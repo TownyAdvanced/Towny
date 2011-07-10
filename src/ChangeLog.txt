@@ -305,7 +305,7 @@ V0.71.4 RC2:
     - Added 'wartime_nation_can_be_neutral' to the config.
       This setting permits you to disable the ability for a nation to remain neutral during a war.
       Toggle in game with '/townyadmin war neutral [on/off]
-    - Added fs as an abreviation for forsale when used in '/plot forsale'.
+    - Added fs as an abreviation for forsale when used in '/plot forsale'. 
     - Corrected an error when a nation sets neutral status. No message was sent of the cost.
     - Added global messages of what nations are at war.
     - Added better sanity checking on the global neutral settings.
