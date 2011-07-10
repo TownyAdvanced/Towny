@@ -4,7 +4,7 @@ version: 0.72.0
 language: english.yml
 last_run_version: 0.72.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
-website: 
+website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
