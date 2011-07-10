@@ -1,0 +1,288 @@
+v0.10:
+	Compass on towny map.
+	Plots and /plot command.
+v0.12:
+	Ability to unclaim areas.
+	Daily and initial cost to nations to stay neutral.
+	Changed the way admins permissions are dealt with.
+	New nations actually cost now.
+	New command /towny prices. Shows the prices for a new town, nation as well as your town's plot price and upkeep costs. It also shows similar aspects for your nation.
+	Flatfile database backup on server start as well as during the daily scheduler. 
+	Rewrote Claim and Unclaim to use the same methods for selecting area.
+	Switch permissions using BlockInteract. Switches may or not actually work and hooking this event may cause bugs.
+	World names loaded from server take the last token after spliting with "/". Eg: Name=map with "worlds/map".
+	HomeBlocks show up as H on towny map.
+	Deposit for both town and nation banks. Any resident can deposit. Withdrawal/Deposits show a message to all online.
+	World names that represent subfolders, eg: "worlds/normal" are use the last token when split with "/". So the example world would use "normal".
+	Added permissions:
+		towny.wild.switch
+		towny.wild.build
+		towny.wild.destroy
+	onMoveChunkTransitions update. Added unowned plot name as well as a homeblock and for sale notifier.
+	Added command /townyadmin backup to force a backup at any time.
+	Fixed bugs.
+	Some tax output during new day.
+	Let the daily interval be customizable.
+	Added command /town spawn [town] with settings and price.
+v0.13:
+	Some debug stuff for war.
+	Town PvP status is ignored during war time.
+	Fixed town bonus plots not being added to maximum when using ratio.
+v0.14:
+	Moved debug commands to townyadmin command. Made tree command not debug only.
+	Fixed error updating cache with build and destroy in the wild.
+	Registered onDeath listener (had that code for ages FML)
+	Did some work on the towny tree output.
+	Moved /towny commands to onCommand
+	The /towny prices now can select individual towns with /towny prices [town].
+	Changed which events were called. Join -> Login. Death -> Respawn.
+	Automatic town spawn on respawn.
+v0.15:
+	Use github if you want the source. 700Kb -> 400Kb
+	Base spoils of war provided by server.
+	Deleting towns/nations will put any leftover money in the banks into the spoils of war for the next war.
+	Winning nation receives half the spoils of war. Town with the highest score receives the other half.
+	Builds on Essentials for Town Spawn teleports and teleport cost.
+v0.16:
+	Price for death during war. If a resident can't pay, its provided by the town. If the town is broke, town is removed from war.
+	Price for death for if not at war. Non player deaths will give the money to spoils of war pot.
+	Price for losing a townblock during war. If town is broke, town is removed from war.
+	War works, it has a fair amount of message spam that will be streamlined as soon as I know the mechanics work.
+v0.17:
+	Mob removal
+	Reload not actually reloading.
+v0.18:
+	Fixed set perm using friend as an alias for resident.
+	Town and nation banks get moved when renaming.
+	Rewrote block permissions to cache the status of the current TownBlock (Wilderness, WarZone, etc).
+	Ignore protection in wilderness for particular blocks. (unclaimed_zone_ignore)
+	Automatically change config if an optional plugin isn't installed.
+	Town assistants can now set plots for sale.
+	During war. The death of a mayor or king will remove the town/nation from war.
+	Defeating a townblock during war will give your town +1 bonus, and the enemy town -1 bonus.
+	Resident perms load on boot now.
+	Added command "/towny top" to show a few highscore lists.
+	Added permission:
+		towny.spawntp (To let a player use /town spawn [town] even when ALLOW_TOWN_SPAWN_TRAVEL=false)
+v0.19:
+	Forgot to override with build and switch for wild ignore blocks.
+	Moved all timers to Bukkits Scheduler.
+	Bug fixes for war.
+v0.20:
+	Quick fix for town notifications.
+v0.21:
+	Resident permissions are persistent.
+	Added add+/remove+ to select offline residents.
+v0.22:
+	Nation server upkeep is now taken. 
+	Added command /townyworld (/tw) to manage worlds.
+	You can now set world PvP, and if a world is claimable.
+	The slightly spammy messages during war have been filtered to show every 10 damage. They can be viewed with the modes "wardef" and "waratk".
+	Added modes "tc" and "nc" to talk in a particular chat without typing /tc [msg], etc.
+	Created Long config values. "Deleted after time" was overflowing int.
+	Added to world options, isDefault (use default settings in config), as well as per world permissions, ignore ids, and unclaimed zone names.
+	Fixed MobRemoval.
+	Moved some help commands around.
+v0.23:
+	Updated Essentials extensibility to use the proper plugin.
+	Added option to disable removing a town/nation on monarch death.
+	Small grammar edit for when setting permissions.
+v0.24:
+	Fixed the logic error with loading permissions.
+v0.25:
+	Finished TownyWorld commands.
+v0.26:
+	All damage within non PvP zones is negated.
+	Update for latest API change.
+v0.27:
+	Mayor's can no longer leave the town (must choose a replacement first).
+	Changed a few config names DATABASE_LOAD, DATABASE_SAVE
+	Flatfile backup is is now zipping the entire Towny folder. 3 options now in config flatfile_backup = [zip/folder/none].
+v0.28:
+	Ability to convert from hMod database. http://towny.xshade.ca/help/converting-from-hmod
+	Possible fix for permission persistency bug.
+	Logic error where town mayor and assistents where charged taxes.
+v0.29:
+	New default aliases for commands seeing as how Essentials keeps stealing them all.
+		The commands /r, /t, and /n are still there, however there are second to Essentials (IE: they will work when it's not installed).
+		/resident = /player,/p,/res,/r
+		/town = /t
+		/nation = /nat,/n
+		Towny, Plot and Townyadmin (/ta) remain the same.
+	Changed command config keys from the suffix _COMMANDS to the prefix COMMANDS_ so as to group them all.
+v0.30:
+	Changed towny.spawntp -> towny.publicspawntp, this permission has to do with teleporting to other towns.
+	New permission towny.spawntp will be relative to your own town.
+	Town has new property: /town set public [on/off]. This will toggle if you allow non-residents to use your warp, and also hides you Homeblock location from the town status.
+v0.31:
+	Players are properly taxed when using /town spawn
+	Added option to ignore all interactions with towny in certain worlds.
+		/tw set usingtowny [on/off]
+v0.32:
+	Added new permission Item Use. Used to prevent using items (like buckets and lighters).
+v0.33:
+	Added points per kill during war.
+	Introducing . . . Pet Zombie mode. An amusing bug from the last release, hoping to prevent damage within towns from other players (PvP) has also prevented PvE. So in the config, there is now an option for your very own pet zombie mode (no_pve_within_non_pvp_towns)
+v0.34 (Craftbukkit 424+ & Minecraft 1.3):
+	Added support for GroupManager directly.
+v0.35:
+	Fixed entity damage mess caused by the PvE option.
+	Updated for iConomy 3.0
+v0.36:
+	Added new town/nation permissions along with config msgs for those without them (towny.town.new)(towny.nation.new). This is only in use when the "only let admin" option is turned on in the config.
+	Town set public was actually editing the pvp setting.
+	Changed towny version command to /towny v, as bukkit highjacks the "version" token.
+v0.37:
+	Added permission towny.wild.block.[blockid]. Allows things like lumberjacks (towny.wild.block.17).
+	Added the permission (towny.town.claim). Without this permission, people will not be able to expand their towns. MAKE SURE YOU ADD IT.
+v0.38:
+	Fixed iConomy bug.
+v0.39:
+	Check if your admin before town.claim check.
+	Checks Permissions before GroupManager (as it's hecktic).
+v0.40:
+	Using the command preprocessor.
+	Updated for iConomy 4.0
+	Depositing/withdrawing prevent negatives.
+	Temp removed GroupManager support.
+	Prices in the config are now doubles (real numbers). (town/nation taxes are still integers for now).
+v0.41:
+	Peasants can no longer turn the town into a nation.
+	The player cache is reset after certain events.
+v0.42:
+	Another vain attempt to fix iConomy and Permissions.
+v0.43:
+	Fixed string formatting forgotten when changing all money handling to real numbers.
+v0.44:
+	Uncommented out switch permissions left in from debugging.
+	Added option to force PvP everywhere. 
+v0.45:
+	Moved the check for forcing pvp to after it makes sure the world is in use with towny.
+	Possible efficiency boost with determining Town levels.
+	Fixed error in first run town-levels.csv
+	Fixed loading of levels configs.
+	Stopped forcing respawn events to use world spawn if town spawn isn't found.
+	Added option to skip town respawn.
+	Changelog is displayed in console during an update.
+	Added a ton of debug statements to the daily timer, as well as an option to turn it off.
+v0.46:
+	There is now an option to set the minimum distance between another town's homeblocks (default is 0 ie no change).
+	Fixed a concurrent modification bug with unclaiming all townblocks in a town.
+	Mob removal now runs in the game thread (possible slow down, increase MOB_REMOVAL_SPEED variable in config if you find a new slowdown after updating).
+	Added torches (id=50) to wild ignore ids default.
+	Modified the onDamage call.
+v0.47:
+	Changed the debug output for when permissions are checked against as it might be causing confusing.
+	Quick fix for /tc and /nc with no msg.
+	Ingame Resident/Town/Nation/Global messages are now sent to it's own log file. It's nature is to start a new log every time the plugin is enabled. Due to the nature of the backup system, it will now keep the log of what went on during that time period.
+	Compiled against Permissions 2.5, to see if it makes any difference.
+	Added maximum plots per resident globally (default=1000). Anyone trying to claim more than this will get an error.
+	Added default permissions for when a new town/resident is registered.
+	Mayor/Assistant can now edit plots within the town, even if the plot owner denies everything.
+	Fixed outsiderSwitch permission. (Thanks PixelEater)
+	wartime_death_price and death_price were renamed to price_death_wartime and price_death.
+	Testing a /townyadmin unclaim command. Untested, use at your own risk.
+v0.48:
+	Fix Essentials compatibility.
+v0.49:
+	Towny now caches the last block location a player was at.
+v0.50:
+	Fixed towny being a pimp and taking over every other plugins command.
+v0.51:
+	Fixed some concurrent errors during taxation.
+v0.52:
+	Switch perms were outputting incorrectly.
+	Item use are now included in item ids usable in the wild.
+	The permission, towny.wild.block.[item id] is now towny.wild.block.[item id].[action], where [action] is build, destroy, switch, item_use. So just add .* onto the end to function normally.
+	No longer attempts to tax when using_iconomy=false.
+	Added support for Questioner (A simple manager for asking questions).
+		'/town add' will go through it to ask the player instead of immediately adding the player if installed.
+	Possible bugfix?
+v0.53:
+	Changed function name that is now used in Bukkit.
+v0.54:
+	"_" is now skinned as spaces with formatted names.
+	Fix for world data persistence. World names with / or spaces are now filtered to use _ instead.
+	Set perms will clear the cache now.
+	Added /ta town [town] ... to be used for admin use. /ta town [town] add is the only command for now.
+	Option to not delete and start log from new when the server starts up.
+	Plausible bug with resident plot permissions.
+	Multiworld persistent.
+	Default permissions for new towns etc now work as intended.
+	Permissions is now treated as every other optional plugin.
+	You can claim without being OP when Permissions isn't installed.
+	Trying a new method for mob removal.
+	Now canceling spawn events within towns instead of waiting for the removal.
+v0.55:
+	Fixed reloading the towny config.
+	Added regex check for all names. Names must be alphanumeric with the exception of underscores in place of spaces. Old names with invalid characters will be filtered appropriately.
+	World names are now filtered like the other objects in the universe, worlds with / are no longer just using the last token.
+	Reworded errors when making new towns. "You" was hardcoded, and didn't take into account admins making towns for others. To clarify, money is taken from the new mayor's bank account.
+	Added new config option save_on_load. It's defaulted to off (which is opposite to what it was before). It will no longer to a giant save on startup which assured that what's in memory = saved in file. This should speed up startup of particular large db.
+	Files are deleted when the object is deleted. It will not delete existing files, so files deleted outside of towny's regular actions will remain.
+	Added allow_resident_plots to enable/disable plot commands, essentially freezing the plot system.
+	Fixed admin add command (you couldnt add if you werent a mayor/assistant of any town).
+	The admin set mayor command will now add the person to town if he/she isn't already. The npc part of this command now works as well.
+v0.56:
+	Fixed default setting for regex.
+v0.57:
+	Removed debug statements.
+v0.58:
+	Fixed default regex settings.
+v0.59:
+	onDestroy is now checked when a player starts breaking a block.
+v0.60:
+	Using on onBlockBreak instead of onBlockDamage.
+v0.61:
+	Now using correct way to calculate townblock cells. Any cells in the negative range will shift by 1.
+v0.62:
+	Fixed towny map not drawing properly due to new bukkit font
+	Fixed town spawn
+	
+v0.69:
+	Fixed iChat
+
+###### Forked to new development ######
+V0.71.1:
+	- Updated to JRE 1.6 and CB 933
+	- Cleared all compile errors and type warnings
+	- Added file tidy up for name changes of nation and towns. Should no longer leave old files behind when names are changed.
+	- Fixed wild permissions bug. Walking into the wild, breaking a block and returning to town allowed you to then break blocks in town (fix from SwearWord).
+	- Towny now moves deleted data files for Towns, Nations and worlds to a deleted folder.
+	- Moved config.properties into config.yml
+	- seperated all language strings to to their own YAML file. Specify which language file to use in config.yml.
+	- Added auto creation of YAML files, if they don't exist.
+	- Reworked all Towny commands to properly implement the bukkit command process.
+	- Added a console 'townyadmin reload' command.
+	- Re-enabled '/town set name xxxx'. Now that the saving/loading code has been reworked it should not be a problem any more.
+v0.71.2:
+	- Fixed '/res set perm friend on/off'
+	- Depreciated the rect subset of town claim and changed '/town claim' to support new methods of radius.
+	  Also supported through townyadmin and unclaim.
+	    Eg. '/town claim', '/town claim 5' or '/town claim auto'
+	- Added a 'not for sale' confirmation message when performing '/plot notforsale'. Also added a permitted abreviation of 'nfs' for 'notforsale'.
+	- Town mayors now get asked if they want to accept a nation invite.
+	- Fixed error on setting a nation assistant.
+	- Removed double message spam on removing a nation assist.
+	- Added leaving messages for towns leaving nations.
+	- Nation [enemy/ally] add/remove now work.
+	- The command '/townyworld set wildperms' accepts a list of permissions to set 'build destroy switch itemuse', or leave blank to set to world defaults.
+	- Changed the towny tree command to a console only command. Also removed it for townyadmin (shouldn;t be there).
+	- fixed '/resident friend clearlist' to no longer give a null exception error.
+v0.71.3:
+	- Fixed a bug in questioner which caused players with capital letters in their names to be unable to accept/deny questions.
+	- Added explosion protection for towns. Use is '/town set explosion [on/off]'. On = explosions will damage, off = no damage.
+	- added a golbal message when a nation is deleted due to no towns being members.
+	- Fixed nation join/leave messages being sent correctly.
+	- NPC mayors now work. '/townyadmin set mayor npc', will set the mayor to an NPC. When you set it back to a player all resident files are tidied up.
+	- Resident permissions now show up correctly as 'rao' instead of 'fao'.
+	- Fixed placing water/lava/lighter use targeting through another player (cheat).
+	- Fixed the map to update correctly with Bukkit 949+
+	- Resized the map to fit the key back on the right.
+	- Fixed '/towny prices command'. I guess I broke it in the last dev version.
+	- Fixed '/towny war' and it's sub sets to give the proper responses.
+	- Added a confirmation message when setting a player mode '/res set mode map'.
+	- /resident set mode reset' now has a new alias of '/resident set mode clear'. (old commands are still accepted)
+	- '/resident friends clearlist' now has a new alias of '/resident friends clear'. (old commands are still accepted)
+	- Added messages for costs when using ./town spawn'.
+	- The 'New Day' message no longer mentions taxes if you are not set to take taxes.

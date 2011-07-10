@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/Questioner.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/bukkit-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/craftbukkit-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/Essentials.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/iConomy.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/955/Permissions.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
