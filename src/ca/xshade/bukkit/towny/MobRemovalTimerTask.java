@@ -108,40 +108,50 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		
 		//System.out.println("[Towny] MobRemovalTimerTask - run()");
 		
-		boolean isRemovingWorldMobs = TownySettings.isRemovingWorldMobs();
-		boolean isRemovingTownMobs = TownySettings.isRemovingTownMobs();
+		//boolean isRemovingWorldMobs = TownySettings.isRemovingWorldMobs();
+		//boolean isRemovingTownMobs = TownySettings.isRemovingTownMobs();
 		
 		// Build a list of mobs to be removed
-		if (isRemovingTownMobs || isRemovingWorldMobs)
+		//if (isRemovingTownMobs || isRemovingWorldMobs)
 			for (World world : server.getWorlds()) {
 				List<LivingEntity> livingEntitiesToRemove = new ArrayList<LivingEntity>();
 				
 				for (LivingEntity livingEntity : world.getLivingEntities()) {
 					Coord coord = Coord.parseCoord(livingEntity.getLocation());
+					TownyWorld townyWorld = null;
+					try {
+						townyWorld = universe.getWorld(world.getName());
+					} catch (NotRegisteredException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						try {
-							TownyWorld townyWorld = universe.getWorld(world.getName());
 							TownBlock townBlock = townyWorld.getTownBlock(coord);
-							if ((isRemovingTownMobs && !townBlock.getTown().hasMobs() && isRemovingTownEntity(livingEntity))) {
-								//System.out.println("[Towny] MobRemovalTimerTask - added: " + livingEntity.toString());
+							if ((!townBlock.getTown().hasMobs() && isRemovingTownEntity(livingEntity))) {
+								//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
 								livingEntitiesToRemove.add(livingEntity);
 							}
 								
 						} catch (TownyException x) {
 							// it will fall through here if the mob has no townblock.
-							if ((isRemovingWorldMobs && isRemovingWorldEntity(livingEntity)))
+							if ((!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity))) {
+								//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
 								livingEntitiesToRemove.add(livingEntity);
+							}
 						}
 				}
 					
 
-			for (LivingEntity livingEntity : livingEntitiesToRemove) {
-				universe.getPlugin().sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
-				//livingEntity.teleportTo(new Location(world, livingEntity.getLocation().getX(), -50, livingEntity.getLocation().getZ()));
-				livingEntity.remove();
-				//numRemoved++;
+				for (LivingEntity livingEntity : livingEntitiesToRemove) {
+					universe.getPlugin().sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
+					//livingEntity.teleportTo(new Location(world, livingEntity.getLocation().getX(), -50, livingEntity.getLocation().getZ()));
+					livingEntity.remove();
+					//numRemoved++;
+				}
+				
+				//universe.getPlugin().sendDebugMsg(world.getName() + ": " + StringMgmt.join(worldLivingEntities));
+
 			}
-			//universe.getPlugin().sendDebugMsg(world.getName() + ": " + StringMgmt.join(worldLivingEntities));
-		}
-		
+			
 	}
 }

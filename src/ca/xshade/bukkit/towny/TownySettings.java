@@ -36,7 +36,8 @@ public class TownySettings {
 		CAPITAL_PREFIX,
 		CAPITAL_POSTFIX,
 		KING_PREFIX,
-		KING_POSTFIX
+		KING_POSTFIX,
+		UPKEEP_MULTIPLIER
 	};
 	// Town Level
 	public enum TownLevel {
@@ -44,7 +45,8 @@ public class TownySettings {
 		NAME_POSTFIX,
 		MAYOR_PREFIX,
 		MAYOR_POSTFIX,
-		TOWN_BLOCK_LIMIT
+		TOWN_BLOCK_LIMIT,
+		UPKEEP_MULTIPLIER
 	};
 	
 	private static Pattern namePattern = null;	
@@ -56,29 +58,31 @@ public class TownySettings {
 	private static final SortedMap<Integer,Map<TownySettings.NationLevel,Object>> configNationLevel = 
 		Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.NationLevel,Object>>(Collections.reverseOrder()));
 	
-	
+	/*
 	static {		
 		newTownLevel(0, "", " Town", "Mayor ", "", 16);
 		newNationLevel(0, "", " Nation", "Capital: ", " City", "King ", "");
 	}
+	*/
 	
 	public static void newTownLevel(int numResidents,
 			String namePrefix, String namePostfix,
 			String mayorPrefix, String mayorPostfix, 
-			int townBlockLimit) {
+			int townBlockLimit, double townUpkeepMultiplier) {
 		ConcurrentHashMap<TownySettings.TownLevel,Object> m = new ConcurrentHashMap<TownySettings.TownLevel,Object>();
 		m.put(TownySettings.TownLevel.NAME_PREFIX, namePrefix);
 		m.put(TownySettings.TownLevel.NAME_POSTFIX, namePostfix);
 		m.put(TownySettings.TownLevel.MAYOR_PREFIX, mayorPrefix);
 		m.put(TownySettings.TownLevel.MAYOR_POSTFIX, mayorPostfix);
 		m.put(TownySettings.TownLevel.TOWN_BLOCK_LIMIT, townBlockLimit);
+		m.put(TownySettings.TownLevel.UPKEEP_MULTIPLIER, townUpkeepMultiplier);
 		configTownLevel.put(numResidents, m);
 	}
 	
 	public static void newNationLevel(int numResidents, 
 			String namePrefix, String namePostfix, 
 			String capitalPrefix, String capitalPostfix,
-			String kingPrefix, String kingPostfix) {
+			String kingPrefix, String kingPostfix, double nationUpkeepMultiplier) {
 		ConcurrentHashMap<TownySettings.NationLevel,Object> m = new ConcurrentHashMap<TownySettings.NationLevel,Object>();
 		m.put(TownySettings.NationLevel.NAME_PREFIX, namePrefix);
 		m.put(TownySettings.NationLevel.NAME_POSTFIX, namePostfix);
@@ -86,6 +90,7 @@ public class TownySettings {
 		m.put(TownySettings.NationLevel.CAPITAL_POSTFIX, capitalPostfix);
 		m.put(TownySettings.NationLevel.KING_PREFIX, kingPrefix);
 		m.put(TownySettings.NationLevel.KING_POSTFIX, kingPostfix);
+		m.put(TownySettings.NationLevel.UPKEEP_MULTIPLIER, nationUpkeepMultiplier);
 		configNationLevel.put(numResidents, m);
 	}
 	
@@ -101,7 +106,7 @@ public class TownySettings {
 	 * @throws IOException 
 	 */
 	
-	public static void loadTownLevelConfig(String filepath) throws IOException {
+	public static void loadTownLevelConfig() throws IOException {
 
 		String[] tokens;		
 		List<String> lines = (List<String>)config.getProperty("townLevel");
@@ -111,12 +116,13 @@ public class TownySettings {
 		
 		//use hasNext() and next() methods of Iterator to iterate through the elements
 		while(itr.hasNext()) {
-                tokens = itr.next().split(",", 6);
-                if (tokens.length >= 6)
+                tokens = itr.next().split(",", 7);
+                if (tokens.length >= 7)
 					try {
                         int numResidents = Integer.parseInt(tokens[0]);
                         int townBlockLimit = Integer.parseInt(tokens[5]);
-                        newTownLevel(numResidents, tokens[1], tokens[2], tokens[3], tokens[4], townBlockLimit);
+                        double townUpkeepMult = Double.valueOf(tokens[6]);
+                        newTownLevel(numResidents, tokens[1], tokens[2], tokens[3], tokens[4], townBlockLimit, townUpkeepMult);
 						if (getDebug())
 							// Used to know the actual values registered
 							 System.out.println("[Towny] Debug: Added town level: "+numResidents+" "+Arrays.toString(getTownLevel(numResidents).values().toArray()));
@@ -163,21 +169,22 @@ public class TownySettings {
 	 * @throws IOException 
 	 */
 	
-	public static void loadNationLevelConfig(String filepath) throws IOException {
+	public static void loadNationLevelConfig() throws IOException {
 		
 		String[] tokens;		
-		List<String> lines = (List<String>)config.getProperty("townLevel");
+		List<String> lines = (List<String>)config.getProperty("nationLevel");
 		
 		//get an Iterator object for list using iterator() method.
 		Iterator<String> itr = lines.iterator();
 		
 		//use hasNext() and next() methods of Iterator to iterate through the elements
 		while(itr.hasNext()) {
-			tokens = itr.next().split(",", 7);
-            if (tokens.length >= 7)
+			tokens = itr.next().split(",", 8);
+            if (tokens.length >= 8)
 				try {
                     int numResidents = Integer.parseInt(tokens[0]);
-                    newNationLevel(numResidents, tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6]);
+                    double upkeep = Double.valueOf(tokens[7]);
+                    newNationLevel(numResidents, tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], upkeep);
 					if (getDebug())
 						// Used to know the actual values registered
 						// System.out.println("[Towny] Debug: Added nation level: "+numResidents+" "+Arrays.toString(getNationLevel(numResidents).values().toArray()));
@@ -239,7 +246,7 @@ public class TownySettings {
 	
 	//TODO: more efficient way
 	public static int calcNationLevel(Nation nation) {
-		int n = nation.getNumResidents();
+		int n = nation.getNumResidents();		
 		for (Integer level : configNationLevel.keySet())
 			if (n >= level)
 				return level;
@@ -255,8 +262,11 @@ public class TownySettings {
 				
 			// read the config.yml into memory
 			config = new Configuration(file);
-			config.load();			
+			config.load();
 			
+			// Load Nation & Town level data into maps.
+			loadTownLevelConfig();
+			loadNationLevelConfig();
 		}	
 	}
 	
@@ -733,6 +743,7 @@ public class TownySettings {
 		return getInt("protection.MOB_REMOVAL_SPEED");
 	}
 	
+	/*
 	public static boolean isRemovingWorldMobs() {
 		return getBoolean("protection.MOB_REMOVAL_WORLD");
 	}
@@ -740,6 +751,7 @@ public class TownySettings {
 	public static boolean isRemovingTownMobs() {
 		return getBoolean("protection.MOB_REMOVAL_TOWN");
 	}
+	*/
 	
 	public static int getHealthRegenSpeed() {
 		return getInt("HEALTH_REGEN_SPEED");
@@ -860,9 +872,11 @@ public class TownySettings {
 		return getBoolean("DEV_MODE");
 	}
 	
+	/*
 	public static boolean isPvEWithinNonPvPZones() {
 		return getBoolean("PVE_IN_NON_PVP_TOWNS");
 	}
+	*/
 	
 	public static boolean isDeclaringNeutral() {
 		return getBoolean("WARTIME_NATION_CAN_BE_NEUTRAL");
@@ -872,21 +886,50 @@ public class TownySettings {
 		return getBoolean("WARTIME_REMOVE_ON_MONARCH_DEATH");
 	}
 
-	public static double getTownUpkeepCost() {
-		return getDouble("economy.PRICE_TOWN_UPKEEP");
+	public static double getTownUpkeepCost(Town town) {
+		double multiplier;
+		
+		if (town != null)
+			multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+		else
+			multiplier = 1.0;
+			
+		return getDouble("economy.PRICE_TOWN_UPKEEP") * multiplier;
 	}
 	
-	public static double getNationUpkeepCost() {
-		return getDouble("economy.PRICE_NATION_UPKEEP");
+	public static double getNationUpkeepCost(Nation nation) {
+		double multiplier;
+		
+		if (nation != null)
+			multiplier = Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+		else
+			multiplier = 1.0;
+		
+		return getDouble("economy.PRICE_NATION_UPKEEP") * multiplier;
 	}
 	
 	public static String getFlatFileBackupType() {
 		return getString("FLATFILE_BACKUP");
 	}
 	
+	/*
 	public static boolean isForcingPvP() {
+	 
 		return getBoolean("FORCE_PVP_ON");
 	}
+	
+	public static boolean isForcingExplosions() {
+		return getBoolean("FORCE_EXPLOSIONS_ON");
+	}
+	
+	public static boolean isForcingMonsters() {
+		return getBoolean("FORCE_MONSTERS_ON");
+	}
+	
+	public static boolean isForcingFire() {
+		return getBoolean("FORCE_FIRE_ON");
+	}
+	*/
 
 	public static boolean isTownRespawning() {
 		return getBoolean("TOWN_RESPAWN");

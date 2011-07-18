@@ -95,17 +95,22 @@ public class TownyUniverse extends TownyObject {
 			dailyTask = getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new DailyTimerTask(this), MinecraftTools.convertToTicks(timeTillNextDay), MinecraftTools.convertToTicks(TownySettings.getDayInterval()));
 			if (dailyTask == -1)
 				plugin.sendErrorMsg("Could not schedule new day loop.");
-		} else if (!on && isDailyTimerRunning())
+		} else if (!on && isDailyTimerRunning()) {
 			getPlugin().getServer().getScheduler().cancelTask(dailyTask);
+			dailyTask = -1;
+		}
+
 	}
 	
 	public void toggleHealthRegen(boolean on) {
 		if (on && !isHealthRegenRunning()) {
-			dailyTask = getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new HealthRegenTimerTask(this, plugin.getServer()), 0, MinecraftTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
-			if (dailyTask == -1)
+			healthRegenTask = getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new HealthRegenTimerTask(this, plugin.getServer()), 0, MinecraftTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
+			if (healthRegenTask == -1)
 				plugin.sendErrorMsg("Could not schedule health regen loop.");
-		} else if (!on && isHealthRegenRunning())
+		} else if (!on && isHealthRegenRunning()) {
 			getPlugin().getServer().getScheduler().cancelTask(healthRegenTask);
+			healthRegenTask = -1;
+		}
 	}
 	
 	public boolean isMobRemovalRunning() {
@@ -136,12 +141,13 @@ public class TownyUniverse extends TownyObject {
 				} catch (NotRegisteredException e) {
 				} catch (AlreadyRegisteredException e) {
 				}
-			getDataSource().saveResidentList();
+			//getDataSource().saveResidentList();
 		} else
 			resident = getResident(player.getName());
 
 		resident.setLastOnline(System.currentTimeMillis());
 		getDataSource().saveResident(resident);
+		getDataSource().saveResidentList();
 
 		try {
 			sendTownBoard(player, resident.getTown());
@@ -277,50 +283,83 @@ public class TownyUniverse extends TownyObject {
 		return nations.containsKey(name.toLowerCase());
 	}
 
-	public void renameTown(Town town, String newName) throws AlreadyRegisteredException {
-		if (hasTown(newName))
-			throw new AlreadyRegisteredException("The town " + newName + " is already in use.");
+	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+		
+		String filteredName;
+		try {
+			filteredName = checkAndFilterName(newName);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		if (hasTown(filteredName))
+			throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
 		// TODO: Delete/rename any invites.
 
+		List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
+		
 		String oldName = town.getName();
-		towns.put(newName.toLowerCase(), town);
+		towns.put(filteredName.toLowerCase(), town);
 		//Tidy up old files
 		// Has to be done here else the town no longer exists and the move command may fail.
 		getDataSource().deleteTown(town);
 		
 		towns.remove(oldName.toLowerCase());
-		town.setName(newName);
+		town.setName(filteredName);
 		Town oldTown = new Town(oldName);
 		
 		try {
+			town.pay(town.getHoldingBalance());
 			oldTown.pay(oldTown.getHoldingBalance(), town);
 		} catch (IConomyException e) {
 		}
+		
+		for (Resident resident : toSave) {
+			getDataSource().saveResident(resident);
+		}
+		
 		getDataSource().saveTown(town);
 		getDataSource().saveTownList();
+		getDataSource().saveWorld(town.getWorld());
 		
 	}
 	
-	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException {
-		if (hasNation(newName))
-			throw new AlreadyRegisteredException("The nation " + newName + " is already in use.");
+	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+		
+		String filteredName;
+		try {
+			filteredName = checkAndFilterName(newName);
+		} catch (InvalidNameException e) {
+			throw new NotRegisteredException(e.getMessage());
+		}
+		
+		if (hasNation(filteredName))
+			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
 		// TODO: Delete/rename any invites.
 
+		List<Town> toSave = new ArrayList<Town>(nation.getTowns());
+		
 		String oldName = nation.getName();
-		nations.put(newName.toLowerCase(), nation);
+		nations.put(filteredName.toLowerCase(), nation);
 		//Tidy up old files
 		getDataSource().deleteNation(nation);
 				
 		nations.remove(oldName.toLowerCase());
-		nation.setName(newName);
+		nation.setName(filteredName);
 		Nation oldNation = new Nation(oldName);
 		
 		try {
+			nation.pay(nation.getHoldingBalance());
 			oldNation.pay(oldNation.getHoldingBalance(), nation);
 		} catch (IConomyException e) {
 		}
+		
+		for (Town town : toSave) {
+			getDataSource().saveTown(town);
+		}
+		
 		getDataSource().saveNation(nation);
 		getDataSource().saveNationList();
 		
@@ -581,8 +620,34 @@ public class TownyUniverse extends TownyObject {
 			//TownySettings.loadNationLevelConfig(getRootFolder() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "nation-levels.csv");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
+		}
+		
+		System.out.println("[Towny] Database: [Load] " + TownySettings.getLoadDatabase() + " [Save] " + TownySettings.getSaveDatabase());
+		if (!loadDatabase(TownySettings.getLoadDatabase())) {
+			System.out.println("[Towny] Error: Failed to load!");
+			return false;
+		}
+		
+		try {
+			setDataSource(TownySettings.getSaveDatabase());
+			getDataSource().initialize(plugin, this);
+			try {
+				getDataSource().backup();
+			} catch (IOException e) {
+				System.out.println("[Towny] Error: Could not create backup.");
+				e.printStackTrace();
+				return false;
+			}
+			
+			//if (TownySettings.isSavingOnLoad())
+			//	townyUniverse.getDataSource().saveAll();
+		} catch (UnsupportedOperationException e) {
+			System.out.println("[Towny] Error: Unsupported save format!");
+			return false;
 		}
 		
 		
@@ -597,6 +662,13 @@ public class TownyUniverse extends TownyObject {
 		}
 
 		getDataSource().initialize(plugin, this);
+		
+		// make sure all tables are clear before loading
+		worlds.clear();
+		nations.clear();
+		towns.clear();
+		residents.clear();
+		
 		return getDataSource().loadAll();
 	}
 
@@ -684,7 +756,7 @@ public class TownyUniverse extends TownyObject {
 	public void collectNationTaxes(Nation nation) throws IConomyException {
 		if (nation.getTaxes() > 0)
 			for (Town town : new ArrayList<Town>(nation.getTowns())) {
-				if (town.isCapital())
+				if (town.isCapital() || !town.hasUpkeep())
 					continue;
 				if (!town.pay(nation.getTaxes(), nation)) {
 					try {
@@ -814,37 +886,96 @@ public class TownyUniverse extends TownyObject {
 		getDataSource().saveNationList();
 	}
 
+	////////////////////////////////////////////
+	
+	
 	public void removeTown(Town town) {
 		getDataSource().deleteTown(town);
 		List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
+		TownyWorld world = town.getWorld();
+		
 		try {
+			if (town.hasNation()) {
+				Nation nation = town.getNation();
+				nation.removeTown(town);
+				getDataSource().saveNation(nation);
+			}
 			town.clear();
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
+		} catch (NotRegisteredException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		try {
 			town.pay(town.getHoldingBalance(), new WarSpoils());
 		} catch (IConomyException e) {
 		}
+		
+		
+		for (Resident resident : toSave) {
+			removeResident(resident);
+			getDataSource().saveResident(resident);
+		}
+		
 		towns.remove(town.getName().toLowerCase());
 		plugin.updateCache();
-		for (Resident resident : toSave)
-			getDataSource().saveResident(resident);
+
 		getDataSource().saveTownList();
+		getDataSource().saveWorld(world);
 	}
 
 	public void removeResident(Resident resident) {
+		
+		Town town =  null;
+		
+		if (resident.hasTown())
+			try {
+				town = resident.getTown();
+			} catch (NotRegisteredException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}	
+			
 		getDataSource().deleteResident(resident);
+		residents.remove(resident.getName().toLowerCase());
+		try {
+			if (town != null) {			
+				town.removeResident(resident);
+				getDataSource().saveTown(town);
+			}
+			resident.clear();
+		} catch (EmptyTownException e) {
+			removeTown(town);
+
+		} catch (NotRegisteredException e) {
+			// TODO Auto-generated catch block
+			// town not registered
+			e.printStackTrace();
+		}
+		//String name = resident.getName();
+		//residents.remove(name.toLowerCase());
+		//plugin.deleteCache(name);
+		getDataSource().saveResidentList();
+	}
+	
+	public void removeResidentList(Resident resident) {
+		
+		String name = resident.getName();
 		try {
 			resident.clear();
 		} catch (EmptyTownException e) {
-			removeTown(e.getTown());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		String name = resident.getName();
 		residents.remove(name.toLowerCase());
 		plugin.deleteCache(name);
 		getDataSource().saveResidentList();
+		
 	}
+	
+	/////////////////////////////////////////////
+	
 	
 	public void sendUniverseTree(CommandSender sender) {
 		for (String line : getTreeString(0))
@@ -878,15 +1009,16 @@ public class TownyUniverse extends TownyObject {
 
 	public void collectTownCosts() throws IConomyException {
 		for (Town town : new ArrayList<Town>(towns.values()))
-			if (!town.pay(TownySettings.getTownUpkeepCost())) {
-				removeTown(town);
-				sendGlobalMessage(town.getName() + TownySettings.getLangString("msg_bankrupt_town"));
-			}
+			if (town.hasUpkeep())
+				if (!town.pay(TownySettings.getTownUpkeepCost(town))) {
+					removeTown(town);
+					sendGlobalMessage(town.getName() + TownySettings.getLangString("msg_bankrupt_town"));
+				}
 	}
 	
 	public void collectNationCosts() throws IConomyException {
 		for (Nation nation : new ArrayList<Nation>(nations.values())) {
-			if (!nation.pay(TownySettings.getNationUpkeepCost())) {
+			if (!nation.pay(TownySettings.getNationUpkeepCost(nation))) {
 				removeNation(nation);
 				sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
 			}

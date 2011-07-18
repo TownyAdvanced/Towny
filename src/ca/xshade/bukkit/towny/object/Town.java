@@ -25,7 +25,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Resident mayor;
 	private int bonusBlocks, taxes, plotPrice, plotTax;
 	private Nation nation;
-	private boolean isPVP, hasMobs, isPublic, isBANG, isFire;
+	private boolean hasUpkeep, isPVP, hasMobs, isPublic, isBANG, isFire;
 	private String townBoard = "/town set board [msg]";
 	private TownBlock homeBlock;
 	private TownyWorld world;
@@ -37,6 +37,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		taxes = 0;
 		plotTax = 0;
 		plotPrice = 0;
+		hasUpkeep = true;
 		isPVP = false;
 		isBANG = false;
 		hasMobs = false;
@@ -157,6 +158,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		return hasNation() ? nation.isCapital(this) : false;
 	}
 
+	public void setHasUpkeep(boolean hasUpkeep) {
+		this.hasUpkeep = hasUpkeep;
+	}
+
+	public boolean hasUpkeep() {
+		return hasUpkeep;
+	}
+	
 	public void setHasMobs(boolean hasMobs) {
 		this.hasMobs = hasMobs;
 	}
@@ -326,12 +335,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			return spawn;
 		}
 			
-		else
+		else {
+			this.spawn = null;
 			throw new TownyException("Town has not set a spawn location.");
+		}
 	}
 
 	public boolean hasSpawn() {
-		return spawn != null;
+		return (hasHomeBlock() && spawn != null);
 	}
 
 	public boolean hasHomeBlock() {

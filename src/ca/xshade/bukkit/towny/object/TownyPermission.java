@@ -168,19 +168,19 @@ public class TownyPermission {
 	
 	public String getColourString() {
 		return
-			Colors.LightGreen + "B=" + Colors.LightGray
+			Colors.LightGreen + "Build = " + Colors.LightGray
 			+ (residentBuild ? "f" : "-")
 			+ (allyBuild ? "a" : "-")
 			+ (outsiderBuild ? "o" : "-")
-			+ Colors.LightGreen + " D=" + Colors.LightGray
+			+ Colors.LightGreen + " Destory = " + Colors.LightGray
 			+ (residentDestroy ? "f" : "-")
 			+ (allyDestroy ? "a" : "-")
 			+ (outsiderDestroy ? "o" : "-")
-			+ Colors.LightGreen + " S=" + Colors.LightGray
+			+ Colors.LightGreen + " Switch = " + Colors.LightGray
 			+ (residentSwitch ? "f" : "-")
 			+ (allySwitch ? "a" : "-")
 			+ (outsiderSwitch ? "o" : "-")
-			+ Colors.LightGreen + " I=" + Colors.LightGray
+			+ Colors.LightGreen + " Item = " + Colors.LightGray
 			+ (residentItemUse ? "f" : "-")
 			+ (allyItemUse ? "a" : "-")
 			+ (outsiderItemUse ? "o" : "-");

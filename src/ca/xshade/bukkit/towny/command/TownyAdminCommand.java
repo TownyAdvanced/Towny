@@ -49,7 +49,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 		//ta_help.add(ChatTools.formatCommand("", "/townyadmin", "war toggle [on/off]", ""));
 		//ta_help.add(ChatTools.formatCommand("", "/townyadmin", "war neutral [on/off]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givebonus [town] [num]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle neutral/war/townmobs/worldmobs", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle neutral/war", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "          debug/devmode", ""));
 
 		//TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin", "npc rename [old name] [new name]", ""));
@@ -152,12 +152,14 @@ public class TownyAdminCommand implements CommandExecutor  {
 				+ Colors.Green + TownySettings.getLangString("ta_panel_3") + (plugin.getTownyUniverse().isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")
 				+ Colors.Gray + " | "
 				+ (Colors.Green + TownySettings.getLangString("ta_panel_5") + (plugin.getTownyUniverse().isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
+		/*
 		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] "
 				+ Colors.Green + TownySettings.getLangString("ta_panel_4")
 				+ (TownySettings.isRemovingWorldMobs() ? Colors.LightGreen + "On" : Colors.Rose + "Off")
 				+ Colors.Gray + " | "
 				+ Colors.Green + TownySettings.getLangString("ta_panel_4_1")
 				+ (TownySettings.isRemovingTownMobs() ? Colors.LightGreen + "On" : Colors.Rose + "Off"));
+		*/
 		try {
 			TownyIConomyObject.checkIConomy();
 			ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "iConomy" + Colors.Blue + "] "
@@ -261,6 +263,8 @@ public class TownyAdminCommand implements CommandExecutor  {
 			} else
 				try {
 					Resident newMayor = null;
+					Town town = plugin.getTownyUniverse().getTown(split[1]);
+					
 					if (split[2].equalsIgnoreCase("npc")) {
 						String name = nextNpcName();
 						plugin.getTownyUniverse().newResident(name);
@@ -272,11 +276,17 @@ public class TownyAdminCommand implements CommandExecutor  {
 						
 						plugin.getTownyUniverse().getDataSource().saveResident(newMayor);
 						plugin.getTownyUniverse().getDataSource().saveResidentList();
+						
+						// set for no upkeep as an NPC mayor is assigned
+						town.setHasUpkeep(false);
 
-					} else
+					} else {
 						newMayor = plugin.getTownyUniverse().getResident(split[2]);
+						
+						//set upkeep again
+						town.setHasUpkeep(true);
+					}
 					
-					Town town = plugin.getTownyUniverse().getTown(split[1]);
 					if (!town.hasResident(newMayor))
 						TownCommand.townAddResident(town, newMayor);
 					// Delete the resident if the old mayor was an NPC.
@@ -288,6 +298,9 @@ public class TownyAdminCommand implements CommandExecutor  {
 						try {
 							town.removeResident(oldMayor);
 							plugin.getTownyUniverse().removeResident(oldMayor);
+							
+							plugin.getTownyUniverse().removeResidentList(oldMayor);
+							
 						} catch (EmptyTownException e) {
 							// Should never reach here as we are setting a new mayor before removing the old one.
 							e.printStackTrace();
@@ -372,7 +385,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 					plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
 					return;
 				}
-
+		/*
 		} else if (split[0].equalsIgnoreCase("townmobs")) {
 
 			try {
@@ -398,8 +411,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
 				return;
 			}
-
-		
+		*/
 		} else if (split[0].equalsIgnoreCase("devmode"))
 			try {
 				choice = !TownySettings.getBoolean("DEV_MODE");

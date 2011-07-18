@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 //import javax.persistence.PersistenceException;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -57,6 +58,7 @@ import ca.xshade.util.StringMgmt;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Teleport;
 import com.iConomy.*;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijiko.permissions.PermissionHandler;
@@ -97,7 +99,9 @@ public class Towny extends JavaPlugin {
 		//System.out.println("[Towny] Towny - create TownyUniverse Object...");
 		townyUniverse = new TownyUniverse(this);
 		//System.out.println("[Towny] Towny - Starting loadSettings...");
-		loadSettings();
+		//loadSettings();
+		
+		load();
 		setupLogger();		
 		
 		// Setup bukkit command interfaces
@@ -112,35 +116,8 @@ public class Towny extends JavaPlugin {
 		getCommand("nationchat").setExecutor(new NationChatCommand(this));
 		
 		
-		System.out.println("[Towny] Database: [Load] " + TownySettings.getLoadDatabase() + " [Save] " + TownySettings.getSaveDatabase());
-		if (!townyUniverse.loadDatabase(TownySettings.getLoadDatabase())) {
-			System.out.println("[Towny] Error: Failed to load!");
-			error = true;
-			getServer().getPluginManager().disablePlugin(this);
-			return;
-		}
-		
-		try {
-			townyUniverse.setDataSource(TownySettings.getSaveDatabase());
-			townyUniverse.getDataSource().initialize(this, townyUniverse);
-			try {
-				townyUniverse.getDataSource().backup();
-			} catch (IOException e) {
-				System.out.println("[Towny] Error: Could not create backup.");
-				e.printStackTrace();
-			}
-			
-			//if (TownySettings.isSavingOnLoad())
-			//	townyUniverse.getDataSource().saveAll();
-		} catch (UnsupportedOperationException e) {
-			System.out.println("[Towny] Error: Unsupported save format!");
-			error = true;
-			getServer().getPluginManager().disablePlugin(this);
-			return;
-		}
-		
-		checkPlugins();
-		load();
+		//checkPlugins();
+		//load();
 		
 		/*
 		if (TownySettings.isFirstRun()) {
@@ -166,6 +143,31 @@ public class Towny extends JavaPlugin {
 			}
 		//setupDatabase();
 	}
+	
+	public boolean isOnline(String playerName) {
+		
+		for (Player player : getServer().getOnlinePlayers())
+			if (player.getName().equalsIgnoreCase(playerName))
+				return true;
+				
+		return false;
+		
+	}
+	
+	public void SetWorldFlags () {
+		
+		for (Town town : getTownyUniverse().getTowns()) {
+			if (town.getWorld().isForcePVP())
+				town.setPVP(true);
+			if (town.getWorld().isForceExpl())
+				town.setBANG(true);
+			if (town.getWorld().isForceFire())
+				town.setFire(true);
+			if (town.getWorld().isForceTownMobs())
+				town.setHasMobs(true);
+		}
+			
+	}
 
 	/*
 	private void setupDatabase()
@@ -189,6 +191,7 @@ public class Towny extends JavaPlugin {
 		list.add(Towny.class);
 		return list;
 	}
+	
 	private void checkPlugins() {
 		List<String> using = new ArrayList<String>();
 		Plugin test;
@@ -246,11 +249,15 @@ public class Towny extends JavaPlugin {
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 	}
 	
-	public void loadSettings() {
+	private void loadSettings() {
 		
 		//System.out.println("[Towny] load");
 		
-		townyUniverse.loadSettings();
+		if (!townyUniverse.loadSettings())  {
+			error = true;
+			getServer().getPluginManager().disablePlugin(this);
+		}
+		
 		Coord.setCellSize(TownySettings.getTownBlockSize());
 		TownyIConomyObject.setPlugin(this);
 		//TownyCommand.setUniverse(townyUniverse);
@@ -258,13 +265,33 @@ public class Towny extends JavaPlugin {
 	
 	public void load() {
 		
-		//loadSettings();
-		if (TownySettings.isForcingPvP())
-			for (Town town : townyUniverse.getTowns())
-				town.setPVP(true);
+		loadSettings();
+		
+		checkPlugins();
+		
+		SetWorldFlags();
+		
+		//make sure the timers are stopped for a reset
+		townyUniverse.toggleDailyTimer(false);
+		townyUniverse.toggleMobRemoval(false);
+		townyUniverse.toggleHealthRegen(false);
+		
+		/*
+		if (TownySettings.isForcingPvP() || TownySettings.isForcingExplosions() || TownySettings.isForcingMonsters())
+			for (Town town : townyUniverse.getTowns()) {
+				if (town.getWorld().isPVP())
+					town.setPVP(true);
+				if (town.getWorld().isExpl())
+					town.setBANG(true);
+				if (town.getWorld().isFire())
+					town.setFire(true);
+				if (town.getWorld().hasMobs())
+					town.setHasMobs(true);
+			}
+		*/
 		
 		townyUniverse.toggleDailyTimer(true);
-		townyUniverse.toggleMobRemoval(TownySettings.isRemovingWorldMobs() || TownySettings.isRemovingTownMobs() );
+		townyUniverse.toggleMobRemoval(true);
 		townyUniverse.toggleHealthRegen(TownySettings.hasHealthRegen());
 		updateCache();
 	}
@@ -330,7 +357,7 @@ public class Towny extends JavaPlugin {
 	}
 	*/
 	
-	public void update() {
+	private void update() {
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
@@ -486,21 +513,32 @@ public class Towny extends JavaPlugin {
 			return modes.contains(mode); 
 	}
 
-	public boolean checkEssentialsTeleport(Player player) {
+	public boolean checkEssentialsTeleport(Player player, Location lctn) {
 		if (!TownySettings.isUsingEssentials() || !TownySettings.isAllowingTownSpawn())
-			return true;
+			return false;
 		
 		Plugin test = getServer().getPluginManager().getPlugin("Essentials");
 		if (test == null)
-			return true;
+			return false;
 		Essentials essentials = (Essentials)test;
 		//essentials.loadClasses();
-		sendDebugMsg("Using Essenitials");
+		sendDebugMsg("Using Essentials");
 		
 		try {
-			@SuppressWarnings("unused")
 			User user = essentials.getUser(player);
+			
+			if (!user.isTeleportEnabled())
+				return false;
+						
+			if (!user.isJailed()){
+
+				//user.getTeleport();
+				Teleport teleport = user.getTeleport();
+				teleport.teleport(lctn, null);
+
+			}
 			return true;
+			
 		} catch (Exception e) {
 			sendErrorMsg(player, "Error: " + e.getMessage());
 			return false;

@@ -330,6 +330,14 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (Exception e) {
 						town.setPlotPrice(0);
 					}
+				
+				line = kvFile.get("hasUpkeep");
+				if (line != null)
+					try {
+						town.setHasUpkeep(Boolean.parseBoolean(line));
+					} catch (NumberFormatException nfe) {
+					} catch (Exception e) {
+					}
 
 				line = kvFile.get("taxes");
 				if (line != null)
@@ -525,6 +533,15 @@ public class TownyFlatFileSource extends TownyDataSource {
 		String line = "";
 		String[] tokens;
 		String path = getWorldFilename(world);
+		
+		// create the world file if it doesn't exist
+		try {
+			FileMgmt.checkFiles(new String[]{path});
+		} catch (IOException e1) {
+			System.out.println("[Towny] Loading Error: Exception while reading file " + path);
+			e1.printStackTrace();
+		}
+		
 		File fileWorld = new File(path);
 		if (fileWorld.exists() && fileWorld.isFile()) {
 			try {
@@ -550,10 +567,46 @@ public class TownyFlatFileSource extends TownyDataSource {
 				line = kvFile.get("pvp");
 				if (line != null)
 					try {
-						world.setPvP(Boolean.parseBoolean(line));
+						world.setPVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcepvp");
+				if (line != null)
+					try {
+						world.setForcePVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("townmobs");
+				if (line != null)
+					try {
+						world.setForceTownMobs(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("worldmobs");
+				if (line != null)
+					try {
+						world.setWorldMobs(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
 					
+				line = kvFile.get("firespread");
+				if (line != null)
+					try {
+						world.setForceFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("explosions");
+				if (line != null)
+					try {
+						world.setForceExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				
 				line = kvFile.get("usingDefault");
 				if (line != null)
 					try {
@@ -730,6 +783,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 	@Override
 	public boolean saveWorldList() {
 		try {
+			
+			System.out.print("[Towny] saveWorldList");
+			
 			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
 			for (TownyWorld world : universe.getWorlds())
 				fout.write(world.getName() + newLine);
@@ -810,6 +866,8 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("plotPrice=" + Integer.toString(town.getPlotPrice()) + newLine);
 			// Plot Tax
 			fout.write("plotTax=" + Integer.toString(town.getPlotTax()) + newLine);
+			// Upkeep
+			fout.write("hasUpkeep=" + Boolean.toString(town.hasUpkeep()) + newLine);
 			// PVP
 			fout.write("pvp=" + Boolean.toString(town.isPVP()) + newLine);
 			// Mobs
@@ -902,9 +960,19 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write(newLine);
 
 			// PvP
-			fout.write("pvp=" + Boolean.toString(world.isPvP()) + newLine);
+			fout.write("pvp=" + Boolean.toString(world.isPVP()) + newLine);
+			// Force PvP
+			fout.write("forcepvp=" + Boolean.toString(world.isForcePVP()) + newLine);
 			// Claimable
 			fout.write("claimable=" + Boolean.toString(world.isClaimable()) + newLine);
+			// has monster spawns			
+			fout.write("worldmobs=" + Boolean.toString(world.hasWorldMobs()) + newLine);
+			// force town mob spawns			
+			fout.write("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()) + newLine);
+			// has firespread enabled
+			fout.write("forcefirespread=" + Boolean.toString(world.isForceFire()) + newLine);
+			// has explosions enabled
+			fout.write("forceexplosions=" + Boolean.toString(world.isForceExpl()) + newLine);
 			// Using Default
 			fout.write("usingDefault=" + Boolean.toString(world.isUsingDefault()) + newLine);
 			// Unclaimed Zone Build

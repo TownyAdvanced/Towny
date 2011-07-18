@@ -2,7 +2,9 @@ package ca.xshade.bukkit.towny.event;
 
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -103,6 +105,8 @@ public class TownyPlayerListener extends PlayerListener {
 				return;
 			}
 		}
+		// fix for minequest causing null block interactions.
+		if (event.getClickedBlock() != null)
 			if (TownySettings.isSwitchId(event.getClickedBlock().getTypeId()) || event.getAction() == Action.PHYSICAL)
 			{
 				//System.out.println("onPlayerInteractEvent: isSwitchId");
@@ -208,6 +212,28 @@ public class TownyPlayerListener extends PlayerListener {
 		
 		if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
 			return;
+		
+	   // Prevent fly/double jump cheats
+		if (TownySettings.getBoolean("protection.cheat_protection"))
+		   if (event.getEventName() != "PLAYER_TELEPORT" && from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
+				   && !player.isSneaking() && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6) {
+			   //plugin.sendErrorMsg(player, "Cheat Detected!");
+			   
+			   Location blockLocation = from;
+	
+			   //find the first non air block below us
+			   while (blockLocation.getBlock().getType() == Material.AIR)
+				   blockLocation.setY(blockLocation.getY() - 1);
+			   
+			   // set to 1 block up so we are not sunk in the ground
+			   blockLocation.setY(blockLocation.getY() + 1);
+			   
+			   plugin.getCache(player).setLastLocation(blockLocation);
+			   player.teleport(blockLocation);
+			   return;
+		   }
+		   
+	  
 		
 		try {
 			TownyWorld fromWorld = plugin.getTownyUniverse().getWorld(from.getWorld().getName());

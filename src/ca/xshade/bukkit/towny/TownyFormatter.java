@@ -99,7 +99,9 @@ public class TownyFormatter {
 		
 		// Permissions: B=rao D=--- S=ra-
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r") );
-		out.add(Colors.Green + "Explosions: " + (town.isBANG() ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + (town.isFire() ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		out.add(Colors.Green + "Explosions: " + (town.isBANG() ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+				+ Colors.Green + "  Firespread: " + (town.isFire() ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+				+ Colors.Green + "  Mob Spawns: " + (town.hasMobs() ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 		// | Bank: 534 coins
 		String bankString = "";
@@ -174,7 +176,17 @@ public class TownyFormatter {
 		// Claimable: No | PvP: Off
 		out.add(Colors.Green + "Claimable: " + (world.isClaimable() ? Colors.LightGreen + "Yes" : Colors.Rose + "No")
 				+ Colors.Gray + " | "
-				+ Colors.Green + "PvP: " + (world.isPvP() ? Colors.Rose + "On" : Colors.LightGreen + "Off"));
+				+ Colors.Green + "PvP: " + (world.isPVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+				+ Colors.Gray + " | "
+				+ Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+				+ Colors.Gray + " | "
+				+ Colors.Green + "Fire: " + (world.isForceFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off"));
+		
+		out.add(Colors.Green + "Explosions: " + (world.isForceExpl() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+				+ Colors.Gray + " | "
+				+ Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+				+ Colors.Gray + " | "
+				+ Colors.Green + "ForceTownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off"));
 		// Using Default Settings: Yes
 		out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
 		// Wilderness:
@@ -219,7 +231,7 @@ public class TownyFormatter {
 			return getFormattedTownName((Town) obj);
 		else if (obj instanceof Nation)
 			return getFormattedNationName((Nation) obj);
-		System.out.println("just name: " + obj.getName());
+		//System.out.println("just name: " + obj.getName());
 		return obj.getName().replaceAll("_", " ");
 	}
 	

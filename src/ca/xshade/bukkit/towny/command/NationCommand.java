@@ -300,7 +300,13 @@ public class NationCommand implements CommandExecutor  {
 			if (!resident.isMayor())
 				if (!town.hasAssistant(resident))
 					throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
+			
 			nation.removeTown(town);
+			
+			plugin.getTownyUniverse().getDataSource().saveTown(town);
+			plugin.getTownyUniverse().getDataSource().saveNation(nation);
+			plugin.getTownyUniverse().getDataSource().saveNationList();
+			
 			plugin.getTownyUniverse().sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName())));
 			plugin.getTownyUniverse().sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_town_left_nation"), nation.getName())));
 		} catch (TownyException x) {
@@ -308,8 +314,13 @@ public class NationCommand implements CommandExecutor  {
 			return;
 		} catch (EmptyNationException en) {
 			plugin.getTownyUniverse().removeNation(en.getNation());
+			plugin.getTownyUniverse().getDataSource().saveNationList();
 			plugin.getTownyUniverse().sendGlobalMessage(ChatTools.color(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName())));
 		}
+		
+		
+		
+		
 	}
 	
 	public void nationDelete(Player player, String[] split) {
@@ -576,6 +587,7 @@ public class NationCommand implements CommandExecutor  {
 				nation.removeAssistant(member);
 				plugin.deleteCache(member.getName());
 				plugin.getTownyUniverse().getDataSource().saveResident(member);
+				plugin.getTownyUniverse().getDataSource().saveNation(nation);
 			} catch (NotRegisteredException e) {
 				remove.add(member);
 			}
@@ -800,28 +812,33 @@ public class NationCommand implements CommandExecutor  {
 					}
 			} else if (split[0].equalsIgnoreCase("capital")) {
 				if (split.length < 2)
-					plugin.sendErrorMsg(player, "Eg: /nation set capital 70");
+					plugin.sendErrorMsg(player, "Eg: /nation set capital {town name}");
 				else
 					try {
 						Town newCapital = plugin.getTownyUniverse().getTown(split[1]);
 						nation.setCapital(newCapital);
 						plugin.updateCache();
 						plugin.getTownyUniverse().sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName()));
-					} catch (NumberFormatException e) {
-						plugin.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
 					} catch (TownyException e) {
 						plugin.sendErrorMsg(player, e.getError());
 					}
 			} else if (split[0].equalsIgnoreCase("taxes")) {
 				if (split.length < 2)
 					plugin.sendErrorMsg(player, "Eg: /nation set taxes 70");
-				else
+				else {
+					Integer amount = Integer.parseInt(split[1]);
+					if (amount < 0) {
+						plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
+						return;
+					}
+
 					try {
-						nation.setTaxes(Integer.parseInt(split[1]));
+						nation.setTaxes(amount);
 						plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_town_set_nation_tax"), player.getName(), split[1]));
 					} catch (NumberFormatException e) {
 						plugin.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
 					}
+				}
 			} else if (split[0].equalsIgnoreCase("name")) {
 				if (split.length < 2)
 					plugin.sendErrorMsg(player, "Eg: /nation set name Plutoria");
@@ -877,7 +894,7 @@ public class NationCommand implements CommandExecutor  {
 	public void nationRename(Player player, Nation nation, String newName) {
 		try {
 			plugin.getTownyUniverse().renameNation(nation, newName);
-			plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), newName));
+			plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), nation.getName()));
 		} catch (TownyException e) {
 			plugin.sendErrorMsg(player, e.getError());
 		}

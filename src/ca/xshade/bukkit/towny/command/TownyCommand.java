@@ -446,6 +446,17 @@ public class TownyCommand implements CommandExecutor {
 	//TODO: Proceduralize and make parse function for /towny prices [town]
 	public List<String> getTownyPrices(Town town) {
 		List<String> output = new ArrayList<String>();
+		Nation nation = null;
+		
+		if (town != null)
+			if (town.hasNation())
+				try {
+					nation = town.getNation();
+				} catch (NotRegisteredException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 		
 		output.add(ChatTools.formatTitle("Prices"));
 		output.add(Colors.Yellow + "[New] "
@@ -453,9 +464,9 @@ public class TownyCommand implements CommandExecutor {
 				+ Colors.Gray + " | "
 				+ Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNewNationPrice()));
 		output.add(Colors.Yellow + "[Upkeep] "
-				+ Colors.Green + "Town: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getTownUpkeepCost())
+				+ Colors.Green + "Town: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getTownUpkeepCost(town))
 				+ Colors.Gray + " | "
-				+ Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationUpkeepCost()));
+				+ Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationUpkeepCost(nation)));
 		if (town != null) {
 			output.add(Colors.Yellow + "Town [" + plugin.getTownyUniverse().getFormatter().getFormattedName(town)+"]");
 			output.add(Colors.Rose + "    [Price] "
@@ -467,11 +478,7 @@ public class TownyCommand implements CommandExecutor {
 					+ Colors.Gray + " | "
 					+ Colors.Green + "Plot: " + Colors.LightGreen + Integer.toString(town.getPlotTax()));
 			
-			Nation nation = null;
-			try {
-				nation = town.getNation();
-			} catch (NotRegisteredException e) {
-			}
+			
 			if (nation != null) {
 				output.add(Colors.Yellow + "Nation [" + plugin.getTownyUniverse().getFormatter().getFormattedName(nation)+"]");
 				output.add(Colors.Rose + "    [Upkeep] "

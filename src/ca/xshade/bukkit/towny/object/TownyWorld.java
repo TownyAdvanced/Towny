@@ -12,7 +12,7 @@ import ca.xshade.bukkit.towny.TownySettings;
 
 public class TownyWorld extends TownyObject {
 	private List<Town> towns = new ArrayList<Town>();
-	private boolean isClaimable = true, isPvP = true, usingDefault = true, isUsingTowny = true;
+	private boolean isClaimable = true, isPVP, isForcePVP, isForceExpl, isForceFire, isForceTownMobs, hasWorldMobs, usingDefault = true, isUsingTowny = true;
 	private List<Integer> unclaimedZoneIgnoreIds = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null, unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
@@ -23,6 +23,13 @@ public class TownyWorld extends TownyObject {
 
 	public TownyWorld(String name) {
 		setName(name);
+		
+		isPVP =  true;
+		isForcePVP = TownySettings.getBoolean("FORCE_PVP_ON");		
+		isForceFire = TownySettings.getBoolean("FORCE_FIRE_ON");
+		isForceTownMobs = TownySettings.getBoolean("FORCE_TOWN_MONSTERS_ON");
+		hasWorldMobs = true;
+		isForceExpl = TownySettings.getBoolean("FORCE_EXPLOSIONS_ON");
 	}
 
 	public List<Town> getTowns() {
@@ -93,10 +100,12 @@ public class TownyWorld extends TownyObject {
 			throw new NotRegisteredException();
 		else {
 			towns.remove(town);
+			/*
 			try {
 				town.setWorld(null);
 			} catch (AlreadyRegisteredException e) {
 			}
+			*/
 		}
 	}
 
@@ -132,12 +141,52 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
-	public void setPvP(boolean isPvP) {
-		this.isPvP = isPvP;
+	public void setPVP(boolean isPVP) {
+		this.isPVP = isPVP;
 	}
 
-	public boolean isPvP() {
-		return isPvP;
+	public boolean isPVP() {
+		return this.isPVP;
+	}
+	
+	public void setForcePVP(boolean isPVP) {
+		this.isForcePVP = isPVP;
+	}
+
+	public boolean isForcePVP() {
+		return this.isForcePVP;
+	}
+	
+	public void setForceExpl(boolean isExpl) {
+		this.isForceExpl = isExpl;
+	}
+
+	public boolean isForceExpl() {
+		return isForceExpl;
+	}
+	
+	public void setForceFire(boolean isFire) {
+		this.isForceFire = isFire;
+	}
+
+	public boolean isForceFire() {
+		return isForceFire;
+	}
+	
+	public void setWorldMobs(boolean hasMobs) {
+		this.hasWorldMobs = hasMobs;
+	}
+
+	public boolean hasWorldMobs() {
+		return this.hasWorldMobs;
+	}
+	
+	public void setForceTownMobs(boolean setMobs) {
+		this.isForceTownMobs = setMobs;
+	}
+
+	public boolean isForceTownMobs() {
+		return isForceTownMobs;
 	}
 
 	public void setClaimable(boolean isClaimable) {
@@ -252,16 +301,32 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	/**
+	 * Checks the distance from the closest homeblock.
+	 * 
+	 * @param key
+	 * @return the distance to nearest towns homeblock.
+	 */
+	public int getMinDistanceFromOtherTowns(Coord key) {
+		
+		return getMinDistanceFromOtherTowns(key, null);
+		
+	}
+	
+	/**
 	 * Checks the distance from a another town's homeblock.
 	 * 
 	 * @param key
+	 * @param town Players town
 	 * @return the closest distance to another towns homeblock.
 	 */
-	public int getMinDistanceFromOtherTowns(Coord key) {
+	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
 		double min = Integer.MAX_VALUE;
 		for (Town town : getTowns())
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
+				if (homeTown != null)
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+						continue;
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min)
 					min = dist;

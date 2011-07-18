@@ -315,3 +315,42 @@ V0.71.4 RC2:
     - Depreciated all default prefix/poxfix entries. Now uses the new townLevel and nationLevel entries in config.yml
     - Added new settings for disabling world monster spawns and town control over mob spawns within their walls.
     - Changes to /townyadmin commands for war, neutral, townmobs, worldmobs, devmode and debug. Now use /townyadmin toggle XXX.
+v0.72.1:
+    - Fix an error on new installs where towny would not auto create the data/worlds/XXX.txt files.
+v0.73.0:
+    - Fixed a few typos in the language file.
+    - Changed loading system to now reload ALL Towny data on the '/townyadmin reload' command.
+    - Fixed an error of Nation/Towns/Residents data files not being correctly updated on a change. Fixes the error when using Inactive resident deletion.
+    - '/town toggle public' now works as intended.
+    - Fixed reading of town and nation level data from the yml. It actually reads it now.
+    - Fixed an error with '/towny unclaim all' causing an error and corrupting a town save file.
+    - Fixed '/town claim' when you have previously unclaimed all it wouldn't allow you to claim with an error of not attached to town message.
+    - Prevented setting negative plot costs and taxes.
+    - Added a town/nation upkeep modifier to the townLevel and nationLevel settings.
+      You can now adjust the cost for upkeep based upon the level of the town/nation eg. (price_town_upkeep * modifier).
+    - Fixed Health regen in towns to correctly display in the Admin panel.
+    - Fixed the connection to Essentials for using teleport timers.
+    - Fixed an error where a player leaving town could sometimes not correctly update the old town data file.
+    - Fixed a typo causing Nation levels to not load.
+    - Fixed players having to relog after leaving a town before they could join another.
+    - Added chests and furnaces to the switch_id's (now protected by permission flags).
+    - changed the default setting for town mob removal to 'true'.
+    - Added a new setting of 'cheat_protection' to prevent fly and double jump cheats.
+    - Removed default_max_town_blocks from the config as it's no longer used. All block settings are now in the townLevel and town_block_ratio entries.
+    - Added config.yml settings for force_explosions_on, force_monsters_on and force_fire_on. These will prevent Mayors toggling the settings.
+    - Added world configs for Forced Fire,Explosions and Monsters.
+    - Moved some townyworld commands the a new toggle command '/townyworld toggle claimable, usingtowny, pvp, explosion, fire and mobs.
+    - Changes to protect towns not in nations from explosions during a war.
+    - Added regex parsing on town and nation renaming.
+    - Removed access to '/town set mayor' command for assistants.
+    - Fixed '/res set mode townclaim' attempting to claim the wrong blocks.
+    - Added a town hasUpkeep setting for towns. Default sets to false if using an NPC mayor, or manually configurable by server admins.
+    - Added a 'Mob Spawns' indicator to the '/town' status display.
+    - Cleaned up display for /town /ta and /tw.
+    - '/town set homeblock' no longer gets confused by your own homeblock when calculating the distance to the closest homeblock.
+    - Moved many config settings to the seperate world data files for individual adjustment.
+      (PvP, town Mob spawns, town Firespread and town Explosions are now configurable per world.)
+    - Added '/townyworld toggle' controls for all new world settings.
+    - Removed pve_in_non_pvp_towns from config.yml as it's no longer needed.
+    - fixed an error in loading which prevented mob removal entities from being updated upon a reload.
+    

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.01
+version: 0.02
 language: english
 author: ElgarL
 website:
@@ -163,7 +163,7 @@ msg_friend_remove: '&b%s removed you as a friend.'
 msg_removed: '&bRemoved '
 msg_from_list: 'from your friend list.'
 msg_to_list: 'to your friend list.'
-msg_left_town: '&b%s  left town'
+msg_left_town: '&b%s left town'
 msg_you_left: '&bYou left %s.'
 msg_not_mayor: '&bYou are not the mayor.'
 msg_not_king: '&bYou are not the king.'
@@ -181,8 +181,8 @@ msg_raised_ass: '&b%s raised %s to %s assistants.'
 msg_lowered_to_res_by: '&bYou were demoted to a regular resident by %s.'
 msg_lowered_to_res: '&b%s demoted %s to regular resident.'
 msg_invalid_name: '&bNone of those names were valid.'
-msg_invited_join_town: '&b%s invited %sto town.'
-msg_invited_join_nation: '&b%s invited %sto the nation.'
+msg_invited_join_town: '&b%s invited %s to town.'
+msg_invited_join_nation: '&b%s invited %s to the nation.'
 msg_deny_invite: '&b%s denied your invite.'
 msg_invited: '&bYou''ve been invited to join %s.'
 
@@ -233,7 +233,14 @@ msg_changed_expl: '&cExplosions in town are now %s.'
 msg_changed_fire: '&cFirespread in town is now %s.'
 msg_changed_mobs: '&cMonster spawns in town are now %s.'
 
+msg_changed_world_setting: '&c%s for %s is: %s.'
+
+
 msg_world_pvp: '&cThis world is PvP only.'
+msg_world_mobs: '&cThis world has Monster spawns forced on.'
+msg_world_expl: '&cThis world has Explosions forced on.'
+msg_world_fire: '&cThis world has Fire spread forced on.'
+
 msg_reloaded: '&2Towny''s settings were reloaded.'
 msg_give_total: '&bGave %s bonus. (Total: %s)'
 mag_backup_success: '&2Backup successful.'
@@ -246,7 +253,7 @@ msg_set_town_spawn: '&bSuccessfully changed town''s spawn.'
 
 msg_set_perms: '&bSuccessfully changed permissions to %s.'
 msg_set_claim: '&bSuccessfully changed %s''s claimability to %s'
-msg_set_pvp: '&bSuccessfully changed %s''s PvP to %s'
+
 msg_usedefault: '&bThis world (%s) is now using the global default settings.'
 msg_set_wild_perms: '&bSuccessfully changed %s''s wild permissions %s'
 msg_set_wild_ignore: '&bSuccessfully changed %s''s wild ignore blocks to %s'
