@@ -6,8 +6,8 @@ import com.avaje.ebean.validation.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+//import org.bukkit.Bukkit;
+//import org.bukkit.entity.Player;
 
 /**
  *

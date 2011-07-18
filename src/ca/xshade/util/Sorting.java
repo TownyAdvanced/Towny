@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 public class Sorting {
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) {
 		Hashtable<Object,Object> table = new Hashtable<Object,Object>();
 		table.put(1, 4);
