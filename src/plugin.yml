@@ -1,8 +1,8 @@
 name: Towny
 main: ca.xshade.bukkit.towny.Towny
-version: 0.72.0
+version: 0.73.0
 language: english.yml
-last_run_version: 0.72.0
+last_run_version: 0.73.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -52,7 +52,7 @@ commands:
 #        towny.wild.destroy
 #        towny.wild.switch
 #        towny.wild.item_use
-#    towny.wild.block.[block id] : User is able to edit [block id] in the wild.
+#    towny.wild.block.[block id].* : User is able to edit [block id] in the wild.
 #    towny.spawntp :Use /town spawn
 #    towny.publicspawntp : Use "/town spawn [town]" (teleport to other towns)
 #
@@ -60,16 +60,8 @@ commands:
 
 # these will be moved to permissions nodes at a later date
 
-# Allow towns to claim outposts (a townblock not connected to town).
-allow_outposts: true
-allow_resident_plots: true
-
-# all the use of /town spawn
-allow_town_spawn: true
-# Allow regular residents to use /town spawn [town] (TP to other towns).
-allow_town_spawn_travel: true
-# Respawn the player at his town spawn point when he/she dies.
-town_respawn: false
+nation_creation_admin_only: false
+town_creation_admin_only: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -77,18 +69,18 @@ town_respawn: false
 # +------------------------------------------------------+ #
 ############################################################
 
-# numResidents,namePrefix,namePostfix,mayorPrefix,mayorPostfix,townBlockLimit
+# numResidents,namePrefix,namePostfix,mayorPrefix,mayorPostfix,townBlockLimit,upkeepModifier
 
 townLevel:
-    - '0,, Ruin,Spirit ,,1'
-    - '1,, (Settlement),,,16'
-    - '2,, (Hamlet),Chief ,,32'
-    - '6,, (Village),Baron Von ,,96'
-    - '10,, (Town),Viscount ,,160'
-    - '14,, (Large Town),Count Von ,,224'
-    - '20,, (City),Earl ,,320'
-    - '24,, (Large City),Duke ,,384'
-    - '28,, (Metropolis),Lord ,,448'
+    - '0,, Ruin,Spirit ,,1,1.0'
+    - '1,, (Settlement),Hermit ,,16,1.0'
+    - '2,, (Hamlet),Chief ,,32,1.0'
+    - '6,, (Village),Baron Von ,,96,1.0'
+    - '10,, (Town),Viscount ,,160,1.0'
+    - '14,, (Large Town),Count Von ,,224,1.0'
+    - '20,, (City),Earl ,,320,1.0'
+    - '24,, (Large City),Duke ,,384,1.0'
+    - '28,, (Metropolis),Lord ,,448,1.0'
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -96,15 +88,15 @@ townLevel:
 # +------------------------------------------------------+ #
 ############################################################
 
-# numResidents,namePrefix,namePostfix,capitalPrefix,capitalPostfix,kingPrefix,kingPostfix
+# numResidents,namePrefix,namePostfix,capitalPrefix,capitalPostfix,kingPrefix,kingPostfix,upkeepModifier
 
 nationLevel:
-    - '0,Lands of , (Nation),,,Leader ,'
-    - '10,Federation of , (Nation),,,Count ,'
-    - '20,Dominion of , (Nation),,,Duke ,'
-    - '30,Kingdom of , (Nation),,,King ,'
-    - '40,The , Empire,,,Emperor ,'
-    - '60,The , Realm,,,God Emperor ,'
+    - '0,Lands of , (Nation),,,Leader ,,1.0'
+    - '10,Federation of , (Nation),,,Count ,,1.0'
+    - '20,Dominion of , (Nation),,,Duke ,,1.0'
+    - '30,Kingdom of , (Nation),,,King ,,1.0'
+    - '40,The , Empire,,,Emperor ,,1.0'
+    - '60,The , Realm,,,God Emperor ,,1.0'
 
 
 ############################################################
@@ -113,8 +105,6 @@ nationLevel:
 # +------------------------------------------------------+ #
 ############################################################
 
-# used to limit a town size if the level config files are empty
-default_max_town_blocks: 64
 # maximum number of plots any single resident can own
 max_plots_per_resident: 100
 # Maximum number of towns allowed on the server.
@@ -136,14 +126,39 @@ town_block_size: 16
 
 ############################################################
 # +------------------------------------------------------+ #
+# |             Default new world settings               | #
+# +------------------------------------------------------+ #
+############################################################
+
+# These flags are only used at the initial setp of a new world.
+
+# Once Towny is running each world can be altered from within game
+# using '/townyworld toggle'
+
+# force_pvp_on is a global flag and overrides any towns flag setting
+force_pvp_on: false
+
+# force_explosions_on is a global flag and overrides any towns flag setting
+force_explosions_on: false
+
+# world_monsters_on is a global flag setting per world.
+world_monsters_on: true
+
+# force_monsters_on is a global flag and overrides any towns flag setting
+force_town_monsters_on: false
+
+# force_fire_on is a global flag and overrides any towns flag setting
+force_fire_on: false
+
+############################################################
+# +------------------------------------------------------+ #
 # |                Global town settings                  | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# force_pvp_on is a global flag and overrides any towns flag setting
-force_pvp_on: false
 # can residents/Allies harm other residents when in a town with pvp enabled?
 friendly_fire: true
+
 # Players within their town or allied towns will regenerate half a heart after every health_regen_speed milliseconds.
 health_regen: true
 health_regen_speed: 3000
@@ -152,10 +167,25 @@ health_regen_speed: 3000
 # If a town can't pay it's tax then it is kicked from the nation.
 # if a resident can't pay his plot tax he loses his plot.
 # if a resident can't pay his town tax then he is kicked from the town.
+# if a town or nation fails to pay it's upkeep it is deleted.
 daily_taxes: true
 
-nation_creation_admin_only: false
-town_creation_admin_only: false
+# Allow towns to claim outposts (a townblock not connected to town).
+allow_outposts: true
+
+# Allow residents to own/purchase plots within a town
+allow_resident_plots: true
+
+# all the use of /town spawn
+allow_town_spawn: true
+# Allow regular residents to use /town spawn [town] (TP to other towns if they are public).
+allow_town_spawn_travel: true
+# Respawn the player at his town spawn point when he/she dies.
+town_respawn: false
+
+# Enables the [~Home] message.
+# If false it will make it harder for enemies to find the home block during a war
+show_town_notifications: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -182,28 +212,24 @@ debug_mode: false
 
 # Spams the player named in dev_name with all messages related to towny.
 dev_mode: false
-dev_name: Shadeness
+dev_name: ElgarL
 
+# Record all messages to the towny.log
 logging: true
+
+# If true this will cause the log to be wiped at every startup.
+reset_log_on_boot: true
 
 name_check_regex: '^[a-zA-Z0-9]+[a-zA-Z0-9._-]*$'
 name_filter_regex: '[ /]'
 name_remove_regex: '[^a-zA-Z0-9._-]'
 
+# Not a good idea to change this at the moment.
 npc_prefix: 'NPC'
 
-pve_in_non_pvp_towns: true
-reset_log_on_boot: true
-
-# Enables the [~Home] message.
-# If false it will make it harder for enemies to find the home block during a war
-show_town_notifications: true
-
-
-# The name of the town a resident will automatically join when he first registers.
-default_town_name: ''
-
 # Skin regular chat with a player's towny prefix, postfix, and colour.
+# You can NOT change this setting and perform a /townyadmin reload.
+# It requires a server restart is setting to false.
 modify_chat_name: true
 
 ############################################################
@@ -219,10 +245,14 @@ protection:
     # 326 - water bucket
     # 327 - lava bucket
     # 351 - bone/bonemeal
-    # 93/94 - redstone repeater
+    
     item_use_ids: 259,325,326,327,351
 
     # Items which can be blocked or enabled via town/plot flags
+    # 25 - noteblock
+    # 54 - chest
+    # 61 - furnace
+    # 62 - lit furnace
     # 64 - wooden door
     # 69 - lever
     # 70 - stone pressure plate
@@ -230,26 +260,30 @@ protection:
     # 72 - wooden pressure plate
     # 77 - stone button
     # 96 - trap door
-    # 25 - noteblock
     # 84 - jukebox
-    switch_ids: 64,69,70,71,72,77,96,25,84,93,94
+    # 93/94 - redstone repeater
+    
+    switch_ids: 25,54,61,62,64,69,70,71,72,77,96,84,93,94
     
     # permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html
     # Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, 
     # PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie
 
     # Remove living entities within a town's boundaries, if the town has the mob removal flag set.
-    mob_removal_town: false
+
     town_mob_removal_entities: Monster,WaterMob,Flying,Slime
     
-    # Globally remove living entities in all worlds.
-    mob_removal_world: false
+    # Globally remove living entities in all worlds that have their flag set.
+
     world_mob_removal_entities: WaterMob,Flying,Slime 
     
     # The maximum amount of time a mob could be inside a town's boundaries before being sent to the void.
     # Lower values will check all entities more often at the risk of heavier burden and resource use.
     # NEVER set below 1000 (guestimate)
     mob_removal_speed: 5000
+    
+    # Prevent fly and double block jump cheats.
+    cheat_protection: true
 
 
 ############################################################
@@ -332,6 +366,9 @@ inactive_after_time: 86400000
 # after Two months (default) of not logging in
 delete_old_residents: false
 deleted_after_time: 5184000000
+
+# The name of the town a resident will automatically join when he first registers.
+default_town_name: ''
 
 
 ############################################################
