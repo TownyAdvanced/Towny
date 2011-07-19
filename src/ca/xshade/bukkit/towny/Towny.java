@@ -56,7 +56,6 @@ import ca.xshade.util.FileMgmt;
 import ca.xshade.util.JavaUtil;
 import ca.xshade.util.StringMgmt;
 
-import com.earth2me.essentials.Teleport;
 import com.iConomy.*;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijiko.permissions.PermissionHandler;
