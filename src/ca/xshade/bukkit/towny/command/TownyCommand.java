@@ -69,6 +69,7 @@ public class TownyCommand implements CommandExecutor {
 		plugin = instance;
 	}
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getTownyUniverse().getPlugin().getVersion();

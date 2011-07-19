@@ -35,6 +35,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		plugin = instance;
 	}		
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		townyworld_help.add(ChatTools.formatTitle("/townyworld"));

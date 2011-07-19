@@ -101,7 +101,8 @@ public class TownyFormatter {
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r") );
 		out.add(Colors.Green + "Explosions: " + (town.isBANG() ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
 				+ Colors.Green + "  Firespread: " + (town.isFire() ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
-				+ Colors.Green + "  Mob Spawns: " + (town.hasMobs() ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				+ Colors.Green + "  Mob Spawns: " + (town.hasMobs() ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+                + Colors.Green + "  Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : ""));
 
 		// | Bank: 534 coins
 		String bankString = "";

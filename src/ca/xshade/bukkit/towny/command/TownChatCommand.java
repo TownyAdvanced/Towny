@@ -28,6 +28,7 @@ public class TownChatCommand implements CommandExecutor  {
 		plugin = instance;
 	}		
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (sender instanceof Player) {

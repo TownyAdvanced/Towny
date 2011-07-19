@@ -788,7 +788,17 @@ public class TownyUniverse extends TownyObject {
 					} catch (TownyException e) {
 					}
 					continue;
-				} else if (!resident.pay(town.getTaxes(), town)) {
+				}
+                else if(town.isTaxPercentage())
+                {
+                    double cost = resident.getHoldingBalance() * town.getTaxes()/100;
+                    resident.pay(cost, town);
+					try {
+						sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + cost);
+					} catch (TownyException e) {
+					}
+                }
+                else if (!resident.pay(town.getTaxes(), town)) {
 					sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
 					try {
 						town.removeResident(resident);
@@ -937,8 +947,8 @@ public class TownyUniverse extends TownyObject {
 				e1.printStackTrace();
 			}	
 			
-		getDataSource().deleteResident(resident);
-		residents.remove(resident.getName().toLowerCase());
+		//getDataSource().deleteResident(resident);
+		//residents.remove(resident.getName().toLowerCase());
 		try {
 			if (town != null) {			
 				town.removeResident(resident);
@@ -959,6 +969,7 @@ public class TownyUniverse extends TownyObject {
 		getDataSource().saveResidentList();
 	}
 	
+	
 	public void removeResidentList(Resident resident) {
 		
 		String name = resident.getName();
@@ -968,6 +979,7 @@ public class TownyUniverse extends TownyObject {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		getDataSource().deleteResident(resident);
 		residents.remove(name.toLowerCase());
 		plugin.deleteCache(name);
 		getDataSource().saveResidentList();

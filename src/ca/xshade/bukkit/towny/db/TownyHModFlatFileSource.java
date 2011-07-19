@@ -242,6 +242,14 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					} catch (NumberFormatException nfe) {
 					} catch (Exception e) {
 					}
+
+                line = kvFile.get("taxpercent");
+				if (line != null)
+					try {
+						town.setTaxPercentage(Boolean.parseBoolean(line));
+					} catch (NumberFormatException nfe) {
+					} catch (Exception e) {
+					}
 				
 				line = kvFile.get("fire");
 				if (line != null)

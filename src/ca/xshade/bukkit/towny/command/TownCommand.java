@@ -11,6 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.User;
 import com.iConomy.iConomy;
 
 import ca.xshade.bukkit.questioner.Questioner;
@@ -70,6 +73,7 @@ public class TownCommand implements CommandExecutor  {
 		plugin = instance;
 	}	
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (sender instanceof Player) {
@@ -118,8 +122,8 @@ public class TownCommand implements CommandExecutor  {
 				
 				// Check permission to use spawn travel
 				if (!isTownyAdmin &&
-						(split.length == 1 && !TownySettings.isAllowingTownSpawn() && !plugin.hasPermission(player, "towny.spawntp")) ||
-						(split.length > 1 && !TownySettings.isAllowingPublicTownSpawnTravel() && !plugin.hasPermission(player, "towny.publicspawntp")))
+						(split.length == 1 && (!TownySettings.isAllowingTownSpawn() || !plugin.hasPermission(player, "towny.spawntp"))) ||
+						(split.length > 1 && (!TownySettings.isAllowingPublicTownSpawnTravel() || !plugin.hasPermission(player, "towny.publicspawntp"))))
 					throw new TownyException(TownySettings.getLangString("msg_err_town_spawn_forbidden"));
 				
 				Resident resident = plugin.getTownyUniverse().getResident(player.getName());
@@ -136,22 +140,48 @@ public class TownCommand implements CommandExecutor  {
 					notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 				}
 				
-				// check payment
-				if (!isTownyAdmin && TownySettings.isUsingIConomy() && !resident.pay(TownySettings.getTownSpawnTravelPrice()))
+				double travelCost = TownySettings.getTownSpawnTravelPrice();
+				
+				// Check if need/can pay
+				if (!isTownyAdmin && TownySettings.isUsingIConomy() && (resident.getHoldingBalance() < travelCost))
 					throw new TownyException(notAffordMSG);
 				
+				boolean notUsingESS = false;
+				
+				//essentials tests
+				Plugin handle = plugin.getServer().getPluginManager().getPlugin("Essentials");
+				if (!handle.equals(null)) {
+					
+					Essentials essentials = (Essentials)handle;
+					plugin.sendDebugMsg("Using Essentials");
+					
+					try {
+						User user = essentials.getUser(player);
+						
+						if (!user.isTeleportEnabled())
+							//Ess teleport is disabled
+							notUsingESS = true;
+						
+						if (!user.isJailed()){
+							Teleport teleport = user.getTeleport();
+							teleport.teleport(town.getSpawn(), null);
+						}
+					} catch (Exception e) {
+						plugin.sendErrorMsg(player, "Error: " + e.getMessage());
+						// cooldown?
+						return;
+					}
+				}
+				
+				//show message if we are using iConomy and are charging for spawn travel.
+				if (!isTownyAdmin && TownySettings.isUsingIConomy() && resident.pay(travelCost))
+					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"),
+							travelCost + TownyIConomyObject.getIConomyCurrency()));
+				
 				// if an Admin or essentials teleport isn't being used, use our own.
-				if(isTownyAdmin || !plugin.checkEssentialsTeleport(player, town.getSpawn()))
+				if(isTownyAdmin || notUsingESS)
 						player.teleport(town.getSpawn());
 
-				//show message if we are using iConomy and are charging for spawn travel.
-				if (!isTownyAdmin && TownySettings.isUsingIConomy() && TownySettings.getTownSpawnTravelPrice() != 0)
-					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"),
-							TownySettings.getTownSpawnTravelPrice() + TownyIConomyObject.getIConomyCurrency()));
-						
-					
-				//if (plugin.checkEssentialsTeleport(player))
-				//	plugin.getTownyUniverse().townSpawn(player, false);
 				
 			} catch (TownyException e) {
 				plugin.sendErrorMsg(player, e.getMessage());
@@ -304,6 +334,7 @@ public class TownCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "explosion", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "fire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "mobs", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "taxpercent", ""));
 		} else {
 			Resident resident;
 			Town town;
@@ -321,7 +352,7 @@ public class TownCommand implements CommandExecutor  {
 			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("pvp")) {
 				try {
-					if (town.getWorld().isPVP()) {
+					if (town.getWorld().isForcePVP()) {
 						town.setPVP(true);
 						throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
 					}
@@ -371,6 +402,14 @@ public class TownCommand implements CommandExecutor  {
 					}
 					town.setHasMobs(!town.hasMobs());
 					plugin.getTownyUniverse().sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_mobs"), town.hasMobs() ? "Enabled" : "Disabled"));
+
+				} catch (Exception e) {
+					plugin.sendErrorMsg(player, e.getMessage());
+				}
+            }else if (split[0].equalsIgnoreCase("taxpercent")) {
+				try {
+					town.setTaxPercentage(!town.isTaxPercentage());
+					plugin.getTownyUniverse().sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_taxpercent"), town.isTaxPercentage() ? "Enabled" : "Disabled"));
 
 				} catch (Exception e) {
 					plugin.sendErrorMsg(player, e.getMessage());
@@ -456,6 +495,11 @@ public class TownCommand implements CommandExecutor  {
 						plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
 						return;
 					}
+                    if(town.isTaxPercentage() && amount > 100)
+                    {
+                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_percentage"));
+                        return;
+                    }
 					try {
 						town.setTaxes(Integer.parseInt(split[1]));
 						plugin.getTownyUniverse().sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax"), player.getName(), split[1]));

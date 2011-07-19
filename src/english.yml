@@ -232,6 +232,7 @@ msg_changed_public: '&cThe Town''s public status is now %s.'
 msg_changed_expl: '&cExplosions in town are now %s.'
 msg_changed_fire: '&cFirespread in town is now %s.'
 msg_changed_mobs: '&cMonster spawns in town are now %s.'
+msg_changed_taxpercent: '&cPercentage based taxes are now %s.'
 
 msg_changed_world_setting: '&c%s for %s is: %s.'
 
@@ -334,6 +335,7 @@ msg_err_command_disable: '&cCommand disabled: Using permissions.'
 msg_err_universe_limit: '&cThe universe cannot hold any more towns.'
 msg_err_too_many_npc: '&cToo many npc''s registered.'
 msg_err_negative_money: '&cNegative money is stupid. Weirdo.'
+msg_err_not_percentage: '&cPercentages must be below 100.'
 
 # these messages are only used if town/nation creation is set to admins only
 

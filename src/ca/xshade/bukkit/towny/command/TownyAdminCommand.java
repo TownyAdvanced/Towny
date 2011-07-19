@@ -67,6 +67,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 		plugin = instance;
 	}	
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (sender instanceof Player) {
@@ -378,7 +379,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 			
 				try {
 					choice = !TownySettings.getBoolean("wartime_nation_can_be_neutral");
-					plugin.setSetting("wartime_nation_can_be_neutral", choice);
+					plugin.setSetting("wartime_nation_can_be_neutral", choice, true);
 					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_nation_allow_neutral"), choice ? "Enabled" : "Disabled"));
 					
 				} catch (Exception e) {
@@ -415,7 +416,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 		} else if (split[0].equalsIgnoreCase("devmode"))
 			try {
 				choice = !TownySettings.getBoolean("DEV_MODE");
-				plugin.setSetting("DEV_MODE", choice);
+				plugin.setSetting("DEV_MODE", choice, false);
 				plugin.sendMsg(player, "Dev Mode " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
 			} catch (Exception e) {
 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
@@ -423,7 +424,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 		else if (split[0].equalsIgnoreCase("debug"))
 			try {
 				choice = !TownySettings.getBoolean("DEBUG_MODE");
-				plugin.setSetting("DEBUG_MODE", choice);
+				plugin.setSetting("DEBUG_MODE", choice, false);
 				plugin.sendMsg(player, "Debug Mode " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
 			} catch (Exception e) {
 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));

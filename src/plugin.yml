@@ -1,8 +1,8 @@
 name: Towny
 main: ca.xshade.bukkit.towny.Towny
-version: 0.73.0
+version: 0.73.1
 language: english.yml
-last_run_version: 0.73.0
+last_run_version: 0.73.1
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -57,6 +57,49 @@ commands:
 #    towny.publicspawntp : Use "/town spawn [town]" (teleport to other towns)
 #
 #
+
+permissions:
+    towny.admin:
+        description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
+        default: op
+    towny.town.*:
+        description: User can create a town and claim land.
+        default: op
+        children:
+            towny.town.new: true
+            towny.town.claim: true
+    towny.town.new:
+        description: User is able to create a town
+        default: false
+    towny.town.claim:
+        description: User is able to expand with /towny claim
+        default: false
+    towny.wild.*:
+        description: User can build/destroy in wild.
+        default: op
+        children:
+            towny.wild.build: true
+            towny.wild.switch: true
+            towny.wild.destroy: true
+            towny.wild.item_use: true
+    towny.wild.build:
+        description: User can build in wild.
+        default: false
+    towny.wild.destroy:
+        description: User can destroy in wild.
+        default: false
+    towny.wild.switch:
+        description: User can switch in wild.
+        default: false
+    towny.wild.item_use:
+        description: User can use use items in wild. 
+        default: false
+    towny.spawntp:
+        description: User can use /town spawn when on in config.
+        default: true
+    towny.publicspawntp:
+        description: User can use /town spawn <town> when on in config.
+        default: true
 
 # these will be moved to permissions nodes at a later date
 
@@ -220,7 +263,7 @@ logging: true
 # If true this will cause the log to be wiped at every startup.
 reset_log_on_boot: true
 
-name_check_regex: '^[a-zA-Z0-9]+[a-zA-Z0-9._-]*$'
+name_check_regex: '^[a-zA-Z0-9._-]*$'
 name_filter_regex: '[ /]'
 name_remove_regex: '[^a-zA-Z0-9._-]'
 

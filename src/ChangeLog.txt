@@ -353,4 +353,15 @@ v0.73.0:
     - Added '/townyworld toggle' controls for all new world settings.
     - Removed pve_in_non_pvp_towns from config.yml as it's no longer needed.
     - fixed an error in loading which prevented mob removal entities from being updated upon a reload.
-    
+v0.73.1:
+    - Fixed more typo's (a never ending job).
+    - Added a debug message on startup to help descover incorrect town/world file configs.
+    - Fixed '/town toggle pvp' to correctly watch the forced world pvp, not the pvp setting.
+    - Fixed resident file being deleted when deleting a town. Should only be deleted if through the inactive player timer or is an NPC.
+    - Fixed a permissions test error on spawn travel. It was failing to abort a teleport to spawn if you didn't have the correct permissions.
+    - setting devmode and debug are now temporary settings for the current session only. They will not cause a save of config.yml.
+    - Fixed teleport cooldown (essentials hook) to NOT teleport when in cooldown mode.
+    - New '/town toggle taxpercent'. Allows a town to set it's taxes as a percentage of a players wealth rather than a fixed fee.
+    - New '/town set taxes $$' to configure the tax rate (fixed or percentage) for a town.
+    - Added error trapping to the language file and config file reads. This will prevent data corruption when users fail to follow the correct upgrade procedure.
+    - Added support for Bukkitpermissions (superperms)

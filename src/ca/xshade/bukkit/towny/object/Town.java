@@ -25,11 +25,12 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Resident mayor;
 	private int bonusBlocks, taxes, plotPrice, plotTax;
 	private Nation nation;
-	private boolean hasUpkeep, isPVP, hasMobs, isPublic, isBANG, isFire;
+	private boolean hasUpkeep, isPVP, hasMobs, isPublic, isBANG, isFire,isTaxPercentage;
 	private String townBoard = "/town set board [msg]";
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private Location spawn;
+
 
 	public Town(String name) {
 		setName(name);
@@ -42,6 +43,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		isBANG = false;
 		hasMobs = false;
 		isPublic = true;
+        isTaxPercentage = false;
 		permissions.loadDefault(this);
 	}
 	
@@ -188,6 +190,19 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public boolean isBANG() {
 		return isBANG;
+	}
+
+    public void setTaxPercentage (boolean isPercentage)
+    {
+        this.isTaxPercentage = isPercentage;
+        if(this.getTaxes() > 100)
+        {
+            this.setTaxes(0);
+        }
+    }
+
+    public boolean isTaxPercentage() {
+		return isTaxPercentage;
 	}
 	
 	public void setFire(boolean isFire) {

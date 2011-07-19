@@ -378,7 +378,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (NumberFormatException nfe) {
 					} catch (Exception e) {
 					}
-					
+
 				line = kvFile.get("explosion");
 				if (line != null)
 					try {
@@ -386,7 +386,15 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (NumberFormatException nfe) {
 					} catch (Exception e) {
 					}
-				
+
+                line = kvFile.get("taxpercent");
+				if (line != null)
+					try {
+						town.setTaxPercentage(Boolean.parseBoolean(line));
+					} catch (NumberFormatException nfe) {
+					} catch (Exception e) {
+					}
+
 				line = kvFile.get("fire");
 				if (line != null)
 					try {
@@ -878,6 +886,8 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("explosion=" + Boolean.toString(town.isBANG()) + newLine);
 			// Firespread
 			fout.write("fire=" + Boolean.toString(town.isFire()) + newLine);
+            // Taxpercent
+			fout.write("taxpercent=" + Boolean.toString(town.isTaxPercentage()) + newLine);
 			// TownBlocks
 			fout.write("townBlocks=" + utilSaveTownBlocks(town.getTownBlocks()) + newLine);
 			// Home Block

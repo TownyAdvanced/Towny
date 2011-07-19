@@ -172,7 +172,7 @@ public class TownyPermission {
 			+ (residentBuild ? "f" : "-")
 			+ (allyBuild ? "a" : "-")
 			+ (outsiderBuild ? "o" : "-")
-			+ Colors.LightGreen + " Destory = " + Colors.LightGray
+			+ Colors.LightGreen + " Destroy = " + Colors.LightGray
 			+ (residentDestroy ? "f" : "-")
 			+ (allyDestroy ? "a" : "-")
 			+ (outsiderDestroy ? "o" : "-")

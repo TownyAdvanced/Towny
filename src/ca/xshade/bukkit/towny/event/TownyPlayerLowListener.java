@@ -24,7 +24,7 @@ public class TownyPlayerLowListener extends PlayerListener {
 	private final Towny plugin;
 
 	public TownyPlayerLowListener(Towny instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@Override

@@ -44,6 +44,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				if ((System.currentTimeMillis() - resident.getLastOnline() > TownySettings.getMaxInactivePeriod()) && !plugin.isOnline(resident.getName())) {
 					universe.getPlugin().sendMsg("Deleting resident: " + resident.getName());
 					universe.removeResident(resident);
+					universe.removeResidentList(resident);
 				}
 		}
 		
