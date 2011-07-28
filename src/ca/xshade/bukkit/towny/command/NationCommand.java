@@ -244,7 +244,7 @@ public class NationCommand implements CommandExecutor  {
 	public void newNation(Player player, String name, String capitalName) {
 		TownyUniverse universe = plugin.getTownyUniverse();
 		try {
-			if (TownySettings.isNationCreationAdminOnly() && !plugin.isTownyAdmin(player) && !plugin.hasPermission(player, "towny.nation.new"))
+			if (!plugin.isTownyAdmin(player) && (TownySettings.isNationCreationAdminOnly() ||  (plugin.isPermissions() && !plugin.hasPermission(player, "towny.nation.new"))))
 				throw new TownyException(TownySettings.getNotPermToNewNationLine());
 			
 			Town town = universe.getTown(capitalName);
@@ -465,6 +465,7 @@ public class NationCommand implements CommandExecutor  {
 					// You can't kick yourself and only the mayor can kick assistants
 					// so there will always be at least one resident.
 				}
+		
 		for (Town town : remove)
 			kicking.remove(town);
 
@@ -807,7 +808,7 @@ public class NationCommand implements CommandExecutor  {
 						nation.setKing(newKing);
 						plugin.deleteCache(oldKingsName);
 						plugin.deleteCache(newKing.getName());
-						plugin.getTownyUniverse().sendNationMessage(nation, TownySettings.getNewKingMsg(newKing.getName()));
+						plugin.getTownyUniverse().sendNationMessage(nation, TownySettings.getNewKingMsg(newKing.getName(), nation.getName()));
 					} catch (TownyException e) {
 						plugin.sendErrorMsg(player, e.getError());
 					}
@@ -819,7 +820,7 @@ public class NationCommand implements CommandExecutor  {
 						Town newCapital = plugin.getTownyUniverse().getTown(split[1]);
 						nation.setCapital(newCapital);
 						plugin.updateCache();
-						plugin.getTownyUniverse().sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName()));
+						plugin.getTownyUniverse().sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
 					} catch (TownyException e) {
 						plugin.sendErrorMsg(player, e.getError());
 					}

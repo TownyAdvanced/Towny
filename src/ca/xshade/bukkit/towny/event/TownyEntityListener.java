@@ -205,9 +205,10 @@ public class TownyEntityListener extends EntityListener {
 			try {
 				
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
-				if (!townBlock.getTown().hasMobs() && MobRemovalTimerTask.isRemovingTownEntity(livingEntity))
+				if (!townBlock.getTown().hasMobs() && MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
 					plugin.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getCreatureType() + " from spawning within "+coord.toString()+".");
 					event.setCancelled(true);
+				}
 			} catch (TownyException x) {
 			}	
 

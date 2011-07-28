@@ -1,8 +1,8 @@
-name: Towny
+﻿name: Towny
 main: ca.xshade.bukkit.towny.Towny
-version: 0.73.1
+version: 0.73.2
 language: english.yml
-last_run_version: 0.73.1
+last_run_version: 0.73.2
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -46,6 +46,7 @@ commands:
 #    towny.admin: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
 #    towny.town.new :User is able to create a town
 #    towny.town.claim : User is able to expand his town with /town claim
+#    towny.town.resident : User is able to join towns upon invite.
 #    towny.nation.new :User is able to create a nation
 #    towny.wild.*: User is able to build/destroy in wild regardless.
 #        towny.wild.build
@@ -62,18 +63,38 @@ permissions:
     towny.admin:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
         default: op
+        children:
+            towny.town.*: true
+            towny.nation.new: true
+            towny.wild.*: true
+            towny.spawntp: true
+            towny.publicspawntp: true
+            towny.cheat.bypass: true
+    towny.cheat.bypass:
+        description: Disables the anti cheat code for players with this node.
+        default: op
+    towny.top:
+        description: User has access to the "/towny top" commands.
+        default: true
     towny.town.*:
         description: User can create a town and claim land.
         default: op
         children:
             towny.town.new: true
             towny.town.claim: true
+            towny.town.resident: true
+    towny.town.resident:
+        description: User is permitted to join towns.
+        default: true
     towny.town.new:
         description: User is able to create a town
-        default: false
+        default: true
     towny.town.claim:
         description: User is able to expand with /towny claim
-        default: false
+        default: true
+    towny.nation.new:
+        description: User is able to create a nation
+        default: true
     towny.wild.*:
         description: User can build/destroy in wild.
         default: op

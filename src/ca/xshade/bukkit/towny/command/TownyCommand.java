@@ -174,6 +174,12 @@ public class TownyCommand implements CommandExecutor {
 	
 	private void TopCommand(Player player, String[] args) {
 		
+		if (!plugin.isTownyAdmin(player) && (plugin.isPermissions() && !plugin.hasPermission(player, "towny.top"))) {
+			sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+			return;
+		}
+			
+		
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "money [all/resident/town/nation]", ""));
@@ -340,7 +346,7 @@ public class TownyCommand implements CommandExecutor {
 						townyMap[y][x] = Colors.White;
 
 					// Registered town block
-					if (townblock.isForSale())
+					if (townblock.isForSale() != -1)
 						townyMap[y][x] += "$";
 					else if (townblock.isHomeBlock())
 						townyMap[y][x] += "H";

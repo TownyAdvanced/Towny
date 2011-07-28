@@ -65,7 +65,7 @@ public class War {
 		warTaskIds.clear();
 	}
 	
-	public void cancleTasks(BukkitScheduler scheduler) {
+	public void cancelTasks(BukkitScheduler scheduler) {
 		for (Integer id : getTaskIds())
 			scheduler.cancelTask(id);
 		clearTaskIds();

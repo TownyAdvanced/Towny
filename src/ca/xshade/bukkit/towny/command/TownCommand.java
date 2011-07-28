@@ -121,9 +121,9 @@ public class TownCommand implements CommandExecutor  {
 				String notAffordMSG;
 				
 				// Check permission to use spawn travel
-				if (!isTownyAdmin &&
-						(split.length == 1 && (!TownySettings.isAllowingTownSpawn() || !plugin.hasPermission(player, "towny.spawntp"))) ||
-						(split.length > 1 && (!TownySettings.isAllowingPublicTownSpawnTravel() || !plugin.hasPermission(player, "towny.publicspawntp"))))
+				if (!isTownyAdmin && (
+						(split.length == 1 && (!TownySettings.isAllowingTownSpawn() || (plugin.isPermissions() && !plugin.hasPermission(player, "towny.spawntp")))) ||
+						(split.length > 1 && (!TownySettings.isAllowingPublicTownSpawnTravel() || (plugin.isPermissions() && !plugin.hasPermission(player, "towny.publicspawntp"))))))
 					throw new TownyException(TownySettings.getLangString("msg_err_town_spawn_forbidden"));
 				
 				Resident resident = plugin.getTownyUniverse().getResident(player.getName());
@@ -146,40 +146,42 @@ public class TownCommand implements CommandExecutor  {
 				if (!isTownyAdmin && TownySettings.isUsingIConomy() && (resident.getHoldingBalance() < travelCost))
 					throw new TownyException(notAffordMSG);
 				
+				//essentials tests
 				boolean notUsingESS = false;
 				
-				//essentials tests
-				Plugin handle = plugin.getServer().getPluginManager().getPlugin("Essentials");
-				if (!handle.equals(null)) {
-					
-					Essentials essentials = (Essentials)handle;
-					plugin.sendDebugMsg("Using Essentials");
-					
-					try {
-						User user = essentials.getUser(player);
+				if (TownySettings.isUsingEssentials()) {
+					Plugin handle = plugin.getServer().getPluginManager().getPlugin("Essentials");
+					if (!handle.equals(null)) {
 						
-						if (!user.isTeleportEnabled())
-							//Ess teleport is disabled
-							notUsingESS = true;
+						Essentials essentials = (Essentials)handle;
+						plugin.sendDebugMsg("Using Essentials");
 						
-						if (!user.isJailed()){
-							Teleport teleport = user.getTeleport();
-							teleport.teleport(town.getSpawn(), null);
+						try {
+							User user = essentials.getUser(player);
+							
+							if (!user.isTeleportEnabled())
+								//Ess teleport is disabled
+								notUsingESS = true;
+							
+							if (!user.isJailed()){
+								Teleport teleport = user.getTeleport();
+								teleport.teleport(town.getSpawn(),null);
+							}
+						} catch (Exception e) {
+							plugin.sendErrorMsg(player, "Error: " + e.getMessage());
+							// cooldown?
+							return;
 						}
-					} catch (Exception e) {
-						plugin.sendErrorMsg(player, "Error: " + e.getMessage());
-						// cooldown?
-						return;
 					}
 				}
-				
 				//show message if we are using iConomy and are charging for spawn travel.
 				if (!isTownyAdmin && TownySettings.isUsingIConomy() && resident.pay(travelCost))
 					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"),
 							travelCost + TownyIConomyObject.getIConomyCurrency()));
 				
+				
 				// if an Admin or essentials teleport isn't being used, use our own.
-				if(isTownyAdmin || notUsingESS)
+				if(isTownyAdmin || !notUsingESS)
 						player.teleport(town.getSpawn());
 
 				
@@ -603,7 +605,7 @@ public class TownCommand implements CommandExecutor  {
 			if (universe.isWarTime())
 				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 			
-			if (TownySettings.isTownCreationAdminOnly() && !plugin.isTownyAdmin(player) && !plugin.hasPermission(player, "towny.town.new"))
+			if (!plugin.isTownyAdmin(player) && (TownySettings.isTownCreationAdminOnly() ||  (plugin.isPermissions() && !plugin.hasPermission(player, "towny.town.new"))))
 				throw new TownyException(TownySettings.getNotPermToNewTownLine());
 			
 			if (TownySettings.hasTownLimit() && universe.getTowns().size() >= TownySettings.getTownLimit())
@@ -699,6 +701,7 @@ public class TownCommand implements CommandExecutor  {
 			town.removeResident(resident);
 		} catch (EmptyTownException et) {
 			plugin.getTownyUniverse().removeTown(et.getTown());
+
 		} catch (NotRegisteredException x) {
 			plugin.sendErrorMsg(player, x.getError());
 			return;
@@ -783,8 +786,14 @@ public class TownCommand implements CommandExecutor  {
 		ArrayList<Resident> remove = new ArrayList<Resident>();
 		for (Resident newMember : invited)
 			try {
-				town.addResidentCheck(newMember);
-				townInviteResident(town, newMember);
+				// only add players with the right permissions.
+				if (plugin.isPermissions() && !plugin.hasPermission(plugin.getServer().getPlayer(newMember.getName()), "towny.town.resident")) {
+					plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
+					remove.add(newMember);
+				} else {
+					town.addResidentCheck(newMember);
+					townInviteResident(town, newMember);
+				}
 			} catch (AlreadyRegisteredException e) {
 				remove.add(newMember);
 				plugin.sendErrorMsg(player, e.getError());
@@ -858,6 +867,7 @@ public class TownCommand implements CommandExecutor  {
 					// assistants
 					// so there will always be at least one resident.
 				}
+		
 		for (Resident member : remove)
 			kicking.remove(member);
 
@@ -1011,6 +1021,7 @@ public class TownCommand implements CommandExecutor  {
 				town = specifiedTown;
 			if (!plugin.isTownyAdmin(player) && !resident.isMayor() && !town.hasAssistant(resident))
 				throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
+			
 		} catch (TownyException x) {
 			plugin.sendErrorMsg(player, x.getError());
 			return;
@@ -1113,7 +1124,6 @@ public class TownCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatTitle("/town claim"));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "", TownySettings.getLangString("msg_block_claim")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "outpost", TownySettings.getLangString("mayor_help_3")));
-			// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/town claim", "auto", "Automatically expand town area till max"));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "[radius]", TownySettings.getLangString("mayor_help_4")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "auto", TownySettings.getLangString("mayor_help_5")));
 		} else {

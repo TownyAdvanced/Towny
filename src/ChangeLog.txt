@@ -365,3 +365,18 @@ v0.73.1:
     - New '/town set taxes $$' to configure the tax rate (fixed or percentage) for a town.
     - Added error trapping to the language file and config file reads. This will prevent data corruption when users fail to follow the correct upgrade procedure.
     - Added support for Bukkitpermissions (superperms)
+v0.73.2:
+    - Minor fix for spawn travel when not using essentials.
+    - Fix for NPC's being deleted at a new day
+    - Fixed teleporting when NOT using essentials for non admins.
+    - Fixed admins teleport. Admins should override teleport settings to be able to teleport to any town by name.
+    - Added a new permissions node - towny.town.resident - required to be able to join a town.
+    - Fixed a typo causing all mob spawns in towns to be prevented, no matter the town/world setting.
+    - plot price is now configurable at the plot level as well as town. '/plot forsale 100' puts that plot up for 100. If no price is specified it will use the towns plotprice.
+    - Added permissions prefix and suffix node support. It now applies them to chat (group prefix, User Prefix, Towny prefix, playername, Towny suffix, Group Suffix, User Suffix).
+    - Added saving of the Pitch and Yaw of town spawns.
+    - Added a new permission node 'towny.cheat.bypass'. Disables the anti cheat code for those players with the node.
+    - If the capital of a nation is removed due to failure to pay upkeep the town with the highest resident count in that nation will become the Capital.
+    - Added ability to update Towny.jar (replacing config.yml and english yml) with the server running.
+    - Added a new permisison node 'towny.top' to restrict access to the towny top commands.
+    - Fixed the welcome message so it correctly uses the player name.

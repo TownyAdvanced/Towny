@@ -214,7 +214,7 @@ public class TownyPlayerListener extends PlayerListener {
 			return;
 		
 	   // Prevent fly/double jump cheats
-		if (TownySettings.getBoolean("protection.cheat_protection"))
+		if (TownySettings.getBoolean("protection.cheat_protection") && !plugin.hasPermission(player, "towny.cheat.bypass"))
 		   if (event.getEventName() != "PLAYER_TELEPORT" && from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
 				   && !player.isSneaking() && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6) {
 			   //plugin.sendErrorMsg(player, "Cheat Detected!");
@@ -285,7 +285,7 @@ public class TownyPlayerListener extends PlayerListener {
 		// Check if player has entered a new town/wilderness
 		if (to.getWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
 			boolean fromWild = false, toWild = false, toForSale = false, toHomeBlock = false;
-			TownBlock fromTownBlock, toTownBlock;
+			TownBlock fromTownBlock, toTownBlock = null;
 			Town fromTown = null, toTown = null;
 			Resident fromResident = null, toResident = null;
 			try {
@@ -313,7 +313,7 @@ public class TownyPlayerListener extends PlayerListener {
 				} catch (NotRegisteredException e) {
 				}
 				
-				toForSale = toTownBlock.isForSale();
+				toForSale = toTownBlock.isForSale() != -1;
 				toHomeBlock = toTownBlock.isHomeBlock();
 			} catch (NotRegisteredException e) {
 				toWild = true;
@@ -350,7 +350,7 @@ public class TownyPlayerListener extends PlayerListener {
 				if (toHomeBlock)
 					toMsg += Colors.LightBlue + "[Home]";
 				if (toForSale)
-					toMsg += Colors.Yellow + String.format(TownySettings.getLangString("For_Sale"), toTown.getPlotPrice());
+					toMsg += Colors.Yellow + String.format(TownySettings.getLangString("For_Sale"), toTownBlock.isForSale());
 			}
 			
 			if (sendToMsg)

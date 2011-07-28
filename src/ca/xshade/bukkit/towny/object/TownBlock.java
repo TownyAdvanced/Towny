@@ -10,7 +10,7 @@ public class TownBlock {
 	private Town town;
 	private Resident resident;
 	private int x, z;
-	private boolean isForSale = false;
+	private int isForSale = -1;
 
 	public TownBlock(int x, int z, TownyWorld world) {
 		this.x = x;
@@ -82,11 +82,12 @@ public class TownBlock {
 		return false;
 	}
 
-	public void setForSale(boolean isForSale) {
-		this.isForSale = isForSale;
+	public void setForSale(int ForSale) {
+		this.isForSale = ForSale;
+
 	}
 	
-	public boolean isForSale() {
+	public int isForSale() {
 		return isForSale;
 	}
 	

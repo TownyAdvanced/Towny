@@ -45,8 +45,8 @@ public class TownyPlayerLowListener extends PlayerListener {
 					colour = Colors.LightBlue;
 				else
 					colour = "";
-				formatedName = colour + plugin.getTownyUniverse().getFormatter().getNamePrefix(resident)
-					+ player.getName() + plugin.getTownyUniverse().getFormatter().getNamePostfix(resident)
+				formatedName = colour + plugin.getPermissionNode(resident, "prefix") + plugin.getTownyUniverse().getFormatter().getNamePrefix(resident)
+					+ player.getName() + plugin.getTownyUniverse().getFormatter().getNamePostfix(resident) + plugin.getPermissionNode(resident, "suffix")
 					+ Colors.White;
 				player.setDisplayName(formatedName);
 			} catch (NotRegisteredException e) {

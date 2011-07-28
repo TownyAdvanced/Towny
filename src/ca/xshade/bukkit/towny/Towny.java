@@ -556,7 +556,65 @@ public class Towny extends JavaPlugin {
 	public boolean isPermissions() {
 		return (TownySettings.isUsingPermissions() && permissions != null);
 	}
+	
+	
+	/** getPermissionNode
+	 * 
+	 * returns the specified prefix/suffix nodes from permissions
+	 * 
+	 * @param resident
+	 * @param node
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public String getPermissionNode(Resident resident, String node) {
+		
+		sendDebugMsg("Perm Check: Does " + resident.getName() + " have the node '" + node + "'?");
+		if (isPermissions()) {
+			sendDebugMsg("    Permissions installed.");
+			PermissionHandler handler = permissions.getHandler();
+			String group, user = ""; 
+			Player player = getServer().getPlayer(resident.getName());
+			
+			if (node == "prefix") {
+				group = handler.getGroupPrefix(player.getWorld().getName(), handler.getGroup(player.getWorld().getName(), player.getName()));
+				//user =  handler.getUserPrefix(player.getWorld().getName(), player.getName());
+				if (!group.equals(user))
+					user = group + user;
+				user = TownySettings.parseSingleLineString(user);
+				sendDebugMsg("Prefix: " + user);
+			}
+			
+			if (node == "suffix") {
+				group = handler.getGroupSuffix(player.getWorld().getName(), handler.getGroup(player.getWorld().getName(), player.getName()));
+				//user =  handler.getUserSuffix(player.getWorld().getName(), player.getName());
+				if (!group.equals(user))
+					user = group + user;
+				user = TownySettings.parseSingleLineString(user);
+				sendDebugMsg("Suffix: " + user);
+			}
+			
+			
+			return user;
+		// } else if (groupManager != null)
+		//	return groupManager.getHandler().permission(player, node);
+		} else {
+			sendDebugMsg("    Does not have permission.");
+			return "";
+		}		
+		
+		
+	}
 
+	/** hasPermission
+	 * 
+	 * returns if a player has a certain permission node.
+	 * If permissions ins't enabled/installed it will return the bukkit superperms default.
+	 * 
+	 * @param player
+	 * @param node
+	 * @return
+	 */
 	public boolean hasPermission(Player player, String node) {
 		sendDebugMsg("Perm Check: Does " + player.getName() + " have the node '" + node + "'?");
 		if (isPermissions()) {

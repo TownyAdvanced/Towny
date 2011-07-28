@@ -161,7 +161,7 @@ public class ResidentCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatCommand("Mode", "map", "", TownySettings.getLangString("mode_1")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "townclaim", "", TownySettings.getLangString("mode_2")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
-			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim", ""));
+			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim tc nc", ""));
 		} else if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("clear"))
 			plugin.removePlayerMode(player);
 		else

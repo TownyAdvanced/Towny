@@ -241,6 +241,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 				else
 					resident.setRegistered(resident.getLastOnline());
 				
+				line = kvFile.get("isNPC");
+				if (line != null)
+					resident.setNPC(Boolean.parseBoolean(line));
 				
 				line = kvFile.get("town");
 				if (line != null)
@@ -429,13 +432,19 @@ public class TownyFlatFileSource extends TownyDataSource {
 				line = kvFile.get("spawn");
 				if (line != null) {
 					tokens = line.split(",");
-					if (tokens.length == 4)
+					if (tokens.length >= 4)
 						try {
 							World world = plugin.getServerWorld(tokens[0]);
 							double x = Double.parseDouble(tokens[1]);
 							double y = Double.parseDouble(tokens[2]);
 							double z = Double.parseDouble(tokens[3]);
-							town.setSpawn(new Location(world, x, y, z));
+							
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							town.setSpawn(loc);
 						} catch (NumberFormatException e) {
 						} catch (NotRegisteredException e) {
 						} catch (NullPointerException e) {
@@ -725,8 +734,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 						}
 					if (tokens.length >= 5)
 						try {
-							townblock.setForSale(Boolean
-									.parseBoolean(tokens[4]));
+							if (tokens[4].trim() != "true")
+								townblock.setForSale(Integer.parseInt(tokens[4]));
+							else
+								townblock.setForSale(town.getPlotPrice());
+
 						} catch (Exception e) {
 						}
 				}
@@ -819,6 +831,8 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("lastOnline=" + Long.toString(resident.getLastOnline()) + newLine);
 			// Registered
 			fout.write("registered=" + Long.toString(resident.getRegistered()) + newLine);
+			// isNPC
+			fout.write("isNPC=" + Boolean.toString(resident.isNPC()) + newLine);
 			if (resident.hasTown())
 				fout.write("town=" + resident.getTown().getName() + newLine);
 			// Friends
@@ -900,7 +914,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 				fout.write("spawn=" + town.getSpawn().getWorld().getName() + ","
 						+ Double.toString(town.getSpawn().getX()) + ","
 						+ Double.toString(town.getSpawn().getY()) + ","
-						+ Double.toString(town.getSpawn().getZ()) + newLine);
+						+ Double.toString(town.getSpawn().getZ()) + ","
+						+ Float.toString(town.getSpawn().getPitch()) + ","
+						+ Float.toString(town.getSpawn().getYaw()) + newLine);
 
 			fout.close();
 		} catch (Exception e) {
@@ -1068,9 +1084,14 @@ public class TownyFlatFileSource extends TownyDataSource {
 
 						if (resident != null && townblock.hasTown())
 							townblock.setResident(resident);
-
+						
+						//if present set the plot price
 						if (tokens.length >= 3)
-							townblock.setForSale(true); //Automatically assume the townblock is for sale
+							if (tokens[2].trim() != "true")
+								townblock.setForSale(Integer.parseInt(tokens[2]));
+							else
+								townblock.setForSale(town.getPlotPrice());
+						
 					} catch (NumberFormatException e) {
 					} catch (NotRegisteredException e) {
 					}
@@ -1096,7 +1117,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 		for (TownyWorld world : worlds.keySet()) {
 			out += world.getName() + ":";
 			for (TownBlock townBlock : worlds.get(world))
-				out += townBlock.getX() + "," + townBlock.getZ() + (townBlock.isForSale() ? ",true" : "") + ";";
+				out += townBlock.getX() + "," + townBlock.getZ() + (townBlock.isForSale() != -1 ? "," + townBlock.isForSale() : "") + ";";
 			out += "|";
 		}
 

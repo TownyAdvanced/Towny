@@ -278,7 +278,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		return mayor != null;
 	}
 	
-	public void removeResident(Resident resident) throws NotRegisteredException, EmptyTownException {
+	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
 		if (!hasResident(resident))
 			throw new NotRegisteredException();
 		else {
@@ -303,7 +303,12 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private void remove(Resident resident) {
 		for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
 			townBlock.setResident(null);
-			townBlock.setForSale(true);
+			try {
+				townBlock.setForSale(townBlock.getTown().getPlotPrice());
+			} catch (NotRegisteredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
 		}
 		

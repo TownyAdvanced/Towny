@@ -264,10 +264,13 @@ public class TownySettings {
 			config = new Configuration(file);
 			config.load();
 			
+			file = null;
+			
 			// Load Nation & Town level data into maps.
 			loadTownLevelConfig();
 			loadNationLevelConfig();
-		}	
+		}
+		
 	}
 	
 	// This will read the language entry in the config.yml to attempt to load custom languages
@@ -282,6 +285,8 @@ public class TownySettings {
 			// read the (language).yml into memory
 			language = new Configuration(file);
 			language.load();
+			
+			file = null;
 				
 		}
 	}
@@ -371,8 +376,8 @@ public class TownySettings {
 	
     ///////////////////////////////////
     
-	public static String[] getRegistrationMsg() {		
-		return parseString(getLangString("MSG_REGISTRATION"));
+	public static String[] getRegistrationMsg(String name) {		
+		return parseString(String.format(getLangString("MSG_REGISTRATION"), name));
 	}
 
 	public static String[] getNewTownMsg(String who, String town) {
@@ -395,8 +400,8 @@ public class TownySettings {
 		return parseString(String.format(getLangString("MSG_NEW_MAYOR"), who));
 	}
 
-	public static String[] getNewKingMsg(String who) {
-		return parseString(String.format(getLangString("MSG_NEW_KING"), who));
+	public static String[] getNewKingMsg(String who, String nation) {
+		return parseString(String.format(getLangString("MSG_NEW_KING"), who, nation));
 	}
 	
 	public static String[] getJoinWarMsg(TownyObject obj) {
@@ -447,12 +452,12 @@ public class TownySettings {
 		return parseString(String.format(getLangString("MSG_DEL_NATION"), nation.getName()));
 	}
 	
-	public static String[] getBuyResidentPlotMsg(String who, String owner) {
-		return parseString(String.format(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner));
+	public static String[] getBuyResidentPlotMsg(String who, String owner, Integer price) {
+		return parseString(String.format(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner, price));
 	}
 	
 	public static String[] getPlotForSaleMsg(String who, WorldCoord worldCoord) {
-		return parseString(String.format(getLangString("MSG_PLOT_FS"), who, worldCoord.toString()));
+		return parseString(String.format(getLangString("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
 	}
 	
 	public static String[] getMayorAbondonMsg() {
@@ -699,6 +704,10 @@ public class TownySettings {
 	}
 
 	public static long getMaxInactivePeriod() {
+		return getLong("INACTIVE_AFTER_TIME");
+	}
+	
+	public static long getDeleteTime() {
 		return getLong("DELETED_AFTER_TIME");
 	}
 

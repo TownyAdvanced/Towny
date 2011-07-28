@@ -133,7 +133,8 @@ public class TownyUniverse extends TownyObject {
 		if (!hasResident(player.getName())) {
 			newResident(player.getName());
 			resident = getResident(player.getName());
-			sendMessage(player, TownySettings.getRegistrationMsg());
+			
+			sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
 			resident.setRegistered(System.currentTimeMillis());
 			if (!TownySettings.getDefaultTownName().equals(""))
 				try {
@@ -141,13 +142,17 @@ public class TownyUniverse extends TownyObject {
 				} catch (NotRegisteredException e) {
 				} catch (AlreadyRegisteredException e) {
 				}
-			//getDataSource().saveResidentList();
-		} else
-			resident = getResident(player.getName());
+			
+			getDataSource().saveResident(resident);
+			getDataSource().saveResidentList();
 
-		resident.setLastOnline(System.currentTimeMillis());
-		getDataSource().saveResident(resident);
-		getDataSource().saveResidentList();
+		} else {
+			resident = getResident(player.getName());
+			resident.setLastOnline(System.currentTimeMillis());
+			
+			getDataSource().saveResident(resident);
+		}
+		
 
 		try {
 			sendTownBoard(player, resident.getTown());
@@ -175,7 +180,7 @@ public class TownyUniverse extends TownyObject {
 	 * @param player
 	 * @param forceTeleport
 	 */
-
+	/*
 	public void townSpawn(Player player, boolean forceTeleport) {
 		try {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
@@ -195,6 +200,7 @@ public class TownyUniverse extends TownyObject {
 				plugin.sendErrorMsg(player, x.getError());
 		}
 	}
+	*/
 	
 	public Location getTownSpawnLocation(Player player) throws TownyException {
 		try {
@@ -855,7 +861,7 @@ public class TownyUniverse extends TownyObject {
 	}
 	
 	public void clearWarEvent() {
-		getWarEvent().cancleTasks(getPlugin().getServer().getScheduler());
+		getWarEvent().cancelTasks(getPlugin().getServer().getScheduler());
 		setWarEvent(null);
 	}
 	
@@ -908,6 +914,7 @@ public class TownyUniverse extends TownyObject {
 			if (town.hasNation()) {
 				Nation nation = town.getNation();
 				nation.removeTown(town);
+					
 				getDataSource().saveNation(nation);
 			}
 			town.clear();
@@ -1019,7 +1026,7 @@ public class TownyUniverse extends TownyObject {
 			removeTownBlock(townBlock);
 	}
 
-	public void collectTownCosts() throws IConomyException {
+	public void collectTownCosts() throws IConomyException, TownyException {
 		for (Town town : new ArrayList<Town>(towns.values()))
 			if (town.hasUpkeep())
 				if (!town.pay(TownySettings.getTownUpkeepCost(town))) {

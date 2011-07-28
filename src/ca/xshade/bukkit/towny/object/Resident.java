@@ -13,6 +13,7 @@ public class Resident extends TownBlockOwner {
 	private List<Resident> friends = new ArrayList<Resident>();
 	private Town town;
 	private long lastOnline, registered;
+	private boolean isNPC = false;
 
 	public Resident(String name) {
 		setName(name);
@@ -25,6 +26,14 @@ public class Resident extends TownBlockOwner {
 
 	public long getLastOnline() {
 		return lastOnline;
+	}
+	
+	public void setNPC(boolean isNPC) {
+		this.isNPC = isNPC;
+	}
+
+	public boolean isNPC() {
+		return isNPC;
 	}
 
 	public boolean isKing() {

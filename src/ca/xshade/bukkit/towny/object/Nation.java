@@ -224,11 +224,26 @@ public class Nation extends TownyIConomyObject implements ResidentList {
 			throw new NotRegisteredException();
 		else {
 
+			boolean isCapital = town.isCapital();
 			remove(town);
 			
 			if (getNumTowns() == 0) {
 				clear();
 				throw new EmptyNationException(this);
+			} else if (isCapital) {
+				int numResidents = 0;
+				Town tempCapital = null;
+				for (Town newCapital : getTowns())
+					if (newCapital.getNumResidents() > numResidents) {
+						tempCapital = newCapital;
+						numResidents = newCapital.getNumResidents();
+					}
+					
+				if (tempCapital != null) {
+					setCapital(tempCapital);
+				}
+				
+
 			}
 		}
 	}
@@ -282,7 +297,7 @@ public class Nation extends TownyIConomyObject implements ResidentList {
 
 	public void setNeutral(boolean neutral) throws TownyException {
 		if (!TownySettings.isDeclaringNeutral() && neutral)
-			throw new TownyException("Neutrality is not an option! Fight like a King!");
+			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
 		else
 			this.neutral = neutral;
 	}
@@ -293,9 +308,9 @@ public class Nation extends TownyIConomyObject implements ResidentList {
 	
 	public void setKing(Resident king) throws TownyException {
 		if (!hasResident(king))
-			throw new TownyException("New King doesn't belong to this nation.");
+			throw new TownyException(TownySettings.getLangString("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
-			throw new TownyException("New King is not a mayor.");
+			throw new TownyException(TownySettings.getLangString("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
 	}
 	
@@ -308,13 +323,13 @@ public class Nation extends TownyIConomyObject implements ResidentList {
 	
 	public void withdrawFromBank(Resident resident, int amount) throws IConomyException, TownyException {
 		if (!isKing(resident) && !hasAssistant(resident))
-			throw new TownyException("You don't have access to the nation's bank.");
+			throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
 		
 		if (TownySettings.isUsingIConomy()) {
 			if (!pay(amount, resident))
-				throw new TownyException("There is not enough money in the bank.");
+				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 		} else
-			throw new TownyException("iConomy has not been turned on.");
+			throw new TownyException(TownySettings.getLangString("msg_err_no_iconomy"));
 	}
 	
 	@Override
