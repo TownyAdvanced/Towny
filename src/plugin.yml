@@ -1,13 +1,15 @@
-﻿name: Towny
-main: ca.xshade.bukkit.towny.Towny
-version: 0.73.2
+name: Towny
+main: com.palmergames.bukkit.towny.Towny
+version: 0.74.0
 language: english.yml
-last_run_version: 0.73.2
+last_run_version: 0.74.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
+
+depends: [MultiVerse]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -83,6 +85,7 @@ permissions:
             towny.town.new: true
             towny.town.claim: true
             towny.town.resident: true
+            towny.town.plot: true
     towny.town.resident:
         description: User is permitted to join towns.
         default: true
@@ -91,6 +94,9 @@ permissions:
         default: true
     towny.town.claim:
         description: User is able to expand with /towny claim
+        default: true
+    towny.town.plot:
+        description: User is able to purchase and own town plots.
         default: true
     towny.nation.new:
         description: User is able to create a nation
@@ -133,18 +139,70 @@ town_creation_admin_only: false
 # +------------------------------------------------------+ #
 ############################################################
 
-# numResidents,namePrefix,namePostfix,mayorPrefix,mayorPostfix,townBlockLimit,upkeepModifier
-
 townLevel:
-    - '0,, Ruin,Spirit ,,1,1.0'
-    - '1,, (Settlement),Hermit ,,16,1.0'
-    - '2,, (Hamlet),Chief ,,32,1.0'
-    - '6,, (Village),Baron Von ,,96,1.0'
-    - '10,, (Town),Viscount ,,160,1.0'
-    - '14,, (Large Town),Count Von ,,224,1.0'
-    - '20,, (City),Earl ,,320,1.0'
-    - '24,, (Large City),Duke ,,384,1.0'
-    - '28,, (Metropolis),Lord ,,448,1.0'
+    - numResidents: 0
+      namePrefix: ''
+      namePostfix: ' Ruins'
+      mayorPrefix: 'Spirit '
+      mayorPostfix: ''
+      townBlockLimit: 1
+      upkeepModifier: 1.0
+    - numResidents: 1
+      namePrefix: ''
+      namePostfix: ' (Settlement)'
+      mayorPrefix: 'Hermit '
+      mayorPostfix: ''
+      townBlockLimit: 16
+      upkeepModifier: 1.0
+    - numResidents: 2
+      namePrefix: ''
+      namePostfix: ' (Hamlet)'
+      mayorPrefix: 'Chief '
+      mayorPostfix: ''
+      townBlockLimit: 32
+      upkeepModifier: 1.0
+    - numResidents: 6
+      namePrefix: ''
+      namePostfix: ' (Village)'
+      mayorPrefix: 'Baron Von '
+      mayorPostfix: ''
+      townBlockLimit: 96
+      upkeepModifier: 1.0
+    - numResidents: 10
+      namePrefix: ''
+      namePostfix: ' (Town)'
+      mayorPrefix: 'Viscount '
+      mayorPostfix: ''
+      townBlockLimit: 160
+      upkeepModifier: 1.0
+    - numResidents: 14
+      namePrefix: ''
+      namePostfix: ' (Large Town)'
+      mayorPrefix: 'Count Von '
+      mayorPostfix: ''
+      townBlockLimit: 224
+      upkeepModifier: 1.0
+    - numResidents: 20
+      namePrefix: ''
+      namePostfix: ' (City)'
+      mayorPrefix: 'Earl '
+      mayorPostfix: ''
+      townBlockLimit: 320
+      upkeepModifier: 1.0
+    - numResidents: 24
+      namePrefix: ''
+      namePostfix: ' (Large City)'
+      mayorPrefix: 'Duke '
+      mayorPostfix: ''
+      townBlockLimit: 384
+      upkeepModifier: 1.0
+    - numResidents: 28
+      namePrefix: ''
+      namePostfix: ' (Metropolis)'
+      mayorPrefix: 'Lord '
+      mayorPostfix: ''
+      townBlockLimit: 448
+      upkeepModifier: 1.0
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -152,15 +210,56 @@ townLevel:
 # +------------------------------------------------------+ #
 ############################################################
 
-# numResidents,namePrefix,namePostfix,capitalPrefix,capitalPostfix,kingPrefix,kingPostfix,upkeepModifier
-
 nationLevel:
-    - '0,Lands of , (Nation),,,Leader ,,1.0'
-    - '10,Federation of , (Nation),,,Count ,,1.0'
-    - '20,Dominion of , (Nation),,,Duke ,,1.0'
-    - '30,Kingdom of , (Nation),,,King ,,1.0'
-    - '40,The , Empire,,,Emperor ,,1.0'
-    - '60,The , Realm,,,God Emperor ,,1.0'
+    - numResidents: 0
+      namePrefix: 'Land of '
+      namePostfix: ' (Nation)'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'Leader '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+    - numResidents: 10
+      namePrefix: 'Federation of '
+      namePostfix: ' (Nation)'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'Count '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+    - numResidents: 20
+      namePrefix: 'Dominion of '
+      namePostfix: ' (Nation)'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'Duke '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+    - numResidents: 30
+      namePrefix: 'Kingdom of '
+      namePostfix: ' (Nation)'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'King '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+    - numResidents: 40
+      namePrefix: 'The '
+      namePostfix: ' Empire'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'Emperor '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+    - numResidents: 60
+      namePrefix: 'The '
+      namePostfix: ' Realm'
+      capitalPrefix: ''
+      capitalPostfix: ''
+      kingPrefix: 'God Emperor '
+      kingPostfix: ''
+      upkeepModifier: 1.0
+
 
 
 ############################################################
@@ -177,6 +276,10 @@ town_limit: 3000
 # Minimum number of plots any towns home plot must be from the next town.
 # This will prevent someone founding a town right on your doorstep
 min_distance_from_town_homeblock: 5
+
+# Maximum distance between homblocks.
+# This will force players to build close together.
+max_distance_between_homeblocks: 0
 
 # The maximum townblocks available to a town is (numResidents * ratio).
 # Setting this value to 0 will instead use the level based jump values determined in the town level config.
@@ -214,6 +317,12 @@ force_town_monsters_on: false
 # force_fire_on is a global flag and overrides any towns flag setting
 force_fire_on: false
 
+# Disable creatures trampling crops
+disable_creature_crop_trampling: true
+
+# Disable players trampling crops
+disable_player_crop_trampling: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                Global town settings                  | #
@@ -237,15 +346,16 @@ daily_taxes: true
 # Allow towns to claim outposts (a townblock not connected to town).
 allow_outposts: true
 
-# Allow residents to own/purchase plots within a town
-allow_resident_plots: true
-
 # all the use of /town spawn
 allow_town_spawn: true
 # Allow regular residents to use /town spawn [town] (TP to other towns if they are public).
 allow_town_spawn_travel: true
 # Respawn the player at his town spawn point when he/she dies.
 town_respawn: false
+
+# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.
+# Allowed options: unclaimed, enemy, neutral
+prevent_town_spawn_in: enemy
 
 # Enables the [~Home] message.
 # If false it will make it harder for enemies to find the home block during a war
@@ -284,6 +394,13 @@ logging: true
 # If true this will cause the log to be wiped at every startup.
 reset_log_on_boot: true
 
+
+############################################################
+# +------------------------------------------------------+ #
+# |               Filters colour and chat                | #
+# +------------------------------------------------------+ #
+############################################################
+
 name_check_regex: '^[a-zA-Z0-9._-]*$'
 name_filter_regex: '[ /]'
 name_remove_regex: '[^a-zA-Z0-9._-]'
@@ -291,10 +408,32 @@ name_remove_regex: '[^a-zA-Z0-9._-]'
 # Not a good idea to change this at the moment.
 npc_prefix: 'NPC'
 
-# Skin regular chat with a player's towny prefix, postfix, and colour.
-# You can NOT change this setting and perform a /townyadmin reload.
-# It requires a server restart is setting to false.
-modify_chat_name: true
+# The format below will specify the changes made to the player name when chatting.
+# keys are
+# {nation} - Displays nation name in [ ] if a member of a nation.
+# {town} - Displays town name in [ ] if a member of a town.
+# {permprefix} - Permission group prefix
+# {townynameprefix} - Towny name prefix taken from the townLevel/nationLevels
+# {playername} - default player name
+# {modplayername} - modified player name (use if Towny is over writing some other plugins changes).
+# {townynamepostfix} - Towny name postfix taken from the townLevel/nationLevels.
+# {permsuffix} - Permission group suffix.
+modify_chat: '{nation}{town}{permprefix}{townynameprefix}{playername}{townynamepostfix}{permsuffix}'
+
+
+# Text colouring
+# --------------
+# Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
+# Purple = &5, Gold = &6, LightGray = &7, Gray = &8
+# DarkPurple = &9, LightGreen = &a, LightBlue = &b
+# Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+
+# Chat colours
+
+# King/Mayor
+colour_king: '&6'
+colour_mayor: '&b'
+
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -443,8 +582,12 @@ default_town_name: ''
 
 economy:
 
+    # Cost to use /town spawn
+    price_town_spawn_travel: 0.0
+    
     # Cost to use /town spawn [town]
-    price_town_spawn_travel: 10.0
+    # This is paid to the town you goto.
+    price_town_public_spawn_travel: 10.0
 
     price_death: 10.0
     price_death_wartime: 200.0

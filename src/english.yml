@@ -1,5 +1,5 @@
-﻿name: Towny
-version: 0.04
+name: Towny
+version: 0.05
 language: english
 author: ElgarL
 website:
@@ -213,6 +213,7 @@ msg_already_claimed: '&cThis area has already been claimed by: %s'
 msg_already_claimed_1: '&cThis area (%s) already belongs to someone.'
 msg_already_claimed_2: '&cThis area has already been claimed.'
 msg_too_close: '&cThis area is too close to another town.'
+msg_too_far: '&cThis area is too far away from the other towns.'
 msg_not_claimed: '&bThis area (%s) hasn''t been claimed.'
 msg_not_claimed_1: '&bThis area had not been claimed.'
 msg_not_own_area: '&cYou do not own the selected area.'
@@ -251,6 +252,8 @@ msg_insuf_funds: '&cYou don''t have that much.'
 
 msg_set_town_home: '&bSuccessfully changed town''s home block to %s'
 msg_set_town_spawn: '&bSuccessfully changed town''s spawn.'
+msg_set_title: '&b%s was granted the title of ''%s''.'
+msg_set_surname: '&b%s was granted the surname of ''%s''.'
 
 msg_set_perms: '&bSuccessfully changed permissions to %s.'
 msg_set_claim: '&bSuccessfully changed %s''s claimability to %s'
@@ -305,6 +308,9 @@ msg_cache_block_error_town_outsider: '&cOutsiders aren''t allowed to %s.'
 msg_err_cant_afford_tp_town: '&cCannot afford to teleport to %s.'
 msg_err_not_public: '&cThat town is not public.'
 msg_err_town_spawn_forbidden: '&cTown spawn travel is forbidden.'
+msg_err_public_spawn_enemy: '&cPublic spawn travel is forbidden for enemies.'
+msg_err_town_spawn_disallowed_from: '&cTown spawn is not allowed from %s.'
+
 msg_err_cant_afford_tp: '&bCannot afford to teleport to your town''s spawn.'
 msg_err_plot_nfs: '&cThis plot is not for sale.'
 msg_err_not_part_town: '&cSelected area is not part of your town.'
@@ -315,6 +321,7 @@ msg_err_not_in_town_claim: '&cYou must belong to a town in order to claim plots.
 msg_err_must_belong_town: '&cYou must belong to a town.'
 msg_err_dont_belong_town: '&cYou don''t belong to a town.'
 msg_err_dont_belong_nation: '&bYou don''t belong to a nation.'
+msg_err_not_same_nation: '&b%s doesn''t belong to your nation.'
 msg_err_rect_auto: '&cOnly towns can use auto.'
 msg_err_invalid_radius: '&cInvalid radius. Use an integer or ''auto''.'
 msg_err_not_configured: '&cThis world has not been configured by Towny.'
@@ -343,6 +350,7 @@ msg_err_negative_money: '&cNegative money is stupid. Weirdo.'
 msg_err_not_percentage: '&cPercentages must be below 100.'
 msg_err_no_iconomy: '&ciConomy has not been turned on.'
 msg_not_allowed_join: '&c%s is not permitted to join a town.'
+msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
 
 # these messages are only used if town/nation creation is set to admins only
 

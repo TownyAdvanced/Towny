@@ -380,3 +380,34 @@ v0.73.2:
     - Added ability to update Towny.jar (replacing config.yml and english yml) with the server running.
     - Added a new permisison node 'towny.top' to restrict access to the towny top commands.
     - Fixed the welcome message so it correctly uses the player name.
+v0.74.0:
+    - Config and english yml's are now written as UTF-8 encoded to allow for easy editing with foreign characters.
+    - Added a depends entry to the config.yml to prevent Towny loading before Multiverse and corrupting worlds.txt
+    - Added a white suffix to town and nation chat to fix a compatability issue with herochat.
+    - Added getTownName and isWilderness functions to the Towny API (inherit com.palmergames.bukkit.towny.TownyUniverse)
+    - If a mayor is deleted due to inactivity a new mayor is chosen from the assistants. If there are no assistants a random resident will be promoted.
+    - Removed 'allow_resident_plots' and replaced with a permission node 'towny.town.plot'. This node is required to have access to the plot commands.
+    - Blocked creating towns named 'spawn' and renaming towns to 'spawn'. Breaks many other functions if towns are named 'spawn'.
+    - Added '/townyadmin nation [nation] add [town]' so admins can force add towns to nations.
+    - Fixed '/townyadmin unclaim'.
+    - Setup name prefix/suffix at login so names display correctly in other list plugins.
+    - Added separate charges for own town spawn travel and public spawn travel (set in config.yml).
+    - Players in Enemy nations can no longer use spawn travel to opposing public towns.
+    - town claim now tells you if the area is already claimed instead of just the cryptic 'not attached to edge' message.
+    - Enabled '/townyadmin backup' use from the console.
+    - Added two new config entries for King and Mayor chat colours (colour_king & colour_mayor).
+    - Added a max_distance_between_homeblocks setting allowing server operators to control how spaced out towns are created.
+    - Added the ability to disable player and creature trampling of crops (per world).
+    - Towns now remember their respective states for fire, explosions, mob spawns and PVP when the World flags are toggled.
+    - Towny will now attempt to repair corrupted world files.
+    - Nations who change to a neutral state during a war are now correctly removed from the war.
+    - Towny now logs all player issued commands to the server.log
+    - Added better control over name/chat modifying - modify_chat: '{permprefix}{townynameprefix}{playername}{townynamepostfix}{permsuffix}'
+    - Added custom titles. Kings can assign titles to their vassals with '/nation set title [resident] title'. The title will be used in place of the townynameprefix.
+    - Added custom surnames. Kings can assign surnames to their vassals with '/nation set surname [resident] text'. The title will be used in place of the townynamepostfix.
+    - Fixed an error caused by deleted residents not being cleaned up from other resident friend lists.
+    - Nations enemy/Ally lists are now updated when another nation is deleted or renamed.
+    - Paintings are now protected along with all other blocks.
+    - townLevels and nationLevels are now full YAML nodes for easy editing (commit by dumptruckman).
+    - Pistons can now only operate between similarly owned townblocks or wild areas (No piston griefing).
+    - You can now block the use of '/town spawn' if you are in certain zones (unclaimed 'wilderness', Neutral towns and Enemy towns).

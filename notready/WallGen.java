@@ -1,6 +1,6 @@
-package com.shade.bukkit.wallgen;
+package com.palmergames.bukkit.wallgen;
 
-import com.shade.bukkit.util.BlockQueue;
+import com.palmergames.bukkit.util.BlockQueue;
 
 public class WallGen {
 	public static final int topSection = 4; //How many layers the top part of the wall is.
