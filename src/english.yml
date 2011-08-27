@@ -1,10 +1,11 @@
 name: Towny
-version: 0.05
+version: 0.06
 language: english
 author: ElgarL
 website:
 description: >
-    Language file for all game messages.
+    Language file for all game messages.  Do not alter this file.
+    If you wish to change any of the entries, make a copy named something else.
     Alternate language files can be enabled by altering the
     [language] entry in config.yml
     
@@ -224,6 +225,7 @@ msg_specify_name: '&bSpecify town name'
 msg_specify_nation_name: '&bSpecify nation name'
 msg_peasant_right: '&bA peasant hasn''t the right to force his leaders into the throne.'
 msg_cost_spawn: '&bYou were charged %s to teleport to the town''s spawn.'
+msg_town_spawn_warmup: '&bWaiting to teleport...'
 msg_town_rename_disabled: '&bTown Renaming Disabled'
 msg_town_set_name: '&b%s renamed town to %s.'
 msg_nation_set_name: '&b%s renamed nation to %s.'
@@ -254,6 +256,7 @@ msg_set_town_home: '&bSuccessfully changed town''s home block to %s'
 msg_set_town_spawn: '&bSuccessfully changed town''s spawn.'
 msg_set_title: '&b%s was granted the title of ''%s''.'
 msg_set_surname: '&b%s was granted the surname of ''%s''.'
+msg_clear_title_surname: '&bThe %s for ''%s'' was cleared.'
 
 msg_set_perms: '&bSuccessfully changed permissions to %s.'
 msg_set_claim: '&bSuccessfully changed %s''s claimability to %s'
@@ -266,11 +269,17 @@ msg_set_use_towny_on: '&bThis world now follows towny rules.'
 msg_set_use_towny_off: '&cThis world is exempt of all towny interactions.'
 
 msg_error_must_be_int: '&bAmount must be an integer.'
+msg_error_must_be_num: '&bAmount must be a number.'
 msg_must_specify_amnt: '&bMust specify amount. Eg: %s withdraw 54'
 msg_town_set_tax: '&b%s has set the daily resident tax at %s'
 msg_town_set_plottax: '&b%s has set the daily tax of plots at %s'
 msg_town_set_plotprice: '&b%s has set the price of plots at %s'
+msg_town_set_shoptax: '&b%s has set the daily tax of shop plots at %s'
+msg_town_set_shopprice: '&b%s has set the price of shop plots at %s'
 msg_town_set_nation_tax: '&b%s has set the nation tax at %s'
+
+msg_set_nation_tag: '&b%s has set the nation tag to [%s]'
+msg_set_town_tag: '&b%s has set the nation tag to [%s]'
 
 msg_mayor_abandon: '&bYou would abandon your people? Choose another mayor with ''/town set mayor'' if your sure.'
 msg_new_day_tax: '&bA new day is here! Taxes and rent have been collected'
@@ -285,8 +294,8 @@ msg_new_mayor: '&b%s is now the mayor!'
 msg_new_nation: '&b%s created a new nation called %s'
 msg_new_town: '&b%s created a new town called %s'
 msg_plot_for_sale: '&b%s put the plot (%s) up for sale!'
+msg_plot_set_type: '&bPlot type set to %s'
 msg_registration: '&eWelcome %s to the server!'
-msg_registration_old: '&eWelcome this is your first login.@You''ve successfully been registered!@Try the /towny command for more help.'
 msg_war_eliminated: '&6[War]&b %s was eliminated from the war.'
 msg_war_forfeited: '&6[War]&b %s forfeited.'
 msg_war_join: '&6[War] &b%s joined the fight!'
@@ -341,6 +350,7 @@ msg_err_already_nation: '&cTarget town already belongs to a nation.'
 msg_err_invalid_property: '&cInvalid %s property.'
 msg_err_not_supported: '&cNot yet supported.'
 msg_err_invalid_input: '&cInvalid input. Use %s'
+msg_err_input_too_long: '&cInput too long.'
 msg_err_invalid_choice: '&cInvalid choice'
 msg_err_invalid_sub: '&cInvalid sub command.'
 msg_err_command_disable: '&cCommand disabled: Using permissions.'
@@ -349,6 +359,7 @@ msg_err_too_many_npc: '&cToo many npc''s registered.'
 msg_err_negative_money: '&cNegative money is stupid. Weirdo.'
 msg_err_not_percentage: '&cPercentages must be below 100.'
 msg_err_no_iconomy: '&ciConomy has not been turned on.'
+msg_err_not_block_type: '&cThat is not a valid plot type!'
 msg_not_allowed_join: '&c%s is not permitted to join a town.'
 msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
 

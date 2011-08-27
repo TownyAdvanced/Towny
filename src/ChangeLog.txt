@@ -411,3 +411,45 @@ v0.74.0:
     - townLevels and nationLevels are now full YAML nodes for easy editing (commit by dumptruckman).
     - Pistons can now only operate between similarly owned townblocks or wild areas (No piston griefing).
     - You can now block the use of '/town spawn' if you are in certain zones (unclaimed 'wilderness', Neutral towns and Enemy towns).
+v0.75.0:
+    - Added sanity checking to prevent colour codes in titles and surnames, and a notification message when a title/surname is cleared.
+    - Removed console spam from 'send message'.
+    - Disabled the use of '/town new' and '/town claim' in worlds where Towny is disabled.
+    - Added 'disable_modify_chat' for those not wanting Towny to make any changes.
+    - Fixed an error if a player uses '/town spawn' after logging in, but before moving. This caused the player cache to be empty.
+    - All console messages should now have their colour codes removed correctly.
+    - New config.yml handling code means no need to delete config at each upgrade. (thanks dumptruckman)
+    - Fixed town spawn being lost at load when using non standard (16x16) plot sizes.
+    - Allow the ignition of obsidian for lighting portals, even when fire spread is disabled in a town.
+    - Durations specified in the config are now in seconds rather than milliseconds.
+    - Implemented Towny's own teleport_warmup_time for town spawns.
+    - Added a command '/townyadmin reset'. Wipes all settings and generate/load a default config.yml.
+    - Title and Surnames can now be limited in length by the setting 'max_title_length' in config.yml.
+    - Towny is now an observable object.  This allows other plugins to observe events that happen in Towny.
+    - Towny now abbreviates it's residents lists when displayed, for easier reading.
+    - Better formatting for times in the config eg. 1d6h20s.
+    - Fixed a bug when using Max distance between towns on a fresh install not allowing the first town to be founded.
+    - Fixed a bug when using essentials teleport warmup where admins would be teleported twice.
+    - Fixed a bug where players with no town we're not able to use public town spawns.
+    - Fixed a bug where plot claim was not taking money from a player.
+    - Added new plot types and commands to support.
+      '/plot set reset/shop'   - Sets a plot as a Shop plot or resets to a normal plot.
+      '/town set shopprice $$' - Set the towns default price on shop plots.
+      '/town set shoptax $$'   - Set the town tax rate on shop plots.
+                                 (a shop plot is charged an extra tax on top of any plot taxes.)
+    - Added /towny map big, which fills the entire chatbox (after pressing t) with the map.
+    - Expanded commands:
+      '/plot [claim/unclaim/nfs] [circle/rect] [radius]'
+      '/plot fs within [circle/rect] [radius]'
+      '/plot fs [$] within [circle/rect] [radius]'
+    - Commands still accepted
+      '/plot claim [radius]'
+      '/plot fs'
+      '/plot fs [$]'
+    - Paintings can no longer be placed in the wilderness if the player doesn't have the correct permissions.
+    - All /townyworld commands are now accessable via the console. Append a suffix of the world name to any command other than '?' and 'list'. eg. '/tw toggle fire world_nether'.
+    - Added new Tags for Towns and Nations. If these are set they will be used instead of the full names in chat.
+      '/town set tag [upto 4 characters]'
+      '/nation set tag [upto 4 characters]
+    - Fixed nations losing Enemies and Allies during a reload.
+    - It is now possible to use '/town spawn' when in boats and minecarts. You will leave the vehicle where it is when you teleport.
