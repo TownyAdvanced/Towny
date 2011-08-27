@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
+import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownySettings;
 
 public class TownBlock {
 	// TODO: Admin only or possibly a group check
@@ -9,13 +11,15 @@ public class TownBlock {
 	private TownyWorld world;
 	private Town town;
 	private Resident resident;
+    private TownBlockType type;
 	private int x, z;
-	private int isForSale = -1;
+	private double plotPrice = -1;
 
 	public TownBlock(int x, int z, TownyWorld world) {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+        this.type = TownBlockType.RESIDENTIAL;
 	}
 
 	public void setTown(Town town) {
@@ -82,14 +86,38 @@ public class TownBlock {
 		return false;
 	}
 
-	public void setForSale(int ForSale) {
-		this.isForSale = ForSale;
+	public void setPlotPrice(double ForSale) {
+		this.plotPrice = ForSale;
 
 	}
 	
-	public int isForSale() {
-		return isForSale;
+	public double getPlotPrice() {
+		return plotPrice;
 	}
+	
+	public boolean isForSale() {
+		return getPlotPrice() != -1.0;
+	}
+
+    public TownBlockType getType() {
+        return type;
+    }
+
+    public void setType(TownBlockType type) {
+        this.type = type;
+    }
+
+    public void setType(int typeId) {
+        setType(TownBlockType.lookup(typeId));
+    }
+
+    public void setType(String typeName) throws TownyException {
+        if (typeName.equalsIgnoreCase("reset")) typeName = "default";
+        TownBlockType type = TownBlockType.lookup(typeName);
+        if (type == null)
+            throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+        setType(type);
+    }
 	
 	public boolean isHomeBlock() {
 		try {

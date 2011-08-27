@@ -49,7 +49,7 @@ public class TownChatCommand implements CommandExecutor  {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
 			Town town = resident.getTown();
 			
-			String prefix = TownySettings.getString("MODIFY_CHAT").contains("{town}") ? "" : "[" + town.getName() + "] ";
+			String prefix = TownySettings.getModifyChatFormat().contains("{town}") ? "" : "[" + town.getName() + "] ";
 			String line = Colors.Blue + "[TC] " + prefix
 					+ player.getDisplayName()
 					+ Colors.White + ": "

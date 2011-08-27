@@ -21,8 +21,13 @@ import org.bukkit.entity.Player;
  */
 
 public class MinecraftTools {
+	/**
+	 * Converts Seconds to Ticks
+	 * @param t
+	 * @return
+	 */
 	public static long convertToTicks(long t) {
-		return t / 50;
+		return t * 20;
 	}
 	
 	public static HashMap<String,Integer> getPlayersPerWorld(Server server) {

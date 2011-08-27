@@ -25,17 +25,22 @@ public class TownyWorld extends TownyObject {
 		setName(name);
 		
 		isPVP =  true;
-		isForcePVP = TownySettings.getBoolean("FORCE_PVP_ON");		
-		isForceFire = TownySettings.getBoolean("FORCE_FIRE_ON");
-		isForceTownMobs = TownySettings.getBoolean("FORCE_TOWN_MONSTERS_ON");
-		isDisablePlayerTrample = TownySettings.getBoolean("DISABLE_PLAYER_CROP_TRAMPLING");
-		isDisableCreatureTrample = TownySettings.getBoolean("DISABLE_CREATURE_CROP_TRAMPLING");
+		isForcePVP = TownySettings.isForcingPvP();
+		isForceFire = TownySettings.isForcingFire();
+		isForceTownMobs = TownySettings.isForcingMonsters();
+		isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
+		isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 		hasWorldMobs = true;
-		isForceExpl = TownySettings.getBoolean("FORCE_EXPLOSIONS_ON");
+        //hasWorldMobs = TownySettings.isWorldMonstersOn(); ??
+		isForceExpl = TownySettings.isForcingExplosions();
 	}
 
 	public List<Town> getTowns() {
 		return towns;
+	}
+	
+	public boolean hasTowns() {
+		return !towns.isEmpty();
 	}
 
 	public boolean hasTown(String name) {

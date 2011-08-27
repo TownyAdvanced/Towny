@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.*;
 
 public class Resident extends TownBlockOwner {
 	private List<Resident> friends = new ArrayList<Resident>();
@@ -15,12 +12,15 @@ public class Resident extends TownBlockOwner {
 	private long lastOnline, registered;
 	private boolean isNPC = false;
 	private String title, surname;
+    private long teleportRequestTime;
+    private Town teleportDestination;
 
 	public Resident(String name) {
 		setName(name);
 		setTitle("");
 		setSurname("");
 		permissions.loadDefault(this);
+        teleportRequestTime = -1;
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -176,4 +176,28 @@ public class Resident extends TownBlockOwner {
 			out.add(getTreeDepth(depth+1) + "Friends (" + getFriends().size() + "): " + Arrays.toString(getFriends().toArray(new Resident[0])));
 		return out;
 	}
+
+    public void clearTeleportRequest() {
+        teleportRequestTime = -1;
+    }
+
+    public void setTeleportRequestTime() {
+        teleportRequestTime = System.currentTimeMillis();
+    }
+
+    public long getTeleportRequestTime() {
+        return teleportRequestTime;
+    }
+
+    public void setTeleportDestination(Town town) {
+        teleportDestination = town;
+    }
+    
+    public Town getTeleportDestination() {
+        return teleportDestination;
+    }
+
+    public boolean hasRequestedTeleport() {
+        return teleportRequestTime != -1;
+    }
 }

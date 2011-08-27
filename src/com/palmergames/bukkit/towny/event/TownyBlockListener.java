@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.event;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -186,8 +188,8 @@ public class TownyBlockListener extends BlockListener {
 							if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident())
 									|| (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
 									|| (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
-									|| (CurrentTownBlock.isForSale() != -1)
-									|| (destinationTownBlock.isForSale() != -1)) {
+									|| (CurrentTownBlock.getPlotPrice() != -1)
+									|| (destinationTownBlock.getPlotPrice() != -1)) {
 								event.setCancelled(true);
 								return;
 							}
@@ -247,13 +249,13 @@ public class TownyBlockListener extends BlockListener {
 
 		Location loc = block.getLocation();
 		Coord coord = Coord.parseCoord(loc);
-		
+
 		try {
 			TownyWorld townyWorld = plugin.getTownyUniverse().getWorld(loc.getWorld().getName());
 			TownBlock townBlock = townyWorld.getTownBlock(coord);
 			if (townyWorld.isUsingTowny())
-				if ((!townBlock.getTown().isFire() && !townyWorld.isForceFire())
-						|| (plugin.getTownyUniverse().isWarTime() && !townBlock.getTown().hasNation())) {
+				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN && !townBlock.getTown().isFire() && !townyWorld.isForceFire())
+						|| (block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN && plugin.getTownyUniverse().isWarTime() && !townBlock.getTown().hasNation())) {
 				plugin.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within "+coord.toString()+".");
 				return true;
 			}

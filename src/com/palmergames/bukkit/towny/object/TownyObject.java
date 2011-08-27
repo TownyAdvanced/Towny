@@ -3,11 +3,14 @@ package com.palmergames.bukkit.towny.object;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 
-public abstract class TownyObject {
+public abstract class TownyObject extends Observable {
 	private String name;
 
 	public void setName(String name) {
+        setChanged();
+        notifyObservers(TownyObservableType.OBJECT_NAME);
 		this.name = name;
 	}
 

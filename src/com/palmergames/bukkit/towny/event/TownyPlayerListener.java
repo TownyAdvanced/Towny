@@ -63,6 +63,13 @@ public class TownyPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		plugin.getTownyUniverse().onLogout(event.getPlayer());
 		
+		// Remove from teleport queue (if exists)
+		try {
+			if (plugin.getTownyUniverse().isTeleportWarmupRunning())
+				plugin.getTownyUniverse().abortTeleportRequest(plugin.getTownyUniverse().getResident(event.getPlayer().getName().toLowerCase()));
+		} catch (NotRegisteredException e) {
+		}
+		
 		plugin.deleteCache(event.getPlayer());
 	}
 	
@@ -236,9 +243,9 @@ public class TownyPlayerListener extends PlayerListener {
 			return;
 		
 	   // Prevent fly/double jump cheats
-		if (TownySettings.getBoolean("protection.cheat_protection") && !plugin.hasPermission(player, "towny.cheat.bypass"))
+		if (TownySettings.isUsingCheatProtection() && !plugin.hasPermission(player, "towny.cheat.bypass"))
 		   if (event.getEventName() != "PLAYER_TELEPORT" && from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
-				   && !player.isSneaking() && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6) {
+                    && !player.isSneaking() && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6) {
 			   //plugin.sendErrorMsg(player, "Cheat Detected!");
 			   
 			   Location blockLocation = from;
@@ -335,7 +342,7 @@ public class TownyPlayerListener extends PlayerListener {
 				} catch (NotRegisteredException e) {
 				}
 				
-				toForSale = toTownBlock.isForSale() != -1;
+				toForSale = toTownBlock.getPlotPrice() != -1;
 				toHomeBlock = toTownBlock.isHomeBlock();
 			} catch (NotRegisteredException e) {
 				toWild = true;
@@ -353,26 +360,31 @@ public class TownyPlayerListener extends PlayerListener {
 			}
 			
 			if (fromResident != toResident && !toWild) {
-				if (!sendToMsg)
+				if (!sendToMsg) {
 					sendToMsg = true;
-				else
+                    if(toTownBlock.getType().getId() != 0) toMsg += "[" + toTownBlock.getType().toString() + "] ";
+                }
+				else {
 					toMsg += Colors.LightGray + "  -  ";
-				
-				if (toResident != null)
+                }
+                if (toResident != null)
 					toMsg += Colors.LightGreen + universe.getFormatter().getFormattedName(toResident);
 				else
 					toMsg += Colors.LightGreen + TownySettings.getUnclaimedPlotName();
 			}
 			
 			if (toTown != null && (toForSale || toHomeBlock)) {
-				if (!sendToMsg)
+				if (!sendToMsg) {
 					sendToMsg = true;
-				else
+                    if(toTownBlock.getType().getId() != 0) toMsg += "[" + toTownBlock.getType().toString() + "] ";
+                }
+				else {
 					toMsg += Colors.LightGray + "  -  ";
-				if (toHomeBlock)
-					toMsg += Colors.LightBlue + "[Home]";
+                }
+                if (toHomeBlock)
+                toMsg += Colors.LightBlue + "[Home]";
 				if (toForSale)
-					toMsg += Colors.Yellow + String.format(TownySettings.getLangString("For_Sale"), toTownBlock.isForSale());
+					toMsg += Colors.Yellow + String.format(TownySettings.getLangString("For_Sale"), toTownBlock.getPlotPrice());
 			}
 			
 			if (sendToMsg)

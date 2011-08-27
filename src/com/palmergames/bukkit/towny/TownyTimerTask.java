@@ -4,7 +4,7 @@ import java.util.TimerTask;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyTimerTask extends TimerTask {
+public abstract class TownyTimerTask extends TimerTask {
 	protected TownyUniverse universe;
 	protected Towny plugin;
 
@@ -13,9 +13,9 @@ public class TownyTimerTask extends TimerTask {
 		this.plugin = universe.getPlugin();
 	}
 
-	@Override
-	public void run() {
+	//@Override
+	//public void run() {
 
-	}
+	//}
 
 }

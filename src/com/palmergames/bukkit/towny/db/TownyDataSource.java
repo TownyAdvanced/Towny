@@ -104,6 +104,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteNation(Nation nation);
 	abstract public void deleteWorld(TownyWorld world);
 	
+	abstract public void deleteFile(String file);
+	
 	public boolean loadWorldList() {
 		return loadServerWorldsList();
 	}
