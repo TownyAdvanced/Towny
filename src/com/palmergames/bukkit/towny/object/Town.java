@@ -23,7 +23,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         private List<Resident> assistants = new ArrayList<Resident>();
         private Wall wall = new Wall();
         private Resident mayor;
-        private int bonusBlocks;
+        private int bonusBlocks, purchasedBlocks;
         private double taxes, plotTax, commercialPlotTax, plotPrice, commercialPlotPrice;
         private Nation nation;
         private boolean hasUpkeep, isPVP, hasMobs, isPublic, isBANG, isFire,isTaxPercentage;
@@ -37,6 +37,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
                 setName(name);
                 tag = "";
                 bonusBlocks = 0;
+                purchasedBlocks = 0;
                 taxes = 0.0;
                 plotTax = 0.0;
         commercialPlotTax = 0;
@@ -257,6 +258,18 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         public void addBonusBlocks(int bonusBlocks) {
                 this.bonusBlocks += bonusBlocks;
         }
+        
+        public void setPurchasedBlocks(int purchasedBlocks) {
+        	this.purchasedBlocks = purchasedBlocks;
+	    }
+	
+	    public int getPurchasedBlocks() {
+	    	return purchasedBlocks;
+	    }
+	    
+	    public void addPurchasedBlocks(int purchasedBlocks) {
+	    	this.purchasedBlocks += purchasedBlocks;
+	    }
         
         public void setHomeBlock(TownBlock homeBlock) throws TownyException {
                 if (homeBlock == null) {

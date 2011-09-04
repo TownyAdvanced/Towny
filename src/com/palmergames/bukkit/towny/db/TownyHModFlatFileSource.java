@@ -202,6 +202,14 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					} catch (Exception e) {
 						town.setBonusBlocks(0);
 					}
+				
+				line = kvFile.get("purchasedBlocks");
+				if (line != null)
+					try {
+						town.setPurchasedBlocks(Integer.parseInt(line));
+					} catch (Exception e) {
+						town.setPurchasedBlocks(0);
+					}
 
 				line = kvFile.get("plotPrice");
 				if (line != null)

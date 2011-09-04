@@ -1,18 +1,63 @@
 package com.palmergames.bukkit.towny.object;
 
+import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_NATION_TAX;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_TONW_TAX;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_DAY;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_WORLD;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGIN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGOUT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN_BLOCK;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TELEPORT_REQUEST;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DAILY_TIMER;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEALTH_REGEN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_CLEARED;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_END;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_SET;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_START;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
-import com.palmergames.bukkit.towny.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.towny.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.DailyTimerTask;
+import com.palmergames.bukkit.towny.EmptyNationException;
+import com.palmergames.bukkit.towny.EmptyTownException;
+import com.palmergames.bukkit.towny.HealthRegenTimerTask;
+import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.MobRemovalTimerTask;
+import com.palmergames.bukkit.towny.NotRegisteredException;
+import com.palmergames.bukkit.towny.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
@@ -23,22 +68,19 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.MinecraftTools;
 import com.palmergames.util.FileMgmt;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
-
 
 public class TownyUniverse extends TownyObject {
-        private Towny plugin;
+        private static Towny plugin;
         private Hashtable<String, Resident> residents = new Hashtable<String, Resident>();
         private Hashtable<String, Town> towns = new Hashtable<String, Town>();
         private Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
         private Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
         // private List<Election> elections;
-        private TownyFormatter formatter = new TownyFormatter(); //TODO : Make static
         private TownyDataSource dataSource;
         private int dailyTask = -1;
         private int mobRemoveTask = -1;
         private int healthRegenTask = -1;
-    private int teleportWarmupTask = -1;
+        private int teleportWarmupTask = -1;
         private War warEvent;
         private String rootFolder;
         
@@ -54,7 +96,7 @@ public class TownyUniverse extends TownyObject {
         
         public TownyUniverse(Towny plugin) {
                 setName("");
-                this.plugin = plugin;
+                TownyUniverse.plugin = plugin;
         }
         
         public void newDay() {
@@ -107,18 +149,18 @@ public class TownyUniverse extends TownyObject {
         notifyObservers(TOGGLE_HEALTH_REGEN);
         }
 
-    public void toggleTeleportWarmup(boolean on) {
-        if (on && !isTeleportWarmupRunning()) {
-                        teleportWarmupTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new TeleportWarmupTimerTask(this), 0, 20);
-                        if (teleportWarmupTask == -1)
-                                plugin.sendErrorMsg("Could not schedule teleport warmup loop.");
-                } else if (!on && isHealthRegenRunning()) {
-                        getPlugin().getServer().getScheduler().cancelTask(teleportWarmupTask);
-                        teleportWarmupTask = -1;
-                }
-        setChanged();
-        notifyObservers(TOGGLE_TELEPORT_WARMUP);
-    }
+	    public void toggleTeleportWarmup(boolean on) {
+	        	if (on && !isTeleportWarmupRunning()) {
+	                    teleportWarmupTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new TeleportWarmupTimerTask(this), 0, 20);
+	                    if (teleportWarmupTask == -1)
+	                            plugin.sendErrorMsg("Could not schedule teleport warmup loop.");
+	            } else if (!on && isTeleportWarmupRunning()) {
+	                    getPlugin().getServer().getScheduler().cancelTask(teleportWarmupTask);
+	                    teleportWarmupTask = -1;
+	            }
+	        setChanged();
+	        notifyObservers(TOGGLE_TELEPORT_WARMUP);
+	    }
         
         public boolean isMobRemovalRunning() {
                 return mobRemoveTask != -1;
@@ -699,19 +741,19 @@ public class TownyUniverse extends TownyObject {
         }
         
         public List<String> getStatus(Resident resident) {
-                return getFormatter().getStatus(resident);
+                return TownyFormatter.getStatus(resident);
         }
 
         public List<String> getStatus(Town town) {
-                return getFormatter().getStatus(town);
+                return TownyFormatter.getStatus(town);
         }
 
         public List<String> getStatus(Nation nation) {
-                return getFormatter().getStatus(nation);
+                return TownyFormatter.getStatus(nation);
         }
         
         public List<String> getStatus(TownyWorld world) {
-                return getFormatter().getStatus(world);
+                return TownyFormatter.getStatus(world);
         }
 
         public Town getTown(String name) throws NotRegisteredException {
@@ -857,6 +899,36 @@ public class TownyUniverse extends TownyObject {
                 }
                 return false;
         }
+        
+        public boolean isEnemy(String a, String b) {
+		        try {
+		                Resident residentA = getResident(a);
+		                Resident residentB = getResident(b);
+		                if (residentA.getTown() == residentB.getTown())
+		                        return false;
+		                if (residentA.getTown().getNation() == residentB.getTown().getNation())
+		                        return false;
+		                if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
+		                        return true;
+		        } catch (NotRegisteredException e) {
+		                return false;
+		        }
+		        return false;
+		}
+		
+		public boolean isEnemy(Town a, Town b) {
+		        try {
+		                if (a == b)
+		                        return false;
+		                if (a.getNation() == b.getNation())
+		                        return false;
+		                if (a.getNation().hasEnemy(b.getNation()))
+		                        return true;
+		        } catch (NotRegisteredException e) {
+		                return false;
+		        }
+		        return false;
+		}
 
         public void setDataSource(String databaseType) throws UnsupportedOperationException {
                 if (databaseType.equalsIgnoreCase("flatfile"))
@@ -873,14 +945,6 @@ public class TownyUniverse extends TownyObject {
 
         public TownyDataSource getDataSource() {
                 return dataSource;
-        }
-
-        public void setFormatter(TownyFormatter formatter) {
-                this.formatter = formatter;
-        }
-
-        public TownyFormatter getFormatter() {
-                return formatter;
         }
 
         public boolean isWarTime() {
@@ -1030,7 +1094,7 @@ public class TownyUniverse extends TownyObject {
         }
 
         public void setPlugin(Towny plugin) {
-                this.plugin = plugin;
+                TownyUniverse.plugin = plugin;
         }
 
         public void removeWorld(TownyWorld world) throws UnsupportedOperationException {
@@ -1039,82 +1103,85 @@ public class TownyUniverse extends TownyObject {
         }
         
         public void removeNation(Nation nation) {
-                getDataSource().deleteNation(nation);
-                List<Town> toSave = new ArrayList<Town>(nation.getTowns());
-                nation.clear();
-                try {
-                        nation.pay(nation.getHoldingBalance(), new WarSpoils());
-                } catch (IConomyException e) {
-                }
-                nations.remove(nation.getName().toLowerCase());
-                
-                //search and remove from all ally/enemy lists
-                List<Nation> toSaveNation = new ArrayList<Nation>(getNations());
-                for (Nation toCheck : toSaveNation)
-                        if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
-                                try {
-                                        if (toCheck.hasAlly(nation))
-                                                toCheck.removeAlly(nation);
-                                        else
-                                                toCheck.removeEnemy(nation);
-                                } catch (NotRegisteredException e) {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
-                                }
-                        }
-                        else
-                                toSave.remove(toCheck);
-                
-                for (Nation toCheck : toSaveNation)
-                        getDataSource().saveNation(toCheck);            
-                                                
-                                                
-                plugin.updateCache();
-                for (Town town : toSave)
-                        getDataSource().saveTown(town);
-                getDataSource().saveNationList();
+        	
+        	//search and remove from all ally/enemy lists
+            List<Nation> toSaveNation = new ArrayList<Nation>();
+            for (Nation toCheck : new ArrayList<Nation>(getNations()))
+                    if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
+                            try {
+                                    if (toCheck.hasAlly(nation))
+                                            toCheck.removeAlly(nation);
+                                    else
+                                            toCheck.removeEnemy(nation);
+                                    
+                                    toSaveNation.add(toCheck);
+                            } catch (NotRegisteredException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                            }
+                    }  
+            
+            for (Nation toCheck : toSaveNation)
+                    getDataSource().saveNation(toCheck);
+            
+            //Delete nation and save towns
+            getDataSource().deleteNation(nation);
+            List<Town> toSave = new ArrayList<Town>(nation.getTowns());
+            nation.clear();
+            try {
+            	nation.pay(nation.getHoldingBalance(), new WarSpoils());
+            } catch (IConomyException e) {
+            }
+            nations.remove(nation.getName().toLowerCase());
+                                                     
+            plugin.updateCache();
+            for (Town town : toSave)
+            	getDataSource().saveTown(town);
+            getDataSource().saveNationList();
 
-        setChanged();
-        notifyObservers(REMOVE_NATION);
+            setChanged();
+            notifyObservers(REMOVE_NATION);
         }
 
         ////////////////////////////////////////////
         
         
         public void removeTown(Town town) {
-                getDataSource().deleteTown(town);
-                List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
-                TownyWorld world = town.getWorld();
-                
-                try {
-                        if (town.hasNation()) {
-                                Nation nation = town.getNation();
-                                nation.removeTown(town);
-                                        
-                                getDataSource().saveNation(nation);
-                        }
-                        town.clear();
-                } catch (EmptyNationException e) {
-                        removeNation(e.getNation());
-                } catch (NotRegisteredException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-                try {
-                        town.pay(town.getHoldingBalance(), new WarSpoils());
-                } catch (IConomyException e) {
-                }
-                
-                for (Resident resident : toSave) {
-                        removeResident(resident);
-                        getDataSource().saveResident(resident);
-                }
-                
-                towns.remove(town.getName().toLowerCase());
-                plugin.updateCache();
+        	
+        	removeTownBlocks(town);
+        	getDataSource().deleteTown(town);
+            List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
+            TownyWorld world = town.getWorld();
+            
+            try {
+                    if (town.hasNation()) {
+                            Nation nation = town.getNation();
+                            nation.removeTown(town);
+                                    
+                            getDataSource().saveNation(nation);
+                    }
+                    town.clear();
+            } catch (EmptyNationException e) {
+                    removeNation(e.getNation());
+            } catch (NotRegisteredException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+            }
+            try {
+                    town.pay(town.getHoldingBalance(), new WarSpoils());
+            } catch (IConomyException e) {
+            }
+            
+            for (Resident resident : toSave) {
+                    removeResident(resident);
+                    getDataSource().saveResident(resident);
+            }
+            
+            towns.remove(town.getName().toLowerCase());
+            plugin.updateCache();
 
-                getDataSource().saveTownList();
-                getDataSource().saveWorld(world);
+            getDataSource().saveTownList();
+            getDataSource().saveWorld(world);
 
         setChanged();
         notifyObservers(REMOVE_TOWN);
@@ -1157,42 +1224,43 @@ public class TownyUniverse extends TownyObject {
         }
         
         
-        public void removeResidentList(Resident resident) {
-                
-                String name = resident.getName();       
-                
-                try {
-                        resident.clear();
-                } catch (EmptyTownException e) {
+	public void removeResidentList(Resident resident) {
+		String name = resident.getName();    
+        
+        //search and remove from all friends lists
+		List<Resident> toSave = new ArrayList<Resident>();
+
+		for (Resident toCheck : new ArrayList<Resident>(getResidents())) {
+    		plugin.sendDebugMsg("Checking friends of: " + toCheck.getName());
+    		if (toCheck.hasFriend(resident)) {
+    			try {
+    				plugin.sendDebugMsg("       - Removing Friend: " + resident.getName());
+                    toCheck.removeFriend(resident);
+                    toSave.add(toCheck);
+                } catch (NotRegisteredException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
-                getDataSource().deleteResident(resident);               
-                
-                residents.remove(name.toLowerCase());
-                plugin.deleteCache(name);
-                getDataSource().saveResidentList();
-                
-                //search and remove from all friends lists
-                List<Resident> toSave = new ArrayList<Resident>(getResidents());
-                if (!toSave.isEmpty()) {
-                        for (Resident toCheck : toSave)
-                                if (toCheck.hasFriend(resident)) {
-                                        try {
-                                                toCheck.removeFriend(resident);
-                                        } catch (NotRegisteredException e) {
-                                                // TODO Auto-generated catch block
-                                                e.printStackTrace();
-                                        }
-                                }
-                                else
-                                        toSave.remove(toCheck);
-                        
-                        for (Resident toCheck : toSave)
-                                getDataSource().saveResident(toCheck);
-                }
-                
+    		}
+    	}
+            
+    	for (Resident toCheck : toSave)
+    		getDataSource().saveResident(toCheck);
+        
+        //Wipe and delete resident
+        try {
+                resident.clear();
+        } catch (EmptyTownException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
         }
+        getDataSource().deleteResident(resident);               
+        
+        residents.remove(name.toLowerCase());
+        plugin.deleteCache(name);
+        getDataSource().saveResidentList();
+          
+	}
         
         /////////////////////////////////////////////
         
@@ -1220,9 +1288,38 @@ public class TownyUniverse extends TownyObject {
                         getDataSource().saveResident(resident);
                 if (town != null)
                         getDataSource().saveTown(town);
+                
+                if (TownySettings.isWorldPlotManagement())
+                	deleteTownBlockIds(townBlock);
 
         setChanged();
         notifyObservers(REMOVE_TOWN_BLOCK);
+        }
+        
+		public void deleteTownBlockIds(TownBlock townBlock) {
+        	
+        	List<Integer> plotManagementDeleteIds = TownySettings.getPlotManagementDeleteIds();
+        	Block block = null;
+        	int plotSize = TownySettings.getTownBlockSize();
+        	
+        	plugin.sendDebugMsg("Processing deleteTownBlockIds");
+        	
+        	for (int z = 0; z < plotSize; z++)
+        		for (int x = 0; x < plotSize; x++)
+        			for (int y = 127; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+        				try {
+        					block = plugin.getServerWorld(townBlock.getWorld().getName()).getBlockAt((townBlock.getX()*plotSize) + x, y, (townBlock.getZ()*plotSize) + z);
+        					plugin.sendDebugMsg("Testing Block - " + block.getType().toString());
+	        				if (plotManagementDeleteIds.contains(block.getTypeId())) {
+	        					plugin.sendDebugMsg("Setting Block type to Air");
+	        					block.setType(Material.AIR);
+	        				}
+						} catch (NotRegisteredException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        				
+        			}
         }
         
         public void removeTownBlocks(Town town) {
@@ -1338,8 +1435,20 @@ public class TownyUniverse extends TownyObject {
                 }
                 return invited;
         }
-
-    public void requestTeleport(Player player, Town town) {
+        
+        public List<Resident> getOnlineResidents(ResidentList residentList) {
+    		List<Resident> onlineResidents = new ArrayList<Resident>();
+    		for (Player player : plugin.getServer().getOnlinePlayers()) {
+    			for (Resident resident : residentList.getResidents()) {
+    				if (resident.getName().equalsIgnoreCase(player.getName()))
+    					onlineResidents.add(resident);
+    			}
+    		}
+    		
+    		return onlineResidents;
+    	}
+        
+	public void requestTeleport(Player player, Town town) {
         try {
             TeleportWarmupTimerTask.requestTeleport(getResident(player.getName().toLowerCase()), town);
         } catch (TownyException x) {

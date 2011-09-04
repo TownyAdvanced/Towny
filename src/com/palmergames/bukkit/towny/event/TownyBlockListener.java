@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 
@@ -135,6 +136,31 @@ public class TownyBlockListener extends BlockListener {
 	}
 	
 	@Override
+	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+		
+		if (event.isCancelled()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		//fetch the piston base
+		Block block = event.getBlock();
+		
+		if (block.getType() != Material.PISTON_STICKY_BASE)
+			return;
+		
+		//Get the block attached to the PISTON_EXTENSION of the PISTON_STICKY_BASE
+		block = block.getRelative(event.getDirection()).getRelative(event.getDirection());
+		
+		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
+			
+			//check the block to see if it's going to pass a plot boundary
+			if (testBlockMove(block, event.getDirection().getOppositeFace()))
+				event.setCancelled(true);			
+		}		
+	}
+	
+	@Override
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 		
 		if (event.isCancelled()) {
@@ -144,67 +170,73 @@ public class TownyBlockListener extends BlockListener {
 
 		List<Block> blocks = event.getBlocks();
 		
-		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
-		Location loc, locTo;
-		Coord coord, coordTo;
+		//TownBlock CurrentTownBlock = null, destinationTownBlock = null;
 		
 		if (!blocks.isEmpty()) {
-			//check each block to see if's going to pass a plot boundary
-			for (Block block : blocks) {
-				
-				Block blockTo = block.getRelative(event.getDirection());
-				loc = block.getLocation();
-				locTo = blockTo.getLocation();
-				coord = Coord.parseCoord(loc);
-				coordTo = Coord.parseCoord(locTo);
-				
-
-					TownyWorld townyWorld = null;
-					try {
-						townyWorld = plugin.getTownyUniverse().getWorld(loc.getWorld().getName());
-						CurrentTownBlock = townyWorld.getTownBlock(coord);
-					} catch (NotRegisteredException e) {
-						//System.out.print("Failed to fetch TownBlock");
-					}
-					
-					try {
-						destinationTownBlock = townyWorld.getTownBlock(coordTo);
-					} catch (NotRegisteredException e1) {
-						//System.out.print("Failed to fetch TownBlockTo");
-					}
-					
-					if (CurrentTownBlock != destinationTownBlock) {
-
-						//System.out.print("Testing TownBlocks");
-						
-						// Cancel if either is not null, but other is (wild to town).
-						if ((CurrentTownBlock == null && destinationTownBlock != null)
-						|| (CurrentTownBlock != null && destinationTownBlock == null)) {
-							event.setCancelled(true);
-							return;
-						}
-						
-						try {
-							if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident())
-									|| (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
-									|| (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
-									|| (CurrentTownBlock.getPlotPrice() != -1)
-									|| (destinationTownBlock.getPlotPrice() != -1)) {
-								event.setCancelled(true);
-								return;
-							}
-						} catch (NotRegisteredException e) {
-							// Failed to fetch a resident
-							event.setCancelled(true);
-							return;
-						}
-					}
-
-			
+			//check each block to see if it's going to pass a plot boundary
+			for (Block block : blocks) {				
+				if (testBlockMove(block, event.getDirection()))
+					event.setCancelled(true);
 			}
 		}
 		
 		
+	}
+	
+	private boolean testBlockMove(Block block, BlockFace direction) {
+		
+		
+		Block blockTo = block.getRelative(direction);
+		Location loc = block.getLocation();
+		Location locTo = blockTo.getLocation();
+		Coord coord = Coord.parseCoord(loc);
+		Coord coordTo = Coord.parseCoord(locTo);
+		
+		TownyWorld townyWorld = null;
+		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
+		
+		try {
+			townyWorld = plugin.getTownyUniverse().getWorld(loc.getWorld().getName());
+			CurrentTownBlock = townyWorld.getTownBlock(coord);
+		} catch (NotRegisteredException e) {
+			//System.out.print("Failed to fetch TownBlock");
+		}
+		
+		try {
+			destinationTownBlock = townyWorld.getTownBlock(coordTo);
+		} catch (NotRegisteredException e1) {
+			//System.out.print("Failed to fetch TownBlockTo");
+		}
+		
+		if (CurrentTownBlock != destinationTownBlock) {
+
+			//System.out.print("Testing TownBlocks");
+			
+			// Cancel if either is not null, but other is (wild to town).
+			if ((CurrentTownBlock == null && destinationTownBlock != null)
+			|| (CurrentTownBlock != null && destinationTownBlock == null)) {
+				//event.setCancelled(true);
+				return true;
+			}
+			
+			try {
+				if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident())
+						|| (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+						|| (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
+		
+						|| (CurrentTownBlock.getPlotPrice() != -1)
+						|| (destinationTownBlock.getPlotPrice() != -1)) {
+					//event.setCancelled(true);
+					return true;
+				}
+			} catch (NotRegisteredException e) {
+				// Failed to fetch a resident
+				//event.setCancelled(true);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 		
 

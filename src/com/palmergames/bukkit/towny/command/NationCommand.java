@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.IConomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -54,6 +55,7 @@ public class NationCommand implements CommandExecutor  {
                 nation_help.add(ChatTools.formatCommand("", "/nation", "", TownySettings.getLangString("nation_help_1")));
                 nation_help.add(ChatTools.formatCommand("", "/nation", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
                 nation_help.add(ChatTools.formatCommand("", "/nation", "list", TownySettings.getLangString("nation_help_4")));
+                nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
                 nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
                 nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
                 if (!TownySettings.isNationCreationAdminOnly())
@@ -172,7 +174,16 @@ public class NationCommand implements CommandExecutor  {
                                 nationEnemy(player, newSplit);
                         else if (split[0].equalsIgnoreCase("delete"))
                                 nationDelete(player, newSplit);
-                        else 
+                        else if (split[0].equalsIgnoreCase("online")) {
+        					try {
+        						Resident resident = plugin.getTownyUniverse().getResident(player.getName());
+        						Town town = resident.getTown();
+        						Nation nation = town.getNation();
+        						plugin.getTownyUniverse().sendMessage(player, TownyFormatter.getFormattedOnlineResidents(plugin, TownySettings.getLangString("msg_nation_online"), nation));
+        					} catch (NotRegisteredException x) {
+        						plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+        					}
+                        } else 
                                 try {
                                         Nation nation = plugin.getTownyUniverse().getNation(split[0]);
                                         plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(nation));
@@ -246,7 +257,7 @@ public class NationCommand implements CommandExecutor  {
         public void newNation(Player player, String name, String capitalName) {
                 TownyUniverse universe = plugin.getTownyUniverse();
                 try {
-                        if (!plugin.isTownyAdmin(player) && (TownySettings.isNationCreationAdminOnly() ||  (plugin.isPermissions() && !plugin.hasPermission(player, "towny.nation.new"))))
+                        if (!plugin.isTownyAdmin(player) && (TownySettings.isNationCreationAdminOnly() ||  (!plugin.hasPermission(player, "towny.nation.new"))))
                                 throw new TownyException(TownySettings.getNotPermToNewNationLine());
                         
                         Town town = universe.getTown(capitalName);

@@ -14,6 +14,7 @@ public class TownyWorld extends TownyObject {
 	private List<Town> towns = new ArrayList<Town>();
 	private boolean isClaimable = true, isPVP, isForcePVP, isForceExpl, isForceFire, isForceTownMobs, hasWorldMobs, isDisablePlayerTrample, isDisableCreatureTrample, usingDefault = true, isUsingTowny = true;
 	private List<Integer> unclaimedZoneIgnoreIds = null;
+	private List<Integer> plotManagementDeleteIds = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null, unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
 	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
@@ -240,6 +241,22 @@ public class TownyWorld extends TownyObject {
 		return usingDefault;
 	}
 	
+	
+	public List<Integer> getPlotManagementDeleteIds() {
+		if (plotManagementDeleteIds == null)
+			return TownySettings.getPlotManagementDeleteIds();
+		else
+			return plotManagementDeleteIds;
+	}
+	
+	public boolean isPlotManagementDeleteIds(int id) {
+		return getPlotManagementDeleteIds().contains(id);
+	}
+
+	public void setPlotManagementDeleteIds(List<Integer> plotManagementDeleteIds) {
+			this.plotManagementDeleteIds = plotManagementDeleteIds;
+	}
+	
 	public List<Integer> getUnclaimedZoneIgnoreIds() {
 		if (unclaimedZoneIgnoreIds == null || isUsingDefault())
 			return TownySettings.getUnclaimedZoneIgnoreIds();
@@ -252,11 +269,6 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setUnclaimedZoneIgnore(List<Integer> unclaimedZoneIgnoreIds) {
-		/*
-		if (TownySettings.isFirstRun())
-			this.unclaimedZoneIgnoreIds = TownySettings.getUnclaimedZoneIgnoreIds();
-		else	
-		*/	
 			this.unclaimedZoneIgnoreIds = unclaimedZoneIgnoreIds;
 	}
 

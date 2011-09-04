@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -21,6 +20,7 @@ import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
@@ -29,7 +29,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.Colors;
@@ -294,7 +293,6 @@ public class TownyPlayerListener extends PlayerListener {
 
 	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc) {
 		plugin.sendDebugMsg("onPlayerMoveChunk: " + player.getName());
-		TownyUniverse universe = plugin.getTownyUniverse();
 		
 		plugin.getCache(player).setLastLocation(toLoc);
 		plugin.getCache(player).updateCoord(to);		
@@ -356,7 +354,7 @@ public class TownyPlayerListener extends PlayerListener {
 				if (toWild)
 					toMsg += Colors.Green + to.getWorld().getUnclaimedZoneName();
 				else
-					toMsg += universe.getFormatter().getFormattedName(toTown);
+					toMsg += TownyFormatter.getFormattedName(toTown);
 			}
 			
 			if (fromResident != toResident && !toWild) {
@@ -368,7 +366,7 @@ public class TownyPlayerListener extends PlayerListener {
 					toMsg += Colors.LightGray + "  -  ";
                 }
                 if (toResident != null)
-					toMsg += Colors.LightGreen + universe.getFormatter().getFormattedName(toResident);
+					toMsg += Colors.LightGreen + TownyFormatter.getFormattedName(toResident);
 				else
 					toMsg += Colors.LightGreen + TownySettings.getUnclaimedPlotName();
 			}

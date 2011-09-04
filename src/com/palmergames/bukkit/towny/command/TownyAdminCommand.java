@@ -190,7 +190,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                 ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + TownySettings.getLangString("ta_panel_8") + Colors.Blue + "] "
                                 + Colors.Green + TownySettings.getLangString("ta_panel_9") + Colors.LightGreen + MemMgmt.getMemSize(run.totalMemory()) + Colors.Gray + " | "
                                 + Colors.Green + TownySettings.getLangString("ta_panel_10") + Colors.LightGreen + Thread.getAllStackTraces().keySet().size() + Colors.Gray + " | "
-                                + Colors.Green + TownySettings.getLangString("ta_panel_11") + Colors.LightGreen + plugin.getTownyUniverse().getFormatter().getTime());
+                                + Colors.Green + TownySettings.getLangString("ta_panel_11") + Colors.LightGreen + TownyFormatter.getTime());
                 ta_panel.add(Colors.Yellow + MemMgmt.getMemoryBar(50, run));
         
         }
@@ -412,6 +412,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "neutral", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "devmode", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "debug", ""));
+                        player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "withdraw", ""));
                         return;
                         
                 } else if (split[0].equalsIgnoreCase("war")) {
@@ -463,7 +464,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 return;
                         }
                 */
-                } else if (split[0].equalsIgnoreCase("devmode"))
+                } else if (split[0].equalsIgnoreCase("devmode")) {
                         try {
                                 choice = !TownySettings.isDevMode();
                                 TownySettings.setDevMode(choice);
@@ -471,13 +472,22 @@ public class TownyAdminCommand implements CommandExecutor  {
                         } catch (Exception e) {
                                 plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
                         }
-                else if (split[0].equalsIgnoreCase("debug"))
+                } else if (split[0].equalsIgnoreCase("debug")) {
                         try {
                                 choice = !TownySettings.getDebug();
-                                TownySettings.setDevMode(choice);
+                                TownySettings.setDebug(choice);
                                 plugin.sendMsg(player, "Debug Mode " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
                         } catch (Exception e) {
                                 plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
+                        }
+                } else if (split[0].equalsIgnoreCase("withdraw")) {
+                		try {
+                				choice = !TownySettings.getTownBankAllowWithdrawls();
+                				TownySettings.SetTownBankAllowWithdrawls(choice);
+                				plugin.sendMsg(player, "Town Withdrawls " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+                		} catch (Exception e) {
+                				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
+                		}
                 } else {
                         // parameter error message
                         // neutral/war/townmobs/worldmobs

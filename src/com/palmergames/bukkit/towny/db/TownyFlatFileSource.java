@@ -337,6 +337,14 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (Exception e) {
 						town.setBonusBlocks(0);
 					}
+					
+				line = kvFile.get("purchasedBlocks");
+				if (line != null)
+					try {
+						town.setPurchasedBlocks(Integer.parseInt(line));
+					} catch (Exception e) {
+						town.setPurchasedBlocks(0);
+					}
 
 				line = kvFile.get("plotPrice");
 				if (line != null)
@@ -719,6 +727,18 @@ public class TownyFlatFileSource extends TownyDataSource {
 							world.setUnclaimedZoneIgnore(nums);
 						} catch (Exception e) {
 						}
+					line = kvFile.get("plotManagementDeleteIds");
+					if (line != null)
+						try {
+							List<Integer> nums = new ArrayList<Integer>();
+							for (String s: line.split(","))
+								try {
+									nums.add(Integer.parseInt(s));
+								} catch (NumberFormatException e) {
+								}
+							world.setPlotManagementDeleteIds(nums);
+						} catch (Exception e) {
+						}
 				}
 				
 				line = kvFile.get("usingTowny");
@@ -933,6 +953,8 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("protectionStatus=" + town.getPermissions().toString() + newLine);
 			// Bonus Blocks
 			fout.write("bonusBlocks=" + Integer.toString(town.getBonusBlocks()) + newLine);
+			// Purchased Blocks
+			fout.write("purchasedBlocks=" + Integer.toString(town.getPurchasedBlocks()) + newLine);
 			// Taxes
 			fout.write("taxes=" + Double.toString(town.getTaxes()) + newLine);
 			// Plot Price
@@ -1079,6 +1101,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 			// Unclaimed Zone Name
 			if (world.getUnclaimedZoneIgnoreIds() != null)
 				fout.write("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ",") + newLine);
+			// Unclaimed Zone Name
+			if (world.getPlotManagementDeleteIds() != null)
+				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
 			// Using Towny
 			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
 			

@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.IConomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -424,7 +425,7 @@ public class War {
                         Town town = (Town)kv.key;
                         output.add(String.format(
                                         Colors.Blue + "%40s "+Colors.Gold+"|"+Colors.LightGray+" %4d",
-                                        universe.getFormatter().getFormattedName(town),
+                                        TownyFormatter.getFormattedName(town),
                                         (Integer)kv.value));
                 }
                 return output;

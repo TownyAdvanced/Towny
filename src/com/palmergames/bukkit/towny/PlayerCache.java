@@ -100,7 +100,8 @@ public class PlayerCache {
 		PLOT_ALLY,
 		TOWN_OWNER,
 		TOWN_RESIDENT,
-		TOWN_ALLY
+		TOWN_ALLY,
+		ENEMY
 	};
 	
 	private TownBlockStatus townBlockStatus = TownBlockStatus.UNKOWN;

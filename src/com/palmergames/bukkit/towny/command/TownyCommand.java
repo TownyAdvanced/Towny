@@ -174,7 +174,7 @@ public class TownyCommand implements CommandExecutor {
         
         private void TopCommand(Player player, String[] args) {
                 
-                if (!plugin.isTownyAdmin(player) && (plugin.isPermissions() && !plugin.hasPermission(player, "towny.top"))) {
+                if (!plugin.isTownyAdmin(player) && (!plugin.hasPermission(player, "towny.top"))) {
                         sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                         return;
                 }
@@ -317,7 +317,7 @@ public class TownyCommand implements CommandExecutor {
                                 + Colors.Gray + " | "
                                 + Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationUpkeepCost(nation)));
                 if (town != null) {
-                        output.add(Colors.Yellow + "Town [" + plugin.getTownyUniverse().getFormatter().getFormattedName(town)+"]");
+                        output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town)+"]");
                         output.add(Colors.Rose + "    [Price] "
                                         + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotPrice())
                                         + Colors.Gray + " | "
@@ -329,7 +329,7 @@ public class TownyCommand implements CommandExecutor {
                         
                         
                         if (nation != null) {
-                                output.add(Colors.Yellow + "Nation [" + plugin.getTownyUniverse().getFormatter().getFormattedName(nation)+"]");
+                                output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation)+"]");
                                 output.add(Colors.Rose + "    [Upkeep] "
                                         + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes())
                                         + Colors.Gray + " | "
@@ -356,7 +356,7 @@ public class TownyCommand implements CommandExecutor {
                         TownyIConomyObject town = (TownyIConomyObject)kv.key;
                         output.add(String.format(
                                         Colors.LightGray + "%-20s "+Colors.Gold+"|"+Colors.Blue+" %s",
-                                        plugin.getTownyUniverse().getFormatter().getFormattedName(town),
+                                        TownyFormatter.getFormattedName(town),
                                         TownyFormatter.formatMoney((Double)kv.value)));
                 }
                 return output;
@@ -377,7 +377,7 @@ public class TownyCommand implements CommandExecutor {
                         ResidentList residentList = (ResidentList)kv.key;
                         output.add(String.format(
                                         Colors.Blue + "%30s "+Colors.Gold+"|"+Colors.LightGray+" %10d",
-                                        plugin.getTownyUniverse().getFormatter().getFormattedName((TownyObject)residentList),
+                                        TownyFormatter.getFormattedName((TownyObject)residentList),
                                         (Integer)kv.value));
                 }
                 return output;
@@ -398,7 +398,7 @@ public class TownyCommand implements CommandExecutor {
                         TownBlockOwner town = (TownBlockOwner)kv.key;
                         output.add(String.format(
                                         Colors.Blue + "%30s "+Colors.Gold+"|"+Colors.LightGray+" %10d",
-                                        plugin.getTownyUniverse().getFormatter().getFormattedName(town),
+                                        TownyFormatter.getFormattedName(town),
                                         (Integer)kv.value));
                 }
                 return output;

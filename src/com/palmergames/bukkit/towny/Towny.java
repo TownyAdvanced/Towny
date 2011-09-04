@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-//import javax.persistence.PersistenceException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -21,17 +20,22 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.xshade.bukkit.questioner.Questioner;
+import ca.xshade.questionmanager.Option;
+import ca.xshade.questionmanager.Question;
 
-import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.NationCommand;
+import com.iConomy.iConomy;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.command.NationChatCommand;
-import com.palmergames.bukkit.towny.command.TownChatCommand;
+import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.command.ResidentCommand;
+import com.palmergames.bukkit.towny.command.TownChatCommand;
+import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
+import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.command.TownyWorldCommand;
-import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.event.TownyBlockListener;
 import com.palmergames.bukkit.towny.event.TownyEntityListener;
 import com.palmergames.bukkit.towny.event.TownyEntityMonitorListener;
@@ -50,15 +54,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-
-import com.iConomy.*;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import com.nijiko.permissions.PermissionHandler;
 
 
 /**
@@ -263,7 +261,7 @@ public class Towny extends JavaPlugin {
                 townyUniverse.toggleDailyTimer(false);
                 townyUniverse.toggleMobRemoval(false);
                 townyUniverse.toggleHealthRegen(false);
-        townyUniverse.toggleTeleportWarmup(false);
+                townyUniverse.toggleTeleportWarmup(false);
                 
                 playerCache.clear();
                 playerMode.clear();
@@ -299,7 +297,7 @@ public class Towny extends JavaPlugin {
                 townyUniverse.toggleDailyTimer(false);
                 townyUniverse.toggleMobRemoval(false);
                 townyUniverse.toggleHealthRegen(false);
-        townyUniverse.toggleTeleportWarmup(false);
+                townyUniverse.toggleTeleportWarmup(false);
                 
                 /*
                 if (TownySettings.isForcingPvP() || TownySettings.isForcingExplosions() || TownySettings.isForcingMonsters())
@@ -318,7 +316,7 @@ public class Towny extends JavaPlugin {
                 townyUniverse.toggleDailyTimer(true);
                 townyUniverse.toggleMobRemoval(true);
                 townyUniverse.toggleHealthRegen(TownySettings.hasHealthRegen());
-        townyUniverse.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+                townyUniverse.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
                 updateCache();
         }
 
@@ -342,6 +340,7 @@ public class Towny extends JavaPlugin {
                 pluginManager.registerEvent(Event.Type.BLOCK_IGNITE, blockListener, Priority.Lowest, this);
                 pluginManager.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Lowest, this);
                 pluginManager.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Lowest, this);
+                pluginManager.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Lowest, this);
                 //getServer().getPluginManager().registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
 
                 pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
@@ -486,8 +485,14 @@ public class Towny extends JavaPlugin {
         }
         
         public PlayerCache getCache(Player player) {
-                if (!hasCache(player))
-                        newCache(player);
+                if (!hasCache(player)) {
+                    newCache(player);
+                    try {
+                        getCache(player).setLastTownBlock(new WorldCoord(getTownyUniverse().getWorld(player.getWorld().getName()), Coord.parseCoord(player)));
+                    } catch (NotRegisteredException e) {
+                        deleteCache(player);
+                    }
+                }
                 
                 return playerCache.get(player.getName().toLowerCase());
         }
@@ -542,10 +547,10 @@ public class Towny extends JavaPlugin {
                                 formattedName = formattedName.replace("{nation}", nation);
                                 formattedName = formattedName.replace("{town}", town);
                                 formattedName = formattedName.replace("{permprefix}", getPermissionNode(resident, "prefix"));
-                                formattedName = formattedName.replace("{townynameprefix}", resident.hasTitle() ? resident.getTitle() : getTownyUniverse().getFormatter().getNamePrefix(resident));
+                                formattedName = formattedName.replace("{townynameprefix}", resident.hasTitle() ? resident.getTitle() : TownyFormatter.getNamePrefix(resident));
                                 formattedName = formattedName.replace("{playername}", player.getName());
                                 formattedName = formattedName.replace("{modplayername}", player.getDisplayName());
-                                formattedName = formattedName.replace("{townynamepostfix}", resident.hasSurname() ? resident.getSurname() : getTownyUniverse().getFormatter().getNamePostfix(resident));
+                                formattedName = formattedName.replace("{townynamepostfix}", resident.hasSurname() ? resident.getSurname() : TownyFormatter.getNamePostfix(resident));
                                 formattedName = formattedName.replace("{permsuffix}", getPermissionNode(resident, "suffix"));
                                 
                                 formattedName = ChatTools.parseSingleLineString(colour + formattedName + Colors.White).trim();
@@ -645,7 +650,8 @@ public class Towny extends JavaPlugin {
          * @return
          */
         @SuppressWarnings("deprecation")
-        public String getPermissionNode(Resident resident, String node) {
+        // Suppression is to clear warnings while retaining permissions 2.7 compatibility
+		public String getPermissionNode(Resident resident, String node) {
                 
                 sendDebugMsg("Perm Check: Does " + resident.getName() + " have the node '" + node + "'?");
                 if (isPermissions()) {
@@ -683,6 +689,32 @@ public class Towny extends JavaPlugin {
                 
                 
         }
+        
+        /**
+         * 
+         * @param playerName
+         * @param node
+         * @return -1 = can't find
+         */
+        @SuppressWarnings("deprecation")
+        // Suppression is to clear warnings while retaining permissions 2.7 compatibility
+        public int getGroupPermissionIntNode(String playerName, String node) {
+        	if (isPermissions()) {
+        		try {
+	        		PermissionHandler handler = permissions.getHandler();
+	        		
+	        		Player player = getServer().getPlayer(playerName);
+	        		String worldName = player.getWorld().getName();
+	        		String groupName = handler.getGroup(worldName, playerName);
+	        		
+	        		return handler.getGroupPermissionInteger(worldName, groupName, node);
+        		} catch (Exception e) {
+        			// Ignore UnsupportedOperationException on certain Permission APIs
+        		}
+        	}
+        	
+        	return -1;
+        }
 
         /** hasPermission
          * 
@@ -696,16 +728,18 @@ public class Towny extends JavaPlugin {
         public boolean hasPermission(Player player, String node) {
                 sendDebugMsg("Perm Check: Does " + player.getName() + " have the node '" + node + "'?");
                 if (isPermissions()) {
-                        sendDebugMsg("    Permissions installed.");
-                        PermissionHandler handler = permissions.getHandler();
-                        boolean perm = handler.permission(player, node);
-                        sendDebugMsg("    Permissions says "+perm+".");
-                        return perm;
+                    sendDebugMsg("    Permissions installed.");
+                    PermissionHandler handler = permissions.getHandler();
+                    boolean perm = handler.permission(player, node);
+                    sendDebugMsg("    Permissions says "+perm+".");
+                	return perm;
                 // } else if (groupManager != null)
                 //      return groupManager.getHandler().permission(player, node);
                 } else {
-                        sendDebugMsg("    Does not have permission.");
-                        return player.hasPermission(node);
+                	sendDebugMsg("    Using BukkitPerms installed.");
+                	boolean perm = player.hasPermission(node);
+                    sendDebugMsg("    Permissions says "+perm+".");
+                    return perm;
                 }
         }
 
@@ -791,6 +825,8 @@ public class Towny extends JavaPlugin {
                                 // Allied destroy rights
                                 if (universe.isAlly(town, resident.getTown()))
                                         return TownBlockStatus.TOWN_ALLY;
+                                else if (universe.isEnemy(town, resident.getTown()))
+                                		return TownBlockStatus.ENEMY;
                                 else
                                         return TownBlockStatus.OUTSIDER;
                         } else if (resident.isMayor() || resident.getTown().hasAssistant(resident))
@@ -930,7 +966,7 @@ public class Towny extends JavaPlugin {
                                 cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), actionType.toString()));
                                 return false;
                         }
-                else if (status == TownBlockStatus.OUTSIDER)
+                else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY)
                         if (town.getPermissions().getOutsider(actionType))
                                 return true;
                         else {

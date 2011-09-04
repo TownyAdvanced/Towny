@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iConomy.iConomy;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyIConomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
@@ -14,21 +16,40 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
-import com.iConomy.*;
-
-//TODO: Make static
-//TODO: pull names from the config
-
 public class TownyFormatter {
         public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
         public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
         
-        public String getTime() {
+        /**
+         * 1 = Description
+    	 * 2 = Count
+    	 * 
+    	 * Colours:
+    	 * 3 = Description and :
+    	 * 4 = Count
+    	 * 5 = Colour for the start of the list
+    	 */
+        public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
+    	
+    	public static List<String> getFormattedOnlineResidents(Towny plugin, String prefix, ResidentList residentList) {
+    		List<Resident> onlineResidents = plugin.getTownyUniverse().getOnlineResidents(residentList);
+    		return getFormattedResidents(prefix, onlineResidents);
+    	}
+    	
+    	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
+    		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Colors.Green, Colors.LightGreen, Colors.White));
+    	}
+    	
+    	public static String[] getFormattedNames(List<Resident> residentList) {
+    		return getFormattedNames(residentList.toArray(new Resident[0]));
+    	}
+        
+        public static String getTime() {
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                 return sdf.format(System.currentTimeMillis());
         }
 
-        public List<String> getStatus(Resident resident) {
+        public static List<String> getStatus(Resident resident) {
                 List<String> out = new ArrayList<String>();
 
                 // ___[ King Harlus ]___
@@ -39,17 +60,18 @@ public class TownyFormatter {
                         + Colors.Gray + " | "
                         + Colors.Green + "Last Online: " + Colors.LightGreen + lastOnlineFormat.format(resident.getLastOnline()));
 
-                // Owner of: 4 Town Blocks | Perm: B=f- D=fa S=f-
-                if (resident.getTownBlocks().size() > 0)
-                        out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots"
-                                        + Colors.Gray + " | " + Colors.Green + "Perm: "
-                                        + resident.getPermissions().getColourString());
+                // Owner of: 4 plots
+                // Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
+                if (resident.getTownBlocks().size() > 0) {
+	                out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
+	                out.add(Colors.Green + "    Perm: " + resident.getPermissions().getColourString());
+                }
 
                 // Bank: 534 coins
                 if (TownySettings.isUsingIConomy())
                         try {
                                 TownyIConomyObject.checkIConomy();
-                                out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingBalance());
+                                out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
                         } catch (IConomyException e1) {
                         }
                 
@@ -65,16 +87,14 @@ public class TownyFormatter {
                         }
                 out.add(line);
 
-                // Friends [12]:
-                // James, Carry, Mason
+                // Friends [12]: James, Carry, Mason
                 List<Resident> friends = resident.getFriends();
-                out.add(Colors.Green + "Friends " + Colors.LightGreen + "[" + friends.size() + "]" + Colors.Green + ":" + Colors.White + " ");
-                out.addAll(ChatTools.listArr(getFormattedNames(friends.toArray(new Resident[0]))));
+                out.addAll(getFormattedResidents("Friends", friends));
 
                 return out;
         }
 
-        public List<String> getStatus(Town town) {
+        public static List<String> getStatus(Town town) {
                 List<String> out = new ArrayList<String>();
                 
                 TownyWorld world = town.getWorld();
@@ -90,11 +110,12 @@ public class TownyFormatter {
                 } catch (NullPointerException e) {
                 }
 
-                // Town Size: 0 / 16 [Bonus: 0] [Home: 33,44]
+                // Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
                 try {
                         out.add(Colors.Green
                                         + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town)
-                                        + Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]"
+                                        + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "")
+                                        + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "")
                                         + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
                 } catch (TownyException e) {
                 }
@@ -111,16 +132,17 @@ public class TownyFormatter {
                 if (TownySettings.isUsingIConomy())
                         try {
                                 TownyIConomyObject.checkIConomy();
-                                bankString = Colors.Gray + " | " + Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingBalance();
+                                bankString = Colors.Gray + " | " + Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
                         } catch (IConomyException e1) {
                         }
 
                 // Mayor: MrSand | Bank: 534 coins
                 out.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()) + bankString);
                 
-                // Assistants: Sammy, Ginger
+                // Assistants [2]: Sammy, Ginger
                 if (town.getAssistants().size() > 0)
-                        out.addAll(ChatTools.listArr(getFormattedNames(town.getAssistants().toArray(new Resident[0])), Colors.Green + "Assistants:" + Colors.White + " "));
+                	out.addAll(getFormattedResidents("Assistants", town.getAssistants()));
+                
                 // Nation: Azur Empire
                 try {
                         out.add(Colors.Green + "Nation: " + Colors.LightGreen
@@ -129,20 +151,20 @@ public class TownyFormatter {
                 }
 
                 // Residents [12]: James, Carry, Mason
-        String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
+                
+                String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
                 if(residents.length > 34){
-            String[] entire = residents;
-            residents = new String[36];
-            System.arraycopy(entire, 0, residents, 0, 35);
-            residents[35] = "and more...";
-        }
+		            String[] entire = residents;
+		            residents = new String[36];
+		            System.arraycopy(entire, 0, residents, 0, 35);
+		            residents[35] = "and more...";
+		        }
                 out.addAll(ChatTools.listArr(residents,
-                                Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
-
+                	Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
                 return out;
         }
 
-        public List<String> getStatus(Nation nation) {
+        public static List<String> getStatus(Nation nation) {
                 List<String> out = new ArrayList<String>();
 
                 // ___[ Azur Empire ]___
@@ -152,7 +174,7 @@ public class TownyFormatter {
                 if (TownySettings.isUsingIConomy())
                         try {
                                 TownyIConomyObject.checkIConomy();
-                                out.add(Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingBalance());
+                                out.add(Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance());
                         } catch (IConomyException e1) {
                         }
                 
@@ -177,7 +199,7 @@ public class TownyFormatter {
                 return out;
         }
         
-        public List<String> getStatus(TownyWorld world) {
+        public static List<String> getStatus(TownyWorld world) {
                 List<String> out = new ArrayList<String>();
                 
                 // ___[ World ]___
@@ -212,7 +234,7 @@ public class TownyFormatter {
                 return out;
         }
 
-        public String getNamePrefix(Resident resident) {
+        public static String getNamePrefix(Resident resident) {
                 if (resident == null)
                         return "";
                 if (resident.isKing())
@@ -222,7 +244,7 @@ public class TownyFormatter {
                 return "";
         }
         
-        public String getNamePostfix(Resident resident) {
+        public static String getNamePostfix(Resident resident) {
                 if (resident == null)
                         return "";
                 if (resident.isKing())
@@ -232,7 +254,7 @@ public class TownyFormatter {
                 return "";
         }
         
-        public String getFormattedName(TownyObject obj) {
+        public static String getFormattedName(TownyObject obj) {
                 if (obj == null)
                         return "Null";
                 else if (obj instanceof Resident)
@@ -245,7 +267,7 @@ public class TownyFormatter {
                 return obj.getName().replaceAll("_", " ");
         }
         
-        public String getFormattedResidentName(Resident resident) {
+        public static String getFormattedResidentName(Resident resident) {
                 if (resident == null)
                         return "null";
                 if (resident.isKing())
@@ -255,31 +277,31 @@ public class TownyFormatter {
                 return resident.getName().replaceAll("_", " ");
         }
 
-        public String getFormattedTownName(Town town) {
+        public static String getFormattedTownName(Town town) {
                 if (town.isCapital())
                         return TownySettings.getCapitalPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(town);
                 return TownySettings.getTownPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(town);
         }
 
-        public String getFormattedNationName(Nation nation) {
+        public static String getFormattedNationName(Nation nation) {
                 return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
         }
 
-        public String[] getFormattedNames(Resident[] residents) {
+        public static String[] getFormattedNames(Resident[] residents) {
                 List<String> names = new ArrayList<String>();
                 for (Resident resident : residents)
                         names.add(getFormattedName(resident));
                 return names.toArray(new String[0]);
         }
 
-        public String[] getFormattedNames(Town[] towns) {
+        public static String[] getFormattedNames(Town[] towns) {
                 List<String> names = new ArrayList<String>();
                 for (Town town : towns)
                         names.add(getFormattedName(town));
                 return names.toArray(new String[0]);
         }
 
-        public String[] getFormattedNames(Nation[] nations) {
+        public static String[] getFormattedNames(Nation[] nations) {
                 List<String> names = new ArrayList<String>();
                 for (Nation nation : nations)
                         names.add(getFormattedName(nation));

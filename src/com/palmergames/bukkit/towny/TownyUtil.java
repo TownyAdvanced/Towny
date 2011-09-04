@@ -32,7 +32,7 @@ public class TownyUtil {
 					}
 				} else {
 					// Treat as rect to serve for backwards capability.
-					out = selectWorldCoordAreaRect(owner, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaRect(owner, pos, args);
 				}
 			}
 		}

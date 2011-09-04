@@ -2,12 +2,11 @@ package com.palmergames.bukkit.towny.object;
 
 import org.bukkit.plugin.Plugin;
 
-import com.palmergames.bukkit.towny.IConomyException;
-import com.palmergames.bukkit.towny.Towny;
-
-import com.iConomy.*;
+import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.iConomy.system.Holdings;
+import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.Towny;
 public class TownyIConomyObject extends TownyObject {
         private static Towny plugin;
 
@@ -203,19 +202,23 @@ public class TownyIConomyObject extends TownyObject {
                 }
         }
         
-        public static String getIConomyCurrency() 
-        {
+        public static String getIConomyCurrency() {
                 return "";      
         }
         
         /* Used To Get Balance of Players holdings in String format for printing*/
-        public String getHoldingFormattedBalance() {
-                try {
-                        return iConomy.format(getHoldingBalance());
-                } catch (IConomyException e) {
-                        return "0 " + getIConomyCurrency();
-                }
-        }
+		public String getHoldingFormattedBalance() {
+			try {
+				double balance = getHoldingBalance();
+				try {
+					return iConomy.format(balance);
+				} catch (Exception eInvalidAPIFunction) {
+					return String.format("%.2f", balance);
+				}
+			} catch (IConomyException eNoIconomy) {
+			        return "Error Accessing Bank Account";
+			}
+		}
         
         
         /* Used To Get Balance of Players Bank in String format for printing*/

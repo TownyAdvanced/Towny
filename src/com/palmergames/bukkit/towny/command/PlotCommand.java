@@ -99,6 +99,9 @@ public class PlotCommand implements CommandExecutor  {
                                 if (split[0].equalsIgnoreCase("claim")) {
                                         List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
                                         selection = TownyUtil.filterUnownedPlots(selection);
+                                        int maxPlots = TownySettings.getMaxResidentPlots(plugin, resident);
+                                        if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
+                                        	throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
                                         if (selection.size() > 0) {
                                                 for (WorldCoord worldCoord : selection) {
                                                         try {
@@ -225,8 +228,10 @@ public class PlotCommand implements CommandExecutor  {
                                         if (townBlock.getPlotPrice() != -1) {
                                                 if (TownySettings.isUsingIConomy() && !resident.pay(townBlock.getPlotPrice(), owner))
                                                         throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
-                                                if (resident.getTownBlocks().size() + 1 > TownySettings.getMaxPlotsPerResident())
-                                                        throw new TownyException(String.format(TownySettings.getLangString("msg_no_money_purchase_plot"), TownySettings.getMaxPlotsPerResident()));
+                                                
+                                                int maxPlots = TownySettings.getMaxResidentPlots(plugin, resident);
+                                                if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
+                                                        throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
                                                 
                                                 plugin.getTownyUniverse().sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
                                                 townBlock.setPlotPrice(-1);
