@@ -455,3 +455,55 @@ v0.75.0:
     - It is now possible to use '/town spawn' when in boats and minecarts. You will leave the vehicle where it is when you teleport.
 v0.75.1:
     - Fixed config reading so it works!
+v0.75.2:
+    - Fixed deleting foreign language files at startup.
+    - Added missing entry from english.yml - msg_err_empty_area_selection: '&cSelected area contains no valid plots.'
+    - Fixed error on using '/town claim auto'.
+    - Fixed a refactoring error which affected towny top commands.
+v0.76.0:
+    - Added Town Buy command. Is defaulted to be empty. Currently only has ability to buy bonus blocks up until a set limit.
+      '/town buy'
+      '/town buy bonus [n]'
+    - [Bonus: 0] is now hidden from the status when the town has no bonus blocks.
+    - Added: [Bought: 0/max] to /town.
+    - Fixed the shutdown of the Teleport warmup timer on restarts.
+    - Fixed enabling Devmode, debug and reading integers from the config.
+    - Added town bank caps and a toggle to enable/disable withdrawls from town banks (prevent players hiding money in towns on PVP worlds) - thanks phrstbrn
+    - New command '/townyadmin toggle withdraw'.
+    - Added two new commands to see who's online
+      '/town online'
+      '/nation online'
+    - Fix for deleted residents in friend lists causing errors upon deletion, and the same error with nation deletion and enemy/ally lists.
+    - Prevent sticky pistons pulling blocks across plot boundaries (if different owners).
+    - Fix for getLastLocation() needing to throw a NullPointerException. The players location is now set upon creation of the cache.
+    - Added a Maxplots permissions node. If a group doesn't have this node or the node is set to -1 Towny will default back to the max_plots_per_resident in config.
+      Setting max_plots_per_resident to -1 with no permission node, or a node set to -1 will allow infinite plots.
+      
+      Eg usage:
+
+		groups:
+		  Default:
+		    default: true
+		    permissions:
+		    - general.spawn
+		    inheritance: []
+		    info:
+		      prefix: ''
+		      build: true
+		      suffix: ''
+		      towny_maxplots: 1
+		  Admins:
+		    default: false
+		    permissions:
+		    - '*'
+		    inheritance:
+		    info:
+		      prefix: ''
+		      build: true
+		      suffix: ''
+		      towny_maxplots: -1
+		      
+    - Fixed old resident deletion for the new config system using seconds instead of milliseconds.
+    - Towny now correctly defaults to Bukkits Permissions if using_permissions is set to false in the config.
+    - Added XcraftGate to the plugin.yml as a recognised multiworld plugin.
+    - Added a new unclaim_delete under Plot management in global_town_settings. This will delete any items listed when a town unclaims a plot or a town is deleted.
