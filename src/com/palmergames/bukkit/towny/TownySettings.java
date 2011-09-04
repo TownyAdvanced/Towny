@@ -2,10 +2,19 @@ package com.palmergames.bukkit.towny;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -19,10 +28,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
-//import com.palmergames.util.StringMgmt;
-
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 
 public class TownySettings {
@@ -287,9 +292,9 @@ public class TownySettings {
         // if the file is not found it will load the default from resource
         public static void loadLanguage (String filepath, String defaultRes) throws IOException {               
                 
-                String defaultName = filepath + FileMgmt.fileSeparator() + getString("language", defaultRes);
+            	String defaultName = filepath + FileMgmt.fileSeparator() + getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
                 
-                File file = FileMgmt.unpackLanguageFile(defaultName, defaultRes);
+            	File file = FileMgmt.unpackLanguageFile(defaultName, defaultRes);
                 if (file != null) {
                                 
                         // read the (language).yml into memory
@@ -318,8 +323,8 @@ public class TownySettings {
                 return str.replaceAll("&", "\u00A7");
         }
 
-    public static Boolean getBoolean(ConfigNodes node) {
-        return config.getBoolean(node.getRoot().toLowerCase(), Boolean.parseBoolean(node.getDefault()));
+    public static boolean getBoolean(ConfigNodes node) {
+        return Boolean.parseBoolean(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
     }
     /*
         public static Boolean getBoolean(String root){
@@ -327,8 +332,8 @@ public class TownySettings {
     }
     */
 
-    private static Double getDouble(ConfigNodes node) {
-        return config.getDouble(node.getRoot().toLowerCase(), Double.parseDouble(node.getDefault()));
+    private static double getDouble(ConfigNodes node) {
+        return Double.parseDouble(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
     }
     /*
     private static Double getDouble(String root){
@@ -336,8 +341,8 @@ public class TownySettings {
     }
     */
 
-    private static Integer getInt(ConfigNodes node) {
-        return config.getInt(node.getRoot().toLowerCase(), Integer.parseInt(node.getDefault()));
+    private static int getInt(ConfigNodes node) {
+        return Integer.parseInt(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
     }
     /*
     private static Integer getInt(String root){
@@ -345,7 +350,7 @@ public class TownySettings {
     }
     */
 
-    private static Long getLong(ConfigNodes node) {
+    private static long getLong(ConfigNodes node) {
         return Long.parseLong(getString(node));
     }
     
@@ -487,6 +492,7 @@ public class TownySettings {
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
+            level.put("numResidents", 1);
             level.put("namePrefix", "");
             level.put("namePostfix", " (Settlement)");
             level.put("mayorPrefix", "Hermit ");
@@ -882,7 +888,7 @@ public class TownySettings {
         public static long getInactiveAfter() {
         String time = getString(ConfigNodes.RES_SETTING_INACTIVE_AFTER_TIME);
         if (Pattern.matches(".*[a-zA-Z].*", time)) {
-            return TimeTools.secondsFromDhms(time);
+            return (TimeTools.secondsFromDhms(time) * 1000);
         }
                 return getLong(ConfigNodes.RES_SETTING_INACTIVE_AFTER_TIME);
         }
@@ -902,11 +908,15 @@ public class TownySettings {
         */
 
         public static int getMaxTownBlocks(Town town) {
-                int ratio = getTownBlockRatio();
-                if (ratio == 0)
-                        return town.getBonusBlocks() + (Integer)getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
-                else
-                        return town.getBonusBlocks() + town.getNumResidents()*ratio;
+			int ratio = getTownBlockRatio();
+			int n = town.getBonusBlocks() + town.getPurchasedBlocks();
+			
+			if (ratio == 0)
+				n += (Integer)getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
+			else
+				n += town.getNumResidents() * ratio;
+			
+			return n;
         }
 
     public static int getTownBlockRatio() {
@@ -1003,7 +1013,7 @@ public class TownySettings {
         public static long getDeleteTime() {
         String time = getString(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_TIME);
         if (Pattern.matches(".*[a-zA-Z].*", time)) {
-            return TimeTools.secondsFromDhms(time);
+            return (TimeTools.secondsFromDhms(time) * 1000);
         }
                 return getLong(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_TIME);
         }
@@ -1095,6 +1105,18 @@ public class TownySettings {
         
         public static int getTownLimit() {
                 return getInt(ConfigNodes.TOWN_LIMIT);
+        }
+        
+        public static int getMaxPurchedBlocks() {
+        	return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+        }
+        
+        public static boolean isSellingBonusBlocks() {
+        	return getMaxPurchedBlocks() != 0;
+        }
+        
+        public static double getPurchasedBonusBlocksCost() {
+            return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK);
         }
         
         public static double getNationNeutralityCost() {
@@ -1216,7 +1238,7 @@ public class TownySettings {
         }
 
     public static void setDevMode(boolean choice) {
-        setProperty(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME.getRoot(), choice);
+        setProperty(ConfigNodes.PLUGIN_DEV_MODE_ENABLE.getRoot(), choice);
     }
 
     public static String getDevName() {
@@ -1274,7 +1296,6 @@ public class TownySettings {
         public static String getFlatFileBackupType() {
                 return getString(ConfigNodes.PLUGIN_FLATFILE_BACKUP);
         }
-        
 
         public static boolean isForcingPvP() {
                 return getBoolean(ConfigNodes.NWS_FORCE_PVP_ON);
@@ -1303,6 +1324,14 @@ public class TownySettings {
         public static boolean isForcingFire() {
                 return getBoolean(ConfigNodes.NWS_FORCE_FIRE_ON);
         }
+        
+    public static boolean isWorldPlotManagement() {
+    	return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_ENABLE);
+    }
+    
+    public static List<Integer> getPlotManagementDeleteIds() {
+    	return getIntArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE);
+    }
 
         public static boolean isTownRespawning() {
                 return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN);
@@ -1336,8 +1365,11 @@ public class TownySettings {
                 return getInt(ConfigNodes.TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);
         }
 
-        public static int getMaxPlotsPerResident() {
-                return getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
+        public static int getMaxResidentPlots(Towny plugin, Resident resident) {
+        	int maxPlots = plugin.getGroupPermissionIntNode(resident.getName(), "towny_maxplots");
+            if (maxPlots == -1) 
+            	maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
+            return maxPlots;
         }
 
     public static boolean getPermFlag_Resident_Friend_Build() {
@@ -1534,6 +1566,17 @@ public class TownySettings {
     
     public static int getTeleportWarmupTime() {
         return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
+    }
+    
+    public static int getTownBankCap() {
+        return getInt(ConfigNodes.GTOWN_SETTINGS_BANK_CAP_AMOUNT);
+    }
+    
+    public static boolean getTownBankAllowWithdrawls() {
+        return getBoolean(ConfigNodes.GTOWN_SETTINGS_BANK_ALLOW_WITHDRAWLS);
+    }
+    public static void SetTownBankAllowWithdrawls(boolean newSetting) {
+        setProperty(ConfigNodes.GTOWN_SETTINGS_BANK_ALLOW_WITHDRAWLS.getRoot(), newSetting);
     }
 
         public static boolean isValidRegionName(String name) {
