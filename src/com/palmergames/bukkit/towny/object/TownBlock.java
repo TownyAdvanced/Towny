@@ -181,4 +181,8 @@ public class TownBlock {
 	public String toString() {
 		return getWorld().getName() + " ("+getCoord()+")";
 	}
+	
+	public boolean isWarZone() {
+		return getWorld().isWarZone(getCoord());
+	}
 }

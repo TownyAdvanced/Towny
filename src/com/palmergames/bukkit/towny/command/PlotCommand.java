@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.ChatTools;
@@ -89,7 +90,7 @@ public class PlotCommand implements CommandExecutor  {
                         TownyWorld world;
                         try {
                                 resident = plugin.getTownyUniverse().getResident(player.getName());
-                                world = plugin.getTownyUniverse().getWorld(player.getWorld().getName());
+								world = TownyUniverse.getWorld(player.getWorld().getName());
                         } catch (TownyException x) {
                                 plugin.sendErrorMsg(player, x.getError());
                                 return;
@@ -99,7 +100,7 @@ public class PlotCommand implements CommandExecutor  {
                                 if (split[0].equalsIgnoreCase("claim")) {
                                         List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
                                         selection = TownyUtil.filterUnownedPlots(selection);
-                                        int maxPlots = TownySettings.getMaxResidentPlots(plugin, resident);
+                                        int maxPlots = TownySettings.getMaxResidentPlots(resident);
                                         if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
                                         	throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
                                         if (selection.size() > 0) {
@@ -113,8 +114,8 @@ public class PlotCommand implements CommandExecutor  {
                                                                 plugin.sendErrorMsg(player, x.getError());
                                                         }
                                                 }
-                                                plugin.getTownyUniverse().getDataSource().saveResident(resident);
-                                                plugin.getTownyUniverse().getDataSource().saveWorld(world);
+												TownyUniverse.getDataSource().saveResident(resident);
+												TownyUniverse.getDataSource().saveWorld(world);
                                         } else {
                                                 player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
                                         }
@@ -134,8 +135,8 @@ public class PlotCommand implements CommandExecutor  {
                                                                 plugin.sendErrorMsg(player, x.getError());
                                                         }
                                                 }
-                                                plugin.getTownyUniverse().getDataSource().saveResident(resident);
-                                                plugin.getTownyUniverse().getDataSource().saveWorld(world);
+												TownyUniverse.getDataSource().saveResident(resident);
+												TownyUniverse.getDataSource().saveWorld(world);
                                         } else {
                                                 player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
                                         }
@@ -206,13 +207,13 @@ public class PlotCommand implements CommandExecutor  {
                 }
                         } catch (TownyException x) {
                                 plugin.sendErrorMsg(player, x.getError());
-                        } catch (IConomyException x) {
+                        } catch (EconomyException x) {
                                 plugin.sendErrorMsg(player, x.getError());
                         }
                 }
         }
         
-        public boolean residentClaim(Resident resident, WorldCoord worldCoord) throws TownyException, IConomyException {
+        public boolean residentClaim(Resident resident, WorldCoord worldCoord) throws TownyException, EconomyException {
                 if (plugin.getTownyUniverse().isWarTime())
                         throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                 
@@ -226,20 +227,20 @@ public class PlotCommand implements CommandExecutor  {
                                 try {
                                         Resident owner = townBlock.getResident();
                                         if (townBlock.getPlotPrice() != -1) {
-                                                if (TownySettings.isUsingIConomy() && !resident.pay(townBlock.getPlotPrice(), owner))
+                                                if (TownySettings.isUsingEconomy() && !resident.pay(townBlock.getPlotPrice(), owner))
                                                         throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
                                                 
-                                                int maxPlots = TownySettings.getMaxResidentPlots(plugin, resident);
+                                                int maxPlots = TownySettings.getMaxResidentPlots(resident);
                                                 if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
                                                         throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
                                                 
                                                 plugin.getTownyUniverse().sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
                                                 townBlock.setPlotPrice(-1);
                                                 townBlock.setResident(resident);
-                                                plugin.getTownyUniverse().getDataSource().saveResident(owner);
+												TownyUniverse.getDataSource().saveResident(owner);
                                                 return true;
                                         } else if (town.isMayor(resident) || town.hasAssistant(resident)) {
-                                                if (TownySettings.isUsingIConomy() && !town.pay(townBlock.getPlotPrice(), owner))
+                                                if (TownySettings.isUsingEconomy() && !town.pay(townBlock.getPlotPrice(), owner))
                                                         throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
                                                 
                                                 plugin.getTownyUniverse().sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), townBlock.getPlotPrice()));
@@ -252,7 +253,7 @@ public class PlotCommand implements CommandExecutor  {
                                         if (townBlock.getPlotPrice() == -1)
                                                 throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
                                         
-                                        if (TownySettings.isUsingIConomy() && !resident.pay(townBlock.getPlotPrice(), town))
+                                        if (TownySettings.isUsingEconomy() && !resident.pay(townBlock.getPlotPrice(), town))
                                                 throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
                                         
                                         townBlock.setPlotPrice(-1);
@@ -276,7 +277,7 @@ public class PlotCommand implements CommandExecutor  {
                         if (resident == owner || force) {
                                 townBlock.setResident(null);
                                 townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-                                plugin.getTownyUniverse().getDataSource().saveResident(resident);
+								TownyUniverse.getDataSource().saveResident(resident);
                                 return true;
                         } else
                                 throw new TownyException(TownySettings.getLangString("msg_not_own_area"));

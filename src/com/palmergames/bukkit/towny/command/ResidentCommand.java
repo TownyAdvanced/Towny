@@ -14,6 +14,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -150,7 +152,7 @@ public class ResidentCommand implements CommandExecutor  {
                                 return;
                         }
 
-                        plugin.getTownyUniverse().getDataSource().saveResident(resident);
+						TownyUniverse.getDataSource().saveResident(resident);
                 }
         }
         
@@ -161,6 +163,10 @@ public class ResidentCommand implements CommandExecutor  {
                         player.sendMessage(ChatTools.formatCommand("Mode", "map", "", TownySettings.getLangString("mode_1")));
                         player.sendMessage(ChatTools.formatCommand("Mode", "townclaim", "", TownySettings.getLangString("mode_2")));
                         player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
+                        player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
+                        player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
+                        String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() == null ? "flag" : TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
+                        player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "", String.format(TownySettings.getLangString("mode_6"), warFlagMaterial)));
                         player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim tc nc", ""));
                 } else if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("clear"))
                         plugin.removePlayerMode(player);
@@ -237,7 +243,7 @@ public class ResidentCommand implements CommandExecutor  {
                         msg = msg.substring(0, msg.length()-2);
                         msg += TownySettings.getLangString("msg_to_list");
                         plugin.sendMsg(player, msg);
-                        plugin.getTownyUniverse().getDataSource().saveResident(resident);
+						TownyUniverse.getDataSource().saveResident(resident);
                 } else
                         plugin.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
         }
@@ -271,7 +277,7 @@ public class ResidentCommand implements CommandExecutor  {
                         msg = msg.substring(0, msg.length()-2);
                         msg += TownySettings.getLangString("msg_from_list");;
                         plugin.sendMsg(player, msg);
-                        plugin.getTownyUniverse().getDataSource().saveResident(resident);
+						TownyUniverse.getDataSource().saveResident(resident);
                 } else
                         plugin.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
                         

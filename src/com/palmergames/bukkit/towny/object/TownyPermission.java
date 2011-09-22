@@ -189,12 +189,12 @@ public class TownyPermission {
 	public void loadDefault(TownBlockOwner owner) {
 		residentBuild = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.BUILD);
 		residentDestroy = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.DESTROY);
-		residentSwitch = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.ITEM_USE);
-		residentItemUse = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.SWITCH);
+		residentSwitch = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.SWITCH);
+		residentItemUse = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.ITEM_USE);
 		allyBuild = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.BUILD);
 		allyDestroy = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.DESTROY);
-		allySwitch = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.ITEM_USE);
-		allyItemUse = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.SWITCH);
+		allySwitch = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.SWITCH);
+		allyItemUse = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.ITEM_USE);
 		outsiderBuild = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.BUILD);
 		outsiderDestroy = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.DESTROY);
 		outsiderItemUse = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.ITEM_USE);

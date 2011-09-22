@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.EmptyNationException;
-import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.townywar.TownyWar;
 
-public class Nation extends TownyIConomyObject implements ResidentList {
+public class Nation extends TownyEconomyObject implements ResidentList {
         private List<Resident> assistants = new ArrayList<Resident>();
         private List<Town> towns = new ArrayList<Town>();
         private List<Nation> allies = new ArrayList<Nation>();
@@ -27,11 +29,11 @@ public class Nation extends TownyIConomyObject implements ResidentList {
         }
         
         public void setTag(String text) throws TownyException {
-        	if (tag.length() > 4)
+        	if (text.length() > 4)
         		throw new TownyException("Tag too long");
-    		if (tag.matches(" "))
-    			tag = "";
     		this.tag = text.toUpperCase();
+    		if (this.tag.matches(" "))
+    			this.tag = "";
     	}
 
     	public String getTag() {
@@ -315,10 +317,16 @@ public class Nation extends TownyIConomyObject implements ResidentList {
         }
 
         public void setNeutral(boolean neutral) throws TownyException {
-                if (!TownySettings.isDeclaringNeutral() && neutral)
-                        throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
-                else
-                        this.neutral = neutral;
+            if (!TownySettings.isDeclaringNeutral() && neutral)
+                throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
+            else {
+        		if (neutral) {
+        			for (Resident resident : getResidents()) {
+            			TownyWar.removeAttackerFlags(resident.getName());
+        			}
+        		}
+                this.neutral = neutral;
+            }
         }
                  
         public boolean isNeutral() {
@@ -340,11 +348,11 @@ public class Nation extends TownyIConomyObject implements ResidentList {
                 return false;
         }
         
-        public void withdrawFromBank(Resident resident, int amount) throws IConomyException, TownyException {
+        public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
                 if (!isKing(resident) && !hasAssistant(resident))
                         throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
                 
-                if (TownySettings.isUsingIConomy()) {
+                if (TownySettings.isUsingEconomy()) {
                         if (!pay(amount, resident))
                                 throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
                 } else

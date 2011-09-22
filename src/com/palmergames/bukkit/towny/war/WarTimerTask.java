@@ -4,12 +4,13 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerTask;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 
 public class WarTimerTask extends TownyTimerTask {
 	War warEvent;
@@ -50,7 +51,7 @@ public class WarTimerTask extends TownyTimerTask {
 					plugin.sendDebugMsg("[War]   warringNation");
 					//TODO: Cache player coord & townblock
 					
-					WorldCoord worldCoord = new WorldCoord(universe.getWorld(player.getWorld().getName()), Coord.parseCoord(player));
+					WorldCoord worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(player));
 					if (!warEvent.isWarZone(worldCoord))
 						continue;
 					plugin.sendDebugMsg("[War]   warZone");

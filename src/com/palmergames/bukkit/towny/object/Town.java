@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -66,11 +66,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         }
         
         public void setTag(String text) throws TownyException {
-        	if (tag.length() > 4)
+        	if (text.length() > 4)
         		throw new TownyException("Tag too long");
-    		if (tag.matches(" "))
-    			tag = "";
     		this.tag = text.toUpperCase();
+    		if (this.tag.matches(" "))
+    			this.tag = "";
     	}
 
     	public String getTag() {
@@ -86,11 +86,21 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         }
 
         public void setTaxes(double taxes) {
-                this.taxes = taxes;
+        	if (isTaxPercentage)
+        		if (taxes > TownySettings.getMaxTaxPercent())
+        			this.taxes = TownySettings.getMaxTaxPercent();
+        		else
+        			this.taxes = taxes;
+        	else
+        		if (taxes > TownySettings.getMaxTax())
+        			this.taxes = TownySettings.getMaxTax();
+        		else
+        			this.taxes = taxes;
         }
 
         public double getTaxes() {
-                return taxes;
+        	setTaxes(taxes); //make sure the tax level is right.
+            return taxes;
         }
 
         public void setMayor(Resident mayor) throws TownyException {
@@ -218,273 +228,271 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
                 return isBANG;
         }
 
-    public void setTaxPercentage (boolean isPercentage)
-    {
+    public void setTaxPercentage (boolean isPercentage) {
         this.isTaxPercentage = isPercentage;
-        if(this.getTaxes() > 100)
-        {
+        if(this.getTaxes() > 100) {
             this.setTaxes(0);
         }
     }
 
     public boolean isTaxPercentage() {
-                return isTaxPercentage;
-        }
+    	return isTaxPercentage;
+    }
         
-        public void setFire(boolean isFire) {
-                this.isFire = isFire;
-        }
+    public void setFire(boolean isFire) {
+        this.isFire = isFire;
+    }
 
-        public boolean isFire() {
-                return isFire;
-        }
+    public boolean isFire() {
+        return isFire;
+    }
 
-        public void setTownBoard(String townBoard) {
-                this.townBoard = townBoard;
-        }
+    public void setTownBoard(String townBoard) {
+        this.townBoard = townBoard;
+    }
 
-        public String getTownBoard() {
-                return townBoard;
-        }
+    public String getTownBoard() {
+        return townBoard;
+    }
 
-        public void setBonusBlocks(int bonusBlocks) {
-                this.bonusBlocks = bonusBlocks;
-        }
+    public void setBonusBlocks(int bonusBlocks) {
+        this.bonusBlocks = bonusBlocks;
+    }
 
-        public int getBonusBlocks() {
-                return bonusBlocks;
-        }
-        
-        public void addBonusBlocks(int bonusBlocks) {
-                this.bonusBlocks += bonusBlocks;
-        }
-        
-        public void setPurchasedBlocks(int purchasedBlocks) {
-        	this.purchasedBlocks = purchasedBlocks;
-	    }
-	
-	    public int getPurchasedBlocks() {
-	    	return purchasedBlocks;
-	    }
-	    
-	    public void addPurchasedBlocks(int purchasedBlocks) {
-	    	this.purchasedBlocks += purchasedBlocks;
-	    }
-        
-        public void setHomeBlock(TownBlock homeBlock) throws TownyException {
-                if (homeBlock == null) {
-                        this.homeBlock = null;
-                        return;
-                }
-                if (!hasTownBlock(homeBlock))
-                        throw new TownyException("Town has no claim over this town block.");
-                this.homeBlock = homeBlock;
-                try {
-                        setSpawn(spawn);
-                } catch (TownyException e) {
-                        spawn = null;
-                } catch (NullPointerException e) {
-                        // In the event that spawn is already null
-                }
-        }
+    public int getBonusBlocks() {
+        return bonusBlocks;
+    }
 
-        public TownBlock getHomeBlock() throws TownyException {
-                if (hasHomeBlock())
-                        return homeBlock;
-                else
-                        throw new TownyException("Town has not set a home block.");
-        }
+    public void addBonusBlocks(int bonusBlocks) {
+        this.bonusBlocks += bonusBlocks;
+    }
 
-        public void setWorld(TownyWorld world) throws AlreadyRegisteredException {
-                if (world == null) {
-                        this.world = null;
-                        return;
-                }
-                if (this.world == world)
-                        return;
-                if (hasWorld())
-                        throw new AlreadyRegisteredException();
-                else
-                        this.world = world;
-        }
+    public void setPurchasedBlocks(int purchasedBlocks) {
+	this.purchasedBlocks = purchasedBlocks;
+    }
 
-        public TownyWorld getWorld() {
-                return world;
-        }
+    public int getPurchasedBlocks() {
+	return purchasedBlocks;
+    }
 
-        public boolean hasMayor() {
-                return mayor != null;
+    public void addPurchasedBlocks(int purchasedBlocks) {
+    	this.purchasedBlocks += purchasedBlocks;
+    }
+
+    public void setHomeBlock(TownBlock homeBlock) throws TownyException {
+        if (homeBlock == null) {
+                this.homeBlock = null;
+                return;
         }
-        
-        public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
-                if (!hasResident(resident))
-                        throw new NotRegisteredException();
-                else {
-                        
-                        remove(resident);
-                        
-                        if (getNumResidents() == 0)
-                                try {
-                                        clear();
-                                        throw new EmptyTownException(this);
-                                } catch (EmptyNationException e) {
-                                        throw new EmptyTownException(this, e);
-                                }
-                }
+        if (!hasTownBlock(homeBlock))
+                throw new TownyException("Town has no claim over this town block.");
+        this.homeBlock = homeBlock;
+        try {
+                setSpawn(spawn);
+        } catch (TownyException e) {
+                spawn = null;
+        } catch (NullPointerException e) {
+                // In the event that spawn is already null
         }
-        
-        private void removeAllResidents() {
-                for (Resident resident : new ArrayList<Resident>(residents))
-                        remove(resident);
+    }
+
+    public TownBlock getHomeBlock() throws TownyException {
+        if (hasHomeBlock())
+                return homeBlock;
+        else
+                throw new TownyException("Town has not set a home block.");
+    }
+
+    public void setWorld(TownyWorld world) throws AlreadyRegisteredException {
+        if (world == null) {
+                this.world = null;
+                return;
         }
-        
-        private void remove(Resident resident) {
-                for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
-                        townBlock.setResident(null);
-                        try {
-                                townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-                        } catch (NotRegisteredException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                        }
-                        //getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
-                }
+        if (this.world == world)
+                return;
+        if (hasWorld())
+                throw new AlreadyRegisteredException();
+        else
+                this.world = world;
+    }
+
+    public TownyWorld getWorld() {
+        return world;
+    }
+
+    public boolean hasMayor() {
+        return mayor != null;
+    }
+
+    public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
+        if (!hasResident(resident))
+                throw new NotRegisteredException();
+        else {
                 
-                if (isMayor(resident)) {
-                        
-                        if (residents.size() > 1) {
-                                for (Resident assistant : new ArrayList<Resident>(getAssistants()))
-                                        if (assistant != resident) {
+                remove(resident);
+                
+                if (getNumResidents() == 0)
+                        try {
+                                clear();
+                                throw new EmptyTownException(this);
+                        } catch (EmptyNationException e) {
+                                throw new EmptyTownException(this, e);
+                        }
+        }
+    }
+
+    private void removeAllResidents() {
+        for (Resident resident : new ArrayList<Resident>(residents))
+                remove(resident);
+    }
+
+    private void remove(Resident resident) {
+        for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
+                townBlock.setResident(null);
+                try {
+                        townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
+                } catch (NotRegisteredException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+                //getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
+        }
+        
+        if (isMayor(resident)) {
+                
+                if (residents.size() > 1) {
+                        for (Resident assistant : new ArrayList<Resident>(getAssistants()))
+                                if (assistant != resident) {
+                                        try {
+                                                setMayor(assistant);
+                                                continue;
+                                        } catch (TownyException e) {
+                                                // Error setting mayor.
+                                                e.printStackTrace();
+                                        }
+                                }
+                        if (isMayor(resident)) {
+                                // Still mayor and no assistants so pick a resident to be mayor
+                                for (Resident newMayor : new ArrayList<Resident>(getResidents()))
+                                        if (newMayor != resident) {
                                                 try {
-                                                        setMayor(assistant);
+                                                        setMayor(newMayor);
                                                         continue;
                                                 } catch (TownyException e) {
                                                         // Error setting mayor.
                                                         e.printStackTrace();
                                                 }
                                         }
-                                if (isMayor(resident)) {
-                                        // Still mayor and no assistants so pick a resident to be mayor
-                                        for (Resident newMayor : new ArrayList<Resident>(getResidents()))
-                                                if (newMayor != resident) {
-                                                        try {
-                                                                setMayor(newMayor);
-                                                                continue;
-                                                        } catch (TownyException e) {
-                                                                // Error setting mayor.
-                                                                e.printStackTrace();
-                                                        }
-                                                }
-                                }
                         }
-                        
                 }
                 
-                if (hasNation() && nation.hasAssistant(resident))
-                        try {
-                                nation.removeAssistant(resident);
-                        } catch (NotRegisteredException e) {
-                        }
-                if (hasAssistant(resident))
-                        try {
-                                removeAssistant(resident);
-                        } catch (NotRegisteredException e) {
-                        }
-                        
-                try {
-                        resident.setTown(null);
-                } catch (AlreadyRegisteredException e) {
-                }
-                residents.remove(resident);
         }
         
-        public void removeAssistant(Resident resident) throws NotRegisteredException {
-                if (!hasAssistant(resident))
-                        throw new NotRegisteredException();
-                else
-                        assistants.remove(resident);
-        }
-
-        public void setSpawn(Location spawn) throws TownyException {
-                if (!hasHomeBlock())
-                        throw new TownyException("Home Block has not been set");
-                Coord spawnBlock = Coord.parseCoord(spawn);
-                if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ())
-                {
-                        this.spawn = spawn;
-                }
-                else
-                        throw new TownyException("Spawn is not within the homeBlock.");
-        }
-
-        public Location getSpawn() throws TownyException {
-                if (hasHomeBlock() && spawn != null)
-                {
-                        return spawn;
-                }
-                        
-                else {
-                        this.spawn = null;
-                        throw new TownyException("Town has not set a spawn location.");
-                }
-        }
-
-        public boolean hasSpawn() {
-                return (hasHomeBlock() && spawn != null);
-        }
-
-        public boolean hasHomeBlock() {
-                return homeBlock != null;
-        }
-
-        public void clear() throws EmptyNationException {
-                //Cleanup
-                removeAllResidents();
-                mayor = null;
-                residents.clear();
-                assistants.clear();
-                homeBlock = null;
-
+        if (hasNation() && nation.hasAssistant(resident))
                 try {
-                        if (hasWorld()) {
-                                world.removeTownBlocks(getTownBlocks());
-                                world.removeTown(this);
-                        }
+                        nation.removeAssistant(resident);
                 } catch (NotRegisteredException e) {
                 }
-                if (hasNation())
-                        try {
-                                nation.removeTown(this);
-                        } catch (NotRegisteredException e) {
-                        }
-        }
-
-        private boolean hasWorld() {
-                return world != null;
-        }
-
-        @Override
-        public void removeTownBlock(TownBlock townBlock)
-                        throws NotRegisteredException {
-                if (!hasTownBlock(townBlock))
-                        throw new NotRegisteredException();
-                else {
-                        try {
-                                if (getHomeBlock() == townBlock)
-                                        setHomeBlock(null);
-                        } catch (TownyException e) {
-                        }
-                        townBlocks.remove(townBlock);
+        if (hasAssistant(resident))
+                try {
+                        removeAssistant(resident);
+                } catch (NotRegisteredException e) {
                 }
+                
+        try {
+                resident.setTown(null);
+        } catch (AlreadyRegisteredException e) {
         }
+        residents.remove(resident);
+    }
 
-        public void setPlotPrice(double plotPrice) {
-                this.plotPrice = plotPrice;
-        }
+    public void removeAssistant(Resident resident) throws NotRegisteredException {
+        if (!hasAssistant(resident))
+                throw new NotRegisteredException();
+        else
+                assistants.remove(resident);
+    }
 
-        public double getPlotPrice() {
-                return plotPrice;
+    public void setSpawn(Location spawn) throws TownyException {
+        if (!hasHomeBlock())
+                throw new TownyException("Home Block has not been set");
+        Coord spawnBlock = Coord.parseCoord(spawn);
+        if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ())
+        {
+                this.spawn = spawn;
         }
+        else
+                throw new TownyException("Spawn is not within the homeBlock.");
+    }
+
+    public Location getSpawn() throws TownyException {
+        if (hasHomeBlock() && spawn != null)
+        {
+                return spawn;
+        }
+                
+        else {
+                this.spawn = null;
+                throw new TownyException("Town has not set a spawn location.");
+        }
+    }
+
+    public boolean hasSpawn() {
+        return (hasHomeBlock() && spawn != null);
+    }
+
+    public boolean hasHomeBlock() {
+        return homeBlock != null;
+    }
+
+    public void clear() throws EmptyNationException {
+        //Cleanup
+        removeAllResidents();
+        mayor = null;
+        residents.clear();
+        assistants.clear();
+        homeBlock = null;
+
+        try {
+                if (hasWorld()) {
+                        world.removeTownBlocks(getTownBlocks());
+                        world.removeTown(this);
+                }
+        } catch (NotRegisteredException e) {
+        }
+        if (hasNation())
+                try {
+                        nation.removeTown(this);
+                } catch (NotRegisteredException e) {
+                }
+    }
+
+    private boolean hasWorld() {
+        return world != null;
+    }
+
+    @Override
+    public void removeTownBlock(TownBlock townBlock)
+                throws NotRegisteredException {
+        if (!hasTownBlock(townBlock))
+                throw new NotRegisteredException();
+        else {
+                try {
+                        if (getHomeBlock() == townBlock)
+                                setHomeBlock(null);
+                } catch (TownyException e) {
+                }
+                townBlocks.remove(townBlock);
+        }
+    }
+
+    public void setPlotPrice(double plotPrice) {
+        this.plotPrice = plotPrice;
+    }
+
+    public double getPlotPrice() {
+        return plotPrice;
+    }
 
     public void setCommercialPlotPrice(double commercialPlotPrice) {
         this.commercialPlotPrice = commercialPlotPrice;
@@ -494,48 +502,48 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         return commercialPlotPrice;
     }
 
-        @Override
-        public Wall getWall() {
-                return wall;
-        }
-        
-        @Override
-        public List<WallSection> getWallSections() {
-                return getWall().getWallSections();
-        }
+    @Override
+    public Wall getWall() {
+            return wall;
+    }
+    
+    @Override
+    public List<WallSection> getWallSections() {
+            return getWall().getWallSections();
+    }
 
-        @Override
-        public void setWallSections(List<WallSection> wallSections) {
-                getWall().setWallSections(wallSections);
+    @Override
+    public void setWallSections(List<WallSection> wallSections) {
+            getWall().setWallSections(wallSections);
 
-        }
+    }
 
-        @Override
-        public boolean hasWallSection(WallSection wallSection) {
-                return getWall().hasWallSection(wallSection);
-        }
+    @Override
+    public boolean hasWallSection(WallSection wallSection) {
+            return getWall().hasWallSection(wallSection);
+    }
 
-        @Override
-        public void addWallSection(WallSection wallSection) {
-                getWall().addWallSection(wallSection);
-        }
+    @Override
+    public void addWallSection(WallSection wallSection) {
+            getWall().addWallSection(wallSection);
+    }
 
-        @Override
-        public void removeWallSection(WallSection wallSection) {
-                getWall().removeWallSection(wallSection);
-        }
+    @Override
+    public void removeWallSection(WallSection wallSection) {
+            getWall().removeWallSection(wallSection);
+    }
 
-        public boolean isHomeBlock(TownBlock townBlock) {
-                return hasHomeBlock() ? townBlock == homeBlock : false;
-        }
+    public boolean isHomeBlock(TownBlock townBlock) {
+            return hasHomeBlock() ? townBlock == homeBlock : false;
+    }
 
-        public void setPlotTax(double plotTax) {
-                this.plotTax = plotTax;
-        }
+    public void setPlotTax(double plotTax) {
+            this.plotTax = plotTax;
+    }
 
-        public double getPlotTax() {
-                return plotTax;
-        }
+    public double getPlotTax() {
+            return plotTax;
+    }
 
     public void setCommercialPlotTax(double commercialTax) {
         this.commercialPlotTax = commercialTax;
@@ -545,39 +553,39 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         return commercialPlotTax;
     }
         
-        public void withdrawFromBank(Resident resident, int amount) throws IConomyException, TownyException {
-                if (!isMayor(resident) && !hasAssistant(resident))
-                        throw new TownyException("You don't have access to the town's bank.");
-                
-                if (TownySettings.isUsingIConomy()) {
-                        if (!pay(amount, resident))
-                                throw new TownyException("There is not enough money in the bank.");
-                } else
-                        throw new TownyException("iConomy has not been turned on.");
-                        
-        }
+    public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
+        if (!isMayor(resident) && !hasAssistant(resident))
+                throw new TownyException("You don't have access to the town's bank.");
         
-        @Override
-        public List<String> getTreeString(int depth) {
-                List<String> out = new ArrayList<String>();
-                out.add(getTreeDepth(depth) + "Town ("+getName()+")");
-                out.add(getTreeDepth(depth+1) + "Mayor: " + (hasMayor() ? getMayor().getName() : "None"));
-                out.add(getTreeDepth(depth+1) + "Home: " + homeBlock);
-                out.add(getTreeDepth(depth+1) + "Bonus: " + bonusBlocks);
-                out.add(getTreeDepth(depth+1) + "TownBlocks (" + getTownBlocks().size() + "): " /*+ getTownBlocks()*/);
-                if (getAssistants().size() > 0)
-                        out.add(getTreeDepth(depth+1) + "Assistants (" + getAssistants().size() + "): " + Arrays.toString(getAssistants().toArray(new Resident[0])));
-                out.add(getTreeDepth(depth+1) + "Residents (" + getResidents().size() + "):");
-                for (Resident resident : getResidents())
-                        out.addAll(resident.getTreeString(depth+2));
-                return out;
-        }
+        if (TownySettings.isUsingEconomy()) {
+                if (!pay(amount, resident))
+                        throw new TownyException("There is not enough money in the bank.");
+        } else
+                throw new TownyException("iConomy has not been turned on.");
+                
+    }
 
-        public void setPublic(boolean isPublic) {
-                this.isPublic = isPublic;
-        }
+    @Override
+    public List<String> getTreeString(int depth) {
+        List<String> out = new ArrayList<String>();
+        out.add(getTreeDepth(depth) + "Town ("+getName()+")");
+        out.add(getTreeDepth(depth+1) + "Mayor: " + (hasMayor() ? getMayor().getName() : "None"));
+        out.add(getTreeDepth(depth+1) + "Home: " + homeBlock);
+        out.add(getTreeDepth(depth+1) + "Bonus: " + bonusBlocks);
+        out.add(getTreeDepth(depth+1) + "TownBlocks (" + getTownBlocks().size() + "): " /*+ getTownBlocks()*/);
+        if (getAssistants().size() > 0)
+                out.add(getTreeDepth(depth+1) + "Assistants (" + getAssistants().size() + "): " + Arrays.toString(getAssistants().toArray(new Resident[0])));
+        out.add(getTreeDepth(depth+1) + "Residents (" + getResidents().size() + "):");
+        for (Resident resident : getResidents())
+                out.addAll(resident.getTreeString(depth+2));
+        return out;
+    }
 
-        public boolean isPublic() {
-                return isPublic;
-        }
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
 }

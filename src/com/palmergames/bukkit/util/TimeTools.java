@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.util;
 
+import java.util.regex.Pattern;
+
 /**
  * @author dumptruckman
  */
@@ -34,5 +36,12 @@ public class TimeTools {
             seconds = Integer.parseInt(dhms.split("s")[0].replaceAll(" ", ""));
         }
         return (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+    }
+    
+    public static long getMillis(String dhms) {
+	    if (Pattern.matches(".*[a-zA-Z].*", dhms)) {
+	        return (TimeTools.secondsFromDhms(dhms) * 1000);
+	    }
+        return Long.parseLong(dhms);
     }
 }

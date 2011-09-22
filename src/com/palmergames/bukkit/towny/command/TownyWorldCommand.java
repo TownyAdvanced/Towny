@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -83,7 +84,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		if (sender instanceof Player) {
 			player = (Player)sender;
 			try {
-				Globalworld = plugin.getTownyUniverse().getWorld(player.getWorld().getName());
+				Globalworld = TownyUniverse.getWorld(player.getWorld().getName());
 			} catch (NotRegisteredException e) {
 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -96,7 +97,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			if ((!split[0].equalsIgnoreCase("?")) && (!split[0].equalsIgnoreCase("list")))
 			try {
 				if ((split.length >= 1)) {
-					Globalworld = plugin.getTownyUniverse().getWorld(split[split.length-1].toLowerCase());
+					Globalworld = TownyUniverse.getWorld(split[split.length-1].toLowerCase());
 					split = StringMgmt.remLastArg(split);
 				} else {
 					sender.sendMessage(TownySettings.getLangString("msg_area_not_recog"));
@@ -264,7 +265,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				return;
 			}
 			
-			plugin.getTownyUniverse().getDataSource().saveWorld(Globalworld);
+			TownyUniverse.getDataSource().saveWorld(Globalworld);
 			
 		}
 		
@@ -390,7 +391,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				return;
 			}
 
-			plugin.getTownyUniverse().getDataSource().saveWorld(Globalworld);
+			TownyUniverse.getDataSource().saveWorld(Globalworld);
 		}
 	}
 	

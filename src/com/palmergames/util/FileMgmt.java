@@ -1,11 +1,9 @@
 package com.palmergames.util;
 
 import java.io.BufferedReader;
-//import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,10 +12,10 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.palmergames.util.FileMgmt;
 
 public class FileMgmt {
 	public static void checkFolders(String[] folders) {
@@ -78,22 +76,26 @@ public class FileMgmt {
 		
 		// open a handle to yml file
 		File file = new File(filePath);
-		//if(file.exists())
-		//	return file;
+		
+		if((file.exists()) && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes)))
+			return file;
 		
 		String resString;
 		
-		// create the file as it doesn't exist
+		/*
+		 *  create the file as it doesn't exist,
+		 *  or it's the default file
+		 *  so refresh just in case.
+		 */
 		try {
-			checkFiles(new String[]{
-					filePath});
+			checkFiles(new String[]{filePath});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		// file didn't exist so we need to populate a new one
+		// Populate a new file
 		try {
-			resString = convertStreamToString(defaultRes);
+			resString = convertStreamToString("/" + defaultRes);
 			if (resString != null) {
 	    		// Save the string to file (*.yml)
 	    		try {
@@ -253,5 +255,69 @@ public class FileMgmt {
 			}
 		}
 	}
-
+	
+	/**
+	 * Delete file, or if path represents a directory, recursively
+	 * delete it's contents beforehand.
+	 */
+    public static void deleteFile(File file) {
+        if (file.isDirectory()) {
+        	File[] children = file.listFiles();
+        	if (children != null) {
+        		for (File child : children)
+        			deleteFile(child);
+        	}
+        	children = file.listFiles();
+        	if (children == null || children.length == 0) {
+        		if (!file.delete())
+        			System.out.println("Error: Could not delete folder: " + file.getPath());
+        	}
+        } else if (file.isFile()) {
+    		if (!file.delete())
+    			System.out.println("Error: Could not delete file: " + file.getPath());
+        }
+    }
+    
+    /**
+     * Delete child files/folders of backupsDir with a filename ending
+     * in milliseconds that is older than deleteAfter milliseconds in age.
+     */
+    public static void deleteOldBackups(File backupsDir, long deleteAfter) {
+    	TreeSet<Long> deleted = new TreeSet<Long>();
+    	if (backupsDir.isDirectory()) {
+    		File[] children = backupsDir.listFiles();
+        	if (children != null) {
+        		for (File child : children) {
+        			try {
+        				String filename = child.getName();
+        				if (child.isFile()) {
+        					if (filename.contains("."))
+        						filename = filename.split("\\.")[0];
+        				}
+        				String[] tokens = filename.split(" ");
+        				String lastToken = tokens[tokens.length-1];
+        				long timeMade = Long.parseLong(lastToken);
+        				
+        				if (timeMade >= 0) {
+        					long age = System.currentTimeMillis() - timeMade;
+        					if (age >= deleteAfter) {
+        						deleteFile(child);
+        						deleted.add(age);
+        					}
+        				}
+        			} catch (Exception e) {
+        				// Ignore file as it doesn't follow the backup format.
+        			}
+        		}
+        	}
+    	}
+    	
+    	if (deleted.size() > 0) {
+    		System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), 
+    				(deleted.size() > 1
+    						? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last()))
+    						: String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()))
+    						)));
+    	} 
+    }
 }

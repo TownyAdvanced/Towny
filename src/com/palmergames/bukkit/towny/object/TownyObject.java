@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
+
 public abstract class TownyObject extends Observable {
 	private String name;
 
@@ -38,5 +40,9 @@ public abstract class TownyObject extends Observable {
 	@Override
 	public String toString() {
 		return getName();
+	}
+	
+	public String getFormattedName() {
+		return TownyFormatter.getFormattedName(this);
 	}
 }

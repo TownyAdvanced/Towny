@@ -10,8 +10,10 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
@@ -40,6 +42,9 @@ public abstract class TownyDataSource {
 	}
 	
 	public void backup() throws IOException {
+	}
+	
+	public void cleanupBackups() {
 	}
 	
 	public boolean confirmContinuation(String msg) {
@@ -72,17 +77,18 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList()
-			&& loadWorlds() && loadNations() && loadTowns() && loadResidents();
+			&& loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadRegenList();
 	}
 
 	public boolean saveAll() {
-		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList()
+		return loadRegenList() && saveWorldList() && saveNationList() && saveTownList() && saveResidentList()
 			&& saveWorlds() && saveNations() && saveTowns() && saveResidents();
 	}
 
 	abstract public boolean loadResidentList();
 	abstract public boolean loadTownList();
 	abstract public boolean loadNationList();
+	abstract public boolean loadRegenList();
 	
 	abstract public boolean loadResident(Resident resident);
 	abstract public boolean loadTown(Town town);
@@ -93,12 +99,19 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTownList();
 	abstract public boolean saveNationList();
 	abstract public boolean saveWorldList();
+	abstract public boolean saveRegenList();
 	
 	abstract public boolean saveResident(Resident resident);
 	abstract public boolean saveTown(Town town);
 	abstract public boolean saveNation(Nation nation);
 	abstract public boolean saveWorld(TownyWorld world);
+	
+	abstract public boolean savePlotData(PlotBlockData plotChunk);
+	
+	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
+	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
 
+	abstract public void deletePlotData(PlotBlockData plotChunk);
 	abstract public void deleteResident(Resident resident);
 	abstract public void deleteTown(Town town);
 	abstract public void deleteNation(Nation nation);

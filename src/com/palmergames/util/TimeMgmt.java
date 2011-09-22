@@ -50,16 +50,16 @@ public class TimeMgmt {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) Math.floor(l / 3600);
-			out += h + " hours";
+			out = h + " hours";
 			l -= h * 3600;
 		}
 		if (l >= 60) {
 			int m = (int) Math.floor(l / 60);
-			out += (out.length() > 0 ? out += ", " : "") + m + " minutes";
+			out += (out.length() > 0 ? ", " : "") + m + " minutes";
 			l -= m * 60;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? out += ", " : "") + l + " seconds";
+			out +=  (out.length() > 0 ? ", " : "") + l + " seconds";
 		return out;
 	}
 

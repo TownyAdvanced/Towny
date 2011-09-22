@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 
 public class JoinNationTask extends ResidentNationQuestionTask {
@@ -19,9 +20,9 @@ public class JoinNationTask extends ResidentNationQuestionTask {
 		try {
 			nation.addTown(resident.getTown());
 			//towny.deleteCache(resident.getName());
-			universe.getDataSource().saveResident(resident);
-			universe.getDataSource().saveTown(resident.getTown());
-			universe.getDataSource().saveNation(nation);
+			TownyUniverse.getDataSource().saveResident(resident);
+			TownyUniverse.getDataSource().saveTown(resident.getTown());
+			TownyUniverse.getDataSource().saveNation(nation);
 			
 			getUniverse().sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_join_nation"), resident.getTown().getName())));
 		} catch (AlreadyRegisteredException e) {

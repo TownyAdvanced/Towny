@@ -507,3 +507,75 @@ v0.76.0:
     - Towny now correctly defaults to Bukkits Permissions if using_permissions is set to false in the config.
     - Added XcraftGate to the plugin.yml as a recognised multiworld plugin.
     - Added a new unclaim_delete under Plot management in global_town_settings. This will delete any items listed when a town unclaims a plot or a town is deleted.
+v0.76.1.0:
+    - Fixed error with '/town buy' granting the wrong number of blocks.
+    - Fixed converting seconds to milliseconds for mobremoval and new day timers.
+    - Fixed an error when using '/town claim #'.
+    - Fixed an error with '/town claim auto' (I broke it fixing the above command).
+    - Explosions in the nether caused by using beds are now blocked if a town is there and set to block explosions. However, the fires it generates can not be blocked.
+    - Added (Online) to title Resident Status
+    - Added Neutral in Nation status.
+    - Moved /nation set neutral [on/off] to /nation toggle neutral
+    - Added plot regeneration.
+      When a town plot is unclaimed (by a player or through upkeep) it will slowly begin to revert to a pre town state.
+      Blocks will slowly change back to whatever blocks we're present at the moment the town block was claimed.
+      You can configure certain block types you don't want restored to prevent players exploiting regen for diamond ores.
+      Block types to not restore are configured in block_ignore in the worlds txt file data/worlds/worldname.txt
+    - Added a block deletion function to remove specified blocks when a town block becomes unclaimed.
+      This is useful for removing Lockette/Deadbolt signs on doors and chests.
+      Block types to remove are configured in unclaim_delete in the worlds txt file data/worlds/worldname.txt
+    - Removed the commands '/town add+' and '/town kick+'. Use '/town add' and '/town kick'.
+    - Removed + commands from '/town assistant [.add/remove]'.
+    - Fixed when players are added to the default town they are unable to use '/town leave'.
+    - Town data files should now be correctly deleted (moved to the deleted folder) upon removal.
+    - Added a max_tax_amount and max_tax_percent to the config for towns. Defaults to 1000 and 25% respetively.
+      Which one is used depends on how the town is taxing; flat rate or by percentage.
+    - Fixed Town and Nation tags size limit.
+    - Titles and surnames can now contain spaces.
+    - Fixed default Bukkit Permissions to deny instead of allow.
+    - Fixed last timer for deleting old residents.
+    - Added a new setting 'regen_delay'.
+      This setting is in seconds. It will allow players to break protected blocks in the wild and towns, even if they dont have permission.
+      The blocks will drop no loot and will regenerate after the specified time.
+      Defaults to 0 (disabled).
+    - Added Nation bank caps and moved the settings to the economy section.
+    - Moved daily tax settings to the economy section of the config.
+    - Tidy of economy settings (WARNING - be sure to check the values after upgrading).
+    - Added a broadcast if a Nation is disbanded due to a town deletion.
+    - Fixed '/xxx claim auto' commands for town and resident.
+    - Fixed '/plot unclaim xx' command. Now errors if it's an invalid entry.
+    - Minor alterations to english.yml
+    - No more sneak jump to avoid the cheat protection.
+    - Fixed resetting tags using '/town set tag '.
+    - Plot regen should now correctly restore different types of leaves/wood etc.
+    - Added a new Default new world setting (wild_revert_on_mob_explosion). When enabled this will replace blocks destroyed by creature explosions in the wild.
+    - Fixed a 'TickNextTick list out of synch' error on a new day.
+    - Fixed overwriting custom language files (no, really this time).
+    - Towny will now clean up it's backup folder. Default time to keep backups is 90 days (configurable in config).
+    - Fixed default switch and item use permissions for ally and outsider.
+    - Finally fixed the elusive error when getLastLocation() throws a NullPointerException.
+    - Fixed an infinite loop when a player uses a fly hack over void.
+    - Added support for Register 2.0 (Register.jar) - Supports iConomy5, iConomy6, EssentialsEco, BOSEconomy.
+      (https://github.com/iConomy/Register/tree/master/dist)
+    - Towny will no longer cause an exception if users attempt to use iConomy 6 instead of 5.01 natively.
+    - Added some new permission nodes.
+    
+      - towny.town.delete : player can delete their town
+      - towny.town.rename : player can rename their town
+      - towny.town.toggle.* : User has access to all town toggle commands (if a mayor or assistant).
+      - towny.town.toggle.pvp : If a mayor or assistant, the user is able to toggle pvp on/off in their town.
+      - towny.town.toggle.public : If a mayor or assistant....
+      - towny.town.toggle.explosions : If a mayor or assistant....
+      - towny.town.toggle.fire : If a mayor or assistant....
+      - towny.town.toggle.mobs :  If a mayor or assistant....
+      - towny.nation.delete : player can delete their nation
+      - towny.nation.rename : player can rename their nation
+      - towny.nation.grant-titles : King can set nation members titles and surnames '/nation set [title/surname]'.
+      - towny.nation.* : Grants all Nation permission nodes.
+      
+    - Added 'towny time' : Displays the time until a new day is scheduled.
+    - Players can no longer attack another players tamed wolf if in a non PVP area (can attack own).
+    - Added new API functions
+      TownyUniverse.getTownBlock(location)
+      TownyUniverse.getCachePermission(player,location,action)
+    - Towny will now check the Craftbukkit version and disable itself if it's too old.

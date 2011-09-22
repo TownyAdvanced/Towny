@@ -24,7 +24,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyIConomyObject;
+import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -98,7 +98,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 reloadTowny(null, true);
                         else if (args[0].equalsIgnoreCase("backup"))
                                 try {
-                                        plugin.getTownyUniverse().getDataSource().backup();
+										TownyUniverse.getDataSource().backup();
                                         sender.sendMessage(Colors.strip(TownySettings.getLangString("mag_backup_success")));
                                 } catch (IOException e) {
                                         sender.sendMessage(Colors.strip("Error: " + e.getMessage()));
@@ -134,7 +134,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 } catch (NumberFormatException nfe) {
                                         throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
                                 }
-                                plugin.getTownyUniverse().getDataSource().saveTown(town);
+								TownyUniverse.getDataSource().saveTown(town);
                         } catch (TownyException e) {
                                 plugin.sendErrorMsg(player, e.getError());
                         }
@@ -144,7 +144,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                         reloadTowny(player, true);
                 else if (split[0].equalsIgnoreCase("backup"))
                         try {
-                                plugin.getTownyUniverse().getDataSource().backup();
+								TownyUniverse.getDataSource().backup();
                                 plugin.sendMsg(player, TownySettings.getLangString("mag_backup_success"));
                         } catch (IOException e) {
                                 plugin.sendErrorMsg(player, "Error: " + e.getMessage());
@@ -181,7 +181,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 + (TownySettings.isRemovingTownMobs() ? Colors.LightGreen + "On" : Colors.Rose + "Off"));
                 */
                 try {
-                        TownyIConomyObject.checkIConomy();
+                        TownyEconomyObject.checkIConomy();
                         ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "iConomy" + Colors.Blue + "] "
                                         + Colors.Green + TownySettings.getLangString("ta_panel_6") + Colors.LightGreen + TownyFormatter.formatMoney(getTotalEconomy()) + Colors.Gray + " | "
                                         + Colors.Green + TownySettings.getLangString("ta_panel_7") + Colors.LightGreen + getNumBankAccounts());
@@ -206,7 +206,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 if (plugin.getTownyUniverse().isWarTime())
                                         throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                 
-                                world = plugin.getTownyUniverse().getWorld(player.getWorld().getName());
+								world = TownyUniverse.getWorld(player.getWorld().getName());
                                 
                                 List<WorldCoord> selection;
                                 selection = TownyUtil.selectWorldCoordArea(null, new WorldCoord(world, Coord.parseCoord(player)), split);
@@ -232,11 +232,13 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 }
 
                                 plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
-                                for (Resident resident : residents)
-                                        plugin.getTownyUniverse().getDataSource().saveResident(resident);
-                                for (Town town : towns)
-                                        plugin.getTownyUniverse().getDataSource().saveTown(town);
-                                plugin.getTownyUniverse().getDataSource().saveWorld(world);
+                                for (Resident resident : residents) {
+									TownyUniverse.getDataSource().saveResident(resident);
+								}
+                                for (Town town : towns) {
+									TownyUniverse.getDataSource().saveTown(town);
+								}
+								TownyUniverse.getDataSource().saveWorld(world);
                                 plugin.updateCache();
                         } catch (TownyException x) {
                                 plugin.sendErrorMsg(player, x.getError());
@@ -259,9 +261,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 if (split.length == 1)
                                         plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(town));
                                 else if (split[1].equalsIgnoreCase("add"))
-                                        TownCommand.townAdd(player, town, StringMgmt.remArgs(split, 2), true);
-                                else if (split[1].equalsIgnoreCase("add+"))
-                                        TownCommand.townAdd(player, town, StringMgmt.remArgs(split, 2), false);
+                                        TownCommand.townAdd(player, town, StringMgmt.remArgs(split, 2));
                         } catch (NotRegisteredException e) {
                                 plugin.sendErrorMsg(player, e.getError());
                         }
@@ -318,8 +318,8 @@ public class TownyAdminCommand implements CommandExecutor  {
                                                 newMayor.setLastOnline(0);
                                                 newMayor.setNPC(true);
                                                 
-                                                plugin.getTownyUniverse().getDataSource().saveResident(newMayor);
-                                                plugin.getTownyUniverse().getDataSource().saveResidentList();
+												TownyUniverse.getDataSource().saveResident(newMayor);
+												TownyUniverse.getDataSource().saveResidentList();
                                                 
                                                 // set for no upkeep as an NPC mayor is assigned
                                                 town.setHasUpkeep(false);
@@ -350,8 +350,10 @@ public class TownyAdminCommand implements CommandExecutor  {
                                                         e.printStackTrace();
                                                 }       
                                         }
-                                        plugin.getTownyUniverse().getDataSource().saveTown(town);
-                                        plugin.getTownyUniverse().sendTownMessage(town, TownySettings.getNewMayorMsg(newMayor.getName()));
+										TownyUniverse.getDataSource().saveTown(town);
+										String[] msg = TownySettings.getNewMayorMsg(newMayor.getName());
+                                        plugin.getTownyUniverse().sendTownMessage(town, msg);
+                                        //plugin.getTownyUniverse().sendMessage(player, msg);
                                 } catch (TownyException e) {
                                         plugin.sendErrorMsg(player, e.getError());
                                 }
@@ -371,7 +373,7 @@ public class TownyAdminCommand implements CommandExecutor  {
 
                         townBlock.setResident(null);
                         townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-                        plugin.getTownyUniverse().getDataSource().saveResident(owner);
+						TownyUniverse.getDataSource().saveResident(owner);
                         return true;
 
                 } catch (NotRegisteredException e) {
@@ -394,8 +396,9 @@ public class TownyAdminCommand implements CommandExecutor  {
         }
         
         public void reloadTowny(Player player, Boolean reset) {
-                if (reset)
-                        plugin.getTownyUniverse().getDataSource().deleteFile(plugin.getConfigPath());
+                if (reset) {
+					TownyUniverse.getDataSource().deleteFile(plugin.getConfigPath());
+				}
                 plugin.load();
                 if (player != null)
                         plugin.sendMsg(player, TownySettings.getLangString("msg_reloaded"));
@@ -412,7 +415,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "neutral", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "devmode", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "debug", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "withdraw", ""));
+                        player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "townwithdraw/nationwithdraw", ""));
                         return;
                         
                 } else if (split[0].equalsIgnoreCase("war")) {
@@ -480,7 +483,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                         } catch (Exception e) {
                                 plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
                         }
-                } else if (split[0].equalsIgnoreCase("withdraw")) {
+                } else if (split[0].equalsIgnoreCase("townwithdraw")) {
                 		try {
                 				choice = !TownySettings.getTownBankAllowWithdrawls();
                 				TownySettings.SetTownBankAllowWithdrawls(choice);
@@ -488,6 +491,14 @@ public class TownyAdminCommand implements CommandExecutor  {
                 		} catch (Exception e) {
                 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
                 		}
+                } else if (split[0].equalsIgnoreCase("nationwithdraw")) {
+            		try {
+            				choice = !TownySettings.geNationBankAllowWithdrawls();
+            				TownySettings.SetNationBankAllowWithdrawls(choice);
+            				plugin.sendMsg(player, "Nation Withdrawls " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+            		} catch (Exception e) {
+            				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_choice"));
+            		}
                 } else {
                         // parameter error message
                         // neutral/war/townmobs/worldmobs

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -62,5 +63,9 @@ public class MinecraftTools {
 		} catch (FileNotFoundException e) {
 		}
 		return names;
+	}
+	
+	public static boolean isOnline(String playerName) {
+		return Bukkit.getServer().getPlayer(playerName) != null;
 	}
 }

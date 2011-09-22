@@ -6,14 +6,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
-import com.palmergames.bukkit.towny.IConomyException;
+import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyIConomyObject;
+import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.war.War;
 import com.palmergames.bukkit.towny.war.WarSpoils;
 
@@ -117,8 +117,8 @@ public class TownyEntityMonitorListener extends EntityListener {
                                 
                                 if (price > 0) {
                                         defenderResident.pay(price, attackerResident);
-                                        plugin.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() +" of " + price + " " + TownyIConomyObject.getIConomyCurrency() + ".");
-                                        plugin.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + price + " " + TownyIConomyObject.getIConomyCurrency() + ".");
+                                        plugin.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() +" of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                        plugin.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
                                 }
                                 
                                 // Resident doesn't have enough funds.
@@ -138,7 +138,7 @@ public class TownyEntityMonitorListener extends EntityListener {
                                         town.pay(townPrice, attackerResident);
                                 }
                         } catch (NotRegisteredException e) {
-                        } catch (IConomyException e) {
+                        } catch (EconomyException e) {
                                 plugin.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
                                 plugin.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
                         }
@@ -149,8 +149,8 @@ public class TownyEntityMonitorListener extends EntityListener {
                                         price = defenderResident.getHoldingBalance();
                         
                                 defenderResident.pay(price, new WarSpoils());
-                                plugin.sendMsg(defenderPlayer, "You lost " + price + " " + TownyIConomyObject.getIConomyCurrency() + ".");
-                        } catch (IConomyException e) {
+                                plugin.sendMsg(defenderPlayer, "You lost " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                        } catch (EconomyException e) {
                                 plugin.sendErrorMsg(defenderPlayer, "Could not take death funds.");
                         }
         }

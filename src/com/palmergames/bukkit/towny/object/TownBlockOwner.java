@@ -6,7 +6,7 @@ import java.util.List;
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 
-public class TownBlockOwner extends TownyIConomyObject {
+public class TownBlockOwner extends TownyEconomyObject {
         protected List<TownBlock> townBlocks = new ArrayList<TownBlock>();
         protected TownyPermission permissions = new TownyPermission();
 

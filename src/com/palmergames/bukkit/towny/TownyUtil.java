@@ -3,7 +3,10 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
@@ -19,21 +22,24 @@ public class TownyUtil {
 			else
 				throw new TownyException(TownySettings.getLangString("msg_not_claimable"));
 		} else {
-			try {
-				Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
 				if (args.length > 1) {
 					if (args[0].equalsIgnoreCase("rect")) {
 						out = selectWorldCoordAreaRect(owner, pos, StringMgmt.remFirstArg(args));
 					} else if (args[0].equalsIgnoreCase("circle")) {
 						out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
 					} else {
-						//TODO: Some output?
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), StringMgmt.join(args," ")));
 					}
-				} else {
-					// Treat as rect to serve for backwards capability.
+				} else if (args[0].equalsIgnoreCase("auto")) {
 					out = selectWorldCoordAreaRect(owner, pos, args);
-				}
+				} else {
+					try {
+						Integer.parseInt(args[0]);
+						// Treat as rect to serve for backwards capability.
+						out = selectWorldCoordAreaRect(owner, pos, args);
+					} catch (NumberFormatException e) {
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), args[0]));
+					}
 			}
 		}
 		
@@ -47,14 +53,19 @@ public class TownyUtil {
 				int r;
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
+					int available;
 					if (owner instanceof Town) {
-						Town town = (Town)owner;
-						int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-						r = 0;
-						while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
-							r += 1;
+							Town town = (Town)owner;
+							available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+					} else if (owner instanceof Resident) {
+						available = TownySettings.getMaxResidentPlots((Resident)owner);
 					} else
-						throw new TownyException(TownySettings.getLangString("msg_err_area_auto"));
+						throw new TownyException(TownySettings.getLangString("msg_err_rect_auto"));
+					
+					r = 0;
+					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
+						r += 1;
+
 				} else {
 					try {
 						r = Integer.parseInt(args[0]);
@@ -81,15 +92,20 @@ public class TownyUtil {
 				int r;
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
+					int available;
 					if (owner instanceof Town) {
-						Town town = (Town)owner;
-						int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-						r = 0;
-						if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-							while (available - Math.ceil(Math.PI * r * r) >= 0)
-								r += 1;
+							Town town = (Town)owner;
+							available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+					} else if (owner instanceof Resident) {
+						available = TownySettings.getMaxResidentPlots((Resident)owner);
 					} else
-						throw new TownyException(TownySettings.getLangString("msg_err_area_auto"));
+						throw new TownyException(TownySettings.getLangString("msg_err_rect_auto"));
+						
+					r = 0;
+					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+						while (available - Math.ceil(Math.PI * r * r) >= 0)
+							r += 1;
+
 				} else {
 					try {
 						r = Integer.parseInt(args[0]);
@@ -173,5 +189,23 @@ public class TownyUtil {
 				return i;
 		}
 		return -1;
+	}
+	
+	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord) {
+        int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+        for (int i = 0; i < 4; i++)
+            try {
+                TownBlock edgeTownBlock = worldCoord.getWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+                if (!edgeTownBlock.isOwner(owner)) {
+                    return true;
+                }
+            } catch (NotRegisteredException e) {
+            	return true;
+            }
+        return false;
+	}
+	
+	public static Long townyTime() {
+		return ((TownySettings.getDayInterval()*1000) - (System.currentTimeMillis() % (TownySettings.getDayInterval()*1000)))/1000;
 	}
 }

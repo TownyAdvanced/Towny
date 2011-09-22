@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.war;
 
-import com.palmergames.bukkit.towny.TownyTimerTask;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 
 public class StartWarTimerTask extends TownyTimerTask {
 

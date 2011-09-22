@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.76.0
+version: 0.76.1.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -47,7 +47,7 @@ permissions:
         default: op
         children:
             towny.town.*: true
-            towny.nation.new: true
+            towny.nation.*: true
             towny.wild.*: true
             towny.spawntp: true
             towny.publicspawntp: true
@@ -57,30 +57,80 @@ permissions:
         default: op
     towny.top:
         description: User has access to the "/towny top" commands.
-        default: true
+        default: false
     towny.town.*:
-        description: User can create a town and claim land.
+        description: User can access all town commands.
         default: op
         children:
             towny.town.new: true
+            towny.town.delete: true
+            towny.town.rename: true
             towny.town.claim: true
             towny.town.resident: true
             towny.town.plot: true
+            towny.town.toggle.*: true
+    towny.town.toggle.*:
+        description: User can access all town toggle commands (if a mayor or assistant).
+        default: op
+        children:
+            towny.town.toggle.pvp: true
+            towny.town.toggle.public: true
+            towny.town.toggle.explosions: true
+            towny.town.toggle.fire: true
+            towny.town.toggle.mobs: true
+    towny.nation.*:
+        description: User has access to all nation commands.
+        default: op
+        children:
+            towny.nation.new: true
+            towny.nation.delete: true
+            towny.nation.rename: true
+            towny.nation.grant-titles: true
     towny.town.resident:
         description: User is permitted to join towns.
-        default: true
+        default: false
     towny.town.new:
         description: User is able to create a town
-        default: true
+        default: false
+    towny.town.delete:
+        description: User is able to delete their town
+        default: false
+    towny.town.rename:
+        description: User is able to rename their town
+        default: false
     towny.town.claim:
         description: User is able to expand with /towny claim
         default: true
     towny.town.plot:
         description: User is able to purchase and own town plots.
-        default: true
+        default: false
+    towny.town.toggle.pvp:
+        description: If a mayor or assistant, the user is able to toggle pvp on/off in their town.
+        default: false
+    towny.town.toggle.public:
+        description: If a mayor or assistant, the user is able to toggle public on/off in their town.
+        default: false
+    towny.town.toggle.explosions:
+        description: If a mayor or assistant, the user is able to toggle explosions on/off in their town.
+        default: false
+    towny.town.toggle.fire:
+        description: If a mayor or assistant, the user is able to toggle fire on/off in their town.
+        default: false
+    towny.town.toggle.mobs:
+        description: If a mayor or assistant, the user is able to toggle mobs on/off in their town.
+        default: false
     towny.nation.new:
         description: User is able to create a nation
-        default: true
+        default: false
+    towny.nation.delete:
+        description: User is able to delete their nation
+        default: false
+    towny.nation.rename:
+        description: User is able to rename their nation
+        default: false
+    towny.nation.grant-titles:
+        description: User is able to set titles and surnames for their nation members
+        default: false
     towny.wild.*:
         description: User can build/destroy in wild.
         default: op
@@ -103,7 +153,7 @@ permissions:
         default: false
     towny.spawntp:
         description: User can use /town spawn when on in config.
-        default: true
+        default: false
     towny.publicspawntp:
         description: User can use /town spawn <town> when on in config.
-        default: true
+        default: false
