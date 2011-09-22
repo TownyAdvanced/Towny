@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="E:/ElgarL/Development/Resources/Essentials.jar"/>
 	<classpathentry kind="lib" path="E:/ElgarL/Development/Resources/iConomy.jar"/>
 	<classpathentry kind="lib" path="E:/ElgarL/Development/Resources/Permissions.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/Development/Resources/Register.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
