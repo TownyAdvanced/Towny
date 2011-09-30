@@ -356,7 +356,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
                         if (!pay(amount, resident))
                                 throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
                 } else
-                        throw new TownyException(TownySettings.getLangString("msg_err_no_iconomy"));
+                        throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
         }
         
         @Override

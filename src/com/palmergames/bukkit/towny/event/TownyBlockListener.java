@@ -51,7 +51,7 @@ public class TownyBlockListener extends BlockListener {
 			return;
 		}
 		
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 		
 		Block block = event.getBlock();
 		BlockLocation blockLocation = new BlockLocation(block.getLocation());
@@ -77,7 +77,7 @@ public class TownyBlockListener extends BlockListener {
 			}
 		}
 
-		plugin.sendDebugMsg("onBlockPhysics took " + (System.currentTimeMillis() - start) + "ms ("+event.isCancelled() +")");
+		//plugin.sendDebugMsg("onBlockPhysics took " + (System.currentTimeMillis() - start) + "ms ("+event.isCancelled() +")");
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class TownyBlockListener extends BlockListener {
 			return;
 		}
 		
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
@@ -96,39 +96,40 @@ public class TownyBlockListener extends BlockListener {
 			worldCoord = new WorldCoord(TownyUniverse.getWorld(block.getWorld().getName()), Coord.parseCoord(block));
 			
 			//Get build permissions (updates if none exist)
-			boolean bDestroy = plugin.getTownyUniverse().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.DESTROY);
+			boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.DESTROY);
 			
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
 			
-			if (!(status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY)))
-				if (!bDestroy) {
-				    long delay = TownySettings.getRegenDelay();
-				    if(delay > 0) {
-				        if(!plugin.getTownyUniverse().isPlaceholder(block)) {
-					    	if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
-		        				ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
-		        				task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20*delay));
-		        				plugin.getTownyUniverse().addProtectionRegenTask(task);
-					    	}
-				        } else {
-				            plugin.getTownyUniverse().removePlaceholder(block);
-				            block.setTypeId(0, false);
-				        }
-				    }
-		            event.setCancelled(true);
-		        }
-			if (cache.hasBlockErrMsg())
+			if ((status == TownBlockStatus.UNCLAIMED_ZONE) && (plugin.hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY)))
+				return;
+
+			if (!bDestroy) {
+			    long delay = TownySettings.getRegenDelay();
+			    if(delay > 0) {
+			        if(!plugin.getTownyUniverse().isPlaceholder(block)) {
+				    	if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
+	        				ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
+	        				task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20*delay));
+	        				plugin.getTownyUniverse().addProtectionRegenTask(task);
+				    	}
+			        } else {
+			            plugin.getTownyUniverse().removePlaceholder(block);
+			            block.setTypeId(0, false);
+			        }
+			    }
+	            event.setCancelled(true);
+	        }
+			
+			if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
 				plugin.sendErrorMsg(player, cache.getBlockErrMsg());
 			
 
 		} catch (NotRegisteredException e1) {
 			plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-			event.setCancelled(true);
-			return;
 		}
 
-		plugin.sendDebugMsg("onBlockBreakEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
+		//plugin.sendDebugMsg("onBlockBreakEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
 	}
 
 	@Override
@@ -139,7 +140,7 @@ public class TownyBlockListener extends BlockListener {
 			return;
 		}
 		
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
@@ -148,40 +149,43 @@ public class TownyBlockListener extends BlockListener {
 			worldCoord = new WorldCoord(TownyUniverse.getWorld(block.getWorld().getName()), Coord.parseCoord(block));
 			
 			//Get build permissions (updates if none exist)
-			boolean bBuild = plugin.getTownyUniverse().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.BUILD);
 			
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
 			
-			if (!(status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD)))
-				if (((status == TownBlockStatus.ENEMY && TownyWarConfig.isAllowingAttacks()) || status == TownBlockStatus.ADMIN)
-						&& event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial()) {
-						//&& plugin.hasPlayerMode(player, "warflag")) {
-					try {
-						if (TownyWar.callAttackCellEvent(plugin, player, block, worldCoord))
-							return;
-					} catch (TownyException e) {
-						plugin.sendErrorMsg(player, e.getMessage());
-					}
-					
+			if ((status == TownBlockStatus.UNCLAIMED_ZONE) && (plugin.hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD)))
+				return;
+
+			if ((status == TownBlockStatus.ENEMY && TownyWarConfig.isAllowingAttacks())
+					&& event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial()) {
+					//&& plugin.hasPlayerMode(player, "warflag")) {
+				try {
+					if (TownyWar.callAttackCellEvent(plugin, player, block, worldCoord))
+						return;
+				} catch (TownyException e) {
+					plugin.sendErrorMsg(player, e.getMessage());
+				}
+				
+				event.setBuild(false);
+				event.setCancelled(true);
+				
+			} else {
+				if (!bBuild) {
 					event.setBuild(false);
 					event.setCancelled(true);
-					
-				} else {
-					if (!bBuild) {
-						event.setBuild(false);
-						event.setCancelled(true);
-					}
-					if (cache.hasBlockErrMsg())
-						plugin.sendErrorMsg(player, cache.getBlockErrMsg());
 				}
+			}
+			
+			if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
+				plugin.sendErrorMsg(player, cache.getBlockErrMsg());
 			
 		} catch (NotRegisteredException e1) {
 			plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
 		}
 
-		plugin.sendDebugMsg("onBlockPlacedEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
+		//plugin.sendDebugMsg("onBlockPlacedEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
 	}
 	
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

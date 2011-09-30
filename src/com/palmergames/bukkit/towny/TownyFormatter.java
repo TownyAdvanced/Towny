@@ -71,7 +71,7 @@ public class TownyFormatter {
                 // Bank: 534 coins
                 if (TownySettings.isUsingEconomy())
                         try {
-                                TownyEconomyObject.checkIConomy();
+                                TownyEconomyObject.checkEconomy();
                                 out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
                         } catch (EconomyException e1) {
                         }
@@ -132,7 +132,7 @@ public class TownyFormatter {
                 String bankString = "";
                 if (TownySettings.isUsingEconomy())
                         try {
-                                TownyEconomyObject.checkIConomy();
+                                TownyEconomyObject.checkEconomy();
                                 bankString = Colors.Gray + " | " + Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
                         } catch (EconomyException e1) {
                         }
@@ -175,7 +175,7 @@ public class TownyFormatter {
 				String line = "";
 				if (TownySettings.isUsingEconomy())
 					try {
-						TownyEconomyObject.checkIConomy();
+						TownyEconomyObject.checkEconomy();
 						line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
 					} catch (EconomyException e1) {
                             }
@@ -231,7 +231,7 @@ public class TownyFormatter {
                                 + Colors.Gray + " | "
                                 + Colors.Green + "ForceTownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off"));
                 // Using Default Settings: Yes
-                out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
+                //out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
                 // Wilderness:
                 //     Build, Destroy, Switch
                 //     Ignored Blocks: 34, 45, 64
@@ -321,7 +321,7 @@ public class TownyFormatter {
         
         public static String formatMoney(double amount) {
                 try {
-                        return iConomy.format(amount);
+                        return TownyEconomyObject.getFormattedBalance(amount);
                 } catch (Exception e) {
                         return Double.toString(amount);
                 }

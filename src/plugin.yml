@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.76.1.0
+version: 0.76.2.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -49,8 +49,6 @@ permissions:
             towny.town.*: true
             towny.nation.*: true
             towny.wild.*: true
-            towny.spawntp: true
-            towny.publicspawntp: true
             towny.cheat.bypass: true
     towny.cheat.bypass:
         description: Disables the anti cheat code for players with this node.
@@ -68,7 +66,28 @@ permissions:
             towny.town.claim: true
             towny.town.resident: true
             towny.town.plot: true
+            towny.town.spawn.*: true
             towny.town.toggle.*: true
+    towny.town.spawn.*:
+        description: Grants all Spawn travel nodes
+        default: op
+        children:
+            towny.town.spawn.town: true
+            towny.town.spawn.nation: true
+            towny.town.spawn.ally: true
+            towny.town.spawn.public: true
+    towny.town.spawn.town:
+        description: User is permitted to use /town spawn.
+        default: false
+    towny.town.spawn.nation:
+        description: Ability to spawn to other towns within your nation.
+        default: false
+    towny.town.spawn.ally:
+        description: Ability to spawn to towns in nations allied with yours.
+        default: false
+    towny.town.spawn.public:
+        description: Ability to spawn to unaffilated public towns.
+        default: false
     towny.town.toggle.*:
         description: User can access all town toggle commands (if a mayor or assistant).
         default: op
@@ -139,6 +158,7 @@ permissions:
             towny.wild.switch: true
             towny.wild.destroy: true
             towny.wild.item_use: true
+            towny.wild.block.*: true
     towny.wild.build:
         description: User can build in wild.
         default: false
@@ -151,9 +171,24 @@ permissions:
     towny.wild.item_use:
         description: User can use use items in wild. 
         default: false
-    towny.spawntp:
-        description: User can use /town spawn when on in config.
+    towny.wild.block.*:
+        description: User is able to edit specified block types in the wild.
+        default: op
+        children:
+            towny.wild.Block.*.build: true
+            towny.wild.block.*.destroy: true
+            towny.wild.block.*.switch: true
+            towny.wild.block.*.item_use: true            
+    towny.wild.block.*.build:
+        description: User can build specified block types in the wild.
         default: false
-    towny.publicspawntp:
-        description: User can use /town spawn <town> when on in config.
+    towny.wild.block.*.destroy:
+        description: User can break specified block types in the wild.
         default: false
+    towny.wild.block.*.switch:
+        description: User can switch specified block types in the wild.
+        default: false
+    towny.wild.block.*.item_use:
+        description: User can use specified block types in the wild.
+        default: false
+        

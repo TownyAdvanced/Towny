@@ -29,7 +29,6 @@ import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.Register;
-import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.command.NationChatCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
@@ -48,7 +47,6 @@ import com.palmergames.bukkit.towny.event.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -105,6 +103,8 @@ public class Towny extends JavaPlugin {
     @Override
     public void onEnable() {
     	
+    	logger.info("====================      Towny      ========================");
+    	
     	version = this.getDescription().getVersion();
         //System.out.println("[Towny] Towny - create TownyUniverse Object...");
         townyUniverse = new TownyUniverse(this);
@@ -132,7 +132,10 @@ public class Towny extends JavaPlugin {
                 update();
         
         registerEvents();
+        
+        logger.info("=============================================================");
         System.out.println("[Towny] Version: " + version + " - Mod Enabled");
+        logger.info("=============================================================");
         
         // Re login anyone online. (In case of plugin reloading)
         for (Player player : getServer().getOnlinePlayers())
@@ -165,16 +168,16 @@ public class Towny extends JavaPlugin {
                 	try {
                     	TownyWorld world = town.getHomeBlock().getWorld();
                     	if (!world.hasTown(town)) {
-                    		town.getWorld().addTown(town);
+                    		world.addTown(town);
                     		TownyUniverse.getDataSource().saveTown(town);
 							TownyUniverse.getDataSource().saveWorld(world);
-                    	}                                                
+                    	}                                               
                     } catch (TownyException e) {
                         // Error fetching homeblock
-                        System.out.println("[Towny Error] Failed set world for: " + town.getName());
+                        System.out.println("[Towny Error] Failed get world data for: " + town.getName());
                     }
                 else
-                    System.out.println("[Towny Error] Failed to detect world for: " + town.getName());     
+                    System.out.println("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());     
             }
         }
                         
@@ -261,26 +264,31 @@ public class Towny extends JavaPlugin {
 
     @Override
     public void onDisable() {
-            if (TownyUniverse.getDataSource() != null && error == false)
-                    TownyUniverse.getDataSource().saveAll();
-            
-            if (error == false) TownyWar.onDisable();
-            
-            if (getTownyUniverse().isWarTime())
-                    getTownyUniverse().getWarEvent().toggleEnd();
-            townyUniverse.toggleTownyRepeatingTimer(false);
-            townyUniverse.toggleDailyTimer(false);
-            townyUniverse.toggleMobRemoval(false);
-            townyUniverse.toggleHealthRegen(false);
-            townyUniverse.toggleTeleportWarmup(false);
-            townyUniverse.cancelProtectionRegenTasks();
-            
-            playerCache.clear();
-            playerMode.clear();
-            
-            townyUniverse = null;
-            
-            Logger.getAnonymousLogger().severe("[Towny] Version: " + version + " - Mod Disabled");
+    	
+    	logger.info("==============================================================");
+    	
+    	if (TownyUniverse.getDataSource() != null && error == false)
+            TownyUniverse.getDataSource().saveAll();
+    
+	    if (error == false) TownyWar.onDisable();
+	    
+	    if (getTownyUniverse().isWarTime())
+	            getTownyUniverse().getWarEvent().toggleEnd();
+	    townyUniverse.toggleTownyRepeatingTimer(false);
+	    townyUniverse.toggleDailyTimer(false);
+	    townyUniverse.toggleMobRemoval(false);
+	    townyUniverse.toggleHealthRegen(false);
+	    townyUniverse.toggleTeleportWarmup(false);
+	    townyUniverse.cancelProtectionRegenTasks();
+	    
+	    playerCache.clear();
+	    playerMode.clear();
+	    
+	    townyUniverse = null;
+	    
+	    
+	    logger.info("[Towny] Version: " + version + " - Mod Disabled");
+	    logger.info("=============================================================");
     }
 
     public boolean load() {
@@ -298,7 +306,8 @@ public class Towny extends JavaPlugin {
         
         if (!matcher.find() || matcher.group(1) == null) {
         	error = true;
-        	Logger.getAnonymousLogger().severe("[Towny Error] Unable to read CraftBukkit Version. Towny requires version " + bukkitVer + " or higher.");
+        	logger.severe("[Towny Error] Unable to read CraftBukkit Version.");
+        	logger.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
@@ -306,7 +315,8 @@ public class Towny extends JavaPlugin {
         
         if (curBuild < bukkitVer){
             error = true;
-            Logger.getAnonymousLogger().severe("[Towny Error] CraftBukkit Version is outdated: " + curBuild + ": Towny requires version " + bukkitVer + " or higher.");
+            logger.severe("[Towny Error] CraftBukkit Version ("  + curBuild + ") is outdated! ");
+            logger.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
@@ -369,6 +379,7 @@ public class Towny extends JavaPlugin {
                 pluginManager.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Lowest, this);
                 pluginManager.registerEvent(Event.Type.PAINTING_BREAK, entityListener, Priority.Normal, this);
                 
+                pluginManager.registerEvent(Event.Type.WORLD_INIT, worldListener, Priority.Normal, this);
                 pluginManager.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Normal, this);
                 
                 pluginManager.registerEvent(Event.Type.BLOCK_BREAK, townyWarBlockListener, Priority.Normal, this);
@@ -534,6 +545,9 @@ public class Towny extends JavaPlugin {
                                 if (resident.hasNation()) {
                                 	nation = resident.hasNation() ? "[" + resident.getTown().getNation().getName() + "]" : "";
                                 	nation = resident.getTown().getNation().hasTag() ? "[" + resident.getTown().getNation().getTag() + "]" : nation;
+                                } else if ((resident.hasTitle()) || (resident.hasSurname())) {
+                                	resident.setTitle(" ");
+                                	resident.setSurname(" ");
                                 }
                                 
                                 if (resident.hasTown()) {
@@ -650,9 +664,9 @@ public class Towny extends JavaPlugin {
         // Suppression is to clear warnings while retaining permissions 2.7 compatibility
 		public String getPermissionNode(Resident resident, String node) {
                 
-                sendDebugMsg("Perm Check: Does " + resident.getName() + " have the node '" + node + "'?");
+                //sendDebugMsg("Perm Check: Does " + resident.getName() + " have the node '" + node + "'?");
                 if (isPermissions()) {
-                        sendDebugMsg("    Permissions installed.");
+                        //sendDebugMsg("    Permissions installed.");
                         PermissionHandler handler = permissions.getHandler();
                         String group, user = ""; 
                         Player player = getServer().getPlayer(resident.getName());
@@ -663,7 +677,7 @@ public class Towny extends JavaPlugin {
                                 if (!group.equals(user))
                                         user = group + user;
                                 user = TownySettings.parseSingleLineString(user);
-                                sendDebugMsg("Prefix: " + user);
+                                //sendDebugMsg("Prefix: " + user);
                         }
                         
                         if (node == "suffix") {
@@ -672,7 +686,7 @@ public class Towny extends JavaPlugin {
                                 if (!group.equals(user))
                                         user = group + user;
                                 user = TownySettings.parseSingleLineString(user);
-                                sendDebugMsg("Suffix: " + user);
+                                //sendDebugMsg("Suffix: " + user);
                         }
                         
                         
@@ -680,7 +694,7 @@ public class Towny extends JavaPlugin {
                 // } else if (groupManager != null)
                 //      return groupManager.getHandler().permission(player, node);
                 } else {
-                        sendDebugMsg("    Does not have permission.");
+                        //sendDebugMsg("    Does not have permission.");
                         return "";
                 }               
                 
@@ -723,19 +737,19 @@ public class Towny extends JavaPlugin {
          * @return
          */
         public boolean hasPermission(Player player, String node) {
-                sendDebugMsg("Perm Check: Does " + player.getName() + " have the node '" + node + "'?");
+                //sendDebugMsg("Perm Check: Does " + player.getName() + " have the node '" + node + "'?");
                 if (isPermissions()) {
-                    sendDebugMsg("    Permissions installed.");
+                    //sendDebugMsg("    Permissions installed.");
                     PermissionHandler handler = permissions.getHandler();
                     boolean perm = handler.permission(player, node);
-                    sendDebugMsg("    Permissions says "+perm+".");
+                    //sendDebugMsg("    Permissions says "+perm+".");
                 	return perm;
                 // } else if (groupManager != null)
                 //      return groupManager.getHandler().permission(player, node);
                 } else {
-                	sendDebugMsg("    Using BukkitPerms installed.");
+                	//sendDebugMsg("    Using BukkitPerms installed.");
                 	boolean perm = player.hasPermission(node);
-                    sendDebugMsg("    Permissions says "+perm+".");
+                    //sendDebugMsg("    Permissions says "+perm+".");
                     return perm;
                 }
         }
@@ -754,236 +768,13 @@ public class Towny extends JavaPlugin {
         
         public Object getSetting(String root) {
                 return TownySettings.getProperty(root);
-}
-        
-
-        public TownBlockStatus getStatusCache(Player player, WorldCoord worldCoord) {
-                if (isTownyAdmin(player))
-                        return TownBlockStatus.ADMIN;
-                
-                if (!worldCoord.getWorld().isUsingTowny())
-                        return TownBlockStatus.OFF_WORLD;
-                
-                TownyUniverse universe = getTownyUniverse();
-                TownBlock townBlock;
-                Town town;
-                try {
-                        townBlock = worldCoord.getTownBlock();
-                        town = townBlock.getTown();
-                } catch (NotRegisteredException e) {
-                        // Unclaimed Zone switch rights
-                        return TownBlockStatus.UNCLAIMED_ZONE;
-                }
-
-                Resident resident;
-                try {
-                        resident = universe.getResident(player.getName());
-                } catch (TownyException e) {
-                        return TownBlockStatus.NOT_REGISTERED;
-                }
-                
-                try {
-                        // War Time switch rights
-                        if (universe.isWarTime())
-                                try {
-                                        if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
-                                                return TownBlockStatus.WARZONE; 
-                                } catch (NotRegisteredException e) {
-                                }
-                        
-                        // Town Owner Override
-                        try {
-                                if (townBlock.getTown().isMayor(resident) || townBlock.getTown().hasAssistant(resident))
-                                        return TownBlockStatus.TOWN_OWNER;
-                        } catch (NotRegisteredException e) {
-                        }
-                                
-                        // Resident Plot switch rights
-                        try {
-                                Resident owner = townBlock.getResident();
-                                if (resident == owner)
-                                        return TownBlockStatus.PLOT_OWNER;
-                                else if (owner.hasFriend(resident))
-                                        return TownBlockStatus.PLOT_FRIEND;
-                                else if (resident.hasTown() && townyUniverse.isAlly(owner.getTown(), resident.getTown()))
-                                        return TownBlockStatus.PLOT_ALLY;
-                                else
-                                        // Exit out and use town permissions
-                                        throw new TownyException();
-                        } catch (NotRegisteredException x) {
-                        } catch (TownyException x) {
-                        }
-
-                        // Town resident destroy rights
-                        if (!resident.hasTown())
-                                throw new TownyException();
-
-                        if (resident.getTown() != town) {
-                                // Allied destroy rights
-                                if (universe.isAlly(town, resident.getTown()))
-                                        return TownBlockStatus.TOWN_ALLY;
-                                else if (universe.isEnemy(resident.getTown(), town)) {
-                                	if (townBlock.isWarZone())
-                            			return TownBlockStatus.WARZONE;
-                            		else
-                            			return TownBlockStatus.ENEMY;
-                        		} else
-                                        return TownBlockStatus.OUTSIDER;
-                        } else if (resident.isMayor() || resident.getTown().hasAssistant(resident))
-                                return TownBlockStatus.TOWN_OWNER;
-                        else
-                                return TownBlockStatus.TOWN_RESIDENT;
-                } catch (TownyException e) {
-                        // Outsider destroy rights
-                        return TownBlockStatus.OUTSIDER;
-                }
         }
-        
-        public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
-                PlayerCache cache = getCache(player);
-                cache.updateCoord(worldCoord);
-                cache.setStatus(townBlockStatus);
-
-                sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Status: " + townBlockStatus);
-                return townBlockStatus;
-        }
-
-
-        public void cacheBuild(Player player, WorldCoord worldCoord, boolean buildRight) {
-                PlayerCache cache = getCache(player);
-                cache.updateCoord(worldCoord);
-                cache.setBuildPermission(buildRight);
-
-                sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Build: " + buildRight);
-        }
-
-        public void cacheDestroy(Player player, WorldCoord worldCoord, boolean destroyRight) {
-                PlayerCache cache = getCache(player);
-                cache.updateCoord(worldCoord);
-                cache.setDestroyPermission(destroyRight);
-
-                sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Destroy: " + destroyRight);
-        }
-        
-        public void cacheSwitch(Player player, WorldCoord worldCoord, boolean switchRight) {
-                PlayerCache cache = getCache(player);
-                cache.updateCoord(worldCoord);
-                cache.setSwitchPermission(switchRight);
-
-                sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Switch: " + switchRight);
-        }
-        
-        public void cacheItemUse(Player player, WorldCoord worldCoord, boolean itemUseRight) {
-                PlayerCache cache = getCache(player);
-                cache.updateCoord(worldCoord);
-                cache.setItemUsePermission(itemUseRight);
-
-                sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
-        }
-        
-        public void cacheBlockErrMsg(Player player, String msg) {
-                PlayerCache cache = getCache(player);
-                cache.setBlockErrMsg(msg);
-        }
-        
-        public boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, TownyPermission.ActionType actionType) {
-                if (status == TownBlockStatus.OFF_WORLD ||
-                        status == TownBlockStatus.ADMIN ||
-                        status == TownBlockStatus.WARZONE ||
-                        status == TownBlockStatus.PLOT_OWNER ||
-                        status == TownBlockStatus.TOWN_OWNER)
-                                return true;
-                
-                if (status == TownBlockStatus.NOT_REGISTERED) {
-                        cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error"));
-                        return false;
-                }
-                
-                TownBlock townBlock;
-                Town town;
-                try {
-                        townBlock = pos.getTownBlock();
-                        town = townBlock.getTown();
-                } catch (NotRegisteredException e) {
-                        
-                        // Wilderness Permissions
-                        if (status == TownBlockStatus.UNCLAIMED_ZONE)
-                                if (hasPermission(player, "towny.wild." + actionType.toString()))
-                                        return true;
-                        
-                                else if (!TownyPermission.getUnclaimedZone(actionType, pos.getWorld())) {
-                                        // TODO: Have permission to destroy here
-                                        cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), actionType.toString()));
-                                        return false;
-                                } else
-                                        return true;
-                        else {
-                                sendErrorMsg(player, "Error updating destroy permission.");
-                                return false;
-                        }
-                }
-                
-                // Plot Permissions
-                try {
-                        Resident owner = townBlock.getResident();
-                        
-                        if (status == TownBlockStatus.PLOT_FRIEND) {
-                                if (owner.getPermissions().getResident(actionType))
-                                        return true;
-                                else {
-                                        cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", actionType.toString()));
-                                        return false;
-                                }
-                        } else if (status == TownBlockStatus.PLOT_ALLY)
-                                if (owner.getPermissions().getAlly(actionType))
-                                        return true;
-                                else {
-                                        cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", actionType.toString()));
-                                        return false;
-                                }
-                        else //TODO: (Remove) if (status == TownBlockStatus.OUTSIDER)
-                                if (owner.getPermissions().getOutsider(actionType))
-                                        return true;
-                                else {
-                                        cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", actionType.toString()));
-                                        return false;
-                                }
-                } catch (NotRegisteredException x) {
-                }
-        
-                // Town Permissions
-                if (status == TownBlockStatus.TOWN_RESIDENT) {
-                        if (town.getPermissions().getResident(actionType))
-                                return true;
-                        else {
-                                cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), actionType.toString()));
-                                return false;
-                        }
-                } else if (status == TownBlockStatus.TOWN_ALLY)
-                        if (town.getPermissions().getAlly(actionType))
-                                return true;
-                        else {
-                                cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), actionType.toString()));
-                                return false;
-                        }
-                else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY)
-                        if (town.getPermissions().getOutsider(actionType))
-                                return true;
-                        else {
-                                cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), actionType.toString()));
-                                return false;
-                        }
-                
-                sendErrorMsg(player, "Error updating " + actionType.toString() + " permission.");
-                return false;
-        }       
 
         public iConomy getIConomy() throws EconomyException {
                 if (iconomy == null)
                         throw new EconomyException("iConomy is not installed");
                 else
-                        return iconomy;
-                
+                        return iconomy;    
         }
 
         /**
@@ -991,7 +782,7 @@ public class Towny extends JavaPlugin {
 		 */
 		public Register getRegister() throws EconomyException{
 			if (iconomy == null)
-                throw new EconomyException("iConomy is not installed");
+                throw new EconomyException("Economy is not installed");
 			else
 				return register;
 		}
@@ -1024,7 +815,27 @@ public class Towny extends JavaPlugin {
         }
         
         public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
-                return world.isUnclaimedZoneIgnoreId(blockId) || hasPermission(player, "towny.wild.block." + blockId + "." + action.toString());
+        	
+        	//check for permissions
+        	
+        	if (hasPermission(player, "towny.wild." + action.toString().toLowerCase())
+                	|| hasPermission(player, "towny.wild.block." + blockId + "." + action.toString().toLowerCase()))
+                	return true;
+            
+        	// No perms found so check world settings.
+        	switch(action) {
+        	
+        	case BUILD:
+            	return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+        	case DESTROY:
+            	return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+        	case SWITCH:
+            	return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+        	case ITEM_USE:
+            	return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+            default:
+            	return false;
+        	}
         }
         
         public void appendQuestion(Questioner questioner, Question question) throws Exception {

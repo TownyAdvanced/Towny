@@ -226,15 +226,30 @@ public class TownySettings {
     }
 
     public static double getDouble(ConfigNodes node) {
-        return Double.parseDouble(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
+    	try {
+    		return Double.parseDouble(config.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+    	} catch (NumberFormatException e) {
+    		sendError(node.getRoot().toLowerCase() + " from config.yml");
+    		return 0.0;
+    	}
     }
 
     public static int getInt(ConfigNodes node) {
-        return Integer.parseInt(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
+        try {
+        	return Integer.parseInt(config.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+    	} catch (NumberFormatException e) {
+    		sendError(node.getRoot().toLowerCase() + " from config.yml");
+    		return 0;
+    	}
     }
     /*
     private static long getLong(ConfigNodes node) {
-        return Long.parseLong(getString(node));
+        try {
+    		return Long.parseLong(getString(node).trim());
+    	} catch (NumberFormatException e) {
+    		sendError(node.getRoot().toLowerCase() + " from config.yml");
+    		return 0;
+    	}
     }
 	*/
     public static String getString(ConfigNodes node) {
@@ -264,8 +279,13 @@ public class TownySettings {
         List<Integer> list = new ArrayList<Integer>();
         if (strArray != null) {
         for (int ctr=0; ctr < strArray.length; ctr++)
-        	if (strArray[ctr] != null)
-        		list.add(Integer.parseInt(strArray[ctr]));
+        	if (strArray[ctr] != null) {
+        		try {
+        			list.add(Integer.parseInt(strArray[ctr].trim()));
+            	} catch (NumberFormatException e) {
+            		sendError(node.getRoot().toLowerCase() + " from config.yml");
+            	}
+        	}
         }
         return list;
     }
@@ -286,7 +306,13 @@ public class TownySettings {
         if (Pattern.matches(".*[a-zA-Z].*", time)) {
             return (TimeTools.secondsFromDhms(time));
         }
-        return Long.parseLong(time);
+
+        try {
+        	return Long.parseLong(time.trim());
+    	} catch (NumberFormatException e) {
+    		sendError(node.getRoot().toLowerCase() + " from config.yml");
+    		return 1;
+    	}
     }
 
     public static void addComment(String root, String...comments) {
@@ -951,7 +977,18 @@ public class TownySettings {
 	}
 	
 	public static long getDayInterval() {
+		//return TimeTools.secondsFromDhms("24h");
 		return getSeconds(ConfigNodes.PLUGIN_DAY_INTERVAL);
+	}
+	
+	public static long getNewDayTime() {
+		long time = getSeconds(ConfigNodes.PLUGIN_NEWDAY_TIME);
+		long day = getDayInterval();
+		if (time > day) {
+			setProperty(ConfigNodes.PLUGIN_NEWDAY_TIME.getRoot(), day);
+			return day;
+		}
+		return time;
 	}
 	
 	public static boolean isAllowingTownSpawn() {
@@ -981,14 +1018,6 @@ public class TownySettings {
     
 	public static boolean isBackingUpDaily() {
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
-	}
-	
-	public static double getTownSpawnTravelPrice() {
-		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL);
-	}
-	
-	public static double getTownPublicSpawnTravelPrice() {
-		return getDouble(ConfigNodes.ECO_PRICE_TOWN_PUBLIC_SPAWN_TRAVEL);
 	}
 	
 	public static double getBaseSpoilsOfWar() {
@@ -1034,8 +1063,14 @@ public class TownySettings {
 	public static double getTownUpkeepCost(Town town) {
 		double multiplier;
         
-		if (town != null)
-        	multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+		if (town != null) {
+			if (isUpkeepByPlot()) {
+				multiplier = town.getTownBlocks().size(); //town.getTotalBlocks();
+			}
+			else {
+				multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+			}
+		}
         else
         	multiplier = 1.0;
                 
@@ -1046,6 +1081,10 @@ public class TownySettings {
         return getDouble(ConfigNodes.ECO_PRICE_TOWN_UPKEEP);
     }
 
+    public static boolean isUpkeepByPlot() {
+        return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED);
+	}
+    
     public static double getNationUpkeep() {
         return getDouble(ConfigNodes.ECO_PRICE_NATION_UPKEEP);
     }
@@ -1102,11 +1141,19 @@ public class TownySettings {
 	}
         
     public static boolean isUsingPlotManagementDelete() {
-    	return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_ENABLE);
+    	return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE_ENABLE);
     }
     
     public static List<Integer> getPlotManagementDeleteIds() {
     	return getIntArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE);
+    }
+    
+    public static boolean isUsingPlotManagementMayorDelete() {
+    	return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE_ENABLE);
+    }
+    
+    public static List<String> getPlotManagementMayorDelete() {
+    	return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE);
     }
     
     public static boolean isUsingPlotManagementRevert() {
@@ -1369,12 +1416,12 @@ public class TownySettings {
         return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
     }
     
-    public static int getTownBankCap() {
-        return getInt(ConfigNodes.ECO_BANK_CAP_TOWN);
+    public static double getTownBankCap() {
+        return getDouble(ConfigNodes.ECO_BANK_CAP_TOWN);
     }
     
-    public static int getNationBankCap() {
-        return getInt(ConfigNodes.ECO_BANK_CAP_NATION);
+    public static double getNationBankCap() {
+        return getDouble(ConfigNodes.ECO_BANK_CAP_NATION);
     }
     
     public static boolean getTownBankAllowWithdrawls() {

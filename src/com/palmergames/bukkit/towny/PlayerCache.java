@@ -40,27 +40,27 @@ public class PlayerCache {
 	
 	public boolean getCachePermission(ActionType action) throws NullPointerException {
 		
-		switch(action.ordinal()){
+		switch(action){
 		
-		case 0: // BUILD
+		case BUILD: // BUILD
 			if (buildPermission == null)
 				throw new NullPointerException();
 			else
 				return buildPermission;
 			
-		case 1: // DESTROY
+		case DESTROY: // DESTROY
 			if (destroyPermission == null)
 				throw new NullPointerException();
 			else
 				return destroyPermission;			
 			
-		case 2: // SWITCH
+		case SWITCH: // SWITCH
 			if (switchPermission == null)
 				throw new NullPointerException();
 			else
 				return switchPermission;			
 			
-		case 3: // ITEM_USE
+		case ITEM_USE: // ITEM_USE
 			if (itemUsePermission == null)
 				throw new NullPointerException();
 			else

@@ -111,14 +111,14 @@ public class TownyWorldCommand implements CommandExecutor  {
 			
 		}
 		
-		if (split.length == 0)
+		if (split.length == 0) {
 			if (player == null) {
 				for (String line : plugin.getTownyUniverse().getStatus(Globalworld))
 					sender.sendMessage(Colors.strip(line));
 			} else
 				plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(Globalworld));				
 
-		else if (split[0].equalsIgnoreCase("?")) {
+		} else if (split[0].equalsIgnoreCase("?")) {
 			if (player == null) {
 				for (String line : townyworld_help)
 					sender.sendMessage(line);
@@ -294,13 +294,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 
 			if (split[0].equalsIgnoreCase("usedefault")) {
 				
-				// if using permissions and it's active disable this command
-				if (plugin.isPermissions()){
-					if (player != null) plugin.sendErrorMsg(player, "Command disabled: Using permissions.");
-					return;					
-				}
-				
-				Globalworld.setUsingDefault(true);
+				Globalworld.setUsingDefault();
 				plugin.updateCache();
 				if (player != null) 
 					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
@@ -309,15 +303,9 @@ public class TownyWorldCommand implements CommandExecutor  {
 				
 			} else if (split[0].equalsIgnoreCase("wildperm")) {
 				
-				// if using permissions and it's active disable this command
-				if (plugin.isPermissions()){
-					plugin.sendErrorMsg(player, "Command disabled: Using permissions.");
-					return;					
-				}
-				
 				if (split.length < 2) {
 					// set default wildperm settings (/tw set wildperm)
-					Globalworld.setUsingDefault(true);
+					Globalworld.setUsingDefault();
 					if (player != null)
 						plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 					else
@@ -329,7 +317,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 						Globalworld.setUnclaimedZoneDestroy(perms.contains("destroy"));
 						Globalworld.setUnclaimedZoneSwitch(perms.contains("switch"));
 						Globalworld.setUnclaimedZoneItemUse(perms.contains("itemuse"));
-						Globalworld.setUsingDefault(false);
+
 						plugin.updateCache();
 						if (player != null)
 							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
@@ -343,12 +331,6 @@ public class TownyWorldCommand implements CommandExecutor  {
 					}
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 				
-				// if using permissions and it's active disable this command
-				if (plugin.isPermissions()){
-					if (player != null) plugin.sendErrorMsg(player, "Command disabled: Using permissions.");
-					return;					
-				}
-				
 				if (split.length < 2)
 					if (player != null)
 						plugin.sendErrorMsg(player, "Eg: /townyworld set wildignore 11,25,45,67");
@@ -359,11 +341,11 @@ public class TownyWorldCommand implements CommandExecutor  {
 						List<Integer> nums = new ArrayList<Integer>();
 						for (String s: StringMgmt.remFirstArg(split))
 							try {
-								nums.add(Integer.parseInt(s));
+								nums.add(Integer.parseInt(s.trim()));
 							} catch (NumberFormatException e) {
 							}
 						Globalworld.setUnclaimedZoneIgnore(nums);
-						Globalworld.setUsingDefault(false);
+
 						plugin.updateCache();
 						if (player != null)
 							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
@@ -378,7 +360,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				} else
 					try {
 						Globalworld.setUnclaimedZoneName(split[1]);
-						Globalworld.setUsingDefault(false);
+
 						if (player != null)
 							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_name"), Globalworld.getName(), split[1]));
 						else

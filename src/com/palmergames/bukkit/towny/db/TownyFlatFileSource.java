@@ -223,34 +223,46 @@ public class TownyFlatFileSource extends TownyDataSource {
 	
 	@Override
 	public boolean loadWorldList() {
-		sendDebugMsg("Loading World List");
-		if (plugin != null)
-			return loadServerWorldsList();
-		else {
-			String line;
-			BufferedReader fin;
-
-			try {
-				fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				return false;
-			}
-			try {
-				while ((line = fin.readLine()) != null)
-					if (!line.equals(""))
-						universe.newWorld(line);
-				fin.close();
-
-			} catch (AlreadyRegisteredException e) {
-				e.printStackTrace();
-				confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-			return true;
+		
+		if (plugin != null) {
+			sendDebugMsg("Loading Server World List");
+			for (World world : plugin.getServer().getWorlds())
+				try {
+					universe.newWorld(world.getName());
+				} catch (AlreadyRegisteredException e) {
+					//e.printStackTrace();
+				} catch (NotRegisteredException e) {
+					//e.printStackTrace();
+				}
 		}
+		
+		// Can no longer reply on Bukkit to report ALL available worlds.
+		
+		sendDebugMsg("Loading World List");
+		
+		String line;
+		BufferedReader fin;
+
+		try {
+			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			while ((line = fin.readLine()) != null)
+				if (!line.equals(""))
+					universe.newWorld(line);
+			fin.close();
+
+		} catch (AlreadyRegisteredException e) {
+			// Ignore this as the world may have been passed to us by bukkit
+			//confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
@@ -357,8 +369,8 @@ public class TownyFlatFileSource extends TownyDataSource {
 		String line;
 		String[] tokens;
 		String path = getTownFilename(town);
-		File fileResident = new File(path);
-		if (fileResident.exists() && fileResident.isFile()) {
+		File fileTown = new File(path);
+		if (fileTown.exists() && fileTown.isFile()) {
 			try {
 				KeyValueFile kvFile = new KeyValueFile(path);
 
@@ -390,7 +402,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				
 				line = kvFile.get("tag");
 				if (line != null)
-					town.setTag(line);
+					try {
+						town.setTag(line);
+					} catch(TownyException e) {
+						town.setTag("");
+					}
 
 				line = kvFile.get("protectionStatus");
 				if (line != null)
@@ -518,16 +534,22 @@ public class TownyFlatFileSource extends TownyDataSource {
 					if (tokens.length == 3)
 						try {
 							TownyWorld world = TownyUniverse.getWorld(tokens[0]);
-							int x = Integer.parseInt(tokens[1]);
-							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = world.getTownBlock(x, z);
-							town.setHomeBlock(homeBlock);
-						} catch (NumberFormatException e) {
-							System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+							
+							try {
+								int x = Integer.parseInt(tokens[1]);
+								int z = Integer.parseInt(tokens[2]);
+								TownBlock homeBlock = world.getTownBlock(x, z);
+								town.setHomeBlock(homeBlock);
+							} catch (NumberFormatException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+							} catch (NotRegisteredException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+							} catch (TownyException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
+							}
+							
 						} catch (NotRegisteredException e) {
 							System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-						} catch (TownyException e) {
-							System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
 						}
 				}
 
@@ -603,7 +625,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				
 				line = kvFile.get("tag");
 				if (line != null)
-					nation.setTag(line);
+					try {
+						nation.setTag(line);
+					} catch(TownyException e) {
+						nation.setTag("");
+					}
 
 				line = kvFile.get("allies");
 				if (line != null) {
@@ -675,8 +701,10 @@ public class TownyFlatFileSource extends TownyDataSource {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						Town town = universe.getTown(token);
-						if (town != null)
-							world.addTown(town);
+						if (town != null) {
+							town.setWorld(world);
+							//world.addTown(town); not needed as it's handled in the Town object
+						}
 					}
 				}
 				
@@ -743,57 +771,48 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (Exception e) {
 					}
 				
-				line = kvFile.get("usingDefault");
+				line = kvFile.get("unclaimedZoneBuild");
 				if (line != null)
 					try {
-						world.setUsingDefault(Boolean.parseBoolean(line));
+						world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
-					
-				if (!world.isUsingDefault()) {
-					line = kvFile.get("unclaimedZoneBuild");
-					if (line != null)
-						try {
-							world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
-						} catch (Exception e) {
-						}
-					line = kvFile.get("unclaimedZoneDestroy");
-					if (line != null)
-						try {
-							world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
-						} catch (Exception e) {
-						}
-					line = kvFile.get("unclaimedZoneSwitch");
-					if (line != null)
-						try {
-							world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
-						} catch (Exception e) {
-						}
-					line = kvFile.get("unclaimedZoneItemUse");
-					if (line != null)
-						try {
-							world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
-						} catch (Exception e) {
-						}
-					line = kvFile.get("unclaimedZoneName");
-					if (line != null)
-						try {
-							world.setUnclaimedZoneName(line);
-						} catch (Exception e) {
-						}
-					line = kvFile.get("unclaimedZoneIgnoreIds");
-					if (line != null)
-						try {
-							List<Integer> nums = new ArrayList<Integer>();
-							for (String s: line.split(","))
-								try {
-									nums.add(Integer.parseInt(s));
-								} catch (NumberFormatException e) {
-								}
-							world.setUnclaimedZoneIgnore(nums);
-						} catch (Exception e) {
-						}
-				}
+				line = kvFile.get("unclaimedZoneDestroy");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneSwitch");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneItemUse");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneName");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneName(line);
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneIgnoreIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setUnclaimedZoneIgnore(nums);
+					} catch (Exception e) {
+					}
 				
 				line = kvFile.get("usingPlotManagementDelete");
 				if (line != null)
@@ -813,6 +832,26 @@ public class TownyFlatFileSource extends TownyDataSource {
 						world.setPlotManagementDeleteIds(nums);
 					} catch (Exception e) {
 					}
+				
+				line = kvFile.get("usingPlotManagementMayorDelete");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementMayorDelete(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementMayorDelete");
+				if (line != null)
+					try {
+						List<String> materials = new ArrayList<String>();
+						for (String s: line.split(","))
+							try {
+								materials.add(s.toUpperCase().trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementMayorDelete(materials);
+					} catch (Exception e) {
+					}
+				
 				line = kvFile.get("usingPlotManagementRevert");
 				if (line != null)
 					try {
@@ -861,14 +900,16 @@ public class TownyFlatFileSource extends TownyDataSource {
 				// loadTownBlocks(world);
 
 			} catch (Exception e) {
-				System.out.println("[Towny] Loading Error: Exception while reading world file " + world.getName());
+				System.out.println("[Towny] Loading Error: Exception while reading world file " + path);
 				e.printStackTrace();
 				return false;
 			}
 
 			return true;
-		} else
+		} else {
+			System.out.println("[Towny] Loading Error: File error while reading " + world.getName());
 			return false;
+		}
 	}
 
 	public boolean loadTownBlocks(TownyWorld world) {
@@ -1209,8 +1250,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()) + newLine);
 			// CreatureTrample
 			fout.write("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()) + newLine);
-			// Using Default
-			fout.write("usingDefault=" + Boolean.toString(world.isUsingDefault()) + newLine);
+
 			// Unclaimed Zone Build
 			if (world.getUnclaimedZoneBuild() != null)
 				fout.write("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()) + newLine);
@@ -1235,6 +1275,12 @@ public class TownyFlatFileSource extends TownyDataSource {
 			// Plot Management Delete Ids
 			if (world.getPlotManagementDeleteIds() != null)
 				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
+			
+			// Using PlotManagement Mayor Delete
+			fout.write("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()) + newLine);
+			// Plot Management Mayor Delete
+			if (world.getPlotManagementMayorDelete() != null)
+				fout.write("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ",") + newLine);
 			
 			// Using PlotManagement Revert
 			fout.write("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()) + newLine);
@@ -1291,14 +1337,16 @@ public class TownyFlatFileSource extends TownyDataSource {
 		String[] worlds = line.split("\\|");
 		for (String w : worlds) {
 			String[] split = w.split(":");
-			if (split.length != 2)
+			if (split.length != 2) {
+				System.out.println("[Towny] [Warning] " + town.getName() + " BlockList does not have a World or data.");
 				continue;
+			}
 			try {
 				TownyWorld world = TownyUniverse.getWorld(split[0]);
 				for (String s : split[1].split(";")) {
                     String blockTypeData = null;
                     int indexOfType = s.indexOf("[");
-                    if (indexOfType != -1) {
+                    if (indexOfType != -1) { //is found
                         int endIndexOfType = s.indexOf("]");
                         if (endIndexOfType != -1) {
                             blockTypeData = s.substring(indexOfType + 1, endIndexOfType);

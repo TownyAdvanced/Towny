@@ -15,7 +15,7 @@ import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
 
-import com.iConomy.iConomy;
+//import com.iConomy.iConomy;
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.EconomyException;
@@ -141,7 +141,7 @@ public class NationCommand implements CommandExecutor  {
                 else if (split[0].equalsIgnoreCase("withdraw")) {
                         if (split.length == 2)
                                 try {
-                                        nationWithdraw(player, Integer.parseInt(split[1]));
+                                        nationWithdraw(player, Integer.parseInt(split[1].trim()));
                                 } catch (NumberFormatException e) {
                                         plugin.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
                                 }
@@ -150,12 +150,12 @@ public class NationCommand implements CommandExecutor  {
                 } else if (split[0].equalsIgnoreCase("deposit")) {
                         if (split.length == 2)
                                 try {
-                                        nationDeposit(player, Integer.parseInt(split[1]));
+                                        nationDeposit(player, Integer.parseInt(split[1].trim()));
                                 } catch (NumberFormatException e) {
                                         plugin.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
                                 }
                         else
-                                plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom));
+                                plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
                 } else {
                         String[] newSplit = StringMgmt.remFirstArg(split);
                         
@@ -308,8 +308,7 @@ public class NationCommand implements CommandExecutor  {
                 nation.setCapital(town);
                 if(TownySettings.isUsingEconomy())
                 {
-                        iConomy.getAccount("nation-"+name);
-                        iConomy.getAccount("nation-"+name).getHoldings().set(0);
+                        nation.setBalance(0);
                 }
                 TownyUniverse.getDataSource().saveTown(town);
                 TownyUniverse.getDataSource().saveNation(nation);
@@ -387,6 +386,12 @@ public class NationCommand implements CommandExecutor  {
         }
         
         public void nationAdd(Player player, String[] names) {
+        	
+        	if (names.length < 1) {
+                plugin.sendErrorMsg(player, "Eg: /nation add [names]");
+                return;
+            }
+        	
                 Resident resident;
                 Nation nation;
                 try {
@@ -478,6 +483,12 @@ public class NationCommand implements CommandExecutor  {
         }
         
         public void nationKick(Player player, String[] names) {
+        	
+        	if (names.length < 1) {
+                plugin.sendErrorMsg(player, "Eg: /nation kick [names]");
+                return;
+            }
+        	
                 Resident resident;
                 Nation nation;
                 try {
@@ -662,6 +673,12 @@ public class NationCommand implements CommandExecutor  {
         }
         
         public void nationAlly(Player player, String[] split) {
+        	
+        	if (split.length < 2) {
+                plugin.sendErrorMsg(player, "Eg: /nation ally [add/remove] [name]");
+                return;
+            }
+        	
                 Resident resident;
                 Nation nation;
                 try {
@@ -743,6 +760,12 @@ public class NationCommand implements CommandExecutor  {
         public void nationEnemy(Player player, String[] split) {
                 Resident resident;
                 Nation nation;
+                
+                if (split.length < 2) {
+                    plugin.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
+                    return;
+                }
+                
                 try {
                         resident = plugin.getTownyUniverse().getResident(player.getName());
                         nation = resident.getTown().getNation();
@@ -828,7 +851,7 @@ public class NationCommand implements CommandExecutor  {
                         player.sendMessage(ChatTools.formatCommand("", "/nation set", "taxes [$]", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [name]", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters]", ""));
+                        player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
                 } else {
                         Resident resident;
                         Nation nation;
@@ -874,7 +897,7 @@ public class NationCommand implements CommandExecutor  {
                                 if (split.length < 2)
                                         plugin.sendErrorMsg(player, "Eg: /nation set taxes 70");
                                 else {
-                                        Integer amount = Integer.parseInt(split[1]);
+                                        Integer amount = Integer.parseInt(split[1].trim());
                                         if (amount < 0) {
                                                 plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
                                                 return;
@@ -905,14 +928,22 @@ public class NationCommand implements CommandExecutor  {
                         	if (split.length < 2)
                                 plugin.sendErrorMsg(player, "Eg: /nation set tag PLT");
                         	else
-                                try {
-                                	nation.setTag(plugin.getTownyUniverse().checkAndFilterName(split[1]));
-                                	plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_set_nation_tag"), player.getName(), nation.getTag()));
-                                } catch (TownyException e) {
-                                	plugin.sendErrorMsg(player, e.getMessage());
-                                } catch (InvalidNameException e) {
-                                	plugin.sendErrorMsg(player, e.getMessage());
-								}
+                        		if (split[1].equalsIgnoreCase("clear")) {
+                        			try {
+										nation.setTag(" ");
+										plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_reset_nation_tag"), player.getName()));
+									} catch (TownyException e) {
+										plugin.sendErrorMsg(player, e.getMessage());
+									}
+                        		} else
+	                                try {
+	                                	nation.setTag(plugin.getTownyUniverse().checkAndFilterName(split[1]));
+	                                	plugin.getTownyUniverse().sendNationMessage(nation, String.format(TownySettings.getLangString("msg_set_nation_tag"), player.getName(), nation.getTag()));
+	                                } catch (TownyException e) {
+	                                	plugin.sendErrorMsg(player, e.getMessage());
+	                                } catch (InvalidNameException e) {
+	                                	plugin.sendErrorMsg(player, e.getMessage());
+									}
                         } else if (split[0].equalsIgnoreCase("title")) {
                                 // Give the resident a title
                                 if (split.length < 2)

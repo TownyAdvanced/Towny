@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldInitEvent;
 
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
@@ -18,7 +19,18 @@ public class TownyWorldListener extends WorldListener {
 	
 	@Override
 	public void onWorldLoad(WorldLoadEvent event) {
-		String worldName = event.getWorld().getName();
+		newWorld(event.getWorld().getName());
+	}
+	
+	@Override
+	public void onWorldInit(WorldInitEvent event) {
+		newWorld(event.getWorld().getName());
+		
+	}
+
+	private void newWorld(String worldName) {
+		
+		//String worldName = event.getWorld().getName();
 		try {
 			plugin.getTownyUniverse().newWorld(worldName);
 			TownyWorld world = TownyUniverse.getWorld(worldName);
@@ -36,5 +48,6 @@ public class TownyWorldListener extends WorldListener {
 			plugin.sendErrorMsg("Could not create data for " + worldName);
 			e.printStackTrace();
 		}
+		
 	}
 }

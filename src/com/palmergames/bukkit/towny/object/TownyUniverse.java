@@ -51,17 +51,14 @@ import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.EmptyTownException;
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUtil;
-import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -89,6 +86,7 @@ public class TownyUniverse extends TownyObject {
 
     // private List<Election> elections;
     private static TownyDataSource dataSource;
+    private static CachePermissions cachePermissions = new CachePermissions();
     private int townyRepeatingTask = -1;
     private int dailyTask = -1;
     private int mobRemoveTask = -1;
@@ -211,28 +209,28 @@ public class TownyUniverse extends TownyObject {
         public void onLogin(Player player) throws AlreadyRegisteredException, NotRegisteredException {
                 Resident resident;
                 if (!hasResident(player.getName())) {
-                        newResident(player.getName());
-                        resident = getResident(player.getName());
+                    newResident(player.getName());
+                    resident = getResident(player.getName());
                         
-                        sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
-                        resident.setRegistered(System.currentTimeMillis());
-                        if (!TownySettings.getDefaultTownName().equals(""))
-                                try {
-                                        Town town = getTown(TownySettings.getDefaultTownName());
-                                        town.addResident(resident);
-                                        getDataSource().saveTown(town);
-                                } catch (NotRegisteredException e) {
-                                } catch (AlreadyRegisteredException e) {
-                                }
+                    sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
+                    resident.setRegistered(System.currentTimeMillis());
+                    if (!TownySettings.getDefaultTownName().equals(""))
+                        try {
+                            Town town = getTown(TownySettings.getDefaultTownName());
+                            town.addResident(resident);
+                            getDataSource().saveTown(town);
+                        } catch (NotRegisteredException e) {
+                        } catch (AlreadyRegisteredException e) {
+                        }
                         
                         getDataSource().saveResident(resident);
                         getDataSource().saveResidentList();
 
                 } else {
-                        resident = getResident(player.getName());
-                        resident.setLastOnline(System.currentTimeMillis());
+                    resident = getResident(player.getName());
+                    resident.setLastOnline(System.currentTimeMillis());
                         
-                        getDataSource().saveResident(resident);
+                    getDataSource().saveResident(resident);
                 }
                 
 
@@ -275,10 +273,10 @@ public class TownyUniverse extends TownyObject {
                         Resident resident = plugin.getTownyUniverse().getResident(player.getName());
                         Town town = resident.getTown();
                         player.teleport(town.getSpawn());
-                        //show message if we are using iConomy and are charging for spawn travel.
+                        //show message if we are using Economy and are charging for spawn travel.
                         if (!plugin.isTownyAdmin(player) && TownySettings.isUsingEconomy() && TownySettings.getTownSpawnTravelPrice() != 0)
                                 plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"),
-                                                TownySettings.getTownSpawnTravelPrice() + TownyIConomyObject.getIConomyCurrency()));
+                                                TownySettings.getTownSpawnTravelPrice() + TownyEconomyObject.getEconomyCurrency()));
                         //player.teleportTo(town.getSpawn());
                 } catch (TownyException x) {
                         if (forceTeleport) {
@@ -331,6 +329,22 @@ public class TownyUniverse extends TownyObject {
                 towns.put(filteredName.toLowerCase(), new Town(filteredName));
         setChanged();
         notifyObservers(NEW_TOWN);
+        }
+        
+        /**
+         * Returns the world a town belongs to
+         * 
+         * @param town
+         * @return
+         */
+        public static TownyWorld getTownWorld(String townName) {
+        	
+        	for (TownyWorld world: worlds.values()){
+        		if (world.hasTown(townName))
+        			return world;
+        	}
+
+        	return null;
         }
 
         public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
@@ -415,14 +429,23 @@ public class TownyUniverse extends TownyObject {
 
                 List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
                 
-                String oldName = town.getName();
-                towns.put(filteredName.toLowerCase(), town);
                 //Tidy up old files
                 // Has to be done here else the town no longer exists and the move command may fail.
                 getDataSource().deleteTown(town);
                 
+                String oldName = town.getName();
                 towns.remove(oldName.toLowerCase());
                 town.setName(filteredName);
+                
+                towns.put(filteredName.toLowerCase(), town);
+                
+                //Check if this is a nation capitol
+                if (town.isCapital()) {
+                	Nation nation = town.getNation();
+                	nation.setCapital(town);
+                	getDataSource().saveNation(nation);
+                }
+                
                 Town oldTown = new Town(oldName);
                 
                 try {
@@ -724,78 +747,6 @@ public class TownyUniverse extends TownyObject {
                         return null;
                 }     
         }
-        
-        /** getCachePermission
-         * 
-         * returns player cached permission for
-         * BUILD, DESTROY, SWITCH or ITEM_USE
-         * 
-         * @param player
-         * @param location
-         * @param action
-         * @return
-         */
-        public boolean getCachePermission(Player player, Location location, ActionType action ) {
-        	
-        	WorldCoord worldCoord;
-        	
-        	try {
-				worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(location));
-				PlayerCache cache = plugin.getCache(player);
-				cache.updateCoord(worldCoord);
-				
-				plugin.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
-				return cache.getCachePermission(action); // Throws NullPointerException if the cache is empty
-				
-			} catch (NotRegisteredException e) {
-				// World not known
-				e.printStackTrace();
-			} catch (NullPointerException e) {
-				// New or old cache permission was null, update it
-				
-				try {
-					worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(location));
-					
-					TownBlockStatus status = plugin.cacheStatus(player, worldCoord, plugin.getStatusCache(player, worldCoord));
-					//plugin.cacheBuild(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
-					triggerCacheCreate(player, location, worldCoord, status, action);
-					
-					PlayerCache cache = plugin.getCache(player);
-					cache.updateCoord(worldCoord);
-					
-					plugin.sendDebugMsg("New Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
-					return cache.getCachePermission(action);
-					
-				} catch (NotRegisteredException e1) {
-					// Will never get here.
-				}
-				
-			}
-			return false;
-    	}
-        
-        private void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, ActionType action) {
-    		
-    		switch(action.ordinal()){
-    		
-    		case 0: // BUILD
-    			plugin.cacheBuild(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
-    			
-    		case 1: // DESTROY
-    			plugin.cacheDestroy(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));		
-    			
-    		case 2: // SWITCH
-    			plugin.cacheSwitch(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));			
-    			
-    		case 3: // ITEM_USE
-    			plugin.cacheItemUse(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
-    			
-    		default:
-    			//for future expansion of permissions
-    			
-    		}
-    		
-    	}
 
         public List<Resident> getResidents() {
                 return new ArrayList<Resident>(residents.values());
@@ -842,7 +793,7 @@ public class TownyUniverse extends TownyObject {
         }
 
         public boolean isActiveResident(Resident resident) {
-                return System.currentTimeMillis() - resident.getLastOnline() < TownySettings.getInactiveAfter();
+                return System.currentTimeMillis() - resident.getLastOnline() < (20*TownySettings.getInactiveAfter());
         }
         
         public List<Resident> getResidents(String[] names) {
@@ -1082,6 +1033,10 @@ public class TownyUniverse extends TownyObject {
         public static TownyDataSource getDataSource() {
                 return dataSource;
         }
+	
+	    public static CachePermissions getCachePermissions() {
+	        return cachePermissions;
+	    }
 
         public boolean isWarTime() {
                 return warEvent != null ? warEvent.isWarTime() : false;
@@ -1463,6 +1418,40 @@ public class TownyUniverse extends TownyObject {
         	
         }
         
+		/**
+		 * Deletes all of a specified block type from a TownBlock
+		 * 
+		 * @param townBlock
+		 * @param material
+		 */
+		public void deleteTownBlockMaterial(TownBlock townBlock, int material) {
+        	
+        	Block block = null;
+        	int plotSize = TownySettings.getTownBlockSize();
+        	
+        	plugin.sendDebugMsg("Processing deleteTownBlockId");
+        	
+        	try {
+				World world = plugin.getServerWorld(townBlock.getWorld().getName());
+				int height = world.getMaxHeight()-1;
+				int worldx = townBlock.getX()*plotSize, worldz = townBlock.getZ()*plotSize;
+				
+				for (int z = 0; z < plotSize; z++)
+	        		for (int x = 0; x < plotSize; x++)
+	        			for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+	        				block = world.getBlockAt(worldx + x, y, worldz + z);
+	        				if (block.getTypeId() == material) {
+	        					block.setType(Material.AIR);
+	        				}	
+	        			}
+			} catch (NotRegisteredException e1) {
+				// Failed to get world.
+				e1.printStackTrace();
+			}
+        	
+        }
+		
+		
         public void removeTownBlocks(Town town) {
                 for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks()))
                         removeTownBlock(townBlock);

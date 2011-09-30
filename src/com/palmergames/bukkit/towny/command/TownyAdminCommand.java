@@ -129,7 +129,7 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 
                                 Town town = plugin.getTownyUniverse().getTown(split[1]);
                                 try {
-                                        town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[2]));
+                                        town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[2].trim()));
                                         plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_give_total"), town.getName(), split[2], town.getBonusBlocks()));
                                 } catch (NumberFormatException nfe) {
                                         throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
@@ -181,8 +181,8 @@ public class TownyAdminCommand implements CommandExecutor  {
                                 + (TownySettings.isRemovingTownMobs() ? Colors.LightGreen + "On" : Colors.Rose + "Off"));
                 */
                 try {
-                        TownyEconomyObject.checkIConomy();
-                        ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "iConomy" + Colors.Blue + "] "
+                        TownyEconomyObject.checkEconomy();
+                        ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Economy" + Colors.Blue + "] "
                                         + Colors.Green + TownySettings.getLangString("ta_panel_6") + Colors.LightGreen + TownyFormatter.formatMoney(getTotalEconomy()) + Colors.Gray + " | "
                                         + Colors.Green + TownySettings.getLangString("ta_panel_7") + Colors.LightGreen + getNumBankAccounts());
                 } catch (Exception e) {

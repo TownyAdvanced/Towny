@@ -126,7 +126,7 @@ public class TownyPermission {
 		}
 	};
 	
-	public boolean getResident(ActionType type) {
+	public boolean getResidentPerm(ActionType type) {
 		switch (type) {
 			case BUILD: return residentBuild;
 			case DESTROY: return residentDestroy;
@@ -136,7 +136,7 @@ public class TownyPermission {
 		}
 	}
 	
-	public boolean getOutsider(ActionType type) {
+	public boolean getOutsiderPerm(ActionType type) {
 		switch (type) {
 			case BUILD: return outsiderBuild;
 			case DESTROY: return outsiderDestroy;
@@ -146,7 +146,7 @@ public class TownyPermission {
 		}
 	}
 	
-	public boolean getAlly(ActionType type) {
+	public boolean getAllyPerm(ActionType type) {
 		switch (type) {
 			case BUILD: return allyBuild;
 			case DESTROY: return allyDestroy;
@@ -156,7 +156,7 @@ public class TownyPermission {
 		}
 	}
 	
-	public static boolean getUnclaimedZone(ActionType type, TownyWorld world) {
+	public static boolean getUnclaimedZonePerm(ActionType type, TownyWorld world) {
 		switch (type) {
 			case BUILD: return world.getUnclaimedZoneBuild();
 			case DESTROY: return world.getUnclaimedZoneDestroy();

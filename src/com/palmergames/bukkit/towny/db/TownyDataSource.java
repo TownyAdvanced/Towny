@@ -3,10 +3,6 @@ package com.palmergames.bukkit.towny.db;
 import java.io.IOException;
 import java.util.Scanner;
 
-import org.bukkit.World;
-
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -88,6 +84,7 @@ public abstract class TownyDataSource {
 	abstract public boolean loadResidentList();
 	abstract public boolean loadTownList();
 	abstract public boolean loadNationList();
+	abstract public boolean loadWorldList();
 	abstract public boolean loadRegenList();
 	
 	abstract public boolean loadResident(Resident resident);
@@ -119,6 +116,7 @@ public abstract class TownyDataSource {
 	
 	abstract public void deleteFile(String file);
 	
+	/*
 	public boolean loadWorldList() {
 		return loadServerWorldsList();
 	}
@@ -138,6 +136,7 @@ public abstract class TownyDataSource {
 			}
 		return true;
 	}
+	*/
 
 	/*
 	 * Load all of category
@@ -179,6 +178,8 @@ public abstract class TownyDataSource {
 			if (!loadWorld(world)){
 				System.out.println("[Towny] Loading Error: Could not read world data '" + world.getName() + "'.");
 				return false;
+			} else {
+				// Push all Towns belonging to this world
 			}
 		return true;
 	}

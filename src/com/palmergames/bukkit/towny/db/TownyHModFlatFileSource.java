@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.bukkit.World;
+
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
@@ -58,8 +60,22 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 	@Override
 	public boolean loadWorldList() {
 		plugin.sendDebugMsg("Loading World List");
-		if (plugin != null)
-			return loadServerWorldsList();
+		if (plugin != null) {
+			sendDebugMsg("Loading Server World List");
+			for (World world : plugin.getServer().getWorlds())
+				try {
+					//String[] split = world.getName().split("/");
+					//String worldName = split[split.length-1];
+					//universe.newWorld(worldName);
+					universe.newWorld(world.getName());
+				} catch (AlreadyRegisteredException e) {
+					e.printStackTrace();
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+			return true;
+		}
+
 		return false;
 	}
 

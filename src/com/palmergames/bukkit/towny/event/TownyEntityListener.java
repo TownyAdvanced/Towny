@@ -34,27 +34,28 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 
 public class TownyEntityListener extends EntityListener {
-        private final Towny plugin;
+       
+	private final Towny plugin;
 
-        public TownyEntityListener(Towny instance) {
-                plugin = instance;
-        }
+	public TownyEntityListener(Towny instance) {
+        plugin = instance;
+	}
         
         
-        @Override
-        public void onEntityDamage(EntityDamageEvent event) {
+    @Override
+    public void onEntityDamage(EntityDamageEvent event) {
 
-                if (event.isCancelled())
-                        return;
+        if (event.isCancelled())
+            return;
                 
-                long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
                 
-                Entity attacker = null;
-                Entity defender = null;
+        Entity attacker = null;
+        Entity defender = null;
 
         if (event instanceof EntityDamageByEntityEvent) {
-                        //plugin.sendMsg("EntityDamageByEntityEvent");
-                        EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent)event;
+            //plugin.sendMsg("EntityDamageByEntityEvent");
+            EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent)event;
             if (entityEvent.getDamager() instanceof Projectile) {
                 Projectile projectile = (Projectile)entityEvent.getDamager();
                 attacker = projectile.getShooter();
@@ -63,48 +64,48 @@ public class TownyEntityListener extends EntityListener {
                 attacker = entityEvent.getDamager();
                 defender = entityEvent.getEntity();
             }
-                }
-                                
-                if (attacker != null) { 
-                        //plugin.sendMsg("Attacker not null");
-                        
-                        TownyUniverse universe = plugin.getTownyUniverse();
-                        try {
-                                TownyWorld world = TownyUniverse.getWorld(defender.getWorld().getName());
-                                
-                                // Wartime
-                                if (universe.isWarTime()) {
-                                        event.setCancelled(false);
-                                        throw new Exception();
-                                }
-                                
-                                Player a = null;
-                                Player b = null;
-                                
-                                if (attacker instanceof Player)
-                                        a = (Player) attacker;
-                                if (defender instanceof Player)
-                                        b = (Player) defender;
-                                
-                                if (preventDamageCall(world, attacker, defender, a, b))
-                                        event.setCancelled(true);
-                        } catch (Exception e) {
-                        }
-                        
-                        
-                        plugin.sendDebugMsg("onEntityDamagedByEntity took " + (System.currentTimeMillis() - start) + "ms");
-                }
-                
         }
-        
-        @Override
-        public void onEntityDeath(EntityDeathEvent event) {
-                Entity entity =  event.getEntity();
-                
-                if (entity instanceof Player) {
-                        Player player = (Player)entity;
-                        plugin.sendDebugMsg("onPlayerDeath: " + player.getName() + "[ID: " + entity.getEntityId() + "]");
+                                
+        if (attacker != null) { 
+        	//plugin.sendMsg("Attacker not null");
+            
+            TownyUniverse universe = plugin.getTownyUniverse();
+            try {
+                TownyWorld world = TownyUniverse.getWorld(defender.getWorld().getName());
+                    
+             // Wartime
+                if (universe.isWarTime()) {
+                        event.setCancelled(false);
+                        throw new Exception();
                 }
+                
+                Player a = null;
+                Player b = null;
+                
+                if (attacker instanceof Player)
+                        a = (Player) attacker;
+                if (defender instanceof Player)
+                        b = (Player) defender;
+                
+                if (preventDamageCall(world, attacker, defender, a, b))
+                        event.setCancelled(true);
+                
+            } catch (Exception e) {
+            }
+            
+            
+            plugin.sendDebugMsg("onEntityDamagedByEntity took " + (System.currentTimeMillis() - start) + "ms");
+        }
+    }
+        
+    @Override
+    public void onEntityDeath(EntityDeathEvent event) {
+        Entity entity =  event.getEntity();
+                
+        if (entity instanceof Player) {
+            Player player = (Player)entity;
+            plugin.sendDebugMsg("onPlayerDeath: " + player.getName() + "[ID: " + entity.getEntityId() + "]");
+        }
     }
         
         @Override
@@ -225,119 +226,82 @@ public class TownyEntityListener extends EntityListener {
         
         @Override
         public void onPaintingBreak(PaintingBreakEvent event) {
-                if (event.isCancelled()) {
+                
+        	if (event.isCancelled()) {
+        		event.setCancelled(true);
+        		return;
+        	}
+                
+        	long start = System.currentTimeMillis();
+            
+            if (event instanceof PaintingBreakByEntityEvent) {
+                PaintingBreakByEntityEvent evt = (PaintingBreakByEntityEvent) event;
+                if (evt.getRemover() instanceof Player) {
+                	Player player = (Player) evt.getRemover();
+                    Painting painting = evt.getPainting();
+    
+                    WorldCoord worldCoord;
+                    try {
+                    	worldCoord = new WorldCoord(TownyUniverse.getWorld(painting.getWorld().getName()), Coord.parseCoord(painting.getLocation()));
+                    } catch (NotRegisteredException e1) {
+                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
                         event.setCancelled(true);
-                        return;
+                         return;
+                    }
+                    
+                    //Get destroy permissions (updates if none exist)
+        			boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.DESTROY);
+        			
+        			PlayerCache cache = plugin.getCache(player);
+                    cache.updateCoord(worldCoord);
+                    TownBlockStatus status = cache.getStatus();
+                    if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.DESTROY))
+                            return;
+                    if (!bDestroy)
+                        event.setCancelled(true);
+                    if (cache.hasBlockErrMsg())
+                        plugin.sendErrorMsg(player, cache.getBlockErrMsg());
                 }
-                
-                long start = System.currentTimeMillis();
-                
-                onPaintingBreak(event,true);
-                
-                plugin.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms ("+event.getCause().name()+", "+event.isCancelled() +")");     
-                
+            }
+            
+            plugin.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms ("+event.getCause().name()+", "+event.isCancelled() +")");                
         }
         
         @Override
         public void onPaintingPlace(PaintingPlaceEvent event) {
-                if (event.isCancelled()) {
-                        event.setCancelled(true);
-                        return;
-                }
                 
-                long start = System.currentTimeMillis();
+        	if (event.isCancelled()) {
+                event.setCancelled(true);
+                return;
+            }
                 
-                onPaintingPlace(event,true);
-                
-                plugin.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms ("+event.getEventName()+", "+event.isCancelled() +")");        
-                
-        }
-        
-        private void onPaintingBreak (PaintingBreakEvent event, boolean firstCall) {
-                
-                if (event instanceof PaintingBreakByEntityEvent) {
-                        PaintingBreakByEntityEvent evt = (PaintingBreakByEntityEvent) event;
-                        if (evt.getRemover() instanceof Player) {
-                                Player player = (Player) evt.getRemover();
-                                Painting painting = evt.getPainting();
-                
-                                WorldCoord worldCoord;
-                                try {
-										worldCoord = new WorldCoord(TownyUniverse.getWorld(painting.getWorld().getName()), Coord.parseCoord(painting.getLocation()));
-                                } catch (NotRegisteredException e1) {
-                                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-                                        event.setCancelled(true);
-                                        return;
-                                }
-                                
-                                // Check cached permissions first
-                                try {
-                                        PlayerCache cache = plugin.getCache(player);
-                                        cache.updateCoord(worldCoord);
-                                        TownBlockStatus status = cache.getStatus();
-                                        if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.DESTROY))
-                                                return;
-                                        if (!cache.getDestroyPermission())
-                                                event.setCancelled(true);
-                                        if (cache.hasBlockErrMsg())
-                                                plugin.sendErrorMsg(player, cache.getBlockErrMsg());
-                                        return;
-                                } catch (NullPointerException e) {
-                                        if (firstCall) {
-                                                // New or old destroy permission was null, update it
-                                                TownBlockStatus status = plugin.cacheStatus(player, worldCoord, plugin.getStatusCache(player, worldCoord));
-                                                plugin.cacheDestroy(player, worldCoord, getDestroyPermission(player, status, worldCoord));
-                                                onPaintingBreak(event, false);
-                                        } else
-                                                plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_updating_destroy_perms"));
+        	long start = System.currentTimeMillis();
+            
+            Player player = event.getPlayer();
+            Painting painting = event.getPainting();
 
-                                }
-                                
+            WorldCoord worldCoord;
+            try {
+            	worldCoord = new WorldCoord(TownyUniverse.getWorld(painting.getWorld().getName()), Coord.parseCoord(painting.getLocation()));
+            } catch (NotRegisteredException e1) {
+            	plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+                event.setCancelled(true);
+                return;
+            }
                 
-                        }
-                }
-        }       
-        
-        private void onPaintingPlace (PaintingPlaceEvent event, boolean firstCall) {
-                
-
-                Player player = event.getPlayer();
-                Painting painting = event.getPainting();
-
-                WorldCoord worldCoord;
-                try {
-						worldCoord = new WorldCoord(TownyUniverse.getWorld(painting.getWorld().getName()), Coord.parseCoord(painting.getLocation()));
-                } catch (NotRegisteredException e1) {
-                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-                        event.setCancelled(true);
-                        return;
-                }
-                
-                // Check cached permissions first
-                try {
-                        PlayerCache cache = plugin.getCache(player);
-                        cache.updateCoord(worldCoord);
-                        TownBlockStatus status = cache.getStatus();
-                        if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.BUILD))
-                                return;
-                        if (!cache.getBuildPermission())
-                                event.setCancelled(true);
-                        if (cache.hasBlockErrMsg())
-                                plugin.sendErrorMsg(player, cache.getBlockErrMsg());
-                        return;
-                } catch (NullPointerException e) {
-                        if (firstCall) {
-                                // New or old build permission was null, update it
-                                TownBlockStatus status = plugin.cacheStatus(player, worldCoord, plugin.getStatusCache(player, worldCoord));
-                                plugin.cacheBuild(player, worldCoord, getBuildPermission(player, status, worldCoord));
-                                onPaintingPlace(event, false);
-                        } else
-                                plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_updating_build_perms"));
-
-                }
-                                
-                
-                        
+            //Get build permissions (updates if none exist)
+            boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.BUILD);
+    			
+            PlayerCache cache = plugin.getCache(player);
+            TownBlockStatus status = cache.getStatus();
+            if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.BUILD))
+                    return;
+            if (!bBuild)
+                    event.setCancelled(true);
+            if (cache.hasBlockErrMsg())
+                    plugin.sendErrorMsg(player, cache.getBlockErrMsg());
+            
+            plugin.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms ("+event.getEventName()+", "+event.isCancelled() +")");                  
         }
         
         public boolean preventDamageCall(TownyWorld world, Entity a, Entity b, Player ap, Player bp) {
@@ -364,9 +328,7 @@ public class TownyEntityListener extends EntityListener {
                                     if (wolf.isTamed() && !wolf.getOwner().equals((AnimalTamer)a)) {
                                     	return true;
                                     }
-                                }
-                                
-                                
+                                }      
                         }
                         /*
                                 else if (!TownySettings.isPvEWithinNonPvPZones()) // TODO: Allow EvE >.>
@@ -397,13 +359,5 @@ public class TownyEntityListener extends EntityListener {
                         return true;
 
                 return false;
-        }
-        
-        public boolean getBuildPermission(Player player, TownBlockStatus status, WorldCoord pos) {
-                return plugin.getPermission(player, status, pos, TownyPermission.ActionType.BUILD);
-        }
-        
-        public boolean getDestroyPermission(Player player, TownBlockStatus status, WorldCoord pos) {
-                return plugin.getPermission(player, status, pos, TownyPermission.ActionType.DESTROY);
         }
 }

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,7 +45,8 @@ public class PlotCommand implements CommandExecutor  {
                 output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot notforsale", "[rect/circle] [radius]", ""));
                 output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot forsale [$]", "", TownySettings.getLangString("msg_plot_fs")));
                 output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot forsale [$]", "within [rect/circle] [radius]", ""));
-        output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot set ...", "", TownySettings.getLangString("msg_plot_fs")));
+                output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot clear", "", ""));
+                output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot set ...", "", TownySettings.getLangString("msg_plot_fs")));
                 output.add(TownySettings.getLangString("msg_nfs_abr"));
         }
 
@@ -79,138 +81,166 @@ public class PlotCommand implements CommandExecutor  {
         
         public void parsePlotCommand(Player player, String[] split) throws TownyException {
                 
-                if ((!plugin.isTownyAdmin(player)) && ((plugin.isPermissions()) && (!plugin.hasPermission(player, "towny.town.plot"))))
-                        throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+            if ((!plugin.isTownyAdmin(player)) && ((plugin.isPermissions()) && (!plugin.hasPermission(player, "towny.town.plot"))))
+                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
                 
-                if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-                        for (String line : output)
-                                player.sendMessage(line);
-                } else {
-                        Resident resident;
-                        TownyWorld world;
-                        try {
-                                resident = plugin.getTownyUniverse().getResident(player.getName());
-								world = TownyUniverse.getWorld(player.getWorld().getName());
-                        } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
-                                return;
+            if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+                for (String line : output)
+                    player.sendMessage(line);
+            } else {
+            	Resident resident;
+                TownyWorld world;
+                Town town;
+                try {
+                    resident = plugin.getTownyUniverse().getResident(player.getName());
+                    world = TownyUniverse.getWorld(player.getWorld().getName());
+                    town = resident.getTown();
+                } catch (TownyException x) {
+                    plugin.sendErrorMsg(player, x.getError());
+                    return;
+                }
+
+                try {
+                	if (split[0].equalsIgnoreCase("claim")) {
+                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+                        selection = TownyUtil.filterUnownedPlots(selection);
+                        int maxPlots = TownySettings.getMaxResidentPlots(resident);
+                        if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
+                        	throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
+                        if (selection.size() > 0) {
+                                for (WorldCoord worldCoord : selection) {
+                                        try {
+                                                if (residentClaim(resident, worldCoord)) {
+                                                        plugin.sendMsg(player, TownySettings.getLangString("msg_claimed") + " (" + worldCoord + ").");
+                                                        plugin.updateCache(worldCoord);
+                                                }       
+                                        } catch (TownyException x) {
+                                                plugin.sendErrorMsg(player, x.getError());
+                                        }
+                                }
+								TownyUniverse.getDataSource().saveResident(resident);
+								TownyUniverse.getDataSource().saveWorld(world);
+                        } else {
+                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+                        }
+                	} else if (split[0].equalsIgnoreCase("unclaim")) {
+                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+                        //System.out.println("pre "+selection.size());
+                        selection = TownyUtil.filterOwnedBlocks(resident, selection);
+                        //System.out.println("post "+selection.size());
+                        if (selection.size() > 0) {
+                                for (WorldCoord worldCoord : selection) {
+                                        try {
+                                                if (residentUnclaim(resident, worldCoord, false)) {
+                                                        plugin.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + " (" + worldCoord + ").");
+                                                        plugin.updateCache(worldCoord);
+                                                }
+                                        } catch (TownyException x) {
+                                                plugin.sendErrorMsg(player, x.getError());
+                                        }
+                                }
+								TownyUniverse.getDataSource().saveResident(resident);
+								TownyUniverse.getDataSource().saveWorld(world);
+                        } else {
+                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+                        }
+                	} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
+                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+                        selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
+                        
+                        for (WorldCoord worldCoord : selection) {
+                                setPlotForSale(resident, worldCoord, -1);
+                        }
+                	} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
+                        WorldCoord pos = new WorldCoord(world, Coord.parseCoord(player));
+                        double plotPrice = 0;
+                        switch (pos.getTownBlock().getType().ordinal()) {
+                        
+                        case 0:
+                                plotPrice = pos.getTownBlock().getTown().getPlotPrice();
+                                break;
+                        case 1:
+                                plotPrice = pos.getTownBlock().getTown().getCommercialPlotPrice();
+                                break;                                                  
                         }
 
-                        try {
-                                if (split[0].equalsIgnoreCase("claim")) {
-                                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-                                        selection = TownyUtil.filterUnownedPlots(selection);
-                                        int maxPlots = TownySettings.getMaxResidentPlots(resident);
-                                        if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
-                                        	throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
-                                        if (selection.size() > 0) {
-                                                for (WorldCoord worldCoord : selection) {
-                                                        try {
-                                                                if (residentClaim(resident, worldCoord)) {
-                                                                        plugin.sendMsg(player, TownySettings.getLangString("msg_claimed") + " (" + worldCoord + ").");
-                                                                        plugin.updateCache(worldCoord);
-                                                                }       
-                                                        } catch (TownyException x) {
-                                                                plugin.sendErrorMsg(player, x.getError());
-                                                        }
-                                                }
-												TownyUniverse.getDataSource().saveResident(resident);
-												TownyUniverse.getDataSource().saveWorld(world);
-                                        } else {
-                                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
-                                        }
-                                } else if (split[0].equalsIgnoreCase("unclaim")) {
-                                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-                                        System.out.println("pre "+selection.size());
-                                        selection = TownyUtil.filterOwnedBlocks(resident, selection);
-                                        System.out.println("post "+selection.size());
-                                        if (selection.size() > 0) {
-                                                for (WorldCoord worldCoord : selection) {
-                                                        try {
-                                                                if (residentUnclaim(resident, worldCoord, false)) {
-                                                                        plugin.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + " (" + worldCoord + ").");
-                                                                        plugin.updateCache(worldCoord);
-                                                                }
-                                                        } catch (TownyException x) {
-                                                                plugin.sendErrorMsg(player, x.getError());
-                                                        }
-                                                }
-												TownyUniverse.getDataSource().saveResident(resident);
-												TownyUniverse.getDataSource().saveWorld(world);
-                                        } else {
-                                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
-                                        }
-                                } else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
-                                        List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+                        if (split.length > 1) {
+                                
+                                int areaSelectPivot = TownyUtil.getAreaSelectPivot(split);
+                                List<WorldCoord> selection;
+                                if (areaSelectPivot >= 0) {
+                                        selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot+1, split.length));
                                         selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
-                                        
-                                        for (WorldCoord worldCoord : selection) {
-                                                setPlotForSale(resident, worldCoord, -1);
+                                        if (selection.size() == 0) {
+                                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+                                                return;
                                         }
-                                } else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
-                                        WorldCoord pos = new WorldCoord(world, Coord.parseCoord(player));
-                                        double plotPrice = 0;
-                                        switch (pos.getTownBlock().getType().ordinal()) {
-                                        
-                                        case 0:
-                                                plotPrice = pos.getTownBlock().getTown().getPlotPrice();
-                                                break;
-                                        case 1:
-                                                plotPrice = pos.getTownBlock().getTown().getCommercialPlotPrice();
-                                                break;                                                  
+                                } else {
+                                        selection = new ArrayList<WorldCoord>();
+                                        selection.add(pos);
+                                }
+                                
+                                
+                        
+                                // Check that it's not: /plot forsale within rect 3
+                                if (areaSelectPivot != 1) {
+                                        try {
+                                                plotPrice = Double.parseDouble(split[1]);
+                                        } catch (NumberFormatException e) {
+                                                player.sendMessage(String.format(TownySettings.getLangString("msg_error_must_be_num")));
+                                                return;
                                         }
-
-                                        if (split.length > 1) {
-                                                
-                                                int areaSelectPivot = TownyUtil.getAreaSelectPivot(split);
-                                                List<WorldCoord> selection;
-                                                if (areaSelectPivot >= 0) {
-                                                        selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot+1, split.length));
-                                                        selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
-                                                        if (selection.size() == 0) {
-                                                                player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
-                                                                return;
-                                                        }
-                                                } else {
-                                                        selection = new ArrayList<WorldCoord>();
-                                                        selection.add(pos);
-                                                }
-                                                
-                                                
-                                        
-                                                // Check that it's not: /plot forsale within rect 3
-                                                if (areaSelectPivot != 1) {
-                                                        try {
-                                                                plotPrice = Double.parseDouble(split[1]);
-                                                        } catch (NumberFormatException e) {
-                                                                player.sendMessage(String.format(TownySettings.getLangString("msg_error_must_be_num")));
-                                                                return;
-                                                        }
-                                                }
-                                                
-                                                for (WorldCoord worldCoord : selection) {
-                                                        setPlotForSale(resident, worldCoord, plotPrice);
-                                                }
-                                        } else {
-                                                setPlotForSale(resident, pos, plotPrice);
-                                        }
-                                } else if (split[0].equalsIgnoreCase("set")) {
-                    if (split.length > 1) {
-                        WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
-                        setPlotType(resident, worldCoord, split[1]);
-                        player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"),split[1]));
-
-                    } else {
-                        player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop", ""));
-                    }
-                }
-                        } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
-                        } catch (EconomyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
+                                }
+                                
+                                for (WorldCoord worldCoord : selection) {
+                                        setPlotForSale(resident, worldCoord, plotPrice);
+                                }
+                        } else {
+                                setPlotForSale(resident, pos, plotPrice);
                         }
+                	} else if (split[0].equalsIgnoreCase("set")) {
+
+	                    if (split.length > 1) {
+	                        WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
+	                        setPlotType(resident, worldCoord, split[1]);
+	                        player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"),split[1]));
+	
+	                    } else {
+	                        player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
+	                        player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop", ""));
+	                    }
+                	} else if (split[0].equalsIgnoreCase("clear")) {
+                		
+                		if (!town.isMayor(resident)) {
+                			player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
+                			return;
+                		}
+                		
+                		TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+                        
+                        if (townBlock != null) {
+                        	if (townBlock.isOwner(town) && (!townBlock.hasResident())) {
+                        		for (String material: world.getPlotManagementMayorDelete())
+                        		if (Material.matchMaterial(material) != null) {
+                        			plugin.getTownyUniverse().deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
+                        			player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
+                        		} else
+                        			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
+                        	} else
+                        		throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed"), townBlock.getResident().getName()));
+
+                        } else {
+                        	// Shouldn't ever reach here as a null townBlock should be caught already in WorldCoord.
+                        	player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+                        }
+                        
+                	}
+                } catch (TownyException x) {
+                	plugin.sendErrorMsg(player, x.getError());
+                } catch (EconomyException x) {
+                	plugin.sendErrorMsg(player, x.getError());
                 }
+            }
         }
         
         public boolean residentClaim(Resident resident, WorldCoord worldCoord) throws TownyException, EconomyException {

@@ -55,7 +55,7 @@ public class TownyCommand implements CommandExecutor {
                 towny_help.add(ChatTools.formatTitle("/towny"));
                 towny_help.add(ChatTools.formatCommand("", "/towny", "", "General help for Towny"));
                 towny_help.add(ChatTools.formatCommand("", "/towny", "map", "Displays a map of the nearby townblocks"));
-                towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "Display the prices used with iConomy"));
+                towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "Display the prices used with Economy"));
                 towny_help.add(ChatTools.formatCommand("", "/towny", "top", "Display highscores"));
                 towny_help.add(ChatTools.formatCommand("", "/towny", "time", "Display time until a new day"));
                 towny_help.add(ChatTools.formatCommand("", "/towny", "universe", "Displays stats"));
@@ -212,7 +212,7 @@ public class TownyCommand implements CommandExecutor {
                                 } else 
                                         sendErrorMsg(player, "Invalid sub command.");
                         } catch (EconomyException e) {
-                                sendErrorMsg(player, "IConomy error.");
+                                sendErrorMsg(player, "Economy error.");
                                 sendErrorMsg(player, e.getError());
                         }
                 else if (args[0].equalsIgnoreCase("residents"))
@@ -284,7 +284,7 @@ public class TownyCommand implements CommandExecutor {
         }
         
         /**
-         * Send the list of costs for iConomy to player Command: /towny prices
+         * Send the list of costs for Economy to player Command: /towny prices
          * 
          * @param town
          */
@@ -323,6 +323,8 @@ public class TownyCommand implements CommandExecutor {
                                 + Colors.Green + "Town: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getTownUpkeepCost(town))
                                 + Colors.Gray + " | "
                                 + Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationUpkeepCost(nation)));
+                output.add(Colors.Gray + "Town upkeep is based on " + Colors.LightGreen + " the " + (TownySettings.isUpkeepByPlot() ? " number of plots" : " town level (num residents)."));
+                
                 if (town != null) {
                         output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town)+"]");
                         output.add(Colors.Rose + "    [Price] "

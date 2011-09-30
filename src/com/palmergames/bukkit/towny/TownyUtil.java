@@ -206,6 +206,14 @@ public class TownyUtil {
 	}
 	
 	public static Long townyTime() {
-		return ((TownySettings.getDayInterval()*1000) - (System.currentTimeMillis() % (TownySettings.getDayInterval()*1000)))/1000;
+		Long oneDay = TownySettings.getDayInterval()*1000;
+		Long time = ((TownySettings.getNewDayTime()*1000) - (System.currentTimeMillis() % oneDay))/1000;
+		
+		time = time - 3600;
+
+		if (time < 0)
+			time = (oneDay/1000) - Math.abs(time);
+		
+		return time % oneDay;
 	}
 }

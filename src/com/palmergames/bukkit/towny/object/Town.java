@@ -259,6 +259,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         this.bonusBlocks = bonusBlocks;
     }
 
+    public int getTotalBlocks() {
+    	return TownySettings.getMaxTownBlocks(this);
+    }
+    
     public int getBonusBlocks() {
         return bonusBlocks;
     }
@@ -279,14 +283,28 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
     	this.purchasedBlocks += purchasedBlocks;
     }
 
-    public void setHomeBlock(TownBlock homeBlock) throws TownyException {
+    /**
+     * @param homeBlock
+     * @return true if the world/homeblock has changed
+     * @throws TownyException
+     */
+    public boolean setHomeBlock(TownBlock homeBlock) throws TownyException {
         if (homeBlock == null) {
                 this.homeBlock = null;
-                return;
+                return false;
         }
         if (!hasTownBlock(homeBlock))
                 throw new TownyException("Town has no claim over this town block.");
         this.homeBlock = homeBlock;
+        
+        // Set the world as it may have changed
+        if (this.world != homeBlock.getWorld()) {
+        	if ((world != null) && (world.hasTown(this)))
+        		world.removeTown(this);
+        	
+        	setWorld(homeBlock.getWorld());	
+        }
+        
         try {
                 setSpawn(spawn);
         } catch (TownyException e) {
@@ -294,6 +312,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         } catch (NullPointerException e) {
                 // In the event that spawn is already null
         }
+        
+        return true;
     }
 
     public TownBlock getHomeBlock() throws TownyException {
@@ -303,21 +323,47 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
                 throw new TownyException("Town has not set a home block.");
     }
 
-    public void setWorld(TownyWorld world) throws AlreadyRegisteredException {
+    /**
+     * Sets the world this town belongs to.
+     * If it's a world change it will remove the town from
+     * the old world and place in the new.
+     * 
+     * @param world
+     */
+    public void setWorld(TownyWorld world) {
         if (world == null) {
                 this.world = null;
                 return;
         }
         if (this.world == world)
                 return;
-        if (hasWorld())
-                throw new AlreadyRegisteredException();
-        else
-                this.world = world;
+        
+        if (hasWorld()) {
+        	try {
+				world.removeTown(this);
+			} catch (NotRegisteredException e) {
+			}
+        }
+
+        this.world = world;
+        
+        try {
+			this.world.addTown(this);
+		} catch (AlreadyRegisteredException e) {
+		}
     }
 
+    /**
+     * Fetch the World this town is registered too.
+     * If (for any reason) it's null it will attempt
+     * to find the owning world from TownyUniverse.
+     * @return world or null
+     */
     public TownyWorld getWorld() {
-        return world;
+    	if (world != null)
+    		return world;
+    	
+    	return TownyUniverse.getTownWorld(this.getName());
     }
 
     public boolean hasMayor() {
@@ -561,7 +607,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
                 if (!pay(amount, resident))
                         throw new TownyException("There is not enough money in the bank.");
         } else
-                throw new TownyException("iConomy has not been turned on.");
+                throw new TownyException("Economy has not been turned on.");
                 
     }
 
