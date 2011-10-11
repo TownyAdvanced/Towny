@@ -9,6 +9,8 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import org.bukkit.Chunk;
+
 /**
  * @author dumptruckman
  */
@@ -31,6 +33,9 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
             if (currentTime > resident.getTeleportRequestTime() + (TownySettings.getTeleportWarmupTime() * 1000)) {
                 resident.clearTeleportRequest();
                 try {
+                	// Make sure the chunk we teleport to is loaded.
+                    Chunk chunk = resident.getTeleportDestination().getSpawn().getWorld().getChunkAt(resident.getTeleportDestination().getSpawn().getBlock());
+                	if (!chunk.isLoaded()) chunk.load();
                     universe.getPlayer(resident).teleport(resident.getTeleportDestination().getSpawn());
                 } catch (TownyException ignore) { }
                 teleportQueue.poll();

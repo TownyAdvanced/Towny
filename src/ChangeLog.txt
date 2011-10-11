@@ -660,3 +660,43 @@ v0.76.1.19:
 	 - Fixed an error in fetching the resident on new cache creation (caused by code reorganising).
 v0.76.2.0:
 	- Release
+v0.76.2.1:
+	- Fixed an error when not using a currency type with Essentials Eco.
+v0.76.2.2:
+	- Force load the destination chunk when teleporting. Attempt to prevent the falling through the world bug.
+	- If wild_revert_on_mob_explosion is enabled, the explosions no longer drop any blocks.
+	- Simplfied Plugin interfacing for Economy plugins to a single setting of using_economy.
+	  Towny will first attempt to use Register.jar. If it's not present
+	  it will fall back to the legacy support for iConomy 5.01.
+v0.76.2.3:
+	- Added a Permission handler to towny so it will now support GroupManager, PEX, bPermissions, Permissions 2/3 + (bridges) and Bukkit Perms.
+	- Admins can now pick, choose and modify which notifications are shown when a player walks from plot to plot. Check the new section 'Town Notifications' in the config.
+	- Town notifications now show a money formatted price.
+v0.76.2.4:
+	- Fixed '/town new' and '/nation new' to properly follow the settings in config if permissions are disabled.
+	- If not using Eco, Towny will no longer error when deleting/renaming towns/nations, or upon a new day.
+v0.76.2.5:
+	- When using SuperPerms you can now use the following nodes with towny.
+	  prefix.prefixhere
+	  suffix.suffixhere
+	  towny_maxplots.x (with x being a number eg towny_maxplots.2)
+	- Town spawn cost now outputs correctly formatted by the settings in your economy plugin.
+v0.76.2.6:
+	- Fixed modplayername in chat format generating duplicate entries.
+	- Optimized Towny chat so it no longer performs lots of wasteful string parsing on every message.
+v0.76.2.7:
+	- Added a seperate thread for Town Claim to relieve the lag caused by Chunk snapshot generation.
+	- Towny World commands are now admin only again.
+v0.76.2.8:
+	- Fixed a world bug where Plot revert was following wild revent instead of it's own setting.
+	- Requires CraftBukkit 1302 as a minimum, to clear memory leaks.
+	- Added access from console for '/ta givebonus', and expanded to allow a town or a player to give the bonus to.
+	  (bonus given to the player is directly transfered to the town)
+v0.76.2.9:
+	- Towny now zero's economy accounts upon removal of resident/town/nation, to allow the account deletion.
+	- Pistons can now push between town owned townblocks.
+	- Fixed town spawn when not using any permissiosn plugins.
+v0.76.2.10:
+	- Update for Bukkit 1317's new YamlConfiguration.
+v0.76.3.0:
+	- Release.

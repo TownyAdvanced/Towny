@@ -27,7 +27,6 @@ import ca.xshade.questionmanager.Question;
 
 import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.Register;
 import com.palmergames.bukkit.towny.command.NationChatCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -45,13 +44,18 @@ import com.palmergames.bukkit.towny.event.TownyPlayerListener;
 import com.palmergames.bukkit.towny.event.TownyPlayerLowListener;
 import com.palmergames.bukkit.towny.event.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
+import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
+import com.palmergames.bukkit.towny.permissions.NullPermSource;
+import com.palmergames.bukkit.towny.permissions.PEXSource;
+import com.palmergames.bukkit.towny.permissions.Perms3Source;
+import com.palmergames.bukkit.towny.permissions.bPermsSource;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.townywar.TownyWar;
 import com.palmergames.bukkit.townywar.listener.TownyWarBlockListener;
@@ -94,10 +98,10 @@ public class Towny extends JavaPlugin {
     
     private Register register = null;
     private iConomy iconomy = null;
-    private Permissions permissions = null;
+
     private boolean error = false;
     private Logger logger = Logger.getLogger("com.palmergames.bukkit.towny");
-    //private GroupManager groupManager = null;
+   
   
         
     @Override
@@ -207,59 +211,101 @@ public class Towny extends JavaPlugin {
     }
     
     private void checkPlugins() {
-            List<String> using = new ArrayList<String>();
-            Plugin test;
+        List<String> using = new ArrayList<String>();
+        Plugin test;
 
-            test = getServer().getPluginManager().getPlugin("Permissions");
-            if (test == null)
-                    TownySettings.setUsingPermissions(false);
-            else {
-                    permissions = (Permissions)test;
-                    if (TownySettings.isUsingPermissions())
-                            using.add("Permissions");
+        if (TownySettings.isUsingPermissions()) {
+            test = getServer().getPluginManager().getPlugin("GroupManager");
+            if (test != null) {
+            	//groupManager = (GroupManager)test;
+            	this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
+                using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
+            } else {
+            	test = getServer().getPluginManager().getPlugin("PermissionsEx");
+            	if (test != null) {
+            		//permissions = (PermissionsEX)test;
+            		getTownyUniverse().setPermissionSource(new PEXSource(this, test));
+            		using.add(String.format("%s v%s", "PermissionsEX", test.getDescription().getVersion()));
+            	} else {
+	            	test = getServer().getPluginManager().getPlugin("bPermissions");
+	            	if (test != null) {
+	            		//permissions = (Permissions)test;
+	            		getTownyUniverse().setPermissionSource(new bPermsSource(this, test));
+	            		using.add(String.format("%s v%s", "bPermissions", test.getDescription().getVersion()));
+	            	} else {
+		            	test = getServer().getPluginManager().getPlugin("Permissions");
+		            	if (test != null) {
+		            		//permissions = (Permissions)test;
+		            		getTownyUniverse().setPermissionSource(new Perms3Source(this, test));
+		            		using.add(String.format("%s v%s", "Permissions", test.getDescription().getVersion()));
+		            	} else {
+		            		getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+		            		using.add("BukkitPermissions");
+		            	}
+	            	}
+            	}
             }
-            
+        } else {
+        	// Not using Permissions
+        	getTownyUniverse().setPermissionSource(new NullPermSource(this));
+        }
+        
+        
+        if (TownySettings.isUsingEconomy()) {
             test = getServer().getPluginManager().getPlugin("Register");
             if (test != null) {
-                    register = (Register)test;
-                    if (TownySettings.isUsingRegister()) {
-                            using.add("Register");
-                            TownySettings.setUsingIConomy(false);
-                    }
-            }else {
-            	TownySettings.setUsingRegister(false);
-            	
+                register = (Register)test;
+                using.add(String.format("%s v%s", "Register", test.getDescription().getVersion()));
+            } else {
             	test = getServer().getPluginManager().getPlugin("iConomy");
                 if (test == null) {
-                    TownySettings.setUsingIConomy(false);
+                    //TownySettings.setUsingIConomy(false);
+                	sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the Register.jar with iConomy, BOSE or Essentials Eco.");
                 } else {
                 	if (!test.getDescription().getVersion().matches("5.01")) {
-                		TownySettings.setUsingIConomy(false);
                 		sendErrorMsg("Towny does not have native support for iConomy " + test.getDescription().getVersion() + ". You need the Register.jar.");
                 	} else {
                         iconomy = (iConomy)test;
-                        if (TownySettings.isUsingIConomy()) {
-                                using.add("iConomy");
-                                TownySettings.setUsingRegister(false);
-                        }
+                        using.add(String.format("%s v%s", "iConomy", test.getDescription().getVersion()));
                 	}
                 }
             }
-            
-            test = getServer().getPluginManager().getPlugin("Essentials");
-            if (test == null)
-                    TownySettings.setUsingEssentials(false);
-            else if (TownySettings.isUsingEssentials())
-                    using.add("Essentials");
-            
-            test = getServer().getPluginManager().getPlugin("Questioner");
-            if (test == null)
-                    TownySettings.setUsingQuestioner(false);
-            else if (TownySettings.isUsingQuestioner())
-                    using.add("Questioner");
-            
-            if (using.size() > 0)
-                    logger.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+        }
+        
+        test = getServer().getPluginManager().getPlugin("Essentials");
+        if (test == null)
+            TownySettings.setUsingEssentials(false);
+        else if (TownySettings.isUsingEssentials())
+            using.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
+        
+        test = getServer().getPluginManager().getPlugin("Questioner");
+        if (test == null)
+            TownySettings.setUsingQuestioner(false);
+        else if (TownySettings.isUsingQuestioner())
+            using.add(String.format("%s v%s", "Questioner", test.getDescription().getVersion()));
+        
+        if (using.size() > 0)
+            logger.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+    }
+    
+    // is permissions active
+    public boolean isPermissions() {
+            return TownySettings.isUsingPermissions();
+    }
+    
+    // is GroupManager active
+    public boolean isEcoActive() {
+            return isRegister() || isIConomy();
+    }
+    
+    // is register active
+    public boolean isRegister() {
+            return (TownySettings.isUsingEconomy() && register != null);
+    }
+    
+    // is iConomy active
+    public boolean isIConomy() {
+            return (TownySettings.isUsingEconomy() && iconomy != null);
     }
 
     @Override
@@ -523,58 +569,10 @@ public class Towny extends JavaPlugin {
         public boolean isTownyAdmin(Player player) {
                 if (player.isOp())
                         return true;
-                return hasPermission(player, "towny.admin");
+                return TownyUniverse.getPermissionSource().hasPermission(player, "towny.admin");
         }
         
-        public void setDisplayName (Player player) {
-                
-                // Setup the chat prefix BEFORE we speak.
-                if (TownySettings.isUsingModifyChat()) {
-                        try {
-                                Resident resident = getTownyUniverse().getResident(player.getName());
-                                String colour, formattedName = "";
-                                if (resident.isKing())
-                                        colour = TownySettings.getKingColour();
-                                else if (resident.isMayor())
-                                        colour = TownySettings.getMayorColour();
-                                else
-                                        colour = "";
-                                formattedName = TownySettings.getModifyChatFormat();
-                                String nation = "",town = "";
-                                
-                                if (resident.hasNation()) {
-                                	nation = resident.hasNation() ? "[" + resident.getTown().getNation().getName() + "]" : "";
-                                	nation = resident.getTown().getNation().hasTag() ? "[" + resident.getTown().getNation().getTag() + "]" : nation;
-                                } else if ((resident.hasTitle()) || (resident.hasSurname())) {
-                                	resident.setTitle(" ");
-                                	resident.setSurname(" ");
-                                }
-                                
-                                if (resident.hasTown()) {
-                                	town = resident.hasTown() ? "[" + resident.getTown().getName() + "]" : "";
-                                	town = resident.getTown().hasTag() ? "[" + resident.getTown().getTag() + "]" : town;
-                                }
-                                
-                                formattedName = formattedName.replace("{nation}", nation);
-                                formattedName = formattedName.replace("{town}", town);
-                                formattedName = formattedName.replace("{permprefix}", getPermissionNode(resident, "prefix"));
-                                formattedName = formattedName.replace("{townynameprefix}", resident.hasTitle() ? resident.getTitle() : TownyFormatter.getNamePrefix(resident));
-                                formattedName = formattedName.replace("{playername}", player.getName());
-                                formattedName = formattedName.replace("{modplayername}", player.getDisplayName());
-                                formattedName = formattedName.replace("{townynamepostfix}", resident.hasSurname() ? resident.getSurname() : TownyFormatter.getNamePostfix(resident));
-                                formattedName = formattedName.replace("{permsuffix}", getPermissionNode(resident, "suffix"));
-                                
-                                formattedName = ChatTools.parseSingleLineString(colour + formattedName + Colors.White).trim();
-                                
-                                //formattedName = ChatTools.parseSingleLineString(colour + (TownySettings.isUsingPermsPrefix() ? getPermissionNode(resident, "prefix") : "") + (TownySettings.isUsingChatPrefix() ? getTownyUniverse().getFormatter().getNamePrefix(resident) : "")
-                                //      + player.getName() + (TownySettings.isUsingChatPrefix() ? getTownyUniverse().getFormatter().getNamePostfix(resident) : "") + (TownySettings.isUsingPermsPrefix() ? getPermissionNode(resident, "suffix") : "")
-                                //      + Colors.White);
-                                player.setDisplayName(formattedName);
-                        } catch (NotRegisteredException e) {
-                                log("Not Registered");
-                        }
-                }               
-        }
+        
         
         public void setPlayerMode(Player player, String[] modes) {
                 playerMode.put(player.getName(), Arrays.asList(modes));
@@ -644,115 +642,7 @@ public class Towny extends JavaPlugin {
                 }
                 
         }
-        */
-        
-        // is permissions active
-        public boolean isPermissions() {
-                return (TownySettings.isUsingPermissions() && permissions != null);
-        }
-        
-        
-        /** getPermissionNode
-         * 
-         * returns the specified prefix/suffix nodes from permissions
-         * 
-         * @param resident
-         * @param node
-         * @return
-         */
-        @SuppressWarnings("deprecation")
-        // Suppression is to clear warnings while retaining permissions 2.7 compatibility
-		public String getPermissionNode(Resident resident, String node) {
-                
-                //sendDebugMsg("Perm Check: Does " + resident.getName() + " have the node '" + node + "'?");
-                if (isPermissions()) {
-                        //sendDebugMsg("    Permissions installed.");
-                        PermissionHandler handler = permissions.getHandler();
-                        String group, user = ""; 
-                        Player player = getServer().getPlayer(resident.getName());
-                        
-                        if (node == "prefix") {
-                                group = handler.getGroupPrefix(player.getWorld().getName(), handler.getGroup(player.getWorld().getName(), player.getName()));
-                                //user =  handler.getUserPrefix(player.getWorld().getName(), player.getName());
-                                if (!group.equals(user))
-                                        user = group + user;
-                                user = TownySettings.parseSingleLineString(user);
-                                //sendDebugMsg("Prefix: " + user);
-                        }
-                        
-                        if (node == "suffix") {
-                                group = handler.getGroupSuffix(player.getWorld().getName(), handler.getGroup(player.getWorld().getName(), player.getName()));
-                                //user =  handler.getUserSuffix(player.getWorld().getName(), player.getName());
-                                if (!group.equals(user))
-                                        user = group + user;
-                                user = TownySettings.parseSingleLineString(user);
-                                //sendDebugMsg("Suffix: " + user);
-                        }
-                        
-                        
-                        return user;
-                // } else if (groupManager != null)
-                //      return groupManager.getHandler().permission(player, node);
-                } else {
-                        //sendDebugMsg("    Does not have permission.");
-                        return "";
-                }               
-                
-                
-        }
-        
-        /**
-         * 
-         * @param playerName
-         * @param node
-         * @return -1 = can't find
-         */
-        @SuppressWarnings("deprecation")
-        // Suppression is to clear warnings while retaining permissions 2.7 compatibility
-        public int getGroupPermissionIntNode(String playerName, String node) {
-        	if (isPermissions()) {
-        		try {
-	        		PermissionHandler handler = permissions.getHandler();
-	        		
-	        		Player player = getServer().getPlayer(playerName);
-	        		String worldName = player.getWorld().getName();
-	        		String groupName = handler.getGroup(worldName, playerName);
-	        		
-	        		return handler.getGroupPermissionInteger(worldName, groupName, node);
-        		} catch (Exception e) {
-        			// Ignore UnsupportedOperationException on certain Permission APIs
-        		}
-        	}
-        	
-        	return -1;
-        }
-
-        /** hasPermission
-         * 
-         * returns if a player has a certain permission node.
-         * If permissions ins't enabled/installed it will return the bukkit superperms default.
-         * 
-         * @param player
-         * @param node
-         * @return
-         */
-        public boolean hasPermission(Player player, String node) {
-                //sendDebugMsg("Perm Check: Does " + player.getName() + " have the node '" + node + "'?");
-                if (isPermissions()) {
-                    //sendDebugMsg("    Permissions installed.");
-                    PermissionHandler handler = permissions.getHandler();
-                    boolean perm = handler.permission(player, node);
-                    //sendDebugMsg("    Permissions says "+perm+".");
-                	return perm;
-                // } else if (groupManager != null)
-                //      return groupManager.getHandler().permission(player, node);
-                } else {
-                	//sendDebugMsg("    Using BukkitPerms installed.");
-                	boolean perm = player.hasPermission(node);
-                    //sendDebugMsg("    Permissions says "+perm+".");
-                    return perm;
-                }
-        }
+        */        
 
         public void sendMsg(String msg) {
                 System.out.println("[Towny] " + ChatTools.stripColour(msg));
@@ -818,8 +708,8 @@ public class Towny extends JavaPlugin {
         	
         	//check for permissions
         	
-        	if (hasPermission(player, "towny.wild." + action.toString().toLowerCase())
-                	|| hasPermission(player, "towny.wild.block." + blockId + "." + action.toString().toLowerCase()))
+        	if (TownyUniverse.getPermissionSource().hasPermission(player, "towny.wild." + action.toString().toLowerCase())
+                	|| TownyUniverse.getPermissionSource().hasPermission(player, "towny.wild.block." + blockId + "." + action.toString().toLowerCase()))
                 	return true;
             
         	// No perms found so check world settings.

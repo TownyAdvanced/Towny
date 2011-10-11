@@ -292,6 +292,10 @@ public class TownyBlockListener extends BlockListener {
 				return true;
 			}
 			
+			// If both blocks are owned by the town.
+			if (!CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+				return false;
+			
 			try {
 				if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident())
 						|| (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())

@@ -880,7 +880,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 				line = kvFile.get("usingPlotManagementWildRegen");
 				if (line != null)
 					try {
-						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
+						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
 				line = kvFile.get("usingPlotManagementWildRegenDelay");

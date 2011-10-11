@@ -52,6 +52,7 @@ import com.palmergames.bukkit.towny.EmptyTownException;
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyChat;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -59,6 +60,7 @@ import com.palmergames.bukkit.towny.TownyUtil;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -87,6 +89,8 @@ public class TownyUniverse extends TownyObject {
     // private List<Election> elections;
     private static TownyDataSource dataSource;
     private static CachePermissions cachePermissions = new CachePermissions();
+    private static TownyPermissionSource permissionSource;
+    
     private int townyRepeatingTask = -1;
     private int dailyTask = -1;
     private int mobRemoveTask = -1;
@@ -243,7 +247,7 @@ public class TownyUniverse extends TownyObject {
                         getWarEvent().sendScores(player, 3);
                 
                 // Setup the chat prefix/suffix
-                plugin.setDisplayName(player);
+                TownyChat.setDisplayName(plugin, player);
         setChanged();
         notifyObservers(PLAYER_LOGIN);
         }
@@ -491,11 +495,12 @@ public class TownyUniverse extends TownyObject {
                 nation.setName(filteredName);
                 Nation oldNation = new Nation(oldName);
                 
-                try {
-                        nation.pay(nation.getHoldingBalance());
-                        oldNation.pay(oldNation.getHoldingBalance(), nation);
-                } catch (EconomyException e) {
-                }
+                if (plugin.isEcoActive())
+	                try {
+	                        nation.pay(nation.getHoldingBalance());
+	                        oldNation.pay(oldNation.getHoldingBalance(), nation);
+	                } catch (EconomyException e) {
+	                }
                 
                 for (Town town : toSave) {
                         getDataSource().saveTown(town);
@@ -1033,120 +1038,129 @@ public class TownyUniverse extends TownyObject {
         public static TownyDataSource getDataSource() {
                 return dataSource;
         }
+        
+    public void setPermissionSource(TownyPermissionSource permissionSource) {
+        TownyUniverse.permissionSource = permissionSource;
+    }
+
+    public static TownyPermissionSource getPermissionSource() {
+        return permissionSource;
+    }
 	
-	    public static CachePermissions getCachePermissions() {
-	        return cachePermissions;
-	    }
+	public static CachePermissions getCachePermissions() {
+	    return cachePermissions;
+	}
 
-        public boolean isWarTime() {
-                return warEvent != null ? warEvent.isWarTime() : false;
+    public boolean isWarTime() {
+    	return warEvent != null ? warEvent.isWarTime() : false;
+    }
+
+    public void collectNationTaxes() throws EconomyException {
+    	for (Nation nation : new ArrayList<Nation>(nations.values())) {
+    		collectNationTaxes(nation);
+    	}		
+    	setChanged();
+    	notifyObservers(COLLECTED_NATION_TAX);
+    }
+
+    public void collectNationTaxes(Nation nation) throws EconomyException {
+    	if (nation.getTaxes() > 0)
+            for (Town town : new ArrayList<Town>(nation.getTowns())) {
+            	if (town.isCapital() || !town.hasUpkeep())
+                	continue;
+                if (!town.pay(nation.getTaxes(), nation)) {
+                	try {
+                    	sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
+                        nation.removeTown(town);
+                    } catch (EmptyNationException e) {
+                        // Always has 1 town (capital) so ignore
+                    } catch (NotRegisteredException e) {
+                    }
+                    getDataSource().saveTown(town);
+                    getDataSource().saveNation(nation);
+                } else
+                    sendTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
+            }
+    }
+
+    public void collectTownTaxes() throws EconomyException {
+        for (Town town : new ArrayList<Town>(towns.values())) {
+                collectTownTaxes(town);
         }
-
-        public void collectNationTaxes() throws EconomyException {
-                for (Nation nation : new ArrayList<Nation>(nations.values()))
-                        collectNationTaxes(nation);
-        setChanged();
-        notifyObservers(COLLECTED_NATION_TAX);
-        }
-
-        public void collectNationTaxes(Nation nation) throws EconomyException {
-                if (nation.getTaxes() > 0)
-                        for (Town town : new ArrayList<Town>(nation.getTowns())) {
-                                if (town.isCapital() || !town.hasUpkeep())
-                                        continue;
-                                if (!town.pay(nation.getTaxes(), nation)) {
-                                        try {
-                                                sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
-                                                nation.removeTown(town);
-                                        } catch (EmptyNationException e) {
-                                                // Always has 1 town (capital) so ignore
-                                        } catch (NotRegisteredException e) {
-                                        }
-                                        getDataSource().saveTown(town);
-                                        getDataSource().saveNation(nation);
-                                } else
-                                        sendTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
-                        }
-        }
-
-        public void collectTownTaxes() throws EconomyException {
-                for (Town town : new ArrayList<Town>(towns.values()))
-                        collectTownTaxes(town);
         setChanged();
         notifyObservers(COLLECTED_TONW_TAX);
-        }
+    }
 
-        public void collectTownTaxes(Town town) throws EconomyException {
-                //Resident Tax
-                if (town.getTaxes() > 0)
-                        for (Resident resident : new ArrayList<Resident>(town.getResidents()))
-                                if (town.isMayor(resident) || town.hasAssistant(resident)) {
-                                        try {
-                                                sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
-                                        } catch (TownyException e) {
-                                        }
-                                        continue;
-                                }
-                else if(town.isTaxPercentage())
-                {
-                    double cost = resident.getHoldingBalance() * town.getTaxes()/100;
-                    resident.pay(cost, town);
-                                        try {
-                                                sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + cost);
-                                        } catch (TownyException e) {
-                                        }
-                }
-                else if (!resident.pay(town.getTaxes(), town)) {
-                                        sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
-                                        try {
-                                                //town.removeResident(resident);
-                                                resident.clear();
-                                        } catch (EmptyTownException e) {
-                                        }
-                                        getDataSource().saveResident(resident);
-                                        getDataSource().saveTown(town);
-                                } else
-                                        try {
-                                                sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + town.getTaxes());
-                                        } catch (TownyException e1) {
-                                        }
-                                
-                
-                //Plot Tax
-                if (town.getPlotTax() > 0 || town.getCommercialPlotTax() > 0) {
-                        Hashtable<Resident,Integer> townPlots = new Hashtable<Resident,Integer>();
-            Hashtable<Resident,Double> townTaxes = new Hashtable<Resident,Double>();
-                        for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks())) {
-                                if (!townBlock.hasResident())
-                                        continue;
+    public void collectTownTaxes(Town town) throws EconomyException {
+    	//Resident Tax
+        if (town.getTaxes() > 0)
+                for (Resident resident : new ArrayList<Resident>(town.getResidents()))
+                        if (town.isMayor(resident) || town.hasAssistant(resident)) {
                                 try {
-                                        Resident resident = townBlock.getResident();
-                                        if (town.isMayor(resident) || town.hasAssistant(resident)) {
-                                                continue;
-                    }
-                    if (!resident.pay(townBlock.getType().getTax(town), town)) {
-                        sendTownMessage(town,  String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
-                        townBlock.setResident(null);
-                        getDataSource().saveResident(resident);
-                        getDataSource().saveWorld(townBlock.getWorld());
-                    } else {
-                        townPlots.put(resident, (townPlots.containsKey(resident) ? townPlots.get(resident) : 0) + 1);
-                        townTaxes.put(resident, (townTaxes.containsKey(resident) ? townTaxes.get(resident) : 0) +
-                                townBlock.getType().getTax(town));
-                    }
-                                } catch (NotRegisteredException e) {
-                                }
-                        }
-                        for (Resident resident : townPlots.keySet()) {
-                                try {
-                                        int numPlots = townPlots.get(resident);
-                                        double totalCost = townTaxes.get(resident);
-                                        sendResidentMessage(resident, String.format(TownySettings.getLangString("msg_payed_plot_cost"), totalCost, numPlots, town.getName()));
+                                        sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
                                 } catch (TownyException e) {
                                 }
-            }
-                }
+                                continue;
+                        }
+        else if(town.isTaxPercentage())
+        {
+            double cost = resident.getHoldingBalance() * town.getTaxes()/100;
+            resident.pay(cost, town);
+                                try {
+                                        sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + cost);
+                                } catch (TownyException e) {
+                                }
         }
+        else if (!resident.pay(town.getTaxes(), town)) {
+        	sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
+            	try {
+            		//town.removeResident(resident);
+                    resident.clear();
+            } catch (EmptyTownException e) {
+            }
+            getDataSource().saveResident(resident);
+            getDataSource().saveTown(town);
+        } else
+        	try {
+            	sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + town.getTaxes());
+            } catch (TownyException e1) {
+            }
+                        
+        	//Plot Tax
+        	if (town.getPlotTax() > 0 || town.getCommercialPlotTax() > 0) {
+                Hashtable<Resident,Integer> townPlots = new Hashtable<Resident,Integer>();
+                Hashtable<Resident,Double> townTaxes = new Hashtable<Resident,Double>();
+                for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks())) {
+                    if (!townBlock.hasResident())
+                        continue;
+                    try {
+                        Resident resident = townBlock.getResident();
+                        if (town.isMayor(resident) || town.hasAssistant(resident)) {
+                            continue;
+                        }
+                        if (!resident.pay(townBlock.getType().getTax(town), town)) {
+                            sendTownMessage(town,  String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
+                            townBlock.setResident(null);
+                            getDataSource().saveResident(resident);
+                            getDataSource().saveWorld(townBlock.getWorld());
+                        } else {
+                            townPlots.put(resident, (townPlots.containsKey(resident) ? townPlots.get(resident) : 0) + 1);
+                            townTaxes.put(resident, (townTaxes.containsKey(resident) ? townTaxes.get(resident) : 0) +
+                                    townBlock.getType().getTax(town));
+                        }
+                    } catch (NotRegisteredException e) {
+                    }
+                }
+                for (Resident resident : townPlots.keySet()) {
+                	try {
+                		int numPlots = townPlots.get(resident);
+                        double totalCost = townTaxes.get(resident);
+                        sendResidentMessage(resident, String.format(TownySettings.getLangString("msg_payed_plot_cost"), totalCost, numPlots, town.getName()));
+                } catch (TownyException e) {
+                }
+            }
+        }
+    }
 
         public void startWarEvent() {
                 this.warEvent = new War(plugin, TownySettings.getWarTimeWarningDelay());
@@ -1219,11 +1233,15 @@ public class TownyUniverse extends TownyObject {
             getDataSource().deleteNation(nation);
             List<Town> toSave = new ArrayList<Town>(nation.getTowns());
             nation.clear();
-            try {
-            	nation.pay(nation.getHoldingBalance(), new WarSpoils());
-            } catch (EconomyException e) {
-            }
+            if (plugin.isEcoActive())
+	            try {
+	            	nation.pay(nation.getHoldingBalance(), new WarSpoils());
+	            } catch (EconomyException e) {
+	            }
             nations.remove(nation.getName().toLowerCase());
+            // Clear accounts
+            if(TownySettings.isUsingEconomy())
+            	nation.setBalance(0);
                                                      
             plugin.updateCache();
             for (Town town : toSave)
@@ -1259,10 +1277,11 @@ public class TownyUniverse extends TownyObject {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
             }
-            try {
-                    town.pay(town.getHoldingBalance(), new WarSpoils());
-            } catch (EconomyException e) {
-            }
+            if (plugin.isEcoActive())
+	            try {
+	                    town.pay(town.getHoldingBalance(), new WarSpoils());
+	            } catch (EconomyException e) {
+	            }
             
             for (Resident resident : toSave) {
                     removeResident(resident);
@@ -1270,14 +1289,17 @@ public class TownyUniverse extends TownyObject {
             }
             
             towns.remove(town.getName().toLowerCase());
+            // Clear accounts
+            if(TownySettings.isUsingEconomy())
+            	town.setBalance(0);
             plugin.updateCache();
 
             getDataSource().deleteTown(town);
             getDataSource().saveTownList();
             getDataSource().saveWorld(world);
 
-        setChanged();
-        notifyObservers(REMOVE_TOWN);
+            setChanged();
+            notifyObservers(REMOVE_TOWN);
         }
 
         public void removeResident(Resident resident) {
@@ -1350,6 +1372,9 @@ public class TownyUniverse extends TownyObject {
         getDataSource().deleteResident(resident);               
         
         residents.remove(name.toLowerCase());
+        // Clear accounts
+        if(TownySettings.isUsingEconomy())
+        	resident.setBalance(0);
         plugin.deleteCache(name);
         getDataSource().saveResidentList();
           
@@ -1382,7 +1407,7 @@ public class TownyUniverse extends TownyObject {
                 // Move the plot to be restored
                 if (townBlock.getWorld().isUsingPlotManagementRevert()) {
                 	PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
-                	if (plotData != null) {
+                	if (plotData != null && !plotData.getBlockList().isEmpty()) {
                 		TownyRegenAPI.addPlotChunk(plotData, true);
                 	}
                 }
@@ -1393,29 +1418,37 @@ public class TownyUniverse extends TownyObject {
         
 		public void deleteTownBlockIds(TownBlock townBlock) {
         	
-        	Block block = null;
+        	//Block block = null;
+        	World world = null;
         	int plotSize = TownySettings.getTownBlockSize();
         	
         	plugin.sendDebugMsg("Processing deleteTownBlockIds");
         	
         	try {
-				World world = plugin.getServerWorld(townBlock.getWorld().getName());
+				world = plugin.getServerWorld(townBlock.getWorld().getName());
+				/*
+				if (!world.isChunkLoaded(MinecraftTools.calcChunk(townBlock.getX()), MinecraftTools.calcChunk(townBlock.getZ())))
+					return;
+				*/
 				int height = world.getMaxHeight()-1;
 				int worldx = townBlock.getX()*plotSize, worldz = townBlock.getZ()*plotSize;
 				
 				for (int z = 0; z < plotSize; z++)
 	        		for (int x = 0; x < plotSize; x++)
 	        			for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-	        				block = world.getBlockAt(worldx + x, y, worldz + z);
+	        				Block block = world.getBlockAt(worldx + x, y, worldz + z);
 	        				if (townBlock.getWorld().isPlotManagementDeleteIds(block.getTypeId())) {
 	        					block.setType(Material.AIR);
-	        				}	
+	        				}
+	        				block = null;
 	        			}
 			} catch (NotRegisteredException e1) {
 				// Failed to get world.
 				e1.printStackTrace();
 			}
         	
+        	//block = null;
+        	world = null;        	
         }
         
 		/**
@@ -1426,23 +1459,28 @@ public class TownyUniverse extends TownyObject {
 		 */
 		public void deleteTownBlockMaterial(TownBlock townBlock, int material) {
         	
-        	Block block = null;
+        	//Block block = null;
         	int plotSize = TownySettings.getTownBlockSize();
         	
         	plugin.sendDebugMsg("Processing deleteTownBlockId");
         	
         	try {
 				World world = plugin.getServerWorld(townBlock.getWorld().getName());
+				/*
+				if (!world.isChunkLoaded(MinecraftTools.calcChunk(townBlock.getX()), MinecraftTools.calcChunk(townBlock.getZ())))
+					return;
+				*/
 				int height = world.getMaxHeight()-1;
 				int worldx = townBlock.getX()*plotSize, worldz = townBlock.getZ()*plotSize;
 				
 				for (int z = 0; z < plotSize; z++)
 	        		for (int x = 0; x < plotSize; x++)
 	        			for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-	        				block = world.getBlockAt(worldx + x, y, worldz + z);
+	        				Block block = world.getBlockAt(worldx + x, y, worldz + z);
 	        				if (block.getTypeId() == material) {
 	        					block.setType(Material.AIR);
-	        				}	
+	        				}
+	        				block = null;
 	        			}
 			} catch (NotRegisteredException e1) {
 				// Failed to get world.

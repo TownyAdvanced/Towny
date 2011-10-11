@@ -34,6 +34,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
     		this.tag = text.toUpperCase();
     		if (this.tag.matches(" "))
     			this.tag = "";
+    		setChangedName(true);
     	}
 
     	public String getTag() {

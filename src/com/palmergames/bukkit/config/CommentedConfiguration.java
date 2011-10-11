@@ -1,32 +1,59 @@
 package com.palmergames.bukkit.config;
 
 import com.palmergames.util.FileMgmt;
-import org.bukkit.util.config.Configuration;
+
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
 /**
  * @author dumptruckman
  */
-public class CommentedConfiguration extends Configuration {
+public class CommentedConfiguration extends YamlConfiguration {
 
     private HashMap<String, String> comments;
     private File file;
-
-    
+   
 
     public CommentedConfiguration(File file) {
-        super(file);
+        super();
+        //this.load(file);
         comments = new HashMap<String, String>();
         this.file = file;
     }
+    
+    public boolean load() {
+    	
+    	boolean loaded = true;
+    	
+    	try {
+			this.load(file);
+		} catch (FileNotFoundException e) {
+			loaded = false;
+		} catch (IOException e) {
+			loaded = false;
+		} catch (InvalidConfigurationException e) {
+			loaded = false;
+		}
+    	
+    	return loaded;
+    }
 
-    @Override
     public boolean save() {
+    	
+    	boolean saved = true;
+    	
         // Save the config just like normal
-        boolean saved = super.save();
+    	try {
+    		super.save(file);
+    	} catch (Exception e) {
+    		saved = false;
+    	}
+       
 
         // if there's comments to add and it saved fine, we need to add comments
         if (!comments.isEmpty() && saved) {
@@ -66,14 +93,14 @@ public class CommentedConfiguration extends Configuration {
                                 break;
                             }
                         }
-                        // Find out if the current depth (whitespace * 4) is greater/lesser/equal to the previous depth
-                        if (whiteSpace / 4 > depth) {
+                        // Find out if the current depth (whitespace * 2) is greater/lesser/equal to the previous depth
+                        if (whiteSpace / 2 > depth) {
                             // Path is deeper.  Add a . and the node name
                             currentPath += "." + line.substring(whiteSpace, index);
                             depth++;
-                        } else if (whiteSpace / 4 < depth) {
-                            // Path is shallower, calculate current depth from whitespace (whitespace / 4) and subtract that many levels from the currentPath
-                            int newDepth = whiteSpace / 4;
+                        } else if (whiteSpace / 2 < depth) {
+                            // Path is shallower, calculate current depth from whitespace (whitespace / 2) and subtract that many levels from the currentPath
+                            int newDepth = whiteSpace / 2;
                             for (int i = 0; i < depth - newDepth; i++) {
                                 currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
                             }
@@ -126,11 +153,14 @@ public class CommentedConfiguration extends Configuration {
             }
             try {
                 // Write the string to the config file
+            	System.out.print("Saving Commented Config...");
                 FileMgmt.stringToFile(newContents, file);
             } catch (IOException e) {
                 saved = false;
+                System.out.print("Failed to save Commented Config!");
             }
-        }
+        } else
+        	System.out.print("Not updating Config.");
 
         return saved;
     }
@@ -145,7 +175,7 @@ public class CommentedConfiguration extends Configuration {
         String leadingSpaces = "";
         for (int n = 0; n < path.length(); n++) {
             if (path.charAt(n) == '.') {
-                leadingSpaces += "    ";
+                leadingSpaces += "  ";
             }
         }
         for (String line : commentLines) {

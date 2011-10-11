@@ -5,7 +5,6 @@ import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.nijikokun.register.payment.Method.MethodAccount;
 import com.nijikokun.register.payment.Methods;
 
@@ -23,7 +22,7 @@ public class TownyEconomyObject extends TownyObject {
             if(canPayFromHoldings(n))
             {
                 plugin.sendDebugMsg("Can Pay: " + n);
-                if(TownySettings.isUsingRegister())
+                if(plugin.isRegister())
                 	((MethodAccount) getEconomyAccount()).subtract(n);
                 else
                 	((Account) getEconomyAccount()).getHoldings().subtract(n);
@@ -35,7 +34,7 @@ public class TownyEconomyObject extends TownyObject {
         /* When collecting money add it to the Accounts bank */
         public void collect(double n) throws EconomyException 
         {
-        	if(TownySettings.isUsingRegister())
+        	if(plugin.isRegister())
         		((MethodAccount) getEconomyAccount()).add(n);
         	else
         		((Account) getEconomyAccount()).getHoldings().add(n);
@@ -60,28 +59,49 @@ public class TownyEconomyObject extends TownyObject {
                         return getName();
         }
 
-        /*
-        public double getBankBalance() throws IConomyException 
+        public void setBalance(double value) 
         {
-                try
-                {
-                        checkIConomy();
-                        return iConomy.getAccount(getIConomyName()).getBankHoldings(0).balance();
-                }
-                catch(NoClassDefFoundError e)
-                {
-                        e.printStackTrace();
-                        throw new IConomyException("IConomy error getting balance for " + getIConomyName());
-                }
+        	try
+            {            	
+            	if(plugin.isRegister()) {
+            		MethodAccount account = (MethodAccount)getEconomyAccount();
+            		if(account!=null) {
+                        account.set(value);                        
+                    }
+                    else
+                    {
+                        plugin.sendDebugMsg("Account is still null!");
+                    }
+            	} else {
+            		Account account = (Account)getEconomyAccount();
+            		if(account!=null) {
+                        account.getHoldings().set(value);
+                    }
+                    else
+                    {
+                        plugin.sendDebugMsg("Account is still null!");
+                    }
+            	}
+
+                
+            }
+            catch(NoClassDefFoundError e)
+            {
+                e.printStackTrace();
+                plugin.sendDebugMsg("Economy error getting holdings from " + getEconomyName());
+            } catch (EconomyException e) {
+            	e.printStackTrace();
+            	plugin.sendDebugMsg("Economy error getting Account for " + getEconomyName());
+			}
         }
-        */
+        
         public double getHoldingBalance() throws EconomyException
         {
                 try
                 {
                 	plugin.sendDebugMsg("Economy Balance Name: " + getEconomyName());
                 	
-                	if(TownySettings.isUsingRegister()) {
+                	if(plugin.isRegister()) {
                 		MethodAccount account = (MethodAccount)getEconomyAccount();
                 		if(account!=null) {
                         	plugin.sendDebugMsg("Economy Balance: " + account.balance());
@@ -103,9 +123,7 @@ public class TownyEconomyObject extends TownyObject {
                             plugin.sendDebugMsg("Account is still null!");
                             return 0;
                         }
-                	}
-
-                    
+                	} 
                 }
                 catch(NoClassDefFoundError e)
                 {
@@ -113,97 +131,28 @@ public class TownyEconomyObject extends TownyObject {
                         throw new EconomyException("Economy error getting holdings for " + getEconomyName());
                 }
         }
-        
-        /*Gets the Players bank account, if it does not exist it creates one and makes it their main*/
-        /*
-        public BankAccount getIConomyBankAccount() throws IConomyException
-        {
-            try
-            {
-                BankAccount baccount = iConomy.getAccount(getIConomyName()).getMainBankAccount();
-                if(baccount!=null)
-                {
-                        plugin.sendDebugMsg("Got Bank Account: " + baccount.toString());
-                    return baccount;
-                }
-                else
-                {
-                        plugin.sendDebugMsg("Creating Bank Account");
-                    Bank bank = iConomy.getBank(getIConomyName());
-                    int count = iConomy.Banks.count(getIConomyName());
-                    //plugin.sendDebugMsg("Bank: " + bank.toString());
-                    if(bank==null)
-                    {
-                        plugin.sendDebugMsg("Bank was Null");
-                        String test = getIConomyName();
-                        plugin.sendDebugMsg(test);
-                        bank.createAccount(getIConomyName());
-                        plugin.sendDebugMsg("Making Account: " + getIConomyName());
-                        if (count == 0)
-                        {
-                                plugin.sendDebugMsg("Player has 0 Accounts, Making this their main");
-                            iConomy.getAccount(getIConomyName()).setMainBank(bank.getId());
-                        }
-                    }
-                    return iConomy.getAccount(getIConomyName()).getMainBankAccount();
-                }
-            }
-                    
-            catch(NoClassDefFoundError e)
-            {
-                    e.printStackTrace();
-                    throw new IConomyException("IConomy error getting Bank: " + getIConomyName());
-            }
-        }
-        
-        public Holdings getEconomyHolding() throws EconomyException
-        {
-        	try
-                {
-                	return iConomy.getAccount(getEconomyName()).getHoldings();
-                }
-                catch(NoClassDefFoundError e)
-                {
-                    e.printStackTrace();
-                    throw new EconomyException("Economy error. Incorrect install.");
-                }
-        }
-        */
 
         public Object getEconomyAccount() throws EconomyException 
         {
-                try 
-                {
-                	if(TownySettings.isUsingRegister()) {
-                		if(Methods.getMethod().hasAccount(getEconomyName()))
-                		{
-                			plugin.sendDebugMsg("Economy Has account: true");
-                			
-                			MethodAccount account = Methods.getMethod().getAccount(getEconomyName());
-                			if(account!=null)
-                            {
-                                return account;
-                            }
-                			
-                		}
-                	} else if(TownySettings.isUsingIConomy()){
-                        if(iConomy.hasAccount(getEconomyName()));
-                        {
-                            Account account = iConomy.getAccount(getEconomyName());
-                            if(account!=null)
-                            {
-                                return account;
-                            }
-                        }
-                	}
-                    return null;
-                } 
-                catch (NoClassDefFoundError e) 
-                {
-                        e.printStackTrace();
-                        throw new EconomyException("Economy error. Incorrect install.");
-                }
-                
+        	try 
+            {
+            	if(plugin.isRegister()) { 
+            		
+            		if (!Methods.getMethod().hasAccount(getEconomyName()))
+            			Methods.getMethod().createAccount(getEconomyName());
+            		
+            		return Methods.getMethod().getAccount(getEconomyName());
+            		
+            	} else if(plugin.isIConomy()){
+                            return iConomy.getAccount(getEconomyName());
+            	}
+                return null;
+            } 
+            catch (NoClassDefFoundError e) 
+            {
+                e.printStackTrace();
+                throw new EconomyException("Economy error. Incorrect install.");
+            }                
         }
         
         public boolean canPayFromHoldings(double n) throws EconomyException 
@@ -213,42 +162,26 @@ public class TownyEconomyObject extends TownyObject {
                 else
                         return false;
         }
-
-        /*
-        public boolean canPayFromBank(double n) throws IConomyException 
-        {
-                if(getIConomyBankAccount().getHoldings().hasEnough(getBankBalance() - n ))
-                        return true;
-                else
-                        return false;
-        }
-        */
         
-        public static void checkIConomy() throws EconomyException {
+        public static void checkEconomy() throws EconomyException {
                 
-                if(TownySettings.isUsingRegister()) {
+                if(plugin.isRegister()) {
                 	return;
-                } else if(TownySettings.isUsingIConomy()){
+                } else if(plugin.isIConomy()){
                 	return;
                 } else
                 	throw new EconomyException("No Economy plugins are configured.");
-
-                /*
-                Plugin test = plugin.getServer().getPluginManager().getPlugin("iConomy");
-                
-                try {
-                        if (test != null)
-                                return (iConomy) test;
-                        else
-                                throw new EconomyException("IConomy has not been installed.");
-                } catch (Exception e) {
-                        throw new EconomyException("Incorrect iConomy plugin. Try updating.");
-                }
-                */
         }
         
         public static String getEconomyCurrency() {
-                return "";      
+        	if(plugin.isRegister()) {
+        		String[] split = Methods.getMethod().format(0).split("0");
+        		return split[split.length-1].trim();
+        	} else if(plugin.isIConomy()){
+        		String[] split = iConomy.format(0).split("0");
+        		return split[split.length-1].trim();
+        	}
+        	return ""; 
         }
         
         /* Used To Get Balance of Players holdings in String format for printing*/
@@ -256,9 +189,9 @@ public class TownyEconomyObject extends TownyObject {
 			try {
 				double balance = getHoldingBalance();
 				try {
-					if(TownySettings.isUsingRegister()) {
+					if(plugin.isRegister()) {
 						return Methods.getMethod().format(balance);
-					} else if(TownySettings.isUsingIConomy()){
+					} else if(plugin.isIConomy()){
 						return iConomy.format(balance);
 					}
 					
@@ -269,17 +202,18 @@ public class TownyEconomyObject extends TownyObject {
 			        return "Error Accessing Bank Account";
 			}
 		}
-        
-        
-        /* Used To Get Balance of Players Bank in String format for printing*/
-        /*
-        @SuppressWarnings("static-access")
-        public String getBankFormattedBalance() {
-                try {
-                        return iConomy.format(getBankBalance());
-                } catch (IConomyException e) {
-                        return "0 " + getIConomyCurrency();
-                }
-        }
-        */
+		
+		public static String getFormattedBalance(double balance) {
+
+			try {
+				if(plugin.isRegister()) {
+					return Methods.getMethod().format(balance);
+				} else if(plugin.isIConomy()){
+					return iConomy.format(balance);
+				}
+				
+			} catch (Exception eInvalidAPIFunction) {
+			}
+			return String.format("%.2f", balance);
+		}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.naming.InvalidNameException;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +25,7 @@ import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.EmptyTownException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
+import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -293,7 +295,7 @@ public class TownCommand implements CommandExecutor  {
                                                 //town.setPVP(true);
                                                 throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
                                         }
-                                        if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.toggle.pvp"))) {
+                                        if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.toggle.pvp"))) {
                                     		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                     		return;
                                     	}
@@ -306,7 +308,7 @@ public class TownCommand implements CommandExecutor  {
                                 }       
                         } else if (split[0].equalsIgnoreCase("public")) {
                                 try {
-                                	if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.toggle.public"))) {
+                                	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.toggle.public"))) {
                                 		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                 		return;
                                 	}
@@ -323,7 +325,7 @@ public class TownCommand implements CommandExecutor  {
                                                 //town.setBANG(true);
                                                 throw new TownyException(TownySettings.getLangString("msg_world_expl"));
                                         }
-                                        if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.toggle.explosions"))) {
+                                        if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.toggle.explosions"))) {
                                     		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                     		return;
                                     	}
@@ -340,7 +342,7 @@ public class TownCommand implements CommandExecutor  {
                                                 //town.setFire(true);
                                                 throw new TownyException(TownySettings.getLangString("msg_world_fire"));
                                         }
-                                        if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.toggle.fire"))) {
+                                        if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.toggle.fire"))) {
                                     		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                     		return;
                                     	}
@@ -357,7 +359,7 @@ public class TownCommand implements CommandExecutor  {
                                                 //town.setHasMobs(true);
                                                 throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
                                         }
-                                        if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.toggle.mobs"))) {
+                                        if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.toggle.mobs"))) {
                                     		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                     		return;
                                     	}
@@ -552,7 +554,7 @@ public class TownCommand implements CommandExecutor  {
                                         plugin.sendErrorMsg(player, "Eg: /town set name BillyBobTown");
                                         return;
                                 } else
-                                	if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.rename"))) {
+                                	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.rename"))) {
                                 		plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                 		return;
                                 	}
@@ -730,7 +732,7 @@ public class TownCommand implements CommandExecutor  {
                         if (universe.isWarTime())
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
-                        if (!plugin.isTownyAdmin(player) && (TownySettings.isTownCreationAdminOnly() ||  (!plugin.hasPermission(player, "towny.town.new"))))
+                        if (!plugin.isTownyAdmin(player) && (TownySettings.isTownCreationAdminOnly() ||  (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.new"))))
                                 throw new TownyException(TownySettings.getNotPermToNewTownLine());
                         
                         if (TownySettings.hasTownLimit() && universe.getTowns().size() >= TownySettings.getTownLimit())
@@ -783,18 +785,6 @@ public class TownCommand implements CommandExecutor  {
                 town.setHomeBlock(townBlock);
                 town.setSpawn(spawn);
                 //world.addTown(town);
-                
-                if (world.isUsingPlotManagementRevert()) {
-                	PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
-            		if (plotChunk != null) {
-            			TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-            		} else {
-            			plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
-            			plotChunk.initialize();
-            		}
-            		TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
-            		plotChunk = null;
-                }
                 
                 if (world.isUsingPlotManagementRevert()) {
                 	PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
@@ -959,6 +949,9 @@ public class TownCommand implements CommandExecutor  {
                 if (travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost))
                 	throw new TownyException(notAffordMSG);
                 
+                // Used later to make sure the chunk we teleport to is loaded.
+                Chunk chunk = town.getSpawn().getWorld().getChunkAt(town.getSpawn().getBlock());
+                
                 // Essentials tests
                 boolean notUsingESS = false;
                 
@@ -977,6 +970,7 @@ public class TownCommand implements CommandExecutor  {
                             }
                             if (!user.isJailed()) {
                                 Teleport teleport = user.getTeleport();
+                                if (!chunk.isLoaded()) chunk.load();
                                 teleport.teleport(town.getSpawn(),null);
                             }
                         } catch (Exception e) {
@@ -990,7 +984,7 @@ public class TownCommand implements CommandExecutor  {
                 // Show message if we are using iConomy and are charging for spawn travel.
                 if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.pay(travelCost, town)) {
                     plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), 
-                    		travelCost + TownyEconomyObject.getEconomyCurrency()));
+                    		TownyEconomyObject.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
                 }
                 
                 
@@ -998,6 +992,7 @@ public class TownCommand implements CommandExecutor  {
                 if(isTownyAdmin) {
                 	if (player.getVehicle() != null)
                 		player.getVehicle().eject();
+                	if (!chunk.isLoaded()) chunk.load();
                     player.teleport(town.getSpawn());
                     return;
                 }
@@ -1012,6 +1007,7 @@ public class TownCommand implements CommandExecutor  {
                     	// Don't use teleport warmup
                     	if (player.getVehicle() != null)
                     		player.getVehicle().eject();
+                    	if (!chunk.isLoaded()) chunk.load();
                         player.teleport(town.getSpawn());
                     }
                 }
@@ -1030,7 +1026,7 @@ public class TownCommand implements CommandExecutor  {
 
                                 if (!resident.isMayor())
                                     throw new TownyException(TownySettings.getLangString("msg_not_mayor"));
-                                if (plugin.isPermissions() && (!plugin.hasPermission(player, "towny.town.delete")))
+                                if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.delete")))
                                 	throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
                                 
                                 plugin.getTownyUniverse().removeTown(town);
@@ -1101,13 +1097,13 @@ public class TownCommand implements CommandExecutor  {
                                 	if (plugin.getServer().matchPlayer(newMember.getName()).isEmpty()) { //Not online
                                         plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
                                         remove.add(newMember);
-                                } else if (!plugin.hasPermission(plugin.getServer().getPlayer(newMember.getName()), "towny.town.resident")) {
+                                	} else if (!TownyUniverse.getPermissionSource().hasPermission(plugin.getServer().getPlayer(newMember.getName()), "towny.town.resident")) {
                                         plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
                                         remove.add(newMember);
-                                } else {
+                                	} else {
                                         town.addResidentCheck(newMember);
                                         townInviteResident(town, newMember);
-                                }
+                                	}
                                 } else {
                                         town.addResidentCheck(newMember);
                                         townInviteResident(town, newMember);
@@ -1452,7 +1448,7 @@ public class TownCommand implements CommandExecutor  {
                                 if (plugin.getTownyUniverse().isWarTime())
                                         throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                 
-                                if (!plugin.isTownyAdmin(player) && plugin.isPermissions() && !plugin.hasPermission(player, "towny.town.claim"))
+                                if (!plugin.isTownyAdmin(player) && plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, "towny.town.claim"))
                                         throw new TownyException(TownySettings.getLangString("msg_no_perms_claim"));
                                 
                                 resident = plugin.getTownyUniverse().getResident(player.getName());
@@ -1495,14 +1491,16 @@ public class TownCommand implements CommandExecutor  {
                                         throw new TownyException("Economy Error");
                                 }
                                 
-                                for (WorldCoord worldCoord : selection)
-                                        townClaim(town, worldCoord);
-
-								TownyUniverse.getDataSource().saveTown(town);
-								TownyUniverse.getDataSource().saveWorld(world);
+                                new TownClaim(plugin, player, town, selection, true, false).start();
                                 
-                                plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
-                                plugin.updateCache();
+                                //for (WorldCoord worldCoord : selection)
+                                //        townClaim(town, worldCoord);
+
+								//TownyUniverse.getDataSource().saveTown(town);
+								//TownyUniverse.getDataSource().saveWorld(world);
+                                
+                                //plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
+                                //plugin.updateCache();
                         } catch (TownyException x) {
                                 plugin.sendErrorMsg(player, x.getError());
                                 return;
@@ -1534,13 +1532,17 @@ public class TownCommand implements CommandExecutor  {
                                 
                                 List<WorldCoord> selection;
                                 if (split.length == 1 && split[0].equalsIgnoreCase("all"))
-                                        townUnclaimAll(town);
+                                	new TownClaim(plugin, player, town, null, false, false).start();
+                                        //townUnclaimAll(town);
                                 else {
                                         selection = TownyUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
                                         selection = TownyUtil.filterOwnedBlocks(town, selection);
                                         
-                                        for (WorldCoord worldCoord : selection)
-                                                townUnclaim(town, worldCoord, false);
+                                        // Set the area to unclaim
+                                        new TownClaim(plugin, player, town, selection, false, false).start();
+                                        
+                                        //for (WorldCoord worldCoord : selection)
+                                        //        townUnclaim(town, worldCoord, false);
         
                                         plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_abandoned_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
                                 }
@@ -1616,7 +1618,7 @@ public class TownCommand implements CommandExecutor  {
                         throw new TownyException("Economy Error");
                 }
         }
-        
+        /*
         public static boolean townClaim(Town town, WorldCoord worldCoord) throws TownyException {               
                 try {
                         TownBlock townBlock = worldCoord.getTownBlock();
@@ -1658,13 +1660,14 @@ public class TownCommand implements CommandExecutor  {
                         throw new TownyException(TownySettings.getLangString("msg_not_claimed_1"));
                 }
         }
-        
+
         public static boolean townUnclaimAll(Town town) {
                 plugin.getTownyUniverse().removeTownBlocks(town);
                 plugin.getTownyUniverse().sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
                 
                 return true;
         }
+        */
         
         private void townWithdraw(Player player, int amount) {
                 Resident resident;

@@ -71,6 +71,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
     		this.tag = text.toUpperCase();
     		if (this.tag.matches(" "))
     			this.tag = "";
+    		setChangedName(true);
     	}
 
     	public String getTag() {
@@ -634,4 +635,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
     public boolean isPublic() {
         return isPublic;
     }
+
+	
 }

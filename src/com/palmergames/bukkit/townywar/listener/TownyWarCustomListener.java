@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.townywar.CellUnderAttack;
 import com.palmergames.bukkit.townywar.TownyWar;
 import com.palmergames.bukkit.townywar.event.CellAttackCanceledEvent;
@@ -95,9 +96,11 @@ public class TownyWarCustomListener extends CustomEventListener {
 					List<WorldCoord> selection = new ArrayList<WorldCoord>();
 					selection.add(worldCoord);
 					TownCommand.checkIfSelectionIsValid(town, selection, false, 0, false);
-					TownCommand.townClaim(town, worldCoord);
-					TownyUniverse.getDataSource().saveTown(town);
-					TownyUniverse.getDataSource().saveWorld(world);
+					new TownClaim(plugin, null, town, selection, true, false).start();
+					
+					//TownCommand.townClaim(town, worldCoord);
+					//TownyUniverse.getDataSource().saveTown(town);
+					//TownyUniverse.getDataSource().saveWorld(world);
 					
 					//TODO
 					//PlotCommand.plotClaim(resident, worldCoord);

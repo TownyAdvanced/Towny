@@ -22,7 +22,7 @@ public class DailyTimerTask extends TownyTimerTask {
                 universe.getPlugin().sendDebugMsg("New Day");
                 
                 // Collect taxes
-                if (TownySettings.isUsingEconomy() && TownySettings.isTaxingDaily()) {
+                if (plugin.isEcoActive() && TownySettings.isTaxingDaily()) {
                         universe.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_day_tax")));
                         try {
                                 universe.getPlugin().sendDebugMsg("Collecting Town Taxes");

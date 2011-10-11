@@ -14,8 +14,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.bukkit.Material;
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
+import org.bukkit.configuration.ConfigurationSection;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -56,8 +55,8 @@ public class TownySettings {
 	};	
 	
 	private static Pattern namePattern = null;      
-	private static CommentedConfiguration config, newConfig;
-	private static Configuration language;
+	private static CommentedConfiguration config, language; //newConfig, 
+	//private static YamlConfiguration language;
 	
 	private static final SortedMap<Integer,Map<TownySettings.TownLevel,Object>> configTownLevel = 
 	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.TownLevel,Object>>(Collections.reverseOrder()));
@@ -104,13 +103,28 @@ public class TownySettings {
 	 * @throws IOException 
 	 */
 	public static void loadTownLevelConfig() throws IOException {
-		ArrayList<ConfigurationNode> levels = new ArrayList<ConfigurationNode>(config.getNodeList("levels.town_level", null));
-		for (ConfigurationNode level : levels) {
-		    newTownLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
+		
+		List<HashMap<String, Object>> levels = config.getList("levels.town_level", null);
+		for (HashMap<String, Object> level : levels) {	
+			
+			newTownLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
+					(String) level.get("namePostfix"), (String) level.get("mayorPrefix"),
+		            (String) level.get("mayorPostfix"), (Integer) level.get("townBlockLimit"),
+		            (Double) level.get("upkeepModifier"));
+			
+		}
+
+		/*
+		HashMap<String, Object> levels = (HashMap<String, Object>) config.getList("levels.town_level", null);
+    	
+    	for (String key: levels.keySet()) {
+    		ConfigurationSection level = (ConfigurationSection) levels.get(key);
+    		newTownLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
 		            level.getString("namePostfix", ""), level.getString("mayorPrefix", ""),
 		            level.getString("mayorPostfix", ""), level.getInt("townBlockLimit", 1),
 		            level.getDouble("upkeepModifier", 1.0));
-		}
+    	}
+    	*/	
 	}
         
 	/**
@@ -123,13 +137,27 @@ public class TownySettings {
      */
 
     public static void loadNationLevelConfig() throws IOException {
-    	ArrayList<ConfigurationNode> levels = new ArrayList<ConfigurationNode>(config.getNodeList("levels.nation_level", null));
-        for (ConfigurationNode level : levels) {
-            newNationLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
+    	
+        List<HashMap<String, Object>> levels = config.getList("levels.nation_level", null);
+        for (HashMap<String, Object> level : levels) {	
+			
+			newNationLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
+					(String) level.get("namePostfix"), (String) level.get("capitalPrefix"),
+                    (String) level.get("capitalPostfix"), (String) level.get("kingPrefix"),
+                    (String) level.get("kingPostfix"), (Double) level.get("upkeepModifier"));
+			
+        }
+        /*
+    	HashMap<String, Object> levels = (HashMap<String, Object>) config.getList("levels.nation_level", null);
+    	
+    	for (String key: levels.keySet()) {
+    		ConfigurationSection level = (ConfigurationSection) levels.get(key);
+    		newNationLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
                     level.getString("namePostfix", ""), level.getString("capitalPrefix", ""),
                     level.getString("capitalPostfix", ""), level.getString("kingPrefix", ""),
                     level.getString("kingPostfix", ""), level.getDouble("upkeepModifier", 1.0));
-        }
+    	}
+    	*/
     }
     
     public static Map<TownySettings.TownLevel,Object> getTownLevel(int numResidents) {
@@ -167,7 +195,6 @@ public class TownySettings {
     }
 
 	public static void loadConfig(String filepath, String version) throws IOException {
-	
 		File file = FileMgmt.CheckYMLExists(new File(filepath));
 		if (file != null) {
 		        
@@ -192,20 +219,22 @@ public class TownySettings {
     	// Load Nation & Town level data into maps.
         loadTownLevelConfig();
         loadNationLevelConfig();
+        
+        ChunkNotification.loadFormatStrings();
     }
 	
 	// This will read the language entry in the config.yml to attempt to load custom languages
 	// if the file is not found it will load the default from resource
 	public static void loadLanguage (String filepath, String defaultRes) throws IOException {               
-	
 		String defaultName = filepath + FileMgmt.fileSeparator() + getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		
 		File file = FileMgmt.unpackLanguageFile(defaultName, defaultRes);
 		if (file != null) {
-		        
+
 			// read the (language).yml into memory
-			language = new Configuration(file);
-			language.load();        
+			language = new CommentedConfiguration(file);
+			language.load();
+       
 		}
 	}
 	
@@ -273,6 +302,10 @@ public class TownySettings {
         }
         return parseSingleLineString(data);
     }
+    
+    public static String getConfigLang(ConfigNodes node) {
+    	return parseSingleLineString(getString(node));
+    }
 
     public static List<Integer> getIntArr(ConfigNodes node) {
         String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
@@ -316,7 +349,7 @@ public class TownySettings {
     }
 
     public static void addComment(String root, String...comments) {
-        newConfig.addComment(root.toLowerCase(), comments);
+        config.addComment(root.toLowerCase(), comments);
     }
     
     /**
@@ -324,33 +357,36 @@ public class TownySettings {
      */
     private static void setDefaults(String version, File file) {
     	
-    	newConfig = new CommentedConfiguration(file);
+    	//newConfig = new CommentedConfiguration(file);
+    	//newConfig.load();
     	
         for (ConfigNodes root : ConfigNodes.values()) {
         	if (root.getComments().length > 0)
         		addComment(root.getRoot(), root.getComments());
         	
-        	if (root == ConfigNodes.LEVELS)
+        	if (root.getRoot() == ConfigNodes.LEVELS.getRoot())
         		setDefaultLevels();
         	else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
         		// Do nothing here as setDefaultLevels configured town and nation levels.
-        	} else if (root == ConfigNodes.VERSION){
-        		setNewProperty(ConfigNodes.VERSION.getRoot(), version);
-        	} else if (root == ConfigNodes.LAST_RUN_VERSION) {
-        		setNewProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), getLastRunVersion(version));
+        	} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()){
+        		setProperty(ConfigNodes.VERSION.getRoot(), version);
+        	} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
+        		setProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), getLastRunVersion(version));
         	} else
-        		setNewProperty(root.getRoot(), (config.getProperty(root.getRoot().toLowerCase()) != null) ? config.getString(root.getRoot().toLowerCase()) : root.getDefault());
+        		setProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.getString(root.getRoot().toLowerCase()) : root.getDefault());
+        	
         }
         
-        config = newConfig;
-        newConfig = null;
+        //config = newConfig;
+        //newConfig = null;
     }
 
     private static void setDefaultLevels() {
         addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "",
                 "# default Town levels.");
-        List<ConfigurationNode> townLevels = new ArrayList<ConfigurationNode>(config.getNodeList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), null));
-        if (townLevels.isEmpty() || townLevels.size() == 0) {
+        List<ConfigurationSection> townLevels = config.getList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
+        
+        if (townLevels == null || townLevels.isEmpty() || townLevels.size() == 0) {
             List<HashMap<String, Object>> levels = new ArrayList<HashMap<String, Object>>();
             HashMap<String, Object> level = new HashMap<String, Object>();
             level.put("numResidents", 0);
@@ -434,14 +470,15 @@ public class TownySettings {
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
-            newConfig.setProperty(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
+            config.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
         } else
-        	newConfig.setProperty(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), config.getProperty(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()));
+        	config.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()));
         
         addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "",
         		"# default Nation levels.");
-        ArrayList<ConfigurationNode> nationLevels = new ArrayList<ConfigurationNode>(config.getNodeList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), null));
-        if (nationLevels.isEmpty() || nationLevels.size() == 0) {
+        List<ConfigurationSection> nationLevels = config.getList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
+        
+        if (nationLevels == null || nationLevels.isEmpty() || nationLevels.size() == 0) {
             List<HashMap<String, Object>> levels = new ArrayList<HashMap<String, Object>>();
             HashMap<String, Object> level = new HashMap<String, Object>();
             level.put("numResidents", 0);
@@ -504,9 +541,9 @@ public class TownySettings {
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
-            newConfig.setProperty(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
+            config.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
         } else
-        	newConfig.setProperty(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), config.getProperty(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()));
+        	config.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()));
     }
 
     public static String[] getRegistrationMsg(String name) {                
@@ -742,7 +779,7 @@ public class TownySettings {
 	public static boolean isNationCreationAdminOnly() {
 		return getBoolean(ConfigNodes.PERMS_NATION_CREATION_ADMIN_ONLY);
 	}
-	
+	/*
 	public static boolean isUsingRegister() {
 		return getBoolean(ConfigNodes.PLUGIN_USING_REGISTER);
 	}
@@ -754,14 +791,15 @@ public class TownySettings {
 	public static boolean isUsingIConomy() {
 		return getBoolean(ConfigNodes.PLUGIN_USING_ICONOMY);
 	}
-	
-	public static boolean isUsingEconomy() {
-		return (isUsingIConomy() || isUsingRegister());
-	}
 
     public static void setUsingIConomy(boolean newSetting) {
         setProperty(ConfigNodes.PLUGIN_USING_ICONOMY.getRoot(), newSetting);
     }
+    */
+    public static boolean isUsingEconomy() {
+    	return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
+		//return (isUsingIConomy() || isUsingRegister());
+	}
         
 	public static boolean isUsingEssentials() {
 		return getBoolean(ConfigNodes.PLUGIN_USING_ESSENTIALS);
@@ -953,15 +991,20 @@ public class TownySettings {
 	}
 	
 	private static void setProperty(String root, Object value) {
-		config.setProperty(root.toLowerCase(), value);
+		config.set(root.toLowerCase(), value);
 	}
-	
+	/*
 	private static void setNewProperty(String root, Object value) {
-		newConfig.setProperty(root.toLowerCase(), value);
+		
+		if (value == null) {
+			//System.out.print("value is null for " + root.toLowerCase());
+			value = "";
+		}
+		newConfig.set(root.toLowerCase(), value);
 	}
-	      
+	*/      
 	public static Object getProperty(String root) {
-		return config.getProperty(root.toLowerCase());
+		return config.get(root.toLowerCase());
 	}
 	
 	public static double getClaimPrice() {
@@ -1213,7 +1256,7 @@ public class TownySettings {
 	}
 	
 	public static int getMaxResidentPlots(Resident resident) {
-		int maxPlots = TownyUniverse.plugin.getGroupPermissionIntNode(resident.getName(), "towny_maxplots");
+		int maxPlots = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), "towny_maxplots");
 	    if (maxPlots == -1) 
 	    	maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
 	    return maxPlots;

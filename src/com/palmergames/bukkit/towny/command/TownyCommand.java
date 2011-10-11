@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -181,7 +182,7 @@ public class TownyCommand implements CommandExecutor {
         
         private void TopCommand(Player player, String[] args) {
                 
-                if (!plugin.isTownyAdmin(player) && (!plugin.hasPermission(player, "towny.top"))) {
+                if (!plugin.isTownyAdmin(player) && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.top"))) {
                         sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                         return;
                 }

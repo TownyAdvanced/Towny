@@ -45,11 +45,9 @@ public class TownyWorld extends TownyObject {
 		isForceExpl = TownySettings.isForcingExplosions();
 		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
 		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
-		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
-		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
 		setPlotManagementRevertSpeed(TownySettings.getPlotManagementSpeed());
-		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());
-		
+		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
+		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());	
 	}
 
 	public List<Town> getTowns() {

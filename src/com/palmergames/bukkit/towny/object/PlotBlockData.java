@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.util.MinecraftTools;
 
 public class PlotBlockData {
 	
@@ -34,8 +35,11 @@ public class PlotBlockData {
 	}
 	
 	public void initialize() {
-		setBlockList(getBlockArr()); //fill array
-		resetBlockListRestored();
+		List<Integer>blocks = getBlockArr();
+		if (blocks != null) {
+			setBlockList(blocks); //fill array
+			resetBlockListRestored();
+		}
 	}
 	
 	/**
@@ -50,8 +54,12 @@ public class PlotBlockData {
         
         try {
         	World world = TownyUniverse.plugin.getServerWorld(worldName);
-			
-			for (int z = 0; z < size; z++)
+        	/*
+        	if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ()))) {
+        		return null;
+        	}
+			*/	
+        	for (int z = 0; z < size; z++)
 	    		for (int x = 0; x < size; x++)
 	    			for (int y = height; y > 0; y--) { // Top down to account for falling blocks.
 	    				block = world.getBlockAt((getX()*size) + x, y, (getZ()*size) + z);
@@ -89,6 +97,9 @@ public class PlotBlockData {
 		
 		try {
 			World world = TownyUniverse.plugin.getServerWorld(worldName);
+			
+			if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ())))
+				return true;
 			
 			//Scale for the number of elements
 			switch (version) {

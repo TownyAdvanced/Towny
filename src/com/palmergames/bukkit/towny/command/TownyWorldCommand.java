@@ -177,8 +177,10 @@ public class TownyWorldCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/worldmobs", ""));
 		} else {
 
-			if ((sender == null) && !plugin.isTownyAdmin(player))
+			if ((sender == null) && !plugin.isTownyAdmin(player)) {
 				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+				return;
+			}
 
 			String msg;
 			

@@ -14,6 +14,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 /**
  * A class of functions related to minecraft in general.
  * 
@@ -67,5 +69,10 @@ public class MinecraftTools {
 	
 	public static boolean isOnline(String playerName) {
 		return Bukkit.getServer().getPlayer(playerName) != null;
+	}
+	
+	public static int calcChunk(int value) {
+		
+		return (value * TownySettings.getTownBlockSize())/16;
 	}
 }

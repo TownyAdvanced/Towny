@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
+//import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -28,7 +28,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 
 public abstract class TownyDataSource {
 	protected TownyUniverse universe;
-	protected TownySettings settings;
+	//protected TownySettings settings;
 	protected Towny plugin;
 	protected boolean firstRun = false;
 

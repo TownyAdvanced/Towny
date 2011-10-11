@@ -16,25 +16,21 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.material.Attachable;
 
+import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.object.BlockLocation;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.util.Colors;
 
 
 /**
@@ -247,7 +243,7 @@ public class TownyPlayerListener extends PlayerListener {
 			return;
 		
 	   // Prevent fly/double jump cheats
-		if (TownySettings.isUsingCheatProtection() && !plugin.hasPermission(player, "towny.cheat.bypass"))
+		if (TownySettings.isUsingCheatProtection() && !TownyUniverse.getPermissionSource().hasPermission(player, "towny.cheat.bypass"))
 		   if (event.getEventName() != "PLAYER_TELEPORT" && from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
                     && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6
         			&& (player.getLocation().getY() > 0)) {
@@ -317,84 +313,10 @@ public class TownyPlayerListener extends PlayerListener {
 
 		// Check if player has entered a new town/wilderness
 		if (to.getWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-			boolean fromWild = false, toWild = false, toForSale = false, toHomeBlock = false;
-			TownBlock fromTownBlock, toTownBlock = null;
-			Town fromTown = null, toTown = null;
-			Resident fromResident = null, toResident = null;
-			try {
-				fromTownBlock = from.getTownBlock();
-				try {
-					fromTown = fromTownBlock.getTown();
-				} catch (NotRegisteredException e) {
-				}
-				try {
-					fromResident = fromTownBlock.getResident();
-				} catch (NotRegisteredException e) {
-				}
-			} catch (NotRegisteredException e) {
-				fromWild = true;
-			}
-
-			try {
-				toTownBlock = to.getTownBlock();
-				try {
-					toTown = toTownBlock.getTown();
-				} catch (NotRegisteredException e) {
-				}
-				try {
-					toResident = toTownBlock.getResident();
-				} catch (NotRegisteredException e) {
-				}
-				
-				toForSale = toTownBlock.getPlotPrice() != -1;
-				toHomeBlock = toTownBlock.isHomeBlock();
-			} catch (NotRegisteredException e) {
-				toWild = true;
-			}
-			
-			boolean sendToMsg = false;
-			String toMsg = Colors.Gold + " ~ ";
-
-			if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
-				sendToMsg = true;
-				if (toWild)
-					toMsg += Colors.Green + to.getWorld().getUnclaimedZoneName();
-				else
-					toMsg += TownyFormatter.getFormattedName(toTown);
-			}
-			
-			if (fromResident != toResident && !toWild) {
-				if (!sendToMsg) {
-					sendToMsg = true;
-                    if(toTownBlock.getType().getId() != 0) toMsg += "[" + toTownBlock.getType().toString() + "] ";
-                }
-				else {
-					toMsg += Colors.LightGray + "  -  ";
-                }
-                if (toResident != null)
-					toMsg += Colors.LightGreen + TownyFormatter.getFormattedName(toResident);
-				else
-					toMsg += Colors.LightGreen + TownySettings.getUnclaimedPlotName();
-			}
-			
-			if (toTown != null && (toForSale || toHomeBlock)) {
-				if (!sendToMsg) {
-					sendToMsg = true;
-                    if(toTownBlock.getType().getId() != 0) toMsg += "[" + toTownBlock.getType().toString() + "] ";
-                }
-				else {
-					toMsg += Colors.LightGray + "  -  ";
-                }
-                if (toHomeBlock)
-                toMsg += Colors.LightBlue + "[Home]";
-				if (toForSale)
-					toMsg += Colors.Yellow + String.format(TownySettings.getLangString("For_Sale"), toTownBlock.getPlotPrice());
-			}
-			
-			if (sendToMsg)
-				player.sendMessage(toMsg);
-			
-			//plugin.sendDebugMsg("onPlayerMoveChunk: " + fromWild + " ^ " + toWild + " " + fromTown + " = " + toTown);
+			ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+			String msg = chunkNotifier.getNotificationString();
+			if (msg != null)
+				player.sendMessage(msg);
 		}
 	}
 }
