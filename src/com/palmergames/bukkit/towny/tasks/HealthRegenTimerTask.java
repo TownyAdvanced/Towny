@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
@@ -33,7 +34,8 @@ private Server server;
 				TownBlock townBlock = world.getTownBlock(coord);
 					
 				if (universe.isAlly(townBlock.getTown(), universe.getResident(player.getName()).getTown()))
-					incHealth(player);
+					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
+						incHealth(player);
 			} catch (TownyException x) {
 			}
 		}

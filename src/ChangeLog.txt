@@ -700,3 +700,81 @@ v0.76.2.10:
 	- Update for Bukkit 1317's new YamlConfiguration.
 v0.76.3.0:
 	- Release.
+v0.76.3.1:
+	- Fixed overwriting of config.yml.
+v0.76.3.2:
+	- Code change due to PEX changing .has() to static (PEX 1.15).
+	- Animals in towns can now only be killed by residents of that town. Unless PVP is enabled.
+v0.76.3.3:
+	- TownBlocks reposessed by the Mayor/Assistants now correctly remove the block from the Residents data files.
+	- Added Plot level permissions and commands to control them.
+	  '/plot perm' displays the current plots permissions.
+	  '/plot set perm [on/off] or [resident/friend/ally/outsider] [build/destroy/switch/itemuse] [on/off]'
+	- Added 23 and 107 to Switch Id's (Dispenser and Fence Gate).
+	- Changed saving of engligh.yml to ansi until bukkit fix their utf-8 support.
+V0.76.3.4:
+	- Added 57 (diamond block), 22 (lazuli block), 41 (gold block), 42 (iron block) to plot_management.revert_on_unclaim.block_ignore.
+	- Removed redundant code in '/ta unclaim' for clearing a resident data. It's already handled in TownyUniverse.
+	- Fixed TownClaim/unclaim thread not correctly selecting the town when the command was issued by an admin.
+	- Towny will now kick players who use hacked clients and join with no name, rather than crash.
+	- Moved all Towny messaging to it's own class. Depreciated old methods in TownyUniverse.
+	- All '/ta' commands are now accessable ingame and at the console, excluding '/ta town/nation name add' for console.
+	- Fixed an error with the new bukkit config failing to set a value (debug/devmode etc)
+	- Temporary fix for prefixes not being updated in Towny when a player changes permissions groups etc.
+v0.76.3.5:
+	- Revert the PEX change as they reverted their change of .has() for release.
+v0.76.3.6:
+	- Added Embassy plots. These may be leased by anyone, so long as they belong to a town (they don't have to be a member of the plot owning town).
+	- New commands:-
+	  '/plot set embassy'
+	  '/town set embassyprice $' - Sets the default price for Embassy plots (can be overridden by '/plot fs $')
+	  '/town set embassytax $'   - This is charged on top of the towns normal plot tax.
+	- Changed response when setting resident/plot/town perms to be more readable.
+v0.76.3.7:
+	- Fixed '/town claim' which I broke when fixing admin unclaim.
+v0.76.3.8:
+	- When claiming/unclaiming groups of TownBlocks the message will no longer spam up your screen with the plot list.
+	- Embassy plots now show up on the map as 'E'.
+	- Threaded plot claim/unclaim to eliminate lag on LARGE claims.
+	- plot claiming now supports the all suffix (/plot unclaim all).'
+	- Capped claiming by radius to 1000 TownBlocks.
+v0.76.3.9:
+	- Reduced default plots per resident to 8, instead of 16 (town_block_ratio).
+	- Added settings for Questioner accept/deny so server admins can change the default commands to accept or deny invites.
+	- Added Arena plots. These plots default to PVP enabled, and can not have PVP disabled.
+	- Added plot toggle commands...
+	  '/plot toggle pvp'
+	  '/plot toggle fire'
+	  '/plot toggle explosion'
+	  '/plot toggle mobs'
+v0.76.3.10:
+	- Arena plots now ignore Friendly fire settings.
+	- Town Health Regen is now disabled in Arean plots.
+v0.76.3.11:
+	- Added protection from Enderman griefing (if town mobs are off).
+	- Added unclaimed_zone_enderman_protect to prevent endermen moving blocks in the wild.
+	- Entity Attack Permissions: Always allow attacks in Warzones and enemy towns, regardless of town or world PvP settings.
+	- Warzones now have their own block permissions (block/switch/item use/fire/explosion). Explosions can also be configured to allow damage, but prevent block breaks.
+	- Warzones will now no longer follow world or town pvp settings (they are always PvP).
+	- Changed EcoObject function pay(n, collector) -> payTo
+	- Added reason argument for all eco functions. Will be put in money log along with transaction details.
+	- logs folder is now placed in backups.
+	- Debug now has it's own log file when it's turned on.
+	- Towny/logs/money.csv is in the format 'timestamp,reason,obj,amount,collector'. In the case that there is no collector or obj, [Server] is entered. towny-war-spoils is shown as '[Server] towny-war-spoils'.
+	- Town and Nation economy accounts are now restricted to 32 characters in length.
+v0.76.2.12:
+	- Possible fix for Essentials teleport refusing to engage and towny defaulting to it's own timer.
+	- Moved all chat handling to a seperate jar (TownyChat.jar).
+	  TownyChat is a Fully functional chat manager. If it's enabled it will handle all chat and supports custom chat channels.
+	  This new system supports total customization of chat.
+	  It supports custom chat channels, with access control via permission nodes.
+	  Current channels are:-
+	    /tc (town chat) permission node: towny.chat.town
+	    /nc (nation chat) permission node: towny.chat.nation
+	    /a (admin chat) permission node: towny.chat.admin
+	    /m (moderators chat) permission node: towny.chat.mod
+	  TownyChat also supports other chat plugins (herochat, iChat etc). To use another chat plugin with Towny...
+	    Set modify_chat.enable : false
+	    Then add any of the towny tags into your chat plugins format line.
+v0.77.0.0:
+	- Release.

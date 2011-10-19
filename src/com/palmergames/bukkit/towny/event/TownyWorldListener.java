@@ -7,6 +7,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
@@ -35,7 +36,7 @@ public class TownyWorldListener extends WorldListener {
 			plugin.getTownyUniverse().newWorld(worldName);
 			TownyWorld world = TownyUniverse.getWorld(worldName);
 			if (world == null)
-				plugin.sendErrorMsg("Could not create data for " + worldName);
+				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
 				if (!TownyUniverse.getDataSource().loadWorld(world)) {
 					// First time world has been noticed
@@ -45,7 +46,7 @@ public class TownyWorldListener extends WorldListener {
 		} catch (AlreadyRegisteredException e) {
 			// Allready loaded			
 		} catch (NotRegisteredException e) {
-			plugin.sendErrorMsg("Could not create data for " + worldName);
+			TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			e.printStackTrace();
 		}
 		

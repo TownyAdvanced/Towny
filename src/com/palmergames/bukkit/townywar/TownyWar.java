@@ -13,6 +13,7 @@ import org.bukkit.event.Cancellable;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUtil;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -36,8 +37,8 @@ public class TownyWar {
 	}
 	
 	public static void onDisable() {
-		for (CellUnderAttack cell : cellsUnderAttack.values()) {
-			cell.destroyFlag();
+		for (CellUnderAttack cell : new ArrayList<CellUnderAttack>(cellsUnderAttack.values())) {
+			attackCanceled(cell);
 		}
 	}
 	
@@ -204,7 +205,7 @@ public class TownyWar {
 		universe.addWarZone(worldCoord);
 		plugin.updateCache(worldCoord);
 		
-		universe.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
+		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
 		return true;
 	}
 	

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -86,7 +87,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			try {
 				Globalworld = TownyUniverse.getWorld(player.getWorld().getName());
 			} catch (NotRegisteredException e) {
-				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;
 			}
 		} else {
@@ -116,7 +117,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				for (String line : plugin.getTownyUniverse().getStatus(Globalworld))
 					sender.sendMessage(Colors.strip(line));
 			} else
-				plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(Globalworld));				
+				TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(Globalworld));				
 
 		} else if (split[0].equalsIgnoreCase("?")) {
 			if (player == null) {
@@ -135,7 +136,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			/*
 			try {
 				TownyWorld world = plugin.getTownyUniverse().getWorld(split[0]);
-				plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(world));
+				TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(world));
 			} catch (NotRegisteredException x) {
 				plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
@@ -178,7 +179,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		} else {
 
 			if ((sender == null) && !plugin.isTownyAdmin(player)) {
-				plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
 				return;
 			}
 
@@ -189,9 +190,9 @@ public class TownyWorldCommand implements CommandExecutor  {
 						Globalworld.setClaimable(!Globalworld.isClaimable());
 						msg = String.format(TownySettings.getLangString("msg_set_claim"), Globalworld.getName(), Globalworld.isClaimable() ? "Enabled" : "Disabled");
 						if (player != null)
-							plugin.sendMsg(player, msg);
+							TownyMessaging.sendMsg(player, msg);
 						else
-							plugin.sendMsg(msg);
+							TownyMessaging.sendMsg(msg);
 								
 						
 			} else if (split[0].equalsIgnoreCase("usingtowny")) {
@@ -200,70 +201,70 @@ public class TownyWorldCommand implements CommandExecutor  {
 					plugin.updateCache();
 					msg = String.format(Globalworld.isUsingTowny() ? TownySettings.getLangString("msg_set_use_towny_on") : TownySettings.getLangString("msg_set_use_towny_off"));
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 					
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
 					Globalworld.setPVP(!Globalworld.isPVP());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Global PVP" ,Globalworld.getName(), Globalworld.isPVP() ? "Enabled" : "Disabled");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 
 			} else if (split[0].equalsIgnoreCase("forcepvp")) {
 
 					Globalworld.setForcePVP(!Globalworld.isForcePVP());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "PVP" ,Globalworld.getName(), Globalworld.isForcePVP() ? "Forced" : "Adjustable");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
 					Globalworld.setForceExpl(!Globalworld.isForceExpl());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Explosions", Globalworld.getName(), Globalworld.isForceExpl() ? "Enabled" : "Disabled");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
 
 					Globalworld.setForceFire(!Globalworld.isForceFire());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Fire Spread", Globalworld.getName(), Globalworld.isForceFire() ? "Forced" : "Adjustable");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 				
 			} else if (split[0].equalsIgnoreCase("townmobs")) {
 
 					Globalworld.setForceTownMobs(!Globalworld.isForceTownMobs());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Town Mob spawns", Globalworld.getName(), Globalworld.isForceTownMobs() ? "Forced" : "Adjustable");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 					
 			} else if (split[0].equalsIgnoreCase("worldmobs")) {
 
 					Globalworld.setWorldMobs(!Globalworld.hasWorldMobs());
 					msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "World Mob spawns", Globalworld.getName(), Globalworld.hasWorldMobs() ? "Enabled" : "Disabled");
 					if (player != null)
-						plugin.sendMsg(player, msg);
+						TownyMessaging.sendMsg(player, msg);
 					else
-						plugin.sendMsg(msg);
+						TownyMessaging.sendMsg(msg);
 					
 			} else {
 				msg = String.format(TownySettings.getLangString("msg_err_invalid_property"), "'" + split[0] + "'");
 				if (player != null)
-					plugin.sendErrorMsg(player, msg);
+					TownyMessaging.sendErrorMsg(player, msg);
 				else
-					plugin.sendErrorMsg(msg);
+					TownyMessaging.sendErrorMsg(msg);
 				return;
 			}
 			
@@ -290,7 +291,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				//Globalworld = plugin.getTownyUniverse().getWorld(player.getWorld().getName());
 			} catch (TownyException x) {
-				plugin.sendErrorMsg(player, x.getError());
+				TownyMessaging.sendErrorMsg(player, x.getError());
 				return;
 			}
 
@@ -299,7 +300,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				Globalworld.setUsingDefault();
 				plugin.updateCache();
 				if (player != null) 
-					plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 				else
 					sender.sendMessage(String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 				
@@ -309,7 +310,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 					// set default wildperm settings (/tw set wildperm)
 					Globalworld.setUsingDefault();
 					if (player != null)
-						plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 					else
 						sender.sendMessage(String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 				} else
@@ -322,12 +323,12 @@ public class TownyWorldCommand implements CommandExecutor  {
 
 						plugin.updateCache();
 						if (player != null)
-							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
 						else
 							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
 					} catch (Exception e) {
 						if (player != null)
-							plugin.sendErrorMsg(player, "Eg: /townyworld set wildperm build destroy");
+							TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildperm build destroy");
 						else
 							sender.sendMessage("Eg: /townyworld set wildperm build destroy <world>");
 					}
@@ -335,7 +336,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 				
 				if (split.length < 2)
 					if (player != null)
-						plugin.sendErrorMsg(player, "Eg: /townyworld set wildignore 11,25,45,67");
+						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildignore 11,25,45,67");
 					else
 						sender.sendMessage("Eg: /townyworld set wildignore 11,25,45,67 <world>");
 				else
@@ -350,28 +351,28 @@ public class TownyWorldCommand implements CommandExecutor  {
 
 						plugin.updateCache();
 						if (player != null)
-							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
 						else
 							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
 					} catch (Exception e) {
-						plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 					}
 			} else if (split[0].equalsIgnoreCase("wildname")) {
 				if (split.length < 2) {
-					if (player != null) plugin.sendErrorMsg(player, "Eg: /townyworld set wildname Wildy");
+					if (player != null) TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildname Wildy");
 				} else
 					try {
 						Globalworld.setUnclaimedZoneName(split[1]);
 
 						if (player != null)
-							plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_name"), Globalworld.getName(), split[1]));
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_name"), Globalworld.getName(), split[1]));
 						else
 							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_name"), Globalworld.getName(), split[1]));
 					} catch (Exception e) {
-						plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 					}
 			} else {
-				if (player != null) plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "world"));
+				if (player != null) TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "world"));
 				return;
 			}
 

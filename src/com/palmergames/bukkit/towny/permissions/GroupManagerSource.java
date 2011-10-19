@@ -80,6 +80,17 @@ public class GroupManagerSource extends TownyPermissionSource {
     	AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		return handler.has(player, node);    		
     }
+    
+    /**
+     * Returns teh players Group name.
+     * @param player
+     * @return
+     */
+    @Override
+	public String getPlayerGroup(Player player) {
+    	AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
+    	return handler.getGroup(player.getName());
+    }
 	
 	
 }

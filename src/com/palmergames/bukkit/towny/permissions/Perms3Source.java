@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.permissions;
 
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -92,6 +91,18 @@ public class Perms3Source extends TownyPermissionSource {
     }
 	
 	
-	
+    /**
+     * Returns the players Group name.
+     * 
+     * @param player
+     * @return
+     */
+    @Override
+	public String getPlayerGroup(Player player) {
+
+    	PermissionHandler handler = permissions.getHandler();
+    	return handler.getGroup(player.getWorld().getName(), player.getName());
+		
+    }
 	
 }

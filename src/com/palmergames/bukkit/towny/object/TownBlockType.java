@@ -18,14 +18,17 @@ public enum TownBlockType {
         }
     },
 
+    ARENA(2, "arena"){	//Always PVP enabled.
+    },
+
+    EMBASSY(3, "embassy") {  // For other towns to own a plot in your town.
+    	@Override
+        public double getTax(Town town) {
+            return town.getEmbassyPlotTax() + town.getPlotTax();
+        }
+    },
     // These are subject to change:
 /*
-    ARENA(2, ""){  // Will have a y-range where pvp is allowed
-    },
-
-    EMBASSY(3, "") {  // For other towns to own a plot in your town.
-    },
-
     PUBLIC(4, "") {  // Will have it's own permission set
     },
 

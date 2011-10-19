@@ -8,6 +8,7 @@ public class TownyPermission {
 	public boolean residentBuild, residentDestroy, residentSwitch, residentItemUse,
 		outsiderBuild, outsiderDestroy, outsiderSwitch, outsiderItemUse,
 		allyBuild, allyDestroy, allySwitch, allyItemUse;
+	public boolean pvp, fire, explosion, mobs;
 
 	public TownyPermission() {
 		reset();
@@ -30,6 +31,11 @@ public class TownyPermission {
 		allyDestroy = b;
 		allySwitch = b;
 		allyItemUse = b;
+		
+		pvp = b;
+		fire = b;
+		explosion = b;
+		mobs = b;
 	}
 
 	public void set(String s, boolean b) {
@@ -59,6 +65,14 @@ public class TownyPermission {
 			allySwitch = b;
 		else if (s.equalsIgnoreCase("allyItemUse"))
 			allyItemUse = b;
+		else if (s.equalsIgnoreCase("pvp"))
+			pvp = b;
+		else if (s.equalsIgnoreCase("fire"))
+			fire = b;
+		else if (s.equalsIgnoreCase("explosion"))
+			explosion = b;
+		else if (s.equalsIgnoreCase("mobs"))
+			mobs = b;
 	}
 
 	public void load(String s) {
@@ -97,6 +111,15 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "allySwitch";
 		if (allyItemUse)
 			out += (out.length() > 0 ? "," : "") + "allyItemUse";
+		
+		if (pvp)
+			out += (out.length() > 0 ? "," : "") + "pvp";
+		if (fire)
+			out += (out.length() > 0 ? "," : "") + "fire";
+		if (explosion)
+			out += (out.length() > 0 ? "," : "") + "explosion";
+		if (mobs)
+			out += (out.length() > 0 ? "," : "") + "mobs";
 		
 		if (out.length() == 0)
 			out += "denyAll"; // Make the token not empty
@@ -199,5 +222,10 @@ public class TownyPermission {
 		outsiderDestroy = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.DESTROY);
 		outsiderItemUse = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.ITEM_USE);
 		outsiderSwitch = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.SWITCH);
+		
+		pvp = owner.getPermissions().pvp;
+		fire = owner.getPermissions().fire;
+		explosion = owner.getPermissions().explosion;
+		mobs = owner.getPermissions().mobs;
 	}
 }

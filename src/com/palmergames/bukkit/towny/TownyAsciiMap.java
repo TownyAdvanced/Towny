@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
@@ -49,7 +50,7 @@ public class TownyAsciiMap {
 			if (resident.hasTown())
 				hasTown = true;
 		} catch (TownyException x) {
-			plugin.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getError());
 			return;
 		}
 
@@ -57,11 +58,11 @@ public class TownyAsciiMap {
 		try {
 			world = TownyUniverse.getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
-			plugin.sendErrorMsg(player, "You are not in a registered world.");
+			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;
 		}
 		if (!world.isUsingTowny()) {
-			plugin.sendErrorMsg(player, "This world is not using towny.");
+			TownyMessaging.sendErrorMsg(player, "This world is not using towny.");
 			return;
 		}
 		Coord pos = Coord.parseCoord(plugin.getCache(player).getLastLocation());
@@ -116,6 +117,8 @@ public class TownyAsciiMap {
 						townyMap[y][x] += "$";
 					else if (townblock.isHomeBlock())
 						townyMap[y][x] += "H";
+					else if (townblock.getType().equals(TownBlockType.EMBASSY))
+						townyMap[y][x] += "E";
 					else
 						townyMap[y][x] += "+";
 				} catch (TownyException e) {
@@ -157,7 +160,7 @@ public class TownyAsciiMap {
 		// Current town block data
 		try {
 			TownBlock townblock = world.getTownBlock(pos);
-			plugin.sendMsg(player, ("Town: " + (townblock.hasTown() ? townblock.getTown().getName() : "None") + " : "
+			TownyMessaging.sendMsg(player, ("Town: " + (townblock.hasTown() ? townblock.getTown().getName() : "None") + " : "
 					+ "Owner: " + (townblock.hasResident() ? townblock.getResident().getName() : "None")));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());

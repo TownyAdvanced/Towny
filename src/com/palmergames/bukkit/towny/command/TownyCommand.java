@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUtil;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -90,7 +91,7 @@ public class TownyCommand implements CommandExecutor {
                         else if (args[0].equalsIgnoreCase("tree"))
                                 plugin.getTownyUniverse().sendUniverseTree(sender);
                         else if (args[0].equalsIgnoreCase("time"))
-                            plugin.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                        	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
                         else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
                                 sender.sendMessage(Colors.strip(towny_version));
                         else if (args[0].equalsIgnoreCase("war")){
@@ -148,7 +149,7 @@ public class TownyCommand implements CommandExecutor {
                 } else if (split[0].equalsIgnoreCase("tree")) {
                         consoleUseOnly(player);
                 } else if (split[0].equalsIgnoreCase("time")) {       
-                        plugin.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                	TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
                 } else if (split[0].equalsIgnoreCase("universe")) {
                         for (String line : getUniverseStats())
                                 player.sendMessage(line);               
@@ -415,7 +416,7 @@ public class TownyCommand implements CommandExecutor {
         }
         
         public void consoleUseOnly(Player player) {
-                plugin.getTownyUniverse().getPlugin().sendErrorMsg(player, "This command was designed for use in the console only.");
+        	TownyMessaging.sendErrorMsg(player, "This command was designed for use in the console only.");
         }
         
         public void inGameUseOnly(CommandSender sender) {
@@ -425,7 +426,7 @@ public class TownyCommand implements CommandExecutor {
         public boolean sendErrorMsg(CommandSender sender, String msg) {
                 if (sender instanceof Player) {
                         Player player = (Player)sender;
-                        plugin.getTownyUniverse().getPlugin().sendErrorMsg(player, msg);
+                        TownyMessaging.sendErrorMsg(player, msg);
                 } else
                         // Console
                         sender.sendMessage("[Towny] ConsoleError: " + msg);

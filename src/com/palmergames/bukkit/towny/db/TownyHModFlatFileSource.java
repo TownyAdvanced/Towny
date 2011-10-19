@@ -10,6 +10,7 @@ import org.bukkit.World;
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -59,7 +60,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 	
 	@Override
 	public boolean loadWorldList() {
-		plugin.sendDebugMsg("Loading World List");
+		TownyMessaging.sendDebugMsg("Loading World List");
 		if (plugin != null) {
 			sendDebugMsg("Loading Server World List");
 			for (World world : plugin.getServer().getWorlds())

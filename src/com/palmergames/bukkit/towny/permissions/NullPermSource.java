@@ -45,5 +45,17 @@ public class NullPermSource extends TownyPermissionSource {
 		// using no permissions provider
     	return false;
     }
+    
+    /**
+     * Returns the players Group name.
+     * 
+     * @param player
+     * @return
+     */
+    @Override
+	public String getPlayerGroup(Player player) {
+    	// using no permissions provider
+    	return "";	
+    }
 	
 }

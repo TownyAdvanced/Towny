@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.76.3.0
+version: 0.77.0.0
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -20,10 +20,6 @@ commands:
         aliases: []
     nation:
         aliases: [n, nat]
-    nationchat:
-        aliases: [nc]
-    townchat:
-        aliases: [tc]
     plot:
         aliases: []
     resident:
@@ -46,6 +42,7 @@ permissions:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
         default: op
         children:
+            towny.chat.*: true
             towny.town.*: true
             towny.nation.*: true
             towny.wild.*: true
@@ -60,6 +57,7 @@ permissions:
         description: User can access all town commands.
         default: op
         children:
+            towny.chat.town: true
             towny.town.new: true
             towny.town.delete: true
             towny.town.rename: true
@@ -101,6 +99,7 @@ permissions:
         description: User has access to all nation commands.
         default: op
         children:
+            towny.chat.nation: true
             towny.nation.new: true
             towny.nation.delete: true
             towny.nation.rename: true
@@ -190,5 +189,25 @@ permissions:
         default: false
     towny.wild.block.*.item_use:
         description: User can use specified block types in the wild.
+        default: false
+    towny.chat.*:
+        description: User is able to use all chat channels.
+        default: op
+        children:
+            towny.chat.admin: true
+            towny.chat.mod: true
+            towny.chat.town: true
+            towny.chat.nation: true
+    towny.chat.admin:
+        description: User is able to talk in the admin channel
+        default: false
+    towny.chat.mod:
+        description: User is able to talk in the mod channel
+        default: false
+    towny.chat.town:
+        description: User is able to talk in the town channel
+        default: false
+    towny.chat.nation:
+        description: User is able to talk in the nation channel
         default: false
         

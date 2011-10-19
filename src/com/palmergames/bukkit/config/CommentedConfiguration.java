@@ -54,7 +54,6 @@ public class CommentedConfiguration extends YamlConfiguration {
     		saved = false;
     	}
        
-
         // if there's comments to add and it saved fine, we need to add comments
         if (!comments.isEmpty() && saved) {
             // String array of each line in the config file
@@ -67,6 +66,8 @@ public class CommentedConfiguration extends YamlConfiguration {
             String currentPath = "";
             // This tells if the specified path has already been commented
             boolean commentedPath = false;
+            // This flags if the line is a node or unknown text.
+            boolean node = false;
             // The depth of the path. (number of words separated by periods - 1)
             int depth = 0;
 
@@ -74,6 +75,12 @@ public class CommentedConfiguration extends YamlConfiguration {
             for (String line : yamlContents) {
                 // If the line is a node (and not something like a list value)
                 if (line.contains(": ") || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
+                	
+                	// This is a new node so we need to mark it for commenting (if there are comments)
+                    commentedPath = false;
+                    // This is a node so flag it as one
+                    node = true;
+                    
                     // Grab the index of the end of the node name
                     int index = 0;
                     index = line.indexOf(": ");
@@ -133,35 +140,47 @@ public class CommentedConfiguration extends YamlConfiguration {
                             currentPath += line.substring(whiteSpace, index);
 
                         }
-                        // This is a new node so we need to mark it for commenting (if there are comments)
-                        commentedPath = false;
+                        
                     }
-                }
-
-                String comment = "";
-                if (!commentedPath) {
-                    // If there's a comment for the current path, retrieve it and flag that path as already commented
-                    comment = comments.get(currentPath);
-                    commentedPath = true;
-                }
-                if (comment != null) {
-                    // Add the comment to the beginning of the current line
-                    line = comment + System.getProperty("line.separator") + line;
+                    
+                } else
+                	node = false;
+                
+                if (node) {
+                	String comment = null;
+	                if (!commentedPath) {
+	                    // If there's a comment for the current path, retrieve it and flag that path as already commented
+	                    comment = comments.get(currentPath);
+	                }
+	                if (comment != null) {
+	                    // Add the comment to the beginning of the current line
+	                    line = comment + System.getProperty("line.separator") + line + System.getProperty("line.separator");
+	                    comment = null;
+	                    commentedPath = true;
+	                } else {
+	                	// Add a new line as it is a node, but has no comment
+	                	line += System.getProperty("line.separator");
+	                }
                 }
                 // Add the (modified) line to the total config String
-                newContents += line + System.getProperty("line.separator");
+                newContents += line + ((!node) ? System.getProperty("line.separator"):"");
+                
+                
             }
+            /*
+             * Due to a bukkit bug we need to strip any extra new lines from the
+             * beginning of this file, else they will multiply.
+             */
+            while (newContents.startsWith(System.getProperty("line.separator")))
+            	newContents = newContents.replaceFirst(System.getProperty("line.separator"), "");
+            
             try {
                 // Write the string to the config file
-            	System.out.print("Saving Commented Config...");
                 FileMgmt.stringToFile(newContents, file);
             } catch (IOException e) {
                 saved = false;
-                System.out.print("Failed to save Commented Config!");
             }
-        } else
-        	System.out.print("Not updating Config.");
-
+        }
         return saved;
     }
 

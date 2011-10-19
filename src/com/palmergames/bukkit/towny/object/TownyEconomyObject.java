@@ -3,61 +3,113 @@ package com.palmergames.bukkit.towny.object;
 
 import com.iConomy.iConomy;
 import com.iConomy.system.Account;
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.Towny;
 import com.nijikokun.register.payment.Method.MethodAccount;
 import com.nijikokun.register.payment.Methods;
+import com.palmergames.bukkit.towny.EconomyException;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.util.StringMgmt;
 
 public class TownyEconomyObject extends TownyObject {
 	
 	private static Towny plugin;
+	private static final String townAccountPrefix = "town-";
+	private static final String nationAccountPrefix = "nation-";
 
     public static void setPlugin(Towny plugin) {
     	TownyEconomyObject.plugin = plugin;
     }
         
-    /*Tries to pay from the players main bank account first, if it fails try their holdings */
-    public boolean pay(double n) throws EconomyException 
-    {
-            if(canPayFromHoldings(n))
-            {
-                plugin.sendDebugMsg("Can Pay: " + n);
-                if(plugin.isRegister())
-                	((MethodAccount) getEconomyAccount()).subtract(n);
-                else
-                	((Account) getEconomyAccount()).getHoldings().subtract(n);
-                return true;
-            }
-            return false;
-     }
-
-        /* When collecting money add it to the Accounts bank */
-        public void collect(double n) throws EconomyException 
-        {
-        	if(plugin.isRegister())
-        		((MethodAccount) getEconomyAccount()).add(n);
-        	else
-        		((Account) getEconomyAccount()).getHoldings().add(n);
-        }
-
-        /*When one account is paying another account(Taxes/Plot Purchasing)*/
-        public boolean pay(double n, TownyEconomyObject collector) throws EconomyException {
-                if (pay(n)) {
-                        collector.collect(n);
-                        return true;
-                } else
-                        return false;
-        }
-
-        public String getEconomyName() {
-                // TODO: Make this less hard coded.
-                if (this instanceof Nation)
-                        return "nation-" + getName();
-                else if (this instanceof Town)
-                        return "town-" + getName();
-                else
-                        return getName();
-        }
+	/**
+	 * Tries to pay from the players main bank account first, if it fails try their holdings
+	 * 
+	 * @param n
+	 * @return if successfully payed amount to 'server'.
+	 * @throws EconomyException
+	 */
+	public boolean pay(double n, String reason) throws EconomyException {
+	    boolean payed = _pay(n);
+	    if (payed)
+	    	TownyLogger.logMoneyTransaction(this, n, null, reason);
+	    return payed;
+	}
+	
+	public boolean pay(double n) throws EconomyException {
+	    return pay(n, null);
+	}
+	
+	private boolean _pay(double n) throws EconomyException {
+		if(canPayFromHoldings(n)) {
+	    	TownyMessaging.sendDebugMsg("Can Pay: " + n);
+	        if(plugin.isRegister())
+	        	((MethodAccount) getEconomyAccount()).subtract(n);
+	        else
+	        	((Account) getEconomyAccount()).getHoldings().subtract(n);
+	        return true;
+	    }
+	    return false;
+	}
+	
+	/**
+	 * When collecting money add it to the Accounts bank
+	 * 
+	 * @param n
+	 * @throws EconomyException
+	 */
+	public void collect(double n, String reason) throws EconomyException {
+		_collect(n);
+	    TownyLogger.logMoneyTransaction(null, n, this, reason);
+	}
+	
+	public void collect(double n) throws EconomyException {
+		collect(n, null);
+	}
+	
+	private void _collect(double n) throws EconomyException {
+		if(plugin.isRegister())
+    		((MethodAccount) getEconomyAccount()).add(n);
+    	else
+    		((Account) getEconomyAccount()).getHoldings().add(n);
+	}
+	
+	/**
+	 * When one account is paying another account(Taxes/Plot Purchasing)
+	 * 
+	 * @param n
+	 * @param collector
+	 * @return if successfully payed amount to collector.
+	 * @throws EconomyException
+	 */
+	public boolean payTo(double n, TownyEconomyObject collector, String reason) throws EconomyException {
+		boolean payed = _payTo(n, collector);
+	    if (payed)
+	    	TownyLogger.logMoneyTransaction(this, n, collector, reason);
+	    return payed;
+	}
+	
+	public boolean payTo(double n, TownyEconomyObject collector) throws EconomyException {
+		return payTo(n, collector, null);
+	}
+	
+	private boolean _payTo(double n, TownyEconomyObject collector) throws EconomyException {
+		if (_pay(n)) {
+			collector._collect(n);
+            return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public String getEconomyName() {
+		// TODO: Make this less hard coded.
+        if (this instanceof Nation)
+            return StringMgmt.trimMaxLength(nationAccountPrefix + getName(),32);
+        else if (this instanceof Town)
+            return StringMgmt.trimMaxLength(townAccountPrefix + getName(),32);
+        else
+            return getName();
+	}
 
         public void setBalance(double value) 
         {
@@ -70,7 +122,7 @@ public class TownyEconomyObject extends TownyObject {
                     }
                     else
                     {
-                        plugin.sendDebugMsg("Account is still null!");
+                    	TownyMessaging.sendDebugMsg("Account is still null!");
                     }
             	} else {
             		Account account = (Account)getEconomyAccount();
@@ -79,7 +131,7 @@ public class TownyEconomyObject extends TownyObject {
                     }
                     else
                     {
-                        plugin.sendDebugMsg("Account is still null!");
+                    	TownyMessaging.sendDebugMsg("Account is still null!");
                     }
             	}
 
@@ -88,10 +140,10 @@ public class TownyEconomyObject extends TownyObject {
             catch(NoClassDefFoundError e)
             {
                 e.printStackTrace();
-                plugin.sendDebugMsg("Economy error getting holdings from " + getEconomyName());
+                TownyMessaging.sendDebugMsg("Economy error getting holdings from " + getEconomyName());
             } catch (EconomyException e) {
             	e.printStackTrace();
-            	plugin.sendDebugMsg("Economy error getting Account for " + getEconomyName());
+            	TownyMessaging.sendDebugMsg("Economy error getting Account for " + getEconomyName());
 			}
         }
         
@@ -99,28 +151,28 @@ public class TownyEconomyObject extends TownyObject {
         {
                 try
                 {
-                	plugin.sendDebugMsg("Economy Balance Name: " + getEconomyName());
+                	TownyMessaging.sendDebugMsg("Economy Balance Name: " + getEconomyName());
                 	
                 	if(plugin.isRegister()) {
                 		MethodAccount account = (MethodAccount)getEconomyAccount();
                 		if(account!=null) {
-                        	plugin.sendDebugMsg("Economy Balance: " + account.balance());
+                			TownyMessaging.sendDebugMsg("Economy Balance: " + account.balance());
                             return account.balance() ;
                         }
                         else
                         {
-                            plugin.sendDebugMsg("Account is still null!");
+                        	TownyMessaging.sendDebugMsg("Account is still null!");
                             return 0;
                         }
                 	} else {
                 		Account account = (Account)getEconomyAccount();
                 		if(account!=null) {
-                        	plugin.sendDebugMsg("Economy Balance: " + account.getHoldings().balance());
+                			TownyMessaging.sendDebugMsg("Economy Balance: " + account.getHoldings().balance());
                             return account.getHoldings().balance();
                         }
                         else
                         {
-                            plugin.sendDebugMsg("Account is still null!");
+                        	TownyMessaging.sendDebugMsg("Account is still null!");
                             return 0;
                         }
                 	} 

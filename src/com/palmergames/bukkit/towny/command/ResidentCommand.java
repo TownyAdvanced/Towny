@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -70,9 +71,9 @@ public class ResidentCommand implements CommandExecutor  {
                 if (split.length == 0)
                         try {
                                 Resident resident = plugin.getTownyUniverse().getResident( player.getName());
-                                plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(resident));
+                                TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(resident));
                         } catch (NotRegisteredException x) {
-                                plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_registered"));
+                        	TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_registered"));
                         }
                 else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help"))
                         for (String line : output)
@@ -91,9 +92,9 @@ public class ResidentCommand implements CommandExecutor  {
                 } else
                         try {
                                 Resident resident = plugin.getTownyUniverse().getResident(split[0]);
-                                plugin.getTownyUniverse().sendMessage(player, plugin.getTownyUniverse().getStatus(resident));
+                                TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(resident));
                         } catch (NotRegisteredException x) {
-                                plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+                        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
                         }
         }
         
@@ -134,22 +135,22 @@ public class ResidentCommand implements CommandExecutor  {
                 } else {
                         Resident resident;
                         try {
-                                resident = plugin.getTownyUniverse().getResident(player.getName());
+                            resident = plugin.getTownyUniverse().getResident(player.getName());
                         } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
-                                return;
+                        	TownyMessaging.sendErrorMsg(player, x.getError());
+                            return;
                         }
 
                         // TODO: Let admin's call a subfunction of this.
                         if (split[0].equalsIgnoreCase("perm")) {
-                                String[] newSplit = StringMgmt.remFirstArg(split);
-                                TownCommand.setTownBlockOwnerPermissions(player, resident, newSplit, true);
+                            String[] newSplit = StringMgmt.remFirstArg(split);
+                            TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), newSplit, true);
                         } else if (split[0].equalsIgnoreCase("mode")) {
-                                String[] newSplit = StringMgmt.remFirstArg(split);
-                                setMode(player, newSplit);
+                            String[] newSplit = StringMgmt.remFirstArg(split);
+                            setMode(player, newSplit);
                         } else {
-                                plugin.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
-                                return;
+                        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
+                            return;
                         }
 
 						TownyUniverse.getDataSource().saveResident(resident);
@@ -182,10 +183,10 @@ public class ResidentCommand implements CommandExecutor  {
                 } else {
                         Resident resident;
                         try {
-                                resident = plugin.getTownyUniverse().getResident(player.getName());
+                            resident = plugin.getTownyUniverse().getResident(player.getName());
                         } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
-                                return;
+                        	TownyMessaging.sendErrorMsg(player, x.getError());
+                            return;
                         }
 
                         // TODO: Let admin's call a subfunction of this.
@@ -212,10 +213,10 @@ public class ResidentCommand implements CommandExecutor  {
                 List<Resident> invited = new ArrayList<Resident>();
                 for (String name : names)
                         try {
-                                Resident target = plugin.getTownyUniverse().getResident(name);
-                                invited.add(target);
+                            Resident target = plugin.getTownyUniverse().getResident(name);
+                            invited.add(target);
                         } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
+                        	TownyMessaging.sendErrorMsg(player, x.getError());
                         }
                 return invited;
         }
@@ -238,14 +239,14 @@ public class ResidentCommand implements CommandExecutor  {
                                 msg += newFriend.getName() + ", ";
                                 Player p = plugin.getServer().getPlayer(newFriend.getName());
                                 if (p != null)
-                                        plugin.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
+                                	TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
                         }
                         msg = msg.substring(0, msg.length()-2);
                         msg += TownySettings.getLangString("msg_to_list");
-                        plugin.sendMsg(player, msg);
+                        TownyMessaging.sendMsg(player, msg);
 						TownyUniverse.getDataSource().saveResident(resident);
                 } else
-                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+                	TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
         }
 
         public void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
@@ -272,14 +273,14 @@ public class ResidentCommand implements CommandExecutor  {
                                 msg += member.getName() + ", ";
                                 p = plugin.getServer().getPlayer(member.getName());
                                 if (p != null)
-                                        plugin.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
+                                	TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
                         }
                         msg = msg.substring(0, msg.length()-2);
                         msg += TownySettings.getLangString("msg_from_list");;
-                        plugin.sendMsg(player, msg);
+                        TownyMessaging.sendMsg(player, msg);
 						TownyUniverse.getDataSource().saveResident(resident);
                 } else
-                        plugin.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+                	TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
                         
         }
         
@@ -288,9 +289,9 @@ public class ResidentCommand implements CommandExecutor  {
                         try {
                                 Resident resident = plugin.getTownyUniverse().getResident(player.getName());
                                 plugin.getTownyUniverse().removeResident(resident);
-                                plugin.getTownyUniverse().sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
+                                TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
                         } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
+                        	TownyMessaging.sendErrorMsg(player, x.getError());
                                 return;
                         }
                 else
@@ -299,9 +300,9 @@ public class ResidentCommand implements CommandExecutor  {
                                         throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete"));
                                 Resident resident = plugin.getTownyUniverse().getResident(split[0]);
                                 plugin.getTownyUniverse().removeResident(resident);
-                                plugin.getTownyUniverse().sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
+                                TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));
                         } catch (TownyException x) {
-                                plugin.sendErrorMsg(player, x.getError());
+                        	TownyMessaging.sendErrorMsg(player, x.getError());
                                 return;
                         }
         }

@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -48,6 +50,35 @@ public class TownyFormatter {
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                 return sdf.format(System.currentTimeMillis());
         }
+        
+        public static List<String> getStatus(TownBlock townBlock) {
+        	List<String> out = new ArrayList<String>();
+        	
+        	
+        	try {
+        		TownBlockOwner owner;
+            	Town town = townBlock.getTown();
+            	TownyWorld world = townBlock.getWorld();
+            	
+	    		if (townBlock.hasResident()){
+					owner = townBlock.getResident();
+	    		} else {
+	    			owner = townBlock.getTown();
+	    		}
+	        	
+	        	out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((MinecraftTools.isOnline(owner.getName())) ? Colors.LightGreen + " (Online)" : "")));
+	        	out.add(Colors.Green + " Perm: " + townBlock.getPermissions().getColourString());
+	        	out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+	        			+ Colors.Green + "  Explosions: " + ((town.isBANG() || world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+                        + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire()  || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+                        + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs()  || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+        	
+        	} catch (NotRegisteredException e) {
+				out.add("Error: " + e.getError());
+			}
+    		
+        	return out;
+        }
 
         public static List<String> getStatus(Resident resident) {
                 List<String> out = new ArrayList<String>();
@@ -62,10 +93,14 @@ public class TownyFormatter {
 
                 // Owner of: 4 plots
                 // Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
-                if (resident.getTownBlocks().size() > 0) {
+                //if (resident.getTownBlocks().size() > 0) {
 	                out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
 	                out.add(Colors.Green + "    Perm: " + resident.getPermissions().getColourString());
-                }
+	                out.add(Colors.Green + "PVP: " + ((resident.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+	                		+ Colors.Green + "  Explosions: " + ((resident.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+	                        + Colors.Green + "  Firespread: " + ((resident.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
+	                        + Colors.Green + "  Mob Spawns: " + ((resident.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+                //}
 
                 // Bank: 534 coins
                 if (TownySettings.isUsingEconomy())

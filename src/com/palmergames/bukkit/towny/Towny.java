@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,11 +26,9 @@ import ca.xshade.questionmanager.Question;
 import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.register.Register;
-import com.palmergames.bukkit.towny.command.NationChatCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.command.ResidentCommand;
-import com.palmergames.bukkit.towny.command.TownChatCommand;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
@@ -41,7 +37,7 @@ import com.palmergames.bukkit.towny.event.TownyBlockListener;
 import com.palmergames.bukkit.towny.event.TownyEntityListener;
 import com.palmergames.bukkit.towny.event.TownyEntityMonitorListener;
 import com.palmergames.bukkit.towny.event.TownyPlayerListener;
-import com.palmergames.bukkit.towny.event.TownyPlayerLowListener;
+//import com.palmergames.bukkit.towny.event.TownyPlayerLowListener;
 import com.palmergames.bukkit.towny.event.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
@@ -61,8 +57,6 @@ import com.palmergames.bukkit.townywar.TownyWar;
 import com.palmergames.bukkit.townywar.listener.TownyWarBlockListener;
 import com.palmergames.bukkit.townywar.listener.TownyWarCustomListener;
 import com.palmergames.bukkit.townywar.listener.TownyWarEntityListener;
-import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
@@ -86,7 +80,6 @@ public class Towny extends JavaPlugin {
     private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
     private final TownyBlockListener blockListener = new TownyBlockListener(this);
     private final TownyEntityListener entityListener = new TownyEntityListener(this);
-    private final TownyPlayerLowListener playerLowListener = new TownyPlayerLowListener(this);
     private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
     private final TownyWorldListener worldListener = new TownyWorldListener(this);
     private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
@@ -100,25 +93,21 @@ public class Towny extends JavaPlugin {
     private iConomy iconomy = null;
 
     private boolean error = false;
-    private Logger logger = Logger.getLogger("com.palmergames.bukkit.towny");
    
   
         
     @Override
     public void onEnable() {
     	
-    	logger.info("====================      Towny      ========================");
+    	
+    	System.out.println("====================      Towny      ========================");
     	
     	version = this.getDescription().getVersion();
-        //System.out.println("[Towny] Towny - create TownyUniverse Object...");
         townyUniverse = new TownyUniverse(this);
-        //System.out.println("[Towny] Towny - Starting loadSettings...");
 
         if (!load())
         	return;
         
-        setupLogger();
-
         // Setup bukkit command interfaces
         getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
         getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
@@ -127,27 +116,25 @@ public class Towny extends JavaPlugin {
         getCommand("town").setExecutor(new TownCommand(this));
         getCommand("nation").setExecutor(new NationCommand(this));
         getCommand("plot").setExecutor(new PlotCommand(this));
-        getCommand("townchat").setExecutor(new TownChatCommand(this));
-        getCommand("nationchat").setExecutor(new NationChatCommand(this));
         
         TownyWar.onEnable();
         
         if (TownySettings.isTownyUpdating(getVersion()))
-                update();
+            update();
         
         registerEvents();
         
-        logger.info("=============================================================");
-        System.out.println("[Towny] Version: " + version + " - Mod Enabled");
-        logger.info("=============================================================");
+        TownyLogger.log.info("=============================================================");
+        TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
+        TownyLogger.log.info("=============================================================");
         
         // Re login anyone online. (In case of plugin reloading)
         for (Player player : getServer().getOnlinePlayers())
-                try {
-                        getTownyUniverse().onLogin(player);
-                } catch (TownyException x) {
-                        sendErrorMsg(player, x.getError());
-                }
+            try {
+                getTownyUniverse().onLogin(player);
+            } catch (TownyException x) {
+            	TownyMessaging.sendErrorMsg(player, x.getError());
+            }
         //setupDatabase();
     }
         
@@ -164,10 +151,10 @@ public class Towny extends JavaPlugin {
     public void SetWorldFlags () {
                 
     	for (Town town : getTownyUniverse().getTowns()) {
-    		sendDebugMsg("[Towny] Setting flags for: " + town.getName());
+    		TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
             
             if (town.getWorld() == null) {
-            	System.out.println("[Towny Error] Detected an error with the world files. Attempting to repair");
+            	TownyLogger.log.warning("[Towny Error] Detected an error with the world files. Attempting to repair");
                 if (town.hasHomeBlock())
                 	try {
                     	TownyWorld world = town.getHomeBlock().getWorld();
@@ -178,10 +165,10 @@ public class Towny extends JavaPlugin {
                     	}                                               
                     } catch (TownyException e) {
                         // Error fetching homeblock
-                        System.out.println("[Towny Error] Failed get world data for: " + town.getName());
+                    	TownyLogger.log.warning("[Towny Error] Failed get world data for: " + town.getName());
                     }
                 else
-                    System.out.println("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());     
+                	TownyLogger.log.warning("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());     
             }
         }
                         
@@ -260,10 +247,10 @@ public class Towny extends JavaPlugin {
             	test = getServer().getPluginManager().getPlugin("iConomy");
                 if (test == null) {
                     //TownySettings.setUsingIConomy(false);
-                	sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the Register.jar with iConomy, BOSE or Essentials Eco.");
+                	TownyMessaging.sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the Register.jar with iConomy, BOSE or Essentials Eco.");
                 } else {
                 	if (!test.getDescription().getVersion().matches("5.01")) {
-                		sendErrorMsg("Towny does not have native support for iConomy " + test.getDescription().getVersion() + ". You need the Register.jar.");
+                		TownyMessaging.sendErrorMsg("Towny does not have native support for iConomy " + test.getDescription().getVersion() + ". You need the Register.jar.");
                 	} else {
                         iconomy = (iConomy)test;
                         using.add(String.format("%s v%s", "iConomy", test.getDescription().getVersion()));
@@ -285,7 +272,7 @@ public class Towny extends JavaPlugin {
             using.add(String.format("%s v%s", "Questioner", test.getDescription().getVersion()));
         
         if (using.size() > 0)
-            logger.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+        	TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
     }
     
     // is permissions active
@@ -311,7 +298,7 @@ public class Towny extends JavaPlugin {
     @Override
     public void onDisable() {
     	
-    	logger.info("==============================================================");
+    	System.out.println("==============================================================");
     	
     	if (TownyUniverse.getDataSource() != null && error == false)
             TownyUniverse.getDataSource().saveAll();
@@ -319,7 +306,7 @@ public class Towny extends JavaPlugin {
 	    if (error == false) TownyWar.onDisable();
 	    
 	    if (getTownyUniverse().isWarTime())
-	            getTownyUniverse().getWarEvent().toggleEnd();
+            getTownyUniverse().getWarEvent().toggleEnd();
 	    townyUniverse.toggleTownyRepeatingTimer(false);
 	    townyUniverse.toggleDailyTimer(false);
 	    townyUniverse.toggleMobRemoval(false);
@@ -333,8 +320,10 @@ public class Towny extends JavaPlugin {
 	    townyUniverse = null;
 	    
 	    
-	    logger.info("[Towny] Version: " + version + " - Mod Disabled");
-	    logger.info("=============================================================");
+	    System.out.println("[Towny] Version: " + version + " - Mod Disabled");
+	    System.out.println("=============================================================");
+	    
+	    TownyLogger.shutDown();
     }
 
     public boolean load() {
@@ -348,12 +337,14 @@ public class Towny extends JavaPlugin {
             return false;
         }
         
+        setupLogger();
+        
         int bukkitVer = TownySettings.getMinBukkitVersion();
         
         if (!matcher.find() || matcher.group(1) == null) {
         	error = true;
-        	logger.severe("[Towny Error] Unable to read CraftBukkit Version.");
-        	logger.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
+        	TownyLogger.log.severe("[Towny Error] Unable to read CraftBukkit Version.");
+        	TownyLogger.log.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
@@ -361,8 +352,8 @@ public class Towny extends JavaPlugin {
         
         if (curBuild < bukkitVer){
             error = true;
-            logger.severe("[Towny Error] CraftBukkit Version ("  + curBuild + ") is outdated! ");
-            logger.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
+            TownyLogger.log.severe("[Towny Error] CraftBukkit Version ("  + curBuild + ") is outdated! ");
+            TownyLogger.log.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }
@@ -393,113 +384,74 @@ public class Towny extends JavaPlugin {
         return true;
     }
 
-        private void registerEvents() {
-                
-                final PluginManager pluginManager = getServer().getPluginManager();
-                //final Plugin towny = (Plugin)pluginManager.getPlugin("Towny");
-                
-                pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-                //getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-                // Used when player has tc or nc modes set.
-                pluginManager.registerEvent(Event.Type.PLAYER_CHAT, playerLowListener, Priority.Low, this);
-                pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-
-                pluginManager.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_IGNITE, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Lowest, this);
-                //getServer().getPluginManager().registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
-
-                pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.ENTITY_INTERACT, entityListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityMonitorListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Lowest, this);
-                pluginManager.registerEvent(Event.Type.PAINTING_BREAK, entityListener, Priority.Normal, this);
-                
-                pluginManager.registerEvent(Event.Type.WORLD_INIT, worldListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Normal, this);
-                
-                pluginManager.registerEvent(Event.Type.BLOCK_BREAK, townyWarBlockListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, customListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_BURN, townyWarBlockListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, townyWarBlockListener, Priority.Normal, this);
-                pluginManager.registerEvent(Event.Type.ENTITY_EXPLODE, townyWarEntityListener, Priority.Normal, this);
-        }
+    private void registerEvents() {
         
-        private void update() {
-                try {
-                        List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
-                        boolean display = false;
-                        logger.info("------------------------------------");
-                        logger.info("[Towny] ChangeLog up until v" + getVersion());
-                        String lastVersion = TownySettings.getLastRunVersion(getVersion());
-                        for (String line : changeLog) { //TODO: crawl from the bottom, then past from that index.
-                                if (line.startsWith("v" + lastVersion))
-                                        display = true;
-                                if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0)
-                                	logger.info(line);
-                        }
-                        logger.info("------------------------------------");
-                } catch (IOException e) {
-                        sendDebugMsg("Could not read ChangeLog.txt");
+        final PluginManager pluginManager = getServer().getPluginManager();
+        
+        pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+
+        pluginManager.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+
+        pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+
+        // Have War Events get launched before regular events.
+        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, townyWarBlockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, customListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_BURN, townyWarBlockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, townyWarBlockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_EXPLODE, townyWarEntityListener, Priority.Lowest, this);
+        
+        pluginManager.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_IGNITE, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Lowest, this);
+        //getServer().getPluginManager().registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
+
+        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENDERMAN_PICKUP, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENDERMAN_PLACE, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_INTERACT, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityMonitorListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Lowest, this);
+        pluginManager.registerEvent(Event.Type.PAINTING_BREAK, entityListener, Priority.Normal, this);
+        
+        pluginManager.registerEvent(Event.Type.WORLD_INIT, worldListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.WORLD_LOAD, worldListener, Priority.Normal, this);
+    }
+        
+    private void update() {
+        try {
+                List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
+                boolean display = false;
+                TownyLogger.log.info("------------------------------------");
+                TownyLogger.log.info("[Towny] ChangeLog up until v" + getVersion());
+                String lastVersion = TownySettings.getLastRunVersion(getVersion());
+                for (String line : changeLog) { //TODO: crawl from the bottom, then past from that index.
+                        if (line.startsWith("v" + lastVersion))
+                                display = true;
+                        if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0)
+                        	TownyLogger.log.info(line);
                 }
-                TownySettings.setLastRunVersion(getVersion());
+                TownyLogger.log.info("------------------------------------");
+        } catch (IOException e) {
+        	TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
         }
-        
+        TownySettings.setLastRunVersion(getVersion());
+    }
 
-        public TownyUniverse getTownyUniverse() {
-                return townyUniverse;
-        }
 
-        public void sendErrorMsg(Player player, String msg) {
-                for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
-                        player.sendMessage(line);
-                sendDevMsg(msg);
-        }
-        
-        public void sendErrorMsg(String msg) {
-        	logger.warning("[Towny] Error: " + msg);
-        }
-        
-        public void sendDevMsg(String msg) {
-                if (TownySettings.isDevMode()) {
-                        Player townyDev = getServer().getPlayer(TownySettings.getDevName());
-                        if (townyDev == null)
-                                return;
-                        for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
-                                townyDev.sendMessage(line);
-                }
-        }
-        
-        public void sendDebugMsg(String msg) {
-                if (TownySettings.getDebug())
-                	logger.info("[Towny] Debug: " + msg);
-                sendDevMsg(msg);
-        }
+    public TownyUniverse getTownyUniverse() {
+        return townyUniverse;
+    }
 
-        public void sendErrorMsg(Player player, String[] msg) {
-                for (String line : msg)
-                        sendErrorMsg(player, line);
-        }
-
-        public void sendMsg(Player player, String msg) {
-                for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg))
-                        player.sendMessage(line);
-        }
-        
-        public void sendMsg(Player player, String[] msg) {
-        	for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg))
-                player.sendMessage(line);
-        }
 
         public String getVersion() {
                 return version;
@@ -522,7 +474,7 @@ public class Towny extends JavaPlugin {
                         getTownyUniverse();
 						playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getWorld(player.getWorld().getName()), player));
                 } catch (NotRegisteredException e) {
-                        sendErrorMsg(player, "Could not create permission cache for this world ("+player.getWorld().getName()+".");
+                	TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world ("+player.getWorld().getName()+".");
                 }
                 
         }
@@ -576,12 +528,12 @@ public class Towny extends JavaPlugin {
         
         public void setPlayerMode(Player player, String[] modes) {
                 playerMode.put(player.getName(), Arrays.asList(modes));
-                sendMsg(player, ("Modes set: " + StringMgmt.join(modes, ",")));
+                TownyMessaging.sendMsg(player, ("Modes set: " + StringMgmt.join(modes, ",")));
         }
         
         public void removePlayerMode(Player player) {
                 playerMode.remove(player.getName());
-                sendMsg(player, ("Mode removed."));
+                TownyMessaging.sendMsg(player, ("Mode removed."));
         }
         
         public List<String> getPlayerMode(Player player) {
@@ -643,10 +595,8 @@ public class Towny extends JavaPlugin {
                 
         }
         */        
-
-        public void sendMsg(String msg) {
-                System.out.println("[Towny] " + ChatTools.stripColour(msg));
-        }
+        
+        
         
         public String getConfigPath() {
                 return getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml";
@@ -683,25 +633,14 @@ public class Towny extends JavaPlugin {
 		public void setRegister(Register register) {
 			this.register = register;
 		}
-
-		public Logger getLogger() {
-                return logger;
-        }
         
         public void log(String msg) {
-                if (TownySettings.isLogging())
-                        getLogger().info(ChatColor.stripColor(msg));
+            if (TownySettings.isLogging())
+            	TownyLogger.log.info(ChatColor.stripColor(msg));
         }
         
         public void setupLogger() {
-                FileMgmt.checkFolders(new String[]{getTownyUniverse().getRootFolder() + FileMgmt.fileSeparator() + "logs"});
-        try {
-            FileHandler fh = new FileHandler(getDataFolder() + FileMgmt.fileSeparator() + "logs" + FileMgmt.fileSeparator() + "towny.log", TownySettings.isAppendingToLog());
-            fh.setFormatter(new TownyLogFormatter());
-            getLogger().addHandler(fh);
-        } catch (IOException e) {
-                e.printStackTrace();
-        }
+        	TownyLogger.setup(getDataFolder().getAbsolutePath(), TownySettings.isAppendingToLog());
         }
         
         public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {

@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.townywar;
 
+import java.util.Set;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 
@@ -24,6 +26,8 @@ public class TownyWarConfig {
 	private static Material flagBaseMaterial = null;
 	private static Material flagLightMaterial = null;
 	private static Material beaconWireFrameMaterial = null;
+	
+	private static Set<Material> editableMaterialsInWarZone = null;
 	
 	public static boolean isAffectedMaterial(Material material) {
 		return material == Material.WOOL
@@ -99,5 +103,37 @@ public class TownyWarConfig {
 	
 	public static int getMinPlayersOnlineInNationForWar() {
 		return TownySettings.getInt(ConfigNodes.WAR_ENEMY_MIN_PLAYERS_ONLINE_IN_NATION);
+	}
+	
+	public static void setEditableMaterialsInWarZone(Set<Material> editableMaterialsInWarZone) {
+		TownyWarConfig.editableMaterialsInWarZone = editableMaterialsInWarZone;
+	}
+	
+	public static boolean isEditableMaterialInWarZone(Material material) {
+		return TownyWarConfig.editableMaterialsInWarZone.contains(material);
+	}
+	
+	public static boolean isAllowingSwitchesInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_SWITCH);
+	}
+	
+	public static boolean isAllowingFireInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_FIRE);
+	}
+	
+	public static boolean isAllowingItemUseInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_ITEM_USE);
+	}
+	
+	public static boolean isAllowingExplosionsInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_EXPLOSIONS);
+	}
+	
+	public static boolean explosionsBreakBlocksInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_EXPLOSIONS_BREAK_BLOCKS);
+	}
+	
+	public static boolean regenBlocksAfterExplosionInWarZone() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS);
 	}
 }

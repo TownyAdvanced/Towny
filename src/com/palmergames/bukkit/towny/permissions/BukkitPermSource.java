@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
 
 
-
 public class BukkitPermSource extends TownyPermissionSource {
 	
 	public BukkitPermSource(Towny towny) {
@@ -72,6 +71,20 @@ public class BukkitPermSource extends TownyPermissionSource {
     @Override
 	public boolean hasPermission(Player player, String node) {
     	return player.hasPermission(node);
+    }
+    
+    /**
+     * Returns the players Group name.
+     * 
+     * @param player
+     * @return
+     */
+    @Override
+	public String getPlayerGroup(Player player) {
+
+    	//BukkitPermissions doesn't support groups.
+    	return "";
+		
     }
 	
 }

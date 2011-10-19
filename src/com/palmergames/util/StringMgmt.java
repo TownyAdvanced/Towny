@@ -16,7 +16,6 @@ public class StringMgmt {
 		return join(arr, " ");
 	}
 	
-	
 	@SuppressWarnings("rawtypes")
 	public static String join(List arr, String separator) {
 		if (arr == null || arr.size() == 0)
@@ -74,6 +73,19 @@ public class StringMgmt {
 			System.arraycopy(arr, start, newSplit, 0, length);
 			return newSplit;
 		}
+	}
+	
+	/**
+	 * Shortens the string to fit in the specified size.
+	 * @return the shortened string
+	 */
+	public static String trimMaxLength(String str, int length) {
+		if (str.length() < length)
+			return str;
+		else if (length > 3)
+			return str.substring(0, length);
+		else
+			throw new UnsupportedOperationException("Minimum length of 3 characters.");
 	}
 	
 	/**

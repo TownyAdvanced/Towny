@@ -15,23 +15,20 @@ import java.util.List;
 public class ChatTools {
 	public static final int lineLength = 54;
 
-	public static List<String> listArr(Object[] args) {
+	public static List<String> listArr(String[] args) {
 		return list(Arrays.asList(args));
 	}
 	
-	public static List<String> listArr(Object[] args, String prefix) {
+	public static List<String> listArr(String[] args, String prefix) {
 		return list(Arrays.asList(args), prefix);
 	}
 
-	
-	@SuppressWarnings("rawtypes")
-	public static List<String> list(List args) {
+
+	public static List<String> list(List<String> args) {
 		return list(args, "");
-	}
+	}	
 	
-	
-	@SuppressWarnings("rawtypes")
-	public static List<String> list(List args, String prefix) {
+	public static List<String> list(List<String> args, String prefix) {
 		if (args.size() > 0) {
 			String line = "";
 			for (int i = 0; i < args.size() - 1; i++)

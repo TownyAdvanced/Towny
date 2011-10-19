@@ -9,6 +9,7 @@ import org.bukkit.entity.LivingEntity;
 
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -38,9 +39,9 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				else
 					throw new Exception();
 			} catch (ClassNotFoundException e) {
-				plugin.sendErrorMsg("WorldMob: " + mob + " is not an acceptable class.");
+				TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable class.");
 			} catch (Exception e) {
-				plugin.sendErrorMsg("WorldMob: " + mob + " is not an acceptable living entity.");
+				TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable living entity.");
 			}
 		
 		townMobsToRemove.clear();
@@ -52,9 +53,9 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				else
 					throw new Exception();
 			} catch (ClassNotFoundException e) {
-				plugin.sendErrorMsg("TownMob: " + mob + " is not an acceptable class.");
+				TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable class.");
 			} catch (Exception e) {
-				plugin.sendErrorMsg("TownMob: " + mob + " is not an acceptable living entity.");
+				TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable living entity.");
 			}
 	}
 	
@@ -130,7 +131,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					}
 						try {
 							TownBlock townBlock = townyWorld.getTownBlock(coord);
-							if ((!townBlock.getTown().hasMobs() && isRemovingTownEntity(livingEntity))) {
+							if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
 								//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
 								livingEntitiesToRemove.add(livingEntity);
 							}
@@ -146,7 +147,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					
 
 				for (LivingEntity livingEntity : livingEntitiesToRemove) {
-					universe.getPlugin().sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
+					TownyMessaging.sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
 					//livingEntity.teleportTo(new Location(world, livingEntity.getLocation().getX(), -50, livingEntity.getLocation().getZ()));
 					livingEntity.remove();
 					//numRemoved++;

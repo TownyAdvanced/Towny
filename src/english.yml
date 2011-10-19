@@ -1,5 +1,5 @@
-﻿name: Towny
-version: 0.09
+name: Towny
+version: 0.11
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -237,20 +237,21 @@ msg_town_rename_disabled: '&bTown Renaming Disabled'
 msg_town_set_name: '&b%s renamed town to %s.'
 msg_nation_set_name: '&b%s renamed nation to %s.'
 
-msg_changed_pvp: '&cTown PVP has been %s.'
+msg_changed_pvp: '&c%s PVP has been %s.'
 msg_changed_public: '&cThe Town''s public status is now %s.'
-msg_changed_expl: '&cExplosions in town are now %s.'
-msg_changed_fire: '&cFirespread in town is now %s.'
-msg_changed_mobs: '&cMonster spawns in town are now %s.'
+msg_changed_expl: '&cExplosions in %s are now %s.'
+msg_changed_fire: '&cFirespread in %s is now %s.'
+msg_changed_mobs: '&cMonster spawns in %s are now %s.'
 msg_changed_taxpercent: '&cPercentage based taxes are now %s.'
 
 msg_changed_world_setting: '&c%s for %s is: %s.'
-
 
 msg_world_pvp: '&cThis world is PvP only.'
 msg_world_mobs: '&cThis world has Monster spawns forced on.'
 msg_world_expl: '&cThis world has Explosions forced on.'
 msg_world_fire: '&cThis world has Fire spread forced on.'
+
+msg_plot_pvp: '&cPVP can not be toggled in an Arena Plot.'
 
 msg_reloaded: '&2Towny''s settings were reloaded.'
 msg_give_total: '&bGave %s bonus. (Total: %s)'
@@ -269,7 +270,7 @@ msg_clear_title_surname: '&bThe %s for ''%s'' was cleared.'
 
 msg_clear_plot_material: '&bThe plot was cleared of all %s''s.'
 
-msg_set_perms: '&bSuccessfully changed permissions to %s.'
+msg_set_perms: '&bSuccessfully changed permissions to:'
 msg_set_claim: '&bSuccessfully changed %s''s claimability to %s'
 
 msg_usedefault: '&bThis world (%s) is now using the global default settings.'
@@ -285,8 +286,8 @@ msg_must_specify_amnt: '&bMust specify amount. Eg: %s 54'
 msg_town_set_tax: '&b%s has set the daily resident tax at %s'
 msg_town_set_plottax: '&b%s has set the daily tax of plots at %s'
 msg_town_set_plotprice: '&b%s has set the price of plots at %s'
-msg_town_set_shoptax: '&b%s has set the daily tax of shop plots at %s'
-msg_town_set_shopprice: '&b%s has set the price of shop plots at %s'
+msg_town_set_alttax: '&b%s has set the daily tax of %s plots at %s'
+msg_town_set_altprice: '&b%s has set the price of %s plots at %s'
 msg_town_set_nation_tax: '&b%s has set the nation tax at %s'
 
 msg_set_nation_tag: '&b%s has set the nation tag to [%s]'
@@ -391,6 +392,9 @@ msg_err_no_economy: '&cEconomy has not been turned on.'
 msg_err_not_block_type: '&cThat is not a valid plot type!'
 msg_not_allowed_join: '&c%s is not permitted to join a town.'
 msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
+msg_err_warzone_cannot_edit_material: '&cCannot %s %s in warzone.'
+msg_err_warzone_cannot_use_switches: '&cCannot use switches in warzone.'
+msg_err_warzone_cannot_use_item: '&cCannot use this item in a warzones.'
 
 # these messages are only used if town/nation creation is set to admins only
 

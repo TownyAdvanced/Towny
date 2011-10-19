@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
@@ -31,6 +32,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.townywar.TownyWarConfig;
 
 
 /**
@@ -53,7 +55,7 @@ public class TownyPlayerListener extends PlayerListener {
 		try {
 			plugin.getTownyUniverse().onLogin(player);
 		} catch (TownyException x) {
-			plugin.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
 	}
 	
@@ -74,7 +76,7 @@ public class TownyPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		plugin.sendDebugMsg("onPlayerDeath: " + player.getName());
+		TownyMessaging.sendDebugMsg("onPlayerDeath: " + player.getName());
 		if (TownySettings.isTownRespawning())
 			try {
 				Location respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
@@ -165,7 +167,7 @@ public class TownyPlayerListener extends PlayerListener {
 		try {
 			worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(player));
 		} catch (NotRegisteredException e1) {
-			plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
 			return;
 		}
@@ -181,10 +183,17 @@ public class TownyPlayerListener extends PlayerListener {
 		TownBlockStatus status = cache.getStatus();
 		if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))
 			return;
+		if (status == TownBlockStatus.WARZONE) {
+			if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
+			}
+			return;
+		}
 		if (!bItemUse)
 			event.setCancelled(true);
 		if (cache.hasBlockErrMsg())
-			plugin.sendErrorMsg(player, cache.getBlockErrMsg());
+			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 		
 		} catch (NullPointerException e) {
 			System.out.print("NPE generated!");
@@ -207,7 +216,7 @@ public class TownyPlayerListener extends PlayerListener {
 		try {
 			worldCoord = new WorldCoord(TownyUniverse.getWorld(block.getWorld().getName()), Coord.parseCoord(block));
 		} catch (NotRegisteredException e1) {
-			plugin.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
 			return;
 		}
@@ -220,12 +229,18 @@ public class TownyPlayerListener extends PlayerListener {
 		TownBlockStatus status = cache.getStatus();
 		if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, block.getTypeId(), TownyPermission.ActionType.SWITCH))
 			return;
-		if (!bSwitch)
-		{
+		if (status == TownBlockStatus.WARZONE) {
+			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
+			}
+			return;
+		}
+		if (!bSwitch) {
 			event.setCancelled(true);
 		}
 		if (cache.hasBlockErrMsg())
-			plugin.sendErrorMsg(player, cache.getBlockErrMsg());
+			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 	}
 	
 	@Override
@@ -279,7 +294,7 @@ public class TownyPlayerListener extends PlayerListener {
 				//plugin.sendDebugMsg("        " + to.toString());
 			}
 		} catch (NotRegisteredException e) {
-			plugin.sendErrorMsg(player, e.getError());
+			TownyMessaging.sendErrorMsg(player, e.getError());
 		}
 		
 		plugin.getCache(player).setLastLocation(to);

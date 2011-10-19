@@ -73,10 +73,10 @@ public class TownyUtil {
 						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 					}	
 				}
-				r -= 1;
-				for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++)
-					for (int x = pos.getX() - r; x <= pos.getX() + r; x++)
-						out.add(new WorldCoord(pos.getWorld(), x, z));
+				if (r > 1000) r = 1000;
+				for (int z = - r; z <= r; z++)
+					for (int x = - r; x <= r; x++)
+						out.add(new WorldCoord(pos.getWorld(), pos.getX()+x, pos.getZ()+z));
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 			}
@@ -113,6 +113,7 @@ public class TownyUtil {
 						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 					}	
 				}
+				if (r > 1000) r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
 						if (x*x+z*z <= r*r)

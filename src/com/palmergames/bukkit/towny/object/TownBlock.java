@@ -14,6 +14,9 @@ public class TownBlock {
     private TownBlockType type;
 	private int x, z;
 	private double plotPrice = -1;
+	
+	//Plot level permissions
+    protected TownyPermission permissions = new TownyPermission();
 
 	public TownBlock(int x, int z, TownyWorld world) {
 		this.x = x;
@@ -98,13 +101,29 @@ public class TownBlock {
 	public boolean isForSale() {
 		return getPlotPrice() != -1.0;
 	}
+	
+    public void setPermissions(String line) {
+        //permissions.reset(); not needed, already done in permissions.load()
+        permissions.load(line);
+    }
+
+    public TownyPermission getPermissions() {
+        return permissions;
+    }
 
     public TownBlockType getType() {
         return type;
     }
 
     public void setType(TownBlockType type) {
+    	if (type != this.type)
+    		this.permissions.reset();
         this.type = type;
+        // Custom plot settings here
+        switch(type) {
+        case ARENA:
+        	this.permissions.pvp = true;
+        }
     }
 
     public void setType(int typeId) {

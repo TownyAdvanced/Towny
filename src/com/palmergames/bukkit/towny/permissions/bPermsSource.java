@@ -92,7 +92,20 @@ public class bPermsSource extends TownyPermissionSource {
         return bPermPM.has(player, node);
     }
 	
-	
+    /**
+     * Returns the players Group name.
+     * 
+     * @param player
+     * @return
+     */
+    @Override
+	public String getPlayerGroup(Player player) {
+
+    	PermissionSet bPermPM = Permissions.getWorldPermissionsManager().getPermissionSet(player.getWorld());
+    	
+    	return bPermPM.getGroups(player).get(0);
+		
+    }
 	
 	
 }

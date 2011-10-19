@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.EconomyException;
+import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -354,7 +353,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
                         throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
                 
                 if (TownySettings.isUsingEconomy()) {
-                        if (!pay(amount, resident))
+                        if (!payTo(amount, resident, "Nation Withdraw"))
                                 throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
                 } else
                         throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));

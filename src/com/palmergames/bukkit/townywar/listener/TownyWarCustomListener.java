@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -112,7 +113,7 @@ public class TownyWarCustomListener extends CustomEventListener {
 				
 				plugin.updateCache(worldCoord);
 				
-				universe.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
 						resident.getFormattedName(),
 						(nation.hasTag() ? nation.getTag() : nation.getFormattedName()),
 						cell.getCellString()));

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -98,16 +99,16 @@ public class War {
                                                 new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))),
                                                 MinecraftTools.convertToTicks((delay-t)*1000));
                                 if (id == -1) {
-                                        plugin.sendErrorMsg("Could not schedule a countdown message for war event.");
-                                        end();
+                                	TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
+                                    end();
                                 } else
                                         addTaskId(id);
                         }
                         //warTimer.schedule(new StartWarTimerTask(universe), delay*1000);
                         int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), MinecraftTools.convertToTicks(delay*1000));
                         if (id == -1) {
-                                plugin.sendErrorMsg("Could not schedule setup delay for war event.");
-                                end();
+                        	TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
+                            end();
                         } else
                                 addTaskId(id);
                 }
@@ -128,22 +129,22 @@ public class War {
                 
                 // Seed spoils of war
                 try {
-                        warSpoils.pay(TownySettings.getBaseSpoilsOfWar());
-                        plugin.sendMsg("[War] Seeding spoils of war with " + TownySettings.getBaseSpoilsOfWar());
+                        warSpoils.pay(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");
+                        TownyMessaging.sendMsg("[War] Seeding spoils of war with " + TownySettings.getBaseSpoilsOfWar());
                 } catch (EconomyException e) {
-                        plugin.sendErrorMsg("[War] Could not seed spoils of war.");
+                	TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
                 }
                 
                 //Gather all nations at war
                 for (Nation nation : universe.getNations()) {
                         if (!nation.isNeutral()) {
                                 add(nation);
-                                universe.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
+                                TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
                         } else if (!TownySettings.isDeclaringNeutral()) {
                                         try {
                                                 nation.setNeutral(false);
                                                 add(nation);
-                                                universe.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
+                                                TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
                                         } catch (TownyException e) {
                                                 // TODO Auto-generated catch block
                                                 e.printStackTrace();
@@ -153,7 +154,7 @@ public class War {
                 //warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
                 int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, MinecraftTools.convertToTicks(1000));
                 if (id == -1) {
-                        plugin.sendErrorMsg("Could not schedule war event loop.");
+                	TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
                         end();
                 } else
                         addTaskId(id);
@@ -171,8 +172,8 @@ public class War {
                         try {
                                 double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
                                 for (Nation winningNation : warringNations) {
-                                        getWarSpoils().pay(nationWinnings, winningNation);
-                                        universe.sendGlobalMessage(winningNation.getName() + " won " + nationWinnings + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                        getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
+                                        TownyMessaging.sendGlobalMessage(winningNation.getName() + " won " + nationWinnings + " " + TownyEconomyObject.getEconomyCurrency() + ".");
                                 }
                         } catch (ArithmeticException e) {
                                 // A war ended with 0 nations.
@@ -180,7 +181,7 @@ public class War {
                         
                         try {
                                 KeyValue<Town,Integer> winningTownScore = getWinningTownScore();
-                                universe.sendGlobalMessage(winningTownScore.key.getName() + " won " + halfWinnings + " " + TownyEconomyObject.getEconomyCurrency() + " with the score " + winningTownScore.value + ".");
+                                TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + halfWinnings + " " + TownyEconomyObject.getEconomyCurrency() + " with the score " + winningTownScore.value + ".");
                         } catch (TownyException e) {
                         }
                 } catch (EconomyException e1) {
@@ -195,7 +196,7 @@ public class War {
         }
         
         public void add(Town town) {
-                universe.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
+        	TownyMessaging.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
                 townScores.put(town, 0);
                 warringTowns.add(town);
                 for (TownBlock townBlock : town.getTownBlocks())
@@ -211,7 +212,7 @@ public class War {
 
         public void townScored(Town town, int n) {
                 townScores.put(town, townScores.get(town) + n);
-                universe.sendTownMessage(town, TownySettings.getWarTimeScoreMsg(town, n));
+                TownyMessaging.sendTownMessage(town, TownySettings.getWarTimeScoreMsg(town, n));
         }
         
         public void damage(Town attacker, TownBlock townBlock) throws NotRegisteredException {
@@ -236,11 +237,11 @@ public class War {
                 townBlock.getTown().addBonusBlocks(-1);
                 attacker.addBonusBlocks(1);
                 try {
-                        if (!townBlock.getTown().pay(TownySettings.getWartimeTownBlockLossPrice(), attacker)) {
+                        if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
                                 remove(townBlock.getTown());
-                                plugin.getTownyUniverse().sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+                                TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
                         } else
-                                plugin.getTownyUniverse().sendTownMessage(townBlock.getTown(), "Your town lost "+TownySettings.getWartimeTownBlockLossPrice()+" "+TownyEconomyObject.getEconomyCurrency()+".");
+                                TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost "+TownySettings.getWartimeTownBlockLossPrice()+" "+TownyEconomyObject.getEconomyCurrency()+".");
                 } catch (EconomyException e) {
                 }
                 if (townBlock.getTown().isHomeBlock(townBlock))
@@ -261,17 +262,17 @@ public class War {
         public void eliminate(Town town) {
                 remove(town);
                 try {
-                        checkNation(town.getNation());
+                    checkNation(town.getNation());
                 } catch (NotRegisteredException e) {
-                        plugin.sendErrorMsg("[War] Error checking "+town.getName()+"'s nation.");
+                	TownyMessaging.sendErrorMsg("[War] Error checking "+town.getName()+"'s nation.");
                 }
-                universe.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
+                TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
                 checkEnd();
         }
         
         public void eliminate(Nation nation) {
                 remove(nation);
-                universe.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getName()));
+                TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getName()));
                 checkEnd();
         }
         
@@ -279,13 +280,13 @@ public class War {
                 remove(nation);
                 for (Town town : nation.getTowns())
                         remove(town);
-                universe.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(nation.getName()));
+                		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(nation.getName()));
                 checkEnd();
         }
         
         public void townLeave(Town town) {
                 remove(town);
-                universe.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(town.getName()));
+                TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(town.getName()));
                 checkEnd();
         }
         
@@ -330,10 +331,10 @@ public class War {
         public void remove(WorldCoord worldCoord) {
                 try {
                         Town town = worldCoord.getTownBlock().getTown();
-                        universe.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
+                        TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
                         warZone.remove(worldCoord);
                 } catch (NotRegisteredException e) {
-                        universe.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
+                	TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
                         warZone.remove(worldCoord);
                 }
                 

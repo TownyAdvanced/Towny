@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityListener;
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -88,13 +89,13 @@ public class TownyEntityMonitorListener extends EntityListener {
                                                                 warEvent.remove(attackerResident.getTown(), defenderNation);
                                                         else
                                                                 warEvent.remove(defenderNation);
-                                                        plugin.getTownyUniverse().sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
+                                                        TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
                                                 } else {
                                                         if (attackerResident != null && attackerResident.hasTown())
                                                                 warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
                                                         else
                                                                 warEvent.remove(defenderResident.getTown());
-                                                        plugin.getTownyUniverse().sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
+                                                        TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
                                                 }
                         } catch (NotRegisteredException e) {
                         }
@@ -116,9 +117,9 @@ public class TownyEntityMonitorListener extends EntityListener {
                                 }
                                 
                                 if (price > 0) {
-                                        defenderResident.pay(price, attackerResident);
-                                        plugin.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() +" of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
-                                        plugin.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                        defenderResident.payTo(price, attackerResident, "Death Payment (War)");
+                                        TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() +" of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                        TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
                                 }
                                 
                                 // Resident doesn't have enough funds.
@@ -133,14 +134,14 @@ public class TownyEntityMonitorListener extends EntityListener {
                                                         plugin.getTownyUniverse().getWarEvent().remove(town);
                                                 }
                                         } else
-                                                plugin.getTownyUniverse().sendTownMessage(town, defenderResident.getName() + "'s wallet couldn't satisfy " + attackerResident.getName() + ". "
+                                                TownyMessaging.sendTownMessage(town, defenderResident.getName() + "'s wallet couldn't satisfy " + attackerResident.getName() + ". "
                                                                 + townPrice + " taken from town bank.");
-                                        town.pay(townPrice, attackerResident);
+                                        town.payTo(townPrice, attackerResident, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
                                 }
                         } catch (NotRegisteredException e) {
                         } catch (EconomyException e) {
-                                plugin.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
-                                plugin.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
+                        	TownyMessaging.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
+                        	TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
                         }
                 else if (TownySettings.getDeathPrice() > 0)
                         try {
@@ -148,10 +149,10 @@ public class TownyEntityMonitorListener extends EntityListener {
                                 if (!defenderResident.canPayFromHoldings(price))
                                         price = defenderResident.getHoldingBalance();
                         
-                                defenderResident.pay(price, new WarSpoils());
-                                plugin.sendMsg(defenderPlayer, "You lost " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                defenderResident.payTo(price, new WarSpoils(), "Death Payment");
+                                TownyMessaging.sendMsg(defenderPlayer, "You lost " + price + " " + TownyEconomyObject.getEconomyCurrency() + ".");
                         } catch (EconomyException e) {
-                                plugin.sendErrorMsg(defenderPlayer, "Could not take death funds.");
+                        	TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
                         }
         }
 
