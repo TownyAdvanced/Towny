@@ -384,10 +384,9 @@ public class TownCommand implements CommandExecutor  {
                         player.sendMessage(ChatTools.formatCommand("", "/town set", "perm ...", "'/town set perm' " + TownySettings.getLangString("res_5")));
                         //player.sendMessage(ChatTools.formatCommand("", "/town set", "pvp [on/off]", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/town set", "taxes [$]", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/town set", "plottax [$]", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/town set", "plotprice [$]", ""));
-            player.sendMessage(ChatTools.formatCommand("", "/town set", "shoptax [$]", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "/town set", "shopprice [$]", ""));
+                        player.sendMessage(ChatTools.formatCommand("", "/town set", "[plottax/shoptax/embassytax] [$]", ""));
+                        //player.sendMessage(ChatTools.formatCommand("", "/town set", "shoptax [$]", ""));
+                        player.sendMessage(ChatTools.formatCommand("", "/town set", "[plotprice/shopprice/embassyprice] [$]", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
                         player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
                         //player.sendMessage(ChatTools.formatCommand("", "/town set", "public [on/off]", ""));
@@ -982,7 +981,7 @@ public class TownCommand implements CommandExecutor  {
                 Chunk chunk = town.getSpawn().getWorld().getChunkAt(town.getSpawn().getBlock());
                 
                 // Essentials tests
-                boolean notUsingESS = false;
+                boolean UsingESS = TownySettings.isUsingEssentials();
                 
                 if (TownySettings.isUsingEssentials() && !isTownyAdmin) {
                     Plugin handle = plugin.getServer().getPluginManager().getPlugin("Essentials");
@@ -995,13 +994,15 @@ public class TownCommand implements CommandExecutor  {
                             
                             if (!user.isTeleportEnabled()) {
                                 //Ess teleport is disabled
-                                notUsingESS = true;
+                            	UsingESS = false;
                                 return;
                             }
                             if (!user.isJailed()) {
                             	
                                 Teleport teleport = user.getTeleport();
                                 if (!chunk.isLoaded()) chunk.load();
+                                // Cause an essentials exception if in cooldown.
+                                teleport.cooldown(true);
                                 teleport.teleport(town.getSpawn(),null);
                             }
                         } catch (Exception e) {
@@ -1028,12 +1029,12 @@ public class TownCommand implements CommandExecutor  {
                     return;
                 }
                 
-                if (!notUsingESS) {
+                if (!UsingESS) {
                     if (plugin.getTownyUniverse().isTeleportWarmupRunning()) {
                     	// Use teleport warmup
                         player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"),
                                 TownySettings.getTeleportWarmupTime()));
-                        plugin.getTownyUniverse().requestTeleport(player, town);
+                        plugin.getTownyUniverse().requestTeleport(player, town, travelCost);
                     } else {
                     	// Don't use teleport warmup
                     	if (player.getVehicle() != null)
@@ -1383,101 +1384,115 @@ public class TownCommand implements CommandExecutor  {
                 setTownBlockPermissions(player, townBlockOwner, townBlockOwner.getPermissions(), split, false);
                 
         }
-        public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
-                
-                // TODO: switches
-                if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-                        player.sendMessage(ChatTools.formatTitle("/... set perm"));
-                        player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
-                        player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-                        player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-                        player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-                        if (townBlockOwner instanceof Town)
-                        	player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
-                        if (townBlockOwner instanceof Resident)
-                        	player.sendMessage(ChatTools.formatCommand("Eg", "/resident|plot set perm", "friend build on", ""));
-                        player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
-                        player.sendMessage(TownySettings.getLangString("plot_perms_1"));
-                } else {
-                        //TownyPermission perm = townBlockOwner.getPermissions();
-                        
-                        // reset the friend to resident so the perm settings don't fail
-                        if (friend && split[0].equalsIgnoreCase("friend"))
-                                split[0] = "resident";
-                        
-                        if (split.length == 1)
-                                try {
-                                        perm.setAll(plugin.parseOnOff(split[0]));
-                                } catch (Exception e) {
-                                }
-                        else if (split.length == 2)
-                                try {
-                                        boolean b = plugin.parseOnOff(split[1]);
-                                        if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
-                                                perm.residentBuild = b;
-                                                perm.residentDestroy = b;
-                                                perm.residentSwitch = b;
-                                                perm.residentItemUse = b;
-                                        } else if (split[0].equalsIgnoreCase("outsider")) {
-                                                perm.outsiderBuild = b;
-                                                perm.outsiderDestroy = b;
-                                                perm.outsiderSwitch = b;
-                                                perm.outsiderItemUse = b;
-                                        } else if (split[0].equalsIgnoreCase("ally")) {
-                                                perm.allyBuild = b;
-                                                perm.allyDestroy = b;
-                                                perm.allySwitch = b;
-                                                perm.allyItemUse = b;
-                                        } else if (split[0].equalsIgnoreCase("build")) {
-                                                perm.residentBuild = b;
-                                                perm.outsiderBuild = b;
-                                                perm.allyBuild = b;
-                                        } else if (split[0].equalsIgnoreCase("destroy")) {
-                                                perm.residentDestroy = b;
-                                                perm.outsiderDestroy = b;
-                                                perm.allyDestroy = b;
-                                        } else if (split[0].equalsIgnoreCase("switch")) {
-                                                perm.residentSwitch = b;
-                                                perm.outsiderSwitch = b;
-                                                perm.allySwitch = b;
-                                        } else if (split[0].equalsIgnoreCase("itemuse")) {
-                                                perm.residentItemUse = b;
-                                                perm.outsiderItemUse = b;
-                                                perm.allyItemUse = b;
-                                        } else if (split[0].equalsIgnoreCase("pvp")) {
-                                            perm.pvp = b;
-	                                    } else if (split[0].equalsIgnoreCase("fire")) {
-	                                        perm.fire = b;
-		                                } else if (split[0].equalsIgnoreCase("explosion")) {
-		                                    perm.explosion = b;
-		                                } else if (split[0].equalsIgnoreCase("mobs")) {
-		                                    perm.mobs = b;
-		                                }
-                                        
-                                } catch (Exception e) {
-                                }
-                        else if (split.length == 3)
-                                try {
-                                        boolean b = plugin.parseOnOff(split[2]);
-                                        String s = "";
-                                        s = split[0] + split[1];
-                                        perm.set(s, b);
-                                } catch (Exception e) {
-                                }
-                        String perms = perm.toString();
-                        //change perm name to friend is this is a resident setting
-                        if (friend)
-                                perms = perms.replaceAll("resident", "friend");
-                        TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-                        TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + perm.getColourString()));
-                        TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
-                        		+ Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
-                                + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF")
-                                + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-                        plugin.updateCache();
-                }
-        }
+
+	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
+
+		// TODO: switches
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+			player.sendMessage(ChatTools.formatTitle("/... set perm"));
+			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+			if (townBlockOwner instanceof Town)
+				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
+			if (townBlockOwner instanceof Resident)
+				player.sendMessage(ChatTools.formatCommand("Eg", "/resident|plot set perm", "friend build on", ""));
+			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
+			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
+		} else {
+			//TownyPermission perm = townBlockOwner.getPermissions();
+
+			// reset the friend to resident so the perm settings don't fail
+			if (friend && split[0].equalsIgnoreCase("friend"))
+				split[0] = "resident";
+
+			if (split.length == 1) {
+				if (split[0].equalsIgnoreCase("reset")) {
+					// reset all townBlock permissions (by town/resident)
+					for (TownBlock townBlock : new ArrayList<TownBlock>(townBlockOwner.getTownBlocks())) {
+						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
+							// Reset permissions
+							townBlock.setType(townBlock.getType());
+						}
+					}
+					if (townBlockOwner instanceof Town)
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
+					else
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
+
+					plugin.updateCache();
+					return;
+				} else
+					try {
+						perm.setAll(plugin.parseOnOff(split[0]));
+					} catch (Exception e) {
+					}
+			} else if (split.length == 2)
+				try {
+					boolean b = plugin.parseOnOff(split[1]);
+					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
+						perm.residentBuild = b;
+						perm.residentDestroy = b;
+						perm.residentSwitch = b;
+						perm.residentItemUse = b;
+					} else if (split[0].equalsIgnoreCase("outsider")) {
+						perm.outsiderBuild = b;
+						perm.outsiderDestroy = b;
+						perm.outsiderSwitch = b;
+						perm.outsiderItemUse = b;
+					} else if (split[0].equalsIgnoreCase("ally")) {
+						perm.allyBuild = b;
+						perm.allyDestroy = b;
+						perm.allySwitch = b;
+						perm.allyItemUse = b;
+					} else if (split[0].equalsIgnoreCase("build")) {
+						perm.residentBuild = b;
+						perm.outsiderBuild = b;
+						perm.allyBuild = b;
+					} else if (split[0].equalsIgnoreCase("destroy")) {
+						perm.residentDestroy = b;
+						perm.outsiderDestroy = b;
+						perm.allyDestroy = b;
+					} else if (split[0].equalsIgnoreCase("switch")) {
+						perm.residentSwitch = b;
+						perm.outsiderSwitch = b;
+						perm.allySwitch = b;
+					} else if (split[0].equalsIgnoreCase("itemuse")) {
+						perm.residentItemUse = b;
+						perm.outsiderItemUse = b;
+						perm.allyItemUse = b;
+					} else if (split[0].equalsIgnoreCase("pvp")) {
+						perm.pvp = b;
+					} else if (split[0].equalsIgnoreCase("fire")) {
+						perm.fire = b;
+					} else if (split[0].equalsIgnoreCase("explosion")) {
+						perm.explosion = b;
+					} else if (split[0].equalsIgnoreCase("mobs")) {
+						perm.mobs = b;
+					}
+
+				} catch (Exception e) {
+				}
+			else if (split.length == 3)
+				try {
+					boolean b = plugin.parseOnOff(split[2]);
+					String s = "";
+					s = split[0] + split[1];
+					perm.set(s, b);
+				} catch (Exception e) {
+				}
+			String perms = perm.toString();
+			//change perm name to friend is this is a resident setting
+			if (friend)
+				perms = perms.replaceAll("resident", "friend");
+			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + perm.getColourString()));
+			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			plugin.updateCache();
+		}
+	}
         
         public static void parseTownClaimCommand(Player player, String[] split) {
                 

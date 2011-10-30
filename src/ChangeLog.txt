@@ -778,3 +778,43 @@ v0.76.2.12:
 	    Then add any of the towny tags into your chat plugins format line.
 v0.77.0.0:
 	- Release.
+v0.77.0.1:
+	- Fixed resident colour in config.
+	- Fixed creation of the logs folder for new installs causing an error at startup.
+	- Added..
+	  {townformatted} - Displays town name if a member of a town (using tag_format.town).
+      {nationformatted} - Displays nation name if a member of a nation (using tag_format.nation).
+    - Changed {townyfullnames} to {townyformatted}.
+    - Fixed an error on town loading caused by the new plot level permissions.
+v0.77.0.2:
+	- Towny now accepts worlds with spaces in their names.
+	- Added a 'wilds' plot type. This type allows mayors to set the plot to wilds and it follows wilderness build/break rules for residents only.
+	  Handy for adding a protection zones arround a town where residents can farm tree's and plant sapplings.
+v0.77.0.3:
+	- changed modify_chat.format to modify_chat.Chat_format so it will force an upgrade of the chat format for those having trouble with copy/paste.
+	- Fixed Arena plots so they properly allow PVP.
+	- Towny cheat protection no longer opperates in worlds where towny is disabled.
+	- Fixed an error displaying the mayor error message when he attempts to leave town.
+	- Fixed Switch permissions allowing users to open chests with certain items in hand.
+v0.77.0.4:
+	- You can no longer add your own nation as an enemy/ally.
+	- Extra parsing when loading comma delimited lines to prevent badly edited or empty elements causing issues.
+	- Only plot owners/mayors and assistants can now use plot toggle.
+	- Removed 'msg_not_town' from english.yml as it's not longer used.
+	- Fixed '/res delete <name>' and made it admin only.
+	  Command will remove all traces of the resident (including deleting the residents data file).
+	- Towny now supports the Essentials Cooldown and delay.
+	- When using the Towny teleport delay, aborted teleports now refund the money.
+	- Added '/townyadmin purge x', where x is a number of days.
+	  Removes all residents who havn't logged in for X amount of days.
+v0.77.0.5:
+	- The notification when entering a town will now show if the town has PVP enabled.
+	- Plot PVP settings will now cause a notification if you move between plots with different settings.
+v0.77.0.6:
+	- Fixed ConcurrentModificationException in utilSaveTownBlocks.
+	- added new commands...
+	  '/town set perm reset' - resets all town owned (non resident) plots to the towns default permissions.
+	  '/plot set perm reset' - resets all plots owned by you to their default permissions.
+	- Fixed 'plot claim/unclaim' to set correct plot permissions based upon plot type.
+v0.77.1.0:
+	- Release.

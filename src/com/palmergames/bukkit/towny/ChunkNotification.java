@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -112,6 +114,10 @@ public class ChunkNotification {
 		if (output != null && output.length() > 0)
 			out.add(output);
 		
+		output = getPVPNotification();
+		if (output != null && output.length() > 0)
+			out.add(output);
+		
 		output = getPlotNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
@@ -122,7 +128,7 @@ public class ChunkNotification {
 	public String getAreaNotification() {
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessNotificationFormat, to.getWorld().getUnclaimedZoneName());
+				return String.format(areaWildernessNotificationFormat, to.getWorld().getUnclaimedZoneName()) + ((testWorldPVP()) ? Colors.Red + " (PvP)" : "");
 			else
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
 		}
@@ -130,13 +136,25 @@ public class ChunkNotification {
 	}
 	
 	public String getOwnerNotification() {
-		if (fromResident != toResident && !toWild) {
+		if (fromResident != toResident && !toWild)  {
             if (toResident != null)
             	return String.format(ownerNotificationFormat, TownyFormatter.getFormattedName(toResident));
 			else
 				return String.format(noOwnerNotificationFormat, TownySettings.getUnclaimedPlotName());
+            
 		}
 		return null;
+	}
+	
+	public String getPVPNotification() {
+		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP())))  {
+			return ((testWorldPVP() && (toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");   
+		}
+		return null;
+	}
+	
+	private boolean testWorldPVP() {
+		return to.getWorld().isPVP() && Bukkit.getServer().getWorld(to.getWorld().getName()).getPVP();	
 	}
 	
 	public String getPlotNotification() {

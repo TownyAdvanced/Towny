@@ -14,6 +14,7 @@ public class Resident extends TownBlockOwner {
 	private String title, surname;
     private long teleportRequestTime;
     private Town teleportDestination;
+    private double teleportCost;
     private String chatFormattedName;
 
 	public Resident(String name) {
@@ -23,6 +24,7 @@ public class Resident extends TownBlockOwner {
 		setSurname("");
 		permissions.loadDefault(this);
         teleportRequestTime = -1;
+        teleportCost = 0.0;
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -203,6 +205,13 @@ public class Resident extends TownBlockOwner {
 
     public boolean hasRequestedTeleport() {
         return teleportRequestTime != -1;
+    }
+    
+    public void setTeleportCost(double cost) {
+        teleportCost = cost;
+    }
+    public double getTeleportCost() {
+        return teleportCost;
     }
 
 	/**

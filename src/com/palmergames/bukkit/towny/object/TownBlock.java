@@ -121,8 +121,26 @@ public class TownBlock {
         this.type = type;
         // Custom plot settings here
         switch(type) {
+        case RESIDENTIAL:
+        	if (this.hasResident())
+        		this.permissions.loadDefault(this.resident);
+        	else
+        		this.permissions.loadDefault(this.town);
+        	
+        	break;
         case ARENA:
         	this.permissions.pvp = true;
+        	break;
+        case EMBASSY:
+        	if (this.hasResident())
+        		this.permissions.loadDefault(this.resident);
+        	else
+        		this.permissions.loadDefault(this.town);
+        	
+        	break;
+        case WILDS:
+        	this.setPermissions("denyAll");
+        	break;
         }
     }
 

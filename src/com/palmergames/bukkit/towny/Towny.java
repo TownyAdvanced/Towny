@@ -640,7 +640,7 @@ public class Towny extends JavaPlugin {
         }
         
         public void setupLogger() {
-        	TownyLogger.setup(getDataFolder().getAbsolutePath(), TownySettings.isAppendingToLog());
+        	TownyLogger.setup(getTownyUniverse().getRootFolder(), TownySettings.isAppendingToLog());
         }
         
         public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {

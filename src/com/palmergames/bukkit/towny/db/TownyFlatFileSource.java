@@ -350,9 +350,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					String[] tokens = line.split(",");
 					for (String token : tokens) {
-						Resident friend = universe.getResident(token);
-						if (friend != null)
-							resident.addFriend(friend);
+						if (!token.isEmpty()){
+							Resident friend = universe.getResident(token);
+							if (friend != null)
+								resident.addFriend(friend);
+						}
 					}
 				}
 				
@@ -389,9 +391,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident resident = universe.getResident(token);
-						if (resident != null)
-							town.addResident(resident);
+						if (!token.isEmpty()){
+							Resident resident = universe.getResident(token);
+							if (resident != null)
+								town.addResident(resident);
+						}
 					}
 				}
 
@@ -403,9 +407,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident assistant = universe.getResident(token);
-						if (assistant != null)
-							town.addAssistant(assistant);
+						if (!token.isEmpty()){
+							Resident assistant = universe.getResident(token);
+							if (assistant != null)
+								town.addAssistant(assistant);
+						}
 					}
 				}
 
@@ -630,9 +636,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Town town = universe.getTown(token);
-						if (town != null)
-							nation.addTown(town);
+						if (!token.isEmpty()){
+							Town town = universe.getTown(token);
+							if (town != null)
+								nation.addTown(town);
+						}
 					}
 				}
 
@@ -644,9 +652,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident assistant = universe.getResident(token);
-						if (assistant != null)
-							nation.addAssistant(assistant);
+						if (!token.isEmpty()){
+							Resident assistant = universe.getResident(token);
+							if (assistant != null)
+								nation.addAssistant(assistant);
+						}
 					}
 				}
 				
@@ -662,9 +672,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
+						if (!token.isEmpty()){
 						Nation friend = universe.getNation(token);
-						if (friend != null)
-							nation.addAlly(friend); //("ally", friend);
+							if (friend != null)
+								nation.addAlly(friend); //("ally", friend);
+						}
 					}
 				}
 
@@ -672,9 +684,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Nation enemy = universe.getNation(token);
-						if (enemy != null)
-							nation.addEnemy(enemy); //("enemy", enemy);
+						if (!token.isEmpty()){
+							Nation enemy = universe.getNation(token);
+							if (enemy != null)
+								nation.addEnemy(enemy); //("enemy", enemy);
+						}
 					}
 				}
 
@@ -727,10 +741,12 @@ public class TownyFlatFileSource extends TownyDataSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Town town = universe.getTown(token);
-						if (town != null) {
-							town.setWorld(world);
-							//world.addTown(town); not needed as it's handled in the Town object
+						if (!token.isEmpty()){
+							Town town = universe.getTown(token);
+							if (town != null) {
+								town.setWorld(world);
+								//world.addTown(town); not needed as it's handled in the Town object
+							}
 						}
 					}
 				}
@@ -833,6 +849,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					try {
 						List<Integer> nums = new ArrayList<Integer>();
 						for (String s: line.split(","))
+							if (!s.isEmpty())
 							try {
 								nums.add(Integer.parseInt(s));
 							} catch (NumberFormatException e) {
@@ -852,6 +869,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					try {
 						List<Integer> nums = new ArrayList<Integer>();
 						for (String s: line.split(","))
+							if (!s.isEmpty())
 							try {
 								nums.add(Integer.parseInt(s));
 							} catch (NumberFormatException e) {
@@ -871,6 +889,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					try {
 						List<String> materials = new ArrayList<String>();
 						for (String s: line.split(","))
+							if (!s.isEmpty())
 							try {
 								materials.add(s.toUpperCase().trim());
 							} catch (NumberFormatException e) {
@@ -896,6 +915,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					try {
 						List<Integer> nums = new ArrayList<Integer>();
 						for (String s: line.split(","))
+							if (!s.isEmpty())
 							try {
 								nums.add(Integer.parseInt(s));
 							} catch (NumberFormatException e) {
@@ -1096,7 +1116,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 				fout.write(friend.getName() + ",");
 			fout.write(newLine);
 			// TownBlocks
-			fout.write("townBlocks=" + utilSaveTownBlocks(resident.getTownBlocks()) + newLine);
+			fout.write("townBlocks=" + utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())) + newLine);
 			// Plot Protection
 			fout.write("protectionStatus=" + resident.getPermissions().toString() + newLine);
 			fout.close();
@@ -1174,7 +1194,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 			fout.write("fire=" + Boolean.toString(town.isFire()) + newLine);
 			*/
 			// TownBlocks
-			fout.write("townBlocks=" + utilSaveTownBlocks(town.getTownBlocks()) + newLine);
+			fout.write("townBlocks=" + utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())) + newLine);
 			// Home Block
 			if (town.hasHomeBlock())
 				fout.write("homeBlock=" + town.getHomeBlock().getWorld().getName() + ","

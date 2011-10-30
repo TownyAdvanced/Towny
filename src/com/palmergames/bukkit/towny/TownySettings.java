@@ -355,6 +355,7 @@ public class TownySettings {
     
     public static String getLangString(String root){
         String data = language.getString(root.toLowerCase());
+
         if (data == null) {
         	sendError(root.toLowerCase() + " from " + config.getString("language"));
         	return "";
@@ -722,8 +723,8 @@ public class TownySettings {
 		return parseString(String.format(getLangString("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
 	}
 	
-	public static String[] getMayorAbondonMsg() {
-		return parseString(getLangString("MSG_MAYOR_ABANDON"));
+	public static String getMayorAbondonMsg() {
+		return parseSingleLineString(getLangString("MSG_MAYOR_ABANDON"));
 	}
 	
 	public static String getNotPermToNewTownLine() {

@@ -19,7 +19,7 @@ public class TownyLogger {
 	
 	public static void setup(String root, boolean append) {
 		String logFolder = root + FileMgmt.fileSeparator() + "logs";
-		FileMgmt.checkFolders(new String[]{logFolder});
+		//FileMgmt.checkFolders(new String[]{logFolder});
 		
 		setupLogger(log, logFolder, "towny.log", new TownyLogFormatter(), TownySettings.isAppendingToLog());
 		

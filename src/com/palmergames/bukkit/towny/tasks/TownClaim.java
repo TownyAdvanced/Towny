@@ -126,7 +126,7 @@ public class TownClaim extends Thread {
                         town.setHomeBlock(townBlock);
                 
                 // Set the plot permissions to mirror the towns.
-                townBlock.setPermissions(town.getPermissions().toString());
+                townBlock.setType(townBlock.getType());
                 TownyUniverse.getDataSource().saveTownBlock(townBlock);
                 
                 if (town.getWorld().isUsingPlotManagementRevert()) {

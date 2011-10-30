@@ -27,18 +27,20 @@ public enum TownBlockType {
             return town.getEmbassyPlotTax() + town.getPlotTax();
         }
     },
+    WILDS(4, "wilds"){	//Follows wilderness protection settings, but town owned.
+    },
     // These are subject to change:
 /*
-    PUBLIC(4, "") {  // Will have it's own permission set
+    PUBLIC(5, "") {  // Will have it's own permission set
     },
 
-    MINE(5, "") {  // Will have it's own permission set within a y range
+    MINE(6, "") {  // Will have it's own permission set within a y range
     },
 
-    HOTEL(6, "") {  // Will stack multiple y-ranges and function like a micro town
+    HOTEL(7, "") {  // Will stack multiple y-ranges and function like a micro town
     },
 
-    JAIL(7, "") {  // Where people will spawn when they die in enemy (neutral) towns
+    JAIL(8, "") {  // Where people will spawn when they die in enemy (neutral) towns
     },*/
     ;
 

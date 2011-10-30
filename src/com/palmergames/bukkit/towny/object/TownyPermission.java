@@ -39,7 +39,9 @@ public class TownyPermission {
 	}
 
 	public void set(String s, boolean b) {
-		if (s.equalsIgnoreCase("residentBuild"))
+		if (s.equalsIgnoreCase("denyAll"))
+			reset();
+		else if (s.equalsIgnoreCase("residentBuild"))
 			residentBuild = b;
 		else if (s.equalsIgnoreCase("residentDestroy"))
 			residentDestroy = b;
@@ -47,7 +49,6 @@ public class TownyPermission {
 			residentSwitch = b;
 		else if (s.equalsIgnoreCase("residentItemUse"))
 			residentItemUse = b;
-		
 		else if (s.equalsIgnoreCase("outsiderBuild"))
 			outsiderBuild = b;
 		else if (s.equalsIgnoreCase("outsiderDestroy"))
@@ -56,7 +57,6 @@ public class TownyPermission {
 			outsiderSwitch = b;
 		else if (s.equalsIgnoreCase("outsiderItemUse"))
 			outsiderItemUse = b;
-		
 		else if (s.equalsIgnoreCase("allyBuild"))
 			allyBuild = b;
 		else if (s.equalsIgnoreCase("allyDestroy"))
@@ -93,7 +93,6 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "residentSwitch";
 		if (residentItemUse)
 			out += (out.length() > 0 ? "," : "") + "residentItemUse";
-		
 		if (outsiderBuild)
 			out += (out.length() > 0 ? "," : "") + "outsiderBuild";
 		if (outsiderDestroy)
@@ -102,7 +101,6 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "outsiderSwitch";
 		if (outsiderItemUse)
 			out += (out.length() > 0 ? "," : "") + "outsiderItemUse";
-		
 		if (allyBuild)
 			out += (out.length() > 0 ? "," : "") + "allyBuild";
 		if (allyDestroy)
@@ -111,7 +109,6 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "allySwitch";
 		if (allyItemUse)
 			out += (out.length() > 0 ? "," : "") + "allyItemUse";
-		
 		if (pvp)
 			out += (out.length() > 0 ? "," : "") + "pvp";
 		if (fire)
@@ -120,7 +117,6 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "explosion";
 		if (mobs)
 			out += (out.length() > 0 ? "," : "") + "mobs";
-		
 		if (out.length() == 0)
 			out += "denyAll"; // Make the token not empty
 		return out;

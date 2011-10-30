@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -45,7 +47,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
         }
     }
 
-    public static void requestTeleport(Resident resident, Town town) {
+    public static void requestTeleport(Resident resident, Town town, double cost) {
     	resident.setTeleportRequestTime();
         resident.setTeleportDestination(town);
         try {
@@ -57,7 +59,21 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
     }
 
     public static void abortTeleportRequest(Resident resident) {
-    		if (resident != null && teleportQueue.contains(resident))
+    		if (resident != null && teleportQueue.contains(resident)) {
     			teleportQueue.remove(resident);
+    			if ((resident.getTeleportCost() != 0) && (TownySettings.isUsingEconomy())) {
+    				try {
+						resident.collect(resident.getTeleportCost(), TownySettings.getLangString("msg_cost_spawn_refund"));
+						resident.setTeleportCost(0);
+						TownyMessaging.sendResidentMessage(resident, TownySettings.getLangString("msg_cost_spawn_refund"));
+					} catch (EconomyException e) {
+						// Economy error trap
+						e.printStackTrace();
+					} catch (TownyException e) {
+						// Resident not registered exception.
+					}
+    				
+    			}
+    		}
     }
 }
