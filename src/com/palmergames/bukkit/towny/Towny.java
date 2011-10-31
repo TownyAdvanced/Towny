@@ -342,11 +342,19 @@ public class Towny extends JavaPlugin {
         int bukkitVer = TownySettings.getMinBukkitVersion();
         
         if (!matcher.find() || matcher.group(1) == null) {
-        	error = true;
-        	TownyLogger.log.severe("[Towny Error] Unable to read CraftBukkit Version.");
-        	TownyLogger.log.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
-            getServer().getPluginManager().disablePlugin(this);
-            return false;
+        	// Test for 1.9 beta builds
+        	pattern = Pattern.compile("-b(\\d*?)-1.9jnks", Pattern.CASE_INSENSITIVE);
+            matcher = pattern.matcher(getServer().getVersion());
+            
+            if (!matcher.find() || matcher.group(1) == null) {
+	        	error = true;
+	        	TownyLogger.log.severe("[Towny Error] Unable to read CraftBukkit Version.");
+	        	TownyLogger.log.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
+	            getServer().getPluginManager().disablePlugin(this);
+	            return false;
+            }
+            bukkitVer = 14;
+            
         }
         int curBuild = Integer.parseInt(matcher.group(1));
         
