@@ -133,16 +133,17 @@ public class PlotClaim extends Thread {
                                         townBlock.setType(townBlock.getType());
 
 										TownyUniverse.getDataSource().saveResident(owner);
+										TownyUniverse.getDataSource().saveTownBlock(townBlock);
 										
 										plugin.updateCache();
                                         return true;
                                 } else if (town.isMayor(resident) || town.hasAssistant(resident)) {
                                 	//Plot isn't for sale but re-possessing for town.
                                 	
-                                        if (TownySettings.isUsingEconomy() && !town.payTo(townBlock.getPlotPrice(), owner, "Plot - Buy Back"))
+                                        if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, "Plot - Buy Back"))
                                                 throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
                                         
-                                        TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), townBlock.getPlotPrice()));
+                                        TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
                                         townBlock.setResident(null);
                                         townBlock.setPlotPrice(-1);
                                         
@@ -150,6 +151,7 @@ public class PlotClaim extends Thread {
                                         townBlock.setType(townBlock.getType());
 
 										TownyUniverse.getDataSource().saveResident(owner);
+										TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
                                         return true;
                                 } else {
@@ -170,7 +172,8 @@ public class PlotClaim extends Thread {
                                 townBlock.setResident(resident);
                                 
                                 // Set the plot permissions to mirror the new owners.
-                                townBlock.setType(townBlock.getType());                                        
+                                townBlock.setType(townBlock.getType());
+                                TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
                                 return true;
                         }
@@ -191,6 +194,7 @@ public class PlotClaim extends Thread {
             
             // Set the plot permissions to mirror the towns.
             townBlock.setType(townBlock.getType());
+            TownyUniverse.getDataSource().saveTownBlock(townBlock);
             
 			plugin.updateCache();
                         

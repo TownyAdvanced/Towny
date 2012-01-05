@@ -3,8 +3,8 @@ package com.palmergames.util;
 import java.util.Comparator;
 import java.util.Hashtable;
 
-import ca.xshade.util.KeyValue;
-import ca.xshade.util.KeyValueTable;
+import com.palmergames.util.KeyValue;
+import com.palmergames.util.KeyValueTable;
 
 public class Sorting {
 	

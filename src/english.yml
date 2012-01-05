@@ -1,5 +1,5 @@
 name: Towny
-version: 0.14
+version: 0.15
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -398,6 +398,7 @@ msg_offline_no_join: '&c%s is offline but using permissions so can''t join a tow
 msg_err_warzone_cannot_edit_material: '&cCannot %s %s in warzone.'
 msg_err_warzone_cannot_use_switches: '&cCannot use switches in warzone.'
 msg_err_warzone_cannot_use_item: '&cCannot use this item in a warzones.'
+msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
 
 # these messages are only used if town/nation creation is set to admins only
 

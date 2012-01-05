@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,6 +33,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 
 
@@ -157,13 +159,15 @@ public class TownyPlayerListener extends PlayerListener {
 
 		Block block = event.getClickedBlock();
 		WorldCoord worldCoord;
+		TownyWorld world = null;
 		//System.out.println("onPlayerInteractEvent");
 
 		try {
+			world = TownyUniverse.getWorld(player.getWorld().getName());
 			if (block != null)
-				worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(block));
+				worldCoord = new WorldCoord(world, Coord.parseCoord(block));
 			else
-				worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(player));
+				worldCoord = new WorldCoord(world, Coord.parseCoord(player));
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
@@ -177,14 +181,22 @@ public class TownyPlayerListener extends PlayerListener {
 			bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.ITEM_USE);
 		else
 			bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), TownyPermission.ActionType.ITEM_USE);
+		
+		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
 
 		PlayerCache cache = plugin.getCache(player);
 		//cache.updateCoord(worldCoord);
 		try {
 
 			TownBlockStatus status = cache.getStatus();
-			if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))
+			if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
 				return;
+			
+			// Allow item_use if we have an override
+			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE)))
+				|| ((status == TownBlockStatus.OUTSIDER) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))))
+				return;
+			
 			if (status == TownBlockStatus.WARZONE) {
 				if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
 					event.setCancelled(true);
@@ -192,9 +204,14 @@ public class TownyPlayerListener extends PlayerListener {
 				}
 				return;
 			}
-			if (!bItemUse)
+			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
+				//if (status == TownBlockStatus.UNCLAIMED_ZONE)
+				//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
+				
 				event.setCancelled(true);
-			if (cache.hasBlockErrMsg())
+			}
+			
+			if ((cache.hasBlockErrMsg())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
 				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 		} catch (NullPointerException e) {
@@ -215,8 +232,10 @@ public class TownyPlayerListener extends PlayerListener {
 			return;
 
 		WorldCoord worldCoord;
+		TownyWorld world;
 		try {
-			worldCoord = new WorldCoord(TownyUniverse.getWorld(block.getWorld().getName()), Coord.parseCoord(block));
+			world = TownyUniverse.getWorld(player.getWorld().getName());
+			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
@@ -225,12 +244,20 @@ public class TownyPlayerListener extends PlayerListener {
 
 		//Get switch permissions (updates if none exist)
 		boolean bSwitch = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.SWITCH);
+		
+		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, block.getTypeId(), TownyPermission.ActionType.SWITCH);
 
 		PlayerCache cache = plugin.getCache(player);
-		//cache.updateCoord(worldCoord);
+		
 		TownBlockStatus status = cache.getStatus();
-		if (status == TownBlockStatus.UNCLAIMED_ZONE && plugin.hasWildOverride(worldCoord.getWorld(), player, block.getTypeId(), TownyPermission.ActionType.SWITCH))
+		if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
 			return;
+		
+		// Allow item_use if we have an override
+		if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, block.getTypeId(), TownyPermission.ActionType.SWITCH)))
+			|| ((status == TownBlockStatus.OUTSIDER) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, block.getTypeId(), TownyPermission.ActionType.SWITCH))))
+			return;
+					
 		if (status == TownBlockStatus.WARZONE) {
 			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
@@ -238,10 +265,13 @@ public class TownyPlayerListener extends PlayerListener {
 			}
 			return;
 		}
-		if (!bSwitch) {
+		if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bSwitch) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
+			//if (status == TownBlockStatus.UNCLAIMED_ZONE)
+			//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
+			
 			event.setCancelled(true);
 		}
-		if (cache.hasBlockErrMsg())
+		if (cache.hasBlockErrMsg()) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
 			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 	}
 
@@ -262,7 +292,7 @@ public class TownyPlayerListener extends PlayerListener {
 		// Prevent fly/double jump cheats
 		try {
 			if (TownyUniverse.getWorld(player.getWorld().getName()).isUsingTowny())
-				if (TownySettings.isUsingCheatProtection() && !TownyUniverse.getPermissionSource().hasPermission(player, "towny.cheat.bypass"))
+				if (TownySettings.isUsingCheatProtection() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.CHEAT_BYPASS.getNode()) && (player.getGameMode() != GameMode.CREATIVE))
 					if (event.getEventName() != "PLAYER_TELEPORT" && from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR && player.getFallDistance() == 0 && player.getVelocity().getY() <= -0.6 && (player.getLocation().getY() > 0)) {
 						//plugin.sendErrorMsg(player, "Cheat Detected!");
 

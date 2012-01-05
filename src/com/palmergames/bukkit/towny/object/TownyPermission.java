@@ -39,6 +39,7 @@ public class TownyPermission {
 	}
 
 	public void set(String s, boolean b) {
+		
 		if (s.equalsIgnoreCase("denyAll"))
 			reset();
 		else if (s.equalsIgnoreCase("residentBuild"))
@@ -218,10 +219,24 @@ public class TownyPermission {
 		outsiderDestroy = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.DESTROY);
 		outsiderItemUse = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.ITEM_USE);
 		outsiderSwitch = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.SWITCH);
-		
+		/*
 		pvp = owner.getPermissions().pvp;
 		fire = owner.getPermissions().fire;
 		explosion = owner.getPermissions().explosion;
 		mobs = owner.getPermissions().mobs;
+		*/
+		
+		if (owner instanceof Town) {
+			pvp = TownySettings.getPermFlag_Town_Default_PVP();
+			fire = TownySettings.getPermFlag_Town_Default_FIRE();
+			explosion = TownySettings.getPermFlag_Town_Default_Explosion();
+			mobs = TownySettings.getPermFlag_Town_Default_Mobs();
+		} else {
+			pvp = owner.getPermissions().pvp;
+			fire = owner.getPermissions().fire;
+			explosion = owner.getPermissions().explosion;
+			mobs = owner.getPermissions().mobs;
+		}
+		
 	}
 }

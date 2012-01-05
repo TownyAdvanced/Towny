@@ -97,7 +97,7 @@ public class War {
                                 //                              (delay-t)*1000);
                                 int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(),
                                                 new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))),
-                                                MinecraftTools.convertToTicks((delay-t)*1000));
+                                                MinecraftTools.convertToTicks((delay-t)));
                                 if (id == -1) {
                                 	TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
                                     end();
@@ -105,7 +105,7 @@ public class War {
                                         addTaskId(id);
                         }
                         //warTimer.schedule(new StartWarTimerTask(universe), delay*1000);
-                        int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), MinecraftTools.convertToTicks(delay*1000));
+                        int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), MinecraftTools.convertToTicks(delay));
                         if (id == -1) {
                         	TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
                             end();
@@ -152,7 +152,7 @@ public class War {
                         }
                 }
                 //warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
-                int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, MinecraftTools.convertToTicks(1000));
+                int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, MinecraftTools.convertToTicks(5));
                 if (id == -1) {
                 	TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
                         end();
@@ -181,6 +181,7 @@ public class War {
                         
                         try {
                                 KeyValue<Town,Integer> winningTownScore = getWinningTownScore();
+                                getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Nation Winnings");
                                 TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + halfWinnings + " " + TownyEconomyObject.getEconomyCurrency() + " with the score " + winningTownScore.value + ".");
                         } catch (TownyException e) {
                         }
@@ -220,14 +221,14 @@ public class War {
                 int hp = warZone.get(worldCoord) - 1;
                 if (hp > 0) {
                         warZone.put(worldCoord, hp);
-                        if (hp % 10 == 0) {
+                        //if (hp % 10 == 0) {
                                 universe.sendMessageTo(townBlock.getTown(),
                                                 Colors.Gray + "["+townBlock.getTown().getName()+"]("+townBlock.getCoord().toString()+") HP: "+hp,
-                                                "wardef");
+                                                "");
                                 universe.sendMessageTo(attacker,
                                                 Colors.Gray + "["+townBlock.getTown().getName()+"]("+townBlock.getCoord().toString()+") HP: "+hp,
-                                                "waratk");
-                        }
+                                                "");
+                        //}
                 } else
                         remove(attacker, townBlock);
         }

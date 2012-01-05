@@ -75,6 +75,31 @@ public class Perms3Source extends TownyPermissionSource {
     	
     	return -1;
     }
+    
+    /**
+     * 
+     * @param playerName
+     * @param node
+     * @return empty = can't find
+     */
+    @Override
+    // Suppression is to clear warnings while retaining permissions 2.7 compatibility
+    public String getPlayerPermissionStringNode(String playerName, String node) {
+    	Player player = plugin.getServer().getPlayer(playerName);
+		String worldName = player.getWorld().getName();
+		String groupName;
+		
+		try {
+			PermissionHandler handler = permissions.getHandler();
+    		groupName = handler.getGroup(worldName, playerName);
+    		
+    		return handler.getGroupPermissionString(worldName, groupName, node);
+		} catch (Exception e) {
+			// Ignore UnsupportedOperationException on certain Permission APIs
+		}
+    	
+    	return "";
+    }
 	
     /** hasPermission
      * 
@@ -86,6 +111,10 @@ public class Perms3Source extends TownyPermissionSource {
      */
     @Override
 	public boolean hasPermission(Player player, String node) {
+    	
+    	if (player.isOp())
+    		return true;
+    	
     	PermissionHandler handler = permissions.getHandler();
         return handler.permission(player, node);
     }

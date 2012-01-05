@@ -153,7 +153,7 @@ public class Resident extends TownBlockOwner {
 
 	public void clear() throws EmptyTownException {
 		removeAllFriends();
-		setLastOnline(0);
+		//setLastOnline(0);
 		
 		if (hasTown())
 			try {

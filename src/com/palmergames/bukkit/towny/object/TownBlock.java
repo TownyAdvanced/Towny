@@ -17,12 +17,14 @@ public class TownBlock {
 	
 	//Plot level permissions
     protected TownyPermission permissions = new TownyPermission();
+    protected boolean isChanged;
 
 	public TownBlock(int x, int z, TownyWorld world) {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
         this.type = TownBlockType.RESIDENTIAL;
+        isChanged = false;
 	}
 
 	public void setTown(Town town) {
@@ -111,7 +113,25 @@ public class TownBlock {
         return permissions;
     }
 
-    public TownBlockType getType() {
+    /**
+     * Have the permissions been manually changed.
+     * 
+	 * @return the isChanged
+	 */
+	public boolean isChanged() {
+		return isChanged;
+	}
+
+	/**
+	 * Flag the permissions as changed.
+	 * 
+	 * @param isChanged the isChanged to set
+	 */
+	public void setChanged(boolean isChanged) {
+		this.isChanged = isChanged;
+	}
+
+	public TownBlockType getType() {
         return type;
     }
 
@@ -119,27 +139,30 @@ public class TownBlock {
     	if (type != this.type)
     		this.permissions.reset();
         this.type = type;
+
         // Custom plot settings here
         switch(type) {
         case RESIDENTIAL:
-        	if (this.hasResident())
-        		this.permissions.loadDefault(this.resident);
-        	else
-        		this.permissions.loadDefault(this.town);
-        	
+        	if (this.hasResident()) {
+        		setPermissions(this.resident.permissions.toString());
+        	} else {
+        		setPermissions(this.town.permissions.toString());
+        	}
+        	break;
+        case COMMERCIAL:
+        	setPermissions("residentSwitch,allySwitch,outsiderSwitch");
         	break;
         case ARENA:
-        	this.permissions.pvp = true;
+        	setPermissions("pvp");
         	break;
         case EMBASSY:
         	if (this.hasResident())
-        		this.permissions.loadDefault(this.resident);
+        		setPermissions(this.resident.permissions.toString());
         	else
-        		this.permissions.loadDefault(this.town);
-        	
+        		setPermissions(this.town.permissions.toString());
         	break;
         case WILDS:
-        	this.setPermissions("denyAll");
+        	setPermissions("denyAll");
         	break;
         }
     }

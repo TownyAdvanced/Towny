@@ -30,6 +30,18 @@ public class NullPermSource extends TownyPermissionSource {
     	// // using no permissions provider
     	return -1;
     }
+    
+    /**
+     * 
+     * @param playerName
+     * @param node
+     * @return empty = can't find
+     */
+    @Override
+	public String getPlayerPermissionStringNode(String playerName, String node) {
+    	// // using no permissions provider
+    	return "";
+    }
 	
 	
     /** hasPermission

@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 
 /**
@@ -40,7 +41,7 @@ public class CachePermissions extends TownyUniverse {
 			cache.updateCoord(worldCoord);
 
 			TownyMessaging.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
-			return cache.getCachePermission(action) || plugin.isTownyAdmin(player); // Throws NullPointerException if the cache is empty
+			return cache.getCachePermission(action); // || plugin.isTownyAdmin(player); // Throws NullPointerException if the cache is empty
 
 		} catch (NotRegisteredException e) {
 			// World not known
@@ -59,7 +60,7 @@ public class CachePermissions extends TownyUniverse {
 				cache.updateCoord(worldCoord);
 
 				TownyMessaging.sendDebugMsg("New Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
-				return cache.getCachePermission(action) || plugin.isTownyAdmin(player);
+				return cache.getCachePermission(action); // || plugin.isTownyAdmin(player);
 
 			} catch (NotRegisteredException e1) {
 				// Will never get here.
@@ -120,7 +121,7 @@ public class CachePermissions extends TownyUniverse {
 
 		try {
 			// War Time switch rights
-			if (isWarTime())
+			if (isWarTime() && TownySettings.isAllowWarBlockGriefing())
 				try {
 					if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
 						return TownBlockStatus.WARZONE;
@@ -222,7 +223,7 @@ public class CachePermissions extends TownyUniverse {
 	}
 
 	public boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, TownyPermission.ActionType actionType) {
-		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.WARZONE || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
+		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.WARZONE || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
@@ -231,19 +232,19 @@ public class CachePermissions extends TownyUniverse {
 		}
 
 		TownBlock townBlock;
-		Town town;
+		//Town town;
 		try {
 			townBlock = pos.getTownBlock();
-			town = townBlock.getTown();
+			//town = townBlock.getTown();
 		} catch (NotRegisteredException e) {
 
 			// Wilderness Permissions
 			if (status == TownBlockStatus.UNCLAIMED_ZONE)
-				if (TownyUniverse.getPermissionSource().hasPermission(player, "towny.wild." + actionType.toString()))
+				if (TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_WILD_ALL.getNode(actionType.toString()))) {
 					return true;
 
-				else if (!TownyPermission.getUnclaimedZonePerm(actionType, pos.getWorld())) {
-					// TODO: Have permission to destroy here
+				} else if (!TownyPermission.getUnclaimedZonePerm(actionType, pos.getWorld())) {
+					// Don't have permission to build/destroy/switch/item_use here
 					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), actionType.toString()));
 					return false;
 				} else
@@ -253,6 +254,10 @@ public class CachePermissions extends TownyUniverse {
 				return false;
 			}
 		}
+		
+		// Allow admins to have ALL permissions over towns.
+		if (TownyUniverse.getPermissionSource().isTownyAdmin(player))
+			return true;
 
 		// Plot Permissions
 		//try {
@@ -275,7 +280,7 @@ public class CachePermissions extends TownyUniverse {
 			else {//TODO: (Remove) if (status == TownBlockStatus.OUTSIDER)
 
 				if (townBlock.getPermissions().getOutsiderPerm(actionType)) {
-					System.out.print("Outsider true");
+					//System.out.print("Outsider true");
 					return true;
 				} else {
 					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", actionType.toString()));
@@ -288,21 +293,21 @@ public class CachePermissions extends TownyUniverse {
 
 		// Town Permissions
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
-			if (town.getPermissions().getResidentPerm(actionType))
+			if (townBlock.getPermissions().getResidentPerm(actionType))
 				return true;
 			else {
 				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), actionType.toString()));
 				return false;
 			}
 		} else if (status == TownBlockStatus.TOWN_ALLY)
-			if (town.getPermissions().getAllyPerm(actionType))
+			if (townBlock.getPermissions().getAllyPerm(actionType))
 				return true;
 			else {
 				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), actionType.toString()));
 				return false;
 			}
 		else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY)
-			if (town.getPermissions().getOutsiderPerm(actionType))
+			if (townBlock.getPermissions().getOutsiderPerm(actionType))
 				return true;
 			else {
 				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), actionType.toString()));

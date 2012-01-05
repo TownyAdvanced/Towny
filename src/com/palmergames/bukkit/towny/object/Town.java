@@ -43,7 +43,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		commercialPlotTax = 0;
 		plotPrice = 0.0;
 		hasUpkeep = true;
-		isPublic = true;
+		isPublic = TownySettings.getTownDefaultPublic();
 		isTaxPercentage = false;
 		permissions.loadDefault(this);
 	}
@@ -169,11 +169,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			}
 	}
 
-	public void addAssistant(Resident resident) throws AlreadyRegisteredException {
+	public void addAssistant(Resident resident) throws AlreadyRegisteredException, NotRegisteredException {
 		if (hasAssistant(resident))
 			throw new AlreadyRegisteredException();
-		else
-			assistants.add(resident);
+		
+		if (!hasResident(resident))
+			throw new NotRegisteredException(resident.getName() + " doesn't belong to your town.");
+
+		assistants.add(resident);
 	}
 
 	public boolean isMayor(Resident resident) {
@@ -528,6 +531,31 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	}
 
 	public double getPlotPrice() {
+		return plotPrice;
+	}
+	
+	public double getPlotTypePrice(TownBlockType type) {
+		
+		double plotPrice = 0;
+		switch (type.ordinal()) {
+
+		case 0:
+			plotPrice = getPlotPrice();
+			break;
+		case 1:
+			plotPrice = getCommercialPlotPrice();
+			break;
+		case 3:
+			plotPrice = getEmbassyPlotPrice();
+			break;
+		default:
+			plotPrice = getPlotPrice();
+			
+		}
+		// check price isn't negative
+		if (plotPrice < 0)
+			plotPrice = 0;
+		
 		return plotPrice;
 	}
 

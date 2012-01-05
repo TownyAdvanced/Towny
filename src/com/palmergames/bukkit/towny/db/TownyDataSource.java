@@ -44,6 +44,10 @@ public abstract class TownyDataSource {
 	public void cleanupBackups() {
 	}
 	
+	public void deleteUnusedResidentFiles() {
+		
+	}
+	
 	public boolean confirmContinuation(String msg) {
 		Boolean choice = null;
 		String input = null;

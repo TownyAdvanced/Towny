@@ -1,7 +1,10 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -46,8 +49,14 @@ private Server server;
 	
 	public void incHealth(Player player) {
 		int currentHP = player.getHealth();
-		if (currentHP < 20)
+		if (currentHP < 20) {
 			player.setHealth(++currentHP);
+			
+			// Raise an event so other plugins can keep in sync.
+			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, ++currentHP, RegainReason.REGEN);
+			Bukkit.getServer().getPluginManager().callEvent(event);
+			
+		}
 	}
 	
 }

@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
@@ -192,9 +193,16 @@ public class TownySettings {
 		for (String channel : chatChannels) {
 			String split[] = channel.split("\\,");
 			if (split.length == 4)
-				newChatChannel(split[0].trim(), split[1].trim(), split[2].trim(), split[3].trim());
-		}	
+				newChatChannel(split[0].trim().toLowerCase(), split[1].trim(), split[2].trim(), split[3].trim());
+		}
+		
+		if (!chatChannelExists("/g"))
+			newChatChannel("/g", "", "", PermissionNodes.TOWNY_CHAT_GLOBAL.getNode());
 	}
+    
+    public static Set<String> getChatChannels() {
+    	return configChatChannel.keySet();
+    }
     
     public static boolean chatChannelExists(String command) {
     	return configChatChannel.containsKey(command);
@@ -368,7 +376,7 @@ public class TownySettings {
     }
 
     public static List<Integer> getIntArr(ConfigNodes node) {
-        String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
+        String[] strArray = getString(node.getRoot(), node.getDefault()).split(",");
         List<Integer> list = new ArrayList<Integer>();
         if (strArray != null) {
         for (int ctr=0; ctr < strArray.length; ctr++)
@@ -445,11 +453,13 @@ public class TownySettings {
         	} else if (root.getRoot() == ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot()) {
         		setChannels();
         	} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()){
-        		setNewProperty(ConfigNodes.VERSION.getRoot(), version);
+        		setNewProperty(root.getRoot(), version);
         	} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
-        		setNewProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), getLastRunVersion(version));
+        		setNewProperty(root.getRoot(), getLastRunVersion(version));
+        	} else if (root.getRoot() == ConfigNodes.VERSION_BUKKIT.getRoot()) {
+        		setNewProperty(root.getRoot(), ConfigNodes.VERSION_BUKKIT.getDefault());
         	} else
-        		setNewProperty(root.getRoot(), (config.getString(root.getRoot().toLowerCase()) != null) ? config.getString(root.getRoot().toLowerCase()) : root.getDefault());
+        		setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
         	
         }
         
@@ -465,13 +475,14 @@ public class TownySettings {
     		System.out.print("Loading NEW chatChannels!");
     		
     		List<String> newChannels = new ArrayList<String>();
-    		newChannels.add("/tc,&f[&3TC&f],&b,towny.chat.town");
-    		newChannels.add("/nc,&f[&6NC&f],&e,towny.chat.nation");
-    		newChannels.add("/a,&f[&4ADMIN&f],&c,towny.chat.admin");
-    		newChannels.add("/m,&f[&9MOD&f],&5,towny.chat.mod");
+    		newChannels.add("/g,,,towny.chat.global");
+    		newChannels.add("/tc,&f[&3TC&f],&b," + PermissionNodes.TOWNY_CHAT_TOWN.getNode());
+    		newChannels.add("/nc,&f[&6NC&f],&e," + PermissionNodes.TOWNY_CHAT_NATION.getNode());
+    		newChannels.add("/a,&f[&4ADMIN&f],&c," + PermissionNodes.TOWNY_CHAT_ADMIN.getNode());
+    		newChannels.add("/m,&f[&9MOD&f],&5," + PermissionNodes.TOWNY_CHAT_MOD.getNode());
     		newConfig.set(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), newChannels);
         } else
-        	newConfig.set(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), config.get(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot()));    	
+        	newConfig.set(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), config.get(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot()));
     }
 
     private static void setDefaultLevels() {
@@ -949,6 +960,10 @@ public class TownySettings {
     public static boolean isUsingModifyChat() {
         return getBoolean(ConfigNodes.FILTERS_MODIFY_CHAT_ENABLE);
     }
+    
+    public static boolean isModifyChatPerWorld() {
+        return getBoolean(ConfigNodes.FILTERS_MODIFY_CHAT_PER_WORLD);
+    }
 
     public static String getKingColour() {
         return getString(ConfigNodes.FILTERS_COLOUR_KING);
@@ -966,12 +981,20 @@ public class TownySettings {
         return getSeconds(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_TIME);
 	}
 	
+    public static boolean isDeleteEcoAccount() {
+        return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ECO);
+	}
+    
 	public static boolean isDeletingOldResidents() {
 		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE);
 	}
 	
 	public static int getWarTimeWarningDelay() {
 		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
+	}
+	
+	public static boolean isAllowWarBlockGriefing() {
+		return getBoolean(ConfigNodes.WAR_EVENT_BLOCK_GRIEFING);
 	}
 	
 	public static int getWarzoneTownBlockHealth() {
@@ -1029,6 +1052,10 @@ public class TownySettings {
 	
 	public static boolean hasHealthRegen() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REGEN_ENABLE);
+	}
+	
+	public static boolean getTownDefaultPublic() {
+		return getBoolean(ConfigNodes.TOWN_DEF_PUBLIC);
 	}
 	
 	public static boolean hasTownLimit() {
@@ -1112,8 +1139,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.UNCLAIMED_ZONE_SWITCH);
 	}
 	
-	public static boolean getUnclaimedZoneEndermanProtect() {
-		return getBoolean(ConfigNodes.UNCLAIMED_ZONE_ENDERMAN);
+	public static boolean getEndermanProtect() {
+		return getBoolean(ConfigNodes.NWS_WORLD_ENDERMAN);
 	}
 	
 	public static String getUnclaimedPlotName() {
@@ -1169,7 +1196,7 @@ public class TownySettings {
 	}
 	
 	public static double getWartimeDeathPrice() {
-		return getDouble(ConfigNodes.ECO_PRICE_DEATH_WARTIME);
+		return getDouble(ConfigNodes.WAR_EVENT_PRICE_DEATH);
 	}
 	
 	public static double getDeathPrice() {
@@ -1229,6 +1256,10 @@ public class TownySettings {
         return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED);
 	}
     
+    public static boolean isUpkeepPayingPlots() {
+        return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
+	}
+    
     public static double getNationUpkeep() {
         return getDouble(ConfigNodes.ECO_PRICE_NATION_UPKEEP);
     }
@@ -1256,6 +1287,9 @@ public class TownySettings {
 		return t;
 	}
 	
+	public static boolean isPvP() {
+		return getBoolean(ConfigNodes.NWS_WORLD_PVP);
+	}
 	public static boolean isForcingPvP() {
 		return getBoolean(ConfigNodes.NWS_FORCE_PVP_ON);
 	}
@@ -1272,6 +1306,9 @@ public class TownySettings {
         return getBoolean(ConfigNodes.NWS_WORLD_MONSTERS_ON);
     }
 
+    public static boolean isExplosions() {
+        return getBoolean(ConfigNodes.NWS_WORLD_EXPLOSION);
+	}
     public static boolean isForcingExplosions() {
         return getBoolean(ConfigNodes.NWS_FORCE_EXPLOSIONS_ON);
 	}
@@ -1280,6 +1317,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_FORCE_TOWN_MONSTERS_ON);
 	}
 	
+	public static boolean isFire() {
+		return getBoolean(ConfigNodes.NWS_WORLD_FIRE);
+	}
 	public static boolean isForcingFire() {
 		return getBoolean(ConfigNodes.NWS_FORCE_FIRE_ON);
 	}
@@ -1335,6 +1375,10 @@ public class TownySettings {
         return getInt(ConfigNodes.VERSION_BUKKIT);
 	}
 	
+	public static boolean isBypassVersionCheck() {
+		return getBoolean(ConfigNodes.VERSION_BUKKIT_BYPASS);
+	}
+	
 	public static boolean isTownyUpToDate(String currentVersion) {
 		return currentVersion.equals(getLastRunVersion(currentVersion));
 	}
@@ -1357,7 +1401,7 @@ public class TownySettings {
 	}
 	
 	public static int getMaxResidentPlots(Resident resident) {
-		int maxPlots = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), "towny_maxplots");
+		int maxPlots = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_PLOTS.getNode());
 	    if (maxPlots == -1) 
 	    	maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
 	    return maxPlots;
@@ -1399,6 +1443,20 @@ public class TownySettings {
     public static boolean getPermFlag_Resident_Outsider_Switch() {
         return getBoolean(ConfigNodes.FLAGS_RES_OUTSIDER_SWITCH);
     }
+    
+    public static boolean getPermFlag_Town_Default_PVP() {
+        return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_PVP);
+    }
+    public static boolean getPermFlag_Town_Default_FIRE() {
+        return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_FIRE);
+    }
+    public static boolean getPermFlag_Town_Default_Explosion() {
+        return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_EXPLOSION);
+    }
+    public static boolean getPermFlag_Town_Default_Mobs() {
+        return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_MOBS);
+    }
+    
     public static boolean getPermFlag_Town_Resident_Build() {
         return getBoolean(ConfigNodes.FLAGS_TOWN_RES_BUILD);
     }
@@ -1629,6 +1687,10 @@ public class TownySettings {
 	
 	public static String getChatTownNationTagFormat() {
 		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_TOWN_NATION);
+	}
+	
+	public static String getChatWorldFormat() {
+		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_WORLD);
 	}
 	
 	public static String getChatTownTagFormat() {

@@ -45,6 +45,9 @@ public class TownyMessaging {
     	if (sender instanceof Player)
     		isPlayer = true;
     	
+    	if (sender == null)
+    		System.out.print("Message called with null sender");
+    	
         for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
         	if (isPlayer)
         		((Player) sender).sendMessage(line);
@@ -187,9 +190,10 @@ public class TownyMessaging {
 		if (sender instanceof Player)
 			isPlayer = true;
 
-		if (isPlayer)
+		if (isPlayer) {
 			((Player) sender).sendMessage(line);
-		else
+			sendToIRC(line);
+		} else
 			((CommandSender) sender).sendMessage(line);
 	}
 	
@@ -206,9 +210,10 @@ public class TownyMessaging {
     		isPlayer = true;
     	
         for (String line : lines) {
-        	if (isPlayer)
+        	if (isPlayer) {
         		((Player) sender).sendMessage(line);
-        	else
+        		sendToIRC(line);
+        	} else
         		((CommandSender) sender).sendMessage(line);
         }
 	}
@@ -248,8 +253,10 @@ public class TownyMessaging {
 	 * @param lines
 	 */
 	public static void sendGlobalMessage(String[] lines) {
-        for (String line : lines)
+        for (String line : lines) {
         	TownyUniverse.plugin.log("[Global Msg] " + line);
+        	sendToIRC("[Global Msg] " + line);
+        }
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers())
                 for (String line : lines)
                         player.sendMessage(line);
@@ -264,6 +271,7 @@ public class TownyMessaging {
                 player.sendMessage(line);
                 TownyUniverse.plugin.log("[Global Message] " + player.getName() + ": " + line);
         }
+        sendToIRC("[Global Message] " + line);
 	}
 
 	/**
@@ -274,8 +282,10 @@ public class TownyMessaging {
 	 * @throws TownyException
 	 */
 	public static void sendResidentMessage(Resident resident, String[] lines) throws TownyException {
-        for (String line : lines)
+        for (String line : lines) {
         	TownyUniverse.plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
+        	sendToIRC("[Resident Msg] " + resident.getName() + ": " + line);
+        }
         Player player = TownyUniverse.plugin.getTownyUniverse().getPlayer(resident);
         for (String line : lines)
                 player.sendMessage(line);
@@ -293,6 +303,7 @@ public class TownyMessaging {
         TownyUniverse.plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
         Player player = TownyUniverse.plugin.getTownyUniverse().getPlayer(resident);
         player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+        sendToIRC("[Resident Msg] " + resident.getName() + ": " + line);
 	}
 
 	/**
@@ -302,8 +313,10 @@ public class TownyMessaging {
 	 * @param lines
 	 */
 	public static void sendTownMessage(Town town, String[] lines) {
-        for (String line : lines)
+        for (String line : lines) {
         	TownyUniverse.plugin.log("[Town Msg] " + town.getName() + ": " + line);
+        	sendToIRC("[Town Msg] " + town.getName() + ": " + line);
+        }
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town)){
                 for (String line : lines)
                         player.sendMessage(line);
@@ -317,7 +330,8 @@ public class TownyMessaging {
 	 * @param lines
 	 */
 	public static void sendTownMessagePrefixed(Town town, String line) {
-		TownyUniverse.plugin.log("[Town Msg] " + town.getName() + ": " + line);
+		TownyUniverse.plugin.log(line);
+		sendToIRC("[Town Msg] " + town.getName() + ": " + line);
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town))
                 player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
@@ -330,6 +344,7 @@ public class TownyMessaging {
 	 */
 	public static void sendTownMessage(Town town, String line) {
 		TownyUniverse.plugin.log("[Town Msg] " + town.getName() + ": " + line);
+		sendToIRC("[Town Msg] " + town.getName() + ": " + line);
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town))
                 player.sendMessage(line);
 	}
@@ -341,8 +356,10 @@ public class TownyMessaging {
 	 * @param lines
 	 */
 	public static void sendNationMessage(Nation nation, String[] lines) {
-        for (String line : lines)
+        for (String line : lines) {
         	TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
+        	sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
+        }
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
                 for (String line : lines)
                         player.sendMessage(line);
@@ -356,6 +373,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessage(Nation nation, String line) {
 		TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
+		sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
                 player.sendMessage(line);
 	}
@@ -368,6 +386,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
 		TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
+		sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
         for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
                 player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
@@ -381,6 +400,15 @@ public class TownyMessaging {
 	public static void sendTownBoard(Player player, Town town) {
         for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() + "] " + Colors.Yellow + town.getTownBoard()))
                 player.sendMessage(line);
+	}
+	
+	protected static void sendToIRC(String message) {
+		/*
+		try {
+			TownyUniverse.plugin.getCraftIRC().sendMessageToTag(message, "");
+		} catch (TownyException e) {
+		}
+		*/
 	}
 	
 }

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,6 +20,7 @@ import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
@@ -87,6 +89,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 	public void backup() throws IOException {
 		String backupType = TownySettings.getFlatFileBackupType();
 		if (!backupType.equalsIgnoreCase("none")) {
+			
+			TownyLogger.shutDown();
+			
 			long t = System.currentTimeMillis();
 			String newBackupFolder = rootFolder + FileMgmt.fileSeparator() + "backup" + FileMgmt.fileSeparator() + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + Long.toString(t);
 			FileMgmt.checkFolders(new String[]{ rootFolder, rootFolder + FileMgmt.fileSeparator() + "backup" });
@@ -101,8 +106,11 @@ public class TownyFlatFileSource extends TownyDataSource {
 						new File(rootFolder + logFolder),
 						new File(rootFolder + settingsFolder)
 						}, new File(newBackupFolder + ".zip"));
-			else
+			else {
+				plugin.setupLogger();
 				throw new IOException("Unsupported flatfile backup type (" + backupType + ")");
+			}
+			plugin.setupLogger();
 		}
 	}
 	
@@ -111,6 +119,27 @@ public class TownyFlatFileSource extends TownyDataSource {
 		long deleteAfter = TownySettings.getBackupLifeLength();
 		if (deleteAfter >= 0)
 			FileMgmt.deleteOldBackups(new File(rootFolder + FileMgmt.fileSeparator() + "backup"), deleteAfter);
+	}
+	
+	@Override
+	public void deleteUnusedResidentFiles() {
+		String path;
+		Set<String> names;
+		
+		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents";
+		names = plugin.getTownyUniverse().getResidentKeys();
+		
+		FileMgmt.deleteUnusedFiles(new File(path), names);
+		
+		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns";
+		names = plugin.getTownyUniverse().getTownsKeys();
+		
+		FileMgmt.deleteUnusedFiles(new File(path), names);
+		
+		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations";
+		names = plugin.getTownyUniverse().getNationsKeys();
+		
+		FileMgmt.deleteUnusedFiles(new File(path), names);
 	}
 	
 	public String getResidentFilename(Resident resident) {
@@ -166,13 +195,19 @@ public class TownyFlatFileSource extends TownyDataSource {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					universe.newResident(line);
-			fin.close();
+
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
 			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e) {
+				// Failed to close file.
+			}
 		}
 		return true;
 	}
@@ -193,7 +228,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					universe.newTown(line);
-			fin.close();
+
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
 			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
@@ -201,6 +236,12 @@ public class TownyFlatFileSource extends TownyDataSource {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e) {
+				// Failed to close file.
+			}
 		}
 		return true;
 	}
@@ -221,13 +262,19 @@ public class TownyFlatFileSource extends TownyDataSource {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					universe.newNation(line);
-			fin.close();
+			
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
 			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e) {
+				// Failed to close file.
+			}
 		}
 		return true;
 	}
@@ -264,7 +311,6 @@ public class TownyFlatFileSource extends TownyDataSource {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					universe.newWorld(line);
-			fin.close();
 
 		} catch (AlreadyRegisteredException e) {
 			// Ignore this as the world may have been passed to us by bukkit
@@ -272,6 +318,12 @@ public class TownyFlatFileSource extends TownyDataSource {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e) {
+				// Failed to close file
+			}
 		}
 		return true;
 	}
@@ -300,11 +352,17 @@ public class TownyFlatFileSource extends TownyDataSource {
                 		TownyRegenAPI.addPlotChunk(plotData, false);
                 	}
 				}
-			fin.close();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException e) {
+				// Failed to close file.
+			}
 		}
 		return true;
 
@@ -409,7 +467,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					for (String token : tokens) {
 						if (!token.isEmpty()){
 							Resident assistant = universe.getResident(token);
-							if (assistant != null)
+							if ((assistant != null) && (town.hasResident(assistant)))
 								town.addAssistant(assistant);
 						}
 					}
@@ -772,7 +830,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (Exception e) {
 					}
 				
-				line = kvFile.get("townmobs");
+				line = kvFile.get("forcetownmobs");
 				if (line != null)
 					try {
 						world.setForceTownMobs(Boolean.parseBoolean(line));
@@ -789,6 +847,13 @@ public class TownyFlatFileSource extends TownyDataSource {
 				line = kvFile.get("firespread");
 				if (line != null)
 					try {
+						world.setFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcefirespread");
+				if (line != null)
+					try {
 						world.setForceFire(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
@@ -796,7 +861,21 @@ public class TownyFlatFileSource extends TownyDataSource {
 				line = kvFile.get("explosions");
 				if (line != null)
 					try {
+						world.setExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forceexplosions");
+				if (line != null)
+					try {
 						world.setForceExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("endermanprotect");
+				if (line != null)
+					try {
+						world.setEndermanProtect(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
 				
@@ -937,6 +1016,37 @@ public class TownyFlatFileSource extends TownyDataSource {
 					} catch (Exception e) {
 					}
 				
+				// Chat channel format
+				
+				line = kvFile.get("GlobalChatChannelFormat");
+				if (line != null)
+					try {
+						world.setChatGlobalChannelFormat(line);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("TownChatChannelFormat");
+				if (line != null)
+					try {
+						world.setChatTownChannelFormat(line);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("NationChatChannelFormat");
+				if (line != null)
+					try {
+						world.setChatNationChannelFormat(line);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("DefaultChatChannelFormat");
+				if (line != null)
+					try {
+						world.setChatDefaultChannelFormat(line);
+					} catch (Exception e) {
+					}
+				
+				
 				line = kvFile.get("usingTowny");
 				if (line != null)
 					try {
@@ -979,7 +1089,15 @@ public class TownyFlatFileSource extends TownyDataSource {
 							townBlock.setPermissions(line.trim());
 							set = true;
 						} catch (Exception e) {
-						}				
+						}	
+					
+					line = kvFile.get("changed");
+					if (line != null)
+						try {
+							townBlock.setChanged(Boolean.parseBoolean(line.trim()));
+							set = true;
+						} catch (Exception e) {
+						}
 					
 				} catch (Exception e) {
 					System.out.println("[Towny] Loading Error: Exception while reading TownBlock file " + path);
@@ -1013,7 +1131,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 		try {
 			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
 			for (Resident resident : universe.getResidents())
-				fout.write(resident.getName() + newLine);
+				fout.write(universe.checkAndFilterName(resident.getName()) + newLine);
 			fout.close();
 			return true;
 		} catch (Exception e) {
@@ -1239,7 +1357,7 @@ public class TownyFlatFileSource extends TownyDataSource {
 			for (Resident assistant : nation.getAssistants())
 				fout.write(assistant.getName() + ",");
 			fout.write(newLine);
-			fout.write("friends=");
+			fout.write("allies=");
 			for (Nation allyNation : nation.getAllies())
 				fout.write(allyNation.getName() + ",");
 			fout.write(newLine);
@@ -1276,26 +1394,36 @@ public class TownyFlatFileSource extends TownyDataSource {
 			}
 				
 			fout.write(newLine);
-
+			fout.write(newLine);
+			
 			// PvP
 			fout.write("pvp=" + Boolean.toString(world.isPVP()) + newLine);
 			// Force PvP
 			fout.write("forcepvp=" + Boolean.toString(world.isForcePVP()) + newLine);
 			// Claimable
+			fout.write("# Can players found towns and claim plots in this world?" + newLine);
 			fout.write("claimable=" + Boolean.toString(world.isClaimable()) + newLine);
 			// has monster spawns			
 			fout.write("worldmobs=" + Boolean.toString(world.hasWorldMobs()) + newLine);
 			// force town mob spawns			
 			fout.write("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()) + newLine);
 			// has firespread enabled
+			fout.write("firespread=" + Boolean.toString(world.isFire()) + newLine);
 			fout.write("forcefirespread=" + Boolean.toString(world.isForceFire()) + newLine);
 			// has explosions enabled
+			fout.write("explosions=" + Boolean.toString(world.isExpl()) + newLine);
 			fout.write("forceexplosions=" + Boolean.toString(world.isForceExpl()) + newLine);
+			// Enderman block protection
+			fout.write("endermanprotect=" + Boolean.toString(world.isEndermanProtect()) + newLine);
 			// PlayerTrample
 			fout.write("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()) + newLine);
 			// CreatureTrample
 			fout.write("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()) + newLine);
 
+			// Unclaimed
+			fout.write(newLine);
+			fout.write("# Unclaimed Zone settings." + newLine);
+			
 			// Unclaimed Zone Build
 			if (world.getUnclaimedZoneBuild() != null)
 				fout.write("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()) + newLine);
@@ -1311,35 +1439,81 @@ public class TownyFlatFileSource extends TownyDataSource {
 			// Unclaimed Zone Name
 			if (world.getUnclaimedZoneName() != null)
 				fout.write("unclaimedZoneName=" + world.getUnclaimedZoneName() + newLine);
+			
+			fout.write(newLine);
+			fout.write("# The following settings are only used if you are not using any permissions provider plugin" + newLine);
+			
 			// Unclaimed Zone Ignore Ids
 			if (world.getUnclaimedZoneIgnoreIds() != null)
 				fout.write("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ",") + newLine);
 			
+			// PlotManagement Delete
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a townblock being unclaimed" + newLine);
+						
 			// Using PlotManagement Delete
 			fout.write("usingPlotManagementDelete=" + Boolean.toString(world.isUsingPlotManagementDelete()) + newLine);
 			// Plot Management Delete Ids
 			if (world.getPlotManagementDeleteIds() != null)
 				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
 			
+			// PlotManagement
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command" + newLine);
+						
 			// Using PlotManagement Mayor Delete
 			fout.write("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()) + newLine);
 			// Plot Management Mayor Delete
 			if (world.getPlotManagementMayorDelete() != null)
 				fout.write("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ",") + newLine);
 			
+			// PlotManagement Revert
+			fout.write(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed." + newLine);
+			fout.write("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot." + newLine);
+						
 			// Using PlotManagement Revert
 			fout.write("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()) + newLine);
 			// Using PlotManagement Revert Speed
 			fout.write("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()) + newLine);
+			
+			fout.write("# Any block Id's listed here will not be respawned. Instead it will revert to air." + newLine);
+			
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)
 				fout.write("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ",") + newLine);
+			
+			// PlotManagement Wild Regen
+			fout.write(newLine);
+			fout.write("# If enabled any damage caused by explosions will repair itself." + newLine);
 			
 			// Using PlotManagement Wild Regen
 			fout.write("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()) + newLine);
 			// Using PlotManagement Wild Regen Delay
 			fout.write("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()) + newLine);
 			
+			
+			// World independent chat formatting
+			fout.write(newLine);
+			fout.write("# These are used to format each worlds chat if per_world is enabled in the Towny config." + newLine);
+			fout.write(newLine);
+			
+			// Global Chat
+			fout.write("# This formatting is used for all Global chat." + newLine);
+			fout.write("GlobalChatChannelFormat=" + world.getChatGlobalChannelFormat() + newLine);
+			// Town Chat
+			fout.write("# This formatting is used for all Town chat." + newLine);
+			fout.write("TownChatChannelFormat=" + world.getChatTownChannelFormat() + newLine);
+			// Nation Chat
+			fout.write("# This formatting is used for all Nation chat." + newLine);
+			fout.write("NationChatChannelFormat=" + world.getChatNationChannelFormat() + newLine);
+			// Default Chat
+			fout.write("# This formatting is used for all other custom chat channels." + newLine);
+			fout.write("DefaultChatChannelFormat=" + world.getChatDefaultChannelFormat() + newLine);
+			
+			// Using Towny
+			fout.write(newLine);
+			fout.write("# This setting is used to enable or disable Towny in this world." + newLine);
+						
 			// Using Towny
 			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
 			
@@ -1375,7 +1549,9 @@ public class TownyFlatFileSource extends TownyDataSource {
 			
 			// permissions
 			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
-			
+			// Have permissions bene manually changed
+			fout.write("changed=" + Boolean.toString(townBlock.isChanged()) + newLine);
+						
 			fout.close();
 
 		} catch (Exception e) {

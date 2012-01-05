@@ -71,11 +71,11 @@ public class TownyAsciiMap {
 		int halfLineHeight = lineHeight / 2;
 		String[][] townyMap = new String[lineWidth][lineHeight];
 		int x, y = 0;
-		for (int tby = pos.getZ() - halfLineWidth; tby <= pos.getZ() + (lineWidth-halfLineWidth-1); tby++) {
+		for (int tby = pos.getX() + (lineWidth-halfLineWidth-1); tby >= pos.getX() - halfLineWidth; tby--) {
 			x = 0;
-			for (int tbx = pos.getX() - halfLineHeight; tbx <= pos.getX() + (lineHeight-halfLineHeight-1); tbx++) {
+			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight-halfLineHeight-1); tbx++) {
 				try {
-					TownBlock townblock = world.getTownBlock(tbx, tby);
+					TownBlock townblock = world.getTownBlock(tby, tbx);
 					//TODO: possibly claim outside of towns
 					if (!townblock.hasTown())
 						throw new TownyException();
@@ -113,12 +113,21 @@ public class TownyAsciiMap {
 						townyMap[y][x] = Colors.White;
 
 					// Registered town block
-					if (townblock.getPlotPrice() != -1)
+					if (townblock.getPlotPrice() != -1) {
+						// override the colour if it's a shop plot for sale
+						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
+							townyMap[y][x] = Colors.Blue;
 						townyMap[y][x] += "$";
-					else if (townblock.isHomeBlock())
+					} else if (townblock.isHomeBlock())
 						townyMap[y][x] += "H";
 					else if (townblock.getType().equals(TownBlockType.EMBASSY))
 						townyMap[y][x] += "E";
+					else if (townblock.getType().equals(TownBlockType.WILDS))
+						townyMap[y][x] += "W";
+					else if (townblock.getType().equals(TownBlockType.COMMERCIAL))
+						townyMap[y][x] += "C";
+					else if (townblock.getType().equals(TownBlockType.ARENA))
+						townyMap[y][x] += "A";
 					else
 						townyMap[y][x] += "+";
 				} catch (TownyException e) {

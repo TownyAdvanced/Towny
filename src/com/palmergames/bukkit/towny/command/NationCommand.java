@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.questioner.JoinNationTask;
 import com.palmergames.bukkit.towny.questioner.ResidentNationQuestionTask;
 import com.palmergames.bukkit.util.ChatTools;
@@ -270,7 +271,8 @@ public class NationCommand implements CommandExecutor {
 	public void newNation(Player player, String name, String capitalName) {
 		TownyUniverse universe = plugin.getTownyUniverse();
 		try {
-			if (!plugin.isTownyAdmin(player) && (TownySettings.isNationCreationAdminOnly() || (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, "towny.nation.new"))))
+			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isNationCreationAdminOnly() && !plugin.isPermissions())
+				|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_NEW.getNode()))))
 				throw new TownyException(TownySettings.getNotPermToNewNationLine());
 
 			Town town = universe.getTown(capitalName);
@@ -354,7 +356,7 @@ public class NationCommand implements CommandExecutor {
 
 				if (!resident.isKing())
 					throw new TownyException(TownySettings.getLangString("msg_not_king"));
-				if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.nation.delete")))
+				if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_DELETE.getNode())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				plugin.getTownyUniverse().removeNation(nation);
@@ -365,7 +367,7 @@ public class NationCommand implements CommandExecutor {
 			}
 		else
 			try {
-				if (!plugin.isTownyAdmin(player))
+				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player))
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete_nation"));
 				Nation nation = plugin.getTownyUniverse().getNation(split[0]);
 				plugin.getTownyUniverse().removeNation(nation);
@@ -917,7 +919,7 @@ public class NationCommand implements CommandExecutor {
 				if (split.length < 2)
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");
 				else {
-					if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.nation.rename"))) {
+					if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_RENAME.getNode()))) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 						return;
 					}
@@ -952,7 +954,7 @@ public class NationCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set title bilbo Jester ");
 				else
 					try {
-						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.nation.titles"))) {
+						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 							return;
 						}
@@ -992,7 +994,7 @@ public class NationCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set surname bilbo the dwarf ");
 				else
 					try {
-						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, "towny.nation.titles"))) {
+						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 							return;
 						}

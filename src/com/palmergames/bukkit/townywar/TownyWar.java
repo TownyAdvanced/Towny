@@ -170,7 +170,7 @@ public class TownyWar {
 		// Check Neutrality
 		if (landOwnerNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_neutral"), landOwnerNation.getFormattedName()));
-		if (!plugin.isTownyAdmin(player) && attackingNation.isNeutral())
+		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_neutral"), attackingNation.getFormattedName()));
 		
 		// Check Minimum Players Online

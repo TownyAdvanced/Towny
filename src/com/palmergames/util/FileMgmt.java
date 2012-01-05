@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -48,15 +49,21 @@ public class FileMgmt {
 			String[] children = sourceLocation.list();
 			for (int i=0; i<children.length; i++)
 				copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
-		} else {      
-			InputStream in = new FileInputStream(sourceLocation);
+		} else {
 			OutputStream out = new FileOutputStream(targetLocation);
-			// Copy the bits from in stream to out stream.
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0)
-				out.write(buf, 0, len);
-			in.close();
+			try {
+				InputStream in = new FileInputStream(sourceLocation);
+				// Copy the bits from in stream to out stream.
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0)
+					out.write(buf, 0, len);
+				in.close();
+				out.close();
+			} catch (IOException ex) {
+				// failed to access file.
+				System.out.println("Error: Could not access: " + sourceLocation);
+			}
 			out.close();
 		}
 	}
@@ -319,5 +326,39 @@ public class FileMgmt {
     						: String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()))
     						)));
     	} 
+    }
+    
+    public static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
+    	
+    	int count = 0;
+    	
+    	if (residentDir.isDirectory()) {
+    		File[] children = residentDir.listFiles();
+        	if (children != null) {
+        		for (File child : children) {
+        			try {
+        				String filename = child.getName();
+        				if (child.isFile()) {
+        					if (filename.contains(".txt"))
+        						filename = filename.split("\\.txt")[0];
+        					
+        					// Delete the file if there is no matching resident.
+            				if (!fileNames.contains(filename.toLowerCase())) {
+            					deleteFile(child);
+            					count ++;
+            				}
+        				}
+
+        			} catch (Exception e) {
+        				// Ignore file
+        			}
+        		}
+        		
+        		if (count > 0) {
+        			System.out.println(String.format("[Towny] Deleted %d old files.", count));
+        		}
+        	}
+    	}
+    	
     }
 }

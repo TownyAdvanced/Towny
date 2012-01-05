@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -35,6 +34,7 @@ public class ResidentCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/resident", "", TownySettings.getLangString("res_1")));
 		output.add(ChatTools.formatCommand("", "/resident", TownySettings.getLangString("res_2"), TownySettings.getLangString("res_3")));
 		output.add(ChatTools.formatCommand("", "/resident", "list", TownySettings.getLangString("res_4")));
+		output.add(ChatTools.formatCommand("", "/resident", "tax", ""));
 		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + TownySettings.getLangString("res_5")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
@@ -79,7 +79,14 @@ public class ResidentCommand implements CommandExecutor {
 				player.sendMessage(line);
 		else if (split[0].equalsIgnoreCase("list"))
 			listResidents(player);
-		else if (split[0].equalsIgnoreCase("set")) {
+		else if (split[0].equalsIgnoreCase("tax")) {
+			try {
+				Resident resident = plugin.getTownyUniverse().getResident(player.getName());
+				TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getTaxStatus(resident));
+			} catch (NotRegisteredException x) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_registered"));
+			}			
+		} else if (split[0].equalsIgnoreCase("set")) {
 			String[] newSplit = StringMgmt.remFirstArg(split);
 			residentSet(player, newSplit);
 		} else if (split[0].equalsIgnoreCase("friend")) {
@@ -165,13 +172,13 @@ public class ResidentCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
-			String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() == null ? "flag" : TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
-			player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "", String.format(TownySettings.getLangString("mode_6"), warFlagMaterial)));
+			//String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() == null ? "flag" : TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
+			//player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "", String.format(TownySettings.getLangString("mode_6"), warFlagMaterial)));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim tc nc", ""));
 		} else if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("clear"))
 			plugin.removePlayerMode(player);
 		else
-			plugin.setPlayerMode(player, split);
+			plugin.setPlayerMode(player, split, true);
 	}
 
 	public void residentFriend(Player player, String[] split) {
@@ -296,7 +303,7 @@ public class ResidentCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 		else
 			try {
-				if (!plugin.isTownyAdmin(player))
+				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player))
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete"));
 				
 				for (String name: split) {

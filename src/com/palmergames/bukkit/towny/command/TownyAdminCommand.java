@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -86,7 +87,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			isConsole = false;
 			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 
-			if (!plugin.isTownyAdmin(player)) {
+			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_admin_only"));
 				return true;
 			}
@@ -249,18 +250,23 @@ public class TownyAdminCommand implements CommandExecutor {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town]", ""));
-			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] add/delete [] .. []", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
 		} else {
 			try {
 				Town town = plugin.getTownyUniverse().getTown(split[0]);
 				if (split.length == 1)
 					TownyMessaging.sendMessage(getSender(), plugin.getTownyUniverse().getStatus(town));
 				else if (split[1].equalsIgnoreCase("add")) {
+					/*
 					if (isConsole) {
 						sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
 						return;
 					}
-					TownCommand.townAdd(player, town, StringMgmt.remArgs(split, 2));
+					*/
+					TownCommand.townAdd(sender, town, StringMgmt.remArgs(split, 2));
+				} else if (split[1].equalsIgnoreCase("kick")) {
+
+					TownCommand.townKickResidents(player, town.getMayor(), town, plugin.getTownyUniverse().getValidatedResidents(player, StringMgmt.remArgs(split, 2)));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -282,10 +288,13 @@ public class TownyAdminCommand implements CommandExecutor {
 				if (split.length == 1)
 					TownyMessaging.sendMessage(getSender(), plugin.getTownyUniverse().getStatus(nation));
 				else if (split[1].equalsIgnoreCase("add")) {
+					/*
 					if (isConsole) {
 						sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
 						return;
 					}
+					
+					*/
 					NationCommand.nationAdd(nation, plugin.getTownyUniverse().getTowns(StringMgmt.remArgs(split, 2)));
 				}
 
@@ -418,14 +427,8 @@ public class TownyAdminCommand implements CommandExecutor {
 			return;
 		}
 
-		for (Resident resident : new ArrayList<Resident>(plugin.getTownyUniverse().getResidents())) {
-			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (TimeTools.getMillis(days + "d"))) && !plugin.isOnline(resident.getName())) {
-				TownyMessaging.sendMessage(this.sender, "Deleting resident: " + resident.getName());
-				plugin.getTownyUniverse().removeResident(resident);
-				plugin.getTownyUniverse().removeResidentList(resident);
-
-			}
-		}
+		// Run a purge in it's own thread
+		new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
 
 	}
 

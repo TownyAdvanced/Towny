@@ -128,7 +128,7 @@ public class ChunkNotification {
 	public String getAreaNotification() {
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessNotificationFormat, to.getWorld().getUnclaimedZoneName()) + ((testWorldPVP()) ? Colors.Red + " (PvP)" : "");
+				return String.format(areaWildernessNotificationFormat, to.getWorld().getUnclaimedZoneName()) + ((to.getWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : "");
 			else
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
 		}
@@ -148,13 +148,13 @@ public class ChunkNotification {
 	
 	public String getPVPNotification() {
 		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP())))  {
-			return ((testWorldPVP() && (toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");   
+			return ((testWorldPVP() && (to.getWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");   
 		}
 		return null;
 	}
 	
 	private boolean testWorldPVP() {
-		return to.getWorld().isPVP() && Bukkit.getServer().getWorld(to.getWorld().getName()).getPVP();	
+		return Bukkit.getServer().getWorld(to.getWorld().getName()).getPVP();	
 	}
 	
 	public String getPlotNotification() {

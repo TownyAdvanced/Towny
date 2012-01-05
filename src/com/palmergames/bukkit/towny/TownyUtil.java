@@ -50,19 +50,18 @@ public class TownyUtil {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
 		if (pos.getWorld().isClaimable()) {
 			if (args.length > 0) {
-				int r;
+				int r = 0, available = 0;
+				
+				if (owner instanceof Town) {
+					Town town = (Town)owner;
+					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+				} else if (owner instanceof Resident) {
+					available = TownySettings.getMaxResidentPlots((Resident)owner);
+				}
+				
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
-					int available;
-					if (owner instanceof Town) {
-							Town town = (Town)owner;
-							available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-					} else if (owner instanceof Resident) {
-						available = TownySettings.getMaxResidentPlots((Resident)owner);
-					} else
-						throw new TownyException(TownySettings.getLangString("msg_err_rect_auto"));
 					
-					r = 0;
 					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
 						r += 1;
 
@@ -76,6 +75,7 @@ public class TownyUtil {
 				if (r > 1000) r = 1000;
 				for (int z = - r; z <= r; z++)
 					for (int x = - r; x <= r; x++)
+						if (out.size() < available)
 						out.add(new WorldCoord(pos.getWorld(), pos.getX()+x, pos.getZ()+z));
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
@@ -89,19 +89,17 @@ public class TownyUtil {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
 		if (pos.getWorld().isClaimable()) {
 			if (args.length > 0) {
-				int r;
+				int r = 0, available = 0;
+				if (owner instanceof Town) {
+						Town town = (Town)owner;
+						available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+				} else if (owner instanceof Resident) {
+					available = TownySettings.getMaxResidentPlots((Resident)owner);
+				}
+				
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
-					int available;
-					if (owner instanceof Town) {
-							Town town = (Town)owner;
-							available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-					} else if (owner instanceof Resident) {
-						available = TownySettings.getMaxResidentPlots((Resident)owner);
-					} else
-						throw new TownyException(TownySettings.getLangString("msg_err_rect_auto"));
-						
-					r = 0;
+
 					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
 						while (available - Math.ceil(Math.PI * r * r) >= 0)
 							r += 1;
@@ -116,7 +114,7 @@ public class TownyUtil {
 				if (r > 1000) r = 1000;
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
-						if (x*x+z*z <= r*r)
+						if ((x*x+z*z <= r*r) && (out.size() < available))
 							out.add(new WorldCoord(pos.getWorld(), pos.getX()+x, pos.getZ()+z));
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));

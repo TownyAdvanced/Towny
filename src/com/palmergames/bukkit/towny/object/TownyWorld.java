@@ -12,8 +12,13 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public class TownyWorld extends TownyObject {
 	private List<Town> towns = new ArrayList<Town>();
-	private boolean isClaimable = true, isPVP, isForcePVP, isForceExpl, isForceFire, isForceTownMobs, hasWorldMobs, isDisablePlayerTrample,
-			isDisableCreatureTrample, isUsingTowny = true,
+	private boolean isClaimable = true, isPVP, isForcePVP,
+		isExplosion, isForceExpl,
+		isFire, isForceFire,
+		isForceTownMobs, hasWorldMobs,
+		isDisableCreatureTrample, isDisablePlayerTrample,
+		isEndermanProtect,
+			isUsingTowny = true,
 			isUsingPlotManagementDelete = true,
 			isUsingPlotManagementMayorDelete = true,
 			isUsingPlotManagementRevert = true,
@@ -23,6 +28,7 @@ public class TownyWorld extends TownyObject {
 	private List<Integer> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;
 	private List<Integer> plotManagementIgnoreIds = null;
+	private String format_global, format_town, format_nation, format_default;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null, unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
 	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
@@ -34,20 +40,29 @@ public class TownyWorld extends TownyObject {
 	public TownyWorld(String name) {
 		setName(name);
 		
-		isPVP =  true;
+		isPVP =  TownySettings.isPvP();
 		isForcePVP = TownySettings.isForcingPvP();
+		isFire = TownySettings.isFire();
 		isForceFire = TownySettings.isForcingFire();
+		hasWorldMobs = TownySettings.isWorldMonstersOn();
 		isForceTownMobs = TownySettings.isForcingMonsters();
+		isExplosion = TownySettings.isExplosions();
+		isForceExpl = TownySettings.isForcingExplosions();
+		isEndermanProtect = TownySettings.getEndermanProtect();
+		
 		isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 		isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-		hasWorldMobs = true;
-        //hasWorldMobs = TownySettings.isWorldMonstersOn(); ??
-		isForceExpl = TownySettings.isForcingExplosions();
+		
 		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
 		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
 		setPlotManagementRevertSpeed(TownySettings.getPlotManagementSpeed());
 		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
-		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());	
+		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());
+		
+		format_global = TownySettings.getModifyChatFormat();
+		format_town = TownySettings.getChatTownChannelFormat();
+		format_nation = TownySettings.getChatNationChannelFormat();
+		format_default = TownySettings.getChatDefaultChannelFormat();
 	}
 
 	public List<Town> getTowns() {
@@ -166,7 +181,6 @@ public class TownyWorld extends TownyObject {
 	public void setPVP(boolean isPVP) {
 		this.isPVP = isPVP;
 	}
-
 	public boolean isPVP() {
 		return this.isPVP;
 	}
@@ -174,23 +188,32 @@ public class TownyWorld extends TownyObject {
 	public void setForcePVP(boolean isPVP) {
 		this.isForcePVP = isPVP;
 	}
-
 	public boolean isForcePVP() {
 		return this.isForcePVP;
 	}
 	
+	public void setExpl(boolean isExpl) {
+		this.isExplosion = isExpl;
+	}
+	public boolean isExpl() {
+		return isExplosion;
+	}
 	public void setForceExpl(boolean isExpl) {
 		this.isForceExpl = isExpl;
 	}
-
 	public boolean isForceExpl() {
 		return isForceExpl;
 	}
 	
+	public void setFire(boolean isFire) {
+		this.isFire = isFire;
+	}
+	public boolean isFire() {
+		return isFire;
+	}
 	public void setForceFire(boolean isFire) {
 		this.isForceFire = isFire;
 	}
-
 	public boolean isForceFire() {
 		return isForceFire;
 	}
@@ -198,7 +221,6 @@ public class TownyWorld extends TownyObject {
 	public void setDisablePlayerTrample(boolean isDisablePlayerTrample) {
 		this.isDisablePlayerTrample = isDisablePlayerTrample;
 	}
-
 	public boolean isDisablePlayerTrample() {
 		return isDisablePlayerTrample;
 	}
@@ -206,7 +228,6 @@ public class TownyWorld extends TownyObject {
 	public void setDisableCreatureTrample(boolean isDisableCreatureTrample) {
 		this.isDisableCreatureTrample = isDisableCreatureTrample;
 	}
-
 	public boolean isDisableCreatureTrample() {
 		return isDisableCreatureTrample;
 	}
@@ -214,7 +235,6 @@ public class TownyWorld extends TownyObject {
 	public void setWorldMobs(boolean hasMobs) {
 		this.hasWorldMobs = hasMobs;
 	}
-
 	public boolean hasWorldMobs() {
 		return this.hasWorldMobs;
 	}
@@ -222,15 +242,20 @@ public class TownyWorld extends TownyObject {
 	public void setForceTownMobs(boolean setMobs) {
 		this.isForceTownMobs = setMobs;
 	}
-
 	public boolean isForceTownMobs() {
 		return isForceTownMobs;
+	}
+	
+	public void setEndermanProtect(boolean setEnder) {
+		this.isEndermanProtect = setEnder;
+	}
+	public boolean isEndermanProtect() {
+		return isEndermanProtect;
 	}
 
 	public void setClaimable(boolean isClaimable) {
 		this.isClaimable = isClaimable;
 	}
-
 	public boolean isClaimable() {
 		if (!isUsingTowny())
 			return false;
@@ -483,6 +508,52 @@ public class TownyWorld extends TownyObject {
     
     public boolean isWarZone(Coord coord) {
     	return warZones.contains(coord);
+    }
+    
+    // Chat channel format settings
+    
+    public String getChatGlobalChannelFormat() {
+    	if (TownySettings.isModifyChatPerWorld())
+    		return format_global;
+    	else 
+    		return TownySettings.getModifyChatFormat();
+    }
+    
+    public void setChatGlobalChannelFormat(String format) {
+    	format_global = format;
+    }
+    
+    public String getChatTownChannelFormat() {
+    	if (TownySettings.isModifyChatPerWorld())
+    		return format_town;
+    	else 
+    		return TownySettings.getChatTownChannelFormat();
+	}
+    
+    public void setChatTownChannelFormat(String format) {
+    	format_town = format;
+    }
+	
+	public String getChatNationChannelFormat() {
+		if (TownySettings.isModifyChatPerWorld())
+    		return format_nation;
+    	else
+		return TownySettings.getChatNationChannelFormat();
+	}
+	
+	public void setChatNationChannelFormat(String format) {
+    	format_nation = format;
+    }
+	
+	public String getChatDefaultChannelFormat() {
+		if (TownySettings.isModifyChatPerWorld())
+    		return format_default;
+    	else
+		return TownySettings.getChatDefaultChannelFormat();
+	}
+	
+	public void setChatDefaultChannelFormat(String format) {
+    	format_default = format;
     }
 
 }

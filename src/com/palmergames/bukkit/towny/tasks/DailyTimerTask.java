@@ -1,13 +1,11 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
@@ -46,17 +44,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
                 // Automatically delete old residents 
                 if (TownySettings.isDeletingOldResidents()) {
-                	TownyMessaging.sendDebugMsg("Scanning for old residents...");
-                        for (Resident resident : new ArrayList<Resident>(universe.getResidents())) {
-                                if (!resident.isNPC()
-                                	&& (System.currentTimeMillis() - resident.getLastOnline() > (TownySettings.getDeleteTime()*1000))
-                                	&& !plugin.isOnline(resident.getName())) {
-                                	TownyMessaging.sendMsg("Deleting resident: " + resident.getName());
-                                    universe.removeResident(resident);
-                                    universe.removeResidentList(resident);
-
-                                }
-                        }
+                	// Run a purge in it's own thread
+            		new ResidentPurge(plugin, null, TownySettings.getDeleteTime()*1000).start();
                 }
                 
                 // Backups

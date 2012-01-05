@@ -1,0 +1,411 @@
+name: Towny
+version: 0.15
+language: german
+author: Konkurrent
+website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+description: >
+    Dies ist die deutsche Uebersetzung der Sprachdatei fuer alle Spielnachrichten von Towny. Veraendere nicht diese Datei. 
+    Moechtest du dennoch einige Eintraege veraendern so sichere diese Sprachdatei vorher ab. Du kannst jederzeit zwischen den 
+    Sprachdatein von Towny wechseln indem du in der config.yml unter [language] den eintrag aenderst. ACHTUNG! Alle Umlaute und 
+    das scharfe S muessen ausgeschrieben werden und duerfen unter keinen Umstaenden abgekuerzt werden da dies zu schwerwiegenden 
+    Fehlern fuehren wird! 
+    
+    Solltet ihr Fehler entdecken so kontaktiert mich bitte unter:  iljamurametz@web.de    
+    
+#
+#
+#  Abstaende in Nachrichten MUESSEN eingehalten werden.
+#  Beginnt ein Text mit LEER oder endet dieser mit LEER 
+#  so muss dies auch uebernommen werden.
+#
+#
+#  %s = Werte die von dem Plugin eingesetzt werden.
+
+#  Textfarben
+#  --------------
+#  Schwarz = &0, Marieneblau = &1, Gruen = &2 
+#  Blau = &3, Rot = &4, Lila = &5, Gold = &6
+#  Hellgrau = &7, Grau = &8, Dunkelviolett = &9
+#  Hellgruen = &a, Hellblau = &b, Rosa = &c
+#  Hellviolett = &d, Gelb = &e, Weiss = &f
+
+
+default_towny_prefix: '&6[Towny] &b'
+
+unclaimed_plot_name: 'Herrenlos'
+unclaimed_zone_name: 'Wildnis'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Hilfsnachrichten                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+
+help_0: 'Allgemeine Hilfe fuer Towny'
+help_1: 'Gebe eins der folgenden Befehlen ein um mehr ueber Towny zu erfahren.'
+help_2: 'Staedte-Chat'
+help_3: 'Nations-Chat'
+
+town_help_1: 'Status deiner Stadt'
+town_help_2: '[Buergermeister]'
+town_help_3: 'Status der Ziel-Stadt'
+town_help_4: 'Kuerzel fuer deine Stadt die in der Umgebung angezeigt wird.'
+town_help_5: 'Zum Stadt-Spawn teleportiert.'
+town_help_6: 'Neue Stadt gruenden mit dir als Buergermeister.'
+town_help_7: 'Neue Stadt gruenden mit ausgewaehlten Buergermeister.'
+town_help_8: 'Liste der Befehle fuer Buergermeister.'
+town_help_9: 'Heute ist der Tag!'
+town_help_10: 'Liste aller aktiven Bewohner'
+
+mayor_help_3: 'Beanspruchgunsbereich grenzt nicht an der Stadt'
+mayor_help_4: 'Beanspruche den Bereich um dich herum in einem Radius von X'
+mayor_help_5: 'Beanspruche den maximalen Radius'
+mayor_help_6: 'Gebe dein Anspruch auf diese Blocke auf'
+mayor_help_7: 'Versucht die Beanspruchung um dich herum aufzugeben.'
+mayor_help_8: 'Versucht die Beanspruchung aller Stadt-Bloecke aufzugeben.'
+
+nation_help_1: 'Status deiner Nation'
+nation_help_2: '[Nation]'
+nation_help_3: 'Status der Ziel-Nation'
+nation_help_4: 'Liste aller Nationen'
+nation_help_5: 'Verlasse deine Nation'
+nation_help_6: 'Gruende eine neue Nation'
+nation_help_7: 'Liste der Befehle fuer Koenige'
+nation_help_8: 'Gruende eine neue Nation'
+nation_help_9: 'Liste aller aktiven Bewohner in deiner Nation'
+
+king_help_1: 'Hilfe fuer Nationsherscher'
+king_help_2: 'Setze deine Verbuendete.'
+king_help_3: 'Setze deine Feinde.'
+
+res_1: 'Dein Status'
+res_2: '[Einwohner]'
+res_3: 'Status der Zielperson'
+res_4: 'Liste aller aktiven Spieler'
+res_5: 'um Hilfe zu erhalten'
+res_6: 'Online Uebereinstimmung'
+res_7: 'Exakter Name'
+
+mode_1: 'Siehe in die Karte um andere Stadt-Bloecke zu sehen'
+mode_2: 'Versucht den Bereich zu beanspruchen das du durchlaeufst'
+mode_3: 'Versucht den Bereich aufzugeben das du durchlaeufst'
+mode_4: 'Standart-Chat zu Staedte-Chat'
+mode_5: 'Standart-Chat zu Nation-Chat'
+mode_6: 'Du kannst an den feindlichen Linien %s plazieren um ein Kriegsgebiet zu erstellen.'
+
+plot_perms: 'Benutze %s statt %s fuer die Grundstuecksberechtigungen.'
+plot_perms_1: 'Die Einwohnergrundstuecke koennen nicht von Aussenstehenden ohne die benoetigten Berechtigungen benutzt werden.'
+
+res_list: 'Einwohner'
+res_sing: 'Einwohner'
+mayor_sing: 'Buergermeister'
+admin_sing: 'Admin'
+nation_sing: 'Nation'
+nation_plu: 'Nationen'
+king_sing: 'Koenig'
+town_plu: 'Staedte'
+world_plu: 'Welten'
+world_sing: 'Welt'
+
+world_help_1: 'Status der aktuellen Welt'
+world_help_2: '[Welt]'
+world_help_3: 'Status der Zielwelt'
+world_help_4: 'Liste aller Welten'
+
+townyadmin_help_1: 'Gebe dein Anspruch auf diese Blocke auf'
+townyadmin_help_2: 'Versuche die Beanspruchung um dich herum aufzugeben.'
+
+ta_panel_1: 'Towny Admin-Uebersicht'
+ta_panel_2: 'Kriegsdauer: '
+ta_panel_3: 'Lebensregenerationfaktor: '
+ta_panel_4: 'Welten-Mob-Entfernung: '
+ta_panel_4_1: 'Stadt-Mob-Entfernung: '
+ta_panel_5: 'Tagesdauer: '
+ta_panel_6: 'Economy: '
+ta_panel_7: 'Bankkonto: '
+ta_panel_8: 'Server'
+ta_panel_9: 'RAM-Speicher: '
+ta_panel_10: 'Themen: '
+ta_panel_11: 'Zeit: '
+
+admin_panel_1: 'Admin-Uebersicht'
+admin_panel_2: 'Lade Towny neu'
+admin_panel_3: 'Setze den neuen Tages-Code'
+
+msg_block_claim: 'Beanspruche diesen Stadt-Block'
+msg_plot_nfs: 'Grundstueck zum Verkauf anbieten'
+msg_nfs_abr: '&e''fs'' und ''nfs'' sind erlaubte Kuerzel fuer ''Zu verkaufen'' und ''Nicht zu verkaufen''.'
+msg_plot_fs: 'Dieses Grundstueck fuer eine Auktion freigeben.'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    Nachrichten                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+msg_buy: '&bkaufte %d %s fuer %s.'
+msg_buy_resident_plot: '&b%s kaufte %s Grundstuecke fuer %s!'
+msg_couldnt_pay_taxes: '&b%s konnte nicht die Steuern bezahlen und wurde aus %s rausgeschmissen.'
+msg_couldnt_pay_plot_taxes: '&b%s konnte nicht die Steuern bezahlen und verlor den Anspruch auf sein Grundstueck.'
+msg_payed_town_tax: '&bSteuern gezahlt an '
+msg_payed_plot_cost: '&b %s ausgezahlt fuer die Steuer von %s Grundstuecke in %s'
+msg_payed_resident_tax: '&bEinwohnersteuer gezahlt an '
+msg_bankrupt_town: ' hatte nicht genug Geld um als Stadt bestehen zu bleiben.'
+msg_bankrupt_nation: ' hatte nicht genug Geld um als Nation bestehen zu bleiben.'
+msg_nation_not_neutral: '&bNation konnte sich sein neutrales Ansehen nicht leisten.'
+msg_nation_cant_neutral: '&bNation konnte es sich nicht leisten sein neutralen Ansehen zu erhalten.'
+msg_neutral_disabled: '&bDie Neutralitaet der Nation wurde global zurueckgesetzt.'
+msg_you_paid: '&bDu hast %s bezahlt fuer einen neutralen Ansehen.'
+msg_nation_set_neutral: '&bNeutralitaetsstatus erfolgreich geaendert.'
+msg_nation_allow_neutral: '&bNationsberechtigungen um neutral zu bleiben sind nun: %s'
+msg_mobremoval_world: '&bBlockierte Mob-Spawns auf der Welt: %s'
+msg_mobremoval_town: '&bErlaube folgende Mob-Spawn in der Stadt zu blockieren: %s'
+msg_nation_neutral: '&bDeine Nation ist jetzt'
+msg_tax_exempt: '&bStadtpersonal sind von den Steuern befreit.'
+msg_del_nation: '&bDie Nation %s wurde aufgeloest!'
+msg_del_resident: '&b%s verlor alle seine Towny-Daten!'
+msg_del_town: '&bDie Stadt von %s fiel in den Ruin!'
+msg_join_nation: '&bDie Stadt von %s ist der Nation beigetreten!'
+msg_join_town: '&b%s ist der Stadt beigetreten!'
+msg_friend_add: '&b%s hat dich als Freund hinzugefuegt.'
+msg_friend_remove: '&b%s hat dich als Freund entfernt.'
+msg_removed: '&bEntfernt '
+msg_from_list: 'aus deiner Freundesliste.'
+msg_to_list: ' zu deiner Freundesliste.'
+msg_left_town: '&b%s hat die Stadt verlassen'
+msg_you_left: '&bDu hast %s verlassen.'
+msg_not_mayor: '&bDu bist nicht der Buergermeister.'
+msg_not_king: '&bDu bist nicht der Koenig.'
+msg_not_mayor_ass: '&bDu bist nicht der Buergermeister oder ein Gehilfe.'
+msg_not_king_ass: '&bDu bist nicht der Koenig oder ein Gehilfe.'
+msg_own_nation_disallow: '&bDu kannst dies nicht in deiner eigenen Nation tun.'
+msg_no_perms_claim: '&bDu hast nicht die noetige Berechtigung um deine Stadt zu erweitern.'
+msg_outpost_disable: '&bAussenposten sind nicht verfuegbar.'
+msg_kicked_by: '&bDu wurdest von %s aus der Stadt rausgeschmissen.'
+msg_kicked: '&b%s schmiss %s aus der Stadt.'
+msg_nation_kicked_by: '&bDeine Stadt wurde durch %s aus der Nation raussgeschmissen.'
+msg_town_left_nation: '&bDeine Stadt hat die Nation von %s verlassen.'
+msg_nation_town_left: '&bDie Stadt von %s hat deine Nation verlassen.'
+msg_nation_kicked: '&b%s schmiss %s aus der Nation.'
+msg_raised_ass: '&b%s ernannte %s zum %s Gehilfen.'
+msg_lowered_to_res_by: '&bDu wurdest von %s zu einem regulaeren Bewohner degradiert.'
+msg_lowered_to_res: '&b%s degratierte %s zu einem regulaeren Bewohner.'
+msg_invalid_name: '&bDiese(r) Name(n) exestieren nicht.'
+msg_invited_join_town: '&b%s fuegte %s zur Stadt hinzu.'
+msg_invited_join_nation: '&b%s fuegte %s zur Nation hinzu.'
+msg_deny_invite: '&b%s lehnte deine Einladung ab.'
+msg_invited: '&bDu wurdest eingeladen um %s beizutreten.'
+msg_town_online: 'Online in der Stadt'
+msg_nation_online: 'Online in der Nation'
+
+msg_allied_nations: '&b%s verbuendete sich mit der Nation %s.'
+msg_broke_alliance: '&b%s brach sein Buendnis mit der Nation %s.'
+msg_enemy_nations: '&b%s entwickelte ein Hass auf die Nation %s.'
+msg_enemy_to_neutral: '&b%s wechselte zum neutralen Ansehen gegenueber %s.'
+msg_added_ally: '&b%s hat sich mit deiner Nation verbuendet.'
+msg_removed_ally: '&b%s brach das Buendnis zu deiner Nation.'
+msg_added_enemy: '&b%s entwickelt ein Hass auf deine Nation.'
+msg_removed_enemy: '&b%s hat nun friedliche Absichten gegenueber deiner Nation.'
+
+msg_claimed: '&2Erfolgreich beansprucht'
+msg_unclaimed: '&2Beanspruchung erfolgreich aufgegeben'
+msg_not_claimable: '&cDiese Welt kann nicht beansprucht werden.'
+msg_abandoned_area: '&bHerrenloser Bereich: %s'
+msg_admin_unclaim_area: '&cZwangsgeraeumter Bereich: %s'
+msg_abandoned_area_1: '&bDeine Stadt hat diesen Bereich zwangsgeraeumt'
+msg_no_money_purchase_plot: '&cDu hast nicht genug Geld um dieses Grundstueck zu bezahlen.'
+msg_town_no_money_purchase_plot: '&cDie Stadt hat nicht genug Geld um dieses Grundstueck zurueck zu kaufen.'
+msg_no_funds_new_town: '&c%s Du kannst es dir nicht leisten hier eine neue Stadt zu besiedeln.'
+msg_no_funds_claim: '&cDie Stadt erlaubt es nicht %s  zu beanspruchen. Stadtblocke kosten %s. Fuege deiner Bank mehr Geld hinzu.'
+msg_no_funds_to_buy: '&cDie stadt erlaubt es nicht %s %s zu kaufen. Die Kosten betragen %s. Fuege deiner Bank mehr Geld hinzu.'
+msg_annexed_area: '&2Beigefuegter Bereich: %s'
+msg_max_plot_own: '&cDu kannst nicht mehr als %s Grundstuecke besitzen.'
+msg_no_funds_new_nation: '&cDiese Stadt kann es sich nicht leisten eine neue Nation zu gruenden.'
+msg_already_claimed: '&cDieser Bereich wurde bereits von %s beansprucht'
+msg_already_claimed_1: '&cBereich (%s) gehoert bereits jemanden.'
+msg_already_claimed_2: '&cDieser Bereich wurde bereits beansprucht.'
+msg_too_close: '&cDieser Bereich ist zu nah zu anderen Staedten.'
+msg_too_far: '&cDieser Bereich ist zu weit entfernt von anderen Staedten.'
+msg_not_claimed: '&bBereich (%s) wurde nicht beansprucht.'
+msg_not_claimed_1: '&bDieser Bereich wurde nicht beansprucht.'
+msg_not_own_area: '&cDir gehoert nicht der Platz den du ausgewaehlt hast.'
+msg_not_own_place: '&bDieser Platz ist in keinem Besitz.'
+msg_area_not_own: '&cDieser Bereich gehoert nicht zu dir.'
+msg_area_not_recog: '&cDieser Bereicht wird von Towny nicht anerkannt.'
+msg_specify_name: '&bGebe den Stadtnamen an'
+msg_specify_nation_name: '&bGebe den Nationsnamen an'
+msg_peasant_right: '&bEin Bauer hat nicht das Recht seinen Anfuehrer zum Thron zu zwingen.'
+msg_cost_spawn: '&bDir wurden fuer die Benutzung des Stadt-Spawns %s berechnet.'
+msg_cost_spawn_refund: '&bDie Kosten fuer den Stadt-Spawn wurden rueckerstattet.'
+msg_town_spawn_warmup: '&bWarte auf die Teleportation...'
+msg_town_rename_disabled: '&bDie Option eine Stadt umzubenennen ist deaktiviert'
+msg_town_set_name: '&b%s hat die Stadt unbenannt zu %s.'
+msg_nation_set_name: '&b%s hat die Nation unbenannt zu %s.'
+
+msg_changed_pvp: '&c%s PvP wurde %s.'
+msg_changed_public: '&cDer Oefentlichkeitsstatus der Stadt ist nun %s.'
+msg_changed_expl: '&cExplosionen sind in %s %s.'
+msg_changed_fire: '&cFeuerausbreitung ist in %s %s.'
+msg_changed_mobs: '&cMonster-Spawn ist in %s %s.'
+msg_changed_taxpercent: '&cDer Prozentsatz basierend zu den Steuern ist nun %s.'
+
+msg_changed_world_setting: '&c%s fuer %s ist: %s.'
+
+msg_world_pvp: '&cPvP ist in dieser Welt uebergreifend aktiv. (config=force_pvp_on)'
+msg_world_mobs: '&cMonster-Spawn ist in dieser Welt uebergreifend aktiv. (config=force_town_monster_on)'
+msg_world_expl: '&cExplosionen ist in dieser Welt uebergreifend aktiv. (config=force_explosions_on)'
+msg_world_fire: '&cFeuerausbreitung ist in dieser Welt uebergreifend aktiv (config=force_fire_on).'
+
+msg_plot_pvp: '&cPvP kann in einem Arenabereich nicht umgeschaltet werden.'
+
+msg_reloaded: '&2Die Einstellungen von Towny wurden neu geladen.'
+msg_give_total: '&bGab %s Bonus. (Gesamt: %s)'
+mag_backup_success: '&2Sicherungskopie erfolgreich angelegt.'
+msg_xx_withdrew_xx: '&b%s nahm %s aus der Bank %s .'
+msg_xx_deposited_xx: '&b%s zahlte %s in die Bank %s ein.'
+msg_insuf_funds: '&cDu hast nicht so viel.'
+msg_err_withdraw_disabled: 'Du kannst kein Geld von der Bank nehmen da dies deaktiviert ist!'
+msg_err_deposit_capped: 'Du kannst kein Geld einzahlen da dies deaktiviert ist. Die Bank besitzt %s.'
+
+msg_set_town_home: '&bZuhause wurde zu %s erfolgreich gewaechselt'
+msg_set_town_spawn: '&bDer Stadt-Spawn wurde erfolgreich gesetzt.'
+msg_set_title: '&b%s wurde der Titel zu ''%s'' gewaehrt.'
+msg_set_surname: '&b%s wurde der Nachname zu ''%s'' gewaehrt.'
+msg_clear_title_surname: '&bDer %s fuer ''%s'' wurde geloescht.'
+
+msg_clear_plot_material: '&bDas Grundstueck wurde fuer folgende geloescht: %s''s.'
+
+msg_set_perms: '&bDie Berechtigungen wurden erfolgreich gaendert zu:'
+msg_set_claim: '&bBeanspruchungsfaehigkeit von %s''s wurde erfolgreich gaendert zu %s '
+msg_set_perms_reset: '&bBerechtigungen wurden an allen %s Grundstuecken zurueckgesetzt.'
+
+msg_usedefault: '&bDie Welt(%s) benutzt nun die globale Standarteinstellungen .'
+msg_set_wild_perms: '&bDie Berechtigungen fuer die Wildnis %s''s wurde erfolgreich gaendert zu %s'
+msg_set_wild_ignore: '&bDie zu ignorierende Bloecke %s''s fuer die Wildnis wurde erfolgreich gaendert zu %s'
+msg_set_wild_name: '&bDer Name fuer die Wildnis %s''s wurde erfolgreich gaendert zu %s'
+msg_set_use_towny_on: '&bDiese Welt befolgt nun die Regeln von Towny.'
+msg_set_use_towny_off: '&cDiese Welt ist nun von jedem Einfluss von Towny befreit.'
+
+msg_error_must_be_int: '&bDer Betrag muss eine ganze Zahl sein.'
+msg_error_must_be_num: '&bDer Betrag muss eine Zahl sein.'
+msg_must_specify_amnt: '&bDu musst einen Betrag angeben. z.B.: %s 54'
+msg_town_set_tax: '&b%s hat die taegliche Einwohnersteuer auf %s gesetzt.'
+msg_town_set_plottax: '&b%s hat die taegliche Grundstueckssteuer auf %s gesetzt.'
+msg_town_set_plotprice: '&b%s hat den Preis der Grundstuecke auf %s gesetzt.'
+msg_town_set_alttax: '&b%s hat die taegliche Steuer von %s Grundstuecken auf %s gesetzt.'
+msg_town_set_altprice: '&b%s hat den Preis von %s Grundstuecken auf %s gesetzt.'
+msg_town_set_nation_tax: '&b%s hat die Nationssteuer auf %s gesetzt.'
+
+msg_set_nation_tag: '&b%s hat das Nations-Kuerzel auf [%s] gesetzt.'
+msg_set_town_tag: '&b%s hat das Stadt-Kuerzel auf [%s] gesetzt.'
+msg_reset_nation_tag: '&b%s hat das Nations-Kuerzel geloescht.'
+msg_reset_town_tag: '&b%s hat das Stadt-Kuerzel geloescht.'
+
+msg_mayor_abandon: '&bDu willst deinen Buergermeister loswerden? Waehle mit ''/town set mayor'' einen neuen Buergermeister wenn du dir sicher bist.'
+msg_new_day_tax: '&bEin neuer Tag ist angebrochen! Steuern und Mieten wurden eingesammelt.'
+msg_new_day: '&bEin neuer Tag ist angebrochen!'
+msg_new_king: '&b%s ist nun der Koenig von %s!'
+msg_err_new_king_notmayor: '&cDer neuer Koenig ist nicht der Buergermeister.'
+msg_err_king_not_in_nation: '&cDer neuer Koenig gehoert nicht zu dieser Nation.'
+msg_err_fight_like_king: '&cNeutralitaet ist kein Ausweg! Kaempfe wie ein Koenig!'
+msg_no_access_nation_bank: '&cDu hast keinen Zugriff auf die nationale Bank.'
+msg_err_no_money: '&cEs ist nicht genug Geld in der Bank.'
+msg_new_mayor: '&b%s ist nun der Buergermeister!'
+msg_new_nation: '&b%s hat eine Nation mit dem Namen %s gegruendet.'
+msg_new_town: '&b%s hat eine Stadt mit dem Namen %s gegruendet.'
+msg_plot_for_sale: '&b%s gab das Grundstueck (%s) zum Verkauf frei!'
+msg_plot_set_type: '&bGrundstuecksttyp wurde zu %s gaendert.'
+msg_registration: '&eWir heissen dich auf dem Server willkommen %s !'
+msg_war_eliminated: '&6[Krieg]&b %s wurde vom Gegener eliminiert.'
+msg_war_forfeited: '&6[Krieg]&b %s freierklaert.'
+msg_war_join: '&6[Krieg] &b%s trat dem Kampf bei!'
+msg_war_join_forced: '&6[Krieg]&b Die Nation %s wurde in den Krieg gezwungen aufgrund der globalen Einstellungen!'
+msg_war_join_nation: '&6[Krieg]&b Die Nation %s ist dem Krieg beigetreten!'
+msg_war_lose_block: '&6[Krieg]&b (%s) von der Nation %s ist gefallen.'
+msg_war_score: '&6[Krieg]&b %s erzielte %d Punkte!'
+msg_war_cannot_do: '&cDu kannst dies nicht tun wenn die Welt im Kriegszustand ist.'
+msg_war_started: '&eKriegscountdown wurde gestartet.'
+msg_war_ended: '&eDer aktuelle Krieg fand ein Ende.'
+
+msg_enemy_war_area_under_attack: '&6[Krieg]&b %s (%s) wird von %s attackiert!'
+msg_enemy_war_area_won: '&6[Krieg]&b %s (%s) gewann (%s)!'
+msg_enemy_war_area_defended: '&6[Krieg]&b %s verteidigte (%s)!'
+msg_err_enemy_war_must_be_placed_above_ground: '&6[Krieg]&c Du musst die Flagge oberhalb des Bodens setzen.'
+msg_err_enemy_war_not_part_of_nation: '&6[Krieg]&c dieser Bereich gehoert zu keiner Nation.'
+msg_err_enemy_war_is_neutral: '&6[Krieg]&c %s ist neutral.'
+msg_err_enemy_war_require_online: '&6[Krieg]&c Es erfordert mindestens %d aktive Spieler in %s um einen Krieg erklaeren zu koennen.'
+msg_err_enemy_war_not_on_edge_of_town: '&6[Krieg]&c Der Krieg wird nicht am Stadtrand gefuehrt.'
+msg_err_enemy_war_cell_already_under_attack: '&6[Krieg]&c Dieser Bereich wird bereits von %s attackiert.'
+msg_err_enemy_war_reached_max_active_flags: '&6[Krieg]&c Du kannst nicht mehr als %s Bereiche gleichzeitig angreifen.'
+
+msg_cache_block_error: '&cDu bist nicht in Towny regestriert. Versuche dich neu einzuwaehlen(Reloggen).'
+msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
+msg_cache_block_error_plot: '&c %s von %s bis hier ist dem Besitzer nicht erlaubt.'
+msg_cache_block_error_town_resident: '&c %s ist Einwohnern hier nicht erlaubt.'
+msg_cache_block_error_town_allies: '&c %s ist Verbuendeten nicht erlaubt.'
+msg_cache_block_error_town_outsider: '&c %s ist Aussenstehenden nicht erlaubt.'
+
+msg_err_cant_afford_tp_town: '&cDer Teleport nach %s wurde verwaehrt da du nicht genug Geld hast.'
+msg_err_not_public: '&cDiese Stadt ist nicht oeffentlich.'
+msg_err_town_spawn_forbidden: '&cStadt-Spawn Reisen sind verboten.'
+msg_err_town_spawn_nation_forbidden: '&cStadt-Spawn Reisen zu anderen Staedten in deiner Nation ist verboten.'
+msg_err_town_spawn_ally_forbidden: '&cStadt-Spawn Reisen zu anderen Staedten in verbuendeten Nationen ist verboten.'
+msg_err_public_spawn_forbidden: '&cOeffentliche Spawn-Reisen zu anderen Staedeten ist verboten.'
+msg_err_public_spawn_enemy: '&cOeffentliche Spawn-Reisen fuer Feinde ist verboten.'
+msg_err_town_spawn_disallowed_from: '&cStadt-Spawn wurde von %s verweigert.'
+
+msg_err_cant_afford_tp: '&bDu hast nicht genug Geld um dich zu deinem Stadt-Spawn zu teleportieren.'
+msg_err_plot_nfs: '&cDieses Grundstueck steht nicht mehr zum Verkauf offen.'
+msg_err_not_part_town: '&cDer ausgewaehlte Bereich ist nicht Teil deiner Stadt.'
+msg_err_not_attached_edge: '&cDer ausgewaehlte Bereich wurde nicht angefuegt.'
+msg_err_empty_area_selection: '&cDer ausgewaehlte Bereich enthaelt keine gueltigen Grundstuecke.'
+msg_err_not_enough_blocks: '&cNicht genug verfuegbare Stadt-Bloecke um diese Auswahl zu beanspruchen.'
+msg_err_cant_afford_blocks: '&cDie Stadt hat nicht genug Geld um dies zu beanspruchen. %s Stadt-Bloecke kosten %s'
+msg_err_not_in_town_claim: '&cDu musst zu einer Stadt angehoeren um Bereiche beanspruchen zu koennen.'
+msg_err_must_belong_town: '&cDu musst zu einer Stadt angehoeren.'
+msg_err_dont_belong_town: '&cDu gehoerst zu keiner Stadt.'
+msg_err_dont_belong_nation: '&bDu gehoerst zu keiner Nation.'
+msg_err_not_same_nation: '&b%s gehoert nicht zu deiner Nation.'
+msg_err_rect_auto: '&cNur Staedte oder Einwohner koennen ''auto'' benutzen.'
+msg_err_invalid_radius: '&cUngueltiger Radius. Benutze eine ganze Zahl oder ''auto''.'
+msg_err_not_configured: '&cDiese Welt wurde nicht von Towny konfiguriert.'
+msg_err_updating_item_perms: '&cFehler bei der Aktualisierung der Use-Berechtigungen im Zwischenspeicher.'
+msg_err_updating_switch_perms: '&cFehler bei der Aktualisierung der Switsch-Berechtigungen im Zwischenspeicher.'
+msg_err_updating_destroy_perms: '&cFehler bei der Aktualisierung der Destroy-Berechtigungen im Zwischenspeicher.'
+msg_err_updating_build_perms: '&cFehler bei der Aktualisierung der Build-Berechtigungen im Zwischenspeicher.'
+msg_err_admin_only: '&cNur ein Administrator kann diesen Befehl benutzen.'
+msg_err_admin_only_delete: '&cNur ein Administrator kann andere Einwohnerdaten loeschen.'
+msg_err_admin_only_delete_town: '&cNur ein Administrator kann andere Staedtedaten loeschen.'
+msg_err_admin_only_delete_nation: '&cNur ein Administrator kann andere Nationsdaten loeschen.'
+msg_err_online_or_npc: '&c%s ist online oder ein NPC.'
+msg_err_not_registered: '&cDu bist nicht regestriert'
+msg_err_not_registered_1: '&c%s ist nicht regestriert'
+msg_err_invalid_name: '&c%s ist ein ungueltiger Name.'
+msg_err_already_res: '&c%s gehoert bereits zu einer Stadt.'
+msg_err_already_nation: '&cAusgewaehlte Stadt gehoert bereits zu einer Nation.'
+msg_err_invalid_property: '&c ''%s'' ist ein ungueltiges Objekt.'
+msg_err_not_supported: '&cWird noch nicht unterstuetzt.'
+msg_err_invalid_input: '&cUngueltige Eingabe. Benutze %s'
+msg_err_negative: '&cEingabe kann nicht negativ sein.'
+msg_err_input_too_long: '&cEingabe zu lang.'
+msg_err_invalid_choice: '&cUngueltige Wahl'
+msg_err_invalid_sub: '&cUngueltiger Unterkommando.'
+msg_err_command_disable: '&cBefehl deaktiviert: Benutze Permissions.'
+msg_err_universe_limit: '&cDas Universum kann nicht noch mehr Staedte halten.'
+msg_err_too_many_npc: '&cZu viele NPCs wurden regestriert.'
+msg_err_negative_money: '&cEin negativer Kontostand ist dumm. Verrueckter Typ...'
+msg_err_not_percentage: '&cProzentangaben muessen unter 100 sein.'
+msg_err_no_economy: '&cEconomy wurde nicht eingeschaltet.'
+msg_err_not_block_type: '&cDas ist kein gueltiger Grundstueckstyp!'
+msg_not_allowed_join: '&c%s ist es nicht erlaubt einer Stadt beizutreten.'
+msg_offline_no_join: '&c%s ist offline. Du kannst ihn durch den town-Ordner hinzufuegen wenn du dazu berechtigt bist.'
+msg_err_warzone_cannot_edit_material: '&c %s %s ist in einem Kriegsgebiet nicht moeglich.'
+msg_err_warzone_cannot_use_switches: '&cDu kannst keine Schalter in einem Kriegsgebiet benutzen.'
+msg_err_warzone_cannot_use_item: '&cDu kannst dieses Item nicht in einem Kriegsgebiet benutzen.'
+msg_err_cannot_perform_action: '&cDu kannst diese Aktion nicht in %s ausfuehren.'
+
+# Diese Nachricht wird nur dann benutzt, wenn die entsprechende Einstellung von "town/nation_creation_admin_only" eingeschaltet ist. 
+
+msg_admin_only_create_nation: '&cNur Admins ist es erlaubt Nationen zu gruenden.'
+msg_admin_only_create_town: '&cNur Admins ist es erlaubt Staedte zu gruenden.'
