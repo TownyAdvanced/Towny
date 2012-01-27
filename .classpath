@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../../lib/bpermissions.jar"/>
-	<classpathentry kind="lib" path="../../lib/Essentials.jar"/>
-	<classpathentry kind="lib" path="../../lib/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="../../lib/iConomy.jar"/>
-	<classpathentry kind="lib" path="../../lib/Permissions.jar"/>
-	<classpathentry kind="lib" path="../../lib/PermissionsEx.jar"/>
-	<classpathentry kind="lib" path="../../lib/Questioner.jar"/>
-	<classpathentry kind="lib" path="../../lib/Register.jar"/>
-	<classpathentry kind="lib" path="../../lib/bukkit-1.1-R2-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="../../lib/craftbukkit-1.1-R2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/bpermissions.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/Essentials.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/EssentialsGroupManager.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/iConomy.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/Permissions.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/PermissionsEx.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/Questioner.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/Register.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/bukkit-1.1-R2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/craftbukkit-1.1-R2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
