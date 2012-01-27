@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Towny" default="makejar" basedir=".">
+  <target name ="makejar" description="Create a jar for the Towny project">
+    <jar jarfile="../lib/Towny.jar" includes="**" basedir="bin"/>
+  </target>
+</project>
