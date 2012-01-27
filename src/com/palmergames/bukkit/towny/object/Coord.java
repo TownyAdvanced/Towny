@@ -72,8 +72,6 @@ public class Coord {
 	/**
 	 * Convert regular grid coordinates to their grid cell's counterparts.
 	 * 
-	 * @author gmcouto
-	 * 
 	 * @param x
 	 * @param z
 	 * @return a new instance of Coord.

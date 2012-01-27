@@ -37,10 +37,8 @@ public class PlotClaim extends Thread {
     /**
      * @param plugin reference to towny
      * @param player Doing the claiming, or null
-     * @param town The claiming town
      * @param selection List of WoorldCoords to claim/unclaim
      * @param claim or unclaim
-     * @param forced admin forced claim/unclaim
      */
     public PlotClaim(Towny plugin, Player player, Resident resident, List<WorldCoord> selection, boolean claim) {
         super();
@@ -63,7 +61,7 @@ public class PlotClaim extends Thread {
 				
 				// Make sure this is a valid world (mainly when unclaiming).
 				try {
-					this.world = TownyUniverse.getWorld(worldCoord.getWorld().getName());
+					this.world = TownyUniverse.getDataSource().getWorld(worldCoord.getWorld().getName());
 				} catch (NotRegisteredException e) {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 		    		continue;
@@ -81,7 +79,7 @@ public class PlotClaim extends Thread {
 					 */
 					TownyMessaging.sendErrorMsg(player, e.getError());
 				} catch (TownyException x) {
-					TownyMessaging.sendErrorMsg(player, x.getError());
+					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
 
 			}
@@ -213,7 +211,7 @@ public class PlotClaim extends Thread {
     		try {
 				residentUnclaim(townBlock.getWorldCoord());
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getError());
+				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
     		
     		

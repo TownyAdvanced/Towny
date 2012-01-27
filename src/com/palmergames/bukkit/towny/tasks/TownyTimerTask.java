@@ -11,7 +11,7 @@ public abstract class TownyTimerTask extends TimerTask {
 
 	public TownyTimerTask(TownyUniverse universe) {
 		this.universe = universe;
-		this.plugin = universe.getPlugin();
+		this.plugin = TownyUniverse.getPlugin();
 	}
 
 	//@Override

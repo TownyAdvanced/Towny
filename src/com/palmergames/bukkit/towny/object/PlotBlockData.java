@@ -27,7 +27,7 @@ public class PlotBlockData {
 		this.worldName = townBlock.getWorld().getName();
 		this.setVersion(defaultVersion);
 		try {
-			setHeight(TownyUniverse.plugin.getServerWorld(worldName).getMaxHeight()-1);
+			setHeight(TownyUniverse.getPlugin().getServerWorld(worldName).getMaxHeight()-1);
 		} catch (NotRegisteredException e) {
 			setHeight(127);
 		}
@@ -53,7 +53,7 @@ public class PlotBlockData {
         
         
         try {
-        	World world = TownyUniverse.plugin.getServerWorld(worldName);
+        	World world = TownyUniverse.getPlugin().getServerWorld(worldName);
         	/*
         	if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ()))) {
         		return null;
@@ -96,7 +96,7 @@ public class PlotBlockData {
 		blockObject storedData;
 		
 		try {
-			World world = TownyUniverse.plugin.getServerWorld(worldName);
+			World world = TownyUniverse.getPlugin().getServerWorld(worldName);
 			
 			if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ())))
 				return true;
@@ -131,7 +131,7 @@ public class PlotBlockData {
 				// If this block isn't correct, replace
 				// and return as done.
 				if ((blockId != storedData.getTypeID())) {
-					if (!TownyUniverse.getWorld(worldName).isPlotManagementIgnoreIds(storedData.getTypeID())) {
+					if (!TownyUniverse.getDataSource().getWorld(worldName).isPlotManagementIgnoreIds(storedData.getTypeID())) {
 						
 						//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
 						

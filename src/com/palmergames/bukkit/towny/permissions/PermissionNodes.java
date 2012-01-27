@@ -33,6 +33,7 @@ public enum PermissionNodes {
 			TOWNY_TOGGLE_EXPLOSION("towny.town.toggle.explosions"),
 			TOWNY_TOGGLE_FIRE("towny.town.toggle.fire"),
 			TOWNY_TOGGLE_MOBS("towny.town.toggle.mobs"),
+			TOWNY_TOGGLE_OPEN("towny.town.toggle.open"),
 		
 		TOWNY_NATION_ALL("towny.nation.*"),
 			
@@ -83,6 +84,7 @@ public enum PermissionNodes {
 			TOWNY_CHAT_ADMIN("towny.chat.admin"),
 			TOWNY_CHAT_MOD("towny.chat.mod"),
 			TOWNY_CHAT_GLOBAL("towny.chat.global"),
+			TOWNY_CHAT_SPY("towny.chat.spy"),
 		
 		// Info nodes
 			

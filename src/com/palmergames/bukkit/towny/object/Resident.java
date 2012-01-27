@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.ChunkSnapshot;
+
 import com.palmergames.bukkit.towny.*;
 
 public class Resident extends TownBlockOwner {
 	private List<Resident> friends = new ArrayList<Resident>();
+	private List<ChunkSnapshot> regenUndo = new ArrayList<ChunkSnapshot>();
 	private Town town;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
@@ -26,7 +29,7 @@ public class Resident extends TownBlockOwner {
         teleportRequestTime = -1;
         teleportCost = 0.0;
 	}
-
+	
 	public void setLastOnline(long lastOnline) {
 		this.lastOnline = lastOnline;
 	}
@@ -227,6 +230,27 @@ public class Resident extends TownBlockOwner {
 	public void setChatFormattedName(String chatFormattedName) {
 		this.chatFormattedName = chatFormattedName;
 		setChangedName(false);
+	}
+	
+	/**
+	 * Push a snapshot to the Undo queue
+	 * 
+	 * @param snapshot
+	 */
+	public void addUndo(ChunkSnapshot snapshot) {
+		if (regenUndo.size() == 5)
+			regenUndo.remove(0);
+		regenUndo.add(snapshot);
+	}
+	
+	public void regenUndo () {
+		if (regenUndo.size() > 0) {
+			ChunkSnapshot snapshot = regenUndo.get(regenUndo.size()-1);
+			regenUndo.remove(snapshot);
+			
+			TownyRegenAPI.regenUndo(snapshot, this);
+			
+		}
 	}
 
 }

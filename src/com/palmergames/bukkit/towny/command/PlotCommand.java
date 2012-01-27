@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUtil;
@@ -23,6 +24,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -51,6 +53,7 @@ public class PlotCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot forsale [$]", "within [rect/circle] [radius]", ""));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot clear", "", ""));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot set ...", "", TownySettings.getLangString("msg_plot_fs")));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/plot toggle", "[pvp/fire/explosion/mobs]", ""));
 		output.add(TownySettings.getLangString("msg_nfs_abr"));
 	}
 
@@ -72,7 +75,7 @@ public class PlotCommand implements CommandExecutor {
 					parsePlotCommand(player, args);
 				} catch (TownyException x) {
 					// No permisisons
-					TownyMessaging.sendErrorMsg(player, x.getError());
+					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
 			}
 
@@ -96,11 +99,11 @@ public class PlotCommand implements CommandExecutor {
 			TownyWorld world;
 			Town town;
 			try {
-				resident = plugin.getTownyUniverse().getResident(player.getName());
-				world = TownyUniverse.getWorld(player.getWorld().getName());
+				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 				town = resident.getTown();
 			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getError());
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 
@@ -150,11 +153,11 @@ public class PlotCommand implements CommandExecutor {
 					if (plugin.getTownyUniverse().isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-					if (split.length == 2 && split[1].equalsIgnoreCase("all"))
+					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task
 						new PlotClaim(plugin, player, resident, null, false).start();
 
-					else {
+					} else {
 						List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 						selection = TownyUtil.filterOwnedBlocks(resident, selection);
 
@@ -222,7 +225,7 @@ public class PlotCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("perm")) {
 
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-					TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(townBlock));
+					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
 
 				} else if (split[0].equalsIgnoreCase("toggle")) {
 
@@ -271,7 +274,7 @@ public class PlotCommand implements CommandExecutor {
 
 					} else {
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set perm", "?", ""));
 					}
 				} else if (split[0].equalsIgnoreCase("clear")) {
@@ -287,7 +290,7 @@ public class PlotCommand implements CommandExecutor {
 						if (townBlock.isOwner(town) && (!townBlock.hasResident())) {
 							for (String material : world.getPlotManagementMayorDelete())
 								if (Material.matchMaterial(material) != null) {
-									plugin.getTownyUniverse().deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
+									TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
 									player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
 								} else
 									throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
@@ -301,9 +304,9 @@ public class PlotCommand implements CommandExecutor {
 
 				}
 			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getError());
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			} catch (EconomyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getError());
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
 		}
 	}
@@ -355,7 +358,7 @@ public class PlotCommand implements CommandExecutor {
 				if (forSale != -1)
 					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
 				else
-					plugin.getTownyUniverse().getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
+					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}

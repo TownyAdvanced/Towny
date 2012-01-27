@@ -14,6 +14,8 @@ public class TownBlock {
     private TownBlockType type;
 	private int x, z;
 	private double plotPrice = -1;
+	private boolean locked = false;
+	private boolean outpost = false;
 	
 	//Plot level permissions
     protected TownyPermission permissions = new TownyPermission();
@@ -131,6 +133,20 @@ public class TownBlock {
 		this.isChanged = isChanged;
 	}
 
+	/**
+	 * @return the outpost
+	 */
+	public boolean isOutpost() {
+		return outpost;
+	}
+
+	/**
+	 * @param outpost the outpost to set
+	 */
+	public void setOutpost(boolean outpost) {
+		this.outpost = outpost;
+	}
+
 	public TownBlockType getType() {
         return type;
     }
@@ -162,6 +178,9 @@ public class TownBlock {
         		setPermissions(this.town.permissions.toString());
         	break;
         case WILDS:
+        	setPermissions("denyAll");
+        	break;
+        case SPLEEF:
         	setPermissions("denyAll");
         	break;
         }
@@ -209,6 +228,22 @@ public class TownBlock {
 	
 	public WorldCoord getWorldCoord() {
 		return new WorldCoord(world, x, z);
+	}
+
+	/**
+	 * Is the TownBlock locked
+	 * 
+	 * @return the locked
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * @param locked is the to locked to set
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 
 	public void setWorld(TownyWorld world) {

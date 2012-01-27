@@ -92,7 +92,7 @@ public class BukkitPermSource extends TownyPermissionSource {
      * 
      * @param player
      * @param node
-     * @return
+     * @return true if Op or has the permission node.
      */
     @Override
 	public boolean hasPermission(Player player, String node) {
@@ -121,7 +121,7 @@ public class BukkitPermSource extends TownyPermissionSource {
      * Returns the players Group name.
      * 
      * @param player
-     * @return
+     * @return Empty string as bukkit doesn't support groups
      */
     @Override
 	public String getPlayerGroup(Player player) {

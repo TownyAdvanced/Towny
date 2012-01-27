@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
@@ -13,13 +12,11 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
  *
  */
 public class SetDefaultModes extends TownyTimerTask {
-	protected Towny plugin;
 	protected Player player;
 	protected boolean notify;
 
 	public SetDefaultModes(TownyUniverse universe, Player player, boolean notify) {
 		super(universe);
-		this.plugin = universe.getPlugin();
 		this.player = player;
 		this.notify = notify;
 	}
@@ -28,7 +25,7 @@ public class SetDefaultModes extends TownyTimerTask {
 	public void run() {
 		
 		// Is the player still available
-		if (!Arrays.asList(universe.getOnlinePlayers()).contains(this.player))
+		if (!Arrays.asList(TownyUniverse.getOnlinePlayers()).contains(this.player))
 			return;
 		
 		//setup default modes

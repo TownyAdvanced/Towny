@@ -4,9 +4,10 @@ package com.palmergames.bukkit.towny.permissions;
 import java.util.Arrays;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.CustomEventListener;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.PermissionEntity;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 
 /**
@@ -33,7 +35,11 @@ public class PEXSource extends TownyPermissionSource {
 		this.pex = (PermissionsEx)test;
 		this.plugin = towny;
 		
-		plugin.getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, new PEXCustomEventListener(), Priority.High, plugin);
+		try {
+			plugin.getServer().getPluginManager().registerEvents(new PEXCustomEventListener(), plugin);
+    	} catch (IllegalPluginAccessException e) {
+			System.out.print("Your Version of PEX is out of date. Please update.");
+		}
 	}
 	
 	/** getPermissionNode
@@ -42,7 +48,7 @@ public class PEXSource extends TownyPermissionSource {
      * 
      * @param resident
      * @param node
-     * @return
+     * @return String of the prefix or suffix
      */
     @Override
 	public String getPrefixSuffix(Resident resident, String node) {
@@ -123,7 +129,7 @@ public class PEXSource extends TownyPermissionSource {
      * 
      * @param player
      * @param node
-     * @return
+     * @return true if Op or has the permission node.
      */
     @Override
 	public boolean hasPermission(Player player, String node) {
@@ -140,7 +146,7 @@ public class PEXSource extends TownyPermissionSource {
      * Returns the players Group name.
      * 
      * @param player
-     * @return
+     * @return Name of the players group
      */
     @Override
 	public String getPlayerGroup(Player player) {
@@ -155,7 +161,7 @@ public class PEXSource extends TownyPermissionSource {
      * Returns an array of Groups this player is a member of.
      * 
      * @param player
-     * @return
+     * @return Array of groups for this player
      */
     public PermissionGroup[] getPlayerGroups(Player player) {
 
@@ -165,64 +171,71 @@ public class PEXSource extends TownyPermissionSource {
 		
     }
     
-    protected class PEXCustomEventListener extends CustomEventListener {
+	protected class PEXCustomEventListener implements Listener {
 
 		public PEXCustomEventListener() {
 		}
 
-		@Override
-		public void onCustomEvent(Event event) {
+		@EventHandler(priority = EventPriority.HIGH)
+		public void onPermissionEntityEvent(PermissionEntityEvent event) {
 
 			Resident resident = null;
 			Player player = null;
 
 			try {
-				if (event instanceof PermissionEntityEvent) {
-					if (PermissionEventEnums.PEXEntity_Action.valueOf(event.getEventName()) != null) {
-						PermissionEntityEvent EntityEvent = (PermissionEntityEvent) event;
-						PermissionEntity entity = EntityEvent.getEntity();
-						if (entity instanceof PermissionGroup) {
-							PermissionGroup group = (PermissionGroup)entity;
-							
-							// Update all players who are in this group.
-							for (Player toUpdate : plugin.getTownyUniverse().getOnlinePlayers()) {
-								if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
-									//setup default modes
-									String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-									plugin.setPlayerMode(player, modes, false);
-								}
+				if (PermissionEventEnums.PEXEntity_Action.valueOf(event.getEventName()) != null) {
+					PermissionEntityEvent EntityEvent = (PermissionEntityEvent) event;
+					PermissionEntity entity = EntityEvent.getEntity();
+					if (entity instanceof PermissionGroup) {
+						PermissionGroup group = (PermissionGroup) entity;
+
+						// Update all players who are in this group.
+						for (Player toUpdate : TownyUniverse.getOnlinePlayers()) {
+							if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
+								//setup default modes
+								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+								plugin.setPlayerMode(player, modes, false);
 							}
-							
-						} else if (entity instanceof PermissionUser) {
-							
-							try {
-								resident = plugin.getTownyUniverse().getResident(((PermissionUser)entity).getName());
-								player = plugin.getServer().getPlayerExact(resident.getName());
-								if (player != null) {
-									//setup default modes for this player.
-									String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-									plugin.setPlayerMode(player, modes, false);
-								}
-							} catch (NotRegisteredException x) {
-							}						
+						}
+
+					} else if (entity instanceof PermissionUser) {
+
+						try {
+							resident = TownyUniverse.getDataSource().getResident(((PermissionUser) entity).getName());
+							player = plugin.getServer().getPlayerExact(resident.getName());
+							if (player != null) {
+								//setup default modes for this player.
+								String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+								plugin.setPlayerMode(player, modes, false);
+							}
+						} catch (NotRegisteredException x) {
 						}
 					}
-	
-				} else if (event instanceof PermissionSystemEvent) {
-					if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
-						// Update all players.
-						for (Player toUpdate : plugin.getTownyUniverse().getOnlinePlayers()) {
-							//setup default modes
-							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(player, modes, false);
-						}
-					}
-	
 				}
-			} catch (IllegalArgumentException ex) {
-				// We are not looking for this event type.
+			} catch (IllegalArgumentException e) {
+				// Not tracking this event type
 			}
 		}
+
+		@EventHandler(priority = EventPriority.HIGH)
+		public void onPermissionSystemEvent(PermissionSystemEvent event) {
+
+			Player player = null;
+
+			try {
+				if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
+					// Update all players.
+					for (Player toUpdate : TownyUniverse.getOnlinePlayers()) {
+						//setup default modes
+						String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+						plugin.setPlayerMode(player, modes, false);
+					}
+				}
+			} catch (IllegalArgumentException e) {
+				// Not tracking this event type
+			}
+
+		}
 	}
-	
 }
+	

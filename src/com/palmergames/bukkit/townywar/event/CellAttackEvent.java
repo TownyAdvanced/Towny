@@ -4,12 +4,26 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 import com.palmergames.bukkit.townywar.CellUnderAttack;
 
 
 public class CellAttackEvent extends Event implements Cancellable {
 	private static final long serialVersionUID = -6413227132896218785L;
+	private static final HandlerList handlers = new HandlerList();
+
+	@Override
+	public HandlerList getHandlers() {
+        return handlers;
+    }
+ 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+    
+    //////////////////////////////
+    
 	private Player player;
 	private Block flagBaseBlock;
 	private boolean cancel = false;

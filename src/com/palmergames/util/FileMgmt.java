@@ -79,12 +79,12 @@ public class FileMgmt {
         return file;
     }
 
-	public static File unpackLanguageFile(String filePath, String defaultRes) {
+	public static File unpackLanguageFile(String filePath, String resource, String defaultRes) {
 		
 		// open a handle to yml file
 		File file = new File(filePath);
 		
-		if((file.exists()) && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes)))
+		if((file.exists()) && (!filePath.contains(FileMgmt.fileSeparator() + resource)))
 			return file;
 		
 		String resString;
@@ -102,17 +102,18 @@ public class FileMgmt {
 		
 		// Populate a new file
 		try {
-			resString = convertStreamToString("/" + defaultRes);
-			if (resString != null) {
-	    		// Save the string to file (*.yml)
-	    		try {
-		    		FileMgmt.stringToFile(resString, filePath);
-	    		} catch (IOException e) {
-	    			e.printStackTrace();
-	    		}
-	    	}
+			resString = convertStreamToString("/" + resource);
+			FileMgmt.stringToFile(resString, filePath);
+
 		} catch (IOException e) {
-			e.printStackTrace();
+			// No resource file found
+			try {
+				resString = convertStreamToString("/" + defaultRes);
+				FileMgmt.stringToFile(resString, filePath);
+			} catch (IOException e1) {
+				// Default resource not found
+				e1.printStackTrace();
+			}
 		}
 			
 		return file;
@@ -136,7 +137,12 @@ public class FileMgmt {
 			{
 			    System.out.println("Exception ");
 			} finally {
-	            is.close();
+				try {
+					is.close();
+				} catch (NullPointerException e) {
+					//Failed to open a stream
+					throw new IOException();
+				}
 	        }
 	        return writer.toString();
 	    } else {        
@@ -180,9 +186,19 @@ public class FileMgmt {
     }
 	
 	//writes a string to a file making all newline codes platform specific
-	public static boolean stringToFile(String source, String FileName) throws IOException {
+	public static boolean stringToFile(String source, String FileName) {
 		
-		return stringToFile(source, new File(FileName));
+		if (source != null) {
+    		// Save the string to file (*.yml)
+    		try {
+    			return stringToFile(source, new File(FileName));
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    	}
+		
+		return false;
+
 	}
 
     /**

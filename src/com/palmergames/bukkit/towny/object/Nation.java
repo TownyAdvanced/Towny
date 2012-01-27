@@ -300,11 +300,15 @@ public class Nation extends TownyEconomyObject implements ResidentList {
         }
 
         public void setTaxes(double taxes) {
-                this.taxes = taxes;
+        	if (taxes > TownySettings.getMaxTax())
+    			this.taxes = TownySettings.getMaxTax();
+    		else
+    			this.taxes = taxes;
         }
 
         public double getTaxes() {
-                return taxes;
+        	setTaxes(taxes); //make sure the tax level is right.
+            return taxes;
         }
 
         public void clear() {

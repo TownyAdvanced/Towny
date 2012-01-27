@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,10 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
@@ -46,6 +49,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "list", TownySettings.getLangString("world_help_4")));
 		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "toggle",""));
 		townyworld_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyworld", "set [] .. []", ""));
+		townyworld_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyworld", "regen", TownySettings.getLangString("world_help_5")));
 		
 		townyworld_set.add(ChatTools.formatTitle("/townyworld set"));
 		townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildname [name]", ""));
@@ -84,7 +88,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		if (sender instanceof Player) {
 			player = (Player)sender;
 			try {
-				Globalworld = TownyUniverse.getWorld(player.getWorld().getName());
+				Globalworld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -97,7 +101,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			if ((!split[0].equalsIgnoreCase("?")) && (!split[0].equalsIgnoreCase("list")))
 			try {
 				if ((split.length >= 1)) {
-					Globalworld = TownyUniverse.getWorld(split[split.length-1].toLowerCase());
+					Globalworld = TownyUniverse.getDataSource().getWorld(split[split.length-1].toLowerCase());
 					split = StringMgmt.remLastArg(split);
 				} else {
 					sender.sendMessage(TownySettings.getLangString("msg_area_not_recog"));
@@ -113,10 +117,10 @@ public class TownyWorldCommand implements CommandExecutor  {
 		
 		if (split.length == 0) {
 			if (player == null) {
-				for (String line : plugin.getTownyUniverse().getStatus(Globalworld))
+				for (String line : TownyFormatter.getStatus(Globalworld))
 					sender.sendMessage(Colors.strip(line));
 			} else
-				TownyMessaging.sendMessage(player, plugin.getTownyUniverse().getStatus(Globalworld));				
+				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(Globalworld));				
 
 			return;
 		} 
@@ -140,6 +144,47 @@ public class TownyWorldCommand implements CommandExecutor  {
 			worldSet(player, sender, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
 			worldToggle(player, sender, StringMgmt.remFirstArg(split));
+		} else if (split[0].equalsIgnoreCase("regen")) {
+
+			if (plugin.getTownyUniverse().isWarTime()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
+				return;
+			}
+			
+			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+				return;
+			}
+			
+			if (TownySettings.getTownBlockSize() != 16) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
+				return;
+			}
+				
+			// Regen this chunk
+			if (player != null) {
+				try {
+					Coord coord = Coord.parseCoord(player);
+					TownyUniverse.getDataSource().getResident(player.getName())
+						.addUndo(Bukkit.getWorld(player.getWorld().getName()).getChunkAt(player.getLocation()).getChunkSnapshot());
+					
+					Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
+					
+				} catch (NotRegisteredException e) {
+					// Failed to get resident
+				}
+			}
+			
+
+		} else if (split[0].equalsIgnoreCase("undo")) {
+			
+			if (player != null)
+				try {
+					TownyUniverse.getDataSource().getResident(player.getName()).regenUndo();
+				} catch (NotRegisteredException e) {
+					// Failed to get resident
+				}
+			
 		} else {
 			/*
 			try {
@@ -160,7 +205,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 		
 		ArrayList<String> formatedList = new ArrayList<String>();
 		HashMap<String,Integer> playersPerWorld = MinecraftTools.getPlayersPerWorld(plugin.getServer());
-		for (TownyWorld world : plugin.getTownyUniverse().getWorlds()) {
+		for (TownyWorld world : TownyUniverse.getDataSource().getWorlds()) {
 			int numPlayers = playersPerWorld.containsKey(world.getName()) ? playersPerWorld.get(world.getName()) : 0;
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}

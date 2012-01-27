@@ -27,17 +27,17 @@ public class WarTimerTask extends TownyTimerTask {
 		if (!warEvent.isWarTime()) {
 			warEvent.end();
 			universe.clearWarEvent();
-			universe.getPlugin().updateCache();
+			TownyUniverse.getPlugin().updateCache();
 			TownyMessaging.sendDebugMsg("War ended.");
 			return;
 		}
 		
 		int numPlayers = 0;
-		for (Player player : universe.getOnlinePlayers()) {
+		for (Player player : TownyUniverse.getOnlinePlayers()) {
 			numPlayers += 1;
 			TownyMessaging.sendDebugMsg("[War] "+player.getName()+": ");
 			try {
-				Resident resident = universe.getResident(player.getName());
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 				if (resident.hasNation()) {
 					Nation nation = resident.getTown().getNation();
 					TownyMessaging.sendDebugMsg("[War]   hasNation");
@@ -52,7 +52,7 @@ public class WarTimerTask extends TownyTimerTask {
 					TownyMessaging.sendDebugMsg("[War]   warringNation");
 					//TODO: Cache player coord & townblock
 					
-					WorldCoord worldCoord = new WorldCoord(TownyUniverse.getWorld(player.getWorld().getName()), Coord.parseCoord(player));
+					WorldCoord worldCoord = new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(player));
 					if (!warEvent.isWarZone(worldCoord))
 						continue;
 					TownyMessaging.sendDebugMsg("[War]   warZone");

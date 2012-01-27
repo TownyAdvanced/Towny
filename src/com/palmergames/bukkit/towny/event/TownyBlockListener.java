@@ -7,10 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -37,17 +39,18 @@ import com.palmergames.bukkit.townywar.TownyWar;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 
 
-public class TownyBlockListener extends BlockListener {
+public class TownyBlockListener implements Listener {
 	private final Towny plugin;
 
 	public TownyBlockListener(Towny instance) {
 		plugin = instance;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
+		
 
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -85,9 +88,10 @@ public class TownyBlockListener extends BlockListener {
 		//plugin.sendDebugMsg("onBlockPhysics took " + (System.currentTimeMillis() - start) + "ms ("+event.isCancelled() +")");
 	}
 	
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (event.isCancelled()) {
+
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -97,8 +101,9 @@ public class TownyBlockListener extends BlockListener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		WorldCoord worldCoord;
+			
 		try {
-			TownyWorld world = TownyUniverse.getWorld(block.getWorld().getName());
+			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
@@ -157,10 +162,10 @@ public class TownyBlockListener extends BlockListener {
 		//plugin.sendDebugMsg("onBlockBreakEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -171,7 +176,7 @@ public class TownyBlockListener extends BlockListener {
 		Block block = event.getBlock();
 		WorldCoord worldCoord;
 		try {
-			TownyWorld world = TownyUniverse.getWorld(block.getWorld().getName());
+			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
 			
 			//Get build permissions (updates if none exist)
@@ -181,18 +186,18 @@ public class TownyBlockListener extends BlockListener {
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
 			
-			// Allow build if in wilds and we have an override
+			// Allow build if in wilds/wilderness and we have an override
 			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride))
 				|| ((status == TownBlockStatus.TOWN_RESIDENT) && (plugin.getTownyUniverse().getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
 				return;
 			
-			// Allow build if we have an override
+			// Allow build if we have a town override
 			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD)))
 				|| ((status == TownBlockStatus.OUTSIDER) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD))))
 				return;
 
-			if ((status == TownBlockStatus.ENEMY && TownyWarConfig.isAllowingAttacks())
-					&& event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial()) {
+			if (((status == TownBlockStatus.ENEMY) && TownyWarConfig.isAllowingAttacks())
+					&& (event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial())) {
 					//&& plugin.hasPlayerMode(player, "warflag")) {
 				try {
 					if (TownyWar.callAttackCellEvent(plugin, player, block, worldCoord))
@@ -232,10 +237,10 @@ public class TownyBlockListener extends BlockListener {
 	}
 	
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBurn(BlockBurnEvent event) {
 		
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -244,10 +249,10 @@ public class TownyBlockListener extends BlockListener {
 			event.setCancelled(true);
 	}
 			
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockIgnite(BlockIgniteEvent event) {
 		
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -257,10 +262,10 @@ public class TownyBlockListener extends BlockListener {
 		
 	}
 	
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 		
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -282,10 +287,10 @@ public class TownyBlockListener extends BlockListener {
 		}		
 	}
 	
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 		
-		if (event.isCancelled()) {
+		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -314,7 +319,7 @@ public class TownyBlockListener extends BlockListener {
 		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
 		
 		try {
-			townyWorld = TownyUniverse.getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
 			CurrentTownBlock = townyWorld.getTownBlock(coord);
 		} catch (NotRegisteredException e) {
 			//System.out.print("Failed to fetch TownBlock");
@@ -329,8 +334,8 @@ public class TownyBlockListener extends BlockListener {
 		if (CurrentTownBlock != destinationTownBlock) {
 
 			// Cancel if either is not null, but other is (wild to town).
-			if ((CurrentTownBlock == null && destinationTownBlock != null)
-			|| (CurrentTownBlock != null && destinationTownBlock == null)) {
+			if (((CurrentTownBlock == null) && (destinationTownBlock != null))
+			|| ((CurrentTownBlock != null) && (destinationTownBlock == null))) {
 				//event.setCancelled(true);
 				return true;
 			}
@@ -364,7 +369,7 @@ public class TownyBlockListener extends BlockListener {
 		TownyWorld townyWorld;
 		
 		try {
-			townyWorld = TownyUniverse.getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
 			
 			if (!townyWorld.isUsingTowny())
 				return false;
@@ -381,8 +386,8 @@ public class TownyBlockListener extends BlockListener {
 				}
 				
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
-				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN && !townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire)
-						|| (block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN && plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation())) {
+				if (((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && !townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire)
+						|| ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation())) {
 					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within "+coord.toString()+".");
 					return true;
 				}

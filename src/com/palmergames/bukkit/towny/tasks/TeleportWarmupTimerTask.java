@@ -38,7 +38,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
                 	// Make sure the chunk we teleport to is loaded.
                     Chunk chunk = resident.getTeleportDestination().getSpawn().getWorld().getChunkAt(resident.getTeleportDestination().getSpawn().getBlock());
                 	if (!chunk.isLoaded()) chunk.load();
-                    universe.getPlayer(resident).teleport(resident.getTeleportDestination().getSpawn());
+                    TownyUniverse.getPlayer(resident).teleport(resident.getTeleportDestination().getSpawn());
                 } catch (TownyException ignore) { }
                 teleportQueue.poll();
             } else {

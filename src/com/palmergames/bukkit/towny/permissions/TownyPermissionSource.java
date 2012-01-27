@@ -22,7 +22,7 @@ public abstract class TownyPermissionSource {
 	protected Towny plugin;
 	
 	protected GroupManager groupManager = null;
-	protected de.bananaco.permissions.Permissions bPermissions = null;
+	//protected de.bananaco.permissions.Permissions bPermissions = null;
 	protected com.nijikokun.bukkit.Permissions.Permissions permissions = null;
 	protected PermissionsEx pex = null;
 
@@ -42,6 +42,10 @@ public abstract class TownyPermissionSource {
 			if ((hasPermission(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase())))
 				|| (hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_ALL.getNode(blockId + "." + action.toString().toLowerCase()))))
 				return true;
+		
+		// Allow ops all access when no permissions
+		if ((!bpermissions) && (isTownyAdmin(player)))
+			return true;
 
 		// No perms so check world settings.
 		switch (action) {
@@ -78,6 +82,10 @@ public abstract class TownyPermissionSource {
 				|| (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(blockId + "." + action.toString().toLowerCase()))))
 				return true;
 
+		// Allow ops all access when no permissions
+		if ((!bpermissions) && (isTownyAdmin(player)))
+			return true;
+				
 		// No perms so check global settings.
 		switch (action) {
 		
@@ -104,6 +112,10 @@ public abstract class TownyPermissionSource {
 				|| (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK.getNode(blockId + "." + action.toString().toLowerCase()))))
 				return true;
 
+		// Allow ops all access when no permissions
+		if ((!bpermissions) && (isTownyAdmin(player)))
+			return true;
+				
 		// No perms so check global settings.
 		switch (action) {
 				

@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.78.0.0
+version: 0.78.0.20
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -120,7 +120,7 @@ permissions:
         default: false
     towny.town.claim:
         description: User is able to expand with /towny claim
-        default: true
+        default: false
         children:
             towny.town.claim.outpost: true
     towny.town.plot:

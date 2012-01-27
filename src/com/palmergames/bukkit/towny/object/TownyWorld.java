@@ -28,7 +28,6 @@ public class TownyWorld extends TownyObject {
 	private List<Integer> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;
 	private List<Integer> plotManagementIgnoreIds = null;
-	private String format_global, format_town, format_nation, format_default;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null, unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
 	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
@@ -59,10 +58,6 @@ public class TownyWorld extends TownyObject {
 		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
 		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());
 		
-		format_global = TownySettings.getModifyChatFormat();
-		format_town = TownySettings.getChatTownChannelFormat();
-		format_nation = TownySettings.getChatNationChannelFormat();
-		format_default = TownySettings.getChatDefaultChannelFormat();
 	}
 
 	public List<Town> getTowns() {
@@ -477,7 +472,7 @@ public class TownyWorld extends TownyObject {
 	 * Checks the distance from a another town's homeblock.
 	 * 
 	 * @param key
-	 * @param town Players town
+	 * @param homeTown Players town
 	 * @return the closest distance to another towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
@@ -508,52 +503,6 @@ public class TownyWorld extends TownyObject {
     
     public boolean isWarZone(Coord coord) {
     	return warZones.contains(coord);
-    }
-    
-    // Chat channel format settings
-    
-    public String getChatGlobalChannelFormat() {
-    	if (TownySettings.isModifyChatPerWorld())
-    		return format_global;
-    	else 
-    		return TownySettings.getModifyChatFormat();
-    }
-    
-    public void setChatGlobalChannelFormat(String format) {
-    	format_global = format;
-    }
-    
-    public String getChatTownChannelFormat() {
-    	if (TownySettings.isModifyChatPerWorld())
-    		return format_town;
-    	else 
-    		return TownySettings.getChatTownChannelFormat();
-	}
-    
-    public void setChatTownChannelFormat(String format) {
-    	format_town = format;
-    }
-	
-	public String getChatNationChannelFormat() {
-		if (TownySettings.isModifyChatPerWorld())
-    		return format_nation;
-    	else
-		return TownySettings.getChatNationChannelFormat();
-	}
-	
-	public void setChatNationChannelFormat(String format) {
-    	format_nation = format;
-    }
-	
-	public String getChatDefaultChannelFormat() {
-		if (TownySettings.isModifyChatPerWorld())
-    		return format_default;
-    	else
-		return TownySettings.getChatDefaultChannelFormat();
-	}
-	
-	public void setChatDefaultChannelFormat(String format) {
-    	format_default = format;
     }
 
 }

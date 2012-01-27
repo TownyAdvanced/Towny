@@ -1021,3 +1021,125 @@ v0.77.1.33:
 	- You can now disable the CraftBukkit version check if you wish to take a risk with untested builds (bypass_version_check).
 v0.78.0.0:
 	- Release.
+v0.78.0.1:
+	- Fix upkeep so it won't attempt to make payments of zero amounts.
+	- Added a regenerate command for admins '/townyworld regen' (not decided if this will stay yet).
+	  This command will regenerate the chunk the player is in using the current world seed.
+	  It will only work on FULL (16x16x128) chunks, and only if your default plot size is still set to 16.
+	  *BEWARE* ths command has no undo feature. Once issued there is no going back.
+	- Added '/plot toggle' to the plot help screen.
+	- Fixed the error report when Towny fails to perform a daily backup.
+	- Slight change to onLogin to try and stop 0kb resident file creation (suspect some other plugin is running in it's own thread kicking a player at the wrong time).
+	- Any residents who are corrupt/missing at startup will no longer prevent Towny loading. They will be removed and the files tidied up.
+	- Fixed saving of plot regens, so they will now resume after a server restart.
+v0.78.0.2:
+	- Added '/ta town {name} rename {newname}'
+	- Added '/ta nation {name} rename {newname}'
+	- Fixed '/towny prices' to correctly display your own towns prices (if you are a resident in a town).
+	- Rework of player death and death costs to trigger on a player death and not on damage (no more multiple charges).
+	  Players will be charged only when killed by another player, monster or trap like a dispenser firing arrows.
+	  Deaths from falling etc will not incur a cost.
+v0.78.0.3:
+	- Town explosion settings no longer override individual plot settings. They only control the town owned plots.
+	- Reworked claiming/unclaim to be threadsafe (no longer throws errors in NoLagg).
+	- When claiming new townBlocks and using PlotManagementRevert all new claims will be locked until the snapshot has been taken.
+	  Building/breaking in the plot will be disabled until the snapshot is finished.
+	- Fixed hook for bPermissions to work with bPerms v2.
+	- Fixed '/ta town {name} kick {player}'.
+v0.78.0.4:
+	- Allow ops all access rights when not using permissions.
+	- Removed a lot of New Day spam to cut down on the lag during the accounting.
+	- Major reorganization of code in advance of SQL support.
+	  Any plugins which hooked TownyUniverse to read data should find the same functions in TownyUniverse.getDataSource().
+	- Added group prefix support as well as player prefix for bPermissionsV2.
+v0.78.0.5:
+	- Fixed '/town spawn' when players have teleport disable toggled in essentials.
+	- Changed 'towny.town.claim' to default to false in superperms.
+	- Fixed Changing database types between load and save (new code).
+v0.78.0.6:
+	- Nations breaking an alliance will now result in the opposing nation removing the ally status too (they can retaliate).
+	- If another nation has you set as an enemy you can no longer set them as an ally to avoid conflict (PvP).
+	- Fixed NullPointerError when reading default modes using Perms 3.x.
+	- Added '/tw undo' with five levels of undo for the '/tw regen' command.
+	  The undo memory is for the last 5 regen actions and is persistant between logins (not server restarts).
+v0.78.0.7:
+	- If Towny fails to load it 'should' now lock everything into safe mode until it's fixed.
+	  No one will be able to do anything at all until the fault is cleared.
+v0.78.0.8:
+	- Fix for not being able to eat (caused in 0.78.0.7).
+v0.78.0.9:
+	- Towny no longer complains if you have an empty mob removal list ('').
+	- Added the ability to restrict channel ranges in TownyChat.
+	
+	  All custom channels (not town or nation) can now have an extra value
+	  appended to signify a range limit on chat.
+	  
+	  -1 = no limits
+	  0 = same world only
+	  any positive value = limited range in the same world.
+	  
+	  eg. - /g,,,towny.chat.global,-1
+	        or a local channel that covers 100 blocks range
+	        /l,&f[local],&f,towny.chat.local,100
+	        
+	- Added a 'spleef' plot type (for future development).
+	- Added a spam filter to TownyChat so players can only send one message every two seconds.
+	- Update players cache properly when teleporting, so '/town claim' etc get the right location if you then don't move.
+v0.78.0.10:
+	- Added a new mode '/towny spy', or '/res set mode spy'.
+	  This requires you have the permission node 'towny.chat.spy' and be using TownyChat.
+	  If you toggle this mode on you will be able to see all town/nation/global, and all custom channel chat.
+	- If a player doesn't have the 'towny.chat.global' permission node, any open chat will pass through for any other plugins to handle.
+v0.78.0.11:
+	- ***** BEFORE USING THIS VERSION BACKUP YOUR CHANNELS (from config) AS THEY WILL be WIPED *****
+	- Added a spanish translation.
+	- Fixed an error when trying to create a language file which doesn't exist (non english).
+	- Moved all chat code to TownyChat (chat formats are still in config and world files).
+	- All chat channels are now defined in their own file 'Channels.yml' found in the Towny/Settings folder.
+	- Range limits can now be applied to town and nation chat.
+	- You can create two identical channels, one with a range limit and one without. The player will use whichever they have permission for.
+	- towny_default_modes now uses the full chat channel name. To allow use of the default channel it would be towny_default_modes: 'general'
+	- Fixed up javadocs - http://palmergames.com/javadoc
+v0.78.0.12:
+	- Fixed typo in comments.
+	- Code cleanup: Plot Types AsciiMap Keys are now in the right class. More specific error messages. Refactored error class to use standard variable.
+	- Added option for town respawn to only happen when the player dies in the same world as the spawn point.
+	- Added option for a town to open it's gates and let players join without needing to be invited.
+	  /town join [town] (Console: town join [resident] [town]). (Open) is shown in the town's status as well as in '/town list'.
+	  To set a town as open '/town toggle open'.
+	- New Lang: msg_err_already_in_town, msg_changed_open, msg_toggle_open_on_warning, msg_err_not_open
+	
+	***** WARNING BACKUP YOUR CHANNEL SETTINGS AS THEY WILL BE WIPED *****
+	
+	- Moved all chat settings to townyChat's own 'ChatConfig.yml' and removed all remaining chat functions from Towny.
+v0.78.0.13:
+	- Updated to support Dev CraftBukkit for 1.1 with new event system.
+	- Updated minimum CraftBukkit version to 1792.
+	- Implement new Bukkit event system supporting new GroupManager and PEX (if they update).
+v0.78.0.14:
+	- Fix for new installs failing to create a new config due to a bukkit bug in getMapList.
+	- Fix for handling GM System Events.
+v0.78.0.15:
+	- Fixed Error reporting when trying to add a non resident as a town assistant.
+	- Fix flag war to correctly observe it's config enable setting.
+v0.78.0.16:
+	- Fix for my fix for the Bukkit bug mentioned in 0.78.0.14.
+v0.78.0.17:
+	- Fixed an error on Setting player modes caused by Bukkit passing null objects.
+	- Fixed Upkeep plot payments to pay on the current size of the town.
+	- Fix PEX out of date message.
+	- Trap errors for GM/PEX events we don't want to track.
+v0.78.0.18:
+	- plot_management block_delete items are now queued and processed one TownBlock at a time, upon a Town unclaiming a plot.
+	- New Day code has been returned to an Asyncronous thread now that the block delete has it's own queue.
+	- Added a new config setting for town open status of new towns 'default_open' in 'Town Claim/new defaults'.
+	- Added a character limit on town and nation names 'max_name_length'. Defaults to 20 characters.
+v0.78.0.19:
+	- Added potion splash protection for non PvP areas.
+	- Nation tax now follow the 'max_tax_amount' cap.
+	- Outposts can now have their own spawns.
+	  The plot you claim as an outpost is the plot which can contain a spawn. It cannot be moved to another plot.
+	  Outpost spawns can be set with '/town set outpost'
+	  Outpost spawns can be used via '/town outpost x' (With x being a number 1 - however many outposts you own).
+v0.78.0.20:
+	- Added Outpost's to the Chunk notifications. They use the formatting from Outpostblock in 'Town Notifications'.

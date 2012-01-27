@@ -33,10 +33,10 @@ private Server server;
 			
 			Coord coord = Coord.parseCoord(player);
 			try {
-				TownyWorld world = TownyUniverse.getWorld(player.getWorld().getName());
+				TownyWorld world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 				TownBlock townBlock = world.getTownBlock(coord);
 					
-				if (universe.isAlly(townBlock.getTown(), universe.getResident(player.getName()).getTown()))
+				if (universe.isAlly(townBlock.getTown(), TownyUniverse.getDataSource().getResident(player.getName()).getTown()))
 					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 						incHealth(player);
 			} catch (TownyException x) {

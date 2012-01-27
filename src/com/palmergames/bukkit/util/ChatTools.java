@@ -79,7 +79,7 @@ public class ChatTools {
 
 	public static String stripColour(String s) {
 		String out = "";
-		for (int i = 0; i < s.length() - 1; i++) {
+		for (int i = 0; i < s.length(); i++) {
 			String c = s.substring(i, i + 1);
 			if (c.equals("§"))
 				i += 1;
@@ -93,7 +93,7 @@ public class ChatTools {
 		String line = ".oOo.__________________________________________________.oOo.";
 		int pivot = line.length() / 2;
 		String center = ".[ " + Colors.Yellow + title + Colors.Gold + " ].";
-		String out = Colors.Gold + line.substring(0, pivot - center.length() / 2);
+		String out = Colors.Gold + line.substring(0, Math.max(0,(pivot - center.length() / 2)));
 		out += center + line.substring(pivot + center.length() / 2);
 		return out;
 	}

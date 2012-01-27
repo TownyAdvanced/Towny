@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -58,25 +57,13 @@ public class TownySettings {
         UPKEEP_MULTIPLIER
 	};
 	
-	// Channel data
-	public enum ChatChannel {
-		COMMAND,
-        CHANNEL_NAME,
-        TEXT_COLOUR,
-        PERMISSION_NODE
-	};	
-	
 	private static Pattern namePattern = null;      
 	private static CommentedConfiguration config, newConfig, language;
-	//private static YamlConfiguration language;
-	
+
 	private static final SortedMap<Integer,Map<TownySettings.TownLevel,Object>> configTownLevel = 
 	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.TownLevel,Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer,Map<TownySettings.NationLevel,Object>> configNationLevel = 
 	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.NationLevel,Object>>(Collections.reverseOrder()));	
-	
-	private static final Map<String,Map<TownySettings.ChatChannel,String>> configChatChannel = 
-	        Collections.synchronizedSortedMap(new TreeMap<String,Map<TownySettings.ChatChannel,String>>(Collections.reverseOrder()));
 	
 	public static void newTownLevel(int numResidents,
 	                String namePrefix, String namePostfix,
@@ -107,17 +94,6 @@ public class TownySettings {
 	        configNationLevel.put(numResidents, m);
 	}
 	
-	public static void newChatChannel(String command, String name, String colour, String node) {
-		Map<TownySettings.ChatChannel,String> push = new ConcurrentHashMap<TownySettings.ChatChannel,String>();
-
-		push.put(TownySettings.ChatChannel.COMMAND, command.toLowerCase());
-		push.put(TownySettings.ChatChannel.CHANNEL_NAME, name);
-		push.put(TownySettings.ChatChannel.TEXT_COLOUR, colour);
-		push.put(TownySettings.ChatChannel.PERMISSION_NODE, node);
-		configChatChannel.put(command.toLowerCase(), push);
-		
-	}
-	
 	/**
 	 * Loads town levels. Level format ignores lines starting with #.
 	 * Each line is considered a level. Each level is loaded as such:
@@ -130,8 +106,8 @@ public class TownySettings {
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 		
-		List<HashMap<String, Object>> levels = config.getList("levels.town_level", null);
-		for (HashMap<String, Object> level : levels) {	
+		List<Map<String, Object>> levels = config.getMapList("levels.town_level");
+		for (Map<String, Object> level : levels) {	
 			
 			newTownLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
 					(String) level.get("namePostfix"), (String) level.get("mayorPrefix"),
@@ -139,18 +115,6 @@ public class TownySettings {
 		            (Double) level.get("upkeepModifier"));
 			
 		}
-
-		/*
-		HashMap<String, Object> levels = (HashMap<String, Object>) config.getList("levels.town_level", null);
-    	
-    	for (String key: levels.keySet()) {
-    		ConfigurationSection level = (ConfigurationSection) levels.get(key);
-    		newTownLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
-		            level.getString("namePostfix", ""), level.getString("mayorPrefix", ""),
-		            level.getString("mayorPostfix", ""), level.getInt("townBlockLimit", 1),
-		            level.getDouble("upkeepModifier", 1.0));
-    	}
-    	*/	
 	}
         
 	/**
@@ -164,8 +128,8 @@ public class TownySettings {
 
     public static void loadNationLevelConfig() throws IOException {
     	
-        List<HashMap<String, Object>> levels = config.getList("levels.nation_level", null);
-        for (HashMap<String, Object> level : levels) {	
+        List<Map<String, Object>> levels = config.getMapList("levels.nation_level");
+        for (Map<String, Object> level : levels) {	
 			
 			newNationLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
 					(String) level.get("namePostfix"), (String) level.get("capitalPrefix"),
@@ -173,51 +137,6 @@ public class TownySettings {
                     (String) level.get("kingPostfix"), (Double) level.get("upkeepModifier"));
 			
         }
-        /*
-    	HashMap<String, Object> levels = (HashMap<String, Object>) config.getList("levels.nation_level", null);
-    	
-    	for (String key: levels.keySet()) {
-    		ConfigurationSection level = (ConfigurationSection) levels.get(key);
-    		newNationLevel(level.getInt("numResidents", 0), level.getString("namePrefix", ""),
-                    level.getString("namePostfix", ""), level.getString("capitalPrefix", ""),
-                    level.getString("capitalPostfix", ""), level.getString("kingPrefix", ""),
-                    level.getString("kingPostfix", ""), level.getDouble("upkeepModifier", 1.0));
-    	}
-    	*/
-    }
-    
-    public static void loadChatChannelsConfig() throws IOException {
-
-		List<String> chatChannels = config.getList(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), null);
-		
-		for (String channel : chatChannels) {
-			String split[] = channel.split("\\,");
-			if (split.length == 4)
-				newChatChannel(split[0].trim().toLowerCase(), split[1].trim(), split[2].trim(), split[3].trim());
-		}
-		
-		if (!chatChannelExists("/g"))
-			newChatChannel("/g", "", "", PermissionNodes.TOWNY_CHAT_GLOBAL.getNode());
-	}
-    
-    public static Set<String> getChatChannels() {
-    	return configChatChannel.keySet();
-    }
-    
-    public static boolean chatChannelExists(String command) {
-    	return configChatChannel.containsKey(command);
-    }
-    
-    public static String getChatChannelName(String command) {
-    	return configChatChannel.get(command).get(ChatChannel.CHANNEL_NAME);
-    }
-    
-    public static String getChatChannelColour(String command) {
-    	return configChatChannel.get(command).get(ChatChannel.TEXT_COLOUR);
-    }
-    
-    public static String getChatChannelPermission(String command) {
-    	return configChatChannel.get(command).get(ChatChannel.PERMISSION_NODE);
     }
     
     public static Map<TownySettings.TownLevel,Object> getTownLevel(int numResidents) {
@@ -281,9 +200,6 @@ public class TownySettings {
         loadTownLevelConfig();
         loadNationLevelConfig();
         
-        // Load Chat channels
-        loadChatChannelsConfig();
-        
         // Load allowed blocks in warzone.
         TownyWarConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
         
@@ -292,10 +208,11 @@ public class TownySettings {
 	
 	// This will read the language entry in the config.yml to attempt to load custom languages
 	// if the file is not found it will load the default from resource
-	public static void loadLanguage (String filepath, String defaultRes) throws IOException {               
-		String defaultName = filepath + FileMgmt.fileSeparator() + getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
+	public static void loadLanguage (String filepath, String defaultRes) throws IOException { 
+		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
+		String defaultName = filepath + FileMgmt.fileSeparator() + res;
 		
-		File file = FileMgmt.unpackLanguageFile(defaultName, defaultRes);
+		File file = FileMgmt.unpackLanguageFile(defaultName, res, defaultRes);
 		if (file != null) {
 
 			// read the (language).yml into memory
@@ -338,16 +255,7 @@ public class TownySettings {
     		return 0;
     	}
     }
-    /*
-    private static long getLong(ConfigNodes node) {
-        try {
-    		return Long.parseLong(getString(node).trim());
-    	} catch (NumberFormatException e) {
-    		sendError(node.getRoot().toLowerCase() + " from config.yml");
-    		return 0;
-    	}
-    }
-	*/
+
     public static String getString(ConfigNodes node) {
         return config.getString(node.getRoot().toLowerCase(), node.getDefault());
     }
@@ -450,8 +358,6 @@ public class TownySettings {
         		setDefaultLevels();
         	else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
         		// Do nothing here as setDefaultLevels configured town and nation levels.
-        	} else if (root.getRoot() == ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot()) {
-        		setChannels();
         	} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()){
         		setNewProperty(root.getRoot(), version);
         	} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
@@ -466,33 +372,16 @@ public class TownySettings {
         config = newConfig;
         newConfig = null;
     }
-    
-    private static void setChannels() {
-    	
-    	List<String> chatChannels = config.getList(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot());
-    	
-    	if (chatChannels == null || chatChannels.isEmpty() || chatChannels.size() == 0) {
-    		System.out.print("Loading NEW chatChannels!");
-    		
-    		List<String> newChannels = new ArrayList<String>();
-    		newChannels.add("/g,,,towny.chat.global");
-    		newChannels.add("/tc,&f[&3TC&f],&b," + PermissionNodes.TOWNY_CHAT_TOWN.getNode());
-    		newChannels.add("/nc,&f[&6NC&f],&e," + PermissionNodes.TOWNY_CHAT_NATION.getNode());
-    		newChannels.add("/a,&f[&4ADMIN&f],&c," + PermissionNodes.TOWNY_CHAT_ADMIN.getNode());
-    		newChannels.add("/m,&f[&9MOD&f],&5," + PermissionNodes.TOWNY_CHAT_MOD.getNode());
-    		newConfig.set(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), newChannels);
-        } else
-        	newConfig.set(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot(), config.get(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNELS.getRoot()));
-    }
 
     private static void setDefaultLevels() {
         addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "",
                 "# default Town levels.");
-        List<ConfigurationSection> townLevels = config.getList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
-        
-        if (townLevels == null || townLevels.isEmpty() || townLevels.size() == 0) {
-            List<HashMap<String, Object>> levels = new ArrayList<HashMap<String, Object>>();
-            HashMap<String, Object> level = new HashMap<String, Object>();
+        if (!config.contains(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) {
+        //List<Map<String, Object>> townLevels = config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
+        	
+        //if (townLevels == null || townLevels.isEmpty() || townLevels.size() == 0) {
+            List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
+            Map<String, Object> level = new HashMap<String, Object>();
             level.put("numResidents", 0);
             level.put("namePrefix", "");
             level.put("namePostfix", " Ruins");
@@ -575,16 +464,20 @@ public class TownySettings {
             levels.add(new HashMap<String, Object>(level));
             level.clear();
             newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
-        } else
+        } else {
         	newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()));
+        }
+        	
         
         addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "",
         		"# default Nation levels.");
-        List<ConfigurationSection> nationLevels = config.getList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
         
-        if (nationLevels == null || nationLevels.isEmpty() || nationLevels.size() == 0) {
-            List<HashMap<String, Object>> levels = new ArrayList<HashMap<String, Object>>();
-            HashMap<String, Object> level = new HashMap<String, Object>();
+        if (!config.contains(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+        //List<Map<String, Object>> nationLevels = config.getMapList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
+        
+        //if (nationLevels == null || nationLevels.isEmpty() || nationLevels.size() == 0) {
+            List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
+            Map<String, Object> level = new HashMap<String, Object>();
             level.put("numResidents", 0);
             level.put("namePrefix", "Land of ");
             level.put("namePostfix", " (Nation)");
@@ -948,33 +841,13 @@ public class TownySettings {
 	public static String getUnclaimedZoneName() {
 		return getLangString("UNCLAIMED_ZONE_NAME");
 	}
-
-    public static String getModifyChatFormat() {
-        return getString(ConfigNodes.FILTERS_MODIFY_CHAT_FORMAT);
-    }
     
     public static int getMaxTitleLength() {
         return getInt(ConfigNodes.FILTERS_MODIFY_CHAT_MAX_LGTH);
     }
-
-    public static boolean isUsingModifyChat() {
-        return getBoolean(ConfigNodes.FILTERS_MODIFY_CHAT_ENABLE);
-    }
     
-    public static boolean isModifyChatPerWorld() {
-        return getBoolean(ConfigNodes.FILTERS_MODIFY_CHAT_PER_WORLD);
-    }
-
-    public static String getKingColour() {
-        return getString(ConfigNodes.FILTERS_COLOUR_KING);
-    }
-    
-    public static String getMayorColour() {
-        return getString(ConfigNodes.FILTERS_COLOUR_MAYOR);
-    }
-    
-    public static String getResidentColour() {
-        return getString(ConfigNodes.FILTERS_COLOUR_RESIDENT);
+    public static int getMaxNameLength() {
+        return getInt(ConfigNodes.FILTERS_MAX_NAME_LGTH);
     }
     
     public static long getDeleteTime() {
@@ -1056,6 +929,10 @@ public class TownySettings {
 	
 	public static boolean getTownDefaultPublic() {
 		return getBoolean(ConfigNodes.TOWN_DEF_PUBLIC);
+	}
+	
+	public static boolean getTownDefaultOpen() {
+		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
 	
 	public static boolean hasTownLimit() {
@@ -1233,19 +1110,17 @@ public class TownySettings {
 	
 	public static double getTownUpkeepCost(Town town) {
 		double multiplier;
-        
+
 		if (town != null) {
 			if (isUpkeepByPlot()) {
 				multiplier = town.getTownBlocks().size(); //town.getTotalBlocks();
-			}
-			else {
+			} else {
 				multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 			}
-		}
-        else
-        	multiplier = 1.0;
-                
-        return getTownUpkeep() * multiplier;
+		} else
+			multiplier = 1.0;
+
+		return getTownUpkeep() * multiplier;
 	}
 
     public static double getTownUpkeep() {
@@ -1362,6 +1237,10 @@ public class TownySettings {
 
     public static boolean isTownRespawning() {
         return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN);
+	}
+    
+    public static boolean isTownRespawningInOtherWorlds() {
+        return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
 	}
 	
 	public static boolean isTownyUpdating(String currentVersion) {
@@ -1649,8 +1528,11 @@ public class TownySettings {
     }
 
     public static boolean isValidRegionName(String name) {
-        
-        if ((name.toLowerCase() == "spawn")
+    	// Max name length
+        if (name.length() > getMaxNameLength())
+        	return false;
+        // Banned names
+        if ((name.equalsIgnoreCase("spawn"))
                         || (name.equalsIgnoreCase("list"))
                         || (name.equalsIgnoreCase("new"))
                         || (name.equalsIgnoreCase("here"))
@@ -1683,33 +1565,5 @@ public class TownySettings {
             e.printStackTrace();
             return false;
 		}
-	}
-	
-	public static String getChatTownNationTagFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_TOWN_NATION);
-	}
-	
-	public static String getChatWorldFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_WORLD);
-	}
-	
-	public static String getChatTownTagFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_TOWN);
-	}
-	
-	public static String getChatNationTagFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_TAG_FORMAT_NATION);
-	}
-	
-	public static String getChatTownChannelFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNEL_FORMAT_TOWN);
-	}
-	
-	public static String getChatNationChannelFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNEL_FORMAT_NATION);
-	}
-	
-	public static String getChatDefaultChannelFormat() {
-		return getString(ConfigNodes.FILTERS_MODIFY_CHAT_CHANNEL_FORMAT_DEFAULT);
 	}
 }

@@ -26,7 +26,7 @@ public class JoinTownTask extends ResidentTownQuestionTask {
 			TownyMessaging.sendTownMessage(town,  ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
 		} catch (AlreadyRegisteredException e) {
 			try {
-				TownyMessaging.sendResidentMessage(resident, e.getError());
+				TownyMessaging.sendResidentMessage(resident, e.getMessage());
 			} catch (TownyException e1) {
 			}
 		}

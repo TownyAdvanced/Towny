@@ -50,7 +50,7 @@ public class NullPermSource extends TownyPermissionSource {
      * 
      * @param player
      * @param node
-     * @return
+     * @return null as we are not using permissions
      */
     @Override
 	public boolean hasPermission(Player player, String node) {
@@ -62,7 +62,7 @@ public class NullPermSource extends TownyPermissionSource {
      * Returns the players Group name.
      * 
      * @param player
-     * @return
+     * @return empty as we are using no permissions
      */
     @Override
 	public String getPlayerGroup(Player player) {

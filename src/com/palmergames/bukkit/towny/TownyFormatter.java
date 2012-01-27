@@ -64,10 +64,10 @@ public class TownyFormatter {
 
 			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((MinecraftTools.isOnline(owner.getName())) ? Colors.LightGreen + " (Online)" : "")));
 			out.add(Colors.Green + " Perm: " + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString() : townBlock.getPermissions().getColourString().replace("f", "r")));
-			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((town.isBANG() || world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 		} catch (NotRegisteredException e) {
-			out.add("Error: " + e.getError());
+			out.add("Error: " + e.getMessage());
 		}
 
 		return out;
@@ -106,7 +106,7 @@ public class TownyFormatter {
 			try {
 				line += getFormattedName(resident.getTown());
 			} catch (TownyException e) {
-				line += "Error: " + e.getError();
+				line += "Error: " + e.getMessage();
 			}
 		out.add(line);
 
@@ -122,8 +122,11 @@ public class TownyFormatter {
 
 		TownyWorld world = town.getWorld();
 
-		// ___[ Raccoon City (PvP) ]___
-		out.add(ChatTools.formatTitle(getFormattedName(town) + ((town.isPVP() || town.getWorld().isForcePVP()) ? Colors.Red + " (PvP)" : "")));
+		// ___[ Raccoon City (PvP) (Open) ]___
+		String title = getFormattedName(town);
+		title += ((town.isPVP() || town.getWorld().isForcePVP()) ? Colors.Red + " (PvP)" : "");
+		title += (town.isOpen() ? Colors.LightBlue + " (Open)" : "");
+		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
@@ -134,9 +137,15 @@ public class TownyFormatter {
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
+			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town)
+				+ (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "")
+				+ (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "")
+				+ (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
 		} catch (TownyException e) {
 		}
+		
+		if (town.hasOutpostSpawn())
+			out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
 
 		// Permissions: B=rao D=--- S=ra-
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r"));
@@ -144,7 +153,7 @@ public class TownyFormatter {
 
 		// | Bank: 534 coins
 		String bankString = "";
-		if (TownySettings.isUsingEconomy())
+		if (TownySettings.isUsingEconomy()) {
 			try {
 				TownyEconomyObject.checkEconomy();
 				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
@@ -153,8 +162,8 @@ public class TownyFormatter {
 				bankString += Colors.Gray + " | " + Colors.Green + "Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
 			} catch (EconomyException e1) {
 			}
-		
-		out.add(bankString);
+			out.add(bankString);
+		}
 
 		// Mayor: MrSand | Bank: 534 coins
 		out.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
@@ -252,7 +261,7 @@ public class TownyFormatter {
 	/**
 	 * Returns the tax info this resident will have to pay at the next new day.
 	 * @param resident
-	 * @return
+	 * @return tax status message
 	 */
 	public static List<String> getTaxStatus(Resident resident) {
 		List<String> out = new ArrayList<String>();

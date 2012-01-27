@@ -32,31 +32,33 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		
 		worldMobsToRemove.clear();
 		for (String mob : TownySettings.getWorldMobRemovalEntities())
-			try {
-				Class c = Class.forName("org.bukkit.entity."+mob);
-				if (JavaUtil.isSubInterface(LivingEntity.class, c))
-					worldMobsToRemove.add(c);
-				else
-					throw new Exception();
-			} catch (ClassNotFoundException e) {
-				TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable class.");
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable living entity.");
-			}
+			if (!mob.equals(""))
+				try {
+					Class c = Class.forName("org.bukkit.entity."+mob);
+					if (JavaUtil.isSubInterface(LivingEntity.class, c))
+						worldMobsToRemove.add(c);
+					else
+						throw new Exception();
+				} catch (ClassNotFoundException e) {
+					TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable class.");
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg("WorldMob: " + mob + " is not an acceptable living entity.");
+				}
 		
 		townMobsToRemove.clear();
 		for (String mob : TownySettings.getTownMobRemovalEntities())
-			try {
-				Class c = Class.forName("org.bukkit.entity."+mob);
-				if (JavaUtil.isSubInterface(LivingEntity.class, c))
-					townMobsToRemove.add(c);
-				else
-					throw new Exception();
-			} catch (ClassNotFoundException e) {
-				TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable class.");
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable living entity.");
-			}
+			if (!mob.equals(""))
+				try {
+					Class c = Class.forName("org.bukkit.entity."+mob);
+					if (JavaUtil.isSubInterface(LivingEntity.class, c))
+						townMobsToRemove.add(c);
+					else
+						throw new Exception();
+				} catch (ClassNotFoundException e) {
+					TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable class.");
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg("TownMob: " + mob + " is not an acceptable living entity.");
+				}
 	}
 	
 	
@@ -124,7 +126,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					Coord coord = Coord.parseCoord(livingEntity.getLocation());
 					TownyWorld townyWorld = null;
 					try {
-						townyWorld = TownyUniverse.getWorld(world.getName());
+						townyWorld = TownyUniverse.getDataSource().getWorld(world.getName());
 					} catch (NotRegisteredException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

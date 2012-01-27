@@ -27,6 +27,7 @@ public class ChunkNotification {
 	public static String plotNotficationSplitter = " ";
 	public static String plotNotificationFormat = "%s";
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
+	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";
 	
@@ -44,12 +45,13 @@ public class ChunkNotification {
 		plotNotficationSplitter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_SPLITTER);
 		plotNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORMAT);
 		homeBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK);
+		outpostBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK);
 		forSaleNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
 		plotTypeNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_TYPE);
 	}
 	
 	WorldCoord from, to;
-	boolean fromWild = false, toWild = false, toForSale = false, toHomeBlock = false;
+	boolean fromWild = false, toWild = false, toForSale = false, toHomeBlock = false, toOutpostBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
@@ -88,6 +90,7 @@ public class ChunkNotification {
 			
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
+			toOutpostBlock = toTownBlock.isOutpost();
 		} catch (NotRegisteredException e) {
 			toWild = true;
 		}
@@ -174,6 +177,10 @@ public class ChunkNotification {
 		if (output != null && output.length() > 0)
 			out.add(output);
 		
+		output = getOutpostblockNotification();
+		if (output != null && output.length() > 0)
+			out.add(output);
+		
 		output = getForSaleNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
@@ -188,6 +195,12 @@ public class ChunkNotification {
 	public String getHomeblockNotification() {
 		if (toHomeBlock)
             return homeBlockNotification;
+		return null;
+	}
+	
+	public String getOutpostblockNotification() {
+		if (toOutpostBlock)
+            return outpostBlockNotification;
 		return null;
 	}
 	

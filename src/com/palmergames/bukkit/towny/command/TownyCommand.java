@@ -74,7 +74,7 @@ public class TownyCommand implements CommandExecutor {
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
                 
-                towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getTownyUniverse().getPlugin().getVersion();
+                towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getVersion();
                 
                 towny_war.add(ChatTools.formatTitle("/towny war"));
                 towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
@@ -90,7 +90,7 @@ public class TownyCommand implements CommandExecutor {
                                 for (String line : towny_general_help)
                                         sender.sendMessage(Colors.strip(line));
                         else if (args[0].equalsIgnoreCase("tree"))
-                                plugin.getTownyUniverse().sendUniverseTree(sender);
+                        	plugin.getTownyUniverse().sendUniverseTree(sender);
                         else if (args[0].equalsIgnoreCase("time"))
                         	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
                         else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
@@ -130,14 +130,14 @@ public class TownyCommand implements CommandExecutor {
                         Town town = null;
                         if (split.length > 1){
                                 try {
-                                        town = plugin.getTownyUniverse().getTown(split[1]);
+                                        town = TownyUniverse.getDataSource().getTown(split[1]);
                                 } catch (NotRegisteredException x) {
-                                        sendErrorMsg(player, x.getError());
+                                        sendErrorMsg(player, x.getMessage());
                                         return;
                                 }
-                        } else if (split.length == 0)
+                        } else if (split.length == 1)
                                 try {
-                                        Resident resident = plugin.getTownyUniverse().getResident(player.getName());
+                                        Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
                                         town = resident.getTown();
                                 } catch (NotRegisteredException x) {
                                 }
@@ -164,6 +164,16 @@ public class TownyCommand implements CommandExecutor {
                                 sendErrorMsg(player, "The world isn't currently at war.");
                         
                         towny_war.clear();
+                } else if (split[0].equalsIgnoreCase("spy")) {
+                	
+                	if (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+	                	if (plugin.hasPlayerMode(player, "spy"))
+	                		plugin.removePlayerMode(player);
+	                	else
+	                		plugin.setPlayerMode(player, split, true);
+                	} else
+                		TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+                	
                 } else
                         sendErrorMsg(player, "Invalid sub command.");
                         
@@ -198,20 +208,20 @@ public class TownyCommand implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("money"))
                         try {
                                 if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-                                        List<TownyEconomyObject> list = new ArrayList<TownyEconomyObject>(plugin.getTownyUniverse().getResidents());
-                                        list.addAll(plugin.getTownyUniverse().getTowns());
-                                        list.addAll(plugin.getTownyUniverse().getNations());
+                                        List<TownyEconomyObject> list = new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getResidents());
+                                        list.addAll(TownyUniverse.getDataSource().getTowns());
+                                        list.addAll(TownyUniverse.getDataSource().getNations());
                                         towny_top.add(ChatTools.formatTitle("Top Bank Accounts"));
                                         towny_top.addAll(getTopBankBalance(list, 10));
                                 } else if (args[1].equalsIgnoreCase("resident")) {
                                         towny_top.add(ChatTools.formatTitle("Top Resident Bank Accounts"));
-                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(plugin.getTownyUniverse().getResidents()), 10));
+                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getResidents()), 10));
                                 } else if (args[1].equalsIgnoreCase("town")) {
                                         towny_top.add(ChatTools.formatTitle("Top Town Bank Accounts"));
-                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(plugin.getTownyUniverse().getTowns()), 10));
+                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getTowns()), 10));
                                 } else if (args[1].equalsIgnoreCase("nation")) {
                                         towny_top.add(ChatTools.formatTitle("Top Nation Bank Accounts"));
-                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(plugin.getTownyUniverse().getNations()), 10));
+                                        towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getNations()), 10));
                                 } else 
                                         sendErrorMsg(player, "Invalid sub command.");
                         } catch (EconomyException e) {
@@ -220,30 +230,30 @@ public class TownyCommand implements CommandExecutor {
                         }
                 else if (args[0].equalsIgnoreCase("residents"))
                         if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-                                List<ResidentList> list = new ArrayList<ResidentList>(plugin.getTownyUniverse().getTowns());
-                                list.addAll(plugin.getTownyUniverse().getNations());
+                                List<ResidentList> list = new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns());
+                                list.addAll(TownyUniverse.getDataSource().getNations());
                                 towny_top.add(ChatTools.formatTitle("Most Residents"));
                                 towny_top.addAll(getMostResidents(list, 10));
                         } else if (args[1].equalsIgnoreCase("town")) {
                                 towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-                                towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(plugin.getTownyUniverse().getTowns()), 10));
+                                towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns()), 10));
                         } else if (args[1].equalsIgnoreCase("nation")) {
                                 towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
-                                towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(plugin.getTownyUniverse().getNations()), 10));
+                                towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getNations()), 10));
                         } else
                                 sendErrorMsg(player, "Invalid sub command.");
                 else if (args[0].equalsIgnoreCase("land"))
                         if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-                                List<TownBlockOwner> list = new ArrayList<TownBlockOwner>(plugin.getTownyUniverse().getResidents());
-                                list.addAll(plugin.getTownyUniverse().getTowns());
+                                List<TownBlockOwner> list = new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents());
+                                list.addAll(TownyUniverse.getDataSource().getTowns());
                                 towny_top.add(ChatTools.formatTitle("Most Land Owned"));
                                 towny_top.addAll(getMostLand(list, 10));
                         } else if (args[1].equalsIgnoreCase("resident")) {
                                 towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-                                towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(plugin.getTownyUniverse().getResidents()), 10));
+                                towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents()), 10));
                         } else if (args[1].equalsIgnoreCase("town")) {
                                 towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-                                towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(plugin.getTownyUniverse().getTowns()), 10));
+                                towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getTowns()), 10));
                         } else
                                 sendErrorMsg(player, "Invalid sub command.");
                 else
@@ -259,19 +269,19 @@ public class TownyCommand implements CommandExecutor {
         public List<String> getUniverseStats() {
                 List<String> output = new ArrayList<String>();
                 output.add("§0-§4###§0---§4###§0-");
-                output.add("§4#§c###§4#§0-§4#§c###§4#§0   §6[§eTowny " + plugin.getTownyUniverse().getPlugin().getVersion() + "§6]");
+                output.add("§4#§c###§4#§0-§4#§c###§4#§0   §6[§eTowny " + plugin.getVersion() + "§6]");
                 output.add("§4#§c####§4#§c####§4#   §3By: §bChris H (Shade)/Llmdl/ElgarL");
                 output.add("§0-§4#§c#######§4#§0-");
                 output.add("§0--§4##§c###§4##§0-- " 
-                                + "§3Residents: §b" + Integer.toString(plugin.getTownyUniverse().getResidents().size())
+                                + "§3Residents: §b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size())
                                 + Colors.Gray + " | "
-                                + "§3Towns: §b" + Integer.toString(plugin.getTownyUniverse().getTowns().size())
+                                + "§3Towns: §b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size())
                                 + Colors.Gray + " | "
-                                + "§3Nations: §b" + Integer.toString(plugin.getTownyUniverse().getNations().size()));
+                                + "§3Nations: §b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
                 output.add("§0----§4#§c#§4#§0---- "
-                                + "§3Worlds: §b" + Integer.toString(plugin.getTownyUniverse().getWorlds().size())
+                                + "§3Worlds: §b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size())
                                 + Colors.Gray + " | "
-                                + "§3TownBlocks: §b" + Integer.toString(plugin.getTownyUniverse().getAllTownBlocks().size()));
+                                + "§3TownBlocks: §b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
                 output.add("§0-----§4#§0----- ");
                 return output;
         }

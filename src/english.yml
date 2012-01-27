@@ -1,5 +1,5 @@
 name: Towny
-version: 0.15
+version: 0.17
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -107,7 +107,7 @@ world_help_1: 'Current world''s status'
 world_help_2: '[world]'
 world_help_3: 'Target worlds''s status'
 world_help_4: 'List all worlds'
-
+world_help_5: 'Regenerate this chunk'
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
 
@@ -202,6 +202,7 @@ msg_added_ally: '&b%s allied with your nation.'
 msg_removed_ally: '&b%s canceled the alliance with your nation.'
 msg_added_enemy: '&b%s has developed a hatred towards your nation.'
 msg_removed_enemy: '&b%s has become peaceful towards your nation.'
+msg_unable_ally_enemy: '&cUnable to ally %s as they have us as enemies.'
 
 msg_claimed: '&2Successfully claimed'
 msg_unclaimed: '&2Successfully unclaimed'
@@ -216,6 +217,7 @@ msg_no_funds_claim: '&cTown cannot afford to claim %s  town blocks costing %s. A
 msg_no_funds_to_buy: '&cTown cannot afford to buy %s %s costing %s. Add more money into the town bank.'
 msg_annexed_area: '&2Annexed area %s'
 msg_max_plot_own: '&cYou cannot own more than %s plots.'
+msg_wait_locked: '&2Please be patient, the plots will become availabe soon.'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
 msg_already_claimed: '&cThis area has already been claimed by: %s'
 msg_already_claimed_1: '&cThis area (%s) already belongs to someone.'
@@ -244,6 +246,8 @@ msg_changed_expl: '&cExplosions in %s are now %s.'
 msg_changed_fire: '&cFirespread in %s is now %s.'
 msg_changed_mobs: '&cMonster spawns in %s are now %s.'
 msg_changed_taxpercent: '&cPercentage based taxes are now %s.'
+msg_changed_open: '&cInviteless joining is now %s.'
+msg_toggle_open_on_warning: 'Warning: Townperms should be turned off if town is set open. Type ''/town set perm off'' followed by ''/town set perm reset''.'
 
 msg_changed_world_setting: '&c%s for %s is: %s.'
 
@@ -253,8 +257,10 @@ msg_world_expl: '&cThis world has Explosions forced on.'
 msg_world_fire: '&cThis world has Fire spread forced on.'
 
 msg_plot_pvp: '&cPVP can not be toggled in an Arena Plot.'
+msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
 
 msg_reloaded: '&2Towny''s settings were reloaded.'
+msg_undo_complete: '&2Undo complete.'
 msg_give_total: '&bGave %s bonus. (Total: %s)'
 mag_backup_success: '&2Backup successful.'
 msg_xx_withdrew_xx: '&b%s withdrew %s from the %s bank.'
@@ -265,6 +271,7 @@ msg_err_deposit_capped: 'Unable to desposit money. This bank is capped at %s.'
 
 msg_set_town_home: '&bSuccessfully changed town''s home block to %s'
 msg_set_town_spawn: '&bSuccessfully changed town''s spawn.'
+msg_set_outpost_spawn: '&bSuccessfully changed outpost''s spawn.'
 msg_set_title: '&b%s was granted the title of ''%s''.'
 msg_set_surname: '&b%s was granted the surname of ''%s''.'
 msg_clear_title_surname: '&bThe %s for ''%s'' was cleared.'
@@ -337,18 +344,21 @@ msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more th
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
 msg_cache_block_error_plot: '&cOwner doesn''t allow %s to %s here.'
+msg_cache_block_error_locked: '&cThis plot is locked!'
 msg_cache_block_error_town_resident: '&cResidents aren''t allowed to %s here.'
 msg_cache_block_error_town_allies: '&cAllies aren''t allowed to %s.'
 msg_cache_block_error_town_outsider: '&cOutsiders aren''t allowed to %s.'
 
 msg_err_cant_afford_tp_town: '&cCannot afford to teleport to %s.'
 msg_err_not_public: '&cThat town is not public.'
+msg_err_not_open: '&cThe town %s does not have it''s doors open to everyone. Ask the mayor or an assistant to join.'
 msg_err_town_spawn_forbidden: '&cTown spawn travel is forbidden.'
 msg_err_town_spawn_nation_forbidden: '&cTown spawn travel to other towns in your nation is forbidden.'
 msg_err_town_spawn_ally_forbidden: '&cTown spawn travel to towns allied with your nation is forbidden.'
 msg_err_public_spawn_forbidden: '&cPublic spawn travel to other towns is forbidden.'
 msg_err_public_spawn_enemy: '&cPublic spawn travel is forbidden for enemies.'
 msg_err_town_spawn_disallowed_from: '&cTown spawn is not allowed from %s.'
+msg_err_outpost_spawn: '&cThere are no outpost spawns set for this town.'
 
 msg_err_cant_afford_tp: '&bCannot afford to teleport to your town''s spawn.'
 msg_err_plot_nfs: '&cThis plot is not for sale.'
@@ -378,6 +388,7 @@ msg_err_not_registered: '&cYou are not registered'
 msg_err_not_registered_1: '&c%s is not registered'
 msg_err_invalid_name: '&c%s is an invalid name.'
 msg_err_already_res: '&c%s already belongs to a town.'
+msg_err_already_in_town: '&c%s is already a part of %s.'
 msg_err_already_nation: '&cTarget town already belongs to a nation.'
 msg_err_invalid_property: '&cInvalid ''%s'' property.'
 msg_err_not_supported: '&cNot yet supported.'

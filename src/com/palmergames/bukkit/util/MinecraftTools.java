@@ -27,7 +27,7 @@ public class MinecraftTools {
 	/**
 	 * Converts Seconds to Ticks
 	 * @param t
-	 * @return
+	 * @return ticks
 	 */
 	public static long convertToTicks(long t) {
 		return t * 20;

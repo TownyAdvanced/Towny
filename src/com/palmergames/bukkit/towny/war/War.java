@@ -136,7 +136,7 @@ public class War {
                 }
                 
                 //Gather all nations at war
-                for (Nation nation : universe.getNations()) {
+                for (Nation nation : TownyUniverse.getDataSource().getNations()) {
                         if (!nation.isNeutral()) {
                                 add(nation);
                                 TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
@@ -162,7 +162,7 @@ public class War {
         }
         
         public void end() {
-                for (Player player : universe.getOnlinePlayers())
+                for (Player player : TownyUniverse.getOnlinePlayers())
                         sendStats(player);
                 double halfWinnings;
                 try {

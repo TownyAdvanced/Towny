@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 public class bPermsSource extends TownyPermissionSource {
 	
 	public bPermsSource(Towny towny, Plugin test) {
-		this.bPermissions = (Permissions)test;
+		//this.bPermissions = (Permissions)test;
 		this.plugin = towny;
 	}
 	
@@ -26,7 +26,7 @@ public class bPermsSource extends TownyPermissionSource {
      * 
      * @param resident
      * @param node
-     * @return
+     * @return String of the prefix/suffix
      */
     @Override
 	public String getPrefixSuffix(Resident resident, String node) {
@@ -38,14 +38,14 @@ public class bPermsSource extends TownyPermissionSource {
         InfoReader bPermIR = Permissions.getInfoReader();
         
         if (node == "prefix") {
-        	group = bPermIR.getPrefix(player);
-        	//user = bPermIR.getPrefix(player);
+        	group = bPermIR.getGroupPrefix(getPlayerGroup(player), player.getWorld().getName());
+        	user = bPermIR.getPrefix(player);
         } else if (node == "suffix") {
-        	group = bPermIR.getSuffix(player);
-        	//user = bPermIR.getSuffix(player);
+        	group = bPermIR.getGroupSuffix(getPlayerGroup(player), player.getWorld().getName());
+        	user = bPermIR.getSuffix(player);
         }
         if (group == null) group = "";
-        //if (user == null) user = "";
+        if (user == null) user = "";
     	
     	if (!group.equals(user))
             user = group + user;
@@ -89,8 +89,12 @@ public class bPermsSource extends TownyPermissionSource {
 		
 		InfoReader bPermIR = Permissions.getInfoReader();
 		
-		return bPermIR.getValue(player, node);
+		String result =  bPermIR.getValue(player, node);
 		   	
+		if (result == null)
+			return "";
+		
+		return result;
     	
     }
 	
@@ -100,7 +104,7 @@ public class bPermsSource extends TownyPermissionSource {
      * 
      * @param player
      * @param node
-     * @return
+     * @return true is Op or has the permission node
      */
     @Override
 	public boolean hasPermission(Player player, String node) {
@@ -130,7 +134,7 @@ public class bPermsSource extends TownyPermissionSource {
      * Returns the players Group name.
      * 
      * @param player
-     * @return
+     * @return String name of this players group.
      */
     @Override
 	public String getPlayerGroup(Player player) {

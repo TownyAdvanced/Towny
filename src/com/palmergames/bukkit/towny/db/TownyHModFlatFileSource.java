@@ -68,7 +68,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					//String[] split = world.getName().split("/");
 					//String worldName = split[split.length-1];
 					//universe.newWorld(worldName);
-					universe.newWorld(world.getName());
+					newWorld(world.getName());
 				} catch (AlreadyRegisteredException e) {
 					e.printStackTrace();
 				} catch (NotRegisteredException e) {
@@ -88,7 +88,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 		String[] tokens;
 		
 		//Default world is the first one loaded
-		TownyWorld world = universe.getWorlds().toArray(new TownyWorld[0])[0];
+		TownyWorld world = getWorlds().toArray(new TownyWorld[0])[0];
 		
 		try {
 			BufferedReader fin = new BufferedReader(new FileReader(rootFolder + dataFolder + "/townblocks.csv"));
@@ -96,7 +96,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				tokens = line.split(",");
 				if (tokens.length >= 4)
 					try {
-						Town town = universe.getTown(tokens[2]);
+						Town town = getTown(tokens[2]);
 					
 					
 						int x = Integer.parseInt(tokens[0]);
@@ -112,7 +112,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 							townblock.setTown(town);
 
 						try {
-							townblock.setResident(universe.getResident(tokens[3]));
+							townblock.setResident(getResident(tokens[3]));
 						} catch (NotRegisteredException e) {
 						}
 					} catch (NumberFormatException e) {
@@ -152,13 +152,13 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				
 				line = kvFile.get("town");
 				if (line != null)
-					resident.setTown(universe.getTown(line));
+					resident.setTown(getTown(line));
 
 				line = kvFile.get("friends");
 				if (line != null) {
 					String[] tokens = line.split(",");
 					for (String token : tokens) {
-						Resident friend = universe.getResident(token);
+						Resident friend = getResident(token);
 						if (friend != null)
 							resident.addFriend(friend);
 					}
@@ -190,7 +190,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident resident = universe.getResident(token);
+						Resident resident = getResident(token);
 						if (resident != null)
 							town.addResident(resident);
 					}
@@ -198,13 +198,13 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 
 				line = kvFile.get("mayor");
 				if (line != null)
-					town.setMayor(universe.getResident(line));
+					town.setMayor(getResident(line));
 
 				line = kvFile.get("assistants");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident assistant = universe.getResident(token);
+						Resident assistant = getResident(token);
 						if (assistant != null)
 							town.addAssistant(assistant);
 					}
@@ -310,20 +310,20 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Town town = universe.getTown(token);
+						Town town = getTown(token);
 						if (town != null)
 							nation.addTown(town);
 					}
 				}
 
 				line = kvFile.get("capital");
-				nation.setCapital(universe.getTown(line));
+				nation.setCapital(getTown(line));
 
 				line = kvFile.get("assistants");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Resident assistant = universe.getResident(token);
+						Resident assistant = getResident(token);
 						if (assistant != null)
 							nation.addAssistant(assistant);
 					}
@@ -333,7 +333,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Nation friend = universe.getNation(token);
+						Nation friend = getNation(token);
 						if (friend != null)
 							nation.setAliegeance("ally", friend);
 					}
@@ -343,7 +343,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
-						Nation enemy = universe.getNation(token);
+						Nation enemy = getNation(token);
 						if (enemy != null)
 							nation.setAliegeance("enemy", enemy);
 					}

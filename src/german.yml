@@ -1,5 +1,5 @@
 name: Towny
-version: 0.15
+version: 0.16
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -268,7 +268,7 @@ msg_insuf_funds: '&cDu hast nicht so viel.'
 msg_err_withdraw_disabled: 'Du kannst kein Geld von der Bank nehmen da dies deaktiviert ist!'
 msg_err_deposit_capped: 'Du kannst kein Geld einzahlen da dies deaktiviert ist. Die Bank besitzt %s.'
 
-msg_set_town_home: '&bZuhause wurde zu %s erfolgreich gewaechselt'
+msg_set_town_home: '&bStadtplatz wurde zu %s erfolgreich gewaechselt'
 msg_set_town_spawn: '&bDer Stadt-Spawn wurde erfolgreich gesetzt.'
 msg_set_title: '&b%s wurde der Titel zu ''%s'' gewaehrt.'
 msg_set_surname: '&b%s wurde der Nachname zu ''%s'' gewaehrt.'
@@ -341,7 +341,7 @@ msg_err_enemy_war_reached_max_active_flags: '&6[Krieg]&c Du kannst nicht mehr al
 
 msg_cache_block_error: '&cDu bist nicht in Towny regestriert. Versuche dich neu einzuwaehlen(Reloggen).'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
-msg_cache_block_error_plot: '&c %s von %s bis hier ist dem Besitzer nicht erlaubt.'
+msg_cache_block_error_plot: '&c %s koennen auf diesem Platz nicht %s betreiben da sie keine Berechtigung vom Besitzer haben.'
 msg_cache_block_error_town_resident: '&c %s ist Einwohnern hier nicht erlaubt.'
 msg_cache_block_error_town_allies: '&c %s ist Verbuendeten nicht erlaubt.'
 msg_cache_block_error_town_outsider: '&c %s ist Aussenstehenden nicht erlaubt.'
@@ -384,7 +384,7 @@ msg_err_not_registered_1: '&c%s ist nicht regestriert'
 msg_err_invalid_name: '&c%s ist ein ungueltiger Name.'
 msg_err_already_res: '&c%s gehoert bereits zu einer Stadt.'
 msg_err_already_nation: '&cAusgewaehlte Stadt gehoert bereits zu einer Nation.'
-msg_err_invalid_property: '&c ''%s'' ist ein ungueltiges Objekt.'
+msg_err_invalid_property: '&c ''%s'' ist ein ungueltiger Befehl.'
 msg_err_not_supported: '&cWird noch nicht unterstuetzt.'
 msg_err_invalid_input: '&cUngueltige Eingabe. Benutze %s'
 msg_err_negative: '&cEingabe kann nicht negativ sein.'

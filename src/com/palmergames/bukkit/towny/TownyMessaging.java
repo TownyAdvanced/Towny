@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,7 @@ public class TownyMessaging {
 	 * @param msg
 	 */
 	public static void sendErrorMsg(String msg) {
-		TownyLogger.log.warning("[Towny] Error: " + msg);
+		TownyLogger.log.warning(ChatTools.stripColour("[Towny] Error: " + msg));
     }
 	
 	/**
@@ -115,7 +116,7 @@ public class TownyMessaging {
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
 	 * 
-	 * @param sender
+	 * @param player
 	 * @param msg
 	 */
 	public static void sendMsg(Player player, String[] msg) {
@@ -131,7 +132,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDevMsg(String msg) {
         if (TownySettings.isDevMode()) {
-                Player townyDev = TownyUniverse.plugin.getServer().getPlayer(TownySettings.getDevName());
+                Player townyDev = Bukkit.getServer().getPlayer(TownySettings.getDevName());
                 if (townyDev == null)
                         return;
                 for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
@@ -147,7 +148,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDevMsg(String[] msg) {
         if (TownySettings.isDevMode()) {
-                Player townyDev = TownyUniverse.plugin.getServer().getPlayer(TownySettings.getDevName());
+                Player townyDev = Bukkit.getServer().getPlayer(TownySettings.getDevName());
                 if (townyDev == null)
                         return;
                 for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
@@ -163,7 +164,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDebugMsg(String msg) {
         if (TownySettings.getDebug())
-        	TownyLogger.debug.info("[Towny] Debug: " + msg);	
+        	TownyLogger.debug.info(ChatTools.stripColour("[Towny] Debug: " + msg));	
         sendDevMsg(msg);
 	}
 	
@@ -172,7 +173,7 @@ public class TownyMessaging {
 	/**
 	 * Send a message to a player
 	 * 
-	 * @param player
+	 * @param sender
 	 * @param lines
 	 */
 	public static void sendMessage(Object sender, List<String> lines) {
@@ -182,7 +183,7 @@ public class TownyMessaging {
 	/**
 	 * Send a message to a player
 	 * 
-	 * @param player
+	 * @param sender
 	 * @param line
 	 */
 	public static void sendMessage(Object sender, String line) {
@@ -192,7 +193,6 @@ public class TownyMessaging {
 
 		if (isPlayer) {
 			((Player) sender).sendMessage(line);
-			sendToIRC(line);
 		} else
 			((CommandSender) sender).sendMessage(line);
 	}
@@ -200,7 +200,7 @@ public class TownyMessaging {
 	/**
 	 * Send a message to a player
 	 * 
-	 * @param player
+	 * @param sender
 	 * @param lines
 	 */
 	public static void sendMessage(Object sender, String[] lines) {
@@ -212,7 +212,6 @@ public class TownyMessaging {
         for (String line : lines) {
         	if (isPlayer) {
         		((Player) sender).sendMessage(line);
-        		sendToIRC(line);
         	} else
         		((CommandSender) sender).sendMessage(line);
         }
@@ -254,10 +253,9 @@ public class TownyMessaging {
 	 */
 	public static void sendGlobalMessage(String[] lines) {
         for (String line : lines) {
-        	TownyUniverse.plugin.log("[Global Msg] " + line);
-        	sendToIRC("[Global Msg] " + line);
+        	TownyLogger.log.info(ChatTools.stripColour("[Global Msg] " + line));
         }
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers())
+        for (Player player : TownyUniverse.getOnlinePlayers())
                 for (String line : lines)
                         player.sendMessage(line);
 	}
@@ -267,11 +265,10 @@ public class TownyMessaging {
 	 * @param line
 	 */
 	public static void sendGlobalMessage(String line) {
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers()) {
+		TownyLogger.log.info(ChatTools.stripColour("[Global Message] " + line));
+        for (Player player : TownyUniverse.getOnlinePlayers()) {
                 player.sendMessage(line);
-                TownyUniverse.plugin.log("[Global Message] " + player.getName() + ": " + line);
         }
-        sendToIRC("[Global Message] " + line);
 	}
 
 	/**
@@ -283,10 +280,9 @@ public class TownyMessaging {
 	 */
 	public static void sendResidentMessage(Resident resident, String[] lines) throws TownyException {
         for (String line : lines) {
-        	TownyUniverse.plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-        	sendToIRC("[Resident Msg] " + resident.getName() + ": " + line);
+        	TownyLogger.log.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
         }
-        Player player = TownyUniverse.plugin.getTownyUniverse().getPlayer(resident);
+        Player player = TownyUniverse.getPlayer(resident);
         for (String line : lines)
                 player.sendMessage(line);
         
@@ -296,14 +292,13 @@ public class TownyMessaging {
 	 * Send a message to a specific resident
 	 * 
 	 * @param resident
-	 * @param lines
+	 * @param line
 	 * @throws TownyException
 	 */
 	public static void sendResidentMessage(Resident resident, String line) throws TownyException {
-        TownyUniverse.plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-        Player player = TownyUniverse.plugin.getTownyUniverse().getPlayer(resident);
+		TownyLogger.log.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
+        Player player = TownyUniverse.getPlayer(resident);
         player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
-        sendToIRC("[Resident Msg] " + resident.getName() + ": " + line);
 	}
 
 	/**
@@ -314,12 +309,11 @@ public class TownyMessaging {
 	 */
 	public static void sendTownMessage(Town town, String[] lines) {
         for (String line : lines) {
-        	TownyUniverse.plugin.log("[Town Msg] " + town.getName() + ": " + line);
-        	sendToIRC("[Town Msg] " + town.getName() + ": " + line);
+        	TownyLogger.log.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
         }
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town)){
-                for (String line : lines)
-                        player.sendMessage(line);
+        for (Player player : TownyUniverse.getOnlinePlayers(town)){
+            for (String line : lines)
+                player.sendMessage(line);
         }
 	}
 	
@@ -327,12 +321,11 @@ public class TownyMessaging {
 	 * Send a message to All online residents of a town and log
 	 * 
 	 * @param town
-	 * @param lines
+	 * @param line
 	 */
 	public static void sendTownMessagePrefixed(Town town, String line) {
-		TownyUniverse.plugin.log(line);
-		sendToIRC("[Town Msg] " + town.getName() + ": " + line);
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town))
+		TownyLogger.log.info(ChatTools.stripColour(line));
+        for (Player player : TownyUniverse.getOnlinePlayers(town))
                 player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
 	
@@ -340,13 +333,12 @@ public class TownyMessaging {
 	 * Send a message to All online residents of a town and log
 	 * 
 	 * @param town
-	 * @param lines
+	 * @param line
 	 */
 	public static void sendTownMessage(Town town, String line) {
-		TownyUniverse.plugin.log("[Town Msg] " + town.getName() + ": " + line);
-		sendToIRC("[Town Msg] " + town.getName() + ": " + line);
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(town))
-                player.sendMessage(line);
+		TownyLogger.log.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+        for (Player player : TownyUniverse.getOnlinePlayers(town))
+        	player.sendMessage(line);
 	}
 
 	/**
@@ -357,37 +349,34 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessage(Nation nation, String[] lines) {
         for (String line : lines) {
-        	TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-        	sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
+        	TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
         }
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
-                for (String line : lines)
-                        player.sendMessage(line);
+        for (Player player : TownyUniverse.getOnlinePlayers(nation))
+        	for (String line : lines)
+                player.sendMessage(line);
 	}
 
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * 
 	 * @param nation
-	 * @param lines
+	 * @param line
 	 */
 	public static void sendNationMessage(Nation nation, String line) {
-		TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-		sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
-                player.sendMessage(line);
+		TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+        for (Player player : TownyUniverse.getOnlinePlayers(nation))
+        	player.sendMessage(line);
 	}
 	
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * 
 	 * @param nation
-	 * @param lines
+	 * @param line
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
-		TownyUniverse.plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-		sendToIRC("[Nation Msg] " + nation.getName() + ": " + line);
-        for (Player player : TownyUniverse.plugin.getTownyUniverse().getOnlinePlayers(nation))
+		TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+        for (Player player : TownyUniverse.getOnlinePlayers(nation))
                 player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
 
@@ -400,15 +389,5 @@ public class TownyMessaging {
 	public static void sendTownBoard(Player player, Town town) {
         for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() + "] " + Colors.Yellow + town.getTownBoard()))
                 player.sendMessage(line);
-	}
-	
-	protected static void sendToIRC(String message) {
-		/*
-		try {
-			TownyUniverse.plugin.getCraftIRC().sendMessageToTag(message, "");
-		} catch (TownyException e) {
-		}
-		*/
-	}
-	
+	}	
 }
