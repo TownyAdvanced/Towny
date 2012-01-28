@@ -1143,3 +1143,5 @@ v0.78.0.19:
 	  Outpost spawns can be used via '/town outpost x' (With x being a number 1 - however many outposts you own).
 v0.78.0.20:
 	- Added Outpost's to the Chunk notifications. They use the formatting from Outpostblock in 'Town Notifications'.
+v0.79.0.0:
+	- release
