@@ -1146,7 +1146,7 @@ v0.78.0.20:
 v0.79.0.0:
 	- release
 v0.79.0.1:
-	- Setting the Plot Management speed to zero will now disable snapshots instead of locking a plot and never releasing it.
+	- An invalid setting of the Plot Management speed will now disable snapshots instead of locking a plot and never releasing it.
 	- Exit from the BlockPhysics event sooner if we do not need to be in there (no regen).
 	- Change PlayerMove event to update the cache for the player the event relates to, not all online players.
 	- Minor optimization of Block Burn events.
