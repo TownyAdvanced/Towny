@@ -565,6 +565,15 @@ public class Towny extends JavaPlugin {
 			}
 	}
 
+	public void updateCache(Player player) {
+			try {
+				getTownyUniverse();
+				getCache(player).setLastTownBlock(new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(player)));
+			} catch (NotRegisteredException e) {
+				deleteCache(player);
+			}
+	}
+	
 	public void setPlayerMode(Player player, String[] modes, boolean notify) {
 
 		if (player == null)

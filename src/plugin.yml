@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.0.0
+version: 0.79.0.1
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -40,7 +40,7 @@ commands:
 permissions:
     towny.admin:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
-        default: op
+        default: false
         children:
             towny.chat.*: true
             towny.town.*: true
@@ -56,7 +56,7 @@ permissions:
         default: false
     towny.town.*:
         description: User can access all town commands.
-        default: op
+        default: false
         children:
             towny.chat.town: true
             towny.town.new: true
@@ -70,7 +70,7 @@ permissions:
             towny.town.toggle.*: true
     towny.town.spawn.*:
         description: Grants all Spawn travel nodes
-        default: op
+        default: false
         children:
             towny.town.spawn.town: true
             towny.town.spawn.nation: true
@@ -90,7 +90,7 @@ permissions:
         default: false
     towny.town.toggle.*:
         description: User can access all town toggle commands (if a mayor or assistant).
-        default: op
+        default: false
         children:
             towny.town.toggle.pvp: true
             towny.town.toggle.public: true
@@ -99,7 +99,7 @@ permissions:
             towny.town.toggle.mobs: true
     towny.nation.*:
         description: User has access to all nation commands.
-        default: op
+        default: false
         children:
             towny.chat.nation: true
             towny.nation.new: true
@@ -159,7 +159,7 @@ permissions:
         
     towny.wild.*:
         description: User can build/destroy/switch/item_use in wild.
-        default: op
+        default: false
         children:
             towny.wild.build: true
             towny.wild.switch: true
@@ -182,7 +182,7 @@ permissions:
         
     towny.wild.block.*:
         description: User is able to edit specified/all block types in the wild.
-        default: op
+        default: false
         children:
             towny.wild.Block.*.build: true
             towny.wild.block.*.destroy: true
@@ -204,7 +204,7 @@ permissions:
         
     towny.claimed.*:
         description: User can build/destroy/switch/item_use in all towns.
-        default: op
+        default: false
         children:
             towny.claimed.build: true
             towny.claimed.switch: true
@@ -227,7 +227,7 @@ permissions:
         
     towny.claimed.alltown.block.*:
         description: User is able to edit specified/all block types in all towns.
-        default: op
+        default: false
         children:
             towny.claimed.alltown.Block.*.build: true
             towny.claimed.alltown.block.*.destroy: true
@@ -249,7 +249,7 @@ permissions:
             
     towny.claimed.owntown.block.*:
         description: User is able to edit specified/all block types in their own town.
-        default: op
+        default: false
         children:
             towny.claimed.owntown.Block.*.build: true
             towny.claimed.owntown.block.*.destroy: true
@@ -271,13 +271,13 @@ permissions:
             
     towny.chat.*:
         description: User is able to use all chat channels.
-        default: op
+        default: false
         children:
             towny.chat.admin: true
             towny.chat.mod: true
             towny.chat.town: true
             towny.chat.nation: true
-            towny.chat.global: true
+            towny.chat.general: true
     towny.chat.admin:
         description: User is able to talk in the admin channel
         default: false
@@ -290,7 +290,7 @@ permissions:
     towny.chat.nation:
         description: User is able to talk in the nation channel
         default: false
-    towny.chat.global:
+    towny.chat.general:
         description: User is able to talk in the nation channel
         default: true
         

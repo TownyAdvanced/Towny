@@ -208,7 +208,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Prevent fly/double jump cheats
 		if (!(event instanceof PlayerTeleportEvent)) {
-			if (TownySettings.isUsingCheatProtection() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.CHEAT_BYPASS.getNode()) && (player.getGameMode() != GameMode.CREATIVE)) {
+			if (TownySettings.isUsingCheatProtection() && (player.getGameMode() != GameMode.CREATIVE) && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.CHEAT_BYPASS.getNode())) {
 				try {
 					if (TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny())
 						if ((from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
@@ -255,7 +255,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		plugin.getCache(player).setLastLocation(to);
-		plugin.updateCache();
+		plugin.updateCache(player);
 		//plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
 		//plugin.sendDebugMsg("        " + from.toString());
 		//plugin.sendDebugMsg("        " + to.toString());

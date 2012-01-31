@@ -148,9 +148,8 @@ public class TownClaim extends Thread {
                 	townBlock.setOutpost(isOutpost);
                 	town.addOutpostSpawn(outpostLocation);
                 }
-                TownyUniverse.getDataSource().saveTownBlock(townBlock);
-                
-                if (town.getWorld().isUsingPlotManagementRevert()) {
+
+                if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
                 	PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
             		if (plotChunk != null) {
             			TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
@@ -163,13 +162,15 @@ public class TownClaim extends Thread {
             			TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
             			townBlock.setLocked(true);
             			
-            			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+            			//TownyUniverse.getDataSource().saveTownBlock(townBlock);
             		}
             		//if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null))
             		//	TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
             		
             		plotChunk = null;
                 }
+                
+                TownyUniverse.getDataSource().saveTownBlock(townBlock);
         }
     }
     

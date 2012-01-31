@@ -55,6 +55,12 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
+		/**
+		 * Exit if the regen timer is zero.
+		 */
+		if (TownySettings.getRegenDelay() <= 0)
+			return;
+		
 		//long start = System.currentTimeMillis();
 		
 		Block block = event.getBlock();
@@ -386,8 +392,9 @@ public class TownyBlockListener implements Listener {
 				}
 				
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
-				if (((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && !townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire)
-						|| ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation())) {
+				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN)
+						&& ((!townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire)
+						|| (plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation()))) {
 					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within "+coord.toString()+".");
 					return true;
 				}
