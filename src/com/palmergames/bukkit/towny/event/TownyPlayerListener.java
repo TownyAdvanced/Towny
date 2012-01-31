@@ -138,20 +138,24 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Block block = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
-		TownyWorld townyWorld = null;
+		TownyWorld World = null;
 
 		try {
-			townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			World = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			if (!World.isUsingTowny())
+				return;
+			
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
+			// World not registered with Towny.
 			e.printStackTrace();
+			return;
 		}
 
 		// prevent players trampling crops
 
-		if ((event.getAction() == Action.PHYSICAL) && (townyWorld.isUsingTowny())) {
+		if ((event.getAction() == Action.PHYSICAL)) {
 			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
-				if (townyWorld.isDisablePlayerTrample()) {
+				if (World.isDisablePlayerTrample()) {
 					event.setCancelled(true);
 					return;
 				}
@@ -165,6 +169,7 @@ public class TownyPlayerListener implements Listener {
 				// Prevent attached blocks from falling off when interacting
 				if (plugin.getTownyUniverse().hasProtectionRegenTask(attachedToBlock)) {
 					event.setCancelled(true);
+					return;
 				}
 			}
 		}
@@ -179,7 +184,7 @@ public class TownyPlayerListener implements Listener {
 		// fix for minequest causing null block interactions.
 		if (event.getClickedBlock() != null)
 			if (TownySettings.isSwitchId(event.getClickedBlock().getTypeId()) || event.getAction() == Action.PHYSICAL) {
-				onPlayerSwitchEvent(event, null);
+				onPlayerSwitchEvent(event, null, World);
 				return;
 			}
 		//plugin.sendDebugMsg("onPlayerItemEvent took " + (System.currentTimeMillis() - start) + "ms");
@@ -336,7 +341,7 @@ public class TownyPlayerListener implements Listener {
 
 	}
 
-	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg) {
+	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg, TownyWorld world) {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
@@ -344,21 +349,10 @@ public class TownyPlayerListener implements Listener {
 		if (!TownySettings.isSwitchId(block.getTypeId()))
 			return;
 
-		WorldCoord worldCoord;
-		TownyWorld world;
-		try {
-			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
-			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-			event.setCancelled(true);
-			return;
-		}
-
 		//Get switch permissions (updates if none exist)
 		boolean bSwitch = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.SWITCH);
 		
-		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, block.getTypeId(), TownyPermission.ActionType.SWITCH);
+		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, block.getTypeId(), TownyPermission.ActionType.SWITCH);
 
 		PlayerCache cache = plugin.getCache(player);
 		
@@ -379,9 +373,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bSwitch) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-			//if (status == TownBlockStatus.UNCLAIMED_ZONE)
-			//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
-			
+
 			event.setCancelled(true);
 		}
 		if (cache.hasBlockErrMsg()) // && (status != TownBlockStatus.UNCLAIMED_ZONE))

@@ -1150,3 +1150,4 @@ v0.79.0.1:
 	- Exit from the BlockPhysics event sooner if we do not need to be in there (no regen).
 	- Change PlayerMove event to update the cache for the player the event relates to, not all online players.
 	- Minor optimization of Block Burn events.
+	- Minor changes to PlayerInteractEvent to increase performance.
