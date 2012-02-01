@@ -36,17 +36,7 @@ import com.palmergames.util.FileMgmt;
 
 
 public class TownySettings {
-        
-	// Nation Level
-	public enum NationLevel {
-        NAME_PREFIX,
-        NAME_POSTFIX,
-        CAPITAL_PREFIX,
-        CAPITAL_POSTFIX,
-        KING_PREFIX,
-        KING_POSTFIX,
-        UPKEEP_MULTIPLIER
-	};
+    
 	// Town Level
 	public enum TownLevel {
 		NAME_PREFIX,
@@ -54,6 +44,17 @@ public class TownySettings {
         MAYOR_PREFIX,
         MAYOR_POSTFIX,
         TOWN_BLOCK_LIMIT,
+        UPKEEP_MULTIPLIER
+	};
+	// Nation Level
+	public enum NationLevel {
+		NAME_PREFIX,
+        NAME_POSTFIX,
+        CAPITAL_PREFIX,
+        CAPITAL_POSTFIX,
+        KING_PREFIX,
+        KING_POSTFIX,
+        TOWN_BLOCK_LIMIT_BONUS,
         UPKEEP_MULTIPLIER
 	};
 	
@@ -82,7 +83,8 @@ public class TownySettings {
 	public static void newNationLevel(int numResidents, 
 	                String namePrefix, String namePostfix, 
 	                String capitalPrefix, String capitalPostfix,
-	                String kingPrefix, String kingPostfix, double nationUpkeepMultiplier) {
+	                String kingPrefix, String kingPostfix,
+	                int townBlockLimitBonus, double nationUpkeepMultiplier) {
 	        ConcurrentHashMap<TownySettings.NationLevel,Object> m = new ConcurrentHashMap<TownySettings.NationLevel,Object>();
 	        m.put(TownySettings.NationLevel.NAME_PREFIX, namePrefix);
 	        m.put(TownySettings.NationLevel.NAME_POSTFIX, namePostfix);
@@ -90,6 +92,7 @@ public class TownySettings {
 	        m.put(TownySettings.NationLevel.CAPITAL_POSTFIX, capitalPostfix);
 	        m.put(TownySettings.NationLevel.KING_PREFIX, kingPrefix);
 	        m.put(TownySettings.NationLevel.KING_POSTFIX, kingPostfix);
+	        m.put(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS, townBlockLimitBonus);
 	        m.put(TownySettings.NationLevel.UPKEEP_MULTIPLIER, nationUpkeepMultiplier);
 	        configNationLevel.put(numResidents, m);
 	}
@@ -109,9 +112,12 @@ public class TownySettings {
 		List<Map<String, Object>> levels = config.getMapList("levels.town_level");
 		for (Map<String, Object> level : levels) {	
 			
-			newTownLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
-					(String) level.get("namePostfix"), (String) level.get("mayorPrefix"),
-		            (String) level.get("mayorPostfix"), (Integer) level.get("townBlockLimit"),
+			newTownLevel((Integer) level.get("numResidents"),
+					(String) level.get("namePrefix"),
+					(String) level.get("namePostfix"),
+					(String) level.get("mayorPrefix"),
+		            (String) level.get("mayorPostfix"),
+		            (Integer) level.get("townBlockLimit"),
 		            (Double) level.get("upkeepModifier"));
 			
 		}
@@ -131,10 +137,15 @@ public class TownySettings {
         List<Map<String, Object>> levels = config.getMapList("levels.nation_level");
         for (Map<String, Object> level : levels) {	
 			
-			newNationLevel((Integer) level.get("numResidents"), (String) level.get("namePrefix"),
-					(String) level.get("namePostfix"), (String) level.get("capitalPrefix"),
-                    (String) level.get("capitalPostfix"), (String) level.get("kingPrefix"),
-                    (String) level.get("kingPostfix"), (Double) level.get("upkeepModifier"));
+			newNationLevel((Integer) level.get("numResidents"),
+					(String) level.get("namePrefix"),
+					(String) level.get("namePostfix"),
+					(String) level.get("capitalPrefix"),
+                    (String) level.get("capitalPostfix"),
+                    (String) level.get("kingPrefix"),
+                    (String) level.get("kingPostfix"),
+                    (level.containsKey("townBlockLimitBonus")? (Integer) level.get("townBlockLimitBonus") : 0),
+                    (Double) level.get("upkeepModifier"));
 			
         }
     }
@@ -485,6 +496,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "Leader ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 10);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -495,6 +507,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "Count ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 20);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -505,6 +518,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "Duke ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 40);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -515,6 +529,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "King ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 60);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -525,6 +540,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "Emperor ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 100);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -535,6 +551,7 @@ public class TownySettings {
             level.put("capitalPostfix", "");
             level.put("kingPrefix", "God Emperor ");
             level.put("kingPostfix", "");
+            level.put("townBlockLimitBonus", 140);
             level.put("upkeepModifier", 1.0);
             levels.add(new HashMap<String, Object>(level));
             level.clear();
@@ -749,9 +766,14 @@ public class TownySettings {
 		int ratio = getTownBlockRatio();
 		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
 		
-		if (ratio == 0)
+		if (ratio == 0) {
 			n += (Integer)getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
-		else
+			if (town.hasNation())
+				try {
+					n += (Integer)getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+				} catch (NotRegisteredException e) {
+				}
+		} else
 			n += town.getNumResidents() * ratio;
 		
 		return n;

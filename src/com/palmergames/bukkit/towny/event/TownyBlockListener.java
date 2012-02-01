@@ -187,7 +187,7 @@ public class TownyBlockListener implements Listener {
 			
 			//Get build permissions (updates if none exist)
 			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.BUILD);
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD);
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD);
 			
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
