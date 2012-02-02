@@ -48,6 +48,11 @@ public class TownyFormatter {
 		return sdf.format(System.currentTimeMillis());
 	}
 
+	/**
+	 * 
+	 * @param townBlock
+	 * @return
+	 */
 	public static List<String> getStatus(TownBlock townBlock) {
 		List<String> out = new ArrayList<String>();
 
@@ -73,6 +78,11 @@ public class TownyFormatter {
 		return out;
 	}
 
+	/**
+	 * 
+	 * @param resident
+	 * @return
+	 */
 	public static List<String> getStatus(Resident resident) {
 		List<String> out = new ArrayList<String>();
 
@@ -117,6 +127,11 @@ public class TownyFormatter {
 		return out;
 	}
 
+	/**
+	 * 
+	 * @param town
+	 * @return
+	 */
 	public static List<String> getStatus(Town town) {
 		List<String> out = new ArrayList<String>();
 
@@ -191,6 +206,11 @@ public class TownyFormatter {
 		return out;
 	}
 
+	/**
+	 * 
+	 * @param nation
+	 * @return
+	 */
 	public static List<String> getStatus(Nation nation) {
 		List<String> out = new ArrayList<String>();
 
@@ -235,26 +255,39 @@ public class TownyFormatter {
 		return out;
 	}
 
+	/**
+	 * 
+	 * @param world
+	 * @return
+	 */
 	public static List<String> getStatus(TownyWorld world) {
 		List<String> out = new ArrayList<String>();
 
-		// ___[ World ]___
-		out.add(ChatTools.formatTitle(getFormattedName(world)));
+		// ___[ World (PvP) ]___
+		String title = getFormattedName(world);
+		title += ((world.isPVP() || world.isForcePVP()) ? Colors.Red + " (PvP)" : "");
+		title += (world.isClaimable() ? Colors.LightGreen + " Claimable" : Colors.Rose + " NoClaims");
+		out.add(ChatTools.formatTitle(title));
 
-		// Claimable: No | PvP: Off
-		out.add(Colors.Green + "Claimable: " + (world.isClaimable() ? Colors.LightGreen + "Yes" : Colors.Rose + "No") + Colors.Gray + " | " + Colors.Green + "PvP: " + (world.isPVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isForceFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off"));
-
-		out.add(Colors.Green + "Explosions: " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-		out.add (Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "ForceTownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-		// Using Default Settings: Yes
-		//out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
-		// Wilderness:
-		//     Build, Destroy, Switch
-		//     Ignored Blocks: 34, 45, 64
-		out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
-		out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
-		out.add("    " + Colors.Green + "Ignored Blocks:" + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ", "));
-
+		if (!world.isUsingTowny()) {
+			out.add(TownySettings.getLangString("msg_set_use_towny_off"));
+		} else {
+			// ForcePvP: No | Fire: Off
+			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+					+ Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
+					+ Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+	
+			out.add(Colors.Green + "Explosions: " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			out.add (Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			// Using Default Settings: Yes
+			//out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
+			// Wilderness:
+			//     Build, Destroy, Switch
+			//     Ignored Blocks: 34, 45, 64
+			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
+			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
+			out.add("    " + Colors.Green + "Ignored Blocks:" + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ", "));
+		}
 		return out;
 	}
 	

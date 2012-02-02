@@ -77,12 +77,13 @@ public class TownyEntityListener implements Listener {
 
 		Entity attacker = null;
 		Entity defender = null;
+		Projectile projectile = null;
 
 		if (event instanceof EntityDamageByEntityEvent) {
 			//plugin.sendMsg("EntityDamageByEntityEvent");
 			EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) event;
 			if (entityEvent.getDamager() instanceof Projectile) {
-				Projectile projectile = (Projectile) entityEvent.getDamager();
+				projectile = (Projectile) entityEvent.getDamager();
 				attacker = projectile.getShooter();
 				defender = entityEvent.getEntity();
 			} else {
@@ -112,8 +113,13 @@ public class TownyEntityListener implements Listener {
 				if (defender instanceof Player)
 					b = (Player) defender;
 
-				if (preventDamageCall(world, attacker, defender, a, b))
+				if (preventDamageCall(world, attacker, defender, a, b)) {
+					if (projectile != null)
+						// Remove he projectile here so no
+						// other events can fire to cause damage
+						projectile.remove();
 					event.setCancelled(true);
+				}
 
 			} catch (Exception e) {
 			}
@@ -198,8 +204,6 @@ public class TownyEntityListener implements Listener {
 		} catch (NotRegisteredException e1) {
 			// Not a registered world
 		}
-		
-		
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -599,7 +603,7 @@ public class TownyEntityListener implements Listener {
 		return false;
 	}
 
-	public boolean preventDamagePvP(TownyWorld world, Player a, Player b) {
+	public boolean preventDamagePvP(TownyWorld world) {
 		// Universe is only PvP
 		if (world.isForcePVP() || world.isPVP())
 			return false;
