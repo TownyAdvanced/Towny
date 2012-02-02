@@ -1168,4 +1168,4 @@ v0.79.0.3:
 	- Fixed saving of outpost spawns. It was only saving the first spawn and losing the rest.
 	- Improve new town/nation name validation.
 v0.79.0.4:
-	- Move all Namechecks to their own class and consolidate tests.
+	- Move all Name checks to their own class and consolidate tests.
