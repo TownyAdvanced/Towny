@@ -280,7 +280,15 @@ public class NationCommand implements CommandExecutor {
 			if (town.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_already_nation"));
 
-			if (!TownySettings.isValidRegionName(name) || TownyUniverse.getDataSource().hasNation(name))
+			// Check the name is valid and doesn't already exist.
+			String filteredName;
+    		try {
+    			filteredName = universe.checkAndFilterName(name);
+    		} catch (InvalidNameException e) {
+    			filteredName = null;
+    		}
+            
+            if ((filteredName != null) || !TownySettings.isValidRegionName(filteredName) || TownyUniverse.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
 			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))

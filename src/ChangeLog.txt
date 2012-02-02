@@ -1166,3 +1166,4 @@ v0.79.0.2:
 	- Fixed a bug where you could create a town with the same name as another.
 v0.79.0.3:
 	- Fixed saving of outpost spawns. It was only saving the first spawn and losing the rest.
+	- Improve new town/nation name validation.
