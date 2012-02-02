@@ -778,6 +778,20 @@ public class TownySettings {
 		
 		return n;
 	}
+	
+	public static int getNationBonusBlocks(Nation nation) {
+		return (Integer)getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+	}
+	
+	public static int getNationBonusBlocks(Town town) {
+		if (town.hasNation())
+			try {
+				return getNationBonusBlocks(town.getNation());
+			} catch (NotRegisteredException e) {
+			}
+
+		return 0;
+	}
 
     public static int getTownBlockRatio() {
         return getInt(ConfigNodes.TOWN_TOWN_BLOCK_RATIO);
