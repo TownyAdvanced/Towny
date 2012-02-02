@@ -1416,15 +1416,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						+ Float.toString(town.getSpawn().getYaw()) + newLine);
 			
 			// Outpost Spawns
-			if (town.hasOutpostSpawn())
+			if (town.hasOutpostSpawn()) {
+				String outpostArray = "outpostspawns=";
 				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
-					fout.write("outpostspawns=" + spawn.getWorld().getName() + ","
+					outpostArray += (spawn.getWorld().getName() + ","
 						+ Double.toString(spawn.getX()) + ","
 						+ Double.toString(spawn.getY()) + ","
 						+ Double.toString(spawn.getZ()) + ","
 						+ Float.toString(spawn.getPitch()) + ","
 						+ Float.toString(spawn.getYaw()) + ";");
 				}
+				fout.write(outpostArray);
+			}
 
 			fout.close();
 		} catch (Exception e) {

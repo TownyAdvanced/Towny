@@ -1164,3 +1164,5 @@ v0.79.0.2:
 	  You can now add any entities here you want explosions to revent for in the wilderness (including TNTPrimed).
 	  These settings are copied to the individual world files, so you must make changes per world.
 	- Fixed a bug where you could create a town with the same name as another.
+v0.79.0.3:
+	- Fixed saving of outpost spawns. It was only saving the first spawn and losing the rest.
