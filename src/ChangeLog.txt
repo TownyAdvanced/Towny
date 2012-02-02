@@ -1161,6 +1161,6 @@ v0.79.0.2:
 	- Added toggles for Unclaim revert and Wilderness explosion revert.
 	  '/tw toggle revertunclaim' and '/tw toggle revertexpl'
 	- Added an entities list to wild_revert_on_mob_explosion.
-	  You can now add any entities in here you want explosions to revent for in the wilderness (including TNTPrimed).
+	  You can now add any entities here you want explosions to revent for in the wilderness (including TNTPrimed).
 	  These settings are copied to the individual world files, so you must make changes per world.
 	- Fixed a bug where you could create a town with the same name as another.
