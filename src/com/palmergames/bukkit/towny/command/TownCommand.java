@@ -800,7 +800,7 @@ public class TownCommand implements CommandExecutor  {
                         if (TownySettings.hasTownLimit() && TownyUniverse.getDataSource().getTowns().size() >= TownySettings.getTownLimit())
                                 throw new TownyException(TownySettings.getLangString("msg_err_universe_limit"));
                         
-                        if (!TownySettings.isValidRegionName(name))
+                        if (!TownySettings.isValidRegionName(name) && !TownyUniverse.getDataSource().hasTown(name))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
                         
                         Resident resident = TownyUniverse.getDataSource().getResident(mayorName);
