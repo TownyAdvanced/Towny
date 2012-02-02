@@ -228,6 +228,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "explosion/forceexplosion", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "fire/forcefire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/worldmobs", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim/revertexpl", ""));
 		} else {
 
 			String msg;
@@ -324,7 +325,25 @@ public class TownyWorldCommand implements CommandExecutor  {
 					else
 						TownyMessaging.sendMsg(msg);
 					
-			} else {
+			} else if (split[0].equalsIgnoreCase("revertunclaim")) {
+
+				Globalworld.setUsingPlotManagementRevert(!Globalworld.isUsingPlotManagementRevert());
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Unclaim Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementRevert() ? "Enabled" : "Disabled");
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+				
+		} else if (split[0].equalsIgnoreCase("revertexpl")) {
+
+			Globalworld.setUsingPlotManagementWildRevert(!Globalworld.isUsingPlotManagementWildRevert());
+			msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Wilderness Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildRevert() ? "Enabled" : "Disabled");
+			if (player != null)
+				TownyMessaging.sendMsg(player, msg);
+			else
+				TownyMessaging.sendMsg(msg);
+			
+	} else {
 				msg = String.format(TownySettings.getLangString("msg_err_invalid_property"), "'" + split[0] + "'");
 				if (player != null)
 					TownyMessaging.sendErrorMsg(player, msg);

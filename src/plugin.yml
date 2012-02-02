@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.0.1
+version: 0.79.0.2
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -291,6 +291,6 @@ permissions:
         description: User is able to talk in the nation channel
         default: false
     towny.chat.general:
-        description: User is able to talk in the nation channel
+        description: User is able to talk in the general channel
         default: true
         

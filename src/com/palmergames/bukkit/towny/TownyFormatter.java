@@ -282,6 +282,8 @@ public class TownyFormatter {
 			out.add (Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
 			// Using Default Settings: Yes
 			//out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
+			
+			out.add(Colors.Green + "Unclaim Revert: " + (world.isUsingPlotManagementRevert()? Colors.LightGreen + "On" : Colors.Rose + "off")  + Colors.Gray + " | " + Colors.Green + "Explosion Revert: " + (world.isUsingPlotManagementWildRevert()? Colors.LightGreen + "On" : Colors.Rose + "off"));
 			// Wilderness:
 			//     Build, Destroy, Switch
 			//     Ignored Blocks: 34, 45, 64

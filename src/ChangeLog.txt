@@ -1156,3 +1156,7 @@ v0.79.0.1:
 	  (Configs will not update for this. To enable, delete the nation_level entries and Towny will add a fresh set of data upon startup)
 	- Fixed Fire setting in the '/townyworld' status page.
 	- Prevent fire arrows causing fire damage when PvP is off.
+v0.79.0.2:
+	- Added Unclaim revert and explosion revert settings to the '/tw' status display.
+	- Added toggles for Unclaim revert and Wilderness explosion revert.
+	  '/tw toggle revertunclaim' and '/tw toggle revertexpl'
