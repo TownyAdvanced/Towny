@@ -5,10 +5,14 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.bukkit.entity.Entity;
+
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.util.JavaUtil;
 
 public class TownyWorld extends TownyObject {
 	private List<Town> towns = new ArrayList<Town>();
@@ -32,6 +36,7 @@ public class TownyWorld extends TownyObject {
 	private String unclaimedZoneName = null;
 	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
 	private List<Coord> warZones = new ArrayList<Coord>();
+	private List<Class<?>> entityExplosionProtection = null;
 	
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
@@ -376,6 +381,48 @@ public class TownyWorld extends TownyObject {
 	 */
 	public void setPlotManagementWildRevertDelay(long plotManagementWildRevertDelay) {
 		this.plotManagementWildRevertDelay = plotManagementWildRevertDelay;
+	}
+	
+	public void setPlotManagementWildRevertEntities(List<String> entities) {
+		
+		entityExplosionProtection = new ArrayList<Class<?>>();
+		 
+		for (String mob : entities)
+			if (!mob.equals(""))
+				try {
+					Class<?> c = Class.forName("org.bukkit.entity."+mob);
+					if (JavaUtil.isSubInterface(Entity.class, c))
+						entityExplosionProtection.add(c);
+					else
+						throw new Exception();
+				} catch (ClassNotFoundException e) {
+					TownyMessaging.sendErrorMsg("Explosion Regen: " + mob + " is not an acceptable class.");
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg("Explosion Regen: " + mob + " is not an acceptable entity.");
+				}
+	}
+	
+	public List<String> getPlotManagementWildRevertEntities() {
+		if (entityExplosionProtection == null)
+			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
+
+		List<String> entities = new ArrayList<String>();
+		for (Class<?> c : entityExplosionProtection)
+			entities.add(c.getSimpleName());
+		
+		return entities;
+	}
+	
+	public boolean isProtectingExplosionEntity(Entity Entity) {
+		if (entityExplosionProtection == null)
+			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
+		
+		for (Class<?> c : entityExplosionProtection)
+			if (c.isInstance(Entity))
+				return true;
+			else if (c.getName().contains(Entity.toString()))
+				System.out.print(Entity.toString());
+		return false;
 	}
 
 	public List<Integer> getUnclaimedZoneIgnoreIds() {

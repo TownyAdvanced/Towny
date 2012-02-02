@@ -174,6 +174,7 @@ public enum ConfigNodes {
             NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_ENABLE("new_world_settings.plot_management.wild_revert_on_mob_explosion.enabled","true",
             		"# Enabling this will slowly regenerate holes created in the",
             		"# wilderness by monsters exploding."),
+            NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST("new_world_settings.plot_management.wild_revert_on_mob_explosion.entities","Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,TNTPrimed"),
             NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME("new_world_settings.plot_management.wild_revert_on_mob_explosion.delay","20s"),
             
             GTOWN_SETTINGS("global_town_settings","", "", "",

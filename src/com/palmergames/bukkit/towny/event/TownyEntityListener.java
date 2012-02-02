@@ -429,7 +429,7 @@ public class TownyEntityListener implements Listener {
 				if (townyWorld.isUsingTowny())
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert()) {
-							if (entity instanceof Creature) {
+							if (townyWorld.isProtectingExplosionEntity(entity)) {
 								if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, false);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));

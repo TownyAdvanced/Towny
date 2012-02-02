@@ -1085,6 +1085,21 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
+				
+				line = kvFile.get("PlotManagementWildRegenEntities");
+				if (line != null)
+					try {
+						List<String> entities = new ArrayList<String>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								entities.add(s.trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementWildRevertEntities(entities);
+					} catch (Exception e) {
+					}
+				
 				line = kvFile.get("usingPlotManagementWildRegenDelay");
 				if (line != null)
 					try {
@@ -1572,6 +1587,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 			// Using PlotManagement Wild Regen
 			fout.write("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()) + newLine);
+			
+			// Wilderness Explosion Protection entities
+			if (world.getPlotManagementWildRevertEntities() != null)
+				fout.write("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ",") + newLine);
+			
+			
+			
+			
 			// Using PlotManagement Wild Regen Delay
 			fout.write("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()) + newLine);
 			

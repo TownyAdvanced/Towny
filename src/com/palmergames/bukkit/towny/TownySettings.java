@@ -953,6 +953,11 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
 	}
 	
+	public static List<String> getWildExplosionProtectionEntities() {
+		if (getDebug()) System.out.println("[Towny] Debug: Wilderness explosion protection entities. ");
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST);
+	}
+	
 	public static long getMobRemovalSpeed() {
 		return getSeconds(ConfigNodes.PROT_MOB_REMOVE_SPEED);
 	}
