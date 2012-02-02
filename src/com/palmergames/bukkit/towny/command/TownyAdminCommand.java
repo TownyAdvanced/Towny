@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
@@ -272,7 +273,7 @@ public class TownyAdminCommand implements CommandExecutor {
 
 				} else if (split[1].equalsIgnoreCase("rename")) {
 
-					if (TownySettings.isValidRegionName(split[2])) {
+					if (!NameValidation.isBlacklistName(split[2])) {
 						TownyUniverse.getDataSource().renameTown(town, split[2]);
 						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player)? player.getName() : "CONSOLE") , town.getName()));
 					} else
@@ -312,7 +313,7 @@ public class TownyAdminCommand implements CommandExecutor {
 
 				} else if (split[1].equalsIgnoreCase("rename")) {
 
-					if (TownySettings.isValidRegionName(split[2])) {
+					if (!NameValidation.isBlacklistName(split[2])) {
 						TownyUniverse.getDataSource().renameNation(nation, split[2]);
 						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player)? player.getName() : "CONSOLE"), nation.getName()));
 					} else

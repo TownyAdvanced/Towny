@@ -51,6 +51,7 @@ import com.palmergames.bukkit.towny.questioner.ResidentTownQuestionTask;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -606,7 +607,7 @@ public class TownCommand implements CommandExecutor  {
                                 	}
                                 		
                                     //TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_rename_disabled"));
-                                    if (TownySettings.isValidRegionName(split[1]))
+                                    if (NameValidation.isBlacklistName(split[1]))
                                         townRename(player, town, split[1]);
                                     else
                                         TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
@@ -624,7 +625,7 @@ public class TownCommand implements CommandExecutor  {
 									}
                         		} else
 	                                try {
-	                                	town.setTag(plugin.getTownyUniverse().checkAndFilterName(split[1]));
+	                                	town.setTag(NameValidation.checkAndFilterName(split[1]));
 	                                	TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_set_town_tag"), player.getName(), town.getTag()));
 	                                } catch (TownyException e) {
 	                                	TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -803,12 +804,12 @@ public class TownCommand implements CommandExecutor  {
                         // Check the name is valid and doesn't already exist.
                         String filteredName;
                 		try {
-                			filteredName = universe.checkAndFilterName(name);
+                			filteredName = NameValidation.checkAndFilterName(name);
                 		} catch (InvalidNameException e) {
                 			filteredName = null;
                 		}
                         
-                        if ((filteredName != null) || !TownySettings.isValidRegionName(filteredName) || TownyUniverse.getDataSource().hasTown(filteredName))
+                        if ((filteredName == null) || TownyUniverse.getDataSource().hasTown(filteredName))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
                         
                         Resident resident = TownyUniverse.getDataSource().getResident(mayorName);

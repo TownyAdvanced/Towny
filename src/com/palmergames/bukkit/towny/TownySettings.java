@@ -14,7 +14,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import org.bukkit.Material;
 
@@ -31,6 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
 
@@ -58,7 +58,7 @@ public class TownySettings {
         UPKEEP_MULTIPLIER
 	};
 	
-	private static Pattern namePattern = null;      
+	//private static Pattern namePattern = null;      
 	private static CommentedConfiguration config, newConfig, language;
 
 	private static final SortedMap<Integer,Map<TownySettings.TownLevel,Object>> configTownLevel = 
@@ -1519,10 +1519,6 @@ public class TownySettings {
     public static void setUsingPermissions(boolean newSetting) {
         setProperty(ConfigNodes.PLUGIN_USING_PERMISSIONS.getRoot(), newSetting);
     }
-        
-	public static String filterName(String input) {
-		return input.replaceAll(getNameFilterRegex(), "_").replaceAll(getNameRemoveRegex(), "");
-	}
 
     public static String getNameFilterRegex() {
         return getString(ConfigNodes.FILTERS_REGEX_NAME_FILTER_REGEX);
@@ -1569,44 +1565,21 @@ public class TownySettings {
     public static void SetNationBankAllowWithdrawls(boolean newSetting) {
         setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
     }
+    
+    ///////////////////////////////////////
 
+    @Deprecated
     public static boolean isValidRegionName(String name) {
-    	// Max name length
-        if (name.length() > getMaxNameLength())
-        	return false;
-        // Banned names
-        if ((name.equalsIgnoreCase("spawn"))
-                        || (name.equalsIgnoreCase("list"))
-                        || (name.equalsIgnoreCase("new"))
-                        || (name.equalsIgnoreCase("here"))
-                        || (name.equalsIgnoreCase("new"))
-                        || (name.equalsIgnoreCase("help"))
-                        || (name.equalsIgnoreCase("?"))
-                        || (name.equalsIgnoreCase("leave"))
-                        || (name.equalsIgnoreCase("withdraw"))
-                        || (name.equalsIgnoreCase("deposit"))
-                        || (name.equalsIgnoreCase("set"))
-                        || (name.equalsIgnoreCase("toggle"))
-                        || (name.equalsIgnoreCase("mayor"))
-                        || (name.equalsIgnoreCase("assistant"))
-                        || (name.equalsIgnoreCase("kick"))
-                        || (name.equalsIgnoreCase("add"))
-                        || (name.equalsIgnoreCase("claim"))
-                        || (name.equalsIgnoreCase("unclaim"))
-                        || (name.equalsIgnoreCase("title")))
-                return false;
-        
-        return isValidName(name);
+    	return !NameValidation.isBlacklistName(name);
 	}
-	        
+	
+    @Deprecated
 	public static boolean isValidName(String name) {
-		try {
-            if (TownySettings.namePattern == null)
-                    namePattern = Pattern.compile(getNameCheckRegex());
-            return TownySettings.namePattern.matcher(name).find();
-		} catch (PatternSyntaxException e) {
-            e.printStackTrace();
-            return false;
-		}
+    	return NameValidation.isValidName(name);
+	}
+    
+    @Deprecated
+	public static String filterName(String input) {
+    	return NameValidation.filterName(input);
 	}
 }

@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
@@ -1197,7 +1198,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
 			for (Resident resident : getResidents())
-				fout.write(universe.checkAndFilterName(resident.getName()) + newLine);
+				fout.write(NameValidation.checkAndFilterPlayerName(resident.getName()) + newLine);
 			fout.close();
 			return true;
 		} catch (Exception e) {

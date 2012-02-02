@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.WarSpoils;
+import com.palmergames.bukkit.util.NameValidation;
 
 
 
@@ -34,7 +35,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public boolean hasResident(String name) {
 		try {
-			return universe.getResidentMap().containsKey(universe.checkAndFilterName(name).toLowerCase());
+			return universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
 			return false;
 		}
@@ -83,7 +84,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public Resident getResident(String name) throws NotRegisteredException {
 		Resident resident = null;
 		try {
-			resident = universe.getResidentMap().get(universe.checkAndFilterName(name).toLowerCase());
+			resident = universe.getResidentMap().get(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
 		}
 		if (resident == null)
@@ -258,7 +259,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
-			filteredName = universe.checkAndFilterName(name);
+			filteredName = NameValidation.checkAndFilterPlayerName(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -275,7 +276,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
-			filteredName = universe.checkAndFilterName(name);
+			filteredName = NameValidation.checkAndFilterName(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -292,7 +293,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
-			filteredName = universe.checkAndFilterName(name);
+			filteredName = NameValidation.checkAndFilterName(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -501,7 +502,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		String filteredName;
 		try {
-			filteredName = universe.checkAndFilterName(newName);
+			filteredName = NameValidation.checkAndFilterName(newName);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -554,7 +555,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		String filteredName;
 		try {
-			filteredName = universe.checkAndFilterName(newName);
+			filteredName = NameValidation.checkAndFilterName(newName);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}

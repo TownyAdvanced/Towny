@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.War;
 import com.palmergames.bukkit.util.MinecraftTools;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.TimeMgmt;
 
@@ -251,28 +252,7 @@ public class TownyUniverse extends TownyObject {
 		} catch (TownyException x) {
 			throw new TownyException("Unable to get spawn location");
 		}
-	}	
-	
-	public String checkAndFilterName(String name) throws InvalidNameException {
-		String out = TownySettings.filterName(name);
-
-		if (!TownySettings.isValidName(out))
-			throw new InvalidNameException(out + " is an invalid name.");
-
-		return out;
-	}
-
-	public String[] checkAndFilterArray(String[] arr) {
-		String[] out = arr;
-		int count = 0;
-
-		for (String word : arr) {
-			out[count] = TownySettings.filterName(word);
-			count++;
-		}
-
-		return out;
-	}	
+	}		
 
 	public static Player getPlayer(Resident resident) throws TownyException {
 		for (Player player : getOnlinePlayers())
@@ -1259,6 +1239,17 @@ public class TownyUniverse extends TownyObject {
 	public void deleteTownBlockIds(TownBlock townBlock) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		TownyRegenAPI.addDeleteTownBlockIdQueue(worldCoord);
+	}
+	
+	@Deprecated
+	public String checkAndFilterName(String name) throws InvalidNameException {
+		
+		return NameValidation.checkAndFilterPlayerName(name);
+	}
+
+	@Deprecated
+	public String[] checkAndFilterArray(String[] arr) {
+		return NameValidation.checkAndFilterArray(arr);
 	}
 	
 	/*

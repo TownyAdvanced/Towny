@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.questioner.JoinNationTask;
 import com.palmergames.bukkit.towny.questioner.ResidentNationQuestionTask;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -283,12 +284,12 @@ public class NationCommand implements CommandExecutor {
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
     		try {
-    			filteredName = universe.checkAndFilterName(name);
+    			filteredName = NameValidation.checkAndFilterName(name);
     		} catch (InvalidNameException e) {
     			filteredName = null;
     		}
             
-            if ((filteredName != null) || !TownySettings.isValidRegionName(filteredName) || TownyUniverse.getDataSource().hasNation(filteredName))
+            if ((filteredName == null) || TownyUniverse.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
 			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
@@ -947,7 +948,7 @@ public class NationCommand implements CommandExecutor {
 						return;
 					}
 
-					if (TownySettings.isValidRegionName(split[1]))
+					if (!NameValidation.isBlacklistName(split[1]))
 						nationRename(player, nation, split[1]);
 					else
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
@@ -964,7 +965,7 @@ public class NationCommand implements CommandExecutor {
 					}
 				} else
 					try {
-						nation.setTag(plugin.getTownyUniverse().checkAndFilterName(split[1]));
+						nation.setTag(NameValidation.checkAndFilterName(split[1]));
 						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_set_nation_tag"), player.getName(), nation.getTag()));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -998,7 +999,7 @@ public class NationCommand implements CommandExecutor {
 							return;
 						}
 
-						String title = StringMgmt.join(plugin.getTownyUniverse().checkAndFilterArray(split));
+						String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
 						resident.setTitle(title + " ");
 						TownyUniverse.getDataSource().saveResident(resident);
 
@@ -1038,7 +1039,7 @@ public class NationCommand implements CommandExecutor {
 							return;
 						}
 
-						String surname = StringMgmt.join(plugin.getTownyUniverse().checkAndFilterArray(split));
+						String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
 						resident.setSurname(" " + surname);
 						TownyUniverse.getDataSource().saveResident(resident);
 
