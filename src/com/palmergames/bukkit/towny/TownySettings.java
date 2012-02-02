@@ -768,13 +768,15 @@ public class TownySettings {
 		
 		if (ratio == 0) {
 			n += (Integer)getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
-			if (town.hasNation())
-				try {
-					n += (Integer)getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
-				} catch (NotRegisteredException e) {
-				}
+			
 		} else
 			n += town.getNumResidents() * ratio;
+		
+		if (town.hasNation())
+			try {
+				n += (Integer)getNationLevel(town.getNation()).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+			} catch (NotRegisteredException e) {
+			}
 		
 		return n;
 	}

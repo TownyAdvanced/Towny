@@ -1152,7 +1152,7 @@ v0.79.0.1:
 	- Minor optimization of Block Burn events.
 	- Minor changes to PlayerInteractEvent to increase performance.
 	- Added a new entry in Nation levels 'townBlockLimitBonus'.
-	  If using Level based TownBlockLimits rather than resident based, joining a nation will net you bonus TownBlocks.
-	  (Configs will not update for this. To enable delete the nation_level entries and Towny will add a fresh set of data upon startup)
+	  Joining a nation can now net you bonus TownBlocks.
+	  (Configs will not update for this. To enable, delete the nation_level entries and Towny will add a fresh set of data upon startup)
 	- Fixed Fire setting in the '/townyworld' status page.
 	- Prevent fire arrows causing fire damage when PvP is off.
