@@ -1169,3 +1169,5 @@ v0.79.0.3:
 	- Improve new town/nation name validation.
 v0.79.0.4:
 	- Move all Name checks to their own class and consolidate tests.
+v0.79.0.5:
+	- Fix Healthregen to fire an event with teh proper health level, instead of increased.

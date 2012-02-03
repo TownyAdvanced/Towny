@@ -53,7 +53,7 @@ private Server server;
 			player.setHealth(++currentHP);
 			
 			// Raise an event so other plugins can keep in sync.
-			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, ++currentHP, RegainReason.REGEN);
+			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 			
 		}
