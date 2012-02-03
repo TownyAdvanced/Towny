@@ -5,13 +5,13 @@ import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 
 /**
  * @author dumptruckman
@@ -36,9 +36,9 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
                 resident.clearTeleportRequest();
                 try {
                 	// Make sure the chunk we teleport to is loaded.
-                    Chunk chunk = resident.getTeleportDestination().getSpawn().getWorld().getChunkAt(resident.getTeleportDestination().getSpawn().getBlock());
+                    Chunk chunk = resident.getTeleportDestination().getWorld().getChunkAt(resident.getTeleportDestination().getBlock());
                 	if (!chunk.isLoaded()) chunk.load();
-                    TownyUniverse.getPlayer(resident).teleport(resident.getTeleportDestination().getSpawn());
+                    TownyUniverse.getPlayer(resident).teleport(resident.getTeleportDestination());
                 } catch (TownyException ignore) { }
                 teleportQueue.poll();
             } else {
@@ -47,9 +47,9 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
         }
     }
 
-    public static void requestTeleport(Resident resident, Town town, double cost) {
+    public static void requestTeleport(Resident resident, Location spawnLoc, double cost) {
     	resident.setTeleportRequestTime();
-        resident.setTeleportDestination(town);
+        resident.setTeleportDestination(spawnLoc);
         try {
         teleportQueue.add(resident);
         } catch (NullPointerException e) {

@@ -1170,4 +1170,5 @@ v0.79.0.3:
 v0.79.0.4:
 	- Move all Name checks to their own class and consolidate tests.
 v0.79.0.5:
-	- Fix Healthregen to fire an event with teh proper health level, instead of increased.
+	- Fix Healthregen to fire an event with the proper health level, instead of increased.
+	- Fixed Teleport timers to send you to the outpost (if chosen), rather than the town spawn.

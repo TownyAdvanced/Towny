@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
 
 import com.palmergames.bukkit.towny.*;
 
@@ -16,7 +17,7 @@ public class Resident extends TownBlockOwner {
 	private boolean isNPC = false;
 	private String title, surname;
     private long teleportRequestTime;
-    private Town teleportDestination;
+    private Location teleportDestination;
     private double teleportCost;
     private String chatFormattedName;
 
@@ -198,11 +199,11 @@ public class Resident extends TownBlockOwner {
         return teleportRequestTime;
     }
 
-    public void setTeleportDestination(Town town) {
-        teleportDestination = town;
+    public void setTeleportDestination(Location spawnLoc) {
+        teleportDestination = spawnLoc;
     }
     
-    public Town getTeleportDestination() {
+    public Location getTeleportDestination() {
         return teleportDestination;
     }
 
