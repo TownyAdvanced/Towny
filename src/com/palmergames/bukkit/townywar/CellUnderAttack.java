@@ -8,22 +8,25 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
 
 public class CellUnderAttack extends Cell {
+	private Towny plugin;
 	private String nameOfFlagOwner;
 	private List<Block> beaconFlagBlocks;
 	private List<Block> beaconWireframeBlocks;
 	private Block flagBaseBlock, flagBlock, flagLightBlock;
 	private int flagColorId;
-	private CellAttackThread thread;
+	private int thread;
 	
-	public CellUnderAttack(String nameOfFlagOwner, Block flagBaseBlock) {
+	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {
 		super(flagBaseBlock.getLocation());
+		this.plugin = plugin;
 		this.nameOfFlagOwner = nameOfFlagOwner;
 		this.flagBaseBlock = flagBaseBlock;
 		this.flagColorId = 0;
-		this.thread = new CellAttackThread(this);
+		this.thread = -1;
 		
 		World world = flagBaseBlock.getWorld();
 		this.flagBlock = world.getBlockAt(flagBaseBlock.getX(), flagBaseBlock.getY() + 1, flagBaseBlock.getZ());
@@ -114,7 +117,7 @@ public class CellUnderAttack extends Cell {
 	public void updateFlag() {
 		DyeColor[] woolColors = TownyWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
-			//System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
+			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
 			int woolId = Material.WOOL.getId();
 			byte woolData = woolColors[flagColorId].getData();
 			
@@ -135,11 +138,14 @@ public class CellUnderAttack extends Cell {
 	}
 	
 	public void begin() {
-		this.thread.start();
+		drawFlag();
+		thread = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new CellAttackThread(this), TownyWarConfig.getTimeBetweenFlagColorChange(), TownyWarConfig.getTimeBetweenFlagColorChange());
 	}
 	
 	public void cancel() {
-		this.thread.setRunning(false);
+		if (thread != -1)
+			plugin.getServer().getScheduler().cancelTask(thread);
+		
 		destroyFlag();
 	}
 

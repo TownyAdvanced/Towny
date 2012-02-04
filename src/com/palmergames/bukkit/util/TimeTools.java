@@ -39,9 +39,26 @@ public class TimeTools {
     }
     
     public static long getMillis(String dhms) {
-	    if (Pattern.matches(".*[a-zA-Z].*", dhms)) {
-	        return (TimeTools.secondsFromDhms(dhms) * 1000);
+    	return getSeconds(dhms)*1000;
+    }
+    
+    public static long getSeconds(String dhms) {
+    	if (Pattern.matches(".*[a-zA-Z].*", dhms)) {
+	        return (TimeTools.secondsFromDhms(dhms));
 	    }
         return Long.parseLong(dhms);
     }
+    
+    public static long getTicks(String dhms) {
+    	return convertToTicks(getSeconds(dhms));
+    }
+    
+    /**
+	 * Converts Seconds to Ticks
+	 * @param t
+	 * @return ticks
+	 */
+	public static long convertToTicks(long t) {
+		return t * 20;
+	}
 }

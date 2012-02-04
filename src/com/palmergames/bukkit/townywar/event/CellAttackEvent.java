@@ -6,6 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.townywar.CellUnderAttack;
 
 
@@ -24,13 +25,15 @@ public class CellAttackEvent extends Event implements Cancellable {
     
     //////////////////////////////
     
+    private Towny plugin;
 	private Player player;
 	private Block flagBaseBlock;
 	private boolean cancel = false;
 	private String reason = null;
 	
-	public CellAttackEvent(Player player, Block flagBaseBlock) {
+	public CellAttackEvent(Towny plugin, Player player, Block flagBaseBlock) {
 		super("CellAttack");
+		this.plugin = plugin;
 		this.player = player;
 		this.flagBaseBlock = flagBaseBlock;
 	}
@@ -44,7 +47,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 	}
 	
 	public CellUnderAttack getData() {
-		return new CellUnderAttack(player.getName(), flagBaseBlock);
+		return new CellUnderAttack(plugin, player.getName(), flagBaseBlock);
 	}
 
 	@Override

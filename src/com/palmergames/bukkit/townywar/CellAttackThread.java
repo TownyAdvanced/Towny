@@ -1,9 +1,10 @@
 package com.palmergames.bukkit.townywar;
 
+import java.util.TimerTask;
 
-public class CellAttackThread extends Thread {
+
+public class CellAttackThread extends TimerTask {
 	CellUnderAttack cell;
-	boolean running = false;
 	
 	public CellAttackThread(CellUnderAttack cellUnderAttack) {
 		this.cell = cellUnderAttack;
@@ -11,24 +12,8 @@ public class CellAttackThread extends Thread {
 
 	@Override
 	public void run() {
-		running = true;
-		cell.drawFlag();
-		while (running) {
-			try {
-				Thread.sleep(TownyWarConfig.getTimeBetweenFlagColorChange());
-			} catch (InterruptedException e) {
-				return;
-			}
-			if (running) {
-				cell.changeFlag();
-				if (cell.hasEnded()) {
-					TownyWar.attackWon(cell);
-				}
-			}
-		}
-	}
-	
-	protected void setRunning(boolean running) {
-		this.running = running;
+		cell.changeFlag();
+		if (cell.hasEnded())
+			TownyWar.attackWon(cell);	
 	}
 }

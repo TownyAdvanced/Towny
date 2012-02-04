@@ -22,8 +22,8 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.MinecraftTools;
 import com.palmergames.bukkit.util.ServerBroadCastTimerTask;
+import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.TimeMgmt;
@@ -97,7 +97,7 @@ public class War {
                                 //                              (delay-t)*1000);
                                 int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(),
                                                 new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))),
-                                                MinecraftTools.convertToTicks((delay-t)));
+                                                TimeTools.convertToTicks((delay-t)));
                                 if (id == -1) {
                                 	TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
                                     end();
@@ -105,7 +105,7 @@ public class War {
                                         addTaskId(id);
                         }
                         //warTimer.schedule(new StartWarTimerTask(universe), delay*1000);
-                        int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), MinecraftTools.convertToTicks(delay));
+                        int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), TimeTools.convertToTicks(delay));
                         if (id == -1) {
                         	TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
                             end();
@@ -152,7 +152,7 @@ public class War {
                         }
                 }
                 //warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
-                int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, MinecraftTools.convertToTicks(5));
+                int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, TimeTools.convertToTicks(5));
                 if (id == -1) {
                 	TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
                         end();

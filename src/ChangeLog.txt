@@ -1172,3 +1172,5 @@ v0.79.0.4:
 v0.79.0.5:
 	- Fix Healthregen to fire an event with the proper health level, instead of increased.
 	- Fixed Teleport timers to send you to the outpost (if chosen), rather than the town spawn.
+v0.79.0.6:
+	- Convert Flag war timers to run Syncronous, instead of Async in a paused thread (no more NoLagg error messages).

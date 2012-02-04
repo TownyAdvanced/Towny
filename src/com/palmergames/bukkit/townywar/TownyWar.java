@@ -184,7 +184,7 @@ public class TownyWar {
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_not_on_edge_of_town"));
 		
 		// Call Event (and make sure an attack isn't already under way)
-		CellAttackEvent cellAttackEvent = new CellAttackEvent(player, block);
+		CellAttackEvent cellAttackEvent = new CellAttackEvent(plugin, player, block);
 		plugin.getServer().getPluginManager().callEvent(cellAttackEvent);
 		
 		if (cellAttackEvent.isCancelled()) {

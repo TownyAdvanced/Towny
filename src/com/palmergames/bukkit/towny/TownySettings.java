@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 
@@ -322,13 +321,9 @@ public class TownySettings {
     }
 
     public static long getSeconds(ConfigNodes node) {
-    	String time = getString(node);
-        if (Pattern.matches(".*[a-zA-Z].*", time)) {
-            return (TimeTools.secondsFromDhms(time));
-        }
 
         try {
-        	return Long.parseLong(time.trim());
+        	return TimeTools.getSeconds(getString(node));
     	} catch (NumberFormatException e) {
     		sendError(node.getRoot().toLowerCase() + " from config.yml");
     		return 1;

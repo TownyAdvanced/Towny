@@ -49,7 +49,7 @@ public class TownyWarConfig {
 	}
 	
 	public static long getFlagWaitingTime() {
-		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
+		return TimeTools.convertToTicks(TownySettings.getSeconds(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
 	}
 	
 	public static long getTimeBetweenFlagColorChange() {
