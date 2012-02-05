@@ -73,7 +73,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 
 		Entity attacker = null;
 		Entity defender = null;
@@ -124,7 +124,7 @@ public class TownyEntityListener implements Listener {
 			} catch (Exception e) {
 			}
 
-			TownyMessaging.sendDebugMsg("onEntityDamagedByEntity took " + (System.currentTimeMillis() - start) + "ms");
+			//TownyMessaging.sendDebugMsg("onEntityDamagedByEntity took " + (System.currentTimeMillis() - start) + "ms");
 		}
 	}
 
@@ -428,7 +428,7 @@ public class TownyEntityListener implements Listener {
 				// Wilderness explosion regeneration
 				if (townyWorld.isUsingTowny())
 					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert()) {
+						if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 							if (townyWorld.isProtectingExplosionEntity(entity)) {
 								if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, false);
