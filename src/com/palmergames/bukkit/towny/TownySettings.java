@@ -63,7 +63,7 @@ public class TownySettings {
 	private static final SortedMap<Integer,Map<TownySettings.TownLevel,Object>> configTownLevel = 
 	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.TownLevel,Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer,Map<TownySettings.NationLevel,Object>> configNationLevel = 
-	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.NationLevel,Object>>(Collections.reverseOrder()));	
+	        Collections.synchronizedSortedMap(new TreeMap<Integer,Map<TownySettings.NationLevel,Object>>(Collections.reverseOrder()));
 	
 	public static void newTownLevel(int numResidents,
 	                String namePrefix, String namePostfix,
@@ -220,9 +220,9 @@ public class TownySettings {
 	// if the file is not found it will load the default from resource
 	public static void loadLanguage (String filepath, String defaultRes) throws IOException { 
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
-		String defaultName = filepath + FileMgmt.fileSeparator() + res;
+		String fullPath = filepath + FileMgmt.fileSeparator() + res;
 		
-		File file = FileMgmt.unpackLanguageFile(defaultName, res, defaultRes);
+		File file = FileMgmt.unpackLanguageFile(fullPath, res, defaultRes);
 		if (file != null) {
 
 			// read the (language).yml into memory

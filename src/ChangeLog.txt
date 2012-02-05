@@ -1176,3 +1176,4 @@ v0.79.0.6:
 	- Convert Flag war timers to run Syncronous, instead of Async in a paused thread (no more NoLagg error messages).
 v0.79.0.7:
 	- check for null entities in the EntityExplodeEvent (MobArean generates them).
+	- Stop Towny overwriting non-english language files (again).
