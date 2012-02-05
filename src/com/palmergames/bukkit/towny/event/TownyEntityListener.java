@@ -114,9 +114,9 @@ public class TownyEntityListener implements Listener {
 					b = (Player) defender;
 
 				if (preventDamageCall(world, attacker, defender, a, b)) {
-					if (projectile != null)
 						// Remove he projectile here so no
 						// other events can fire to cause damage
+					if (projectile != null)
 						projectile.remove();
 					event.setCancelled(true);
 				}
