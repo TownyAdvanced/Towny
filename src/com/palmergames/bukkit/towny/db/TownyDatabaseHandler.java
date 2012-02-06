@@ -81,16 +81,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 	
 	@Override
-	public Resident getResident(String name) throws NotRegisteredException {
-		Resident resident = null;
+	public Resident getResident(String name) throws NotRegisteredException {		
+		
 		try {
-			resident = universe.getResidentMap().get(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
+			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
 		} catch (InvalidNameException e) {
 		}
-		if (resident == null)
-			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
 
-		return resident;
+		if (!hasResident(name))
+			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+		
+		return universe.getResidentMap().get(name);
+		
 	}
 
 	@Override
@@ -111,10 +113,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-		if (!hasTown(name.toLowerCase()))
+		
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException e) {
+		}
+		
+		if (!hasTown(name))
 			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
 			
-		return universe.getTownsMap().get(name.toLowerCase());
+		return universe.getTownsMap().get(name);
 	}
 
 	@Override
@@ -135,10 +143,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Nation getNation(String name) throws NotRegisteredException {
-		Nation nation = universe.getNationsMap().get(name.toLowerCase());
-		if (nation == null)
+		
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException e) {
+		}
+		
+		if (!hasNation(name))
 			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
-		return nation;
+		
+		return universe.getNationsMap().get(name.toLowerCase());
 	}
 	
 	@Override
