@@ -47,7 +47,8 @@ public class TownClaim extends Thread {
         super();
         this.plugin = plugin;
         this.player = player;
-        this.outpostLocation = player.getLocation();
+        if (this.player != null)
+        	this.outpostLocation = player.getLocation();
         this.town = town;
         this.selection = selection;
         this.outpost = isOutpost;
