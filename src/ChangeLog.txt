@@ -1177,3 +1177,4 @@ v0.79.0.6:
 v0.79.0.7:
 	- check for null entities in the EntityExplodeEvent (MobArean generates them).
 	- Stop Towny overwriting non-english language files (again).
+	- Stop towny throwing an NPE when devs are accessing the API attempting to get town data without checking the town exists first.

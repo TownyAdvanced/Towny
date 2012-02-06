@@ -111,10 +111,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-		Town town = universe.getTownsMap().get(name.toLowerCase());
-		if (town == null)
+		if (!hasTown(name.toLowerCase()))
 			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
-		return town;
+			
+		return universe.getTownsMap().get(name.toLowerCase());
 	}
 
 	@Override
