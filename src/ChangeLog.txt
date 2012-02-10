@@ -1180,3 +1180,5 @@ v0.79.0.7:
 	- Stop towny throwing an NPE when devs are accessing the API attempting to get town data without checking the town exists first.
 	- Improve error trapping on getResident/getTown and getNation to prevent other plugins causing internal errors when asking for data they havn't checked exists.
 	- Fix Flag war upon a win claiming the plot for the victors.
+v0.79.0.8:
+	- Added 'My Worlds' the the plugin depends list of multiworld plugins.
