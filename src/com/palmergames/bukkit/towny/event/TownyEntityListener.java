@@ -10,6 +10,7 @@ import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LightningStrike;
@@ -24,8 +25,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EndermanPickupEvent;
-import org.bukkit.event.entity.EndermanPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -282,12 +283,15 @@ public class TownyEntityListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEndermanPickup(EndermanPickupEvent event) {
+	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		
 		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (!(event.getEntity() instanceof Enderman))
+			return;
 
 		Block block = event.getBlock();
 
@@ -303,37 +307,6 @@ public class TownyEntityListener implements Listener {
 			if (townyWorld.isEndermanProtect())
 				try {
 					townBlock = townyWorld.getTownBlock(new Coord(Coord.parseCoord(block)));
-					if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && !townBlock.getTown().hasMobs())
-						event.setCancelled(true);
-				} catch (NotRegisteredException e) {
-					// not in a townblock
-					event.setCancelled(true);
-				}
-		} catch (NotRegisteredException e) {
-			// Failed to fetch world
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEndermanPlace(EndermanPlaceEvent event) {
-		
-		if (event.isCancelled() || plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		TownyWorld townyWorld = null;
-		TownBlock townBlock;
-
-		try {
-			townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());
-			
-			if (!townyWorld.isUsingTowny())
-				return;
-			
-			if (townyWorld.isEndermanProtect())
-				try {
-					townBlock = townyWorld.getTownBlock(new Coord(Coord.parseCoord(event.getLocation())));
 					if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && !townBlock.getTown().hasMobs())
 						event.setCancelled(true);
 				} catch (NotRegisteredException e) {
@@ -452,6 +425,77 @@ public class TownyEntityListener implements Listener {
 					}
 			}
 		}
+	}
+	
+	/**
+	 * Prevent fire arrows igniting players when PvP is disabled
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) {
+
+		if (event.isCancelled() || plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		TownyWorld world;
+		Entity combuster = event.getCombuster();
+		Entity defender = event.getEntity();
+
+		/**
+		 * Perform this test outside the block loop so we only get the world
+		 * once per explosion.
+		 */
+		try {
+			world = TownyUniverse.getDataSource().getWorld(
+					defender.getWorld().getName());
+
+			if (!world.isUsingTowny())
+				return;
+
+		} catch (NotRegisteredException e) {
+			// failed to get world so abort
+			return;
+		}
+
+		if (combuster instanceof Arrow) {
+
+			LivingEntity attacker = ((Arrow) combuster).getShooter();
+
+			if (attacker != null) {
+
+				try {
+
+					// Wartime
+					if (plugin.getTownyUniverse().isWarTime()) {
+						event.setCancelled(false);
+						throw new Exception();
+					}
+
+					Player a = null;
+					Player b = null;
+
+					if (attacker instanceof Player)
+						a = (Player) attacker;
+					if (defender instanceof Player)
+						b = (Player) defender;
+
+					if (preventDamageCall(world, attacker, defender, a, b)) {
+						// Remove the projectile here so no
+						// other events can fire to cause damage
+						combuster.remove();
+						event.setCancelled(true);
+					}
+
+				} catch (Exception e) {
+					// War time so do nothing.
+				}
+
+			}
+		}
+
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -616,7 +660,7 @@ public class TownyEntityListener implements Listener {
 			}
 		} catch (NotRegisteredException e) {
 			// Not in a town
-			if ((a instanceof Player) && (b instanceof Player) && (!world.isPVP()))
+			if ((a instanceof Player) && (b instanceof Player) && (!world.isPVP()) && (!world.isForcePVP()))
 				return true;
 		}
 
@@ -630,12 +674,8 @@ public class TownyEntityListener implements Listener {
 		// Universe is only PvP
 		if (world.isForcePVP() || world.isPVP())
 			return false;
-		//plugin.sendDebugMsg("is not forcing pvp");
-		// World PvP
-		if (!world.isPVP())
-			return true;
-		//plugin.sendDebugMsg("world is pvp");
-		return false;
+
+		return true;
 	}
 
 	public boolean preventFriendlyFire(Player a, Player b) {

@@ -1186,3 +1186,7 @@ v0.79.0.9:
 	- Allow Ally and and Enemy status to be overridden by 'towny.claimed.*' permissions.
 	- Fix '/town set name' to work again.
 	- Better optimize EntityExplodeEvent.
+v0.79.0.10:
+	- Fix ForcedPvP in the wilderness.
+	- Update for craftbukkit-1.1-R4 (1938).
+	- Added EntityCombustByEntityEvent handler to prevent fire arrows igniting players when PvP is disabled.
