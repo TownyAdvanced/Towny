@@ -1519,14 +1519,11 @@ public class TownCommand implements CommandExecutor  {
         
         // wrapper function for non friend setting of perms
         public static void setTownBlockOwnerPermissions(Player player, TownBlockOwner townBlockOwner, String[] split) {
-                
                 setTownBlockPermissions(player, townBlockOwner, townBlockOwner.getPermissions(), split, false);
-                
         }
 
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 
-		// TODO: switches
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
 			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
@@ -1534,6 +1531,7 @@ public class TownCommand implements CommandExecutor  {
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
 			if (townBlockOwner instanceof Town)
 				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
 			if (townBlockOwner instanceof Resident)
@@ -1565,11 +1563,21 @@ public class TownCommand implements CommandExecutor  {
 
 					plugin.updateCache();
 					return;
-				} else
+				} else {
+					// Set all perms to On or Off
+					// '/town set perm off'
+
 					try {
-						perm.setAll(plugin.parseOnOff(split[0]));
+						boolean b = plugin.parseOnOff(split[0]);
+						for (String element : new String[]{"residentBuild","residentDestroy","residentSwitch","residentItemUse",
+														   "outsiderBuild","outsiderDestroy","outsiderSwitch","outsiderItemUse",
+														   "allyBuild","allyDestroy","allySwitch","allyItemUse"})
+							perm.set(element, b);
 					} catch (Exception e) {
+						// invalid entry
 					}
+
+				}
 			} else if (split.length == 2)
 				try {
 					boolean b = plugin.parseOnOff(split[1]);
@@ -1604,6 +1612,8 @@ public class TownCommand implements CommandExecutor  {
 						perm.residentItemUse = b;
 						perm.outsiderItemUse = b;
 						perm.allyItemUse = b;
+					}
+					/*
 					} else if (split[0].equalsIgnoreCase("pvp")) {
 						perm.pvp = b;
 					} else if (split[0].equalsIgnoreCase("fire")) {
@@ -1613,6 +1623,7 @@ public class TownCommand implements CommandExecutor  {
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						perm.mobs = b;
 					}
+					*/
 
 				} catch (Exception e) {
 				}

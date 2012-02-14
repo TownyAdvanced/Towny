@@ -1190,3 +1190,4 @@ v0.79.0.10:
 	- Fix ForcedPvP in the wilderness.
 	- Update for craftbukkit-1.1-R4 (1938).
 	- Added EntityCombustByEntityEvent handler to prevent fire arrows igniting players when PvP is disabled.
+	- Disallow setting of pvp/fire etc with '/town set perm'. Also from plot and resident commands (only allowed via toggles).
