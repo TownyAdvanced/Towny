@@ -125,7 +125,7 @@ public class TownyBlockListener implements Listener {
 			
 			// Allow destroy if we have an override
 			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY)))
-				|| ((status == TownBlockStatus.OUTSIDER) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY))))
+				|| (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY))))
 				return;
 			
 			if (status == TownBlockStatus.WARZONE) {
@@ -199,7 +199,7 @@ public class TownyBlockListener implements Listener {
 			
 			// Allow build if we have a town override
 			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD)))
-				|| ((status == TownBlockStatus.OUTSIDER) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD))))
+				|| (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD))))
 				return;
 
 			if (((status == TownBlockStatus.ENEMY) && TownyWarConfig.isAllowingAttacks())

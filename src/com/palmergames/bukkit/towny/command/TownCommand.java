@@ -607,7 +607,7 @@ public class TownCommand implements CommandExecutor  {
                                 	}
                                 		
                                     //TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_rename_disabled"));
-                                    if (NameValidation.isBlacklistName(split[1]))
+                                    if (!NameValidation.isBlacklistName(split[1]))
                                         townRename(player, town, split[1]);
                                     else
                                         TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));

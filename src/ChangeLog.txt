@@ -1182,3 +1182,7 @@ v0.79.0.7:
 	- Fix Flag war upon a win claiming the plot for the victors.
 v0.79.0.8:
 	- Added 'My Worlds' the the plugin depends list of multiworld plugins.
+v0.79.0.9:
+	- Allow Ally and and Enemy status to be overridden by 'towny.claimed.*' permissions.
+	- Fix '/town set name' to work again.
+	- Better optimize EntityExplodeEvent.
