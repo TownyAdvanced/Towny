@@ -1192,5 +1192,5 @@ v0.79.0.10:
 	- Added EntityCombustByEntityEvent handler to prevent fire arrows igniting players when PvP is disabled.
 	- Disallow setting of pvp/fire etc with '/town set perm'. Also from plot and resident commands (only allowed via toggles).
 v0.79.0.11:
-	- Expand '/plot clear' use to plot owners.
+	- Expand '/plot clear' usage to plot owners.
 	- Fix '/plot toggle' to correctly observe the permisison nodes for toggling.
