@@ -393,28 +393,28 @@ public class PlotCommand implements CommandExecutor {
 		} else {
 
 			try {
-				// TODO: Let admin's call a subfunction of this.
+				
 				if (split[0].equalsIgnoreCase("pvp")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
+					toggleTest(player,townBlock,StringMgmt.join(split, " "));
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_pvp"), "Plot", townBlock.getPermissions().pvp ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
+					toggleTest(player,townBlock,StringMgmt.join(split, " "));
 					townBlock.getPermissions().explosion = !townBlock.getPermissions().explosion;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_expl"), "the Plot", townBlock.getPermissions().explosion ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
+					toggleTest(player,townBlock,StringMgmt.join(split, " "));
 					townBlock.getPermissions().fire = !townBlock.getPermissions().fire;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_fire"), "the Plot", townBlock.getPermissions().fire ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
+					toggleTest(player,townBlock,StringMgmt.join(split, " "));
 					townBlock.getPermissions().mobs = !townBlock.getPermissions().mobs;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_mobs"), "the Plot", townBlock.getPermissions().mobs ? "Enabled" : "Disabled"));
 
