@@ -279,15 +279,24 @@ public class PlotCommand implements CommandExecutor {
 					}
 				} else if (split[0].equalsIgnoreCase("clear")) {
 
-					if (!town.isMayor(resident)) {
-						player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
-						return;
-					}
-
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 
 					if (townBlock != null) {
-						if (townBlock.isOwner(town) && (!townBlock.hasResident())) {
+						
+						/**
+						 * Only allow mayors or plot owners to use this command.
+						 */
+						if (!town.isMayor(resident)) {
+							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
+							return;
+						} else if (!townBlock.isOwner(resident)) {
+							player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
+							return;
+						}
+
+						if ((townBlock.isOwner(town) && (!townBlock.hasResident()))
+								|| (townBlock.isOwner(resident))){
+							
 							for (String material : world.getPlotManagementMayorDelete())
 								if (Material.matchMaterial(material) != null) {
 									TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
