@@ -4,9 +4,8 @@ package com.palmergames.bukkit.towny.permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import de.bananaco.permissions.Permissions;
-import de.bananaco.permissions.info.InfoReader;
-import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.util.CalculableType;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -34,16 +33,9 @@ public class bPermsSource extends TownyPermissionSource {
     	String group = "", user = ""; 
         Player player = plugin.getServer().getPlayer(resident.getName());
         
-        //PermissionSet bPermPM = Permissions.getWorldPermissionsManager().getPermissionSet(player.getWorld());
-        InfoReader bPermIR = Permissions.getInfoReader();
-        
-        if (node == "prefix") {
-        	group = bPermIR.getGroupPrefix(getPlayerGroup(player), player.getWorld().getName());
-        	user = bPermIR.getPrefix(player);
-        } else if (node == "suffix") {
-        	group = bPermIR.getGroupSuffix(getPlayerGroup(player), player.getWorld().getName());
-        	user = bPermIR.getSuffix(player);
-        }
+        group = ApiLayer.getValue(player.getWorld().getName(), CalculableType.GROUP, getPlayerGroup(player), node);
+        user = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
+
         if (group == null) group = "";
         if (user == null) user = "";
     	
@@ -65,9 +57,7 @@ public class bPermsSource extends TownyPermissionSource {
     public int getGroupPermissionIntNode(String playerName, String node) {
     	Player player = plugin.getServer().getPlayer(playerName);
 		
-		InfoReader bPermIR = Permissions.getInfoReader();
-		
-		String result = bPermIR.getValue(player, node);
+		String result = ApiLayer.getValue(player.getWorld().getName(), CalculableType.GROUP, getPlayerGroup(player), node);
 		
 		try {
 			return Integer.parseInt(result);
@@ -86,10 +76,8 @@ public class bPermsSource extends TownyPermissionSource {
     @Override
     public String getPlayerPermissionStringNode(String playerName, String node) {
     	Player player = plugin.getServer().getPlayer(playerName);
-		
-		InfoReader bPermIR = Permissions.getInfoReader();
-		
-		String result =  bPermIR.getValue(player, node);
+
+		String result =  ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
 		   	
 		if (result == null)
 			return "";
@@ -138,11 +126,7 @@ public class bPermsSource extends TownyPermissionSource {
      */
     @Override
 	public String getPlayerGroup(Player player) {
-
-    	PermissionSet bPermPM = Permissions.getWorldPermissionsManager().getPermissionSet(player.getWorld());
-    	
-    	return bPermPM.getGroups(player).get(0);
-		
+    	return ApiLayer.getGroups(player.getWorld().getName(), CalculableType.USER, player.getName())[0];		
     }
 	
 	

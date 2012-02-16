@@ -1196,3 +1196,5 @@ v0.79.0.11:
 	- Fix '/plot toggle' to correctly observe the permisison nodes for toggling.
 v0.79.0.12:
 	- Remove all chat permissions from plugin.yml as they noew register correctly via TownyChat.
+v0.79.0.13:
+	- Update to support the new bpermissions api.
