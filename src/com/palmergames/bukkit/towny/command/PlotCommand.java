@@ -286,25 +286,22 @@ public class PlotCommand implements CommandExecutor {
 						/**
 						 * Only allow mayors or plot owners to use this command.
 						 */
-						if (!town.isMayor(resident)) {
-							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
-							return;
-						} else if (!townBlock.isOwner(resident)) {
+						if (!townBlock.isOwner(resident)) {
+							if (!town.isMayor(resident)) {
+								player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
+								return;
+							}
 							player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
 							return;
+							
 						}
 
-						if ((townBlock.isOwner(town) && (!townBlock.hasResident()))
-								|| (townBlock.isOwner(resident))){
-							
-							for (String material : world.getPlotManagementMayorDelete())
-								if (Material.matchMaterial(material) != null) {
-									TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
-									player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
-								} else
-									throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
-						} else
-							throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed"), townBlock.getResident().getName()));
+						for (String material : world.getPlotManagementMayorDelete())
+							if (Material.matchMaterial(material) != null) {
+								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
+								player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
+							} else
+								throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
 
 					} else {
 						// Shouldn't ever reach here as a null townBlock should be caught already in WorldCoord.
