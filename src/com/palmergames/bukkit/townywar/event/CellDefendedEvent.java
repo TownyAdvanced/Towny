@@ -8,7 +8,6 @@ import com.palmergames.bukkit.townywar.Cell;
 
 
 public class CellDefendedEvent extends Event {
-	private static final long serialVersionUID = 257333278929768100L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -27,7 +26,7 @@ public class CellDefendedEvent extends Event {
 	private Cell cell;
 
 	public CellDefendedEvent(Player player, Cell cell) {
-		super("CellDefended");
+		super();
 		this.player = player;
 		this.cell = cell;
 	}

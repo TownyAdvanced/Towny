@@ -11,7 +11,6 @@ import com.palmergames.bukkit.townywar.CellUnderAttack;
 
 
 public class CellAttackEvent extends Event implements Cancellable {
-	private static final long serialVersionUID = -6413227132896218785L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -32,7 +31,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 	private String reason = null;
 	
 	public CellAttackEvent(Towny plugin, Player player, Block flagBaseBlock) {
-		super("CellAttack");
+		super();
 		this.plugin = plugin;
 		this.player = player;
 		this.flagBaseBlock = flagBaseBlock;

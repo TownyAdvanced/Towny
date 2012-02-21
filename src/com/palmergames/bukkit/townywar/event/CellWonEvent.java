@@ -7,7 +7,6 @@ import com.palmergames.bukkit.townywar.CellUnderAttack;
 
 
 public class CellWonEvent extends Event {
-	private static final long serialVersionUID = 4691420283914184122L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -25,7 +24,7 @@ public class CellWonEvent extends Event {
 	private CellUnderAttack cellAttackData;
 	
 	public CellWonEvent(CellUnderAttack cellAttackData) {
-		super("CellWon");
+		super();
 		this.cellAttackData = cellAttackData;
 	}
 	

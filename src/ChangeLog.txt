@@ -1199,3 +1199,5 @@ v0.79.0.12:
 v0.79.0.13:
 	- Update to support the new bpermissions api.
 	- Fix 'plot clear' for plot owners.
+v0.79.0.14:
+	- Update for Bukkit R5 compatability.

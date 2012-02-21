@@ -7,7 +7,6 @@ import com.palmergames.bukkit.townywar.CellUnderAttack;
 
 
 public class CellAttackCanceledEvent extends Event {
-	private static final long serialVersionUID = 2036661065011346448L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -23,7 +22,7 @@ public class CellAttackCanceledEvent extends Event {
 	private CellUnderAttack cell;
 	
 	public CellAttackCanceledEvent(CellUnderAttack cell) {
-		super("CellAttackCanceled");
+		super();
 		this.cell = cell;
 		
 	}
