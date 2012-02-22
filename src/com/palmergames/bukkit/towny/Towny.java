@@ -205,7 +205,7 @@ public class Towny extends JavaPlugin {
 		System.out.println("==============================================================");
 
 		if (TownyUniverse.getDataSource() != null && error == false)
-			TownyUniverse.getDataSource().saveAll();
+			TownyUniverse.getDataSource().saveQueues();
 
 		if (error == false)
 			TownyWar.onDisable();
