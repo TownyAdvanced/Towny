@@ -46,7 +46,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.BlockLocation;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
@@ -652,10 +651,20 @@ public class TownyEntityListener implements Listener {
 					}
 				}
 
-				if (b instanceof Animals) {
+				if ((b instanceof Animals) && (a instanceof Player)) {
+					
+					//Get build permissions (updates if none exist)
+					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission((Player) a, a.getLocation(), TownyPermission.ActionType.DESTROY);
+					
+					// Don't allow players to kill animals in plots they don't have destroy permissions in.
+					if (!bDestroy)
+						return true;
+					
+					/*
 					Resident resident = TownyUniverse.getDataSource().getResident(ap.getName());
 					if ((!resident.hasTown()) || (resident.hasTown() && (resident.getTown() != townblock.getTown())))
 						return true;
+					*/
 				}
 			}
 		} catch (NotRegisteredException e) {

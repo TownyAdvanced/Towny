@@ -1201,3 +1201,5 @@ v0.79.0.13:
 	- Fix 'plot clear' for plot owners.
 v0.79.0.14:
 	- Update for Bukkit R5 compatability.
+v0.79.0.15:
+	- Don't allow players to kill animals in plots they don't have destroy permissions in.
