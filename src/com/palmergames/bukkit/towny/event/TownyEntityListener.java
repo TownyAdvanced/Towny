@@ -651,10 +651,10 @@ public class TownyEntityListener implements Listener {
 					}
 				}
 
-				if ((b instanceof Animals) && (a instanceof Player)) {
+				if ((b instanceof Animals) && (ap != null)) {
 					
-					//Get build permissions (updates if none exist)
-					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission((Player) a, a.getLocation(), TownyPermission.ActionType.DESTROY);
+					//Get destroy permissions (updates if none exist)
+					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(ap, ap.getLocation(), TownyPermission.ActionType.DESTROY);
 					
 					// Don't allow players to kill animals in plots they don't have destroy permissions in.
 					if (!bDestroy)
@@ -669,7 +669,7 @@ public class TownyEntityListener implements Listener {
 			}
 		} catch (NotRegisteredException e) {
 			// Not in a town
-			if ((a instanceof Player) && (b instanceof Player) && (!world.isPVP()) && (!world.isForcePVP()))
+			if ((ap != null) && (bp != null) && (!world.isPVP()) && (!world.isForcePVP()))
 				return true;
 		}
 
