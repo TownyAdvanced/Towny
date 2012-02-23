@@ -100,7 +100,7 @@ public class TownyUniverse extends TownyObject {
 
 	public void toggleTownyRepeatingTimer(boolean on) {
 		if (on && !isTownyRepeatingTaskRunning()) {
-			townyRepeatingTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new RepeatingTimerTask(this), 0, TimeTools.convertToTicks(TownySettings.getPlotManagementSpeed()));
+			townyRepeatingTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new RepeatingTimerTask(this), 0, TimeTools.convertToTicks(1L));
 			if (townyRepeatingTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule Towny Timer Task.");
 		} else if (!on && isTownyRepeatingTaskRunning()) {
