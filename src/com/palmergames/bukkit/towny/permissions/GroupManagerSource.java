@@ -144,7 +144,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			Player player = null;
 
 			try {
-				if (PermissionEventEnums.GMUser_Action.valueOf(event.getEventName()) != null) {
+				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
 
 					try {
 						resident = TownyUniverse.getDataSource().getResident(event.getUserName());
@@ -170,7 +170,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			Player player = null;
 
 			try {
-				if (PermissionEventEnums.GMGroup_Action.valueOf(event.getEventName()) != null) {
+				if (PermissionEventEnums.GMGroup_Action.valueOf(event.getAction().name()) != null) {
 
 					Group group = event.getGroup();
 					// Update all players who are in this group.
@@ -194,7 +194,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			Player player = null;
 
 			try {
-				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getEventName()) != null) {
+				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
 					for (Player toUpdate : TownyUniverse.getOnlinePlayers()) {
 						//setup default modes

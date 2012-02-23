@@ -1204,3 +1204,4 @@ v0.79.0.14:
 v0.79.0.15:
 	- Don't allow players to kill animals in plots they don't have destroy permissions in.
 	- Rework of Plot revert so adjusting it's timer will not affect plot claiming (snapshots).
+	- Fix hooking of GroupManager Events (use action instead of event name).
