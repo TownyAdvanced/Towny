@@ -20,12 +20,11 @@ public class RepeatingTimerTask extends TownyTimerTask {
 	
 	@Override
 	public void run() {
-		timerCounter++;
 		
 		// Perform a single block regen in each regen area, if any are left to do.
 		if (TownyRegenAPI.hasPlotChunks()) {
 			// only execute if the correct amount of time has passed.
-			if (Math.max(1L, TownySettings.getPlotManagementSpeed()) == timerCounter) {
+			if (Math.max(1L, TownySettings.getPlotManagementSpeed()) >= ++timerCounter) {
 				for (PlotBlockData plotChunk : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values())) {
 					if (!plotChunk.restoreNextBlock()) {
 						TownyRegenAPI.deletePlotChunk(plotChunk);	
