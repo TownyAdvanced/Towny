@@ -138,4 +138,12 @@ public abstract class TownyPermissionSource {
 		return hasPermission(player, PermissionNodes.TOWNY_ADMIN.getNode());
 	}
 	
+	public void registerPermissionNodes() {
+		
+		
+		
+		
+		
+	}
+	
 }
