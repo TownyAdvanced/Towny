@@ -1207,4 +1207,8 @@ v0.79.0.15:
 	- Fix hooking of GroupManager Events (use action instead of event name).
 v0.79.1.0:
 	- Dynamically register child permissions for block types. Should reduce CPU load and increase performance of Towny.
+	  This will also allow you ot grant a parent node and negate child elements.
+	  eg.
+	    - towny.wild.*
+	    - -towny.wild.block.2.destroy
 	- Update for Craftbukkit-1.1-R6.
