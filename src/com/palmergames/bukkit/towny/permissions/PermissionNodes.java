@@ -116,4 +116,7 @@ public enum PermissionNodes {
           public String getNode(String replace) {
                   return value.replace("*", replace);
           }
+          public String getNode(int replace) {
+              return value.replace("*", replace+"");
+      }
 	}

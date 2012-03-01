@@ -1206,4 +1206,5 @@ v0.79.0.15:
 	- Rework of Plot revert so adjusting it's timer will not affect plot claiming (snapshots).
 	- Fix hooking of GroupManager Events (use action instead of event name).
 v0.79.1.0:
+	- Dynamically register child permissions for block types. Should reduce CPU load and increase performance of Towny.
 	- Update for Craftbukkit-1.1-R6.

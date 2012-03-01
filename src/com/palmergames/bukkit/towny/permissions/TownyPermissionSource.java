@@ -1,7 +1,13 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import java.util.HashMap;
+
 import org.anjocaido.groupmanager.GroupManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -22,7 +28,6 @@ public abstract class TownyPermissionSource {
 	protected Towny plugin;
 	
 	protected GroupManager groupManager = null;
-	//protected de.bananaco.permissions.Permissions bPermissions = null;
 	protected com.nijikokun.bukkit.Permissions.Permissions permissions = null;
 	protected PermissionsEx pex = null;
 
@@ -39,36 +44,14 @@ public abstract class TownyPermissionSource {
 		
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((hasPermission(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase())))
-				|| (hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_ALL.getNode(blockId + "." + action.toString().toLowerCase()))))
+			if ((hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_ALL.getNode(blockId + "." + action.toString().toLowerCase()))))
 				return true;
 		
 		// Allow ops all access when no permissions
 		if ((!bpermissions) && (isTownyAdmin(player)))
 			return true;
 
-		// No perms so check world settings.
-		switch (action) {
-
-		case BUILD:
-			return world.getUnclaimedZoneBuild()
-				|| (bpermissions && hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_BUILD.getNode()))
-				|| (!bpermissions && world.isUnclaimedZoneIgnoreId(blockId));
-		case DESTROY:
-			return world.getUnclaimedZoneDestroy()
-				|| (bpermissions && hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode()))
-				|| (!bpermissions && world.isUnclaimedZoneIgnoreId(blockId));
-		case SWITCH:
-			return world.getUnclaimedZoneSwitch()
-				|| (bpermissions && hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode()))
-				|| (!bpermissions && world.isUnclaimedZoneIgnoreId(blockId));
-		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse()
-				|| (bpermissions && hasPermission(player, PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode()))
-				|| (!bpermissions && world.isUnclaimedZoneIgnoreId(blockId));
-		default:
-			return false;
-		}
+		return false;
 	}
 	
 	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
@@ -77,29 +60,15 @@ public abstract class TownyPermissionSource {
 		
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode(action.toString().toLowerCase())))
-				|| (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK.getNode(blockId + "." + action.toString().toLowerCase())))
-				|| (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(blockId + "." + action.toString().toLowerCase()))))
+			if ((hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK.getNode(blockId + "." + action.toString().toLowerCase())))
+				|| (hasAllTownOverride(player, blockId, action)))
 				return true;
 
 		// Allow ops all access when no permissions
 		if ((!bpermissions) && (isTownyAdmin(player)))
 			return true;
-				
-		// No perms so check global settings.
-		switch (action) {
 		
-		case BUILD:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_BUILD.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode())));
-		case DESTROY:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode())));
-		case SWITCH:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode())));
-		case ITEM_USE:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode())));
-		default:
-			return false;
-		}
+		return false;
 	}
 	
 	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
@@ -108,28 +77,14 @@ public abstract class TownyPermissionSource {
 		
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode(action.toString().toLowerCase())))
-				|| (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK.getNode(blockId + "." + action.toString().toLowerCase()))))
+			if ((hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK.getNode(blockId + "." + action.toString().toLowerCase()))))
 				return true;
 
 		// Allow ops all access when no permissions
 		if ((!bpermissions) && (isTownyAdmin(player)))
 			return true;
-				
-		// No perms so check global settings.
-		switch (action) {
-				
-		case BUILD:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_BUILD.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode())));
-		case DESTROY:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode())));
-		case SWITCH:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode())));
-		case ITEM_USE:
-			return (bpermissions && (hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode()) || hasPermission(player, PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode())));
-		default:
-			return false;
-		}
+		
+		return false;
 	}
 	
 	public boolean isTownyAdmin(Player player) {
@@ -140,10 +95,84 @@ public abstract class TownyPermissionSource {
 	
 	public void registerPermissionNodes() {
 		
-		
-		
-		
-		
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+
+			@Override
+			public void run() {
+				Permission perm = null;
+				
+				for (int blockId = 0; blockId < 4096; blockId++) {
+					/**
+					 * Register all towny.wild.block.[id].* nodes
+					 */
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_BUILD.getNode(blockId), "User can build a specific block in the wild.", PermissionDefault.FALSE, null);
+					Bukkit.getPluginManager().removePermission(perm);
+					perm.addParent(PermissionNodes.TOWNY_WILD_BUILD.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_BUILD.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_WILD_DESTROY.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode(blockId + ""), "User can switch a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_WILD_SWITCH.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_WILD_ITEM_USE.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode(), true);
+					
+					/**
+					 * Register all towny.claimed.alltown.block.[id].* nodes
+					 */
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode(blockId + ""), "User can build in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_BUILD.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode(), true);
+					
+					/**
+					 * Register all towny.claimed.owntown.block.[id].* nodes
+					 */
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode(blockId + ""), "User can build in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_BUILD.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode(), true);
+					
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					Bukkit.getPluginManager().removePermission(perm.getName());
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode(), true);
+					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode(), true);
+				}
+				
+			} },1);
 	}
 	
 }
