@@ -108,8 +108,8 @@ public class TownySettings {
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 		
-		List<Map<String, Object>> levels = config.getMapList("levels.town_level");
-		for (Map<String, Object> level : levels) {	
+		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
+		for (Map<?, ?> level : levels) {	
 			
 			newTownLevel((Integer) level.get("numResidents"),
 					(String) level.get("namePrefix"),
@@ -133,8 +133,8 @@ public class TownySettings {
 
     public static void loadNationLevelConfig() throws IOException {
     	
-        List<Map<String, Object>> levels = config.getMapList("levels.nation_level");
-        for (Map<String, Object> level : levels) {	
+        List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
+        for (Map<?, ?> level : levels) {	
 			
 			newNationLevel((Integer) level.get("numResidents"),
 					(String) level.get("namePrefix"),
