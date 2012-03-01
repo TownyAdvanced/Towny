@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.permissions;
 
-import java.util.HashMap;
-
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -110,17 +108,17 @@ public abstract class TownyPermissionSource {
 					perm.addParent(PermissionNodes.TOWNY_WILD_BUILD.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_BUILD.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy a specific block in the wild.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_WILD_DESTROY.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_DESTROY.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode(blockId + ""), "User can switch a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode(blockId + ""), "User can switch a specific block in the wild.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_WILD_SWITCH.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_SWITCH.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use a specific block in the wild.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use a specific block in the wild.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_WILD_ITEM_USE.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_WILD_BLOCK_ITEM_USE.getNode(), true);
@@ -128,22 +126,22 @@ public abstract class TownyPermissionSource {
 					/**
 					 * Register all towny.claimed.alltown.block.[id].* nodes
 					 */
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode(blockId + ""), "User can build in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode(blockId + ""), "User can build in all town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_BUILD.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_BUILD.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in all town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_DESTROY.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in all town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_SWITCH.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in all town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in all town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE.getNode(), true);
@@ -151,22 +149,22 @@ public abstract class TownyPermissionSource {
 					/**
 					 * Register all towny.claimed.owntown.block.[id].* nodes
 					 */
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode(blockId + ""), "User can build in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode(blockId + ""), "User can build in own town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_BUILD.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode(blockId + ""), "User can destroy in own town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_DESTROY.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode(blockId + ""), "User can switch in own town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_SWITCH.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH.getNode(), true);
 					
-					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in own town zones.", PermissionDefault.FALSE, new HashMap<String, Boolean>());
+					perm = new Permission(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode(blockId + ""), "User can item_use in own town zones.", PermissionDefault.FALSE, null);
 					Bukkit.getPluginManager().removePermission(perm.getName());
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_ITEM_USE.getNode(), true);
 					perm.addParent(PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE.getNode(), true);
