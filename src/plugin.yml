@@ -162,7 +162,6 @@ permissions:
             towny.wild.switch: true
             towny.wild.destroy: true
             towny.wild.item_use: true
-            towny.wild.block.*: true
             
     towny.wild.build:
         description: User can build in wild.
@@ -207,7 +206,6 @@ permissions:
             towny.claimed.switch: true
             towny.claimed.destroy: true
             towny.claimed.item_use: true
-            towny.claimed.alltown.block.*: true
             
     towny.claimed.build:
         description: User can build in all towns.
