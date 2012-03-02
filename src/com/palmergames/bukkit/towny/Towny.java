@@ -118,6 +118,9 @@ public class Towny extends JavaPlugin {
 	
 			if (TownySettings.isTownyUpdating(getVersion()))
 				update();
+			
+			// Register all child permissions
+			TownyUniverse.getPermissionSource().registerPermissionNodes();
 		}
 
 		registerEvents();
@@ -285,9 +288,6 @@ public class Towny extends JavaPlugin {
 		townyUniverse.toggleMobRemoval(false);
 		townyUniverse.toggleHealthRegen(false);
 		townyUniverse.toggleTeleportWarmup(false);
-		
-		// Register all child permissions
-		TownyUniverse.getPermissionSource().registerPermissionNodes();
 
 		//Start timers
 		townyUniverse.toggleTownyRepeatingTimer(true);
