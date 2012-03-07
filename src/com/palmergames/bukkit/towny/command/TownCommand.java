@@ -771,7 +771,7 @@ public class TownCommand implements CommandExecutor  {
     		
     		try {
     			double cost = n * TownySettings.getPurchasedBonusBlocksCost();
-                if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Buy Bonus (%d)", n)))
+                if (TownySettings.isUsingEconomy() && !town.pay(cost, Bukkit.getWorld(town.getWorld().getName()), String.format("Town Buy Bonus (%d)", n)))
                 	throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", cost + TownyEconomyObject.getEconomyCurrency()));
     	    } catch (EconomyException e1) {
                 throw new TownyException("Economy Error");
@@ -832,7 +832,7 @@ public class TownCommand implements CommandExecutor  {
                                 if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
                                         throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
-                        if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
+                        if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), player.getWorld(), "New Town Cost"))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "You" : resident.getName())));
 
                         newTown(universe, world, name, resident, key, player.getLocation());                    
@@ -871,7 +871,7 @@ public class TownCommand implements CommandExecutor  {
                 TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-"+name);
                 if(TownySettings.isUsingEconomy())
                 {
-                        town.setBalance(0);
+                        town.setBalance(0, Bukkit.getWorld(world.getName()));
                 }
                 
                 TownyUniverse.getDataSource().saveResident(resident);
@@ -1037,7 +1037,7 @@ public class TownCommand implements CommandExecutor  {
                 double travelCost = townSpawnPermission.getCost();
                 
                 // Check if need/can pay
-                if (travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost))
+                if (travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance(player.getWorld()) < travelCost))
                 	throw new TownyException(notAffordMSG);
                 
                 // Used later to make sure the chunk we teleport to is loaded.
@@ -1066,7 +1066,7 @@ public class TownCommand implements CommandExecutor  {
                 }
                 
                 // Show message if we are using iConomy and are charging for spawn travel.
-                if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Town Spawn (%s)", townSpawnPermission))) {
+                if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, player.getWorld(), String.format("Town Spawn (%s)", townSpawnPermission))) {
                 	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), 
                     		TownyEconomyObject.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
                 }
@@ -1718,7 +1718,7 @@ public class TownCommand implements CommandExecutor  {
 
 				try {
 					double cost = blockCost * selection.size();
-					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
+					if (TownySettings.isUsingEconomy() && !town.pay(cost, player.getWorld(), String.format("Town Claim (%d)", selection.size())))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
@@ -1846,7 +1846,7 @@ public class TownCommand implements CommandExecutor  {
                 
                 try {
                         double cost = blockCost * selection.size();
-                        if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost))
+                        if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost, Bukkit.getWorld(town.getWorld().getName())))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
                 } catch (EconomyException e1) {
                         throw new TownyException("Economy Error");
@@ -1934,14 +1934,14 @@ public class TownCommand implements CommandExecutor  {
                         
                         double bankcap = TownySettings.getTownBankCap();
                         if (bankcap > 0) {
-                                if(amount + town.getHoldingBalance() > bankcap)
+                                if(amount + town.getHoldingBalance(player.getWorld()) > bankcap)
                                         throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
                         }
                         
                         if (amount < 0)
                                 throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
                         
-                        if (!resident.payTo(amount, town, "Town Deposit"))
+                        if (!resident.payTo(amount, town, player.getWorld(), "Town Deposit"))
                                 throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
                         
                         TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "town"));

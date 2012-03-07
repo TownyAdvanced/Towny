@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
@@ -386,7 +388,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
-		TownyWorld world = town.getWorld();
+		TownyWorld townyWorld = town.getWorld();
+		World world = Bukkit.getWorld(townyWorld.getName());
 
 		try {
 			if (town.hasNation()) {
@@ -405,7 +408,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		if (plugin.isEcoActive())
 			try {
-				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.payTo(town.getHoldingBalance(world), new WarSpoils(), world, "Remove Town");
 			} catch (EconomyException e) {
 			}
 
@@ -422,7 +425,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		deleteTown(town);
 		saveTownList();
-		saveWorld(world);
+		saveWorld(townyWorld);
 
 		universe.setChangedNotify(REMOVE_TOWN);
 	}
@@ -430,6 +433,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeNation(Nation nation) {
 
+		World world = Bukkit.getWorld(nation.getCapital().getWorld().getName());
+		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<Nation>();
 		for (Nation toCheck : new ArrayList<Nation>(universe.getNationsMap().values()))
@@ -456,7 +461,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		nation.clear();
 		if (plugin.isEcoActive())
 			try {
-				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
+				nation.payTo(nation.getHoldingBalance(world), new WarSpoils(), world, "Remove Nation");
 			} catch (EconomyException e) {
 			}
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
@@ -514,6 +519,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
+		World world = Bukkit.getWorld(town.getWorld().getName());
+		
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterName(newName);
@@ -548,8 +555,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Town oldTown = new Town(oldName);
 
 		try {
-			town.pay(town.getHoldingBalance(), "Rename Town - Empty account of new town name.");
-			oldTown.payTo(oldTown.getHoldingBalance(), town, "Rename Town - Transfer to new account");
+			town.pay(town.getHoldingBalance(world), world, "Rename Town - Empty account of new town name.");
+			oldTown.payTo(oldTown.getHoldingBalance(world), town, world, "Rename Town - Transfer to new account");
 		} catch (EconomyException e) {
 		}
 
@@ -567,7 +574,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
+		World world = Bukkit.getWorld(nation.getCapital().getWorld().getName());
 		String filteredName;
+		
 		try {
 			filteredName = NameValidation.checkAndFilterName(newName);
 		} catch (InvalidNameException e) {
@@ -592,8 +601,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (plugin.isEcoActive())
 			try {
-				nation.pay(nation.getHoldingBalance(), "Rename Nation - Empty account of new nation name.");
-				oldNation.payTo(oldNation.getHoldingBalance(), nation, "Rename Nation - Transfer to new account");
+				nation.pay(nation.getHoldingBalance(world), world, "Rename Nation - Empty account of new nation name.");
+				oldNation.payTo(oldNation.getHoldingBalance(world), nation, world, "Rename Nation - Transfer to new account");
 			} catch (EconomyException e) {
 			}
 

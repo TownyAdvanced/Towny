@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.EmptyNationException;
 import com.palmergames.bukkit.towny.EmptyTownException;
@@ -112,7 +115,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Town town : new ArrayList<Town>(nation.getTowns())) {
 				if (town.isCapital() || !town.hasUpkeep())
 					continue;
-				if (!town.payTo(nation.getTaxes(), nation, "Nation Tax")) {
+				if (!town.payTo(nation.getTaxes(), nation, Bukkit.getWorld(town.getWorld().getName()), "Nation Tax")) {
 					try {
 						TownyMessaging.sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
 						nation.removeTown(town);
@@ -146,6 +149,9 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	protected void collectTownTaxes(Town town) throws EconomyException {
+		
+		World world = Bukkit.getWorld(town.getWorld().getName());
+		
 		//Resident Tax
 		if (town.getTaxes() > 0)
 			for (Resident resident : new ArrayList<Resident>(town.getResidents()))
@@ -157,8 +163,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					continue;
 				} else if (town.isTaxPercentage()) {
-					double cost = resident.getHoldingBalance() * town.getTaxes() / 100;
-					resident.payTo(cost, town, "Town Tax (Percentage)");
+					double cost = resident.getHoldingBalance(world) * town.getTaxes() / 100;
+					resident.payTo(cost, town, world, "Town Tax (Percentage)");
 					/* Don't send individual message anymore to ease up on the lag.
 					try {
 						TownyMessaging.sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + cost);
@@ -166,7 +172,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Player is not online
 					}
 					*/
-				} else if (!resident.payTo(town.getTaxes(), town, "Town Tax")) {
+				} else if (!resident.payTo(town.getTaxes(), town, world, "Town Tax")) {
 					TownyMessaging.sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
 					try {
 						//town.removeResident(resident);
@@ -197,7 +203,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.isMayor(resident) || town.hasAssistant(resident)) {
 						continue;
 					}
-					if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+					if (!resident.payTo(townBlock.getType().getTax(town), town, world, String.format("Plot Tax (%s)", townBlock.getType()))) {
 						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
 						townBlock.setResident(null);
 						TownyUniverse.getDataSource().saveResident(resident);
@@ -239,7 +245,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				if (upkeep > 0) {
 					// Town is paying upkeep
-					if (!town.pay(upkeep, "Town Upkeep")) {
+					if (!town.pay(upkeep, Bukkit.getWorld(town.getWorld().getName()), "Town Upkeep")) {
 						TownyUniverse.getDataSource().removeTown(town);
 						TownyMessaging.sendGlobalMessage(town.getName() + TownySettings.getLangString("msg_bankrupt_town"));
 					}
@@ -251,14 +257,14 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						for (TownBlock townBlock :plots) {
 							if (townBlock.hasResident())
-								townBlock.getResident().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+								townBlock.getResident().pay((upkeep / plots.size()), Bukkit.getWorld(town.getWorld().getName()), "Negative Town Upkeep - Plot income");
 							else
-								town.pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+								town.pay((upkeep / plots.size()), Bukkit.getWorld(town.getWorld().getName()), "Negative Town Upkeep - Plot income");
 						}
 
 					} else {
 						//Not paying plot owners so just pay the town
-						town.pay(upkeep, "Negative Town Upkeep");
+						town.pay(upkeep, Bukkit.getWorld(town.getWorld().getName()), "Negative Town Upkeep");
 					}
 
 				}
@@ -274,12 +280,15 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	public void collectNationCosts() throws EconomyException {
 		for (Nation nation : new ArrayList<Nation>(TownyUniverse.getDataSource().getNations())) {
-			if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+			
+			World world = Bukkit.getWorld(nation.getCapital().getWorld().getName());
+			
+			if (!nation.pay(TownySettings.getNationUpkeepCost(nation), world, "Nation Upkeep")) {
 				TownyUniverse.getDataSource().removeNation(nation);
 				TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
 			}
 			if (nation.isNeutral())
-				if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Neutrality Upkeep")) {
+				if (!nation.pay(TownySettings.getNationNeutralityCost(), world, "Nation Neutrality Upkeep")) {
 					try {
 						nation.setNeutral(false);
 					} catch (TownyException e) {

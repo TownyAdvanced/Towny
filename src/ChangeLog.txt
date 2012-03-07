@@ -1212,3 +1212,5 @@ v0.79.1.0:
 	    - towny.wild.*
 	    - -towny.wild.block.2.destroy
 	- Update for Craftbukkit-1.1-R6.
+v0.79.1.1:
+	- Updated to support Register 1.7 and Craftconomy.

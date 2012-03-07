@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.naming.InvalidNameException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -230,14 +231,14 @@ public class NationCommand implements CommandExecutor {
 
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
-				if (amount + nation.getHoldingBalance() > bankcap)
+				if (amount + nation.getHoldingBalance(player.getWorld()) > bankcap)
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 			}
 
 			if (amount < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
-			if (!resident.payTo(amount, nation, "Nation Deposit"))
+			if (!resident.payTo(amount, nation, player.getWorld(), "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
@@ -292,7 +293,7 @@ public class NationCommand implements CommandExecutor {
             if ((filteredName == null) || TownyUniverse.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
+			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), player.getWorld(), "New Nation Cost"))
 				throw new TownyException(TownySettings.getLangString("msg_no_funds_new_nation"));
 
 			newNation(universe, name, town);
@@ -320,7 +321,7 @@ public class NationCommand implements CommandExecutor {
 		nation.addTown(town);
 		nation.setCapital(town);
 		if (TownySettings.isUsingEconomy()) {
-			nation.setBalance(0);
+			nation.setBalance(0, Bukkit.getWorld(town.getWorld().getName()));
 		}
 		TownyUniverse.getDataSource().saveTown(town);
 		TownyUniverse.getDataSource().saveNation(nation);
@@ -1087,7 +1088,7 @@ public class NationCommand implements CommandExecutor {
 					boolean choice = !nation.isNeutral();
 					Double cost = TownySettings.getNationNeutralityCost();
 
-					if (choice && TownySettings.isUsingEconomy() && !nation.pay(cost, "Nation Neutrality Cost"))
+					if (choice && TownySettings.isUsingEconomy() && !nation.pay(cost, player.getWorld(), "Nation Neutrality Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_neutral"));
 
 					nation.setNeutral(choice);

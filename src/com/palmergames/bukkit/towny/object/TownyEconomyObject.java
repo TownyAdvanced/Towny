@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
 
+import org.bukkit.World;
+
 import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.nijikokun.register.payment.Method.MethodAccount;
@@ -29,22 +31,22 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return if successfully payed amount to 'server'.
 	 * @throws EconomyException
 	 */
-	public boolean pay(double n, String reason) throws EconomyException {
-		boolean payed = _pay(n);
+	public boolean pay(double n, World world, String reason) throws EconomyException {
+		boolean payed = _pay(n, world);
 		if (payed)
 			TownyLogger.logMoneyTransaction(this, n, null, reason);
 		return payed;
 	}
 
-	public boolean pay(double n) throws EconomyException {
-		return pay(n, null);
+	public boolean pay(double n, World world) throws EconomyException {
+		return pay(n, world, null);
 	}
 
-	private boolean _pay(double n) throws EconomyException {
-		if (canPayFromHoldings(n)) {
+	private boolean _pay(double n, World world) throws EconomyException {
+		if (canPayFromHoldings(n, world)) {
 			TownyMessaging.sendDebugMsg("Can Pay: " + n);
 			if (plugin.isRegister())
-				((MethodAccount) getEconomyAccount()).subtract(n);
+				((MethodAccount) getEconomyAccount()).subtract(n,world);
 			else
 				((Account) getEconomyAccount()).getHoldings().subtract(n);
 			return true;
@@ -58,18 +60,18 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param n
 	 * @throws EconomyException
 	 */
-	public void collect(double n, String reason) throws EconomyException {
-		_collect(n);
+	public void collect(double n, World world, String reason) throws EconomyException {
+		_collect(n, world);
 		TownyLogger.logMoneyTransaction(null, n, this, reason);
 	}
 
-	public void collect(double n) throws EconomyException {
-		collect(n, null);
+	public void collect(double n, World world) throws EconomyException {
+		collect(n, world, null);
 	}
 
-	private void _collect(double n) throws EconomyException {
+	private void _collect(double n, World world) throws EconomyException {
 		if (plugin.isRegister())
-			((MethodAccount) getEconomyAccount()).add(n);
+			((MethodAccount) getEconomyAccount()).add(n, world);
 		else
 			((Account) getEconomyAccount()).getHoldings().add(n);
 	}
@@ -82,20 +84,20 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return if successfully payed amount to collector.
 	 * @throws EconomyException
 	 */
-	public boolean payTo(double n, TownyEconomyObject collector, String reason) throws EconomyException {
-		boolean payed = _payTo(n, collector);
+	public boolean payTo(double n, TownyEconomyObject collector, World world, String reason) throws EconomyException {
+		boolean payed = _payTo(n, collector, world);
 		if (payed)
 			TownyLogger.logMoneyTransaction(this, n, collector, reason);
 		return payed;
 	}
 
-	public boolean payTo(double n, TownyEconomyObject collector) throws EconomyException {
-		return payTo(n, collector, null);
+	public boolean payTo(double n, TownyEconomyObject collector, World world) throws EconomyException {
+		return payTo(n, collector, world, null);
 	}
 
-	private boolean _payTo(double n, TownyEconomyObject collector) throws EconomyException {
-		if (_pay(n)) {
-			collector._collect(n);
+	private boolean _payTo(double n, TownyEconomyObject collector, World world) throws EconomyException {
+		if (_pay(n, world)) {
+			collector._collect(n, world);
 			return true;
 		} else {
 			return false;
@@ -112,12 +114,12 @@ public class TownyEconomyObject extends TownyObject {
 			return getName();
 	}
 
-	public void setBalance(double value) {
+	public void setBalance(double value, World world) {
 		try {
 			if (plugin.isRegister()) {
 				MethodAccount account = (MethodAccount) getEconomyAccount();
 				if (account != null) {
-					account.set(value);
+					account.set(value, world);
 				} else {
 					TownyMessaging.sendDebugMsg("Account is still null!");
 				}
@@ -139,15 +141,15 @@ public class TownyEconomyObject extends TownyObject {
 		}
 	}
 
-	public double getHoldingBalance() throws EconomyException {
+	public double getHoldingBalance(World world) throws EconomyException {
 		try {
 			TownyMessaging.sendDebugMsg("Economy Balance Name: " + getEconomyName());
 
 			if (plugin.isRegister()) {
 				MethodAccount account = (MethodAccount) getEconomyAccount();
 				if (account != null) {
-					TownyMessaging.sendDebugMsg("Economy Balance: " + account.balance());
-					return account.balance();
+					TownyMessaging.sendDebugMsg("Economy Balance: " + account.balance(world));
+					return account.balance(world);
 				} else {
 					TownyMessaging.sendDebugMsg("Account is still null!");
 					return 0;
@@ -203,8 +205,8 @@ public class TownyEconomyObject extends TownyObject {
 
 	}
 
-	public boolean canPayFromHoldings(double n) throws EconomyException {
-		if (getHoldingBalance() - n >= 0)
+	public boolean canPayFromHoldings(double n, World world) throws EconomyException {
+		if (getHoldingBalance(world) - n >= 0)
 			return true;
 		else
 			return false;
@@ -232,9 +234,9 @@ public class TownyEconomyObject extends TownyObject {
 	}
 
 	/* Used To Get Balance of Players holdings in String format for printing*/
-	public String getHoldingFormattedBalance() {
+	public String getHoldingFormattedBalance(World world) {
 		try {
-			double balance = getHoldingBalance();
+			double balance = getHoldingBalance(world);
 			try {
 				if (plugin.isRegister()) {
 					return Methods.getMethod().format(balance);

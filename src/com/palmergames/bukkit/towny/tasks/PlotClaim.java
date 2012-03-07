@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.AlreadyRegisteredException;
@@ -111,12 +113,15 @@ public class PlotClaim extends Thread {
                         if (resident.getTown() != town && !townBlock.getType().equals(TownBlockType.EMBASSY))
                                 throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 
+                        World world = Bukkit.getWorld(townBlock.getWorld().getName());
+                        
                         try {
                                 Resident owner = townBlock.getResident();
+                                
                                 if (townBlock.getPlotPrice() != -1) {
                                 	// Plot is for sale
                                 	
-                                        if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), owner, "Plot - Buy From Seller"))
+                                        if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), owner, world, "Plot - Buy From Seller"))
                                                 throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
                                         
                                         int maxPlots = TownySettings.getMaxResidentPlots(resident);
@@ -138,7 +143,7 @@ public class PlotClaim extends Thread {
                                 } else if (town.isMayor(resident) || town.hasAssistant(resident)) {
                                 	//Plot isn't for sale but re-possessing for town.
                                 	
-                                        if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, "Plot - Buy Back"))
+                                        if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, world, "Plot - Buy Back"))
                                                 throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
                                         
                                         TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
@@ -163,7 +168,7 @@ public class PlotClaim extends Thread {
                                 if (townBlock.getPlotPrice() == -1)
                                         throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
                                 
-                                if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), town, "Plot - Buy From Town"))
+                                if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), town, world, "Plot - Buy From Town"))
                                         throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
                                 
                                 townBlock.setPlotPrice(-1);
