@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -186,13 +185,13 @@ public class TownyEntityMonitorListener implements Listener {
 
 				double price = TownySettings.getWartimeDeathPrice();
 				double townPrice = 0;
-				if (!defenderResident.canPayFromHoldings(price, defenderPlayer.getWorld())) {
-					townPrice = price - defenderResident.getHoldingBalance(defenderPlayer.getWorld());
-					price = defenderResident.getHoldingBalance(defenderPlayer.getWorld());
+				if (!defenderResident.canPayFromHoldings(price)) {
+					townPrice = price - defenderResident.getHoldingBalance();
+					price = defenderResident.getHoldingBalance();
 				}
 
 				if (price > 0) {
-					defenderResident.payTo(price, attackerResident, defenderPlayer.getWorld(), "Death Payment (War)");
+					defenderResident.payTo(price, attackerResident, "Death Payment (War)");
 					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyObject.getFormattedBalance(price) + ".");
 					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyObject.getFormattedBalance(price) + ".");
 				}
@@ -200,9 +199,9 @@ public class TownyEntityMonitorListener implements Listener {
 				// Resident doesn't have enough funds.
 				if (townPrice > 0) {
 					Town town = defenderResident.getTown();
-					if (!town.canPayFromHoldings(townPrice, Bukkit.getWorld(town.getWorld().getName()))) {
+					if (!town.canPayFromHoldings(townPrice)) {
 						// Town doesn't have enough funds.
-						townPrice = town.getHoldingBalance(Bukkit.getWorld(town.getWorld().getName()));
+						townPrice = town.getHoldingBalance();
 						try {
 							plugin.getTownyUniverse().getWarEvent().remove(attackerResident.getTown(), town);
 						} catch (NotRegisteredException e) {
@@ -210,7 +209,7 @@ public class TownyEntityMonitorListener implements Listener {
 						}
 					} else
 						TownyMessaging.sendTownMessage(town, defenderResident.getName() + "'s wallet couldn't satisfy " + attackerResident.getName() + ". " + townPrice + " taken from town bank.");
-					town.payTo(townPrice, attackerResident, Bukkit.getWorld(town.getWorld().getName()), String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
+					town.payTo(townPrice, attackerResident, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
 				}
 			} catch (NotRegisteredException e) {
 			} catch (EconomyException e) {
@@ -220,10 +219,10 @@ public class TownyEntityMonitorListener implements Listener {
 		else if (TownySettings.getDeathPrice() > 0)
 			try {
 				double price = TownySettings.getDeathPrice();
-				if (!defenderResident.canPayFromHoldings(price, defenderPlayer.getWorld()))
-					price = defenderResident.getHoldingBalance(defenderPlayer.getWorld());
+				if (!defenderResident.canPayFromHoldings(price))
+					price = defenderResident.getHoldingBalance();
 
-				defenderResident.payTo(price, new WarSpoils(), defenderPlayer.getWorld(), "Death Payment");
+				defenderResident.payTo(price, new WarSpoils(), "Death Payment");
 				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyObject.getFormattedBalance(price) + ".");
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");

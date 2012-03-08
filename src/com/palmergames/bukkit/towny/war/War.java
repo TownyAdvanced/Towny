@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -130,7 +129,7 @@ public class War {
                 
                 // Seed spoils of war
                 try {
-                        warSpoils.pay(TownySettings.getBaseSpoilsOfWar(), Bukkit.getWorlds().get(0), "Start of War - Base Spoils");
+                        warSpoils.pay(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");
                         TownyMessaging.sendMsg("[War] Seeding spoils of war with " + TownySettings.getBaseSpoilsOfWar());
                 } catch (EconomyException e) {
                 	TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
@@ -168,12 +167,12 @@ public class War {
                 double halfWinnings;
                 try {
                         // Transactions might leave 1 coin. (OH noez!)
-                        halfWinnings = getWarSpoils().getHoldingBalance(Bukkit.getWorlds().get(0)) / 2.0;
+                        halfWinnings = getWarSpoils().getHoldingBalance() / 2.0;
                                 
                         try {
                                 double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
                                 for (Nation winningNation : warringNations) {
-                                        getWarSpoils().payTo(nationWinnings, winningNation, Bukkit.getWorlds().get(0), "War - Nation Winnings");
+                                        getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
                                         TownyMessaging.sendGlobalMessage(winningNation.getName() + " won " + nationWinnings + " " + TownyEconomyObject.getEconomyCurrency() + ".");
                                 }
                         } catch (ArithmeticException e) {
@@ -182,7 +181,7 @@ public class War {
                         
                         try {
                                 KeyValue<Town,Integer> winningTownScore = getWinningTownScore();
-                                getWarSpoils().payTo(halfWinnings, winningTownScore.key, Bukkit.getWorlds().get(0), "War - Nation Winnings");
+                                getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Nation Winnings");
                                 TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + halfWinnings + " " + TownyEconomyObject.getEconomyCurrency() + " with the score " + winningTownScore.value + ".");
                         } catch (TownyException e) {
                         }
@@ -239,7 +238,7 @@ public class War {
                 townBlock.getTown().addBonusBlocks(-1);
                 attacker.addBonusBlocks(1);
                 try {
-                        if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, Bukkit.getWorlds().get(0), "War - TownBlock Loss")) {
+                        if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
                                 remove(townBlock.getTown());
                                 TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
                         } else
@@ -391,7 +390,7 @@ public class War {
                 output.add(Colors.Green + "  Towns: " + Colors.LightGreen + warringTowns.size() +" / " + townScores.size());
                 output.add(Colors.Green + "  WarZone: " + Colors.LightGreen + warZone.size() + " Town blocks");
                 try{
-        output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + warSpoils.getHoldingBalance(Bukkit.getWorlds().get(0)) + " " + TownyEconomyObject.getEconomyCurrency());
+        output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + warSpoils.getHoldingBalance() + " " + TownyEconomyObject.getEconomyCurrency());
         return output;
                 }
                 catch(EconomyException e)

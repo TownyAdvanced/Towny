@@ -139,7 +139,7 @@ public class PlotCommand implements CommandExecutor {
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
-						if (TownySettings.isUsingEconomy() && (!resident.canPayFromHoldings(cost, player.getWorld())))
+						if (TownySettings.isUsingEconomy() && (!resident.canPayFromHoldings(cost)))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyObject.getFormattedBalance(cost)));
 
 						// Start the claim task

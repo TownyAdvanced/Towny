@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
@@ -64,7 +63,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
     			teleportQueue.remove(resident);
     			if ((resident.getTeleportCost() != 0) && (TownySettings.isUsingEconomy())) {
     				try {
-						resident.collect(resident.getTeleportCost(), Bukkit.getPlayer(resident.getName()).getWorld(), TownySettings.getLangString("msg_cost_spawn_refund"));
+						resident.collect(resident.getTeleportCost(), TownySettings.getLangString("msg_cost_spawn_refund"));
 						resident.setTeleportCost(0);
 						TownyMessaging.sendResidentMessage(resident, TownySettings.getLangString("msg_cost_spawn_refund"));
 					} catch (EconomyException e) {

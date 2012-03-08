@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -367,7 +366,7 @@ public class TownyCommand implements CommandExecutor {
                 KeyValueTable<TownyEconomyObject,Double> kvTable = new KeyValueTable<TownyEconomyObject,Double>();
                 for (TownyEconomyObject obj : list)
                 {
-                        kvTable.put(obj, obj.getHoldingBalance(Bukkit.getWorlds().get(0)));
+                        kvTable.put(obj, obj.getHoldingBalance());
                 }
                 kvTable.sortByValue();
                 kvTable.revese();

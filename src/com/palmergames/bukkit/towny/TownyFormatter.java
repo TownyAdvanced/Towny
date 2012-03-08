@@ -4,10 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -89,14 +85,6 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(Resident resident) {
 		List<String> out = new ArrayList<String>();
-		
-		World world;
-		Player player = Bukkit.getPlayer(resident.getName());
-		if (player != null) {
-			world = player.getWorld();
-		} else {
-			world = Bukkit.getServer().getWorlds().get(0);
-		}
 
 		// ___[ King Harlus ]___
 		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((MinecraftTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
@@ -116,7 +104,7 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy())
 			try {
 				TownyEconomyObject.checkEconomy();
-				out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance(world));
+				out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
 			} catch (EconomyException e1) {
 			}
 
@@ -184,7 +172,7 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				TownyEconomyObject.checkEconomy();
-				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance(Bukkit.getWorld(world.getName()));
+				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
 				if (town.hasUpkeep())
 					bankString += Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getTownUpkeepCost(town);
 				bankString += Colors.Gray + " | " + Colors.Green + "Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
@@ -235,7 +223,7 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy())
 			try {
 				TownyEconomyObject.checkEconomy();
-				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance(Bukkit.getWorld(nation.getCapital().getWorld().getName()));
+				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
 				
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
 					line += (Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
@@ -315,14 +303,6 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 		Town town = null;
 		
-		World world;
-		Player player = Bukkit.getPlayer(resident.getName());
-		if (player != null) {
-			world = player.getWorld();
-		} else {
-			world = Bukkit.getServer().getWorlds().get(0);
-		}
-		
 		double plotTax = 0.0;
 		
 		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((MinecraftTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
@@ -336,7 +316,7 @@ public class TownyFormatter {
 					out.add(Colors.Green + "Staff are exempt from paying town taxes.");
 				} else {
 					if(town.isTaxPercentage()) {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance(world) * town.getTaxes()/100));
+						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes()/100));
 					} else {
 						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + town.getTaxes());
 						
