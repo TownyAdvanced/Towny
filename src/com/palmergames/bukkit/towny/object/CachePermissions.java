@@ -106,15 +106,19 @@ public class CachePermissions extends TownyUniverse {
 		try {
 			townBlock = worldCoord.getTownBlock();
 			town = townBlock.getTown();
+			
+			if (townBlock.isLocked()) {
+				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
+				if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+					return TownBlockStatus.LOCKED;
+				}
+				townBlock.setLocked(false);
+			}
+			
 		} catch (NotRegisteredException e) {
 			// Unclaimed Zone switch rights
 			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
-		
-		if (townBlock.isLocked()) {
-			// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-			TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-			return TownBlockStatus.LOCKED;
 		}
 
 		Resident resident;
