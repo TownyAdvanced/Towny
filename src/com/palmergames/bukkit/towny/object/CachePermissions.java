@@ -111,8 +111,11 @@ public class CachePermissions extends TownyUniverse {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
 		
-		if (townBlock.isLocked())
+		if (townBlock.isLocked()) {
+			// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
+			TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
 			return TownBlockStatus.LOCKED;
+		}
 
 		Resident resident;
 		try {

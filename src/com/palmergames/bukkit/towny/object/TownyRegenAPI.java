@@ -48,6 +48,15 @@ public class TownyRegenAPI extends TownyUniverse {
 		return worldCoords.size() != 0;
 	}
 	/**
+	 * Check if this WorldCoord is waiting for a snapshot to be taken.
+	 * 
+	 * @param worldCoord
+	 * @return
+	 */
+	public static boolean hasWorldCoord(WorldCoord worldCoord) {
+		return worldCoords.contains(worldCoord);
+	}
+	/**
 	 * @return First WorldCoord to be processed.
 	 */
 	public static WorldCoord getWorldCoord() {

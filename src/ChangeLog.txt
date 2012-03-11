@@ -1216,3 +1216,4 @@ v0.79.1.1:
 	- Updated to support Register 1.7 and Craftconomy.
 v0.79.1.2:
 	- Fix saving World lists and world data.
+	- If a plot is found to be locked, be certain it's queued for a snapshot.
