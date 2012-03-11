@@ -437,8 +437,8 @@ public class TownyUniverse extends TownyObject {
 		try {
 			getDataSource().cleanupBackups();
 			// Set the new class for saving.
-			//setDataSource(TownySettings.getSaveDatabase());
-			//getDataSource().initialize(plugin, this);
+			setDataSource(TownySettings.getSaveDatabase());
+			getDataSource().initialize(plugin, this);
 			try {
 				getDataSource().backup();
 				getDataSource().deleteUnusedResidentFiles();
@@ -447,7 +447,10 @@ public class TownyUniverse extends TownyObject {
 				e.printStackTrace();
 				return false;
 			}
-
+			
+			// Update all Worlds data files
+			getDataSource().saveAllWorlds();
+			
 			//if (TownySettings.isSavingOnLoad())
 			//      townyUniverse.getDataSource().saveAll();
 		} catch (UnsupportedOperationException e) {

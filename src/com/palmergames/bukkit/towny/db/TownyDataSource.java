@@ -96,6 +96,10 @@ public abstract class TownyDataSource {
 			&& saveRegenList() && saveSnapshotList();
 	}
 	
+	public boolean saveAllWorlds() {
+		return saveWorldList() && saveWorlds();
+	}
+	
 	public boolean saveQueues() {
 		return saveRegenList() && saveSnapshotList();
 	}
