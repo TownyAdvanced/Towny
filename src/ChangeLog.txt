@@ -1217,3 +1217,5 @@ v0.79.1.1:
 v0.79.1.2:
 	- Fix saving World lists and world data.
 	- If a plot is found to be locked, be certain it's queued for a snapshot.
+v0.79.1.3:
+	- Reduced the total block count from 4096 to 512 (temporarily).

@@ -98,7 +98,7 @@ public abstract class TownyPermissionSource {
 			public void run() {
 				Permission perm = null;
 				
-				for (int blockId = 0; blockId < 4096; blockId++) {
+				for (int blockId = 0; blockId < 512; blockId++) {
 					/**
 					 * Register all towny.wild.block.[id].* nodes
 					 */
