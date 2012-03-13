@@ -99,6 +99,8 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		{
 			if (cntx==null || cntx.isClosed())
 				cntx = DriverManager.getConnection(connect_str);
+			if (cntx==null || cntx.isClosed())
+				return false;
 			return true;
 		}
 		catch (SQLException e) 
@@ -112,12 +114,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		this.universe = universe;
 		this.plugin = plugin;	
 		this.rootFolder = universe.getRootFolder();
-		
-		if (getContext())				
-			System.out.println("Connected to Database");		
-		else		
-			System.out.println("Error connecting to Database");
-		
+						
 		try {
 			FileMgmt.checkFiles(new String[]{
 					rootFolder,				
@@ -134,6 +131,13 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		// Checking for db tables	
 		System.out.println("Checking for tables existence");
 		DatabaseMetaData dbm;
+		if (getContext())				
+			System.out.println("Connected to Database");		
+		else		
+		{
+			System.out.println("Error connecting to Database");
+			return;
+		}
 		try  { dbm = cntx.getMetaData(); }
 		catch (SQLException e) { System.out.println("Cannot get Table metadata"); return; }
 		
@@ -422,7 +426,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				
 												
 				rs = s.executeQuery("SELECT " +
-				"mayor,nation,world,bonus,purchased,taxes,taxpercent,hasUpkeep," +
+				"mayor,assistants, nation,world,bonus,purchased,taxes,taxpercent,hasUpkeep,outpostSpawns," +
 				"plotPrice,plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
 				"open,public,board,protectionStatus,spawn_x,spawn_y,spawn_z,spawn_pitch,spawn_yaw,homeblock_x,homeblock_z" +
 				" FROM "+tb_prefix+"towns WHERE name='"+town.getName()+"'");
@@ -465,14 +469,17 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						town.setTownBoard(rs.getString("board"));
 						town.setPurchasedBlocks(rs.getInt("purchased"));						
 						town.setPermissions(rs.getString("protectionStatus"));
-						String line = rs.getString("assistants");
-						if (line != null) {
-							String[] tokens = line.split(",");
-							for (String token : tokens) {
-								if (!token.isEmpty()){
-									Resident assistant = getResident(token);
-									if ((assistant != null) && (town.hasResident(assistant)))
-										town.addAssistant(assistant);
+						if (rs.getString("assistants")!=null)
+						{
+							String line = rs.getString("assistants");
+							if (line != null) {
+								String[] tokens = line.split(",");
+								for (String token : tokens) {
+									if (!token.isEmpty()){
+										Resident assistant = getResident(token);
+										if ((assistant != null) && (town.hasResident(assistant)))
+											town.addAssistant(assistant);
+									}
 								}
 							}
 						}
@@ -486,7 +493,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						} catch (Exception e) { System.out.println("Spawn load error "+e.getMessage()); }	
 						
 						// Load outpost spawns
-						line = rs.getString("outpostSpawns");
+						String line = rs.getString("outpostSpawns");
 						if (line != null) {
 							String[] outposts = line.split(";");
 							for (String spawn : outposts) {
