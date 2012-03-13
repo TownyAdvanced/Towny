@@ -420,7 +420,8 @@ public class TownCommand implements CommandExecutor  {
                         //player.sendMessage(ChatTools.formatCommand("", "/town set", "fire [on/off]", ""));
                 } else {
                         Resident resident;
-                        Town town;
+                        Town town = null;
+                        Nation nation = null;
                         TownyWorld oldWorld = null;
                         
                         try {
@@ -429,6 +430,8 @@ public class TownCommand implements CommandExecutor  {
                                 if (!resident.isMayor())
                                         if (!town.hasAssistant(resident))
                                                 throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
+                                if (town.hasNation())
+                                	nation = town.getNation();
                         } catch (TownyException x) {
                                 TownyMessaging.sendErrorMsg(player, x.getMessage());
                                 return;
@@ -689,6 +692,12 @@ public class TownCommand implements CommandExecutor  {
                         }
 
 						TownyUniverse.getDataSource().saveTown(town);
+						TownyUniverse.getDataSource().saveTownList();
+						
+						if (nation != null) {
+							TownyUniverse.getDataSource().saveNation(nation);
+							//TownyUniverse.getDataSource().saveNationList();
+						}
 						
 						// If the town (homeblock) has moved worlds we need to update the world files.
 						if (oldWorld != null) {
