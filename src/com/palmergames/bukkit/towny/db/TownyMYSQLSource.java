@@ -40,9 +40,10 @@ import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
+import com.palmergames.util.StringMgmt;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -98,6 +99,8 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		{
 			if (cntx==null || cntx.isClosed())
 				cntx = DriverManager.getConnection(connect_str);
+			if (cntx==null || cntx.isClosed())
+				return false;
 			return true;
 		}
 		catch (SQLException e) 
@@ -111,12 +114,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		this.universe = universe;
 		this.plugin = plugin;	
 		this.rootFolder = universe.getRootFolder();
-		
-		if (getContext())				
-			System.out.println("Connected to Database");		
-		else		
-			System.out.println("Error connecting to Database");
-		
+						
 		try {
 			FileMgmt.checkFiles(new String[]{
 					rootFolder,				
@@ -133,6 +131,13 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		// Checking for db tables	
 		System.out.println("Checking for tables existence");
 		DatabaseMetaData dbm;
+		if (getContext())				
+			System.out.println("Connected to Database");		
+		else		
+		{
+			System.out.println("Error connecting to Database");
+			return;
+		}
 		try  { dbm = cntx.getMetaData(); }
 		catch (SQLException e) { System.out.println("Cannot get Table metadata"); return; }
 		
@@ -216,9 +221,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			ResultSet nat_table = dbm.getTables(null, null, tb_prefix+"nations", null); 
 			if (nat_table.next()) { System.out.println("[Towny] Table nations is ok!"); }
 			else 
-			{
-			ResultSet town_table = dbm.getTables(null, null, tb_prefix+"nations", null); 
-		
+			{					
 				String nation_create = 
 						"CREATE TABLE "+tb_prefix+"nations ("+
 						"`name` mediumtext NOT NULL,"+						
@@ -423,7 +426,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				
 												
 				rs = s.executeQuery("SELECT " +
-				"mayor,nation,world,bonus,purchased,taxes,taxpercent,hasUpkeep," +
+				"mayor,assistants, nation,world,bonus,purchased,taxes,taxpercent,hasUpkeep,outpostSpawns," +
 				"plotPrice,plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
 				"open,public,board,protectionStatus,spawn_x,spawn_y,spawn_z,spawn_pitch,spawn_yaw,homeblock_x,homeblock_z" +
 				" FROM "+tb_prefix+"towns WHERE name='"+town.getName()+"'");
@@ -446,11 +449,24 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 							try {
 								tworld.newTownBlock(x,z);								
 							} catch (AlreadyRegisteredException e) {}
-							TownBlock tb = tworld.getTownBlock(x,z);
-							tb.setTown(town);
-							town.setHomeBlock(tb);
+							try {
+								TownBlock tb = tworld.getTownBlock(x,z);
+								tb.setTown(town);
+								town.setHomeBlock(tb);
+								if (tb.isHomeBlock())
+								{
+									System.out.println("Homeblock: "+tb.getX()+"x"+tb.getZ());
+								}
+								System.out.println("Homeblock set! "+x+"x"+z );
+							} catch (NumberFormatException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+							} catch (NotRegisteredException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+							} catch (TownyException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
+							}
 							
-						} catch (NotRegisteredException e) {}
+						} catch (NotRegisteredException e) { System.out.println("Could not load homeblock"); }
 						town.setBonusBlocks(rs.getInt("bonus"));
 						town.setTaxes(rs.getFloat("taxes"));
 						town.setTaxPercentage(rs.getBoolean("taxpercent"));						
@@ -466,14 +482,17 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						town.setTownBoard(rs.getString("board"));
 						town.setPurchasedBlocks(rs.getInt("purchased"));						
 						town.setPermissions(rs.getString("protectionStatus"));
-						String line = rs.getString("assistants");
-						if (line != null) {
-							String[] tokens = line.split(",");
-							for (String token : tokens) {
-								if (!token.isEmpty()){
-									Resident assistant = getResident(token);
-									if ((assistant != null) && (town.hasResident(assistant)))
-										town.addAssistant(assistant);
+						if (rs.getString("assistants")!=null)
+						{
+							String line = rs.getString("assistants");
+							if (line != null) {
+								String[] tokens = line.split(",");
+								for (String token : tokens) {
+									if (!token.isEmpty()){
+										Resident assistant = getResident(token);
+										if ((assistant != null) && (town.hasResident(assistant)))
+											town.addAssistant(assistant);
+									}
 								}
 							}
 						}
@@ -487,7 +506,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						} catch (Exception e) { System.out.println("Spawn load error "+e.getMessage()); }	
 						
 						// Load outpost spawns
-						line = rs.getString("outpostSpawns");
+						String line = rs.getString("outpostSpawns");
 						if (line != null) {
 							String[] outposts = line.split(";");
 							for (String spawn : outposts) {
@@ -553,8 +572,264 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-		System.out.println("Loading world: "+world.getName());
-		return true;
+		String line = "";		
+		String path = getWorldFilename(world);
+		
+		// create the world file if it doesn't exist
+		try {
+			FileMgmt.checkFiles(new String[]{path});
+		} catch (IOException e1) {
+			System.out.println("[Towny] Loading Error: Exception while reading file " + path);
+			e1.printStackTrace();
+		}
+		
+		File fileWorld = new File(path);
+		if (fileWorld.exists() && fileWorld.isFile()) {
+			try {
+				KeyValueFile kvFile = new KeyValueFile(path);
+												
+				line = kvFile.get("claimable");
+				if (line != null)
+					try {
+						world.setClaimable(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+					
+				line = kvFile.get("pvp");
+				if (line != null)
+					try {
+						world.setPVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcepvp");
+				if (line != null)
+					try {
+						world.setForcePVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcetownmobs");
+				if (line != null)
+					try {
+						world.setForceTownMobs(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("worldmobs");
+				if (line != null)
+					try {
+						world.setWorldMobs(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+					
+				line = kvFile.get("firespread");
+				if (line != null)
+					try {
+						world.setFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcefirespread");
+				if (line != null)
+					try {
+						world.setForceFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("explosions");
+				if (line != null)
+					try {
+						world.setExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forceexplosions");
+				if (line != null)
+					try {
+						world.setForceExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("endermanprotect");
+				if (line != null)
+					try {
+						world.setEndermanProtect(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("disableplayertrample");
+				if (line != null)
+					try {
+						world.setDisablePlayerTrample(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("disablecreaturetrample");
+				if (line != null)
+					try {
+						world.setDisableCreatureTrample(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("unclaimedZoneBuild");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneDestroy");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneSwitch");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneItemUse");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneName");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneName(line);
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneIgnoreIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setUnclaimedZoneIgnore(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementDelete");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementDelete(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementDeleteIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementDeleteIds(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementMayorDelete");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementMayorDelete(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementMayorDelete");
+				if (line != null)
+					try {
+						List<String> materials = new ArrayList<String>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								materials.add(s.toUpperCase().trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementMayorDelete(materials);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementRevert");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("usingPlotManagementRevertSpeed");
+				if (line != null)
+					try {
+						world.setPlotManagementRevertSpeed(Long.parseLong(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementIgnoreIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementIgnoreIds(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementWildRegen");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("PlotManagementWildRegenEntities");
+				if (line != null)
+					try {
+						List<String> entities = new ArrayList<String>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								entities.add(s.trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementWildRevertEntities(entities);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementWildRegenDelay");
+				if (line != null)
+					try {
+						world.setPlotManagementWildRevertDelay(Long.parseLong(line));
+					} catch (Exception e) {
+					}				
+				
+				line = kvFile.get("usingTowny");
+				if (line != null)
+					try {
+						world.setUsingTowny(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+
+				// loadTownBlocks(world);
+
+			} catch (Exception e) {
+				System.out.println("[Towny] Loading Error: Exception while reading world file " + path);
+				e.printStackTrace();
+				return false;
+			}
+
+			return true;
+		} else {
+			System.out.println("[Towny] Loading Error: File error while reading " + world.getName());
+			return false;
+		}		
 	}
 	
 	@Override
@@ -580,8 +855,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				TownBlock tb = world.getTownBlock(x, z);	
 				try 
 				{ 
-					Town t = getTown(rs.getString("town"));
-					tb.setTown(t); 
+					if (!tb.hasTown())
+					{
+						Town t = getTown(rs.getString("town"));
+						tb.setTown(t);
+					}
 				}
 				catch (NotRegisteredException e) {}
 				
@@ -624,12 +902,12 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			code = "INSERT INTO "+tb_prefix+tb_name+" ";
 			String keycode = "(";
 			String valuecode = " VALUES (";
-			
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+						
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				
 				keycode += me.getKey();
 				keycode += ""+(i.hasNext()?", ":")");			
@@ -658,11 +936,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		else
 		{
 			code = "UPDATE "+tb_prefix+tb_name+" SET ";
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				code += me.getKey()+" = ";
 				if (me.getValue() instanceof String)
 					code += "'"+me.getValue()+"'";				
@@ -670,18 +948,19 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 					code += ""+me.getValue();
 				code += ""+(i.hasNext()?",":"");
 			}
-			code += " WHERE ";		
-			i = keys.iterator();
-			while (i.hasNext())
+			code += " WHERE ";
+			
+			Iterator<String> keys_i = keys.iterator();
+			while (keys_i.hasNext())
 			{				
-				String key = (String)i.next();
+				String key = (String)keys_i.next();
 				code += key+" = ";			
 				Object v = args.get(key);
 				if (v instanceof String)
 					code += "'"+v+"'";	
 				else
 					code += v;
-				code += ""+(i.hasNext()?" AND ":"");
+				code += ""+(keys_i.hasNext()?" AND ":"");
 			}
 			
 			try
@@ -703,11 +982,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		try
 		{
 			String wherecode = "DELETE FROM "+tb_prefix+tb_name+" WHERE ";
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				wherecode += me.getKey() + " = ";
 				if (me.getValue() instanceof String)
 					wherecode += "'"+me.getValue()+"'";
@@ -733,12 +1012,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveResident(Resident resident) {
-		System.out.println("Saving Resident");		
-		String query = "";		
-		try {
-			Statement s = cntx.createStatement();
-			
-			HashMap res_hm = new HashMap();
+		sendDebugMsg("Saving Resident");				
+		try {						
+			HashMap<String, Object> res_hm = new HashMap<String, Object>();
 			res_hm.put("name", resident.getName());
 			res_hm.put("town", resident.hasTown()?resident.getTown().getName():"");
 			res_hm.put("name", resident.getName());						
@@ -767,10 +1043,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveTown(Town town) {
-		sendDebugMsg("Saving town "+town.getName());
-		System.out.println("Saving town");
+		sendDebugMsg("Saving town "+town.getName());		
 		try {			
-				HashMap twn_hm = new HashMap();
+				HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 				twn_hm.put("name", town.getName());
 				twn_hm.put("world", town.getWorld().getName());
 				twn_hm.put("mayor", town.hasMayor()?town.getMayor().getName():"");
@@ -834,10 +1109,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveNation(Nation nation) {
-		sendDebugMsg("Saving nation "+nation.getName());
-		System.out.println("Saving nation");
+		sendDebugMsg("Saving nation "+nation.getName());		
 		try {
-			HashMap nat_hm = new HashMap();
+			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 			nat_hm.put("name", nation.getName());
 			nat_hm.put("capital", nation.hasCapital()?nation.getCapital().getName():"");			
 			nat_hm.put("taxes", nation.getTaxes());
@@ -850,8 +1124,133 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveWorld(TownyWorld world) {
-		sendDebugMsg("Saving world "+world.getName());
-		System.out.println("Saving world");
+		try {
+			sendDebugMsg("Saving world - " + getWorldFilename(world));
+			
+			String path = getWorldFilename(world);
+			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
+									
+			fout.write(newLine);
+			fout.write(newLine);
+			
+			// PvP
+			fout.write("pvp=" + Boolean.toString(world.isPVP()) + newLine);
+			// Force PvP
+			fout.write("forcepvp=" + Boolean.toString(world.isForcePVP()) + newLine);
+			// Claimable
+			fout.write("# Can players found towns and claim plots in this world?" + newLine);
+			fout.write("claimable=" + Boolean.toString(world.isClaimable()) + newLine);
+			// has monster spawns			
+			fout.write("worldmobs=" + Boolean.toString(world.hasWorldMobs()) + newLine);
+			// force town mob spawns			
+			fout.write("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()) + newLine);
+			// has firespread enabled
+			fout.write("firespread=" + Boolean.toString(world.isFire()) + newLine);
+			fout.write("forcefirespread=" + Boolean.toString(world.isForceFire()) + newLine);
+			// has explosions enabled
+			fout.write("explosions=" + Boolean.toString(world.isExpl()) + newLine);
+			fout.write("forceexplosions=" + Boolean.toString(world.isForceExpl()) + newLine);
+			// Enderman block protection
+			fout.write("endermanprotect=" + Boolean.toString(world.isEndermanProtect()) + newLine);
+			// PlayerTrample
+			fout.write("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()) + newLine);
+			// CreatureTrample
+			fout.write("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()) + newLine);
+
+			// Unclaimed
+			fout.write(newLine);
+			fout.write("# Unclaimed Zone settings." + newLine);
+			
+			// Unclaimed Zone Build
+			if (world.getUnclaimedZoneBuild() != null)
+				fout.write("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()) + newLine);
+			// Unclaimed Zone Destroy
+			if (world.getUnclaimedZoneDestroy() != null)
+				fout.write("unclaimedZoneDestroy=" + Boolean.toString(world.getUnclaimedZoneDestroy()) + newLine);
+			// Unclaimed Zone Switch
+			if (world.getUnclaimedZoneSwitch() != null)
+				fout.write("unclaimedZoneSwitch=" + Boolean.toString(world.getUnclaimedZoneSwitch()) + newLine);
+			// Unclaimed Zone Item Use
+			if (world.getUnclaimedZoneItemUse() != null)
+				fout.write("unclaimedZoneItemUse=" + Boolean.toString(world.getUnclaimedZoneItemUse()) + newLine);
+			// Unclaimed Zone Name
+			if (world.getUnclaimedZoneName() != null)
+				fout.write("unclaimedZoneName=" + world.getUnclaimedZoneName() + newLine);
+			
+			fout.write(newLine);
+			fout.write("# The following settings are only used if you are not using any permissions provider plugin" + newLine);
+			
+			// Unclaimed Zone Ignore Ids
+			if (world.getUnclaimedZoneIgnoreIds() != null)
+				fout.write("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ",") + newLine);
+			
+			// PlotManagement Delete
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a townblock being unclaimed" + newLine);
+						
+			// Using PlotManagement Delete
+			fout.write("usingPlotManagementDelete=" + Boolean.toString(world.isUsingPlotManagementDelete()) + newLine);
+			// Plot Management Delete Ids
+			if (world.getPlotManagementDeleteIds() != null)
+				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
+			
+			// PlotManagement
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command" + newLine);
+						
+			// Using PlotManagement Mayor Delete
+			fout.write("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()) + newLine);
+			// Plot Management Mayor Delete
+			if (world.getPlotManagementMayorDelete() != null)
+				fout.write("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ",") + newLine);
+			
+			// PlotManagement Revert
+			fout.write(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed." + newLine);
+			fout.write("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot." + newLine);
+						
+			// Using PlotManagement Revert
+			fout.write("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()) + newLine);
+			// Using PlotManagement Revert Speed
+			fout.write("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()) + newLine);
+			
+			fout.write("# Any block Id's listed here will not be respawned. Instead it will revert to air." + newLine);
+			
+			// Plot Management Ignore Ids
+			if (world.getPlotManagementIgnoreIds() != null)
+				fout.write("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ",") + newLine);
+			
+			// PlotManagement Wild Regen
+			fout.write(newLine);
+			fout.write("# If enabled any damage caused by explosions will repair itself." + newLine);
+			
+			// Using PlotManagement Wild Regen
+			fout.write("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()) + newLine);
+			
+			// Wilderness Explosion Protection entities
+			if (world.getPlotManagementWildRevertEntities() != null)
+				fout.write("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ",") + newLine);
+			
+			
+			
+			
+			// Using PlotManagement Wild Regen Delay
+			fout.write("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()) + newLine);
+			
+			// Using Towny
+			fout.write(newLine);
+			fout.write("# This setting is used to enable or disable Towny in this world." + newLine);
+						
+			// Using Towny
+			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
+			
+			fout.close();
+
+			// saveTownBlocks(world);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	
@@ -860,7 +1259,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		sendDebugMsg("Saving town block "+townBlock.getX()+"x"+townBlock.getZ());
 		try
 		{
-			HashMap tb_hm = new HashMap();
+			HashMap<String, Object> tb_hm = new HashMap<String, Object>();
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());														
 			tb_hm.put("world", townBlock.hasTown()?townBlock.getTown().getWorld().getName():"");
@@ -879,27 +1278,27 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	}
 	@Override
 	public void deleteResident(Resident resident) {
-		HashMap res_hm = new HashMap();
+		HashMap<String, Object> res_hm = new HashMap<String, Object>();
 		res_hm.put("name", resident.getName());		
 		DeleteDB("residents", res_hm);
 	}
 	
 	@Override
 	public void deleteTown(Town town) {
-		HashMap twn_hm = new HashMap();
+		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 		twn_hm.put("name", town.getName());		
 		DeleteDB("towns", twn_hm);
 	}
 	
 	@Override
 	public void deleteNation(Nation nation) {
-		HashMap nat_hm = new HashMap();
+		HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 		nat_hm.put("name", nation.getName());		
 		DeleteDB("nations", nat_hm);
 	}
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
-		HashMap twn_hm = new HashMap();
+		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 		twn_hm.put("x", townBlock.getX());
 		twn_hm.put("z", townBlock.getZ());
 		DeleteDB("townblocks", twn_hm);
@@ -1204,7 +1603,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" + FileMgmt.fileSeparator() +  townBlock.getWorld().getName()
 				+ FileMgmt.fileSeparator() + townBlock.getX() + "_" + townBlock.getZ()  + "_" + TownySettings.getTownBlockSize() + ".data";
 	}
-	
+	public String getWorldFilename(TownyWorld world) {
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() +  "worlds" + FileMgmt.fileSeparator() + world.getName() + ".txt";
+	}
 	
 	
 	
@@ -1261,6 +1662,14 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	}
 	@Override
 	public void deleteWorld(TownyWorld world) {
+		File file = new File(getWorldFilename(world));
+		if (file.exists()){
+			try {
+				FileMgmt.moveFile(file, ("deleted"));
+			} catch (IOException e) {
+				System.out.println("[Towny] Error moving World txt file.");
+			}
+		}
 	}
 	/*
 	* Save keys

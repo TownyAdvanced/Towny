@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.TownyUtil;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
+import com.palmergames.bukkit.towny.db.TownyMYSQLSource;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -477,6 +478,8 @@ public class TownyUniverse extends TownyObject {
 			setDataSource(new TownyFlatFileSource());
 		else if (databaseType.equalsIgnoreCase("flatfile-hmod"))
 			setDataSource(new TownyHModFlatFileSource());
+		else if (databaseType.trim().substring(0,5).equalsIgnoreCase("mysql"))						
+			setDataSource(new TownyMYSQLSource(databaseType.trim().substring(6)));		
 		else
 			throw new UnsupportedOperationException();
 	}
