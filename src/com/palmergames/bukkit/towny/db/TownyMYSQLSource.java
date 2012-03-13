@@ -41,6 +41,9 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.KeyValueFile;
+import com.palmergames.util.StringMgmt;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -549,8 +552,265 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-		System.out.println("Loading world: "+world.getName());
-		return true;
+		String line = "";
+		String[] tokens;
+		String path = getWorldFilename(world);
+		
+		// create the world file if it doesn't exist
+		try {
+			FileMgmt.checkFiles(new String[]{path});
+		} catch (IOException e1) {
+			System.out.println("[Towny] Loading Error: Exception while reading file " + path);
+			e1.printStackTrace();
+		}
+		
+		File fileWorld = new File(path);
+		if (fileWorld.exists() && fileWorld.isFile()) {
+			try {
+				KeyValueFile kvFile = new KeyValueFile(path);
+												
+				line = kvFile.get("claimable");
+				if (line != null)
+					try {
+						world.setClaimable(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+					
+				line = kvFile.get("pvp");
+				if (line != null)
+					try {
+						world.setPVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcepvp");
+				if (line != null)
+					try {
+						world.setForcePVP(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcetownmobs");
+				if (line != null)
+					try {
+						world.setForceTownMobs(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("worldmobs");
+				if (line != null)
+					try {
+						world.setWorldMobs(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+					
+				line = kvFile.get("firespread");
+				if (line != null)
+					try {
+						world.setFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forcefirespread");
+				if (line != null)
+					try {
+						world.setForceFire(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("explosions");
+				if (line != null)
+					try {
+						world.setExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("forceexplosions");
+				if (line != null)
+					try {
+						world.setForceExpl(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("endermanprotect");
+				if (line != null)
+					try {
+						world.setEndermanProtect(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("disableplayertrample");
+				if (line != null)
+					try {
+						world.setDisablePlayerTrample(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("disablecreaturetrample");
+				if (line != null)
+					try {
+						world.setDisableCreatureTrample(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("unclaimedZoneBuild");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneDestroy");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneSwitch");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneItemUse");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneName");
+				if (line != null)
+					try {
+						world.setUnclaimedZoneName(line);
+					} catch (Exception e) {
+					}
+				line = kvFile.get("unclaimedZoneIgnoreIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setUnclaimedZoneIgnore(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementDelete");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementDelete(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementDeleteIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementDeleteIds(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementMayorDelete");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementMayorDelete(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementMayorDelete");
+				if (line != null)
+					try {
+						List<String> materials = new ArrayList<String>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								materials.add(s.toUpperCase().trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementMayorDelete(materials);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementRevert");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("usingPlotManagementRevertSpeed");
+				if (line != null)
+					try {
+						world.setPlotManagementRevertSpeed(Long.parseLong(line));
+					} catch (Exception e) {
+					}
+				line = kvFile.get("plotManagementIgnoreIds");
+				if (line != null)
+					try {
+						List<Integer> nums = new ArrayList<Integer>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								nums.add(Integer.parseInt(s));
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementIgnoreIds(nums);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementWildRegen");
+				if (line != null)
+					try {
+						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("PlotManagementWildRegenEntities");
+				if (line != null)
+					try {
+						List<String> entities = new ArrayList<String>();
+						for (String s: line.split(","))
+							if (!s.isEmpty())
+							try {
+								entities.add(s.trim());
+							} catch (NumberFormatException e) {
+							}
+						world.setPlotManagementWildRevertEntities(entities);
+					} catch (Exception e) {
+					}
+				
+				line = kvFile.get("usingPlotManagementWildRegenDelay");
+				if (line != null)
+					try {
+						world.setPlotManagementWildRevertDelay(Long.parseLong(line));
+					} catch (Exception e) {
+					}				
+				
+				line = kvFile.get("usingTowny");
+				if (line != null)
+					try {
+						world.setUsingTowny(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+
+				// loadTownBlocks(world);
+
+			} catch (Exception e) {
+				System.out.println("[Towny] Loading Error: Exception while reading world file " + path);
+				e.printStackTrace();
+				return false;
+			}
+
+			return true;
+		} else {
+			System.out.println("[Towny] Loading Error: File error while reading " + world.getName());
+			return false;
+		}		
 	}
 	
 	@Override
@@ -842,7 +1102,133 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveWorld(TownyWorld world) {
-		sendDebugMsg("Saving world "+world.getName());		
+		try {
+			sendDebugMsg("Saving world - " + getWorldFilename(world));
+			
+			String path = getWorldFilename(world);
+			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
+									
+			fout.write(newLine);
+			fout.write(newLine);
+			
+			// PvP
+			fout.write("pvp=" + Boolean.toString(world.isPVP()) + newLine);
+			// Force PvP
+			fout.write("forcepvp=" + Boolean.toString(world.isForcePVP()) + newLine);
+			// Claimable
+			fout.write("# Can players found towns and claim plots in this world?" + newLine);
+			fout.write("claimable=" + Boolean.toString(world.isClaimable()) + newLine);
+			// has monster spawns			
+			fout.write("worldmobs=" + Boolean.toString(world.hasWorldMobs()) + newLine);
+			// force town mob spawns			
+			fout.write("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()) + newLine);
+			// has firespread enabled
+			fout.write("firespread=" + Boolean.toString(world.isFire()) + newLine);
+			fout.write("forcefirespread=" + Boolean.toString(world.isForceFire()) + newLine);
+			// has explosions enabled
+			fout.write("explosions=" + Boolean.toString(world.isExpl()) + newLine);
+			fout.write("forceexplosions=" + Boolean.toString(world.isForceExpl()) + newLine);
+			// Enderman block protection
+			fout.write("endermanprotect=" + Boolean.toString(world.isEndermanProtect()) + newLine);
+			// PlayerTrample
+			fout.write("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()) + newLine);
+			// CreatureTrample
+			fout.write("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()) + newLine);
+
+			// Unclaimed
+			fout.write(newLine);
+			fout.write("# Unclaimed Zone settings." + newLine);
+			
+			// Unclaimed Zone Build
+			if (world.getUnclaimedZoneBuild() != null)
+				fout.write("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()) + newLine);
+			// Unclaimed Zone Destroy
+			if (world.getUnclaimedZoneDestroy() != null)
+				fout.write("unclaimedZoneDestroy=" + Boolean.toString(world.getUnclaimedZoneDestroy()) + newLine);
+			// Unclaimed Zone Switch
+			if (world.getUnclaimedZoneSwitch() != null)
+				fout.write("unclaimedZoneSwitch=" + Boolean.toString(world.getUnclaimedZoneSwitch()) + newLine);
+			// Unclaimed Zone Item Use
+			if (world.getUnclaimedZoneItemUse() != null)
+				fout.write("unclaimedZoneItemUse=" + Boolean.toString(world.getUnclaimedZoneItemUse()) + newLine);
+			// Unclaimed Zone Name
+			if (world.getUnclaimedZoneName() != null)
+				fout.write("unclaimedZoneName=" + world.getUnclaimedZoneName() + newLine);
+			
+			fout.write(newLine);
+			fout.write("# The following settings are only used if you are not using any permissions provider plugin" + newLine);
+			
+			// Unclaimed Zone Ignore Ids
+			if (world.getUnclaimedZoneIgnoreIds() != null)
+				fout.write("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ",") + newLine);
+			
+			// PlotManagement Delete
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a townblock being unclaimed" + newLine);
+						
+			// Using PlotManagement Delete
+			fout.write("usingPlotManagementDelete=" + Boolean.toString(world.isUsingPlotManagementDelete()) + newLine);
+			// Plot Management Delete Ids
+			if (world.getPlotManagementDeleteIds() != null)
+				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
+			
+			// PlotManagement
+			fout.write(newLine);
+			fout.write("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command" + newLine);
+						
+			// Using PlotManagement Mayor Delete
+			fout.write("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()) + newLine);
+			// Plot Management Mayor Delete
+			if (world.getPlotManagementMayorDelete() != null)
+				fout.write("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ",") + newLine);
+			
+			// PlotManagement Revert
+			fout.write(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed." + newLine);
+			fout.write("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot." + newLine);
+						
+			// Using PlotManagement Revert
+			fout.write("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()) + newLine);
+			// Using PlotManagement Revert Speed
+			fout.write("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()) + newLine);
+			
+			fout.write("# Any block Id's listed here will not be respawned. Instead it will revert to air." + newLine);
+			
+			// Plot Management Ignore Ids
+			if (world.getPlotManagementIgnoreIds() != null)
+				fout.write("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ",") + newLine);
+			
+			// PlotManagement Wild Regen
+			fout.write(newLine);
+			fout.write("# If enabled any damage caused by explosions will repair itself." + newLine);
+			
+			// Using PlotManagement Wild Regen
+			fout.write("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()) + newLine);
+			
+			// Wilderness Explosion Protection entities
+			if (world.getPlotManagementWildRevertEntities() != null)
+				fout.write("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ",") + newLine);
+			
+			
+			
+			
+			// Using PlotManagement Wild Regen Delay
+			fout.write("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()) + newLine);
+			
+			// Using Towny
+			fout.write(newLine);
+			fout.write("# This setting is used to enable or disable Towny in this world." + newLine);
+						
+			// Using Towny
+			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
+			
+			fout.close();
+
+			// saveTownBlocks(world);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	
@@ -1195,7 +1581,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" + FileMgmt.fileSeparator() +  townBlock.getWorld().getName()
 				+ FileMgmt.fileSeparator() + townBlock.getX() + "_" + townBlock.getZ()  + "_" + TownySettings.getTownBlockSize() + ".data";
 	}
-	
+	public String getWorldFilename(TownyWorld world) {
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() +  "worlds" + FileMgmt.fileSeparator() + world.getName() + ".txt";
+	}
 	
 	
 	
