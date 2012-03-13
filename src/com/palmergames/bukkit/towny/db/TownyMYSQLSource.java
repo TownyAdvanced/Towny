@@ -449,11 +449,24 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 							try {
 								tworld.newTownBlock(x,z);								
 							} catch (AlreadyRegisteredException e) {}
-							TownBlock tb = tworld.getTownBlock(x,z);
-							tb.setTown(town);
-							town.setHomeBlock(tb);
+							try {
+								TownBlock tb = tworld.getTownBlock(x,z);
+								tb.setTown(town);
+								town.setHomeBlock(tb);
+								if (tb.isHomeBlock())
+								{
+									System.out.println("Homeblock: "+tb.getX()+"x"+tb.getZ());
+								}
+								System.out.println("Homeblock set! "+x+"x"+z );
+							} catch (NumberFormatException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+							} catch (NotRegisteredException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+							} catch (TownyException e) {
+								System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
+							}
 							
-						} catch (NotRegisteredException e) {}
+						} catch (NotRegisteredException e) { System.out.println("Could not load homeblock"); }
 						town.setBonusBlocks(rs.getInt("bonus"));
 						town.setTaxes(rs.getFloat("taxes"));
 						town.setTaxPercentage(rs.getBoolean("taxpercent"));						
@@ -842,8 +855,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				TownBlock tb = world.getTownBlock(x, z);	
 				try 
 				{ 
-					Town t = getTown(rs.getString("town"));
-					tb.setTown(t); 
+					if (!tb.hasTown())
+					{
+						Town t = getTown(rs.getString("town"));
+						tb.setTown(t);
+					}
 				}
 				catch (NotRegisteredException e) {}
 				
