@@ -214,9 +214,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			ResultSet nat_table = dbm.getTables(null, null, tb_prefix+"nations", null); 
 			if (nat_table.next()) { System.out.println("[Towny] Table nations is ok!"); }
 			else 
-			{
-			ResultSet town_table = dbm.getTables(null, null, tb_prefix+"nations", null); 
-		
+			{					
 				String nation_create = 
 						"CREATE TABLE "+tb_prefix+"nations ("+
 						"`name` mediumtext NOT NULL,"+						
@@ -622,12 +620,12 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			code = "INSERT INTO "+tb_prefix+tb_name+" ";
 			String keycode = "(";
 			String valuecode = " VALUES (";
-			
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+						
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				
 				keycode += me.getKey();
 				keycode += ""+(i.hasNext()?", ":")");			
@@ -656,11 +654,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		else
 		{
 			code = "UPDATE "+tb_prefix+tb_name+" SET ";
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				code += me.getKey()+" = ";
 				if (me.getValue() instanceof String)
 					code += "'"+me.getValue()+"'";				
@@ -668,18 +666,19 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 					code += ""+me.getValue();
 				code += ""+(i.hasNext()?",":"");
 			}
-			code += " WHERE ";		
-			i = keys.iterator();
-			while (i.hasNext())
+			code += " WHERE ";
+			
+			Iterator<String> keys_i = keys.iterator();
+			while (keys_i.hasNext())
 			{				
-				String key = (String)i.next();
+				String key = (String)keys_i.next();
 				code += key+" = ";			
 				Object v = args.get(key);
 				if (v instanceof String)
 					code += "'"+v+"'";	
 				else
 					code += v;
-				code += ""+(i.hasNext()?" AND ":"");
+				code += ""+(keys_i.hasNext()?" AND ":"");
 			}
 			
 			try
@@ -701,11 +700,11 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		try
 		{
 			String wherecode = "DELETE FROM "+tb_prefix+tb_name+" WHERE ";
-			Set set = args.entrySet();			
-			Iterator i = set.iterator();
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
 			{
-				Map.Entry me = (Map.Entry)i.next();
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				wherecode += me.getKey() + " = ";
 				if (me.getValue() instanceof String)
 					wherecode += "'"+me.getValue()+"'";
@@ -731,12 +730,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveResident(Resident resident) {
-		System.out.println("Saving Resident");		
-		String query = "";		
-		try {
-			Statement s = cntx.createStatement();
-			
-			HashMap res_hm = new HashMap();
+		sendDebugMsg("Saving Resident");				
+		try {						
+			HashMap<String, Object> res_hm = new HashMap<String, Object>();
 			res_hm.put("name", resident.getName());
 			res_hm.put("town", resident.hasTown()?resident.getTown().getName():"");
 			res_hm.put("name", resident.getName());						
@@ -765,10 +761,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveTown(Town town) {
-		sendDebugMsg("Saving town "+town.getName());
-		System.out.println("Saving town");
+		sendDebugMsg("Saving town "+town.getName());		
 		try {			
-				HashMap twn_hm = new HashMap();
+				HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 				twn_hm.put("name", town.getName());
 				twn_hm.put("world", town.getWorld().getName());
 				twn_hm.put("mayor", town.hasMayor()?town.getMayor().getName():"");
@@ -832,10 +827,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveNation(Nation nation) {
-		sendDebugMsg("Saving nation "+nation.getName());
-		System.out.println("Saving nation");
+		sendDebugMsg("Saving nation "+nation.getName());		
 		try {
-			HashMap nat_hm = new HashMap();
+			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 			nat_hm.put("name", nation.getName());
 			nat_hm.put("capital", nation.hasCapital()?nation.getCapital().getName():"");			
 			nat_hm.put("taxes", nation.getTaxes());
@@ -848,8 +842,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean saveWorld(TownyWorld world) {
-		sendDebugMsg("Saving world "+world.getName());
-		System.out.println("Saving world");
+		sendDebugMsg("Saving world "+world.getName());		
 		return true;
 	}
 	
@@ -858,7 +851,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		sendDebugMsg("Saving town block "+townBlock.getX()+"x"+townBlock.getZ());
 		try
 		{
-			HashMap tb_hm = new HashMap();
+			HashMap<String, Object> tb_hm = new HashMap<String, Object>();
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());														
 			tb_hm.put("world", townBlock.hasTown()?townBlock.getTown().getWorld().getName():"");
@@ -877,27 +870,27 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	}
 	@Override
 	public void deleteResident(Resident resident) {
-		HashMap res_hm = new HashMap();
+		HashMap<String, Object> res_hm = new HashMap<String, Object>();
 		res_hm.put("name", resident.getName());		
 		DeleteDB("residents", res_hm);
 	}
 	
 	@Override
 	public void deleteTown(Town town) {
-		HashMap twn_hm = new HashMap();
+		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 		twn_hm.put("name", town.getName());		
 		DeleteDB("towns", twn_hm);
 	}
 	
 	@Override
 	public void deleteNation(Nation nation) {
-		HashMap nat_hm = new HashMap();
+		HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 		nat_hm.put("name", nation.getName());		
 		DeleteDB("nations", nat_hm);
 	}
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
-		HashMap twn_hm = new HashMap();
+		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 		twn_hm.put("x", townBlock.getX());
 		twn_hm.put("z", townBlock.getZ());
 		DeleteDB("townblocks", twn_hm);
