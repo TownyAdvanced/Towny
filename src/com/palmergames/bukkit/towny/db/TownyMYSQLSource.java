@@ -552,8 +552,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-		String line = "";
-		String[] tokens;
+		String line = "";		
 		String path = getWorldFilename(world);
 		
 		// create the world file if it doesn't exist
@@ -1640,6 +1639,14 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	}
 	@Override
 	public void deleteWorld(TownyWorld world) {
+		File file = new File(getWorldFilename(world));
+		if (file.exists()){
+			try {
+				FileMgmt.moveFile(file, ("deleted"));
+			} catch (IOException e) {
+				System.out.println("[Towny] Error moving World txt file.");
+			}
+		}
 	}
 	/*
 	* Save keys
