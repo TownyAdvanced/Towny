@@ -1058,6 +1058,7 @@ public class NationCommand implements CommandExecutor {
 			}
 
 			TownyUniverse.getDataSource().saveNation(nation);
+			TownyUniverse.getDataSource().saveNationList();
 		}
 	}
 
