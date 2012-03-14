@@ -109,6 +109,126 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		}
 		return false;
 	}
+	public boolean UpdateDB(String tb_name, HashMap<String,Object> args, List<String> keys)
+	{
+		if (!getContext()) return false;
+		String code;
+		Statement s;		
+		if (keys==null)
+		{
+			code = "INSERT INTO "+tb_prefix+tb_name+" ";
+			String keycode = "(";
+			String valuecode = " VALUES (";
+						
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
+			while(i.hasNext()) 
+			{
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
+				
+				keycode += me.getKey();
+				keycode += ""+(i.hasNext()?", ":")");			
+				if (me.getValue() instanceof String)
+					valuecode += "'"+me.getValue()+"'";
+				else if (me.getValue() instanceof Double)
+					valuecode += "'"+me.getValue()+"'";
+				else if (me.getValue() instanceof Float)
+					valuecode += "'"+me.getValue()+"'";					
+				else
+					valuecode += ""+me.getValue();			
+				valuecode += ""+(i.hasNext()?",":")");								
+			}
+			code += keycode;		
+			code += valuecode;
+			try
+			{
+				s = cntx.createStatement();
+				int rs = s.executeUpdate(code);
+				if (rs == 0)
+					return false;
+				return true;
+			}
+			catch (SQLException e)
+			{ log.info("Towny SQL: Insert sql error " + e.getMessage()+ " --> "+code); }
+			return false;
+		}
+		else
+		{
+			code = "UPDATE "+tb_prefix+tb_name+" SET ";
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
+			while(i.hasNext()) 
+			{
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
+				code += me.getKey()+" = ";
+				if (me.getValue() instanceof String)
+					code += "'"+me.getValue()+"'";	
+				else if (me.getValue() instanceof Float)
+					code += "'"+me.getValue()+"'";
+				else if (me.getValue() instanceof Double)
+					code += "'"+me.getValue()+"'";								
+				else
+					code += ""+me.getValue();
+				code += ""+(i.hasNext()?",":"");
+			}
+			code += " WHERE ";
+			
+			Iterator<String> keys_i = keys.iterator();
+			while (keys_i.hasNext())
+			{				
+				String key = (String)keys_i.next();
+				code += key+" = ";			
+				Object v = args.get(key);
+				if (v instanceof String)
+					code += "'"+v+"'";	
+				else
+					code += v;
+				code += ""+(keys_i.hasNext()?" AND ":"");
+			}
+			
+			try
+			{
+				s = cntx.createStatement();
+				int rs = s.executeUpdate(code);
+				if (rs == 0) // if entry dont exist then try to insert 
+					return UpdateDB(tb_name, args, null);	
+				return true;
+			}
+			catch (SQLException e)
+			{ log.info("Towny SQL: Update sql error " + e.getMessage()+ " --> "+code); }
+		}			
+		return false;
+	}
+	public boolean DeleteDB(String tb_name, HashMap<String,Object> args)
+	{
+		if (!getContext()) return false;
+		try
+		{
+			String wherecode = "DELETE FROM "+tb_prefix+tb_name+" WHERE ";
+			Set<Map.Entry<String,Object>> set = args.entrySet();			
+			Iterator<Map.Entry<String,Object>> i = set.iterator();
+			while(i.hasNext()) 
+			{
+				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
+				wherecode += me.getKey() + " = ";
+				if (me.getValue() instanceof String)
+					wherecode += "'"+me.getValue()+"'";
+				else if (me.getValue() instanceof Float)
+					wherecode += "'"+me.getValue()+"'";
+				else
+					wherecode += ""+me.getValue();
+				
+				wherecode += ""+(i.hasNext()?" AND ":"");	
+			}
+			Statement s = cntx.createStatement();
+			int rs = s.executeUpdate(wherecode);
+			if (rs == 0)
+			{
+				log.info("Towny SQL: delete returned 0: "+wherecode);
+			}
+		} catch (SQLException e) { System.out.println("Towny SQL: Error delete : "+e.getMessage()); }
+		return false;
+	}
 	@Override
 	public void initialize(Towny plugin, TownyUniverse universe) {
 		this.universe = universe;
@@ -147,34 +267,31 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			if (town_table.next()) { System.out.println("[Towny] Table towns is ok!"); }
 			else {				
 				String town_create = 
-						  "CREATE TABLE "+tb_prefix+"towns ("+
+						  "CREATE TABLE "+tb_prefix+"towns ("+						  
 						  "`name` mediumtext NOT NULL,"+
-						  "`world` mediumtext,"+
-						  "`mayor` mediumtext NOT NULL,"+
-						  "`assistants` text,"+
-						  "`bonus` int(11) NOT NULL,"+
-						  "`purchased` int(11) NOT NULL,"+
-						  "`taxes` float NOT NULL,"+
+						  "`residents` mediumtext,"+						  
+						  "`mayor` mediumtext,"+
+						  "`nation` mediumtext NOT NULL,"+
+						  "`assistants` text  DEFAULT NULL,"+
+						  "`townBoard` mediumtext DEFAULT NULL,"+
+						  "`tag` mediumtext DEFAULT NULL,"+
+						  "`protectionStatus` mediumtext DEFAULT NULL,"+						  
+						  "`bonus` int(11)  DEFAULT 0,"+
+						  "`purchased` int(11)  DEFAULT 0,"+						  						 
 						  "`taxpercent` tinyint(1) DEFAULT NULL,"+
-						  "`hasUpkeep` tinyint(1) NOT NULL,"+
-						  "`plotPrice` float NOT NULL,"+
-						  "`plotTax` float NOT NULL,"+
-						  "`commercialPlotPrice` float NOT NULL,"+
+						  "`taxes` float  DEFAULT 0,"+						  
+						  "`hasUpkeep` tinyint(1)  DEFAULT 0,"+
+						  "`plotPrice` float DEFAULT NULL,"+
+						  "`plotTax` float  DEFAULT NULL,"+
+						  "`commercialPlotPrice` float  DEFAULT NULL,"+
 						  "`commercialPlotTax` float NOT NULL,"+
 						  "`embassyPlotPrice` float NOT NULL,"+
 						  "`embassyPlotTax` float NOT NULL,"+
 						  "`open` tinyint(1) NOT NULL,"+
 						  "`public` tinyint(1) NOT NULL,"+
-						  "`board` mediumtext NOT NULL,"+
-						  "`nation` mediumtext NOT NULL,"+
-						  "`protectionStatus` mediumtext NOT NULL,"+
-						  "`spawn_x` float DEFAULT NULL,"+
-						  "`spawn_y` float DEFAULT NULL,"+
-						  "`spawn_z` float DEFAULT NULL,"+
-						  "`spawn_pitch` float DEFAULT NULL,"+
-						  "`spawn_yaw` float DEFAULT NULL,"+
-						  "`homeblock_x` int(11) DEFAULT NULL,"+
-						  "`homeblock_z` int(11) DEFAULT NULL,"+
+						  "`homeblock` mediumtext NOT NULL,"+
+						  "`townBlocks` mediumtext NOT NULL,"+
+						  "`spawn` mediumtext NOT NULL,"+
 						  "`outpostSpawns` mediumtext DEFAULT NULL,"+
 						  "PRIMARY KEY (`name`(20))"+
 						") ENGINE=INNODB DEFAULT CHARSET=latin1";
@@ -205,6 +322,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						  "`surname` mediumtext,"+
 						  "`protectionStatus` mediumtext,"+
 						  "`friends` mediumtext,"+
+						  "`townBlocks` mediumtext,"+
 						  "KEY `new_index` (`name`(20))"+
 						") ENGINE=INNODB DEFAULT CHARSET=latin1";
 				try {				
@@ -224,9 +342,16 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			{					
 				String nation_create = 
 						"CREATE TABLE "+tb_prefix+"nations ("+
-						"`name` mediumtext NOT NULL,"+						
-						"`capital` mediumtext NOT NULL,"+						
-						"`taxes` float NOT NULL"+
+						"`name` mediumtext NOT NULL,"+	
+						"`towns` mediumtext NOT NULL,"+
+						"`capital` mediumtext NOT NULL,"+
+						"`assistants` mediumtext NOT NULL,"+
+						"`tag` mediumtext NOT NULL,"+
+						"`allies` mediumtext NOT NULL,"+
+						"`enemies` mediumtext NOT NULL,"+
+						"`taxes` float NOT NULL,"+
+						"`neutral` tinyint(1) NOT NULL, "+
+						" KEY `new_index` (`name`(20))"+
 						") ENGINE=INNODB DEFAULT CHARSET=latin1";
 				try {				
 					Statement s = cntx.createStatement();
@@ -246,16 +371,10 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				String townblock_create = 
 						"CREATE TABLE "+tb_prefix+"townblocks ("+						
 						"`x` bigint(20) NOT NULL,"+
-						"`z` bigint(20) NOT NULL,"+						
-						"`world` mediumtext NOT NULL,"+
-						"`owner` mediumtext NOT NULL,"+
-						"`town` mediumtext NOT NULL,"+
-						"`protectionStatus` mediumtext NOT NULL,"+
-						"`locked` tinyint(1) NOT NULL DEFAULT '0',"+
-						"`changed` tinyint(1) NOT NULL DEFAULT '0',"+
-						"`isOutpost` tinyint(1) NOT NULL DEFAULT 0,"+
-						"`plotType` int(7) NOT NULL DEFAULT 0,"+
-						"`plotPrice` float NOT NULL DEFAULT '-1.0',"+
+						"`z` bigint(20) NOT NULL,"+												
+						"`permissions` mediumtext NOT NULL,"+
+						"`locked` bool NOT NULL DEFAULT '0',"+
+						"`changed` tinyint(1) NOT NULL DEFAULT '0',"+						
 						"PRIMARY KEY (`x`,`z`)"+
 						") ENGINE=INNODB DEFAULT CHARSET=latin1";
 				try {				
@@ -308,13 +427,13 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 					try {											
 						newTown(rs.getString("name"));
 					} catch (AlreadyRegisteredException e) {}
-    			} 
+    			} 				
 				return true;
 			} 
 			catch (SQLException e) 
 			{ log.info("Towny SQL: town list sql error : "+e.getMessage()); }				
 			catch (Exception e) 
-			{ log.info("Towny SQL: town list unknown error: ");e.printStackTrace(); }		
+			{ log.info("Towny SQL: town list unknown error: ");e.printStackTrace(); }				
 		return false;
 	}
 	
@@ -329,7 +448,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				while (rs.next())
     			{
 					try {
-					newNation(rs.getString("name"));
+						newNation(rs.getString("name"));
 					} catch (AlreadyRegisteredException e) {} 
     			}
 				return true;
@@ -372,20 +491,34 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			try
 			{
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT town,lastOnline,registered,isNPC,title,surname,protectionStatus,friends FROM "+tb_prefix+"residents WHERE name='"+resident.getName()+"'");				
+				ResultSet rs = s.executeQuery("SELECT " +
+						" lastOnline,registered,isNPC,title,surname,town,friends,protectionStatus,townBlocks" +
+						" FROM "+tb_prefix+"residents " +
+						" WHERE name='"+resident.getName()+"'");								
 				while (rs.next())
-    			{	
-					try
-					{
-					Town t = getTown(rs.getString("town"));
-					resident.setTown(t);
-					} catch (NotRegisteredException e) {}
+    			{			
+					try {
 					resident.setLastOnline(rs.getLong("lastOnline"));
-					resident.setRegistered(rs.getLong("registered"));
+					} catch (Exception e) { e.printStackTrace(); }
+					try {
+					resident.setRegistered(rs.getLong("registered"));					
+					} catch (Exception e) { e.printStackTrace(); }
+					try {
 					resident.setNPC(rs.getBoolean("isNPC"));
+					} catch (Exception e) { e.printStackTrace(); }
+					try {
 					resident.setTitle(rs.getString("title"));
+					} catch (Exception e) { e.printStackTrace(); }
+					try {
 					resident.setSurname(rs.getString("surname"));
-					resident.setPermissions(rs.getString("protectionStatus"));
+					} catch (Exception e) { e.printStackTrace(); }
+					if (rs.getString("town")!=null && rs.getString("town")!="")
+					{
+						resident.setTown(getTown(rs.getString("town")));
+						System.out.println("Resident "+resident.getName()+" set to Town "+rs.getString("town"));
+					}
+					
+					try {
 					String line = rs.getString("friends");
 					if (line != null) {
 						String[] tokens = line.split(",");
@@ -397,6 +530,12 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 							}
 						}
 					}
+					} catch (Exception e) {e.printStackTrace(); }
+					try {
+					resident.setPermissions(rs.getString("protectionStatus"));
+					} catch (Exception e) {e.printStackTrace(); }
+					if (rs.getString("townBlocks")!=null && rs.getString("townBlocks")!="")
+						utilLoadTownBlocks(rs.getString("townBlocks"), null, resident);					
 					return true;
     			}
 				return false;				
@@ -411,62 +550,55 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	@Override
 	public boolean loadTown(Town town)
 	{
+		String line;
+		String[] tokens;
 		sendDebugMsg("Loading town "+town.getName());	
 		if (!getContext()) return false;
 						
 			try
 			{
-				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"residents WHERE town='"+town.getName()+"'");				
-				try 
-				{
-				while (rs.next())					
-					town.addResident(getResident(rs.getString("name")));
-				} catch (AlreadyRegisteredException e) {}
-				
-												
-				rs = s.executeQuery("SELECT " +
-				"mayor,assistants, nation,world,bonus,purchased,taxes,taxpercent,hasUpkeep,outpostSpawns," +
-				"plotPrice,plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
-				"open,public,board,protectionStatus,spawn_x,spawn_y,spawn_z,spawn_pitch,spawn_yaw,homeblock_x,homeblock_z" +
-				" FROM "+tb_prefix+"towns WHERE name='"+town.getName()+"'");
+				Statement s = cntx.createStatement();								
+				 ResultSet rs = s.executeQuery("SELECT " +
+				"residents,mayor,assistants,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" +				
+				",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
+				"open,public,townBlocks, homeBlock, spawn,outpostSpawns " +
+				" FROM "+tb_prefix+"towns " +
+				" WHERE name='"+town.getName()+"'");
 				while (rs.next())
     			{					
 						
-						
-						town.setMayor( getResident(rs.getString("mayor")) );	
-						try 
-						{ 
-							Nation n = getNation(rs.getString("nation"));
-							n.addTown(town);
-						} catch (NotRegisteredException e) {}
-						try 
-						{
-							TownyWorld tworld = getWorld(rs.getString("world")); 					
-							town.setWorld(tworld);
-							int x = rs.getInt("homeblock_x");
-							int z = rs.getInt("homeblock_z");
-							try {
-								tworld.newTownBlock(x,z);								
-							} catch (AlreadyRegisteredException e) {}
-							try {
-								TownBlock tb = tworld.getTownBlock(x,z);
-								tb.setTown(town);
-								town.setHomeBlock(tb);
-								if (tb.isHomeBlock())
-								{
-									System.out.println("Homeblock: "+tb.getX()+"x"+tb.getZ());
+						line = rs.getString("residents");
+						if (line != null) {
+							tokens = line.split(",");
+							for (String token : tokens) {
+								if (!token.isEmpty()){
+									Resident resident = getResident(token);
+									if (resident != null)
+										town.addResident(resident);
 								}
-								System.out.println("Homeblock set! "+x+"x"+z );
-							} catch (NumberFormatException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-							} catch (NotRegisteredException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-							} catch (TownyException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
 							}
-							
-						} catch (NotRegisteredException e) { System.out.println("Could not load homeblock"); }
+						}
+						town.setMayor( getResident(rs.getString("mayor")) );	
+						line = rs.getString("assistants");
+						if (line != null) {
+							tokens = line.split(",");
+							for (String token : tokens) {
+								if (!token.isEmpty()){
+									Resident assistant = getResident(token);
+									if ((assistant != null) && (town.hasResident(assistant)))
+										town.addAssistant(assistant);
+								}
+							}
+						}
+						town.setTownBoard(rs.getString("townBoard"));
+						line = rs.getString("tag");
+						if (line != null)
+							try {
+								town.setTag(line);
+							} catch(TownyException e) {
+								town.setTag("");
+							}
+						town.setPermissions(rs.getString("protectionStatus"));
 						town.setBonusBlocks(rs.getInt("bonus"));
 						town.setTaxes(rs.getFloat("taxes"));
 						town.setTaxPercentage(rs.getBoolean("taxpercent"));						
@@ -479,59 +611,86 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 						town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
 						town.setOpen(rs.getBoolean("open"));
 						town.setPublic(rs.getBoolean("public"));			
-						town.setTownBoard(rs.getString("board"));
+						
 						town.setPurchasedBlocks(rs.getInt("purchased"));						
-						town.setPermissions(rs.getString("protectionStatus"));
-						if (rs.getString("assistants")!=null)
-						{
-							String line = rs.getString("assistants");
-							if (line != null) {
-								String[] tokens = line.split(",");
-								for (String token : tokens) {
-									if (!token.isEmpty()){
-										Resident assistant = getResident(token);
-										if ((assistant != null) && (town.hasResident(assistant)))
-											town.addAssistant(assistant);
+						line = rs.getString("townBlocks");
+						if (line != null)
+							utilLoadTownBlocks(line, town, null);
+
+						line = rs.getString("homeBlock");
+						if (line != null) {
+							tokens = line.split(",");
+							if (tokens.length == 3)
+								try {
+									TownyWorld world = getWorld(tokens[0]);
+									
+									try {
+										int x = Integer.parseInt(tokens[1]);
+										int z = Integer.parseInt(tokens[2]);
+										TownBlock homeBlock = world.getTownBlock(x, z);
+										town.setHomeBlock(homeBlock);
+									} catch (NumberFormatException e) {
+										System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+									} catch (NotRegisteredException e) {
+										System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+									} catch (TownyException e) {
+										System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
 									}
+									
+								} catch (NotRegisteredException e) {
+									System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+								}
+						}
+
+						line = rs.getString("spawn");
+						if (line != null) {
+							tokens = line.split(",");
+							if (tokens.length >= 4)
+								try {
+									World world = plugin.getServerWorld(tokens[0]);
+									double x = Double.parseDouble(tokens[1]);
+									double y = Double.parseDouble(tokens[2]);
+									double z = Double.parseDouble(tokens[3]);
+									
+									Location loc = new Location(world, x, y, z);
+									if (tokens.length == 6) {
+										loc.setPitch(Float.parseFloat(tokens[4]));
+										loc.setYaw(Float.parseFloat(tokens[5]));
+									}
+									town.setSpawn(loc);
+								} catch (NumberFormatException e) {
+								} catch (NotRegisteredException e) {
+								} catch (NullPointerException e) {
+								} catch (TownyException e) {
+									System.out.println("[Towny] [Warning] " + town.getName() + " does not have a spawn point.");
+								}
+							// Load outpost spawns
+							line = rs.getString("outpostSpawns");
+							if (line != null) {
+								String[] outposts = line.split(";");
+								for (String spawn : outposts) {
+								tokens = spawn.split(",");
+									if (tokens.length >= 4)
+										try {
+											World world = plugin.getServerWorld(tokens[0]);
+											double x = Double.parseDouble(tokens[1]);
+											double y = Double.parseDouble(tokens[2]);
+											double z = Double.parseDouble(tokens[3]);
+											
+											Location loc = new Location(world, x, y, z);
+											if (tokens.length == 6) {
+												loc.setPitch(Float.parseFloat(tokens[4]));
+												loc.setYaw(Float.parseFloat(tokens[5]));
+											}
+											town.addOutpostSpawn(loc);
+										} catch (NumberFormatException e) {
+										} catch (NotRegisteredException e) {
+										} catch (NullPointerException e) {
+										} catch (TownyException e) {
+										}
 								}
 							}
 						}
-						try
-						{
-							World world = plugin.getServerWorld(rs.getString("world"));						
-							town.setSpawn(new Location(world,							
-							rs.getFloat("spawn_x"),rs.getFloat("spawn_y"),rs.getFloat("spawn_z"),
-							rs.getFloat("spawn_yaw"),rs.getFloat("spawn_pitch")
-							));															
-						} catch (Exception e) { System.out.println("Spawn load error "+e.getMessage()); }	
-						
-						// Load outpost spawns
-						String line = rs.getString("outpostSpawns");
-						if (line != null) {
-							String[] outposts = line.split(";");
-							for (String spawn : outposts) {
-								String[] tokens = spawn.split(",");
-								if (tokens.length >= 4)
-									try {
-										World world = plugin.getServerWorld(tokens[0]);
-										double x = Double.parseDouble(tokens[1]);
-										double y = Double.parseDouble(tokens[2]);
-										double z = Double.parseDouble(tokens[3]);
-										
-										Location loc = new Location(world, x, y, z);
-										if (tokens.length == 6) {
-											loc.setPitch(Float.parseFloat(tokens[4]));
-											loc.setYaw(Float.parseFloat(tokens[5]));
-										}
-										town.addOutpostSpawn(loc);
-									} catch (NumberFormatException e) {
-									} catch (NotRegisteredException e) {
-									} catch (NullPointerException e) {
-									} catch (TownyException e) {
-									}
-							}
-						}
-						
 						return true;																			
     			}
 				return false;
@@ -546,20 +705,67 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean loadNation(Nation nation) {
+		String line = "";
+		String[] tokens;
 		sendDebugMsg("Loading nation "+nation.getName());	
 		if (!getContext()) return false;							
 			try
 			{
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT capital,taxes FROM "+tb_prefix+"nations WHERE name='"+nation.getName()+"'");
+				ResultSet rs = s.executeQuery("SELECT towns,capital,assistants,tag,allies,enemies,taxes,neutral FROM "+tb_prefix+"nations WHERE name='"+nation.getName()+"'");
 				while (rs.next())
     			{
-					try
-					{
-						Town capital = getTown(rs.getString("capital"));
-						nation.setCapital(capital);
-					} catch (NotRegisteredException e) {}
-					nation.setTaxes(rs.getFloat("taxes"));
+					line = rs.getString("towns");
+					if (line != null) {
+						tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()){
+								Town town = getTown(token);
+								if (town != null)
+									nation.addTown(town);
+							}
+						}
+					}
+					nation.setCapital(getTown(rs.getString("capital")));
+					line = rs.getString("assistants");
+					if (line != null) {
+						tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()){
+								Resident assistant = getResident(token);
+								if (assistant != null)
+									nation.addAssistant(assistant);
+							}
+						}
+					}
+					
+					nation.setTag(rs.getString("tag"));
+					
+					line = rs.getString("allies");
+					if (line != null) {
+						tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()){
+							Nation friend = getNation(token);
+								if (friend != null)
+									nation.addAlly(friend); //("ally", friend);
+							}
+						}
+					}
+
+					line = rs.getString("enemies");
+					if (line != null) {
+						tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()){
+								Nation enemy = getNation(token);
+								if (enemy != null)
+									nation.addEnemy(enemy); //("enemy", enemy);
+							}
+						}
+					}
+					nation.setTaxes(rs.getDouble("taxes"));
+					nation.setNeutral(rs.getBoolean("neutral"));
     			}	
 				return true;
 			}
@@ -572,7 +778,8 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-		String line = "";		
+		String line = "";
+		String[] tokens;
 		String path = getWorldFilename(world);
 		
 		// create the world file if it doesn't exist
@@ -587,7 +794,19 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		if (fileWorld.exists() && fileWorld.isFile()) {
 			try {
 				KeyValueFile kvFile = new KeyValueFile(path);
-												
+				line = kvFile.get("towns");
+				if (line != null) {
+					tokens = line.split(",");
+					for (String token : tokens) {
+						if (!token.isEmpty()){
+							Town town = getTown(token);
+							if (town != null) {
+								town.setWorld(world);								
+							}
+						}
+					}
+				}
+				
 				line = kvFile.get("claimable");
 				if (line != null)
 					try {
@@ -835,177 +1054,66 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	@Override
 	public boolean loadTownBlocks() {
 		System.out.println("Loading Town blocks");
+		String line = "";
 		// Load town blocks
-		if (!getContext()) return false;
-		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT " +
-				"world,town,x,z,owner,protectionStatus,locked, " +
-				"isOutpost, plotPrice, plotType"+
-				" FROM "+tb_prefix+"townblocks");
-			while (rs.next())
-			{
-				Integer x = rs.getInt("x");
-				Integer z = rs.getInt("z");																
-				
-				TownyWorld world = getWorld(rs.getString("world"));
-				try  { world.newTownBlock(x, z); } 
-				catch (AlreadyRegisteredException e) {}				
-							
-				TownBlock tb = world.getTownBlock(x, z);	
-				try 
-				{ 
-					if (!tb.hasTown())
-					{
-						Town t = getTown(rs.getString("town"));
-						tb.setTown(t);
-					}
-				}
-				catch (NotRegisteredException e) {}
-				
-				tb.setPermissions(rs.getString("protectionStatus"));
-				tb.setLocked(rs.getBoolean("locked"));
-				tb.setPlotPrice(rs.getFloat("plotPrice"));
-				tb.setType(rs.getInt("plotType"));
-				tb.setOutpost(rs.getBoolean("isOutpost"));
+		if (!getContext()) return false;		
+		ResultSet rs;
+		for (TownBlock townBlock : getAllTownBlocks()) 
+		{
+				boolean set = false;
 				try
 				{
-					Resident r = getResident(rs.getString("owner")); 
-					tb.setResident(r);					
-				} catch (NotRegisteredException e) {}
-				
-				try {
-					if (tb.hasResident()){
-						tb.setPermissions(tb.getResident().getPermissions().toString());
-					} else {
-						tb.setPermissions(tb.getTown().getPermissions().toString());
-					}
-				} catch (NotRegisteredException e) {}
-				
-			}			
-			return true;
-		}
-		catch (Exception e) {System.out.println("Loading Town blocks Exception "+e.getMessage());}
-		return false;
-	}
-	
-	
-	
-	
-	public boolean UpdateDB(String tb_name, HashMap<String,Object> args, List<String> keys)
-	{
-		if (!getContext()) return false;
-		String code;
-		Statement s;		
-		if (keys==null)
-		{
-			code = "INSERT INTO "+tb_prefix+tb_name+" ";
-			String keycode = "(";
-			String valuecode = " VALUES (";
+					Statement s = cntx.createStatement();
+					rs = s.executeQuery("SELECT " +
+							"permissions,locked, changed " +				
+							" FROM "+tb_prefix+"townblocks " +
+							" WHERE x="+townBlock.getX()+" AND z="+townBlock.getZ());
+					while (rs.next())
+					{
+						line = rs.getString("permissions");
+						if (line != null)
+							try {
+								townBlock.setPermissions(line.trim());
+								set = true;
+							} catch (Exception e) {
+							}	
 						
-			Set<Map.Entry<String,Object>> set = args.entrySet();			
-			Iterator<Map.Entry<String,Object>> i = set.iterator();
-			while(i.hasNext()) 
-			{
-				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
-				
-				keycode += me.getKey();
-				keycode += ""+(i.hasNext()?", ":")");			
-				if (me.getValue() instanceof String)
-					valuecode += "'"+me.getValue()+"'";
-				else if (me.getValue() instanceof Float)
-					valuecode += "'"+me.getValue()+"'";
-				else
-					valuecode += ""+me.getValue();			
-				valuecode += ""+(i.hasNext()?",":")");								
-			}
-			code += keycode;		
-			code += valuecode;
-			try
-			{
-				s = cntx.createStatement();
-				int rs = s.executeUpdate(code);
-				if (rs == 0)
-					return false;
-				return true;
-			}
-			catch (SQLException e)
-			{ log.info("Towny SQL: Insert sql error " + e.getMessage()+ " --> "+code); }
-			return false;
+							try {
+								townBlock.setChanged(rs.getBoolean("changed"));
+							} catch (Exception e) {
+							}												
+							try {
+								townBlock.setLocked(rs.getBoolean("locked"));
+							} catch (Exception e) {
+							}
+							if (!set) {
+								// no permissions found so set in relation to it's owners perms.
+								try {
+									if (townBlock.hasResident()){
+										townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+									} else {
+										townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+									}
+								} catch (NotRegisteredException e) {
+									// Will never reach here
+								}
+							}
+					}					
+				}
+				catch (SQLException e) 
+				{ 
+					System.out.println("[Towny] Loading Error: Exception while reading TownBlock file ");
+					e.printStackTrace();
+					return false; 
+				}							
 		}
-		else
-		{
-			code = "UPDATE "+tb_prefix+tb_name+" SET ";
-			Set<Map.Entry<String,Object>> set = args.entrySet();			
-			Iterator<Map.Entry<String,Object>> i = set.iterator();
-			while(i.hasNext()) 
-			{
-				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
-				code += me.getKey()+" = ";
-				if (me.getValue() instanceof String)
-					code += "'"+me.getValue()+"'";				
-				else
-					code += ""+me.getValue();
-				code += ""+(i.hasNext()?",":"");
-			}
-			code += " WHERE ";
-			
-			Iterator<String> keys_i = keys.iterator();
-			while (keys_i.hasNext())
-			{				
-				String key = (String)keys_i.next();
-				code += key+" = ";			
-				Object v = args.get(key);
-				if (v instanceof String)
-					code += "'"+v+"'";	
-				else
-					code += v;
-				code += ""+(keys_i.hasNext()?" AND ":"");
-			}
-			
-			try
-			{
-				s = cntx.createStatement();
-				int rs = s.executeUpdate(code);
-				if (rs == 0) // if entry dont exist then try to insert 
-					return UpdateDB(tb_name, args, null);	
-				return true;
-			}
-			catch (SQLException e)
-			{ log.info("Towny SQL: Update sql error " + e.getMessage()+ " --> "+code); }
-		}			
-		return false;
+		return true;
 	}
-	public boolean DeleteDB(String tb_name, HashMap<String,Object> args)
-	{
-		if (!getContext()) return false;
-		try
-		{
-			String wherecode = "DELETE FROM "+tb_prefix+tb_name+" WHERE ";
-			Set<Map.Entry<String,Object>> set = args.entrySet();			
-			Iterator<Map.Entry<String,Object>> i = set.iterator();
-			while(i.hasNext()) 
-			{
-				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
-				wherecode += me.getKey() + " = ";
-				if (me.getValue() instanceof String)
-					wherecode += "'"+me.getValue()+"'";
-				else if (me.getValue() instanceof Float)
-					wherecode += "'"+me.getValue()+"'";
-				else
-					wherecode += ""+me.getValue();
-				
-				wherecode += ""+(i.hasNext()?" AND ":"");	
-			}
-			Statement s = cntx.createStatement();
-			int rs = s.executeUpdate(wherecode);
-			if (rs == 0)
-			{
-				log.info("Towny SQL: delete returned 0: "+wherecode);
-			}
-		} catch (SQLException e) { System.out.println("Towny SQL: Error delete : "+e.getMessage()); }
-		return false;
-	}
+	
+	
+	
+	
+	
 	/*
 	* Save individual towny objects
 	*/
@@ -1016,23 +1124,19 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		try {						
 			HashMap<String, Object> res_hm = new HashMap<String, Object>();
 			res_hm.put("name", resident.getName());
-			res_hm.put("town", resident.hasTown()?resident.getTown().getName():"");
-			res_hm.put("name", resident.getName());						
 			res_hm.put("lastOnline", resident.getLastOnline()); 
-			res_hm.put("registered", resident.getRegistered());				
-			res_hm.put("isNPC", (resident.isNPC()?1:0));
+			res_hm.put("registered", resident.getRegistered());
+			res_hm.put("isNPC", resident.isNPC());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
-			res_hm.put("protectionStatus", resident.getPermissions().toString());
-			UpdateDB("residents", res_hm, Arrays.asList("name"));								
-							
+			res_hm.put("town", resident.hasTown()?resident.getTown().getName():"");						
 			String fstr = "";
 			for (Resident friend : resident.getFriends())
 				fstr += friend.getName() + ",";
-			res_hm.put("friends", fstr);
-					
-			for (TownBlock tb : resident.getTownBlocks())
-				saveTownBlock(tb);			
+			res_hm.put("friends", fstr);							
+			res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
+			res_hm.put("protectionStatus", resident.getPermissions().toString());
+			UpdateDB("residents", res_hm, Arrays.asList("name"));																													
 			return true;
 		}		
 		catch (Exception e)
@@ -1047,9 +1151,16 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		try {			
 				HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 				twn_hm.put("name", town.getName());
-				twn_hm.put("world", town.getWorld().getName());
+				twn_hm.put("residents", StringMgmt.join(town.getResidents(), ","));							
 				twn_hm.put("mayor", town.hasMayor()?town.getMayor().getName():"");
 				twn_hm.put("nation", town.hasNation()?town.getNation().getName():"");
+				String fstr = "";
+				for (Resident assist : town.getAssistants())
+					fstr += assist.getName() + ",";
+				twn_hm.put("assistants", fstr);
+				twn_hm.put("townBoard", town.getTownBoard());
+				twn_hm.put("tag", town.getTag());
+				twn_hm.put("protectionStatus",town.getPermissions().toString());
 				twn_hm.put("bonus", town.getBonusBlocks());
 				twn_hm.put("purchased", town.getPurchasedBlocks());
 				twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
@@ -1059,29 +1170,19 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 				twn_hm.put("plotPrice", town.getPlotPrice());
 				twn_hm.put("plotTax", town.getPlotTax());
 				twn_hm.put("taxes", town.getTaxes());
-				twn_hm.put("hasUpkeep", town.hasUpkeep()?1:0);
-				twn_hm.put("open", town.isOpen()?1:0);
-				twn_hm.put("public", town.isPublic()?1:0);
-				twn_hm.put("board", town.getTownBoard());	
-				twn_hm.put("protectionStatus", town.getPermissions().toString());	
-				if (town.hasSpawn())
-				{
-					twn_hm.put("spawn_x", town.getSpawn().getX());
-					twn_hm.put("spawn_y", town.getSpawn().getY());
-					twn_hm.put("spawn_z", town.getSpawn().getZ());
-					twn_hm.put("spawn_pitch", town.getSpawn().getPitch());
-					twn_hm.put("spawn_yaw", town.getSpawn().getYaw());
-				}				
-				if (town.hasHomeBlock())
-				{
-					twn_hm.put("homeblock_x", town.getHomeBlock().getX());
-					twn_hm.put("homeblock_z", town.getHomeBlock().getZ());
-				}
-				String fstr = "";
-				for (Resident assist : town.getAssistants())
-					fstr += assist.getName() + ",";
-				twn_hm.put("assistants", fstr);
-				
+				twn_hm.put("hasUpkeep", town.hasUpkeep());
+				twn_hm.put("open", town.isOpen());
+				twn_hm.put("public", town.isPublic());	
+				twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
+				twn_hm.put("homeblock", town.hasHomeBlock()?town.getHomeBlock().getWorld().getName() + ","
+						+ Integer.toString(town.getHomeBlock().getX()) + ","
+						+ Integer.toString(town.getHomeBlock().getZ()):"");
+				twn_hm.put("spawn", town.hasSpawn()?town.getSpawn().getWorld().getName() + ","
+						+ Double.toString(town.getSpawn().getX()) + ","
+						+ Double.toString(town.getSpawn().getY()) + ","
+						+ Double.toString(town.getSpawn().getZ()) + ","
+						+ Float.toString(town.getSpawn().getPitch()) + ","
+						+ Float.toString(town.getSpawn().getYaw()):"");																
 				// Outpost Spawns
 				if (town.hasOutpostSpawn()) {
 					String outpostArray = "";
@@ -1097,9 +1198,7 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 					}
 						
 						
-				UpdateDB("towns", twn_hm, Arrays.asList("name"));
-				for (TownBlock tb : town.getTownBlocks())				
-					saveTownBlock(tb);									
+				UpdateDB("towns", twn_hm, Arrays.asList("name"));											
 				return true;
 		}		
 		catch (Exception e) 
@@ -1113,8 +1212,26 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 		try {
 			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 			nat_hm.put("name", nation.getName());
-			nat_hm.put("capital", nation.hasCapital()?nation.getCapital().getName():"");			
+			String fstr = "";
+			for (Town town : nation.getTowns())
+				fstr += town.getName() + ",";
+			nat_hm.put("towns", fstr);
+			nat_hm.put("capital", nation.hasCapital()?nation.getCapital().getName():"");
+			nat_hm.put("tag", nation.hasTag()?nation.getTag():"");
+			fstr = "";
+			for (Resident assistant : nation.getAssistants())
+				fstr += assistant.getName() + ",";
+			nat_hm.put("assistants", fstr);						
+			fstr = "";
+			for (Nation allyNation : nation.getAllies())
+				fstr += allyNation.getName() + ",";
+			nat_hm.put("allies", fstr);
+			fstr = "";
+			for (Nation enemyNation : nation.getEnemies())
+				fstr += enemyNation.getName() + ",";
+			nat_hm.put("enemies", fstr);
 			nat_hm.put("taxes", nation.getTaxes());
+			nat_hm.put("neutral", nation.isNeutral());
 			UpdateDB("nations", nat_hm, Arrays.asList("name"));
 		}		
 		catch (Exception e) 
@@ -1129,7 +1246,14 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			
 			String path = getWorldFilename(world);
 			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
-									
+			
+			// Towns
+			fout.write("towns=");
+			for (Town town : world.getTowns()){
+				sendDebugMsg("   Town - " + town.getName());
+				fout.write(town.getName() + ",");
+			}
+			
 			fout.write(newLine);
 			fout.write(newLine);
 			
@@ -1262,14 +1386,9 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 			HashMap<String, Object> tb_hm = new HashMap<String, Object>();
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());														
-			tb_hm.put("world", townBlock.hasTown()?townBlock.getTown().getWorld().getName():"");
-			tb_hm.put("town", townBlock.hasTown()?townBlock.getTown().getName():"");
-			tb_hm.put("owner", townBlock.hasResident()?townBlock.getResident().getName():"");
-			tb_hm.put("protectionStatus", townBlock.getPermissions().toString());
+			tb_hm.put("permissions", townBlock.getPermissions().toString());
 			tb_hm.put("locked", townBlock.isLocked());
-			tb_hm.put("isOutpost", townBlock.isOutpost()?1:0);
-			tb_hm.put("plotPrice", townBlock.getPlotPrice());
-			tb_hm.put("plotType", townBlock.getType().getId());
+			tb_hm.put("changed", townBlock.isChanged());			
 			UpdateDB("townblocks", tb_hm, Arrays.asList("x","z"));
 		}
 		catch (Exception e) 
@@ -1321,7 +1440,104 @@ public class TownyMYSQLSource extends TownyDatabaseHandler
 	 * 
 	 * PlotData and regenlist should stay on hd for speed purpose ... maybe ramfs ? 
 	 */
-	
+	public void utilLoadTownBlocks(String line, Town town, Resident resident) {
+		String[] worlds = line.split("\\|");
+		for (String w : worlds) {
+			String[] split = w.split(":");
+			if (split.length != 2) {
+				System.out.println("[Towny] [Warning] " + town.getName() + " BlockList does not have a World or data.");
+				continue;
+			}
+			try {
+				TownyWorld world = getWorld(split[0]);
+				for (String s : split[1].split(";")) {
+                    String blockTypeData = null;
+                    int indexOfType = s.indexOf("[");
+                    if (indexOfType != -1) { //is found
+                        int endIndexOfType = s.indexOf("]");
+                        if (endIndexOfType != -1) {
+                            blockTypeData = s.substring(indexOfType + 1, endIndexOfType);
+                        }
+                        s = s.substring(endIndexOfType + 1);
+                    }
+					String[] tokens = s.split(",");
+					if (tokens.length < 2)
+						continue;
+					try {
+						int x = Integer.parseInt(tokens[0]);
+						int z = Integer.parseInt(tokens[1]);
+
+						try {
+							world.newTownBlock(x, z);
+						} catch (AlreadyRegisteredException e) {
+						}
+						TownBlock townblock = world.getTownBlock(x, z);
+
+						if (town != null)
+							townblock.setTown(town);
+
+						if (resident != null && townblock.hasTown())
+							townblock.setResident(resident);
+
+                        if (blockTypeData != null) {
+                            utilLoadTownBlockTypeData(townblock, blockTypeData);
+                        }
+
+						//if present set the plot price
+						if (tokens.length >= 3) {
+							if (tokens[2] == "true")
+								townblock.setPlotPrice(town.getPlotPrice());
+							else
+								townblock.setPlotPrice(Double.parseDouble(tokens[2]));
+                        }
+						
+					} catch (NumberFormatException e) {
+					} catch (NotRegisteredException e) {
+					}
+				}
+			} catch (NotRegisteredException e) {
+				continue;
+			}
+		}
+	}
+
+    public void utilLoadTownBlockTypeData(TownBlock townBlock, String data) {
+    	String[] tokens = data.split(",");
+
+    	// Plot Type
+    	if (tokens.length >= 1)
+    		townBlock.setType(Integer.valueOf(tokens[0]));
+    	
+    	// Outpost or normal plot.
+        if (tokens.length >= 2)
+        	townBlock.setOutpost(tokens[1].equalsIgnoreCase("1")? true : false);
+    }
+
+	public String utilSaveTownBlocks(List<TownBlock> townBlocks) {
+		HashMap<TownyWorld, ArrayList<TownBlock>> worlds = new HashMap<TownyWorld, ArrayList<TownBlock>>();
+		String out = "";
+
+		// Sort all town blocks according to what world its in
+		for (TownBlock townBlock : townBlocks) {
+			TownyWorld world = townBlock.getWorld();
+			if (!worlds.containsKey(world))
+				worlds.put(world, new ArrayList<TownBlock>());
+			worlds.get(world).add(townBlock);
+		}
+
+		for (TownyWorld world : worlds.keySet()) {
+			out += world.getName() + ":";
+			for (TownBlock townBlock : worlds.get(world)) {
+				out += "[" + townBlock.getType().getId();
+				out += "," + (townBlock.isOutpost()? "1" : "0");
+				out += "]" + townBlock.getX() + "," + townBlock.getZ() +  "," + townBlock.getPlotPrice() + ";";
+			}
+			out += "|";
+			
+		}
+
+		return out;
+	}
 	
 	@Override
 	public boolean saveRegenList() {
