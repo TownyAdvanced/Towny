@@ -22,6 +22,7 @@ public enum PermissionNodes {
 		TOWNY_SPAWN_ALL("towny.town.spawn.*"),
 		
 			TOWNY_SPAWN_TOWN("towny.town.spawn.town"),
+			TOWNY_SPAWN_OUTPOST("towny.town.spawn.outpost"),
 			TOWNY_SPAWN_NATION("towny.town.spawn.nation"),
 			TOWNY_SPAWN_ALLY("towny.town.spawn.ally"),
 			TOWNY_SPAWN_PUBLIC("towny.town.spawn.public"),

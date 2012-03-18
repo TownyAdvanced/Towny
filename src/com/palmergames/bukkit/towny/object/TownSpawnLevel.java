@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 public enum TownSpawnLevel {
 	TOWN_RESIDENT(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN, "msg_err_town_spawn_forbidden", ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL, PermissionNodes.TOWNY_SPAWN_TOWN.getNode()),
+	TOWN_RESIDENT_OUTPOST(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN, "msg_err_town_spawn_forbidden", ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL, PermissionNodes.TOWNY_SPAWN_OUTPOST.getNode()),
 	PART_OF_NATION(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_NATION, "msg_err_town_spawn_nation_forbidden", ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION, PermissionNodes.TOWNY_SPAWN_NATION.getNode()),
 	NATION_ALLY(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_ALLY, "msg_err_town_spawn_ally_forbidden", ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_ALLY, PermissionNodes.TOWNY_SPAWN_ALLY.getNode()),
 	UNAFFILIATED(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL, "msg_err_public_spawn_forbidden", ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC, PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode()),

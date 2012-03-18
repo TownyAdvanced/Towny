@@ -77,6 +77,8 @@ permissions:
     towny.town.spawn.town:
         description: User is permitted to use /town spawn.
         default: false
+        children:
+            towny.town.spawn.outpost: true
     towny.town.spawn.nation:
         description: Ability to spawn to other towns within your nation.
         default: false

@@ -991,7 +991,7 @@ public class TownCommand implements CommandExecutor  {
                 	if (!resident.hasTown()) {
                 		townSpawnPermission = TownSpawnLevel.UNAFFILIATED;
                 	} else if (resident.getTown() == town) {
-                		townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
+                		townSpawnPermission = outpost? TownSpawnLevel.TOWN_RESIDENT_OUTPOST : TownSpawnLevel.TOWN_RESIDENT;
                 	} else if (resident.hasNation() && town.hasNation()) {
                 		Nation playerNation = resident.getTown().getNation();
                 		Nation targetNation = town.getNation();
@@ -1014,7 +1014,7 @@ public class TownCommand implements CommandExecutor  {
                 TownyMessaging.sendDebugMsg(townSpawnPermission.toString() + " " + townSpawnPermission.isAllowed());
                 townSpawnPermission.checkIfAllowed(plugin, player);
                 
-                if (!(isTownyAdmin || townSpawnPermission == TownSpawnLevel.TOWN_RESIDENT) && !town.isPublic())
+                if (!(isTownyAdmin || townSpawnPermission == TownSpawnLevel.TOWN_RESIDENT || townSpawnPermission == TownSpawnLevel.TOWN_RESIDENT_OUTPOST) && !town.isPublic())
                 	throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
                 
                 if (!isTownyAdmin) {
