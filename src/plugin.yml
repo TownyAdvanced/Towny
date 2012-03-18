@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.1.2
+version: 0.79.1.3
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -166,38 +166,24 @@ permissions:
     towny.wild.build:
         description: User can build in wild.
         default: false
+        # This includes all subnodes for
+        #  towny.wild.block.[id].build
     towny.wild.destroy:
         description: User can destroy in wild.
         default: false
+        # This includes all subnodes for
+        #  towny.wild.block.[id].destroy
     towny.wild.switch:
         description: User can switch in wild.
         default: false
+        # This includes all subnodes for
+        #  towny.wild.block.[id].switch
     towny.wild.item_use:
         description: User can use use items in wild. 
         default: false
-        
-    towny.wild.block.*:
-        description: User is able to edit specified/all block types in the wild.
-        default: false
-        children:
-            towny.wild.Block.*.build: true
-            towny.wild.block.*.destroy: true
-            towny.wild.block.*.switch: true
-            towny.wild.block.*.item_use: true 
-            
-    towny.wild.block.*.build:
-        description: User can build specified/all block types in the wild.
-        default: false
-    towny.wild.block.*.destroy:
-        description: User can break specified/all block types in the wild.
-        default: false
-    towny.wild.block.*.switch:
-        description: User can switch specified/all block types in the wild.
-        default: false
-    towny.wild.block.*.item_use:
-        description: User can use specified/all block types in the wild.
-        default: false
-        
+        # This includes all subnodes for
+        #  towny.wild.block.[id].item_use
+
     towny.claimed.*:
         description: User can build/destroy/switch/item_use in all towns.
         default: false
@@ -210,56 +196,24 @@ permissions:
     towny.claimed.build:
         description: User can build in all towns.
         default: false
+        # This includes all subnodes for
+        #  towny.claimed.owntown.block.[id].build
+        #  towny.claimed.alltown.block.[id].build
     towny.claimed.destroy:
         description: User can destroy in all towns.
         default: false
+        # This includes all subnodes for
+        #  towny.claimed.owntown.block.[id].destroy
+        #  towny.claimed.alltown.block.[id].destroy
     towny.claimed.switch:
         description: User can switch in all towns.
         default: false
+        # This includes all subnodes for
+        #  towny.claimed.owntown.block.[id].switch
+        #  towny.claimed.alltown.block.[id].switch
     towny.claimed.item_use:
         description: User can use use items in all towns. 
         default: false
-        
-    towny.claimed.alltown.block.*:
-        description: User is able to edit specified/all block types in all towns.
-        default: false
-        children:
-            towny.claimed.alltown.Block.*.build: true
-            towny.claimed.alltown.block.*.destroy: true
-            towny.claimed.alltown.block.*.switch: true
-            towny.claimed.alltown.block.*.item_use: true
-            
-    towny.claimed.alltown.block.*.build:
-        description: User can build specified/all block types in all towns.
-        default: false
-    towny.claimed.alltown.block.*.destroy:
-        description: User can break specified/all block types in all towns.
-        default: false
-    towny.claimed.alltown.block.*.switch:
-        description: User can switch specified/all block types in all towns.
-        default: false
-    towny.claimed.alltown.block.*.item_use:
-        description: User can use specified/all block types in all towns.
-        default: false
-            
-    towny.claimed.owntown.block.*:
-        description: User is able to edit specified/all block types in their own town.
-        default: false
-        children:
-            towny.claimed.owntown.Block.*.build: true
-            towny.claimed.owntown.block.*.destroy: true
-            towny.claimed.owntown.block.*.switch: true
-            towny.claimed.owntown.block.*.item_use: true 
-            
-    towny.claimed.owntown.block.*.build:
-        description: User can build specified/all block types in their own town.
-        default: false
-    towny.claimed.owntown.block.*.destroy:
-        description: User can break specified/all block types in their own town.
-        default: false
-    towny.claimed.owntown.block.*.switch:
-        description: User can switch specified/all block types in their own town.
-        default: false
-    towny.claimed.owntown.block.*.item_use:
-        description: User can use specified/all block types in their own town.
-        default: false
+        # This includes all subnodes for
+        #  towny.claimed.owntown.block.[id].item_use
+        #  towny.claimed.alltown.block.[id].item_use
