@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.War;
 import com.palmergames.bukkit.towny.war.WarSpoils;
 
@@ -41,6 +42,19 @@ public class TownyEntityMonitorListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent event) {
 
 		Entity defenderEntity = event.getEntity();
+		
+		TownyWorld World = null;
+
+		try {
+			World = TownyUniverse.getDataSource().getWorld(defenderEntity.getLocation().getWorld().getName());
+			if (!World.isUsingTowny())
+				return;
+			
+		} catch (NotRegisteredException e) {
+			// World not registered with Towny.
+			return;
+		}
+		
 
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {

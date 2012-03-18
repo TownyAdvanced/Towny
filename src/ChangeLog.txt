@@ -1223,3 +1223,4 @@ v0.79.1.3:
 	- Fix world setting checks when not using permissions.
 	- Rework permission inheritances to reduce lag.
 	- Added a permission node to allow teleporting to your towns outposts - 'towny.town.spawn.outpost' (defaults to true, but follows town spawn permissions).
+	- Death events in non-towny worlds are no longer tracked for war or death payments.
