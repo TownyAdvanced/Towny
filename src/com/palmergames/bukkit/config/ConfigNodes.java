@@ -551,6 +551,7 @@ public enum ConfigNodes {
                     "############################################################", ""),
             WARTIME_NATION_CAN_BE_NEUTRAL("war.nation_can_be_neutral","true",
                     "#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
+            
             WAR_EVENT("war.event", "",
             		"", "",
                     "############################################################",
@@ -574,6 +575,8 @@ public enum ConfigNodes {
                     "# The remaining half is paid to the town which took the most town blocks, and lost the least.",
                     ""),
             WAR_EVENT_WARNING_DELAY("war.event.warning_delay","30"),
+            WAR_EVENT_TOWNS_NEUTRAL("war.event.towns_are_neutral","true",
+                    "#If false all towns not in nations can be attacked during a war event."),
             WAR_EVENT_REMOVE_ON_MONARCH_DEATH("war.event.remove_on_monarch_death","false", "", "# If true and the monarch/king dies the nation is removed from the war."),
             WAR_EVENT_BLOCK_GRIEFING("war.event.allow_block_griefing","true", "# If enabled players will be able to break/place blocks in enemy plots during a war."),
             

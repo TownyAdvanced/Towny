@@ -920,6 +920,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
 	}
 	
+	public static boolean isWarTimeTownsNeutral() {
+		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
+	}
+	
 	public static boolean isAllowWarBlockGriefing() {
 		return getBoolean(ConfigNodes.WAR_EVENT_BLOCK_GRIEFING);
 	}

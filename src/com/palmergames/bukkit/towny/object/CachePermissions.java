@@ -131,12 +131,19 @@ public class CachePermissions extends TownyUniverse {
 
 		try {
 			// War Time switch rights
-			if (isWarTime() && TownySettings.isAllowWarBlockGriefing())
-				try {
-					if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
-						return TownBlockStatus.WARZONE;
-				} catch (NotRegisteredException e) {
+			if (isWarTime()) {
+				if (TownySettings.isAllowWarBlockGriefing()) {
+					try {
+						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
+							return TownBlockStatus.WARZONE;
+					} catch (NotRegisteredException e) {
+						
+					}
 				}
+				//If this town is not in a nation and we are set to non neutral status during war.
+				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation())
+					return TownBlockStatus.WARZONE;
+			}
 
 			// Town Owner Override
 			try {
