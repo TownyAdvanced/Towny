@@ -1228,3 +1228,4 @@ v0.79.1.4:
 	- First beta of SQL database handling (MYSQL only at the moment).
 	- Add support for h2/sqlite SQL formats.
 	- Added a new setting under War events 'towns_are_neutral'. If set to false, all towns not in nations are attackable during a war event.
+	- Block 'fire charge' from lighting fires if firespread is disabled (added to item_use_ids).
