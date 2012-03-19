@@ -80,13 +80,13 @@ public class TownySQLSource extends TownyFlatFileSource
 			FileMgmt.checkFolders(new String[]{
 					rootFolder,
 					rootFolder + dataFolder,
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds" + FileMgmt.fileSeparator() + "deleted"
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data"
+					//rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds",
+					//rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds" + FileMgmt.fileSeparator() + "deleted"
 			});
 			FileMgmt.checkFiles(new String[]{
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt"
+					//rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"
 			});		
 		} catch (IOException e) {
 			log.info("[Towny] Error: Could not create flatfile default files and folders.");
@@ -254,6 +254,58 @@ public class TownySQLSource extends TownyFlatFileSource
 		}
 		catch (SQLException e)
 		{ System.out.println("[Towny] Error Checking table townblocks :" + e.getMessage()); }
+		
+		try 
+		{ 
+			ResultSet tb_table = dbm.getTables(null, null, (tb_prefix+"worlds").toUpperCase(), types); 			
+			if (tb_table.next()) {
+				//System.out.println("[Towny] Table worlds is ok!");
+			}
+			else 
+			{
+				String world_create = 
+						"CREATE TABLE "+tb_prefix+"worlds ("+						
+						"`name` mediumtext NOT NULL,"+												
+						"`towns` mediumtext NOT NULL,"+
+						"`claimable` bool NOT NULL DEFAULT '0',"+
+						"`pvp` bool NOT NULL DEFAULT '0',"+
+						"`forcepvp` bool NOT NULL DEFAULT '0',"+
+						"`forcetownmobs` bool NOT NULL DEFAULT '0',"+
+						"`worldmobs` bool NOT NULL DEFAULT '0',"+
+						"`firespread` bool NOT NULL DEFAULT '0',"+
+						"`forcefirespread` bool NOT NULL DEFAULT '0',"+
+						"`explosions` bool NOT NULL DEFAULT '0',"+
+						"`forceexplosions` bool NOT NULL DEFAULT '0',"+
+						"`endermanprotect` bool NOT NULL DEFAULT '0',"+
+						"`disableplayertrample` bool NOT NULL DEFAULT '0',"+
+						"`disablecreaturetrample` bool NOT NULL DEFAULT '0',"+
+						"`unclaimedZoneBuild` bool NOT NULL DEFAULT '0',"+
+						"`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0',"+
+						"`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0',"+
+						"`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0',"+
+						"`unclaimedZoneName` mediumtext NOT NULL,"+
+						"`unclaimedZoneIgnoreIds` mediumtext NOT NULL,"+
+						"`usingPlotManagementDelete` bool NOT NULL DEFAULT '0',"+
+						"`plotManagementDeleteIds` mediumtext NOT NULL,"+
+						"`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0',"+
+						"`plotManagementMayorDelete` mediumtext NOT NULL,"+
+						"`usingPlotManagementRevert` bool NOT NULL DEFAULT '0',"+
+						"`plotManagementRevertSpeed` long NOT NULL DEFAULT '0',"+
+						"`plotManagementIgnoreIds` mediumtext NOT NULL,"+
+						"`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0',"+
+						"`plotManagementWildRegenEntities` mediumtext NOT NULL,"+
+						"`plotManagementWildRegenSpeed` long NOT NULL DEFAULT '0',"+
+						"`usingTowny` bool NOT NULL DEFAULT '0',"+
+						"PRIMARY KEY (`name`)"+
+						")";
+				try {				
+					Statement s = cntx.createStatement();
+					s.executeUpdate(world_create);
+				} catch (SQLException ee) { System.out.println("[Towny] Error Creating table worlds : " + ee.getMessage()); }
+			}
+		}
+		catch (SQLException e)
+		{ System.out.println("[Towny] Error Checking table worlds :" + e.getMessage()); }
 		
 		//System.out.println("Checking done!");
 	}
@@ -474,15 +526,33 @@ public class TownySQLSource extends TownyFlatFileSource
 			catch (SQLException e)
 			{ log.info("[Towny] SQL: nation list sql error : "+e.getMessage()); }
 			catch (Exception e)
-			{ log.info("[Towny] SQL: nation list unknown error: ");e.printStackTrace();}		
+			{ log.info("[Towny] SQL: nation list unknown error : ");e.printStackTrace();}		
 		return false;	
 	}
 	
-	/*
 	@Override
 	public boolean loadWorldList() {
 	
-		sendDebugMsg("Loading World List");
+		TownyMessaging.sendDebugMsg("Loading World List");
+		
+		if (!getContext()) return false;								
+		try
+		{
+			Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"worlds");
+			while (rs.next())
+			{
+				try {
+					newWorld(rs.getString("name"));
+				} catch (AlreadyRegisteredException e) {} 
+			}
+		}
+		catch (SQLException e)
+		{ log.info("[Towny] SQL: world list sql error : "+e.getMessage()); }
+		catch (Exception e)
+		{ log.info("[Towny] SQL: world list unknown error : ");e.printStackTrace();}
+		
+		// Check for any new worlds registered with bukkit.
 		if (plugin != null) {			
 			for (World world : plugin.getServer().getWorlds())
 				try {
@@ -495,7 +565,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		}
 		return true;
 	}
-	*/
+
 	
 	
 	/*
@@ -800,6 +870,285 @@ public class TownySQLSource extends TownyFlatFileSource
 	}
 	
 	@Override
+	public boolean loadWorld(TownyWorld world) {
+		
+		String line = "";
+		Boolean result = false;
+		Long resultLong;
+		String[] tokens;
+		TownyMessaging.sendDebugMsg("Loading world "+world.getName());	
+		if (!getContext()) return false;							
+			try
+			{
+				Statement s = cntx.createStatement();
+				ResultSet rs = s.executeQuery("SELECT * FROM "+tb_prefix+"worlds WHERE name='"+world.getName()+"'");
+				while (rs.next())
+    			{
+					line = rs.getString("towns");
+					if (line != null) {
+						tokens = line.split(",");
+						for (String token : tokens) {
+							if (!token.isEmpty()){
+								Town town = getTown(token);
+								if (town != null) {
+									town.setWorld(world);
+								}
+							}
+						}
+					}
+					
+					result = rs.getBoolean("claimable");
+					if (result != null)
+						try {
+							world.setClaimable(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("pvp");
+					if (result != null)
+						try {
+							world.setPVP(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("forcepvp");
+					if (result != null)
+						try {
+							world.setForcePVP(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("forcetownmobs");
+					if (result != null)
+						try {
+							world.setForceTownMobs(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("worldmobs");
+					if (result != null)
+						try {
+							world.setWorldMobs(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("firespread");
+					if (result != null)
+						try {
+							world.setFire(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("forcefirespread");
+					if (result != null)
+						try {
+							world.setForceFire(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("explosions");
+					if (result != null)
+						try {
+							world.setExpl(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("forceexplosions");
+					if (result != null)
+						try {
+							world.setForceExpl(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("endermanprotect");
+					if (result != null)
+						try {
+							world.setEndermanProtect(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("disableplayertrample");
+					if (result != null)
+						try {
+							world.setDisablePlayerTrample(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("disablecreaturetrample");
+					if (result != null)
+						try {
+							world.setDisableCreatureTrample(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("unclaimedZoneBuild");
+					if (result != null)
+						try {
+							world.setUnclaimedZoneBuild(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("unclaimedZoneDestroy");
+					if (result != null)
+						try {
+							world.setUnclaimedZoneDestroy(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("unclaimedZoneSwitch");
+					if (result != null)
+						try {
+							world.setUnclaimedZoneSwitch(result);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("unclaimedZoneItemUse");
+					if (result != null)
+						try {
+							world.setUnclaimedZoneItemUse(result);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("unclaimedZoneName");
+					if (result != null)
+						try {
+							world.setUnclaimedZoneName(line);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("unclaimedZoneIgnoreIds");
+					if (line != null)
+						try {
+							List<Integer> nums = new ArrayList<Integer>();
+							for (String split: line.split(","))
+								if (!split.isEmpty())
+								try {
+									nums.add(Integer.parseInt(split));
+								} catch (NumberFormatException e) {
+								}
+							world.setUnclaimedZoneIgnore(nums);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("usingPlotManagementDelete");
+					if (result != null)
+						try {
+							world.setUsingPlotManagementDelete(result);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("plotManagementDeleteIds");
+					if (line != null)
+						try {
+							List<Integer> nums = new ArrayList<Integer>();
+							for (String split: line.split(","))
+								if (!split.isEmpty())
+								try {
+									nums.add(Integer.parseInt(split));
+								} catch (NumberFormatException e) {
+								}
+							world.setPlotManagementDeleteIds(nums);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("usingPlotManagementMayorDelete");
+					if (result != null)
+						try {
+							world.setUsingPlotManagementMayorDelete(result);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("plotManagementMayorDelete");
+					if (line != null)
+						try {
+							List<String> materials = new ArrayList<String>();
+							for (String split: line.split(","))
+								if (!split.isEmpty())
+								try {
+									materials.add(split.toUpperCase().trim());
+								} catch (NumberFormatException e) {
+								}
+							world.setPlotManagementMayorDelete(materials);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("usingPlotManagementRevert");
+					if (result != null)
+						try {
+							world.setUsingPlotManagementRevert(result);
+						} catch (Exception e) {
+						}
+					
+					resultLong = rs.getLong("PlotManagementRevertSpeed");
+					if (resultLong != null)
+						try {
+							world.setPlotManagementRevertSpeed(resultLong);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("plotManagementIgnoreIds");
+					if (line != null)
+						try {
+							List<Integer> nums = new ArrayList<Integer>();
+							for (String split: line.split(","))
+								if (!split.isEmpty())
+								try {
+									nums.add(Integer.parseInt(split));
+								} catch (NumberFormatException e) {
+								}
+							world.setPlotManagementIgnoreIds(nums);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("usingPlotManagementWildRegen");
+					if (result != null)
+						try {
+							world.setUsingPlotManagementWildRevert(result);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("plotManagementWildRegenEntities");
+					if (line != null)
+						try {
+							List<String> entities = new ArrayList<String>();
+							for (String split: line.split(","))
+								if (!split.isEmpty())
+								try {
+									entities.add(split.trim());
+								} catch (NumberFormatException e) {
+								}
+							world.setPlotManagementWildRevertEntities(entities);
+						} catch (Exception e) {
+						}
+					
+					resultLong = rs.getLong("plotManagementWildRegenSpeed");
+					if (resultLong != null)
+						try {
+							world.setPlotManagementWildRevertDelay(resultLong);
+						} catch (Exception e) {
+						}
+					
+					result = rs.getBoolean("usingTowny");
+					if (result != null)
+						try {
+							world.setUsingTowny(result);
+						} catch (Exception e) {
+						}
+
+    			}
+				return true;
+				
+			}
+			catch (SQLException e)
+			{  log.info("[Towny] SQL: Load world sql error (" + world.getName() + ")" + e.getMessage()); }
+			catch (Exception e)
+			{  log.info("[Towny] SQL: Load world unknown error - ");e.printStackTrace(); }		
+		return false;
+
+
+	}
+	
+	@Override
 	public boolean loadTownBlocks() {
 
 		String line = "";
@@ -989,6 +1338,104 @@ public class TownySQLSource extends TownyFlatFileSource
 		catch (Exception e) 
 		{ log.info("[Towny] SQL: Save Nation unknown error"); e.printStackTrace(); }
 		return false;
+	}
+	
+	@Override
+	public boolean saveWorld(TownyWorld world) {
+		
+		TownyMessaging.sendDebugMsg("Saving world "+world.getName());		
+		try {
+			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
+			
+			nat_hm.put("name", world.getName());
+			
+			String fstr = "";
+			for (Town town : world.getTowns())
+				fstr += town.getName() + ",";
+					
+			// Towns
+			nat_hm.put("towns", fstr);
+			// PvP
+			nat_hm.put("pvp", world.isPVP());
+			// Force PvP
+			nat_hm.put("forcepvp", world.isForcePVP());
+			// Claimable
+			nat_hm.put("claimable", world.isClaimable());
+			// has monster spawns			
+			nat_hm.put("worldmobs", world.hasWorldMobs());
+			// force town mob spawns			
+			nat_hm.put("forcetownmobs", world.isForceTownMobs());
+			// has firespread enabled
+			nat_hm.put("firespread", world.isFire());
+			nat_hm.put("forcefirespread", world.isForceFire());
+			// has explosions enabled
+			nat_hm.put("explosions", world.isExpl());
+			nat_hm.put("forceexplosions", world.isForceExpl());
+			// Enderman block protection
+			nat_hm.put("endermanprotect", world.isEndermanProtect());
+			// PlayerTrample
+			nat_hm.put("disableplayertrample", world.isDisablePlayerTrample());
+			// CreatureTrample
+			nat_hm.put("disablecreaturetrample", world.isDisableCreatureTrample());
+			
+			// Unclaimed Zone Build
+			nat_hm.put("unclaimedZoneBuild", world.getUnclaimedZoneBuild());
+			// Unclaimed Zone Destroy
+			nat_hm.put("unclaimedZoneDestroy", world.getUnclaimedZoneDestroy());
+			// Unclaimed Zone Switch
+			nat_hm.put("unclaimedZoneSwitch", world.getUnclaimedZoneSwitch());
+			// Unclaimed Zone Item Use
+			nat_hm.put("unclaimedZoneItemUse", world.getUnclaimedZoneItemUse());
+			// Unclaimed Zone Name
+			if (world.getUnclaimedZoneName() != null)
+				nat_hm.put("unclaimedZoneName", world.getUnclaimedZoneName());
+			
+			// Unclaimed Zone Ignore Ids
+			if (world.getUnclaimedZoneIgnoreIds() != null)
+				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ","));
+			
+			// Using PlotManagement Delete
+			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
+			// Plot Management Delete Ids
+			if (world.getPlotManagementDeleteIds() != null)
+				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+			
+			// Using PlotManagement Mayor Delete
+			nat_hm.put("usingPlotManagementMayorDelete", world.isUsingPlotManagementMayorDelete());
+			// Plot Management Mayor Delete
+			if (world.getPlotManagementMayorDelete() != null)
+				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), ","));
+			
+			// Using PlotManagement Revert
+			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
+			// Using PlotManagement Revert Speed
+			nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
+
+			// Plot Management Ignore Ids
+			if (world.getPlotManagementIgnoreIds() != null)
+				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
+
+			// Using PlotManagement Wild Regen
+			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildRevert());
+			
+			// Wilderness Explosion Protection entities
+			if (world.getPlotManagementWildRevertEntities() != null)
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities(), ","));
+
+			// Using PlotManagement Wild Regen Delay
+			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
+			
+			// Using Towny
+			nat_hm.put("usingTowny", world.isUsingTowny());
+			
+			UpdateDB("worlds", nat_hm, Arrays.asList("name"));
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
