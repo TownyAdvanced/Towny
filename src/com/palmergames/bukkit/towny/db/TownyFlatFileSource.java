@@ -86,7 +86,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"});
 		} catch (IOException e) {
-			System.out.println("[Towny] Error: Could not create flatfile default files and folders.");
+			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
 	}
 	
@@ -469,8 +469,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					utilLoadTownBlocks(line, null, resident);
 
 			} catch (Exception e) {
-				System.out.println("[Towny] Loading Error: Exception while reading resident file " + resident.getName());
-				//e.printStackTrace();
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName());
 				return false;
 			}
 
@@ -683,15 +682,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								TownBlock homeBlock = world.getTownBlock(x, z);
 								town.setHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
 							} catch (NotRegisteredException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
 							} catch (TownyException e) {
-								System.out.println("[Towny] [Warning] " + town.getName() + " does not have a home block.");
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 							}
 							
 						} catch (NotRegisteredException e) {
-							System.out.println("[Towny] [Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
 						}
 				}
 
@@ -715,7 +714,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (NotRegisteredException e) {
 						} catch (NullPointerException e) {
 						} catch (TownyException e) {
-							System.out.println("[Towny] [Warning] " + town.getName() + " does not have a spawn point.");
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a spawn point.");
 						}
 				}
 				
@@ -747,8 +746,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 			} catch (Exception e) {
-				System.out.println("[Towny] Loading Error: Exception while reading town file " + town.getName());
-				e.printStackTrace();
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName());
 				return false;
 			}
 
@@ -844,8 +842,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 			} catch (Exception e) {
-				System.out.println("[Towny] Loading Error: Exception while reading nation file " + nation.getName());
-				e.printStackTrace();
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName());
 				return false;
 			}
 
@@ -864,8 +861,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			FileMgmt.checkFiles(new String[]{path});
 		} catch (IOException e1) {
-			System.out.println("[Towny] Loading Error: Exception while reading file " + path);
-			e1.printStackTrace();
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading file " + path);
 		}
 		
 		File fileWorld = new File(path);
@@ -1119,14 +1115,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				// loadTownBlocks(world);
 
 			} catch (Exception e) {
-				System.out.println("[Towny] Loading Error: Exception while reading world file " + path);
-				e.printStackTrace();
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path);
 				return false;
 			}
 
 			return true;
 		} else {
-			System.out.println("[Towny] Loading Error: File error while reading " + world.getName());
+			TownyMessaging.sendErrorMsg("Loading Error: File error while reading " + world.getName());
 			return false;
 		}
 	}
@@ -1168,8 +1163,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					
 				} catch (Exception e) {
-					System.out.println("[Towny] Loading Error: Exception while reading TownBlock file " + path);
-					e.printStackTrace();
+					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path);
 					return false;
 				}
 				if (!set) {
@@ -1203,7 +1197,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving residents list file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving residents list file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1218,7 +1212,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving town list file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1233,7 +1227,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving nation list file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving nation list file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1251,7 +1245,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving world list file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving world list file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1269,7 +1263,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving regen file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1289,7 +1283,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("[Towny] Saving Error: Exception while saving snapshot_queue file");
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
 			e.printStackTrace();
 			return false;
 		}
@@ -1327,6 +1321,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.write("protectionStatus=" + resident.getPermissions().toString() + newLine);
 			fout.close();
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving resident file (" + resident.getName() + ")");
 			e.printStackTrace();
 			return false;
 		}
@@ -1698,7 +1693,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		for (String w : worlds) {
 			String[] split = w.split(":");
 			if (split.length != 2) {
-				System.out.println("[Towny] [Warning] " + town.getName() + " BlockList does not have a World or data.");
+				TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " BlockList does not have a World or data.");
 				continue;
 			}
 			try {
@@ -1970,7 +1965,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
-				System.out.println("[Towny] Error moving Town txt file.");
+				TownyMessaging.sendErrorMsg("Error moving Town txt file.");
 			}
 		}
 	}
@@ -1982,7 +1977,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
-				System.out.println("[Towny] Error moving Nation txt file.");
+				TownyMessaging.sendErrorMsg("Error moving Nation txt file.");
 			}
 		}
 	}
@@ -1994,7 +1989,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
-				System.out.println("[Towny] Error moving World txt file.");
+				TownyMessaging.sendErrorMsg("Error moving World txt file.");
 			}
 		}
 	}

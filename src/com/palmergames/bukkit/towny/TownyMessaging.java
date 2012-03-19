@@ -86,7 +86,7 @@ public class TownyMessaging {
 	 * @param msg
 	 */
 	public static void sendMsg(String msg) {
-        System.out.println("[Towny] " + ChatTools.stripColour(msg));
+        TownyLogger.log.info("[Towny] " + ChatTools.stripColour(msg));
 	}
 	
 	/**
