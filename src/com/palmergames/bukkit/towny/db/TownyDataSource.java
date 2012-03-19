@@ -77,13 +77,6 @@ public abstract class TownyDataSource {
 		return false;
 	}
 
-	public void sendDebugMsg(String msg) {
-		if (plugin != null)
-			TownyMessaging.sendDebugMsg(msg);
-		else
-			System.out.println("[Towny] Debug: " + msg);
-	}
-
 	public boolean loadAll() {
 		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList()
 			&& loadWorlds() && loadNations() && loadTowns() && loadResidents()
@@ -92,7 +85,7 @@ public abstract class TownyDataSource {
 
 	public boolean saveAll() {
 		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList()
-			&& saveWorlds() && saveNations() && saveTowns() && saveResidents()
+			&& saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks()
 			&& saveRegenList() && saveSnapshotList();
 	}
 	
@@ -129,6 +122,7 @@ public abstract class TownyDataSource {
 	abstract public boolean saveNation(Nation nation);
 	abstract public boolean saveWorld(TownyWorld world);
 	
+	abstract public boolean saveAllTownBlocks();
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 	abstract public boolean savePlotData(PlotBlockData plotChunk);
 	
@@ -170,7 +164,7 @@ public abstract class TownyDataSource {
 	 */
 
 	public boolean loadResidents() {
-		sendDebugMsg("Loading Residents");
+		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<Resident>();
 
@@ -191,7 +185,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadTowns() {
-		sendDebugMsg("Loading Towns");
+		TownyMessaging.sendDebugMsg("Loading Towns");
 		for (Town town : getTowns())
 			if (!loadTown(town)) {
 				System.out.println("[Towny] Loading Error: Could not read town data " + town.getName() + "'.");
@@ -201,7 +195,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadNations() {
-		sendDebugMsg("Loading Nations");
+		TownyMessaging.sendDebugMsg("Loading Nations");
 		for (Nation nation : getNations())
 			if (!loadNation(nation)) {
 				System.out.println("[Towny] Loading Error: Could not read nation data '" + nation.getName() + "'.");
@@ -211,7 +205,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadWorlds() {
-		sendDebugMsg("Loading Worlds");
+		TownyMessaging.sendDebugMsg("Loading Worlds");
 		for (TownyWorld world : getWorlds())
 			if (!loadWorld(world)) {
 				System.out.println("[Towny] Loading Error: Could not read world data '" + world.getName() + "'.");
@@ -227,28 +221,28 @@ public abstract class TownyDataSource {
 	 */
 
 	public boolean saveResidents() {
-		sendDebugMsg("Saving Residents");
+		TownyMessaging.sendDebugMsg("Saving Residents");
 		for (Resident resident : getResidents())
 			saveResident(resident);
 		return true;
 	}
 
 	public boolean saveTowns() {
-		sendDebugMsg("Saving Towns");
+		TownyMessaging.sendDebugMsg("Saving Towns");
 		for (Town town : getTowns())
 			saveTown(town);
 		return true;
 	}
 
 	public boolean saveNations() {
-		sendDebugMsg("Saving Nations");
+		TownyMessaging.sendDebugMsg("Saving Nations");
 		for (Nation nation : getNations())
 			saveNation(nation);
 		return true;
 	}
 
 	public boolean saveWorlds() {
-		sendDebugMsg("Saving Worlds");
+		TownyMessaging.sendDebugMsg("Saving Worlds");
 		for (TownyWorld world : getWorlds())
 			saveWorld(world);
 		return true;
@@ -296,6 +290,5 @@ public abstract class TownyDataSource {
 	
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-
 	
 }

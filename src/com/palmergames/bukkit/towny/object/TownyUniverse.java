@@ -419,18 +419,20 @@ public class TownyUniverse extends TownyObject {
 			e.printStackTrace();
 			return false;
 		}
+		
+		String save = TownySettings.getSaveDatabase(), load = TownySettings.getLoadDatabase();
 
 		// Setup any defaults before we load the database.
 		Coord.setCellSize(TownySettings.getTownBlockSize());
 
-		System.out.println("[Towny] Database: [Load] " + TownySettings.getLoadDatabase() + " [Save] " + TownySettings.getSaveDatabase());
+		System.out.println("[Towny] Database: [Load] " + load + " [Save] " + save);
 		
 		worlds.clear();
 		nations.clear();
 		towns.clear();
 		residents.clear();
 		
-		if (!loadDatabase(TownySettings.getLoadDatabase())) {
+		if (!loadDatabase(load)) {
 			System.out.println("[Towny] Error: Failed to load!");
 			return false;
 		}
@@ -438,7 +440,7 @@ public class TownyUniverse extends TownyObject {
 		try {
 			getDataSource().cleanupBackups();
 			// Set the new class for saving.
-			setDataSource(TownySettings.getSaveDatabase());
+			setDataSource(save);
 			getDataSource().initialize(plugin, this);
 			try {
 				getDataSource().backup();
@@ -449,8 +451,13 @@ public class TownyUniverse extends TownyObject {
 				return false;
 			}
 			
-			// Update all Worlds data files
-			getDataSource().saveAllWorlds();
+			if (load.equalsIgnoreCase(save)) {
+				// Update all Worlds data files
+				getDataSource().saveAllWorlds();
+			} else {
+				//Formats are different so save ALL data.
+				getDataSource().saveAll();
+			}
 			
 			//if (TownySettings.isSavingOnLoad())
 			//      townyUniverse.getDataSource().saveAll();
@@ -478,8 +485,8 @@ public class TownyUniverse extends TownyObject {
 			setDataSource(new TownyFlatFileSource());
 		else if (databaseType.equalsIgnoreCase("flatfile-hmod"))
 			setDataSource(new TownyHModFlatFileSource());
-		else if (databaseType.trim().substring(0,5).equalsIgnoreCase("mysql"))						
-			setDataSource(new TownySQLSource(databaseType.trim().substring(6)));		
+		else if ((databaseType.equalsIgnoreCase("mysql")) || (databaseType.equalsIgnoreCase("sqlite")) || (databaseType.equalsIgnoreCase("h2")))
+			setDataSource(new TownySQLSource(databaseType));		
 		else
 			throw new UnsupportedOperationException();
 	}

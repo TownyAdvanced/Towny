@@ -62,7 +62,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 	public boolean loadWorldList() {
 		TownyMessaging.sendDebugMsg("Loading World List");
 		if (plugin != null) {
-			sendDebugMsg("Loading Server World List");
+			TownyMessaging.sendDebugMsg("Loading Server World List");
 			for (World world : plugin.getServer().getWorlds())
 				try {
 					//String[] split = world.getName().split("/");

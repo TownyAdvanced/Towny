@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
@@ -185,7 +186,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadResidentList() {
-		sendDebugMsg("Loading Resident List");
+		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line;
 		BufferedReader fin;
 
@@ -218,7 +219,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadTownList() {
-		sendDebugMsg("Loading Town List");
+		TownyMessaging.sendDebugMsg("Loading Town List");
 		String line;
 		BufferedReader fin;
 
@@ -252,7 +253,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadNationList() {
-		sendDebugMsg("Loading Nation List");
+		TownyMessaging.sendDebugMsg("Loading Nation List");
 		String line;
 		BufferedReader fin;
 
@@ -287,7 +288,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadWorldList() {
 		
 		if (plugin != null) {
-			sendDebugMsg("Loading Server World List");
+			TownyMessaging.sendDebugMsg("Loading Server World List");
 			for (World world : plugin.getServer().getWorlds())
 				try {
 					newWorld(world.getName());
@@ -300,7 +301,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Can no longer reply on Bukkit to report ALL available worlds.
 		
-		sendDebugMsg("Loading World List");
+		TownyMessaging.sendDebugMsg("Loading World List");
 		
 		String line;
 		BufferedReader fin;
@@ -334,7 +335,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadRegenList() {
-		sendDebugMsg("Loading Regen List");
+		TownyMessaging.sendDebugMsg("Loading Regen List");
 
 		String line;
 		BufferedReader fin;
@@ -374,7 +375,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadSnapshotList() {
-		sendDebugMsg("Loading Snapshot Queue");
+		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
 
 		String line;
 		BufferedReader fin;
@@ -1484,7 +1485,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveWorld(TownyWorld world) {
 		try {
-			sendDebugMsg("Saving world - " + getWorldFilename(world));
+			TownyMessaging.sendDebugMsg("Saving world - " + getWorldFilename(world));
 			
 			String path = getWorldFilename(world);
 			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
@@ -1492,7 +1493,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Towns
 			fout.write("towns=");
 			for (Town town : world.getTowns()){
-				sendDebugMsg("   Town - " + town.getName());
+				TownyMessaging.sendDebugMsg("   Town - " + town.getName());
 				fout.write(town.getName() + ",");
 			}
 				
@@ -1621,6 +1622,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
+	public boolean saveAllTownBlocks() {
+		
+		for (TownyWorld world : getWorlds()) {
+			for (TownBlock townBlock : world.getTownBlocks())
+				saveTownBlock(townBlock);
+		}
+			
+		return true;
+	}
+	
+	@Override
 	public boolean saveTownBlock(TownBlock townBlock) {
 		
 		FileMgmt.checkFolders(new String[]{
@@ -1637,7 +1649,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		try {
 			
-			sendDebugMsg("Saving TownBlock - " + path);
+			TownyMessaging.sendDebugMsg("Saving TownBlock - " + path);
 			
 			// permissions
 			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);

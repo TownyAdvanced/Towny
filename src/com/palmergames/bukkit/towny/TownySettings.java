@@ -757,6 +757,27 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DATABASE_SAVE);
 	}
 	
+	// SQL
+	public static String getSQLHostName() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_HOSTNAME);
+	}
+	public static String getSQLPort() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_PORT);
+	}
+	public static String getSQLDBName() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_DBNAME);
+	}
+	public static String getSQLTablePrefix() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_TABLEPREFIX);
+	}
+	public static String getSQLUsername() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_USERNAME);
+	}
+	public static String getSQLPassword() {
+		return getString(ConfigNodes.PLUGIN_DATABASE_PASSWORD);
+	}
+	
+	
 	public static int getMaxTownBlocks(Town town) {
 		int ratio = getTownBlockRatio();
 		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
