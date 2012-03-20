@@ -57,7 +57,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	private boolean ish2 = false;
 
 	/**
-	 * Flag if we are using h2 or standard SQL conectivity.
+	 * Flag if we are using h2 or standard SQL connectivity.
 	 * 
 	 * @param type
 	 */
