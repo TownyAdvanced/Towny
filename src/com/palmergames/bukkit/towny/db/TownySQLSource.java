@@ -89,7 +89,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		//Setup SQL connection
 		hostname = TownySettings.getSQLHostName();		
 		port = TownySettings.getSQLPort();
-		db_name = TownySettings.getSQLDBName().toUpperCase();
+		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();	
 		
 		if (this.ish2) {
