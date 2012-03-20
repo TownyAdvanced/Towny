@@ -168,7 +168,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		{ 
 			ResultSet res_table = dbm.getTables(null, null, (tb_prefix+"RESIDENTS").toUpperCase(), types); 
 			if (res_table.next()) {
-				TownyMessaging.sendDebugMsg("Table residents is ok!");
+				TownyMessaging.sendDebugMsg("Table RESIDENTS is ok!");
 			} else {			
 				String resident_create = 
 						"CREATE TABLE "+tb_prefix+"RESIDENTS ("+
