@@ -353,7 +353,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				keycode += me.getKey();
 				keycode += ""+(i.hasNext()?", ":")");			
 				if (me.getValue() instanceof String)
-					valuecode += "'"+me.getValue()+"'";
+					valuecode += "'"+ ((String)me.getValue()).replace("'", "\''") +"'";
 				else if (me.getValue() instanceof Double)
 					valuecode += "'"+me.getValue()+"'";
 				else if (me.getValue() instanceof Float)
@@ -386,7 +386,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				Map.Entry<String,Object> me = (Map.Entry<String,Object>)i.next();
 				code += me.getKey()+" = ";
 				if (me.getValue() instanceof String)
-					code += "'"+me.getValue()+"'";	
+					code += "'"+ ((String)me.getValue()).replace("'", "\''") +"'";	
 				else if (me.getValue() instanceof Float)
 					code += "'"+me.getValue()+"'";
 				else if (me.getValue() instanceof Double)
