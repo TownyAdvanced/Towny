@@ -127,7 +127,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			} else {				
 				String town_create = 
 						  "CREATE TABLE "+tb_prefix+"towns ("+						  
-						  "`name` mediumtext(32) NOT NULL,"+
+						  "`name` VARCHAR(32) NOT NULL,"+
 						  "`residents` mediumtext,"+						  
 						  "`mayor` mediumtext,"+
 						  "`nation` mediumtext NOT NULL,"+
@@ -172,7 +172,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			} else {			
 				String resident_create = 
 						"CREATE TABLE "+tb_prefix+"residents ("+
-						 " `name` mediumtext(16) NOT NULL,"+
+						 " `name` VARCHAR(16) NOT NULL,"+
 						  "`town` mediumtext,"+
 						  "`lastOnline` BIGINT NOT NULL,"+
 						  "`registered` BIGINT NOT NULL,"+
@@ -203,7 +203,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{					
 				String nation_create = 
 						"CREATE TABLE "+tb_prefix+"nations ("+
-						"`name` mediumtext(32) NOT NULL,"+	
+						"`name` VARCHAR(32) NOT NULL,"+	
 						"`towns` mediumtext NOT NULL,"+
 						"`capital` mediumtext NOT NULL,"+
 						"`assistants` mediumtext NOT NULL,"+
@@ -233,7 +233,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{
 				String townblock_create = 
 						"CREATE TABLE "+tb_prefix+"townblocks ("+						
-						"`world` mediumtext(32) NOT NULL,"+
+						"`world` VARCHAR(32) NOT NULL,"+
 						"`x` bigint(20) NOT NULL,"+
 						"`z` bigint(20) NOT NULL,"+												
 						"`permissions` mediumtext NOT NULL,"+
@@ -260,7 +260,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{
 				String world_create = 
 						"CREATE TABLE "+tb_prefix+"worlds ("+						
-						"`name` mediumtext(32) NOT NULL,"+												
+						"`name` VARCHAR(32) NOT NULL,"+												
 						"`towns` mediumtext NOT NULL,"+
 						"`claimable` bool NOT NULL DEFAULT '0',"+
 						"`pvp` bool NOT NULL DEFAULT '0',"+
