@@ -333,6 +333,14 @@ public class TownySQLSource extends TownyFlatFileSource
 		return false;
 	}
 	
+	/**
+	 * Build the SQL string and execute to INSERT/UPDATE
+	 * 
+	 * @param tb_name
+	 * @param args
+	 * @param keys
+	 * @return
+	 */
 	public boolean UpdateDB(String tb_name, HashMap<String,Object> args, List<String> keys)
 	{
 		if (!getContext()) return false;
@@ -424,6 +432,13 @@ public class TownySQLSource extends TownyFlatFileSource
 		return false;
 	}
 	
+	/**
+	 * Build the SQL string and execute to DELETE
+	 * 
+	 * @param tb_name
+	 * @param args
+	 * @return
+	 */
 	public boolean DeleteDB(String tb_name, HashMap<String,Object> args)
 	{
 		if (!getContext()) return false;
