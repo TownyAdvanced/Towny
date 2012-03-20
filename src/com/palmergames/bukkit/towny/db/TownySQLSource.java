@@ -127,7 +127,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			} else {				
 				String town_create = 
 						  "CREATE TABLE "+tb_prefix+"towns ("+						  
-						  "`name` mediumtext NOT NULL,"+
+						  "`name` mediumtext(32) NOT NULL,"+
 						  "`residents` mediumtext,"+						  
 						  "`mayor` mediumtext,"+
 						  "`nation` mediumtext NOT NULL,"+
@@ -172,7 +172,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			} else {			
 				String resident_create = 
 						"CREATE TABLE "+tb_prefix+"residents ("+
-						 " `name` text NOT NULL,"+
+						 " `name` mediumtext(16) NOT NULL,"+
 						  "`town` mediumtext,"+
 						  "`lastOnline` BIGINT NOT NULL,"+
 						  "`registered` BIGINT NOT NULL,"+
@@ -187,7 +187,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(resident_create);
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Creating table residents :" + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table residents :" + ee.getMessage()); }
 			}
 		} 
 		catch (SQLException e)
@@ -203,7 +203,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{					
 				String nation_create = 
 						"CREATE TABLE "+tb_prefix+"nations ("+
-						"`name` mediumtext NOT NULL,"+	
+						"`name` mediumtext(32) NOT NULL,"+	
 						"`towns` mediumtext NOT NULL,"+
 						"`capital` mediumtext NOT NULL,"+
 						"`assistants` mediumtext NOT NULL,"+
@@ -217,7 +217,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(nation_create);
-				} catch (SQLException ee) { System.out.println("[Towny] Error Creating table nations : " + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table nations : " + ee.getMessage()); }
 			}
 		}
 		catch (SQLException e)
@@ -233,7 +233,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{
 				String townblock_create = 
 						"CREATE TABLE "+tb_prefix+"townblocks ("+						
-						"`world` mediumtext NOT NULL,"+
+						"`world` mediumtext(32) NOT NULL,"+
 						"`x` bigint(20) NOT NULL,"+
 						"`z` bigint(20) NOT NULL,"+												
 						"`permissions` mediumtext NOT NULL,"+
@@ -260,7 +260,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			{
 				String world_create = 
 						"CREATE TABLE "+tb_prefix+"worlds ("+						
-						"`name` mediumtext NOT NULL,"+												
+						"`name` mediumtext(32) NOT NULL,"+												
 						"`towns` mediumtext NOT NULL,"+
 						"`claimable` bool NOT NULL DEFAULT '0',"+
 						"`pvp` bool NOT NULL DEFAULT '0',"+
@@ -285,11 +285,11 @@ public class TownySQLSource extends TownyFlatFileSource
 						"`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0',"+
 						"`plotManagementMayorDelete` mediumtext NOT NULL,"+
 						"`usingPlotManagementRevert` bool NOT NULL DEFAULT '0',"+
-						"`plotManagementRevertSpeed` long NOT NULL DEFAULT '0',"+
+						"`plotManagementRevertSpeed` long NOT NULL,"+
 						"`plotManagementIgnoreIds` mediumtext NOT NULL,"+
 						"`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0',"+
 						"`plotManagementWildRegenEntities` mediumtext NOT NULL,"+
-						"`plotManagementWildRegenSpeed` long NOT NULL DEFAULT '0',"+
+						"`plotManagementWildRegenSpeed` long NOT NULL,"+
 						"`usingTowny` bool NOT NULL DEFAULT '0',"+
 						"PRIMARY KEY (`name`)"+
 						")";
@@ -315,10 +315,11 @@ public class TownySQLSource extends TownyFlatFileSource
 		try
 		{
 			if (cntx==null || cntx.isClosed()) {
-				if (ish2) {
-					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
-				} else
+				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
 					cntx = DriverManager.getConnection(this.dsn);
+			    } else
+			    	cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
+
 			}
 			
 			if (cntx==null || cntx.isClosed())
