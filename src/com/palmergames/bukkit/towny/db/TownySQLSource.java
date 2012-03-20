@@ -89,8 +89,8 @@ public class TownySQLSource extends TownyFlatFileSource
 		//Setup SQL connection
 		hostname = TownySettings.getSQLHostName();		
 		port = TownySettings.getSQLPort();
-		db_name = TownySettings.getSQLDBName();
-		tb_prefix = TownySettings.getSQLTablePrefix();	
+		db_name = TownySettings.getSQLDBName().toUpperCase();
+		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();	
 		
 		if (this.ish2) {
 			this.dsn = ("jdbc:h2:" + rootFolder + dataFolder + File.separator + db_name + ";AUTO_RECONNECT=TRUE");
@@ -121,12 +121,12 @@ public class TownySQLSource extends TownyFlatFileSource
 
 		try 
 		{ 
-			ResultSet town_table = dbm.getTables(null, null, (tb_prefix+"towns").toUpperCase(), types); 
+			ResultSet town_table = dbm.getTables(null, null, (tb_prefix+"TOWNS").toUpperCase(), types); 
 			if (town_table.next()) {
-				TownyMessaging.sendDebugMsg("Table towns is ok!");
+				TownyMessaging.sendDebugMsg("Table TOWNS is ok!");
 			} else {				
 				String town_create = 
-						  "CREATE TABLE "+tb_prefix+"towns ("+						  
+						  "CREATE TABLE "+tb_prefix+"TOWNS ("+						  
 						  "`name` VARCHAR(32) NOT NULL,"+
 						  "`residents` mediumtext,"+						  
 						  "`mayor` mediumtext,"+
@@ -157,21 +157,21 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(town_create);					
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Creating table towns :" + ee.getMessage()); }				
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage()); }				
 			}			
 		}
 		catch (SQLException e)
-		{ TownyMessaging.sendErrorMsg("Error Checking table towns :" + e.getMessage()); }
+		{ TownyMessaging.sendErrorMsg("Error Checking table TOWNS :" + e.getMessage()); }
 		
 		
 		try 
 		{ 
-			ResultSet res_table = dbm.getTables(null, null, (tb_prefix+"residents").toUpperCase(), types); 
+			ResultSet res_table = dbm.getTables(null, null, (tb_prefix+"RESIDENTS").toUpperCase(), types); 
 			if (res_table.next()) {
 				TownyMessaging.sendDebugMsg("Table residents is ok!");
 			} else {			
 				String resident_create = 
-						"CREATE TABLE "+tb_prefix+"residents ("+
+						"CREATE TABLE "+tb_prefix+"RESIDENTS ("+
 						 " `name` VARCHAR(16) NOT NULL,"+
 						  "`town` mediumtext,"+
 						  "`lastOnline` BIGINT NOT NULL,"+
@@ -187,22 +187,22 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(resident_create);
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table residents :" + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage()); }
 			}
 		} 
 		catch (SQLException e)
-		{ TownyMessaging.sendErrorMsg("Error Checking table residents :" + e.getMessage()); }
+		{ TownyMessaging.sendErrorMsg("Error Checking table RESIDENTS :" + e.getMessage()); }
 		
 		try 
 		{ 
-			ResultSet nat_table = dbm.getTables(null, null, (tb_prefix+"nations").toUpperCase(), types); 
+			ResultSet nat_table = dbm.getTables(null, null, (tb_prefix+"NATIONS").toUpperCase(), types); 
 			if (nat_table.next()) {
-				TownyMessaging.sendDebugMsg("Table nations is ok!");
+				TownyMessaging.sendDebugMsg("Table NATIONS is ok!");
 			}
 			else 
 			{					
 				String nation_create = 
-						"CREATE TABLE "+tb_prefix+"nations ("+
+						"CREATE TABLE "+tb_prefix+"NATIONS ("+
 						"`name` VARCHAR(32) NOT NULL,"+	
 						"`towns` mediumtext NOT NULL,"+
 						"`capital` mediumtext NOT NULL,"+
@@ -217,22 +217,22 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(nation_create);
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table nations : " + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage()); }
 			}
 		}
 		catch (SQLException e)
-		{ System.out.println("[Towny] Error Checking table nations :" + e.getMessage()); }
+		{ System.out.println("[Towny] Error Checking table NATIONS :" + e.getMessage()); }
 		
 		try 
 		{ 
-			ResultSet tb_table = dbm.getTables(null, null, (tb_prefix+"townblocks").toUpperCase(), types); 			
+			ResultSet tb_table = dbm.getTables(null, null, (tb_prefix+"TOWNBLOCKS").toUpperCase(), types); 			
 			if (tb_table.next()) {
-				TownyMessaging.sendDebugMsg("Table townblocks is ok!");
+				TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is ok!");
 			}
 			else 
 			{
 				String townblock_create = 
-						"CREATE TABLE "+tb_prefix+"townblocks ("+						
+						"CREATE TABLE "+tb_prefix+"TOWNBLOCKS ("+						
 						"`world` VARCHAR(32) NOT NULL,"+
 						"`x` bigint(20) NOT NULL,"+
 						"`z` bigint(20) NOT NULL,"+												
@@ -244,22 +244,22 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(townblock_create);
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table townblocks : " + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage()); }
 			}
 		}
 		catch (SQLException e)
-		{ TownyMessaging.sendErrorMsg("Error Checking table townblocks :" + e.getMessage()); }
+		{ TownyMessaging.sendErrorMsg("Error Checking table TOWNBLOCKS :" + e.getMessage()); }
 		
 		try 
 		{ 
-			ResultSet tb_table = dbm.getTables(null, null, (tb_prefix+"worlds").toUpperCase(), types); 			
+			ResultSet tb_table = dbm.getTables(null, null, (tb_prefix+"WORLDS").toUpperCase(), types); 			
 			if (tb_table.next()) {
-				TownyMessaging.sendDebugMsg("Table worlds is ok!");
+				TownyMessaging.sendDebugMsg("Table WORLDS is ok!");
 			}
 			else 
 			{
 				String world_create = 
-						"CREATE TABLE "+tb_prefix+"worlds ("+						
+						"CREATE TABLE "+tb_prefix+"WORLDS ("+						
 						"`name` VARCHAR(32) NOT NULL,"+												
 						"`towns` mediumtext NOT NULL,"+
 						"`claimable` bool NOT NULL DEFAULT '0',"+
@@ -296,11 +296,11 @@ public class TownySQLSource extends TownyFlatFileSource
 				try {				
 					Statement s = cntx.createStatement();
 					s.executeUpdate(world_create);
-				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table worlds : " + ee.getMessage()); }
+				} catch (SQLException ee) { TownyMessaging.sendErrorMsg("Error Creating table WORLDS : " + ee.getMessage()); }
 			}
 		}
 		catch (SQLException e)
-		{ TownyMessaging.sendErrorMsg("Error Checking table worlds :" + e.getMessage()); }
+		{ TownyMessaging.sendErrorMsg("Error Checking table WORLDS :" + e.getMessage()); }
 		
 		TownyMessaging.sendDebugMsg("Checking done!");
 	}
@@ -348,7 +348,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		Statement s;		
 		if (keys==null)
 		{
-			code = "INSERT INTO "+tb_prefix+tb_name+" ";
+			code = "INSERT INTO "+tb_prefix+(tb_name.toUpperCase())+" ";
 			String keycode = "(";
 			String valuecode = " VALUES (";
 						
@@ -386,7 +386,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		}
 		else
 		{
-			code = "UPDATE "+tb_prefix+tb_name+" SET ";
+			code = "UPDATE "+tb_prefix+(tb_name.toUpperCase())+" SET ";
 			Set<Map.Entry<String,Object>> set = args.entrySet();			
 			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
@@ -444,7 +444,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		if (!getContext()) return false;
 		try
 		{
-			String wherecode = "DELETE FROM "+tb_prefix+tb_name+" WHERE ";
+			String wherecode = "DELETE FROM "+tb_prefix+(tb_name.toUpperCase())+" WHERE ";
 			Set<Map.Entry<String,Object>> set = args.entrySet();			
 			Iterator<Map.Entry<String,Object>> i = set.iterator();
 			while(i.hasNext()) 
@@ -480,7 +480,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		if (!getContext()) return false;
 		try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"residents");						
+			ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"RESIDENTS");						
 			while (rs.next())
 			{
 				try {
@@ -502,7 +502,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		if (!getContext()) return false;
 			try {
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"towns");
+				ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"TOWNS");
 				while (rs.next())
     			{					
 					try {											
@@ -525,7 +525,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			try
 			{
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"nations");
+				ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"NATIONS");
 				while (rs.next())
     			{
 					try {
@@ -550,7 +550,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		try
 		{
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"worlds");
+			ResultSet rs = s.executeQuery("SELECT name FROM "+tb_prefix+"WORLDS");
 			while (rs.next())
 			{
 				try {
@@ -593,7 +593,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				Statement s = cntx.createStatement();
 				ResultSet rs = s.executeQuery("SELECT " +
 						" lastOnline,registered,isNPC,title,surname,town,friends,protectionStatus,townBlocks" +
-						" FROM "+tb_prefix+"residents " +
+						" FROM "+tb_prefix+"RESIDENTS " +
 						" WHERE name='"+resident.getName()+"'");								
 				while (rs.next())
     			{			
@@ -666,7 +666,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				"residents,mayor,assistants,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" +				
 				",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
 				"open,public,townBlocks, homeBlock, spawn,outpostSpawns " +
-				" FROM "+tb_prefix+"towns " +
+				" FROM "+tb_prefix+"TOWNS " +
 				" WHERE name='"+town.getName()+"'");
 				while (rs.next())
     			{					
@@ -816,7 +816,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			try
 			{
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT towns,capital,assistants,tag,allies,enemies,taxes,neutral FROM "+tb_prefix+"nations WHERE name='"+nation.getName()+"'");
+				ResultSet rs = s.executeQuery("SELECT towns,capital,assistants,tag,allies,enemies,taxes,neutral FROM "+tb_prefix+"NATIONS WHERE name='"+nation.getName()+"'");
 				while (rs.next())
     			{
 					line = rs.getString("towns");
@@ -892,7 +892,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			try
 			{
 				Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM "+tb_prefix+"worlds WHERE name='"+world.getName()+"'");
+				ResultSet rs = s.executeQuery("SELECT * FROM "+tb_prefix+"WORLDS WHERE name='"+world.getName()+"'");
 				while (rs.next())
     			{
 					line = rs.getString("towns");
@@ -1175,7 +1175,7 @@ public class TownySQLSource extends TownyFlatFileSource
 					Statement s = cntx.createStatement();
 					rs = s.executeQuery("SELECT " +
 							"permissions,locked,changed" +				
-							" FROM "+tb_prefix+"townblocks" +
+							" FROM "+tb_prefix+"TOWNBLOCKS" +
 							" WHERE world='"+townBlock.getWorld().getName()+"' AND x='"+townBlock.getX()+"' AND z='"+townBlock.getZ()+"'");
 					while (rs.next())
 					{
@@ -1248,7 +1248,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			res_hm.put("friends", fstr);							
 			res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
 			res_hm.put("protectionStatus", resident.getPermissions().toString());
-			UpdateDB("residents", res_hm, Arrays.asList("name"));																													
+			UpdateDB("RESIDENTS", res_hm, Arrays.asList("name"));																													
 			return true;
 		}		
 		catch (Exception e)
@@ -1310,7 +1310,7 @@ public class TownySQLSource extends TownyFlatFileSource
 					}
 						
 						
-				UpdateDB("towns", twn_hm, Arrays.asList("name"));											
+				UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));											
 				return true;
 		}		
 		catch (Exception e) 
@@ -1344,7 +1344,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			nat_hm.put("enemies", fstr);
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("neutral", nation.isNeutral());
-			UpdateDB("nations", nat_hm, Arrays.asList("name"));
+			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 		}		
 		catch (Exception e) 
 		{ TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error"); e.printStackTrace(); }
@@ -1439,7 +1439,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			// Using Towny
 			nat_hm.put("usingTowny", world.isUsingTowny());
 			
-			UpdateDB("worlds", nat_hm, Arrays.asList("name"));
+			UpdateDB("WORLDS", nat_hm, Arrays.asList("name"));
 
 
 		} catch (Exception e) {
@@ -1461,7 +1461,7 @@ public class TownySQLSource extends TownyFlatFileSource
 			tb_hm.put("permissions", townBlock.getPermissions().toString());
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());			
-			UpdateDB("townblocks", tb_hm, Arrays.asList("world","x","z"));
+			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world","x","z"));
 		}
 		catch (Exception e) 
 		{ TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error"); e.printStackTrace(); }		
@@ -1471,21 +1471,21 @@ public class TownySQLSource extends TownyFlatFileSource
 	public void deleteResident(Resident resident) {
 		HashMap<String, Object> res_hm = new HashMap<String, Object>();
 		res_hm.put("name", resident.getName());		
-		DeleteDB("residents", res_hm);
+		DeleteDB("RESIDENTS", res_hm);
 	}
 	
 	@Override
 	public void deleteTown(Town town) {
 		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 		twn_hm.put("name", town.getName());		
-		DeleteDB("towns", twn_hm);
+		DeleteDB("TOWNS", twn_hm);
 	}
 	
 	@Override
 	public void deleteNation(Nation nation) {
 		HashMap<String, Object> nat_hm = new HashMap<String, Object>();
 		nat_hm.put("name", nation.getName());		
-		DeleteDB("nations", nat_hm);
+		DeleteDB("NATIONS", nat_hm);
 	}
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
@@ -1493,7 +1493,7 @@ public class TownySQLSource extends TownyFlatFileSource
 		twn_hm.put("world", townBlock.getWorld().getName());
 		twn_hm.put("x", townBlock.getX());
 		twn_hm.put("z", townBlock.getZ());
-		DeleteDB("townblocks", twn_hm);
+		DeleteDB("TOWNBLOCKS", twn_hm);
 		
 	}
 		
