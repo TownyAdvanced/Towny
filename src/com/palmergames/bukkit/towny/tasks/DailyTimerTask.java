@@ -200,9 +200,15 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
+
 						townBlock.setResident(null);
+                        townBlock.setPlotPrice(-1);
+                        
+                        // Set the plot permissions to mirror the towns.
+                        townBlock.setType(townBlock.getType());
+
 						TownyUniverse.getDataSource().saveResident(resident);
-						TownyUniverse.getDataSource().saveWorld(townBlock.getWorld());
+						TownyUniverse.getDataSource().saveTownBlock(townBlock);
 					}// else {
 					//	townPlots.put(resident, (townPlots.containsKey(resident) ? townPlots.get(resident) : 0) + 1);
 					//	townTaxes.put(resident, (townTaxes.containsKey(resident) ? townTaxes.get(resident) : 0) + townBlock.getType().getTax(town));
