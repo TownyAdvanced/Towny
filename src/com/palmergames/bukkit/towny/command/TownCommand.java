@@ -400,8 +400,6 @@ public class TownCommand implements CommandExecutor  {
         		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_PVP.getNode())))
         			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         	}
-        	
-        	throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         }
         
         public void townSet(Player player, String[] split) {
