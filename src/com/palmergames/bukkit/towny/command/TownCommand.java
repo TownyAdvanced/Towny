@@ -865,6 +865,9 @@ public class TownCommand implements CommandExecutor  {
                 TownBlock townBlock = world.getTownBlock(key);
                 townBlock.setTown(town);
                 town.setHomeBlock(townBlock);
+                // Set the plot permissions to mirror the towns.
+                townBlock.setType(townBlock.getType());
+
                 town.setSpawn(spawn);
                 //world.addTown(town);
                 
@@ -886,6 +889,7 @@ public class TownCommand implements CommandExecutor  {
                 }
                 
                 TownyUniverse.getDataSource().saveResident(resident);
+                TownyUniverse.getDataSource().saveTownBlock(townBlock);
                 TownyUniverse.getDataSource().saveTown(town);
                 TownyUniverse.getDataSource().saveWorld(world);
                 TownyUniverse.getDataSource().saveTownList();
