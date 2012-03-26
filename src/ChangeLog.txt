@@ -1233,3 +1233,4 @@ v0.79.1.5:
 	- Make all SQL tables uppercase.
 v0.79.1.6:
 	- Plots lost due to taxes are no longer put up for sale and have their permissions correctly set for their type as per the town settings.
+	- Fixed a bug where you could bypass a toggle permission (plot and town) by using an upper case letter.

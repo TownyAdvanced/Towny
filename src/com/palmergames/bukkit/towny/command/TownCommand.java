@@ -371,6 +371,8 @@ public class TownCommand implements CommandExecutor  {
         	
         	//Make sure we are allowed to set these permissions.
         	
+        	split = split.toLowerCase();
+        	
         	if (split.contains("mobs")) {
         		if (town.getWorld().isForceTownMobs()) 
                     throw new TownyException(TownySettings.getLangString("msg_world_mobs"));

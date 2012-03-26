@@ -444,6 +444,7 @@ public class PlotCommand implements CommandExecutor {
 
 		//Make sure we are allowed to set these permissions.
 		Town town = townBlock.getTown();
+		split = split.toLowerCase();
 
 		if (split.contains("mobs")) {
 			if (town.getWorld().isForceTownMobs())
