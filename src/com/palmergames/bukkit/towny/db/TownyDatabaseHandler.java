@@ -534,10 +534,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Double townBalance = 0.0;
 		
 		// Save the towns bank balance to set in the new account.
-		try {
-			townBalance = town.getHoldingBalance();
-		} catch (EconomyException e) {
-		}
+		// Clear accounts
+		if (TownySettings.isUsingEconomy())
+			try {
+				townBalance = town.getHoldingBalance();
+				town.removeAccount();
+			} catch (EconomyException e) {
+			}
 		
 		// Store the nation in case we have to update the capitol
 		if (town.hasNation()) {
@@ -566,7 +569,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveNation(nation);
 		}
 
-		town.setBalance(townBalance, "Rename Town - Transfer to new account");
+		if (TownySettings.isUsingEconomy())
+			town.setBalance(townBalance, "Rename Town - Transfer to new account");
 
 		for (Resident resident : toSave) {
 			saveResident(resident);
@@ -596,22 +600,31 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// TODO: Delete/rename any invites.
 
 		List<Town> toSave = new ArrayList<Town>(nation.getTowns());
-
-		String oldName = nation.getName();
-		universe.getNationsMap().put(filteredName.toLowerCase(), nation);
-		//Tidy up old files
-		deleteNation(nation);
-
-		universe.getNationsMap().remove(oldName.toLowerCase());
-		nation.setName(filteredName);
-		Nation oldNation = new Nation(oldName);
-
-		if (plugin.isEcoActive())
+		Double nationBalance = 0.0;
+		
+		// Save the nations bank balance to set in the new account.
+		// Clear accounts
+		if (TownySettings.isUsingEconomy())
 			try {
-				nation.pay(nation.getHoldingBalance(), "Rename Nation - Empty account of new nation name.");
-				oldNation.payTo(oldNation.getHoldingBalance(), nation, "Rename Nation - Transfer to new account");
+				nationBalance = nation.getHoldingBalance();
+				nation.removeAccount();
 			} catch (EconomyException e) {
 			}
+		
+		//Tidy up old files
+		deleteNation(nation);
+		
+		/*
+		 * Remove the old nation from the nationsMap
+		 * and rename to the new name
+		 */
+		String oldName = nation.getName();
+		universe.getNationsMap().remove(oldName.toLowerCase());
+		nation.setName(filteredName);
+		universe.getNationsMap().put(filteredName.toLowerCase(), nation);
+
+		if (plugin.isEcoActive())
+			nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
 
 		for (Town town : toSave) {
 			saveTown(town);
@@ -621,6 +634,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveNationList();
 
 		//search and update all ally/enemy lists
+		Nation oldNation = new Nation(oldName);
 		List<Nation> toSaveNation = new ArrayList<Nation>(getNations());
 		for (Nation toCheck : toSaveNation)
 			if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {

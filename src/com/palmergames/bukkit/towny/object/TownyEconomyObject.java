@@ -229,6 +229,9 @@ public class TownyEconomyObject extends TownyObject {
 		}
 	}
 
+	/**
+	 * Attempt to delete the economy account.
+	 */
 	public void removeAccount() {
 		try {
 			if (plugin.isRegister()) {
