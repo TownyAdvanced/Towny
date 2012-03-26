@@ -529,31 +529,44 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// TODO: Delete/rename any invites.
 
 		List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
-
-		//Tidy up old files
-		// Has to be done here else the town no longer exists and the move command may fail.
+		Boolean isCapital = false;
+		Nation nation = null;
+		Double townBalance = 0.0;
+		
+		// Save the towns bank balance to set in the new account.
+		try {
+			townBalance = town.getHoldingBalance();
+		} catch (EconomyException e) {
+		}
+		
+		// Store the nation in case we have to update the capitol
+		if (town.hasNation()) {
+			nation = town.getNation();
+			isCapital = town.isCapital();
+		}
+		
+		/*
+		 *  Tidy up old files.
+		 *  Has to be done here else the town no longer exists
+		 *  and the file move command may fail.
+		 */
 		deleteTown(town);
 
-		String oldName = town.getName();
-		universe.getTownsMap().remove(oldName.toLowerCase());
+		/*
+		 * Remove the old town from the townsMap
+		 * and rename to the new name
+		 */
+		universe.getTownsMap().remove(town.getName().toLowerCase());
 		town.setName(filteredName);
-
 		universe.getTownsMap().put(filteredName.toLowerCase(), town);
 
-		//Check if this is a nation capitol
-		if (town.isCapital()) {
-			Nation nation = town.getNation();
+		// If this was a nation capitol
+		if (isCapital) {
 			nation.setCapital(town);
 			saveNation(nation);
 		}
 
-		Town oldTown = new Town(oldName);
-
-		try {
-			town.pay(town.getHoldingBalance(), "Rename Town - Empty account of new town name.");
-			oldTown.payTo(oldTown.getHoldingBalance(), town, "Rename Town - Transfer to new account");
-		} catch (EconomyException e) {
-		}
+		town.setBalance(townBalance, "Rename Town - Transfer to new account");
 
 		for (Resident resident : toSave) {
 			saveResident(resident);

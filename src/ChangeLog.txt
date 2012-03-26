@@ -1236,3 +1236,5 @@ v0.79.1.6:
 	- Fixed a bug where you could bypass a toggle permission (plot and town) by using an upper case letter.
 	- Creating a new town now correctly sets the plot permissions for the homeblock at creation.
 	- '/plot clear' works again on plots lost due to taxes and all other unowned plots.
+v0.79.1.7:
+	- Fix updating the nation file if the renamed town was the Capital.

@@ -137,7 +137,23 @@ public class TownyEconomyObject extends TownyObject {
 		
 		return Bukkit.getWorlds().get(0);
 	}
+	
+	/**
+	 * Set balance and log this action
+	 * 
+	 * @param n
+	 * @param reason
+	 */
+	public void setBalance(double n, String reason) {
+		setBalance(n);
+		TownyLogger.logMoneyTransaction(null, n, this, reason);
+	}
 
+	/**
+	 * Set balance without logging the action
+	 * 
+	 * @param value
+	 */
 	public void setBalance(double value) {
 		try {
 			if (plugin.isRegister()) {
