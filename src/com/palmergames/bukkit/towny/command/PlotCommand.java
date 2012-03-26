@@ -477,6 +477,8 @@ public class PlotCommand implements CommandExecutor {
 			if (townBlock.getType().equals(TownBlockType.ARENA))
 				throw new TownyException(TownySettings.getLangString("msg_plot_pvp"));
 		}
+		
+		throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 	}
 	
 	/**
