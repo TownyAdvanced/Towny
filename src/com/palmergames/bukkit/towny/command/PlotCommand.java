@@ -286,14 +286,15 @@ public class PlotCommand implements CommandExecutor {
 						/**
 						 * Only allow mayors or plot owners to use this command.
 						 */
-						if (!townBlock.isOwner(resident)) {
-							if (!town.isMayor(resident)) {
-								player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
+						if (townBlock.hasResident()) {
+							if (!townBlock.isOwner(resident)) {
+								player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
 								return;
 							}
-							player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
-							return;
 							
+						} else if (!town.isMayor(resident)) {
+							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
+							return;
 						}
 
 						for (String material : world.getPlotManagementMayorDelete())
