@@ -451,16 +451,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
+				
+		// Transfer any money to the warchest.
+		if (plugin.isEcoActive())
+			try {
+				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
+				nation.removeAccount();
+			} catch (EconomyException e) {
+			}
 
 		//Delete nation and save towns
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<Town>(nation.getTowns());
 		nation.clear();
-		if (plugin.isEcoActive())
-			try {
-				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
-			} catch (EconomyException e) {
-			}
+		
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 		// Clear accounts
 		if (TownySettings.isUsingEconomy())
