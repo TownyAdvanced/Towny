@@ -49,13 +49,11 @@ public enum PermissionNodes {
 			TOWNY_WILD_DESTROY("towny.wild.destroy"),
 			TOWNY_WILD_SWITCH("towny.wild.switch"),
 			TOWNY_WILD_ITEM_USE("towny.wild.item_use"),
-		
-		TOWNY_WILD_BLOCK_ALL("towny.wild.block.*"),
 			
-			TOWNY_WILD_BLOCK_BUILD("towny.wild.block.*.build"),
-			TOWNY_WILD_BLOCK_DESTROY("towny.wild.block.*.destroy"),
-			TOWNY_WILD_BLOCK_SWITCH("towny.wild.block.*.switch"),
-			TOWNY_WILD_BLOCK_ITEM_USE("towny.wild.block.*.item_use"),
+			TOWNY_WILD_BLOCK_BUILD("towny.wild.build.*"),
+			TOWNY_WILD_BLOCK_DESTROY("towny.wild.destroy.*"),
+			TOWNY_WILD_BLOCK_SWITCH("towny.wild.switch.*"),
+			TOWNY_WILD_BLOCK_ITEM_USE("towny.wild.item_use.*"),
 			
 		TOWNY_CLAIMED_ALL("towny.claimed.*"),
 			
@@ -64,19 +62,19 @@ public enum PermissionNodes {
 			TOWNY_CLAIMED_SWITCH("towny.claimed.switch"),
 			TOWNY_CLAIMED_ITEM_USE("towny.claimed.item_use"),
 			
-		TOWNY_CLAIMED_ALL_BLOCK("towny.claimed.alltown.block.*"),
+		TOWNY_CLAIMED_ALLTOWN_BLOCK("towny.claimed.alltown.*"),
 		
-			TOWNY_CLAIMED_ALL_BLOCK_BUILD("towny.claimed.alltown.block.*.build"),
-			TOWNY_CLAIMED_ALL_BLOCK_DESTROY("towny.claimed.alltown.block.*.destroy"),
-			TOWNY_CLAIMED_ALL_BLOCK_SWITCH("towny.claimed.alltown.block.*.switch"),
-			TOWNY_CLAIMED_ALL_BLOCK_ITEM_USE("towny.claimed.alltown.block.*.item_use"),
+			TOWNY_CLAIMED_ALLTOWN_BLOCK_BUILD("towny.claimed.alltown.build.*"),
+			TOWNY_CLAIMED_ALLTOWN_BLOCK_DESTROY("towny.claimed.alltown.destroy.*"),
+			TOWNY_CLAIMED_ALLTOWN_BLOCK_SWITCH("towny.claimed.alltown.switch.*"),
+			TOWNY_CLAIMED_ALLTOWN_BLOCK_ITEM_USE("towny.claimed.alltown.item_use.*"),
 			
-		TOWNY_CLAIMED_OWNTOWN_BLOCK("towny.claimed.owntown.block.*"),
+		TOWNY_CLAIMED_OWNTOWN_BLOCK("towny.claimed.owntown.*"),
 			
-			TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD("towny.claimed.owntown.block.*.build"),
-			TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY("towny.claimed.owntown.block.*.destroy"),
-			TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH("towny.claimed.owntown.block.*.switch"),
-			TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE("towny.claimed.owntown.block.*.item_use"),
+			TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD("towny.claimed.owntown.build.*"),
+			TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY("towny.claimed.owntown.destroy.*"),
+			TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH("towny.claimed.owntown.switch.*"),
+			TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE("towny.claimed.owntown.item_use.*"),
 		
 		TOWNY_CHAT_ALL("towny.chat.*"),
 			

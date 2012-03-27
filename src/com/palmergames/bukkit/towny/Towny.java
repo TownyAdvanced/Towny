@@ -120,7 +120,7 @@ public class Towny extends JavaPlugin {
 				update();
 			
 			// Register all child permissions
-			TownyUniverse.getPermissionSource().registerPermissionNodes();
+			//TownyUniverse.getPermissionSource().registerPermissionNodes();
 		}
 
 		registerEvents();

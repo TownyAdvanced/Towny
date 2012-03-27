@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.1.7
+version: 0.79.1.8
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -168,23 +168,31 @@ permissions:
     towny.wild.build:
         description: User can build in wild.
         default: false
+        children:
+            towny.wild.build.*: true
         # This includes all subnodes for
-        #  towny.wild.block.[id].build
+        #  towny.wild.build.[id]
     towny.wild.destroy:
         description: User can destroy in wild.
         default: false
+        children:
+            towny.wild.destroy.*: true
         # This includes all subnodes for
-        #  towny.wild.block.[id].destroy
+        #  towny.wild.destroy.[id]
     towny.wild.switch:
         description: User can switch in wild.
         default: false
+        children:
+            towny.wild.switch.*: true
         # This includes all subnodes for
-        #  towny.wild.block.[id].switch
+        #  towny.wild.switch.[id]
     towny.wild.item_use:
         description: User can use use items in wild. 
         default: false
+        children:
+            towny.wild.item_use.*: true
         # This includes all subnodes for
-        #  towny.wild.block.[id].item_use
+        #  towny.wild.item_use.[id]
 
     towny.claimed.*:
         description: User can build/destroy/switch/item_use in all towns.
@@ -198,24 +206,36 @@ permissions:
     towny.claimed.build:
         description: User can build in all towns.
         default: false
+        children:
+            towny.claimed.owntown.build.*: true
+            towny.claimed.alltown.build.*: true
         # This includes all subnodes for
-        #  towny.claimed.owntown.block.[id].build
-        #  towny.claimed.alltown.block.[id].build
+        #  towny.claimed.owntown.build.[id]
+        #  towny.claimed.alltown.build.[id]
     towny.claimed.destroy:
         description: User can destroy in all towns.
         default: false
+        children:
+            towny.claimed.owntown.destroy.*: true
+            towny.claimed.alltown.destroy.*: true
         # This includes all subnodes for
-        #  towny.claimed.owntown.block.[id].destroy
-        #  towny.claimed.alltown.block.[id].destroy
+        #  towny.claimed.owntown.destroy.[id]
+        #  towny.claimed.alltown.destroy.[id]
     towny.claimed.switch:
         description: User can switch in all towns.
         default: false
+        children:
+            towny.claimed.owntown.switch.*: true
+            towny.claimed.alltown.switch.*: true
         # This includes all subnodes for
-        #  towny.claimed.owntown.block.[id].switch
-        #  towny.claimed.alltown.block.[id].switch
+        #  towny.claimed.owntown.switch.[id]
+        #  towny.claimed.alltown.switch.[id]
     towny.claimed.item_use:
         description: User can use use items in all towns. 
         default: false
+        children:
+            towny.claimed.owntown.item_use.*: true
+            towny.claimed.alltown.item_use.*: true
         # This includes all subnodes for
-        #  towny.claimed.owntown.block.[id].item_use
-        #  towny.claimed.alltown.block.[id].item_use
+        #  towny.claimed.owntown.item_use.[id]
+        #  towny.claimed.alltown.item_use.[id]

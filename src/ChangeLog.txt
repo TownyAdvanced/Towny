@@ -1239,3 +1239,21 @@ v0.79.1.6:
 v0.79.1.7:
 	- Fix updating the nation file if the renamed town was the Capital.
 	- Attempt to delete old economy accounts when a town/nation is renamed.
+v0.79.1.8:
+	- MAJOR changes to permission nodes to facilitate the following.
+		- Reduce the number of nodes Towny needs to register.
+		- Reduce Server lag due to so many permissions
+		- Allow for future expansion as new block numbers are used.
+		- The following nodes have changed...
+			'towny.wild.block.[id].build' is now 'towny.wild.build.[id]'
+			'towny.wild.block.[id].destroy' is now 'towny.wild.destroy.[id]'
+			'towny.wild.block.[id].switch' is now 'towny.wild.switch.[id]'
+			'towny.wild.block.[id].item_use' is now 'towny.wild.item_use.[id]'
+			'towny.claimed.owntown.block.[id].build' is now 'towny.claimed.owntown.build.[id]'
+			'towny.claimed.owntown.block.[id].destroy' is now 'towny.claimed.owntown.destroy.[id]'
+			'towny.claimed.owntown.block.[id].switch' is now 'towny.claimed.owntown.switch.[id]'
+			'towny.claimed.owntown.block.[id].item_use' is now 'towny.claimed.owntown.item_use.[id]'
+			'towny.claimed.alltown.block.[id].build' is now 'towny.claimed.alltown.build.[id]'
+			'towny.claimed.alltown.block.[id].destroy' is now 'towny.claimed.alltown.destroy.[id]'
+			'towny.claimed.alltown.block.[id].switch' is now 'towny.claimed.alltown.switch.[id]'
+			'towny.claimed.alltown.block.[id].item_use' is now 'towny.claimed.alltown.item_use.[id]'
