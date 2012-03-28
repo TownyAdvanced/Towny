@@ -80,7 +80,8 @@ public class TownySQLSource extends TownyFlatFileSource
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data"
 			});
 			FileMgmt.checkFiles(new String[]{
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt"
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"
 			});		
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
