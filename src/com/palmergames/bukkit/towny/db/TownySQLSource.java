@@ -665,8 +665,8 @@ public class TownySQLSource extends TownyFlatFileSource
 				Statement s = cntx.createStatement();								
 				 ResultSet rs = s.executeQuery("SELECT " +
 				"residents,mayor,assistants,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" +				
-				",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
-				"open,public,townBlocks,homeBlock,spawn,outpostSpawns" +
+				",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax" +
+				",open,public,townBlocks,homeBlock,spawn,outpostSpawns" +
 				" FROM "+tb_prefix+"TOWNS " +
 				" WHERE name='"+town.getName()+"'");
 				while (rs.next())
@@ -705,8 +705,8 @@ public class TownySQLSource extends TownyFlatFileSource
 							}
 						town.setPermissions(rs.getString("protectionStatus"));
 						town.setBonusBlocks(rs.getInt("bonus"));
+						town.setTaxPercentage(rs.getBoolean("taxpercent"));
 						town.setTaxes(rs.getFloat("taxes"));
-						town.setTaxPercentage(rs.getBoolean("taxpercent"));						
 						town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 						town.setPlotPrice(rs.getFloat("plotPrice"));
 						town.setPlotTax(rs.getFloat("plotTax"));

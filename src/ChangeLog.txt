@@ -1262,3 +1262,4 @@ v0.79.1.9:
 	- Change a couple of sql data types from tinyint to bool's.
 	- Add file creation (if not present for snapshot_queue.txt to the sql data handler.
 	- Fix saving a towns setting for tax percentage (SQL).
+	- SQL loading should set the towns tax percentage setting before setting the tax.
