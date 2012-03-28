@@ -132,18 +132,18 @@ public class TownySQLSource extends TownyFlatFileSource
 						  "`residents` mediumtext,"+						  
 						  "`mayor` mediumtext,"+
 						  "`nation` mediumtext NOT NULL,"+
-						  "`assistants` text  DEFAULT NULL,"+
+						  "`assistants` text DEFAULT NULL,"+
 						  "`townBoard` mediumtext DEFAULT NULL,"+
 						  "`tag` mediumtext DEFAULT NULL,"+
 						  "`protectionStatus` mediumtext DEFAULT NULL,"+						  
-						  "`bonus` int(11)  DEFAULT 0,"+
+						  "`bonus` int(11) DEFAULT 0,"+
 						  "`purchased` int(11)  DEFAULT 0,"+						  						 
 						  "`taxpercent` bool NOT NULL DEFAULT '0',"+
-						  "`taxes` float  DEFAULT 0,"+						  
+						  "`taxes` float DEFAULT 0,"+						  
 						  "`hasUpkeep` bool NOT NULL DEFAULT '0',"+
 						  "`plotPrice` float DEFAULT NULL,"+
-						  "`plotTax` float  DEFAULT NULL,"+
-						  "`commercialPlotPrice` float  DEFAULT NULL,"+
+						  "`plotTax` float DEFAULT NULL,"+
+						  "`commercialPlotPrice` float DEFAULT NULL,"+
 						  "`commercialPlotTax` float NOT NULL,"+
 						  "`embassyPlotPrice` float NOT NULL,"+
 						  "`embassyPlotTax` float NOT NULL,"+
@@ -666,7 +666,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				 ResultSet rs = s.executeQuery("SELECT " +
 				"residents,mayor,assistants,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" +				
 				",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax," +
-				"open,public,townBlocks, homeBlock, spawn,outpostSpawns " +
+				"open,public,townBlocks,homeBlock,spawn,outpostSpawns" +
 				" FROM "+tb_prefix+"TOWNS " +
 				" WHERE name='"+town.getName()+"'");
 				while (rs.next())
@@ -1284,6 +1284,7 @@ public class TownySQLSource extends TownyFlatFileSource
 				twn_hm.put("plotTax", town.getPlotTax());
 				twn_hm.put("taxes", town.getTaxes());
 				twn_hm.put("hasUpkeep", town.hasUpkeep());
+				twn_hm.put("taxpercent", town.isTaxPercentage());
 				twn_hm.put("open", town.isOpen());
 				twn_hm.put("public", town.isPublic());	
 				twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));

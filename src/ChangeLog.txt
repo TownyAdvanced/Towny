@@ -1261,3 +1261,4 @@ v0.79.1.9:
 	- Fix deleting of nations at newday.
 	- Change a couple of sql data types from tinyint to bool's.
 	- Add file creation (if not present for snapshot_queue.txt to teh sql data handler.
+	- Fix saving a towns setting for tax percentage (SQL).
