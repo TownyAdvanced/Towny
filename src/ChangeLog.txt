@@ -1259,3 +1259,4 @@ v0.79.1.8:
 			'towny.claimed.alltown.block.[id].item_use' is now 'towny.claimed.alltown.item_use.[id]'
 v0.79.1.9:
 	- Fix deleting of nations at newday.
+	- Change a couple of sql data types from tinyint to bool's.

@@ -137,17 +137,17 @@ public class TownySQLSource extends TownyFlatFileSource
 						  "`protectionStatus` mediumtext DEFAULT NULL,"+						  
 						  "`bonus` int(11)  DEFAULT 0,"+
 						  "`purchased` int(11)  DEFAULT 0,"+						  						 
-						  "`taxpercent` tinyint(1) DEFAULT NULL,"+
+						  "`taxpercent` bool NOT NULL DEFAULT '0',"+
 						  "`taxes` float  DEFAULT 0,"+						  
-						  "`hasUpkeep` tinyint(1)  DEFAULT 0,"+
+						  "`hasUpkeep` bool NOT NULL DEFAULT '0',"+
 						  "`plotPrice` float DEFAULT NULL,"+
 						  "`plotTax` float  DEFAULT NULL,"+
 						  "`commercialPlotPrice` float  DEFAULT NULL,"+
 						  "`commercialPlotTax` float NOT NULL,"+
 						  "`embassyPlotPrice` float NOT NULL,"+
 						  "`embassyPlotTax` float NOT NULL,"+
-						  "`open` tinyint(1) NOT NULL,"+
-						  "`public` tinyint(1) NOT NULL,"+
+						  "`open` bool NOT NULL DEFAULT '0',"+
+						  "`public` bool NOT NULL DEFAULT '0',"+
 						  "`homeblock` mediumtext NOT NULL,"+
 						  "`townBlocks` mediumtext NOT NULL,"+
 						  "`spawn` mediumtext NOT NULL,"+
@@ -176,7 +176,7 @@ public class TownySQLSource extends TownyFlatFileSource
 						  "`town` mediumtext,"+
 						  "`lastOnline` BIGINT NOT NULL,"+
 						  "`registered` BIGINT NOT NULL,"+
-						  "`isNPC` tinyint(1) NOT NULL,"+
+						  "`isNPC` bool NOT NULL DEFAULT '0',"+
 						  "`title` mediumtext,"+
 						  "`surname` mediumtext,"+
 						  "`protectionStatus` mediumtext,"+
@@ -211,7 +211,7 @@ public class TownySQLSource extends TownyFlatFileSource
 						"`allies` mediumtext NOT NULL,"+
 						"`enemies` mediumtext NOT NULL,"+
 						"`taxes` float NOT NULL,"+
-						"`neutral` tinyint(1) NOT NULL, "+
+						"`neutral` bool NOT NULL DEFAULT '0', "+
 						"PRIMARY KEY (`name`)"+
 						")";
 				try {				
@@ -238,7 +238,7 @@ public class TownySQLSource extends TownyFlatFileSource
 						"`z` bigint(20) NOT NULL,"+												
 						"`permissions` mediumtext NOT NULL,"+
 						"`locked` bool NOT NULL DEFAULT '0',"+
-						"`changed` tinyint(1) NOT NULL DEFAULT '0',"+						
+						"`changed` bool NOT NULL DEFAULT '0',"+						
 						"PRIMARY KEY (`world`,`x`,`z`)"+
 						")";
 				try {				
