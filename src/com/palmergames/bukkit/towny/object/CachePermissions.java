@@ -262,7 +262,7 @@ public class CachePermissions extends TownyUniverse {
 
 			// Wilderness Permissions
 			if (status == TownBlockStatus.UNCLAIMED_ZONE)
-				if (TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_WILD_ALL.getNode(actionType.toString()))) {
+				if (TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(actionType.toString()))) {
 					return true;
 
 				} else if (!TownyPermission.getUnclaimedZonePerm(actionType, pos.getWorld())) {

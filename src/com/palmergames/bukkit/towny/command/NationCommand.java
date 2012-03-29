@@ -274,7 +274,7 @@ public class NationCommand implements CommandExecutor {
 		TownyUniverse universe = plugin.getTownyUniverse();
 		try {
 			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isNationCreationAdminOnly() && !plugin.isPermissions())
-				|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_NEW.getNode()))))
+				|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_NEW.getNode()))))
 				throw new TownyException(TownySettings.getNotPermToNewNationLine());
 
 			Town town = TownyUniverse.getDataSource().getTown(capitalName);
@@ -366,7 +366,7 @@ public class NationCommand implements CommandExecutor {
 
 				if (!resident.isKing())
 					throw new TownyException(TownySettings.getLangString("msg_not_king"));
-				if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_DELETE.getNode())))
+				if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_DELETE.getNode())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				TownyUniverse.getDataSource().removeNation(nation);
@@ -943,7 +943,7 @@ public class NationCommand implements CommandExecutor {
 				if (split.length < 2)
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");
 				else {
-					if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_RENAME.getNode()))) {
+					if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_RENAME.getNode()))) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 						return;
 					}
@@ -978,7 +978,7 @@ public class NationCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set title bilbo Jester ");
 				else
 					try {
-						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
+						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 							return;
 						}
@@ -1018,7 +1018,7 @@ public class NationCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set surname bilbo the dwarf ");
 				else
 					try {
-						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
+						if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_GRANT_TITLES.getNode()))) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 							return;
 						}

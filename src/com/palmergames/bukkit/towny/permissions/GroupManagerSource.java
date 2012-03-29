@@ -112,10 +112,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 */
 	@Override
 	public boolean hasPermission(Player player, String node) {
-		
-		if (player.isOp())
-    		return true;
-		
+
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		
 		return handler.has(player, node);

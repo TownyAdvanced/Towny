@@ -97,9 +97,6 @@ public class BukkitPermSource extends TownyPermissionSource {
     @Override
 	public boolean hasPermission(Player player, String node) {
 
-    	if (player.isOp())
-    		return true;
-    	
 		final String[] parts = node.split("\\.");
 		final StringBuilder builder = new StringBuilder(node.length());
 		for (String part : parts) {

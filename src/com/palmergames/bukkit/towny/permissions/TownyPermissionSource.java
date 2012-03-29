@@ -102,8 +102,24 @@ public abstract class TownyPermissionSource {
 	public boolean isTownyAdmin(Player player) {
 		if (player.isOp())
 			return true;
-		return hasPermission(player, PermissionNodes.TOWNY_ADMIN.getNode());
+		return (plugin.isPermissions() && hasPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()));
 	}
+	
+	/**
+	 * All permission checks should go through here.
+	 * 
+	 * @param player
+	 * @param node
+	 * @return
+	 */
+	public boolean has(Player player, String node) {
+		
+		if (player.isOp())
+    		return true;
+		
+		return (plugin.isPermissions() && hasPermission(player, node));
+	}
+	
 	/*
 	public void registerPermissionNodes() {
 		

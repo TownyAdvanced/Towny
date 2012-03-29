@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.ChatTools;
@@ -88,17 +89,13 @@ public class TownyAdminCommand implements CommandExecutor {
 			isConsole = false;
 			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 
-			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
-				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_admin_only"));
-				return true;
-			}
 		} else {
 			isConsole = true;
 			this.player = null;
 		}
 
 		try {
-			parseTownyAdminCommand(args);
+			return parseTownyAdminCommand(args);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(sender, e.getMessage());
 		}
@@ -113,54 +110,91 @@ public class TownyAdminCommand implements CommandExecutor {
 			return player;
 	}
 
-	public void parseTownyAdminCommand(String[] split) throws TownyException {
+	public boolean parseTownyAdminCommand(String[] split) throws TownyException {
 		if (split.length == 0) {
 			buildTAPanel();
 			for (String line : ta_panel) {
 				sender.sendMessage(line);
 			}
 
-		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help"))
+		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			for (String line : ta_help) {
 				sender.sendMessage(line);
 			}
-		else if (split[0].equalsIgnoreCase("set"))
-			adminSet(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("town"))
-			parseAdminTownCommand(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("nation"))
-			parseAdminNationCommand(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("toggle"))
-			parseToggleCommand(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("givebonus"))
-			giveBonus(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("reload"))
-			reloadTowny(false);
-		else if (split[0].equalsIgnoreCase("reset"))
-			reloadTowny(true);
-		else if (split[0].equalsIgnoreCase("backup"))
-			try {
-				TownyUniverse.getDataSource().backup();
-				TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("mag_backup_success"));
-
-			} catch (IOException e) {
-				TownyMessaging.sendErrorMsg(getSender(), "Error: " + e.getMessage());
-
+		} else {
+			
+			/*
+			 * Check we have a permission nodes for this command.
+			 */
+			if (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_COMMAND.getNode(split[0].toLowerCase()))) {
+				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_admin_only"));
+				// Return true as we are going to eat this command anyway.
+				return true;
 			}
-		else if (split[0].equalsIgnoreCase("newday"))
-			plugin.getTownyUniverse().newDay();
-		else if (split[0].equalsIgnoreCase("purge"))
-			purge(StringMgmt.remFirstArg(split));
-		else if (split[0].equalsIgnoreCase("unclaim"))
-			parseAdminUnclaimCommand(StringMgmt.remFirstArg(split));
-		/*
-		else if (split[0].equalsIgnoreCase("seed") && TownySettings.getDebug())
-		        seedTowny();
-		else if (split[0].equalsIgnoreCase("warseed") && TownySettings.getDebug())
-		        warSeed(player);
-		        */
-		else
-			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_sub"));
+			
+			if (split[0].equalsIgnoreCase("set")) {
+					
+				adminSet(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("town")) {
+	
+				parseAdminTownCommand(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("nation")) {
+
+				parseAdminNationCommand(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("toggle")) {
+
+				parseToggleCommand(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("givebonus")) {
+
+				giveBonus(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("reload")) {
+
+				reloadTowny(false);
+				
+			} else if (split[0].equalsIgnoreCase("reset")) {
+				
+				reloadTowny(true);
+				
+			} else if (split[0].equalsIgnoreCase("backup")) {
+				
+				try {
+					TownyUniverse.getDataSource().backup();
+					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("mag_backup_success"));
+	
+				} catch (IOException e) {
+					TownyMessaging.sendErrorMsg(getSender(), "Error: " + e.getMessage());
+	
+				}
+				
+			} else if (split[0].equalsIgnoreCase("newday")) {
+				
+				plugin.getTownyUniverse().newDay();
+				
+			} else if (split[0].equalsIgnoreCase("purge")) {
+				
+				purge(StringMgmt.remFirstArg(split));
+				
+			} else if (split[0].equalsIgnoreCase("unclaim")) {
+				
+				parseAdminUnclaimCommand(StringMgmt.remFirstArg(split));
+			/*
+			else if (split[0].equalsIgnoreCase("seed") && TownySettings.getDebug())
+			        seedTowny();
+			else if (split[0].equalsIgnoreCase("warseed") && TownySettings.getDebug())
+			        warSeed(player);
+			        */
+			} else {
+				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_sub"));
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	private void giveBonus(String[] split) throws TownyException {

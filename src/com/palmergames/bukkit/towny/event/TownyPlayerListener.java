@@ -213,7 +213,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Prevent fly/double jump cheats
 		if (!(event instanceof PlayerTeleportEvent)) {
-			if (TownySettings.isUsingCheatProtection() && (player.getGameMode() != GameMode.CREATIVE) && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.CHEAT_BYPASS.getNode())) {
+			if (TownySettings.isUsingCheatProtection() && (player.getGameMode() != GameMode.CREATIVE) && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.CHEAT_BYPASS.getNode())) {
 				try {
 					if (TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny())
 						if ((from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)

@@ -304,7 +304,7 @@ public class TownCommand implements CommandExecutor  {
                 try {
                 	// TODO: Let admin's call a subfunction of this.
                 	if (split[0].equalsIgnoreCase("public")) {
-                		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_PUBLIC.getNode())))
+                		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_PUBLIC.getNode())))
                     		throw new Exception(TownySettings.getLangString("msg_err_command_disable"));
                     		
                      	town.setPublic(!town.isPublic());
@@ -338,7 +338,7 @@ public class TownCommand implements CommandExecutor  {
                     	town.setTaxPercentage(!town.isTaxPercentage());
                         TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_taxpercent"), town.isTaxPercentage() ? "Enabled" : "Disabled"));
                     } else if (split[0].equalsIgnoreCase("open")) {
-                    	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_OPEN.getNode())))
+                    	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_OPEN.getNode())))
                     		throw new Exception(TownySettings.getLangString("msg_err_command_disable"));
                     	
                     	town.setOpen(!town.isOpen());
@@ -376,28 +376,28 @@ public class TownCommand implements CommandExecutor  {
         	if (split.contains("mobs")) {
         		if (town.getWorld().isForceTownMobs()) 
                     throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
-        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_MOBS.getNode()))) 
+        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_MOBS.getNode()))) 
         			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         	}
         	
         	if (split.contains("fire")) {
         		if (town.getWorld().isForceFire())
         			throw new TownyException(TownySettings.getLangString("msg_world_fire"));
-        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_FIRE.getNode())))
+        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_FIRE.getNode())))
         			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         	}
         	
         	if (split.contains("explosion")) {
         		if (town.getWorld().isForceExpl())
         			throw new TownyException(TownySettings.getLangString("msg_world_expl"));
-        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_EXPLOSION.getNode())))
+        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_EXPLOSION.getNode())))
         			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         	}
         	
         	if (split.contains("pvp")) {
         		if (town.getWorld().isForcePVP())
         			throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
-        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_PVP.getNode())))
+        		if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_PVP.getNode())))
         			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
         	}
         }
@@ -606,7 +606,7 @@ public class TownCommand implements CommandExecutor  {
                                         TownyMessaging.sendErrorMsg(player, "Eg: /town set name BillyBobTown");
                                         return;
                                 } else
-                                	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_RENAME.getNode()))) {
+                                	if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_RENAME.getNode()))) {
                                 		TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                                 		return;
                                 	}
@@ -806,7 +806,7 @@ public class TownCommand implements CommandExecutor  {
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
                         if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isTownCreationAdminOnly() && !plugin.isPermissions())
-                        	|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_NEW.getNode()))))
+                        	|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_NEW.getNode()))))
                                 throw new TownyException(TownySettings.getNotPermToNewTownLine());
                         
                         if (TownySettings.hasTownLimit() && TownyUniverse.getDataSource().getTowns().size() >= TownySettings.getTownLimit())
@@ -1125,7 +1125,7 @@ public class TownCommand implements CommandExecutor  {
 
                                 if (!resident.isMayor())
                                     throw new TownyException(TownySettings.getLangString("msg_not_mayor"));
-                                if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_DELETE.getNode())))
+                                if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_DELETE.getNode())))
                                 	throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
                                 
                                 TownyUniverse.getDataSource().removeTown(town);
@@ -1198,7 +1198,7 @@ public class TownCommand implements CommandExecutor  {
 					if (Bukkit.getServer().matchPlayer(newMember.getName()).isEmpty()) { //Not online
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
 						remove.add(newMember);
-					} else if (!TownyUniverse.getPermissionSource().hasPermission(Bukkit.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+					} else if (!TownyUniverse.getPermissionSource().has(Bukkit.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
 						remove.add(newMember);
 					} else {
@@ -1687,7 +1687,7 @@ public class TownCommand implements CommandExecutor  {
 				if (plugin.getTownyUniverse().isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_CLAIM.getNode()))
+				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_CLAIM.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_no_perms_claim"));
 
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -1706,7 +1706,7 @@ public class TownCommand implements CommandExecutor  {
 
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 					if ((TownySettings.isAllowingOutposts())
-						&& (!plugin.isPermissions() || ((plugin.isPermissions()) && TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_CLAIM_OUTPOST.getNode())))){
+						&& (!plugin.isPermissions() || ((plugin.isPermissions()) && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_CLAIM_OUTPOST.getNode())))){
 
 						if (world.hasTownBlock(key))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));

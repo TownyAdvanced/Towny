@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.1.10
+version: 0.79.1.11
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -42,11 +42,23 @@ permissions:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
         default: false
         children:
+            towny.admin.town: true
+            towny.admin.nation: true
+            towny.admin.set: true
+            towny.admin.reload: true
+            towny.admin.reset: true
+            towny.admin.toggle: true
+            towny.admin.givebonus: true
+            towny.admin.backup: true
+            towny.admin.newday: true
+            towny.admin.purge: true
+            towny.admin.unclaim: true
             towny.town.*: true
             towny.nation.*: true
             towny.wild.*: true
             towny.claimed.*: true
             towny.cheat.bypass: true
+            towny.top: true
     towny.cheat.bypass:
         description: Disables the anti cheat code for players with this node.
         default: op

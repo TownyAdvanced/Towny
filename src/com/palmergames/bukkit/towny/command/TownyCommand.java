@@ -166,7 +166,7 @@ public class TownyCommand implements CommandExecutor {
                         towny_war.clear();
                 } else if (split[0].equalsIgnoreCase("spy")) {
                 	
-                	if (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+                	if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 	                	if (plugin.hasPlayerMode(player, "spy"))
 	                		plugin.removePlayerMode(player);
 	                	else
@@ -194,7 +194,7 @@ public class TownyCommand implements CommandExecutor {
         
         private void TopCommand(Player player, String[] args) {
                 
-                if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOP.getNode()))) {
+                if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOP.getNode()))) {
                         sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
                         return;
                 }

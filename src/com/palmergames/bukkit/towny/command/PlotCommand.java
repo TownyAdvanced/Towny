@@ -88,7 +88,7 @@ public class PlotCommand implements CommandExecutor {
 
 	public void parsePlotCommand(Player player, String[] split) throws TownyException {
 
-		if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions()) && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_PLOT.getNode()))))
+		if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT.getNode()))))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -260,7 +260,7 @@ public class PlotCommand implements CommandExecutor {
 						}
 
 						if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions())
-							&& (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode())))
+							&& (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode())))
 							&& !town.isMayor(resident)
 							&& !town.hasAssistant(resident))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), "change plot types"));
@@ -450,28 +450,28 @@ public class PlotCommand implements CommandExecutor {
 		if (split.contains("mobs")) {
 			if (town.getWorld().isForceTownMobs())
 				throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
-			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_MOBS.getNode())))
+			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_MOBS.getNode())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		}
 
 		if (split.contains("fire")) {
 			if (town.getWorld().isForceFire())
 				throw new TownyException(TownySettings.getLangString("msg_world_fire"));
-			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_FIRE.getNode())))
+			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_FIRE.getNode())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		}
 
 		if (split.contains("explosion")) {
 			if (town.getWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
-			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_EXPLOSION.getNode())))
+			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_EXPLOSION.getNode())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		}
 
 		if (split.contains("pvp")) {
 			if (town.getWorld().isForcePVP())
 				throw new TownyException(TownySettings.getLangString("msg_world_pvp"));
-			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_TOGGLE_PVP.getNode())))
+			if (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOGGLE_PVP.getNode())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		}
 		if ((split.contains("pvp")) || (split.trim().equalsIgnoreCase("off"))) {

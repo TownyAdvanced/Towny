@@ -6,6 +6,9 @@ package com.palmergames.bukkit.towny.permissions;
  */
 public enum PermissionNodes {
 		TOWNY_ADMIN("towny.admin"),
+		
+			TOWNY_ADMIN_COMMAND("towny.admin.*"),
+		
 		CHEAT_BYPASS("towny.cheat.bypass"),
 		TOWNY_TOP("towny.top"),
 		TOWNY_TOWN_ALL("towny.town.*"),

@@ -1265,3 +1265,16 @@ v0.79.1.9:
 	- SQL loading should set the towns tax percentage setting before setting the tax.
 v0.79.1.10:
 	- Update for 1.2.4-R1.0 (2126)
+v0.79.1.11:
+	- Broke admin permissions into seperate nodes. They are all children of 'towny.admin'.
+		- towny.admin.town: Allows a player to use '/ta town add/kick'
+        - towny.admin.nation: Allows a player to use '/ta nation add/kick'
+		- towny.admin.set: Grants access to '/ta set' allowing a player to set and remove NPC mayors.
+		- towny.admin.reload: Reload all towny settings and data.
+		- towny.admin.reset: Generate a fresh config.yml and perform a full reload of Towny.
+		- towny.admin.toggle: Allows a player to toggle any adming settings using '/ta toggle'
+		- towny.admin.givebonus: granting of bonus plots to a player/town
+		- towny.admin.backup: perform a backup
+		- towny.admin.newday: run a new day event for taxes
+		- towny.admin.purge: Remove old residents '/ta purge 30'
+		- towny.admin.unclaim: Force unclaim of a town plot (any town)

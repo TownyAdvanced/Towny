@@ -36,7 +36,7 @@ public enum TownSpawnLevel {
 	}
 	
 	public boolean hasPermissionNode(Towny plugin, Player player) {
-		return this == TownSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, this.permissionNode))
+		return this == TownSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, this.permissionNode))
 													|| ((!plugin.isPermissions()) && (TownySettings.isAllowingTownSpawn()));
 	}
 	

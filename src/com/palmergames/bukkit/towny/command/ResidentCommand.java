@@ -188,7 +188,7 @@ public class ResidentCommand implements CommandExecutor {
 		}
 
 		List<String> list = Arrays.asList(split);
-		if ((list.contains("spy")) && (plugin.isPermissions() && !TownyUniverse.getPermissionSource().hasPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode()))) {
+		if ((list.contains("spy")) && (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode()))) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 			return;
 		}
