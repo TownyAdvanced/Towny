@@ -1263,3 +1263,5 @@ v0.79.1.9:
 	- Add file creation (if not present) for snapshot_queue.txt to the sql data handler.
 	- Fix saving a towns setting for tax percentage (SQL).
 	- SQL loading should set the towns tax percentage setting before setting the tax.
+v0.79.1.10:
+	- Update for 1.2.4-R1.0 (2126)
