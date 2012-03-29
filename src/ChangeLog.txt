@@ -1278,3 +1278,4 @@ v0.79.1.11:
 		- towny.admin.newday: run a new day event for taxes
 		- towny.admin.purge: Remove old residents '/ta purge 30'
 		- towny.admin.unclaim: Force unclaim of a town plot (any town)
+	- Change default permissions on 'shop' plots to follow the owners permissions.

@@ -166,7 +166,11 @@ public class TownBlock {
         	}
         	break;
         case COMMERCIAL:
-        	setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+        	//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
+        	if (this.hasResident())
+        		setPermissions(this.resident.permissions.toString());
+        	else
+        		setPermissions(this.town.permissions.toString());
         	break;
         case ARENA:
         	setPermissions("pvp");
