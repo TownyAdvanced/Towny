@@ -126,7 +126,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			/*
 			 * Check we have a permission nodes for this command.
 			 */
-			if (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_COMMAND.getNode(split[0].toLowerCase()))) {
+			if (!isConsole && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_COMMAND.getNode(split[0].toLowerCase())))) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_admin_only"));
 				// Return true as we are going to eat this command anyway.
 				return true;

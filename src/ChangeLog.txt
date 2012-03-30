@@ -1293,3 +1293,4 @@ v0.79.1.12:
 		- towny.town.plot.clear: Allows use of plot clear (mainly for mayors).
 v0.79.1.13:
 	- Fix for me breaking op's wild override.
+	- Fix Admin commands from the console.
