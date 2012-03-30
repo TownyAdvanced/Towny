@@ -20,6 +20,9 @@ public enum PermissionNodes {
 			TOWNY_TOWN_CLAIM("towny.town.claim"),
 			TOWNY_TOWN_CLAIM_OUTPOST("towny.town.claim.outpost"),
 			TOWNY_TOWN_PLOT("towny.town.plot"),
+			
+				TOWNY_TOWN_PLOT_COMMAND("towny.town.plot.*"),
+			
 			TOWNY_TOWN_PLOTTYPE("towny.town.plottype"),
 			
 		TOWNY_SPAWN_ALL("towny.town.spawn.*"),

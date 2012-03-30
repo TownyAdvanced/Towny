@@ -72,7 +72,7 @@ public class PlotCommand implements CommandExecutor {
 					player.sendMessage(line);
 			} else {
 				try {
-					parsePlotCommand(player, args);
+					return parsePlotCommand(player, args);
 				} catch (TownyException x) {
 					// No permisisons
 					TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -86,15 +86,19 @@ public class PlotCommand implements CommandExecutor {
 		return true;
 	}
 
-	public void parsePlotCommand(Player player, String[] split) throws TownyException {
-
-		if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT.getNode()))))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+	public boolean parsePlotCommand(Player player, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			for (String line : output)
 				player.sendMessage(line);
 		} else {
+			
+			/*
+			 * check we have the right permission node for this command.
+			 */
+			if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT_COMMAND.getNode(split[0].toLowerCase())))))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			Resident resident;
 			TownyWorld world;
 			Town town;
@@ -104,7 +108,7 @@ public class PlotCommand implements CommandExecutor {
 				town = resident.getTown();
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
+				return true;
 			}
 
 			try {
@@ -190,7 +194,7 @@ public class PlotCommand implements CommandExecutor {
 							selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
 							if (selection.size() == 0) {
 								player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
-								return;
+								return true;
 							}
 						} else {
 							selection = new ArrayList<WorldCoord>();
@@ -204,11 +208,11 @@ public class PlotCommand implements CommandExecutor {
 								plotPrice = Double.parseDouble(split[1]);
 								if (plotPrice < 0) {
 		                            TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
-		                            return;
+		                            return true;
 		                        }
 							} catch (NumberFormatException e) {
 								player.sendMessage(String.format(TownySettings.getLangString("msg_error_must_be_num")));
-								return;
+								return true;
 							}
 						}
 
@@ -256,7 +260,7 @@ public class PlotCommand implements CommandExecutor {
 							TownCommand.setTownBlockPermissions(player, owner, townBlock.getPermissions(), StringMgmt.remFirstArg(split), true);
 							townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
-							return;
+							return true;
 						}
 
 						if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions())
@@ -289,12 +293,12 @@ public class PlotCommand implements CommandExecutor {
 						if (townBlock.hasResident()) {
 							if (!townBlock.isOwner(resident)) {
 								player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
-								return;
+								return true;
 							}
 							
 						} else if (!town.isMayor(resident)) {
 							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
-							return;
+							return true;
 						}
 
 						for (String material : world.getPlotManagementMayorDelete())
@@ -309,13 +313,17 @@ public class PlotCommand implements CommandExecutor {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
 
-				}
+				} else
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
+				
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			} catch (EconomyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
 		}
+		
+		return true;
 	}
 	
 	/**

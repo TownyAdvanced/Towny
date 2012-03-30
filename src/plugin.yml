@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.79.1.11
+version: 0.79.1.12
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -137,6 +137,17 @@ permissions:
     towny.town.plot:
         description: User is able to purchase and own town plots.
         default: false
+        children:
+            towny.town.plot.claim: true
+            towny.town.plot.unclaim: true
+            towny.town.plot.notforsale: true
+            towny.town.plot.nfs: true
+            towny.town.plot.forsale: true
+            towny.town.plot.fs: true
+            towny.town.plot.perm: true
+            towny.town.plot.toggle: true
+            towny.town.plot.set: true
+            towny.town.plot.clear: true
     towny.town.plottype:
         description: User is able to alter plot types on plots they own.
         default: false

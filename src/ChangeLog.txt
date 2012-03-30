@@ -1279,3 +1279,15 @@ v0.79.1.11:
 		- towny.admin.purge: Remove old residents '/ta purge 30'
 		- towny.admin.unclaim: Force unclaim of a town plot (any town)
 	- Change default permissions on 'shop' plots to follow the owners permissions.
+v0.79.1.12:
+	- Expanded the plot command permission into child nodes.
+		- towny.town.plot.claim: Allows use of '/plot claim'
+		- towny.town.plot.unclaim
+		- towny.town.plot.notforsale
+		- towny.town.plot.nfs
+		- towny.town.plot.forsale
+		- towny.town.plot.fs
+		- towny.town.plot.perm
+		- towny.town.plot.toggle
+		- towny.town.plot.set
+		- towny.town.plot.clear: Allows use of plot clear (mainly for mayors).
