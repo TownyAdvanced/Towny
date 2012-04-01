@@ -51,8 +51,8 @@ public class TownyCommand implements CommandExecutor {
                                 + ", " + ChatTools.formatCommand("", "/nation", "?", "")
                                 + ", " + ChatTools.formatCommand("", "/plot", "?", "")
                                 + ", " + ChatTools.formatCommand("", "/towny", "?", ""));
-                towny_general_help.add(ChatTools.formatCommand("", "/townchat", " [msg]", TownySettings.getLangString("help_2"))
-                                + ", " + ChatTools.formatCommand("", "/nationchat", " [msg]", TownySettings.getLangString("help_3")));
+                towny_general_help.add(ChatTools.formatCommand("", "/tc", "[msg]", TownySettings.getLangString("help_2"))
+                                + ", " + ChatTools.formatCommand("", "/nc", "[msg]", TownySettings.getLangString("help_3")).trim());
                 towny_general_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin", "?", ""));
                 
                 towny_help.add(ChatTools.formatTitle("/towny"));
