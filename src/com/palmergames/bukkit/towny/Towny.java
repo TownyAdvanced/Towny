@@ -84,7 +84,7 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
-	private final TownyWarCustomListener customListener = new TownyWarCustomListener(this);
+	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
 	private TownyUniverse townyUniverse;
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
@@ -392,7 +392,7 @@ public class Towny extends JavaPlugin {
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(weatherListener, this);
-			pluginManager.registerEvents(customListener, this);
+			pluginManager.registerEvents(townyWarCustomListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			
 		}

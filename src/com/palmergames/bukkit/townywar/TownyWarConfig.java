@@ -36,10 +36,6 @@ public class TownyWarConfig {
 			|| material == getBeaconWireFrameMaterial();
 	}
 	
-	public static String parseSingleLineString(String str) {
-        return str.replaceAll("&", "\u00A7");
-	}
-	
 	public static DyeColor[] getWoolColors() {
 		return woolColors;
 	}
@@ -136,4 +132,20 @@ public class TownyWarConfig {
 	public static boolean regenBlocksAfterExplosionInWarZone() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS);
 	}
+
+    public static double getWonTownblockReward() {
+        return TownySettings.getDouble(ConfigNodes.WAR_ECONOMY_TOWNBLOCK_WON);
+    }
+
+    public static double getWonHomeblockReward() {
+        return TownySettings.getDouble(ConfigNodes.WAR_ECONOMY_HOMEBLOCK_WON);
+    }
+
+    public static double getCostToPlaceWarFlag() {
+        return TownySettings.getDouble(ConfigNodes.WAR_ECONOMY_ENEMY_PLACE_FLAG);
+    }
+
+    public static double getDefendedAttackReward() {
+        return TownySettings.getDouble(ConfigNodes.WAR_ECONOMY_ENEMY_DEFENDED_ATTACK);
+    }
 }
