@@ -45,22 +45,21 @@ public abstract class TownyPermissionSource {
 				return true;
 		
 		// Allow ops all access when no permissions
-		if (!bpermissions) {
+		if (!bpermissions)
 			if (isTownyAdmin(player))
 				return true;
 			
-			// No perms so check world settings.
-			switch (action) {
+		// No perms so check world settings.
+		switch (action) {
 
-			case BUILD:
-				return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
-			case DESTROY:
-				return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
-			case SWITCH:
-				return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
-			case ITEM_USE:
-				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
-			}
+		case BUILD:
+			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+		case DESTROY:
+			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+		case SWITCH:
+			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+		case ITEM_USE:
+			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
 		}
 		
 		return false;
