@@ -79,6 +79,14 @@ public class TownyWarConfig {
 	public static int getBeaconSize() {
 		return getBeaconRadius() * 2 - 1;
 	}
+
+    public static int getBeaconMinHeightAboveFlag() {
+        return TownySettings.getInt(ConfigNodes.WAR_ENEMY_BEACON_HEIGHT_ABOVE_FLAG_MIN);
+    }
+
+    public static int getBeaconMaxHeightAboveFlag() {
+        return TownySettings.getInt(ConfigNodes.WAR_ENEMY_BEACON_HEIGHT_ABOVE_FLAG_MAX);
+    }
 	
 	public static void setFlagBaseMaterial(Material flagBaseMaterial) {
 		TownyWarConfig.flagBaseMaterial = flagBaseMaterial;
