@@ -1294,3 +1294,10 @@ v0.79.1.12:
 v0.79.1.13:
 	- Fix for me breaking op's wild override.
 	- Fix Admin commands from the console.
+v0.79.1.14:
+	- Flag war mode now supports economy payments for specific events. Those being:
+    	- Payment to server -  to place a warflag.
+    	- Attacking flagbearer -  pays the defender who broke the flag during a successful defend.
+    	- Pillage fund - from defending town during a succesfuly attack. A different amount can be set for the homeblock.
+    	  (Using a negative amount for pillaging will instead cause the attacker to pay a 'rebuilding cost'.)
+	
