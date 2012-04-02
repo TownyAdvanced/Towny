@@ -410,7 +410,8 @@ public class TownyEntityListener implements Listener {
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 							if (townyWorld.isProtectingExplosionEntity(entity)) {
-								if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
+								if ((!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation())))
+								&& (block.getType() != Material.TNT)) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, false);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 									plugin.getTownyUniverse().addProtectionRegenTask(task);
@@ -638,9 +639,14 @@ public class TownyEntityListener implements Listener {
 		}
 
 		try {
-			// Check Town PvP status
-			TownBlock townblock = world.getTownBlock(coord);
-			if (!townblock.getTown().isPVP() && !world.isForcePVP() && !townblock.getPermissions().pvp) {
+
+			// Check TownBlock PvP status
+			TownBlock defenderTB = world.getTownBlock(coord);
+			TownBlock attackerTB = world.getTownBlock(Coord.parseCoord(a));
+			
+			if (!world.isForcePVP()
+					&& (!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp)
+					&& (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp)) {
 				if (bp != null && (ap != null || a instanceof Arrow || a instanceof ThrownPotion))
 					return true;
 
