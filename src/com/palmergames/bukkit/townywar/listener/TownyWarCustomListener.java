@@ -20,56 +20,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TownyWarCustomListener implements Listener {
-	private final Towny plugin;
+    private final Towny plugin;
 
-	public TownyWarCustomListener(Towny instance) {
-		plugin = instance;
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onCellAttackEvent(CellAttackEvent event) {
-		
-			try {
-				CellUnderAttack cell = event.getData();
-				TownyWar.registerAttack(cell);
-			} catch (Exception e) {
-				event.setCancelled(true);
-				event.setReason(e.getMessage());
-			}
-			
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onCellDefendedEvent(CellDefendedEvent event) {
-		
-			Player player = event.getPlayer();
-			CellUnderAttack cell = event.getCell().getAttackData();
-			
-			TownyUniverse universe = plugin.getTownyUniverse();
-			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
-				WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
-				universe.removeWarZone(worldCoord);
-				
-				plugin.updateCache(worldCoord);
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
-			
-			String playerName;
-			if (player == null) {
-				playerName = "Greater Forces";
-			} else {
-				playerName = player.getName();
-				try {
-					playerName = TownyUniverse.getDataSource().getResident(player.getName()).getFormattedName();
-				} catch (TownyException e) {
-				}
-			}
-			
-			plugin.getServer().broadcastMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_defended"),
-					playerName,
-					cell.getCellString()));
+    public TownyWarCustomListener(Towny instance) {
+        plugin = instance;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCellAttackEvent(CellAttackEvent event) {
+        try {
+            CellUnderAttack cell = event.getData();
+            TownyWar.registerAttack(cell);
+        } catch (Exception e) {
+            event.setCancelled(true);
+            event.setReason(e.getMessage());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCellDefendedEvent(CellDefendedEvent event) {
+
+        Player player = event.getPlayer();
+        CellUnderAttack cell = event.getCell().getAttackData();
+
+        TownyUniverse universe = plugin.getTownyUniverse();
+        try {
+            TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
+            WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
+            universe.removeWarZone(worldCoord);
+
+            plugin.updateCache(worldCoord);
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
+        }
+
+        String playerName;
+        if (player == null) {
+            playerName = "Greater Forces";
+        } else {
+            playerName = player.getName();
+            try {
+                playerName = TownyUniverse.getDataSource().getResident(player.getName()).getFormattedName();
+            } catch (TownyException e) {
+            }
+        }
+
+        plugin.getServer().broadcastMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_defended"),
+                playerName,
+                cell.getCellString()));
 
 
         // Defender Reward
@@ -119,127 +117,125 @@ public class TownyWarCustomListener implements Listener {
                 e.printStackTrace();
             }
         }
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onCellWonEvent(CellWonEvent event) {
-		
-			CellUnderAttack cell = event.getCellAttackData();
-			
-			TownyUniverse universe = plugin.getTownyUniverse();
-			try {
-                Resident attackingResident = TownyUniverse.getDataSource().getResident(cell.getNameOfFlagOwner());
-                Town attackingTown = attackingResident.getTown();
-                Nation attackingNation = attackingTown.getNation();
+    }
 
-                WorldCoord worldCoord = TownyWar.cellToWorldCoord(cell);
-                universe.removeWarZone(worldCoord);
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCellWonEvent(CellWonEvent event) {
 
-                TownBlock townBlock = worldCoord.getTownBlock();
-                Town defendingTown = townBlock.getTown();
+        CellUnderAttack cell = event.getCellAttackData();
 
-                // Payments
-                double amount = 0;
-                String moneyTranserMsg = null;
-                if (TownySettings.isUsingEconomy()) {
-                    try {
-                        String reasonType;
-                        if (townBlock.isHomeBlock()) {
-                            amount = TownyWarConfig.getWonHomeblockReward();
-                            reasonType = "Homeblock";
-                        } else {
-                            amount = TownyWarConfig.getWonTownblockReward();
-                            reasonType = "Townblock";
-                        }
+        TownyUniverse universe = plugin.getTownyUniverse();
+        try {
+            Resident attackingResident = TownyUniverse.getDataSource().getResident(cell.getNameOfFlagOwner());
+            Town attackingTown = attackingResident.getTown();
+            Nation attackingNation = attackingTown.getNation();
 
-                        if (amount > 0) {
-                            // Defending Town -> Attacker (Pillage)
-                            String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
-                            amount = Math.min(amount, defendingTown.getHoldingBalance());
-                            defendingTown.payTo(amount, attackingResident, reason);
+            WorldCoord worldCoord = TownyWar.cellToWorldCoord(cell);
+            universe.removeWarZone(worldCoord);
 
+            TownBlock townBlock = worldCoord.getTownBlock();
+            Town defendingTown = townBlock.getTown();
 
-                            // Message
-                            moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_pillage"),
-                                    attackingResident.getFormattedName(),
-                                    TownyFormatter.formatMoney(amount),
-                                    defendingTown.getFormattedName());
-                        } else if (amount < 0) {
-                            // Attacker -> Defending Town (Rebuild cost)
-                            amount = -amount; // Inverse the amount so it's positive.
-                            String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
-                            if (!attackingResident.payTo(amount, defendingTown, reason)) {
-                                // Could Not Pay Defending Town the Rebuilding Cost.
-                                TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
-                                        attackingResident.getFormattedName(),
-                                        (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()),
-                                        cell.getCellString()));
-                            }
-
-                            // Message
-                            moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_rebuilding"),
-                                    attackingResident.getFormattedName(),
-                                    TownyFormatter.formatMoney(amount),
-                                    defendingTown.getFormattedName());
-                        }
-                    } catch (EconomyException x) {
-                        x.printStackTrace();
-                    }
-                }
-
-                // Defender loses townblock
-				TownyUniverse.getDataSource().removeTownBlock(townBlock);
-
-                // Attacker Claim Automatically
+            // Payments
+            double amount = 0;
+            String moneyTranserMsg = null;
+            if (TownySettings.isUsingEconomy()) {
                 try {
-                    List<WorldCoord> selection = new ArrayList<WorldCoord>();
-                    selection.add(worldCoord);
-                    TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
-                    new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
-                } catch (TownyException te) {
-                    // Couldn't claim it.
-                }
-
-                // Cleanup
-                plugin.updateCache(worldCoord);
-
-                // Event Message
-                TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
-                        attackingResident.getFormattedName(),
-                        (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()),
-                        cell.getCellString()));
-
-                // Money Transfer message.
-                if (TownySettings.isUsingEconomy()) {
-                    if (amount != 0 && moneyTranserMsg != null) {
-                        try {
-                            TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);
-                        } catch (TownyException e) {
-                        }
-                        TownyMessaging.sendTownMessage(defendingTown, moneyTranserMsg);
+                    String reasonType;
+                    if (townBlock.isHomeBlock()) {
+                        amount = TownyWarConfig.getWonHomeblockReward();
+                        reasonType = "Homeblock";
+                    } else {
+                        amount = TownyWarConfig.getWonTownblockReward();
+                        reasonType = "Townblock";
                     }
+
+                    if (amount > 0) {
+                        // Defending Town -> Attacker (Pillage)
+                        String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
+                        amount = Math.min(amount, defendingTown.getHoldingBalance());
+                        defendingTown.payTo(amount, attackingResident, reason);
+
+
+                        // Message
+                        moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_pillage"),
+                                attackingResident.getFormattedName(),
+                                TownyFormatter.formatMoney(amount),
+                                defendingTown.getFormattedName());
+                    } else if (amount < 0) {
+                        // Attacker -> Defending Town (Rebuild cost)
+                        amount = -amount; // Inverse the amount so it's positive.
+                        String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
+                        if (!attackingResident.payTo(amount, defendingTown, reason)) {
+                            // Could Not Pay Defending Town the Rebuilding Cost.
+                            TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
+                                    attackingResident.getFormattedName(),
+                                    (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()),
+                                    cell.getCellString()));
+                        }
+
+                        // Message
+                        moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_rebuilding"),
+                                attackingResident.getFormattedName(),
+                                TownyFormatter.formatMoney(amount),
+                                defendingTown.getFormattedName());
+                    }
+                } catch (EconomyException x) {
+                    x.printStackTrace();
                 }
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
-			
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onCellAttackCanceledEvent(CellAttackCanceledEvent event) {
-		
-			CellUnderAttack cell = event.getCell();
-			
-			TownyUniverse universe = plugin.getTownyUniverse();
-			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
-				WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
-				universe.removeWarZone(worldCoord);
-				plugin.updateCache(worldCoord);
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
-			System.out.println(cell.getCellString());
-		}
-	}
+            }
+
+            // Defender loses townblock
+            TownyUniverse.getDataSource().removeTownBlock(townBlock);
+
+            // Attacker Claim Automatically
+            try {
+                List<WorldCoord> selection = new ArrayList<WorldCoord>();
+                selection.add(worldCoord);
+                TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
+                new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
+            } catch (TownyException te) {
+                // Couldn't claim it.
+            }
+
+            // Cleanup
+            plugin.updateCache(worldCoord);
+
+            // Event Message
+            TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_won"),
+                    attackingResident.getFormattedName(),
+                    (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()),
+                    cell.getCellString()));
+
+            // Money Transfer message.
+            if (TownySettings.isUsingEconomy()) {
+                if (amount != 0 && moneyTranserMsg != null) {
+                    try {
+                        TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);
+                    } catch (TownyException e) {
+                    }
+                    TownyMessaging.sendTownMessage(defendingTown, moneyTranserMsg);
+                }
+            }
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCellAttackCanceledEvent(CellAttackCanceledEvent event) {
+        CellUnderAttack cell = event.getCell();
+
+        TownyUniverse universe = plugin.getTownyUniverse();
+        try {
+            TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
+            WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
+            universe.removeWarZone(worldCoord);
+            plugin.updateCache(worldCoord);
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
+        }
+        System.out.println(cell.getCellString());
+    }
+}
 
