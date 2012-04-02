@@ -644,9 +644,17 @@ public class TownyEntityListener implements Listener {
 			TownBlock defenderTB = world.getTownBlock(coord);
 			TownBlock attackerTB = world.getTownBlock(Coord.parseCoord(a));
 			
+			/*
+			 * Check to prevent damage if...
+			 * The world isn't forced PVP
+			 * and
+			 * The Defender isn't in a PVP area.
+			 * or
+			 * The Attacker isn't in a PVP area.
+			 */
 			if (!world.isForcePVP()
-					&& (!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp)
-					&& (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp)) {
+					&& ((!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp)
+					|| (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp))) {
 				if (bp != null && (ap != null || a instanceof Arrow || a instanceof ThrownPotion))
 					return true;
 
