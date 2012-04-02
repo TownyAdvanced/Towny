@@ -45,7 +45,7 @@ public class CellUnderAttack extends Cell {
 			return;
 		
 		Block minBlock = getBeaconMinBlock(getFlagBaseBlock().getWorld());
-		if (flagBaseBlock.getY() + 4 > minBlock.getY())
+		if (getMinimumHeightForBeacon() >= minBlock.getY())
 			return;
 		
 		int outerEdge = beaconSize - 1;
@@ -65,6 +65,14 @@ public class CellUnderAttack extends Cell {
 			}
 		}
 	}
+
+    private Block getTopOfFlagBlock() {
+        return flagLightBlock;
+    }
+
+    private int getMinimumHeightForBeacon() {
+        return getTopOfFlagBlock().getY() + TownyWarConfig.getBeaconMinHeightAboveFlag();
+    }
 	
 	private int getEdgeCount(int x, int y, int z, int outerEdge) {
 		return (zeroOr(x, outerEdge) ? 1 : 0) + (zeroOr(y, outerEdge) ? 1 : 0) + (zeroOr(z, outerEdge) ? 1 : 0);
@@ -78,12 +86,16 @@ public class CellUnderAttack extends Cell {
 		int middle = (int) Math.floor(Coord.getCellSize() / 2.0);
 		int radiusCenterExpansion = TownyWarConfig.getBeaconRadius() - 1;
 		int fromCorner = middle - radiusCenterExpansion;
-		int maxY = world.getMaxHeight();
-		
+
 		int x = (getX() * Coord.getCellSize()) + fromCorner;
-		int y = maxY - TownyWarConfig.getBeaconSize();
-		int z = (getZ() * Coord.getCellSize()) + fromCorner;
-		
+        int z = (getZ() * Coord.getCellSize()) + fromCorner;
+
+        int maxY = world.getMaxHeight();
+        int y = getTopOfFlagBlock().getY() + TownyWarConfig.getBeaconMaxHeightAboveFlag();
+        if (y > maxY) {
+            y = maxY - TownyWarConfig.getBeaconSize();
+        }
+
 		return world.getBlockAt(x, y, z);
 	}
 	

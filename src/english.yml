@@ -411,6 +411,22 @@ msg_err_warzone_cannot_use_switches: '&cCannot use switches in warzone.'
 msg_err_warzone_cannot_use_item: '&cCannot use this item in a warzones.'
 msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
 
+# WarFlag Economy
+msg_enemy_war_purchased_warflag: '&6[War]&c You payed %s in fees to attack.'
+msg_enemy_war_area_won_pillage: '&6[War]&c %s pillaged %s from %s.'
+msg_enemy_war_area_won_rebuilding: '&6[War]&c %s payed %s to %s for rebuilding.'
+msg_enemy_war_area_won_rebuilding_err: 'You don''t have enough to pay %s %s to aid in rebuilding.'
+msg_enemy_war_area_won_rebuilding_err_global: '%s could not pay the %s. Attack at %s was canceled.'
+msg_err_insuficient_funds_warflag: 'You require %s in order to place a warflag.'
+msg_err_insuficient_funds_future: 'You require %s in the event you need to pay for %s.'
+name_defended_attack: 'defended attack'
+name_rebuilding: 'rebuilding fine'
+msg_enemy_war_area_defended_attacker: '&6[War]&c You were forced to pay %s %s for your failed attack.'
+msg_enemy_war_area_defended_defender: '&6[War]&c %s payed you %s for the failed attack.'
+msg_enemy_war_area_defended_greater_forces: '&6[War]&c Your failed attack costed you %s.'
+
+
+
 # these messages are only used if town/nation creation is set to admins only
 
 msg_admin_only_create_nation: '&cOnly admins are allowed to create nations.'
