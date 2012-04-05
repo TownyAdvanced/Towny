@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.event;
 import java.util.Collections;
 import java.util.List;
 
+import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -231,8 +233,13 @@ public class TownyEntityListener implements Listener {
 			//remove from world if set to remove mobs globally
 			if (townyWorld.isUsingTowny())
 				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
-					//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
-					event.setCancelled(true);
+					if (plugin.isCitizens2()) {
+						if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+							//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+							event.setCancelled(true);
+						}
+					} else
+						event.setCancelled(true);
 				}
 
 			//remove from towns if in the list and set to remove            
@@ -241,8 +248,13 @@ public class TownyEntityListener implements Listener {
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
 						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
-							//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
-							event.setCancelled(true);
+							if (plugin.isCitizens2()) {
+								if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+									//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+									event.setCancelled(true);
+								}
+							} else
+								event.setCancelled(true);
 						}
 					}
 				}

@@ -93,6 +93,7 @@ public class Towny extends JavaPlugin {
 	private Essentials essentials = null;
 	private Register register = null;
 	private iConomy iconomy = null;
+	private boolean citizens2 = false;
 
 	private boolean error = false;
 
@@ -375,6 +376,15 @@ public class Towny extends JavaPlugin {
 			TownySettings.setUsingQuestioner(false);
 		else if (TownySettings.isUsingQuestioner())
 			using.add(String.format("%s v%s", "Questioner", test.getDescription().getVersion()));
+		
+		/*
+		 * Test for Citizens2 so we can avoid removing their NPC's
+		 */
+		test = getServer().getPluginManager().getPlugin("Citizens");
+		if (test != null) {
+			citizens2 = test.getDescription().getVersion().startsWith("2");
+		}
+			
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
@@ -474,6 +484,11 @@ public class Towny extends JavaPlugin {
 	// is iConomy active
 	public boolean isIConomy() {
 		return (TownySettings.isUsingEconomy() && (this.iconomy != null));
+	}
+	
+	// is Citizens2 active
+	public boolean isCitizens2() {
+		return citizens2;
 	}
 
 	/**
