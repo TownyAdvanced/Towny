@@ -1306,3 +1306,5 @@ v0.79.1.15:
 	- Fix Wild perms so it will follow the world settings if no permissions are found.
 v0.80.0.0:
 	- Release for MC 1.2.4
+v0.80.0.1:
+	- Fix monster spawning to obey the 'Force Town Mobs' world setting.

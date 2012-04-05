@@ -130,13 +130,15 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					} catch (NotRegisteredException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						return;
 					}
 						try {
 							TownBlock townBlock = townyWorld.getTownBlock(coord);
-							if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
-								//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
-								livingEntitiesToRemove.add(livingEntity);
-							}
+							if (!townyWorld.isForceTownMobs())
+								if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
+									//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
+									livingEntitiesToRemove.add(livingEntity);
+								}
 								
 						} catch (TownyException x) {
 							// it will fall through here if the mob has no townblock.
