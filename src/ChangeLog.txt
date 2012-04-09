@@ -1309,3 +1309,5 @@ v0.80.0.0:
 v0.80.0.1:
 	- Fix monster spawning to obey the 'Force Town Mobs' world setting.
 	- Add tentative support for Citizens2 to prevent removing NPC created as monsters.
+v0.80.0.2:
+	- Change Newday code to use iterators instead of creating new arrays (reliability and performance).

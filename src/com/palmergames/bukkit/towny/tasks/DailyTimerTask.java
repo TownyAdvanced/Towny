@@ -8,6 +8,7 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_TOW
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.palmergames.bukkit.towny.EconomyException;
 import com.palmergames.bukkit.towny.EmptyNationException;
@@ -31,6 +32,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
+		
 		long start = System.currentTimeMillis();
 
 		TownyMessaging.sendDebugMsg("New Day");
@@ -95,7 +97,12 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectNationTaxes() throws EconomyException {
-		for (Nation nation : new ArrayList<Nation>(TownyUniverse.getDataSource().getNations())) {
+		
+		ListIterator<Nation> nationItr = TownyUniverse.getDataSource().getNations().listIterator();
+		Nation nation = null;
+
+		while (nationItr.hasNext()) {
+			nation = nationItr.next();
 			collectNationTaxes(nation);
 		}
 		universe.setChangedNotify(COLLECTED_NATION_TAX);
@@ -108,8 +115,15 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
-		if (nation.getTaxes() > 0)
-			for (Town town : new ArrayList<Town>(nation.getTowns())) {
+		
+		if (nation.getTaxes() > 0) {
+			
+			ListIterator<Town> townItr = nation.getTowns().listIterator();
+			Town town = null;
+
+			while (townItr.hasNext()) {
+				town = townItr.next();
+
 				if (town.isCapital() || !town.hasUpkeep())
 					continue;
 				if (!town.payTo(nation.getTaxes(), nation, "Nation Tax")) {
@@ -125,6 +139,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				} else
 					TownyMessaging.sendTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 			}
+		}
+
 	}
 
 	/**
@@ -133,7 +149,12 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectTownTaxes() throws EconomyException {
-		for (Town town : new ArrayList<Town>(TownyUniverse.getDataSource().getTowns())) {
+		
+		ListIterator<Town> townItr = TownyUniverse.getDataSource().getTowns().listIterator();
+		Town town = null;
+
+		while (townItr.hasNext()) {
+			town = townItr.next();
 			collectTownTaxes(town);
 		}
 		universe.setChangedNotify(COLLECTED_TONW_TAX);
@@ -148,8 +169,14 @@ public class DailyTimerTask extends TownyTimerTask {
 	protected void collectTownTaxes(Town town) throws EconomyException {
 
 		//Resident Tax
-		if (town.getTaxes() > 0)
-			for (Resident resident : new ArrayList<Resident>(town.getResidents()))
+		if (town.getTaxes() > 0) {
+			
+			ListIterator<Resident> residentItr = town.getResidents().listIterator();
+			Resident resident = null;
+
+			while (residentItr.hasNext()) {
+				resident = residentItr.next();
+
 				if (town.isMayor(resident) || town.hasAssistant(resident)) {
 					try {
 						TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
@@ -185,12 +212,20 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Player is not online
 					}
 					*/
+			}
+		}
 
 		//Plot Tax
 		if (town.getPlotTax() > 0 || town.getCommercialPlotTax() > 0) {
 			//Hashtable<Resident, Integer> townPlots = new Hashtable<Resident, Integer>();
 			//Hashtable<Resident, Double> townTaxes = new Hashtable<Resident, Double>();
-			for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks())) {
+			
+			ListIterator<TownBlock> townBlockItr = town.getTownBlocks().listIterator();
+			TownBlock townBlock = null;
+
+			while (townBlockItr.hasNext()) {
+				townBlock = townBlockItr.next();
+				
 				if (!townBlock.hasResident())
 					continue;
 				try {
@@ -240,7 +275,13 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws TownyException
 	 */
 	public void collectTownCosts() throws EconomyException, TownyException {
-		for (Town town : new ArrayList<Town>(TownyUniverse.getDataSource().getTowns()))
+		
+		ListIterator<Town> townItr = TownyUniverse.getDataSource().getTowns().listIterator();
+		Town town = null;
+
+		while (townItr.hasNext()) {
+			town = townItr.next();
+			
 			if (town.hasUpkeep()) {
 				double upkeep = TownySettings.getTownUpkeepCost(town);
 
@@ -270,6 +311,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				}
 			}
+		}
 
 		universe.setChangedNotify(UPKEEP_TOWN);
 	}
@@ -280,7 +322,12 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectNationCosts() throws EconomyException {
-		for (Nation nation : new ArrayList<Nation>(TownyUniverse.getDataSource().getNations())) {
+		
+		ListIterator<Nation> nationItr = TownyUniverse.getDataSource().getNations().listIterator();
+		Nation nation = null;
+
+		while (nationItr.hasNext()) {
+			nation = nationItr.next();
 
 			if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 				TownyUniverse.getDataSource().removeNation(nation);
