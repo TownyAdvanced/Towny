@@ -1311,3 +1311,5 @@ v0.80.0.1:
 	- Add tentative support for Citizens2 to prevent removing NPC created as monsters.
 v0.80.0.2:
 	- Change Newday code to use iterators instead of creating new arrays (reliability and performance).
+v0.80.0.3:
+	- Add checks to make sure nations/towns/residents still exist when taxing as it's run in an async thread.
