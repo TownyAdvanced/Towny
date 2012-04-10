@@ -44,22 +44,39 @@ public abstract class TownyPermissionSource {
 			if ((has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId))))
 				return true;
 		
-		// Allow ops all access when no permissions
-		if (!bpermissions)
+		// Not using permissions
+		if (!bpermissions) {
+			
+			// Allow ops all access when no permissions
 			if (isTownyAdmin(player))
 				return true;
 			
-		// No perms so check world settings.
+			// Check world settings as we are not using permissions.
+			switch (action) {
+
+			case BUILD:
+				return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+			case DESTROY:
+				return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+			case SWITCH:
+				return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+			case ITEM_USE:
+				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+			}
+			
+		}
+			
+		// No perms but we are using permissions so check world settings (without UnclaimedIgnoreId's).
 		switch (action) {
 
 		case BUILD:
-			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneBuild();
 		case DESTROY:
-			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneDestroy();
 		case SWITCH:
-			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneSwitch();
 		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneItemUse();
 		}
 		
 		return false;

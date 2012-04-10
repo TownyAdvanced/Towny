@@ -1313,3 +1313,4 @@ v0.80.0.2:
 	- Change Newday code to use iterators instead of creating new arrays (reliability and performance).
 v0.80.0.3:
 	- Add checks to make sure nations/towns/residents still exist when taxing as it's run in an async thread.
+	- Remove the UnclaimedZoneIgnoreId's test when we are using permissions. We should only check the enable/disable flags on the world if the player doesn't have the perms.
