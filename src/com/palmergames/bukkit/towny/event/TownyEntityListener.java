@@ -304,26 +304,15 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Enderman))
 			return;
 
-		Block block = event.getBlock();
-
-		TownyWorld townyWorld = null;
-		TownBlock townBlock;
-
 		try {
-			townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
 			
 			if (!townyWorld.isUsingTowny())
 				return;
 			
 			if (townyWorld.isEndermanProtect())
-				try {
-					townBlock = townyWorld.getTownBlock(new Coord(Coord.parseCoord(block)));
-					if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && !townBlock.getTown().hasMobs())
-						event.setCancelled(true);
-				} catch (NotRegisteredException e) {
-					// not in a townblock
-					event.setCancelled(true);
-				}
+				event.setCancelled(true);
+
 		} catch (NotRegisteredException e) {
 			// Failed to fetch world
 		}

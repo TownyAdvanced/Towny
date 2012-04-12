@@ -1314,3 +1314,5 @@ v0.80.0.2:
 v0.80.0.3:
 	- Add checks to make sure nations/towns/residents still exist when taxing as it's run in an async thread.
 	- Remove the UnclaimedZoneIgnoreId's test when we are using permissions. We should only check the enable/disable flags on the world if the player doesn't have the perms.
+v0.80.0.4:
+	- Fix Enderman protection block move to follow the world toggle and ignore all other settings.
