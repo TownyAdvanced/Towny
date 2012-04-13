@@ -189,7 +189,7 @@ public class CombatUtil {
 				if (!townBlock.getType().equals(TownBlockType.ARENA))
 					return true;
 			} catch (TownyException x) {
-				//world or townblock failure
+				// world or townblock failure
 				// But we want to prevent friendly fire in the wilderness too.
 				return true;
 			}
@@ -219,7 +219,7 @@ public class CombatUtil {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if they are allies.
 	 */
 	public static boolean isAlly(Town a, Town b) {
 		
@@ -236,6 +236,13 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Can resident a attack resident b?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if they can attack.
+	 */
 	public static boolean canAttackEnemy(String a, String b) {
 		
 		try {
@@ -257,6 +264,13 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Is resident b an enemy of resident a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if b is an enemy.
+	 */
 	public static boolean isEnemy(String a, String b) {
 		
 		try {
@@ -274,6 +288,13 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Is town b an enemy of town a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if b is an enemy.
+	 */
 	public static boolean isEnemy(Town a, Town b) {
 		
 		try {
@@ -289,6 +310,13 @@ public class CombatUtil {
 		return false;
 	}
 	
+	/**
+	 * Does this WorldCoord fall within a plot owned by an enemy town?
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @return true if it is an enemy plot.
+	 */
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 		try {
 			return CombatUtil.isEnemy(TownyUniverse.getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
