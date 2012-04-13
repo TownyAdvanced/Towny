@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.util.CombatUtil;
 
 
 /**
@@ -159,7 +160,7 @@ public class CachePermissions extends TownyUniverse {
 					return TownBlockStatus.PLOT_OWNER;
 				else if (owner.hasFriend(resident))
 					return TownBlockStatus.PLOT_FRIEND;
-				else if (resident.hasTown() && isAlly(owner.getTown(), resident.getTown()))
+				else if (resident.hasTown() && CombatUtil.isAlly(owner.getTown(), resident.getTown()))
 					return TownBlockStatus.PLOT_ALLY;
 				else
 					// Exit out and use town permissions
@@ -174,9 +175,9 @@ public class CachePermissions extends TownyUniverse {
 
 			if (resident.getTown() != town) {
 				// Allied destroy rights
-				if (isAlly(town, resident.getTown()))
+				if (CombatUtil.isAlly(town, resident.getTown()))
 					return TownBlockStatus.TOWN_ALLY;
-				else if (isEnemy(resident.getTown(), town)) {
+				else if (CombatUtil.isEnemy(resident.getTown(), town)) {
 					if (townBlock.isWarZone())
 						return TownBlockStatus.WARZONE;
 					else
