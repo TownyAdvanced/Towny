@@ -23,10 +23,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ServerBroadCastTimerTask;
-import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.TimeMgmt;
+import com.palmergames.util.TimeTools;
 
 
 //TODO: Extend a new class called TownyEvent

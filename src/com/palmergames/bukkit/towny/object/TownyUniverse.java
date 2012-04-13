@@ -43,9 +43,9 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.War;
 import com.palmergames.bukkit.util.CombatUtil;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.TimeMgmt;
+import com.palmergames.util.TimeTools;
 
 
 public class TownyUniverse extends TownyObject {

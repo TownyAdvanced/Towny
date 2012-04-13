@@ -30,8 +30,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.TimeTools;
 
 
 public class TownySettings {
