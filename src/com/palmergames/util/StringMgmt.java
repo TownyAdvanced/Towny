@@ -11,13 +11,11 @@ import java.util.List;
 
 public class StringMgmt {
 	
-	@SuppressWarnings("rawtypes")
-	public static String join(List arr) {
+	public static String join(List<?> arr) {
 		return join(arr, " ");
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public static String join(List arr, String separator) {
+	public static String join(List<?> arr, String separator) {
 		if (arr == null || arr.size() == 0)
 			return "";
 		String out = arr.get(0).toString();

@@ -9,6 +9,7 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.Sorting;
 
 public class KeyValueTable<K,V> {
+	
 	private List<KeyValue<K,V>> keyValues = new ArrayList<KeyValue<K,V>>();
 	
 	public List<KeyValue<K,V>> getKeyValues() {

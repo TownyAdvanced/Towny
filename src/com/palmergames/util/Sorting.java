@@ -8,7 +8,6 @@ import com.palmergames.util.KeyValueTable;
 
 public class Sorting {
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) {
 		Hashtable<Object,Object> table = new Hashtable<Object,Object>();
 		table.put(1, 4);
@@ -17,7 +16,7 @@ public class Sorting {
 		table.put(2, 2);
 		table.put(4, 1);
 		
-		KeyValueTable kvTable = new KeyValueTable(table);
+		KeyValueTable<Object, Object> kvTable = new KeyValueTable<Object, Object>(table);
 		print(kvTable);
 		kvTable.sortByKey();print(kvTable);
 		kvTable.sortByValue();print(kvTable);
