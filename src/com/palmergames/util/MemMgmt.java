@@ -1,10 +1,11 @@
 package com.palmergames.util;
 
 public class MemMgmt {
+
 	public static String getMemoryBar(int size, Runtime run) {
+
 		String line = "";
-		double percentUsed = (run.totalMemory() - run.freeMemory())
-				/ run.maxMemory();
+		double percentUsed = (run.totalMemory() - run.freeMemory()) / run.maxMemory();
 		int pivot = (int) Math.floor(size * percentUsed);
 		for (int i = 0; i < pivot - 1; i++)
 			line += "=";
@@ -16,6 +17,7 @@ public class MemMgmt {
 	}
 
 	public static String getMemSize(long num) {
+
 		String[] s = { "By", "Kb", "Mb", "Gb", "Tb" };
 		double n = num;
 		int w = 0;

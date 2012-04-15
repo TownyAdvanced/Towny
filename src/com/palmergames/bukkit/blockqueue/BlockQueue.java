@@ -5,22 +5,26 @@ import java.util.LinkedList;
 import org.bukkit.Server;
 
 public class BlockQueue {
+
 	private LinkedList<Object> queue = new LinkedList<Object>();
 	private static volatile BlockQueue instance;
 	private BlockWorker worker;
 
 	public synchronized void addWork(Object obj) {
+
 		queue.addLast(obj);
 		notify();
 	}
 
 	public synchronized Object getWork() throws InterruptedException {
+
 		while (queue.isEmpty())
 			wait();
 		return queue.removeFirst();
 	}
 
 	public static BlockQueue getInstance() throws Exception {
+
 		if (instance == null)
 			throw new Exception("BlockQueue has not been initialized yet");
 
@@ -28,9 +32,10 @@ public class BlockQueue {
 	}
 
 	public static BlockQueue newInstance(Server server) {
+
 		instance = new BlockQueue();
 		instance.worker = new BlockWorker(server, instance);
-		
+
 		//TODO: Fix
 		//TODO: null = plugin
 		//TODO: null = plugin
@@ -43,6 +48,7 @@ public class BlockQueue {
 	}
 
 	public BlockWorker getWorker() {
+
 		return worker;
 	}
 }

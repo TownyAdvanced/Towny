@@ -50,20 +50,18 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
-
 public class TownyUniverse extends TownyObject {
-	
+
 	private static Towny plugin;
-	
+
 	protected Hashtable<String, Resident> residents = new Hashtable<String, Resident>();
 	protected Hashtable<String, Town> towns = new Hashtable<String, Town>();
 	protected Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
-	
+
 	private Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
 	private Set<Block> protectionPlaceholders = new HashSet<Block>();
-	
-	
+
 	//private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<String, PlotBlockData>();
 
 	// private List<Election> elections;
@@ -80,21 +78,25 @@ public class TownyUniverse extends TownyObject {
 	private String rootFolder;
 
 	public TownyUniverse() {
+
 		setName("");
 		rootFolder = "";
 	}
 
 	public TownyUniverse(String rootFolder) {
+
 		setName("");
 		this.rootFolder = rootFolder;
 	}
 
 	public TownyUniverse(Towny plugin) {
+
 		setName("");
 		TownyUniverse.plugin = plugin;
 	}
 
 	public void newDay() {
+
 		if (!isDailyTimerRunning())
 			toggleDailyTimer(true);
 		//dailyTimer.schedule(new DailyTimerTask(this), 0);
@@ -104,6 +106,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void toggleTownyRepeatingTimer(boolean on) {
+
 		if (on && !isTownyRepeatingTaskRunning()) {
 			townyRepeatingTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new RepeatingTimerTask(this), 0, TimeTools.convertToTicks(1L));
 			if (townyRepeatingTask == -1)
@@ -116,6 +119,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void toggleMobRemoval(boolean on) {
+
 		if (on && !isMobRemovalRunning()) {
 			mobRemoveTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new MobRemovalTimerTask(this, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 			if (mobRemoveTask == -1)
@@ -128,6 +132,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void toggleDailyTimer(boolean on) {
+
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = AreaSelectionUtil.townyTime();
 			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
@@ -142,6 +147,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void toggleHealthRegen(boolean on) {
+
 		if (on && !isHealthRegenRunning()) {
 			healthRegenTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new HealthRegenTimerTask(this, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 			if (healthRegenTask == -1)
@@ -154,6 +160,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void toggleTeleportWarmup(boolean on) {
+
 		if (on && !isTeleportWarmupRunning()) {
 			teleportWarmupTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new TeleportWarmupTimerTask(this), 0, 20);
 			if (teleportWarmupTask == -1)
@@ -166,23 +173,28 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean isTownyRepeatingTaskRunning() {
+
 		return townyRepeatingTask != -1;
 
 	}
 
 	public boolean isMobRemovalRunning() {
+
 		return mobRemoveTask != -1;
 	}
 
 	public boolean isDailyTimerRunning() {
+
 		return dailyTask != -1;
 	}
 
 	public boolean isHealthRegenRunning() {
+
 		return healthRegenTask != -1;
 	}
 
 	public boolean isTeleportWarmupRunning() {
+
 		return teleportWarmupTask != -1;
 	}
 
@@ -240,6 +252,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void onLogout(Player player) {
+
 		try {
 			Resident resident = getDataSource().getResident(player.getName());
 			resident.setLastOnline(System.currentTimeMillis());
@@ -250,6 +263,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public Location getTownSpawnLocation(Player player) throws TownyException {
+
 		try {
 			Resident resident = getDataSource().getResident(player.getName());
 			Town town = resident.getTown();
@@ -257,9 +271,10 @@ public class TownyUniverse extends TownyObject {
 		} catch (TownyException x) {
 			throw new TownyException("Unable to get spawn location");
 		}
-	}		
+	}
 
 	public static Player getPlayer(Resident resident) throws TownyException {
+
 		for (Player player : getOnlinePlayers())
 			if (player.getName().equals(resident.getName()))
 				return player;
@@ -267,10 +282,12 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public static Player[] getOnlinePlayers() {
+
 		return Bukkit.getOnlinePlayers();
 	}
 
 	public static List<Player> getOnlinePlayers(ResidentList residents) {
+
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : getOnlinePlayers())
 			if (residents.hasResident(player.getName()))
@@ -279,6 +296,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public static List<Player> getOnlinePlayers(Town town) {
+
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : getOnlinePlayers())
 			if (town.hasResident(player.getName()))
@@ -287,6 +305,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public static List<Player> getOnlinePlayers(Nation nation) {
+
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Town town : nation.getTowns())
 			players.addAll(getOnlinePlayers(town));
@@ -363,8 +382,9 @@ public class TownyUniverse extends TownyObject {
 			return null;
 		}
 	}
-	
+
 	public List<Resident> getActiveResidents() {
+
 		List<Resident> activeResidents = new ArrayList<Resident>();
 		for (Resident resident : getDataSource().getResidents())
 			if (isActiveResident(resident))
@@ -373,36 +393,38 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean isActiveResident(Resident resident) {
+
 		return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (plugin.isOnline(resident.getName())));
 	}
 
 	/*
-	public List<String> getStatus(TownBlock townBlock) {
-		return TownyFormatter.getStatus(townBlock);
-	}
+	 * public List<String> getStatus(TownBlock townBlock) {
+	 * return TownyFormatter.getStatus(townBlock);
+	 * }
+	 * 
+	 * public List<String> getStatus(Resident resident) {
+	 * return TownyFormatter.getStatus(resident);
+	 * }
+	 * 
+	 * public List<String> getStatus(Town town) {
+	 * return TownyFormatter.getStatus(town);
+	 * }
+	 * 
+	 * public List<String> getStatus(Nation nation) {
+	 * return TownyFormatter.getStatus(nation);
+	 * }
+	 * 
+	 * public List<String> getStatus(TownyWorld world) {
+	 * return TownyFormatter.getStatus(world);
+	 * }
+	 * 
+	 * public List<String> getTaxStatus(Resident resident) {
+	 * return TownyFormatter.getTaxStatus(resident);
+	 * }
+	 */
 
-	public List<String> getStatus(Resident resident) {
-		return TownyFormatter.getStatus(resident);
-	}
-
-	public List<String> getStatus(Town town) {
-		return TownyFormatter.getStatus(town);
-	}
-
-	public List<String> getStatus(Nation nation) {
-		return TownyFormatter.getStatus(nation);
-	}
-
-	public List<String> getStatus(TownyWorld world) {
-		return TownyFormatter.getStatus(world);
-	}
-
-	public List<String> getTaxStatus(Resident resident) {
-		return TownyFormatter.getTaxStatus(resident);
-	}
-	*/
-	
 	public String getRootFolder() {
+
 		if (plugin != null)
 			return plugin.getDataFolder().getPath();
 		else
@@ -410,8 +432,12 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean loadSettings() {
+
 		try {
-			FileMgmt.checkFolders(new String[] { getRootFolder(), getRootFolder() + FileMgmt.fileSeparator() + "settings", getRootFolder() + FileMgmt.fileSeparator() + "logs" }); // Setup the logs folder here as the logger will not yet be enabled.
+			FileMgmt.checkFolders(new String[] {
+					getRootFolder(),
+					getRootFolder() + FileMgmt.fileSeparator() + "settings",
+					getRootFolder() + FileMgmt.fileSeparator() + "logs" }); // Setup the logs folder here as the logger will not yet be enabled.
 
 			TownySettings.loadConfig(getRootFolder() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml", plugin.getVersion());
 			TownySettings.loadLanguage(getRootFolder() + FileMgmt.fileSeparator() + "settings", "english.yml");
@@ -423,19 +449,19 @@ public class TownyUniverse extends TownyObject {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		String save = TownySettings.getSaveDatabase(), load = TownySettings.getLoadDatabase();
 
 		// Setup any defaults before we load the database.
 		Coord.setCellSize(TownySettings.getTownBlockSize());
 
 		System.out.println("[Towny] Database: [Load] " + load + " [Save] " + save);
-		
+
 		worlds.clear();
 		nations.clear();
 		towns.clear();
 		residents.clear();
-		
+
 		if (!loadDatabase(load)) {
 			System.out.println("[Towny] Error: Failed to load!");
 			return false;
@@ -454,7 +480,7 @@ public class TownyUniverse extends TownyObject {
 				e.printStackTrace();
 				return false;
 			}
-			
+
 			if (load.equalsIgnoreCase(save)) {
 				// Update all Worlds data files
 				getDataSource().saveAllWorlds();
@@ -462,7 +488,7 @@ public class TownyUniverse extends TownyObject {
 				//Formats are different so save ALL data.
 				getDataSource().saveAll();
 			}
-			
+
 			//if (TownySettings.isSavingOnLoad())
 			//      townyUniverse.getDataSource().saveAll();
 		} catch (UnsupportedOperationException e) {
@@ -474,6 +500,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean loadDatabase(String databaseType) {
+
 		try {
 			setDataSource(databaseType);
 		} catch (UnsupportedOperationException e) {
@@ -483,74 +510,89 @@ public class TownyUniverse extends TownyObject {
 
 		return getDataSource().loadAll();
 	}
-	
+
 	public void setDataSource(String databaseType) throws UnsupportedOperationException {
+
 		if (databaseType.equalsIgnoreCase("flatfile"))
 			setDataSource(new TownyFlatFileSource());
 		else if (databaseType.equalsIgnoreCase("flatfile-hmod"))
 			setDataSource(new TownyHModFlatFileSource());
 		else if ((databaseType.equalsIgnoreCase("mysql")) || (databaseType.equalsIgnoreCase("sqlite")) || (databaseType.equalsIgnoreCase("h2")))
-			setDataSource(new TownySQLSource(databaseType));		
+			setDataSource(new TownySQLSource(databaseType));
 		else
 			throw new UnsupportedOperationException();
 	}
 
 	public void setDataSource(TownyDataSource dataSource) {
+
 		TownyUniverse.dataSource = dataSource;
 	}
 
 	public static TownyDataSource getDataSource() {
+
 		return dataSource;
 	}
 
 	public void setPermissionSource(TownyPermissionSource permissionSource) {
+
 		TownyUniverse.permissionSource = permissionSource;
 	}
 
 	public static TownyPermissionSource getPermissionSource() {
+
 		return permissionSource;
 	}
 
 	public static PlayerCacheUtil getCachePermissions() {
+
 		return cachePermissions;
 	}
-	
 
 	/**
 	 * @return Hashtable of residents
 	 */
 	public Hashtable<String, Resident> getResidentMap() {
+
 		return this.residents;
 	}
+
 	/**
 	 * @return HashTable of Towns
 	 */
 	public Hashtable<String, Town> getTownsMap() {
+
 		return this.towns;
 	}
+
 	/**
 	 * @return Hashtable of all nations
 	 */
 	public Hashtable<String, Nation> getNationsMap() {
+
 		return this.nations;
 	}
+
 	/**
 	 * @return Map of TownyWorlds
 	 */
 	public Hashtable<String, TownyWorld> getWorldMap() {
+
 		return this.worlds;
 	}
 
 	public static boolean isWarTime() {
+
 		return warEvent != null ? warEvent.isWarTime() : false;
 	}
 
 	public void startWarEvent() {
+
 		warEvent = new War(plugin, TownySettings.getWarTimeWarningDelay());
 		setChangedNotify(WAR_START);
 	}
 
 	public void endWarEvent() {
+
 		if (isWarTime())
 			warEvent.toggleEnd();
 		// Automatically makes warEvent null
@@ -558,6 +600,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void clearWarEvent() {
+
 		getWarEvent().cancelTasks(getPlugin().getServer().getScheduler());
 		setWarEvent(null);
 		setChangedNotify(WAR_CLEARED);
@@ -565,29 +608,35 @@ public class TownyUniverse extends TownyObject {
 
 	//TODO: throw error if null
 	public War getWarEvent() {
+
 		return warEvent;
 	}
 
 	public void setWarEvent(War event) {
+
 		warEvent = event;
 		setChangedNotify(WAR_SET);
 	}
 
 	public static Towny getPlugin() {
+
 		return plugin;
 	}
 
 	public void setPlugin(Towny plugin) {
+
 		TownyUniverse.plugin = plugin;
-	}	
+	}
 
 	public void sendUniverseTree(CommandSender sender) {
+
 		for (String line : getTreeString(0))
 			sender.sendMessage(line);
 	}
 
 	@Override
 	public List<String> getTreeString(int depth) {
+
 		List<String> out = new ArrayList<String>();
 		out.add(getTreeDepth(depth) + "Universe (" + getName() + ")");
 		if (plugin != null) {
@@ -617,6 +666,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean areAllAllies(List<Nation> possibleAllies) {
+
 		if (possibleAllies.size() <= 1)
 			return true;
 		else {
@@ -628,12 +678,14 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void sendMessageTo(ResidentList residents, String msg, String modeRequired) {
+
 		for (Player player : getOnlinePlayers(residents))
 			if (plugin.hasPlayerMode(player, modeRequired))
 				player.sendMessage(msg);
 	}
 
 	public List<Resident> getValidatedResidents(Object sender, String[] names) {
+
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
 			List<Player> matches = plugin.getServer().matchPlayer(name);
@@ -665,6 +717,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public List<Resident> getOnlineResidents(Player player, String[] names) {
+
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
 			List<Player> matches = plugin.getServer().matchPlayer(name);
@@ -682,9 +735,10 @@ public class TownyUniverse extends TownyObject {
 				}
 		}
 		return invited;
-	}	
+	}
 
 	public List<Resident> getOnlineResidents(ResidentList residentList) {
+
 		List<Resident> onlineResidents = new ArrayList<Resident>();
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			for (Resident resident : residentList.getResidents()) {
@@ -697,6 +751,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void requestTeleport(Player player, Location spawnLoc, double cost) {
+
 		try {
 			TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc, cost);
 		} catch (TownyException x) {
@@ -707,10 +762,12 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void abortTeleportRequest(Resident resident) {
+
 		TeleportWarmupTimerTask.abortTeleportRequest(resident);
 	}
 
 	public void addWarZone(WorldCoord worldCoord) {
+
 		try {
 			worldCoord.getTownyWorld().addWarZone(worldCoord);
 		} catch (NotRegisteredException e) {
@@ -720,6 +777,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void removeWarZone(WorldCoord worldCoord) {
+
 		try {
 			worldCoord.getTownyWorld().removeWarZone(worldCoord);
 		} catch (NotRegisteredException e) {
@@ -729,6 +787,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean hasProtectionRegenTask(BlockLocation blockLocation) {
+
 		for (BlockLocation location : protectionRegenTasks.keySet()) {
 			if (location.isLocation(blockLocation)) {
 				return true;
@@ -738,6 +797,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
+
 		for (BlockLocation location : protectionRegenTasks.keySet()) {
 			if (location.isLocation(blockLocation)) {
 				return protectionRegenTasks.get(location);
@@ -747,16 +807,19 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void addProtectionRegenTask(ProtectionRegenTask task) {
+
 		protectionRegenTasks.put(task.getBlockLocation(), task);
 	}
 
 	public void removeProtectionRegenTask(ProtectionRegenTask task) {
+
 		protectionRegenTasks.remove(task.getBlockLocation());
 		if (protectionRegenTasks.isEmpty())
 			protectionPlaceholders.clear();
 	}
 
 	public void cancelProtectionRegenTasks() {
+
 		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
 			plugin.getServer().getScheduler().cancelTask(task.getTaskId());
 			task.replaceProtections();
@@ -766,33 +829,39 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public boolean isPlaceholder(Block block) {
+
 		return protectionPlaceholders.contains(block);
 	}
 
 	public void addPlaceholder(Block block) {
+
 		protectionPlaceholders.add(block);
 	}
 
 	public void removePlaceholder(Block block) {
+
 		protectionPlaceholders.remove(block);
 	}
-	
+
 	public void setChangedNotify(TownyObservableType type) {
+
 		setChanged();
 		notifyObservers(type);
 	}
-	
+
 	@Deprecated
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
+
 		try {
 			return CombatUtil.isEnemy(getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException e) {
 			return false;
 		}
 	}
-	
+
 	@Deprecated
 	public boolean isAlly(String a, String b) {
+
 		try {
 			Resident residentA = getDataSource().getResident(a);
 			Resident residentB = getDataSource().getResident(b);
@@ -810,6 +879,7 @@ public class TownyUniverse extends TownyObject {
 
 	@Deprecated
 	public boolean isAlly(Town a, Town b) {
+
 		try {
 			if (a == b)
 				return true;
@@ -825,6 +895,7 @@ public class TownyUniverse extends TownyObject {
 
 	@Deprecated
 	public boolean canAttackEnemy(String a, String b) {
+
 		try {
 			Resident residentA = getDataSource().getResident(a);
 			Resident residentB = getDataSource().getResident(b);
@@ -846,6 +917,7 @@ public class TownyUniverse extends TownyObject {
 
 	@Deprecated
 	public boolean isEnemy(String a, String b) {
+
 		try {
 			Resident residentA = getDataSource().getResident(a);
 			Resident residentB = getDataSource().getResident(b);
@@ -863,6 +935,7 @@ public class TownyUniverse extends TownyObject {
 
 	@Deprecated
 	public boolean isEnemy(Town a, Town b) {
+
 		try {
 			if (a == b)
 				return false;
@@ -875,7 +948,7 @@ public class TownyUniverse extends TownyObject {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Deprecated - Use TownyUniverse.getDataSource().newResident(name)
 	 * 
@@ -885,6 +958,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().newResident(name);
 	}
 
@@ -897,9 +971,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().newTown(name);
 	}
-	
+
 	/**
 	 * Deprecated - Use TownyUniverse.getDataSource().getTownWorld(name)
 	 * 
@@ -908,6 +983,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public static TownyWorld getTownWorld(String townName) {
+
 		return getDataSource().getTownWorld(townName);
 	}
 
@@ -920,6 +996,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().newNation(name);
 	}
 
@@ -932,9 +1009,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().newWorld(name);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().hasResident(name)
 	 * 
@@ -943,6 +1021,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public boolean hasResident(String name) {
+
 		return getDataSource().hasResident(name);
 	}
 
@@ -954,6 +1033,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public boolean hasTown(String name) {
+
 		return getDataSource().hasTown(name);
 	}
 
@@ -965,10 +1045,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public boolean hasNation(String name) {
+
 		return getDataSource().hasNation(name);
 	}
-	
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().renameTown()
 	 * 
@@ -979,6 +1059,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().renameTown(town, newName);
 	}
 
@@ -992,9 +1073,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+
 		getDataSource().renameNation(nation, newName);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getResident(name)
 	 * 
@@ -1004,9 +1086,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Resident getResident(String name) throws NotRegisteredException {
+
 		return getDataSource().getResident(name);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getResidents()
 	 * 
@@ -1014,6 +1097,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Resident> getResidents() {
+
 		return getDataSource().getResidents();
 	}
 
@@ -1024,6 +1108,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Set<String> getResidentKeys() {
+
 		return getDataSource().getResidentKeys();
 	}
 
@@ -1034,6 +1119,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Set<String> getTownsKeys() {
+
 		return getDataSource().getTownsKeys();
 	}
 
@@ -1044,6 +1130,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Set<String> getNationsKeys() {
+
 		return getDataSource().getNationsKeys();
 	}
 
@@ -1054,6 +1141,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Town> getTowns() {
+
 		return getDataSource().getTowns();
 	}
 
@@ -1064,6 +1152,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Nation> getNations() {
+
 		return getDataSource().getNations();
 	}
 
@@ -1074,6 +1163,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<TownyWorld> getWorlds() {
+
 		return getDataSource().getWorlds();
 	}
 
@@ -1084,6 +1174,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Town> getTownsWithoutNation() {
+
 		return getDataSource().getTownsWithoutNation();
 	}
 
@@ -1094,9 +1185,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Resident> getResidentsWithoutTown() {
+
 		return getDataSource().getResidentsWithoutTown();
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getResidents()
 	 * 
@@ -1105,6 +1197,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Resident> getResidents(String[] names) {
+
 		return getDataSource().getResidents(names);
 	}
 
@@ -1116,6 +1209,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Town> getTowns(String[] names) {
+
 		return getDataSource().getTowns(names);
 	}
 
@@ -1127,9 +1221,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Nation> getNations(String[] names) {
+
 		return getDataSource().getNations(names);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getTown()
 	 * 
@@ -1139,6 +1234,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Town getTown(String name) throws NotRegisteredException {
+
 		return getDataSource().getTown(name);
 	}
 
@@ -1151,9 +1247,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public Nation getNation(String name) throws NotRegisteredException {
+
 		return getDataSource().getNation(name);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getWorld()
 	 * 
@@ -1163,9 +1260,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public static TownyWorld getWorld(String name) throws NotRegisteredException {
+
 		return getDataSource().getWorld(name);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().removeWorld()
 	 * 
@@ -1174,6 +1272,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeWorld(TownyWorld world) throws UnsupportedOperationException {
+
 		getDataSource().removeWorld(world);
 	}
 
@@ -1184,9 +1283,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeNation(Nation nation) {
+
 		getDataSource().removeNation(nation);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().removeTown()
 	 * 
@@ -1194,9 +1294,9 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeTown(Town town) {
+
 		getDataSource().removeTown(town);
 	}
-	
 
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().removeResident()
@@ -1205,6 +1305,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeResident(Resident resident) {
+
 		getDataSource().removeResident(resident);
 	}
 
@@ -1215,10 +1316,11 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeResidentList(Resident resident) {
+
 		getDataSource().removeResidentList(resident);
 
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().removeTownBlock()
 	 * 
@@ -1226,9 +1328,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeTownBlock(TownBlock townBlock) {
+
 		getDataSource().removeTownBlock(townBlock);
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().removeTownBlocks()
 	 * 
@@ -1236,6 +1339,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void removeTownBlocks(Town town) {
+
 		getDataSource().removeTownBlocks(town);
 	}
 
@@ -1246,9 +1350,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<TownBlock> getAllTownBlocks() {
+
 		return getDataSource().getAllTownBlocks();
 	}
-	
+
 	/**
 	 * Deprecated - use TownyUniverse.getDataSource().getResidents()
 	 * 
@@ -1258,9 +1363,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public List<Resident> getResidents(Player player, String[] names) {
-	    return getDataSource().getResidents(player, names);
+
+		return getDataSource().getResidents(player, names);
 	}
-	
+
 	/**
 	 * (Please use addDeleteTownBlockIdQueue in TownyRegenAPI)
 	 * 
@@ -1268,108 +1374,128 @@ public class TownyUniverse extends TownyObject {
 	 */
 	@Deprecated
 	public void deleteTownBlockIds(TownBlock townBlock) {
+
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		TownyRegenAPI.addDeleteTownBlockIdQueue(worldCoord);
 	}
-	
+
 	@Deprecated
 	public String checkAndFilterName(String name) throws InvalidNameException {
-		
+
 		return NameValidation.checkAndFilterPlayerName(name);
 	}
 
 	@Deprecated
 	public String[] checkAndFilterArray(String[] arr) {
+
 		return NameValidation.checkAndFilterArray(arr);
 	}
-	
+
 	/*
-	@Deprecated
-	public void sendMessage(Player player, List<String> lines) {
-	        sendMessage(player, lines.toArray(new String[0]));
-	}
-	@Deprecated
-	public void sendTownMessage(Town town, List<String> lines) {
-	        sendTownMessage(town, lines.toArray(new String[0]));
-	}
-	@Deprecated
-	public void sendNationMessage(Nation nation, List<String> lines) {
-	        sendNationMessage(nation, lines.toArray(new String[0]));
-	}
-	@Deprecated
-	public void sendGlobalMessage(List<String> lines) {
-	        sendGlobalMessage(lines.toArray(new String[0]));
-	}
-	@Deprecated
-	public void sendGlobalMessage(String line) {
-	        for (Player player : getOnlinePlayers()) {
-	                player.sendMessage(line);
-	                plugin.log("[Global Message] " + player.getName() + ": " + line);
-	        }
-	}
-	@Deprecated
-	public void sendMessage(Player player, String[] lines) {
-	        for (String line : lines) {
-	                player.sendMessage(line);
-	                //plugin.log("[send Message] " + player.getName() + ": " + line);
-	        }
-	}
-	@Deprecated
-	public void sendResidentMessage(Resident resident, String[] lines) throws TownyException {
-	        for (String line : lines)
-	                plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-	        Player player = getPlayer(resident);
-	        for (String line : lines)
-	                player.sendMessage(line);
-	        
-	}
-	@Deprecated
-	public void sendTownMessage(Town town, String[] lines) {
-	        for (String line : lines)
-	                plugin.log("[Town Msg] " + town.getName() + ": " + line);
-	        for (Player player : getOnlinePlayers(town)){
-	                for (String line : lines)
-	                        player.sendMessage(line);
-	        }
-	}
-	@Deprecated
-	public void sendNationMessage(Nation nation, String[] lines) {
-	        for (String line : lines)
-	                plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-	        for (Player player : getOnlinePlayers(nation))
-	                for (String line : lines)
-	                        player.sendMessage(line);
-	}
-	@Deprecated
-	public void sendGlobalMessage(String[] lines) {
-	        for (String line : lines)
-	                plugin.log("[Global Msg] " + line);
-	        for (Player player : getOnlinePlayers())
-	                for (String line : lines)
-	                        player.sendMessage(line);
-	}
-	@Deprecated
-	public void sendResidentMessage(Resident resident, String line) throws TownyException {
-	        plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-	        Player player = getPlayer(resident);
-	        player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
-	}
-	@Deprecated
-	public void sendTownMessage(Town town, String line) {
-	        plugin.log("[Town Msg] " + town.getName() + ": " + line);
-	        for (Player player : getOnlinePlayers(town))
-	                player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
-	}
-	@Deprecated
-	public void sendNationMessage(Nation nation, String line) {
-	        plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-	        for (Player player : getOnlinePlayers(nation))
-	                player.sendMessage(line);
-	}
-	@Deprecated
-	public void sendTownBoard(Player player, Town town) {
-	        for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() + "] " + Colors.Yellow + town.getTownBoard()))
-	                player.sendMessage(line);
-	}
-	*/
+	 * @Deprecated
+	 * public void sendMessage(Player player, List<String> lines) {
+	 * sendMessage(player, lines.toArray(new String[0]));
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendTownMessage(Town town, List<String> lines) {
+	 * sendTownMessage(town, lines.toArray(new String[0]));
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendNationMessage(Nation nation, List<String> lines) {
+	 * sendNationMessage(nation, lines.toArray(new String[0]));
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendGlobalMessage(List<String> lines) {
+	 * sendGlobalMessage(lines.toArray(new String[0]));
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendGlobalMessage(String line) {
+	 * for (Player player : getOnlinePlayers()) {
+	 * player.sendMessage(line);
+	 * plugin.log("[Global Message] " + player.getName() + ": " + line);
+	 * }
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendMessage(Player player, String[] lines) {
+	 * for (String line : lines) {
+	 * player.sendMessage(line);
+	 * //plugin.log("[send Message] " + player.getName() + ": " + line);
+	 * }
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendResidentMessage(Resident resident, String[] lines) throws
+	 * TownyException {
+	 * for (String line : lines)
+	 * plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
+	 * Player player = getPlayer(resident);
+	 * for (String line : lines)
+	 * player.sendMessage(line);
+	 * 
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendTownMessage(Town town, String[] lines) {
+	 * for (String line : lines)
+	 * plugin.log("[Town Msg] " + town.getName() + ": " + line);
+	 * for (Player player : getOnlinePlayers(town)){
+	 * for (String line : lines)
+	 * player.sendMessage(line);
+	 * }
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendNationMessage(Nation nation, String[] lines) {
+	 * for (String line : lines)
+	 * plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
+	 * for (Player player : getOnlinePlayers(nation))
+	 * for (String line : lines)
+	 * player.sendMessage(line);
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendGlobalMessage(String[] lines) {
+	 * for (String line : lines)
+	 * plugin.log("[Global Msg] " + line);
+	 * for (Player player : getOnlinePlayers())
+	 * for (String line : lines)
+	 * player.sendMessage(line);
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendResidentMessage(Resident resident, String line) throws
+	 * TownyException {
+	 * plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
+	 * Player player = getPlayer(resident);
+	 * player.sendMessage(TownySettings.getLangString("default_towny_prefix") +
+	 * line);
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendTownMessage(Town town, String line) {
+	 * plugin.log("[Town Msg] " + town.getName() + ": " + line);
+	 * for (Player player : getOnlinePlayers(town))
+	 * player.sendMessage(TownySettings.getLangString("default_towny_prefix") +
+	 * line);
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendNationMessage(Nation nation, String line) {
+	 * plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
+	 * for (Player player : getOnlinePlayers(nation))
+	 * player.sendMessage(line);
+	 * }
+	 * 
+	 * @Deprecated
+	 * public void sendTownBoard(Player player, Town town) {
+	 * for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() +
+	 * "] " + Colors.Yellow + town.getTownBoard()))
+	 * player.sendMessage(line);
+	 * }
+	 */
 }

@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.MinecraftTools;
 import com.palmergames.util.StringMgmt;
 
 public class TownyFormatter {
+
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
 	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
 
@@ -33,19 +34,23 @@ public class TownyFormatter {
 	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
 
 	public static List<String> getFormattedOnlineResidents(Towny plugin, String prefix, ResidentList residentList) {
+
 		List<Resident> onlineResidents = plugin.getTownyUniverse().getOnlineResidents(residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
+
 		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Colors.Green, Colors.LightGreen, Colors.White));
 	}
 
 	public static String[] getFormattedNames(List<Resident> residentList) {
+
 		return getFormattedNames(residentList.toArray(new Resident[0]));
 	}
 
 	public static String getTime() {
+
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 		return sdf.format(System.currentTimeMillis());
 	}
@@ -56,6 +61,7 @@ public class TownyFormatter {
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownBlock townBlock) {
+
 		List<String> out = new ArrayList<String>();
 
 		try {
@@ -86,6 +92,7 @@ public class TownyFormatter {
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Resident resident) {
+
 		List<String> out = new ArrayList<String>();
 
 		// ___[ King Harlus ]___
@@ -106,7 +113,6 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
 				out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
-
 
 		// Town: Camelot
 		String line = Colors.Green + "Town: " + Colors.LightGreen;
@@ -133,6 +139,7 @@ public class TownyFormatter {
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Town town) {
+
 		List<String> out = new ArrayList<String>();
 
 		TownyWorld world = town.getWorld();
@@ -152,14 +159,10 @@ public class TownyFormatter {
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town)
-				+ (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "")
-				+ (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "")
-				+ ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "")
-				+ (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
+			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
 		} catch (TownyException e) {
 		}
-		
+
 		if (town.hasOutpostSpawn())
 			out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
 
@@ -211,6 +214,7 @@ public class TownyFormatter {
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Nation nation) {
+
 		List<String> out = new ArrayList<String>();
 
 		// ___[ Azur Empire ]___
@@ -221,10 +225,10 @@ public class TownyFormatter {
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
 				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
-				
+
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
 					line += (Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
-				
+
 			}
 
 		if (nation.isNeutral()) {
@@ -258,6 +262,7 @@ public class TownyFormatter {
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownyWorld world) {
+
 		List<String> out = new ArrayList<String>();
 
 		// ___[ World (PvP) ]___
@@ -270,16 +275,14 @@ public class TownyFormatter {
 			out.add(TownySettings.getLangString("msg_set_use_towny_off"));
 		} else {
 			// ForcePvP: No | Fire: Off
-			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
-					+ Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off")
-					+ Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-	
+			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+
 			out.add(Colors.Green + "Explosions: " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-			out.add (Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			out.add(Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
 			// Using Default Settings: Yes
 			//out.add(Colors.Green + "Using Default Settings: " + (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose + "No"));
-			
-			out.add(Colors.Green + "Unclaim Revert: " + (world.isUsingPlotManagementRevert()? Colors.LightGreen + "On" : Colors.Rose + "off")  + Colors.Gray + " | " + Colors.Green + "Explosion Revert: " + (world.isUsingPlotManagementWildRevert()? Colors.LightGreen + "On" : Colors.Rose + "off"));
+
+			out.add(Colors.Green + "Unclaim Revert: " + (world.isUsingPlotManagementRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off") + Colors.Gray + " | " + Colors.Green + "Explosion Revert: " + (world.isUsingPlotManagementWildRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off"));
 			// Wilderness:
 			//     Build, Destroy, Switch
 			//     Ignored Blocks: 34, 45, 64
@@ -289,56 +292,59 @@ public class TownyFormatter {
 		}
 		return out;
 	}
-	
+
 	/**
 	 * Returns the tax info this resident will have to pay at the next new day.
+	 * 
 	 * @param resident
 	 * @return tax status message
 	 */
 	public static List<String> getTaxStatus(Resident resident) {
+
 		List<String> out = new ArrayList<String>();
 		Town town = null;
-		
+
 		double plotTax = 0.0;
-		
+
 		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((MinecraftTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
-		
+
 		if (resident.hasTown()) {
 			try {
 				town = resident.getTown();
 				out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
-				
+
 				if (resident.isMayor() || town.hasAssistant(resident)) {
 					out.add(Colors.Green + "Staff are exempt from paying town taxes.");
 				} else {
-					if(town.isTaxPercentage()) {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes()/100));
+					if (town.isTaxPercentage()) {
+						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes() / 100));
 					} else {
 						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + town.getTaxes());
-						
+
 						if ((resident.getTownBlocks().size() > 0)) {
-							
+
 							for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
-							
+
 							out.add(Colors.Green + "Total Plot Taxes: " + Colors.LightGreen + plotTax);
 						}
 						out.add(Colors.Green + "Total Tax to pay: " + Colors.LightGreen + (town.getTaxes() + plotTax));
 					}
 				}
-				
+
 			} catch (NotRegisteredException e) {
 				// Failed to fetch town
 			} catch (EconomyException e) {
 				// Economy failed
 			}
 		}
-		
+
 		return out;
 	}
 
 	public static String getNamePrefix(Resident resident) {
+
 		if (resident == null)
 			return "";
 		if (resident.isKing())
@@ -349,6 +355,7 @@ public class TownyFormatter {
 	}
 
 	public static String getNamePostfix(Resident resident) {
+
 		if (resident == null)
 			return "";
 		if (resident.isKing())
@@ -359,6 +366,7 @@ public class TownyFormatter {
 	}
 
 	public static String getFormattedName(TownyObject obj) {
+
 		if (obj == null)
 			return "Null";
 		else if (obj instanceof Resident)
@@ -372,6 +380,7 @@ public class TownyFormatter {
 	}
 
 	public static String getFormattedResidentName(Resident resident) {
+
 		if (resident == null)
 			return "null";
 		if (resident.isKing())
@@ -382,16 +391,19 @@ public class TownyFormatter {
 	}
 
 	public static String getFormattedTownName(Town town) {
+
 		if (town.isCapital())
 			return TownySettings.getCapitalPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(town);
 		return TownySettings.getTownPrefix(town) + town.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(town);
 	}
 
 	public static String getFormattedNationName(Nation nation) {
+
 		return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
 	}
 
 	public static String[] getFormattedNames(Resident[] residents) {
+
 		List<String> names = new ArrayList<String>();
 		for (Resident resident : residents)
 			names.add(getFormattedName(resident));
@@ -399,6 +411,7 @@ public class TownyFormatter {
 	}
 
 	public static String[] getFormattedNames(Town[] towns) {
+
 		List<String> names = new ArrayList<String>();
 		for (Town town : towns)
 			names.add(getFormattedName(town));
@@ -406,6 +419,7 @@ public class TownyFormatter {
 	}
 
 	public static String[] getFormattedNames(Nation[] nations) {
+
 		List<String> names = new ArrayList<String>();
 		for (Nation nation : nations)
 			names.add(getFormattedName(nation));

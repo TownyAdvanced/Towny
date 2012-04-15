@@ -14,25 +14,29 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
 public class TownyWorldListener implements Listener {
+
 	//private final Towny plugin;
 
 	public TownyWorldListener(Towny instance) {
+
 		//plugin = instance;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onWorldLoad(WorldLoadEvent event) {
+
 		newWorld(event.getWorld().getName());
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onWorldInit(WorldInitEvent event) {
+
 		newWorld(event.getWorld().getName());
-		
+
 	}
 
 	private void newWorld(String worldName) {
-		
+
 		//String worldName = event.getWorld().getName();
 		try {
 			TownyUniverse.getDataSource().newWorld(worldName);
@@ -44,13 +48,13 @@ public class TownyWorldListener implements Listener {
 					// First time world has been noticed
 					TownyUniverse.getDataSource().saveWorld(world);
 				}
-			} 
+			}
 		} catch (AlreadyRegisteredException e) {
 			// Allready loaded			
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			e.printStackTrace();
 		}
-		
+
 	}
 }

@@ -24,22 +24,23 @@ import com.palmergames.bukkit.towny.TownySettings;
  */
 
 public class MinecraftTools {
-	
+
 	/**
 	 * Count the number of players online in each world
 	 * 
 	 * @param server
 	 * @return Map of world to online players.
 	 */
-	public static HashMap<String,Integer> getPlayersPerWorld(Server server) {
-		HashMap<String,Integer> m = new HashMap<String,Integer>();
+	public static HashMap<String, Integer> getPlayersPerWorld(Server server) {
+
+		HashMap<String, Integer> m = new HashMap<String, Integer>();
 		for (World world : server.getWorlds())
 			m.put(world.getName(), 0);
 		for (Player player : server.getOnlinePlayers())
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
 	}
-	
+
 	/**
 	 * Find a block at a specific offset.
 	 * 
@@ -50,26 +51,28 @@ public class MinecraftTools {
 	 * @return Block at the new location.
 	 */
 	public static Block getBlockOffset(Block block, int xOffset, int yOffset, int zOffset) {
-		return block.getWorld().getBlockAt(block.getX()+xOffset, block.getY()+yOffset, block.getZ()+zOffset);
+
+		return block.getWorld().getBlockAt(block.getX() + xOffset, block.getY() + yOffset, block.getZ() + zOffset);
 	}
-	
+
 	/**
 	 * Compiles a list of all whitelisted users.
 	 * 
 	 * @return List of all whitelist player names.
 	 */
 	public static List<String> getWhiteListedUsers() {
+
 		List<String> names = new ArrayList<String>();
 		try {
 			BufferedReader fin = new BufferedReader(new FileReader("white-list.txt"));
-			
+
 			try {
 				String line;
 				while ((line = fin.readLine()) != null)
 					names.add(line);
 			} catch (IOException e) {
 			}
-			
+
 			try {
 				fin.close();
 			} catch (IOException e) {
@@ -78,7 +81,7 @@ public class MinecraftTools {
 		}
 		return names;
 	}
-	
+
 	/**
 	 * Tests if this player is online.
 	 * 
@@ -86,9 +89,10 @@ public class MinecraftTools {
 	 * @return true if online
 	 */
 	public static boolean isOnline(String playerName) {
+
 		return Bukkit.getServer().getPlayer(playerName) != null;
 	}
-	
+
 	/**
 	 * Accepts an X or Z value and returns the associated Towny plot value.
 	 * 
@@ -96,7 +100,7 @@ public class MinecraftTools {
 	 * @return int of the relevant townblock x/z.
 	 */
 	public static int calcChunk(int value) {
-		
-		return (value * TownySettings.getTownBlockSize())/16;
+
+		return (value * TownySettings.getTownBlockSize()) / 16;
 	}
 }

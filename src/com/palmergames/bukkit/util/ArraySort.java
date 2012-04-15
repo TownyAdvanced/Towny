@@ -6,21 +6,23 @@ import org.bukkit.block.Block;
 
 /**
  * @author ElgarL
- *
+ * 
  */
 public class ArraySort implements Comparator<Block> {
 
-    @Override
-    public int compare(Block blockA, Block blockB) {
+	@Override
+	public int compare(Block blockA, Block blockB) {
 
-        return blockA.getY() - blockB.getY();
-    }
-    private static ArraySort instance;
+		return blockA.getY() - blockB.getY();
+	}
 
-    public static ArraySort getInstance() {
-        if (instance == null) {
-            instance = new ArraySort();
-        }
-        return instance;
-    }
+	private static ArraySort instance;
+
+	public static ArraySort getInstance() {
+
+		if (instance == null) {
+			instance = new ArraySort();
+		}
+		return instance;
+	}
 }

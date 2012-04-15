@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class BlockWorker implements Runnable {
+
 	private BlockQueue blockQueue;
 	private Server server;
 	public static final Object NO_MORE_WORK = new Object();
@@ -16,17 +17,20 @@ public class BlockWorker implements Runnable {
 	private int blocks, skipped;
 
 	public BlockWorker(Server server, BlockQueue blockQueue) {
+
 		this.blockQueue = blockQueue;
 		this.setServer(server);
 		setRunning(true);
 	}
 
 	public synchronized void setRunning(boolean running) {
+
 		this.running = running;
 	}
 
 	@Override
 	public void run() {
+
 		blocks = 0;
 		skipped = 0;
 
@@ -65,8 +69,9 @@ public class BlockWorker implements Runnable {
 	}
 
 	public void buildBlock(BlockWork blockWork) {
+
 		Block block = blockWork.getWorld().getBlockAt(blockWork.getX(), blockWork.getY(), blockWork.getZ());
-		
+
 		if (blockWork.getId() == block.getTypeId())
 			return;
 
@@ -76,14 +81,17 @@ public class BlockWorker implements Runnable {
 	}
 
 	public void setServer(Server server) {
+
 		this.server = server;
 	}
 
 	public Server getServer() {
+
 		return server;
 	}
 
 	public void onJobFinish(BlockJob job) {
+
 		if (job.isNotify()) {
 			Player player = getServer().getPlayer(job.getBoss());
 			player.sendMessage("Generated: " + blocks + " Blocks");

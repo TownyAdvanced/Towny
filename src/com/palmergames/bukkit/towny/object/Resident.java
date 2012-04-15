@@ -14,44 +14,51 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 public class Resident extends TownBlockOwner {
+
 	private List<Resident> friends = new ArrayList<Resident>();
 	private List<ChunkSnapshot> regenUndo = new ArrayList<ChunkSnapshot>();
 	private Town town;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
 	private String title, surname;
-    private long teleportRequestTime;
-    private Location teleportDestination;
-    private double teleportCost;
-    private String chatFormattedName;
+	private long teleportRequestTime;
+	private Location teleportDestination;
+	private double teleportCost;
+	private String chatFormattedName;
 
 	public Resident(String name) {
+
 		setChatFormattedName(name);
 		setName(name);
 		setTitle("");
 		setSurname("");
 		permissions.loadDefault(this);
-        teleportRequestTime = -1;
-        teleportCost = 0.0;
+		teleportRequestTime = -1;
+		teleportCost = 0.0;
 	}
-	
+
 	public void setLastOnline(long lastOnline) {
+
 		this.lastOnline = lastOnline;
 	}
 
 	public long getLastOnline() {
+
 		return lastOnline;
 	}
-	
+
 	public void setNPC(boolean isNPC) {
+
 		this.isNPC = isNPC;
 	}
 
 	public boolean isNPC() {
+
 		return isNPC;
 	}
-	
+
 	public void setTitle(String title) {
+
 		if (title.matches(" "))
 			title = "";
 		this.title = title;
@@ -59,14 +66,17 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public String getTitle() {
+
 		return title;
 	}
-	
+
 	public boolean hasTitle() {
+
 		return !title.isEmpty();
 	}
-	
+
 	public void setSurname(String surname) {
+
 		if (surname.matches(" "))
 			surname = "";
 		this.surname = surname;
@@ -74,14 +84,17 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public String getSurname() {
+
 		return surname;
 	}
-	
+
 	public boolean hasSurname() {
+
 		return !surname.isEmpty();
 	}
 
 	public boolean isKing() {
+
 		try {
 			return getTown().getNation().isKing(this);
 		} catch (TownyException e) {
@@ -90,26 +103,30 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public boolean isMayor() {
+
 		return hasTown() ? town.isMayor(this) : false;
 	}
 
 	public boolean hasTown() {
+
 		return !(town == null);
 	}
 
 	public boolean hasNation() {
+
 		return hasTown() ? town.hasNation() : false;
 	}
 
 	public Town getTown() throws NotRegisteredException {
+
 		if (hasTown())
 			return town;
 		else
-			throw new NotRegisteredException(
-					"Resident doesn't belong to any town");
+			throw new NotRegisteredException("Resident doesn't belong to any town");
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
+
 		if (town == null) {
 			this.town = null;
 			setTitle("");
@@ -126,14 +143,17 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public void setFriends(List<Resident> newFriends) {
+
 		friends = newFriends;
 	}
 
 	public List<Resident> getFriends() {
+
 		return friends;
 	}
 
 	public boolean removeFriend(Resident resident) throws NotRegisteredException {
+
 		if (hasFriend(resident))
 			return friends.remove(resident);
 		else
@@ -141,17 +161,20 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public boolean hasFriend(Resident resident) {
+
 		return friends.contains(resident);
 	}
 
 	public void addFriend(Resident resident) throws AlreadyRegisteredException {
+
 		if (hasFriend(resident))
 			throw new AlreadyRegisteredException();
 		else
 			friends.add(resident);
 	}
-	
+
 	public void removeAllFriends() {
+
 		for (Resident resident : new ArrayList<Resident>(friends))
 			try {
 				removeFriend(resident);
@@ -160,9 +183,10 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public void clear() throws EmptyTownException {
+
 		removeAllFriends();
 		//setLastOnline(0);
-		
+
 		if (hasTown())
 			try {
 				town.removeResident(this);
@@ -173,59 +197,72 @@ public class Resident extends TownBlockOwner {
 	}
 
 	public void setRegistered(long registered) {
+
 		this.registered = registered;
 	}
 
 	public long getRegistered() {
+
 		return registered;
 	}
-	
+
 	@Override
 	public List<String> getTreeString(int depth) {
+
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "Resident ("+getName()+")");
-		out.add(getTreeDepth(depth+1) + "Registered: " + getRegistered());
-		out.add(getTreeDepth(depth+1) + "Last Online: " + getLastOnline());
+		out.add(getTreeDepth(depth) + "Resident (" + getName() + ")");
+		out.add(getTreeDepth(depth + 1) + "Registered: " + getRegistered());
+		out.add(getTreeDepth(depth + 1) + "Last Online: " + getLastOnline());
 		if (getFriends().size() > 0)
-			out.add(getTreeDepth(depth+1) + "Friends (" + getFriends().size() + "): " + Arrays.toString(getFriends().toArray(new Resident[0])));
+			out.add(getTreeDepth(depth + 1) + "Friends (" + getFriends().size() + "): " + Arrays.toString(getFriends().toArray(new Resident[0])));
 		return out;
 	}
 
-    public void clearTeleportRequest() {
-        teleportRequestTime = -1;
-    }
+	public void clearTeleportRequest() {
 
-    public void setTeleportRequestTime() {
-        teleportRequestTime = System.currentTimeMillis();
-    }
+		teleportRequestTime = -1;
+	}
 
-    public long getTeleportRequestTime() {
-        return teleportRequestTime;
-    }
+	public void setTeleportRequestTime() {
 
-    public void setTeleportDestination(Location spawnLoc) {
-        teleportDestination = spawnLoc;
-    }
-    
-    public Location getTeleportDestination() {
-        return teleportDestination;
-    }
+		teleportRequestTime = System.currentTimeMillis();
+	}
 
-    public boolean hasRequestedTeleport() {
-        return teleportRequestTime != -1;
-    }
-    
-    public void setTeleportCost(double cost) {
-        teleportCost = cost;
-    }
-    public double getTeleportCost() {
-        return teleportCost;
-    }
+	public long getTeleportRequestTime() {
+
+		return teleportRequestTime;
+	}
+
+	public void setTeleportDestination(Location spawnLoc) {
+
+		teleportDestination = spawnLoc;
+	}
+
+	public Location getTeleportDestination() {
+
+		return teleportDestination;
+	}
+
+	public boolean hasRequestedTeleport() {
+
+		return teleportRequestTime != -1;
+	}
+
+	public void setTeleportCost(double cost) {
+
+		teleportCost = cost;
+	}
+
+	public double getTeleportCost() {
+
+		return teleportCost;
+	}
 
 	/**
 	 * @return the chatFormattedName
 	 */
 	public String getChatFormattedName() {
+
 		return chatFormattedName;
 	}
 
@@ -233,28 +270,31 @@ public class Resident extends TownBlockOwner {
 	 * @param chatFormattedName the chatFormattedName to set
 	 */
 	public void setChatFormattedName(String chatFormattedName) {
+
 		this.chatFormattedName = chatFormattedName;
 		setChangedName(false);
 	}
-	
+
 	/**
 	 * Push a snapshot to the Undo queue
 	 * 
 	 * @param snapshot
 	 */
 	public void addUndo(ChunkSnapshot snapshot) {
+
 		if (regenUndo.size() == 5)
 			regenUndo.remove(0);
 		regenUndo.add(snapshot);
 	}
-	
-	public void regenUndo () {
+
+	public void regenUndo() {
+
 		if (regenUndo.size() > 0) {
-			ChunkSnapshot snapshot = regenUndo.get(regenUndo.size()-1);
+			ChunkSnapshot snapshot = regenUndo.get(regenUndo.size() - 1);
 			regenUndo.remove(snapshot);
-			
+
 			TownyRegenAPI.regenUndo(snapshot, this);
-			
+
 		}
 	}
 

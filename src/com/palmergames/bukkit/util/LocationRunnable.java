@@ -7,5 +7,6 @@ import org.bukkit.Location;
  *         Date: 4/15/12
  */
 public interface LocationRunnable {
-    public void run(Location loc);
+
+	public void run(Location loc);
 }

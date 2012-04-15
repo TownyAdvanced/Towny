@@ -21,44 +21,47 @@ import org.bukkit.event.Listener;
  * Date: 4/15/12
  */
 public class TownyCustomListener implements Listener {
-    private final Towny plugin;
 
-    public TownyCustomListener(Towny instance) {
-        plugin = instance;
-    }
+	private final Towny plugin;
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
-        Player player = event.getPlayer();
-        WorldCoord from = event.getFrom();
-        WorldCoord to = event.getTo();
+	public TownyCustomListener(Towny instance) {
 
-        // TODO: Player mode
-        if (plugin.hasPlayerMode(player, "townclaim"))
-            TownCommand.parseTownClaimCommand(player, new String[]{});
-        if (plugin.hasPlayerMode(player, "townunclaim"))
-            TownCommand.parseTownUnclaimCommand(player, new String[] {});
-        if (plugin.hasPlayerMode(player, "map"))
-            TownyCommand.showMap(player);
+		plugin = instance;
+	}
 
-        // claim: attempt to claim area
-        // claim remove: remove area from town
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
 
-        // Check if player has entered a new town/wilderness
-        try {
-            if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-                ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-                String msg = chunkNotifier.getNotificationString();
-                if (msg != null)
-                    player.sendMessage(msg);
-            }
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        }
+		Player player = event.getPlayer();
+		WorldCoord from = event.getFrom();
+		WorldCoord to = event.getTo();
 
-        if (plugin.hasPlayerMode(player, "plotborder")) {
-            CellBorder cellBorder = BorderUtil.getPlotBorder(to);
-            cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTask.DEFAULT);
-        }
-    }
+		// TODO: Player mode
+		if (plugin.hasPlayerMode(player, "townclaim"))
+			TownCommand.parseTownClaimCommand(player, new String[] {});
+		if (plugin.hasPlayerMode(player, "townunclaim"))
+			TownCommand.parseTownUnclaimCommand(player, new String[] {});
+		if (plugin.hasPlayerMode(player, "map"))
+			TownyCommand.showMap(player);
+
+		// claim: attempt to claim area
+		// claim remove: remove area from town
+
+		// Check if player has entered a new town/wilderness
+		try {
+			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
+				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+				String msg = chunkNotifier.getNotificationString();
+				if (msg != null)
+					player.sendMessage(msg);
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
+		if (plugin.hasPlayerMode(player, "plotborder")) {
+			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
+			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTask.DEFAULT);
+		}
+	}
 }

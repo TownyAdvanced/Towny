@@ -3,6 +3,7 @@ package com.palmergames.bukkit.util;
 import org.bukkit.ChatColor;
 
 public class Colors {
+
 	public static final String Black = "\u00A70";
 	public static final String Navy = "\u00A71";
 	public static final String Green = "\u00A72";
@@ -19,8 +20,9 @@ public class Colors {
 	public static final String LightPurple = "\u00A7d";
 	public static final String Yellow = "\u00A7e";
 	public static final String White = "\u00A7f";
-	
+
 	public static String strip(String line) {
+
 		for (ChatColor cc : ChatColor.values())
 			line.replaceAll(cc.toString(), "");
 		return line;

@@ -14,15 +14,18 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 
 public class WarTimerTask extends TownyTimerTask {
+
 	War warEvent;
-	
+
 	public WarTimerTask(War warEvent) {
+
 		super(warEvent.getTownyUniverse());
 		this.warEvent = warEvent;
 	}
 
 	@Override
 	public void run() {
+
 		//TODO: check if war has ended and end gracefully
 		if (!warEvent.isWarTime()) {
 			warEvent.end();
@@ -31,11 +34,11 @@ public class WarTimerTask extends TownyTimerTask {
 			TownyMessaging.sendDebugMsg("War ended.");
 			return;
 		}
-		
+
 		int numPlayers = 0;
 		for (Player player : TownyUniverse.getOnlinePlayers()) {
 			numPlayers += 1;
-			TownyMessaging.sendDebugMsg("[War] "+player.getName()+": ");
+			TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 				if (resident.hasNation()) {
@@ -51,7 +54,7 @@ public class WarTimerTask extends TownyTimerTask {
 						continue;
 					TownyMessaging.sendDebugMsg("[War]   warringNation");
 					//TODO: Cache player coord & townblock
-					
+
 					WorldCoord worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
 					if (!warEvent.isWarZone(worldCoord))
 						continue;
@@ -67,11 +70,11 @@ public class WarTimerTask extends TownyTimerTask {
 					warEvent.damage(resident.getTown(), townBlock);
 					TownyMessaging.sendDebugMsg("[War]   damaged");
 				}
-			} catch(NotRegisteredException e) {
+			} catch (NotRegisteredException e) {
 				continue;
 			}
 		}
-		
+
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}
 }

@@ -31,44 +31,49 @@ import com.palmergames.bukkit.util.NameValidation;
 
 /**
  * @author ElgarL
- *
+ * 
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public boolean hasResident(String name) {
+
 		try {
 			return universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public boolean hasTown(String name) {
+
 		return universe.getTownsMap().containsKey(name.toLowerCase());
 	}
 
 	@Override
 	public boolean hasNation(String name) {
+
 		return universe.getNationsMap().containsKey(name.toLowerCase());
-	}	
-	
+	}
+
 	@Override
 	public List<Resident> getResidents(Player player, String[] names) {
-	    List<Resident> invited = new ArrayList<Resident>();
-	    for (String name : names)
-	        try {
-	            Resident target = getResident(name);
-	            invited.add(target);
-	        } catch (TownyException x) {
-	            TownyMessaging.sendErrorMsg(player, x.getMessage());
-	        }
-	    return invited;
+
+		List<Resident> invited = new ArrayList<Resident>();
+		for (String name : names)
+			try {
+				Resident target = getResident(name);
+				invited.add(target);
+			} catch (TownyException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
+			}
+		return invited;
 	}
-	
+
 	@Override
 	public List<Resident> getResidents(String[] names) {
+
 		List<Resident> matches = new ArrayList<Resident>();
 		for (String name : names)
 			try {
@@ -77,15 +82,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		return matches;
 	}
-	
+
 	@Override
 	public List<Resident> getResidents() {
+
 		return new ArrayList<Resident>(universe.getResidentMap().values());
 	}
-	
+
 	@Override
-	public Resident getResident(String name) throws NotRegisteredException {		
-		
+	public Resident getResident(String name) throws NotRegisteredException {
+
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
 		} catch (InvalidNameException e) {
@@ -93,13 +99,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (!hasResident(name))
 			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-		
+
 		return universe.getResidentMap().get(name);
-		
+
 	}
 
 	@Override
 	public List<Town> getTowns(String[] names) {
+
 		List<Town> matches = new ArrayList<Town>();
 		for (String name : names)
 			try {
@@ -108,28 +115,30 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		return matches;
 	}
-	
+
 	@Override
 	public List<Town> getTowns() {
+
 		return new ArrayList<Town>(universe.getTownsMap().values());
 	}
-	
+
 	@Override
 	public Town getTown(String name) throws NotRegisteredException {
-		
+
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
 		} catch (InvalidNameException e) {
 		}
-		
+
 		if (!hasTown(name))
 			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
-			
+
 		return universe.getTownsMap().get(name);
 	}
 
 	@Override
 	public List<Nation> getNations(String[] names) {
+
 		List<Nation> matches = new ArrayList<Nation>();
 		for (String name : names)
 			try {
@@ -138,28 +147,30 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		return matches;
 	}
-	
+
 	@Override
 	public List<Nation> getNations() {
+
 		return new ArrayList<Nation>(universe.getNationsMap().values());
 	}
 
 	@Override
 	public Nation getNation(String name) throws NotRegisteredException {
-		
+
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
 		} catch (InvalidNameException e) {
 		}
-		
+
 		if (!hasNation(name))
 			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
-		
+
 		return universe.getNationsMap().get(name.toLowerCase());
 	}
-	
+
 	@Override
 	public TownyWorld getWorld(String name) throws NotRegisteredException {
+
 		TownyWorld world = universe.getWorldMap().get(name.toLowerCase());
 
 		if (world == null)
@@ -167,12 +178,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return world;
 	}
-	
+
 	@Override
 	public List<TownyWorld> getWorlds() {
+
 		return new ArrayList<TownyWorld>(universe.getWorldMap().values());
 	}
-	
+
 	/**
 	 * Returns the world a town belongs to
 	 * 
@@ -189,7 +201,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return null;
 	}
-	
+
 	@Override
 	public void removeResident(Resident resident) {
 
@@ -217,12 +229,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			e.printStackTrace();
 		}
 
-
 		universe.setChangedNotify(REMOVE_RESIDENT);
 	}
 
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
+
 		Resident resident = null;
 		Town town = null;
 		try {
@@ -257,23 +269,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(REMOVE_TOWN_BLOCK);
 	}
-	
+
 	@Override
 	public void removeTownBlocks(Town town) {
+
 		for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
 	}
 
 	@Override
 	public List<TownBlock> getAllTownBlocks() {
+
 		List<TownBlock> townBlocks = new ArrayList<TownBlock>();
 		for (TownyWorld world : getWorlds())
 			townBlocks.addAll(world.getTownBlocks());
 		return townBlocks;
 	}
-	
+
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterPlayerName(name);
@@ -291,6 +306,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterName(name);
@@ -305,9 +321,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(NEW_TOWN);
 	}
-	
+
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterName(name);
@@ -325,14 +342,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
+
 		String filteredName = name;
 		/*
-		try {
-		        filteredName = checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-		        throw new NotRegisteredException(e.getMessage());
-		}
-		*/
+		 * try {
+		 * filteredName = checkAndFilterName(name);
+		 * } catch (InvalidNameException e) {
+		 * throw new NotRegisteredException(e.getMessage());
+		 * }
+		 */
 		if (universe.getWorldMap().containsKey(filteredName.toLowerCase()))
 			throw new AlreadyRegisteredException("The world " + filteredName + " is already in use.");
 
@@ -340,9 +358,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(NEW_WORLD);
 	}
-	
+
 	@Override
 	public void removeResidentList(Resident resident) {
+
 		String name = resident.getName();
 
 		//search and remove from all friends lists
@@ -382,7 +401,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveResidentList();
 
 	}
-	
+
 	@Override
 	public void removeTown(Town town) {
 
@@ -406,12 +425,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		for (Resident resident : toSave) {
 			removeResident(resident);
 			saveResident(resident);
 		}
-		
+
 		if (TownyEconomyHandler.isActive())
 			try {
 				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
@@ -429,10 +448,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(REMOVE_TOWN);
 	}
-	
+
 	@Override
 	public void removeNation(Nation nation) {
-		
+
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<Nation>();
 		for (Nation toCheck : new ArrayList<Nation>(universe.getNationsMap().values()))
@@ -452,7 +471,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
-				
+
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			try {
@@ -465,42 +484,47 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<Town>(nation.getTowns());
 		nation.clear();
-		
+
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 
 		for (Town town : toSave) {
 			saveTown(town);
 		}
-				
+
 		plugin.updateCache();
 		saveNationList();
 
 		universe.setChangedNotify(REMOVE_NATION);
 	}
-	
+
 	@Override
 	public void removeWorld(TownyWorld world) throws UnsupportedOperationException {
+
 		deleteWorld(world);
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Set<String> getResidentKeys() {
+
 		return universe.getResidentMap().keySet();
 	}
 
 	@Override
 	public Set<String> getTownsKeys() {
+
 		return universe.getTownsMap().keySet();
 	}
 
 	@Override
 	public Set<String> getNationsKeys() {
+
 		return universe.getNationsMap().keySet();
 	}
 
 	@Override
 	public List<Town> getTownsWithoutNation() {
+
 		List<Town> townFilter = new ArrayList<Town>();
 		for (Town town : getTowns())
 			if (!town.hasNation())
@@ -510,13 +534,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<Resident> getResidentsWithoutTown() {
+
 		List<Resident> residentFilter = new ArrayList<Resident>();
 		for (Resident resident : universe.getResidentMap().values())
 			if (!resident.hasTown())
 				residentFilter.add(resident);
 		return residentFilter;
 	}
-	
+
 	@Override
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
@@ -536,7 +561,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Boolean isCapital = false;
 		Nation nation = null;
 		Double townBalance = 0.0;
-		
+
 		// Save the towns bank balance to set in the new account.
 		// Clear accounts
 		if (TownySettings.isUsingEconomy())
@@ -545,17 +570,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				town.removeAccount();
 			} catch (EconomyException e) {
 			}
-		
+
 		// Store the nation in case we have to update the capitol
 		if (town.hasNation()) {
 			nation = town.getNation();
 			isCapital = town.isCapital();
 		}
-		
+
 		/*
-		 *  Tidy up old files.
-		 *  Has to be done here else the town no longer exists
-		 *  and the file move command may fail.
+		 * Tidy up old files.
+		 * Has to be done here else the town no longer exists
+		 * and the file move command may fail.
 		 */
 		deleteTown(town);
 
@@ -591,7 +616,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
-		
+
 		try {
 			filteredName = NameValidation.checkAndFilterName(newName);
 		} catch (InvalidNameException e) {
@@ -605,7 +630,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		List<Town> toSave = new ArrayList<Town>(nation.getTowns());
 		Double nationBalance = 0.0;
-		
+
 		// Save the nations bank balance to set in the new account.
 		// Clear accounts
 		if (TownySettings.isUsingEconomy())
@@ -614,10 +639,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				nation.removeAccount();
 			} catch (EconomyException e) {
 			}
-		
+
 		//Tidy up old files
 		deleteNation(nation);
-		
+
 		/*
 		 * Remove the old nation from the nationsMap
 		 * and rename to the new name
@@ -662,5 +687,5 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(RENAME_NATION);
 	}
-	
+
 }

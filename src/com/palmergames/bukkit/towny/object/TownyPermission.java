@@ -5,20 +5,24 @@ import com.palmergames.bukkit.util.Colors;
 
 //TODO: 12 permission so far. Anything else will expand it to include even more variables. Possibly change the data structure.
 public class TownyPermission {
-	public boolean residentBuild, residentDestroy, residentSwitch, residentItemUse,
-		outsiderBuild, outsiderDestroy, outsiderSwitch, outsiderItemUse,
-		allyBuild, allyDestroy, allySwitch, allyItemUse;
+
+	public boolean residentBuild, residentDestroy, residentSwitch,
+			residentItemUse, outsiderBuild, outsiderDestroy, outsiderSwitch,
+			outsiderItemUse, allyBuild, allyDestroy, allySwitch, allyItemUse;
 	public boolean pvp, fire, explosion, mobs;
 
 	public TownyPermission() {
+
 		reset();
 	}
 
 	public void reset() {
+
 		setAll(false);
 	}
 
 	public void setAll(boolean b) {
+
 		residentBuild = b;
 		residentDestroy = b;
 		residentSwitch = b;
@@ -31,7 +35,7 @@ public class TownyPermission {
 		allyDestroy = b;
 		allySwitch = b;
 		allyItemUse = b;
-		
+
 		pvp = b;
 		fire = b;
 		explosion = b;
@@ -39,7 +43,7 @@ public class TownyPermission {
 	}
 
 	public void set(String s, boolean b) {
-		
+
 		if (s.equalsIgnoreCase("denyAll"))
 			reset();
 		else if (s.equalsIgnoreCase("residentBuild"))
@@ -77,6 +81,7 @@ public class TownyPermission {
 	}
 
 	public void load(String s) {
+
 		setAll(false);
 		String[] tokens = s.split(",");
 		for (String token : tokens)
@@ -85,6 +90,7 @@ public class TownyPermission {
 
 	@Override
 	public String toString() {
+
 		String out = "";
 		if (residentBuild)
 			out += "residentBuild";
@@ -122,81 +128,82 @@ public class TownyPermission {
 			out += "denyAll"; // Make the token not empty
 		return out;
 	}
-	
+
 	public enum ActionType {
-		BUILD,
-		DESTROY,
-		SWITCH,
-		ITEM_USE;
-		
+		BUILD, DESTROY, SWITCH, ITEM_USE;
+
 		@Override
 		public String toString() {
+
 			return super.toString().toLowerCase();
 		}
 	};
-	
+
 	public enum PermLevel {
-		RESIDENT,
-		ALLY,
-		OUTSIDER;
-		
+		RESIDENT, ALLY, OUTSIDER;
+
 		@Override
 		public String toString() {
+
 			return super.toString().toLowerCase();
 		}
 	};
-	
+
 	public boolean getResidentPerm(ActionType type) {
+
 		switch (type) {
-			case BUILD: return residentBuild;
-			case DESTROY: return residentDestroy;
-			case SWITCH: return residentSwitch;
-			case ITEM_USE: return residentItemUse;
-			default: throw new UnsupportedOperationException();
+		case BUILD:
+			return residentBuild;
+		case DESTROY:
+			return residentDestroy;
+		case SWITCH:
+			return residentSwitch;
+		case ITEM_USE:
+			return residentItemUse;
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	public boolean getOutsiderPerm(ActionType type) {
+
 		switch (type) {
-			case BUILD: return outsiderBuild;
-			case DESTROY: return outsiderDestroy;
-			case SWITCH: return outsiderSwitch;
-			case ITEM_USE: return outsiderItemUse;
-			default: throw new UnsupportedOperationException();
+		case BUILD:
+			return outsiderBuild;
+		case DESTROY:
+			return outsiderDestroy;
+		case SWITCH:
+			return outsiderSwitch;
+		case ITEM_USE:
+			return outsiderItemUse;
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	public boolean getAllyPerm(ActionType type) {
+
 		switch (type) {
-			case BUILD: return allyBuild;
-			case DESTROY: return allyDestroy;
-			case SWITCH: return allySwitch;
-			case ITEM_USE: return allyItemUse;
-			default: throw new UnsupportedOperationException();
+		case BUILD:
+			return allyBuild;
+		case DESTROY:
+			return allyDestroy;
+		case SWITCH:
+			return allySwitch;
+		case ITEM_USE:
+			return allyItemUse;
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	public String getColourString() {
-		return
-			Colors.LightGreen + "Build = " + Colors.LightGray
-			+ (residentBuild ? "f" : "-")
-			+ (allyBuild ? "a" : "-")
-			+ (outsiderBuild ? "o" : "-")
-			+ Colors.LightGreen + " Destroy = " + Colors.LightGray
-			+ (residentDestroy ? "f" : "-")
-			+ (allyDestroy ? "a" : "-")
-			+ (outsiderDestroy ? "o" : "-")
-			+ Colors.LightGreen + " Switch = " + Colors.LightGray
-			+ (residentSwitch ? "f" : "-")
-			+ (allySwitch ? "a" : "-")
-			+ (outsiderSwitch ? "o" : "-")
-			+ Colors.LightGreen + " Item = " + Colors.LightGray
-			+ (residentItemUse ? "f" : "-")
-			+ (allyItemUse ? "a" : "-")
-			+ (outsiderItemUse ? "o" : "-");
+
+		return Colors.LightGreen + "Build = " + Colors.LightGray + (residentBuild ? "f" : "-") + (allyBuild ? "a" : "-") + (outsiderBuild ? "o" : "-") + Colors.LightGreen + " Destroy = " + Colors.LightGray + (residentDestroy ? "f" : "-") + (allyDestroy ? "a" : "-") + (outsiderDestroy ? "o" : "-") + Colors.LightGreen + " Switch = " + Colors.LightGray + (residentSwitch ? "f" : "-") + (allySwitch ? "a" : "-") + (outsiderSwitch ? "o" : "-") + Colors.LightGreen + " Item = " + Colors.LightGray + (residentItemUse ? "f" : "-") + (allyItemUse ? "a" : "-") + (outsiderItemUse ? "o" : "-");
 	}
-	
+
 	public void loadDefault(TownBlockOwner owner) {
+
 		residentBuild = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.BUILD);
 		residentDestroy = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.DESTROY);
 		residentSwitch = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.SWITCH);
@@ -210,12 +217,12 @@ public class TownyPermission {
 		outsiderItemUse = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.ITEM_USE);
 		outsiderSwitch = TownySettings.getDefaultPermission(owner, PermLevel.OUTSIDER, ActionType.SWITCH);
 		/*
-		pvp = owner.getPermissions().pvp;
-		fire = owner.getPermissions().fire;
-		explosion = owner.getPermissions().explosion;
-		mobs = owner.getPermissions().mobs;
-		*/
-		
+		 * pvp = owner.getPermissions().pvp;
+		 * fire = owner.getPermissions().fire;
+		 * explosion = owner.getPermissions().explosion;
+		 * mobs = owner.getPermissions().mobs;
+		 */
+
 		if (owner instanceof Town) {
 			pvp = TownySettings.getPermFlag_Town_Default_PVP();
 			fire = TownySettings.getPermFlag_Town_Default_FIRE();
@@ -227,6 +234,6 @@ public class TownyPermission {
 			explosion = owner.getPermissions().explosion;
 			mobs = owner.getPermissions().mobs;
 		}
-		
+
 	}
 }

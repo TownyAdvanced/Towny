@@ -10,12 +10,14 @@ import java.util.List;
  */
 
 public class StringMgmt {
-	
+
 	public static String join(List<?> arr) {
+
 		return join(arr, " ");
 	}
-	
+
 	public static String join(List<?> arr, String separator) {
+
 		if (arr == null || arr.size() == 0)
 			return "";
 		String out = arr.get(0).toString();
@@ -23,12 +25,14 @@ public class StringMgmt {
 			out += separator + arr.get(i);
 		return out;
 	}
-	
+
 	public static String join(Object[] arr) {
+
 		return join(arr, " ");
 	}
-	
+
 	public static String join(Object[] arr, String separator) {
+
 		if (arr.length == 0)
 			return "";
 		String out = arr[0].toString();
@@ -36,16 +40,19 @@ public class StringMgmt {
 			out += separator + arr[i];
 		return out;
 	}
-	
+
 	public static String[] remFirstArg(String[] arr) {
+
 		return remArgs(arr, 1);
 	}
-	
+
 	public static String[] remLastArg(String[] arr) {
-		return subArray(arr, 0, arr.length-1);
+
+		return subArray(arr, 0, arr.length - 1);
 	}
-	
+
 	public static String[] remArgs(String[] arr, int startFromIndex) {
+
 		if (arr.length == 0)
 			return arr;
 		else if (arr.length < startFromIndex)
@@ -56,8 +63,9 @@ public class StringMgmt {
 			return newSplit;
 		}
 	}
-	
+
 	public static String[] subArray(String[] arr, int start, int end) {
+
 		//assert start > end;
 		//assert start >= 0;
 		//assert end < args.length;
@@ -72,12 +80,14 @@ public class StringMgmt {
 			return newSplit;
 		}
 	}
-	
+
 	/**
 	 * Shortens the string to fit in the specified size.
+	 * 
 	 * @return the shortened string
 	 */
 	public static String trimMaxLength(String str, int length) {
+
 		if (str.length() < length)
 			return str;
 		else if (length > 3)
@@ -85,21 +95,25 @@ public class StringMgmt {
 		else
 			throw new UnsupportedOperationException("Minimum length of 3 characters.");
 	}
-	
+
 	/**
-	 * Shortens the string to fit in the specified size with an elipse "..." at the end.
+	 * Shortens the string to fit in the specified size with an elipse "..." at
+	 * the end.
+	 * 
 	 * @return the shortened string
 	 */
 	public static String maxLength(String str, int length) {
+
 		if (str.length() < length)
 			return str;
 		else if (length > 3)
-			return str.substring(0, length-3) + "...";
+			return str.substring(0, length - 3) + "...";
 		else
 			throw new UnsupportedOperationException("Minimum length of 3 characters.");
 	}
-	
+
 	public static boolean containsIgnoreCase(List<String> arr, String str) {
+
 		for (String s : arr)
 			if (s.equalsIgnoreCase(str))
 				return true;

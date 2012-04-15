@@ -8,121 +8,140 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 
 public class WorldCoord extends Coord {
-    private String worldName;
 
-    public WorldCoord(String worldName, int x, int z) {
-        super(x,z);
-        this.worldName = worldName;
-    }
+	private String worldName;
 
-    public WorldCoord(String worldName, Coord coord) {
-        super(coord);
-        this.worldName = worldName;
-    }
+	public WorldCoord(String worldName, int x, int z) {
 
-    public WorldCoord(WorldCoord worldCoord) {
-        super(worldCoord);
-        this.worldName = worldCoord.getWorldName();
-    }
+		super(x, z);
+		this.worldName = worldName;
+	}
 
-    public String getWorldName() {
-        return worldName;
-    }
+	public WorldCoord(String worldName, Coord coord) {
 
-    public Coord getCoord() {
-        return new Coord(x, z);
-    }
+		super(coord);
+		this.worldName = worldName;
+	}
 
-    @Deprecated
-    public TownyWorld getWorld() throws NotRegisteredException {
-        return getTownyWorld();
-    }
+	public WorldCoord(WorldCoord worldCoord) {
 
-    @Deprecated
-    public WorldCoord(TownyWorld world, int x, int z) {
-        super(x,z);
-        this.worldName = world.getName();
-    }
+		super(worldCoord);
+		this.worldName = worldCoord.getWorldName();
+	}
 
-    @Deprecated
-    public WorldCoord(TownyWorld world, Coord coord) {
-        super(coord);
-        this.worldName = world.getName();
-    }
+	public String getWorldName() {
 
-    public static WorldCoord parseWorldCoord(Entity entity) {
-        return parseWorldCoord(entity.getLocation());
-    }
+		return worldName;
+	}
 
-    public static WorldCoord parseWorldCoord(Location loc) {
-        return new WorldCoord(loc.getWorld().getName(), parseCoord(loc));
-    }
+	public Coord getCoord() {
 
-    public static WorldCoord parseWorldCoord(Block block) {
-        return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
-    }
+		return new Coord(x, z);
+	}
 
-    public WorldCoord add(int xOffset, int zOffset) {
-        return new WorldCoord(getWorldName(), getX() + xOffset, getZ() + zOffset);
-    }
+	@Deprecated
+	public TownyWorld getWorld() throws NotRegisteredException {
 
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
-        hash = hash * 27 + x;
-        hash = hash * 27 + z;
-        return hash;
-    }
+		return getTownyWorld();
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
-        if (!(obj instanceof Coord))
-            return false;
+	@Deprecated
+	public WorldCoord(TownyWorld world, int x, int z) {
 
-        if (!(obj instanceof WorldCoord)) {
-            Coord that = (Coord) obj;
-            return this.x == that.x && this.z == that.z;
-        }
+		super(x, z);
+		this.worldName = world.getName();
+	}
 
-        WorldCoord that = (WorldCoord) obj;
-        return this.x == that.x
-                && this.z == that.z
-                && (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
-    }
+	@Deprecated
+	public WorldCoord(TownyWorld world, Coord coord) {
 
-    @Override
-    public String toString() {
-        return worldName + "," + super.toString();
-    }
+		super(coord);
+		this.worldName = world.getName();
+	}
 
-    /**
-     * Shortcut for Bukkit.getWorld(worldName)
-     * @return the relevant org.bukkit.World instance
-     */
-    public World getBukkitWorld() {
-        return Bukkit.getWorld(worldName);
-    }
+	public static WorldCoord parseWorldCoord(Entity entity) {
 
-    /**
-     * Shortcut for TownyUniverse.getDataSource().getWorld(worldName)
-     * 
-     * @return the relevant TownyWorld instance, or throw a NotRegisteredException.
-     */
-    public TownyWorld getTownyWorld() throws NotRegisteredException {
+		return parseWorldCoord(entity.getLocation());
+	}
 
-    	return TownyUniverse.getDataSource().getWorld(worldName);
+	public static WorldCoord parseWorldCoord(Location loc) {
 
-    }
+		return new WorldCoord(loc.getWorld().getName(), parseCoord(loc));
+	}
 
-    /**
-     * Shortcut for getTownyWorld().getTownBlock(getCoord())
-     * @return the relevant TownBlock instance.
-     * @throws NotRegisteredException
-     */
-    public TownBlock getTownBlock() throws NotRegisteredException {
-        return getTownyWorld().getTownBlock(getCoord());
-    }
+	public static WorldCoord parseWorldCoord(Block block) {
+
+		return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
+	}
+
+	public WorldCoord add(int xOffset, int zOffset) {
+
+		return new WorldCoord(getWorldName(), getX() + xOffset, getZ() + zOffset);
+	}
+
+	@Override
+	public int hashCode() {
+
+		int hash = 17;
+		hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
+		hash = hash * 27 + x;
+		hash = hash * 27 + z;
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj == this)
+			return true;
+		if (!(obj instanceof Coord))
+			return false;
+
+		if (!(obj instanceof WorldCoord)) {
+			Coord that = (Coord) obj;
+			return this.x == that.x && this.z == that.z;
+		}
+
+		WorldCoord that = (WorldCoord) obj;
+		return this.x == that.x && this.z == that.z && (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
+	}
+
+	@Override
+	public String toString() {
+
+		return worldName + "," + super.toString();
+	}
+
+	/**
+	 * Shortcut for Bukkit.getWorld(worldName)
+	 * 
+	 * @return the relevant org.bukkit.World instance
+	 */
+	public World getBukkitWorld() {
+
+		return Bukkit.getWorld(worldName);
+	}
+
+	/**
+	 * Shortcut for TownyUniverse.getDataSource().getWorld(worldName)
+	 * 
+	 * @return the relevant TownyWorld instance, or throw a
+	 *         NotRegisteredException.
+	 */
+	public TownyWorld getTownyWorld() throws NotRegisteredException {
+
+		return TownyUniverse.getDataSource().getWorld(worldName);
+
+	}
+
+	/**
+	 * Shortcut for getTownyWorld().getTownBlock(getCoord())
+	 * 
+	 * @return the relevant TownBlock instance.
+	 * @throws NotRegisteredException
+	 */
+	public TownBlock getTownBlock() throws NotRegisteredException {
+
+		return getTownyWorld().getTownBlock(getCoord());
+	}
 }

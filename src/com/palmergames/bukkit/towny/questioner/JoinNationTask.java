@@ -11,20 +11,22 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 
 public class JoinNationTask extends ResidentNationQuestionTask {
-	
+
 	public JoinNationTask(Resident resident, Nation nation) {
+
 		super(resident, nation);
 	}
 
 	@Override
 	public void run() {
+
 		try {
 			nation.addTown(resident.getTown());
 			//towny.deleteCache(resident.getName());
 			TownyUniverse.getDataSource().saveResident(resident);
 			TownyUniverse.getDataSource().saveTown(resident.getTown());
 			TownyUniverse.getDataSource().saveNation(nation);
-			
+
 			TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_join_nation"), resident.getTown().getName())));
 		} catch (AlreadyRegisteredException e) {
 			try {

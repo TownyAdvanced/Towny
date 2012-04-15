@@ -36,20 +36,23 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
  */
 
 public abstract class TownyDataSource {
-	
+
 	protected TownyUniverse universe;
 	protected Towny plugin;
 	protected boolean firstRun = true;
 
 	public void initialize(Towny plugin, TownyUniverse universe) {
+
 		this.universe = universe;
 		this.plugin = plugin;
 	}
 
 	public void backup() throws IOException {
+
 	}
 
 	public void cleanupBackups() {
+
 	}
 
 	public void deleteUnusedResidentFiles() {
@@ -57,6 +60,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean confirmContinuation(String msg) {
+
 		Boolean choice = null;
 		String input = null;
 		while (choice == null) {
@@ -78,92 +82,119 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadAll() {
-		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList()
-			&& loadWorlds() && loadNations() && loadTowns() && loadResidents()
-			&& loadRegenList() && loadSnapshotList() && loadTownBlocks();
+
+		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadRegenList() && loadSnapshotList() && loadTownBlocks();
 	}
 
 	public boolean saveAll() {
-		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList()
-			&& saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks()
-			&& saveRegenList() && saveSnapshotList();
+
+		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
-	
+
 	public boolean saveAllWorlds() {
+
 		return saveWorldList() && saveWorlds();
 	}
-	
+
 	public boolean saveQueues() {
+
 		return saveRegenList() && saveSnapshotList();
 	}
 
 	abstract public boolean loadResidentList();
+
 	abstract public boolean loadTownList();
+
 	abstract public boolean loadNationList();
+
 	abstract public boolean loadWorldList();
+
 	abstract public boolean loadRegenList();
+
 	abstract public boolean loadSnapshotList();
+
 	abstract public boolean loadTownBlocks();
-	
+
 	abstract public boolean loadResident(Resident resident);
+
 	abstract public boolean loadTown(Town town);
+
 	abstract public boolean loadNation(Nation nation);
+
 	abstract public boolean loadWorld(TownyWorld world);
-	
+
 	abstract public boolean saveResidentList();
+
 	abstract public boolean saveTownList();
+
 	abstract public boolean saveNationList();
+
 	abstract public boolean saveWorldList();
+
 	abstract public boolean saveRegenList();
+
 	abstract public boolean saveSnapshotList();
-	
+
 	abstract public boolean saveResident(Resident resident);
+
 	abstract public boolean saveTown(Town town);
+
 	abstract public boolean saveNation(Nation nation);
+
 	abstract public boolean saveWorld(TownyWorld world);
-	
+
 	abstract public boolean saveAllTownBlocks();
+
 	abstract public boolean saveTownBlock(TownBlock townBlock);
+
 	abstract public boolean savePlotData(PlotBlockData plotChunk);
-	
+
 	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
+
 	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
-	
+
 	abstract public void deletePlotData(PlotBlockData plotChunk);
+
 	abstract public void deleteResident(Resident resident);
+
 	abstract public void deleteTown(Town town);
+
 	abstract public void deleteNation(Nation nation);
+
 	abstract public void deleteWorld(TownyWorld world);
+
 	abstract public void deleteTownBlock(TownBlock townBlock);
+
 	abstract public void deleteFile(String file);
 
 	/*
-	public boolean loadWorldList() {
-		return loadServerWorldsList();
-	}
-	
-	public boolean loadServerWorldsList() {
-		sendDebugMsg("Loading Server World List");
-		for (World world : plugin.getServer().getWorlds())
-			try {
-				//String[] split = world.getName().split("/");
-				//String worldName = split[split.length-1];
-				//universe.newWorld(worldName);
-				universe.newWorld(world.getName());
-			} catch (AlreadyRegisteredException e) {
-				e.printStackTrace();
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
-		return true;
-	}
-	*/
+	 * public boolean loadWorldList() {
+	 * return loadServerWorldsList();
+	 * }
+	 * 
+	 * public boolean loadServerWorldsList() {
+	 * sendDebugMsg("Loading Server World List");
+	 * for (World world : plugin.getServer().getWorlds())
+	 * try {
+	 * //String[] split = world.getName().split("/");
+	 * //String worldName = split[split.length-1];
+	 * //universe.newWorld(worldName);
+	 * universe.newWorld(world.getName());
+	 * } catch (AlreadyRegisteredException e) {
+	 * e.printStackTrace();
+	 * } catch (NotRegisteredException e) {
+	 * e.printStackTrace();
+	 * }
+	 * return true;
+	 * }
+	 */
 
 	/*
 	 * Load all of category
 	 */
 
 	public boolean loadResidents() {
+
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		List<Resident> toRemove = new ArrayList<Resident>();
@@ -185,6 +216,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadTowns() {
+
 		TownyMessaging.sendDebugMsg("Loading Towns");
 		for (Town town : getTowns())
 			if (!loadTown(town)) {
@@ -195,6 +227,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadNations() {
+
 		TownyMessaging.sendDebugMsg("Loading Nations");
 		for (Nation nation : getNations())
 			if (!loadNation(nation)) {
@@ -205,6 +238,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean loadWorlds() {
+
 		TownyMessaging.sendDebugMsg("Loading Worlds");
 		for (TownyWorld world : getWorlds())
 			if (!loadWorld(world)) {
@@ -221,6 +255,7 @@ public abstract class TownyDataSource {
 	 */
 
 	public boolean saveResidents() {
+
 		TownyMessaging.sendDebugMsg("Saving Residents");
 		for (Resident resident : getResidents())
 			saveResident(resident);
@@ -228,6 +263,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean saveTowns() {
+
 		TownyMessaging.sendDebugMsg("Saving Towns");
 		for (Town town : getTowns())
 			saveTown(town);
@@ -235,6 +271,7 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean saveNations() {
+
 		TownyMessaging.sendDebugMsg("Saving Nations");
 		for (Nation nation : getNations())
 			saveNation(nation);
@@ -242,53 +279,82 @@ public abstract class TownyDataSource {
 	}
 
 	public boolean saveWorlds() {
+
 		TownyMessaging.sendDebugMsg("Saving Worlds");
 		for (TownyWorld world : getWorlds())
 			saveWorld(world);
 		return true;
 	}
 
-	
 	// Database functions
 	abstract public List<Resident> getResidents(Player player, String[] names);
+
 	abstract public List<Resident> getResidents();
+
 	abstract public List<Resident> getResidents(String[] names);
+
 	abstract public Resident getResident(String name) throws NotRegisteredException;
-	
+
 	abstract public void removeResidentList(Resident resident);
+
 	abstract public void removeNation(Nation nation);
+
 	abstract public boolean hasResident(String name);
+
 	abstract public boolean hasTown(String name);
+
 	abstract public boolean hasNation(String name);
-	
+
 	abstract public List<Town> getTowns(String[] names);
+
 	abstract public List<Town> getTowns();
+
 	abstract public Town getTown(String name) throws NotRegisteredException;
+
 	abstract public List<Nation> getNations(String[] names);
+
 	abstract public List<Nation> getNations();
+
 	abstract public Nation getNation(String name) throws NotRegisteredException;
+
 	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
+
 	abstract public List<TownyWorld> getWorlds();
+
 	abstract public TownyWorld getTownWorld(String townName);
+
 	abstract public void removeResident(Resident resident);
+
 	abstract public void removeTownBlock(TownBlock townBlock);
+
 	abstract public void removeTownBlocks(Town town);
+
 	abstract public List<TownBlock> getAllTownBlocks();
+
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
 	abstract public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
 	abstract public void removeTown(Town town);
+
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	abstract public Set<String> getResidentKeys();
+
 	abstract public Set<String> getTownsKeys();
+
 	abstract public Set<String> getNationsKeys();
-	
+
 	abstract public List<Town> getTownsWithoutNation();
+
 	abstract public List<Resident> getResidentsWithoutTown();
-	
+
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-	
+
 }

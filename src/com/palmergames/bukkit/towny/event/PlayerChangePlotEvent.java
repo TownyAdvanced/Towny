@@ -10,30 +10,36 @@ import org.bukkit.event.player.PlayerEvent;
  * Date: 4/15/12
  */
 public class PlayerChangePlotEvent extends PlayerEvent {
-    private static final HandlerList handlers = new HandlerList();
-    private WorldCoord from;
-    private WorldCoord to;
 
-    public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to) {
-        super(player);
-        this.from = from;
-        this.to = to;
-    }
+	private static final HandlerList handlers = new HandlerList();
+	private WorldCoord from;
+	private WorldCoord to;
 
-    public WorldCoord getFrom() {
-        return from;
-    }
+	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to) {
 
-    public WorldCoord getTo() {
-        return to;
-    }
+		super(player);
+		this.from = from;
+		this.to = to;
+	}
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+	public WorldCoord getFrom() {
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+		return from;
+	}
+
+	public WorldCoord getTo() {
+
+		return to;
+	}
+
+	@Override
+	public HandlerList getHandlers() {
+
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+
+		return handlers;
+	}
 }

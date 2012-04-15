@@ -1,21 +1,17 @@
 package com.palmergames.bukkit.util;
 
 public class Compass {
+
 	public enum Point {
-		N,
-		NE,
-		E,
-		SE,
-		S,
-		SW,
-		W,
-		NW
+		N, NE, E, SE, S, SW, W, NW
 	}
+
 	public static Compass.Point getCompassPointForDirection(double inDegrees) {
-		double degrees = (inDegrees - 90) % 360 ;
+
+		double degrees = (inDegrees - 90) % 360;
 		if (degrees < 0)
 			degrees += 360;
-		
+
 		if (0 <= degrees && degrees < 22.5)
 			return Compass.Point.W;
 		else if (22.5 <= degrees && degrees < 67.5)
@@ -36,5 +32,5 @@ public class Compass {
 			return Compass.Point.W;
 		else
 			return null;
-    }
+	}
 }

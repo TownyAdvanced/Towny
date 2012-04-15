@@ -26,10 +26,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 /**
  * 
  * @author ElgarL,Shade
- *
+ * 
  */
 public class CombatUtil {
-	
+
 	/**
 	 * Tests the attacker against defender to see if we need to cancel
 	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
@@ -41,17 +41,17 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(Entity attacker, Entity defender) {
-		
+
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
-			
+
 			// World using Towny
 			if (!world.isUsingTowny())
 				return false;
 
 			Player a = null;
 			Player b = null;
-			
+
 			/*
 			 * Find the shooter if this is a projectile.
 			 */
@@ -59,22 +59,22 @@ public class CombatUtil {
 				Projectile projectile = (Projectile) attacker;
 				attacker = projectile.getShooter();
 			}
-	
+
 			if (attacker instanceof Player)
 				a = (Player) attacker;
 			if (defender instanceof Player)
 				b = (Player) defender;
-			
-			return preventDamageCall(world,attacker, defender, a, b);
-			
+
+			return preventDamageCall(world, attacker, defender, a, b);
+
 		} catch (Exception e) {
 			// Failed to fetch world
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	/**
 	 * Tests the attacker against defender to see if we need to cancel
 	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
@@ -89,7 +89,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) {
-		
+
 		// World using Towny
 		if (!world.isUsingTowny())
 			return false;
@@ -109,7 +109,7 @@ public class CombatUtil {
 			// Check TownBlock PvP status
 			TownBlock defenderTB = world.getTownBlock(coord);
 			TownBlock attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-			
+
 			/*
 			 * Check to prevent damage if...
 			 * The world isn't forced PVP
@@ -118,9 +118,7 @@ public class CombatUtil {
 			 * or
 			 * The Attacker isn't in a PVP area.
 			 */
-			if (!world.isForcePVP()
-					&& ((!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp)
-					|| (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp))) {
+			if (!world.isForcePVP() && ((!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp) || (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp))) {
 				if (defendingPlayer != null && (attackingPlayer != null || attackingEntity instanceof Arrow || attackingEntity instanceof ThrownPotion))
 					return true;
 
@@ -132,19 +130,21 @@ public class CombatUtil {
 				}
 
 				if ((defendingEntity instanceof Animals) && (attackingPlayer != null)) {
-					
+
 					//Get destroy permissions (updates if none exist)
 					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(attackingPlayer, attackingPlayer.getLocation(), TownyPermission.ActionType.DESTROY);
-					
+
 					// Don't allow players to kill animals in plots they don't have destroy permissions in.
 					if (!bDestroy)
 						return true;
-					
+
 					/*
-					Resident resident = TownyUniverse.getDataSource().getResident(ap.getName());
-					if ((!resident.hasTown()) || (resident.hasTown() && (resident.getTown() != townblock.getTown())))
-						return true;
-					*/
+					 * Resident resident =
+					 * TownyUniverse.getDataSource().getResident(ap.getName());
+					 * if ((!resident.hasTown()) || (resident.hasTown() &&
+					 * (resident.getTown() != townblock.getTown())))
+					 * return true;
+					 */
 				}
 			}
 		} catch (NotRegisteredException e) {
@@ -166,6 +166,7 @@ public class CombatUtil {
 	 * @return true if we should prevent PVP
 	 */
 	public static boolean preventDamagePvP(TownyWorld world) {
+
 		// Universe is only PvP
 		if (world.isForcePVP() || world.isPVP())
 			return false;
@@ -181,7 +182,7 @@ public class CombatUtil {
 	 * @return true if we should cancel damage.
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
-		
+
 		if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 			try {
 				TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
@@ -197,7 +198,7 @@ public class CombatUtil {
 	}
 
 	public static boolean isAlly(String attackingResident, String defendingResident) {
-		
+
 		try {
 			Resident residentA = TownyUniverse.getDataSource().getResident(attackingResident);
 			Resident residentB = TownyUniverse.getDataSource().getResident(defendingResident);
@@ -221,7 +222,7 @@ public class CombatUtil {
 	 * @return true if they are allies.
 	 */
 	public static boolean isAlly(Town a, Town b) {
-		
+
 		try {
 			if (a == b)
 				return true;
@@ -243,7 +244,7 @@ public class CombatUtil {
 	 * @return true if they can attack.
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
-		
+
 		try {
 			Resident residentA = TownyUniverse.getDataSource().getResident(a);
 			Resident residentB = TownyUniverse.getDataSource().getResident(b);
@@ -271,7 +272,7 @@ public class CombatUtil {
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(String a, String b) {
-		
+
 		try {
 			Resident residentA = TownyUniverse.getDataSource().getResident(a);
 			Resident residentB = TownyUniverse.getDataSource().getResident(b);
@@ -295,7 +296,7 @@ public class CombatUtil {
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(Town a, Town b) {
-		
+
 		try {
 			if (a == b)
 				return false;
@@ -308,7 +309,7 @@ public class CombatUtil {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Does this WorldCoord fall within a plot owned by an enemy town?
 	 * 
@@ -317,6 +318,7 @@ public class CombatUtil {
 	 * @return true if it is an enemy plot.
 	 */
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
+
 		try {
 			return CombatUtil.isEnemy(TownyUniverse.getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException e) {

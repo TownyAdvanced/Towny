@@ -9,26 +9,30 @@ import java.util.List;
  * 
  * @version 2.0
  * @author Shade (xshade.ca)
- *
+ * 
  */
 
 public class ChatTools {
+
 	public static final int lineLength = 54;
 
 	public static List<String> listArr(String[] args) {
+
 		return list(Arrays.asList(args));
 	}
-	
+
 	public static List<String> listArr(String[] args, String prefix) {
+
 		return list(Arrays.asList(args), prefix);
 	}
 
-
 	public static List<String> list(List<String> args) {
+
 		return list(args, "");
-	}	
-	
+	}
+
 	public static List<String> list(List<String> args, String prefix) {
+
 		if (args.size() > 0) {
 			String line = "";
 			for (int i = 0; i < args.size() - 1; i++)
@@ -42,6 +46,7 @@ public class ChatTools {
 	}
 
 	public static List<String> wordWrap(String[] tokens) {
+
 		List<String> out = new ArrayList<String>();
 		out.add("");
 
@@ -55,6 +60,7 @@ public class ChatTools {
 	}
 
 	public static List<String> color(String line) {
+
 		List<String> out = wordWrap(line.split(" "));
 
 		String c = "f";
@@ -72,12 +78,14 @@ public class ChatTools {
 
 		return out;
 	}
-	
+
 	public static String parseSingleLineString(String str) {
+
 		return str.replaceAll("&", "\u00A7");
 	}
 
 	public static String stripColour(String s) {
+
 		String out = "";
 		for (int i = 0; i < s.length(); i++) {
 			String c = s.substring(i, i + 1);
@@ -90,15 +98,17 @@ public class ChatTools {
 	}
 
 	public static String formatTitle(String title) {
+
 		String line = ".oOo.__________________________________________________.oOo.";
 		int pivot = line.length() / 2;
 		String center = ".[ " + Colors.Yellow + title + Colors.Gold + " ].";
-		String out = Colors.Gold + line.substring(0, Math.max(0,(pivot - center.length() / 2)));
+		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
 		out += center + line.substring(pivot + center.length() / 2);
 		return out;
 	}
 
 	public static String formatCommand(String requirement, String command, String subCommand, String help) {
+
 		String out = "  ";
 		if (requirement.length() > 0)
 			out += Colors.Rose + requirement + ": ";
@@ -111,8 +121,10 @@ public class ChatTools {
 	}
 
 	public static void main(String[] args) {
-		String[] players = { "dude", "bowie", "blarg", "sonbitch", "songoku",
-				"pacman", "link", "stacker", "hacker", "newb" };
+
+		String[] players = {
+				"dude", "bowie", "blarg", "sonbitch", "songoku", "pacman",
+				"link", "stacker", "hacker", "newb" };
 		for (String line : ChatTools.listArr(players))
 			System.out.println(line);
 

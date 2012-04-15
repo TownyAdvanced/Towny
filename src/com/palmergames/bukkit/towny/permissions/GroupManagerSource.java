@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class GroupManagerSource extends TownyPermissionSource {
 
 	public GroupManagerSource(Towny towny, Plugin test) {
+
 		this.groupManager = (GroupManager) test;
 		this.plugin = towny;
 		try {
@@ -33,7 +34,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 		} catch (IllegalPluginAccessException e) {
 			System.out.print("Your Version of GroupManager is out of date. Please update.");
 		}
-		
+
 	}
 
 	/**
@@ -78,6 +79,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 */
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
+
 		Player player = plugin.getServer().getPlayer(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
@@ -93,6 +95,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 */
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
+
 		Player player = plugin.getServer().getPlayer(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
@@ -114,7 +117,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	public boolean hasPermission(Player player, String node) {
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
-		
+
 		return handler.has(player, node);
 	}
 
@@ -126,6 +129,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 */
 	@Override
 	public String getPlayerGroup(Player player) {
+
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		return handler.getGroup(player.getName());
 	}
@@ -133,6 +137,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	protected class GMCustomEventListener implements Listener {
 
 		public GMCustomEventListener() {
+
 		}
 
 		@EventHandler(priority = EventPriority.HIGH)
@@ -208,4 +213,4 @@ public class GroupManagerSource extends TownyPermissionSource {
 		}
 
 	}
-	}
+}

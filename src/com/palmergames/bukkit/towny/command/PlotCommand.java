@@ -57,6 +57,7 @@ public class PlotCommand implements CommandExecutor {
 	}
 
 	public PlotCommand(Towny instance) {
+
 		plugin = instance;
 	}
 
@@ -91,13 +92,13 @@ public class PlotCommand implements CommandExecutor {
 			for (String line : output)
 				player.sendMessage(line);
 		} else {
-			
+
 			/*
 			 * check we have the right permission node for this command.
 			 */
 			if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT_COMMAND.getNode(split[0].toLowerCase())))))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-			
+
 			Resident resident;
 			String world;
 			Town town;
@@ -137,7 +138,7 @@ public class PlotCommand implements CommandExecutor {
 								selection.remove(worldCoord);
 							}
 						}
-						
+
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
@@ -206,9 +207,9 @@ public class PlotCommand implements CommandExecutor {
 								// command was 'plot fs $'
 								plotPrice = Double.parseDouble(split[1]);
 								if (plotPrice < 0) {
-		                            TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
-		                            return true;
-		                        }
+									TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
+									return true;
+								}
 							} catch (NumberFormatException e) {
 								player.sendMessage(String.format(TownySettings.getLangString("msg_error_must_be_num")));
 								return true;
@@ -218,7 +219,7 @@ public class PlotCommand implements CommandExecutor {
 						for (WorldCoord worldCoord : selection) {
 							if (selection.size() > 1)
 								plotPrice = worldCoord.getTownBlock().getTown().getPlotTypePrice(worldCoord.getTownBlock().getType());
-								
+
 							setPlotForSale(resident, worldCoord, plotPrice);
 						}
 					} else {
@@ -262,12 +263,9 @@ public class PlotCommand implements CommandExecutor {
 							return true;
 						}
 
-						if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions())
-							&& (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode())))
-							&& !town.isMayor(resident)
-							&& !town.hasAssistant(resident))
+						if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions()) && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode()))) && !town.isMayor(resident) && !town.hasAssistant(resident))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), "change plot types"));
-						
+
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
 						TownBlock townBlock = worldCoord.getTownBlock();
 						setPlotType(resident, worldCoord, split[0]);
@@ -285,7 +283,7 @@ public class PlotCommand implements CommandExecutor {
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 
 					if (townBlock != null) {
-						
+
 						/**
 						 * Only allow mayors or plot owners to use this command.
 						 */
@@ -294,7 +292,7 @@ public class PlotCommand implements CommandExecutor {
 								player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
 								return true;
 							}
-							
+
 						} else if (!town.isMayor(resident)) {
 							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
 							return true;
@@ -314,17 +312,17 @@ public class PlotCommand implements CommandExecutor {
 
 				} else
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
-				
+
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			} catch (EconomyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Set the plot type if we are permitted
 	 * 
@@ -334,15 +332,16 @@ public class PlotCommand implements CommandExecutor {
 	 * @throws TownyException
 	 */
 	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException {
+
 		if (resident.hasTown())
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
-				
+
 				// Test we are allowed to work on this plot
 				plotTestOwner(resident, townBlock); //ignore the return as we are only checking for an exception
-				
+
 				townBlock.setType(type);
-				
+
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}
@@ -360,6 +359,7 @@ public class PlotCommand implements CommandExecutor {
 	 * @throws TownyException
 	 */
 	public void setPlotForSale(Resident resident, WorldCoord worldCoord, double forSale) throws TownyException {
+
 		if (resident.hasTown())
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
@@ -389,6 +389,7 @@ public class PlotCommand implements CommandExecutor {
 	 * @param split
 	 */
 	public void plotToggle(Player player, TownBlock townBlock, String[] split) {
+
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/res toggle"));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "pvp", ""));
@@ -398,28 +399,28 @@ public class PlotCommand implements CommandExecutor {
 		} else {
 
 			try {
-				
+
 				if (split[0].equalsIgnoreCase("pvp")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player,townBlock,StringMgmt.join(split, " "));
+					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_pvp"), "Plot", townBlock.getPermissions().pvp ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player,townBlock,StringMgmt.join(split, " "));
+					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().explosion = !townBlock.getPermissions().explosion;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_expl"), "the Plot", townBlock.getPermissions().explosion ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player,townBlock,StringMgmt.join(split, " "));
+					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().fire = !townBlock.getPermissions().fire;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_fire"), "the Plot", townBlock.getPermissions().fire ? "Enabled" : "Disabled"));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					//Make sure we are allowed to set these permissions.
-					toggleTest(player,townBlock,StringMgmt.join(split, " "));
+					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					townBlock.getPermissions().mobs = !townBlock.getPermissions().mobs;
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_mobs"), "the Plot", townBlock.getPermissions().mobs ? "Enabled" : "Disabled"));
 
@@ -427,10 +428,10 @@ public class PlotCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "plot"));
 					return;
 				}
-				
-    			townBlock.setChanged(true);
-    			TownyUniverse.getDataSource().saveTownBlock(townBlock);
-    			
+
+				townBlock.setChanged(true);
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
@@ -486,7 +487,7 @@ public class PlotCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_plot_pvp"));
 		}
 	}
-	
+
 	/**
 	 * Test the townBlock to ensure we are either the plot owner, or the
 	 * mayor/assistant

@@ -10,13 +10,15 @@ import org.bukkit.util.Vector;
  *         Date: 4/15/12
  */
 public class DrawSmokeTask implements LocationRunnable {
-    BlockFace smokeDirection = BlockFace.UP;
-    Vector offset = new Vector(0.5, 0.5, 0.5);
 
-    @Override
-    public void run(Location loc) {
-        loc.getWorld().playEffect(loc.add(offset), Effect.SMOKE, smokeDirection);
-    }
+	BlockFace smokeDirection = BlockFace.UP;
+	Vector offset = new Vector(0.5, 0.5, 0.5);
 
-    public static final DrawSmokeTask DEFAULT = new DrawSmokeTask();
+	@Override
+	public void run(Location loc) {
+
+		loc.getWorld().playEffect(loc.add(offset), Effect.SMOKE, smokeDirection);
+	}
+
+	public static final DrawSmokeTask DEFAULT = new DrawSmokeTask();
 }

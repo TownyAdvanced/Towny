@@ -1,4 +1,5 @@
 package com.palmergames.bukkit.towny;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,10 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 public class ChunkNotification {
-	
+
 	// Example:
 	// ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]
-	
+
 	public static String notificationFormat = Colors.Gold + " ~ %s";
 	public static String notificationSpliter = Colors.LightGray + " - ";
 	public static String areaWildernessNotificationFormat = Colors.Green + "%s";
@@ -31,12 +32,13 @@ public class ChunkNotification {
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";
-	
+
 	/**
 	 * Called on Config load.
 	 * Specifically: TownySettings.loadCachedLangStrings()
 	 */
 	public static void loadFormatStrings() {
+
 		notificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_FORMAT);
 		notificationSpliter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_SPLITTER);
 		areaWildernessNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS);
@@ -50,18 +52,20 @@ public class ChunkNotification {
 		forSaleNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
 		plotTypeNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_TYPE);
 	}
-	
+
 	WorldCoord from, to;
-	boolean fromWild = false, toWild = false, toForSale = false, toHomeBlock = false, toOutpostBlock = false;
+	boolean fromWild = false, toWild = false, toForSale = false,
+			toHomeBlock = false, toOutpostBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
 	TownBlockType fromPlotType = null, toPlotType = null;
-	
+
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
+
 		this.from = from;
 		this.to = to;
-		
+
 		try {
 			fromTownBlock = from.getTownBlock();
 			fromPlotType = fromTownBlock.getType();
@@ -88,7 +92,7 @@ public class ChunkNotification {
 				toResident = toTownBlock.getResident();
 			} catch (NotRegisteredException e) {
 			}
-			
+
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
@@ -96,8 +100,9 @@ public class ChunkNotification {
 			toWild = true;
 		}
 	}
-	
+
 	public String getNotificationString() {
+
 		if (notificationFormat.length() == 0)
 			return null;
 		List<String> outputContent = getNotificationContent();
@@ -105,31 +110,33 @@ public class ChunkNotification {
 			return null;
 		return String.format(notificationFormat, StringMgmt.join(outputContent, notificationSpliter));
 	}
-	
+
 	public List<String> getNotificationContent() {
+
 		List<String> out = new ArrayList<String>();
 		String output;
-		
+
 		output = getAreaNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getOwnerNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getPVPNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getPlotNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		return out;
 	}
-	
+
 	public String getAreaNotification() {
+
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
 				try {
@@ -142,39 +149,43 @@ public class ChunkNotification {
 		}
 		return null;
 	}
-	
+
 	public String getOwnerNotification() {
-		if (fromResident != toResident && !toWild)  {
-            if (toResident != null)
-            	return String.format(ownerNotificationFormat, TownyFormatter.getFormattedName(toResident));
+
+		if (fromResident != toResident && !toWild) {
+			if (toResident != null)
+				return String.format(ownerNotificationFormat, TownyFormatter.getFormattedName(toResident));
 			else
 				return String.format(noOwnerNotificationFormat, TownySettings.getUnclaimedPlotName());
-            
+
 		}
 		return null;
 	}
-	
+
 	public String getPVPNotification() {
-		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP())))  {
+
+		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP()))) {
 			try {
 				return ((testWorldPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");
 			} catch (NotRegisteredException e) {
 				// Not a Towny registered world.
-			}   
+			}
 		}
 		return null;
 	}
-	
+
 	private boolean testWorldPVP() {
+
 		try {
 			return Bukkit.getServer().getWorld(to.getTownyWorld().getName()).getPVP();
 		} catch (NotRegisteredException e) {
 			// Not a Towny registered world
 			return true;
-		}	
+		}
 	}
-	
+
 	public String getPlotNotification() {
+
 		if (plotNotificationFormat.length() == 0)
 			return null;
 		List<String> outputContent = getPlotNotificationContent();
@@ -182,51 +193,56 @@ public class ChunkNotification {
 			return null;
 		return String.format(plotNotificationFormat, StringMgmt.join(outputContent, plotNotficationSplitter));
 	}
-	
+
 	public List<String> getPlotNotificationContent() {
+
 		List<String> out = new ArrayList<String>();
 		String output;
-		
+
 		output = getHomeblockNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getOutpostblockNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getForSaleNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		output = getPlotTypeNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
-		
+
 		return out;
 	}
-	
+
 	public String getHomeblockNotification() {
+
 		if (toHomeBlock)
-            return homeBlockNotification;
+			return homeBlockNotification;
 		return null;
 	}
-	
+
 	public String getOutpostblockNotification() {
+
 		if (toOutpostBlock)
-            return outpostBlockNotification;
+			return outpostBlockNotification;
 		return null;
 	}
-	
+
 	public String getForSaleNotification() {
+
 		if (toForSale)
-            return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
+			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
 		return null;
 	}
-	
+
 	public String getPlotTypeNotification() {
+
 		if (fromPlotType != toPlotType && toPlotType != null && toPlotType != TownBlockType.RESIDENTIAL)
-            return String.format(plotTypeNotificationFormat, toPlotType.toString());
+			return String.format(plotTypeNotificationFormat, toPlotType.toString());
 		return null;
 	}
 }

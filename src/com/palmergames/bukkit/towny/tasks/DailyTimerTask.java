@@ -28,12 +28,13 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 public class DailyTimerTask extends TownyTimerTask {
 
 	public DailyTimerTask(TownyUniverse universe) {
+
 		super(universe);
 	}
 
 	@Override
 	public void run() {
-		
+
 		long start = System.currentTimeMillis();
 
 		TownyMessaging.sendDebugMsg("New Day");
@@ -98,7 +99,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectNationTaxes() throws EconomyException {
-		
+
 		List<Nation> nations = new ArrayList<Nation>(TownyUniverse.getDataSource().getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation = null;
@@ -122,9 +123,9 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
-		
+
 		if (nation.getTaxes() > 0) {
-			
+
 			List<Town> towns = new ArrayList<Town>(nation.getTowns());
 			ListIterator<Town> townItr = towns.listIterator();
 			Town town = null;
@@ -133,7 +134,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				town = townItr.next();
 
 				/*
-				 * Only collect nation tax from this town if it really still exists.
+				 * Only collect nation tax from this town if it really still
+				 * exists.
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (TownyUniverse.getDataSource().hasTown(town.getName())) {
@@ -149,7 +151,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						}
 						TownyUniverse.getDataSource().saveTown(town);
 						TownyUniverse.getDataSource().saveNation(nation);
-				}
+					}
 				} else
 					TownyMessaging.sendTownMessage(town, TownySettings.getPayedTownTaxMsg() + nation.getTaxes());
 			}
@@ -163,7 +165,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectTownTaxes() throws EconomyException {
-		
+
 		List<Town> towns = new ArrayList<Town>(TownyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town = null;
@@ -171,7 +173,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		while (townItr.hasNext()) {
 			town = townItr.next();
 			/*
-			 * Only collect resident tax for this town if it really still exists.
+			 * Only collect resident tax for this town if it really still
+			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (TownyUniverse.getDataSource().hasTown(town.getName()))
@@ -190,16 +193,17 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		//Resident Tax
 		if (town.getTaxes() > 0) {
-			
+
 			List<Resident> residents = new ArrayList<Resident>(town.getResidents());
 			ListIterator<Resident> residentItr = residents.listIterator();
 			Resident resident = null;
 
 			while (residentItr.hasNext()) {
 				resident = residentItr.next();
-				
+
 				/*
-				 * Only collect resident tax from this resident if it really still exists.
+				 * Only collect resident tax from this resident if it really
+				 * still exists.
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
@@ -214,13 +218,16 @@ public class DailyTimerTask extends TownyTimerTask {
 					} else if (town.isTaxPercentage()) {
 						double cost = resident.getHoldingBalance() * town.getTaxes() / 100;
 						resident.payTo(cost, town, "Town Tax (Percentage)");
-						/* Don't send individual message anymore to ease up on the lag.
-						try {
-							TownyMessaging.sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + cost);
-						} catch (TownyException e) {
-							// Player is not online
-						}
-						*/
+						/*
+						 * Don't send individual message anymore to ease up on
+						 * the lag.
+						 * try {
+						 * TownyMessaging.sendResidentMessage(resident,
+						 * TownySettings.getPayedResidentTaxMsg() + cost);
+						 * } catch (TownyException e) {
+						 * // Player is not online
+						 * }
+						 */
 					} else if (!resident.payTo(town.getTaxes(), town, "Town Tax")) {
 						TownyMessaging.sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
 						try {
@@ -232,13 +239,17 @@ public class DailyTimerTask extends TownyTimerTask {
 						TownyUniverse.getDataSource().saveResident(resident);
 						TownyUniverse.getDataSource().saveTown(town);
 					}// else
-						/* Don't send individual message anymore to ease up on the lag.
-						try {
-							TownyMessaging.sendResidentMessage(resident, TownySettings.getPayedResidentTaxMsg() + town.getTaxes());
-						} catch (TownyException e) {
-							// Player is not online
-						}
-						*/
+					/*
+					 * Don't send individual message anymore to ease up on the
+					 * lag.
+					 * try {
+					 * TownyMessaging.sendResidentMessage(resident,
+					 * TownySettings.getPayedResidentTaxMsg() +
+					 * town.getTaxes());
+					 * } catch (TownyException e) {
+					 * // Player is not online
+					 * }
+					 */
 				}
 			}
 		}
@@ -247,64 +258,67 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (town.getPlotTax() > 0 || town.getCommercialPlotTax() > 0) {
 			//Hashtable<Resident, Integer> townPlots = new Hashtable<Resident, Integer>();
 			//Hashtable<Resident, Double> townTaxes = new Hashtable<Resident, Double>();
-			
+
 			List<TownBlock> townBlocks = new ArrayList<TownBlock>(town.getTownBlocks());
 			ListIterator<TownBlock> townBlockItr = townBlocks.listIterator();
 			TownBlock townBlock = null;
 
 			while (townBlockItr.hasNext()) {
 				townBlock = townBlockItr.next();
-				
+
 				if (!townBlock.hasResident())
 					continue;
 				try {
 					Resident resident = townBlock.getResident();
-					
+
 					/*
-					 * Only collect plot tax from this resident if it really still exists.
-					 * We are running in an Async thread so MUST verify all objects.
+					 * Only collect plot tax from this resident if it really
+					 * still exists.
+					 * We are running in an Async thread so MUST verify all
+					 * objects.
 					 */
 					if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
-						
+
 						if (town.isMayor(resident) || town.hasAssistant(resident)) {
 							continue;
 						}
 						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
-	
+
 							townBlock.setResident(null);
-	                        townBlock.setPlotPrice(-1);
-	                        
-	                        // Set the plot permissions to mirror the towns.
-	                        townBlock.setType(townBlock.getType());
-	
+							townBlock.setPlotPrice(-1);
+
+							// Set the plot permissions to mirror the towns.
+							townBlock.setType(townBlock.getType());
+
 							TownyUniverse.getDataSource().saveResident(resident);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 						}// else {
-						//	townPlots.put(resident, (townPlots.containsKey(resident) ? townPlots.get(resident) : 0) + 1);
-						//	townTaxes.put(resident, (townTaxes.containsKey(resident) ? townTaxes.get(resident) : 0) + townBlock.getType().getTax(town));
-						//}
+							//	townPlots.put(resident, (townPlots.containsKey(resident) ? townPlots.get(resident) : 0) + 1);
+							//	townTaxes.put(resident, (townTaxes.containsKey(resident) ? townTaxes.get(resident) : 0) + townBlock.getType().getTax(town));
+							//}
 					}
 				} catch (NotRegisteredException e) {
 				}
 			}
-			/* Don't send individual message anymore to ease up on the lag.
-			for (Resident resident : townPlots.keySet()) {
-				try {
-					int numPlots = townPlots.get(resident);
-					double totalCost = townTaxes.get(resident);
-					TownyMessaging.sendResidentMessage(resident, String.format(TownySettings.getLangString("msg_payed_plot_cost"), totalCost, numPlots, town.getName()));
-				} catch (TownyException e) {
-					// Player is not online
-				}
-			}
-			*/
-			
+			/*
+			 * Don't send individual message anymore to ease up on the lag.
+			 * for (Resident resident : townPlots.keySet()) {
+			 * try {
+			 * int numPlots = townPlots.get(resident);
+			 * double totalCost = townTaxes.get(resident);
+			 * TownyMessaging.sendResidentMessage(resident,
+			 * String.format(TownySettings.getLangString("msg_payed_plot_cost"),
+			 * totalCost, numPlots, town.getName()));
+			 * } catch (TownyException e) {
+			 * // Player is not online
+			 * }
+			 * }
+			 */
+
 		}
 	}
-	
-	
-	
+
 	/**
 	 * Collect or pay upkeep for all towns.
 	 * 
@@ -312,23 +326,23 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws TownyException
 	 */
 	public void collectTownCosts() throws EconomyException, TownyException {
-		
+
 		List<Town> towns = new ArrayList<Town>(TownyUniverse.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town = null;
 
 		while (townItr.hasNext()) {
 			town = townItr.next();
-			
+
 			/*
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (TownyUniverse.getDataSource().hasTown(town.getName())) {
-			
+
 				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
-	
+
 					if (upkeep > 0) {
 						// Town is paying upkeep
 						if (!town.pay(upkeep, "Town Upkeep")) {
@@ -340,19 +354,19 @@ public class DailyTimerTask extends TownyTimerTask {
 						if (TownySettings.isUpkeepPayingPlots()) {
 							// Pay each plot owner a share of the negative upkeep
 							List<TownBlock> plots = new ArrayList<TownBlock>(town.getTownBlocks());
-							
-							for (TownBlock townBlock :plots) {
+
+							for (TownBlock townBlock : plots) {
 								if (townBlock.hasResident())
 									townBlock.getResident().pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 								else
 									town.pay((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 							}
-	
+
 						} else {
 							//Not paying plot owners so just pay the town
 							town.pay(upkeep, "Negative Town Upkeep");
 						}
-	
+
 					}
 				}
 			}
@@ -367,14 +381,14 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException
 	 */
 	public void collectNationCosts() throws EconomyException {
-		
+
 		List<Nation> nations = new ArrayList<Nation>(TownyUniverse.getDataSource().getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation = null;
 
 		while (nationItr.hasNext()) {
 			nation = nationItr.next();
-			
+
 			/*
 			 * Only charge upkeep for this nation if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.

@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
-
 /**
  * Groups all the cache status and permissions in one place.
  * 
@@ -30,7 +29,8 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 public class PlayerCacheUtil {
 
 	/**
-	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE at this location.
+	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
+	 * at this location.
 	 * Generates the cache if it doesn't exist.
 	 * 
 	 * @param player
@@ -107,6 +107,7 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
+
 		//if (isTownyAdmin(player))
 		//        return TownBlockStatus.ADMIN;
 
@@ -124,7 +125,7 @@ public class PlayerCacheUtil {
 		try {
 			townBlock = worldCoord.getTownBlock();
 			town = townBlock.getTown();
-			
+
 			if (townBlock.isLocked()) {
 				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
 				if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
@@ -133,7 +134,7 @@ public class PlayerCacheUtil {
 				}
 				townBlock.setLocked(false);
 			}
-			
+
 		} catch (NotRegisteredException e) {
 			// Unclaimed Zone switch rights
 			return TownBlockStatus.UNCLAIMED_ZONE;
@@ -155,7 +156,7 @@ public class PlayerCacheUtil {
 						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
 							return TownBlockStatus.WARZONE;
 					} catch (NotRegisteredException e) {
-						
+
 					}
 				}
 				//If this town is not in a nation and we are set to non neutral status during war.
@@ -212,7 +213,8 @@ public class PlayerCacheUtil {
 	}
 
 	/**
-	 * Update and return back the townBlockStatus for the player at this worldCoord.
+	 * Update and return back the townBlockStatus for the player at this
+	 * worldCoord.
 	 * 
 	 * @param player
 	 * @param worldCoord
@@ -220,6 +222,7 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setStatus(townBlockStatus);
@@ -236,6 +239,7 @@ public class PlayerCacheUtil {
 	 * @param buildRight
 	 */
 	public void cacheBuild(Player player, WorldCoord worldCoord, boolean buildRight) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setBuildPermission(buildRight);
@@ -251,6 +255,7 @@ public class PlayerCacheUtil {
 	 * @param destroyRight
 	 */
 	public void cacheDestroy(Player player, WorldCoord worldCoord, boolean destroyRight) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setDestroyPermission(destroyRight);
@@ -266,6 +271,7 @@ public class PlayerCacheUtil {
 	 * @param switchRight
 	 */
 	public void cacheSwitch(Player player, WorldCoord worldCoord, boolean switchRight) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setSwitchPermission(switchRight);
@@ -281,6 +287,7 @@ public class PlayerCacheUtil {
 	 * @param itemUseRight
 	 */
 	public void cacheItemUse(Player player, WorldCoord worldCoord, boolean itemUseRight) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setItemUsePermission(itemUseRight);
@@ -295,12 +302,14 @@ public class PlayerCacheUtil {
 	 * @param msg
 	 */
 	public void cacheBlockErrMsg(Player player, String msg) {
+
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.setBlockErrMsg(msg);
 	}
 
 	/**
-	 * Test if the player has permission to perform a certain action at this WorldCoord.
+	 * Test if the player has permission to perform a certain action at this
+	 * WorldCoord.
 	 * 
 	 * @param player
 	 * @param status
@@ -309,6 +318,7 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	public boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, TownyPermission.ActionType actionType) {
+
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.WARZONE || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
 
@@ -316,7 +326,7 @@ public class PlayerCacheUtil {
 			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error"));
 			return false;
 		}
-		
+
 		if (status == TownBlockStatus.LOCKED) {
 			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error_locked"));
 			return false;
@@ -350,7 +360,7 @@ public class PlayerCacheUtil {
 				return false;
 			}
 		}
-		
+
 		// Allow admins to have ALL permissions over towns.
 		if (TownyUniverse.getPermissionSource().isTownyAdmin(player))
 			return true;

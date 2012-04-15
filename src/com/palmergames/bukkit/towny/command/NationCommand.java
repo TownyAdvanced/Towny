@@ -81,6 +81,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public NationCommand(Towny instance) {
+
 		plugin = instance;
 	}
 
@@ -106,6 +107,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void parseNationCommand(Player player, String[] split) {
+
 		String nationCom = "/nation";
 
 		if (split.length == 0)
@@ -200,6 +202,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	private void nationWithdraw(Player player, int amount) {
+
 		Resident resident;
 		Nation nation;
 		try {
@@ -222,6 +225,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	private void nationDeposit(Player player, int amount) {
+
 		Resident resident;
 		Nation nation;
 		try {
@@ -256,6 +260,7 @@ public class NationCommand implements CommandExecutor {
 	 */
 
 	public void listNations(Player player) {
+
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
 		ArrayList<String> formatedList = new ArrayList<String>();
 		for (Nation nation : TownyUniverse.getDataSource().getNations())
@@ -271,10 +276,10 @@ public class NationCommand implements CommandExecutor {
 	 */
 
 	public void newNation(Player player, String name, String capitalName) {
+
 		TownyUniverse universe = plugin.getTownyUniverse();
 		try {
-			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isNationCreationAdminOnly() && !plugin.isPermissions())
-				|| (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_NEW.getNode()))))
+			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isNationCreationAdminOnly() && !plugin.isPermissions()) || (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_NATION_NEW.getNode()))))
 				throw new TownyException(TownySettings.getNotPermToNewNationLine());
 
 			Town town = TownyUniverse.getDataSource().getTown(capitalName);
@@ -283,27 +288,29 @@ public class NationCommand implements CommandExecutor {
 
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
-    		try {
-    			filteredName = NameValidation.checkAndFilterName(name);
-    		} catch (InvalidNameException e) {
-    			filteredName = null;
-    		}
-            
-            if ((filteredName == null) || TownyUniverse.getDataSource().hasNation(filteredName))
+			try {
+				filteredName = NameValidation.checkAndFilterName(name);
+			} catch (InvalidNameException e) {
+				filteredName = null;
+			}
+
+			if ((filteredName == null) || TownyUniverse.getDataSource().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
 			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
 				throw new TownyException(TownySettings.getLangString("msg_no_funds_new_nation"));
 
 			newNation(universe, name, town);
-			/*universe.newNation(name);
-			Nation nation = universe.getNation(name);
-			nation.addTown(town);
-			nation.setCapital(town);
-
-			universe.getDataSource().saveTown(town);
-			universe.getDataSource().saveNation(nation);
-			universe.getDataSource().saveNationList();*/
+			/*
+			 * universe.newNation(name);
+			 * Nation nation = universe.getNation(name);
+			 * nation.addTown(town);
+			 * nation.setCapital(town);
+			 * 
+			 * universe.getDataSource().saveTown(town);
+			 * universe.getDataSource().saveNation(nation);
+			 * universe.getDataSource().saveNationList();
+			 */
 
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), name));
 		} catch (TownyException x) {
@@ -315,6 +322,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public Nation newNation(TownyUniverse universe, String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+
 		TownyUniverse.getDataSource().newNation(name);
 		Nation nation = TownyUniverse.getDataSource().getNation(name);
 		nation.addTown(town);
@@ -330,6 +338,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationLeave(Player player) {
+
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Town town = resident.getTown();
@@ -358,6 +367,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationDelete(Player player, String[] split) {
+
 		if (split.length == 0)
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -389,6 +399,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationKing(Player player, String[] split) {
+
 		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
 			for (String line : king_help)
 				player.sendMessage(line);
@@ -419,6 +430,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public static void nationAdd(Player player, Nation nation, List<Town> invited) {
+
 		ArrayList<Town> remove = new ArrayList<Town>();
 		for (Town town : invited)
 			try {
@@ -446,6 +458,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws AlreadyRegisteredException {
+
 		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
 
 		Resident townMayor = town.getMayor();
@@ -457,8 +470,10 @@ public class NationCommand implements CommandExecutor {
 			List<Option> options = new ArrayList<Option>();
 			options.add(new Option(TownySettings.questionerAccept(), new JoinNationTask(townMayor, nation)));
 			options.add(new Option(TownySettings.questionerDeny(), new ResidentNationQuestionTask(townMayor, nation) {
+
 				@Override
 				public void run() {
+
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
 				}
 			}));
@@ -515,6 +530,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationKick(Player player, Resident resident, Nation nation, List<Town> kicking) {
+
 		ArrayList<Town> remove = new ArrayList<Town>();
 		for (Town town : kicking)
 			if (town.isCapital())
@@ -552,6 +568,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationAssistant(Player player, String[] split) {
+
 		if (split.length == 0) {
 			//TODO: assistant help
 		} else if (split[0].equalsIgnoreCase("add")) {
@@ -579,6 +596,7 @@ public class NationCommand implements CommandExecutor {
 	 */
 
 	public void nationAssistantsAdd(Player player, String[] names, boolean matchOnline) {
+
 		Resident resident;
 		Nation nation;
 		try {
@@ -595,6 +613,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationAssistantsAdd(Player player, Nation nation, List<Resident> invited) {
+
 		//TODO: change variable names from townAdd copypasta
 		ArrayList<Resident> remove = new ArrayList<Resident>();
 		for (Resident newMember : invited)
@@ -632,6 +651,7 @@ public class NationCommand implements CommandExecutor {
 	 */
 
 	public void nationAssistantsRemove(Player player, String[] names, boolean matchOnline) {
+
 		Resident resident;
 		Nation nation;
 		try {
@@ -648,6 +668,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationAssistantsRemove(Player player, Resident resident, Nation nation, List<Resident> kicking) {
+
 		ArrayList<Resident> remove = new ArrayList<Resident>();
 		for (Resident member : kicking)
 			try {
@@ -666,12 +687,14 @@ public class NationCommand implements CommandExecutor {
 
 			for (Resident member : kicking) {
 				msg += member.getName() + ", ";
-				/* removed to prevent multiple message spam.
+				/*
+				 * removed to prevent multiple message spam.
 				 * 
-				Player p = plugin.getServer().getPlayer(member.getName());
-				if (p != null)
-				        p.sendMessage(String.format(TownySettings.getLangString("msg_lowered_to_res_by"), player.getName()));
-				*/
+				 * Player p = plugin.getServer().getPlayer(member.getName());
+				 * if (p != null)
+				 * p.sendMessage(String.format(TownySettings.getLangString(
+				 * "msg_lowered_to_res_by"), player.getName()));
+				 */
 			}
 			msg = msg.substring(0, msg.length() - 2);
 			msg = String.format(TownySettings.getLangString("msg_lowered_to_res"), player.getName(), msg);
@@ -729,6 +752,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationAlly(Player player, Nation nation, List<Nation> allies, boolean add) {
+
 		ArrayList<Nation> remove = new ArrayList<Nation>();
 		for (Nation targetNation : allies)
 			try {
@@ -780,6 +804,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationEnemy(Player player, String[] split) {
+
 		Resident resident;
 		Nation nation;
 
@@ -827,6 +852,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationEnemy(Player player, Nation nation, List<Nation> enemies, boolean add) {
+
 		ArrayList<Nation> remove = new ArrayList<Nation>();
 		for (Nation targetNation : enemies)
 			try {
@@ -836,7 +862,7 @@ public class NationCommand implements CommandExecutor {
 					// Remove any ally settings from the target nation
 					if (targetNation.hasAlly(nation))
 						nationAlly(player, targetNation, Arrays.asList(nation), false);
-					
+
 				} else if (nation.getEnemies().contains(targetNation)) {
 					nation.removeEnemy(targetNation);
 					TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_removed_enemy"), nation.getName()));
@@ -1063,6 +1089,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationToggle(Player player, String[] split) {
+
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
 			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "neutral", ""));
@@ -1124,6 +1151,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	public void nationRename(Player player, Nation nation, String newName) {
+
 		try {
 			TownyUniverse.getDataSource().renameNation(nation, newName);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), nation.getName()));
@@ -1133,6 +1161,7 @@ public class NationCommand implements CommandExecutor {
 	}
 
 	private List<Resident> getResidents(Player player, String[] names) {
+
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names)
 			try {

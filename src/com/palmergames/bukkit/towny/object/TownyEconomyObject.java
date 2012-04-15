@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -15,13 +14,12 @@ import com.palmergames.util.StringMgmt;
  * Economy object which provides an interface with the Economy Handler.
  * 
  * @author ElgarL, Shade
- *
+ * 
  */
 public class TownyEconomyObject extends TownyObject {
 
 	private static final String townAccountPrefix = "town-";
 	private static final String nationAccountPrefix = "nation-";
-
 
 	/**
 	 * Tries to pay from the players holdings
@@ -32,6 +30,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
+
 		boolean payed = _pay(amount);
 		if (payed)
 			TownyLogger.logMoneyTransaction(this, amount, null, reason);
@@ -39,12 +38,12 @@ public class TownyEconomyObject extends TownyObject {
 	}
 
 	public boolean pay(double amount) throws EconomyException {
-		
+
 		return pay(amount, null);
 	}
 
 	private boolean _pay(double amount) throws EconomyException {
-		
+
 		if (canPayFromHoldings(amount)) {
 			if (TownyEconomyHandler.isActive())
 				return TownyEconomyHandler.subtract(getEconomyName(), amount, getBukkitWorld());
@@ -60,11 +59,13 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public void collect(double amount, String reason) throws EconomyException {
+
 		TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
 		TownyLogger.logMoneyTransaction(null, amount, this, reason);
 	}
 
 	public void collect(double amount) throws EconomyException {
+
 		collect(amount, null);
 	}
 
@@ -78,6 +79,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean payTo(double amount, TownyEconomyObject collector, String reason) throws EconomyException {
+
 		boolean payed = _payTo(amount, collector);
 		if (payed)
 			TownyLogger.logMoneyTransaction(this, amount, collector, reason);
@@ -85,10 +87,12 @@ public class TownyEconomyObject extends TownyObject {
 	}
 
 	public boolean payTo(double amount, TownyEconomyObject collector) throws EconomyException {
+
 		return payTo(amount, collector, null);
 	}
 
 	private boolean _payTo(double amount, TownyEconomyObject collector) throws EconomyException {
+
 		if (_pay(amount)) {
 			collector.collect(amount);
 			return true;
@@ -103,6 +107,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return account name
 	 */
 	public String getEconomyName() {
+
 		// TODO: Make this less hard coded.
 		if (this instanceof Nation)
 			return StringMgmt.trimMaxLength(nationAccountPrefix + getName(), 32);
@@ -111,33 +116,32 @@ public class TownyEconomyObject extends TownyObject {
 		else
 			return getName();
 	}
-	
+
 	/**
 	 * Fetch the current world for this object
 	 * 
 	 * @return Bukkit world for the object
 	 */
 	private World getBukkitWorld() {
-		
+
 		try {
 			if (this instanceof Nation)
 				return Bukkit.getWorld(TownyUniverse.getDataSource().getNation(this.getName()).getCapital().getWorld().getName());
-				
-				
+
 			if (this instanceof Town)
 				return Bukkit.getWorld(TownyUniverse.getDataSource().getTown(this.getName()).getWorld().getName());
-						
+
 			if (this instanceof Resident) {
 				Player player = Bukkit.getPlayer(this.getName());
-				return (player != null)? player.getWorld() : Bukkit.getWorlds().get(0);
+				return (player != null) ? player.getWorld() : Bukkit.getWorlds().get(0);
 			}
 		} catch (NotRegisteredException e) {
 			// Failed to fetch world
 		}
-		
+
 		return Bukkit.getWorlds().get(0);
 	}
-	
+
 	/**
 	 * Set balance and log this action
 	 * 
@@ -145,6 +149,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param reason
 	 */
 	public void setBalance(double amount, String reason) {
+
 		setBalance(amount);
 		TownyLogger.logMoneyTransaction(null, amount, this, reason);
 	}
@@ -155,10 +160,12 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param amount
 	 */
 	public void setBalance(double amount) {
+
 		TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
 	}
 
 	public double getHoldingBalance() throws EconomyException {
+
 		try {
 			return TownyEconomyHandler.getBalance(getEconomyName(), getBukkitWorld());
 		} catch (NoClassDefFoundError e) {
@@ -175,7 +182,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean canPayFromHoldings(double amount) throws EconomyException {
-		
+
 		return TownyEconomyHandler.hasEnough(getEconomyName(), amount, getBukkitWorld());
 	}
 
@@ -185,19 +192,19 @@ public class TownyEconomyObject extends TownyObject {
 	 * @return current account balance formatted in a string.
 	 */
 	public String getHoldingFormattedBalance() {
-		
+
 		try {
 			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 		} catch (EconomyException e) {
 			return "Error Accessing Bank Account";
 		}
 	}
-	
+
 	/**
 	 * Attempt to delete the economy account.
 	 */
 	public void removeAccount() {
-		
+
 		TownyEconomyHandler.removeAccount(getEconomyName());
 
 	}
