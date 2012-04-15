@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.townywar;
+package com.palmergames.bukkit.towny.war.flagwar;
 
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -6,10 +6,11 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.townywar.event.CellAttackCanceledEvent;
-import com.palmergames.bukkit.townywar.event.CellAttackEvent;
-import com.palmergames.bukkit.townywar.event.CellDefendedEvent;
-import com.palmergames.bukkit.townywar.event.CellWonEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.townywar.listener;
+package com.palmergames.bukkit.towny.war.flagwar.listeners;
 
 import org.bukkit.block.Block;
 //import org.bukkit.entity.Player;
@@ -13,9 +13,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.townywar.TownyWar;
-//import com.palmergames.bukkit.townywar.TownyWarConfig;
-//import com.palmergames.bukkit.townywar.event.CellAttackEvent;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class TownyWarBlockListener implements Listener {
 	//private Towny plugin;

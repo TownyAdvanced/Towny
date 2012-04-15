@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.townywar.listener;
+package com.palmergames.bukkit.towny.war.flagwar.listeners;
 
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.command.TownCommand;
@@ -7,13 +7,14 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
-import com.palmergames.bukkit.townywar.CellUnderAttack;
-import com.palmergames.bukkit.townywar.TownyWar;
-import com.palmergames.bukkit.townywar.TownyWarConfig;
-import com.palmergames.bukkit.townywar.event.CellAttackCanceledEvent;
-import com.palmergames.bukkit.townywar.event.CellAttackEvent;
-import com.palmergames.bukkit.townywar.event.CellDefendedEvent;
-import com.palmergames.bukkit.townywar.event.CellWonEvent;
+import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

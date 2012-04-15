@@ -1,9 +1,9 @@
-package com.palmergames.bukkit.townywar.event;
+package com.palmergames.bukkit.towny.war.flagwar.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.palmergames.bukkit.townywar.CellUnderAttack;
+import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 
 
 public class CellWonEvent extends Event {

@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.townywar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
         private List<Resident> assistants = new ArrayList<Resident>();

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war;
+package com.palmergames.bukkit.towny.war.eventwar;
 
 import org.bukkit.entity.Player;
 

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.townywar.event;
+package com.palmergames.bukkit.towny.war.flagwar.events;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.townywar.CellUnderAttack;
+import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 
 
 public class CellAttackEvent extends Event implements Cancellable {

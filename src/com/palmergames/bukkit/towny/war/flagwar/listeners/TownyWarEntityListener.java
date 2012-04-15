@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.townywar.listener;
+package com.palmergames.bukkit.towny.war.flagwar.listeners;
 
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.townywar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class TownyWarEntityListener implements Listener {
 	//private Towny plugin;

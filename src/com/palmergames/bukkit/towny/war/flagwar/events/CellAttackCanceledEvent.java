@@ -1,13 +1,12 @@
-package com.palmergames.bukkit.townywar.event;
+package com.palmergames.bukkit.towny.war.flagwar.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.palmergames.bukkit.townywar.Cell;
+import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 
 
-public class CellDefendedEvent extends Event {
+public class CellAttackCanceledEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -18,24 +17,17 @@ public class CellDefendedEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-    
-    //////////////////////////////
-    
-	
-	private Player player;
-	private Cell cell;
 
-	public CellDefendedEvent(Player player, Cell cell) {
+    //////////////////////////////
+	private CellUnderAttack cell;
+	
+	public CellAttackCanceledEvent(CellUnderAttack cell) {
 		super();
-		this.player = player;
 		this.cell = cell;
+		
 	}
-	
-	public Player getPlayer() {
-		return player;
-	}
-	
-	public Cell getCell() {
+		
+	public CellUnderAttack getCell() {
 		return cell;
 	}
 }
