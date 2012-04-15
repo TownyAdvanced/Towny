@@ -227,7 +227,7 @@ public class TownyAdminCommand implements CommandExecutor {
 		ta_panel.clear();
 		Runtime run = Runtime.getRuntime();
 		ta_panel.add(ChatTools.formatTitle(TownySettings.getLangString("ta_panel_1")));
-		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] " + Colors.Green + TownySettings.getLangString("ta_panel_2") + Colors.LightGreen + plugin.getTownyUniverse().isWarTime() + Colors.Gray + " | " + Colors.Green + TownySettings.getLangString("ta_panel_3") + (plugin.getTownyUniverse().isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off") + Colors.Gray + " | " + (Colors.Green + TownySettings.getLangString("ta_panel_5") + (plugin.getTownyUniverse().isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
+		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] " + Colors.Green + TownySettings.getLangString("ta_panel_2") + Colors.LightGreen + TownyUniverse.isWarTime() + Colors.Gray + " | " + Colors.Green + TownySettings.getLangString("ta_panel_3") + (plugin.getTownyUniverse().isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off") + Colors.Gray + " | " + (Colors.Green + TownySettings.getLangString("ta_panel_5") + (plugin.getTownyUniverse().isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
 		/*
 		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] "
 		                + Colors.Green + TownySettings.getLangString("ta_panel_4")
@@ -262,7 +262,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			}
 			TownyWorld world;
 			try {
-				if (plugin.getTownyUniverse().isWarTime())
+				if (TownyUniverse.isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
@@ -502,7 +502,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			return;
 
 		} else if (split[0].equalsIgnoreCase("war")) {
-			choice = plugin.getTownyUniverse().isWarTime();
+			choice = TownyUniverse.isWarTime();
 
 			if (!choice) {
 				plugin.getTownyUniverse().startWarEvent();

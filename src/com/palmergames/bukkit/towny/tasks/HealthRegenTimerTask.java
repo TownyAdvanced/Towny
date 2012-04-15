@@ -25,7 +25,7 @@ private Server server;
 	
 	@Override
 	public void run() {
-		if (universe.isWarTime())
+		if (TownyUniverse.isWarTime())
 			return;
 		
 		for (Player player : server.getOnlinePlayers()) {

@@ -394,7 +394,7 @@ public class TownyBlockListener implements Listener {
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN)
 						&& ((!townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire)
-						|| (plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation()))) {
+						|| (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation()))) {
 					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within "+coord.toString()+".");
 					return true;
 				}

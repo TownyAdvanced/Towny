@@ -217,7 +217,7 @@ public class Towny extends JavaPlugin {
 		if (error == false)
 			TownyWar.onDisable();
 
-		if (getTownyUniverse().isWarTime())
+		if (TownyUniverse.isWarTime())
 			getTownyUniverse().getWarEvent().toggleEnd();
 		
 		townyUniverse.toggleTownyRepeatingTimer(false);

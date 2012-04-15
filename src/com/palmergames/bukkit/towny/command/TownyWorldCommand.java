@@ -146,7 +146,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			worldToggle(player, sender, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("regen")) {
 
-			if (plugin.getTownyUniverse().isWarTime()) {
+			if (TownyUniverse.isWarTime()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
 				return;
 			}

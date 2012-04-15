@@ -114,7 +114,7 @@ public class PlotCommand implements CommandExecutor {
 			try {
 				if (split[0].equalsIgnoreCase("claim")) {
 
-					if (plugin.getTownyUniverse().isWarTime())
+					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
@@ -154,7 +154,7 @@ public class PlotCommand implements CommandExecutor {
 					}
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
-					if (plugin.getTownyUniverse().isWarTime())
+					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {

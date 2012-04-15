@@ -642,7 +642,7 @@ public class TownCommand implements CommandExecutor  {
                                 TownBlock townBlock;
                                 TownyWorld world;
                                 try {
-                                        if (plugin.getTownyUniverse().isWarTime())
+                                        if (TownyUniverse.isWarTime())
                                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                         
 										world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
@@ -800,9 +800,9 @@ public class TownCommand implements CommandExecutor  {
          */
 
         public void newTown(Player player, String name, String mayorName) {
-                TownyUniverse universe = plugin.getTownyUniverse();
+                
                 try {
-                        if (universe.isWarTime())
+                        if (TownyUniverse.isWarTime())
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
                         if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isTownCreationAdminOnly() && !plugin.isPermissions())
@@ -846,7 +846,7 @@ public class TownCommand implements CommandExecutor  {
                         if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "You" : resident.getName())));
 
-                        newTown(universe, world, name, resident, key, player.getLocation());                    
+                        newTown( world, name, resident, key, player.getLocation());                    
                         TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
                 } catch (TownyException x) {
                         TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -856,7 +856,7 @@ public class TownCommand implements CommandExecutor  {
                 }
         }
         
-        public Town newTown(TownyUniverse universe, TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
+        public Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
                 world.newTownBlock(key);
                 TownyUniverse.getDataSource().newTown(name);
                 Town town = TownyUniverse.getDataSource().getTown(name);
@@ -912,7 +912,7 @@ public class TownCommand implements CommandExecutor  {
                 Town town;
                 try {
                         //TODO: Allow leaving town during war.
-                        if (plugin.getTownyUniverse().isWarTime()) 
+                        if (TownyUniverse.isWarTime()) 
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
                         resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -1684,7 +1684,7 @@ public class TownCommand implements CommandExecutor  {
 			Town town;
 			TownyWorld world;
 			try {
-				if (plugin.getTownyUniverse().isWarTime())
+				if (TownyUniverse.isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_CLAIM.getNode()))
@@ -1768,7 +1768,7 @@ public class TownCommand implements CommandExecutor  {
                         Town town;
                         TownyWorld world;
                         try {
-                                if (plugin.getTownyUniverse().isWarTime())
+                                if (TownyUniverse.isWarTime())
                                         throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                 
                                 resident = TownyUniverse.getDataSource().getResident(player.getName());

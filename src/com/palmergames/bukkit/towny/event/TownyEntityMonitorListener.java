@@ -154,7 +154,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 	*/
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (attackerPlayer != null && plugin.getTownyUniverse().isWarTime())
+		if (attackerPlayer != null && TownyUniverse.isWarTime())
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException();
@@ -167,7 +167,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	private void monarchDeath(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (plugin.getTownyUniverse().isWarTime()) {
+		if (TownyUniverse.isWarTime()) {
 			War warEvent = plugin.getTownyUniverse().getWarEvent();
 			try {
 				Nation defenderNation = defenderResident.getTown().getNation();
@@ -192,7 +192,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (attackerPlayer != null && plugin.getTownyUniverse().isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
+		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException();

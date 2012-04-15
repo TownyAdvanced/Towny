@@ -181,7 +181,7 @@ public class TownyCommand implements CommandExecutor {
         
         private boolean TownyWar(String[] args){
                 
-                if (plugin.getTownyUniverse().isWarTime() && args.length > 0) {
+                if (TownyUniverse.isWarTime() && args.length > 0) {
                         towny_war.clear();
                         if (args[0].equalsIgnoreCase("stats"))
                                 towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getStats());
@@ -189,7 +189,7 @@ public class TownyCommand implements CommandExecutor {
                                 towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
                 }
                 
-                return plugin.getTownyUniverse().isWarTime();   
+                return TownyUniverse.isWarTime();   
         }
         
         private void TopCommand(Player player, String[] args) {

@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
  * @author ElgarL/Shade
  * 
  */
-public class CachePermissions extends TownyUniverse {
+public class CachePermissions {
 
 	/**
 	 * getCachePermission
@@ -132,7 +132,7 @@ public class CachePermissions extends TownyUniverse {
 
 		try {
 			// War Time switch rights
-			if (isWarTime()) {
+			if (TownyUniverse.isWarTime()) {
 				if (TownySettings.isAllowWarBlockGriefing()) {
 					try {
 						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())

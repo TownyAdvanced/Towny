@@ -95,7 +95,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Has an attacker and Not wartime
-		if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime())) {
+		if ((attacker != null) && (!TownyUniverse.isWarTime())) {
 			
 			if (CombatUtil.preventDamageCall(attacker, defender)) {
 				// Remove the projectile here so no
@@ -154,7 +154,7 @@ public class TownyEntityListener implements Listener {
 		Entity attacker = potion.getShooter();
 		
 		// Not Wartime
-		if (!plugin.getTownyUniverse().isWarTime())
+		if (!TownyUniverse.isWarTime())
 			for (LivingEntity defender : affectedEntities)
 				if (CombatUtil.preventDamageCall(attacker, defender))
 					event.setIntensity(defender, -1.0);
@@ -354,7 +354,7 @@ public class TownyEntityListener implements Listener {
 				// If explosions are off, or it's wartime and explosions are off and the towns has no nation
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceExpl()) {
 					if ((!townBlock.getPermissions().explosion)
-							|| (plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
+							|| (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
 						if (event.getEntity() != null)
 							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
 						event.setCancelled(true);
@@ -405,7 +405,7 @@ public class TownyEntityListener implements Listener {
 			LivingEntity attacker = ((Projectile) combuster).getShooter();
 
 			// There is an attacker and Not war time.
-			if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime()) ) {
+			if ((attacker != null) && (!TownyUniverse.isWarTime()) ) {
 				
 				if (CombatUtil.preventDamageCall(attacker, defender)) {
 					// Remove the projectile here so no

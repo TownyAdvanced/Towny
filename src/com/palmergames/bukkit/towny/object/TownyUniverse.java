@@ -73,7 +73,7 @@ public class TownyUniverse extends TownyObject {
 	private int mobRemoveTask = -1;
 	private int healthRegenTask = -1;
 	private int teleportWarmupTask = -1;
-	private War warEvent;
+	private static War warEvent;
 	private String rootFolder;
 
 	public TownyUniverse() {
@@ -538,12 +538,12 @@ public class TownyUniverse extends TownyObject {
 		return this.worlds;
 	}
 
-	public boolean isWarTime() {
+	public static boolean isWarTime() {
 		return warEvent != null ? warEvent.isWarTime() : false;
 	}
 
 	public void startWarEvent() {
-		this.warEvent = new War(plugin, TownySettings.getWarTimeWarningDelay());
+		warEvent = new War(plugin, TownySettings.getWarTimeWarningDelay());
 		setChangedNotify(WAR_START);
 	}
 
@@ -565,8 +565,8 @@ public class TownyUniverse extends TownyObject {
 		return warEvent;
 	}
 
-	public void setWarEvent(War warEvent) {
-		this.warEvent = warEvent;
+	public void setWarEvent(War event) {
+		warEvent = event;
 		setChangedNotify(WAR_SET);
 	}
 
