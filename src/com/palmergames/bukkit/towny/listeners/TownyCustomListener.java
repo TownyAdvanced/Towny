@@ -6,7 +6,10 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.util.BorderUtil;
+import com.palmergames.bukkit.util.DrawSmokeTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +49,11 @@ public class TownyCustomListener implements Listener {
             String msg = chunkNotifier.getNotificationString();
             if (msg != null)
                 player.sendMessage(msg);
+        }
+
+        if (plugin.hasPlayerMode(player, "plotborder")) {
+            CellBorder cellBorder = BorderUtil.getPlotBorder(to);
+            cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTask.DEFAULT);
         }
     }
 }

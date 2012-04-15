@@ -33,9 +33,13 @@ public class BorderUtil {
     public static List<CellBorder> getPlotBorder(List<WorldCoord> worldCoords) {
         List<CellBorder> borderCoords = new ArrayList<CellBorder>();
         for (WorldCoord worldCoord : worldCoords) {
-            CellBorder border = new CellBorder(worldCoord, new boolean[]{true, true, true, true, true, true, true, true});
+            CellBorder border = getPlotBorder(worldCoord);
             borderCoords.add(border);
         }
         return borderCoords;
+    }
+
+    public static CellBorder getPlotBorder(WorldCoord worldCoord) {
+        return new CellBorder(worldCoord, new boolean[]{true, true, true, true, true, true, true, true});
     }
 }
