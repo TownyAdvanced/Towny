@@ -116,7 +116,7 @@ public class TownyEconomyHandler {
         	 * Flag as using Vault hooks
         	 */
         	vaultEconomy = vaultEcoProvider.getProvider();
-        	setVersion(String.format("%s v%s", "iConomy", vaultEcoProvider.getPlugin().getDescription().getVersion()));
+        	setVersion(String.format("%s v%s", "Vault", vaultEcoProvider.getPlugin().getDescription().getVersion()));
         	Type = EcoType.VAULT;
         	return true;
         }
