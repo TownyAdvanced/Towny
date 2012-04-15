@@ -41,10 +41,11 @@ import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.War;
+import com.palmergames.bukkit.util.CombatUtil;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.TimeMgmt;
+import com.palmergames.util.TimeTools;
 
 
 public class TownyUniverse extends TownyObject {
@@ -537,86 +538,6 @@ public class TownyUniverse extends TownyObject {
 		return this.worlds;
 	}
 
-	public boolean isAlly(String a, String b) {
-		try {
-			Resident residentA = getDataSource().getResident(a);
-			Resident residentB = getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
-				return true;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
-				return true;
-			if (residentA.getTown().getNation().hasAlly(residentB.getTown().getNation()))
-				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-		return false;
-	}
-
-	public boolean isAlly(Town a, Town b) {
-		try {
-			if (a == b)
-				return true;
-			if (a.getNation() == b.getNation())
-				return true;
-			if (a.getNation().hasAlly(b.getNation()))
-				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-		return false;
-	}
-
-	public boolean canAttackEnemy(String a, String b) {
-		try {
-			Resident residentA = getDataSource().getResident(a);
-			Resident residentB = getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
-				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
-				return false;
-			Nation nationA = residentA.getTown().getNation();
-			Nation nationB = residentB.getTown().getNation();
-			if (nationA.isNeutral() || nationB.isNeutral())
-				return false;
-			if (nationA.hasEnemy(nationB))
-				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-		return false;
-	}
-
-	public boolean isEnemy(String a, String b) {
-		try {
-			Resident residentA = getDataSource().getResident(a);
-			Resident residentB = getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
-				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
-				return false;
-			if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
-				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-		return false;
-	}
-
-	public boolean isEnemy(Town a, Town b) {
-		try {
-			if (a == b)
-				return false;
-			if (a.getNation() == b.getNation())
-				return false;
-			if (a.getNation().hasEnemy(b.getNation()))
-				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-		return false;
-	}
-
 	public boolean isWarTime() {
 		return warEvent != null ? warEvent.isWarTime() : false;
 	}
@@ -796,14 +717,6 @@ public class TownyUniverse extends TownyObject {
 		plugin.updateCache(worldCoord);
 	}
 
-	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
-		try {
-			return isEnemy(getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
-		} catch (NotRegisteredException e) {
-			return false;
-		}
-	}
-
 	public boolean hasProtectionRegenTask(BlockLocation blockLocation) {
 		for (BlockLocation location : protectionRegenTasks.keySet()) {
 			if (location.isLocation(blockLocation)) {
@@ -856,6 +769,100 @@ public class TownyUniverse extends TownyObject {
 	public void setChangedNotify(TownyObservableType type) {
 		setChanged();
 		notifyObservers(type);
+	}
+	
+	@Deprecated
+	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
+		try {
+			return CombatUtil.isEnemy(getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+	}
+	
+	@Deprecated
+	public boolean isAlly(String a, String b) {
+		try {
+			Resident residentA = getDataSource().getResident(a);
+			Resident residentB = getDataSource().getResident(b);
+			if (residentA.getTown() == residentB.getTown())
+				return true;
+			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+				return true;
+			if (residentA.getTown().getNation().hasAlly(residentB.getTown().getNation()))
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	@Deprecated
+	public boolean isAlly(Town a, Town b) {
+		try {
+			if (a == b)
+				return true;
+			if (a.getNation() == b.getNation())
+				return true;
+			if (a.getNation().hasAlly(b.getNation()))
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	@Deprecated
+	public boolean canAttackEnemy(String a, String b) {
+		try {
+			Resident residentA = getDataSource().getResident(a);
+			Resident residentB = getDataSource().getResident(b);
+			if (residentA.getTown() == residentB.getTown())
+				return false;
+			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+				return false;
+			Nation nationA = residentA.getTown().getNation();
+			Nation nationB = residentB.getTown().getNation();
+			if (nationA.isNeutral() || nationB.isNeutral())
+				return false;
+			if (nationA.hasEnemy(nationB))
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	@Deprecated
+	public boolean isEnemy(String a, String b) {
+		try {
+			Resident residentA = getDataSource().getResident(a);
+			Resident residentB = getDataSource().getResident(b);
+			if (residentA.getTown() == residentB.getTown())
+				return false;
+			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+				return false;
+			if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	@Deprecated
+	public boolean isEnemy(Town a, Town b) {
+		try {
+			if (a == b)
+				return false;
+			if (a.getNation() == b.getNation())
+				return false;
+			if (a.getNation().hasEnemy(b.getNation()))
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
 	}
 	
 	/**

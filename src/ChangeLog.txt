@@ -1304,3 +1304,17 @@ v0.79.1.15:
 	- You can no longer stand in a non-pvp area and safely shoot players outside in pvp areas.
 	- Prevent TnT being regenerated if destroyed in explosions.
 	- Fix Wild perms so it will follow the world settings if no permissions are found.
+v0.80.0.0:
+	- Release for MC 1.2.4
+v0.80.0.1:
+	- Fix monster spawning to obey the 'Force Town Mobs' world setting.
+	- Add tentative support for Citizens2 to prevent removing NPC created as monsters.
+v0.80.0.2:
+	- Change Newday code to use iterators instead of creating new arrays (reliability and performance).
+v0.80.0.3:
+	- Add checks to make sure nations/towns/residents still exist when taxing as it's run in an async thread.
+	- Remove the UnclaimedZoneIgnoreId's test when we are using permissions. We should only check the enable/disable flags on the world if the player doesn't have the perms.
+v0.80.0.4:
+	- Fix Enderman protection block move to follow the world toggle and ignore all other settings.
+v0.80.0.5:
+	- Move all Combat test functions to their own class. All now available vial 'CombatUtil' (for other plugin devs).

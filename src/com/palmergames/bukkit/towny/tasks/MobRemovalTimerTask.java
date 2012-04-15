@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -130,19 +132,31 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					} catch (NotRegisteredException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						return;
 					}
 						try {
 							TownBlock townBlock = townyWorld.getTownBlock(coord);
-							if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
-								//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
-								livingEntitiesToRemove.add(livingEntity);
-							}
+							if (!townyWorld.isForceTownMobs())
+								if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
+									if (plugin.isCitizens2()) {
+										if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+											//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
+											livingEntitiesToRemove.add(livingEntity);
+										}
+									}else
+										livingEntitiesToRemove.add(livingEntity);
+								}
 								
 						} catch (TownyException x) {
 							// it will fall through here if the mob has no townblock.
 							if ((!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity))) {
-								//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
-								livingEntitiesToRemove.add(livingEntity);
+								if (plugin.isCitizens2()) {
+									if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+										//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
+										livingEntitiesToRemove.add(livingEntity);
+									}
+								} else
+									livingEntitiesToRemove.add(livingEntity);
 							}
 						}
 				}

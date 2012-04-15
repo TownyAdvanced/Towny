@@ -25,6 +25,12 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public class MinecraftTools {
 	
+	/**
+	 * Count the number of players online in each world
+	 * 
+	 * @param server
+	 * @return Map of world to online players.
+	 */
 	public static HashMap<String,Integer> getPlayersPerWorld(Server server) {
 		HashMap<String,Integer> m = new HashMap<String,Integer>();
 		for (World world : server.getWorlds())
@@ -34,10 +40,24 @@ public class MinecraftTools {
 		return m;
 	}
 	
+	/**
+	 * Find a block at a specific offset.
+	 * 
+	 * @param block
+	 * @param xOffset
+	 * @param yOffset
+	 * @param zOffset
+	 * @return Block at the new location.
+	 */
 	public static Block getBlockOffset(Block block, int xOffset, int yOffset, int zOffset) {
 		return block.getWorld().getBlockAt(block.getX()+xOffset, block.getY()+yOffset, block.getZ()+zOffset);
 	}
 	
+	/**
+	 * Compiles a list of all whitelisted users.
+	 * 
+	 * @return List of all whitelist player names.
+	 */
 	public static List<String> getWhiteListedUsers() {
 		List<String> names = new ArrayList<String>();
 		try {
@@ -59,10 +79,22 @@ public class MinecraftTools {
 		return names;
 	}
 	
+	/**
+	 * Tests if this player is online.
+	 * 
+	 * @param playerName
+	 * @return true if online
+	 */
 	public static boolean isOnline(String playerName) {
 		return Bukkit.getServer().getPlayer(playerName) != null;
 	}
 	
+	/**
+	 * Accepts an X or Z value and returns the associated Towny plot value.
+	 * 
+	 * @param value
+	 * @return int of the relevant townblock x/z.
+	 */
 	public static int calcChunk(int value) {
 		
 		return (value * TownySettings.getTownBlockSize())/16;

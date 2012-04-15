@@ -23,6 +23,7 @@ import java.util.TreeMap;
  * @version 1.1
  */
 public class KeyValueFile {
+	
 	private static final String newLine = System.getProperty("line.separator");
 	private Map<String, String> keys = new HashMap<String, String>();
 	private String fileName;

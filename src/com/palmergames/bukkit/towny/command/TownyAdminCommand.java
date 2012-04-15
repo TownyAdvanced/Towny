@@ -32,9 +32,9 @@ import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.TimeTools;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeTools;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:

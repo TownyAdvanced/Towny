@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.util.TimeTools;
+import com.palmergames.util.TimeTools;
 
 public class TownyWarConfig {
 	public static final DyeColor[] woolColors = new DyeColor[] {

@@ -3,12 +3,11 @@ package com.palmergames.bukkit.towny.event;
 import java.util.Collections;
 import java.util.List;
 
+import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
@@ -20,7 +19,6 @@ import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -56,7 +54,13 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
+import com.palmergames.bukkit.util.CombatUtil;
 
+/**
+ * 
+ * @author ElgarL,Shade
+ *
+ */
 public class TownyEntityListener implements Listener {
 
 	private final Towny plugin;
@@ -72,15 +76,13 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
-		//long start = System.currentTimeMillis();
-
+		
 		Entity attacker = null;
 		Entity defender = null;
 		Projectile projectile = null;
 
 		if (event instanceof EntityDamageByEntityEvent) {
-			//plugin.sendMsg("EntityDamageByEntityEvent");
+
 			EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) event;
 			if (entityEvent.getDamager() instanceof Projectile) {
 				projectile = (Projectile) entityEvent.getDamager();
@@ -92,43 +94,23 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		if (attacker != null) {
-			//plugin.sendMsg("Attacker not null");
-
-			TownyUniverse universe = plugin.getTownyUniverse();
-			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
-
-				// Wartime
-				if (universe.isWarTime()) {
-					event.setCancelled(false);
-					throw new Exception();
-				}
-
-				Player a = null;
-				Player b = null;
-
-				if (attacker instanceof Player)
-					a = (Player) attacker;
-				if (defender instanceof Player)
-					b = (Player) defender;
-
-				if (preventDamageCall(world, attacker, defender, a, b)) {
-						// Remove the projectile here so no
-						// other events can fire to cause damage
-					if (projectile != null)
-						projectile.remove();
-					event.setCancelled(true);
-				}
-
-			} catch (Exception e) {
-				// War time so do nothing.
+		// Has an attacker and Not wartime
+		if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime())) {
+			
+			if (CombatUtil.preventDamageCall(attacker, defender)) {
+				// Remove the projectile here so no
+				// other events can fire to cause damage
+				if (projectile != null)
+					projectile.remove();
+				event.setCancelled(true);
 			}
-
-			//TownyMessaging.sendDebugMsg("onEntityDamagedByEntity took " + (System.currentTimeMillis() - start) + "ms");
 		}
 	}
 
+	/**
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDeath(EntityDeathEvent event) {
 		
@@ -171,42 +153,18 @@ public class TownyEntityListener implements Listener {
 		
 		Entity attacker = potion.getShooter();
 		
-		Player a = null;
-		if (attacker instanceof Player)
-			a = (Player) attacker;
-		
-		TownyUniverse universe = plugin.getTownyUniverse();
-		
-		try {
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(potion.getWorld().getName());
-			
-			for (LivingEntity defender : affectedEntities) {
-				
-				try {
-					// Wartime
-					if (universe.isWarTime()) {
-						event.setCancelled(false);
-						throw new Exception();
-					}
-					
-					Player b = null;
-					
-					if (defender instanceof Player)
-						b = (Player) defender;
+		// Not Wartime
+		if (!plugin.getTownyUniverse().isWarTime())
+			for (LivingEntity defender : affectedEntities)
+				if (CombatUtil.preventDamageCall(attacker, defender))
+					event.setIntensity(defender, -1.0);
 
-					if (preventDamageCall(world, attacker, defender, a, b))
-						event.setIntensity(defender, -1.0);
-
-				} catch (Exception e) {
-					//do nothing as this is war.
-				}
-
-			}
-		} catch (NotRegisteredException e1) {
-			// Not a registered world
-		}
 	}
 
+	/**
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		
@@ -231,8 +189,13 @@ public class TownyEntityListener implements Listener {
 			//remove from world if set to remove mobs globally
 			if (townyWorld.isUsingTowny())
 				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
-					//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getCreatureType() + " from spawning within "+coord.toString()+".");
-					event.setCancelled(true);
+					if (plugin.isCitizens2()) {
+						if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+							//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+							event.setCancelled(true);
+						}
+					} else
+						event.setCancelled(true);
 				}
 
 			//remove from towns if in the list and set to remove            
@@ -241,8 +204,13 @@ public class TownyEntityListener implements Listener {
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
 						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
-							//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getCreatureType() + " from spawning within "+coord.toString()+".");
-							event.setCancelled(true);
+							if (plugin.isCitizens2()) {
+								if(!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+									//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+									event.setCancelled(true);
+								}
+							} else
+								event.setCancelled(true);
 						}
 					}
 				}
@@ -292,26 +260,15 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Enderman))
 			return;
 
-		Block block = event.getBlock();
-
-		TownyWorld townyWorld = null;
-		TownBlock townBlock;
-
 		try {
-			townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
 			
 			if (!townyWorld.isUsingTowny())
 				return;
 			
 			if (townyWorld.isEndermanProtect())
-				try {
-					townBlock = townyWorld.getTownBlock(new Coord(Coord.parseCoord(block)));
-					if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && !townBlock.getTown().hasMobs())
-						event.setCancelled(true);
-				} catch (NotRegisteredException e) {
-					// not in a townblock
-					event.setCancelled(true);
-				}
+				event.setCancelled(true);
+
 		} catch (NotRegisteredException e) {
 			// Failed to fetch world
 		}
@@ -428,7 +385,7 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Prevent fire arrows igniting players when PvP is disabled
+	 * Prevent fire arrows and charges igniting players when PvP is disabled
 	 * 
 	 * @param event
 	 */
@@ -440,59 +397,22 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		TownyWorld world;
 		Entity combuster = event.getCombuster();
 		Entity defender = event.getEntity();
 
-		/**
-		 * Perform this test outside the block loop so we only get the world
-		 * once per explosion.
-		 */
-		try {
-			world = TownyUniverse.getDataSource().getWorld(
-					defender.getWorld().getName());
+		if (combuster instanceof Projectile) {
 
-			if (!world.isUsingTowny())
-				return;
+			LivingEntity attacker = ((Projectile) combuster).getShooter();
 
-		} catch (NotRegisteredException e) {
-			// failed to get world so abort
-			return;
-		}
-
-		if (combuster instanceof Arrow) {
-
-			LivingEntity attacker = ((Arrow) combuster).getShooter();
-
-			if (attacker != null) {
-
-				try {
-
-					// Wartime
-					if (plugin.getTownyUniverse().isWarTime()) {
-						event.setCancelled(false);
-						throw new Exception();
-					}
-
-					Player a = null;
-					Player b = null;
-
-					if (attacker instanceof Player)
-						a = (Player) attacker;
-					if (defender instanceof Player)
-						b = (Player) defender;
-
-					if (preventDamageCall(world, attacker, defender, a, b)) {
-						// Remove the projectile here so no
-						// other events can fire to cause damage
-						combuster.remove();
-						event.setCancelled(true);
-					}
-
-				} catch (Exception e) {
-					// War time so do nothing.
+			// There is an attacker and Not war time.
+			if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime()) ) {
+				
+				if (CombatUtil.preventDamageCall(attacker, defender)) {
+					// Remove the projectile here so no
+					// other events can fire to cause damage
+					combuster.remove();
+					event.setCancelled(true);
 				}
-
 			}
 		}
 
@@ -610,111 +530,5 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
 
-	/**
-	 * Tests the attacker against defender to see if we need to cancel
-	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
-	 * Also only allow a Wolves owner to cause it damage, and town residents to
-	 * damage passive animals.
-	 * 
-	 * @param world
-	 * @param a
-	 * @param b
-	 * @param ap
-	 * @param bp
-	 * @return true if we should cancel.
-	 */
-	public boolean preventDamageCall(TownyWorld world, Entity a, Entity b, Player ap, Player bp) {
-		// World using Towny
-		if (!world.isUsingTowny())
-			return false;
-
-		Coord coord = Coord.parseCoord(b);
-
-		if (ap != null && bp != null) {
-			if (world.isWarZone(coord))
-				return false;
-
-			if (preventFriendlyFire(ap, bp)) // (preventDamagePvP(world, ap, bp) || 
-				return true;
-		}
-
-		try {
-
-			// Check TownBlock PvP status
-			TownBlock defenderTB = world.getTownBlock(coord);
-			TownBlock attackerTB = world.getTownBlock(Coord.parseCoord(a));
-			
-			/*
-			 * Check to prevent damage if...
-			 * The world isn't forced PVP
-			 * and
-			 * The Defender isn't in a PVP area.
-			 * or
-			 * The Attacker isn't in a PVP area.
-			 */
-			if (!world.isForcePVP()
-					&& ((!defenderTB.getTown().isPVP() && !defenderTB.getPermissions().pvp)
-					|| (!attackerTB.getTown().isPVP() && !attackerTB.getPermissions().pvp))) {
-				if (bp != null && (ap != null || a instanceof Arrow || a instanceof ThrownPotion))
-					return true;
-
-				if (b instanceof Wolf) {
-					Wolf wolf = (Wolf) b;
-					if (wolf.isTamed() && !wolf.getOwner().equals((AnimalTamer) a)) {
-						return true;
-					}
-				}
-
-				if ((b instanceof Animals) && (ap != null)) {
-					
-					//Get destroy permissions (updates if none exist)
-					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(ap, ap.getLocation(), TownyPermission.ActionType.DESTROY);
-					
-					// Don't allow players to kill animals in plots they don't have destroy permissions in.
-					if (!bDestroy)
-						return true;
-					
-					/*
-					Resident resident = TownyUniverse.getDataSource().getResident(ap.getName());
-					if ((!resident.hasTown()) || (resident.hasTown() && (resident.getTown() != townblock.getTown())))
-						return true;
-					*/
-				}
-			}
-		} catch (NotRegisteredException e) {
-			// Not in a town
-			if ((ap != null) && (bp != null) && (!world.isPVP()) && (!world.isForcePVP()))
-				return true;
-		}
-
-		//if (plugin.getTownyUniverse().canAttackEnemy(ap.getName(), bp.getName()))
-		//	return false;
-
-		return false;
-	}
-
-	public boolean preventDamagePvP(TownyWorld world) {
-		// Universe is only PvP
-		if (world.isForcePVP() || world.isPVP())
-			return false;
-
-		return true;
-	}
-
-	public boolean preventFriendlyFire(Player a, Player b) {
-		TownyUniverse universe = plugin.getTownyUniverse();
-		if (!TownySettings.getFriendlyFire() && universe.isAlly(a.getName(), b.getName())) {
-			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(b.getWorld().getName());
-				TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(b)).getTownBlock();
-				if (!townBlock.getType().equals(TownBlockType.ARENA))
-					return true;
-			} catch (TownyException x) {
-				//world or townblock failure
-				// But we want to prevent friendly fire in the wilderness too.
-				return true;
-			}
-		}
-		return false;
-	}
+	
 }

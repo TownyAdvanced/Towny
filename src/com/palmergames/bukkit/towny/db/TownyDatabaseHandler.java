@@ -405,21 +405,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (plugin.isEcoActive())
-			try {
-				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
-			} catch (EconomyException e) {
-			}
-
+		
 		for (Resident resident : toSave) {
 			removeResident(resident);
 			saveResident(resident);
 		}
+		
+		if (plugin.isEcoActive())
+			try {
+				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.removeAccount();
+			} catch (EconomyException e) {
+			}
 
 		universe.getTownsMap().remove(town.getName().toLowerCase());
-		// Clear accounts
-		if (TownySettings.isUsingEconomy())
-			town.removeAccount();
+
 		plugin.updateCache();
 
 		deleteTown(town);
@@ -466,9 +466,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		nation.clear();
 		
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
-		// Clear accounts
-		if (TownySettings.isUsingEconomy())
-			nation.removeAccount();
 
 		plugin.updateCache();
 		for (Town town : toSave)

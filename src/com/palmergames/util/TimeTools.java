@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.util;
+package com.palmergames.util;
 
 import java.util.regex.Pattern;
 
