@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.exceptions;
 
 public class AlreadyRegisteredException extends TownyException {
 	private static final long serialVersionUID = 4191685552690886161L;

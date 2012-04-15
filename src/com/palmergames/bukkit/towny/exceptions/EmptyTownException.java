@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.exceptions;
 
 import com.palmergames.bukkit.towny.object.Town;
 

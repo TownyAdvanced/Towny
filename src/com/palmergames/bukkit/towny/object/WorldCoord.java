@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 
 //TODO: have toString() include the worlds?

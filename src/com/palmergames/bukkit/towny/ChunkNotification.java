@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;

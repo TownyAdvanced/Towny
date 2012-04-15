@@ -2,9 +2,9 @@ package com.palmergames.bukkit.towny.war;
 
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;

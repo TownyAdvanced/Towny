@@ -21,16 +21,15 @@ import ca.xshade.questionmanager.Question;
 
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
@@ -49,6 +48,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.questioner.JoinTownTask;
 import com.palmergames.bukkit.towny.questioner.ResidentTownQuestionTask;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
@@ -1722,12 +1722,12 @@ public class TownCommand implements CommandExecutor  {
 					} else
 						throw new TownyException(TownySettings.getLangString("msg_outpost_disable"));
 				} else {
-					selection = TownyUtil.selectWorldCoordArea(town, new WorldCoord(world, key), split);
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				selection = TownyUtil.filterTownOwnedBlocks(selection);
+				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
 				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
 
@@ -1783,8 +1783,8 @@ public class TownCommand implements CommandExecutor  {
                                 	new TownClaim(plugin, player, town, null, false, false, false).start();
                                         //townUnclaimAll(town);
                                 else {
-                                        selection = TownyUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
-                                        selection = TownyUtil.filterOwnedBlocks(town, selection);
+                                        selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+                                        selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
                                         
                                         // Set the area to unclaim
                                         new TownClaim(plugin, player, town, selection, false, false, false).start();

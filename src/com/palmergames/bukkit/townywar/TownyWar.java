@@ -1,7 +1,11 @@
 package com.palmergames.bukkit.townywar;
 
 import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.townywar.event.CellAttackCanceledEvent;
 import com.palmergames.bukkit.townywar.event.CellAttackEvent;
 import com.palmergames.bukkit.townywar.event.CellDefendedEvent;
@@ -186,7 +190,7 @@ public class TownyWar {
 		checkIfNationHasMinOnlineForWar(attackingNation);
 		
 		// Check that attack takes place on the edge of a town
-		if (!TownyUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
+		if (!AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_not_on_edge_of_town"));
 
         // Check that the user can pay for the warflag + fines from losing/winning.

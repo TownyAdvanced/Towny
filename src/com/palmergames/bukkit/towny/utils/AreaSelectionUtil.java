@@ -1,8 +1,11 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -11,7 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
-public class TownyUtil {
+public class AreaSelectionUtil {
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
 		

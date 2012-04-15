@@ -3,15 +3,15 @@ package com.palmergames.bukkit.towny.object;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.PlayerCache;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.util.CombatUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 
 /**

@@ -8,14 +8,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -25,6 +24,7 @@ import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -92,7 +92,7 @@ public class TownyCommand implements CommandExecutor {
                         else if (args[0].equalsIgnoreCase("tree"))
                         	plugin.getTownyUniverse().sendUniverseTree(sender);
                         else if (args[0].equalsIgnoreCase("time"))
-                        	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                        	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(AreaSelectionUtil.townyTime()));
                         else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
                                 sender.sendMessage(Colors.strip(towny_version));
                         else if (args[0].equalsIgnoreCase("war")){
@@ -150,7 +150,7 @@ public class TownyCommand implements CommandExecutor {
                 } else if (split[0].equalsIgnoreCase("tree")) {
                         consoleUseOnly(player);
                 } else if (split[0].equalsIgnoreCase("time")) {       
-                	TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                	TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(AreaSelectionUtil.townyTime()));
                 } else if (split[0].equalsIgnoreCase("universe")) {
                         for (String line : getUniverseStats())
                                 player.sendMessage(line);               

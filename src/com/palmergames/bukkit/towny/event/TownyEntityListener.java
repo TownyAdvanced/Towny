@@ -35,13 +35,13 @@ import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.painting.PaintingBreakEvent;
 import org.bukkit.event.painting.PaintingPlaceEvent;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.BlockLocation;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -52,9 +52,9 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.townywar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
-import com.palmergames.bukkit.util.CombatUtil;
 
 /**
  * 

@@ -9,11 +9,11 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 //import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.exceptions;
 
 public class EconomyException extends Exception {
 	private static final long serialVersionUID = 5273714478509976170L;

@@ -9,10 +9,10 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;

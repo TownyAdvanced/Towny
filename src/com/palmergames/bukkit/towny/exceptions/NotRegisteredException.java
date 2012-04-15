@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.exceptions;
 
 
 public class NotRegisteredException extends TownyException {

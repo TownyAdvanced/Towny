@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.util;
+package com.palmergames.bukkit.towny.utils;
 
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
@@ -9,9 +9,9 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;

@@ -2,9 +2,9 @@ package com.palmergames.bukkit.towny.tasks;
 
 import java.util.ArrayList;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyRegenAPI;

@@ -18,9 +18,9 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import ru.tehkode.permissions.events.PermissionEntityEvent;
 import ru.tehkode.permissions.events.PermissionSystemEvent;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 

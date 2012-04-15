@@ -21,17 +21,16 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -40,8 +39,9 @@ import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.War;
-import com.palmergames.bukkit.util.CombatUtil;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.TimeMgmt;
@@ -126,7 +126,7 @@ public class TownyUniverse extends TownyObject {
 
 	public void toggleDailyTimer(boolean on) {
 		if (on && !isDailyTimerRunning()) {
-			long timeTillNextDay = TownyUtil.townyTime();
+			long timeTillNextDay = AreaSelectionUtil.townyTime();
 			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			dailyTask = getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new DailyTimerTask(this), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			if (dailyTask == -1)

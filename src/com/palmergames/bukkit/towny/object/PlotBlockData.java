@@ -6,8 +6,8 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.util.MinecraftTools;
 
 public class PlotBlockData {

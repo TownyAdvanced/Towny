@@ -9,11 +9,11 @@ import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.nijikokun.register.payment.Method.MethodAccount;
 import com.nijikokun.register.payment.Methods;
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.util.StringMgmt;
 
 public class TownyEconomyObject extends TownyObject {

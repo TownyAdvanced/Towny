@@ -1320,3 +1320,4 @@ v0.80.0.5:
 	- Move all Combat test functions to their own class. All now available vial 'CombatUtil' (for other plugin devs).
 v0.80.0.6:
 	- Lets have another go at stopping these nations hanging on after they should be removed.
+	- Refactor a bunch of classes for better organisation. ** Will likely break many plugin hooks due to moved exception classes **
