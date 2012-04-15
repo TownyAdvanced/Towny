@@ -16,22 +16,22 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
@@ -1339,6 +1339,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 		}
 		try {
+			// Name
+			fout.write("name=" + town.getName() + newLine);
 			// Residents
 			fout.write("residents=" + StringMgmt.join(town.getResidents(), ",") + newLine);
 			// Mayor
@@ -1966,6 +1968,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
 				TownyMessaging.sendErrorMsg("Error moving Town txt file.");
+				file.delete();
 			}
 		}
 	}
@@ -1978,6 +1981,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
 				TownyMessaging.sendErrorMsg("Error moving Nation txt file.");
+				file.delete();
 			}
 		}
 	}

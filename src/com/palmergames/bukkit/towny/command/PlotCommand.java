@@ -9,27 +9,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
-import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -114,10 +114,10 @@ public class PlotCommand implements CommandExecutor {
 			try {
 				if (split[0].equalsIgnoreCase("claim")) {
 
-					if (plugin.getTownyUniverse().isWarTime())
+					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-					List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					//selection = TownyUtil.filterUnownedPlots(selection);
 
 					if (selection.size() > 0) {
@@ -144,7 +144,7 @@ public class PlotCommand implements CommandExecutor {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
 						if (TownySettings.isUsingEconomy() && (!resident.canPayFromHoldings(cost)))
-							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyObject.getFormattedBalance(cost)));
+							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
 						// Start the claim task
 						new PlotClaim(plugin, player, resident, selection, true).start();
@@ -154,7 +154,7 @@ public class PlotCommand implements CommandExecutor {
 					}
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
-					if (plugin.getTownyUniverse().isWarTime())
+					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
@@ -162,8 +162,8 @@ public class PlotCommand implements CommandExecutor {
 						new PlotClaim(plugin, player, resident, null, false).start();
 
 					} else {
-						List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-						selection = TownyUtil.filterOwnedBlocks(resident, selection);
+						List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
 
 						if (selection.size() > 0) {
 
@@ -175,8 +175,8 @@ public class PlotCommand implements CommandExecutor {
 						}
 					}
 				} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
-					List<WorldCoord> selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-					selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+					selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
 
 					for (WorldCoord worldCoord : selection) {
 						setPlotForSale(resident, worldCoord, -1);
@@ -187,11 +187,11 @@ public class PlotCommand implements CommandExecutor {
 
 					if (split.length > 1) {
 
-						int areaSelectPivot = TownyUtil.getAreaSelectPivot(split);
+						int areaSelectPivot = AreaSelectionUtil.getAreaSelectPivot(split);
 						List<WorldCoord> selection;
 						if (areaSelectPivot >= 0) {
-							selection = TownyUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot + 1, split.length));
-							selection = TownyUtil.filterOwnedBlocks(resident.getTown(), selection);
+							selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot + 1, split.length));
+							selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
 							if (selection.size() == 0) {
 								player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 								return true;

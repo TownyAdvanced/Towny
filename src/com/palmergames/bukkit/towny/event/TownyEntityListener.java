@@ -35,26 +35,26 @@ import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.painting.PaintingBreakEvent;
 import org.bukkit.event.painting.PaintingPlaceEvent;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.PlayerCache;
-import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.BlockLocation;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.townywar.TownyWarConfig;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
-import com.palmergames.bukkit.util.CombatUtil;
 
 /**
  * 
@@ -95,7 +95,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Has an attacker and Not wartime
-		if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime())) {
+		if ((attacker != null) && (!TownyUniverse.isWarTime())) {
 			
 			if (CombatUtil.preventDamageCall(attacker, defender)) {
 				// Remove the projectile here so no
@@ -154,7 +154,7 @@ public class TownyEntityListener implements Listener {
 		Entity attacker = potion.getShooter();
 		
 		// Not Wartime
-		if (!plugin.getTownyUniverse().isWarTime())
+		if (!TownyUniverse.isWarTime())
 			for (LivingEntity defender : affectedEntities)
 				if (CombatUtil.preventDamageCall(attacker, defender))
 					event.setIntensity(defender, -1.0);
@@ -354,7 +354,7 @@ public class TownyEntityListener implements Listener {
 				// If explosions are off, or it's wartime and explosions are off and the towns has no nation
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceExpl()) {
 					if ((!townBlock.getPermissions().explosion)
-							|| (plugin.getTownyUniverse().isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
+							|| (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
 						if (event.getEntity() != null)
 							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
 						event.setCancelled(true);
@@ -405,7 +405,7 @@ public class TownyEntityListener implements Listener {
 			LivingEntity attacker = ((Projectile) combuster).getShooter();
 
 			// There is an attacker and Not war time.
-			if ((attacker != null) && (!plugin.getTownyUniverse().isWarTime()) ) {
+			if ((attacker != null) && (!TownyUniverse.isWarTime()) ) {
 				
 				if (CombatUtil.preventDamageCall(attacker, defender)) {
 					// Remove the projectile here so no

@@ -20,13 +20,13 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -309,7 +309,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	/**
 	 * open a connection to the SQL server.
 	 * 
-	 * @return
+	 * @return true if we successfully connected to the db.
 	 */
 	public boolean getContext()
 	{
@@ -340,7 +340,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	 * @param tb_name
 	 * @param args
 	 * @param keys
-	 * @return
+	 * @return true if the update was successfull.
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String,Object> args, List<String> keys)
 	{
@@ -438,7 +438,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	 * 
 	 * @param tb_name
 	 * @param args
-	 * @return
+	 * @return true if the delete was a success.
 	 */
 	public boolean DeleteDB(String tb_name, HashMap<String,Object> args)
 	{

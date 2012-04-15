@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -206,7 +207,7 @@ public class ChunkNotification {
 	
 	public String getForSaleNotification() {
 		if (toForSale)
-            return String.format(forSaleNotificationFormat, TownyFormatter.formatMoney(toTownBlock.getPlotPrice()));
+            return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
 		return null;
 	}
 	

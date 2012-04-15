@@ -176,16 +176,6 @@ public class TownyPermission {
 		}
 	}
 	
-	public static boolean getUnclaimedZonePerm(ActionType type, TownyWorld world) {
-		switch (type) {
-			case BUILD: return world.getUnclaimedZoneBuild();
-			case DESTROY: return world.getUnclaimedZoneDestroy();
-			case SWITCH: return world.getUnclaimedZoneSwitch();
-			case ITEM_USE: return world.getUnclaimedZoneItemUse();
-			default: throw new UnsupportedOperationException();
-		}
-	}
-	
 	public String getColourString() {
 		return
 			Colors.LightGreen + "Build = " + Colors.LightGray

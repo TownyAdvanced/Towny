@@ -1268,7 +1268,7 @@ v0.79.1.10:
 v0.79.1.11:
 	- Broke admin permissions into seperate nodes. They are all children of 'towny.admin'.
 		- towny.admin.town: Allows a player to use '/ta town add/kick'
-		- towny.admin.nation: Allows a player to use '/ta nation add/kick'
+        - towny.admin.nation: Allows a player to use '/ta nation add/kick'
 		- towny.admin.set: Grants access to '/ta set' allowing a player to set and remove NPC mayors.
 		- towny.admin.reload: Reload all towny settings and data.
 		- towny.admin.reset: Generate a fresh config.yml and perform a full reload of Towny.
@@ -1296,10 +1296,10 @@ v0.79.1.13:
 	- Fix Admin commands from the console.
 v0.79.1.14:
 	- Flag war mode now supports economy payments for specific events. Those being:
-		- Payment to server -  to place a warflag.
-		- Attacking flagbearer -  pays the defender who broke the flag during a successful defend.
-		- Pillage fund - from defending town during a succesfuly attack. A different amount can be set for the homeblock.
-		  (Using a negative amount for pillaging will instead cause the attacker to pay a 'rebuilding cost'.)
+    	- Payment to server -  to place a warflag.
+    	- Attacking flagbearer -  pays the defender who broke the flag during a successful defend.
+    	- Pillage fund - from defending town during a succesfuly attack. A different amount can be set for the homeblock.
+    	  (Using a negative amount for pillaging will instead cause the attacker to pay a 'rebuilding cost'.)
 v0.79.1.15:
 	- You can no longer stand in a non-pvp area and safely shoot players outside in pvp areas.
 	- Prevent TnT being regenerated if destroyed in explosions.

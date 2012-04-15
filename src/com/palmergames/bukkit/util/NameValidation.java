@@ -40,7 +40,7 @@ public class NameValidation {
 	 * Check and perform regex on any Player names
 	 * 
 	 * @param name
-	 * @return
+	 * @return String of the valid name result.
 	 * @throws InvalidNameException
 	 */
 	public static String checkAndFilterPlayerName(String name) throws InvalidNameException {
@@ -56,7 +56,7 @@ public class NameValidation {
 	 * Perform regex on all names passed and return the results.
 	 * 
 	 * @param arr
-	 * @return
+	 * @return string array of the filtered names.
 	 */
 	public static String[] checkAndFilterArray(String[] arr) {
 		String[] out = arr;
@@ -76,7 +76,7 @@ public class NameValidation {
 	 * return true if it is an invalid name.
 	 * 
 	 * @param name
-	 * @return
+	 * @return true if this name is blacklist/invalid
 	 */
 	public static boolean isBlacklistName(String name) {
     	// Max name length
@@ -98,7 +98,7 @@ public class NameValidation {
 	 * Is this a valid name via getNameCheckRegex
 	 * 
 	 * @param name
-	 * @return
+	 * @return true if this name is valid.
 	 */
 	public static boolean isValidName(String name) {
 		try {

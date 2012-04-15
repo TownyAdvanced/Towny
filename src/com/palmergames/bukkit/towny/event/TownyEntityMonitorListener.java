@@ -10,19 +10,19 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 //import org.bukkit.event.entity.EntityDamageEvent;
 
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.War;
-import com.palmergames.bukkit.towny.war.WarSpoils;
+import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 
 /**
  * @author Shade & ElgarL
@@ -154,7 +154,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 	*/
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (attackerPlayer != null && plugin.getTownyUniverse().isWarTime())
+		if (attackerPlayer != null && TownyUniverse.isWarTime())
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException();
@@ -167,7 +167,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	private void monarchDeath(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (plugin.getTownyUniverse().isWarTime()) {
+		if (TownyUniverse.isWarTime()) {
 			War warEvent = plugin.getTownyUniverse().getWarEvent();
 			try {
 				Nation defenderNation = defenderResident.getTown().getNation();
@@ -192,7 +192,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (attackerPlayer != null && plugin.getTownyUniverse().isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
+		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException();
@@ -206,8 +206,8 @@ public class TownyEntityMonitorListener implements Listener {
 
 				if (price > 0) {
 					defenderResident.payTo(price, attackerResident, "Death Payment (War)");
-					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyObject.getFormattedBalance(price) + ".");
-					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyObject.getFormattedBalance(price) + ".");
+					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
 				}
 
 				// Resident doesn't have enough funds.
@@ -237,7 +237,7 @@ public class TownyEntityMonitorListener implements Listener {
 					price = defenderResident.getHoldingBalance();
 
 				defenderResident.payTo(price, new WarSpoils(), "Death Payment");
-				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyObject.getFormattedBalance(price) + ".");
+				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
 			}

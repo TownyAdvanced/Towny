@@ -8,14 +8,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -92,7 +93,7 @@ public class TownyCommand implements CommandExecutor {
                         else if (args[0].equalsIgnoreCase("tree"))
                         	plugin.getTownyUniverse().sendUniverseTree(sender);
                         else if (args[0].equalsIgnoreCase("time"))
-                        	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                        	TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(AreaSelectionUtil.townyTime()));
                         else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
                                 sender.sendMessage(Colors.strip(towny_version));
                         else if (args[0].equalsIgnoreCase("war")){
@@ -150,7 +151,7 @@ public class TownyCommand implements CommandExecutor {
                 } else if (split[0].equalsIgnoreCase("tree")) {
                         consoleUseOnly(player);
                 } else if (split[0].equalsIgnoreCase("time")) {       
-                	TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyUtil.townyTime()));
+                	TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(AreaSelectionUtil.townyTime()));
                 } else if (split[0].equalsIgnoreCase("universe")) {
                         for (String line : getUniverseStats())
                                 player.sendMessage(line);               
@@ -181,7 +182,7 @@ public class TownyCommand implements CommandExecutor {
         
         private boolean TownyWar(String[] args){
                 
-                if (plugin.getTownyUniverse().isWarTime() && args.length > 0) {
+                if (TownyUniverse.isWarTime() && args.length > 0) {
                         towny_war.clear();
                         if (args[0].equalsIgnoreCase("stats"))
                                 towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getStats());
@@ -189,7 +190,7 @@ public class TownyCommand implements CommandExecutor {
                                 towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
                 }
                 
-                return plugin.getTownyUniverse().isWarTime();   
+                return TownyUniverse.isWarTime();   
         }
         
         private void TopCommand(Player player, String[] args) {
@@ -329,13 +330,13 @@ public class TownyCommand implements CommandExecutor {
                 
                 output.add(ChatTools.formatTitle("Prices"));
                 output.add(Colors.Yellow + "[New] "
-                                + Colors.Green + "Town: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNewTownPrice())
+                                + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())
                                 + Colors.Gray + " | "
-                                + Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNewNationPrice()));
+                                + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
                 output.add(Colors.Yellow + "[Upkeep] "
-                                + Colors.Green + "Town: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getTownUpkeepCost(town))
+                                + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town))
                                 + Colors.Gray + " | "
-                                + Colors.Green + "Nation: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationUpkeepCost(nation)));
+                                + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
                 output.add(Colors.Gray + "Town upkeep is based on " + Colors.LightGreen + " the " + (TownySettings.isUpkeepByPlot() ? " number of plots" : " town level (num residents)."));
                 
                 if (town != null) {
@@ -343,7 +344,7 @@ public class TownyCommand implements CommandExecutor {
                         output.add(Colors.Rose + "    [Price] "
                                         + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotPrice())
                                         + Colors.Gray + " | "
-                                        + Colors.Green + "Outpost: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getOutpostCost()));
+                                        + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
                         output.add(Colors.Rose + "    [Upkeep] "
                                         + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes())
                                         + Colors.Gray + " | "
@@ -355,7 +356,7 @@ public class TownyCommand implements CommandExecutor {
                                 output.add(Colors.Rose + "    [Upkeep] "
                                         + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes())
                                         + Colors.Gray + " | "
-                                        + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyFormatter.formatMoney(TownySettings.getNationNeutralityCost()));
+                                        + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
                         }
                 }
                 return output;
@@ -379,7 +380,7 @@ public class TownyCommand implements CommandExecutor {
                         output.add(String.format(
                                         Colors.LightGray + "%-20s "+Colors.Gold+"|"+Colors.Blue+" %s",
                                         TownyFormatter.getFormattedName(town),
-                                        TownyFormatter.formatMoney((Double)kv.value)));
+                                        TownyEconomyHandler.getFormattedBalance((Double)kv.value)));
                 }
                 return output;
         }

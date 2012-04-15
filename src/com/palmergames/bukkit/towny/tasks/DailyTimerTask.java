@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.EmptyNationException;
-import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -38,7 +39,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("New Day");
 
 		// Collect taxes
-		if (plugin.isEcoActive() && TownySettings.isTaxingDaily()) {
+		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_day_tax")));
 			try {
 				TownyMessaging.sendDebugMsg("Collecting Town Taxes");

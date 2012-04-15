@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.util.CombatUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 
@@ -25,7 +25,7 @@ private Server server;
 	
 	@Override
 	public void run() {
-		if (universe.isWarTime())
+		if (TownyUniverse.isWarTime())
 			return;
 		
 		for (Player player : server.getOnlinePlayers()) {

@@ -4,13 +4,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
@@ -51,7 +53,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param townBlock
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownBlock townBlock) {
 		List<String> out = new ArrayList<String>();
@@ -81,7 +83,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param resident
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Resident resident) {
 		List<String> out = new ArrayList<String>();
@@ -102,11 +104,9 @@ public class TownyFormatter {
 
 		// Bank: 534 coins
 		if (TownySettings.isUsingEconomy())
-			try {
-				TownyEconomyObject.checkEconomy();
+			if (TownyEconomyHandler.isActive())
 				out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
-			} catch (EconomyException e1) {
-			}
+
 
 		// Town: Camelot
 		String line = Colors.Green + "Town: " + Colors.LightGreen;
@@ -130,7 +130,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param town
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Town town) {
 		List<String> out = new ArrayList<String>();
@@ -170,13 +170,11 @@ public class TownyFormatter {
 		// | Bank: 534 coins
 		String bankString = "";
 		if (TownySettings.isUsingEconomy()) {
-			try {
-				TownyEconomyObject.checkEconomy();
+			if (TownyEconomyHandler.isActive()) {
 				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
 				if (town.hasUpkeep())
 					bankString += Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getTownUpkeepCost(town);
 				bankString += Colors.Gray + " | " + Colors.Green + "Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
-			} catch (EconomyException e1) {
 			}
 			out.add(bankString);
 		}
@@ -210,7 +208,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param nation
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Nation nation) {
 		List<String> out = new ArrayList<String>();
@@ -221,14 +219,12 @@ public class TownyFormatter {
 		// Bank: 534 coins
 		String line = "";
 		if (TownySettings.isUsingEconomy())
-			try {
-				TownyEconomyObject.checkEconomy();
+			if (TownyEconomyHandler.isActive()) {
 				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
 				
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
 					line += (Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
 				
-			} catch (EconomyException e1) {
 			}
 
 		if (nation.isNeutral()) {
@@ -259,7 +255,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param world
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownyWorld world) {
 		List<String> out = new ArrayList<String>();
@@ -414,13 +410,5 @@ public class TownyFormatter {
 		for (Nation nation : nations)
 			names.add(getFormattedName(nation));
 		return names.toArray(new String[0]);
-	}
-
-	public static String formatMoney(double amount) {
-		try {
-			return TownyEconomyObject.getFormattedBalance(amount);
-		} catch (Exception e) {
-			return Double.toString(amount);
-		}
 	}
 }

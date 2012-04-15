@@ -10,22 +10,23 @@ import javax.naming.InvalidNameException;
 
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.EmptyNationException;
-import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.WarSpoils;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.NameValidation;
 
 /**
@@ -411,7 +412,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveResident(resident);
 		}
 		
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			try {
 				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
 				town.removeAccount();
@@ -453,7 +454,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveNation(toCheck);
 				
 		// Transfer any money to the warchest.
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			try {
 				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
 				nation.removeAccount();
@@ -467,12 +468,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 
-		plugin.updateCache();
-		for (Town town : toSave)
+		for (Town town : toSave) {
 			saveTown(town);
+		}
+				
+		plugin.updateCache();
 		saveNationList();
 
-			universe.setChangedNotify(REMOVE_NATION);
+		universe.setChangedNotify(REMOVE_NATION);
 	}
 	
 	@Override
@@ -624,7 +627,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		nation.setName(filteredName);
 		universe.getNationsMap().put(filteredName.toLowerCase(), nation);
 
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
 
 		for (Town town : toSave) {

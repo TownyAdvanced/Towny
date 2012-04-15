@@ -21,34 +21,34 @@ import ca.xshade.questionmanager.Question;
 
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
-import com.palmergames.bukkit.towny.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.EconomyException;
-import com.palmergames.bukkit.towny.EmptyTownException;
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyException;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUtil;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotBlockData;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyRegenAPI;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.questioner.JoinTownTask;
 import com.palmergames.bukkit.towny.questioner.ResidentTownQuestionTask;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
+import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
@@ -642,7 +642,7 @@ public class TownCommand implements CommandExecutor  {
                                 TownBlock townBlock;
                                 TownyWorld world;
                                 try {
-                                        if (plugin.getTownyUniverse().isWarTime())
+                                        if (TownyUniverse.isWarTime())
                                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                         
 										world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
@@ -717,7 +717,7 @@ public class TownCommand implements CommandExecutor  {
 	                    + Colors.Green + "Cost: " + Colors.LightGreen + "%s"
 	                    + Colors.Gray + " | "
 	                    + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-                    player.sendMessage(String.format(line, TownyFormatter.formatMoney(TownySettings.getPurchasedBonusBlocksCost()), TownySettings.getMaxPurchedBlocks()));
+                    player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(TownySettings.getPurchasedBonusBlocksCost()), TownySettings.getMaxPurchedBlocks()));
                     player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
                 } else {
                 	// Temp placeholder.
@@ -742,7 +742,7 @@ public class TownCommand implements CommandExecutor  {
 	                        try {
 	                        	int bought = townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()));
 	                        	double cost = bought * TownySettings.getPurchasedBonusBlocksCost();
-	                        	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), bought, "bonus town blocks", TownyFormatter.formatMoney(cost)));
+	                        	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), bought, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
 	                        } catch (NumberFormatException e) {
 	                        	throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 	                        }
@@ -783,7 +783,7 @@ public class TownCommand implements CommandExecutor  {
     		try {
     			double cost = n * TownySettings.getPurchasedBonusBlocksCost();
                 if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Buy Bonus (%d)", n)))
-                	throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", cost + TownyEconomyObject.getEconomyCurrency()));
+                	throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
     	    } catch (EconomyException e1) {
                 throw new TownyException("Economy Error");
     	    }
@@ -800,9 +800,9 @@ public class TownCommand implements CommandExecutor  {
          */
 
         public void newTown(Player player, String name, String mayorName) {
-                TownyUniverse universe = plugin.getTownyUniverse();
+                
                 try {
-                        if (universe.isWarTime())
+                        if (TownyUniverse.isWarTime())
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
                         if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((TownySettings.isTownCreationAdminOnly() && !plugin.isPermissions())
@@ -846,7 +846,7 @@ public class TownCommand implements CommandExecutor  {
                         if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
                                 throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "You" : resident.getName())));
 
-                        newTown(universe, world, name, resident, key, player.getLocation());                    
+                        newTown( world, name, resident, key, player.getLocation());                    
                         TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
                 } catch (TownyException x) {
                         TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -856,7 +856,7 @@ public class TownCommand implements CommandExecutor  {
                 }
         }
         
-        public Town newTown(TownyUniverse universe, TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
+        public Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
                 world.newTownBlock(key);
                 TownyUniverse.getDataSource().newTown(name);
                 Town town = TownyUniverse.getDataSource().getTown(name);
@@ -912,7 +912,7 @@ public class TownCommand implements CommandExecutor  {
                 Town town;
                 try {
                         //TODO: Allow leaving town during war.
-                        if (plugin.getTownyUniverse().isWarTime()) 
+                        if (TownyUniverse.isWarTime()) 
                                 throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                         
                         resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -1083,7 +1083,7 @@ public class TownCommand implements CommandExecutor  {
                 // Show message if we are using iConomy and are charging for spawn travel.
                 if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Town Spawn (%s)", townSpawnPermission))) {
                 	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), 
-                    		TownyEconomyObject.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
+                			TownyEconomyHandler.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
                 }
                 
                 
@@ -1684,7 +1684,7 @@ public class TownCommand implements CommandExecutor  {
 			Town town;
 			TownyWorld world;
 			try {
-				if (plugin.getTownyUniverse().isWarTime())
+				if (TownyUniverse.isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_CLAIM.getNode()))
@@ -1722,19 +1722,19 @@ public class TownCommand implements CommandExecutor  {
 					} else
 						throw new TownyException(TownySettings.getLangString("msg_outpost_disable"));
 				} else {
-					selection = TownyUtil.selectWorldCoordArea(town, new WorldCoord(world, key), split);
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				selection = TownyUtil.filterTownOwnedBlocks(selection);
+				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
 				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
 
 				try {
 					double cost = blockCost * selection.size();
 					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
@@ -1768,7 +1768,7 @@ public class TownCommand implements CommandExecutor  {
                         Town town;
                         TownyWorld world;
                         try {
-                                if (plugin.getTownyUniverse().isWarTime())
+                                if (TownyUniverse.isWarTime())
                                         throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
                                 
                                 resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -1783,8 +1783,8 @@ public class TownCommand implements CommandExecutor  {
                                 	new TownClaim(plugin, player, town, null, false, false, false).start();
                                         //townUnclaimAll(town);
                                 else {
-                                        selection = TownyUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
-                                        selection = TownyUtil.filterOwnedBlocks(town, selection);
+                                        selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+                                        selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
                                         
                                         // Set the area to unclaim
                                         new TownClaim(plugin, player, town, selection, false, false, false).start();
@@ -1862,7 +1862,7 @@ public class TownCommand implements CommandExecutor  {
                 try {
                         double cost = blockCost * selection.size();
                         if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost))
-                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
+                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
                 } catch (EconomyException e1) {
                         throw new TownyException("Economy Error");
                 }

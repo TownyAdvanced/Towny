@@ -11,11 +11,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -146,7 +146,7 @@ public class TownyWorldCommand implements CommandExecutor  {
 			worldToggle(player, sender, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("regen")) {
 
-			if (plugin.getTownyUniverse().isWarTime()) {
+			if (TownyUniverse.isWarTime()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
 				return;
 			}
