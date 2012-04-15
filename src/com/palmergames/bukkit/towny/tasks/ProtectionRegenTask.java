@@ -9,9 +9,9 @@ import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.PistonExtensionMaterial;
 
-import com.palmergames.bukkit.towny.object.BlockLocation;
-import com.palmergames.bukkit.towny.object.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.regen.BlockLocation;
+import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 
 public class ProtectionRegenTask extends TownyTimerTask {
     

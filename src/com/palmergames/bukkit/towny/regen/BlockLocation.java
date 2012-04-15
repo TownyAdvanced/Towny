@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.regen;
 
 import org.bukkit.Location;
 import org.bukkit.World;

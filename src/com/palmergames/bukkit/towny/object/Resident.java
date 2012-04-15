@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 public class Resident extends TownBlockOwner {
 	private List<Resident> friends = new ArrayList<Resident>();

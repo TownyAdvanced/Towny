@@ -1,12 +1,10 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny.object;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+
 
 public class PlayerCache {
 	private WorldCoord lastTownBlock;

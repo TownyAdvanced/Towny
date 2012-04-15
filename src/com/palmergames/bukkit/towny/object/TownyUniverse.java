@@ -32,6 +32,8 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
+import com.palmergames.bukkit.towny.regen.BlockLocation;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -41,6 +43,7 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.War;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -65,7 +68,7 @@ public class TownyUniverse extends TownyObject {
 
 	// private List<Election> elections;
 	private static TownyDataSource dataSource;
-	private static CachePermissions cachePermissions = new CachePermissions();
+	private static PlayerCacheUtil cachePermissions = new PlayerCacheUtil();
 	private static TownyPermissionSource permissionSource;
 
 	private int townyRepeatingTask = -1;
@@ -508,7 +511,7 @@ public class TownyUniverse extends TownyObject {
 		return permissionSource;
 	}
 
-	public static CachePermissions getCachePermissions() {
+	public static PlayerCacheUtil getCachePermissions() {
 		return cachePermissions;
 	}
 	

@@ -1,17 +1,24 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.PlayerCache;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 
 /**
@@ -20,7 +27,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
  * @author ElgarL/Shade
  * 
  */
-public class CachePermissions {
+public class PlayerCacheUtil {
 
 	/**
 	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE at this location.
