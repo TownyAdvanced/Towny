@@ -106,15 +106,13 @@ public class TownyBlockListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		WorldCoord worldCoord;
 			
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
-			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
 			boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.DESTROY);
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
 			
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
@@ -183,7 +181,7 @@ public class TownyBlockListener implements Listener {
 		WorldCoord worldCoord;
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
-			worldCoord = new WorldCoord(world, Coord.parseCoord(block));
+			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 			
 			//Get build permissions (updates if none exist)
 			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.BUILD);

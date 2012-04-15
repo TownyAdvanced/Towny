@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -100,11 +99,11 @@ public class PlotCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
 			Resident resident;
-			TownyWorld world;
+			String world;
 			Town town;
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
-				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				world = player.getWorld().getName();
 				town = resident.getTown();
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -301,7 +300,7 @@ public class PlotCommand implements CommandExecutor {
 							return true;
 						}
 
-						for (String material : world.getPlotManagementMayorDelete())
+						for (String material : TownyUniverse.getDataSource().getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
 								player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));

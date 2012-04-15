@@ -71,7 +71,7 @@ public class TownClaim extends Thread {
 			for (WorldCoord worldCoord : selection) {
 				
 				try {
-					world = TownyUniverse.getDataSource().getWorld(worldCoord.getWorld().getName());
+					world = worldCoord.getTownyWorld();
 					if (!worlds.contains(world)) worlds.add(world);
 				
 					if (claim) {
@@ -138,7 +138,7 @@ public class TownClaim extends Thread {
                         throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
                 }
         } catch (NotRegisteredException e) {
-                TownBlock townBlock = worldCoord.getWorld().newTownBlock(worldCoord);
+                TownBlock townBlock = worldCoord.getTownyWorld().newTownBlock(worldCoord);
                 townBlock.setTown(town);
                 if (!town.hasHomeBlock())
                         town.setHomeBlock(townBlock);

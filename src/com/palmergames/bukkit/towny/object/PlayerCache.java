@@ -14,7 +14,7 @@ public class PlayerCache {
 	//TODO: cache last entity attacked
 
 	public PlayerCache(TownyWorld world, Player player) {
-		this(new WorldCoord(world, Coord.parseCoord(player)));
+		this(new WorldCoord(world.getName(), Coord.parseCoord(player)));
 		setLastLocation(player.getLocation());
 	}
 	

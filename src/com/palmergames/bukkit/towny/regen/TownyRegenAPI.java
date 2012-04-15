@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -235,7 +236,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		TownyMessaging.sendDebugMsg("Processing deleteTownBlockIds");
 
-		world = Bukkit.getWorld(worldCoord.getWorld().getName());
+		world = worldCoord.getBukkitWorld();
 		
 		if (world != null) {
 			/*
@@ -249,8 +250,12 @@ public class TownyRegenAPI extends TownyUniverse {
 				for (int x = 0; x < plotSize; x++)
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						if (worldCoord.getWorld().isPlotManagementDeleteIds(block.getTypeId())) {
-							block.setType(Material.AIR);
+						try {
+							if (worldCoord.getTownyWorld().isPlotManagementDeleteIds(block.getTypeId())) {
+								block.setType(Material.AIR);
+							}
+						} catch (NotRegisteredException e) {
+							// Not a registered world
 						}
 						block = null;
 					}

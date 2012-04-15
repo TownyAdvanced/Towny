@@ -48,15 +48,12 @@ public class TownyWarCustomListener implements Listener {
         CellUnderAttack cell = event.getCell().getAttackData();
 
         TownyUniverse universe = plugin.getTownyUniverse();
-        try {
-            TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
-            WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
-            universe.removeWarZone(worldCoord);
 
-            plugin.updateCache(worldCoord);
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        }
+        WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
+        universe.removeWarZone(worldCoord);
+
+        plugin.updateCache(worldCoord);
+
 
         String playerName;
         if (player == null) {
@@ -231,14 +228,11 @@ public class TownyWarCustomListener implements Listener {
         CellUnderAttack cell = event.getCell();
 
         TownyUniverse universe = plugin.getTownyUniverse();
-        try {
-            TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
-            WorldCoord worldCoord = new WorldCoord(world, cell.getX(), cell.getZ());
-            universe.removeWarZone(worldCoord);
-            plugin.updateCache(worldCoord);
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        }
+
+        WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
+        universe.removeWarZone(worldCoord);
+        plugin.updateCache(worldCoord);
+
         System.out.println(cell.getCellString());
     }
 }

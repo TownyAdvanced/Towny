@@ -306,7 +306,7 @@ public class TownyUniverse extends TownyObject {
 		WorldCoord worldCoord;
 
 		try {
-			worldCoord = new WorldCoord(getDataSource().getWorld(block.getWorld().getName()), Coord.parseCoord(block));
+			worldCoord = new WorldCoord(getDataSource().getWorld(block.getWorld().getName()).getName(), Coord.parseCoord(block));
 		} catch (NotRegisteredException e) {
 			// No record so must be Wilderness
 			return true;
@@ -333,7 +333,7 @@ public class TownyUniverse extends TownyObject {
 	public String getTownName(Location loc) {
 
 		try {
-			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()), Coord.parseCoord(loc));
+			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
 			return worldCoord.getTownBlock().getTown().getName();
 		} catch (NotRegisteredException e) {
 			// No data so return null
@@ -356,7 +356,7 @@ public class TownyUniverse extends TownyObject {
 		TownyMessaging.sendDebugMsg("Fetching TownBlock");
 
 		try {
-			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()), Coord.parseCoord(loc));
+			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
 			return worldCoord.getTownBlock();
 		} catch (NotRegisteredException e) {
 			// No data so return null
@@ -711,12 +711,20 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	public void addWarZone(WorldCoord worldCoord) {
-		worldCoord.getWorld().addWarZone(worldCoord);
+		try {
+			worldCoord.getTownyWorld().addWarZone(worldCoord);
+		} catch (NotRegisteredException e) {
+			// Not a registered world
+		}
 		plugin.updateCache(worldCoord);
 	}
 
 	public void removeWarZone(WorldCoord worldCoord) {
-		worldCoord.getWorld().removeWarZone(worldCoord);
+		try {
+			worldCoord.getTownyWorld().removeWarZone(worldCoord);
+		} catch (NotRegisteredException e) {
+			// Not a registered world
+		}
 		plugin.updateCache(worldCoord);
 	}
 

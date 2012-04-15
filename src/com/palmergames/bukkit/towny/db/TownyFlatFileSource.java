@@ -392,8 +392,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
 					split = line.split(",");
-					TownyWorld world = getWorld(split[0]);
-					WorldCoord worldCoord = new WorldCoord(world, Integer.parseInt(split[1]),Integer.parseInt(split[2]));
+					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]),Integer.parseInt(split[2]));
 					TownyRegenAPI.addWorldCoord(worldCoord);
 				}
 
@@ -1278,7 +1277,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"));
 			while (TownyRegenAPI.hasWorldCoords()) {
 				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-				fout.write(worldCoord.getWorld().getName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
+				fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
 			}
 			fout.close();
 			return true;

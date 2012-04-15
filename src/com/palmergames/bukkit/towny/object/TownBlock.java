@@ -231,7 +231,7 @@ public class TownBlock {
 	}
 	
 	public WorldCoord getWorldCoord() {
-		return new WorldCoord(world, x, z);
+		return new WorldCoord(world.getName(), x, z);
 	}
 
 	/**

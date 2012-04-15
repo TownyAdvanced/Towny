@@ -435,49 +435,52 @@ public class TownyEntityListener implements Listener {
 			WorldCoord worldCoord;
 			
 			try {
-				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(painting.getWorld().getName());
+				String worldName = painting.getWorld().getName();
+				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(worldName);
 					
 				if (!townyWorld.isUsingTowny())
 					return;
 				
-				worldCoord = new WorldCoord(townyWorld, Coord.parseCoord(painting.getLocation()));
+				worldCoord = new WorldCoord(worldName, Coord.parseCoord(painting.getLocation()));
+				
+				if (remover instanceof Player) {
+					Player player = (Player) evt.getRemover();
+
+					//Get destroy permissions (updates if none exist)
+					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.DESTROY);
+
+					PlayerCache cache = plugin.getCache(player);
+					cache.updateCoord(worldCoord);
+					TownBlockStatus status = cache.getStatus();
+					if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, painting.getEntityId(), TownyPermission.ActionType.DESTROY))
+						return;
+					if (!bDestroy)
+						event.setCancelled(true);
+					if (cache.hasBlockErrMsg())
+						TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+					
+				} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
+					
+					try {
+						TownBlock townBlock = worldCoord.getTownBlock();
+						
+						// Explosions are blocked in this plot
+						if ((!townBlock.getPermissions().explosion) && (!townBlock.getWorld().isForceExpl()))
+							event.setCancelled(true);					
+						
+					} catch (NotRegisteredException e) {
+						// Not in a town
+						if ((!townyWorld.isExpl()) && (!townyWorld.isForceExpl()))
+							event.setCancelled(true);
+					}
+
+				}
+				
+				
 			} catch (NotRegisteredException e1) {
 				//TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 				event.setCancelled(true);
 				return;
-			}
-			
-			if (remover instanceof Player) {
-				Player player = (Player) evt.getRemover();
-
-				//Get destroy permissions (updates if none exist)
-				boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.DESTROY);
-
-				PlayerCache cache = plugin.getCache(player);
-				cache.updateCoord(worldCoord);
-				TownBlockStatus status = cache.getStatus();
-				if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.DESTROY))
-					return;
-				if (!bDestroy)
-					event.setCancelled(true);
-				if (cache.hasBlockErrMsg())
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-				
-			} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
-				
-				try {
-					TownBlock townBlock = worldCoord.getTownBlock();
-					
-					// Explosions are blocked in this plot
-					if ((!townBlock.getPermissions().explosion) && (!townBlock.getWorld().isForceExpl()))
-						event.setCancelled(true);					
-					
-				} catch (NotRegisteredException e) {
-					// Not in a town
-					if ((!worldCoord.getWorld().isExpl()) && (!worldCoord.getWorld().isForceExpl()))
-						event.setCancelled(true);
-				}
-
 			}
 
 		}
@@ -498,34 +501,35 @@ public class TownyEntityListener implements Listener {
 		Player player = event.getPlayer();
 		Painting painting = event.getPainting();
 
-		WorldCoord worldCoord;
 		try {
 			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(painting.getWorld().getName());
 			
 			if (!townyWorld.isUsingTowny())
 				return;
 			
-			worldCoord = new WorldCoord(townyWorld, Coord.parseCoord(painting.getLocation()));
+			//Get build permissions (updates if none exist)
+			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.BUILD);
+
+			PlayerCache cache = plugin.getCache(player);
+			TownBlockStatus status = cache.getStatus();
+
+			if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, painting.getEntityId(), TownyPermission.ActionType.BUILD))
+				return;
+
+			if (!bBuild)
+				event.setCancelled(true);
+
+			if (cache.hasBlockErrMsg())
+				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+			
+			
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
 			return;
 		}
 
-		//Get build permissions (updates if none exist)
-		boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.BUILD);
-
-		PlayerCache cache = plugin.getCache(player);
-		TownBlockStatus status = cache.getStatus();
-
-		if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, painting.getEntityId(), TownyPermission.ActionType.BUILD))
-			return;
-
-		if (!bBuild)
-			event.setCancelled(true);
-
-		if (cache.hasBlockErrMsg())
-			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+		
 
 		TownyMessaging.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
