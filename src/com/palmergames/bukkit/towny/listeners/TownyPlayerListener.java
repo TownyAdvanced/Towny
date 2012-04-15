@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.listeners;
 
 
 import org.bukkit.GameMode;

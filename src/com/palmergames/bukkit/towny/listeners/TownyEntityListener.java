@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.listeners;
 
 import java.util.Collections;
 import java.util.List;
