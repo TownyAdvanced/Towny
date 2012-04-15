@@ -11,7 +11,7 @@ import java.util.List;
  *         Date: 4/15/12
  */
 public class BorderUtil {
-    public static List<CellBorder> getOuterBorder(List<WorldCoord> worldCoords, boolean bordersOnly) {
+    public static List<CellBorder> getOuterBorder(List<WorldCoord> worldCoords) {
         List<CellBorder> borderCoords = new ArrayList<CellBorder>();
         for (WorldCoord worldCoord : worldCoords) {
             CellBorder border = new CellBorder(worldCoord, new boolean[]{
