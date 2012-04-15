@@ -1,6 +1,19 @@
 package com.palmergames.bukkit.towny.listeners;
 
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.regen.BlockLocation;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.Colors;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,33 +24,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.material.Attachable;
-
-import com.palmergames.bukkit.towny.ChunkNotification;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.regen.BlockLocation;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
-import com.palmergames.bukkit.util.Colors;
 
 
 /**
@@ -386,27 +374,7 @@ public class TownyPlayerListener implements Listener {
 		plugin.getCache(player).setLastLocation(toLoc);
 		plugin.getCache(player).updateCoord(to);
 
-		// TODO: Player mode
-		if (plugin.hasPlayerMode(player, "townclaim"))
-			TownCommand.parseTownClaimCommand(player, new String[] {});
-		if (plugin.hasPlayerMode(player, "townunclaim"))
-			TownCommand.parseTownUnclaimCommand(player, new String[] {});
-		if (plugin.hasPlayerMode(player, "map"))
-			TownyCommand.showMap(player);
-
-		// claim: attempt to claim area
-		// claim remove: remove area from town
-
-		// Check if player has entered a new town/wilderness
-		try {
-			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-				String msg = chunkNotifier.getNotificationString();
-				if (msg != null)
-					player.sendMessage(msg);
-			}
-		} catch (NotRegisteredException e) {
-			// Not a registered world
-		}
+        PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to);
+        Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 }

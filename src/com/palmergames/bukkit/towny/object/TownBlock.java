@@ -45,7 +45,7 @@ public class TownBlock {
 
 	public Town getTown() throws NotRegisteredException {
 		if (!hasTown())
-			throw new NotRegisteredException();
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
 		return town;
 	}
 
@@ -69,7 +69,7 @@ public class TownBlock {
 
 	public Resident getResident() throws NotRegisteredException {
 		if (!hasResident())
-			throw new NotRegisteredException();
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
 		return resident;
 	}
 

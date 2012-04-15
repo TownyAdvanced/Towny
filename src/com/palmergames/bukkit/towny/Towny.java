@@ -1,56 +1,17 @@
 package com.palmergames.bukkit.towny;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
-import com.palmergames.bukkit.towny.command.NationCommand;
-import com.palmergames.bukkit.towny.command.PlotCommand;
-import com.palmergames.bukkit.towny.command.ResidentCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.TownyAdminCommand;
-import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.command.TownyWorldCommand;
+import com.palmergames.bukkit.towny.command.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
-import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
-import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
-import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
-import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.listeners.*;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
-import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
-import com.palmergames.bukkit.towny.permissions.NullPermSource;
-import com.palmergames.bukkit.towny.permissions.PEXSource;
-import com.palmergames.bukkit.towny.permissions.Perms3Source;
-import com.palmergames.bukkit.towny.permissions.bPermsSource;
+import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -60,6 +21,17 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -79,6 +51,7 @@ public class Towny extends JavaPlugin {
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyBlockListener blockListener = new TownyBlockListener(this);
+    private final TownyCustomListener customListener = new TownyCustomListener(this);
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
@@ -388,6 +361,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(weatherListener, this);
 			pluginManager.registerEvents(townyWarCustomListener, this);
+            pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			
 		}
@@ -477,7 +451,7 @@ public class Towny extends JavaPlugin {
 			if (world.getName().equals(name))
 				return world;
 
-		throw new NotRegisteredException();
+		throw new NotRegisteredException(String.format("A world called '$%s' has not been reigstered.", name));
 	}
 
 	public boolean hasCache(Player player) {
