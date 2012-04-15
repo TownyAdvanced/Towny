@@ -63,6 +63,10 @@ public class WorldCoord extends Coord {
     public static WorldCoord parseWorldCoord(Block block) {
         return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
     }
+
+    public WorldCoord add(int xOffset, int zOffset) {
+        return new WorldCoord(getWorldName(), getX() + xOffset, getZ() + zOffset);
+    }
 	
 	@Override
 	public int hashCode() {

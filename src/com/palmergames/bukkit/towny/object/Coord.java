@@ -40,6 +40,10 @@ public class Coord {
 		this.z = z;
 	}
 
+    public Coord add(int xOffset, int zOffset) {
+        return new Coord(getX() + xOffset, getZ() + zOffset);
+    }
+
 	@Override
 	public int hashCode() {
 		int result = 17;
