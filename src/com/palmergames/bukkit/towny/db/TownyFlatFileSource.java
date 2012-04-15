@@ -1966,6 +1966,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
 				TownyMessaging.sendErrorMsg("Error moving Town txt file.");
+				file.delete();
 			}
 		}
 	}
@@ -1978,6 +1979,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				FileMgmt.moveFile(file, ("deleted"));
 			} catch (IOException e) {
 				TownyMessaging.sendErrorMsg("Error moving Nation txt file.");
+				file.delete();
 			}
 		}
 	}
