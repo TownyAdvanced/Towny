@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.util;
+package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.WorldCoord;
