@@ -203,7 +203,7 @@ public class TownyWar {
 
                 // Check that the user can pay for the warflag.
                 if (balance < costToPlaceWarFlag)
-                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_insuficient_funds_warflag"), TownyFormatter.formatMoney(costToPlaceWarFlag)));
+                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_insuficient_funds_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 
                 // Check that the user can pay the fines from losing/winning all future warflags.
                 int activeFlagCount = getNumActiveFlags(attackingResident.getName());
@@ -243,7 +243,7 @@ public class TownyWar {
                     // Check if player can pay in worst case scenario.
                     if (balance < requiredAmount)
                         throw new TownyException(String.format(TownySettings.getLangString("msg_err_insuficient_funds_future"),
-                                TownyFormatter.formatMoney(cost),
+                        		TownyEconomyHandler.getFormattedBalance(cost),
                                 String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
                 }
             } catch (EconomyException e) {
@@ -270,7 +270,7 @@ public class TownyWar {
             if (costToPlaceWarFlag > 0) {
                 try {
                     attackingResident.pay(costToPlaceWarFlag, "War - WarFlag Cost");
-                    TownyMessaging.sendResidentMessage(attackingResident, String.format(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyFormatter.formatMoney(costToPlaceWarFlag)));
+                    TownyMessaging.sendResidentMessage(attackingResident, String.format(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
                 } catch (EconomyException e) {
                     e.printStackTrace();
                 }

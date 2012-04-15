@@ -1324,3 +1324,8 @@ v0.80.0.6:
 	- Fix cached Wild perms to use the world settings rather than global.
 	- More javadocs.
 	- Added UID's to the TownyObject for later implementation.
+v0.80.0.7:
+	- Added a new economy handler with support for...
+	  - Register
+	  - Vault (will require a build newer than 1.2.15-b172)
+	  - Native iConomy 5.01

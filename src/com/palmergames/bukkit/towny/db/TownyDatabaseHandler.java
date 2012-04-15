@@ -10,6 +10,7 @@ import javax.naming.InvalidNameException;
 
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -411,7 +412,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveResident(resident);
 		}
 		
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			try {
 				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
 				town.removeAccount();
@@ -453,7 +454,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveNation(toCheck);
 				
 		// Transfer any money to the warchest.
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			try {
 				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
 				nation.removeAccount();
@@ -626,7 +627,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		nation.setName(filteredName);
 		universe.getNationsMap().put(filteredName.toLowerCase(), nation);
 
-		if (plugin.isEcoActive())
+		if (TownyEconomyHandler.isActive())
 			nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
 
 		for (Town town : toSave) {

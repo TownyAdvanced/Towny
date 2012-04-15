@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -17,7 +18,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.ChatTools;
@@ -173,7 +173,7 @@ public class War {
                                 double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
                                 for (Nation winningNation : warringNations) {
                                         getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-                                        TownyMessaging.sendGlobalMessage(winningNation.getName() + " won " + nationWinnings + " " + TownyEconomyObject.getEconomyCurrency() + ".");
+                                        TownyMessaging.sendGlobalMessage(winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
                                 }
                         } catch (ArithmeticException e) {
                                 // A war ended with 0 nations.
@@ -182,7 +182,7 @@ public class War {
                         try {
                                 KeyValue<Town,Integer> winningTownScore = getWinningTownScore();
                                 getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Nation Winnings");
-                                TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + halfWinnings + " " + TownyEconomyObject.getEconomyCurrency() + " with the score " + winningTownScore.value + ".");
+                                TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
                         } catch (TownyException e) {
                         }
                 } catch (EconomyException e1) {
@@ -242,7 +242,7 @@ public class War {
                                 remove(townBlock.getTown());
                                 TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
                         } else
-                                TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost "+TownySettings.getWartimeTownBlockLossPrice()+" "+TownyEconomyObject.getEconomyCurrency()+".");
+                                TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
                 } catch (EconomyException e) {
                 }
                 if (townBlock.getTown().isHomeBlock(townBlock))
@@ -390,7 +390,7 @@ public class War {
                 output.add(Colors.Green + "  Towns: " + Colors.LightGreen + warringTowns.size() +" / " + townScores.size());
                 output.add(Colors.Green + "  WarZone: " + Colors.LightGreen + warZone.size() + " Town blocks");
                 try{
-        output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + warSpoils.getHoldingBalance() + " " + TownyEconomyObject.getEconomyCurrency());
+        output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
         return output;
                 }
                 catch(EconomyException e)

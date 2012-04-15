@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 //import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -18,7 +19,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -206,8 +206,8 @@ public class TownyEntityMonitorListener implements Listener {
 
 				if (price > 0) {
 					defenderResident.payTo(price, attackerResident, "Death Payment (War)");
-					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyObject.getFormattedBalance(price) + ".");
-					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyObject.getFormattedBalance(price) + ".");
+					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
 				}
 
 				// Resident doesn't have enough funds.
@@ -237,7 +237,7 @@ public class TownyEntityMonitorListener implements Listener {
 					price = defenderResident.getHoldingBalance();
 
 				defenderResident.payTo(price, new WarSpoils(), "Death Payment");
-				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyObject.getFormattedBalance(price) + ".");
+				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
 			}

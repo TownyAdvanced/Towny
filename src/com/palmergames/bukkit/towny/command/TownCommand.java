@@ -22,6 +22,7 @@ import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -37,7 +38,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -717,7 +717,7 @@ public class TownCommand implements CommandExecutor  {
 	                    + Colors.Green + "Cost: " + Colors.LightGreen + "%s"
 	                    + Colors.Gray + " | "
 	                    + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-                    player.sendMessage(String.format(line, TownyFormatter.formatMoney(TownySettings.getPurchasedBonusBlocksCost()), TownySettings.getMaxPurchedBlocks()));
+                    player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(TownySettings.getPurchasedBonusBlocksCost()), TownySettings.getMaxPurchedBlocks()));
                     player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
                 } else {
                 	// Temp placeholder.
@@ -742,7 +742,7 @@ public class TownCommand implements CommandExecutor  {
 	                        try {
 	                        	int bought = townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()));
 	                        	double cost = bought * TownySettings.getPurchasedBonusBlocksCost();
-	                        	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), bought, "bonus town blocks", TownyFormatter.formatMoney(cost)));
+	                        	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), bought, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
 	                        } catch (NumberFormatException e) {
 	                        	throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 	                        }
@@ -783,7 +783,7 @@ public class TownCommand implements CommandExecutor  {
     		try {
     			double cost = n * TownySettings.getPurchasedBonusBlocksCost();
                 if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Buy Bonus (%d)", n)))
-                	throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", cost + TownyEconomyObject.getEconomyCurrency()));
+                	throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
     	    } catch (EconomyException e1) {
                 throw new TownyException("Economy Error");
     	    }
@@ -1083,7 +1083,7 @@ public class TownCommand implements CommandExecutor  {
                 // Show message if we are using iConomy and are charging for spawn travel.
                 if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Town Spawn (%s)", townSpawnPermission))) {
                 	TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), 
-                    		TownyEconomyObject.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
+                			TownyEconomyHandler.getFormattedBalance(travelCost))); // + TownyEconomyObject.getEconomyCurrency()));
                 }
                 
                 
@@ -1734,7 +1734,7 @@ public class TownCommand implements CommandExecutor  {
 				try {
 					double cost = blockCost * selection.size();
 					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
@@ -1862,7 +1862,7 @@ public class TownCommand implements CommandExecutor  {
                 try {
                         double cost = blockCost * selection.size();
                         if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost))
-                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), cost + TownyEconomyObject.getEconomyCurrency()));
+                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
                 } catch (EconomyException e1) {
                         throw new TownyException("Economy Error");
                 }

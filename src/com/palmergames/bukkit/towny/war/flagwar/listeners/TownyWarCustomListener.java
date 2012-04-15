@@ -88,7 +88,7 @@ public class TownyWarCustomListener implements Listener {
                     }
                 }
 
-                String formattedMoney = TownyFormatter.formatMoney(TownyWarConfig.getDefendedAttackReward());
+                String formattedMoney = TownyEconomyHandler.getFormattedBalance(TownyWarConfig.getDefendedAttackReward());
                 if (defendingPlayer == null) {
                     if (attackingPlayer.pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
                         try {
@@ -164,7 +164,7 @@ public class TownyWarCustomListener implements Listener {
                         // Message
                         moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_pillage"),
                                 attackingResident.getFormattedName(),
-                                TownyFormatter.formatMoney(amount),
+                                TownyEconomyHandler.getFormattedBalance(amount),
                                 defendingTown.getFormattedName());
                     } else if (amount < 0) {
                         // Attacker -> Defending Town (Rebuild cost)
@@ -181,7 +181,7 @@ public class TownyWarCustomListener implements Listener {
                         // Message
                         moneyTranserMsg = String.format(TownySettings.getLangString("msg_enemy_war_area_won_rebuilding"),
                                 attackingResident.getFormattedName(),
-                                TownyFormatter.formatMoney(amount),
+                                TownyEconomyHandler.getFormattedBalance(amount),
                                 defendingTown.getFormattedName());
                     }
                 } catch (EconomyException x) {

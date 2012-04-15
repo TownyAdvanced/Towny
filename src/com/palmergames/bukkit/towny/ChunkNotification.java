@@ -207,7 +207,7 @@ public class ChunkNotification {
 	
 	public String getForSaleNotification() {
 		if (toForSale)
-            return String.format(forSaleNotificationFormat, TownyFormatter.formatMoney(toTownBlock.getPlotPrice()));
+            return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
 		return null;
 	}
 	

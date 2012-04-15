@@ -22,9 +22,7 @@ import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
 
 import com.earth2me.essentials.Essentials;
-import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.register.Register;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.command.ResidentCommand;
@@ -38,13 +36,11 @@ import com.palmergames.bukkit.towny.event.TownyEntityMonitorListener;
 import com.palmergames.bukkit.towny.event.TownyPlayerListener;
 import com.palmergames.bukkit.towny.event.TownyWeatherListener;
 import com.palmergames.bukkit.towny.event.TownyWorldListener;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -95,8 +91,6 @@ public class Towny extends JavaPlugin {
 	private Map<String, List<String>> playerMode = Collections.synchronizedMap(new HashMap<String, List<String>>());
 
 	private Essentials essentials = null;
-	private Register register = null;
-	private iConomy iconomy = null;
 	private boolean citizens2 = false;
 
 	private boolean error = false;
@@ -244,7 +238,7 @@ public class Towny extends JavaPlugin {
 		Pattern pattern = Pattern.compile("-b(\\d*?)jnks", Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(getServer().getVersion());
 
-		TownyEconomyObject.setPlugin(this);
+		//TownyEconomyHandler.setupEconomy();
 		
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
@@ -347,24 +341,11 @@ public class Towny extends JavaPlugin {
 		}
 
 		if (TownySettings.isUsingEconomy()) {
-			test = getServer().getPluginManager().getPlugin("Register");
-			if (test != null) {
-				this.register = (Register) test;
-				using.add(String.format("%s v%s", "Register", test.getDescription().getVersion()));
-			} else {
-				test = getServer().getPluginManager().getPlugin("iConomy");
-				if (test == null) {
-					//TownySettings.setUsingIConomy(false);
-					TownyMessaging.sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the Register.jar with iConomy, BOSE or Essentials Eco.");
-				} else {
-					if (!test.getDescription().getVersion().matches("5.01")) {
-						TownyMessaging.sendErrorMsg("Towny does not have native support for iConomy " + test.getDescription().getVersion() + ". You need the Register.jar.");
-					} else {
-						this.iconomy = (iConomy) test;
-						using.add(String.format("%s v%s", "iConomy", test.getDescription().getVersion()));
-					}
-				}
-			}
+			
+			if (TownyEconomyHandler.setupEconomy())
+				using.add(TownyEconomyHandler.getVersion());
+			else
+				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the vault/Register.jar with any of the supported eco systems.");
 		}
 
 		test = getServer().getPluginManager().getPlugin("Essentials");
@@ -474,21 +455,6 @@ public class Towny extends JavaPlugin {
 	public boolean isEssentials() {
 		return (TownySettings.isUsingEssentials() && (this.essentials != null));
 	}
-
-	// is GroupManager active
-	public boolean isEcoActive() {
-		return isRegister() || isIConomy();
-	}
-
-	// is register active
-	public boolean isRegister() {
-		return (TownySettings.isUsingEconomy() && (this.register != null));
-	}
-
-	// is iConomy active
-	public boolean isIConomy() {
-		return (TownySettings.isUsingEconomy() && (this.iconomy != null));
-	}
 	
 	// is Citizens2 active
 	public boolean isCitizens2() {
@@ -504,28 +470,6 @@ public class Towny extends JavaPlugin {
 			throw new TownyException("Essentials is not installed, or not enabled!");
 		else
 			return essentials;
-	}
-
-	/**
-	 * @return Economy object
-	 * @throws EconomyException
-	 */
-	public iConomy getIConomy() throws EconomyException {
-		if (iconomy == null)
-			throw new EconomyException("iConomy is not installed, or not enabled!");
-		else
-			return iconomy;
-	}
-
-	/**
-	 * @return Register object
-	 * @throws EconomyException
-	 */
-	public Register getRegister() throws EconomyException {
-		if (register == null)
-			throw new EconomyException("Economy is not installed, or not enabled!");
-		else
-			return register;
 	}
 
 	public World getServerWorld(String name) throws NotRegisteredException {
