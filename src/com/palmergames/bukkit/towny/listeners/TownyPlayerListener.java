@@ -232,9 +232,9 @@ public class TownyPlayerListener implements Listener {
 
 		try {
 			TownyWorld fromWorld = TownyUniverse.getDataSource().getWorld(from.getWorld().getName());
-			WorldCoord fromCoord = new WorldCoord(fromWorld, Coord.parseCoord(from));
+			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
 			TownyWorld toWorld = TownyUniverse.getDataSource().getWorld(to.getWorld().getName());
-			WorldCoord toCoord = new WorldCoord(toWorld, Coord.parseCoord(to));
+			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
 			if (!fromCoord.equals(toCoord))
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to);
 			else {
@@ -265,66 +265,66 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		WorldCoord worldCoord;
-		TownyWorld world = null;
-		//System.out.println("onPlayerInteractEvent");
 
 		try {
-			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+			String worldName = player.getWorld().getName();
+
 			if (block != null)
-				worldCoord = new WorldCoord(world, Coord.parseCoord(block));
+				worldCoord = new WorldCoord(worldName, Coord.parseCoord(block));
 			else
-				worldCoord = new WorldCoord(world, Coord.parseCoord(player));
+				worldCoord = new WorldCoord(worldName, Coord.parseCoord(player));
+			
+			//Get itemUse permissions (updates if none exist)
+			boolean bItemUse;
+			
+			if (block != null)
+				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.ITEM_USE);
+			else
+				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), TownyPermission.ActionType.ITEM_USE);
+			
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
+
+			PlayerCache cache = plugin.getCache(player);
+			//cache.updateCoord(worldCoord);
+			try {
+
+				TownBlockStatus status = cache.getStatus();
+				if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
+					return;
+				
+				// Allow item_use if we have an override
+				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE)))
+					|| (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))))
+					return;
+				
+				if (status == TownBlockStatus.WARZONE) {
+					if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
+						event.setCancelled(true);
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
+					}
+					return;
+				}
+				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
+					//if (status == TownBlockStatus.UNCLAIMED_ZONE)
+					//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
+					
+					event.setCancelled(true);
+				}
+				
+				if ((cache.hasBlockErrMsg())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
+					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+
+			} catch (NullPointerException e) {
+				System.out.print("NPE generated!");
+				System.out.print("Player: " + event.getPlayer().getName());
+				System.out.print("Item: " + event.getItem().getType().toString());
+				//System.out.print("Block: " + block.getType().toString());
+			}
+			
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 			event.setCancelled(true);
 			return;
-		}
-
-		//Get itemUse permissions (updates if none exist)
-		boolean bItemUse;
-		
-		if (block != null)
-			bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.ITEM_USE);
-		else
-			bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), TownyPermission.ActionType.ITEM_USE);
-		
-		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
-
-		PlayerCache cache = plugin.getCache(player);
-		//cache.updateCoord(worldCoord);
-		try {
-
-			TownBlockStatus status = cache.getStatus();
-			if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
-				return;
-			
-			// Allow item_use if we have an override
-			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE)))
-				|| (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))))
-				return;
-			
-			if (status == TownBlockStatus.WARZONE) {
-				if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
-				}
-				return;
-			}
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-				//if (status == TownBlockStatus.UNCLAIMED_ZONE)
-				//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
-				
-				event.setCancelled(true);
-			}
-			
-			if ((cache.hasBlockErrMsg())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
-				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		} catch (NullPointerException e) {
-			System.out.print("NPE generated!");
-			System.out.print("Player: " + event.getPlayer().getName());
-			System.out.print("Item: " + event.getItem().getType().toString());
-			//System.out.print("Block: " + block.getType().toString());
 		}
 
 	}

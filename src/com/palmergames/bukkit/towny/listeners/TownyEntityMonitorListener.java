@@ -157,7 +157,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (attackerPlayer != null && TownyUniverse.isWarTime())
 			try {
 				if (attackerResident == null)
-					throw new NotRegisteredException();
+					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
 
 				Town town = attackerResident.getTown();
 				if (TownySettings.getWarPointsForKill() > 0)
@@ -195,7 +195,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
 			try {
 				if (attackerResident == null)
-					throw new NotRegisteredException();
+					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
 
 				double price = TownySettings.getWartimeDeathPrice();
 				double townPrice = 0;

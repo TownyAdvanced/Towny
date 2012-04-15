@@ -451,7 +451,7 @@ public class Towny extends JavaPlugin {
 			if (world.getName().equals(name))
 				return world;
 
-		throw new NotRegisteredException();
+		throw new NotRegisteredException(String.format("A world called '$%s' has not been reigstered.", name));
 	}
 
 	public boolean hasCache(Player player) {
@@ -479,12 +479,7 @@ public class Towny extends JavaPlugin {
 	public PlayerCache getCache(Player player) {
 		if (!hasCache(player)) {
 			newCache(player);
-			try {
-				getTownyUniverse();
-				getCache(player).setLastTownBlock(new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(player)));
-			} catch (NotRegisteredException e) {
-				deleteCache(player);
-			}
+			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 		}
 
 		return playerCache.get(player.getName().toLowerCase());
@@ -498,21 +493,13 @@ public class Towny extends JavaPlugin {
 
 	public void updateCache() {
 		for (Player player : getServer().getOnlinePlayers())
-			try {
-				getTownyUniverse();
-				getCache(player).setLastTownBlock(new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(player)));
-			} catch (NotRegisteredException e) {
-				deleteCache(player);
-			}
+			
+				getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 	}
 
 	public void updateCache(Player player) {
-			try {
-				getTownyUniverse();
-				getCache(player).setLastTownBlock(new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(player)));
-			} catch (NotRegisteredException e) {
-				deleteCache(player);
-			}
+		
+			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 	}
 	
 	public void setPlayerMode(Player player, String[] modes, boolean notify) {

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.util.BorderUtil;
@@ -44,11 +45,15 @@ public class TownyCustomListener implements Listener {
         // claim remove: remove area from town
 
         // Check if player has entered a new town/wilderness
-        if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-            ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-            String msg = chunkNotifier.getNotificationString();
-            if (msg != null)
-                player.sendMessage(msg);
+        try {
+            if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
+                ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+                String msg = chunkNotifier.getNotificationString();
+                if (msg != null)
+                    player.sendMessage(msg);
+            }
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
         }
 
         if (plugin.hasPlayerMode(player, "plotborder")) {

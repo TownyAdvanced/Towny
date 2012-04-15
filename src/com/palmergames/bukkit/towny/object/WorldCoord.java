@@ -34,7 +34,7 @@ public class WorldCoord extends Coord {
     }
 
     @Deprecated
-    public TownyWorld getWorld() {
+    public TownyWorld getWorld() throws NotRegisteredException {
         return getTownyWorld();
     }
 
@@ -108,14 +108,13 @@ public class WorldCoord extends Coord {
 
     /**
      * Shortcut for TownyUniverse.getDataSource().getWorld(worldName)
-     * @return the relevant TownyWorld instance, or null if NotRegistered.
+     * 
+     * @return the relevant TownyWorld instance, or throw a NotRegisteredException.
      */
-    public TownyWorld getTownyWorld() {
-        try {
-            return TownyUniverse.getDataSource().getWorld(worldName);
-        } catch (NotRegisteredException e) {
-            return null;
-        }
+    public TownyWorld getTownyWorld() throws NotRegisteredException {
+
+    	return TownyUniverse.getDataSource().getWorld(worldName);
+
     }
 
     /**

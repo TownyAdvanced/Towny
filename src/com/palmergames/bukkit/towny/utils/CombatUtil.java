@@ -184,8 +184,7 @@ public class CombatUtil {
 		
 		if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
-				TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(defender)).getTownBlock();
+				TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 				if (!townBlock.getType().equals(TownBlockType.ARENA))
 					return true;
 			} catch (TownyException x) {

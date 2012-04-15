@@ -307,7 +307,6 @@ public class TownyWar {
 	}
 
     public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {
-        TownyWorld world = TownyUniverse.getDataSource().getWorld(cell.getWorldName());
-        return new WorldCoord(world, cell.getX(), cell.getZ());
+        return new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
     }
 }

@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
@@ -260,15 +259,14 @@ public class TownyAdminCommand implements CommandExecutor {
 				sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
 				return;
 			}
-			TownyWorld world;
+
 			try {
 				if (TownyUniverse.isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				List<WorldCoord> selection;
-				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(world, Coord.parseCoord(player)), split);
+				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
 
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 

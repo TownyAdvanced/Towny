@@ -132,7 +132,11 @@ public class ChunkNotification {
 	public String getAreaNotification() {
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessNotificationFormat, to.getWorld().getUnclaimedZoneName()) + ((to.getWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : "");
+				try {
+					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName()) + ((to.getTownyWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : "");
+				} catch (NotRegisteredException ex) {
+					// Not a Towny registered world
+				}
 			else
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
 		}
@@ -152,13 +156,22 @@ public class ChunkNotification {
 	
 	public String getPVPNotification() {
 		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP())))  {
-			return ((testWorldPVP() && (to.getWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");   
+			try {
+				return ((testWorldPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");
+			} catch (NotRegisteredException e) {
+				// Not a Towny registered world.
+			}   
 		}
 		return null;
 	}
 	
 	private boolean testWorldPVP() {
-		return Bukkit.getServer().getWorld(to.getWorld().getName()).getPVP();	
+		try {
+			return Bukkit.getServer().getWorld(to.getTownyWorld().getName()).getPVP();
+		} catch (NotRegisteredException e) {
+			// Not a Towny registered world
+			return true;
+		}	
 	}
 	
 	public String getPlotNotification() {

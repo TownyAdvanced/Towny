@@ -20,7 +20,7 @@ public class AreaSelectionUtil {
 		
 		if (args.length == 0) {
 			// claim with no sub command entered so attempt selection of one plot
-			if (pos.getWorld().isClaimable())
+			if (pos.getTownyWorld().isClaimable())
 				out.add(pos);
 			else
 				throw new TownyException(TownySettings.getLangString("msg_not_claimable"));
@@ -51,7 +51,7 @@ public class AreaSelectionUtil {
 	
 	public static List<WorldCoord> selectWorldCoordAreaRect(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
-		if (pos.getWorld().isClaimable()) {
+		if (pos.getTownyWorld().isClaimable()) {
 			if (args.length > 0) {
 				int r = 0, available = 0;
 				
@@ -79,7 +79,7 @@ public class AreaSelectionUtil {
 				for (int z = - r; z <= r; z++)
 					for (int x = - r; x <= r; x++)
 						if (out.size() < available)
-						out.add(new WorldCoord(pos.getWorld(), pos.getX()+x, pos.getZ()+z));
+						out.add(new WorldCoord(pos.getWorldName(), pos.getX()+x, pos.getZ()+z));
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 			}
@@ -90,7 +90,7 @@ public class AreaSelectionUtil {
 	
 	public static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
-		if (pos.getWorld().isClaimable()) {
+		if (pos.getTownyWorld().isClaimable()) {
 			if (args.length > 0) {
 				int r = 0, available = 0;
 				if (owner instanceof Town) {
@@ -118,7 +118,7 @@ public class AreaSelectionUtil {
 				for (int z = -r; z <= r; z++)
 					for (int x = -r; x <= r; x++)
 						if ((x*x+z*z <= r*r) && (out.size() < available))
-							out.add(new WorldCoord(pos.getWorld(), pos.getX()+x, pos.getZ()+z));
+							out.add(new WorldCoord(pos.getWorldName(), pos.getX()+x, pos.getZ()+z));
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 			}
@@ -197,7 +197,7 @@ public class AreaSelectionUtil {
         int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
         for (int i = 0; i < 4; i++)
             try {
-                TownBlock edgeTownBlock = worldCoord.getWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+                TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
                 if (!edgeTownBlock.isOwner(owner)) {
                     return true;
                 }

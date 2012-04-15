@@ -43,38 +43,28 @@ public class PlayerCacheUtil {
 		WorldCoord worldCoord;
 
 		try {
-			worldCoord = new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(location));
+			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
 			PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 			cache.updateCoord(worldCoord);
 
 			TownyMessaging.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
 			return cache.getCachePermission(action); // || plugin.isTownyAdmin(player); // Throws NullPointerException if the cache is empty
 
-		} catch (NotRegisteredException e) {
-			// World not known
-			e.printStackTrace();
 		} catch (NullPointerException e) {
 			// New or old cache permission was null, update it
 
-			try {
-				worldCoord = new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(location));
+			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
 
-				TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
-				//plugin.cacheBuild(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
-				triggerCacheCreate(player, location, worldCoord, status, action);
+			TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
+			//plugin.cacheBuild(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
+			triggerCacheCreate(player, location, worldCoord, status, action);
 
-				PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-				cache.updateCoord(worldCoord);
+			PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+			cache.updateCoord(worldCoord);
 
-				TownyMessaging.sendDebugMsg("New Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
-				return cache.getCachePermission(action); // || plugin.isTownyAdmin(player);
-
-			} catch (NotRegisteredException ex) {
-				// Will never get here.
-			}
-
+			TownyMessaging.sendDebugMsg("New Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
+			return cache.getCachePermission(action); // || plugin.isTownyAdmin(player);
 		}
-		return false;
 	}
 
 	/**
@@ -120,8 +110,13 @@ public class PlayerCacheUtil {
 		//if (isTownyAdmin(player))
 		//        return TownBlockStatus.ADMIN;
 
-		if (!worldCoord.getWorld().isUsingTowny())
-			return TownBlockStatus.OFF_WORLD;
+		try {
+			if (!worldCoord.getTownyWorld().isUsingTowny())
+				return TownBlockStatus.OFF_WORLD;
+		} catch (NotRegisteredException ex) {
+			// Not a registered world
+			return TownBlockStatus.NOT_REGISTERED;
+		}
 
 		//TownyUniverse universe = plugin.getTownyUniverse();
 		TownBlock townBlock;
@@ -339,12 +334,17 @@ public class PlayerCacheUtil {
 				if (TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(actionType.toString()))) {
 					return true;
 
-				} else if (!pos.getWorld().getUnclaimedZonePerm(actionType)) {
-					// Don't have permission to build/destroy/switch/item_use here
-					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), actionType.toString()));
-					return false;
 				} else
-					return true;
+					try {
+						if (!pos.getTownyWorld().getUnclaimedZonePerm(actionType)) {
+							// Don't have permission to build/destroy/switch/item_use here
+							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), actionType.toString()));
+							return false;
+						} else
+							return true;
+					} catch (NotRegisteredException e1) {
+						return true;
+					}
 			else {
 				TownyMessaging.sendErrorMsg(player, "Error updating destroy permission.");
 				return false;

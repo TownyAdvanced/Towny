@@ -1715,14 +1715,14 @@ public class TownCommand implements CommandExecutor  {
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 						selection = new ArrayList<WorldCoord>();
-						selection.add(new WorldCoord(world, key));
+						selection.add(new WorldCoord(world.getName(), key));
 						blockCost = TownySettings.getOutpostCost();
 						attachedToEdge = false;
 						outpost = true;
 					} else
 						throw new TownyException(TownySettings.getLangString("msg_outpost_disable"));
 				} else {
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, key), split);
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
 
@@ -1783,7 +1783,7 @@ public class TownCommand implements CommandExecutor  {
                                 	new TownClaim(plugin, player, town, null, false, false, false).start();
                                         //townUnclaimAll(town);
                                 else {
-                                        selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world, Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+                                        selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
                                         selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
                                         
                                         // Set the area to unclaim
@@ -1823,7 +1823,7 @@ public class TownCommand implements CommandExecutor  {
                 int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
                 for (int i = 0; i < 4; i++)
                         try {
-                                TownBlock edgeTownBlock = worldCoord.getWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+                                TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
                                 if (edgeTownBlock.isOwner(owner)) {
                                         if (TownySettings.getDebug())
                                                 System.out.println("true");
