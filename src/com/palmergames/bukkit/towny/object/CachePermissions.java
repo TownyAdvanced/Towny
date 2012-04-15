@@ -23,9 +23,8 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 public class CachePermissions {
 
 	/**
-	 * getCachePermission
-	 * 
-	 * returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
+	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE at this location.
+	 * Generates the cache if it doesn't exist.
 	 * 
 	 * @param player
 	 * @param location
@@ -53,7 +52,7 @@ public class CachePermissions {
 			try {
 				worldCoord = new WorldCoord(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), Coord.parseCoord(location));
 
-				TownBlockStatus status = cacheStatus(player, worldCoord, getStatusCache(player, worldCoord));
+				TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
 				//plugin.cacheBuild(player, worldCoord, plugin.getPermission(player, status, worldCoord, action));
 				triggerCacheCreate(player, location, worldCoord, status, action);
 
@@ -63,7 +62,7 @@ public class CachePermissions {
 				TownyMessaging.sendDebugMsg("New Cache permissions for " + action.toString() + " : " + cache.getCachePermission(action));
 				return cache.getCachePermission(action); // || plugin.isTownyAdmin(player);
 
-			} catch (NotRegisteredException e1) {
+			} catch (NotRegisteredException ex) {
 				// Will never get here.
 			}
 
@@ -71,6 +70,15 @@ public class CachePermissions {
 		return false;
 	}
 
+	/**
+	 * Generate a new cache for this player/action.
+	 * 
+	 * @param player
+	 * @param location
+	 * @param worldCoord
+	 * @param status
+	 * @param action
+	 */
 	private void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, ActionType action) {
 
 		switch (action) {
@@ -94,7 +102,14 @@ public class CachePermissions {
 
 	}
 
-	public TownBlockStatus getStatusCache(Player player, WorldCoord worldCoord) {
+	/**
+	 * Fetch the TownBlockStatus type for this player at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @return TownBlockStatus type.
+	 */
+	public TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 		//if (isTownyAdmin(player))
 		//        return TownBlockStatus.ADMIN;
 
@@ -194,6 +209,14 @@ public class CachePermissions {
 		}
 	}
 
+	/**
+	 * Update and return back the townBlockStatus for the player at this worldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param townBlockStatus
+	 * @return TownBlockStatus type.
+	 */
 	public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
@@ -203,6 +226,13 @@ public class CachePermissions {
 		return townBlockStatus;
 	}
 
+	/**
+	 * Update the player cache for Build rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param buildRight
+	 */
 	public void cacheBuild(Player player, WorldCoord worldCoord, boolean buildRight) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
@@ -211,6 +241,13 @@ public class CachePermissions {
 		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Build: " + buildRight);
 	}
 
+	/**
+	 * Update the player cache for Destroy rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param destroyRight
+	 */
 	public void cacheDestroy(Player player, WorldCoord worldCoord, boolean destroyRight) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
@@ -219,6 +256,13 @@ public class CachePermissions {
 		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Destroy: " + destroyRight);
 	}
 
+	/**
+	 * Update the player cache for Switch rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param switchRight
+	 */
 	public void cacheSwitch(Player player, WorldCoord worldCoord, boolean switchRight) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
@@ -227,6 +271,13 @@ public class CachePermissions {
 		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Switch: " + switchRight);
 	}
 
+	/**
+	 * Update the player cache for Item_use rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param itemUseRight
+	 */
 	public void cacheItemUse(Player player, WorldCoord worldCoord, boolean itemUseRight) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.updateCoord(worldCoord);
@@ -235,11 +286,26 @@ public class CachePermissions {
 		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
 	}
 
+	/**
+	 * Update the cached BlockErrMsg for this player.
+	 * 
+	 * @param player
+	 * @param msg
+	 */
 	public void cacheBlockErrMsg(Player player, String msg) {
 		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
 		cache.setBlockErrMsg(msg);
 	}
 
+	/**
+	 * Test if the player has permission to perform a certain action at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param status
+	 * @param pos
+	 * @param actionType
+	 * @return true if allowed.
+	 */
 	public boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, TownyPermission.ActionType actionType) {
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.WARZONE || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
@@ -266,7 +332,7 @@ public class CachePermissions {
 				if (TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(actionType.toString()))) {
 					return true;
 
-				} else if (!TownyPermission.getUnclaimedZonePerm(actionType, pos.getWorld())) {
+				} else if (!pos.getWorld().getUnclaimedZonePerm(actionType)) {
 					// Don't have permission to build/destroy/switch/item_use here
 					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), actionType.toString()));
 					return false;

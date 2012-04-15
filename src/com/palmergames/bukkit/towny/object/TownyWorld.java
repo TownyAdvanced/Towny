@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.util.JavaUtil;
 
 public class TownyWorld extends TownyObject {
@@ -438,6 +439,16 @@ public class TownyWorld extends TownyObject {
 
 	public void setUnclaimedZoneIgnore(List<Integer> unclaimedZoneIgnoreIds) {
 			this.unclaimedZoneIgnoreIds = unclaimedZoneIgnoreIds;
+	}
+	
+	public boolean getUnclaimedZonePerm(ActionType type) {
+		switch (type) {
+			case BUILD: return this.getUnclaimedZoneBuild();
+			case DESTROY: return this.getUnclaimedZoneDestroy();
+			case SWITCH: return this.getUnclaimedZoneSwitch();
+			case ITEM_USE: return this.getUnclaimedZoneItemUse();
+			default: throw new UnsupportedOperationException();
+		}
 	}
 
 	public Boolean getUnclaimedZoneBuild() {

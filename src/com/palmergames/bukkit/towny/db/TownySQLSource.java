@@ -309,7 +309,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	/**
 	 * open a connection to the SQL server.
 	 * 
-	 * @return
+	 * @return true if we successfully connected to the db.
 	 */
 	public boolean getContext()
 	{
@@ -340,7 +340,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	 * @param tb_name
 	 * @param args
 	 * @param keys
-	 * @return
+	 * @return true if the update was successfull.
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String,Object> args, List<String> keys)
 	{
@@ -438,7 +438,7 @@ public class TownySQLSource extends TownyFlatFileSource
 	 * 
 	 * @param tb_name
 	 * @param args
-	 * @return
+	 * @return true if the delete was a success.
 	 */
 	public boolean DeleteDB(String tb_name, HashMap<String,Object> args)
 	{

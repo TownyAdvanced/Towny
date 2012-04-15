@@ -51,7 +51,7 @@ public class TownyRegenAPI extends TownyUniverse {
 	 * Check if this WorldCoord is waiting for a snapshot to be taken.
 	 * 
 	 * @param worldCoord
-	 * @return
+	 * @return true if it's in the queue.
 	 */
 	public static boolean hasWorldCoord(WorldCoord worldCoord) {
 		return worldCoords.contains(worldCoord);
@@ -221,8 +221,7 @@ public class TownyRegenAPI extends TownyUniverse {
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
-	 * @param townBlock
-	 * @param material
+	 * @param worldCoord
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 

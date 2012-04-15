@@ -1321,3 +1321,5 @@ v0.80.0.5:
 v0.80.0.6:
 	- Lets have another go at stopping these nations hanging on after they should be removed.
 	- Refactor a bunch of classes for better organisation. ** Will likely break many plugin hooks due to moved exception classes **
+	- Fix cached Wild perms to use the world settings rather than global.
+	- More javadocs.

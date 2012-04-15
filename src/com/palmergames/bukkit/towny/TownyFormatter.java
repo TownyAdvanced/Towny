@@ -54,7 +54,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param townBlock
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownBlock townBlock) {
 		List<String> out = new ArrayList<String>();
@@ -84,7 +84,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param resident
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Resident resident) {
 		List<String> out = new ArrayList<String>();
@@ -133,7 +133,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param town
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Town town) {
 		List<String> out = new ArrayList<String>();
@@ -213,7 +213,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param nation
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Nation nation) {
 		List<String> out = new ArrayList<String>();
@@ -262,7 +262,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param world
-	 * @return
+	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownyWorld world) {
 		List<String> out = new ArrayList<String>();
