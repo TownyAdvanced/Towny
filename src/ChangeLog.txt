@@ -1323,3 +1323,4 @@ v0.80.0.6:
 	- Refactor a bunch of classes for better organisation. ** Will likely break many plugin hooks due to moved exception classes **
 	- Fix cached Wild perms to use the world settings rather than global.
 	- More javadocs.
+	- Added UID's to the TownyObject for later implementation.

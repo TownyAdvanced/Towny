@@ -1339,6 +1339,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 		}
 		try {
+			// Name
+			fout.write("name=" + town.getName() + newLine);
 			// Residents
 			fout.write("residents=" + StringMgmt.join(town.getResidents(), ",") + newLine);
 			// Mayor
