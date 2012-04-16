@@ -120,7 +120,7 @@ public class TownyEconomyHandler {
 				Type = EcoType.VAULT;
 				return true;
 			}
-		} catch (Exception ex) {
+		} catch (NoClassDefFoundError ex) {
 		}
 
 		/*
