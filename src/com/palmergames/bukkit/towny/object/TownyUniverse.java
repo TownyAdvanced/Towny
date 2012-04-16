@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -34,49 +33,17 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
-import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
-import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
-import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
+
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.TimeMgmt;
-import com.palmergames.util.TimeTools;
 
 public class TownyUniverse extends TownyObject {
-
-	private static Towny plugin;
-
-	protected Hashtable<String, Resident> residents = new Hashtable<String, Resident>();
-	protected Hashtable<String, Town> towns = new Hashtable<String, Town>();
-	protected Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
-	protected Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
-
-	private Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
-	private Set<Block> protectionPlaceholders = new HashSet<Block>();
-
-	// private List<Election> elections;
-	private static TownyDataSource dataSource;
-	private static PlayerCacheUtil cachePermissions = new PlayerCacheUtil();
-	private static TownyPermissionSource permissionSource;
-
-	private int townyRepeatingTask = -1;
-	private int dailyTask = -1;
-	private int mobRemoveTask = -1;
-	private int healthRegenTask = -1;
-	private int teleportWarmupTask = -1;
-	
-	private static War warEvent;
-	private String rootFolder;
 
 	public TownyUniverse(Towny plugin) {
 
@@ -84,109 +51,21 @@ public class TownyUniverse extends TownyObject {
 		setName("");
 		TownyUniverse.plugin = plugin;
 	}
+	
+	private static Towny plugin;
 
-	public void newDay() {
+	protected Hashtable<String, Resident> residents = new Hashtable<String, Resident>();
+	protected Hashtable<String, Town> towns = new Hashtable<String, Town>();
+	protected Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
+	protected Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
 
-		if (!isDailyTimerRunning())
-			toggleDailyTimer(true);
-		//dailyTimer.schedule(new DailyTimerTask(this), 0);
-		if (getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new DailyTimerTask(this)) == -1)
-			TownyMessaging.sendErrorMsg("Could not schedule newDay.");
-		setChangedNotify(NEW_DAY);
-	}
-
-	public void toggleTownyRepeatingTimer(boolean on) {
-
-		if (on && !isTownyRepeatingTaskRunning()) {
-			townyRepeatingTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new RepeatingTimerTask(this), 0, TimeTools.convertToTicks(1L));
-			if (townyRepeatingTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule Towny Timer Task.");
-		} else if (!on && isTownyRepeatingTaskRunning()) {
-			getPlugin().getServer().getScheduler().cancelTask(townyRepeatingTask);
-			townyRepeatingTask = -1;
-		}
-		setChanged();
-	}
-
-	public void toggleMobRemoval(boolean on) {
-
-		if (on && !isMobRemovalRunning()) {
-			mobRemoveTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new MobRemovalTimerTask(this, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
-			if (mobRemoveTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule mob removal loop.");
-		} else if (!on && isMobRemovalRunning()) {
-			getPlugin().getServer().getScheduler().cancelTask(mobRemoveTask);
-			mobRemoveTask = -1;
-		}
-		setChangedNotify(TOGGLE_MOB_REMOVAL);
-	}
-
-	public void toggleDailyTimer(boolean on) {
-
-		if (on && !isDailyTimerRunning()) {
-			long timeTillNextDay = AreaSelectionUtil.townyTime();
-			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-			dailyTask = getPlugin().getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new DailyTimerTask(this), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
-			if (dailyTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
-		} else if (!on && isDailyTimerRunning()) {
-			getPlugin().getServer().getScheduler().cancelTask(dailyTask);
-			dailyTask = -1;
-		}
-		setChangedNotify(TOGGLE_DAILY_TIMER);
-	}
-
-	public void toggleHealthRegen(boolean on) {
-
-		if (on && !isHealthRegenRunning()) {
-			healthRegenTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new HealthRegenTimerTask(this, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
-			if (healthRegenTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule health regen loop.");
-		} else if (!on && isHealthRegenRunning()) {
-			getPlugin().getServer().getScheduler().cancelTask(healthRegenTask);
-			healthRegenTask = -1;
-		}
-		setChangedNotify(TOGGLE_HEALTH_REGEN);
-	}
-
-	public void toggleTeleportWarmup(boolean on) {
-
-		if (on && !isTeleportWarmupRunning()) {
-			teleportWarmupTask = getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), new TeleportWarmupTimerTask(this), 0, 20);
-			if (teleportWarmupTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule teleport warmup loop.");
-		} else if (!on && isTeleportWarmupRunning()) {
-			getPlugin().getServer().getScheduler().cancelTask(teleportWarmupTask);
-			teleportWarmupTask = -1;
-		}
-		setChangedNotify(TOGGLE_TELEPORT_WARMUP);
-	}
-
-	public boolean isTownyRepeatingTaskRunning() {
-
-		return townyRepeatingTask != -1;
-
-	}
-
-	public boolean isMobRemovalRunning() {
-
-		return mobRemoveTask != -1;
-	}
-
-	public boolean isDailyTimerRunning() {
-
-		return dailyTask != -1;
-	}
-
-	public boolean isHealthRegenRunning() {
-
-		return healthRegenTask != -1;
-	}
-
-	public boolean isTeleportWarmupRunning() {
-
-		return teleportWarmupTask != -1;
-	}
+	// private List<Election> elections;
+	private static TownyDataSource dataSource;
+	private static PlayerCacheUtil cachePermissions = new PlayerCacheUtil();
+	private static TownyPermissionSource permissionSource;
+	
+	private static War warEvent;
+	private String rootFolder;
 
 	public void onLogin(Player player) throws AlreadyRegisteredException, NotRegisteredException {
 
@@ -281,9 +160,7 @@ public class TownyUniverse extends TownyObject {
 						} catch (EconomyException e) {
 							// Economy error, so ignore it and try to continue.
 						}
-						
 					}
-
 					
 				} catch (NotRegisteredException e) {
 					// Should never reach here as we tested it beforehand.
@@ -315,6 +192,13 @@ public class TownyUniverse extends TownyObject {
 		}
 	}
 
+	/**
+	 * Find a matching online player for this resident.
+	 * 
+	 * @param resident
+	 * @return an online player object
+	 * @throws TownyException
+	 */
 	public static Player getPlayer(Resident resident) throws TownyException {
 
 		for (Player player : getOnlinePlayers())
@@ -323,11 +207,22 @@ public class TownyUniverse extends TownyObject {
 		throw new TownyException(String.format("%s is not online", resident.getName()));
 	}
 
+	/**
+	 * Get all online players
+	 * 
+	 * @return array of online players
+	 */
 	public static Player[] getOnlinePlayers() {
 
 		return Bukkit.getOnlinePlayers();
 	}
 
+	/**
+	 * Get a list of all online players matching the residents supplied.
+	 * 
+	 * @param residents
+	 * @return list of all matching players
+	 */
 	public static List<Player> getOnlinePlayers(ResidentList residents) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -337,6 +232,12 @@ public class TownyUniverse extends TownyObject {
 		return players;
 	}
 
+	/**
+	 * Get a list of all online players for a specific town
+	 * 
+	 * @param town
+	 * @return list of all matching players
+	 */
 	public static List<Player> getOnlinePlayers(Town town) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -346,6 +247,12 @@ public class TownyUniverse extends TownyObject {
 		return players;
 	}
 
+	/**
+	 * Get a list of all online players for a specific nation
+	 * 
+	 * @param nation
+	 * @return list of all matching players
+	 */
 	public static List<Player> getOnlinePlayers(Nation nation) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -379,7 +286,6 @@ public class TownyUniverse extends TownyObject {
 			// Must be wilderness
 			return true;
 		}
-
 	}
 
 	/**
@@ -437,14 +343,6 @@ public class TownyUniverse extends TownyObject {
 	public boolean isActiveResident(Resident resident) {
 
 		return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (plugin.isOnline(resident.getName())));
-	}
-
-	public String getRootFolder() {
-
-		if (plugin != null)
-			return plugin.getDataFolder().getPath();
-		else
-			return rootFolder;
 	}
 
 	public boolean loadSettings() {
@@ -525,6 +423,14 @@ public class TownyUniverse extends TownyObject {
 		getDataSource().initialize(plugin, this);
 
 		return getDataSource().loadAll();
+	}
+	
+	public String getRootFolder() {
+
+		if (plugin != null)
+			return plugin.getDataFolder().getPath();
+		else
+			return rootFolder;
 	}
 
 	public void setDataSource(String databaseType) throws UnsupportedOperationException {
@@ -783,62 +689,7 @@ public class TownyUniverse extends TownyObject {
 		plugin.updateCache(worldCoord);
 	}
 
-	public boolean hasProtectionRegenTask(BlockLocation blockLocation) {
-
-		for (BlockLocation location : protectionRegenTasks.keySet()) {
-			if (location.isLocation(blockLocation)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
-
-		for (BlockLocation location : protectionRegenTasks.keySet()) {
-			if (location.isLocation(blockLocation)) {
-				return protectionRegenTasks.get(location);
-			}
-		}
-		return null;
-	}
-
-	public void addProtectionRegenTask(ProtectionRegenTask task) {
-
-		protectionRegenTasks.put(task.getBlockLocation(), task);
-	}
-
-	public void removeProtectionRegenTask(ProtectionRegenTask task) {
-
-		protectionRegenTasks.remove(task.getBlockLocation());
-		if (protectionRegenTasks.isEmpty())
-			protectionPlaceholders.clear();
-	}
-
-	public void cancelProtectionRegenTasks() {
-
-		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
-			plugin.getServer().getScheduler().cancelTask(task.getTaskId());
-			task.replaceProtections();
-		}
-		protectionRegenTasks.clear();
-		protectionPlaceholders.clear();
-	}
-
-	public boolean isPlaceholder(Block block) {
-
-		return protectionPlaceholders.contains(block);
-	}
-
-	public void addPlaceholder(Block block) {
-
-		protectionPlaceholders.add(block);
-	}
-
-	public void removePlaceholder(Block block) {
-
-		protectionPlaceholders.remove(block);
-	}
+	
 
 	public void setChangedNotify(TownyObservableType type) {
 

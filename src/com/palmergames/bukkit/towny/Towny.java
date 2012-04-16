@@ -10,9 +10,9 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.listeners.*;
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -57,7 +57,10 @@ public class Towny extends JavaPlugin {
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
+	
 	private TownyUniverse townyUniverse;
+	private TownyTimerHandler townyTimers;
+	
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
 
 	private Essentials essentials = null;
@@ -71,7 +74,9 @@ public class Towny extends JavaPlugin {
 		System.out.println("====================      Towny      ========================");
 
 		version = this.getDescription().getVersion();
+		
 		townyUniverse = new TownyUniverse(this);
+		townyTimers = new TownyTimerHandler(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -187,16 +192,18 @@ public class Towny extends JavaPlugin {
 		if (TownyUniverse.isWarTime())
 			getTownyUniverse().getWarEvent().toggleEnd();
 
-		townyUniverse.toggleTownyRepeatingTimer(false);
-		townyUniverse.toggleDailyTimer(false);
-		townyUniverse.toggleMobRemoval(false);
-		townyUniverse.toggleHealthRegen(false);
-		townyUniverse.toggleTeleportWarmup(false);
-		townyUniverse.cancelProtectionRegenTasks();
+		townyTimers.toggleTownyRepeatingTimer(false);
+		townyTimers.toggleDailyTimer(false);
+		townyTimers.toggleMobRemoval(false);
+		townyTimers.toggleHealthRegen(false);
+		townyTimers.toggleTeleportWarmup(false);
+		
+		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
 
 		townyUniverse = null;
+		townyTimers = null;
 
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 		System.out.println("=============================================================");
@@ -254,18 +261,18 @@ public class Towny extends JavaPlugin {
 		SetWorldFlags();
 
 		//make sure the timers are stopped for a reset
-		townyUniverse.toggleTownyRepeatingTimer(false);
-		townyUniverse.toggleDailyTimer(false);
-		townyUniverse.toggleMobRemoval(false);
-		townyUniverse.toggleHealthRegen(false);
-		townyUniverse.toggleTeleportWarmup(false);
+		townyTimers.toggleTownyRepeatingTimer(false);
+		townyTimers.toggleDailyTimer(false);
+		townyTimers.toggleMobRemoval(false);
+		townyTimers.toggleHealthRegen(false);
+		townyTimers.toggleTeleportWarmup(false);
 
 		//Start timers
-		townyUniverse.toggleTownyRepeatingTimer(true);
-		townyUniverse.toggleDailyTimer(true);
-		townyUniverse.toggleMobRemoval(true);
-		townyUniverse.toggleHealthRegen(TownySettings.hasHealthRegen());
-		townyUniverse.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		townyTimers.toggleTownyRepeatingTimer(true);
+		townyTimers.toggleDailyTimer(true);
+		townyTimers.toggleMobRemoval(true);
+		townyTimers.toggleHealthRegen(TownySettings.hasHealthRegen());
+		townyTimers.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		updateCache();
 
 		return true;
@@ -393,13 +400,23 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * Fetch the TownyUniverse object
+	 * Fetch the TownyUniverse instance
 	 * 
 	 * @return TownyUniverse
 	 */
 	public TownyUniverse getTownyUniverse() {
 
 		return townyUniverse;
+	}
+	
+	/**
+	 * Fetch the TownyTimerHandler instance
+	 * 
+	 * @return
+	 */
+	public TownyTimerHandler getTownyTimers() {
+
+		return townyTimers;
 	}
 
 	public String getVersion() {

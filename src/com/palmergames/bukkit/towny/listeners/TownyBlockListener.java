@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -71,12 +72,12 @@ public class TownyBlockListener implements Listener {
 		BlockLocation blockLocation = new BlockLocation(block.getLocation());
 
 		// if this is a placeholder remove it, as it's no longer needed.
-		if (plugin.getTownyUniverse().isPlaceholder(block)) {
-			plugin.getTownyUniverse().removePlaceholder(block);
+		if (TownyRegenAPI.isPlaceholder(block)) {
+			TownyRegenAPI.removePlaceholder(block);
 			block.setTypeId(0, false);
 		}
 
-		if (plugin.getTownyUniverse().hasProtectionRegenTask(blockLocation)) {
+		if (TownyRegenAPI.hasProtectionRegenTask(blockLocation)) {
 			//Cancel any physics events as we will be replacing this block
 			event.setCancelled(true);
 		} else {
@@ -84,7 +85,7 @@ public class TownyBlockListener implements Listener {
 			Block blockBelow = block.getRelative(BlockFace.DOWN);
 			blockLocation = new BlockLocation(blockBelow.getLocation());
 
-			if (plugin.getTownyUniverse().hasProtectionRegenTask(blockLocation) && (NeedsPlaceholder.contains(block.getType()))) {
+			if (TownyRegenAPI.hasProtectionRegenTask(blockLocation) && (NeedsPlaceholder.contains(block.getType()))) {
 				//System.out.print("Cancelling for Below on - " + block.getType().toString());
 				event.setCancelled(true);
 			}
@@ -139,14 +140,14 @@ public class TownyBlockListener implements Listener {
 
 				long delay = TownySettings.getRegenDelay();
 				if (delay > 0) {
-					if (!plugin.getTownyUniverse().isPlaceholder(block)) {
-						if (!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
+					if (!TownyRegenAPI.isPlaceholder(block)) {
+						if (!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 							ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
 							task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20 * delay));
-							plugin.getTownyUniverse().addProtectionRegenTask(task);
+							TownyRegenAPI.addProtectionRegenTask(task);
 						}
 					} else {
-						plugin.getTownyUniverse().removePlaceholder(block);
+						TownyRegenAPI.removePlaceholder(block);
 						block.setTypeId(0, false);
 					}
 				} else

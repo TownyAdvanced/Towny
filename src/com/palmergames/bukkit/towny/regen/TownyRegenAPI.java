@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.regen;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -19,6 +21,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.MinecraftTools;
 
 /**
@@ -40,6 +43,12 @@ public class TownyRegenAPI extends TownyUniverse {
 
 	// A list of worldCoords which are needing snapshots
 	private static List<WorldCoord> worldCoords = new ArrayList<WorldCoord>();
+	
+	// A holder for each protection regen task
+	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
+	
+	// List of protection blocks placed to prevent blockPhysics.
+	private static  Set<Block> protectionPlaceholders = new HashSet<Block>();
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
@@ -331,4 +340,64 @@ public class TownyRegenAPI extends TownyUniverse {
 		}
 	}
 
+	/*
+	 * Protection Regen follows
+	 */
+	
+	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
+
+		for (BlockLocation location : protectionRegenTasks.keySet()) {
+			if (location.isLocation(blockLocation)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
+
+		for (BlockLocation location : protectionRegenTasks.keySet()) {
+			if (location.isLocation(blockLocation)) {
+				return protectionRegenTasks.get(location);
+			}
+		}
+		return null;
+	}
+
+	public static void addProtectionRegenTask(ProtectionRegenTask task) {
+
+		protectionRegenTasks.put(task.getBlockLocation(), task);
+	}
+
+	public static void removeProtectionRegenTask(ProtectionRegenTask task) {
+
+		protectionRegenTasks.remove(task.getBlockLocation());
+		if (protectionRegenTasks.isEmpty())
+			protectionPlaceholders.clear();
+	}
+
+	public static void cancelProtectionRegenTasks() {
+
+		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
+			getPlugin().getServer().getScheduler().cancelTask(task.getTaskId());
+			task.replaceProtections();
+		}
+		protectionRegenTasks.clear();
+		protectionPlaceholders.clear();
+	}
+
+	public static boolean isPlaceholder(Block block) {
+
+		return protectionPlaceholders.contains(block);
+	}
+
+	public static void addPlaceholder(Block block) {
+
+		protectionPlaceholders.add(block);
+	}
+
+	public static void removePlaceholder(Block block) {
+
+		protectionPlaceholders.remove(block);
+	}
 }

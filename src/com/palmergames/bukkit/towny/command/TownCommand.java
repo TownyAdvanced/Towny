@@ -1104,7 +1104,7 @@ public class TownCommand implements CommandExecutor {
 			}
 
 			if (!UsingESS) {
-				if (plugin.getTownyUniverse().isTeleportWarmupRunning()) {
+				if (plugin.getTownyTimers().isTeleportWarmupRunning()) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 					plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);

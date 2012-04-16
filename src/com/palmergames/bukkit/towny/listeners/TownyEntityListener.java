@@ -50,6 +50,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -374,10 +375,10 @@ public class TownyEntityListener implements Listener {
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 							if (townyWorld.isProtectingExplosionEntity(entity)) {
-								if ((!plugin.getTownyUniverse().hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, false);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-									plugin.getTownyUniverse().addProtectionRegenTask(task);
+									TownyRegenAPI.addProtectionRegenTask(task);
 									event.setYield((float) 0.0);
 								}
 							}

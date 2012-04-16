@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
@@ -69,7 +70,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Remove from teleport queue (if exists)
 		try {
-			if (plugin.getTownyUniverse().isTeleportWarmupRunning())
+			if (plugin.getTownyTimers().isTeleportWarmupRunning())
 				plugin.getTownyUniverse().abortTeleportRequest(TownyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
 		} catch (NotRegisteredException e) {
 		}
@@ -155,7 +156,7 @@ public class TownyPlayerListener implements Listener {
 				Attachable attachable = (Attachable) event.getClickedBlock().getState().getData();
 				BlockLocation attachedToBlock = new BlockLocation(event.getClickedBlock().getRelative(attachable.getAttachedFace()).getLocation());
 				// Prevent attached blocks from falling off when interacting
-				if (plugin.getTownyUniverse().hasProtectionRegenTask(attachedToBlock)) {
+				if (TownyRegenAPI.hasProtectionRegenTask(attachedToBlock)) {
 					event.setCancelled(true);
 					return;
 				}

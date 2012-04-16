@@ -12,6 +12,7 @@ import org.bukkit.material.PistonExtensionMaterial;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
@@ -60,7 +61,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	public void run() {
 
 		replaceProtections();
-		universe.removeProtectionRegenTask(this);
+		TownyRegenAPI.removeProtectionRegenTask(this);
 	}
 
 	public void replaceProtections() {
@@ -98,7 +99,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			Block attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
 			if (attachedBlock.getTypeId() == 0) {
 				attachedBlock.setTypeId(placeholder.getId(), false);
-				universe.addPlaceholder(attachedBlock);
+				TownyRegenAPI.addPlaceholder(attachedBlock);
 			}
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 		} else {
@@ -110,12 +111,12 @@ public class ProtectionRegenTask extends TownyTimerTask {
 					} else {
 						blockBelow.setTypeId(placeholder.getId(), true);
 					}
-					universe.addPlaceholder(blockBelow);
+					TownyRegenAPI.addPlaceholder(blockBelow);
 				}
 			}
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), !NeedsPlaceholder.contains(state.getType()));
 		}
-		universe.removePlaceholder(block);
+		TownyRegenAPI.removePlaceholder(block);
 	}
 
 	/**

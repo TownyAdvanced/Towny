@@ -9,6 +9,7 @@ public enum TownyObservableType {
 
 	// TownyUniverse
 	NEW_DAY,
+	TOGGLE_REPEATING_TIMER,
 	TOGGLE_MOB_REMOVAL,
 	TOGGLE_DAILY_TIMER,
 	TOGGLE_HEALTH_REGEN,
