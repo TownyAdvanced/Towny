@@ -26,7 +26,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * 
 	 * @param amount
 	 * @param reason
-	 * @return
+	 * @return true if successfull
 	 * @throws EconomyException
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {

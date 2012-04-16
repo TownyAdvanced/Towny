@@ -177,8 +177,8 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns the accounts current balance
 	 * 
-	 * @param name
-	 * @return
+	 * @param accountName
+	 * @return double containing the total in the account
 	 */
 	public static double getBalance(String accountName, World world) {
 
@@ -211,9 +211,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns true if the account has enough money
 	 * 
-	 * @param name
+	 * @param accountName
 	 * @param amount
-	 * @return
+	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, Double amount, World world) {
 
@@ -226,9 +226,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Attempts to remove an amount from an account
 	 * 
-	 * @param name
+	 * @param accountName
 	 * @param amount
-	 * @return
+	 * @return true if successful
 	 */
 	public static boolean subtract(String accountName, Double amount, World world) {
 
