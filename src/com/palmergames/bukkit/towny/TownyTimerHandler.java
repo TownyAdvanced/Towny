@@ -29,6 +29,12 @@ import com.palmergames.util.TimeTools;
  */
 public class TownyTimerHandler{
 	
+	public TownyTimerHandler (Towny plugin) {
+		
+		TownyTimerHandler.plugin = plugin;
+		universe = plugin.getTownyUniverse();
+	}
+	
 	private static Towny plugin;
 	private TownyUniverse universe;
 	
@@ -37,12 +43,6 @@ public class TownyTimerHandler{
 	private int mobRemoveTask = -1;
 	private int healthRegenTask = -1;
 	private int teleportWarmupTask = -1;
-	
-	public TownyTimerHandler (Towny plugin) {
-		
-		TownyTimerHandler.plugin = plugin;
-		universe = plugin.getTownyUniverse();
-	}
 
 	public void newDay() {
 
