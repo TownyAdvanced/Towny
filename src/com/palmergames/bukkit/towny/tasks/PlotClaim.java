@@ -195,7 +195,7 @@ public class PlotClaim extends Thread {
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
-			TownyUniverse.getDataSource().deleteTownBlock(townBlock);
+			TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			plugin.updateCache();
 
