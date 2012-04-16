@@ -605,7 +605,7 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * Check if the player has a specific.
+	 * Check if the player has a specific mode.
 	 * 
 	 * @param player
 	 * @param mode
