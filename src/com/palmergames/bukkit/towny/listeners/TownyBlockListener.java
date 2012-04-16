@@ -118,7 +118,7 @@ public class TownyBlockListener implements Listener {
 			TownBlockStatus status = cache.getStatus();
 
 			// Allow destroy if we are in wilds and have an override.
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (plugin.getTownyUniverse().getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
+			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
 				return;
 
 			// Allow destroy if we have an override
@@ -190,7 +190,7 @@ public class TownyBlockListener implements Listener {
 			TownBlockStatus status = cache.getStatus();
 
 			// Allow build if in wilds/wilderness and we have an override
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (plugin.getTownyUniverse().getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
+			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
 				return;
 
 			// Allow build if we have a town override

@@ -269,7 +269,7 @@ public class TownyUniverse extends TownyObject {
 	 * @param block
 	 * @return true is in wilderness
 	 */
-	public boolean isWilderness(Block block) {
+	public static boolean isWilderness(Block block) {
 
 		WorldCoord worldCoord;
 
@@ -297,7 +297,7 @@ public class TownyUniverse extends TownyObject {
 	 * @param loc
 	 * @return name of any town at this location, or null for none.
 	 */
-	public String getTownName(Location loc) {
+	public static String getTownName(Location loc) {
 
 		try {
 			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
@@ -318,7 +318,7 @@ public class TownyUniverse extends TownyObject {
 	 * @param loc
 	 * @return TownBlock at this location, or null for none.
 	 */
-	public TownBlock getTownBlock(Location loc) {
+	public static TownBlock getTownBlock(Location loc) {
 
 		TownyMessaging.sendDebugMsg("Fetching TownBlock");
 

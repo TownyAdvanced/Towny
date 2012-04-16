@@ -1038,9 +1038,9 @@ public class TownCommand implements CommandExecutor {
 					String inTown = null;
 					try {
 						Location loc = plugin.getCache(player).getLastLocation();
-						inTown = plugin.getTownyUniverse().getTownName(loc);
+						inTown = TownyUniverse.getTownName(loc);
 					} catch (NullPointerException e) {
-						inTown = plugin.getTownyUniverse().getTownName(player.getLocation());
+						inTown = TownyUniverse.getTownName(player.getLocation());
 					}
 
 					if (inTown == null && disallowedZones.contains("unclaimed"))
