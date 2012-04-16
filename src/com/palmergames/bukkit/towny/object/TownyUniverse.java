@@ -74,23 +74,13 @@ public class TownyUniverse extends TownyObject {
 	private int mobRemoveTask = -1;
 	private int healthRegenTask = -1;
 	private int teleportWarmupTask = -1;
+	
 	private static War warEvent;
 	private String rootFolder;
 
-	public TownyUniverse() {
-
-		setName("");
-		rootFolder = "";
-	}
-
-	public TownyUniverse(String rootFolder) {
-
-		setName("");
-		this.rootFolder = rootFolder;
-	}
-
 	public TownyUniverse(Towny plugin) {
 
+		// Initialize the object.
 		setName("");
 		TownyUniverse.plugin = plugin;
 	}
@@ -449,32 +439,6 @@ public class TownyUniverse extends TownyObject {
 		return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (plugin.isOnline(resident.getName())));
 	}
 
-	/*
-	 * public List<String> getStatus(TownBlock townBlock) {
-	 * return TownyFormatter.getStatus(townBlock);
-	 * }
-	 * 
-	 * public List<String> getStatus(Resident resident) {
-	 * return TownyFormatter.getStatus(resident);
-	 * }
-	 * 
-	 * public List<String> getStatus(Town town) {
-	 * return TownyFormatter.getStatus(town);
-	 * }
-	 * 
-	 * public List<String> getStatus(Nation nation) {
-	 * return TownyFormatter.getStatus(nation);
-	 * }
-	 * 
-	 * public List<String> getStatus(TownyWorld world) {
-	 * return TownyFormatter.getStatus(world);
-	 * }
-	 * 
-	 * public List<String> getTaxStatus(Resident resident) {
-	 * return TownyFormatter.getTaxStatus(resident);
-	 * }
-	 */
-
 	public String getRootFolder() {
 
 		if (plugin != null)
@@ -717,25 +681,6 @@ public class TownyUniverse extends TownyObject {
 		return out;
 	}
 
-	public boolean areAllAllies(List<Nation> possibleAllies) {
-
-		if (possibleAllies.size() <= 1)
-			return true;
-		else {
-			for (int i = 0; i < possibleAllies.size() - 1; i++)
-				if (!possibleAllies.get(i).hasAlly(possibleAllies.get(i + 1)))
-					return false;
-			return true;
-		}
-	}
-
-	public void sendMessageTo(ResidentList residents, String msg, String modeRequired) {
-
-		for (Player player : getOnlinePlayers(residents))
-			if (plugin.hasPlayerMode(player, modeRequired))
-				player.sendMessage(msg);
-	}
-
 	public List<Resident> getValidatedResidents(Object sender, String[] names) {
 
 		List<Resident> invited = new ArrayList<Resident>();
@@ -789,7 +734,7 @@ public class TownyUniverse extends TownyObject {
 		return invited;
 	}
 
-	public List<Resident> getOnlineResidents(ResidentList residentList) {
+	public static List<Resident> getOnlineResidents(ResidentList residentList) {
 
 		List<Resident> onlineResidents = new ArrayList<Resident>();
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
@@ -901,6 +846,32 @@ public class TownyUniverse extends TownyObject {
 		notifyObservers(type);
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param possibleAllies
+	 * @return
+	 */
+	@Deprecated
+	public boolean areAllAllies(List<Nation> possibleAllies) {
+
+		if (possibleAllies.size() <= 1)
+			return true;
+		else {
+			for (int i = 0; i < possibleAllies.size() - 1; i++)
+				if (!possibleAllies.get(i).hasAlly(possibleAllies.get(i + 1)))
+					return false;
+			return true;
+		}
+	}
+	
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @return
+	 */
 	@Deprecated
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 
@@ -911,6 +882,13 @@ public class TownyUniverse extends TownyObject {
 		}
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	@Deprecated
 	public boolean isAlly(String a, String b) {
 
@@ -929,6 +907,13 @@ public class TownyUniverse extends TownyObject {
 		return false;
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	@Deprecated
 	public boolean isAlly(Town a, Town b) {
 
@@ -945,6 +930,13 @@ public class TownyUniverse extends TownyObject {
 		return false;
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	@Deprecated
 	public boolean canAttackEnemy(String a, String b) {
 
@@ -967,6 +959,13 @@ public class TownyUniverse extends TownyObject {
 		return false;
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	@Deprecated
 	public boolean isEnemy(String a, String b) {
 
@@ -985,6 +984,13 @@ public class TownyUniverse extends TownyObject {
 		return false;
 	}
 
+	/**
+	 * Deprecated - Use CombatUtil
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	@Deprecated
 	public boolean isEnemy(Town a, Town b) {
 
@@ -1443,111 +1449,4 @@ public class TownyUniverse extends TownyObject {
 		return NameValidation.checkAndFilterArray(arr);
 	}
 
-	/*
-	 * @Deprecated
-	 * public void sendMessage(Player player, List<String> lines) {
-	 * sendMessage(player, lines.toArray(new String[0]));
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendTownMessage(Town town, List<String> lines) {
-	 * sendTownMessage(town, lines.toArray(new String[0]));
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendNationMessage(Nation nation, List<String> lines) {
-	 * sendNationMessage(nation, lines.toArray(new String[0]));
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendGlobalMessage(List<String> lines) {
-	 * sendGlobalMessage(lines.toArray(new String[0]));
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendGlobalMessage(String line) {
-	 * for (Player player : getOnlinePlayers()) {
-	 * player.sendMessage(line);
-	 * plugin.log("[Global Message] " + player.getName() + ": " + line);
-	 * }
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendMessage(Player player, String[] lines) {
-	 * for (String line : lines) {
-	 * player.sendMessage(line);
-	 * //plugin.log("[send Message] " + player.getName() + ": " + line);
-	 * }
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendResidentMessage(Resident resident, String[] lines) throws
-	 * TownyException {
-	 * for (String line : lines)
-	 * plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-	 * Player player = getPlayer(resident);
-	 * for (String line : lines)
-	 * player.sendMessage(line);
-	 * 
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendTownMessage(Town town, String[] lines) {
-	 * for (String line : lines)
-	 * plugin.log("[Town Msg] " + town.getName() + ": " + line);
-	 * for (Player player : getOnlinePlayers(town)){
-	 * for (String line : lines)
-	 * player.sendMessage(line);
-	 * }
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendNationMessage(Nation nation, String[] lines) {
-	 * for (String line : lines)
-	 * plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-	 * for (Player player : getOnlinePlayers(nation))
-	 * for (String line : lines)
-	 * player.sendMessage(line);
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendGlobalMessage(String[] lines) {
-	 * for (String line : lines)
-	 * plugin.log("[Global Msg] " + line);
-	 * for (Player player : getOnlinePlayers())
-	 * for (String line : lines)
-	 * player.sendMessage(line);
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendResidentMessage(Resident resident, String line) throws
-	 * TownyException {
-	 * plugin.log("[Resident Msg] " + resident.getName() + ": " + line);
-	 * Player player = getPlayer(resident);
-	 * player.sendMessage(TownySettings.getLangString("default_towny_prefix") +
-	 * line);
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendTownMessage(Town town, String line) {
-	 * plugin.log("[Town Msg] " + town.getName() + ": " + line);
-	 * for (Player player : getOnlinePlayers(town))
-	 * player.sendMessage(TownySettings.getLangString("default_towny_prefix") +
-	 * line);
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendNationMessage(Nation nation, String line) {
-	 * plugin.log("[Nation Msg] " + nation.getName() + ": " + line);
-	 * for (Player player : getOnlinePlayers(nation))
-	 * player.sendMessage(line);
-	 * }
-	 * 
-	 * @Deprecated
-	 * public void sendTownBoard(Player player, Town town) {
-	 * for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() +
-	 * "] " + Colors.Yellow + town.getTownBoard()))
-	 * player.sendMessage(line);
-	 * }
-	 */
 }

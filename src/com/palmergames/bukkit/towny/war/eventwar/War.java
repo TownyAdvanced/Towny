@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ServerBroadCastTimerTask;
@@ -237,8 +238,8 @@ public class War {
 		if (hp > 0) {
 			warZone.put(worldCoord, hp);
 			//if (hp % 10 == 0) {
-			universe.sendMessageTo(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			universe.sendMessageTo(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			//}
 		} else
 			remove(attacker, townBlock);
@@ -367,7 +368,7 @@ public class War {
 
 		if (warringNations.size() <= 1)
 			toggleEnd();
-		else if (plugin.getTownyUniverse().areAllAllies(warringNations))
+		else if (CombatUtil.areAllAllies(warringNations))
 			toggleEnd();
 	}
 

@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -25,6 +26,11 @@ import com.palmergames.bukkit.util.MinecraftTools;
  * 
  */
 public class TownyRegenAPI extends TownyUniverse {
+
+	public TownyRegenAPI(Towny plugin) {
+
+		super(plugin);
+	}
 
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<String, PlotBlockData>();

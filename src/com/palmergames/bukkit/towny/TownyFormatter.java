@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -35,7 +36,7 @@ public class TownyFormatter {
 
 	public static List<String> getFormattedOnlineResidents(Towny plugin, String prefix, ResidentList residentList) {
 
-		List<Resident> onlineResidents = plugin.getTownyUniverse().getOnlineResidents(residentList);
+		List<Resident> onlineResidents = TownyUniverse.getOnlineResidents(residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 

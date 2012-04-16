@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.List;
+
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Arrow;
@@ -262,6 +264,24 @@ public class CombatUtil {
 			return false;
 		}
 		return false;
+	}
+	
+	/**
+	 * Test if all the listed nations are allies
+	 * 
+	 * @param possibleAllies
+	 * @return true if they are all allies
+	 */
+	public static boolean areAllAllies(List<Nation> possibleAllies) {
+
+		if (possibleAllies.size() <= 1)
+			return true;
+		else {
+			for (int i = 0; i < possibleAllies.size() - 1; i++)
+				if (!possibleAllies.get(i).hasAlly(possibleAllies.get(i + 1)))
+					return false;
+			return true;
+		}
 	}
 
 	/**

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
@@ -417,5 +418,19 @@ public class TownyMessaging {
 
 		for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() + "] " + Colors.Yellow + town.getTownBoard()))
 			player.sendMessage(line);
+	}
+	
+	/**
+	 * Send a message to all residents in the list with the required mode
+	 * 
+	 * @param residents
+	 * @param msg
+	 * @param modeRequired
+	 */
+	public static void sendMessageToMode(ResidentList residents, String msg, String modeRequired) {
+
+		for (Resident resident : TownyUniverse.getOnlineResidents(residents))
+			if (resident.hasMode(modeRequired))
+				sendMessage(resident, msg);
 	}
 }
