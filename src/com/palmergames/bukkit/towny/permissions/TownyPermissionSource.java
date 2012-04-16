@@ -44,7 +44,8 @@ public abstract class TownyPermissionSource {
 
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId))))
+			if ((has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
+					|| (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase()))))
 				return true;
 
 		// Not using permissions
@@ -91,7 +92,8 @@ public abstract class TownyPermissionSource {
 
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId))) || (hasAllTownOverride(player, blockId, action)))
+			if ((has(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId)))
+					|| (hasAllTownOverride(player, blockId, action)))
 				return true;
 
 		// Allow ops all access when no permissions
@@ -107,7 +109,8 @@ public abstract class TownyPermissionSource {
 
 		//check for permissions
 		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALLTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId))))
+			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALLTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId)))
+					|| (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode(action.toString().toLowerCase()))))
 				return true;
 
 		// Allow ops all access when no permissions

@@ -1336,3 +1336,7 @@ v0.80.0.8:
 	  Issuing a command of '/res toggle' will clear all modes and set the defaults.
 	- Added a new mode '/res toggle plotborder'.
 	  This will puff smoke along the plot boundary when you enter a plot to show it's edges. Ideal for marking out plots.
+v0.80.0.9:
+	- Fix perms for...
+	  towny.wild.build/destroy/switch/item_use
+	  towny.claimed.build/destroy/switch/item_use
