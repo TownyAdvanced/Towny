@@ -109,15 +109,18 @@ public class TownyEconomyHandler {
 		/*
 		 * Attempt to find Vault for Economy handling
 		 */
-		RegisteredServiceProvider<Economy> vaultEcoProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (vaultEcoProvider != null) {
-			/*
-			 * Flag as using Vault hooks
-			 */
-			vaultEconomy = vaultEcoProvider.getProvider();
-			setVersion(String.format("%s v%s", "Vault", vaultEcoProvider.getPlugin().getDescription().getVersion()));
-			Type = EcoType.VAULT;
-			return true;
+		try {
+			RegisteredServiceProvider<Economy> vaultEcoProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+			if (vaultEcoProvider != null) {
+				/*
+				 * Flag as using Vault hooks
+				 */
+				vaultEconomy = vaultEcoProvider.getProvider();
+				setVersion(String.format("%s v%s", "Vault", vaultEcoProvider.getPlugin().getDescription().getVersion()));
+				Type = EcoType.VAULT;
+				return true;
+			}
+		} catch (Exception ex) {
 		}
 
 		/*
