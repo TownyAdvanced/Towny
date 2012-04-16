@@ -344,6 +344,12 @@ public class TownyRegenAPI extends TownyUniverse {
 	 * Protection Regen follows
 	 */
 	
+	/**
+	 * Does a task for this block already exist?
+	 * 
+	 * @param blockLocation
+	 * @return true if a task exists
+	 */
 	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
 
 		for (BlockLocation location : protectionRegenTasks.keySet()) {
@@ -354,6 +360,12 @@ public class TownyRegenAPI extends TownyUniverse {
 		return false;
 	}
 
+	/**
+	 * Fetch the relevant regen task for this block
+	 * 
+	 * @param blockLocation
+	 * @return the stored task, or null if there is none.
+	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
 
 		for (BlockLocation location : protectionRegenTasks.keySet()) {
@@ -364,11 +376,21 @@ public class TownyRegenAPI extends TownyUniverse {
 		return null;
 	}
 
+	/**
+	 * Add this task to the protection regen queue.
+	 * 
+	 * @param task
+	 */
 	public static void addProtectionRegenTask(ProtectionRegenTask task) {
 
 		protectionRegenTasks.put(task.getBlockLocation(), task);
 	}
 
+	/**
+	 * Remove this task form teh protection regen queue
+	 * 
+	 * @param task
+	 */
 	public static void removeProtectionRegenTask(ProtectionRegenTask task) {
 
 		protectionRegenTasks.remove(task.getBlockLocation());
@@ -376,6 +398,9 @@ public class TownyRegenAPI extends TownyUniverse {
 			protectionPlaceholders.clear();
 	}
 
+	/**
+	 * Cancel all regenerating tasks and clear all queues.
+	 */
 	public static void cancelProtectionRegenTasks() {
 
 		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
@@ -386,16 +411,32 @@ public class TownyRegenAPI extends TownyUniverse {
 		protectionPlaceholders.clear();
 	}
 
+	/**
+	 * Is this a placholder block?
+	 * 
+	 * @param block
+	 * @return true if it is a placeholder
+	 */
 	public static boolean isPlaceholder(Block block) {
 
 		return protectionPlaceholders.contains(block);
 	}
 
+	/**
+	 * Add this block as a placeholder (will be replaced when it's regeneration task occurs)
+	 * 
+	 * @param block
+	 */
 	public static void addPlaceholder(Block block) {
 
 		protectionPlaceholders.add(block);
 	}
 
+	/**
+	 * Remove this block from being tracked as a placeholder.
+	 * 
+	 * @param block
+	 */
 	public static void removePlaceholder(Block block) {
 
 		protectionPlaceholders.remove(block);
