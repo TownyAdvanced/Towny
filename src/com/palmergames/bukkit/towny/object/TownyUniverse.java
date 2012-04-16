@@ -701,7 +701,7 @@ public class TownyUniverse extends TownyObject {
 	 * Deprecated - Use CombatUtil
 	 * 
 	 * @param possibleAllies
-	 * @return
+	 * @return trus if all are allies
 	 */
 	@Deprecated
 	public boolean areAllAllies(List<Nation> possibleAllies) {
@@ -721,7 +721,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param player
 	 * @param worldCoord
-	 * @return
+	 * @return true if this is an enemy townblock
 	 */
 	@Deprecated
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
@@ -738,7 +738,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if these residents are allies
 	 */
 	@Deprecated
 	public boolean isAlly(String a, String b) {
@@ -763,7 +763,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if these towns are allies
 	 */
 	@Deprecated
 	public boolean isAlly(Town a, Town b) {
@@ -786,7 +786,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if resident a can attack resident b
 	 */
 	@Deprecated
 	public boolean canAttackEnemy(String a, String b) {
@@ -815,7 +815,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if resident b is an enemy of resident a
 	 */
 	@Deprecated
 	public boolean isEnemy(String a, String b) {
@@ -840,7 +840,7 @@ public class TownyUniverse extends TownyObject {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return true if town b is an enemy of town a
 	 */
 	@Deprecated
 	public boolean isEnemy(Town a, Town b) {
