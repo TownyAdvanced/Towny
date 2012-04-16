@@ -174,6 +174,7 @@ public class TownBlock {
 
 		if (type != this.type)
 			this.permissions.reset();
+		
 		this.type = type;
 
 		// Custom plot settings here
@@ -208,6 +209,9 @@ public class TownBlock {
 			setPermissions("denyAll");
 			break;
 		}
+		
+		// Reset any changed status.
+		this.setChanged(false);
 	}
 
 	public void setType(int typeId) {

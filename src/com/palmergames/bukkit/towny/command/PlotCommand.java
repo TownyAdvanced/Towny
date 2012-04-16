@@ -373,6 +373,10 @@ public class PlotCommand implements CommandExecutor {
 					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
 				else
 					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
+				
+				// Save this townblocks town so the for sale status to remembered.
+				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
+				
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}

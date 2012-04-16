@@ -151,7 +151,8 @@ public class PlotClaim extends Thread {
 						townBlock.setType(townBlock.getType());
 
 						TownyUniverse.getDataSource().saveResident(owner);
-						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						// Remove the townBlock data file so it's no longer using custom settings.
+						TownyUniverse.getDataSource().deleteTownBlock(townBlock);
 
 						return true;
 					} else {
@@ -194,7 +195,7 @@ public class PlotClaim extends Thread {
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
-			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getDataSource().deleteTownBlock(townBlock);
 
 			plugin.updateCache();
 

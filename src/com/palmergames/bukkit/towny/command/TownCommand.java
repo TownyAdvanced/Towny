@@ -1588,8 +1588,7 @@ public class TownCommand implements CommandExecutor {
 						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
-							townBlock.setChanged(false);
-							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							TownyUniverse.getDataSource().deleteTownBlock(townBlock);
 						}
 					}
 					if (townBlockOwner instanceof Town)
@@ -1681,7 +1680,7 @@ public class TownCommand implements CommandExecutor {
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						TownyUniverse.getDataSource().deleteTownBlock(townBlock);
 					}
 				}
 			}
