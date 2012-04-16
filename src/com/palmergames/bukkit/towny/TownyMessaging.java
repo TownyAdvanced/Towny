@@ -101,15 +101,18 @@ public class TownyMessaging {
 	 */
 	public static void sendMsg(Object sender, String msg) {
 
-		boolean isPlayer = false;
-		if (sender instanceof Player)
-			isPlayer = true;
-
 		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg))
-			if (isPlayer)
+			if (sender instanceof Player)
 				((Player) sender).sendMessage(line);
-			else
+			else if (sender instanceof CommandSender)
 				((CommandSender) sender).sendMessage(Colors.strip(line));
+			else if (sender instanceof Resident)
+				try {
+					TownyUniverse.getPlayer(((Resident) sender)).sendMessage(Colors.strip(line));
+				} catch (TownyException e) {
+					// No player exists
+				}
+				
 		sendDevMsg(msg);
 	}
 

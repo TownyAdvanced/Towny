@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
-import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -60,7 +59,6 @@ public class Towny extends JavaPlugin {
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
 	private TownyUniverse townyUniverse;
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
-	private Map<String, List<String>> playerMode = Collections.synchronizedMap(new HashMap<String, List<String>>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -197,7 +195,6 @@ public class Towny extends JavaPlugin {
 		townyUniverse.cancelProtectionRegenTasks();
 
 		playerCache.clear();
-		playerMode.clear();
 
 		townyUniverse = null;
 
@@ -524,15 +521,14 @@ public class Towny extends JavaPlugin {
 
 		if (player == null)
 			return;
-
-		if ((modes != null) && !modes[0].isEmpty()) {
-			playerMode.remove(player.getName());
-
-			playerMode.put(player.getName(), Arrays.asList(modes));
-			if (notify)
-				TownyMessaging.sendMsg(player, ("Modes set: " + StringMgmt.join(modes, ",")));
-		} else
-			playerMode.remove(player.getName());
+		
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident.setModes(modes, notify);
+					
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+		}
 	}
 
 	/*
@@ -568,42 +564,68 @@ public class Towny extends JavaPlugin {
 	 * }
 	 */
 
+	/**
+	 * Remove ALL current modes (and set the defaults)
+	 * 
+	 * @param player
+	 */
 	public void removePlayerMode(Player player) {
+		
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident.clearModes();
+			
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+		}
 
-		playerMode.remove(player.getName());
-
-		if (getServer().getScheduler().scheduleSyncDelayedTask(this, new SetDefaultModes(getTownyUniverse(), player, true), 1) == -1)
-			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
-
-		//TownyMessaging.sendMsg(player, ("Mode removed."));
 	}
 
+	/**
+	 * Fetch a list of all the players current modes.
+	 * 
+	 * @param player
+	 * @return list of modes
+	 */
 	public List<String> getPlayerMode(Player player) {
 
-		return playerMode.get(player.getName());
-	}
-
-	public boolean hasPlayerMode(Player player, String mode) {
-
-		List<String> modes = getPlayerMode(player);
-		if (modes == null)
-			return false;
-		else
-			return modes.contains(mode);
+		return getPlayerMode(player.getName());
 	}
 
 	public List<String> getPlayerMode(String name) {
 
-		return playerMode.get(name);
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(name);
+			return resident.getModes();
+			
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
+			return null;
+		}
 	}
 
+	/**
+	 * Check if the player has a specific.
+	 * 
+	 * @param player
+	 * @param mode
+	 * @return true if the mode is present.
+	 */
+	public boolean hasPlayerMode(Player player, String mode) {
+
+		return hasPlayerMode(player.getName(), mode);
+	}
+	
 	public boolean hasPlayerMode(String name, String mode) {
 
-		List<String> modes = getPlayerMode(name);
-		if (modes == null)
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(name);
+			return resident.hasMode(mode);
+			
+		} catch (NotRegisteredException e) {
+			// Resident doesn't exist
 			return false;
-		else
-			return modes.contains(mode);
+		}
 	}
 
 	/*

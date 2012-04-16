@@ -245,7 +245,7 @@ public class TownyUniverse extends TownyObject {
 			getWarEvent().sendScores(player, 3);
 
 		//Schedule to setup default modes when the player has finished loading
-		if (getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), new SetDefaultModes(this, player, false), 1) == -1)
+		if (getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), new SetDefaultModes(player.getName(), false), 1) == -1)
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
 
 		setChangedNotify(PLAYER_LOGIN);

@@ -1329,3 +1329,10 @@ v0.80.0.7:
 	  - Register
 	  - Vault (will require a build newer than 1.2.15-b172)
 	  - Native iConomy 5.01
+v0.80.0.8:
+	- Moved all player modes under the resident object.
+	  Modes can now be toggled using the command '/res toggle [mode]', as well as the already existing '/res set mode [mode]'.
+	  An example would be '/res toggle map townclaim'. This would change the state for both of these modes to the opposite of what they were (on/off).
+	  Issuing a command of '/res toggle' will clear all modes and set the defaults.
+	- Added a new mode '/res toggle plotborder'.
+	  This will puff smoke along the plot boundary when you enter a plot to show it's edges. Ideal for marking out plots.

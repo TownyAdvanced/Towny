@@ -38,6 +38,7 @@ public class ResidentCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/resident", TownySettings.getLangString("res_2"), TownySettings.getLangString("res_3")));
 		output.add(ChatTools.formatCommand("", "/resident", "list", TownySettings.getLangString("res_4")));
 		output.add(ChatTools.formatCommand("", "/resident", "tax", ""));
+		output.add(ChatTools.formatCommand("", "/resident", "toggle", "[mode]...[mode]"));
 		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + TownySettings.getLangString("res_5")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
@@ -94,6 +95,9 @@ public class ResidentCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("set")) {
 			String[] newSplit = StringMgmt.remFirstArg(split);
 			residentSet(player, newSplit);
+		} else if (split[0].equalsIgnoreCase("toggle")) {
+			String[] newSplit = StringMgmt.remFirstArg(split);
+			residentToggle(player, newSplit);
 		} else if (split[0].equalsIgnoreCase("friend")) {
 			String[] newSplit = StringMgmt.remFirstArg(split);
 			residentFriend(player, newSplit);
@@ -107,6 +111,24 @@ public class ResidentCommand implements CommandExecutor {
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
+	}
+
+	/**
+	 * Toggle modes for this player.
+	 * 
+	 * @param player
+	 * @param newSplit
+	 */
+	private void residentToggle(Player player, String[] newSplit) {
+
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident.toggleMode(newSplit, true);
+		} catch (NotRegisteredException e) {
+			// unknown resident
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
+		}
+		
 	}
 
 	public void listResidents(Player player) {

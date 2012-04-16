@@ -7,13 +7,16 @@ import java.util.List;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.util.StringMgmt;
 
-public class Resident extends TownBlockOwner {
+public class Resident extends TownBlockOwner implements ResidentModes {
 
 	private List<Resident> friends = new ArrayList<Resident>();
 	private List<ChunkSnapshot> regenUndo = new ArrayList<ChunkSnapshot>();
@@ -25,6 +28,7 @@ public class Resident extends TownBlockOwner {
 	private Location teleportDestination;
 	private double teleportCost;
 	private String chatFormattedName;
+	private List<String> modes = new ArrayList<String>();
 
 	public Resident(String name) {
 
@@ -296,6 +300,65 @@ public class Resident extends TownBlockOwner {
 			TownyRegenAPI.regenUndo(snapshot, this);
 
 		}
+	}
+
+	@Override
+	public List<String> getModes() {
+
+		return this.modes;
+	}
+
+	@Override
+	public boolean hasMode(String mode) {
+
+		return this.modes.contains(mode.toLowerCase());
+	}
+
+	@Override
+	public void toggleMode(String newModes[], boolean notify) {
+		
+		if (newModes.length == 0) {
+			clearModes();
+			return;
+		}
+
+		for (String mode : newModes) {
+			mode = mode.toLowerCase();
+			if (this.modes.contains(mode))
+				this.modes.remove(mode);
+			else
+				this.modes.add(mode);
+		}
+		
+		if (notify)
+			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+	}
+
+	@Override
+	public void setModes(String[] modes, boolean notify) {
+
+		if (modes.length == 0) {
+			clearModes();
+			return;
+		}
+			
+		this.modes.clear();
+		this.toggleMode(modes, false);
+		
+		if (notify)
+			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+		
+		
+	}
+
+	@Override
+	public void clearModes() {
+
+		modes.clear();
+		
+		if (TownyUniverse.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(TownyUniverse.getPlugin(), new SetDefaultModes(this.getName(), true), 1) == -1)
+			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
+		
 	}
 
 }
