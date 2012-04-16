@@ -1342,3 +1342,4 @@ v0.80.0.9:
 	  towny.claimed.build/destroy/switch/item_use
 	- Update the TownBlock data when a plot is taken/given back to the town so it will correctly follow the towns permissions once again.
 	- Save the town data to preserve the 'for sale' status when a townblock is put up, or taken off sale.
+	- Players will now receive a warning message if their town or nation is due for deletion at the next new day tax period.

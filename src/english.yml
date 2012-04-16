@@ -1,5 +1,5 @@
 name: Towny
-version: 0.17
+version: 0.18
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -425,7 +425,7 @@ msg_enemy_war_area_defended_attacker: '&6[War]&c You were forced to pay %s %s fo
 msg_enemy_war_area_defended_defender: '&6[War]&c %s payed you %s for the failed attack.'
 msg_enemy_war_area_defended_greater_forces: '&6[War]&c Your failed attack costed you %s.'
 
-
+msg_warning_delete: '&4*** WARNING, %s WILL BE DELETED AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 
 # these messages are only used if town/nation creation is set to admins only
 

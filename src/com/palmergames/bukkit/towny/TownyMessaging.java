@@ -198,14 +198,16 @@ public class TownyMessaging {
 	 */
 	public static void sendMessage(Object sender, String line) {
 
-		boolean isPlayer = false;
-		if (sender instanceof Player)
-			isPlayer = true;
-
-		if (isPlayer) {
+		if ((sender instanceof Player)) {
 			((Player) sender).sendMessage(line);
-		} else
+		} else if (sender instanceof CommandSender)
 			((CommandSender) sender).sendMessage(line);
+		else if (sender instanceof Resident)
+			try {
+				TownyUniverse.getPlayer(((Resident) sender)).sendMessage(Colors.strip(line));
+			} catch (TownyException e) {
+				// No player exists
+			}
 	}
 
 	/**
