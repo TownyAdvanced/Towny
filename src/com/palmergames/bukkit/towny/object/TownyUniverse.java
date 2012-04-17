@@ -701,7 +701,7 @@ public class TownyUniverse extends TownyObject {
 	 * Deprecated - Use CombatUtil
 	 * 
 	 * @param possibleAllies
-	 * @return trus if all are allies
+	 * @return true if all are allies
 	 */
 	@Deprecated
 	public boolean areAllAllies(List<Nation> possibleAllies) {
