@@ -412,7 +412,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Fetch the TownyTimerHandler instance
 	 * 
-	 * @return
+	 * @return TownyTimerHandler
 	 */
 	public TownyTimerHandler getTownyTimers() {
 
