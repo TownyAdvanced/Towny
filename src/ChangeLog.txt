@@ -1343,3 +1343,5 @@ v0.80.0.9:
 	- Update the TownBlock data when a plot is taken/given back to the town so it will correctly follow the towns permissions once again.
 	- Save the town data to preserve the 'for sale' status when a townblock is put up, or taken off sale.
 	- Players will now receive a warning message if their town or nation is due for deletion at the next new day tax period.
+v0.80.0.10:
+	- Move player login code to run in a seperate thread, and configure data retrieval and saving to be syncronized.

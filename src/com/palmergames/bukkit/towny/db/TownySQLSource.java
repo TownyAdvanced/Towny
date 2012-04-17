@@ -1126,7 +1126,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 */
 
 	@Override
-	public boolean saveResident(Resident resident) {
+	public synchronized boolean saveResident(Resident resident) {
 
 		TownyMessaging.sendDebugMsg("Saving Resident");
 		try {
@@ -1153,7 +1153,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	}
 
 	@Override
-	public boolean saveTown(Town town) {
+	public synchronized boolean saveTown(Town town) {
 
 		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
 		try {
@@ -1204,7 +1204,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	}
 
 	@Override
-	public boolean saveNation(Nation nation) {
+	public synchronized boolean saveNation(Nation nation) {
 
 		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
 		try {
@@ -1239,7 +1239,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	}
 
 	@Override
-	public boolean saveWorld(TownyWorld world) {
+	public synchronized boolean saveWorld(TownyWorld world) {
 
 		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
 		try {
@@ -1337,7 +1337,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	}
 
 	@Override
-	public boolean saveTownBlock(TownBlock townBlock) {
+	public synchronized boolean saveTownBlock(TownBlock townBlock) {
 
 		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x" + townBlock.getZ());
 		try {

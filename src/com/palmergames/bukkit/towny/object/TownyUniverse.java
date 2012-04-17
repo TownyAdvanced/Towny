@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -29,13 +28,12 @@ import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
-import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -78,96 +76,9 @@ public class TownyUniverse extends TownyObject {
 			return;
 		}
 
-		Resident resident;
+		// Perform login code in it's own thread to update Towny data.
+		new OnPlayerLogin(plugin, player).start();
 
-		if (!getDataSource().hasResident(player.getName())) {
-			getDataSource().newResident(player.getName());
-			resident = getDataSource().getResident(player.getName());
-
-			TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
-			resident.setRegistered(System.currentTimeMillis());
-			if (!TownySettings.getDefaultTownName().equals(""))
-				try {
-					Town town = getDataSource().getTown(TownySettings.getDefaultTownName());
-					town.addResident(resident);
-					getDataSource().saveTown(town);
-				} catch (NotRegisteredException e) {
-				} catch (AlreadyRegisteredException e) {
-				}
-
-			getDataSource().saveResident(resident);
-			getDataSource().saveResidentList();
-
-		} else {
-			resident = getDataSource().getResident(player.getName());
-			resident.setLastOnline(System.currentTimeMillis());
-
-			getDataSource().saveResident(resident);
-		}
-
-		try {
-			TownyMessaging.sendTownBoard(player, resident.getTown());
-		} catch (NotRegisteredException e) {
-		}
-
-		if (isWarTime())
-			getWarEvent().sendScores(player, 3);
-
-		//Schedule to setup default modes when the player has finished loading
-		if (getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), new SetDefaultModes(player.getName(), false), 1) == -1)
-			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
-		
-		// Send any warning messages at login.
-		warningMessage(resident);
-
-		setChangedNotify(PLAYER_LOGIN);
-	}
-
-	/**
-	 * Send a warning message if the town or nation is due to be deleted.
-	 */
-	private void warningMessage(Resident resident) {
-
-		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			if (resident.hasTown()) {
-				try {
-					Town town = resident.getTown();
-					if (town.hasUpkeep()) {
-						double upkeep = TownySettings.getTownUpkeepCost(town);
-						try {
-							if ((upkeep > 0) && (!town.canPayFromHoldings(upkeep))) {
-								/*
-								 *  Warn that the town is due to be deleted.
-								 */
-								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), town.getName()));
-							}
-						} catch (EconomyException e) {
-							// Economy error, so ignore it and try to continue.
-						}
-					}
-						
-					if (town.hasNation()) {
-						Nation nation = town.getNation();
-						
-						double upkeep = TownySettings.getNationUpkeepCost(nation);
-						try {
-							if ((upkeep > 0) && (!nation.canPayFromHoldings(upkeep))) {
-								/*
-								 *  Warn that the nation is due to be deleted.
-								 */
-								TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_warning_delete"), nation.getName()));
-							}
-						} catch (EconomyException e) {
-							// Economy error, so ignore it and try to continue.
-						}
-					}
-					
-				} catch (NotRegisteredException e) {
-					// Should never reach here as we tested it beforehand.
-				}
-			}
-		}
-		
 	}
 
 	public void onLogout(Player player) {
