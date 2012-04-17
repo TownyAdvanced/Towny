@@ -189,13 +189,16 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
+		Location to = event.getTo();
 		Location from;
+		PlayerCache cache = plugin.getCache(player);
+		
 		try {
-			from = plugin.getCache(player).getLastLocation();
+			from = cache.getLastLocation();
 		} catch (NullPointerException e) {
 			from = event.getFrom();
 		}
-		Location to = event.getTo();
+		
 
 		if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
 			return;
@@ -217,7 +220,7 @@ public class TownyPlayerListener implements Listener {
 							// set to 1 block up so we are not sunk in the ground
 							blockLocation.setY(blockLocation.getY() + 1);
 
-							plugin.getCache(player).setLastLocation(blockLocation);
+							cache.setLastLocation(blockLocation);
 							player.teleport(blockLocation);
 							return;
 						}
@@ -245,7 +248,7 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
-		plugin.getCache(player).setLastLocation(to);
+		cache.setLastLocation(to);
 		plugin.updateCache(player);
 		//plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
 		//plugin.sendDebugMsg("        " + from.toString());
