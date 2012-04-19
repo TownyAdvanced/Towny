@@ -1345,3 +1345,5 @@ v0.80.0.9:
 	- Players will now receive a warning message if their town or nation is due for deletion at the next new day tax period.
 v0.80.0.10:
 	- Move player login code to run in a seperate thread, and configure data retrieval and saving to be syncronized.
+	- Rework Towny Regen to 'hopefully' prevent the incorrect world height being set.
+	- Outposts can no longer be claimed in worlds which are set as unclaimable.

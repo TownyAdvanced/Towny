@@ -7,9 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.MinecraftTools;
 
 public class PlotBlockData {
@@ -17,6 +15,7 @@ public class PlotBlockData {
 	private int defaultVersion = 1;
 
 	private String worldName;
+	private TownBlock townBlock;
 	private int x, z, size, height, version;
 
 	private List<Integer> blockList = new ArrayList<Integer>(); // Stores the original plot blocks
@@ -24,16 +23,13 @@ public class PlotBlockData {
 
 	public PlotBlockData(TownBlock townBlock) {
 
+		this.townBlock = townBlock;
 		setX(townBlock.getX());
 		setZ(townBlock.getZ());
 		setSize(TownySettings.getTownBlockSize());
 		this.worldName = townBlock.getWorld().getName();
 		this.setVersion(defaultVersion);
-		try {
-			setHeight(TownyUniverse.getPlugin().getServerWorld(worldName).getMaxHeight() - 1);
-		} catch (NotRegisteredException e) {
-			setHeight(127);
-		}
+		setHeight(townBlock.getWorldCoord().getBukkitWorld().getMaxHeight() - 1);
 		this.blockListRestored = 0;
 	}
 
@@ -56,35 +52,30 @@ public class PlotBlockData {
 		List<Integer> list = new ArrayList<Integer>();
 		Block block = null;
 
-		try {
-			World world = TownyUniverse.getPlugin().getServerWorld(worldName);
-			/*
-			 * if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()),
-			 * MinecraftTools.calcChunk(getZ()))) {
-			 * return null;
-			 * }
-			 */
-			for (int z = 0; z < size; z++)
-				for (int x = 0; x < size; x++)
-					for (int y = height; y > 0; y--) { // Top down to account for falling blocks.
-						block = world.getBlockAt((getX() * size) + x, y, (getZ() * size) + z);
-						switch (defaultVersion) {
+		World world = this.townBlock.getWorldCoord().getBukkitWorld();
+		/*
+		 * if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()),
+		 * MinecraftTools.calcChunk(getZ()))) {
+		 * return null;
+		 * }
+		 */
+		for (int z = 0; z < size; z++)
+			for (int x = 0; x < size; x++)
+				for (int y = height; y > 0; y--) { // Top down to account for falling blocks.
+					block = world.getBlockAt((getX() * size) + x, y, (getZ() * size) + z);
+					switch (defaultVersion) {
 
-						case 1:
-							list.add(block.getTypeId());
-							list.add((int) block.getData());
-							break;
+					case 1:
+						list.add(block.getTypeId());
+						list.add((int) block.getData());
+						break;
 
-						default:
-							list.add(block.getTypeId());
-						}
-
+					default:
+						list.add(block.getTypeId());
 					}
 
-		} catch (NotRegisteredException e1) {
-			// Failed to fetch world
-			e1.printStackTrace();
-		}
+				}
+
 
 		return list;
 	}
@@ -100,67 +91,61 @@ public class PlotBlockData {
 		int x, y, z, blockId, reverse, scale;
 		int worldx = getX() * size, worldz = getZ() * size;
 		blockObject storedData;
+		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
-		try {
-			World world = TownyUniverse.getPlugin().getServerWorld(worldName);
+		if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ())))
+			return true;
 
-			if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ())))
+		//Scale for the number of elements
+		switch (version) {
+
+		case 1:
+			scale = 2;
+			break;
+
+		default:
+			scale = 1;
+		}
+
+		reverse = (blockList.size() - blockListRestored) / scale;
+
+		while (reverse > 0) {
+
+			reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
+			y = height - (reverse % height);
+			x = (int) (reverse / height) % size;
+			z = ((int) (reverse / height) / size) % size;
+
+			block = world.getBlockAt(worldx + x, y, worldz + z);
+			blockId = block.getTypeId();
+			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
+
+			// Increment based upon number of elements
+			blockListRestored += scale;
+
+			// If this block isn't correct, replace
+			// and return as done.
+			if ((blockId != storedData.getTypeID())) {
+				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(storedData.getTypeID())) {
+
+					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
+
+					//restore based upon version
+					switch (version) {
+
+					case 1:
+						block.setTypeIdAndData(storedData.getTypeID(), storedData.getData(), false);
+
+						break;
+					default:
+						block.setTypeId(storedData.getTypeID());
+					}
+
+				} else
+					block.setTypeId(0);
+
 				return true;
-
-			//Scale for the number of elements
-			switch (version) {
-
-			case 1:
-				scale = 2;
-				break;
-
-			default:
-				scale = 1;
 			}
-
-			reverse = (blockList.size() - blockListRestored) / scale;
-
-			while (reverse > 0) {
-
-				reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
-				y = height - (reverse % height);
-				x = (int) (reverse / height) % size;
-				z = ((int) (reverse / height) / size) % size;
-
-				block = world.getBlockAt(worldx + x, y, worldz + z);
-				blockId = block.getTypeId();
-				storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
-
-				// Increment based upon number of elements
-				blockListRestored += scale;
-
-				// If this block isn't correct, replace
-				// and return as done.
-				if ((blockId != storedData.getTypeID())) {
-					if (!TownyUniverse.getDataSource().getWorld(worldName).isPlotManagementIgnoreIds(storedData.getTypeID())) {
-
-						//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
-
-						//restore based upon version
-						switch (version) {
-
-						case 1:
-							block.setTypeIdAndData(storedData.getTypeID(), storedData.getData(), false);
-
-							break;
-						default:
-							block.setTypeId(storedData.getTypeID());
-						}
-
-					} else
-						block.setTypeId(0);
-
-					return true;
-				}
-			}
-		} catch (NotRegisteredException e1) {
-			// Failed to get world.
-			e1.printStackTrace();
 		}
 
 		// reset as we are finished with the regeneration

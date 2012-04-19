@@ -387,16 +387,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//Wipe and delete resident
 		try {
 			resident.clear();
-		} catch (EmptyTownException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (EmptyTownException ex) {
+			removeTown(ex.getTown());
 		}
+		// Delete the residents file.
 		deleteResident(resident);
-
+		// Remove the residents record from memory.
 		universe.getResidentMap().remove(name.toLowerCase());
+		
 		// Clear accounts
 		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount())
 			resident.removeAccount();
+		
 		plugin.deleteCache(name);
 		saveResidentList();
 

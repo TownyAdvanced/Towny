@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
@@ -212,7 +211,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		byte data;
 		int typeId;
-		World world = Bukkit.getWorld(snapshot.getWorldName());
+		World world = getPlugin().getServer().getWorld(snapshot.getWorldName());
 		Chunk chunk = world.getChunkAt(MinecraftTools.calcChunk(snapshot.getX()), MinecraftTools.calcChunk(snapshot.getZ()));
 
 		for (int x = 0; x < 16; x++) {
@@ -226,7 +225,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		}
 
-		TownyMessaging.sendMessage(Bukkit.getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
+		TownyMessaging.sendMessage(getPlugin().getServer().getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
 
 	}
 
@@ -316,7 +315,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		TownyMessaging.sendDebugMsg("Processing deleteTownBlockMaterial");
 
-		World world = Bukkit.getWorld(townBlock.getWorld().getName());
+		World world = getPlugin().getServer().getWorld(townBlock.getWorld().getName());
 
 		if (world != null) {
 			/*

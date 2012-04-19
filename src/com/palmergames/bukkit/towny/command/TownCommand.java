@@ -1737,8 +1737,7 @@ public class TownCommand implements CommandExecutor {
 						if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
-						selection = new ArrayList<WorldCoord>();
-						selection.add(new WorldCoord(world.getName(), key));
+						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
 						blockCost = TownySettings.getOutpostCost();
 						attachedToEdge = false;
 						outpost = true;
