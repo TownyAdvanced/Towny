@@ -350,7 +350,7 @@ public class TownyEconomyHandler {
 
 			}
 
-		} catch (Exception eInvalidAPIFunction) {
+		} catch (Exception InvalidAPIFunction) {
 		}
 
 		return String.format("%.2f", balance);
