@@ -1347,3 +1347,6 @@ v0.80.0.10:
 	- Move player login code to run in a seperate thread, and configure data retrieval and saving to be syncronized.
 	- Rework Towny Regen to 'hopefully' prevent the incorrect world height being set.
 	- Outposts can no longer be claimed in worlds which are set as unclaimable.
+v0.80.0.11:
+	- Rework all PvP and PvM code to properly prevent damage where approriate.
+	- Added Villagers to be protected the same as animals when in a town.
