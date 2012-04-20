@@ -476,7 +476,7 @@ public class Towny extends JavaPlugin {
 			if (world.getName().equals(name))
 				return world;
 
-		throw new NotRegisteredException(String.format("A world called '$%s' has not been reigstered.", name));
+		throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
 	}
 
 	public boolean hasCache(Player player) {
