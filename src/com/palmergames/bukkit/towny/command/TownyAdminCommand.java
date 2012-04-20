@@ -297,6 +297,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] rename [newname]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] delete", ""));
 		} else {
 			try {
 				Town town = TownyUniverse.getDataSource().getTown(split[0]);
@@ -316,6 +317,10 @@ public class TownyAdminCommand implements CommandExecutor {
 				} else if (split[1].equalsIgnoreCase("kick")) {
 
 					TownCommand.townKickResidents(getSender(), town.getMayor(), town, plugin.getTownyUniverse().getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
+
+				} else if (split[1].equalsIgnoreCase("delete")) {
+					
+					TownyUniverse.getDataSource().removeTown(town);
 
 				} else if (split[1].equalsIgnoreCase("rename")) {
 
@@ -342,6 +347,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] add [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] rename [newname]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] delete", ""));
 		} else {
 			try {
 				Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
@@ -357,6 +363,10 @@ public class TownyAdminCommand implements CommandExecutor {
 					 * }
 					 */
 					NationCommand.nationAdd(nation, TownyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+
+				} else if (split[1].equalsIgnoreCase("delete")) {
+					
+					TownyUniverse.getDataSource().removeNation(nation);
 
 				} else if (split[1].equalsIgnoreCase("rename")) {
 
