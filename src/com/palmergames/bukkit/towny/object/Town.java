@@ -431,12 +431,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			remove(resident);
 
 			if (getNumResidents() == 0)
-				try {
-					clear();
 					throw new EmptyTownException(this);
-				} catch (EmptyNationException e) {
-					throw new EmptyTownException(this, e);
-				}
 		}
 	}
 

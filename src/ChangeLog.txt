@@ -1353,3 +1353,4 @@ v0.80.0.11:
 	- Added two new Admin commands...
 	  '/townyadmin town [name] delete'
 	  '/townyadmin nation [name] delete'
+	- Fix resident purge so it correctly filters up when updating towns/nations.

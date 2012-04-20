@@ -282,7 +282,6 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 			remove(town);
 
 			if (getNumTowns() == 0) {
-				clear();
 				throw new EmptyNationException(this);
 			} else if (isCapital) {
 				int numResidents = 0;

@@ -26,7 +26,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -71,45 +70,38 @@ public class TownyEntityListener implements Listener {
 		plugin = instance;
 	}
 
+	/**
+	 * Prevent PvP and PvM damage dependent upon PvP
+	 * settings and location.
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 
 		if (event.isCancelled() || plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
 
-		Entity attacker = null;
-		Entity defender = null;
-		Projectile projectile = null;
+		Entity attacker = event.getDamager();
 
-		if (event instanceof EntityDamageByEntityEvent) {
+		// Not wartime
+		if (!TownyUniverse.isWarTime()) {
 
-			EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) event;
-			if (entityEvent.getDamager() instanceof Projectile) {
-				projectile = (Projectile) entityEvent.getDamager();
-				attacker = projectile.getShooter();
-				defender = entityEvent.getEntity();
-			} else {
-				attacker = entityEvent.getDamager();
-				defender = entityEvent.getEntity();
-			}
-		}
-
-		// Has an attacker and Not wartime
-		if ((attacker != null) && (!TownyUniverse.isWarTime())) {
-
-			if (CombatUtil.preventDamageCall(attacker, defender)) {
+			if (CombatUtil.preventDamageCall(attacker, event.getEntity())) {
 				// Remove the projectile here so no
 				// other events can fire to cause damage
-				if (projectile != null)
-					projectile.remove();
+				if (attacker instanceof Projectile)
+					attacker.remove();
+				
 				event.setCancelled(true);
 			}
 		}
 	}
 
 	/**
+	 * Prevent monsters from dropping blocks if within an arena plot.
 	 * 
 	 * @param event
 	 */
