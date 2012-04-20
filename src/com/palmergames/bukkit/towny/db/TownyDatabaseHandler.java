@@ -446,6 +446,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		deleteTown(town);
 		saveTownList();
+		try {
+			townyWorld.removeTown(town);
+		} catch (NotRegisteredException e) {
+			// Must already be removed
+		}
 		saveWorld(townyWorld);
 
 		universe.setChangedNotify(REMOVE_TOWN);
