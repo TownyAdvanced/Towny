@@ -1355,3 +1355,5 @@ v0.80.0.11:
 	  '/townyadmin nation [name] delete'
 	- Fix resident purge so it correctly filters up when updating towns/nations.
 	- Better optimize damange prevention
+v0.80.0.12:
+	- Synchronize backup/delete to prevent lockups.

@@ -94,7 +94,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public void backup() throws IOException {
+	public synchronized void backup() throws IOException {
 
 		String backupType = TownySettings.getFlatFileBackupType();
 		if (!backupType.equalsIgnoreCase("none")) {
@@ -125,7 +125,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public void cleanupBackups() {
+	public synchronized void cleanupBackups() {
 
 		long deleteAfter = TownySettings.getBackupLifeLength();
 		if (deleteAfter >= 0)
@@ -133,7 +133,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public void deleteUnusedResidentFiles() {
+	public synchronized void deleteUnusedResidentFiles() {
 
 		String path;
 		Set<String> names;

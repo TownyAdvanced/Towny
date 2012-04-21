@@ -1392,7 +1392,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	}
 
 	@Override
-	public void backup() throws IOException {
+	public synchronized void backup() throws IOException {
 
 		TownyMessaging.sendMsg("Performing backup");
 		TownyMessaging.sendMsg("***** Warning *****");
