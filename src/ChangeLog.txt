@@ -1357,3 +1357,24 @@ v0.80.0.11:
 	- Better optimize damange prevention
 v0.80.0.12:
 	- Synchronize backup/delete to prevent lockups.
+v0.80.0.13:
+	- Simplify Wild and claimed permission nodes to reduce confusion and make the permission tests faster.
+	
+	    Node changes...
+	  
+	    'towny.wild.build' has become 'towny.wild.build.*'
+	    'towny.wild.destroy' has become 'towny.wild.build.*'
+	    'towny.wild.switch' has become 'towny.wild.switch.*'
+	    'towny.wild.item_use' has become 'towny.wild.item_use.*'
+	    
+	    'towny.claimed.build' has become 'towny.claimed.build.*'
+	    'towny.claimed.destroy' has become 'towny.claimed.build.*'
+	    'towny.claimed.switch' has become 'towny.claimed.switch.*'
+	    'towny.claimed.item_use' has become 'towny.claimed.item_use.*'
+	    
+	    Nodes removed (with no replacements)...
+	    
+	    towny.claimed.owntown.*
+	    towny.claimed.alltown.*
+	    
+	- Major rewrite of the player caching system. Should make things faster when handling most events.

@@ -105,23 +105,6 @@ public class GroupManagerSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * hasPermission
-	 * 
-	 * returns if a player has a certain permission node.
-	 * 
-	 * @param player
-	 * @param node
-	 * @return true is Op or has the permission node.
-	 */
-	@Override
-	public boolean hasPermission(Player player, String node) {
-
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
-
-		return handler.has(player, node);
-	}
-
-	/**
 	 * Returns the players Group name.
 	 * 
 	 * @param player

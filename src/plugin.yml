@@ -1,6 +1,6 @@
 ﻿name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.80.0.12
+version: 0.80.0.13
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -180,85 +180,28 @@ permissions:
         default: false
         
     towny.wild.*:
-        description: User can build/destroy/switch/item_use in wild.
+        description: User can build/destroy/switch/item_use in the wild.
         default: false
         children:
-            towny.wild.build: true
-            towny.wild.switch: true
-            towny.wild.destroy: true
-            towny.wild.item_use: true
-            
-    towny.wild.build:
-        description: User can build in wild.
-        default: false
-        children:
+            # You can grant these child nodes and replace the * with a block Id
+            # to directly set or negate specific block permissions
             towny.wild.build.*: true
-        # This includes all subnodes for
-        #  towny.wild.build.[id]
-    towny.wild.destroy:
-        description: User can destroy in wild.
-        default: false
-        children:
-            towny.wild.destroy.*: true
-        # This includes all subnodes for
-        #  towny.wild.destroy.[id]
-    towny.wild.switch:
-        description: User can switch in wild.
-        default: false
-        children:
             towny.wild.switch.*: true
-        # This includes all subnodes for
-        #  towny.wild.switch.[id]
-    towny.wild.item_use:
-        description: User can use use items in wild. 
-        default: false
-        children:
+            towny.wild.destroy.*: true
             towny.wild.item_use.*: true
-        # This includes all subnodes for
-        #  towny.wild.item_use.[id]
 
     towny.claimed.*:
         description: User can build/destroy/switch/item_use in all towns.
         default: false
         children:
-            towny.claimed.build: true
-            towny.claimed.switch: true
-            towny.claimed.destroy: true
-            towny.claimed.item_use: true
-            
-    towny.claimed.build:
-        description: User can build in all towns.
-        default: false
-        children:
+            # You can grant these child nodes and replace the * with a block Id
+            # to directly set or negate specific block permissions
             towny.claimed.owntown.build.*: true
             towny.claimed.alltown.build.*: true
-        # This includes all subnodes for
-        #  towny.claimed.owntown.build.[id]
-        #  towny.claimed.alltown.build.[id]
-    towny.claimed.destroy:
-        description: User can destroy in all towns.
-        default: false
-        children:
-            towny.claimed.owntown.destroy.*: true
-            towny.claimed.alltown.destroy.*: true
-        # This includes all subnodes for
-        #  towny.claimed.owntown.destroy.[id]
-        #  towny.claimed.alltown.destroy.[id]
-    towny.claimed.switch:
-        description: User can switch in all towns.
-        default: false
-        children:
-            towny.claimed.owntown.switch.*: true
-            towny.claimed.alltown.switch.*: true
-        # This includes all subnodes for
-        #  towny.claimed.owntown.switch.[id]
-        #  towny.claimed.alltown.switch.[id]
-    towny.claimed.item_use:
-        description: User can use use items in all towns. 
-        default: false
-        children:
             towny.claimed.owntown.item_use.*: true
             towny.claimed.alltown.item_use.*: true
-        # This includes all subnodes for
-        #  towny.claimed.owntown.item_use.[id]
-        #  towny.claimed.alltown.item_use.[id]
+            towny.claimed.owntown.destroy.*: true
+            towny.claimed.alltown.destroy.*: true
+            towny.claimed.owntown.switch.*: true
+            towny.claimed.alltown.switch.*: true
+            

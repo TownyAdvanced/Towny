@@ -32,7 +32,7 @@ public abstract class TownyPermissionSource {
 
 	abstract public int getGroupPermissionIntNode(String playerName, String node);
 
-	abstract public boolean hasPermission(Player player, String node);
+	//abstract public boolean hasPermission(Player player, String node);
 
 	abstract public String getPlayerGroup(Player player);
 
@@ -40,18 +40,30 @@ public abstract class TownyPermissionSource {
 
 	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
 
-		boolean bpermissions;
-
 		//check for permissions
-		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
-					|| (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + ".*")))
-					|| (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase()))))
+		if (plugin.isPermissions()) {
+			if (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
 				return true;
+			
+			// No node set but we are using permissions so check world settings (without UnclaimedIgnoreId's).
+			switch (action) {
 
-		// Not using permissions
-		if (!bpermissions) {
-
+			case BUILD:
+				return world.getUnclaimedZoneBuild();
+			case DESTROY:
+				return world.getUnclaimedZoneDestroy();
+			case SWITCH:
+				return world.getUnclaimedZoneSwitch();
+			case ITEM_USE:
+				return world.getUnclaimedZoneItemUse();
+			}
+			
+		} else {
+			/*
+			 * Not using a permissions plugin
+			 * 
+			 */
+			
 			// Allow ops all access when no permissions
 			if (isTownyAdmin(player))
 				return true;
@@ -68,20 +80,6 @@ public abstract class TownyPermissionSource {
 			case ITEM_USE:
 				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
 			}
-
-		}
-
-		// No perms but we are using permissions so check world settings (without UnclaimedIgnoreId's).
-		switch (action) {
-
-		case BUILD:
-			return world.getUnclaimedZoneBuild();
-		case DESTROY:
-			return world.getUnclaimedZoneDestroy();
-		case SWITCH:
-			return world.getUnclaimedZoneSwitch();
-		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse();
 		}
 
 		return false;
@@ -89,49 +87,47 @@ public abstract class TownyPermissionSource {
 
 	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 
-		boolean bpermissions;
-
 		//check for permissions
-		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId)))
-					|| (has(player, PermissionNodes.TOWNY_CLAIMED_OWNTOWN_BLOCK.getNode(action.toString().toLowerCase() + ".*")))
+		if (plugin.isPermissions()) {
+			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId)))
 					|| (hasAllTownOverride(player, blockId, action)))
 				return true;
+		} else {
 
-		// Allow ops all access when no permissions
-		if ((!bpermissions) && (isTownyAdmin(player)))
-			return true;
+			// Allow ops all access when no permissions
+			if (isTownyAdmin(player))
+				return true;
+		}
 
 		return false;
 	}
 
 	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 
-		boolean bpermissions;
-
 		//check for permissions
-		if (bpermissions = plugin.isPermissions())
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALLTOWN_BLOCK.getNode(action.toString().toLowerCase() + "." + blockId)))
-					|| (has(player, PermissionNodes.TOWNY_CLAIMED_ALLTOWN_BLOCK.getNode(action.toString().toLowerCase() + ".*")))
-					|| (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode(action.toString().toLowerCase()))))
+		if (plugin.isPermissions()) {
+			if (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId)))
 				return true;
+		} else {
 
-		// Allow ops all access when no permissions
-		if ((!bpermissions) && (isTownyAdmin(player)))
-			return true;
+			// Allow ops all access when no permissions
+			if (isTownyAdmin(player))
+				return true;
+		}
 
 		return false;
 	}
 
 	public boolean isTownyAdmin(Player player) {
 
-		if (player.isOp())
-			return true;
-		return (plugin.isPermissions() && hasPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()));
+		return (player.isOp()) || (plugin.isPermissions() && has(player, PermissionNodes.TOWNY_ADMIN.getNode()));
+
 	}
 
 	/**
 	 * All permission checks should go through here.
+	 * 
+	 * Returns true if a player has a certain permission node.
 	 * 
 	 * @param player
 	 * @param node
@@ -142,7 +138,36 @@ public abstract class TownyPermissionSource {
 		if (player.isOp())
 			return true;
 
-		return (plugin.isPermissions() && hasPermission(player, node));
+		//return (plugin.isPermissions() && hasPermission(player, node));
+		
+		/*
+		 * Node has been set or negated so return the actual value
+		 */
+		if (player.isPermissionSet(node))
+			return player.hasPermission(node);
+		
+		/*
+		 * Check for a parent with a wildcard
+		 */
+		final String[] parts = node.split("\\.");
+		final StringBuilder builder = new StringBuilder(node.length());
+		for (String part : parts) {
+			builder.append('*');
+			if (player.hasPermission("-" + builder.toString())) {
+				return false;
+			}
+			if (player.hasPermission(builder.toString())) {
+				return true;
+			}
+			builder.deleteCharAt(builder.length() - 1);
+			builder.append(part).append('.');
+		}
+		
+		/*
+		 * No parent found so we don't have this node.
+		 */
+		return false;
+		
 	}
 
 	/*

@@ -128,23 +128,6 @@ public class PEXSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * hasPermission
-	 * 
-	 * returns if a player has a certain permission node.
-	 * 
-	 * @param player
-	 * @param node
-	 * @return true if Op or has the permission node.
-	 */
-	@Override
-	public boolean hasPermission(Player player, String node) {
-
-		PermissionManager pexPM = PermissionsEx.getPermissionManager();
-
-		return pexPM.getUser(player).has(node);
-	}
-
-	/**
 	 * Returns the players Group name.
 	 * 
 	 * @param player

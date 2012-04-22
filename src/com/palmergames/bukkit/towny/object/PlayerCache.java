@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -7,9 +10,12 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
 public class PlayerCache {
 
+	private Map<Integer, Boolean> buildPermission = new HashMap<Integer, Boolean>();
+	private Map<Integer, Boolean> destroyPermission = new HashMap<Integer, Boolean>();
+	private Map<Integer, Boolean> switchPermission = new HashMap<Integer, Boolean>();
+	private Map<Integer, Boolean> itemUsePermission = new HashMap<Integer, Boolean>();
+	
 	private WorldCoord lastTownBlock;
-	private Boolean buildPermission, destroyPermission, switchPermission,
-			itemUsePermission;
 	private String blockErrMsg;
 	private Location lastLocation;
 
@@ -44,33 +50,33 @@ public class PlayerCache {
 		return lastTownBlock;
 	}
 
-	public boolean getCachePermission(ActionType action) throws NullPointerException {
+	public boolean getCachePermission(Integer id, ActionType action) throws NullPointerException {
 
 		switch (action) {
 
 		case BUILD: // BUILD
-			if (buildPermission == null)
+			if (buildPermission.containsKey(id))
 				throw new NullPointerException();
 			else
-				return buildPermission;
+				return buildPermission.get(id);
 
 		case DESTROY: // DESTROY
 			if (destroyPermission == null)
 				throw new NullPointerException();
 			else
-				return destroyPermission;
+				return destroyPermission.get(id);
 
 		case SWITCH: // SWITCH
 			if (switchPermission == null)
 				throw new NullPointerException();
 			else
-				return switchPermission;
+				return switchPermission.get(id);
 
 		case ITEM_USE: // ITEM_USE
 			if (itemUsePermission == null)
 				throw new NullPointerException();
 			else
-				return itemUsePermission;
+				return itemUsePermission.get(id);
 
 		default:
 			throw new NullPointerException();
@@ -79,43 +85,57 @@ public class PlayerCache {
 
 	}
 
-	public void setBuildPermission(boolean buildPermission) {
+	public void setBuildPermission(Integer id, Boolean value) {
 
-		this.buildPermission = buildPermission;
+		buildPermission.put(id, value);
 	}
 
-	public boolean getBuildPermission() throws NullPointerException {
+	public boolean getBuildPermission(Integer id) throws NullPointerException {
 
-		if (buildPermission == null)
+		if (!buildPermission.containsKey(id))
 			throw new NullPointerException();
 		else
-			return buildPermission;
+			return buildPermission.get(id);
 	}
 
-	public void setDestroyPermission(boolean destroyPermission) {
+	public void setDestroyPermission(Integer id, Boolean value) {
 
-		this.destroyPermission = destroyPermission;
+		destroyPermission.put(id, value);
+
 	}
 
-	public boolean getDestroyPermission() throws NullPointerException {
+	public boolean getDestroyPermission(Integer id) throws NullPointerException {
 
-		if (destroyPermission == null)
+		if (!destroyPermission.containsKey(id))
 			throw new NullPointerException();
 		else
-			return destroyPermission;
+			return destroyPermission.get(id);
 	}
 
-	public void setSwitchPermission(boolean switchPermission) {
+	public void setSwitchPermission(Integer id, Boolean value) {
 
-		this.switchPermission = switchPermission;
+		switchPermission.put(id, value);
 	}
 
-	public boolean getSwitchPermission() throws NullPointerException {
+	public boolean getSwitchPermission(Integer id) throws NullPointerException {
 
-		if (switchPermission == null)
+		if (!switchPermission.containsKey(id))
 			throw new NullPointerException();
 		else
-			return switchPermission;
+			return switchPermission.get(id);
+	}
+	
+	public void setItemUsePermission(Integer id, Boolean value) {
+
+		itemUsePermission.put(id, value);
+	}
+
+	public Boolean getItemUsePermission(Integer id) throws NullPointerException {
+
+		if (!itemUsePermission.containsKey(id))
+			throw new NullPointerException();
+		else
+			return itemUsePermission.get(id);
 	}
 
 	public boolean updateCoord(WorldCoord pos) {
@@ -136,6 +156,11 @@ public class PlayerCache {
 		switchPermission = null;
 		itemUsePermission = null;
 		blockErrMsg = null;
+		
+		buildPermission = new HashMap<Integer, Boolean>();
+		destroyPermission = new HashMap<Integer, Boolean>();
+		switchPermission = new HashMap<Integer, Boolean>();
+		itemUsePermission = new HashMap<Integer, Boolean>();
 	}
 
 	public enum TownBlockStatus {
@@ -184,19 +209,6 @@ public class PlayerCache {
 	public boolean hasBlockErrMsg() {
 
 		return blockErrMsg != null;
-	}
-
-	public void setItemUsePermission(Boolean itemUsePermission) {
-
-		this.itemUsePermission = itemUsePermission;
-	}
-
-	public Boolean getItemUsePermission() throws NullPointerException {
-
-		if (itemUsePermission == null)
-			throw new NullPointerException();
-		else
-			return itemUsePermission;
 	}
 
 	public void setLastLocation(Location lastLocation) {

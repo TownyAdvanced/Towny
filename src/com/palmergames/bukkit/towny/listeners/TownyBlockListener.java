@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -102,67 +101,58 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		//long start = System.currentTimeMillis();
-
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
-		try {
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
+		//Get build permissions (updates cache if none exist)
+		boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
+		
+		// Allow destroy if we are permitted
+		if (bDestroy)
+			return;
 
-			//Get build permissions (updates if none exist)
-			boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.DESTROY);
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
+		/*
+		 * Fetch the players cache
+		 */
+		PlayerCache cache = plugin.getCache(player);
+		TownBlockStatus status = cache.getStatus();
 
-			PlayerCache cache = plugin.getCache(player);
-			TownBlockStatus status = cache.getStatus();
-
-			// Allow destroy if we are in wilds and have an override.
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
-				return;
-
-			// Allow destroy if we have an override
-			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY))))
-				return;
-
-			if (status == TownBlockStatus.WARZONE) {
-				if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
-				}
-				return;
+		/*
+		 * Allow destroy in a WarZone (FlagWar) if it's an editable material.
+		 */
+		if (status == TownBlockStatus.WARZONE) {
+			if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
 			}
-
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bDestroy) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-
-				//if (status == TownBlockStatus.UNCLAIMED_ZONE)
-				//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
-
-				long delay = TownySettings.getRegenDelay();
-				if (delay > 0) {
-					if (!TownyRegenAPI.isPlaceholder(block)) {
-						if (!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
-							ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
-							task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20 * delay));
-							TownyRegenAPI.addProtectionRegenTask(task);
-						}
-					} else {
-						TownyRegenAPI.removePlaceholder(block);
-						block.setTypeId(0, false);
-					}
-				} else
-					event.setCancelled(true);
-
-			}
-
-			if ((cache.hasBlockErrMsg()) && (event.isCancelled())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
-				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
+			return;
 		}
 
-		//plugin.sendDebugMsg("onBlockBreakEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
+		/*
+		 * Queue a protectionRegenTask if we have delayed regeneration set
+		 */
+		long delay = TownySettings.getRegenDelay();
+		if (delay > 0) {
+			if (!TownyRegenAPI.isPlaceholder(block)) {
+				if (!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
+					ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
+					task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20 * delay));
+					TownyRegenAPI.addProtectionRegenTask(task);
+				}
+			} else {
+				TownyRegenAPI.removePlaceholder(block);
+				block.setTypeId(0, false);
+			}
+		} else {
+			event.setCancelled(true);
+		}
+
+		/* 
+		 * display any error recorded for this plot
+		 */
+		if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
+			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -173,32 +163,32 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		//long start = System.currentTimeMillis();
-
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		WorldCoord worldCoord;
+		
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.BUILD);
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD);
 
+			// Allow build if we are permitted
+			if (bBuild)
+				return;
+			
+			/*
+			 * Fetch the players cache
+			 */
 			PlayerCache cache = plugin.getCache(player);
 			TownBlockStatus status = cache.getStatus();
 
-			// Allow build if in wilds/wilderness and we have an override
-			if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (wildOverride)) || ((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getTownBlock(block.getLocation()).getType() == TownBlockType.WILDS) && (wildOverride)))
-				return;
-
-			// Allow build if we have a town override
-			if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD))))
-				return;
-
+			/*
+			 * Flag war
+			 */
 			if (((status == TownBlockStatus.ENEMY) && TownyWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial())) {
-				//&& plugin.hasPlayerMode(player, "warflag")) {
+
 				try {
 					if (TownyWar.callAttackCellEvent(plugin, player, block, worldCoord))
 						return;
@@ -216,16 +206,15 @@ public class TownyBlockListener implements Listener {
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "build", block.getType().toString().toLowerCase()));
 				}
 				return;
-			} else if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bBuild) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-
-				//if (status == TownBlockStatus.UNCLAIMED_ZONE)
-				//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
-
+			} else {
 				event.setBuild(false);
 				event.setCancelled(true);
 			}
 
-			if ((cache.hasBlockErrMsg()) && (event.isCancelled())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
+			/* 
+			 * display any error recorded for this plot
+			 */
+			if ((cache.hasBlockErrMsg()) && (event.isCancelled()))
 				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 		} catch (NotRegisteredException e1) {
@@ -233,7 +222,6 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		//plugin.sendDebugMsg("onBlockPlacedEvent took " + (System.currentTimeMillis() - start) + "ms ("+event.getPlayer().getName()+", "+event.isCancelled() +")");
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

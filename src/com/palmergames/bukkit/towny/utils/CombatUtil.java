@@ -160,18 +160,18 @@ public class CombatUtil {
 							/*
 							 * Only allow the player to kill animals etc,
 							 * if they are from the same town
-							 * and have destroy permissions in the defending TownBlock
+							 * and have destroy permissions (grass) in the defending TownBlock
 							 */
 							if (defenderTB.getTown().equals(TownyUniverse.getDataSource().getResident(attackingPlayer.getName()).getTown()))
-								if (TownyUniverse.getCachePermissions().getCachePermission(attackingPlayer, attackingPlayer.getLocation(), ActionType.DESTROY))
+								if (TownyUniverse.getCachePermissions().getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, ActionType.DESTROY))
 									return false;
 						} catch (NotRegisteredException e) {
 							/*
 							 * The attacking player has no town.
 							 * Only allow them to kill animals etc,
-							 * if they have destroy permissions in the defending TownBlock
+							 * if they have destroy permissions (grass) in the defending TownBlock
 							 */
-							if (TownyUniverse.getCachePermissions().getCachePermission(attackingPlayer, attackingPlayer.getLocation(), ActionType.DESTROY))
+							if (TownyUniverse.getCachePermissions().getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, ActionType.DESTROY))
 								return false;
 						}
 					}

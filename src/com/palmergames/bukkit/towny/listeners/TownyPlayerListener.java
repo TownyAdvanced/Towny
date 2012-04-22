@@ -280,9 +280,9 @@ public class TownyPlayerListener implements Listener {
 			boolean bItemUse;
 
 			if (block != null)
-				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.ITEM_USE);
 			else
-				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
 
 			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
 
@@ -339,38 +339,39 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		//Get switch permissions (updates if none exist)
-		boolean bSwitch = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), TownyPermission.ActionType.SWITCH);
+		boolean bSwitch = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.SWITCH);
 
-		boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(world, player, block.getTypeId(), TownyPermission.ActionType.SWITCH);
-
+		// Allow switch if we are permitted
+		if (bSwitch)
+			return;
+		
+		/*
+		 * Fetch the players cache
+		 */
 		PlayerCache cache = plugin.getCache(player);
-
 		TownBlockStatus status = cache.getStatus();
-		if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
-			return;
 
-		// Allow item_use if we have an override
-		if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, block.getTypeId(), TownyPermission.ActionType.SWITCH))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, block.getTypeId(), TownyPermission.ActionType.SWITCH))))
-			return;
-
+		/*
+		 * Flag war
+		 */
 		if (status == TownBlockStatus.WARZONE) {
 			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
 			}
 			return;
-		}
-		if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bSwitch) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-
+		} else {
 			event.setCancelled(true);
 		}
-		if (cache.hasBlockErrMsg()) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
+		
+		/* 
+		 * display any error recorded for this plot
+		 */
+		if (cache.hasBlockErrMsg())
 			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 	}
 
 	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc) {
-
-		//plugin.sendDebugMsg("onPlayerMoveChunk: " + player.getName());
 
 		plugin.getCache(player).setLastLocation(toLoc);
 		plugin.getCache(player).updateCoord(to);

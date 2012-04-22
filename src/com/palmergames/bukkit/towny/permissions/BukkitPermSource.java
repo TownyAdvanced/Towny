@@ -89,35 +89,6 @@ public class BukkitPermSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * hasPermission
-	 * 
-	 * returns if a player has a certain permission node.
-	 * 
-	 * @param player
-	 * @param node
-	 * @return true if Op or has the permission node.
-	 */
-	@Override
-	public boolean hasPermission(Player player, String node) {
-
-		final String[] parts = node.split("\\.");
-		final StringBuilder builder = new StringBuilder(node.length());
-		for (String part : parts) {
-			builder.append('*');
-			if (player.hasPermission("-" + builder.toString())) {
-				return false;
-			}
-			if (player.hasPermission(builder.toString())) {
-				return true;
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			builder.append(part).append('.');
-		}
-		return player.hasPermission(node);
-		//return player.hasPermission(node);
-	}
-
-	/**
 	 * Returns the players Group name.
 	 * 
 	 * @param player

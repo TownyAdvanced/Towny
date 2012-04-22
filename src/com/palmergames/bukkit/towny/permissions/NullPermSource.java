@@ -46,22 +46,6 @@ public class NullPermSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * hasPermission
-	 * 
-	 * returns if a player has a certain permission node.
-	 * 
-	 * @param player
-	 * @param node
-	 * @return null as we are not using permissions
-	 */
-	@Override
-	public boolean hasPermission(Player player, String node) {
-
-		// using no permissions provider
-		return false;
-	}
-
-	/**
 	 * Returns the players Group name.
 	 * 
 	 * @param player

@@ -47,7 +47,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -425,13 +424,10 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		long start = System.currentTimeMillis();
-
 		if (event instanceof PaintingBreakByEntityEvent) {
 			PaintingBreakByEntityEvent evt = (PaintingBreakByEntityEvent) event;
 			Painting painting = evt.getPainting();
 			Object remover = evt.getRemover();
-			WorldCoord worldCoord;
 
 			try {
 				String worldName = painting.getWorld().getName();
@@ -440,28 +436,31 @@ public class TownyEntityListener implements Listener {
 				if (!townyWorld.isUsingTowny())
 					return;
 
-				worldCoord = new WorldCoord(worldName, Coord.parseCoord(painting.getLocation()));
 
 				if (remover instanceof Player) {
 					Player player = (Player) evt.getRemover();
 
 					//Get destroy permissions (updates if none exist)
-					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.DESTROY);
-
-					PlayerCache cache = plugin.getCache(player);
-					cache.updateCoord(worldCoord);
-					TownBlockStatus status = cache.getStatus();
-					if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, painting.getEntityId(), TownyPermission.ActionType.DESTROY))
+					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.DESTROY);
+					
+					// Allow the removal if we are permitted
+					if (bDestroy)
 						return;
-					if (!bDestroy)
-						event.setCancelled(true);
+
+					/*
+					 * Fetch the players cache
+					 */
+					PlayerCache cache = plugin.getCache(player);
+
+					event.setCancelled(true);
+					
 					if (cache.hasBlockErrMsg())
 						TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 				} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
 
 					try {
-						TownBlock townBlock = worldCoord.getTownBlock();
+						TownBlock townBlock = new WorldCoord(worldName, Coord.parseCoord(painting.getLocation())).getTownBlock();
 
 						// Explosions are blocked in this plot
 						if ((!townBlock.getPermissions().explosion) && (!townBlock.getWorld().isForceExpl()))
@@ -483,7 +482,6 @@ public class TownyEntityListener implements Listener {
 
 		}
 
-		TownyMessaging.sendDebugMsg("onPaintingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getCause().name() + ", " + event.isCancelled() + ")");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -506,16 +504,18 @@ public class TownyEntityListener implements Listener {
 				return;
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), TownyPermission.ActionType.BUILD);
-
-			PlayerCache cache = plugin.getCache(player);
-			TownBlockStatus status = cache.getStatus();
-
-			if (status == TownBlockStatus.UNCLAIMED_ZONE && TownyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, painting.getEntityId(), TownyPermission.ActionType.BUILD))
+			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.BUILD);
+			
+			// Allow placing if we are permitted
+			if (bBuild)
 				return;
+			
+			/*
+			 * Fetch the players cache
+			 */
+			PlayerCache cache = plugin.getCache(player);
 
-			if (!bBuild)
-				event.setCancelled(true);
+			event.setCancelled(true);
 
 			if (cache.hasBlockErrMsg())
 				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());

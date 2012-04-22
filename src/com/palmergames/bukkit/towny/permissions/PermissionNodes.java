@@ -51,10 +51,10 @@ public enum PermissionNodes {
 
 	TOWNY_WILD_ALL("towny.wild.*"),
 
-	TOWNY_WILD_BUILD("towny.wild.build"),
-	TOWNY_WILD_DESTROY("towny.wild.destroy"),
-	TOWNY_WILD_SWITCH("towny.wild.switch"),
-	TOWNY_WILD_ITEM_USE("towny.wild.item_use"),
+	//TOWNY_WILD_BUILD("towny.wild.build"),
+	//TOWNY_WILD_DESTROY("towny.wild.destroy"),
+	//TOWNY_WILD_SWITCH("towny.wild.switch"),
+	//TOWNY_WILD_ITEM_USE("towny.wild.item_use"),
 
 	TOWNY_WILD_BLOCK_BUILD("towny.wild.build.*"),
 	TOWNY_WILD_BLOCK_DESTROY("towny.wild.destroy.*"),
@@ -63,19 +63,19 @@ public enum PermissionNodes {
 
 	TOWNY_CLAIMED_ALL("towny.claimed.*"),
 
-	TOWNY_CLAIMED_BUILD("towny.claimed.build"),
-	TOWNY_CLAIMED_DESTROY("towny.claimed.destroy"),
-	TOWNY_CLAIMED_SWITCH("towny.claimed.switch"),
-	TOWNY_CLAIMED_ITEM_USE("towny.claimed.item_use"),
+	//TOWNY_CLAIMED_BUILD("towny.claimed.build"),
+	//TOWNY_CLAIMED_DESTROY("towny.claimed.destroy"),
+	//TOWNY_CLAIMED_SWITCH("towny.claimed.switch"),
+	//TOWNY_CLAIMED_ITEM_USE("towny.claimed.item_use"),
 
-	TOWNY_CLAIMED_ALLTOWN_BLOCK("towny.claimed.alltown.*"),
+	//TOWNY_CLAIMED_ALLTOWN_BLOCK("towny.claimed.alltown.*"),
 
 	TOWNY_CLAIMED_ALLTOWN_BLOCK_BUILD("towny.claimed.alltown.build.*"),
 	TOWNY_CLAIMED_ALLTOWN_BLOCK_DESTROY("towny.claimed.alltown.destroy.*"),
 	TOWNY_CLAIMED_ALLTOWN_BLOCK_SWITCH("towny.claimed.alltown.switch.*"),
 	TOWNY_CLAIMED_ALLTOWN_BLOCK_ITEM_USE("towny.claimed.alltown.item_use.*"),
 
-	TOWNY_CLAIMED_OWNTOWN_BLOCK("towny.claimed.owntown.*"),
+	//TOWNY_CLAIMED_OWNTOWN_BLOCK("towny.claimed.owntown.*"),
 
 	TOWNY_CLAIMED_OWNTOWN_BLOCK_BUILD("towny.claimed.owntown.build.*"),
 	TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY("towny.claimed.owntown.destroy.*"),
