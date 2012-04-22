@@ -1367,14 +1367,13 @@ v0.80.0.13:
 	    'towny.wild.switch' has become 'towny.wild.switch.*'
 	    'towny.wild.item_use' has become 'towny.wild.item_use.*'
 	    
-	    'towny.claimed.build' has become 'towny.claimed.build.*'
-	    'towny.claimed.destroy' has become 'towny.claimed.build.*'
-	    'towny.claimed.switch' has become 'towny.claimed.switch.*'
-	    'towny.claimed.item_use' has become 'towny.claimed.item_use.*'
-	    
 	    Nodes removed (with no replacements)...
 	    
-	    towny.claimed.owntown.*
-	    towny.claimed.alltown.*
+	    'towny.claimed.build'
+	    'towny.claimed.destroy'
+	    'towny.claimed.switch'
+	    'towny.claimed.item_use'
+	    'towny.claimed.owntown.*'
+	    'towny.claimed.alltown.*'
 	    
 	- Major rewrite of the player caching system. Should make things faster when handling most events.

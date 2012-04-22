@@ -55,25 +55,25 @@ public class PlayerCache {
 		switch (action) {
 
 		case BUILD: // BUILD
-			if (buildPermission.containsKey(id))
+			if (!buildPermission.containsKey(id))
 				throw new NullPointerException();
 			else
 				return buildPermission.get(id);
 
 		case DESTROY: // DESTROY
-			if (destroyPermission == null)
+			if (!destroyPermission.containsKey(id))
 				throw new NullPointerException();
 			else
 				return destroyPermission.get(id);
 
 		case SWITCH: // SWITCH
-			if (switchPermission == null)
+			if (!switchPermission.containsKey(id))
 				throw new NullPointerException();
 			else
 				return switchPermission.get(id);
 
 		case ITEM_USE: // ITEM_USE
-			if (itemUsePermission == null)
+			if (!itemUsePermission.containsKey(id))
 				throw new NullPointerException();
 			else
 				return itemUsePermission.get(id);
@@ -101,7 +101,6 @@ public class PlayerCache {
 	public void setDestroyPermission(Integer id, Boolean value) {
 
 		destroyPermission.put(id, value);
-
 	}
 
 	public boolean getDestroyPermission(Integer id) throws NullPointerException {
@@ -150,11 +149,7 @@ public class PlayerCache {
 	private void reset() {
 
 		lastTownBlock = null;
-		buildPermission = null;
-		destroyPermission = null;
 		townBlockStatus = null;
-		switchPermission = null;
-		itemUsePermission = null;
 		blockErrMsg = null;
 		
 		buildPermission = new HashMap<Integer, Boolean>();

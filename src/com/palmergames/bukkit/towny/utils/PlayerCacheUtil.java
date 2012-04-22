@@ -96,9 +96,106 @@ public class PlayerCacheUtil {
 			return;
 		default:
 			//for future expansion of permissions
-
 		}
+	}
+	
+	/**
+	 * Update and return back the townBlockStatus for the player at this
+	 * worldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param townBlockStatus
+	 * @return TownBlockStatus type.
+	 */
+	public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
 
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setStatus(townBlockStatus);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Status: " + townBlockStatus);
+		return townBlockStatus;
+	}
+
+	/**
+	 * Update the player cache for Build rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param id
+	 * @param buildRight
+	 */
+	public void cacheBuild(Player player, WorldCoord worldCoord, Integer id, Boolean buildRight) {
+
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setBuildPermission(id, buildRight);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Build: " + buildRight);
+	}
+
+	/**
+	 * Update the player cache for Destroy rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param id
+	 * @param destroyRight
+	 */
+	public void cacheDestroy(Player player, WorldCoord worldCoord, Integer id, Boolean destroyRight) {
+
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setDestroyPermission(id, destroyRight);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Destroy: " + destroyRight);
+	}
+
+	/**
+	 * Update the player cache for Switch rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param id
+	 * @param switchRight
+	 */
+	public void cacheSwitch(Player player, WorldCoord worldCoord, Integer id, Boolean switchRight) {
+
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setSwitchPermission(id, switchRight);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Switch: " + switchRight);
+	}
+
+	/**
+	 * Update the player cache for Item_use rights at this WorldCoord.
+	 * 
+	 * @param player
+	 * @param worldCoord
+	 * @param id
+	 * @param itemUseRight
+	 */
+	public void cacheItemUse(Player player, WorldCoord worldCoord, Integer id, Boolean itemUseRight) {
+
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setItemUsePermission(id, itemUseRight);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
+	}
+
+	/**
+	 * Update the cached BlockErrMsg for this player.
+	 * 
+	 * @param player
+	 * @param msg
+	 */
+	public void cacheBlockErrMsg(Player player, String msg) {
+
+		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		cache.setBlockErrMsg(msg);
 	}
 
 	/**
@@ -212,105 +309,6 @@ public class PlayerCacheUtil {
 			// Outsider destroy rights
 			return TownBlockStatus.OUTSIDER;
 		}
-	}
-
-	/**
-	 * Update and return back the townBlockStatus for the player at this
-	 * worldCoord.
-	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param townBlockStatus
-	 * @return TownBlockStatus type.
-	 */
-	public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setStatus(townBlockStatus);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Status: " + townBlockStatus);
-		return townBlockStatus;
-	}
-
-	/**
-	 * Update the player cache for Build rights at this WorldCoord.
-	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param id
-	 * @param buildRight
-	 */
-	public void cacheBuild(Player player, WorldCoord worldCoord, Integer id, Boolean buildRight) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setBuildPermission(id, buildRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Build: " + buildRight);
-	}
-
-	/**
-	 * Update the player cache for Destroy rights at this WorldCoord.
-	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param id
-	 * @param destroyRight
-	 */
-	public void cacheDestroy(Player player, WorldCoord worldCoord, Integer id, Boolean destroyRight) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setDestroyPermission(id, destroyRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Destroy: " + destroyRight);
-	}
-
-	/**
-	 * Update the player cache for Switch rights at this WorldCoord.
-	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param id
-	 * @param switchRight
-	 */
-	public void cacheSwitch(Player player, WorldCoord worldCoord, Integer id, Boolean switchRight) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setSwitchPermission(id, switchRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Switch: " + switchRight);
-	}
-
-	/**
-	 * Update the player cache for Item_use rights at this WorldCoord.
-	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param id
-	 * @param itemUseRight
-	 */
-	public void cacheItemUse(Player player, WorldCoord worldCoord, Integer id, Boolean itemUseRight) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setItemUsePermission(id, itemUseRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
-	}
-
-	/**
-	 * Update the cached BlockErrMsg for this player.
-	 * 
-	 * @param player
-	 * @param msg
-	 */
-	public void cacheBlockErrMsg(Player player, String msg) {
-
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
-		cache.setBlockErrMsg(msg);
 	}
 
 	/**

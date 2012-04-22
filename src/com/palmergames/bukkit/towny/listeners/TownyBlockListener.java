@@ -172,7 +172,7 @@ public class TownyBlockListener implements Listener {
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.BUILD);
 
 			// Allow build if we are permitted
 			if (bBuild)
