@@ -41,17 +41,13 @@ public class BukkitTools {
 	 * @return array of online players
 	 */
 	public static Player[] getOnlinePlayers() {
-		synchronized(server.getOnlinePlayers()) {
-			return server.getOnlinePlayers();
-		}
+		return getServer().getOnlinePlayers();
 	}
 	
 	public static List<Player> matchPlayer(String name) {
-		synchronized(server.matchPlayer(name)) {
-			return server.matchPlayer(name);
-		}
-		
+		return getServer().matchPlayer(name);
 	}
+	
 	/**
 	 * Tests if this player is online.
 	 * 
@@ -59,25 +55,21 @@ public class BukkitTools {
 	 * @return true if online
 	 */
 	public static boolean isOnline(String playerName) {
-		synchronized(server.getPlayer(playerName)) {
-			return server.getPlayer(playerName) != null;
-		}
+		return getServer().getPlayer(playerName) != null;
 	}
 	
 	public static List<World> getWorlds() {
-		synchronized(server.getWorlds()) {
 			return server.getWorlds();
-		}
 	}
 	
 	public static Server getServer() {
-		return server;
+		synchronized(server) {
+			return server;
+		}
 	}
 	
 	public static BukkitScheduler getScheduler() {
-		synchronized(server.getScheduler()) {
-			return server.getScheduler();
-		}
+		return getServer().getScheduler();
 	}
 	
 	/**
@@ -135,9 +127,9 @@ public class BukkitTools {
 	public static HashMap<String, Integer> getPlayersPerWorld() {
 
 		HashMap<String, Integer> m = new HashMap<String, Integer>();
-		for (World world : server.getWorlds())
+		for (World world : getServer().getWorlds())
 			m.put(world.getName(), 0);
-		for (Player player :  server.getOnlinePlayers())
+		for (Player player :  getServer().getOnlinePlayers())
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
 	}
