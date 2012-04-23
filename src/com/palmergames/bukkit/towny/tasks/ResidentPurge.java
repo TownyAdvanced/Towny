@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -31,13 +32,13 @@ public class ResidentPurge extends Thread {
 	}
 
 	@Override
-	public synchronized void run() {
+	public void run() {
 
 		int count = 0;
 
 		message("Scanning for old residents...");
 		for (Resident resident : new ArrayList<Resident>(TownyUniverse.getDataSource().getResidents())) {
-			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !plugin.isOnline(resident.getName()) && !plugin.isOnline(resident.getName())) {
+			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName()) && !BukkitTools.isOnline(resident.getName())) {
 				count++;
 				message("Deleting resident: " + resident.getName());
 				TownyUniverse.getDataSource().removeResident(resident);

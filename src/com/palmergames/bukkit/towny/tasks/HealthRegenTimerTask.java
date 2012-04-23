@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -18,9 +19,9 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 	private Server server;
 
-	public HealthRegenTimerTask(TownyUniverse universe, Server server) {
+	public HealthRegenTimerTask(Towny plugin, Server server) {
 
-		super(universe);
+		super(plugin);
 		this.server = server;
 	}
 

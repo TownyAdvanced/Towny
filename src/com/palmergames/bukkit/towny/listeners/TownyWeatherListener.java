@@ -16,7 +16,7 @@ public class TownyWeatherListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLightningStrike(LightningStrikeEvent event) {
 
 	}

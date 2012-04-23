@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -87,7 +88,7 @@ public class TownyMessaging {
 	 * 
 	 * @param msg
 	 */
-	public synchronized static void sendMsg(String msg) {
+	public static void sendMsg(String msg) {
 
 		TownyLogger.log.info("[Towny] " + ChatTools.stripColour(msg));
 	}
@@ -273,7 +274,7 @@ public class TownyMessaging {
 		for (String line : lines) {
 			TownyLogger.log.info(ChatTools.stripColour("[Global Msg] " + line));
 		}
-		for (Player player : TownyUniverse.getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			for (String line : lines)
 				player.sendMessage(line);
 	}
@@ -286,7 +287,7 @@ public class TownyMessaging {
 	public static void sendGlobalMessage(String line) {
 
 		TownyLogger.log.info(ChatTools.stripColour("[Global Message] " + line));
-		for (Player player : TownyUniverse.getOnlinePlayers()) {
+		for (Player player : BukkitTools.getOnlinePlayers()) {
 			player.sendMessage(line);
 		}
 	}

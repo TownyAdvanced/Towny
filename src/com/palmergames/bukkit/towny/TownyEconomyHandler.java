@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -21,6 +20,8 @@ import com.nijikokun.register.payment.Method.MethodAccount;
  */
 public class TownyEconomyHandler {
 
+	private static Towny plugin = null;
+	
 	private static Economy vaultEconomy = null;
 
 	private static EcoType Type = EcoType.NONE;
@@ -29,6 +30,11 @@ public class TownyEconomyHandler {
 
 	public enum EcoType {
 		NONE, ICO5, REGISTER, VAULT
+	}
+
+	public static void initialize(Towny plugin) {
+
+		TownyEconomyHandler.plugin = plugin;
 	}
 
 	/**
@@ -79,7 +85,7 @@ public class TownyEconomyHandler {
 		/*
 		 * Test for native iCo5 support
 		 */
-		economyProvider = Bukkit.getPluginManager().getPlugin("iConomy");
+		economyProvider = plugin.getServer().getPluginManager().getPlugin("iConomy");
 
 		if (economyProvider != null) {
 			/*
@@ -95,7 +101,7 @@ public class TownyEconomyHandler {
 		/*
 		 * Attempt to hook Register
 		 */
-		economyProvider = Bukkit.getPluginManager().getPlugin("Register");
+		economyProvider = plugin.getServer().getPluginManager().getPlugin("Register");
 
 		if (economyProvider != null) {
 			/*
@@ -110,7 +116,7 @@ public class TownyEconomyHandler {
 		 * Attempt to find Vault for Economy handling
 		 */
 		try {
-			RegisteredServiceProvider<Economy> vaultEcoProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+			RegisteredServiceProvider<Economy> vaultEcoProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 			if (vaultEcoProvider != null) {
 				/*
 				 * Flag as using Vault hooks

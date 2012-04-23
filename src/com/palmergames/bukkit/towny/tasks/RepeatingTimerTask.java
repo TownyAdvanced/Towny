@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import java.util.ArrayList;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -12,9 +13,9 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 public class RepeatingTimerTask extends TownyTimerTask {
 
-	public RepeatingTimerTask(TownyUniverse universe) {
+	public RepeatingTimerTask(Towny plugin) {
 
-		super(universe);
+		super(plugin);
 	}
 
 	private Long timerCounter = 0L;

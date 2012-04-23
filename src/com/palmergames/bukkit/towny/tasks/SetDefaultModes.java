@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -25,7 +26,7 @@ public class SetDefaultModes extends TimerTask {
 	public void run() {
 
 		// Is the player still available
-		if (!TownyUniverse.getPlugin().isOnline(name))
+		if (!BukkitTools.isOnline(name))
 			return;
 
 		//setup default modes

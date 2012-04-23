@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
@@ -47,10 +48,10 @@ public class TownyBlockListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -93,10 +94,10 @@ public class TownyBlockListener implements Listener {
 		//plugin.sendDebugMsg("onBlockPhysics took " + (System.currentTimeMillis() - start) + "ms ("+event.isCancelled() +")");
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -105,7 +106,7 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();
 
 		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
+		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
 		
 		// Allow destroy if we are permitted
 		if (bDestroy)
@@ -134,7 +135,7 @@ public class TownyBlockListener implements Listener {
 		if (delay > 0) {
 			if (!TownyRegenAPI.isPlaceholder(block)) {
 				if (!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
-					ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, true);
+					ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, true);
 					task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20 * delay));
 					TownyRegenAPI.addProtectionRegenTask(task);
 				}
@@ -154,10 +155,10 @@ public class TownyBlockListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -171,7 +172,7 @@ public class TownyBlockListener implements Listener {
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.BUILD);
 
 			// Allow build if we are permitted
 			if (bBuild)
@@ -224,10 +225,10 @@ public class TownyBlockListener implements Listener {
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -249,10 +250,10 @@ public class TownyBlockListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -274,10 +275,10 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}

@@ -52,6 +52,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
 
@@ -75,10 +76,10 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -104,7 +105,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
 
 		if (plugin.isError()) {
@@ -138,7 +139,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPotionSplashEvent(PotionSplashEvent event) {
 
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
@@ -158,10 +159,10 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -212,10 +213,10 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -242,10 +243,10 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -267,10 +268,10 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -367,7 +368,7 @@ public class TownyEntityListener implements Listener {
 						if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 							if (townyWorld.isProtectingExplosionEntity(entity)) {
 								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-									ProtectionRegenTask task = new ProtectionRegenTask(plugin.getTownyUniverse(), block, false);
+									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 									TownyRegenAPI.addProtectionRegenTask(task);
 									event.setYield((float) 0.0);
@@ -387,10 +388,10 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -416,10 +417,10 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPaintingBreak(PaintingBreakEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -441,7 +442,7 @@ public class TownyEntityListener implements Listener {
 					Player player = (Player) evt.getRemover();
 
 					//Get destroy permissions (updates if none exist)
-					boolean bDestroy = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.DESTROY);
 					
 					// Allow the removal if we are permitted
 					if (bDestroy)
@@ -484,10 +485,10 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPaintingPlace(PaintingPlaceEvent event) {
 
-		if (event.isCancelled() || plugin.isError()) {
+		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -504,7 +505,7 @@ public class TownyEntityListener implements Listener {
 				return;
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = TownyUniverse.getCachePermissions().getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.BUILD);
 			
 			// Allow placing if we are permitted
 			if (bBuild)

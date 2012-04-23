@@ -1403,3 +1403,4 @@ v0.80.0.14:
 	- Towny now removes old zip backups when using SQL as well as flatfile.
 	- Synchronize old backup deletion
 	- Fix all file access so it no longer leaves any open streams.
+	- Yet MORE optimizations

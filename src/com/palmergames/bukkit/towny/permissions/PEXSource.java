@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -176,7 +177,7 @@ public class PEXSource extends TownyPermissionSource {
 						PermissionGroup group = (PermissionGroup) entity;
 
 						// Update all players who are in this group.
-						for (Player toUpdate : TownyUniverse.getOnlinePlayers()) {
+						for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
 							if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
 								//setup default modes
 								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
@@ -211,7 +212,7 @@ public class PEXSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
 					// Update all players.
-					for (Player toUpdate : TownyUniverse.getOnlinePlayers()) {
+					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
 						//setup default modes
 						String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 						plugin.setPlayerMode(player, modes, false);

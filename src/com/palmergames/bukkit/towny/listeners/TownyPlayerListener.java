@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
@@ -70,7 +72,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Remove from teleport queue (if exists)
 		try {
-			if (plugin.getTownyTimers().isTeleportWarmupRunning())
+			if (TownyTimerHandler.isTeleportWarmupRunning())
 				plugin.getTownyUniverse().abortTeleportRequest(TownyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
 		} catch (NotRegisteredException e) {
 		}
@@ -104,16 +106,13 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-
-		//System.out.println("onPlayerInteract2");
-		//long start = System.currentTimeMillis();
 
 		if (event.isCancelled()) {
 			// Fix for bucket bug.
@@ -149,44 +148,51 @@ public class TownyPlayerListener implements Listener {
 					return;
 				}
 		}
-
-		// Towny regen
-		if (TownySettings.getRegenDelay() > 0) {
-			if (event.getClickedBlock().getState().getData() instanceof Attachable) {
-				Attachable attachable = (Attachable) event.getClickedBlock().getState().getData();
-				BlockLocation attachedToBlock = new BlockLocation(event.getClickedBlock().getRelative(attachable.getAttachedFace()).getLocation());
-				// Prevent attached blocks from falling off when interacting
-				if (TownyRegenAPI.hasProtectionRegenTask(attachedToBlock)) {
-					event.setCancelled(true);
-					return;
-				}
-			}
-		}
-
+		
 		if (event.hasItem()) {
-
+			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
 				onPlayerInteractEvent(event);
 				return;
 			}
 		}
-		// fix for minequest causing null block interactions.
-		if (event.getClickedBlock() != null)
+
+		if (event.getClickedBlock() != null) {
+			// Towny regen
+			if (TownySettings.getRegenDelay() > 0) {
+				if (event.getClickedBlock().getState().getData() instanceof Attachable) {
+					Attachable attachable = (Attachable) event.getClickedBlock().getState().getData();
+					BlockLocation attachedToBlock = new BlockLocation(event.getClickedBlock().getRelative(attachable.getAttachedFace()).getLocation());
+					// Prevent attached blocks from falling off when interacting
+					if (TownyRegenAPI.hasProtectionRegenTask(attachedToBlock)) {
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
+		
 			if (TownySettings.isSwitchId(event.getClickedBlock().getTypeId()) || event.getAction() == Action.PHYSICAL) {
 				onPlayerSwitchEvent(event, null, World);
 				return;
 			}
-		//plugin.sendDebugMsg("onPlayerItemEvent took " + (System.currentTimeMillis() - start) + "ms");
-		//}
+		}
+
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
+		
+		/*
+		 * Abort if we havn't really moved
+		 */
+		if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY()) {
+			return;
+		 }
 
 		Player player = event.getPlayer();
 		Location to = event.getTo();
@@ -199,9 +205,6 @@ public class TownyPlayerListener implements Listener {
 			from = event.getFrom();
 		}
 		
-
-		if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
-			return;
 
 		// Prevent fly/double jump cheats
 		if (!(event instanceof PlayerTeleportEvent)) {
@@ -255,7 +258,7 @@ public class TownyPlayerListener implements Listener {
 		//plugin.sendDebugMsg("        " + to.toString());
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
 		onPlayerMove(event);
@@ -280,9 +283,9 @@ public class TownyPlayerListener implements Listener {
 			boolean bItemUse;
 
 			if (block != null)
-				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.ITEM_USE);
 			else
-				bItemUse = TownyUniverse.getCachePermissions().getCachePermission(player, player.getLocation(), event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
 
 			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
 
@@ -339,7 +342,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		//Get switch permissions (updates if none exist)
-		boolean bSwitch = TownyUniverse.getCachePermissions().getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.SWITCH);
+		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.SWITCH);
 
 		// Allow switch if we are permitted
 		if (bSwitch)

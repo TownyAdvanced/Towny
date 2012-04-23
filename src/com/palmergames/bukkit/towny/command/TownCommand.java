@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -178,7 +179,7 @@ public class TownCommand implements CommandExecutor {
 				try {
 					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 					Town town = resident.getTown();
-					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(plugin, TownySettings.getLangString("msg_town_online"), town));
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town));
 				} catch (NotRegisteredException x) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
 				}
@@ -1104,7 +1105,7 @@ public class TownCommand implements CommandExecutor {
 			}
 
 			if (!UsingESS) {
-				if (plugin.getTownyTimers().isTeleportWarmupRunning()) {
+				if (TownyTimerHandler.isTeleportWarmupRunning()) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 					plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);

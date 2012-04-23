@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 public class Resident extends TownBlockOwner implements ResidentModes {
@@ -356,7 +357,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 		modes.clear();
 		
-		if (TownyUniverse.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(TownyUniverse.getPlugin(), new SetDefaultModes(this.getName(), true), 1) == -1)
+		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
 		
 	}

@@ -9,7 +9,7 @@ import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.PistonExtensionMaterial;
 
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -23,9 +23,9 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 	private static final Material placeholder = Material.DIRT;
 
-	public ProtectionRegenTask(TownyUniverse universe, Block block, boolean update) {
+	public ProtectionRegenTask(Towny plugin, Block block, boolean update) {
 
-		super(universe);
+		super(plugin);
 		this.state = block.getState();
 		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));

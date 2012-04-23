@@ -21,17 +21,19 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.util.MinecraftTools;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
  * 
  */
-public class TownyRegenAPI extends TownyUniverse {
+public class TownyRegenAPI {
 
-	public TownyRegenAPI(Towny plugin) {
+	//private static Towny plugin = null;
+	
+	public static void initialize(Towny plugin) {
 
-		super(plugin);
+		//TownyRegenAPI.plugin = plugin;
 	}
 
 	// table containing snapshot data of active reversions.
@@ -211,8 +213,8 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		byte data;
 		int typeId;
-		World world = getPlugin().getServer().getWorld(snapshot.getWorldName());
-		Chunk chunk = world.getChunkAt(MinecraftTools.calcChunk(snapshot.getX()), MinecraftTools.calcChunk(snapshot.getZ()));
+		World world = BukkitTools.getServer().getWorld(snapshot.getWorldName());
+		Chunk chunk = world.getChunkAt(BukkitTools.calcChunk(snapshot.getX()), BukkitTools.calcChunk(snapshot.getZ()));
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
@@ -225,7 +227,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		}
 
-		TownyMessaging.sendMessage(getPlugin().getServer().getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
+		TownyMessaging.sendMessage(BukkitTools.getServer().getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
 
 	}
 
@@ -315,7 +317,7 @@ public class TownyRegenAPI extends TownyUniverse {
 
 		TownyMessaging.sendDebugMsg("Processing deleteTownBlockMaterial");
 
-		World world = getPlugin().getServer().getWorld(townBlock.getWorld().getName());
+		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
 
 		if (world != null) {
 			/*
@@ -403,7 +405,7 @@ public class TownyRegenAPI extends TownyUniverse {
 	public static void cancelProtectionRegenTasks() {
 
 		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
-			getPlugin().getServer().getScheduler().cancelTask(task.getTaskId());
+			BukkitTools.getServer().getScheduler().cancelTask(task.getTaskId());
 			task.replaceProtections();
 		}
 		protectionRegenTasks.clear();

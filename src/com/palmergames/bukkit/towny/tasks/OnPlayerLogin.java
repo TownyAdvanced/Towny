@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.BukkitTools;
 
 
 /**
@@ -102,7 +103,7 @@ public class OnPlayerLogin extends Thread{
 			universe.getWarEvent().sendScores(player, 3);
 
 		//Schedule to setup default modes when the player has finished loading
-		if (TownyUniverse.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(TownyUniverse.getPlugin(), new SetDefaultModes(player.getName(), false), 1) == -1)
+		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
 		
 		// Send any warning messages at login.

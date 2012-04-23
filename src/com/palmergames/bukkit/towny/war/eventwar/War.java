@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ServerBroadCastTimerTask;
@@ -112,7 +113,7 @@ public class War {
 					addTaskId(id);
 			}
 			//warTimer.schedule(new StartWarTimerTask(universe), delay*1000);
-			int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new StartWarTimerTask(universe), TimeTools.convertToTicks(delay));
+			int id = BukkitTools.scheduleAsyncDelayedTask(new StartWarTimerTask(plugin), TimeTools.convertToTicks(delay));
 			if (id == -1) {
 				TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
 				end();
@@ -162,7 +163,7 @@ public class War {
 			}
 		}
 		//warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
-		int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(this), 0, TimeTools.convertToTicks(5));
+		int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
 		if (id == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
 			end();
@@ -173,7 +174,7 @@ public class War {
 
 	public void end() {
 
-		for (Player player : TownyUniverse.getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			sendStats(player);
 		double halfWinnings;
 		try {

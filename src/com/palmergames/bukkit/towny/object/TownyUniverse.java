@@ -13,7 +13,6 @@ import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -36,8 +35,8 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
@@ -59,7 +58,6 @@ public class TownyUniverse extends TownyObject {
 
 	// private List<Election> elections;
 	private static TownyDataSource dataSource;
-	private static PlayerCacheUtil cachePermissions = new PlayerCacheUtil();
 	private static TownyPermissionSource permissionSource;
 	
 	private static War warEvent;
@@ -112,20 +110,10 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static Player getPlayer(Resident resident) throws TownyException {
 
-		for (Player player : getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player.getName().equals(resident.getName()))
 				return player;
 		throw new TownyException(String.format("%s is not online", resident.getName()));
-	}
-
-	/**
-	 * Get all online players
-	 * 
-	 * @return array of online players
-	 */
-	public static Player[] getOnlinePlayers() {
-
-		return Bukkit.getOnlinePlayers();
 	}
 
 	/**
@@ -137,7 +125,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Player> getOnlinePlayers(ResidentList residents) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
-		for (Player player : getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			if (residents.hasResident(player.getName()))
 				players.add(player);
 		return players;
@@ -152,7 +140,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Player> getOnlinePlayers(Town town) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
-		for (Player player : getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			if (town.hasResident(player.getName()))
 				players.add(player);
 		return players;
@@ -253,7 +241,7 @@ public class TownyUniverse extends TownyObject {
 
 	public boolean isActiveResident(Resident resident) {
 
-		return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (plugin.isOnline(resident.getName())));
+		return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (BukkitTools.isOnline(resident.getName())));
 	}
 
 	public boolean loadSettings() {
@@ -376,11 +364,6 @@ public class TownyUniverse extends TownyObject {
 		return permissionSource;
 	}
 
-	public static PlayerCacheUtil getCachePermissions() {
-
-		return cachePermissions;
-	}
-
 	/**
 	 * @return Hashtable of residents
 	 */
@@ -434,7 +417,7 @@ public class TownyUniverse extends TownyObject {
 
 	public void clearWarEvent() {
 
-		getWarEvent().cancelTasks(getPlugin().getServer().getScheduler());
+		getWarEvent().cancelTasks(BukkitTools.getScheduler());
 		setWarEvent(null);
 		setChangedNotify(WAR_CLEARED);
 	}
@@ -451,16 +434,6 @@ public class TownyUniverse extends TownyObject {
 		setChangedNotify(WAR_SET);
 	}
 
-	public static Towny getPlugin() {
-
-		return plugin;
-	}
-
-	public void setPlugin(Towny plugin) {
-
-		TownyUniverse.plugin = plugin;
-	}
-
 	public void sendUniverseTree(CommandSender sender) {
 
 		for (String line : getTreeString(0))
@@ -473,10 +446,10 @@ public class TownyUniverse extends TownyObject {
 		List<String> out = new ArrayList<String>();
 		out.add(getTreeDepth(depth) + "Universe (" + getName() + ")");
 		if (plugin != null) {
-			out.add(getTreeDepth(depth + 1) + "Server (" + plugin.getServer().getName() + ")");
-			out.add(getTreeDepth(depth + 2) + "Version: " + plugin.getServer().getVersion());
-			out.add(getTreeDepth(depth + 2) + "Players: " + plugin.getServer().getOnlinePlayers().length + "/" + plugin.getServer().getMaxPlayers());
-			out.add(getTreeDepth(depth + 2) + "Worlds (" + plugin.getServer().getWorlds().size() + "): " + Arrays.toString(plugin.getServer().getWorlds().toArray(new World[0])));
+			out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
+			out.add(getTreeDepth(depth + 2) + "Version: " + BukkitTools.getServer().getVersion());
+			out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
+			out.add(getTreeDepth(depth + 2) + "Worlds (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
 		}
 		out.add(getTreeDepth(depth + 1) + "Worlds (" + getDataSource().getWorlds().size() + "):");
 		for (TownyWorld world : getDataSource().getWorlds())
@@ -502,7 +475,7 @@ public class TownyUniverse extends TownyObject {
 
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
-			List<Player> matches = plugin.getServer().matchPlayer(name);
+			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
 				String line = "Multiple players selected";
 				for (Player p : matches)
@@ -534,7 +507,7 @@ public class TownyUniverse extends TownyObject {
 
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
-			List<Player> matches = plugin.getServer().matchPlayer(name);
+			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
 				String line = "Multiple players selected";
 				for (Player p : matches)
@@ -554,7 +527,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Resident> getOnlineResidents(ResidentList residentList) {
 
 		List<Resident> onlineResidents = new ArrayList<Resident>();
-		for (Player player : plugin.getServer().getOnlinePlayers()) {
+		for (Player player : BukkitTools.getOnlinePlayers()) {
 			for (Resident resident : residentList.getResidents()) {
 				if (resident.getName().equalsIgnoreCase(player.getName()))
 					onlineResidents.add(resident);

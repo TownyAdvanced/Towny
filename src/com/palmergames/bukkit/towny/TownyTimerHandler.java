@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
@@ -28,120 +29,120 @@ import com.palmergames.util.TimeTools;
  */
 public class TownyTimerHandler{
 	
-	public TownyTimerHandler (Towny plugin) {
+	private static Towny plugin;
+	private static TownyUniverse universe;
+	
+	public static void initialize (Towny plugin) {
 		
 		TownyTimerHandler.plugin = plugin;
 		universe = plugin.getTownyUniverse();
 	}
 	
-	private static Towny plugin;
-	private TownyUniverse universe;
-	
-	private int townyRepeatingTask = -1;
-	private int dailyTask = -1;
-	private int mobRemoveTask = -1;
-	private int healthRegenTask = -1;
-	private int teleportWarmupTask = -1;
+	private static int townyRepeatingTask = -1;
+	private static int dailyTask = -1;
+	private static int mobRemoveTask = -1;
+	private static int healthRegenTask = -1;
+	private static int teleportWarmupTask = -1;
 
-	public void newDay() {
+	public static void newDay() {
 
 		if (!isDailyTimerRunning())
 			toggleDailyTimer(true);
 		//dailyTimer.schedule(new DailyTimerTask(this), 0);
-		if (plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new DailyTimerTask(universe)) == -1)
+		if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 			TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		universe.setChangedNotify(NEW_DAY);
 	}
 
-	public void toggleTownyRepeatingTimer(boolean on) {
+	public static void toggleTownyRepeatingTimer(boolean on) {
 
 		if (on && !isTownyRepeatingTaskRunning()) {
-			townyRepeatingTask = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new RepeatingTimerTask(universe), 0, TimeTools.convertToTicks(1L));
+			townyRepeatingTask = BukkitTools.scheduleSyncRepeatingTask(new RepeatingTimerTask(plugin), 0, TimeTools.convertToTicks(1L));
 			if (townyRepeatingTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule Towny Timer Task.");
 		} else if (!on && isTownyRepeatingTaskRunning()) {
-			plugin.getServer().getScheduler().cancelTask(townyRepeatingTask);
+			BukkitTools.getScheduler().cancelTask(townyRepeatingTask);
 			townyRepeatingTask = -1;
 		}
 		universe.setChangedNotify(TOGGLE_REPEATING_TIMER);
 	}
 
-	public void toggleMobRemoval(boolean on) {
+	public static void toggleMobRemoval(boolean on) {
 
 		if (on && !isMobRemovalRunning()) {
-			mobRemoveTask = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new MobRemovalTimerTask(universe, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
+			mobRemoveTask = BukkitTools.scheduleSyncRepeatingTask(new MobRemovalTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 			if (mobRemoveTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule mob removal loop.");
 		} else if (!on && isMobRemovalRunning()) {
-			plugin.getServer().getScheduler().cancelTask(mobRemoveTask);
+			BukkitTools.getScheduler().cancelTask(mobRemoveTask);
 			mobRemoveTask = -1;
 		}
-		plugin.getTownyUniverse().setChangedNotify(TOGGLE_MOB_REMOVAL);
+		universe.setChangedNotify(TOGGLE_MOB_REMOVAL);
 	}
 
-	public void toggleDailyTimer(boolean on) {
+	public static void toggleDailyTimer(boolean on) {
 
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
 			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-			dailyTask = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new DailyTimerTask(universe), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
+			dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			if (dailyTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
 		} else if (!on && isDailyTimerRunning()) {
-			plugin.getServer().getScheduler().cancelTask(dailyTask);
+			BukkitTools.getScheduler().cancelTask(dailyTask);
 			dailyTask = -1;
 		}
 		universe.setChangedNotify(TOGGLE_DAILY_TIMER);
 	}
 
-	public void toggleHealthRegen(boolean on) {
+	public static void toggleHealthRegen(boolean on) {
 
 		if (on && !isHealthRegenRunning()) {
-			healthRegenTask = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new HealthRegenTimerTask(universe, plugin.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
+			healthRegenTask = BukkitTools.scheduleSyncRepeatingTask(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 			if (healthRegenTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule health regen loop.");
 		} else if (!on && isHealthRegenRunning()) {
-			plugin.getServer().getScheduler().cancelTask(healthRegenTask);
+			BukkitTools.getScheduler().cancelTask(healthRegenTask);
 			healthRegenTask = -1;
 		}
 		universe.setChangedNotify(TOGGLE_HEALTH_REGEN);
 	}
 
-	public void toggleTeleportWarmup(boolean on) {
+	public static void toggleTeleportWarmup(boolean on) {
 
 		if (on && !isTeleportWarmupRunning()) {
-			teleportWarmupTask = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new TeleportWarmupTimerTask(universe), 0, 20);
+			teleportWarmupTask = BukkitTools.scheduleSyncRepeatingTask(new TeleportWarmupTimerTask(plugin), 0, 20);
 			if (teleportWarmupTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule teleport warmup loop.");
 		} else if (!on && isTeleportWarmupRunning()) {
-			plugin.getServer().getScheduler().cancelTask(teleportWarmupTask);
+			BukkitTools.getScheduler().cancelTask(teleportWarmupTask);
 			teleportWarmupTask = -1;
 		}
 		universe.setChangedNotify(TOGGLE_TELEPORT_WARMUP);
 	}
 
-	public boolean isTownyRepeatingTaskRunning() {
+	public static boolean isTownyRepeatingTaskRunning() {
 
 		return townyRepeatingTask != -1;
 
 	}
 
-	public boolean isMobRemovalRunning() {
+	public static boolean isMobRemovalRunning() {
 
 		return mobRemoveTask != -1;
 	}
 
-	public boolean isDailyTimerRunning() {
+	public static boolean isDailyTimerRunning() {
 
 		return dailyTask != -1;
 	}
 
-	public boolean isHealthRegenRunning() {
+	public static boolean isHealthRegenRunning() {
 
 		return healthRegenTask != -1;
 	}
 
-	public boolean isTeleportWarmupRunning() {
+	public static boolean isTeleportWarmupRunning() {
 
 		return teleportWarmupTask != -1;
 	}

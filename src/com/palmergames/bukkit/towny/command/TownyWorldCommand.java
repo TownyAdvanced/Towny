@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.MinecraftTools;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -207,7 +207,7 @@ public class TownyWorldCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("world_plu")));
 
 		ArrayList<String> formatedList = new ArrayList<String>();
-		HashMap<String, Integer> playersPerWorld = MinecraftTools.getPlayersPerWorld(plugin.getServer());
+		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
 		for (TownyWorld world : TownyUniverse.getDataSource().getWorlds()) {
 			int numPlayers = playersPerWorld.containsKey(world.getName()) ? playersPerWorld.get(world.getName()) : 0;
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);

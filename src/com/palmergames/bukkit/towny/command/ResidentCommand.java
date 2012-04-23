@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -356,7 +357,7 @@ public class ResidentCommand implements CommandExecutor {
 				for (String name : split) {
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(name);
-						if (!resident.isNPC() && !plugin.isOnline(resident.getName())) {
+						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
 							TownyUniverse.getDataSource().removeResident(resident);
 							TownyUniverse.getDataSource().removeResidentList(resident);
 							TownyMessaging.sendGlobalMessage(TownySettings.getDelResidentMsg(resident));

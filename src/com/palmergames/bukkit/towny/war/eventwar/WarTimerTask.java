@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -12,14 +13,15 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarTimerTask extends TownyTimerTask {
 
 	War warEvent;
 
-	public WarTimerTask(War warEvent) {
+	public WarTimerTask(Towny plugin, War warEvent) {
 
-		super(warEvent.getTownyUniverse());
+		super(plugin);
 		this.warEvent = warEvent;
 	}
 
@@ -30,13 +32,13 @@ public class WarTimerTask extends TownyTimerTask {
 		if (!warEvent.isWarTime()) {
 			warEvent.end();
 			universe.clearWarEvent();
-			TownyUniverse.getPlugin().updateCache();
+			plugin.updateCache();
 			TownyMessaging.sendDebugMsg("War ended.");
 			return;
 		}
 
 		int numPlayers = 0;
-		for (Player player : TownyUniverse.getOnlinePlayers()) {
+		for (Player player : BukkitTools.getOnlinePlayers()) {
 			numPlayers += 1;
 			TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 			try {

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -26,9 +27,9 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	public static List<Class> townMobsToRemove = new ArrayList<Class>();
 
 	@SuppressWarnings("rawtypes")
-	public MobRemovalTimerTask(TownyUniverse universe, Server server) {
+	public MobRemovalTimerTask(Towny plugin, Server server) {
 
-		super(universe);
+		super(plugin);
 		this.server = server;
 
 		worldMobsToRemove.clear();

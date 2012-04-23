@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -27,9 +28,9 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 
 public class DailyTimerTask extends TownyTimerTask {
 
-	public DailyTimerTask(TownyUniverse universe) {
+	public DailyTimerTask(Towny plugin) {
 
-		super(universe);
+		super(plugin);
 	}
 
 	@Override

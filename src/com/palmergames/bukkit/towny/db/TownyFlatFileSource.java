@@ -1204,7 +1204,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public synchronized boolean saveResidentList() {
+	public boolean saveResidentList() {
 
 		BufferedWriter fout = null;
 
@@ -1231,7 +1231,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTownList() {
+	public boolean saveTownList() {
 
 		BufferedWriter fout = null;
 		
@@ -1258,7 +1258,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveNationList() {
+	public boolean saveNationList() {
 
 		BufferedWriter fout = null;
 		
@@ -1285,7 +1285,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveWorldList() {
+	public boolean saveWorldList() {
 
 		BufferedWriter fout = null;
 		
@@ -1312,7 +1312,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveRegenList() {
+	public boolean saveRegenList() {
 
 		BufferedWriter fout = null;
 
@@ -1339,7 +1339,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveSnapshotList() {
+	public boolean saveSnapshotList() {
 
 		BufferedWriter fout = null;
 		
@@ -1371,7 +1371,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public synchronized boolean saveResident(Resident resident) {
+	public boolean saveResident(Resident resident) {
 
 		BufferedWriter fout = null;
 
@@ -1419,7 +1419,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTown(Town town) {
+	public boolean saveTown(Town town) {
 
 		BufferedWriter fout = null;
 
@@ -1523,7 +1523,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveNation(Nation nation) {
+	public boolean saveNation(Nation nation) {
 
 		BufferedWriter fout = null;
 		
@@ -1574,7 +1574,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveWorld(TownyWorld world) {
+	public boolean saveWorld(TownyWorld world) {
 
 		BufferedWriter fout = null;
 		
@@ -1718,7 +1718,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveAllTownBlocks() {
+	public boolean saveAllTownBlocks() {
 
 		for (TownyWorld world : getWorlds()) {
 			for (TownBlock townBlock : world.getTownBlocks())
@@ -1729,7 +1729,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTownBlock(TownBlock townBlock) {
+	public boolean saveTownBlock(TownBlock townBlock) {
 
 		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks" + FileMgmt.fileSeparator() + townBlock.getWorld().getName() });
 

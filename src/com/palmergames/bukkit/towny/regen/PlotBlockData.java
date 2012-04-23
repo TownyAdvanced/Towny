@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.util.MinecraftTools;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class PlotBlockData {
 
@@ -93,7 +93,7 @@ public class PlotBlockData {
 		blockObject storedData;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
-		if (!world.isChunkLoaded(MinecraftTools.calcChunk(getX()), MinecraftTools.calcChunk(getZ())))
+		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
 
 		//Scale for the number of elements

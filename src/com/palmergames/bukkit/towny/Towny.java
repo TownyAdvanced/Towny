@@ -13,10 +13,12 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
@@ -59,7 +61,6 @@ public class Towny extends JavaPlugin {
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
 	
 	private TownyUniverse townyUniverse;
-	private TownyTimerHandler townyTimers;
 	
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
 
@@ -74,9 +75,16 @@ public class Towny extends JavaPlugin {
 		System.out.println("====================      Towny      ========================");
 
 		version = this.getDescription().getVersion();
-		
+
 		townyUniverse = new TownyUniverse(this);
-		townyTimers = new TownyTimerHandler(this);
+		
+		// Setup classes
+		BukkitTools.initialize(this);
+		TownyTimerHandler.initialize(this);
+		TownyEconomyHandler.initialize(this);
+		TownyFormatter.initialize(this);
+		TownyRegenAPI.initialize(this);
+		PlayerCacheUtil.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -108,24 +116,13 @@ public class Towny extends JavaPlugin {
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
-			for (Player player : getServer().getOnlinePlayers())
+			for (Player player : BukkitTools.getOnlinePlayers())
 				try {
 					getTownyUniverse().onLogin(player);
 				} catch (TownyException x) {
 					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
 		}
-		//setupDatabase();
-	}
-
-	public boolean isOnline(String playerName) {
-
-		for (Player player : getServer().getOnlinePlayers())
-			if (player.getName().equalsIgnoreCase(playerName))
-				return true;
-
-		return false;
-
 	}
 
 	public void SetWorldFlags() {
@@ -154,30 +151,6 @@ public class Towny extends JavaPlugin {
 
 	}
 
-	/*
-	 * private void setupDatabase()
-	 * {
-	 * try
-	 * {
-	 * getDatabase().find(Towny.class).findRowCount();
-	 * }
-	 * catch(PersistenceException ex)
-	 * {
-	 * System.out.println("Installing database for " +
-	 * getDescription().getName() + " due to first time usage");
-	 * installDDL();
-	 * }
-	 * }
-	 */
-
-	@Override
-	public List<Class<?>> getDatabaseClasses() {
-
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(Towny.class);
-		return list;
-	}
-
 	@Override
 	public void onDisable() {
 
@@ -192,18 +165,17 @@ public class Towny extends JavaPlugin {
 		if (TownyUniverse.isWarTime())
 			getTownyUniverse().getWarEvent().toggleEnd();
 
-		townyTimers.toggleTownyRepeatingTimer(false);
-		townyTimers.toggleDailyTimer(false);
-		townyTimers.toggleMobRemoval(false);
-		townyTimers.toggleHealthRegen(false);
-		townyTimers.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleTownyRepeatingTimer(false);
+		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleMobRemoval(false);
+		TownyTimerHandler.toggleHealthRegen(false);
+		TownyTimerHandler.toggleTeleportWarmup(false);
 		
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
 
 		townyUniverse = null;
-		townyTimers = null;
 
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 		System.out.println("=============================================================");
@@ -261,18 +233,18 @@ public class Towny extends JavaPlugin {
 		SetWorldFlags();
 
 		//make sure the timers are stopped for a reset
-		townyTimers.toggleTownyRepeatingTimer(false);
-		townyTimers.toggleDailyTimer(false);
-		townyTimers.toggleMobRemoval(false);
-		townyTimers.toggleHealthRegen(false);
-		townyTimers.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleTownyRepeatingTimer(false);
+		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleMobRemoval(false);
+		TownyTimerHandler.toggleHealthRegen(false);
+		TownyTimerHandler.toggleTeleportWarmup(false);
 
 		//Start timers
-		townyTimers.toggleTownyRepeatingTimer(true);
-		townyTimers.toggleDailyTimer(true);
-		townyTimers.toggleMobRemoval(true);
-		townyTimers.toggleHealthRegen(TownySettings.hasHealthRegen());
-		townyTimers.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleTownyRepeatingTimer(true);
+		TownyTimerHandler.toggleDailyTimer(true);
+		TownyTimerHandler.toggleMobRemoval(true);
+		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
+		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		updateCache();
 
 		return true;
@@ -398,7 +370,7 @@ public class Towny extends JavaPlugin {
 		}
 		TownySettings.setLastRunVersion(getVersion());
 	}
-
+	
 	/**
 	 * Fetch the TownyUniverse instance
 	 * 
@@ -408,22 +380,12 @@ public class Towny extends JavaPlugin {
 
 		return townyUniverse;
 	}
-	
-	/**
-	 * Fetch the TownyTimerHandler instance
-	 * 
-	 * @return TownyTimerHandler
-	 */
-	public TownyTimerHandler getTownyTimers() {
-
-		return townyTimers;
-	}
 
 	public String getVersion() {
 
 		return version;
 	}
-
+	
 	/**
 	 * @return the error
 	 */
@@ -472,7 +434,7 @@ public class Towny extends JavaPlugin {
 
 	public World getServerWorld(String name) throws NotRegisteredException {
 
-		for (World world : getServer().getWorlds())
+		for (World world : BukkitTools.getWorlds())
 			if (world.getName().equals(name))
 				return world;
 
@@ -520,7 +482,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 
-		for (Player player : getServer().getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 			if (Coord.parseCoord(player).equals(worldCoord))
 				getCache(player).setLastTownBlock(worldCoord); //Automatically resets permissions.
 	}
@@ -530,7 +492,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache() {
 
-		for (Player player : getServer().getOnlinePlayers())
+		for (Player player : BukkitTools.getOnlinePlayers())
 
 			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 	}
@@ -558,39 +520,6 @@ public class Towny extends JavaPlugin {
 			// Resident doesn't exist
 		}
 	}
-
-	/*
-	 * public void setPlayerChatMode(Player player, String newMode) {
-	 * 
-	 * List<String> modes = new ArrayList<String>();
-	 * List<String> currentModes = getPlayerMode(player);
-	 * boolean toggle = false;
-	 * 
-	 * if ((currentModes != null) && (!currentModes.isEmpty())) {
-	 * modes.addAll(currentModes);
-	 * 
-	 * if (modes.contains(newMode))
-	 * toggle = true;
-	 * 
-	 * // Clear all chat channels
-	 * for (String channel : TownySettings.getChatChannels()) {
-	 * if (modes.contains(channel.replace("/", "")))
-	 * if (modes.size() > 1)
-	 * modes.remove(channel.replace("/", ""));
-	 * else
-	 * modes = new ArrayList<String>();
-	 * }
-	 * }
-	 * 
-	 * if (!modes.contains(newMode) && !toggle)
-	 * modes.add(newMode);
-	 * 
-	 * if (modes.isEmpty())
-	 * removePlayerMode(player);
-	 * else
-	 * setPlayerMode(player, modes.toArray(new String[modes.size()]), true);
-	 * }
-	 */
 
 	/**
 	 * Remove ALL current modes (and set the defaults)
@@ -656,51 +585,10 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
-	/*
-	 * public boolean checkEssentialsTeleport(Player player, Location lctn) {
-	 * if (!TownySettings.isUsingEssentials() ||
-	 * !TownySettings.isAllowingTownSpawn())
-	 * return false;
-	 * 
-	 * Plugin test = getServer().getPluginManager().getPlugin("Essentials");
-	 * if (test == null)
-	 * return false;
-	 * Essentials essentials = (Essentials)test;
-	 * //essentials.loadClasses();
-	 * sendDebugMsg("Using Essentials");
-	 * 
-	 * try {
-	 * User user = essentials.getUser(player);
-	 * 
-	 * if (!user.isTeleportEnabled())
-	 * return false;
-	 * 
-	 * if (!user.isJailed()){
-	 * 
-	 * //user.getTeleport();
-	 * Teleport teleport = user.getTeleport();
-	 * teleport.teleport(lctn, null);
-	 * 
-	 * }
-	 * return true;
-	 * 
-	 * } catch (Exception e) {
-	 * sendErrorMsg(player, "Error: " + e.getMessage());
-	 * // we still retun true here as it is a cooldown
-	 * return true;
-	 * }
-	 * 
-	 * }
-	 */
-
 	public String getConfigPath() {
 
 		return getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml";
 	}
-
-	//public void setSetting(String root, Object value, boolean saveYML) {
-	//              TownySettings.setProperty(root, value, saveYML);
-	//}
 
 	public Object getSetting(String root) {
 
@@ -734,17 +622,5 @@ public class Towny extends JavaPlugin {
 			return false;
 		else
 			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
-	}
-
-	@Deprecated
-	public boolean isTownyAdmin(Player player) {
-
-		return TownyUniverse.getPermissionSource().isTownyAdmin(player);
-	}
-
-	@Deprecated
-	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
-
-		return TownyUniverse.getPermissionSource().hasWildOverride(world, player, blockId, action);
 	}
 }

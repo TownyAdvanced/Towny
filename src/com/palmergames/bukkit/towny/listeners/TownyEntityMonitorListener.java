@@ -39,7 +39,7 @@ public class TownyEntityMonitorListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
 
 		Entity defenderEntity = event.getEntity();

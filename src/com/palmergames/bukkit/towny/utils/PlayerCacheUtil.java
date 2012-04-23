@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -27,6 +28,12 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
  * 
  */
 public class PlayerCacheUtil {
+	
+	static Towny plugin = null;
+	
+	public static void initialize(Towny plugin) {
+		PlayerCacheUtil.plugin = plugin;
+	}
 
 	/**
 	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
@@ -40,13 +47,13 @@ public class PlayerCacheUtil {
 	 * @param action
 	 * @return true if the player has permission.
 	 */
-	public boolean getCachePermission(Player player, Location location, Integer blockId, ActionType action) {
+	public static boolean getCachePermission(Player player, Location location, Integer blockId, ActionType action) {
 
 		WorldCoord worldCoord;
 
 		try {
 			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
-			PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
 
 			TownyMessaging.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(blockId, action));
@@ -60,7 +67,7 @@ public class PlayerCacheUtil {
 			TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
 			triggerCacheCreate(player, location, worldCoord, status, blockId, action);
 
-			PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
 
 			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + " = " + cache.getCachePermission(blockId, action));
@@ -78,7 +85,7 @@ public class PlayerCacheUtil {
 	 * @param id
 	 * @param action
 	 */
-	private void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Integer id, ActionType action) {
+	private static void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Integer id, ActionType action) {
 
 		switch (action) {
 
@@ -108,9 +115,9 @@ public class PlayerCacheUtil {
 	 * @param townBlockStatus
 	 * @return TownBlockStatus type.
 	 */
-	public TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
+	public static TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setStatus(townBlockStatus);
 
@@ -126,9 +133,9 @@ public class PlayerCacheUtil {
 	 * @param id
 	 * @param buildRight
 	 */
-	public void cacheBuild(Player player, WorldCoord worldCoord, Integer id, Boolean buildRight) {
+	private static void cacheBuild(Player player, WorldCoord worldCoord, Integer id, Boolean buildRight) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setBuildPermission(id, buildRight);
 
@@ -143,9 +150,9 @@ public class PlayerCacheUtil {
 	 * @param id
 	 * @param destroyRight
 	 */
-	public void cacheDestroy(Player player, WorldCoord worldCoord, Integer id, Boolean destroyRight) {
+	private static void cacheDestroy(Player player, WorldCoord worldCoord, Integer id, Boolean destroyRight) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setDestroyPermission(id, destroyRight);
 
@@ -160,9 +167,9 @@ public class PlayerCacheUtil {
 	 * @param id
 	 * @param switchRight
 	 */
-	public void cacheSwitch(Player player, WorldCoord worldCoord, Integer id, Boolean switchRight) {
+	private static void cacheSwitch(Player player, WorldCoord worldCoord, Integer id, Boolean switchRight) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setSwitchPermission(id, switchRight);
 
@@ -177,9 +184,9 @@ public class PlayerCacheUtil {
 	 * @param id
 	 * @param itemUseRight
 	 */
-	public void cacheItemUse(Player player, WorldCoord worldCoord, Integer id, Boolean itemUseRight) {
+	private static void cacheItemUse(Player player, WorldCoord worldCoord, Integer id, Boolean itemUseRight) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.updateCoord(worldCoord);
 		cache.setItemUsePermission(id, itemUseRight);
 
@@ -192,9 +199,9 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param msg
 	 */
-	public void cacheBlockErrMsg(Player player, String msg) {
+	public static void cacheBlockErrMsg(Player player, String msg) {
 
-		PlayerCache cache = TownyUniverse.getPlugin().getCache(player);
+		PlayerCache cache = plugin.getCache(player);
 		cache.setBlockErrMsg(msg);
 	}
 
@@ -205,7 +212,7 @@ public class PlayerCacheUtil {
 	 * @param worldCoord
 	 * @return TownBlockStatus type.
 	 */
-	public TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
+	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 
 		//if (isTownyAdmin(player))
 		//        return TownBlockStatus.ADMIN;
@@ -322,7 +329,7 @@ public class PlayerCacheUtil {
 	 * @param action
 	 * @return true if allowed.
 	 */
-	public boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos,  Integer blockId, TownyPermission.ActionType action) {
+	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos,  Integer blockId, TownyPermission.ActionType action) {
 
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.WARZONE || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
