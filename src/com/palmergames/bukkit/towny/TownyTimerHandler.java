@@ -149,10 +149,8 @@ public class TownyTimerHandler{
 	
 	public static Long townyTime() {
 
-		Long oneDay = TownySettings.getDayInterval()-1 * 1000;
-		Long time = ((TownySettings.getNewDayTime() * 1000) - (System.currentTimeMillis() % oneDay)) / 1000;
-
-		//time = time - 3600;
+		Long oneDay = (TownySettings.getDayInterval()-1) * 1000;
+		Long time = (oneDay - ((System.currentTimeMillis() % oneDay) - (TownySettings.getNewDayTime() * 1000))) / 1000;
 
 		if (time < 0)
 			time = (oneDay / 1000) - Math.abs(time);
