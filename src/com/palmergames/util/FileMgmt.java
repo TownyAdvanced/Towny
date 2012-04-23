@@ -290,7 +290,7 @@ public class FileMgmt {
 	 * Delete file, or if path represents a directory, recursively
 	 * delete it's contents beforehand.
 	 */
-	public synchronized static void deleteFile(File file) {
+	public static void deleteFile(File file) {
 
 		if (file.isDirectory()) {
 			File[] children = file.listFiles();
@@ -313,7 +313,7 @@ public class FileMgmt {
 	 * Delete child files/folders of backupsDir with a filename ending
 	 * in milliseconds that is older than deleteAfter milliseconds in age.
 	 */
-	public synchronized static void deleteOldBackups(File backupsDir, long deleteAfter) {
+	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
 
 		TreeSet<Long> deleted = new TreeSet<Long>();
 		if (backupsDir.isDirectory()) {
