@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
@@ -83,7 +82,7 @@ public class TownyTimerHandler{
 	public void toggleDailyTimer(boolean on) {
 
 		if (on && !isDailyTimerRunning()) {
-			long timeTillNextDay = AreaSelectionUtil.townyTime();
+			long timeTillNextDay = townyTime();
 			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			dailyTask = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new DailyTimerTask(universe), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			if (dailyTask == -1)
@@ -145,6 +144,19 @@ public class TownyTimerHandler{
 	public boolean isTeleportWarmupRunning() {
 
 		return teleportWarmupTask != -1;
+	}
+	
+	public static Long townyTime() {
+
+		Long oneDay = TownySettings.getDayInterval() * 1000;
+		Long time = ((TownySettings.getNewDayTime() * 1000) - (System.currentTimeMillis() % oneDay)) / 1000;
+
+		time = time - 3600;
+
+		if (time < 0)
+			time = (oneDay / 1000) - Math.abs(time);
+
+		return time % oneDay;
 	}
 
 }
