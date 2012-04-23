@@ -50,11 +50,11 @@ public abstract class TownyDataSource {
 		this.plugin = plugin;
 	}
 
-	public void backup() throws IOException {
-
+	public synchronized void backup() throws IOException {
+		//place holder to be overridden
 	}
 
-	public void cleanupBackups() {
+	public synchronized void cleanupBackups() {
 		
 		long deleteAfter = TownySettings.getBackupLifeLength();
 		if (deleteAfter >= 0)
@@ -62,8 +62,8 @@ public abstract class TownyDataSource {
 
 	}
 
-	public void deleteUnusedResidentFiles() {
-
+	public synchronized void deleteUnusedResidentFiles() {
+		//place holder to be overridden
 	}
 
 	public boolean confirmContinuation(String msg) {
