@@ -190,33 +190,33 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
+			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					newResident(line);
 
+			return true;
+			
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
-			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
+			return false;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file.
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
-		return true;
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Town List");
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt"));
@@ -236,22 +236,26 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					newTown(line);
+			
+			return true;
 
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
-			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
+			return false;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file.
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
-		return true;
+		
 	}
 
 	@Override
@@ -259,7 +263,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Nation List");
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt"));
@@ -272,20 +276,24 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (!line.equals(""))
 					newNation(line);
 
+			return true;
+			
 		} catch (AlreadyRegisteredException e) {
 			e.printStackTrace();
-			confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
+			return false;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file.
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
-		return true;
 	}
 
 	@Override
@@ -308,33 +316,34 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading World List");
 
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
+			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
 					newWorld(line);
 
+			return true;
+			
 		} catch (AlreadyRegisteredException e) {
 			// Ignore this as the world may have been passed to us by bukkit
-			//confirmContinuation(e.getMessage() + " | Continuing will delete it's data.");
+			return true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
-		return true;
+		
 	}
 
 	@Override
@@ -343,17 +352,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading Regen List");
 
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 		String[] split;
 		PlotBlockData plotData;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
+			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
 					split = line.split(",");
@@ -363,17 +368,21 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+			return true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file.
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
-		return true;
+		
 
 	}
 
@@ -383,36 +392,34 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
 
 		String line;
-		BufferedReader fin;
+		BufferedReader fin = null;
 		String[] split;
 
 		try {
 			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		try {
+			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
 					split = line.split(",");
 					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
 					TownyRegenAPI.addWorldCoord(worldCoord);
 				}
+			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+			
 		} finally {
-			try {
-				fin.close();
-			} catch (IOException e) {
-				// Failed to close file.
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
 			}
 		}
 
-		return true;
+		
 
 	}
 
@@ -1199,107 +1206,163 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public synchronized boolean saveResidentList() {
 
+		BufferedWriter fout = null;
+
 		try {
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
 			for (Resident resident : getResidents())
 				fout.write(NameValidation.checkAndFilterPlayerName(resident.getName()) + newLine);
-			fout.close();
+
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving residents list file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
 	@Override
 	public synchronized boolean saveTownList() {
 
+		BufferedWriter fout = null;
+		
 		try {
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt"));
 			for (Town town : getTowns())
 				fout.write(town.getName() + newLine);
-			fout.close();
+
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
 	@Override
 	public synchronized boolean saveNationList() {
 
+		BufferedWriter fout = null;
+		
 		try {
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt"));
 			for (Nation nation : getNations())
 				fout.write(nation.getName() + newLine);
-			fout.close();
+
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving nation list file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
 	@Override
 	public synchronized boolean saveWorldList() {
 
+		BufferedWriter fout = null;
+		
 		try {
-
-			//System.out.print("[Towny] saveWorldList");
-
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
 			for (TownyWorld world : getWorlds())
 				fout.write(world.getName() + newLine);
-			fout.close();
+
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving world list file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
 	@Override
 	public synchronized boolean saveRegenList() {
 
+		BufferedWriter fout = null;
+
 		try {
-
-			//System.out.print("[Towny] save active regen list");
-
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt"));
 			for (PlotBlockData plot : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values()))
 				fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + newLine);
-			fout.close();
+
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
 	@Override
 	public synchronized boolean saveSnapshotList() {
 
+		BufferedWriter fout = null;
+		
 		try {
-
-			//System.out.print("[Towny] save active snapshot queue");
-
-			BufferedWriter fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"));
+			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt"));
 			while (TownyRegenAPI.hasWorldCoords()) {
 				WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
 				fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + newLine);
 			}
-			fout.close();
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 	}
 
@@ -1310,9 +1373,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public synchronized boolean saveResident(Resident resident) {
 
+		BufferedWriter fout = null;
+
 		try {
 			String path = getResidentFilename(resident);
-			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
+			fout = new BufferedWriter(new FileWriter(path));
 			// Last Online
 			fout.write("lastOnline=" + Long.toString(resident.getLastOnline()) + newLine);
 			// Registered
@@ -1334,27 +1399,33 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.write("townBlocks=" + utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())) + newLine);
 			// Plot Protection
 			fout.write("protectionStatus=" + resident.getPermissions().toString() + newLine);
-			fout.close();
+			
+			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving resident file (" + resident.getName() + ")");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
-		return true;
+		
 	}
 
 	@Override
 	public synchronized boolean saveTown(Town town) {
 
-		BufferedWriter fout;
-		String path = getTownFilename(town);
+		BufferedWriter fout = null;
+
 		try {
+			String path = getTownFilename(town);
 			fout = new BufferedWriter(new FileWriter(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
 			// Name
 			fout.write("name=" + town.getName() + newLine);
 			// Residents
@@ -1433,25 +1504,32 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				fout.write(outpostArray);
 			}
 
-			fout.close();
+			return true;
+			
 		} catch (Exception e) {
-			try {
-				fout.close();
-			} catch (IOException ioe) {
-			}
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town file (" + town.getName() + ")");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
-
-		return true;
+		
 	}
 
 	@Override
 	public synchronized boolean saveNation(Nation nation) {
 
+		BufferedWriter fout = null;
+		
 		try {
 			String path = getNationFilename(nation);
-			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
+			fout = new BufferedWriter(new FileWriter(path));
 			fout.write("towns=");
 			for (Town town : nation.getTowns())
 				fout.write(town.getName() + ",");
@@ -1477,22 +1555,32 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Neutral
 			fout.write("neutral=" + Boolean.toString(nation.isNeutral()) + newLine);
 
-			fout.close();
+			return true;
+			
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving nation file (" + nation.getName() + ")");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
-		return true;
+		
 	}
 
 	@Override
 	public synchronized boolean saveWorld(TownyWorld world) {
 
+		BufferedWriter fout = null;
+		
 		try {
-			TownyMessaging.sendDebugMsg("Saving world - " + getWorldFilename(world));
-
 			String path = getWorldFilename(world);
-			BufferedWriter fout = new BufferedWriter(new FileWriter(path));
+			fout = new BufferedWriter(new FileWriter(path));
 
 			// Towns
 			fout.write("towns=");
@@ -1611,15 +1699,22 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Using Towny
 			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
 
-			fout.close();
-
-			// saveTownBlocks(world);
-
+			return true;
+			
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving world file (" + world.getName() + ")");
 			e.printStackTrace();
 			return false;
+			
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
-		return true;
+		
 	}
 
 	@Override
@@ -1638,19 +1733,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks" + FileMgmt.fileSeparator() + townBlock.getWorld().getName() });
 
-		BufferedWriter fout;
+		BufferedWriter fout = null;
 		String path = getTownBlockFilename(townBlock);
+
 		try {
 			fout = new BufferedWriter(new FileWriter(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		try {
-
-			TownyMessaging.sendDebugMsg("Saving TownBlock - " + path);
-
 			// permissions
 			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
 			// Have permissions been manually changed
@@ -1658,11 +1745,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			fout.write("locked=" + Boolean.toString(townBlock.isLocked()) + newLine);
 
-			fout.close();
-
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving TownBlock file (" + path + ")");
 			e.printStackTrace();
 			return false;
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 		return true;
 
@@ -1807,16 +1900,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" + FileMgmt.fileSeparator() + plotChunk.getWorldName() });
 
-		BufferedWriter fout;
+		BufferedWriter fout = null;
 		String path = getPlotFilename(plotChunk);
+		
 		try {
 			fout = new BufferedWriter(new FileWriter(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		try {
-
+			
 			switch (plotChunk.getVersion()) {
 
 			case 1:
@@ -1839,11 +1928,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				fout.write(block);
 			}
 
-			fout.close();
-
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving PlotBlockData file (" + path + ")");
 			e.printStackTrace();
 			return false;
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (IOException ignore) {
+				}
+			}
 		}
 		return true;
 
@@ -1889,47 +1984,55 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			PlotBlockData plotBlockData = new PlotBlockData(townBlock);
 			List<Integer> IntArr = new ArrayList<Integer>();
 
+			BufferedReader fin = null;
+			
 			try {
-				BufferedReader fin = new BufferedReader(new FileReader(fileName));
-				try {
-					//read the first 3 characters to test for version info
-					char[] key = new char[3];
-					fin.read(key, 0, 3);
-					String test = new String(key);
+				fin = new BufferedReader(new FileReader(fileName));
 
-					switch (elements.fromString(test)) {
-					case VER:
-						// Read the file version
-						int version = fin.read();
-						plotBlockData.setVersion(version);
+				//read the first 3 characters to test for version info
+				char[] key = new char[3];
+				fin.read(key, 0, 3);
+				String test = new String(key);
 
-						// next entry is the plot height
-						plotBlockData.setHeight(fin.read());
-						break;
+				switch (elements.fromString(test)) {
+				case VER:
+					// Read the file version
+					int version = fin.read();
+					plotBlockData.setVersion(version);
 
-					default:
-						/*
-						 * no version field so set height
-						 * and push rest to queue
-						 */
-						plotBlockData.setVersion(0);
-						// First entry is the plot height
-						plotBlockData.setHeight(key[0]);
-						IntArr.add((int) key[1]);
-						IntArr.add((int) key[2]);
-					}
+					// next entry is the plot height
+					plotBlockData.setHeight(fin.read());
+					break;
 
-					// load remainder of file
-					while ((value = fin.read()) >= 0) {
-						IntArr.add(value);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				default:
+					/*
+					 * no version field so set height
+					 * and push rest to queue
+					 */
+					plotBlockData.setVersion(0);
+					// First entry is the plot height
+					plotBlockData.setHeight(key[0]);
+					IntArr.add((int) key[1]);
+					IntArr.add((int) key[2]);
 				}
-				fin.close();
+
+				// load remainder of file
+				while ((value = fin.read()) >= 0) {
+					IntArr.add(value);
+				}
+
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				if (fin != null) {
+					try {
+						fin.close();
+					} catch (IOException ignore) {
+					}
+				}
 			}
+			
+			
 			plotBlockData.setBlockList(IntArr);
 			plotBlockData.resetBlockListRestored();
 			return plotBlockData;

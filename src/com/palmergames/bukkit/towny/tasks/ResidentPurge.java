@@ -27,11 +27,11 @@ public class ResidentPurge extends Thread {
 		super();
 		this.plugin = plugin;
 		this.deleteTime = deleteTime;
-		this.setPriority(MIN_PRIORITY);
+		this.setPriority(NORM_PRIORITY);
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 
 		int count = 0;
 

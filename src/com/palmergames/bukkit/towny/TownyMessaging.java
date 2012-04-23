@@ -87,7 +87,7 @@ public class TownyMessaging {
 	 * 
 	 * @param msg
 	 */
-	public static void sendMsg(String msg) {
+	public synchronized static void sendMsg(String msg) {
 
 		TownyLogger.log.info("[Towny] " + ChatTools.stripColour(msg));
 	}
