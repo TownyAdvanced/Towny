@@ -1426,11 +1426,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 		}
 	}
 
-	@Override
-	public void deleteUnusedResidentFiles() {
-
-	}
-
 	/*
 	 * Save keys
 	 */

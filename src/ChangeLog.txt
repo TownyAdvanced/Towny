@@ -1399,3 +1399,5 @@ v0.80.0.13:
 	    
 	- Major rewrite of the player caching system. Should make things faster when handling most events.
 	- Stop resetting the players cache on every location change. Only clear it if we cross a TownBlock boundary.
+v0.80.0.14:
+	- Towny now removes old zip backups when using SQL as well as flatfile.

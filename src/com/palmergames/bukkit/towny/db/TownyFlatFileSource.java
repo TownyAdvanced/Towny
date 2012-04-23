@@ -125,14 +125,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized void cleanupBackups() {
-
-		long deleteAfter = TownySettings.getBackupLifeLength();
-		if (deleteAfter >= 0)
-			FileMgmt.deleteOldBackups(new File(rootFolder + FileMgmt.fileSeparator() + "backup"), deleteAfter);
-	}
-
-	@Override
 	public synchronized void deleteUnusedResidentFiles() {
 
 		String path;

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 //import java.util.Hashtable;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 //import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -21,6 +23,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.util.FileMgmt;
 
 /*
  * --- : Loading process : ---
@@ -52,6 +55,10 @@ public abstract class TownyDataSource {
 	}
 
 	public void cleanupBackups() {
+		
+		long deleteAfter = TownySettings.getBackupLifeLength();
+		if (deleteAfter >= 0)
+			FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + FileMgmt.fileSeparator() + "backup"), deleteAfter);
 
 	}
 
