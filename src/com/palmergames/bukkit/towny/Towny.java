@@ -515,6 +515,9 @@ public class Towny extends JavaPlugin {
 		return playerCache.get(player.getName().toLowerCase());
 	}
 
+	/**
+	 * Resets all Online player caches if their location has changed
+	 */
 	public void updateCache(WorldCoord worldCoord) {
 
 		for (Player player : getServer().getOnlinePlayers())
@@ -522,6 +525,9 @@ public class Towny extends JavaPlugin {
 				getCache(player).setLastTownBlock(worldCoord); //Automatically resets permissions.
 	}
 
+	/**
+	 * Resets all player caches if their location has changed
+	 */
 	public void updateCache() {
 
 		for (Player player : getServer().getOnlinePlayers())
@@ -529,6 +535,11 @@ public class Towny extends JavaPlugin {
 			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 	}
 
+	/**
+	 * Resets a specific players cache if their location has changed
+	 * 
+	 * @param player
+	 */
 	public void updateCache(Player player) {
 
 		getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));

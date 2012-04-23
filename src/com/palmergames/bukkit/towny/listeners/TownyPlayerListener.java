@@ -249,7 +249,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		cache.setLastLocation(to);
-		plugin.updateCache(player);
+		//plugin.updateCache(player);
 		//plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
 		//plugin.sendDebugMsg("        " + from.toString());
 		//plugin.sendDebugMsg("        " + to.toString());

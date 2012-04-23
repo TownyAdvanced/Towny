@@ -34,14 +34,16 @@ public class PlayerCache {
 
 	/**
 	 * Update the cache with new coordinates. Reset the other cached
-	 * permissions.
+	 * permissions if the TownBlock has changed
 	 * 
 	 * @param lastTownBlock
 	 */
 
 	public void setLastTownBlock(WorldCoord lastTownBlock) {
 
-		reset();
+		if ((getLastTownBlock() != null)  && !getLastTownBlock().equals(lastTownBlock))
+			reset();
+		
 		this.lastTownBlock = lastTownBlock;
 	}
 
@@ -49,6 +51,16 @@ public class PlayerCache {
 
 		return lastTownBlock;
 	}
+	
+	public boolean updateCoord(WorldCoord pos) {
+
+		if (!getLastTownBlock().equals(pos)) {
+			setLastTownBlock(pos);
+			return true;
+		} else
+			return false;
+	}
+
 
 	public boolean getCachePermission(Integer id, ActionType action) throws NullPointerException {
 
@@ -135,15 +147,6 @@ public class PlayerCache {
 			throw new NullPointerException();
 		else
 			return itemUsePermission.get(id);
-	}
-
-	public boolean updateCoord(WorldCoord pos) {
-
-		if (!getLastTownBlock().equals(pos)) {
-			setLastTownBlock(pos);
-			return true;
-		} else
-			return false;
 	}
 
 	private void reset() {
