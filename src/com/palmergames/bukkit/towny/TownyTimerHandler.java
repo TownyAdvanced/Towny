@@ -10,6 +10,9 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEA
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -147,15 +150,29 @@ public class TownyTimerHandler{
 		return teleportWarmupTask != -1;
 	}
 	
+	/**
+	 * Calculates the time in seconds until the next new day event.
+	 * TimeZone specific, including daylight savings.
+	 * 
+	 * @return seconds until event
+	 */
 	public static Long townyTime() {
 
-		Long oneDay = (TownySettings.getDayInterval()-1) * 1000;
-		Long time = (oneDay - ((System.currentTimeMillis() % oneDay) - (TownySettings.getNewDayTime() * 1000))) / 1000;
+		Long secondsInDay = TownySettings.getDayInterval();
 
-		if (time < 0)
-			time = (oneDay / 1000) - Math.abs(time);
+		// Get Calendar instance
+		Calendar now = Calendar.getInstance();
 
-		return time % oneDay;
+		// Get current TimeZone
+		TimeZone timeZone = now.getTimeZone();
+		
+		// Get current system time in milliseconds
+		Long timeMilli = System.currentTimeMillis();
+		
+		// Calculate the TimeZone specific offset (including DST)
+		Integer timeOffset = timeZone.getOffset(timeMilli)/1000;
+
+		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
 	}
 
 }

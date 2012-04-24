@@ -1405,3 +1405,4 @@ v0.80.0.14:
 	- Fix all file access so it no longer leaves any open streams.
 	- Yet MORE optimizations
 	- Fix Towny time to count properly with non standard day cycles.
+	- Recode Towny time to work with different time zones and daylight savings.
