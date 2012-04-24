@@ -401,7 +401,7 @@ public class PlayerCacheUtil {
 			if (targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, blockId, action))) {
 				return true;
 
-			} else if (!playersTown.equals(targetTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, action))) {
+			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, action))) {
 				return true;
 
 			} else if (status == TownBlockStatus.PLOT_FRIEND) {
@@ -439,7 +439,7 @@ public class PlayerCacheUtil {
 			if (targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, blockId, action))) {
 				return true;
 
-			} else if (!playersTown.equals(targetTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, action))) {
+			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, action))) {
 				return true;
 
 			} else if (townBlock.getPermissions().getResidentPerm(action))
