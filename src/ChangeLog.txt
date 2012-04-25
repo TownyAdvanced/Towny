@@ -1409,3 +1409,4 @@ v0.80.0.14:
 	- Fix an error in the player cache when the player attempting the action has no town.
 v0.80.0.15:
 	- Updated all cache references to correctly update when plot permissions change.
+	- Stop giving point for allied kills in Event War.
