@@ -1,28 +1,25 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-//import org.bukkit.event.entity.EntityDamageEvent;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+
+//import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * @author Shade & ElgarL
@@ -160,14 +157,14 @@ public class TownyEntityMonitorListener implements Listener {
 	 */
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		if (attackerPlayer != null && TownyUniverse.isWarTime())
+		if (attackerPlayer != null && defenderPlayer != null && TownyUniverse.isWarTime())
 			try {
-				if (attackerResident == null)
-					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
+				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
+                    return;
 
-				Town town = attackerResident.getTown();
 				if (TownySettings.getWarPointsForKill() > 0)
-					plugin.getTownyUniverse().getWarEvent().townScored(town, TownySettings.getWarPointsForKill());
+					plugin.getTownyUniverse().getWarEvent().townScored(attackerResident.getTown(), TownySettings.getWarPointsForKill());
+
 			} catch (NotRegisteredException e) {
 			}
 	}
