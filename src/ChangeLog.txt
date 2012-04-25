@@ -1407,3 +1407,5 @@ v0.80.0.14:
 	- Fix Towny time to count properly with non standard day cycles.
 	- Recode Towny time to work with different time zones and daylight savings.
 	- Fix an error in the player cache when the player attempting the action has no town.
+v0.80.0.15:
+	- Updated all cache references to correctly update when plot permissions change.

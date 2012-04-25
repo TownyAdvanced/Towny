@@ -140,6 +140,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 							//setup default modes for this player.
 							String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 							plugin.setPlayerMode(player, modes, false);
+							plugin.resetCache(player);
 						}
 					} catch (NotRegisteredException x) {
 					}
@@ -166,6 +167,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 							plugin.setPlayerMode(player, modes, false);
+							plugin.resetCache(player);
 						}
 					}
 
@@ -187,6 +189,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 						//setup default modes
 						String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 						plugin.setPlayerMode(player, modes, false);
+						plugin.resetCache(player);
 					}
 
 				}

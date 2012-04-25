@@ -223,6 +223,7 @@ public class TownyPlayerListener implements Listener {
 							// set to 1 block up so we are not sunk in the ground
 							blockLocation.setY(blockLocation.getY() + 1);
 
+							// Update the cache for this location (same WorldCoord).
 							cache.setLastLocation(blockLocation);
 							player.teleport(blockLocation);
 							return;
@@ -251,7 +252,9 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
+		// Update the cached players current location
 		cache.setLastLocation(to);
+		
 		//plugin.updateCache(player);
 		//plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
 		//plugin.sendDebugMsg("        " + from.toString());

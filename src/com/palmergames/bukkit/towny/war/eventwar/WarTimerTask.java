@@ -32,7 +32,7 @@ public class WarTimerTask extends TownyTimerTask {
 		if (!warEvent.isWarTime()) {
 			warEvent.end();
 			universe.clearWarEvent();
-			plugin.updateCache();
+			plugin.resetCache();
 			TownyMessaging.sendDebugMsg("War ended.");
 			return;
 		}

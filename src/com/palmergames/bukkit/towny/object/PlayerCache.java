@@ -15,7 +15,7 @@ public class PlayerCache {
 	private Map<Integer, Boolean> switchPermission = new HashMap<Integer, Boolean>();
 	private Map<Integer, Boolean> itemUsePermission = new HashMap<Integer, Boolean>();
 	
-	private WorldCoord lastTownBlock;
+	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
 	private Location lastLocation;
 
@@ -27,34 +27,52 @@ public class PlayerCache {
 		setLastLocation(player.getLocation());
 	}
 
-	public PlayerCache(WorldCoord lastTownBlock) {
+	public PlayerCache(WorldCoord worldCoord) {
 
-		this.setLastTownBlock(lastTownBlock);
+		this.setLastTownBlock(worldCoord);
 	}
 
 	/**
-	 * Update the cache with new coordinates. Reset the other cached
-	 * permissions if the TownBlock has changed
+	 * Update the cache with new coordinates.
 	 * 
 	 * @param lastTownBlock
 	 */
+	public void setLastTownBlock(WorldCoord worldCoord) {
 
-	public void setLastTownBlock(WorldCoord lastTownBlock) {
-
-		if ((getLastTownBlock() != null)  && !getLastTownBlock().equals(lastTownBlock))
-			reset();
-		
-		this.lastTownBlock = lastTownBlock;
-	}
-
-	public WorldCoord getLastTownBlock() {
-
-		return lastTownBlock;
+		this.lastWorldCoord = worldCoord;
 	}
 	
+	/**
+	 * Reset the cache permissions and update the cache with new coordinates.
+	 * 
+	 * @param lastTownBlock
+	 */
+	public void resetAndUpdate(WorldCoord worldCoord) {
+		
+		reset();
+		setLastTownBlock(worldCoord);
+	}
+
+	/**
+	 * Retrieve the last cached WorldCoord
+	 * 
+	 * @return
+	 */
+	public WorldCoord getLastTownBlock() {
+
+		return lastWorldCoord;
+	}
+	
+	/**
+	 * Update the players WorldCoord, resetting all permissions if it has changed.
+	 * 
+	 * @param pos
+	 * @return true if changed.
+	 */
 	public boolean updateCoord(WorldCoord pos) {
 
 		if (!getLastTownBlock().equals(pos)) {
+			reset();
 			setLastTownBlock(pos);
 			return true;
 		} else
@@ -151,7 +169,7 @@ public class PlayerCache {
 
 	private void reset() {
 
-		lastTownBlock = null;
+		lastWorldCoord = null;
 		townBlockStatus = null;
 		blockErrMsg = null;
 		

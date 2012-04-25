@@ -54,7 +54,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 
 				townBlock.setLocked(false);
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
-				plugin.updateCache();
+				plugin.updateCache(townBlock.getWorldCoord());
 
 				if (!TownyRegenAPI.hasWorldCoords())
 					TownyLogger.log.info("Plot snapshots completed.");

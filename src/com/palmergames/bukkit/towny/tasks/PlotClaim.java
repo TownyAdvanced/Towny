@@ -99,7 +99,7 @@ public class PlotClaim extends Thread {
 		}
 
 		TownyUniverse.getDataSource().saveResident(resident);
-		plugin.updateCache();
+		plugin.resetCache();
 
 	}
 
@@ -135,7 +135,8 @@ public class PlotClaim extends Thread {
 						TownyUniverse.getDataSource().saveResident(owner);
 						TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
-						plugin.updateCache();
+						// Update any caches for this WorldCoord
+						plugin.updateCache(worldCoord);
 						return true;
 					} else if (town.isMayor(resident) || town.hasAssistant(resident)) {
 						//Plot isn't for sale but re-possessing for town.
@@ -197,7 +198,7 @@ public class PlotClaim extends Thread {
 			townBlock.setType(townBlock.getType());
 			TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
-			plugin.updateCache();
+			plugin.updateCache(worldCoord);
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_not_own_place"));

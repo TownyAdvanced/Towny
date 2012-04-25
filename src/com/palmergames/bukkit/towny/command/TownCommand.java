@@ -50,6 +50,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
@@ -693,7 +694,7 @@ public class TownCommand implements CommandExecutor {
 				}
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				setTownBlockOwnerPermissions(player, town, newSplit);
-				plugin.updateCache();
+
 			} else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
 				return;
@@ -900,7 +901,8 @@ public class TownCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveWorld(world);
 		TownyUniverse.getDataSource().saveTownList();
 
-		plugin.updateCache();
+		// Reset cache permissions for anyone in this TownBlock
+		plugin.updateCache(townBlock.getWorldCoord());
 		return town;
 	}
 
@@ -950,7 +952,8 @@ public class TownCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveResident(resident);
 		TownyUniverse.getDataSource().saveTown(town);
 
-		plugin.updateCache();
+		// Reset everyones cache permissions as this player leaving could affect multiple areas
+		plugin.resetCache();
 
 		TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_left_town"), resident.getName()));
 		TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_left_town"), resident.getName()));
@@ -1182,7 +1185,8 @@ public class TownCommand implements CommandExecutor {
 
 		townKickResidents(player, resident, town, plugin.getTownyUniverse().getValidatedResidents(player, names));
 
-		plugin.updateCache();
+		// Reset everyones cache permissions as this player leaving can affect multiple areas.
+		plugin.resetCache();
 	}
 
 	/*
@@ -1550,7 +1554,8 @@ public class TownCommand implements CommandExecutor {
 
 		townAddResidents(sender, town, plugin.getTownyUniverse().getValidatedResidents(sender, names));
 
-		plugin.updateCache();
+		// Reset this players cached permissions
+		plugin.resetCache(BukkitTools.getPlayerExact(name));
 	}
 
 	// wrapper function for non friend setting of perms
@@ -1597,7 +1602,7 @@ public class TownCommand implements CommandExecutor {
 					else
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
 
-					plugin.updateCache();
+					plugin.resetCache();
 					return;
 				} else {
 					// Set all perms to On or Off
@@ -1692,7 +1697,9 @@ public class TownCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
 			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-			plugin.updateCache();
+			
+			// Reset all caches as this can affect everyone.
+			plugin.resetCache();
 		}
 	}
 
@@ -1764,14 +1771,6 @@ public class TownCommand implements CommandExecutor {
 
 				new TownClaim(plugin, player, town, selection, outpost, true, false).start();
 
-				//for (WorldCoord worldCoord : selection)
-				//        townClaim(town, worldCoord);
-
-				//TownyUniverse.getDataSource().saveTown(town);
-				//TownyUniverse.getDataSource().saveWorld(world);
-
-				//plugin.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				//plugin.updateCache();
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -1812,14 +1811,9 @@ public class TownCommand implements CommandExecutor {
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
 
-					//for (WorldCoord worldCoord : selection)
-					//        townUnclaim(town, worldCoord, false);
-
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_abandoned_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				}
-				TownyUniverse.getDataSource().saveTown(town);
-				TownyUniverse.getDataSource().saveWorld(world);
-				plugin.updateCache();
+
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;

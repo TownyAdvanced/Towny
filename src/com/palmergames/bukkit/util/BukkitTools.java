@@ -48,6 +48,10 @@ public class BukkitTools {
 		return getServer().matchPlayer(name);
 	}
 	
+	public static Player getPlayerExact(String name) {
+		return getServer().getPlayerExact(name);
+	}
+	
 	/**
 	 * Tests if this player is online.
 	 * 

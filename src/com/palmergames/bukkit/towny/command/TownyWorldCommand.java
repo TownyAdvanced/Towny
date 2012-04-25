@@ -248,7 +248,7 @@ public class TownyWorldCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("usingtowny")) {
 
 				Globalworld.setUsingTowny(!Globalworld.isUsingTowny());
-				plugin.updateCache();
+				plugin.resetCache();
 				msg = String.format(Globalworld.isUsingTowny() ? TownySettings.getLangString("msg_set_use_towny_on") : TownySettings.getLangString("msg_set_use_towny_off"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
@@ -375,7 +375,7 @@ public class TownyWorldCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("usedefault")) {
 
 				Globalworld.setUsingDefault();
-				plugin.updateCache();
+				plugin.resetCache();
 				if (player != null)
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_usedefault"), Globalworld.getName()));
 				else
@@ -398,7 +398,7 @@ public class TownyWorldCommand implements CommandExecutor {
 						Globalworld.setUnclaimedZoneSwitch(perms.contains("switch"));
 						Globalworld.setUnclaimedZoneItemUse(perms.contains("itemuse"));
 
-						plugin.updateCache();
+						plugin.resetCache();
 						if (player != null)
 							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
 						else
@@ -426,7 +426,7 @@ public class TownyWorldCommand implements CommandExecutor {
 							}
 						Globalworld.setUnclaimedZoneIgnore(nums);
 
-						plugin.updateCache();
+						plugin.resetCache();
 						if (player != null)
 							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
 						else

@@ -245,7 +245,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
-		updateCache();
+		resetCache();
 
 		return true;
 	}
@@ -467,6 +467,13 @@ public class Towny extends JavaPlugin {
 		playerCache.remove(name.toLowerCase());
 	}
 
+	/**
+	 * Fetch the current players cache
+	 * Creates a new one, if one doesn't exist.
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public PlayerCache getCache(Player player) {
 
 		if (!hasCache(player)) {
@@ -478,23 +485,37 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * Resets all Online player caches if their location has changed
+	 * Resets all Online player caches, retaining their location info.
+	 */
+	public void resetCache() {
+
+		for (Player player : BukkitTools.getOnlinePlayers())
+			getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player))); //Automatically resets permissions.
+	}
+	
+	/**
+	 * Resets all Online player caches if their location equals this one
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (Coord.parseCoord(player).equals(worldCoord))
-				getCache(player).setLastTownBlock(worldCoord); //Automatically resets permissions.
+				getCache(player).resetAndUpdate(worldCoord); //Automatically resets permissions.
 	}
 
 	/**
-	 * Resets all player caches if their location has changed
+	 * Resets all Online player caches if their location has changed
 	 */
 	public void updateCache() {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
-
-			getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
+		WorldCoord worldCoord = null;
+		
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
+			PlayerCache cache = getCache(player);
+			if (cache.getLastTownBlock() != worldCoord)
+				cache.resetAndUpdate(worldCoord);
+		}
 	}
 
 	/**
@@ -504,7 +525,21 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache(Player player) {
 
-		getCache(player).setLastTownBlock(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
+		WorldCoord worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
+		PlayerCache cache = getCache(player);
+		
+		if (cache.getLastTownBlock() != worldCoord)
+			cache.resetAndUpdate(worldCoord);
+	}
+	
+	/**
+	 * Resets a specific players cache
+	 * 
+	 * @param player
+	 */
+	public void resetCache(Player player) {
+
+		getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)));
 	}
 
 	public void setPlayerMode(Player player, String[] modes, boolean notify) {

@@ -442,7 +442,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 
-		plugin.updateCache();
+		plugin.resetCache();
 
 		deleteTown(town);
 		saveTownList();
@@ -498,7 +498,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveTown(town);
 		}
 
-		plugin.updateCache();
+		plugin.resetCache();
 		saveNationList();
 
 		universe.setChangedNotify(REMOVE_NATION);

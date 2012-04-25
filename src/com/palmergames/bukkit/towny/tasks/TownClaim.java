@@ -114,7 +114,7 @@ public class TownClaim extends Thread {
 			for (TownyWorld test : worlds)
 				TownyUniverse.getDataSource().saveWorld(test);
 
-		plugin.updateCache();
+		plugin.resetCache();
 
 		if (player != null) {
 			if (claim) {
