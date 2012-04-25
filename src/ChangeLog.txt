@@ -1410,3 +1410,6 @@ v0.80.0.14:
 v0.80.0.15:
 	- Updated all cache references to correctly update when plot permissions change.
 	- Stop giving point for allied kills in Event War.
+v0.80.0.16:
+	- Fix an error where a player not in a town would be protected when in a warzone, even when not allowign neutrals during war.
+	- Fix permission overrides for Towny Ally and outsiders.
