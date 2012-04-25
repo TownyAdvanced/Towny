@@ -157,11 +157,8 @@ public class TownyEntityMonitorListener implements Listener {
 	 */
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		if (attackerPlayer != null && TownyUniverse.isWarTime())
+		if (attackerPlayer != null && defenderPlayer != null && TownyUniverse.isWarTime())
 			try {
-				if (attackerResident == null)
-					return; // The attackingResident %s has not been registered.
-
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
                     return;
 
