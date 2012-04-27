@@ -36,7 +36,7 @@ import com.palmergames.bukkit.util.NameValidation;
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
-	public synchronized boolean hasResident(String name) {
+	public boolean hasResident(String name) {
 
 		try {
 			return universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
@@ -46,19 +46,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized boolean hasTown(String name) {
+	public boolean hasTown(String name) {
 
 		return universe.getTownsMap().containsKey(name.toLowerCase());
 	}
 
 	@Override
-	public synchronized boolean hasNation(String name) {
+	public boolean hasNation(String name) {
 
 		return universe.getNationsMap().containsKey(name.toLowerCase());
 	}
 
 	@Override
-	public synchronized List<Resident> getResidents(Player player, String[] names) {
+	public List<Resident> getResidents(Player player, String[] names) {
 
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names)
@@ -72,7 +72,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Resident> getResidents(String[] names) {
+	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<Resident>();
 		for (String name : names)
@@ -84,13 +84,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Resident> getResidents() {
+	public List<Resident> getResidents() {
 
 		return new ArrayList<Resident>(universe.getResidentMap().values());
 	}
 
 	@Override
-	public synchronized Resident getResident(String name) throws NotRegisteredException {
+	public Resident getResident(String name) throws NotRegisteredException {
 
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
@@ -105,7 +105,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Town> getTowns(String[] names) {
+	public List<Town> getTowns(String[] names) {
 
 		List<Town> matches = new ArrayList<Town>();
 		for (String name : names)
@@ -117,13 +117,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Town> getTowns() {
+	public List<Town> getTowns() {
 
 		return new ArrayList<Town>(universe.getTownsMap().values());
 	}
 
 	@Override
-	public synchronized Town getTown(String name) throws NotRegisteredException {
+	public Town getTown(String name) throws NotRegisteredException {
 
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
@@ -137,7 +137,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Nation> getNations(String[] names) {
+	public List<Nation> getNations(String[] names) {
 
 		List<Nation> matches = new ArrayList<Nation>();
 		for (String name : names)
@@ -149,13 +149,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Nation> getNations() {
+	public List<Nation> getNations() {
 
 		return new ArrayList<Nation>(universe.getNationsMap().values());
 	}
 
 	@Override
-	public synchronized Nation getNation(String name) throws NotRegisteredException {
+	public Nation getNation(String name) throws NotRegisteredException {
 
 		try {
 			name = NameValidation.checkAndFilterName(name).toLowerCase();
@@ -169,7 +169,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized TownyWorld getWorld(String name) throws NotRegisteredException {
+	public TownyWorld getWorld(String name) throws NotRegisteredException {
 
 		TownyWorld world = universe.getWorldMap().get(name.toLowerCase());
 
@@ -180,7 +180,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<TownyWorld> getWorlds() {
+	public List<TownyWorld> getWorlds() {
 
 		return new ArrayList<TownyWorld>(universe.getWorldMap().values());
 	}
@@ -192,7 +192,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * @return TownyWorld for this town.
 	 */
 	@Override
-	public synchronized TownyWorld getTownWorld(String townName) {
+	public TownyWorld getTownWorld(String townName) {
 
 		for (TownyWorld world : universe.getWorldMap().values()) {
 			if (world.hasTown(townName))
@@ -203,7 +203,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeResident(Resident resident) {
+	public void removeResident(Resident resident) {
 
 		Town town = null;
 
@@ -233,7 +233,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeTownBlock(TownBlock townBlock) {
+	public void removeTownBlock(TownBlock townBlock) {
 
 		Resident resident = null;
 		Town town = null;
@@ -271,14 +271,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeTownBlocks(Town town) {
+	public void removeTownBlocks(Town town) {
 
 		for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
 	}
 
 	@Override
-	public synchronized List<TownBlock> getAllTownBlocks() {
+	public List<TownBlock> getAllTownBlocks() {
 
 		List<TownBlock> townBlocks = new ArrayList<TownBlock>();
 		for (TownyWorld world : getWorlds())
@@ -287,7 +287,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
+	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
 		try {
@@ -305,7 +305,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
+	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
 		try {
@@ -323,7 +323,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
+	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
 		try {
@@ -341,7 +341,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
+	public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName = name;
 		/*
@@ -360,7 +360,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeResidentList(Resident resident) {
+	public void removeResidentList(Resident resident) {
 
 		String name = resident.getName();
 
@@ -405,7 +405,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeTown(Town town) {
+	public void removeTown(Town town) {
 
 		removeTownBlocks(town);
 
@@ -457,7 +457,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeNation(Nation nation) {
+	public void removeNation(Nation nation) {
 
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<Nation>();
@@ -505,32 +505,32 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void removeWorld(TownyWorld world) throws UnsupportedOperationException {
+	public void removeWorld(TownyWorld world) throws UnsupportedOperationException {
 
 		deleteWorld(world);
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public synchronized Set<String> getResidentKeys() {
+	public Set<String> getResidentKeys() {
 
 		return universe.getResidentMap().keySet();
 	}
 
 	@Override
-	public synchronized Set<String> getTownsKeys() {
+	public Set<String> getTownsKeys() {
 
 		return universe.getTownsMap().keySet();
 	}
 
 	@Override
-	public synchronized Set<String> getNationsKeys() {
+	public Set<String> getNationsKeys() {
 
 		return universe.getNationsMap().keySet();
 	}
 
 	@Override
-	public synchronized List<Town> getTownsWithoutNation() {
+	public List<Town> getTownsWithoutNation() {
 
 		List<Town> townFilter = new ArrayList<Town>();
 		for (Town town : getTowns())
@@ -540,7 +540,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized List<Resident> getResidentsWithoutTown() {
+	public List<Resident> getResidentsWithoutTown() {
 
 		List<Resident> residentFilter = new ArrayList<Resident>();
 		for (Resident resident : universe.getResidentMap().values())
@@ -550,7 +550,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
 		try {
@@ -620,7 +620,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public synchronized void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
 		String filteredName;
 

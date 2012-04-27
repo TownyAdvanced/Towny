@@ -1411,5 +1411,7 @@ v0.80.0.15:
 	- Updated all cache references to correctly update when plot permissions change.
 	- Stop giving point for allied kills in Event War.
 v0.80.0.16:
-	- Fix an error where a player not in a town would be protected when in a warzone, even when not allowign neutrals during war.
+	- Fix an error where a player not in a town would be protected when in a warzone, even when not allowing neutrals during war.
 	- Fix permission overrides for Towny Ally and outsiders.
+v0.80.0.17:
+	- Stop deadlock in the DataSource when called from seperate threads. We use HashTables so no need to lock the whole class.
