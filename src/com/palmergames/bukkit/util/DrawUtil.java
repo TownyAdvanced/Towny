@@ -41,6 +41,6 @@ public class DrawUtil {
 
 	public static void drawSmokeOnSurface(World world, int x1, int z1, int x2, int z2, int height) {
 
-		runOnSurface(world, x1, z1, x2, z2, height, DrawSmokeTask.DEFAULT);
+		runOnSurface(world, x1, z1, x2, z2, height, DrawSmokeTaskFactory.SEND_TO_WORLD);
 	}
 }
