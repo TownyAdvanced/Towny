@@ -9,8 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
@@ -251,21 +251,29 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!(event.getEntity() instanceof Enderman))
-			return;
-
-		try {
-			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
-
-			if (!townyWorld.isUsingTowny())
-				return;
-
-			if (townyWorld.isEndermanProtect())
-				event.setCancelled(true);
-
-		} catch (NotRegisteredException e) {
-			// Failed to fetch world
+		switch (EntityType.fromId(event.getEntity().getEntityId())) {
+		
+		case ENDERMAN:
+			
+			try {
+				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
+	
+				if (!townyWorld.isUsingTowny())
+					return;
+	
+				if (townyWorld.isEndermanProtect())
+					event.setCancelled(true);
+	
+			} catch (NotRegisteredException e) {
+				// Failed to fetch world
+			}
+			
+			break;
+			
+		default:
+		
 		}
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
