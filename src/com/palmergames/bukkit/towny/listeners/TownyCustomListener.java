@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
-import com.palmergames.bukkit.util.DrawSmokeTask;
+import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,7 +61,7 @@ public class TownyCustomListener implements Listener {
 
 		if (plugin.hasPlayerMode(player, "plotborder")) {
 			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
-			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTask.DEFAULT);
+			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 		}
 	}
 }
