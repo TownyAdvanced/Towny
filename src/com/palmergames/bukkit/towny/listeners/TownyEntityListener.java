@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
@@ -251,7 +250,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		switch (EntityType.fromId(event.getEntity().getType().getTypeId())) {
+		switch (event.getEntity().getType()) {
 		
 		case ENDERMAN:
 			
