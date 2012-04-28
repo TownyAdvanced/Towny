@@ -250,6 +250,9 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (event.getEntity() == null)
+			return;
 
 		switch (EntityType.fromId(event.getEntity().getEntityId())) {
 		
