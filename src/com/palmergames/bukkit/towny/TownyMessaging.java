@@ -275,8 +275,9 @@ public class TownyMessaging {
 			TownyLogger.log.info(ChatTools.stripColour("[Global Msg] " + line));
 		}
 		for (Player player : BukkitTools.getOnlinePlayers())
-			for (String line : lines)
-				player.sendMessage(line);
+			if (player != null)
+				for (String line : lines)
+					player.sendMessage(line);
 	}
 
 	/**
@@ -288,7 +289,8 @@ public class TownyMessaging {
 
 		TownyLogger.log.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			player.sendMessage(line);
+			if (player != null)
+				player.sendMessage(line);
 		}
 	}
 

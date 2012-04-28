@@ -111,8 +111,9 @@ public class TownyUniverse extends TownyObject {
 	public static Player getPlayer(Resident resident) throws TownyException {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player.getName().equals(resident.getName()))
-				return player;
+			if (player != null)
+				if (player.getName().equals(resident.getName()))
+					return player;
 		throw new TownyException(String.format("%s is not online", resident.getName()));
 	}
 
@@ -126,8 +127,9 @@ public class TownyUniverse extends TownyObject {
 
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (residents.hasResident(player.getName()))
-				players.add(player);
+			if (player != null)
+				if (residents.hasResident(player.getName()))
+					players.add(player);
 		return players;
 	}
 
@@ -528,10 +530,11 @@ public class TownyUniverse extends TownyObject {
 
 		List<Resident> onlineResidents = new ArrayList<Resident>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			for (Resident resident : residentList.getResidents()) {
-				if (resident.getName().equalsIgnoreCase(player.getName()))
-					onlineResidents.add(resident);
-			}
+			if (player != null)
+				for (Resident resident : residentList.getResidents()) {
+					if (resident.getName().equalsIgnoreCase(player.getName()))
+						onlineResidents.add(resident);
+				}
 		}
 
 		return onlineResidents;

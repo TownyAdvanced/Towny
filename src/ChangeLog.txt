@@ -1415,3 +1415,4 @@ v0.80.0.16:
 	- Fix permission overrides for Towny Ally and outsiders.
 v0.80.0.17:
 	- Stop deadlock in the DataSource when called from seperate threads. We use HashTables so no need to lock the whole class.
+	- Prevent NPE's if bukkit passes a null when getting online players.

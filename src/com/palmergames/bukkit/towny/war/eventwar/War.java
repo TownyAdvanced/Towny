@@ -175,7 +175,9 @@ public class War {
 	public void end() {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			sendStats(player);
+			if (player != null)
+				sendStats(player);
+		
 		double halfWinnings;
 		try {
 			// Transactions might leave 1 coin. (OH noez!)
