@@ -251,7 +251,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		switch (EntityType.valueOf(event.getEntity().getType().toString())) {
+		switch (EntityType.fromId(event.getEntity().getType().getTypeId())) {
 		
 		case ENDERMAN:
 			
