@@ -130,6 +130,12 @@ public class CombatUtil {
 				 */
 				if (world.isWarZone(coord))
 					return false;
+				
+				/*
+				 * Check for special pvp plots (arena)
+				 */
+				if (isPvPPlot(attackingPlayer, defendingPlayer))
+					return false;
 
 				/*
 				 * Check if we are preventing friendly fire between allies
@@ -257,6 +263,31 @@ public class CombatUtil {
 					return true;
 				}
 			}
+		return false;
+	}
+	
+	/**
+	 * Return true if both attacker and defender are in Arena Plots.
+	 * 
+	 * @param attacker
+	 * @param defender
+	 * @return
+	 */
+	public static boolean isPvPPlot(Player attacker, Player defender) {
+		
+		if ((attacker != null) && (defender != null)) {
+			TownBlock attackerTB, defenderTB;
+			try {
+				attackerTB = new WorldCoord(attacker.getWorld().getName(), Coord.parseCoord(attacker)).getTownBlock();
+				defenderTB = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
+				
+				if (defenderTB.getType().equals(TownBlockType.ARENA) && attackerTB.getType().equals(TownBlockType.ARENA))
+					return true;
+				
+			} catch (NotRegisteredException e) {
+				// Not a Town owned Plot
+			}
+		}
 		return false;
 	}
 
