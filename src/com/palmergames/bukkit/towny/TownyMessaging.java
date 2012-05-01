@@ -436,4 +436,18 @@ public class TownyMessaging {
 			if (resident.hasMode(modeRequired))
 				sendMessage(resident, msg);
 	}
+	
+	/**
+	 * Send a message to all residents in the town with the required mode
+	 * 
+	 * @param town
+	 * @param msg
+	 * @param modeRequired
+	 */
+	public static void sendMessageToMode(Town town, String msg, String modeRequired) {
+
+		for (Resident resident : town.getResidents())
+			if (BukkitTools.isOnline(resident.getName()))
+				sendMessage(resident,msg);
+	}
 }

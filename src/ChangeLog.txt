@@ -1420,3 +1420,6 @@ v0.80.0.18:
 	- Modify the EntityChangeBlockEvent handler to make it easier to handle when bukkit implements other creature types than Endermen.
 	- 'plotborder' smoke is now sent to the target player only.
 	- Fix Arena plots so they are useable by players with friendly fire off.
+v0.80.0.19:
+	- Make war the war results page a little more understandable (event war).
+	- Fix sending attack update messages to town defenders as well as attackers (event war).

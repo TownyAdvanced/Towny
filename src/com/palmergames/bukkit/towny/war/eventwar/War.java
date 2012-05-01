@@ -187,7 +187,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage(winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
+					TownyMessaging.sendGlobalMessage("Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -195,8 +195,8 @@ public class War {
 
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
-				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Nation Winnings");
-				TownyMessaging.sendGlobalMessage(winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
+				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
+				TownyMessaging.sendGlobalMessage("Highest Score: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {
