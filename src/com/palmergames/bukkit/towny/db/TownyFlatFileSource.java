@@ -1,12 +1,17 @@
 package com.palmergames.bukkit.towny.db;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1900,11 +1905,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" + FileMgmt.fileSeparator() + plotChunk.getWorldName() });
 
-		BufferedWriter fout = null;
+		BufferedOutputStream fout = null;
 		String path = getPlotFilename(plotChunk);
 		
 		try {
-			fout = new BufferedWriter(new FileWriter(path));
+			fout = new BufferedOutputStream(new FileOutputStream(path));
 			
 			switch (plotChunk.getVersion()) {
 
@@ -1913,7 +1918,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				 * New system requires pushing
 				 * version data first
 				 */
-				fout.write("VER");
+				fout.write("VER".getBytes(Charset.forName("UTF-8")));
 				fout.write(plotChunk.getVersion());
 
 				break;
@@ -1984,13 +1989,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			PlotBlockData plotBlockData = new PlotBlockData(townBlock);
 			List<Integer> IntArr = new ArrayList<Integer>();
 
-			BufferedReader fin = null;
+			BufferedInputStream fin = null;
 			
 			try {
-				fin = new BufferedReader(new FileReader(fileName));
+				fin = new BufferedInputStream(new FileInputStream(fileName));
 
 				//read the first 3 characters to test for version info
-				char[] key = new char[3];
+				byte[] key = new byte[3];
 				fin.read(key, 0, 3);
 				String test = new String(key);
 

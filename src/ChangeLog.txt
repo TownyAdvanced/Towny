@@ -1423,3 +1423,5 @@ v0.80.0.18:
 v0.80.0.19:
 	- Make war the war results page a little more understandable (event war).
 	- Fix sending attack update messages to town defenders as well as attackers (event war).
+v0.80.0.20:
+	- Finally fix the error with world height on some systems for plot regen (thanks Peewi96).
