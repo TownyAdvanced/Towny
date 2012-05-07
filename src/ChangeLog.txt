@@ -1425,3 +1425,5 @@ v0.80.0.19:
 	- Fix sending attack update messages to town defenders as well as attackers (event war).
 v0.80.0.20:
 	- Finally fix the error with world height on some systems for plot regen (thanks Peewi96).
+v0.80.1.0:
+	- Release.
