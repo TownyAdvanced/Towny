@@ -1,13 +1,12 @@
 package com.palmergames.bukkit.towny.war.flagwar;
 
-import java.util.Set;
-
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+
+import java.util.Set;
 
 public class TownyWarConfig {
 
@@ -176,4 +175,9 @@ public class TownyWarConfig {
 
 		return TownySettings.getDouble(ConfigNodes.WAR_ECONOMY_ENEMY_DEFENDED_ATTACK);
 	}
+
+    public static boolean isAttackingBordersOnly() {
+
+        return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_ONLY_ATTACK_BORDER);
+    }
 }

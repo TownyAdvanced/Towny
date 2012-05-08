@@ -1027,6 +1027,10 @@ public enum ConfigNodes {
 			"war.enemy.allow_attacks",
 			"false",
 			"# If false, players won't be able to place war flags, effectively disabling warzones."),
+    WAR_ENEMY_ONLY_ATTACK_BORDER(
+            "war.enemy.only_attack_borders",
+            "true",
+            "# If true, enemy's can only attack the edge plots of a town with war flags."),
 	WAR_ENEMY_MIN_PLAYERS_ONLINE_IN_TOWN(
 			"war.enemy.min_players_online_in_town",
 			"2",
