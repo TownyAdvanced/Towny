@@ -35,7 +35,7 @@ public class PlayerCache {
 	/**
 	 * Update the cache with new coordinates.
 	 * 
-	 * @param WorldCoord
+	 * @param worldCoord
 	 */
 	public void setLastTownBlock(WorldCoord worldCoord) {
 
