@@ -208,7 +208,7 @@ public class TownyWar {
 		checkIfNationHasMinOnlineForWar(attackingNation);
 
 		// Check that attack takes place on the edge of a town
-		if (!AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
+		if (TownyWarConfig.isAttackingBordersOnly() && !AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_not_on_edge_of_town"));
 
 		// Check that the user can pay for the warflag + fines from losing/winning.
