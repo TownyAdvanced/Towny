@@ -204,7 +204,7 @@ public class CombatUtil {
 				/*
 				 * Check the attackers TownBlock and it's Town for their PvP status
 				 */
-				if (!townBlock.getTown().isPVP() && !townBlock.getPermissions().pvp)
+				if (!townBlock.getTown().isPVP() && !townBlock.getPermissions().pvp && !world.isForcePVP())
 					return true;
 			
 			} catch (NotRegisteredException ex) {
@@ -212,7 +212,7 @@ public class CombatUtil {
 				 * Failed to fetch the town data
 				 * so check world PvP
 				 */
-				if (preventPvP(world))
+				if (!isWorldPvP(world))
 					return true;
 			}
 			
@@ -221,25 +221,25 @@ public class CombatUtil {
 			/*
 			 * Attacker isn't in a TownBlock so check the world PvP
 			 */
-			if (preventPvP(world))
+			if (!isWorldPvP(world))
 				return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * Is PvP disabled in this world?
+	 * Is PvP enabled in this world?
 	 * 
 	 * @param world
 	 * @return true if the world disallows PvP
 	 */
-	public static boolean preventPvP(TownyWorld world) {
+	public static boolean isWorldPvP(TownyWorld world) {
 
 		// Universe is only PvP
 		if (world.isForcePVP() || world.isPVP())
-			return false;
+			return true;
 
-		return true;
+		return false;
 	}
 
 	/**

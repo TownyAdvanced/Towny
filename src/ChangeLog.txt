@@ -1429,3 +1429,6 @@ v0.80.1.0:
 	- Release.
 v0.80.1.1:
 	- Fix Towny Economy failing to get a world when a town has no townblocks.
+v0.80.1.2:
+	- Added a config option to only allow attack borders during flag war (disabled allows you to attack any plot).
+	- Fix Forced PVP to actually do something with the new combat code.
