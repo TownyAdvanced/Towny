@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Towny" default="makejar" basedir=".">
-  <target name ="makejar" description="Create a jar for the Towny project">
-    <jar jarfile="../lib/Towny.jar" includes="**" basedir="bin"/>
-  </target>
+<project name="Towny" default="jar" basedir=".">
+    <property name="build" value="target"/>
+    <property file="build.properties"/>
+    
+    <target name="clean">
+        <delete dir="${build}"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${build}"/>
+    </target>   
+    
+    <target name="compile" depends="init">
+        <!-- Compile the java code -->
+        <javac srcdir="src" destdir="${build}">
+            <classpath>
+                <pathelement location="${env.LIB}/bukkit.jar"/>
+                <pathelement location="${env.LIB}/craftbukkit.jar"/>
+                <pathelement location="${env.LIB}/bpermissions.jar"/>
+                <pathelement location="${env.LIB}/Essentials.jar"/>
+                <pathelement location="${env.LIB}/EssentialsGroupManager.jar"/>
+                <pathelement location="${env.LIB}/Permissions.jar"/>
+                <pathelement location="${env.LIB}/PermissionsEx.jar"/>
+                <pathelement location="${env.LIB}/PermissionsBukkit.jar"/>
+                <pathelement location="${env.LIB}/Register.jar"/>
+                <pathelement location="${env.LIB}/iConomy.jar"/>
+                <pathelement location="${env.LIB}/Questioner.jar"/>
+                <pathelement location="${env.LIB}/Vault.jar"/>
+                <pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar"/>
+            </classpath>
+        </javac>
+    </target>   
+    
+    <target name="jar" depends="compile">
+        <!-- Build the jar file -->
+        <jar basedir="${build}" destfile="${env.LIB}/Towny.jar">
+	        <fileset dir="./src" includes="ChangeLog.txt"/>
+        	<fileset dir="./src" includes="english.yml"/>
+        	<fileset dir="./src" includes="german.yml"/>
+        	<fileset dir="./src" includes="plugin.yml"/>
+          <fileset dir="./src" includes="spanish.yml"/>
+          <fileset dir="./src" includes="ToDo.txt"/>
+        </jar>
+    </target>
 </project>
