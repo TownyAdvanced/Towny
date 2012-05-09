@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Towny" default="jar" basedir=".">
-    <property name="build" value="target"/>
+    <property name="build" value="bin"/>
     <property file="build.properties"/>
     
     <target name="clean">
