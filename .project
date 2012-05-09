@@ -16,7 +16,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/Towny.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/Towny Builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
