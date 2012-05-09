@@ -133,7 +133,6 @@ public class BukkitTools {
 	/**
 	 * Count the number of players online in each world
 	 * 
-	 * @param server
 	 * @return Map of world to online players.
 	 */
 	public static HashMap<String, Integer> getPlayersPerWorld() {

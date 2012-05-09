@@ -231,7 +231,7 @@ public class CombatUtil {
 	 * Is PvP enabled in this world?
 	 * 
 	 * @param world
-	 * @return true if the world disallows PvP
+	 * @return true if the world is PvP
 	 */
 	public static boolean isWorldPvP(TownyWorld world) {
 
@@ -271,7 +271,7 @@ public class CombatUtil {
 	 * 
 	 * @param attacker
 	 * @param defender
-	 * @return
+	 * @return true if both players in an Arena plot.
 	 */
 	public static boolean isPvPPlot(Player attacker, Player defender) {
 		

@@ -473,7 +473,7 @@ public class Towny extends JavaPlugin {
 	 * Creates a new one, if one doesn't exist.
 	 * 
 	 * @param player
-	 * @return
+	 * @return the current (or new) cache for this player.
 	 */
 	public PlayerCache getCache(Player player) {
 

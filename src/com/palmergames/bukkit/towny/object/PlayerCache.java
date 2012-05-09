@@ -35,7 +35,7 @@ public class PlayerCache {
 	/**
 	 * Update the cache with new coordinates.
 	 * 
-	 * @param lastTownBlock
+	 * @param WorldCoord
 	 */
 	public void setLastTownBlock(WorldCoord worldCoord) {
 
@@ -45,7 +45,7 @@ public class PlayerCache {
 	/**
 	 * Reset the cache permissions and update the cache with new coordinates.
 	 * 
-	 * @param lastTownBlock
+	 * @param worldCoord
 	 */
 	public void resetAndUpdate(WorldCoord worldCoord) {
 		
@@ -56,7 +56,7 @@ public class PlayerCache {
 	/**
 	 * Retrieve the last cached WorldCoord
 	 * 
-	 * @return
+	 * @return WorldCoord of the last acted upon TownBlock
 	 */
 	public WorldCoord getLastTownBlock() {
 
