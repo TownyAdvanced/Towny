@@ -1427,3 +1427,5 @@ v0.80.0.20:
 	- Finally fix the error with world height on some systems for plot regen (thanks Peewi96).
 v0.80.1.0:
 	- Release.
+v0.80.1.1:
+	- Fix Towny Economy failing to get a world when a town has no townblocks.

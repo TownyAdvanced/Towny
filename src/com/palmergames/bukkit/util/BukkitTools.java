@@ -52,6 +52,10 @@ public class BukkitTools {
 		return getServer().getPlayerExact(name);
 	}
 	
+	public static Player getPlayer(String name) {
+		return getServer().getPlayer(name);
+	}
+	
 	/**
 	 * Tests if this player is online.
 	 * 
@@ -63,7 +67,11 @@ public class BukkitTools {
 	}
 	
 	public static List<World> getWorlds() {
-			return server.getWorlds();
+		return  getServer().getWorlds();
+	}
+	
+	public static World getWorld(String name) {
+		return  getServer().getWorld(name);
 	}
 	
 	public static Server getServer() {

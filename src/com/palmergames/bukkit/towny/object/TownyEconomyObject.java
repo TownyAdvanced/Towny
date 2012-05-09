@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -8,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -126,20 +126,22 @@ public class TownyEconomyObject extends TownyObject {
 
 		try {
 			if (this instanceof Nation)
-				return Bukkit.getWorld(TownyUniverse.getDataSource().getNation(this.getName()).getCapital().getWorld().getName());
+				if (((Nation)this).getCapital().getWorld() != null)
+					return BukkitTools.getWorld(TownyUniverse.getDataSource().getNation(this.getName()).getCapital().getWorld().getName());
 
 			if (this instanceof Town)
-				return Bukkit.getWorld(TownyUniverse.getDataSource().getTown(this.getName()).getWorld().getName());
+				if (((Town)this).getWorld() != null)
+					return BukkitTools.getWorld(TownyUniverse.getDataSource().getTown(this.getName()).getWorld().getName());
 
 			if (this instanceof Resident) {
-				Player player = Bukkit.getPlayer(this.getName());
-				return (player != null) ? player.getWorld() : Bukkit.getWorlds().get(0);
+				Player player = BukkitTools.getPlayer(this.getName());
+				if (player != null) return player.getWorld();
 			}
 		} catch (NotRegisteredException e) {
 			// Failed to fetch world
 		}
 
-		return Bukkit.getWorlds().get(0);
+		return BukkitTools.getWorlds().get(0);
 	}
 
 	/**
