@@ -419,6 +419,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 				saveNation(nation);
 			}
+			
+			// Clear all town blocks so the sign removal triggers.
+			removeTownBlocks(town);
+			
 			town.clear();
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());

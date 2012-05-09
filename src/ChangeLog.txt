@@ -1432,3 +1432,4 @@ v0.80.1.1:
 v0.80.1.2:
 	- Added a config option to only allow attack borders during flag war (disabled allows you to attack any plot).
 	- Fix Forced PVP to actually do something with the new combat code.
+	- Fix sign removal upon a town deletion.
