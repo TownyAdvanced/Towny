@@ -125,17 +125,17 @@ public class TownyEconomyObject extends TownyObject {
 	private World getBukkitWorld() {
 
 		try {
-			if (this instanceof Nation)
-				if (((Nation)this).getCapital().getWorld() != null)
+			if (this instanceof Nation) {
+                Town capital = ((Nation)this).getCapital();
+				if (capital != null && capital.getWorld() != null)
 					return BukkitTools.getWorld(TownyUniverse.getDataSource().getNation(this.getName()).getCapital().getWorld().getName());
-
-			if (this instanceof Town)
+            } else if (this instanceof Town) {
 				if (((Town)this).getWorld() != null)
 					return BukkitTools.getWorld(TownyUniverse.getDataSource().getTown(this.getName()).getWorld().getName());
-
-			if (this instanceof Resident) {
+            } else if (this instanceof Resident) {
 				Player player = BukkitTools.getPlayer(this.getName());
-				if (player != null) return player.getWorld();
+				if (player != null)
+                    return player.getWorld();
 			}
 		} catch (NotRegisteredException e) {
 			// Failed to fetch world
