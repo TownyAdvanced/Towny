@@ -1,12 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Location;
-
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -16,6 +9,14 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Resident extends TownBlockOwner implements ResidentModes {
 
@@ -361,5 +362,15 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
 		
 	}
+
+    @Override
+    protected World getBukkitWorld() {
+        Player player = BukkitTools.getPlayer(getName());
+        if (player != null) {
+            return player.getWorld();
+        } else {
+            return super.getBukkitWorld();
+        }
+    }
 
 }

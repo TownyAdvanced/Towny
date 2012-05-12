@@ -1,22 +1,18 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.wallgen.Wall;
+import com.palmergames.bukkit.wallgen.WallSection;
+import com.palmergames.bukkit.wallgen.Walled;
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.bukkit.Location;
-
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.wallgen.Wall;
-import com.palmergames.bukkit.wallgen.WallSection;
-import com.palmergames.bukkit.wallgen.Walled;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
 
@@ -567,7 +563,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			}
 	}
 
-	private boolean hasWorld() {
+	public boolean hasWorld() {
 
 		return world != null;
 	}
@@ -845,5 +841,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		return isPublic;
 	}
+
+    @Override
+    protected World getBukkitWorld() {
+        if (hasWorld()) {
+            return BukkitTools.getWorld(getWorld().getName());
+        } else {
+            return super.getBukkitWorld();
+        }
+    }
 
 }

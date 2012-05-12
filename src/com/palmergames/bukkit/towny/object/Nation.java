@@ -1,16 +1,14 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.World;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
 
@@ -441,4 +439,13 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 				return true;
 		return false;
 	}
+
+    @Override
+    protected World getBukkitWorld() {
+        if (hasCapital() && getCapital().hasWorld()) {
+            return BukkitTools.getWorld(getCapital().getWorld().getName());
+        } else {
+            return super.getBukkitWorld();
+        }
+    }
 }
