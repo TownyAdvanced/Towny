@@ -7,6 +7,7 @@ import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_ADD_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_REMOVE_RESIDENT;
 
 /**
  * Send a list of all town help commands to player
@@ -1273,6 +1275,17 @@ public class TownCommand implements CommandExecutor {
 			}
 	}
 
+    public static void townRemoveResident(Town town, Resident resident) throws EmptyTownException, NotRegisteredException {
+
+        town.removeResident(resident);
+        plugin.deleteCache(resident.getName());
+        TownyUniverse.getDataSource().saveResident(resident);
+        TownyUniverse.getDataSource().saveTown(town);
+
+        plugin.getTownyUniverse().setChangedNotify(TOWN_REMOVE_RESIDENT);
+        Bukkit.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, town));
+    }
+
 	public static void townKickResidents(Object sender, Resident resident, Town town, List<Resident> kicking) {
 
 		Player player = null;
@@ -1280,25 +1293,22 @@ public class TownCommand implements CommandExecutor {
 		if (sender instanceof Player)
 			player = (Player) sender;
 
-		ArrayList<Resident> remove = new ArrayList<Resident>();
-		for (Resident member : kicking)
-			if (resident == member || member.isMayor() || town.hasAssistant(member))
-				remove.add(member);
-			else
+		for (Resident member : new ArrayList<Resident>(kicking)) {
+			if (resident == member || member.isMayor() || town.hasAssistant(member)) {
+                kicking.remove(member);
+            } else {
 				try {
-					town.removeResident(member);
-					plugin.deleteCache(member.getName());
-					TownyUniverse.getDataSource().saveResident(member);
+                    townRemoveResident(town, member);
 				} catch (NotRegisteredException e) {
-					remove.add(member);
+                    kicking.remove(member);
 				} catch (EmptyTownException e) {
 					// You can't kick yourself and only the mayor can kick
 					// assistants
 					// so there will always be at least one resident.
 				}
+            }
+        }
 
-		for (Resident member : remove)
-			kicking.remove(member);
 
 		if (kicking.size() > 0) {
 			String msg = "";
@@ -1312,8 +1322,9 @@ public class TownCommand implements CommandExecutor {
 			msg = String.format(TownySettings.getLangString("msg_kicked"), (player != null) ? player.getName() : "CONSOLE", msg);
 			TownyMessaging.sendTownMessage(town, ChatTools.color(msg));
 			TownyUniverse.getDataSource().saveTown(town);
-		} else
+		} else {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
+        }
 	}
 
 	/**

@@ -1,24 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
-
-import javax.naming.InvalidNameException;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -31,7 +12,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -39,6 +19,18 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import javax.naming.InvalidNameException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+
+import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
 
 public class TownyUniverse extends TownyObject {
 
@@ -473,7 +465,7 @@ public class TownyUniverse extends TownyObject {
 		return out;
 	}
 
-	public List<Resident> getValidatedResidents(Object sender, String[] names) {
+	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
 
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
@@ -505,7 +497,7 @@ public class TownyUniverse extends TownyObject {
 		return invited;
 	}
 
-	public List<Resident> getOnlineResidents(Player player, String[] names) {
+	public static List<Resident> getOnlineResidents(Player player, String[] names) {
 
 		List<Resident> invited = new ArrayList<Resident>();
 		for (String name : names) {
