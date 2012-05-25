@@ -146,7 +146,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					if (!townyWorld.isForceTownMobs())
 						if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
 							if (plugin.isCitizens2()) {
-								if (!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
 									livingEntitiesToRemove.add(livingEntity);
 								}
@@ -158,7 +158,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					// it will fall through here if the mob has no townblock.
 					if ((!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity))) {
 						if (plugin.isCitizens2()) {
-							if (!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+							if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 								//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
 								livingEntitiesToRemove.add(livingEntity);
 							}
