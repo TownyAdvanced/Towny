@@ -242,10 +242,10 @@ public class ResidentCommand implements CommandExecutor {
 			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("add")) {
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendAdd(player, resident, plugin.getTownyUniverse().getOnlineResidents(player, names));
+				residentFriendAdd(player, resident, TownyUniverse.getOnlineResidents(player, names));
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendRemove(player, resident, plugin.getTownyUniverse().getOnlineResidents(player, names));
+				residentFriendRemove(player, resident, TownyUniverse.getOnlineResidents(player, names));
 			} else if (split[0].equalsIgnoreCase("add+")) {
 				String[] names = StringMgmt.remFirstArg(split);
 				residentFriendAdd(player, resident, getResidents(player, names));

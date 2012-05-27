@@ -610,7 +610,7 @@ public class NationCommand implements CommandExecutor {
 			return;
 		}
 
-		nationAssistantsAdd(player, nation, (matchOnline ? plugin.getTownyUniverse().getOnlineResidents(player, names) : getResidents(player, names)));
+		nationAssistantsAdd(player, nation, (matchOnline ? TownyUniverse.getOnlineResidents(player, names) : getResidents(player, names)));
 	}
 
 	public void nationAssistantsAdd(Player player, Nation nation, List<Resident> invited) {
@@ -665,7 +665,7 @@ public class NationCommand implements CommandExecutor {
 			return;
 		}
 
-		nationAssistantsRemove(player, resident, nation, (matchOnline ? plugin.getTownyUniverse().getOnlineResidents(player, names) : getResidents(player, names)));
+		nationAssistantsRemove(player, resident, nation, (matchOnline ? TownyUniverse.getOnlineResidents(player, names) : getResidents(player, names)));
 	}
 
 	public void nationAssistantsRemove(Player player, Resident resident, Nation nation, List<Resident> kicking) {

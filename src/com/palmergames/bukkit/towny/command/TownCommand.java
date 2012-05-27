@@ -1166,7 +1166,7 @@ public class TownCommand implements CommandExecutor {
 			return;
 		}
 
-		townKickResidents(player, resident, town, plugin.getTownyUniverse().getValidatedResidents(player, names));
+		townKickResidents(player, resident, town, TownyUniverse.getValidatedResidents(player, names));
 
 		// Reset everyones cache permissions as this player leaving can affect multiple areas.
 		plugin.resetCache();
@@ -1350,7 +1350,7 @@ public class TownCommand implements CommandExecutor {
 			return;
 		}
 
-		townAssistantsAdd(player, town, plugin.getTownyUniverse().getValidatedResidents(player, names));
+		townAssistantsAdd(player, town, TownyUniverse.getValidatedResidents(player, names));
 	}
 
 	public void townAssistantsAdd(Player player, Town town, List<Resident> invited) {
@@ -1406,7 +1406,7 @@ public class TownCommand implements CommandExecutor {
 			return;
 		}
 
-		townAssistantsRemove(player, resident, town, plugin.getTownyUniverse().getValidatedResidents(player, names));
+		townAssistantsRemove(player, resident, town, TownyUniverse.getValidatedResidents(player, names));
 	}
 
 	public void townAssistantsRemove(Player player, Resident resident, Town town, List<Resident> kicking) {
@@ -1545,7 +1545,7 @@ public class TownCommand implements CommandExecutor {
 			return;
 		}
 
-		townAddResidents(sender, town, plugin.getTownyUniverse().getValidatedResidents(sender, names));
+		townAddResidents(sender, town, TownyUniverse.getValidatedResidents(sender, names));
 
 		// Reset this players cached permissions
 		plugin.resetCache(BukkitTools.getPlayerExact(name));
