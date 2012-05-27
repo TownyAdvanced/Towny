@@ -183,7 +183,7 @@ public class TownyEntityListener implements Listener {
 			if (townyWorld.isUsingTowny())
 				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
 					if (plugin.isCitizens2()) {
-						if (!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 							//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
 							event.setCancelled(true);
 						}
@@ -198,7 +198,7 @@ public class TownyEntityListener implements Listener {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
 						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
 							if (plugin.isCitizens2()) {
-								if (!CitizensAPI.getNPCManager().isNPC(livingEntity)) {
+								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
 									event.setCancelled(true);
 								}
