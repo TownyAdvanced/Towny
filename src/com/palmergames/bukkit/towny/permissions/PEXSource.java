@@ -178,7 +178,7 @@ public class PEXSource extends TownyPermissionSource {
 
 						// Update all players who are in this group.
 						for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-							if (toUpdate != null)
+							if ((toUpdate != null) && (!toUpdate.isEmpty()))
 								if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
 									//setup default modes
 									String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
@@ -216,7 +216,7 @@ public class PEXSource extends TownyPermissionSource {
 				if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
 					// Update all players.
 					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
+						if ((toUpdate != null) && (!toUpdate.isEmpty())) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 							plugin.setPlayerMode(player, modes, false);

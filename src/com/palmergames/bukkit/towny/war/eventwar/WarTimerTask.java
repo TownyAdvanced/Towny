@@ -39,7 +39,7 @@ public class WarTimerTask extends TownyTimerTask {
 
 		int numPlayers = 0;
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
+			if ((player != null) && (!player.isEmpty())) {
 				numPlayers += 1;
 				TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 				try {

@@ -117,7 +117,7 @@ public class Towny extends JavaPlugin {
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
-				if (player != null)
+				if ((player != null) && (!player.isEmpty()))
 					try {
 						getTownyUniverse().onLogin(player);
 					} catch (TownyException x) {
@@ -491,7 +491,7 @@ public class Towny extends JavaPlugin {
 	public void resetCache() {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null)
+			if ((player != null) && (!player.isEmpty()))
 				getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player))); //Automatically resets permissions.
 	}
 	
@@ -501,7 +501,7 @@ public class Towny extends JavaPlugin {
 	public void updateCache(WorldCoord worldCoord) {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if (player != null)
+			if ((player != null) && (!player.isEmpty()))
 				if (Coord.parseCoord(player).equals(worldCoord))
 					getCache(player).resetAndUpdate(worldCoord); //Automatically resets permissions.
 	}
@@ -514,7 +514,7 @@ public class Towny extends JavaPlugin {
 		WorldCoord worldCoord = null;
 		
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
+			if ((player != null) && (!player.isEmpty())) {
 				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
 				PlayerCache cache = getCache(player);
 				if (cache.getLastTownBlock() != worldCoord)

@@ -163,7 +163,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 					Group group = event.getGroup();
 					// Update all players who are in this group.
 					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
+						if ((toUpdate != null) && (!toUpdate.isEmpty())) {
 							if (group.equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
 								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
@@ -188,7 +188,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
 					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
+						if ((toUpdate != null) && (!toUpdate.isEmpty())) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 							plugin.setPlayerMode(player, modes, false);
