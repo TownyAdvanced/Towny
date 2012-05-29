@@ -1437,3 +1437,6 @@ v0.80.1.3:
 	- Fixed integration with Citizens2 for their API changes.
 	- Towny now raises events when a resident joins or leaves a town (handy for other plugins to monitor).
 	- Lets see if we can't stop these occasional NPE's when groupmanager reloads.
+v0.80.1.4:
+	- Revert earlier fix for NPE's when GroupManager reloads.
+	- Added empty potion bottles to the item_use protection list.

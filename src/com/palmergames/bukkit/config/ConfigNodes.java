@@ -544,7 +544,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_ID(
 			"protection.item_use_ids",
-			"259,325,326,327,351,385",
+			"259,325,326,327,351,374,385",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",

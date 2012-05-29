@@ -175,7 +175,7 @@ public class War {
 	public void end() {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
-			if ((player != null) && (!player.isEmpty()))
+			if (player != null)
 				sendStats(player);
 		
 		double halfWinnings;
