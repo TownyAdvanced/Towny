@@ -293,7 +293,7 @@ public class PlotCommand implements CommandExecutor {
 								return true;
 							}
 
-						} else if (!town.isMayor(resident)) {
+						} else if (!townBlock.getTown().isMayor(resident)) {
 							player.sendMessage(TownySettings.getLangString("msg_not_mayor"));
 							return true;
 						}

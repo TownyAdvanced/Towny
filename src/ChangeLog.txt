@@ -1440,3 +1440,5 @@ v0.80.1.3:
 v0.80.1.4:
 	- Revert earlier fix for NPE's when GroupManager reloads.
 	- Added empty potion bottles to the item_use protection list.
+v0.80.1.5:
+	- Fix '/plot clear' so outsider mayors can't use it.
