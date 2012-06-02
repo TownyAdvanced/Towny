@@ -1444,3 +1444,4 @@ v0.80.1.5:
 	- Fix '/plot clear' so outsider mayors can't use it.
 v0.80.1.6:
 	- Added native support for Tekkit and any mods which require the use of a fake player.
+	- Do not remove entities from unloaded chunks (fix for Multiverse Adventure worlds not resetting).

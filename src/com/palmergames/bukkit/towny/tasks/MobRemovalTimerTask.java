@@ -132,38 +132,40 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			List<LivingEntity> livingEntitiesToRemove = new ArrayList<LivingEntity>();
 
 			for (LivingEntity livingEntity : world.getLivingEntities()) {
-				Coord coord = Coord.parseCoord(livingEntity.getLocation());
-				TownyWorld townyWorld = null;
-				try {
-					townyWorld = TownyUniverse.getDataSource().getWorld(world.getName());
-				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return;
-				}
-				try {
-					TownBlock townBlock = townyWorld.getTownBlock(coord);
-					if (!townyWorld.isForceTownMobs())
-						if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
+				if (livingEntity.getLocation().getChunk().isLoaded()) {
+					Coord coord = Coord.parseCoord(livingEntity.getLocation());
+					TownyWorld townyWorld = null;
+					try {
+						townyWorld = TownyUniverse.getDataSource().getWorld(world.getName());
+					} catch (NotRegisteredException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return;
+					}
+					try {
+						TownBlock townBlock = townyWorld.getTownBlock(coord);
+						if (!townyWorld.isForceTownMobs())
+							if ((!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs && isRemovingTownEntity(livingEntity))) {
+								if (plugin.isCitizens2()) {
+									if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
+										//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
+										livingEntitiesToRemove.add(livingEntity);
+									}
+								} else
+									livingEntitiesToRemove.add(livingEntity);
+							}
+	
+					} catch (TownyException x) {
+						// it will fall through here if the mob has no townblock.
+						if ((!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity))) {
 							if (plugin.isCitizens2()) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
-									//System.out.println("[Towny] Town MobRemovalTimerTask - added: " + livingEntity.toString());
+									//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
 									livingEntitiesToRemove.add(livingEntity);
 								}
 							} else
 								livingEntitiesToRemove.add(livingEntity);
 						}
-
-				} catch (TownyException x) {
-					// it will fall through here if the mob has no townblock.
-					if ((!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity))) {
-						if (plugin.isCitizens2()) {
-							if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
-								//System.out.println("[Towny] World MobRemovalTimerTask - added: " + livingEntity.toString());
-								livingEntitiesToRemove.add(livingEntity);
-							}
-						} else
-							livingEntitiesToRemove.add(livingEntity);
 					}
 				}
 			}
