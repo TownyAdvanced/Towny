@@ -87,9 +87,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			bottomHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 			
 		} else if (state instanceof Sign) {
-			
-			System.out.print("Replacing a sign!!!!");
-			
+
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 			Sign sign = (Sign) block.getState();
 			int i = 0;
