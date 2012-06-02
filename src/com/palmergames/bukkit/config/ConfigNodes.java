@@ -420,6 +420,12 @@ public enum ConfigNodes {
 			"# Valid entries are: zip, none."),
 
 	PLUGIN_INTERFACING("plugin.interfacing", "", ""),
+	PLUGIN_MODS(
+			"plugin.interfacing.tekkit", "", ""),
+	PLUGIN_MODS_FAKE_RESIDENTS(
+					"plugin.interfacing.tekkit.fake_residents",
+					"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
+					"# Add any fake players for client/server mods (aka Tekkit) here"),
 	PLUGIN_USING_ESSENTIALS(
 			"plugin.interfacing.using_essentials",
 			"false",

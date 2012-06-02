@@ -912,6 +912,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
 		//return (isUsingIConomy() || isUsingRegister());
 	}
+	
+	public static boolean isFakeResident(String name) {
+		
+		return getString(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS).toLowerCase().contains(name.toLowerCase());
+	}
 
 	public static boolean isUsingEssentials() {
 
