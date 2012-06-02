@@ -379,6 +379,7 @@ public class TownyEntityListener implements Listener {
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 									TownyRegenAPI.addProtectionRegenTask(task);
 									event.setYield((float) 0.0);
+									block.getDrops().clear();
 								}
 							}
 						}

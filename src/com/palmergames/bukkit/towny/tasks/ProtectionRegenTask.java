@@ -6,6 +6,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.PistonExtensionMaterial;
@@ -100,6 +103,20 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 			((CreatureSpawner) block.getState()).setSpawnedType(((CreatureSpawner) state).getSpawnedType());
+			
+		} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
+			
+			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+			
+			// Container to receive the inventory
+			InventoryHolder container = (InventoryHolder) block.getState();
+			
+			// Contents we are respawning.
+			Inventory inven = ((InventoryHolder) state).getInventory();
+			
+			if (inven.getContents().length > 0)
+				container.getInventory().setContents(inven.getContents());
+			
 			
 		} else if (state.getData() instanceof PistonExtensionMaterial) {
 			
