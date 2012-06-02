@@ -39,7 +39,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean hasResident(String name) {
 
 		try {
-			return universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
+			return TownySettings.isFakeResident(name) || universe.getResidentMap().containsKey(NameValidation.checkAndFilterPlayerName(name).toLowerCase());
 		} catch (InvalidNameException e) {
 			return false;
 		}
