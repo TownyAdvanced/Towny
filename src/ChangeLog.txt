@@ -1445,3 +1445,5 @@ v0.80.1.5:
 v0.80.1.6:
 	- Added native support for Tekkit and any mods which require the use of a fake player.
 	- Do not remove entities from unloaded chunks (fix for Multiverse Adventure worlds not resetting).
+	- Fix regen tasks so they respawn the correct type of CreatureSpawner.
+	- Fix regen tasks so signs keep their text.

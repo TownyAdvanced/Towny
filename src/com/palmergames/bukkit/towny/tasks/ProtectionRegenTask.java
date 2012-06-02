@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
@@ -67,7 +68,9 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	public void replaceProtections() {
 
 		Block block = state.getBlock();
+		
 		if (state.getData() instanceof Door) {
+			
 			Door door = (Door) state.getData();
 			Block topHalf;
 			Block bottomHalf;
@@ -82,13 +85,26 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			topHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 			door.setTopHalf(false);
 			bottomHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+			
 		} else if (state instanceof Sign) {
+			
+			System.out.print("Replacing a sign!!!!");
+			
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
 			Sign sign = (Sign) block.getState();
 			int i = 0;
 			for (String line : ((Sign) state).getLines())
 				sign.setLine(i++, line);
+			
+			sign.update(true);
+			
+		} else if (state instanceof CreatureSpawner) {
+			
+			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+			((CreatureSpawner) block.getState()).setSpawnedType(((CreatureSpawner) state).getSpawnedType());
+			
 		} else if (state.getData() instanceof PistonExtensionMaterial) {
+			
 			PistonExtensionMaterial extension = (PistonExtensionMaterial) state.getData();
 			Block piston = block.getRelative(extension.getAttachedFace());
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
@@ -96,13 +112,16 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				piston.setTypeIdAndData(altState.getTypeId(), altState.getData().getData(), false);
 			}
 		} else if (state.getData() instanceof Attachable) {
+			
 			Block attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
 			if (attachedBlock.getTypeId() == 0) {
 				attachedBlock.setTypeId(placeholder.getId(), false);
 				TownyRegenAPI.addPlaceholder(attachedBlock);
 			}
 			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+			
 		} else {
+			
 			if (NeedsPlaceholder.contains(state.getType())) {
 				Block blockBelow = block.getRelative(BlockFace.DOWN);
 				if (blockBelow.getTypeId() == 0) {
