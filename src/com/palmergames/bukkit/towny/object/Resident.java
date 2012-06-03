@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ import java.util.List;
 public class Resident extends TownBlockOwner implements ResidentModes {
 
 	private List<Resident> friends = new ArrayList<Resident>();
-	private List<ChunkSnapshot> regenUndo = new ArrayList<ChunkSnapshot>();
+	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
 	private Town town;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
@@ -286,7 +285,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	 * 
 	 * @param snapshot
 	 */
-	public void addUndo(ChunkSnapshot snapshot) {
+	public void addUndo(Object[][][] snapshot) {
 
 		if (regenUndo.size() == 5)
 			regenUndo.remove(0);
@@ -296,7 +295,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	public void regenUndo() {
 
 		if (regenUndo.size() > 0) {
-			ChunkSnapshot snapshot = regenUndo.get(regenUndo.size() - 1);
+			Object[][][] snapshot = regenUndo.get(regenUndo.size() - 1);
 			regenUndo.remove(snapshot);
 
 			TownyRegenAPI.regenUndo(snapshot, this);

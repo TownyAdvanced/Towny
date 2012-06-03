@@ -1447,4 +1447,5 @@ v0.80.1.6:
 	- Do not remove entities from unloaded chunks (fix for Multiverse Adventure worlds not resetting).
 	- Fix regen tasks so they respawn the correct type of CreatureSpawner.
 	- Fix regen tasks so signs keep their text.
-	- Add chest support to wilderness regen/explosion protection (they also no longer drop their contents).
+	- Add chest support to wilderness regen/explosion protection (they also no longer drop their contents if being regen'd).
+	- Greatly improved '/tw regen' and /tw undo' (also Tekkit compatible).

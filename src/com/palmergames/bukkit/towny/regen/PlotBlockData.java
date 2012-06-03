@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class PlotBlockData {
@@ -90,7 +91,7 @@ public class PlotBlockData {
 		Block block = null;
 		int x, y, z, blockId, reverse, scale;
 		int worldx = getX() * size, worldz = getZ() * size;
-		blockObject storedData;
+		BlockObject storedData;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
@@ -125,8 +126,8 @@ public class PlotBlockData {
 
 			// If this block isn't correct, replace
 			// and return as done.
-			if ((blockId != storedData.getTypeID())) {
-				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(storedData.getTypeID())) {
+			if ((blockId != storedData.getTypeId())) {
+				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(storedData.getTypeId())) {
 
 					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
 
@@ -134,11 +135,11 @@ public class PlotBlockData {
 					switch (version) {
 
 					case 1:
-						block.setTypeIdAndData(storedData.getTypeID(), storedData.getData(), false);
+						block.setTypeIdAndData(storedData.getTypeId(), storedData.getData(), false);
 
 						break;
 					default:
-						block.setTypeId(storedData.getTypeID());
+						block.setTypeId(storedData.getTypeId());
 					}
 
 				} else
@@ -153,16 +154,16 @@ public class PlotBlockData {
 		return false;
 	}
 
-	private blockObject getStoredBlockData(int index) {
+	private BlockObject getStoredBlockData(int index) {
 
 		//return based upon version
 		switch (version) {
 
 		case 1:
-			return new blockObject(blockList.get(index - 1), (byte) (blockList.get(index) & 0xff));
+			return new BlockObject(blockList.get(index - 1), (byte) (blockList.get(index) & 0xff));
 
 		default:
-			return new blockObject(blockList.get(index), (byte) 0);
+			return new BlockObject(blockList.get(index), (byte) 0);
 		}
 
 	}

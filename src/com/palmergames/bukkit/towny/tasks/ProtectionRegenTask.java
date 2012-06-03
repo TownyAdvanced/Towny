@@ -14,9 +14,9 @@ import org.bukkit.material.Door;
 import org.bukkit.material.PistonExtensionMaterial;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.regen.BlockLocation;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 

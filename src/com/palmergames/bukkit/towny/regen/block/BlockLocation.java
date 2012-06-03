@@ -1,5 +1,6 @@
-package com.palmergames.bukkit.towny.regen;
+package com.palmergames.bukkit.towny.regen.block;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -16,6 +17,7 @@ public class BlockLocation {
 	}
 
 	protected int x, z, y;
+	protected Chunk chunk;
 	protected World world;
 
 	public BlockLocation(Location loc) {
@@ -23,9 +25,15 @@ public class BlockLocation {
 		this.x = loc.getBlockX();
 		this.z = loc.getBlockZ();
 		this.y = loc.getBlockY();
+		this.chunk = loc.getChunk();
 		this.world = loc.getWorld();
 	}
 
+	public Chunk getChunk() {
+
+		return chunk;
+	}
+	
 	public int getX() {
 
 		return x;

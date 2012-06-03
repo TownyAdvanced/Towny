@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Bukkit;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,9 +16,9 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -164,15 +164,7 @@ public class TownyWorldCommand implements CommandExecutor {
 
 			// Regen this chunk
 			if (player != null) {
-				try {
-					Coord coord = Coord.parseCoord(player);
-					TownyUniverse.getDataSource().getResident(player.getName()).addUndo(Bukkit.getWorld(player.getWorld().getName()).getChunkAt(player.getLocation()).getChunkSnapshot());
-
-					Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
-
-				} catch (NotRegisteredException e) {
-					// Failed to get resident
-				}
+				TownyRegenAPI.regenChunk(player);
 			}
 
 		} else if (split[0].equalsIgnoreCase("undo")) {
