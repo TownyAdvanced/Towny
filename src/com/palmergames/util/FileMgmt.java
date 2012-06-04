@@ -285,7 +285,7 @@ public class FileMgmt {
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
 					continue;
-				} else {
+				} else if (f.isFile() && f.canRead()) {
 					FileInputStream input = new FileInputStream(f);
 					ZipEntry anEntry = new ZipEntry(f.getPath());
 					zipStream.putNextEntry(anEntry);
