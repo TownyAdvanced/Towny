@@ -38,11 +38,40 @@ public abstract class TownyPermissionSource {
 
 	abstract public String getPlayerPermissionStringNode(String playerName, String node);
 
-	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
+	
+	/*
+	 * Wrappers for backwards compatibility
+	 */
+	/*public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
+		return hasWildOverride(world, player, blockId, (byte)0, action);
+	}
+	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
+		return hasOwnTownOverride(player, blockId, (byte)0, action);
+	}
+	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
+		return hasAllTownOverride(player, blockId, (byte)0, action);
+	}*/
+	/*
+	 * 
+	 */
+	
+	
+	/**
+	 * Test if the player has a wild override to permit this action.
+	 * 
+	 * @param world
+	 * @param player
+	 * @param blockId
+	 * @param data
+	 * @param action
+	 * @return
+	 */
+	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, byte data, TownyPermission.ActionType action) {
 
 		//check for permissions
 		if (plugin.isPermissions()) {
-			if (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
+			if (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId + ":" + data))
+					|| has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
 				return true;
 			
 			// No node set but we are using permissions so check world settings (without UnclaimedIgnoreId's).
@@ -84,13 +113,23 @@ public abstract class TownyPermissionSource {
 
 		return false;
 	}
-
-	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
+	
+	/**
+	 * Test if the player has an own town (or all town) override to permit this action.
+	 * 
+	 * @param player
+	 * @param blockId
+	 * @param data
+	 * @param action
+	 * @return true if the action is permitted.
+	 */
+	public boolean hasOwnTownOverride(Player player, int blockId, byte data, TownyPermission.ActionType action) {
 
 		//check for permissions
 		if (plugin.isPermissions()) {
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId)))
-					|| (hasAllTownOverride(player, blockId, action)))
+			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId +  ":" + data)))
+					|| has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId))
+					|| hasAllTownOverride(player, blockId, data, action))
 				return true;
 		} else {
 
@@ -102,11 +141,21 @@ public abstract class TownyPermissionSource {
 		return false;
 	}
 
-	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
+	/**
+	 * Test if the player has an all town override to permit this action.
+	 * 
+	 * @param player
+	 * @param blockId
+	 * @param data
+	 * @param action
+	 * @return true if the action is permitted.
+	 */
+	public boolean hasAllTownOverride(Player player, int blockId, byte data, TownyPermission.ActionType action) {
 
 		//check for permissions
 		if (plugin.isPermissions()) {
-			if (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId)))
+			if (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId + ":" + data))
+					|| has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId)))
 				return true;
 		} else {
 

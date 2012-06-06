@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,10 +9,10 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
 public class PlayerCache {
 
-	private Map<Integer, Boolean> buildPermission = new HashMap<Integer, Boolean>();
-	private Map<Integer, Boolean> destroyPermission = new HashMap<Integer, Boolean>();
-	private Map<Integer, Boolean> switchPermission = new HashMap<Integer, Boolean>();
-	private Map<Integer, Boolean> itemUsePermission = new HashMap<Integer, Boolean>();
+	private HashMap<Integer, HashMap<Byte, Boolean>> buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+	private HashMap<Integer, HashMap<Byte, Boolean>> destroyPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+	private HashMap<Integer, HashMap<Byte, Boolean>> switchPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+	private HashMap<Integer, HashMap<Byte, Boolean>> itemUsePermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
 	
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
@@ -80,33 +79,21 @@ public class PlayerCache {
 	}
 
 
-	public boolean getCachePermission(Integer id, ActionType action) throws NullPointerException {
+	public boolean getCachePermission(Integer id, byte data, ActionType action) throws NullPointerException {
 
 		switch (action) {
 
 		case BUILD: // BUILD
-			if (!buildPermission.containsKey(id))
-				throw new NullPointerException();
-			else
-				return buildPermission.get(id);
+			return getBuildPermission(id, data);
 
 		case DESTROY: // DESTROY
-			if (!destroyPermission.containsKey(id))
-				throw new NullPointerException();
-			else
-				return destroyPermission.get(id);
+			return getDestroyPermission(id, data);
 
 		case SWITCH: // SWITCH
-			if (!switchPermission.containsKey(id))
-				throw new NullPointerException();
-			else
-				return switchPermission.get(id);
+			return getSwitchPermission(id, data);
 
 		case ITEM_USE: // ITEM_USE
-			if (!itemUsePermission.containsKey(id))
-				throw new NullPointerException();
-			else
-				return itemUsePermission.get(id);
+			return getItemUsePermission(id, data);
 
 		default:
 			throw new NullPointerException();
@@ -115,56 +102,78 @@ public class PlayerCache {
 
 	}
 
-	public void setBuildPermission(Integer id, Boolean value) {
+	public void setBuildPermission(Integer id, byte data, Boolean value) {
 
-		buildPermission.put(id, value);
+		updateMaps(buildPermission, id, data, value);
+
 	}
+	public void setDestroyPermission(Integer id, byte data, Boolean value) {
 
-	public boolean getBuildPermission(Integer id) throws NullPointerException {
-
-		if (!buildPermission.containsKey(id))
-			throw new NullPointerException();
-		else
-			return buildPermission.get(id);
+		updateMaps(destroyPermission, id, data, value);
 	}
+	public void setSwitchPermission(Integer id, byte data, Boolean value) {
 
-	public void setDestroyPermission(Integer id, Boolean value) {
+		updateMaps(switchPermission, id, data, value);
 
-		destroyPermission.put(id, value);
 	}
+	public void setItemUsePermission(Integer id, byte data, Boolean value) {
 
-	public boolean getDestroyPermission(Integer id) throws NullPointerException {
-
-		if (!destroyPermission.containsKey(id))
-			throw new NullPointerException();
-		else
-			return destroyPermission.get(id);
-	}
-
-	public void setSwitchPermission(Integer id, Boolean value) {
-
-		switchPermission.put(id, value);
-	}
-
-	public boolean getSwitchPermission(Integer id) throws NullPointerException {
-
-		if (!switchPermission.containsKey(id))
-			throw new NullPointerException();
-		else
-			return switchPermission.get(id);
+		updateMaps(itemUsePermission, id, data, value);
+		
 	}
 	
-	public void setItemUsePermission(Integer id, Boolean value) {
+	public boolean getBuildPermission(Integer id, byte data) throws NullPointerException {
 
-		itemUsePermission.put(id, value);
+		return getBlockPermission(buildPermission, id, data);
+
 	}
+	public boolean getDestroyPermission(Integer id, byte data) throws NullPointerException {
 
-	public Boolean getItemUsePermission(Integer id) throws NullPointerException {
+		return getBlockPermission(destroyPermission, id, data);
+		
+	}
+	public boolean getSwitchPermission(Integer id, byte data) throws NullPointerException {
 
-		if (!itemUsePermission.containsKey(id))
+		return getBlockPermission(switchPermission, id, data);
+		
+	}
+	public Boolean getItemUsePermission(Integer id, byte data) throws NullPointerException {
+
+		return getBlockPermission(itemUsePermission, id, data);
+		
+	}
+	
+	private void updateMaps(HashMap<Integer, HashMap<Byte, Boolean>> blockMap, Integer id, byte data, Boolean value) {
+		
+		if (!blockMap.containsKey(id)) {
+			/*
+			 * We have no permissions cached for this block.
+			 */
+			HashMap<Byte, Boolean> map = new HashMap<Byte, Boolean>();
+			map.put(data, value);
+			blockMap.put(id, map);
+		} else {
+			/*
+			 * We have cached permissions for this block type so just push updated data.
+			 */
+			blockMap.get(id).put(data, value);
+			
+			
+		}
+	}
+	
+	private boolean getBlockPermission(HashMap<Integer, HashMap<Byte, Boolean>> blockMap, Integer id, byte data) throws NullPointerException {
+		
+		if (!blockMap.containsKey(id))
 			throw new NullPointerException();
-		else
-			return itemUsePermission.get(id);
+		
+		HashMap<Byte, Boolean> map = blockMap.get(id);
+		
+		if (!map.containsKey(data))
+			throw new NullPointerException();
+		
+		return map.get(data);
+		
 	}
 
 	private void reset() {
@@ -173,10 +182,10 @@ public class PlayerCache {
 		townBlockStatus = null;
 		blockErrMsg = null;
 		
-		buildPermission = new HashMap<Integer, Boolean>();
-		destroyPermission = new HashMap<Integer, Boolean>();
-		switchPermission = new HashMap<Integer, Boolean>();
-		itemUsePermission = new HashMap<Integer, Boolean>();
+		buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+		destroyPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+		switchPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+		itemUsePermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
 	}
 
 	public enum TownBlockStatus {

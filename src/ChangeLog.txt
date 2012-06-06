@@ -1452,4 +1452,9 @@ v0.80.1.6:
 v0.80.1.7:
 	- Fix the backup so it will only backup files it can actually read instead of throwing an error.
 	- Fix town animal protection so no one can kill the animals in a plot unless they have perms to break grass in that plot.
-	- Fix Lava/water bucket hack/exploits.
+	- Fix lava/water bucket hack/exploits.
+	- Add finer control over block permissions. You can now allow the use of specific block types via permissions.
+	  eg.
+	    Granting '- towny.wild.build.35' allows a player to place wool blocks in the wilderness.
+	    Now you can grant '- towny.wild.destroy.35:1' allowing them to only break brown wool.
+	    This adds support for custom block types used in mods such as IndustrialCraft, Redpower etc.

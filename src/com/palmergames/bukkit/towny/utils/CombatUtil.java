@@ -167,7 +167,7 @@ public class CombatUtil {
 						 * if they are from the same town
 						 * and have destroy permissions (grass) in the defending TownBlock
 						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, ActionType.DESTROY))
+						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, (byte)0, ActionType.DESTROY))
 							return true;
 					}
 				}

@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
 /**
@@ -117,7 +118,7 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlockClicked();
 		
-		event.setCancelled(onPlayerInteract(player, block, event.getBucket().getId()));
+		event.setCancelled(onPlayerInteract(player, block, event.getItemStack()));
 		
 	}
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -131,7 +132,7 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlockClicked();
 		
-		event.setCancelled(onPlayerInteract(player, block, event.getBucket().getId()));
+		event.setCancelled(onPlayerInteract(player, block, event.getItemStack()));
 		
 	}
 
@@ -182,7 +183,7 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
-				event.setCancelled(onPlayerInteract(player, block, event.getItem().getTypeId()));
+				event.setCancelled(onPlayerInteract(player, block, event.getItem()));
 				return;
 			}
 		}
@@ -297,7 +298,7 @@ public class TownyPlayerListener implements Listener {
 		onPlayerMove(event);
 	}
 
-	public boolean onPlayerInteract(Player player, Block block, int itemId) {
+	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
 
 
 		boolean cancelState = false;
@@ -315,11 +316,11 @@ public class TownyPlayerListener implements Listener {
 			boolean bItemUse;
 
 			if (block != null)
-				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.ITEM_USE);
 			else
-				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), itemId, TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
 
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, itemId, TownyPermission.ActionType.ITEM_USE);
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
 
 			PlayerCache cache = plugin.getCache(player);
 			//cache.updateCoord(worldCoord);
@@ -330,7 +331,7 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 
 				// Allow item_use if we have an override
-				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, itemId, TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, itemId, TownyPermission.ActionType.ITEM_USE))))
+				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE))))
 					return cancelState;
 
 				if (status == TownBlockStatus.WARZONE) {
@@ -353,7 +354,7 @@ public class TownyPlayerListener implements Listener {
 			} catch (NullPointerException e) {
 				System.out.print("NPE generated!");
 				System.out.print("Player: " + player.getName());
-				System.out.print("Item: " + Material.getMaterial(itemId).name());
+				System.out.print("Item: " + item.getData().getItemType().name());
 				//System.out.print("Block: " + block.getType().toString());
 			}
 
@@ -376,7 +377,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		//Get switch permissions (updates if none exist)
-		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.SWITCH);
+		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.SWITCH);
 
 		// Allow switch if we are permitted
 		if (bSwitch)

@@ -450,7 +450,7 @@ public class TownyEntityListener implements Listener {
 					Player player = (Player) evt.getRemover();
 
 					//Get destroy permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, (byte)0, TownyPermission.ActionType.DESTROY);
 					
 					// Allow the removal if we are permitted
 					if (bDestroy)
@@ -513,7 +513,7 @@ public class TownyEntityListener implements Listener {
 				return;
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, painting.getLocation(), 321, (byte)0, TownyPermission.ActionType.BUILD);
 			
 			// Allow placing if we are permitted
 			if (bBuild)

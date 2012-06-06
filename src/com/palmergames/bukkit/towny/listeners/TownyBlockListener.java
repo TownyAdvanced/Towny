@@ -106,7 +106,7 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();
 
 		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), event.getBlock().getTypeId(), TownyPermission.ActionType.DESTROY);
+		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY);
 		
 		// Allow destroy if we are permitted
 		if (bDestroy)
@@ -172,7 +172,7 @@ public class TownyBlockListener implements Listener {
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.BUILD);
 
 			// Allow build if we are permitted
 			if (bBuild)
