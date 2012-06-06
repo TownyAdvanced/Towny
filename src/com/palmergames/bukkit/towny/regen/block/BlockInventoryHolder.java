@@ -16,32 +16,32 @@ public class BlockInventoryHolder extends BlockObject {
 	/**
 	 * Constructor for all Container objects
 	 * 
-	 * @param typeID
-	 * @param inventorySize
+	 * @param typeId
+	 * @param items
 	 */
-	public BlockInventoryHolder(int typeID, ItemStack[] items) {
+	public BlockInventoryHolder(int typeId, ItemStack[] items) {
 
-		super(typeID);
+		super(typeId);
 		setItems(items);
 	}
 
 	/**
 	 * Constructor for all Container objects
 	 * 
-	 * @param typeID
+	 * @param typeId
 	 * @param data
-	 * @param inventorySize
+	 * @param items
 	 */
-	public BlockInventoryHolder(int typeID, byte data, ItemStack[] items) {
+	public BlockInventoryHolder(int typeId, byte data, ItemStack[] items) {
 
-		super(typeID, data);
+		super(typeId, data);
 		setItems(items);
 	}
 
 	/**
 	 * Get the list of items.
 	 * 
-	 * @return
+	 * @return array of ItemStacks.
 	 */
 	public ItemStack[] getItems() {
 

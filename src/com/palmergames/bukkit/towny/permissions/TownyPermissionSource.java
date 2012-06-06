@@ -67,7 +67,7 @@ public abstract class TownyPermissionSource {
 	 * @param blockId
 	 * @param data
 	 * @param action
-	 * @return
+	 * @return true if the action is permitted.
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, byte data, TownyPermission.ActionType action) {
 

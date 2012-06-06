@@ -48,7 +48,7 @@ public class BlockObject {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param typeId the id to set
 	 */
 	public void setTypeId(int typeId) {
 
@@ -64,7 +64,7 @@ public class BlockObject {
 	}
 
 	/**
-	 * @param damage the data to set
+	 * @param data the data to set
 	 */
 	public void setData(byte data) {
 
@@ -80,7 +80,7 @@ public class BlockObject {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param loc the location to set
 	 */
 	public void setLocation(Location loc) {
 
@@ -88,7 +88,7 @@ public class BlockObject {
 	}
 
 	/**
-	 * @param typeID the typeID to set
+	 * @param typeId the typeId to set
 	 */
 	public void setTypeIdAndData(int typeId, byte data) {
 

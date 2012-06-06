@@ -16,7 +16,7 @@ public class BlockSign extends BlockObject {
 	 * 
 	 * @param type
 	 * @param data
-	 * @param text
+	 * @param lines
 	 */
 	public BlockSign(int type, byte data, String[] lines) {
 
@@ -45,7 +45,7 @@ public class BlockSign extends BlockObject {
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param lines the text to set
 	 */
 	public void setlines(String[] lines) {
 

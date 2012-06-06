@@ -16,7 +16,7 @@ public class BlockMobSpawner extends BlockObject {
 	private int delay;
 
 	/**
-	 * @param typeID
+	 * @param type
 	 */
 	public BlockMobSpawner(EntityType type) {
 
@@ -27,7 +27,7 @@ public class BlockMobSpawner extends BlockObject {
 	/**
 	 * Get the mob type.
 	 * 
-	 * @return
+	 * @return the EntityType this spawner is set for.
 	 */
 	public EntityType getSpawnedType() {
 
