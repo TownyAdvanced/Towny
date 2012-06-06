@@ -1452,3 +1452,4 @@ v0.80.1.6:
 v0.80.1.7:
 	- Fix the backup so it will only backup files it can actually read instead of throwing an error.
 	- Fix town animal protection so no one can kill the animals in a plot unless they have perms to break grass in that plot.
+	- Fix Lava/water bucket hack/exploits.

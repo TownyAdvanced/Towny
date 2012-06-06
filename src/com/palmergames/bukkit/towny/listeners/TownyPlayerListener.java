@@ -105,6 +105,35 @@ public class TownyPlayerListener implements Listener {
 			// Town has not set respawn location. Using default.
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+		
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		Player player = event.getPlayer();
+		Block block = event.getBlockClicked();
+		
+		event.setCancelled(onPlayerInteract(player, block, event.getBucket().getId()));
+		
+	}
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+		
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		Player player = event.getPlayer();
+		Block block = event.getBlockClicked();
+		
+		event.setCancelled(onPlayerInteract(player, block, event.getBucket().getId()));
+		
+	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
@@ -116,16 +145,17 @@ public class TownyPlayerListener implements Listener {
 
 		if (event.isCancelled()) {
 			// Fix for bucket bug.
-			if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-				Integer item = event.getPlayer().getItemInHand().getTypeId();
-				// block cheats for placing water/lava/fire/lighter use.
-				if (item == 326 || item == 327 || item == 259 || (item >= 8 && item <= 11) || item == 51)
-					event.setCancelled(true);
-			}
+			//if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+			//	Integer item = event.getPlayer().getItemInHand().getTypeId();
+			//	// block cheats for placing water/lava/fire/lighter use.
+			//	if (item == 326 || item == 327 || item == 259 || (item >= 8 && item <= 11) || item == 51)
+			//		event.setCancelled(true);
+			//}
 			return;
 		}
 
-		Block block = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
+		Player player = event.getPlayer();
+		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		TownyWorld World = null;
 
 		try {
@@ -152,7 +182,7 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
-				onPlayerInteractEvent(event);
+				event.setCancelled(onPlayerInteract(player, block, event.getItem().getTypeId()));
 				return;
 			}
 		}
@@ -267,11 +297,10 @@ public class TownyPlayerListener implements Listener {
 		onPlayerMove(event);
 	}
 
-	public void onPlayerInteractEvent(PlayerInteractEvent event) {
+	public boolean onPlayerInteract(Player player, Block block, int itemId) {
 
-		Player player = event.getPlayer();
 
-		Block block = event.getClickedBlock();
+		boolean cancelState = false;
 		WorldCoord worldCoord;
 
 		try {
@@ -288,9 +317,9 @@ public class TownyPlayerListener implements Listener {
 			if (block != null)
 				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), TownyPermission.ActionType.ITEM_USE);
 			else
-				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), itemId, TownyPermission.ActionType.ITEM_USE);
 
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE);
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, itemId, TownyPermission.ActionType.ITEM_USE);
 
 			PlayerCache cache = plugin.getCache(player);
 			//cache.updateCoord(worldCoord);
@@ -298,24 +327,24 @@ public class TownyPlayerListener implements Listener {
 
 				TownBlockStatus status = cache.getStatus();
 				if (status == TownBlockStatus.UNCLAIMED_ZONE && wildOverride)
-					return;
+					return cancelState;
 
 				// Allow item_use if we have an override
-				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, event.getItem().getTypeId(), TownyPermission.ActionType.ITEM_USE))))
-					return;
+				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, itemId, TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, itemId, TownyPermission.ActionType.ITEM_USE))))
+					return cancelState;
 
 				if (status == TownBlockStatus.WARZONE) {
 					if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
-						event.setCancelled(true);
+						cancelState = true;
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
 					}
-					return;
+					return cancelState;
 				}
 				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
 					//if (status == TownBlockStatus.UNCLAIMED_ZONE)
 					//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
 
-					event.setCancelled(true);
+					cancelState = true;
 				}
 
 				if ((cache.hasBlockErrMsg())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
@@ -323,16 +352,18 @@ public class TownyPlayerListener implements Listener {
 
 			} catch (NullPointerException e) {
 				System.out.print("NPE generated!");
-				System.out.print("Player: " + event.getPlayer().getName());
-				System.out.print("Item: " + event.getItem().getType().toString());
+				System.out.print("Player: " + player.getName());
+				System.out.print("Item: " + Material.getMaterial(itemId).name());
 				//System.out.print("Block: " + block.getType().toString());
 			}
 
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-			event.setCancelled(true);
-			return;
+			cancelState = true;
+			return cancelState;
 		}
+		
+		return cancelState;
 
 	}
 
