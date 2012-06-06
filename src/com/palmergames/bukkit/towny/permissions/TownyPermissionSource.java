@@ -42,15 +42,18 @@ public abstract class TownyPermissionSource {
 	/*
 	 * Wrappers for backwards compatibility
 	 */
-	/*public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
+	@Deprecated
+	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, TownyPermission.ActionType action) {
 		return hasWildOverride(world, player, blockId, (byte)0, action);
 	}
+	@Deprecated
 	public boolean hasOwnTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 		return hasOwnTownOverride(player, blockId, (byte)0, action);
 	}
+	@Deprecated
 	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 		return hasAllTownOverride(player, blockId, (byte)0, action);
-	}*/
+	}
 	/*
 	 * 
 	 */

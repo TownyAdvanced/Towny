@@ -38,11 +38,10 @@ public class PlayerCacheUtil {
 	/*
 	 * Wrappers for backwards compatibility
 	 */
-	//public static boolean getCachePermission(Player player, Location location, Integer blockId, ActionType action) {
-	//	return getCachePermission(player, location, blockId, (byte)0, action);
-	//}
-	
-	
+	@Deprecated
+	public static boolean getCachePermission(Player player, Location location, Integer blockId, ActionType action) {
+		return getCachePermission(player, location, blockId, (byte)0, action);
+	}
 	
 	
 	/**
@@ -54,6 +53,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param location
 	 * @param blockId
+	 * @param data
 	 * @param action
 	 * @return true if the player has permission.
 	 */
@@ -95,6 +95,7 @@ public class PlayerCacheUtil {
 	 * @param worldCoord
 	 * @param status
 	 * @param id
+	 * @param data
 	 * @param action
 	 */
 	private static void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Integer id, byte data, ActionType action) {
@@ -143,6 +144,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param worldCoord
 	 * @param id
+	 * @param data
 	 * @param buildRight
 	 */
 	private static void cacheBuild(Player player, WorldCoord worldCoord, Integer id, byte data, Boolean buildRight) {
@@ -160,6 +162,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param worldCoord
 	 * @param id
+	 * @param data
 	 * @param destroyRight
 	 */
 	private static void cacheDestroy(Player player, WorldCoord worldCoord, Integer id, byte data, Boolean destroyRight) {
@@ -177,6 +180,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param worldCoord
 	 * @param id
+	 * @param data
 	 * @param switchRight
 	 */
 	private static void cacheSwitch(Player player, WorldCoord worldCoord, Integer id, byte data, Boolean switchRight) {
@@ -194,6 +198,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param worldCoord
 	 * @param id
+	 * @param data
 	 * @param itemUseRight
 	 */
 	private static void cacheItemUse(Player player, WorldCoord worldCoord, Integer id, byte data, Boolean itemUseRight) {
@@ -349,6 +354,7 @@ public class PlayerCacheUtil {
 	 * @param status
 	 * @param pos
 	 * @param id
+	 * @param data
 	 * @param action
 	 * @return true if allowed.
 	 */
