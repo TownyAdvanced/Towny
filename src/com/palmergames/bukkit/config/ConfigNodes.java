@@ -588,7 +588,7 @@ public enum ConfigNodes {
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
-			"WaterMob,Flying,Slime",
+			"Monster,WaterMob,Flying,Slime",
 			"",
 			"# Globally remove living entities in all worlds that have their flag set."),
 	PROT_MOB_REMOVE_SPEED(
