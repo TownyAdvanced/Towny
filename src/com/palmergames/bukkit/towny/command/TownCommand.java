@@ -1547,7 +1547,8 @@ public class TownCommand implements CommandExecutor {
 		townAddResidents(sender, town, TownyUniverse.getValidatedResidents(sender, names));
 
 		// Reset this players cached permissions
-		plugin.resetCache(BukkitTools.getPlayerExact(name));
+		if (!name.equalsIgnoreCase("Console"))
+			plugin.resetCache(BukkitTools.getPlayerExact(name));
 	}
 
 	// wrapper function for non friend setting of perms

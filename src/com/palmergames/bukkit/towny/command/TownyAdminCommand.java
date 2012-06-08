@@ -306,7 +306,7 @@ public class TownyAdminCommand implements CommandExecutor {
 					 * return;
 					 * }
 					 */
-					TownCommand.townAdd(sender, town, StringMgmt.remArgs(split, 2));
+					TownCommand.townAdd(getSender(), town, StringMgmt.remArgs(split, 2));
 
 				} else if (split[1].equalsIgnoreCase("kick")) {
 
