@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
@@ -183,7 +184,7 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
-				event.setCancelled(onPlayerInteract(player, block, event.getItem()));
+				event.setCancelled(onPlayerInteract(player, null, event.getItem()));
 				return;
 			}
 		}
@@ -295,6 +296,19 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
+		/*
+		 * Test to see if Ender pearls are disabled.
+		 */
+		if (event.getCause() == TeleportCause.ENDER_PEARL) {
+			
+			if (TownySettings.isItemUseId(Material.ENDER_PEARL.getId())) {
+				if (onPlayerInteract(event.getPlayer(), null, new ItemStack(Material.ENDER_PEARL))) {
+					event.setCancelled(true);
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Ender Pearls are disabled!");
+					return;
+				}
+			}
+		}
 		onPlayerMove(event);
 	}
 
