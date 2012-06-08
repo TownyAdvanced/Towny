@@ -1458,3 +1458,5 @@ v0.80.1.7:
 	    Granting '- towny.wild.build.35' allows a player to place wool blocks in the wilderness.
 	    Now you can grant '- towny.wild.destroy.35:1' allowing them to only break brown wool.
 	    This adds support for custom block types used in mods such as IndustrialCraft, Redpower etc.
+v0.80.1.8:
+	- Fix '/plot set' so only the towns mayor or assistants can change town plot types (no outsider mayors).

@@ -263,7 +263,8 @@ public class PlotCommand implements CommandExecutor {
 							return true;
 						}
 
-						if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((plugin.isPermissions()) && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode()))) && !town.isMayor(resident) && !town.hasAssistant(resident))
+						if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && ((plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOTTYPE.getNode()))
+								|| !(town.isMayor(resident) || town.hasAssistant(resident))))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), "change plot types"));
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
