@@ -22,7 +22,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -1192,10 +1191,10 @@ public class TownCommand implements CommandExecutor {
 			try {
 				// only add players with the right permissions.
 				if (plugin.isPermissions()) {
-					if (Bukkit.getServer().matchPlayer(newMember.getName()).isEmpty()) { //Not online
+					if (BukkitTools.getServer().matchPlayer(newMember.getName()).isEmpty()) { //Not online
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
                         invited.remove(newMember);
-					} else if (!TownyUniverse.getPermissionSource().has(Bukkit.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
                         invited.remove(newMember);
 					} else {
@@ -1241,12 +1240,12 @@ public class TownCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveTown(town);
 
         plugin.getTownyUniverse().setChangedNotify(TOWN_ADD_RESIDENT);
-        Bukkit.getPluginManager().callEvent(new TownAddResidentEvent(resident, town));
+        BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, town));
 	}
 
 	private static void townInviteResident(Town town, Resident newMember) throws AlreadyRegisteredException {
 
-		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("Questioner");
+		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
 		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 			Questioner questioner = (Questioner) test;
@@ -1283,7 +1282,7 @@ public class TownCommand implements CommandExecutor {
         TownyUniverse.getDataSource().saveTown(town);
 
         plugin.getTownyUniverse().setChangedNotify(TOWN_REMOVE_RESIDENT);
-        Bukkit.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, town));
+        BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, town));
     }
 
 	public static void townKickResidents(Object sender, Resident resident, Town town, List<Resident> kicking) {
@@ -1314,7 +1313,7 @@ public class TownCommand implements CommandExecutor {
 			String msg = "";
 			for (Resident member : kicking) {
 				msg += member.getName() + ", ";
-				Player p = Bukkit.getServer().getPlayer(member.getName());
+				Player p = BukkitTools.getServer().getPlayer(member.getName());
 				if (p != null)
 					p.sendMessage(String.format(TownySettings.getLangString("msg_kicked_by"), (player != null) ? player.getName() : "CONSOLE"));
 			}
@@ -1435,7 +1434,7 @@ public class TownCommand implements CommandExecutor {
 
 			for (Resident member : toKick) {
 				msg += member.getName() + ", ";
-				p = Bukkit.getServer().getPlayer(member.getName());
+				p = BukkitTools.getServer().getPlayer(member.getName());
 				if (p != null)
 					p.sendMessage(String.format(TownySettings.getLangString("msg_lowered_to_res_by"), player.getName()));
 			}

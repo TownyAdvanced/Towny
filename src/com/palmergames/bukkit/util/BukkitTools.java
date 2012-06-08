@@ -12,6 +12,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -78,6 +79,10 @@ public class BukkitTools {
 		synchronized(server) {
 			return server;
 		}
+	}
+	
+	public static PluginManager getPluginManager() {
+		return getServer().getPluginManager();
 	}
 	
 	public static BukkitScheduler getScheduler() {
