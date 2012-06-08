@@ -96,7 +96,7 @@ public class PlotCommand implements CommandExecutor {
 			/*
 			 * check we have the right permission node for this command.
 			 */
-			if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && ((!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT_COMMAND.getNode(split[0].toLowerCase())))))
+			if ((!TownyUniverse.getPermissionSource().isTownyAdmin(player)) && (plugin.isPermissions() && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOWN_PLOT_COMMAND.getNode(split[0].toLowerCase())))))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			Resident resident;
