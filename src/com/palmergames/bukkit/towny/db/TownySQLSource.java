@@ -236,7 +236,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			while (i.hasNext()) {
 				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
 
-				keycode += "'" + me.getKey() + "'";
+				keycode += "`" + me.getKey() + "`";
 				keycode += "" + (i.hasNext() ? ", " : ")");
 				if (me.getValue() instanceof String)
 					valuecode += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
@@ -246,7 +246,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					valuecode += "'" + me.getValue() + "'";
 				else
 					valuecode += "'" + me.getValue() + "'";
-				valuecode += "" + (i.hasNext() ? "," : ")");
+				valuecode += (i.hasNext() ? "," : ")");
 			}
 			code += keycode;
 			code += valuecode;
@@ -266,7 +266,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			Iterator<Map.Entry<String, Object>> i = set.iterator();
 			while (i.hasNext()) {
 				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
-				code += "'" + me.getKey() + "' = ";
+				code += "`" + me.getKey() + "` = ";
 				if (me.getValue() instanceof String)
 					code += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
 				else if (me.getValue() instanceof Float)
@@ -275,20 +275,20 @@ public class TownySQLSource extends TownyFlatFileSource {
 					code += "'" + me.getValue() + "'";
 				else
 					code += "'" + me.getValue() + "'";
-				code += "" + (i.hasNext() ? "," : "");
+				code += (i.hasNext() ? "," : "");
 			}
 			code += " WHERE ";
 
 			Iterator<String> keys_i = keys.iterator();
 			while (keys_i.hasNext()) {
 				String key = (String) keys_i.next();
-				code += "'" + key + "' = ";
+				code += "`" + key + "` = ";
 				Object v = args.get(key);
 				if (v instanceof String)
 					code += "'" + v + "'";
 				else
 					code += v;
-				code += "" + (keys_i.hasNext() ? " AND " : "");
+				code += (keys_i.hasNext() ? " AND " : "");
 			}
 
 			try {
@@ -321,15 +321,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 			Iterator<Map.Entry<String, Object>> i = set.iterator();
 			while (i.hasNext()) {
 				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
-				wherecode += me.getKey() + " = ";
+				wherecode += "`" + me.getKey() + "` = ";
 				if (me.getValue() instanceof String)
 					wherecode += "'" + me.getValue() + "'";
 				else if (me.getValue() instanceof Float)
 					wherecode += "'" + me.getValue() + "'";
 				else
-					wherecode += "" + me.getValue();
+					wherecode += "'" + me.getValue() + "'";
 
-				wherecode += "" + (i.hasNext() ? " AND " : "");
+				wherecode += (i.hasNext() ? " AND " : "");
 			}
 			Statement s = cntx.createStatement();
 			int rs = s.executeUpdate(wherecode);
