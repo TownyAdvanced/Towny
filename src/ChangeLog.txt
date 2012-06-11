@@ -1463,3 +1463,5 @@ v0.80.1.8:
 	- Stop trying to reset a non-existant cache for the Console when using '/ta town <town> add'
 	- You can now disable Enderpearl teleporting buy adding them to the item_use entry in the config (permissions will override).
 	- Fix '/plot claim' when not using a permission system.
+v0.80.1.9:
+	- Update SQL database drivers to use sqlite instead of h2 when selected.
