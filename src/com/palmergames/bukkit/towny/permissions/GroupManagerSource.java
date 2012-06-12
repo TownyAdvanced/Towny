@@ -155,8 +155,6 @@ public class GroupManagerSource extends TownyPermissionSource {
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMGroupEvent(GMGroupEvent event) {
 
-			Player player = null;
-
 			try {
 				if (PermissionEventEnums.GMGroup_Action.valueOf(event.getAction().name()) != null) {
 
@@ -167,8 +165,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 							if (group.equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
 								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-								plugin.setPlayerMode(player, modes, false);
-								plugin.resetCache(player);
+								plugin.setPlayerMode(toUpdate, modes, false);
+								plugin.resetCache(toUpdate);
 							}
 						}
 					}
@@ -182,8 +180,6 @@ public class GroupManagerSource extends TownyPermissionSource {
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMSystemEvent(GMSystemEvent event) {
 
-			Player player = null;
-
 			try {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
@@ -191,8 +187,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 						if (toUpdate != null) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(player, modes, false);
-							plugin.resetCache(player);
+							plugin.setPlayerMode(toUpdate, modes, false);
+							plugin.resetCache(toUpdate);
 						}
 					}
 

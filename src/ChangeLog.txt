@@ -1465,3 +1465,4 @@ v0.80.1.8:
 	- Fix '/plot claim' when not using a permission system.
 v0.80.1.9:
 	- Update SQL database drivers to use sqlite instead of h2 when selected.
+	- Really fix the NPE when PEX/GM generates a System update event.

@@ -182,8 +182,8 @@ public class PEXSource extends TownyPermissionSource {
 								if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
 									//setup default modes
 									String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-									plugin.setPlayerMode(player, modes, false);
-									plugin.resetCache(player);
+									plugin.setPlayerMode(toUpdate, modes, false);
+									plugin.resetCache(toUpdate);
 								}
 							}
 
@@ -210,8 +210,6 @@ public class PEXSource extends TownyPermissionSource {
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onPermissionSystemEvent(PermissionSystemEvent event) {
 
-			Player player = null;
-
 			try {
 				if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
 					// Update all players.
@@ -219,8 +217,8 @@ public class PEXSource extends TownyPermissionSource {
 						if (toUpdate != null) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(player, modes, false);
-							plugin.resetCache(player);
+							plugin.setPlayerMode(toUpdate, modes, false);
+							plugin.resetCache(toUpdate);
 						}
 					}
 				}
