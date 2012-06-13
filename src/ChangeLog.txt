@@ -1468,3 +1468,7 @@ v0.80.1.9:
 	- Really fix the NPE when PEX/GM generates a System update event.
 v0.80.1.10:
 	- Close all SQL Statement objects as soon as possible to prevent tying up the database (SQLite fix).
+	- Fix for MySQL using tinyint to hold Booleans.
+	    SQL datbase names changed for h2 and SQLite databases.
+	    If you use this version you need to rename your current h2/sqlite database
+	    in the data folder from 'towny' to 'towny.sqldb' or 'towny.h2db'
