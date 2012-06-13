@@ -1466,3 +1466,5 @@ v0.80.1.8:
 v0.80.1.9:
 	- Update SQL database drivers to use sqlite instead of h2 when selected.
 	- Really fix the NPE when PEX/GM generates a System update event.
+v0.80.1.10:
+	- Close all SQL Statement objects as soon as possible to prevent tying up the database (SQLite fix).

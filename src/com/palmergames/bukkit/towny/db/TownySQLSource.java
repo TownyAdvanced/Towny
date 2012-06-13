@@ -139,7 +139,34 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		//String[] types = { "TABLE" };
 
-		String town_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS (" + "`name` VARCHAR(32) NOT NULL," + "`residents` mediumtext," + "`mayor` mediumtext," + "`nation` mediumtext NOT NULL," + "`assistants` text DEFAULT NULL," + "`townBoard` mediumtext DEFAULT NULL," + "`tag` mediumtext DEFAULT NULL," + "`protectionStatus` mediumtext DEFAULT NULL," + "`bonus` int(11) DEFAULT 0," + "`purchased` int(11)  DEFAULT 0," + "`taxpercent` bool NOT NULL DEFAULT '0'," + "`taxes` float DEFAULT 0," + "`hasUpkeep` bool NOT NULL DEFAULT '0'," + "`plotPrice` float DEFAULT NULL," + "`plotTax` float DEFAULT NULL," + "`commercialPlotPrice` float DEFAULT NULL," + "`commercialPlotTax` float NOT NULL," + "`embassyPlotPrice` float NOT NULL," + "`embassyPlotTax` float NOT NULL," + "`open` bool NOT NULL DEFAULT '0'," + "`public` bool NOT NULL DEFAULT '0'," + "`homeblock` mediumtext NOT NULL," + "`townBlocks` mediumtext NOT NULL," + "`spawn` mediumtext NOT NULL," + "`outpostSpawns` mediumtext DEFAULT NULL," + "PRIMARY KEY (`name`)" + ")";
+		String town_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
+				+ "`name` VARCHAR(32) NOT NULL," 
+				+ "`residents` mediumtext,"
+				+ "`mayor` mediumtext," 
+				+ "`nation` mediumtext NOT NULL," 
+				+ "`assistants` text DEFAULT NULL," 
+				+ "`townBoard` mediumtext DEFAULT NULL," 
+				+ "`tag` mediumtext DEFAULT NULL," 
+				+ "`protectionStatus` mediumtext DEFAULT NULL," 
+				+ "`bonus` int(11) DEFAULT 0," 
+				+ "`purchased` int(11)  DEFAULT 0," 
+				+ "`taxpercent` bool NOT NULL DEFAULT '0'," 
+				+ "`taxes` float DEFAULT 0," 
+				+ "`hasUpkeep` bool NOT NULL DEFAULT '0'," 
+				+ "`plotPrice` float DEFAULT NULL," 
+				+ "`plotTax` float DEFAULT NULL," 
+				+ "`commercialPlotPrice` float DEFAULT NULL," 
+				+ "`commercialPlotTax` float NOT NULL," 
+				+ "`embassyPlotPrice` float NOT NULL," 
+				+ "`embassyPlotTax` float NOT NULL," 
+				+ "`open` bool NOT NULL DEFAULT '0'," 
+				+ "`public` bool NOT NULL DEFAULT '0'," 
+				+ "`homeblock` mediumtext NOT NULL,"
+				+ "`townBlocks` mediumtext NOT NULL," 
+				+ "`spawn` mediumtext NOT NULL," 
+				+ "`outpostSpawns` mediumtext DEFAULT NULL," 
+				+ "PRIMARY KEY (`name`)" 
+				+ ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_create);
@@ -148,7 +175,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage());
 		}
 
-		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS (" + " `name` VARCHAR(16) NOT NULL," + "`town` mediumtext," + "`lastOnline` BIGINT NOT NULL," + "`registered` BIGINT NOT NULL," + "`isNPC` bool NOT NULL DEFAULT '0'," + "`title` mediumtext," + "`surname` mediumtext," + "`protectionStatus` mediumtext," + "`friends` mediumtext," + "`townBlocks` mediumtext," + "PRIMARY KEY (`name`)" + ")";
+		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
+				+ " `name` VARCHAR(16) NOT NULL," 
+				+ "`town` mediumtext," 
+				+ "`lastOnline` BIGINT NOT NULL," 
+				+ "`registered` BIGINT NOT NULL," 
+				+ "`isNPC` bool NOT NULL DEFAULT '0'," 
+				+ "`title` mediumtext," 
+				+ "`surname` mediumtext," 
+				+ "`protectionStatus` mediumtext," 
+				+ "`friends` mediumtext," 
+				+ "`townBlocks` mediumtext," 
+				+ "PRIMARY KEY (`name`)" 
+				+ ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_create);
@@ -157,7 +196,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage());
 		}
 
-		String nation_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`capital` mediumtext NOT NULL," + "`assistants` mediumtext NOT NULL," + "`tag` mediumtext NOT NULL," + "`allies` mediumtext NOT NULL," + "`enemies` mediumtext NOT NULL," + "`taxes` float NOT NULL," + "`neutral` bool NOT NULL DEFAULT '0', " + "PRIMARY KEY (`name`)" + ")";
+		String nation_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS ("
+				+ "`name` VARCHAR(32) NOT NULL," 
+				+ "`towns` mediumtext NOT NULL," 
+				+ "`capital` mediumtext NOT NULL," 
+				+ "`assistants` mediumtext NOT NULL," 
+				+ "`tag` mediumtext NOT NULL," 
+				+ "`allies` mediumtext NOT NULL," 
+				+ "`enemies` mediumtext NOT NULL," 
+				+ "`taxes` float NOT NULL," 
+				+ "`neutral` bool NOT NULL DEFAULT '0', " 
+				+ "PRIMARY KEY (`name`)" 
+				+ ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(nation_create);
@@ -166,7 +216,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
 		}
 
-		String townblock_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS (" + "`world` VARCHAR(32) NOT NULL," + "`x` bigint(20) NOT NULL," + "`z` bigint(20) NOT NULL," + "`permissions` mediumtext NOT NULL," + "`locked` bool NOT NULL DEFAULT '0'," + "`changed` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`world`,`x`,`z`)" + ")";
+		String townblock_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
+				+ "`world` VARCHAR(32) NOT NULL," 
+				+ "`x` bigint(20) NOT NULL," 
+				+ "`z` bigint(20) NOT NULL," 
+				+ "`permissions` mediumtext NOT NULL," 
+				+ "`locked` bool NOT NULL DEFAULT '0',"
+				+ "`changed` bool NOT NULL DEFAULT '0'," 
+				+ "PRIMARY KEY (`world`,`x`,`z`)" 
+				+ ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(townblock_create);
@@ -175,7 +233,40 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
 		}
 
-		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`claimable` bool NOT NULL DEFAULT '0'," + "`pvp` bool NOT NULL DEFAULT '0'," + "`forcepvp` bool NOT NULL DEFAULT '0'," + "`forcetownmobs` bool NOT NULL DEFAULT '0'," + "`worldmobs` bool NOT NULL DEFAULT '0'," + "`firespread` bool NOT NULL DEFAULT '0'," + "`forcefirespread` bool NOT NULL DEFAULT '0'," + "`explosions` bool NOT NULL DEFAULT '0'," + "`forceexplosions` bool NOT NULL DEFAULT '0'," + "`endermanprotect` bool NOT NULL DEFAULT '0'," + "`disableplayertrample` bool NOT NULL DEFAULT '0'," + "`disablecreaturetrample` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneName` mediumtext NOT NULL," + "`unclaimedZoneIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementDeleteIds` mediumtext NOT NULL," + "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementMayorDelete` mediumtext NOT NULL," + "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'," + "`plotManagementRevertSpeed` long NOT NULL," + "`plotManagementIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'," + "`plotManagementWildRegenEntities` mediumtext NOT NULL," + "`plotManagementWildRegenSpeed` long NOT NULL," + "`usingTowny` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`name`)" + ")";
+		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" 
+				+ "`name` VARCHAR(32) NOT NULL," 
+				+ "`towns` mediumtext NOT NULL," 
+				+ "`claimable` bool NOT NULL DEFAULT '0'," 
+				+ "`pvp` bool NOT NULL DEFAULT '0'," 
+				+ "`forcepvp` bool NOT NULL DEFAULT '0'," 
+				+ "`forcetownmobs` bool NOT NULL DEFAULT '0'," 
+				+ "`worldmobs` bool NOT NULL DEFAULT '0'," 
+				+ "`firespread` bool NOT NULL DEFAULT '0'," 
+				+ "`forcefirespread` bool NOT NULL DEFAULT '0'," 
+				+ "`explosions` bool NOT NULL DEFAULT '0'," 
+				+ "`forceexplosions` bool NOT NULL DEFAULT '0'," 
+				+ "`endermanprotect` bool NOT NULL DEFAULT '0'," 
+				+ "`disableplayertrample` bool NOT NULL DEFAULT '0'," 
+				+ "`disablecreaturetrample` bool NOT NULL DEFAULT '0'," 
+				+ "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'," 
+				+ "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'," 
+				+ "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'," 
+				+ "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'," 
+				+ "`unclaimedZoneName` mediumtext NOT NULL," 
+				+ "`unclaimedZoneIgnoreIds` mediumtext NOT NULL," 
+				+ "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'," 
+				+ "`plotManagementDeleteIds` mediumtext NOT NULL," 
+				+ "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'," 
+				+ "`plotManagementMayorDelete` mediumtext NOT NULL," 
+				+ "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'," 
+				+ "`plotManagementRevertSpeed` long NOT NULL," 
+				+ "`plotManagementIgnoreIds` mediumtext NOT NULL," 
+				+ "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'," 
+				+ "`plotManagementWildRegenEntities` mediumtext NOT NULL," 
+				+ "`plotManagementWildRegenSpeed` long NOT NULL," 
+				+ "`usingTowny` bool NOT NULL DEFAULT '0'," 
+				+ "PRIMARY KEY (`name`)" 
+				+ ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(world_create);
@@ -240,10 +331,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 				keycode += "" + (i.hasNext() ? ", " : ")");
 				if (me.getValue() instanceof String)
 					valuecode += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
-				else if (me.getValue() instanceof Double)
-					valuecode += "'" + me.getValue() + "'";
-				else if (me.getValue() instanceof Float)
-					valuecode += "'" + me.getValue() + "'";
 				else
 					valuecode += "'" + me.getValue() + "'";
 				valuecode += (i.hasNext() ? "," : ")");
@@ -253,6 +340,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			try {
 				s = cntx.createStatement();
 				int rs = s.executeUpdate(code);
+				s.close();
 				if (rs == 0)
 					return false;
 				return true;
@@ -269,10 +357,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 				code += "`" + me.getKey() + "` = ";
 				if (me.getValue() instanceof String)
 					code += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
-				else if (me.getValue() instanceof Float)
-					code += "'" + me.getValue() + "'";
-				else if (me.getValue() instanceof Double)
-					code += "'" + me.getValue() + "'";
 				else
 					code += "'" + me.getValue() + "'";
 				code += (i.hasNext() ? "," : "");
@@ -294,6 +378,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			try {
 				s = cntx.createStatement();
 				int rs = s.executeUpdate(code);
+				s.close();
 				if (rs == 0) // if entry doesn't exist then try to insert 
 					return UpdateDB(tb_name, args, null);
 				return true;
@@ -323,9 +408,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
 				wherecode += "`" + me.getKey() + "` = ";
 				if (me.getValue() instanceof String)
-					wherecode += "'" + me.getValue() + "'";
-				else if (me.getValue() instanceof Float)
-					wherecode += "'" + me.getValue() + "'";
+					wherecode += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
 				else
 					wherecode += "'" + me.getValue() + "'";
 
@@ -333,6 +416,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			}
 			Statement s = cntx.createStatement();
 			int rs = s.executeUpdate(wherecode);
+			s.close();
 			if (rs == 0) {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
 			}
@@ -355,6 +439,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
+			s.close();
 			while (rs.next()) {
 				try {
 					newResident(rs.getString("name"));
@@ -379,6 +464,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
+			s.close();
 			while (rs.next()) {
 				try {
 					newTown(rs.getString("name"));
@@ -404,6 +490,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
+			s.close();
 			while (rs.next()) {
 				try {
 					newNation(rs.getString("name"));
@@ -430,6 +517,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
+			s.close();
 			while (rs.next()) {
 				try {
 					newWorld(rs.getString("name"));
@@ -470,6 +558,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT " + " lastOnline,registered,isNPC,title,surname,town,friends,protectionStatus,townBlocks" + " FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
+			s.close();
 			while (rs.next()) {
 				try {
 					resident.setLastOnline(rs.getLong("lastOnline"));
@@ -551,6 +640,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT " + "residents,mayor,assistants,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" + ",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax" + ",open,public,townBlocks,homeBlock,spawn,outpostSpawns" + " FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
+			s.close();
 			while (rs.next()) {
 
 				line = rs.getString("residents");
@@ -700,6 +790,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT towns,capital,assistants,tag,allies,enemies,taxes,neutral FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
+			s.close();
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
@@ -776,6 +867,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");
+			s.close();
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
@@ -1055,6 +1147,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT " + "permissions,locked,changed" + " FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
+				s.close();
 				while (rs.next()) {
 					line = rs.getString("permissions");
 					if (line != null)
