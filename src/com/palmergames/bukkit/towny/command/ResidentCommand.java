@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -124,11 +125,44 @@ public class ResidentCommand implements CommandExecutor {
 
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			resident.toggleMode(newSplit, true);
+			
+			TownyPermission perm = resident.getPermissions();
+			
+			if (newSplit[0].equalsIgnoreCase("pvp")) {
+				perm.pvp = !perm.pvp;
+			} else if (newSplit[0].equalsIgnoreCase("fire")) {
+				perm.fire = !perm.fire;
+			} else if (newSplit[0].equalsIgnoreCase("explosion")) {
+				perm.explosion = !perm.explosion;
+			} else if (newSplit[0].equalsIgnoreCase("mobs")) {
+				perm.mobs = !perm.mobs;
+			} else {
+			
+				resident.toggleMode(newSplit, true);
+				return;
+			}
+			
+			notifyPerms(player,perm);
+			TownyUniverse.getDataSource().saveResident(resident);
+			
 		} catch (NotRegisteredException e) {
 			// unknown resident
 			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
 		}
+		
+	}
+	
+	/**
+	 * Show the player the new Permission settings after the toggle.
+	 * 
+	 * @param player
+	 * @param perm
+	 */
+	private void notifyPerms(Player player, TownyPermission perm) {
+		
+		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		
 		
 	}
 
