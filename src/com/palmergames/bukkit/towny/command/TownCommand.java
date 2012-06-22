@@ -28,6 +28,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
@@ -1085,7 +1086,7 @@ public class TownCommand implements CommandExecutor {
 					player.getVehicle().eject();
 				if (!chunk.isLoaded())
 					chunk.load();
-				player.teleport(spawnLoc);
+				player.teleport(spawnLoc, TeleportCause.COMMAND);
 				return;
 			}
 
@@ -1100,7 +1101,7 @@ public class TownCommand implements CommandExecutor {
 						player.getVehicle().eject();
 					if (!chunk.isLoaded())
 						chunk.load();
-					player.teleport(spawnLoc);
+					player.teleport(spawnLoc, TeleportCause.COMMAND);
 				}
 			}
 		} catch (TownyException e) {
