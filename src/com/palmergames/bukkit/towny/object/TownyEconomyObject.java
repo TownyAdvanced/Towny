@@ -35,11 +35,6 @@ public class TownyEconomyObject extends TownyObject {
 		return payTo(amount, SERVER_ACCOUNT, reason);
 	}
 
-	public boolean pay(double amount) throws EconomyException {
-
-		return pay(amount, null);
-	}
-
 	private boolean _pay(double amount) throws EconomyException {
 
 		if (canPayFromHoldings(amount)) {
@@ -57,14 +52,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean collect(double amount, String reason) throws EconomyException {
-		boolean collected = _collect(amount);
-		if (collected)
-			TownyLogger.logMoneyTransaction(null, amount, this, reason);
-		return collected;
-	}
-
-	public boolean collect(double amount) throws EconomyException {
-		return collect(amount, null);
+		return SERVER_ACCOUNT.payTo(amount, this, reason);
 	}
 
 	private boolean _collect(double amount) throws EconomyException {
@@ -86,11 +74,6 @@ public class TownyEconomyObject extends TownyObject {
 		if (payed)
 			TownyLogger.logMoneyTransaction(this, amount, collector, reason);
 		return payed;
-	}
-
-	public boolean payTo(double amount, TownyEconomyObject collector) throws EconomyException {
-
-		return payTo(amount, collector, null);
 	}
 
 	private boolean _payTo(double amount, TownyEconomyObject collector) throws EconomyException {
@@ -129,20 +112,24 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param amount
 	 * @param reason
 	 */
-	public void setBalance(double amount, String reason) {
-
-		setBalance(amount);
-		TownyLogger.logMoneyTransaction(null, amount, this, reason);
+	public boolean setBalance(double amount, String reason) throws EconomyException {
+		double balance = getHoldingBalance();
+		double diff = amount - balance;
+		if (diff > 0) {
+			// Adding to
+			return collect(diff, reason);
+		} else if (balance > amount) {
+			// Subtracting from
+			diff = -diff;
+			return pay(diff, reason);
+		} else {
+			// Same amount, do nothing.
+			return true;
+		}
 	}
 
-	/**
-	 * Set balance without logging the action
-	 * 
-	 * @param amount
-	 */
-	public void setBalance(double amount) {
-
-		TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
+	private boolean _setBalance(double amount) {
+		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
 	}
 
 	public double getHoldingBalance() throws EconomyException {
