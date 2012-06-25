@@ -6,6 +6,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.wallgen.Wall;
 import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
+import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -15,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
+
+	private static final String ECONOMY_ACCOUNT_PREFIX = "town-";
 
 	private List<Resident> residents = new ArrayList<Resident>();
 	private List<Resident> assistants = new ArrayList<Resident>();
@@ -851,4 +854,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
         }
     }
 
+	@Override
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+	}
 }

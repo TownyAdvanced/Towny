@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.StringMgmt;
 import org.bukkit.World;
 
 /**
@@ -14,9 +13,6 @@ import org.bukkit.World;
  * 
  */
 public class TownyEconomyObject extends TownyObject {
-
-	private static final String townAccountPrefix = "town-";
-	private static final String nationAccountPrefix = "nation-";
 
 	/**
 	 * Tries to pay from the players holdings
@@ -105,13 +101,7 @@ public class TownyEconomyObject extends TownyObject {
 	 */
 	public String getEconomyName() {
 
-		// TODO: Make this less hard coded.
-		if (this instanceof Nation)
-			return StringMgmt.trimMaxLength(nationAccountPrefix + getName(), 32);
-		else if (this instanceof Town)
-			return StringMgmt.trimMaxLength(townAccountPrefix + getName(), 32);
-		else
-			return getName();
+		return getName();
 	}
 
 	/**
