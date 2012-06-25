@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
+
+	private static final String ECONOMY_ACCOUNT_PREFIX = "nation-";
 
 	private List<Resident> assistants = new ArrayList<Resident>();
 	private List<Town> towns = new ArrayList<Town>();
@@ -448,4 +451,10 @@ public class Nation extends TownyEconomyObject implements ResidentList {
             return super.getBukkitWorld();
         }
     }
+
+
+	@Override
+	public String getEconomyName() {
+		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+	}
 }
