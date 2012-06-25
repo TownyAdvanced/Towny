@@ -1757,13 +1757,7 @@ public class TownCommand implements CommandExecutor {
 
 				try {
 					double cost = blockCost * selection.size();
-					TownyEconomyObject serverAccount = new TownyEconomyObject() {
-						@Override
-						public String getName() {
-							return "towny-server";
-						}
-					};
-					if (TownySettings.isUsingEconomy() && !town.payTo(cost, serverAccount, String.format("Town Claim (%d)", selection.size())))
+					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");

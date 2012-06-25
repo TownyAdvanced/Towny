@@ -865,6 +865,10 @@ public enum ConfigNodes {
 			"economy.banks.nation_allow_withdrawls",
 			"true",
 			"# Set to true to allow withdrawls from nation banks"),
+	ECO_BANK_NAMES_SERVER(
+			"economy.banks.names.server",
+			"towny-server",
+			"# The name of the account that all money that normally disapears goes into."),
 
 	ECO_DAILY_TAXES("economy.daily_taxes", "", ""),
 	ECO_DAILY_TAXES_ENABLED(
