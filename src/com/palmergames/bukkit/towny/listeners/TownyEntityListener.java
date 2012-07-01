@@ -148,9 +148,14 @@ public class TownyEntityListener implements Listener {
 
 		// Not Wartime
 		if (!TownyUniverse.isWarTime())
-			for (LivingEntity defender : affectedEntities)
-				if (CombatUtil.preventDamageCall(attacker, defender))
-					event.setIntensity(defender, -1.0);
+			for (LivingEntity defender : affectedEntities) {
+				/*
+				 * Don't block potion use on ourselves.
+				 */
+				if (attacker != defender)
+					if (CombatUtil.preventDamageCall(attacker, defender))
+						event.setIntensity(defender, -1.0);
+			}
 
 	}
 
