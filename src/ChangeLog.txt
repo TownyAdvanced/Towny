@@ -1474,3 +1474,5 @@ v0.80.1.10:
 	    in the data folder from 'towny' to 'towny.sqldb' or 'towny.h2db'
 v0.80.1.11:
 	- Added the missing code to handle '/resident toggle {pvp/fire/explosion/mob}'.
+v0.80.1.12:
+	- Allow your own potions to affect you, even if you have friendly fire turned off.

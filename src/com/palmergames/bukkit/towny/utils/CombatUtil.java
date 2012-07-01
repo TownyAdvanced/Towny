@@ -42,7 +42,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(Entity attacker, Entity defender) {
-
+		
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
 
@@ -239,6 +239,12 @@ public class CombatUtil {
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
 
+		/*
+		 * Don't block potion use (self damaging) on ourselves.
+		 */
+		if (attacker == defender)
+			return false;
+		
 		if ((attacker != null) && (defender != null))
 			if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 				try {
