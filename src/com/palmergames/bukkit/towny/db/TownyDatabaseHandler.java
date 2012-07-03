@@ -510,7 +510,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 
+		
+		
 		for (Town town : toSave) {
+			
+			/*
+			 * Remove all resident titles before saving the town itself.
+			 */
+			List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
+			
+			for (Resident res : titleRemove) {
+				if (res.hasTitle() || res.hasSurname()) {
+					res.setTitle("");
+					res.setSurname("");
+					saveResident(res);
+				}
+			}
+
 			saveTown(town);
 		}
 

@@ -1480,3 +1480,4 @@ v0.80.1.12:
 	  (May not work with PEX as PEX doesn't return the correct value for 'isPermissionSet' on a negated permission).
 	- Save the Nation when removing a resident from a town (in case they were an assistant).
 	- Only show a resident as Online if the requesting player is able to see them (allow for vanish).
+	- Remove all resident titles/surnames when removing a nation.
