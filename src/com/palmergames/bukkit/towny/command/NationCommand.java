@@ -348,6 +348,19 @@ public class NationCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
 
 			nation.removeTown(town);
+			
+			/*
+			 * Remove all resident titles before saving the town itself.
+			 */
+			List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
+			
+			for (Resident res : titleRemove) {
+				if (res.hasTitle() || res.hasSurname()) {
+					res.setTitle("");
+					res.setSurname("");
+					TownyUniverse.getDataSource().saveResident(res);
+				}
+			}
 
 			TownyUniverse.getDataSource().saveTown(town);
 			TownyUniverse.getDataSource().saveNation(nation);
