@@ -227,6 +227,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			if (town != null) {
 				town.removeResident(resident);
+				if (town.hasNation())
+					saveNation(town.getNation());
+				
 				saveTown(town);
 			}
 			resident.clear();
