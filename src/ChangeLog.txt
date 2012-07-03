@@ -1476,3 +1476,5 @@ v0.80.1.11:
 	- Added the missing code to handle '/resident toggle {pvp/fire/explosion/mob}'.
 v0.80.1.12:
 	- Allow your own potions to affect you, even if you have friendly fire turned off.
+	- Simplify permission negation so you don't have to negate every data type of a block.
+	  (May not work with PEX as PEX doesn't return the correct value for 'isPermissionSet' on a negated permission).

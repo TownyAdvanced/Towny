@@ -54,11 +54,11 @@ public abstract class TownyPermissionSource {
 	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 		return hasAllTownOverride(player, blockId, (byte)0, action);
 	}
+
 	/*
 	 * 
 	 */
-	
-	
+
 	/**
 	 * Test if the player has a wild override to permit this action.
 	 * 
@@ -71,13 +71,28 @@ public abstract class TownyPermissionSource {
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, int blockId, byte data, TownyPermission.ActionType action) {
 
-		//check for permissions
+		// check for permissions
 		if (plugin.isPermissions()) {
-			if (has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId + ":" + data))
-					|| has(player, PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId)))
+
+			String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId);
+			String dataPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + blockId + ":" + data);
+
+			//boolean blockRegistered = player.isPermissionSet(blockPerm);
+			boolean dataRegistered = player.isPermissionSet(dataPerm);
+
+			boolean hasBlock = has(player, blockPerm);
+			boolean hasData = has(player, dataPerm);
+
+			/*
+			 * If the player has the data node permission registered directly
+			 *  or
+			 * the player has the block permission and the data node isn't registered
+			 */
+			if ((hasData && dataRegistered) || (hasBlock && !dataRegistered))
 				return true;
-			
-			// No node set but we are using permissions so check world settings (without UnclaimedIgnoreId's).
+
+			// No node set but we are using permissions so check world settings
+			// (without UnclaimedIgnoreId's).
 			switch (action) {
 
 			case BUILD:
@@ -89,13 +104,12 @@ public abstract class TownyPermissionSource {
 			case ITEM_USE:
 				return world.getUnclaimedZoneItemUse();
 			}
-			
+
 		} else {
 			/*
 			 * Not using a permissions plugin
-			 * 
 			 */
-			
+
 			// Allow ops all access when no permissions
 			if (isTownyAdmin(player))
 				return true;
@@ -130,10 +144,26 @@ public abstract class TownyPermissionSource {
 
 		//check for permissions
 		if (plugin.isPermissions()) {
-			if ((has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId +  ":" + data)))
-					|| has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId))
-					|| hasAllTownOverride(player, blockId, data, action))
+			
+			String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId);
+			String dataPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + blockId +  ":" + data);
+
+			//boolean blockRegistered = player.isPermissionSet(blockPerm);
+			boolean dataRegistered = player.isPermissionSet(dataPerm);
+
+			boolean hasBlock = has(player, blockPerm);
+			boolean hasData = has(player, dataPerm);
+
+			/*
+			 * If the player has the data node permission registered directly
+			 *  or
+			 * the player has the block permission and the data node isn't registered
+			 *  or
+			 * the player has an All town Override
+			 */
+			if ((hasData && dataRegistered) || (hasBlock && !dataRegistered)|| hasAllTownOverride(player, blockId, data, action))
 				return true;
+			
 		} else {
 
 			// Allow ops all access when no permissions
@@ -157,9 +187,25 @@ public abstract class TownyPermissionSource {
 
 		//check for permissions
 		if (plugin.isPermissions()) {
-			if (has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId + ":" + data))
-					|| has(player, PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId)))
+			
+			String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId);
+			String dataPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + blockId + ":" + data);
+
+			//boolean blockRegistered = player.isPermissionSet(blockPerm);
+			boolean dataRegistered = player.isPermissionSet(dataPerm);
+
+			boolean hasBlock = has(player, blockPerm);
+			boolean hasData = has(player, dataPerm);
+
+			/*
+			 * If the player has the data node permission registered directly
+			 *  or
+			 * the player has the block permission and the data node isn't registered
+			 */
+			if ((hasData && dataRegistered) || (hasBlock && !dataRegistered))
 				return true;
+			
+			
 		} else {
 
 			// Allow ops all access when no permissions
