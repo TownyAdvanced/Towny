@@ -78,7 +78,7 @@ public class ResidentCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident));
+				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_registered"));
 			}
@@ -109,7 +109,7 @@ public class ResidentCommand implements CommandExecutor {
 		} else
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident));
+				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
