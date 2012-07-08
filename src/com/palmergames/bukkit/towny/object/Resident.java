@@ -21,7 +21,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 	private List<Resident> friends = new ArrayList<Resident>();
 	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
-	private Town town;
+	private Town town = null;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
 	private String title, surname;
@@ -114,7 +114,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 	public boolean hasTown() {
 
-		return !(town == null);
+		return town != null;
 	}
 
 	public boolean hasNation() {

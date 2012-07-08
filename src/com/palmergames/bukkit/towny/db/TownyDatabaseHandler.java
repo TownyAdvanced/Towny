@@ -98,17 +98,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (!hasResident(name)) {
-			if (TownySettings.isFakeResident(name)) {
-				
-				Resident resident = new Resident(name);
-				resident.setNPC(true);
-				
-				return resident;
-				
-			} else
-				throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-		}
+			
+			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+			
+		} else if (TownySettings.isFakeResident(name)) {
 
+			Resident resident = new Resident(name);
+			resident.setNPC(true);
+
+			return resident;
+
+		} 
+			
 		return universe.getResidentMap().get(name);
 
 	}
