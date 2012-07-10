@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
@@ -153,6 +154,8 @@ public abstract class TownyPermissionSource {
 
 			boolean hasBlock = has(player, blockPerm);
 			boolean hasData = has(player, dataPerm);
+			
+			TownyMessaging.sendDebugMsg(player.getName() + " - owntown (Block: " + hasBlock + " - Data: " + hasData + ":" + (dataRegistered? "Registered":"None"));
 
 			/*
 			 * If the player has the data node permission registered directly
@@ -196,6 +199,9 @@ public abstract class TownyPermissionSource {
 
 			boolean hasBlock = has(player, blockPerm);
 			boolean hasData = has(player, dataPerm);
+			
+			TownyMessaging.sendDebugMsg(player.getName() + " - alltown (Block: " + hasBlock + " - Data: " + hasData + ":" + (dataRegistered? "Registered":"None"));
+
 
 			/*
 			 * If the player has the data node permission registered directly
