@@ -1484,3 +1484,5 @@ v0.80.1.12:
 	- Remove all resident titles/surnames when a town leaves a nation.
 v0.80.1.13:
 	- Fix NullPointerException when handling fake players on modded servers (aka. Tekkit).
+v0.81.0.0:
+	- Release.
