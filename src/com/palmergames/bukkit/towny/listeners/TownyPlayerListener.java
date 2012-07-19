@@ -116,10 +116,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		Player player = event.getPlayer();
-		Block block = event.getBlockClicked();
-		
-		event.setCancelled(onPlayerInteract(player, block, event.getItemStack()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
 		
 	}
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -130,10 +127,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		Player player = event.getPlayer();
-		Block block = event.getBlockClicked();
-		
-		event.setCancelled(onPlayerInteract(player, block, event.getItemStack()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
 		
 	}
 
