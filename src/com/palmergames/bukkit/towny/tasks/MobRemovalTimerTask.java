@@ -82,6 +82,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				continue;
 			}
 
+			// Filter worlds not using towny.
+			if (townyWorld.isUsingTowny())
+				continue;
+
 			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
