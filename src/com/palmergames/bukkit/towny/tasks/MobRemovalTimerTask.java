@@ -18,8 +18,8 @@ import java.util.List;
 public class MobRemovalTimerTask extends TownyTimerTask {
 
 	private Server server;
-	public static List<Class> classesOfWorldMobsToRemove = new ArrayList<Class>();
-	public static List<Class> classesOfTownMobsToRemove = new ArrayList<Class>();
+	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<Class<?>>();
+	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<Class<?>>();
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 
@@ -30,14 +30,14 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		classesOfTownMobsToRemove = parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
 	}
 
-	public static List<Class> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {
-		List<Class> livingEntityClasses = new ArrayList<Class>();
+	public static List<Class<?>> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {
+		List<Class<?>> livingEntityClasses = new ArrayList<Class<?>>();
 		for (String mobClassName : mobClassNames) {
 			if (mobClassName.isEmpty())
 				continue;
 
 			try {
-				Class c = Class.forName("org.bukkit.entity." + mobClassName);
+				Class<?> c = Class.forName("org.bukkit.entity." + mobClassName);
 				if (JavaUtil.isSubInterface(LivingEntity.class, c))
 					livingEntityClasses.add(c);
 				else
@@ -59,8 +59,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		return isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
 	}
 
-	public static boolean isInstanceOfAny(List<Class> classList, Object obj) {
-		for (Class c : classList)
+	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
+		for (Class<?> c : classesOfWorldMobsToRemove2)
 			if (c.isInstance(obj))
 				return true;
 		return false;
