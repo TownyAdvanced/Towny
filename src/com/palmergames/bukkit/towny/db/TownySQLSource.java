@@ -591,7 +591,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			return false;
 		try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT " + " lastOnline,registered,isNPC,title,surname,town,friends,protectionStatus,townBlocks" + " FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
+			ResultSet rs = s.executeQuery("SELECT " + " lastOnline,registered,isNPC,title,surname,town,town-ranks,nation-ranks,friends,protectionStatus,townBlocks" + " FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
 			
 			while (rs.next()) {
 				try {
