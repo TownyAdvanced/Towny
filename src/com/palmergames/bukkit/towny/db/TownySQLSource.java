@@ -591,7 +591,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			return false;
 		try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT " + " lastOnline,registered,isNPC,title,surname,town,town-ranks,nation-ranks,friends,protectionStatus,townBlocks" + " FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
+			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
 			
 			while (rs.next()) {
 				try {
@@ -687,7 +687,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT " + "residents,mayor,townBoard,nation,tag,protectionStatus,bonus,purchased,plotPrice,hasUpkeep,taxpercent,taxes" + ",plotTax,commercialPlotPrice,commercialPlotTax,embassyPlotPrice,embassyPlotTax" + ",open,public,townBlocks,homeBlock,spawn,outpostSpawns" + " FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
+			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
 			
 			while (rs.next()) {
 
@@ -839,7 +839,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			return false;
 		try {
 			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT towns,capital,tag,allies,enemies,taxes,neutral FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
+			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
 			
 			while (rs.next()) {
 				line = rs.getString("towns");
@@ -1200,7 +1200,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			boolean set = false;
 			try {
 				Statement s = cntx.createStatement();
-				rs = s.executeQuery("SELECT " + "permissions,locked,changed" + " FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
+				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
 				
 				while (rs.next()) {
 					line = rs.getString("permissions");
