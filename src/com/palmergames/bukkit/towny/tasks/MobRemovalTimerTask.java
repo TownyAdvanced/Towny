@@ -18,8 +18,8 @@ import java.util.List;
 public class MobRemovalTimerTask extends TownyTimerTask {
 
 	private Server server;
-	public List<Class> classesOfWorldMobsToRemove = new ArrayList<Class>();
-	public List<Class> classesOfTownMobsToRemove = new ArrayList<Class>();
+	public static List<Class> classesOfWorldMobsToRemove = new ArrayList<Class>();
+	public static List<Class> classesOfTownMobsToRemove = new ArrayList<Class>();
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 
@@ -33,7 +33,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	public static List<Class> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {
 		List<Class> livingEntityClasses = new ArrayList<Class>();
 		for (String mobClassName : mobClassNames) {
-			if (mobClassName.length() == 0) // String.isEmpty()
+			if (mobClassName.isEmpty())
 				continue;
 
 			try {
@@ -51,11 +51,11 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		return livingEntityClasses;
 	}
 
-	public boolean isRemovingWorldEntity(LivingEntity livingEntity) {
+	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
 		return isInstanceOfAny(classesOfWorldMobsToRemove, livingEntity);
 	}
 
-	public boolean isRemovingTownEntity(LivingEntity livingEntity) {
+	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
 		return isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
 	}
 
@@ -83,7 +83,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			}
 
 			// Filter worlds not using towny.
-			if (townyWorld.isUsingTowny())
+			if (!townyWorld.isUsingTowny())
 				continue;
 
 			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
@@ -144,11 +144,11 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 				livingEntitiesToRemove.add(livingEntity);
 			}
+		}
 
-			for (LivingEntity livingEntity : livingEntitiesToRemove) {
-				TownyMessaging.sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
-				livingEntity.remove();
-			}
+		for (LivingEntity livingEntity : livingEntitiesToRemove) {
+			TownyMessaging.sendDebugMsg("MobRemoval Removed: " + livingEntity.toString());
+			livingEntity.remove();
 		}
 	}
 }
