@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.questioner.JoinNationTask;
 import com.palmergames.bukkit.towny.questioner.ResidentNationQuestionTask;
 import com.palmergames.bukkit.util.ChatTools;
@@ -164,7 +165,9 @@ public class NationCommand implements CommandExecutor {
 		} else {
 			String[] newSplit = StringMgmt.remFirstArg(split);
 
-			if (split[0].equalsIgnoreCase("king"))
+			if (split[0].equalsIgnoreCase("rank"))
+				nationRank(player, newSplit);
+			else if (split[0].equalsIgnoreCase("king"))
 				nationKing(player, newSplit);
 			else if (split[0].equalsIgnoreCase("add"))
 				nationAdd(player, newSplit);
@@ -199,6 +202,102 @@ public class NationCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 				}
 		}
+	}
+	
+	public void nationRank(Player player, String[] split) {
+		
+		if (split.length == 0) {
+			//Help output.
+			player.sendMessage(ChatTools.formatTitle("/nation rank"));
+			player.sendMessage(ChatTools.formatCommand("", "/nation rank", "add/remove [resident] rank", ""));
+			
+		} else {
+			
+			Resident resident, target;
+			Town town = null;
+			Town targetTown = null;
+			String rank;
+
+			/*
+			 * Does the command have enough arguments?
+			 */
+			if (split.length < 3) {
+				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [resident] [rank]");
+				return;
+			}
+			
+			try {
+				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				target = TownyUniverse.getDataSource().getResident(split[1]);
+				town = resident.getTown();
+				targetTown = target.getTown();
+				
+				if (town.getNation() != targetTown.getNation())
+					throw new TownyException("This resident is not a member of your Town!");
+
+			} catch (TownyException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				return;
+			}
+			
+			rank = split[2].toLowerCase();
+			/*
+			 * Is this a known rank?
+			 */
+			if (!TownyPerms.getNationRanks().contains(rank)) {
+				TownyMessaging.sendErrorMsg(player, "Unknown rank '" + rank + "'. Permissible ranks are :- " + StringMgmt.join(TownyPerms.getNationRanks(), ",") + ".");
+				return;
+			}
+			/*
+			 * Only allow the player to assign ranks if they have the grant perm for it.
+			 */
+			if (!TownyUniverse.getPermissionSource().has(player, "towny.nation.grant-" + rank)) {
+				TownyMessaging.sendErrorMsg(player, "You do not have permission to grant this rank.");
+				return;
+			}		
+				
+			if (split[0].equalsIgnoreCase("add")) {
+				try {
+					if (target.addNationRank(rank)) {
+						TownyMessaging.sendMsg(target, "You have been granted the Nation rank of '" + rank + "'.");
+						TownyMessaging.sendMsg(player, "You have granted the Nation rank of '" + rank + "' to " + target.getName() + ".");
+					} else {
+						// Not in a nation or Rank doesn't exist
+						TownyMessaging.sendErrorMsg(player, "That resident isn't a member of a town!");
+						return;
+					}
+				} catch (AlreadyRegisteredException e) {
+					// Must already have this rank
+					TownyMessaging.sendMsg(player, target.getName() + " already holds this Nation rank.");
+					return;
+				}
+				
+			} else if (split[0].equalsIgnoreCase("remove")) {
+				try {
+					if (target.removeTownRank(rank)) {
+						TownyMessaging.sendMsg(target, "You have been demoted from the Nation rank of '" + rank + "'.");
+						TownyMessaging.sendMsg(player, "You have removed the Nation rank of '" + rank + "' from " + target.getName() + ".");
+					}
+				} catch (NotRegisteredException e) {
+					// Must already have this rank
+					TownyMessaging.sendMsg(player, target.getName() + " doesn't hold this Nation rank.");
+					return;
+				}
+				
+				
+			} else {
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
+				return;
+			}
+			
+			/*
+			 * If we got here we have made a change
+			 * Save the altered resident data.
+			 */
+			TownyUniverse.getDataSource().saveResident(target);
+			
+		}
+		
 	}
 
 	private void nationWithdraw(Player player, int amount) {
@@ -632,7 +731,8 @@ public class NationCommand implements CommandExecutor {
 		ArrayList<Resident> remove = new ArrayList<Resident>();
 		for (Resident newMember : invited)
 			try {
-				nation.addAssistant(newMember);
+				//nation.addAssistant(newMember);
+				newMember.addNationRank("assistant");
 				plugin.deleteCache(newMember.getName());
 				TownyUniverse.getDataSource().saveResident(newMember);
 			} catch (AlreadyRegisteredException e) {
@@ -686,7 +786,8 @@ public class NationCommand implements CommandExecutor {
 		ArrayList<Resident> remove = new ArrayList<Resident>();
 		for (Resident member : kicking)
 			try {
-				nation.removeAssistant(member);
+				//nation.removeAssistant(member);
+				member.removeNationRank("assistant");
 				plugin.deleteCache(member.getName());
 				TownyUniverse.getDataSource().saveResident(member);
 				TownyUniverse.getDataSource().saveNation(nation);

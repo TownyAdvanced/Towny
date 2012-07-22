@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -80,6 +81,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		plugin.deleteCache(event.getPlayer());
+		TownyPerms.removeAttachment(event.getPlayer().getName());
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -304,6 +306,12 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 		onPlayerMove(event);
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerChangeWorld(PlayerChangedWorldEvent event) { // has changed worlds
+
+		TownyPerms.assignPermissions(null, event.getPlayer());
 	}
 
 	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {

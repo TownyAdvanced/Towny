@@ -85,6 +85,7 @@ public class Towny extends JavaPlugin {
 		TownyFormatter.initialize(this);
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
+		TownyPerms.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces

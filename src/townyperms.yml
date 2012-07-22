@@ -1,0 +1,79 @@
+# This file contains custom permission sets which will be assigned to your players
+# depending on their current status.
+#
+# This is all managed by towny and pushed directly to CraftBukkits SuperPerms.
+# These will be in addition to any you manually assign in your specific permission plugin.
+#
+# You may assign any Permission nodes here, including those from other plugins.
+# You may also create any custom ranks you require.
+
+
+# The 'nomad' permission set covers players not in any town
+nomad:
+    - towny.town.new
+    - towny.town.resident
+    - towny.town.spawn.public
+    - towny.town.plot.perm
+    - towny.chat.general
+    
+# This section of permissions covers players who are members of a town.
+towns:
+    default:
+        # 'default' is the permission set which is auto assigned to any normal town member
+        - towny.town.plot.claim
+        - towny.town.plot.unclaim
+        - towny.town.plot.forsale
+        - towny.town.plot.notforsale
+        - towny.town.plot.perm
+        - towny.town.plot.toggle
+        - towny.town.plot.set
+        - towny.town.spawn.town
+        - towny.town.spawn.public
+        - towny.chat.general
+        - towny.chat.town
+    mayor:
+        # Mayors get these permissions in addition to the default set.
+        - towny.top
+        - towny.town.delete
+        - towny.town.rename
+        - towny.town.claim
+        - towny.town.plot
+        - towny.town.plottype
+        - towny.town.toggle.*
+        - towny.claimed.owntown.*
+        - towny.nation.new
+        - towny.town.grant-rank.*
+    ranks:
+        # Ranks contain additional permissions residents will be
+        # granted if they are assigned that specific rank.
+        assistant:
+            - towny.town.claim
+            - towny.town.plot
+            - towny.town.plottype
+            - towny.town.toggle.public
+            - towny.claimed.owntown.switch.*
+            - towny.town.grant-rank.vip
+        donator:
+            # Currently only a rank holder with no extra permissions
+        vip:
+            - towny.cheat.bypass
+            
+# This section of permissions covers players who are members of any town in a nation.
+nations:
+    default:
+        # All nation members get these permissions.
+        - towny.town.spawn.nation
+        - towny.town.spawn.ally
+        - towny.chat.nation
+    king:
+        # Kings get these permissions in addition to the default set.
+        - towny.nation.delete
+        - towny.nation.rename
+        - towny.nation.grant-titles
+        - towny.nation.grant-rank.*
+    ranks:
+        assistant:
+            - towny.nation.grant-titles
+            - towny.nation.grant-rank.helper
+        helper:
+            # Currently only a rank holder with no extra permissions

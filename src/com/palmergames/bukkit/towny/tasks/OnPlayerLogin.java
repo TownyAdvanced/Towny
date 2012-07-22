@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 
 
@@ -94,6 +95,10 @@ public class OnPlayerLogin extends Thread{
 		}
 
 		if (resident != null)
+			
+			TownyPerms.assignPermissions(resident, null);
+			
+			
 			try {
 				TownyMessaging.sendTownBoard(player, resident.getTown());
 			} catch (NotRegisteredException ex) {

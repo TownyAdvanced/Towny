@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -30,6 +31,9 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	private double teleportCost;
 	private String chatFormattedName;
 	private List<String> modes = new ArrayList<String>();
+	
+	private List<String> townRanks = new ArrayList<String>();
+	private List<String> nationRanks = new ArrayList<String>();
 
 	public Resident(String name) {
 
@@ -136,15 +140,20 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 			this.town = null;
 			setTitle("");
 			setSurname("");
+			updatePerms();
 			return;
 		}
+		
 		if (this.town == town)
 			return;
+		
 		if (hasTown())
 			throw new AlreadyRegisteredException();
+		
 		this.town = town;
 		setTitle("");
 		setSurname("");
+		updatePerms();
 	}
 
 	public void setFriends(List<Resident> newFriends) {
@@ -197,8 +206,15 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				town.removeResident(this);
 				setTitle("");
 				setSurname("");
+				updatePerms();
 			} catch (NotRegisteredException e) {
 			}
+	}
+	
+	private void updatePerms() {
+		setTownRanks(new ArrayList<String>());
+		setNationRanks(new ArrayList<String>());
+		TownyPerms.assignPermissions(this, null);
 	}
 
 	public void setRegistered(long registered) {
@@ -359,6 +375,82 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
+		
+	}
+	
+	
+	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
+		
+		if (this.hasTown() && TownyPerms.getTownRanks().contains(rank)) {
+			if (townRanks.contains(rank))
+				throw new AlreadyRegisteredException();
+			
+			townRanks.add(rank);
+			TownyPerms.assignPermissions(this, null);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void setTownRanks(List<String> ranks) {
+		townRanks.addAll(ranks);
+	}
+	
+	public boolean hasTownRank(String rank) {
+		return townRanks.contains(rank.toLowerCase());
+	}
+	
+	public List<String> getTownRanks() {
+		return townRanks;
+	}
+	
+	public boolean removeTownRank(String rank) throws NotRegisteredException {
+		
+		if (townRanks.contains(rank)) {
+			townRanks.remove(rank);
+			TownyPerms.assignPermissions(this, null);
+			return true;
+		}
+		
+		throw new NotRegisteredException();
+	}
+	
+	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
+		
+		if (this.hasNation() && TownyPerms.getNationRanks().contains(rank)) {
+			if (nationRanks.contains(rank))
+				throw new AlreadyRegisteredException();
+			
+			nationRanks.add(rank);
+			TownyPerms.assignPermissions(this, null);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void setNationRanks(List<String> ranks) {
+		nationRanks.addAll(ranks);
+	}
+	
+	public boolean hasNationRank(String rank) {
+		return nationRanks.contains(rank.toLowerCase());
+	}
+	
+	public List<String> getNationRanks() {
+		return nationRanks;
+	}
+	
+	public boolean removeNationRank(String rank) throws NotRegisteredException {
+		
+		if (nationRanks.contains(rank)) {
+			nationRanks.remove(rank);
+			TownyPerms.assignPermissions(this, null);
+			return true;
+		}
+		
+		throw new NotRegisteredException();
 		
 	}
 

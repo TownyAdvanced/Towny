@@ -202,15 +202,15 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null)
 					town.setMayor(getResident(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						Resident assistant = getResident(token);
-						if (assistant != null)
-							town.addAssistant(assistant);
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						Resident assistant = getResident(token);
+//						if (assistant != null)
+//							town.addAssistant(assistant);
+//					}
+//				}
 
 				town.setTownBoard(kvFile.get("townBoard"));
 
@@ -322,15 +322,15 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				line = kvFile.get("capital");
 				nation.setCapital(getTown(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						Resident assistant = getResident(token);
-						if (assistant != null)
-							nation.addAssistant(assistant);
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						Resident assistant = getResident(token);
+//						if (assistant != null)
+//							nation.addAssistant(assistant);
+//					}
+//				}
 
 				line = kvFile.get("allies");
 				if (line != null) {

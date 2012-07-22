@@ -213,7 +213,7 @@ public class TownySettings {
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		String fullPath = filepath + FileMgmt.fileSeparator() + res;
 
-		File file = FileMgmt.unpackLanguageFile(fullPath, res, defaultRes);
+		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		if (file != null) {
 
 			// read the (language).yml into memory
