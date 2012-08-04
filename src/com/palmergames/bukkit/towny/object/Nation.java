@@ -204,7 +204,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	}
 
 	//TODO: Remove
-	public boolean setAliegeance(String type, Nation nation) {
+	public boolean setAllegiance(String type, Nation nation) {
 
 		try {
 			if (type.equalsIgnoreCase("ally")) {

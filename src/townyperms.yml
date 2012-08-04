@@ -10,51 +10,58 @@
 
 # The 'nomad' permission set covers players not in any town
 nomad:
-    - towny.town.new
+    - towny.command.towny.map
+    - towny.command.towny.prices
+    - towny.command.towny.tree
+    - towny.command.towny.time
+    - towny.command.towny.universe
+    - towny.command.towny.version
+    - towny.command.towny.war
+    - towny.command.town.new
+    - towny.command.town.join
+    - towny.command.town.list
+    - towny.command.plot.perm
+    - towny.command.nation.list
     - towny.town.resident
     - towny.town.spawn.public
-    - towny.town.plot.perm
     - towny.chat.general
     
 # This section of permissions covers players who are members of a town.
 towns:
     default:
         # 'default' is the permission set which is auto assigned to any normal town member
-        - towny.town.plot.claim
-        - towny.town.plot.unclaim
-        - towny.town.plot.forsale
-        - towny.town.plot.notforsale
-        - towny.town.plot.perm
-        - towny.town.plot.toggle
-        - towny.town.plot.set
+        - towny.command.plot.claim
+        - towny.command.plot.unclaim
+        - towny.command.plot.forsale
+        - towny.command.plot.notforsale
+        - towny.command.plot.toggle.*
+        - towny.command.plot.set.perm
+        - towny.command.plot.set.reset
+        - towny.command.town.online
+        - towny.command.town.deposit
         - towny.town.spawn.town
-        - towny.town.spawn.public
-        - towny.chat.general
         - towny.chat.town
     mayor:
         # Mayors get these permissions in addition to the default set.
-        - towny.top
-        - towny.town.delete
-        - towny.town.rename
-        - towny.town.claim
-        - towny.town.plot
-        - towny.town.plottype
-        - towny.town.toggle.*
+        - towny.command.towny.top
+        - towny.command.town.*
+        - towny.command.plot.*
         - towny.claimed.owntown.*
-        - towny.nation.new
-        - towny.town.grant-rank.*
+        - towny.command.nation.new
+
     ranks:
         # Ranks contain additional permissions residents will be
         # granted if they are assigned that specific rank.
         assistant:
-            - towny.town.claim
-            - towny.town.plot
-            - towny.town.plottype
+            - towny.command.town.claim
+            - town.command.town.add
+            - towny.command.plot.*
             - towny.town.toggle.public
             - towny.claimed.owntown.switch.*
-            - towny.town.grant-rank.vip
+            # assistants are able to grant VIP rank
+            - towny.command.town.rank.vip
         donator:
-            # Currently only a rank holder with no extra permissions
+            # Currently only an example rank holder with no extra permissions
         vip:
             - towny.cheat.bypass
             
@@ -62,18 +69,19 @@ towns:
 nations:
     default:
         # All nation members get these permissions.
+        - towny.command.nation.online
+        - towny.command.nation.deposit
         - towny.town.spawn.nation
         - towny.town.spawn.ally
         - towny.chat.nation
     king:
         # Kings get these permissions in addition to the default set.
-        - towny.nation.delete
-        - towny.nation.rename
-        - towny.nation.grant-titles
-        - towny.nation.grant-rank.*
+        - towny.command.nation.*
     ranks:
         assistant:
-            - towny.nation.grant-titles
-            - towny.nation.grant-rank.helper
+            - towny.command.nation.rank.helper
+            - towny.command.nation.add
+            - towny.command.nation.ally
+            - towny.command.nation enemy
         helper:
-            # Currently only a rank holder with no extra permissions
+            - towny.command.nation.add

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
 /**
@@ -226,6 +227,14 @@ public abstract class TownyPermissionSource {
 
 		return (player.isOp()) || (plugin.isPermissions() && has(player, PermissionNodes.TOWNY_ADMIN.getNode()));
 
+	}
+	
+	public boolean testPermission(Player player, String perm) {
+		
+		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!has(player, perm)))
+			return false;
+					
+		return true;
 	}
 
 	/**

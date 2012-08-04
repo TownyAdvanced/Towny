@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -35,7 +36,7 @@ import com.palmergames.util.TimeMgmt;
 
 public class TownyCommand implements CommandExecutor {
 
-	//protected static TownyUniverse universe;
+	// protected static TownyUniverse universe;
 	private static Towny plugin;
 
 	private static final List<String> towny_general_help = new ArrayList<String>();
@@ -111,67 +112,82 @@ public class TownyCommand implements CommandExecutor {
 
 	private void parseTownyCommand(Player player, String[] split) {
 
-		if (split.length == 0)
+		if (split.length == 0) {
 			for (String line : towny_general_help)
 				player.sendMessage(line);
-		else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help"))
+
+			return;
+		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			for (String line : towny_help)
 				player.sendMessage(Colors.strip(line));
-		else if (split[0].equalsIgnoreCase("map"))
-			if (split.length > 1 && split[1].equalsIgnoreCase("big"))
-				TownyAsciiMap.generateAndSend(plugin, player, 18);
-			else
-				showMap(player);
-		else if (split[0].equalsIgnoreCase("prices")) {
-			Town town = null;
-			if (split.length > 1) {
-				try {
-					town = TownyUniverse.getDataSource().getTown(split[1]);
-				} catch (NotRegisteredException x) {
-					sendErrorMsg(player, x.getMessage());
-					return;
-				}
-			} else if (split.length == 1)
-				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-					town = resident.getTown();
-				} catch (NotRegisteredException x) {
-				}
 
-			for (String line : getTownyPrices(town))
-				player.sendMessage(line);
+			return;
+		}
 
-		} else if (split[0].equalsIgnoreCase("top")) {
-			TopCommand(player, StringMgmt.remFirstArg(split));
-		} else if (split[0].equalsIgnoreCase("tree")) {
-			consoleUseOnly(player);
-		} else if (split[0].equalsIgnoreCase("time")) {
-			TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
-		} else if (split[0].equalsIgnoreCase("universe")) {
-			for (String line : getUniverseStats())
-				player.sendMessage(line);
-		} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
-			player.sendMessage(towny_version);
-		} else if (split[0].equalsIgnoreCase("war")) {
-			boolean war = TownyWar(StringMgmt.remFirstArg(split));
-			for (String line : towny_war)
-				player.sendMessage(Colors.strip(line));
-			if (!war)
-				sendErrorMsg(player, "The world isn't currently at war.");
+		try {
 
-			towny_war.clear();
-		} else if (split[0].equalsIgnoreCase("spy")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-				if (plugin.hasPlayerMode(player, "spy"))
-					plugin.removePlayerMode(player);
+			if (split[0].equalsIgnoreCase("map"))
+				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
+					TownyAsciiMap.generateAndSend(plugin, player, 18);
 				else
-					plugin.setPlayerMode(player, split, true);
-			} else
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+					showMap(player);
+			else if (split[0].equalsIgnoreCase("prices")) {
+				Town town = null;
+				if (split.length > 1) {
+					try {
+						town = TownyUniverse.getDataSource().getTown(split[1]);
+					} catch (NotRegisteredException x) {
+						sendErrorMsg(player, x.getMessage());
+						return;
+					}
+				} else if (split.length == 1)
+					try {
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						town = resident.getTown();
+					} catch (NotRegisteredException x) {
+					}
 
-		} else
-			sendErrorMsg(player, "Invalid sub command.");
+				for (String line : getTownyPrices(town))
+					player.sendMessage(line);
+
+			} else if (split[0].equalsIgnoreCase("top")) {
+				TopCommand(player, StringMgmt.remFirstArg(split));
+			} else if (split[0].equalsIgnoreCase("tree")) {
+				consoleUseOnly(player);
+			} else if (split[0].equalsIgnoreCase("time")) {
+				TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+			} else if (split[0].equalsIgnoreCase("universe")) {
+				for (String line : getUniverseStats())
+					player.sendMessage(line);
+			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
+				player.sendMessage(towny_version);
+			} else if (split[0].equalsIgnoreCase("war")) {
+				boolean war = TownyWar(StringMgmt.remFirstArg(split));
+				for (String line : towny_war)
+					player.sendMessage(Colors.strip(line));
+				if (!war)
+					sendErrorMsg(player, "The world isn't currently at war.");
+
+				towny_war.clear();
+			} else if (split[0].equalsIgnoreCase("spy")) {
+
+				if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+					if (plugin.hasPlayerMode(player, "spy"))
+						plugin.removePlayerMode(player);
+					else
+						plugin.setPlayerMode(player, split, true);
+				} else
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+
+			} else
+				sendErrorMsg(player, "Invalid sub command.");
+
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+		}
 
 	}
 
@@ -189,11 +205,6 @@ public class TownyCommand implements CommandExecutor {
 	}
 
 	private void TopCommand(Player player, String[] args) {
-
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_TOP.getNode()))) {
-			sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
-			return;
-		}
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
@@ -292,16 +303,12 @@ public class TownyCommand implements CommandExecutor {
 	 */
 
 	/*
-	 * [New] Town: 100 | Nation: 500
-	 * [Upkeep] Town: 10 | Nation: 100
-	 * Town [Elden]:
-	 * [Price] Plot: 100 | Outpost: 250
-	 * [Upkeep] Resident: 20 | Plot: 50
-	 * Nation [Albion]:
-	 * [Upkeep] Town: 100 | Neutrality: 100
+	 * [New] Town: 100 | Nation: 500 [Upkeep] Town: 10 | Nation: 100 Town
+	 * [Elden]: [Price] Plot: 100 | Outpost: 250 [Upkeep] Resident: 20 | Plot:
+	 * 50 Nation [Albion]: [Upkeep] Town: 100 | Neutrality: 100
 	 */
 
-	//TODO: Proceduralize and make parse function for /towny prices [town]
+	// TODO: Proceduralize and make parse function for /towny prices [town]
 	public List<String> getTownyPrices(Town town) {
 
 		List<String> output = new ArrayList<String>();

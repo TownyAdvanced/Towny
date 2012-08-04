@@ -102,8 +102,8 @@ public class Towny extends JavaPlugin {
 			if (TownySettings.isTownyUpdating(getVersion()))
 				update();
 
-			// Register all child permissions
-			//TownyUniverse.getPermissionSource().registerPermissionNodes();
+			// Register all child permissions for ranks
+			TownyPerms.registerPermissionNodes();
 		}
 
 		registerEvents();

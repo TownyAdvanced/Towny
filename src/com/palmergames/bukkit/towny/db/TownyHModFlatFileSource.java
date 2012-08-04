@@ -338,7 +338,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					for (String token : tokens) {
 						Nation friend = getNation(token);
 						if (friend != null)
-							nation.setAliegeance("ally", friend);
+							nation.setAllegiance("ally", friend);
 					}
 				}
 
@@ -348,7 +348,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					for (String token : tokens) {
 						Nation enemy = getNation(token);
 						if (enemy != null)
-							nation.setAliegeance("enemy", enemy);
+							nation.setAllegiance("enemy", enemy);
 					}
 				}
 

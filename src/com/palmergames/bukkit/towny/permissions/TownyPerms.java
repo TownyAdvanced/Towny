@@ -20,6 +20,7 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionDefault;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
@@ -273,6 +274,42 @@ public class TownyPerms {
 		
 		return newPerms;
 		
+	}
+	
+	public static void registerPermissionNodes() {
+		
+		 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new
+		 Runnable(){
+
+			@Override
+			public void run() {
+
+				Permission perm;
+				
+				/*
+				 * Register Town ranks
+				 */
+				for (String rank : getTownRanks()) {
+					perm = new
+					Permission(PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank),
+					"User can grant this town rank to others..",
+					PermissionDefault.FALSE, null);
+					perm.addParent(PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(), true);
+				}
+				
+				/*
+				 * Register Nation ranks
+				 */
+				for (String rank : getNationRanks()) {
+					perm = new
+					Permission(PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank),
+					"User can grant this town rank to others..",
+					PermissionDefault.FALSE, null);
+					perm.addParent(PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(), true);
+				}
+			}
+			 
+		 },1);
 	}
 
 	/*
