@@ -47,6 +47,7 @@ permissions:
             towny.command.towny.*: true
             towny.command.town.*: true
             towny.command.nation.*: true
+            towny.command.plot.*: true
             towny.town.resident: true
             towny.town.spawn.*: true
             towny.wild.*: true
