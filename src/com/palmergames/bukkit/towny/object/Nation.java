@@ -195,7 +195,11 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public void setCapital(Town capital) {
 
 		this.capital = capital;
-		TownyPerms.assignPermissions(capital.getMayor(), null);
+		try {
+			TownyPerms.assignPermissions(capital.getMayor(), null);
+		} catch (Exception e) {
+			// Dummy catch to prevent errors on startup when setting nation.
+		}
 	}
 
 	public Town getCapital() {

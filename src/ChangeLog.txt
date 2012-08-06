@@ -1670,3 +1670,4 @@ v0.81.0.2:
 		towny.command.townyworld.undo
 v0.81.0.3:
 	- Fix SQL reading towny-rank when it should be town-ranks.
+	- Fix an error setting permissions on Load for Nations.
