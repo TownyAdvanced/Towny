@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.StringMgmt;
 
 /**
  * @author ElgarL
@@ -87,7 +86,6 @@ public class TownyPerms {
 		 */
 		collectPermissions();
 		
-		System.out.println(StringMgmt.join(getTownRanks(),","));
 	}
 	
 	/**
