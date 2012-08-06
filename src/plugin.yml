@@ -339,11 +339,11 @@ permissions:
         description: User can access the admin toggle commands.
         default: false
         children:
-            towny.command.townyworld.list:
-            towny.command.townyworld.set:
-            towny.command.townyworld.toggle.*:
-            towny.command.townyworld.regen:
-            towny.command.townyworld.undo:
+            towny.command.townyworld.list: true
+            towny.command.townyworld.set: true
+            towny.command.townyworld.toggle.*: true
+            towny.command.townyworld.regen: true
+            towny.command.townyworld.undo: true
 
     towny.command.townyworld.toggle.*:
         description: TownyWorld toggle commands.
