@@ -1490,6 +1490,10 @@ v0.81.0.1:
 	- Make buckets test against item_use instead of testing the block they are being used on.
 v0.81.0.2:
 	- Added town/nation ranks so server admins can create custom ranks with custom permission sets.
+	  Any existing players set as assistants will lose their rank and need to have it re-assigned.
+	- New commands
+	  '/town rank add/remove <player> <rank>'
+	  '/nation rank add/remove <player> <rank>'
 	- Added Towny's own permission system (townyperms.yml).
 	  This system pushes permissions directly to Bukkit and works along side all other perms plugins.
 	  It allows you to define sets of permissions based upon a players status (nomad/resident/mayor/king).
