@@ -202,9 +202,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 		 * Update the table structure for older databases.
 		 */
 		String resident_update = "IF EXISTS( SELECT NULL FROM INFORMATION_SCHEMA.COLUMNS "
-				+ "WHERE table_name = '" + tb_prefix + "RESIDENTS' "
-				+ "AND table_schema = '" + db_name + "' "
-				+ "AND column_name != 'town-ranks')  THEN "
+				+ "WHERE table_name = `" + tb_prefix + "RESIDENTS` "
+				+ "AND table_schema = `" + db_name + "` "
+				+ "AND column_name != `town-ranks`)  THEN "
 				+ "ALTER TABLE " + tb_prefix + "RESIDENTS (ADD "
 				+ "`town-ranks`  mediumtext,"
 				+ "`nation-ranks`  mediumtext"
