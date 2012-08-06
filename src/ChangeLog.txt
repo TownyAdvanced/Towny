@@ -1488,7 +1488,7 @@ v0.81.0.0:
 	- Release.
 v0.81.0.1:
 	- Make buckets test against item_use instead of testing the block they are being used on.
-v0.82.0.0:
+v0.81.0.2:
 	- Added town/nation ranks so server admins can create custom ranks with custom permission sets.
 	- Added Towny's own permission system (townyperms.yml).
 	  This system pushes permissions directly to Bukkit and works along side all other perms plugins.
