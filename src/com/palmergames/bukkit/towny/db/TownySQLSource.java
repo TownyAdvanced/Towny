@@ -626,13 +626,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
 				}
 				
-				line = rs.getString("town-rank");
+				line = rs.getString("town-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 				}
 				
-				line = rs.getString("nation-rank");
+				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);

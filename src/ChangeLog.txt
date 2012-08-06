@@ -1668,3 +1668,5 @@ v0.81.0.2:
 		towny.command.townyworld.toggle.revertexpl
 		towny.command.townyworld.regen
 		towny.command.townyworld.undo
+v0.81.0.3:
+	- Fix SQL reading towny-rank when it shoudl be town-ranks.
