@@ -38,6 +38,7 @@ towns:
         - towny.command.plot.set.perm
         - towny.command.plot.set.reset
         - towny.command.town.online
+        - towny.command.town.leave
         - towny.command.town.deposit
         - towny.town.spawn.town
         - towny.chat.town
@@ -56,7 +57,7 @@ towns:
             - towny.command.town.claim
             - town.command.town.add
             - towny.command.plot.*
-            - towny.town.toggle.public
+            - towny.command.town.toggle.public
             - towny.claimed.owntown.switch.*
             # assistants are able to grant VIP rank
             - towny.command.town.rank.vip

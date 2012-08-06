@@ -116,6 +116,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		if (!hasResident(mayor))
 			throw new TownyException("Mayor doesn't belong to town.");
 		this.mayor = mayor;
+		
+		TownyPerms.assignPermissions(mayor, null);
 	}
 
 	public Nation getNation() throws NotRegisteredException {
