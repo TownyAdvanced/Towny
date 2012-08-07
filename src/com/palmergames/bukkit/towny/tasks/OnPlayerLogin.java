@@ -26,7 +26,7 @@ import com.palmergames.bukkit.util.BukkitTools;
  * @author ElgarL
  *
  */
-public class OnPlayerLogin implements Runnable{
+public class OnPlayerLogin implements Runnable {
 	
 	Towny plugin;
 	TownyUniverse universe;
