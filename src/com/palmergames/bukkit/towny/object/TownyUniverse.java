@@ -68,7 +68,9 @@ public class TownyUniverse extends TownyObject {
 		}
 
 		// Perform login code in it's own thread to update Towny data.
-		new OnPlayerLogin(plugin, player).start();
+		//new OnPlayerLogin(plugin, player).start();
+		if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(plugin,player),0L) == -1)
+			TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
 
 	}
 
