@@ -1673,3 +1673,5 @@ v0.81.0.3:
 	- Fix an error setting permissions on Load for Nations.
 v0.81.0.4:
 	- Added PersonalWorlds and WormholeXTremeWorlds as supported multiworld plugins.
+v0.81.0.5:
+	- God I hate MySQL queries.

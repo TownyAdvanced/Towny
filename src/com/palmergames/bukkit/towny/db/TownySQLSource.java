@@ -201,21 +201,22 @@ public class TownySQLSource extends TownyFlatFileSource {
 		/*
 		 * Update the table structure for older databases.
 		 */
-		String resident_update = "IF EXISTS( SELECT NULL FROM INFORMATION_SCHEMA.COLUMNS "
-				+ "WHERE table_name = `" + tb_prefix + "RESIDENTS` "
-				+ "AND table_schema = `" + db_name + "` "
-				+ "AND column_name != `town-ranks`)  THEN "
-				+ "ALTER TABLE " + tb_prefix + "RESIDENTS (ADD "
-				+ "`town-ranks`  mediumtext,"
-				+ "`nation-ranks`  mediumtext"
-				+ ");";
+		String resident_update;
 		
 		try {
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `town-ranks`  mediumtext";
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
+			
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `nation-ranks`  mediumtext";
+			s = cntx.createStatement();
+			s.executeUpdate(resident_update);
+			
 			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
 		} catch (SQLException ee) {
+			if (ee.getErrorCode() != 1060)
 			TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
 		}
 		
 		
