@@ -1676,3 +1676,5 @@ v0.81.0.4:
 v0.81.0.5:
 	- God I hate MySQL queries.
 	- Change OnPlayerLogin to a DelayedSync task as we now push Towny perms and Bukkit perms are not thread safe.
+v0.81.0.6:
+	- Add missing towny.command.resident.* permission.

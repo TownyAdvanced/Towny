@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.81.0.5
+version: 0.81.0.6
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -238,14 +238,16 @@ permissions:
             towny.command.plot.set.spleef: true
     
     # Resident command permissions
-    towny.command.resident.list:
-        description: User can list all active residents/players.
+    towny.command.resident.*:
+        description: User can access to all resident commands.
         default: false
-        
-    towny.command.resident.tax:
-        description: User can obtain a tax status page.
-        default: false
-        
+        children:
+            towny.command.resident.list: true
+            towny.command.resident.tax: true
+            towny.command.resident.set.*: true
+            towny.command.resident.toggle.*: true
+            towny.command.resident.friend: true
+
     towny.command.resident.set.*:
         description: User can access the plot set command.
         default: false
@@ -261,10 +263,6 @@ permissions:
             towny.command.resident.toggle.explosion: true
             towny.command.resident.toggle.fire: true
             towny.command.resident.toggle.mobs: true
-    
-    towny.command.resident.friend:
-        description: User can add and remove friends.
-        default: false
     
     # TownyAdmin command permissions
     towny.command.townyadmin.*:

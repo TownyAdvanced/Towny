@@ -30,6 +30,7 @@ nomad:
 towns:
     default:
         # 'default' is the permission set which is auto assigned to any normal town member
+        - towny.command.resident.*
         - towny.command.plot.claim
         - towny.command.plot.unclaim
         - towny.command.plot.forsale
