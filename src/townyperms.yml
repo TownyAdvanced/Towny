@@ -55,7 +55,7 @@ towns:
         # Ranks contain additional permissions residents will be
         # granted if they are assigned that specific rank.
         assistant:
-            - towny.command.town.claim
+            - towny.command.town.claim.*
             - town.command.town.add
             - towny.command.plot.*
             - towny.command.town.toggle.public
