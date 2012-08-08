@@ -630,6 +630,7 @@ public class TownCommand implements CommandExecutor {
 					town.setTownBoard(line);
 					TownyMessaging.sendTownBoard(player, town);
 				}
+				return;
 			}
 
 			/*
