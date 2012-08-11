@@ -1678,3 +1678,4 @@ v0.81.0.5:
 	- Change OnPlayerLogin to a DelayedSync task as we now push Towny perms and Bukkit perms are not thread safe.
 v0.81.0.6:
 	- Add missing towny.command.resident.* permission.
+	- Fix typo on 'towny.command.town.add' permission.
