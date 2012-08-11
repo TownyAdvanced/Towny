@@ -96,7 +96,7 @@ public class OnPlayerLogin implements Runnable {
 
 		if (resident != null)
 			
-			TownyPerms.assignPermissions(resident, null);
+			TownyPerms.assignPermissions(resident, player);
 			
 			
 			try {
