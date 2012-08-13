@@ -1683,3 +1683,6 @@ v0.81.0.7:
 	- Fix player permissions not being updated when performing a '/ta reload'.
 v0.81.0.8:
 	- Fix explosion regen so containers respawn with the correct inventories.
+	- Add two missing permissions to the plugin.yml
+	    towny.command.town.claim.town
+	    towny.command.town.claim.outpost
