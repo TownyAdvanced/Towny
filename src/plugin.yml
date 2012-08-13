@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.81.0.7
+version: 0.81.0.8
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -169,6 +169,13 @@ permissions:
             towny.command.town.claim.*: true
             towny.command.town.unclaim: true
             towny.command.town.online: true
+            
+    towny.command.town.claim.*:
+        description: User can access all town related commands.
+        default: false
+        children:
+            towny.command.town.claim.town: true
+            towny.command.town.claim.outpost: true
 
     towny.command.town.set.*:
         description: User can access all town set commands.

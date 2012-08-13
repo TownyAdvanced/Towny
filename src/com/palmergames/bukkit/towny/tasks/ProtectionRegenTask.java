@@ -1,14 +1,17 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.PistonExtensionMaterial;
@@ -24,6 +27,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
+	private List<ItemStack> contents = new ArrayList<ItemStack>();
 
 	private static final Material placeholder = Material.DIRT;
 
@@ -33,7 +37,19 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		this.state = block.getState();
 		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
+		
+		if (state instanceof InventoryHolder) {
 
+			// Contents we are respawning.
+			Inventory inven = ((InventoryHolder) state).getInventory();
+
+			for (ItemStack item : inven.getContents()) {
+				contents.add((item != null) ? item.clone() : null);
+			}
+			
+			inven.clear();
+		}
+		
 		if (update)
 			if (state.getData() instanceof Door) {
 				Door door = (Door) state.getData();
@@ -70,87 +86,87 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 	public void replaceProtections() {
 
-		Block block = state.getBlock();
-		
-		if (state.getData() instanceof Door) {
-			
-			Door door = (Door) state.getData();
-			Block topHalf;
-			Block bottomHalf;
-			if (door.isTopHalf()) {
-				topHalf = block;
-				bottomHalf = block.getRelative(BlockFace.DOWN);
-			} else {
-				bottomHalf = block;
-				topHalf = block.getRelative(BlockFace.UP);
-			}
-			door.setTopHalf(true);
-			topHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			door.setTopHalf(false);
-			bottomHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			
-		} else if (state instanceof Sign) {
+		try {
 
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			Sign sign = (Sign) block.getState();
-			int i = 0;
-			for (String line : ((Sign) state).getLines())
-				sign.setLine(i++, line);
-			
-			sign.update(true);
-			
-		} else if (state instanceof CreatureSpawner) {
-			
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			((CreatureSpawner) block.getState()).setSpawnedType(((CreatureSpawner) state).getSpawnedType());
-			
-		} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
-			
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			
-			// Container to receive the inventory
-			InventoryHolder container = (InventoryHolder) block.getState();
-			
-			// Contents we are respawning.
-			Inventory inven = ((InventoryHolder) state).getInventory();
-			
-			if (inven.getContents().length > 0)
-				container.getInventory().setContents(inven.getContents());
-			
-			
-		} else if (state.getData() instanceof PistonExtensionMaterial) {
-			
-			PistonExtensionMaterial extension = (PistonExtensionMaterial) state.getData();
-			Block piston = block.getRelative(extension.getAttachedFace());
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			if (altState != null) {
-				piston.setTypeIdAndData(altState.getTypeId(), altState.getData().getData(), false);
-			}
-		} else if (state.getData() instanceof Attachable) {
-			
-			Block attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
-			if (attachedBlock.getTypeId() == 0) {
-				attachedBlock.setTypeId(placeholder.getId(), false);
-				TownyRegenAPI.addPlaceholder(attachedBlock);
-			}
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-			
-		} else {
-			
-			if (NeedsPlaceholder.contains(state.getType())) {
-				Block blockBelow = block.getRelative(BlockFace.DOWN);
-				if (blockBelow.getTypeId() == 0) {
-					if (state.getType().equals(Material.CROPS)) {
-						blockBelow.setTypeId(Material.SOIL.getId(), true);
-					} else {
-						blockBelow.setTypeId(placeholder.getId(), true);
-					}
-					TownyRegenAPI.addPlaceholder(blockBelow);
+			Block block = state.getBlock();
+
+			if (state.getData() instanceof Door) {
+
+				Door door = (Door) state.getData();
+				Block topHalf;
+				Block bottomHalf;
+				if (door.isTopHalf()) {
+					topHalf = block;
+					bottomHalf = block.getRelative(BlockFace.DOWN);
+				} else {
+					bottomHalf = block;
+					topHalf = block.getRelative(BlockFace.UP);
 				}
+				door.setTopHalf(true);
+				topHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				door.setTopHalf(false);
+				bottomHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+
+			} else if (state instanceof Sign) {
+
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				Sign sign = (Sign) block.getState();
+				int i = 0;
+				for (String line : ((Sign) state).getLines())
+					sign.setLine(i++, line);
+
+				sign.update(true);
+
+			} else if (state instanceof CreatureSpawner) {
+
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				((CreatureSpawner) block.getState()).setSpawnedType(((CreatureSpawner) state).getSpawnedType());
+
+			} else if (state instanceof InventoryHolder) {
+
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+
+				// Container to receive the inventory
+				Inventory container = ((InventoryHolder) block.getState()).getInventory();
+				container.setContents(contents.toArray(new ItemStack[0]));
+
+			} else if (state.getData() instanceof PistonExtensionMaterial) {
+
+				PistonExtensionMaterial extension = (PistonExtensionMaterial) state.getData();
+				Block piston = block.getRelative(extension.getAttachedFace());
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				if (altState != null) {
+					piston.setTypeIdAndData(altState.getTypeId(), altState.getData().getData(), false);
+				}
+			} else if (state.getData() instanceof Attachable) {
+
+				Block attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
+				if (attachedBlock.getTypeId() == 0) {
+					attachedBlock.setTypeId(placeholder.getId(), false);
+					TownyRegenAPI.addPlaceholder(attachedBlock);
+				}
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+
+			} else {
+
+				if (NeedsPlaceholder.contains(state.getType())) {
+					Block blockBelow = block.getRelative(BlockFace.DOWN);
+					if (blockBelow.getTypeId() == 0) {
+						if (state.getType().equals(Material.CROPS)) {
+							blockBelow.setTypeId(Material.SOIL.getId(), true);
+						} else {
+							blockBelow.setTypeId(placeholder.getId(), true);
+						}
+						TownyRegenAPI.addPlaceholder(blockBelow);
+					}
+				}
+				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), !NeedsPlaceholder.contains(state.getType()));
 			}
-			block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), !NeedsPlaceholder.contains(state.getType()));
+			TownyRegenAPI.removePlaceholder(block);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-		TownyRegenAPI.removePlaceholder(block);
 	}
 
 	/**
