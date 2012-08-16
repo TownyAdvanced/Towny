@@ -1686,3 +1686,5 @@ v0.81.0.8:
 	- Add two missing permissions to the plugin.yml
 	    towny.command.town.claim.town
 	    towny.command.town.claim.outpost
+v0.81.0.9:
+	- Reset a players ranks when they leave a town.
