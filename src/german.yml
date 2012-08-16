@@ -1,5 +1,5 @@
 name: Towny
-version: 0.16
+version: 0.17
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -171,7 +171,7 @@ msg_join_town: '&b%s ist der Stadt beigetreten!'
 msg_friend_add: '&b%s hat dich als Freund hinzugefuegt.'
 msg_friend_remove: '&b%s hat dich als Freund entfernt.'
 msg_removed: '&bEntfernt '
-msg_from_list: 'aus deiner Freundesliste.'
+msg_from_list: ' aus deiner Freundesliste.'
 msg_to_list: ' zu deiner Freundesliste.'
 msg_left_town: '&b%s hat die Stadt verlassen'
 msg_you_left: '&bDu hast %s verlassen.'
