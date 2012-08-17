@@ -1689,3 +1689,4 @@ v0.81.0.8:
 v0.81.0.9:
 	- Reset a players ranks when they leave a town.
 	- Fixed a missing space when adding/removing friends to/from your friends list (English and german language files).
+	- Updated mayor help for new rank command.
