@@ -1071,6 +1071,16 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Reading Town Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
 	}
+	
+	public static boolean isRemovingVillagerBabiesWorld() {
+		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD);
+	}
+
+	public static boolean isRemovingVillagerBabiesTown() {
+		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN);
+	}
 
 	public static List<String> getWildExplosionProtectionEntities() {
 

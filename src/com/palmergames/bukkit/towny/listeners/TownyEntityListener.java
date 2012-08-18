@@ -18,6 +18,7 @@ import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -186,7 +187,8 @@ public class TownyEntityListener implements Listener {
 
 			//remove from world if set to remove mobs globally
 			if (townyWorld.isUsingTowny())
-				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
+				if (!townyWorld.hasWorldMobs() && ((MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)
+													|| ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult()) && (TownySettings.isRemovingVillagerBabiesWorld())))) {
 					if (plugin.isCitizens2()) {
 						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 							//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
@@ -201,7 +203,8 @@ public class TownyEntityListener implements Listener {
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
-						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
+						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity)
+								|| ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult()) && (TownySettings.isRemovingVillagerBabiesTown()))) {
 							if (plugin.isCitizens2()) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
