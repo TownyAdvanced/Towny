@@ -1692,3 +1692,4 @@ v0.81.0.9:
 	- Updated mayor help for new rank command.
 v0.81.0.10:
 	- Added the ability to prevent spawning/breeding of villager babies at the world or town level.
+	- Fixed an ArrayIndexOutOfBoundsException when trying to use '/plot set'.

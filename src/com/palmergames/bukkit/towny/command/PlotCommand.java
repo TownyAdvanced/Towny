@@ -266,10 +266,11 @@ public class PlotCommand implements CommandExecutor {
 
 					split = StringMgmt.remFirstArg(split);
 
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
 					if (split.length > 0) {
+						
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						
 						if (split[0].equalsIgnoreCase("perm")) {
 
 							// Set plot level permissions (if the plot owner) or
