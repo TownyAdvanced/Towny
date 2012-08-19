@@ -141,7 +141,7 @@ public class TownyAdminCommand implements CommandExecutor {
 
 			}
 
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode(split[0].toLowerCase())))
+			if ((!isConsole) && (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode(split[0].toLowerCase()))))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if (split[0].equalsIgnoreCase("givebonus")) {
