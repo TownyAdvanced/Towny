@@ -1696,3 +1696,5 @@ v0.81.0.10:
 v0.81.0.11:
 	- Fix 'ta reload' at console.
 	- Remove 'resident delete' from the help menu as it's replaced by '/ta delete'.
+v0.81.0.12:
+	- Fix prevention of villager breeding.
