@@ -1698,3 +1698,6 @@ v0.81.0.11:
 	- Remove 'resident delete' from the help menu as it's replaced by '/ta delete'.
 v0.81.0.12:
 	- Fix prevention of villager breeding.
+v0.81.0.13:
+	- Prevent attempting to add Null if they user has removed all perms from a townyperms section.
+	

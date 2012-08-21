@@ -321,7 +321,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getDefault() {
 
-		return getList("nomad");
+		List<String> permsList = getList("nomad");
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/*
@@ -335,7 +336,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRanks() {
 
-		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
+		List<String> permsList = getList("towns.ranks");
+		return (permsList == null)? new ArrayList<String>() : new ArrayList<String>(((MemorySection) permsList).getKeys(false));
 	}
 
 	/**
@@ -344,8 +346,9 @@ public class TownyPerms {
 	 * @return a list of permissions
 	 */
 	public static List<String> getTownDefault() {
-
-		return getList("towns.default");
+		
+		List<String> permsList = getList("towns.default");
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/**
@@ -355,7 +358,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownMayor() {
 
-		return getList("towns.mayor");
+		List<String> permsList = getList("towns.mayor");
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/**
@@ -366,7 +370,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRank(String rank) {
 
-		return getList("towns.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("towns.ranks." + rank.toLowerCase());
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/*
@@ -380,7 +385,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationRanks() {
 
-		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
+		List<String> permsList = getList("nations.ranks");
+		return (permsList == null)? new ArrayList<String>() : new ArrayList<String>(((MemorySection) permsList).getKeys(false));
 	}
 
 	/**
@@ -390,7 +396,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationDefault() {
 
-		return getList("nations.default");
+		List<String> permsList = getList("nations.default");
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/**
@@ -400,7 +407,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationKing() {
 
-		return getList("nations.king");
+		List<String> permsList = getList("nations.king");
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
 	/**
@@ -411,7 +419,8 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationRank(String rank) {
 
-		return getList("nations.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("nations.ranks." + rank.toLowerCase());
+		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 	
 	/*

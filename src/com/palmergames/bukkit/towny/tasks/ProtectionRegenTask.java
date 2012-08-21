@@ -28,6 +28,8 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	private BlockLocation blockLocation;
 	private int TaskId;
 	private List<ItemStack> contents = new ArrayList<ItemStack>();
+	
+	//Tekkit - InventoryView
 
 	private static final Material placeholder = Material.DIRT;
 
