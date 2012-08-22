@@ -336,8 +336,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRanks() {
 
-		List<String> permsList = getList("towns.ranks");
-		return (permsList == null)? new ArrayList<String>() : new ArrayList<String>(((MemorySection) permsList).getKeys(false));
+		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
 	}
 
 	/**
@@ -385,8 +384,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationRanks() {
 
-		List<String> permsList = getList("nations.ranks");
-		return (permsList == null)? new ArrayList<String>() : new ArrayList<String>(((MemorySection) permsList).getKeys(false));
+		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
 	}
 
 	/**
