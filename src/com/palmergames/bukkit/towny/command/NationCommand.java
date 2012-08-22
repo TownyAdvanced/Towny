@@ -512,10 +512,13 @@ public class NationCommand implements CommandExecutor {
 
 	public void nationLeave(Player player) {
 
+		Town town = null;
+		Nation nation = null;
+		
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Town town = resident.getTown();
-			Nation nation = town.getNation();
+			town = resident.getTown();
+			nation = town.getNation();
 
 			nation.removeTown(town);
 
@@ -532,7 +535,6 @@ public class NationCommand implements CommandExecutor {
 				}
 			}
 
-			TownyUniverse.getDataSource().saveTown(town);
 			TownyUniverse.getDataSource().saveNation(nation);
 			TownyUniverse.getDataSource().saveNationList();
 
@@ -545,6 +547,8 @@ public class NationCommand implements CommandExecutor {
 			TownyUniverse.getDataSource().removeNation(en.getNation());
 			TownyUniverse.getDataSource().saveNationList();
 			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName())));
+		} finally {
+			TownyUniverse.getDataSource().saveTown(town);
 		}
 
 	}

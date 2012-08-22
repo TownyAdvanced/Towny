@@ -1700,4 +1700,5 @@ v0.81.0.12:
 	- Fix prevention of villager breeding.
 v0.81.0.13:
 	- Prevent attempting to add Null if they user has removed all perms from a townyperms section.
+	- Be sure we save a town's data if it's the last to leave a nation (causing the nation to be deleted).
 	
