@@ -813,8 +813,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
-		if (!isMayor(resident))// && !hasAssistant(resident))
-			throw new TownyException("You don't have access to the town's bank.");
+		//if (!isMayor(resident))// && !hasAssistant(resident))
+		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
 			if (!payTo(amount, resident, "Town Widthdraw"))

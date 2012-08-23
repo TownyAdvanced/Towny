@@ -410,8 +410,8 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
-		if (!isKing(resident))// && !hasAssistant(resident))
-			throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
+		//if (!isKing(resident))// && !hasAssistant(resident))
+		//	throw new TownyException(TownySettings.getLangString("msg_no_access_nation_bank"));
 
 		if (TownySettings.isUsingEconomy()) {
 			if (!payTo(amount, resident, "Nation Withdraw"))
