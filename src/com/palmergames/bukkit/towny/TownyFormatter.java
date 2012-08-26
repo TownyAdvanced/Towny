@@ -106,7 +106,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		// ___[ King Harlus ]___
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayerExact(resident.getName()))) ) ? Colors.LightGreen + " (Online)" : "")));
+		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName()))) ) ? Colors.LightGreen + " (Online)" : "")));
 
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 		out.add(Colors.Green + "Registered: " + Colors.LightGreen + registeredFormat.format(resident.getRegistered()) + Colors.Gray + " | " + Colors.Green + "Last Online: " + Colors.LightGreen + lastOnlineFormat.format(resident.getLastOnline()));

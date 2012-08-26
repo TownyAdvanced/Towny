@@ -1703,3 +1703,4 @@ v0.81.0.13:
 	- Be sure we save a town's data if it's the last to leave a nation (causing the nation to be deleted).
 v0.81.0.14:
 	- Fix town and nation withdraws to follow permissions.
+	- Prevent a NPE if using '/res' on an invalid player name.
