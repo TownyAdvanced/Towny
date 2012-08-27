@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.81.0.16
+version: 0.81.0.17
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -158,6 +158,7 @@ permissions:
             towny.command.town.withdraw: true
             towny.command.town.deposit: true
             towny.command.town.rank.*: true
+            towny.command.town.ranks: true
             towny.command.town.set.*: true
             towny.command.town.buy: true
             towny.command.town.toggle.*: true
