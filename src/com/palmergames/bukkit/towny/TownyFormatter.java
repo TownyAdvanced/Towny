@@ -143,23 +143,30 @@ public class TownyFormatter {
 		return out;
 	}
 	
+	/**
+	 * Returns a Chat Formatted List of all town residents who hold a rank.
+	 * 
+	 * @param town
+	 * @return a list containing formatted rank data.
+	 */
 	public static List<String> getRanks(Town town) {
+		
 		List<String> ranklist = new ArrayList<String>();
+		
 		String towntitle = getFormattedName(town);
 		towntitle += Colors.Blue + " Rank List";
 		ranklist.add(ChatTools.formatTitle(towntitle));
-		ranklist.add(Colors.Green + "Mayor: " + Colors.LightGreen
-				+ getFormattedName(town.getMayor()));
+		ranklist.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
+		
 		List<Resident> residents = town.getResidents();
-		List<String> townyranks = TownyPerms.getTownRanks();
+		List<String> townranks = TownyPerms.getTownRanks();
 		List<Resident> residentwithrank = new ArrayList<Resident>();
 
-		for (String rank : townyranks) {
+		for (String rank : townranks) {
 			for (Resident r : residents) {
-				if (r.getTownRanks() != null) {
-					if (r.getTownRanks().contains(rank)) {
-						residentwithrank.add(r);
-					}
+				
+				if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank))) {
+					residentwithrank.add(r);
 				}
 			}
 			ranklist.addAll(getFormattedResidents(rank, residentwithrank));

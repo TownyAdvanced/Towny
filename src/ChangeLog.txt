@@ -1706,3 +1706,5 @@ v0.81.0.14:
 v0.81.0.15:
 	- Prevent a NPE if using '/res' on an invalid player name.
 	- Changes to the Town Board are now saved correctly.
+v0.81.0.16:
+	- Added '/town ranks' command to display all residents holding ranks in your town.
