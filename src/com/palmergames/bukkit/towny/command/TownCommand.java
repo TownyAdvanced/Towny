@@ -57,6 +57,7 @@ public class TownCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/town", "list", ""));
 		output.add(ChatTools.formatCommand("", "/town", "online", TownySettings.getLangString("town_help_10")));
 		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
+		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
 		output.add(ChatTools.formatCommand("", "/town", "spawn", TownySettings.getLangString("town_help_5")));
 		if (!TownySettings.isTownCreationAdminOnly())
 			output.add(ChatTools.formatCommand("", "/town", "new [town]", TownySettings.getLangString("town_help_6")));
@@ -231,6 +232,15 @@ public class TownCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townDelete(player, newSplit);
+					
+				}else if(split[0].equalsIgnoreCase("ranklist")){
+					try {
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						Town town = resident.getTown();
+						TownyMessaging.sendMessage(player, TownyFormatter.getRanks(town));
+					} catch (NotRegisteredException x) {
+						throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
+					}
 
 				} else if (split[0].equalsIgnoreCase("join")) {
 

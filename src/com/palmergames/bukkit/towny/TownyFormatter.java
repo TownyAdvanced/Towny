@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
-
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -141,6 +141,31 @@ public class TownyFormatter {
 		out.addAll(getFormattedResidents("Friends", friends));
 
 		return out;
+	}
+	
+	public static List<String> getRanks(Town town) {
+		List<String> ranklist = new ArrayList<String>();
+		String towntitle = getFormattedName(town);
+		towntitle += Colors.Blue + " Rank List";
+		ranklist.add(ChatTools.formatTitle(towntitle));
+		ranklist.add(Colors.Green + "Mayor: " + Colors.LightGreen
+				+ getFormattedName(town.getMayor()));
+		List<Resident> residents = town.getResidents();
+		List<String> townyranks = TownyPerms.getTownRanks();
+		List<Resident> residentwithrank = new ArrayList<Resident>();
+
+		for (String rank : townyranks) {
+			for (Resident r : residents) {
+				if (r.getTownRanks() != null) {
+					if (r.getTownRanks().contains(rank)) {
+						residentwithrank.add(r);
+					}
+				}
+			}
+			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			residentwithrank.clear();
+		}
+		return ranklist;
 	}
 
 	/**
