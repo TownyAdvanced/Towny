@@ -234,6 +234,10 @@ public class TownCommand implements CommandExecutor {
 					townDelete(player, newSplit);
 					
 				}else if(split[0].equalsIgnoreCase("ranklist")){
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANKLIST.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();

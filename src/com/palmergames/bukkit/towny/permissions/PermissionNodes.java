@@ -60,6 +60,7 @@ public enum PermissionNodes {
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
+		TOWNY_COMMAND_TOWN_RANKLIST("towny.command.town.ranklist"),
 		
 		TOWNY_COMMAND_TOWN_SET("towny.command.town.set.*"),
 			TOWNY_COMMAND_TOWN_SET_BOARD("towny.command.town.set.board"),
