@@ -22,7 +22,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 public class TownyFormatter {
 
@@ -170,7 +169,7 @@ public class TownyFormatter {
 					residentwithrank.add(r);
 				}
 			}
-			ranklist.addAll(getFormattedResidents(StringUtils.capitalize(rank), residentwithrank));
+			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
 			residentwithrank.clear();
 		}
 		return ranklist;
