@@ -1710,3 +1710,5 @@ v0.81.0.16:
 	- Added '/town ranklist' command to display all residents holding ranks in your town.
 v0.81.0.17:
 	- Added missing permission for the new '/town ranklist' command.
+v0.81.0.18:
+	- '/Nation rank remove' now correctly removed nation ranks not ttown ranks.

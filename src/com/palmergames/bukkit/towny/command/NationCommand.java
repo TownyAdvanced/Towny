@@ -352,7 +352,7 @@ public class NationCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
-					if (target.removeTownRank(rank)) {
+					if (target.removeNationRank(rank)) {
 						TownyMessaging.sendMsg(target, "You have been demoted from the Nation rank of '" + rank + "'.");
 						TownyMessaging.sendMsg(player, "You have removed the Nation rank of '" + rank + "' from " + target.getName() + ".");
 					}
