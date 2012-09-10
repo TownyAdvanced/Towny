@@ -1712,3 +1712,5 @@ v0.81.0.17:
 	- Added missing permission for the new '/town ranklist' command.
 v0.81.0.18:
 	- '/Nation rank remove' now correctly removed nation ranks not ttown ranks.
+v0.81.0.19:
+	- Fixed plot claim message to correctly indicate success/failure.

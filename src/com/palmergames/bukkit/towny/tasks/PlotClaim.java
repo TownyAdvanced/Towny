@@ -90,9 +90,12 @@ public class PlotClaim extends Thread {
 		}
 
 		if (player != null) {
-			if (claim)
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-			else if (selection != null)
+			if (claim) {
+				if ((selection != null) && (selection.size() > 0))
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				else
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_not_claimed_1"));
+			} else if (selection != null)
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			else
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed"));
