@@ -644,15 +644,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setEmbassyPlotTax(0);
 					}
+				
+				line = kvFile.get("adminDisabledPvP");
+				if (line != null)
+					try {
+						town.setAdminDisabledPVP(Boolean.parseBoolean(line));
+					} catch (NumberFormatException nfe) {
+					} catch (Exception e) {
+				}
+				
 				/*
-				 * line = kvFile.get("pvp");
-				 * if (line != null)
-				 * try {
-				 * town.setPVP(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 * 
 				 * line = kvFile.get("mobs");
 				 * if (line != null)
 				 * try {
@@ -1488,10 +1489,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.write("hasUpkeep=" + Boolean.toString(town.hasUpkeep()) + newLine);
 			// Open
 			fout.write("open=" + Boolean.toString(town.isOpen()) + newLine);
-			/*
-			 * // PVP
-			 * fout.write("pvp=" + Boolean.toString(town.isPVP()) + newLine);
-			 * // Mobs
+			// PVP
+			fout.write("adminDisabledPvP=" + Boolean.toString(town.isAdminDisabledPVP()) + newLine);
+			 /* // Mobs
 			 * fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
 			 */
 			// Public

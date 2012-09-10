@@ -1714,3 +1714,4 @@ v0.81.0.18:
 	- '/Nation rank remove' now correctly removed nation ranks not ttown ranks.
 v0.81.0.19:
 	- Fixed plot claim message to correctly indicate success/failure.
+	- Added a manual flag on each town allowing a server owner to set a town to disable ALL PvP (adminDisabledPvP).

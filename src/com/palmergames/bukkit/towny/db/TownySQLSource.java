@@ -161,6 +161,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				+ "`embassyPlotTax` float NOT NULL," 
 				+ "`open` bool NOT NULL DEFAULT '0'," 
 				+ "`public` bool NOT NULL DEFAULT '0'," 
+				+ "`admindisabledpvp` bool NOT NULL DEFAULT '0'," 
 				+ "`homeblock` mediumtext NOT NULL,"
 				+ "`townBlocks` mediumtext NOT NULL," 
 				+ "`spawn` mediumtext NOT NULL," 
@@ -175,6 +176,24 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage());
 		}
 
+		/*
+		 * Update the table structure for older databases.
+		 */
+		String town_update;
+		
+		try {
+			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `admindisabledpvp`  bool";
+			Statement s = cntx.createStatement();
+			s.executeUpdate(town_update);
+			
+			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
+		} catch (SQLException ee) {
+			if (ee.getErrorCode() != 1060)
+			TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
+			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
+		}
+		
+		
 		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
 				+ " `name` VARCHAR(16) NOT NULL," 
 				+ "`town` mediumtext," 
@@ -736,6 +755,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
 				town.setOpen(rs.getBoolean("open"));
 				town.setPublic(rs.getBoolean("public"));
+				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 
 				town.setPurchasedBlocks(rs.getInt("purchased"));
 				line = rs.getString("townBlocks");
@@ -1314,6 +1334,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("taxpercent", town.isTaxPercentage());
 			twn_hm.put("open", town.isOpen());
 			twn_hm.put("public", town.isPublic());
+			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
+			
 			twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
 			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()) : "");
 			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()) : "");
