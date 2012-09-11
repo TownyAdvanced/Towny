@@ -271,6 +271,9 @@ permissions:
             towny.command.resident.toggle.explosion: true
             towny.command.resident.toggle.fire: true
             towny.command.resident.toggle.mobs: true
+            towny.command.resident.toggle.plotborder: true
+            towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.townclaim: true
     
     # TownyAdmin command permissions
     towny.command.townyadmin.*:
