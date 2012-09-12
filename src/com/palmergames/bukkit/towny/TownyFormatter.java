@@ -188,7 +188,7 @@ public class TownyFormatter {
 
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = getFormattedName(town);
-		title += ((town.isPVP() || town.getWorld().isForcePVP()) ? Colors.Red + " (PvP)" : "");
+		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? Colors.Red + " (PvP)" : "");
 		title += (town.isOpen() ? Colors.LightBlue + " (Open)" : "");
 		out.add(ChatTools.formatTitle(title));
 
