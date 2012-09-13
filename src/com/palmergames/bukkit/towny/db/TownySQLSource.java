@@ -182,7 +182,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		String town_update;
 		
 		try {
-			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `admindisabledpvp`  bool";
+			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN `admindisabledpvp`  bool";
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_update);
 			
