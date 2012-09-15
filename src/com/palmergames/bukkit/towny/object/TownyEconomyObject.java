@@ -15,12 +15,14 @@ import org.bukkit.World;
  * 
  */
 public class TownyEconomyObject extends TownyObject {
-	public static final TownyEconomyObject SERVER_ACCOUNT = new TownyEconomyObject() {
+	private static final class TownyServerAccount extends TownyEconomyObject {
 		@Override
 		public String getName() {
-			return TownySettings.getString(ConfigNodes.ECO_BANK_NAMES_SERVER);
+			return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
 		}
-	};
+	}
+
+	private static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 
 	/**
 	 * Tries to pay from the players holdings
@@ -31,8 +33,14 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
-
-		return payTo(amount, SERVER_ACCOUNT, reason);
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return payTo(amount, SERVER_ACCOUNT, reason);
+		} else {
+			boolean payed = _pay(amount);
+			if (payed)
+				TownyLogger.logMoneyTransaction(this, amount, null, reason);
+			return payed;
+		}
 	}
 
 	private boolean _pay(double amount) throws EconomyException {
@@ -52,7 +60,14 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean collect(double amount, String reason) throws EconomyException {
-		return SERVER_ACCOUNT.payTo(amount, this, reason);
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return SERVER_ACCOUNT.payTo(amount, this, reason);
+		} else {
+			boolean collected = _collect(amount);
+			if (collected)
+				TownyLogger.logMoneyTransaction(null, amount, this, reason);
+			return collected;
+		}
 	}
 
 	private boolean _collect(double amount) throws EconomyException {
