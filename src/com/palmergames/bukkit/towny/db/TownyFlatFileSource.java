@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -464,6 +465,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("town");
 				if (line != null)
 					resident.setTown(getTown(line));
+				
+				line = kvFile.get("town-ranks");
+				if (line != null)
+					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
+				
+				line = kvFile.get("nation-ranks");
+				if (line != null)
+					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
 
 				line = kvFile.get("friends");
 				if (line != null) {
@@ -522,17 +531,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setMayor(getResident(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident assistant = getResident(token);
-							if ((assistant != null) && (town.hasResident(assistant)))
-								town.addAssistant(assistant);
-						}
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						if (!token.isEmpty()) {
+//							Resident assistant = getResident(token);
+//							if ((assistant != null) && (town.hasResident(assistant)))
+//								town.addAssistant(assistant);
+//						}
+//					}
+//				}
 
 				town.setTownBoard(kvFile.get("townBoard"));
 
@@ -635,15 +644,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setEmbassyPlotTax(0);
 					}
+				
+				line = kvFile.get("adminDisabledPvP");
+				if (line != null)
+					try {
+						town.setAdminDisabledPVP(Boolean.parseBoolean(line));
+					} catch (NumberFormatException nfe) {
+					} catch (Exception e) {
+				}
+				
 				/*
-				 * line = kvFile.get("pvp");
-				 * if (line != null)
-				 * try {
-				 * town.setPVP(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 * 
 				 * line = kvFile.get("mobs");
 				 * if (line != null)
 				 * try {
@@ -800,17 +810,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					nation.setCapital(getTown(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident assistant = getResident(token);
-							if (assistant != null)
-								nation.addAssistant(assistant);
-						}
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						if (!token.isEmpty()) {
+//							Resident assistant = getResident(token);
+//							if (assistant != null)
+//								nation.addAssistant(assistant);
+//						}
+//					}
+//				}
 
 				line = kvFile.get("tag");
 				if (line != null)
@@ -1393,8 +1403,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.write("title=" + resident.getTitle() + newLine);
 			// surname
 			fout.write("surname=" + resident.getSurname() + newLine);
-			if (resident.hasTown())
+			if (resident.hasTown()) {
 				fout.write("town=" + resident.getTown().getName() + newLine);
+				fout.write("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ",") + newLine);
+				fout.write("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ",") + newLine);
+			}
 			// Friends
 			fout.write("friends=");
 			for (Resident friend : resident.getFriends())
@@ -1476,10 +1489,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout.write("hasUpkeep=" + Boolean.toString(town.hasUpkeep()) + newLine);
 			// Open
 			fout.write("open=" + Boolean.toString(town.isOpen()) + newLine);
-			/*
-			 * // PVP
-			 * fout.write("pvp=" + Boolean.toString(town.isPVP()) + newLine);
-			 * // Mobs
+			// PVP
+			fout.write("adminDisabledPvP=" + Boolean.toString(town.isAdminDisabledPVP()) + newLine);
+			 /* // Mobs
 			 * fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
 			 */
 			// Public

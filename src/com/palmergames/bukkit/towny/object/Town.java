@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.wallgen.Wall;
 import com.palmergames.bukkit.wallgen.WallSection;
@@ -20,7 +21,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private static final String ECONOMY_ACCOUNT_PREFIX = "town-";
 
 	private List<Resident> residents = new ArrayList<Resident>();
-	private List<Resident> assistants = new ArrayList<Resident>();
+	//private List<Resident> assistants = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private Wall wall = new Wall();
 	private Resident mayor;
@@ -33,6 +34,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private Location spawn;
+	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 
 	public Town(String name) {
 
@@ -115,6 +117,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		if (!hasResident(mayor))
 			throw new TownyException("Mayor doesn't belong to town.");
 		this.mayor = mayor;
+		
+		TownyPerms.assignPermissions(mayor, null);
 	}
 
 	public Nation getNation() throws NotRegisteredException {
@@ -129,6 +133,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		if (nation == null) {
 			this.nation = null;
+			TownyPerms.updateTownPerms(this);
 			return;
 		}
 		if (this.nation == nation)
@@ -136,6 +141,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		if (hasNation())
 			throw new AlreadyRegisteredException();
 		this.nation = nation;
+		TownyPerms.updateTownPerms(this);
 	}
 
 	@Override
@@ -146,6 +152,12 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public List<Resident> getAssistants() {
 
+		List<Resident> assistants = new ArrayList<Resident>();
+		
+		for (Resident assistant: residents) {
+			if (assistant.hasTownRank("assistant"))
+				assistants.add(assistant);
+		}
 		return assistants;
 	}
 
@@ -165,7 +177,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public boolean hasAssistant(Resident resident) {
 
-		return assistants.contains(resident);
+		return getAssistants().contains(resident);
 	}
 
 	public void addResident(Resident resident) throws AlreadyRegisteredException {
@@ -189,16 +201,16 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			}
 	}
 
-	public void addAssistant(Resident resident) throws AlreadyRegisteredException, NotRegisteredException {
-
-		if (hasAssistant(resident))
-			throw new AlreadyRegisteredException();
-
-		if (!hasResident(resident))
-			throw new NotRegisteredException(resident.getName() + " doesn't belong to your town.");
-
-		assistants.add(resident);
-	}
+//	public void addAssistant(Resident resident) throws AlreadyRegisteredException, NotRegisteredException {
+//
+//		if (hasAssistant(resident))
+//			throw new AlreadyRegisteredException();
+//
+//		if (!hasResident(resident))
+//			throw new NotRegisteredException(resident.getName() + " doesn't belong to your town.");
+//
+//		assistants.add(resident);
+//	}
 
 	public boolean isMayor(Resident resident) {
 
@@ -244,10 +256,25 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		this.permissions.pvp = isPVP;
 	}
+	
+	public void setAdminDisabledPVP(boolean isPVPDisabled) {
+
+		this.adminDisabledPVP = isPVPDisabled;
+	}
 
 	public boolean isPVP() {
 
+		// Admin has disabled PvP for this town.
+		if (isAdminDisabledPVP()) 
+			return false;
+		
 		return this.permissions.pvp;
+	}
+	
+	public boolean isAdminDisabledPVP() {
+
+		// Admin has disabled PvP for this town.
+		return this.adminDisabledPVP;
 	}
 
 	public void setBANG(boolean isBANG) {
@@ -457,7 +484,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 			if (residents.size() > 1) {
 				for (Resident assistant : new ArrayList<Resident>(getAssistants()))
-					if (assistant != resident) {
+					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
 						try {
 							setMayor(assistant);
 							continue;
@@ -483,16 +510,16 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		}
 
-		if (hasNation() && nation.hasAssistant(resident))
-			try {
-				nation.removeAssistant(resident);
-			} catch (NotRegisteredException e) {
-			}
-		if (hasAssistant(resident))
-			try {
-				removeAssistant(resident);
-			} catch (NotRegisteredException e) {
-			}
+//		if (hasNation() && nation.hasAssistant(resident))
+//			try {
+//				nation.removeAssistant(resident);
+//			} catch (NotRegisteredException e) {
+//			}
+//		if (hasAssistant(resident))
+//			try {
+//				removeAssistant(resident);
+//			} catch (NotRegisteredException e) {
+//			}
 
 		try {
 			resident.setTown(null);
@@ -501,13 +528,13 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		residents.remove(resident);
 	}
 
-	public void removeAssistant(Resident resident) throws NotRegisteredException {
-
-		if (!hasAssistant(resident))
-			throw new NotRegisteredException();
-		else
-			assistants.remove(resident);
-	}
+//	public void removeAssistant(Resident resident) throws NotRegisteredException {
+//
+//		if (!hasAssistant(resident))
+//			throw new NotRegisteredException();
+//		else
+//			assistants.remove(resident);
+//	}
 
 	public void setSpawn(Location spawn) throws TownyException {
 
@@ -548,7 +575,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		removeAllResidents();
 		mayor = null;
 		residents.clear();
-		assistants.clear();
+		//assistants.clear();
 		homeBlock = null;
 		outpostSpawns.clear();
 
@@ -802,8 +829,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
 
-		if (!isMayor(resident) && !hasAssistant(resident))
-			throw new TownyException("You don't have access to the town's bank.");
+		//if (!isMayor(resident))// && !hasAssistant(resident))
+		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
 			if (!payTo(amount, resident, "Town Widthdraw"))
@@ -827,8 +854,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 																						 * (
 																						 * )
 																						 */);
-		if (getAssistants().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Assistants (" + getAssistants().size() + "): " + Arrays.toString(getAssistants().toArray(new Resident[0])));
+		List<Resident> assistants = getAssistants();
+		
+		if (assistants.size() > 0)
+			out.add(getTreeDepth(depth + 1) + "Assistants (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
+		
 		out.add(getTreeDepth(depth + 1) + "Residents (" + getResidents().size() + "):");
 		for (Resident resident : getResidents())
 			out.addAll(resident.getTreeString(depth + 2));

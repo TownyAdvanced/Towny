@@ -213,7 +213,7 @@ public class TownySettings {
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		String fullPath = filepath + FileMgmt.fileSeparator() + res;
 
-		File file = FileMgmt.unpackLanguageFile(fullPath, res, defaultRes);
+		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		if (file != null) {
 
 			// read the (language).yml into memory
@@ -1070,6 +1070,16 @@ public class TownySettings {
 		if (getDebug())
 			System.out.println("[Towny] Debug: Reading Town Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
+	}
+	
+	public static boolean isRemovingVillagerBabiesWorld() {
+		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD);
+	}
+
+	public static boolean isRemovingVillagerBabiesTown() {
+		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN);
 	}
 
 	public static List<String> getWildExplosionProtectionEntities() {

@@ -12,7 +12,7 @@ public enum ConfigNodes {
 			"# This is for showing the changelog on updates.  Please do not edit."),
 	VERSION_BUKKIT(
 			"version.bukkit_version",
-			"2149",
+			"2222",
 			"# Minimum required version of CraftBukkit.  Please do not edit."),
 	VERSION_BUKKIT_BYPASS(
 			"version.bypass_version_check",
@@ -588,11 +588,25 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
+			
+	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
+			"protection.town_prevent_villager_breeding",
+			"false",
+			"",
+			"# Prevent the spawning of villager babies in towns."),
+			
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime",
 			"",
 			"# Globally remove living entities in all worlds that have their flag set."),
+			
+	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
+			"protection.world_prevent_villager_breeding",
+			"false",
+			"",
+			"# Prevent the spawning of villager babies in the world."),
+					
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",

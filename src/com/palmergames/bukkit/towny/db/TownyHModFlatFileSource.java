@@ -202,15 +202,15 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				if (line != null)
 					town.setMayor(getResident(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						Resident assistant = getResident(token);
-						if (assistant != null)
-							town.addAssistant(assistant);
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						Resident assistant = getResident(token);
+//						if (assistant != null)
+//							town.addAssistant(assistant);
+//					}
+//				}
 
 				town.setTownBoard(kvFile.get("townBoard"));
 
@@ -322,15 +322,15 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 				line = kvFile.get("capital");
 				nation.setCapital(getTown(line));
 
-				line = kvFile.get("assistants");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						Resident assistant = getResident(token);
-						if (assistant != null)
-							nation.addAssistant(assistant);
-					}
-				}
+//				line = kvFile.get("assistants");
+//				if (line != null) {
+//					tokens = line.split(",");
+//					for (String token : tokens) {
+//						Resident assistant = getResident(token);
+//						if (assistant != null)
+//							nation.addAssistant(assistant);
+//					}
+//				}
 
 				line = kvFile.get("allies");
 				if (line != null) {
@@ -338,7 +338,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					for (String token : tokens) {
 						Nation friend = getNation(token);
 						if (friend != null)
-							nation.setAliegeance("ally", friend);
+							nation.setAllegiance("ally", friend);
 					}
 				}
 
@@ -348,7 +348,7 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					for (String token : tokens) {
 						Nation enemy = getNation(token);
 						if (enemy != null)
-							nation.setAliegeance("enemy", enemy);
+							nation.setAllegiance("enemy", enemy);
 					}
 				}
 

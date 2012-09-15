@@ -230,7 +230,7 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
-
+		
 		//if (isTownyAdmin(player))
 		//        return TownBlockStatus.ADMIN;
 
@@ -296,7 +296,7 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.TOWN_OWNER;
 			} catch (NotRegisteredException e) {
 			}
-
+			
 			// Resident Plot rights
 			try {
 				Resident owner = townBlock.getResident();
@@ -315,6 +315,7 @@ public class PlayerCacheUtil {
 
 			// Resident with no town.
 			if (!resident.hasTown()) {
+				
 				if (townBlock.isWarZone()) {
 					if (!TownySettings.isWarTimeTownsNeutral())
 						return TownBlockStatus.WARZONE;
@@ -323,8 +324,7 @@ public class PlayerCacheUtil {
 				}
 				throw new TownyException();
 			}	
-				
-
+			
 			if (resident.getTown() != town) {
 				// Allied destroy rights
 				if (CombatUtil.isAlly(town, resident.getTown()))

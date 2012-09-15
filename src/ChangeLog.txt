@@ -1474,3 +1474,246 @@ v0.80.1.10:
 	    in the data folder from 'towny' to 'towny.sqldb' or 'towny.h2db'
 v0.80.1.11:
 	- Added the missing code to handle '/resident toggle {pvp/fire/explosion/mob}'.
+v0.80.1.12:
+	- Allow your own potions to affect you, even if you have friendly fire turned off.
+	- Simplify permission negation so you don't have to negate every data type of a block.
+	  (May not work with PEX as PEX doesn't return the correct value for 'isPermissionSet' on a negated permission).
+	- Save the Nation when removing a resident from a town (in case they were an assistant).
+	- Only show a resident as Online if the requesting player is able to see them (allow for vanish).
+	- Remove all resident titles/surnames when deleting a nation.
+	- Remove all resident titles/surnames when a town leaves a nation.
+v0.80.1.13:
+	- Fix NullPointerException when handling fake players on modded servers (aka. Tekkit).
+v0.81.0.0:
+	- Release.
+v0.81.0.1:
+	- Make buckets test against item_use instead of testing the block they are being used on.
+v0.81.0.2:
+	- Added town/nation ranks so server admins can create custom ranks with custom permission sets.
+	  Any existing players set as assistants will lose their rank and need to have it re-assigned.
+	- New commands
+	  '/town rank add/remove <player> <rank>'
+	  '/nation rank add/remove <player> <rank>'
+	- Added Towny's own permission system (townyperms.yml).
+	  This system pushes permissions directly to Bukkit and works along side all other perms plugins.
+	  It allows you to define sets of permissions based upon a players status (nomad/resident/mayor/king).
+	  You can also assign additional permissions based upon any assigned town/nation ranks (assistant/vip etc).
+	  This system is not limited to Towny perms. You can assign any permissions for any plugins in it's groups.
+	- Deprecated the following permission nodes (all have replacements)...
+	    All 'towny.town.toggle...' nodes, and the following...
+		towny.top
+		towny.town.*
+		towny.town.new
+		towny.town.delete
+		towny.town.rename
+		towny.town.claim
+		towny.town.claim.outpost
+		towny.town.plot
+		towny.town.plot.*
+		towny.town.plottype
+		towny.nation.*
+		towny.nation.new
+		towny.nation.delete
+		towny.nation.rename
+		towny.nation.grant-titles
+	- New permission nodes (auto assigned in townyperms.yml)
+		towny.command.nation.list
+		towny.command.nation.new
+		towny.command.nation.leave
+		towny.command.nation.withdraw
+		towny.command.nation.deposit
+		towny.command.nation.rank.*
+		towny.command.nation.king
+		towny.command.nation.set.*
+		towny.command.nation.set.king
+		towny.command.nation.set.capitol
+		towny.command.nation.set.taxes
+		towny.command.nation.set.name
+		towny.command.nation.set.title
+		towny.command.nation.set.surname
+		towny.command.nation.set.tag
+		towny.command.nation.toggle.*
+		towny.command.nation.toggle.neutral
+		towny.command.nation.ally
+		towny.command.nation.enemy
+		towny.command.nation.delete
+		towny.command.nation.online
+		towny.command.nation.add
+		towny.command.nation.kick
+		towny.command.town.*
+		towny.command.town.here
+		towny.command.town.list
+		towny.command.town.new
+		towny.command.town.leave
+		towny.command.town.withdraw
+		towny.command.town.deposit
+		towny.command.town.rank.*
+		towny.command.town.set.*
+		towny.command.town.set.board
+		towny.command.town.set.mayor
+		towny.command.town.set.homeblock
+		towny.command.town.set.spawn
+		towny.command.town.set.outpost
+		towny.command.town.set.perm
+		towny.command.town.set.taxes
+		towny.command.town.set.plottax
+		towny.command.town.set.shoptax
+		towny.command.town.set.embassytax
+		towny.command.town.set.plotprice
+		towny.command.town.set.shopprice
+		towny.command.town.set.embassyprice
+		towny.command.town.set.name
+		towny.command.town.set.tag
+		towny.command.town.buy
+		towny.command.town.toggle.*
+		towny.command.town.toggle.pvp
+		towny.command.town.toggle.public
+		towny.command.town.toggle.explosion
+		towny.command.town.toggle.fire
+		towny.command.town.toggle.mobs
+		towny.command.town.toggle.taxpercent
+		towny.command.town.toggle.open
+		towny.command.town.mayor
+		towny.command.town.delete
+		towny.command.town.join
+		towny.command.town.add
+		towny.command.town.kick
+		towny.command.town.claim.*
+		towny.command.town.claim.town
+		towny.command.town.claim.outpost
+		towny.command.town.unclaim
+		towny.command.town.online
+		towny.command.plot.*
+		towny.command.plot.claim
+		towny.command.plot.unclaim
+		towny.command.plot.notforsale
+		towny.command.plot.forsale
+		towny.command.plot.perm
+		towny.command.plot.toggle.*
+		towny.command.plot.toggle.pvp
+		towny.command.plot.toggle.explosion
+		towny.command.plot.toggle.fire
+		towny.command.plot.toggle.mobs
+		towny.command.plot.set.*
+		towny.command.plot.set.perm
+		towny.command.plot.set.reset
+		towny.command.plot.set.shop
+		towny.command.plot.set.embassy
+		towny.command.plot.set.arena
+		towny.command.plot.set.wilds
+		towny.command.plot.set.spleef
+		towny.command.plot.clear
+		towny.command.resident.list
+		towny.command.resident.tax
+		towny.command.resident.set.*
+		towny.command.resident.set.perm
+		towny.command.resident.set.mode
+		towny.command.resident.toggle.*
+		towny.command.resident.toggle.pvp
+		towny.command.resident.toggle.explosion
+		towny.command.resident.toggle.fire
+		towny.command.resident.toggle.mobs
+		towny.command.resident.friend
+		towny.command.townyadmin.*
+		towny.command.townyadmin.set.*
+		towny.command.townyadmin.set.mayor
+		towny.command.townyadmin.town.*
+		towny.command.townyadmin.town.new
+		towny.command.townyadmin.town.add
+		towny.command.townyadmin.town.kick
+		towny.command.townyadmin.town.delete
+		towny.command.townyadmin.town.rename
+		towny.command.townyadmin.nation.*
+		towny.command.townyadmin.nation.add
+		towny.command.townyadmin.nation.delete
+		towny.command.townyadmin.nation.rename
+		towny.command.townyadmin.toggle.*
+		towny.command.townyadmin.toggle.war
+		towny.command.townyadmin.toggle.neutral
+		towny.command.townyadmin.toggle.devmode
+		towny.command.townyadmin.toggle.debug
+		towny.command.townyadmin.toggle.townwithdraw
+		towny.command.townyadmin.toggle.nationwithdraw
+		towny.command.townyadmin.givebonus
+		towny.command.townyadmin.reload
+		towny.command.townyadmin.reset
+		towny.command.townyadmin.backup
+		towny.command.townyadmin.newday
+		towny.command.townyadmin.purge
+		towny.command.townyadmin.unclaim
+		towny.command.townyadmin.resident.delete
+		towny.command.towny.*
+		towny.command.towny.map
+		towny.command.towny.top
+		towny.command.towny.tree
+		towny.command.towny.time
+		towny.command.towny.universe
+		towny.command.towny.version
+		towny.command.towny.war
+		towny.command.towny.spy
+		towny.command.townyworld.list
+		towny.command.townyworld.set
+		towny.command.townyworld.toggle.*
+		towny.command.townyworld.toggle.claimable
+		towny.command.townyworld.toggle.usingtowny
+		towny.command.townyworld.toggle.pvp
+		towny.command.townyworld.toggle.forcepvp
+		towny.command.townyworld.toggle.explosion
+		towny.command.townyworld.toggle.forceexplosion
+		towny.command.townyworld.toggle.fire
+		towny.command.townyworld.toggle.forcefire
+		towny.command.townyworld.toggle.townmobs
+		towny.command.townyworld.toggle.worldmobs
+		towny.command.townyworld.toggle.revertunclaim
+		towny.command.townyworld.toggle.revertexpl
+		towny.command.townyworld.regen
+		towny.command.townyworld.undo
+v0.81.0.3:
+	- Fix SQL reading towny-rank when it should be town-ranks.
+	- Fix an error setting permissions on Load for Nations.
+v0.81.0.4:
+	- Added PersonalWorlds and WormholeXTremeWorlds as supported multiworld plugins.
+v0.81.0.5:
+	- God I hate MySQL queries.
+	- Change OnPlayerLogin to a DelayedSync task as we now push Towny perms and Bukkit perms are not thread safe.
+v0.81.0.6:
+	- Add missing towny.command.resident.* permission.
+	- Fix typo on 'towny.command.town.add' permission.
+v0.81.0.7:
+	- Fix player permissions not being updated when performing a '/ta reload'.
+v0.81.0.8:
+	- Fix explosion regen so containers respawn with the correct inventories.
+	- Add two missing permissions to the plugin.yml
+	    towny.command.town.claim.town
+	    towny.command.town.claim.outpost
+v0.81.0.9:
+	- Reset a players ranks when they leave a town.
+	- Fixed a missing space when adding/removing friends to/from your friends list (English and german language files).
+	- Updated mayor help for new rank command.
+v0.81.0.10:
+	- Added the ability to prevent spawning/breeding of villager babies at the world or town level.
+	- Fixed an ArrayIndexOutOfBoundsException when trying to use '/plot set'.
+v0.81.0.11:
+	- Fix 'ta reload' at console.
+	- Remove 'resident delete' from the help menu as it's replaced by '/ta delete'.
+v0.81.0.12:
+	- Fix prevention of villager breeding.
+v0.81.0.13:
+	- Prevent attempting to add Null if they user has removed all perms from a townyperms section.
+	- Be sure we save a town's data if it's the last to leave a nation (causing the nation to be deleted).
+v0.81.0.14:
+	- Fix town and nation withdraws to follow permissions.
+v0.81.0.15:
+	- Prevent a NPE if using '/res' on an invalid player name.
+	- Changes to the Town Board are now saved correctly.
+v0.81.0.16:
+	- Added '/town ranklist' command to display all residents holding ranks in your town.
+v0.81.0.17:
+	- Added missing permission for the new '/town ranklist' command.
+v0.81.0.18:
+	- '/Nation rank remove' now correctly removed nation ranks not ttown ranks.
+v0.81.0.19:
+	- Fixed plot claim message to correctly indicate success/failure.
+	- Added a manual flag on each town allowing a server owner to set a town to disable ALL PvP (adminDisabledPvP).
+v0.81.0.20:
+	- Fix SQL table updating for the new pvp field.

@@ -42,7 +42,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(Entity attacker, Entity defender) {
-
+		
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
 
@@ -192,6 +192,9 @@ public class CombatUtil {
 				/*
 				 * Check the attackers TownBlock and it's Town for their PvP status
 				 */
+				if (townBlock.getTown().isAdminDisabledPVP())
+					return true;
+				
 				if (!townBlock.getTown().isPVP() && !townBlock.getPermissions().pvp && !world.isForcePVP())
 					return true;
 			
@@ -239,6 +242,12 @@ public class CombatUtil {
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
 
+		/*
+		 * Don't block potion use (self damaging) on ourselves.
+		 */
+		if (attacker == defender)
+			return false;
+		
 		if ((attacker != null) && (defender != null))
 			if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 				try {

@@ -16,7 +16,6 @@
         <javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6">
             <classpath>
                 <pathelement location="${env.LIB}/bukkit.jar"/>
-                <pathelement location="${env.LIB}/craftbukkit.jar"/>
                 <pathelement location="${env.LIB}/bpermissions.jar"/>
                 <pathelement location="${env.LIB}/Essentials.jar"/>
                 <pathelement location="${env.LIB}/EssentialsGroupManager.jar"/>
@@ -39,7 +38,8 @@
         	<fileset dir="./src" includes="english.yml"/>
         	<fileset dir="./src" includes="german.yml"/>
         	<fileset dir="./src" includes="plugin.yml"/>
-          <fileset dir="./src" includes="spanish.yml"/>
+        	<fileset dir="./src" includes="spanish.yml"/>
+        	<fileset dir="./src" includes="townyperms.yml"/>
           <fileset dir="./src" includes="ToDo.txt"/>
         </jar>
     </target>

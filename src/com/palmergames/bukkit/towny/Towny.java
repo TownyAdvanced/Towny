@@ -85,6 +85,7 @@ public class Towny extends JavaPlugin {
 		TownyFormatter.initialize(this);
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
+		TownyPerms.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -101,8 +102,8 @@ public class Towny extends JavaPlugin {
 			if (TownySettings.isTownyUpdating(getVersion()))
 				update();
 
-			// Register all child permissions
-			//TownyUniverse.getPermissionSource().registerPermissionNodes();
+			// Register all child permissions for ranks
+			TownyPerms.registerPermissionNodes();
 		}
 
 		registerEvents();
@@ -209,6 +210,7 @@ public class Towny extends JavaPlugin {
 				error = true;
 				TownyLogger.log.severe("[Towny Error] Unable to read CraftBukkit Version.");
 				TownyLogger.log.severe("[Towny Error] Towny requires version " + bukkitVer + " or higher.");
+				TownyLogger.log.severe("[Towny Error] Check your CraftBukkit version or set 'bypass_version_check' to true in the Towny config.");
 				getServer().getPluginManager().disablePlugin(this);
 				return false;
 			}

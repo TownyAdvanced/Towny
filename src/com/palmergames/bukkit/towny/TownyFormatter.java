@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.Player;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -99,12 +101,12 @@ public class TownyFormatter {
 	 * @param resident
 	 * @return a string list containing the results.
 	 */
-	public static List<String> getStatus(Resident resident) {
+	public static List<String> getStatus(Resident resident, Player player) {
 
 		List<String> out = new ArrayList<String>();
 
 		// ___[ King Harlus ]___
-		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
+		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName()))) ) ? Colors.LightGreen + " (Online)" : "")));
 
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 		out.add(Colors.Green + "Registered: " + Colors.LightGreen + registeredFormat.format(resident.getRegistered()) + Colors.Gray + " | " + Colors.Green + "Last Online: " + Colors.LightGreen + lastOnlineFormat.format(resident.getLastOnline()));
@@ -140,6 +142,38 @@ public class TownyFormatter {
 
 		return out;
 	}
+	
+	/**
+	 * Returns a Chat Formatted List of all town residents who hold a rank.
+	 * 
+	 * @param town
+	 * @return a list containing formatted rank data.
+	 */
+	public static List<String> getRanks(Town town) {
+		
+		List<String> ranklist = new ArrayList<String>();
+		
+		String towntitle = getFormattedName(town);
+		towntitle += Colors.Blue + " Rank List";
+		ranklist.add(ChatTools.formatTitle(towntitle));
+		ranklist.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
+		
+		List<Resident> residents = town.getResidents();
+		List<String> townranks = TownyPerms.getTownRanks();
+		List<Resident> residentwithrank = new ArrayList<Resident>();
+
+		for (String rank : townranks) {
+			for (Resident r : residents) {
+				
+				if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank))) {
+					residentwithrank.add(r);
+				}
+			}
+			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			residentwithrank.clear();
+		}
+		return ranklist;
+	}
 
 	/**
 	 * 
@@ -154,7 +188,7 @@ public class TownyFormatter {
 
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = getFormattedName(town);
-		title += ((town.isPVP() || town.getWorld().isForcePVP()) ? Colors.Red + " (PvP)" : "");
+		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? Colors.Red + " (PvP)" : "");
 		title += (town.isOpen() ? Colors.LightBlue + " (Open)" : "");
 		out.add(ChatTools.formatTitle(title));
 

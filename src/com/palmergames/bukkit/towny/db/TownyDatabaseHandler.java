@@ -87,17 +87,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (!hasResident(name)) {
-			if (TownySettings.isFakeResident(name)) {
-				
-				Resident resident = new Resident(name);
-				resident.setNPC(true);
-				
-				return resident;
-				
-			} else
-				throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-		}
+			
+			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+			
+		} else if (TownySettings.isFakeResident(name)) {
 
+			Resident resident = new Resident(name);
+			resident.setNPC(true);
+
+			return resident;
+
+		} 
+			
 		return universe.getResidentMap().get(name);
 
 	}
@@ -216,6 +217,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			if (town != null) {
 				town.removeResident(resident);
+				if (town.hasNation())
+					saveNation(town.getNation());
+				
 				saveTown(town);
 			}
 			resident.clear();
@@ -496,7 +500,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 
+		
+		
 		for (Town town : toSave) {
+			
+			/*
+			 * Remove all resident titles before saving the town itself.
+			 */
+			List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
+			
+			for (Resident res : titleRemove) {
+				if (res.hasTitle() || res.hasSurname()) {
+					res.setTitle("");
+					res.setSurname("");
+					saveResident(res);
+				}
+			}
+
 			saveTown(town);
 		}
 

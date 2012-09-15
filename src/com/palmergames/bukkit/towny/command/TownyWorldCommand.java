@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +15,10 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -25,8 +26,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 /**
- * Send a list of all general townyworld help commands to player
- * Command: /townyworld
+ * Send a list of all general townyworld help commands to player Command:
+ * /townyworld
  */
 
 public class TownyWorldCommand implements CommandExecutor {
@@ -54,7 +55,8 @@ public class TownyWorldCommand implements CommandExecutor {
 
 		townyworld_set.add(ChatTools.formatTitle("/townyworld set"));
 		townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildname [name]", ""));
-		//townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "usingtowny [on/off]", ""));
+		// townyworld_set.add(ChatTools.formatCommand("", "/townyworld set",
+		// "usingtowny [on/off]", ""));
 
 		// if using permissions and it's active disable this command
 		if (!plugin.isPermissions()) {
@@ -69,11 +71,8 @@ public class TownyWorldCommand implements CommandExecutor {
 		}
 		parseWorldCommand(sender, args);
 		/*
-		 * } else {
-		 * // Console
-		 * for (String line : townyworld_help)
-		 * sender.sendMessage(Colors.strip(line));
-		 * }
+		 * } else { // Console for (String line : townyworld_help)
+		 * sender.sendMessage(Colors.strip(line)); }
 		 */
 
 		townyworld_set.clear();
@@ -126,68 +125,84 @@ public class TownyWorldCommand implements CommandExecutor {
 			return;
 		}
 
-		// The following commands are only available at console or for admins.
-		if ((player != null) && !TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
-			return;
-		}
+		try {
 
-		if (split[0].equalsIgnoreCase("?")) {
-			if (player == null) {
-				for (String line : townyworld_help)
-					sender.sendMessage(line);
-			} else
-				for (String line : townyworld_help)
-					player.sendMessage(line);
-		} else if (split[0].equalsIgnoreCase("list")) {
-			listWorlds(player, sender);
-		} else if (split[0].equalsIgnoreCase("set")) {
-			worldSet(player, sender, StringMgmt.remFirstArg(split));
-		} else if (split[0].equalsIgnoreCase("toggle")) {
-			worldToggle(player, sender, StringMgmt.remFirstArg(split));
-		} else if (split[0].equalsIgnoreCase("regen")) {
+			if (split[0].equalsIgnoreCase("?")) {
+				if (player == null) {
+					for (String line : townyworld_help)
+						sender.sendMessage(line);
+				} else
+					for (String line : townyworld_help)
+						player.sendMessage(line);
+			} else if (split[0].equalsIgnoreCase("list")) {
 
-			if (TownyUniverse.isWarTime()) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
-				return;
-			}
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
-				return;
-			}
+				listWorlds(player, sender);
 
-			if (TownySettings.getTownBlockSize() != 16) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
-				return;
-			}
+			} else if (split[0].equalsIgnoreCase("set")) {
 
-			// Regen this chunk
-			if (player != null) {
-				TownyRegenAPI.regenChunk(player);
-			}
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-		} else if (split[0].equalsIgnoreCase("undo")) {
+				worldSet(player, sender, StringMgmt.remFirstArg(split));
 
-			if (player != null)
-				try {
-					TownyUniverse.getDataSource().getResident(player.getName()).regenUndo();
-				} catch (NotRegisteredException e) {
-					// Failed to get resident
+			} else if (split[0].equalsIgnoreCase("toggle")) {
+
+				worldToggle(player, sender, StringMgmt.remFirstArg(split));
+
+			} else if (split[0].equalsIgnoreCase("regen")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_REGEN.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (TownyUniverse.isWarTime()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
+					return;
 				}
 
-		} else {
-			/*
-			 * try {
-			 * TownyWorld world = plugin.getTownyUniverse().getWorld(split[0]);
-			 * TownyMessaging.sendMessage(player,
-			 * plugin.getTownyUniverse().getStatus(world));
-			 * } catch (NotRegisteredException x) {
-			 * plugin.sendErrorMsg(player,
-			 * String.format(TownySettings.getLangString
-			 * ("msg_err_not_registered_1"), split[0]));
-			 * }
-			 */
+				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+					return;
+				}
+
+				if (TownySettings.getTownBlockSize() != 16) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
+					return;
+				}
+
+				// Regen this chunk
+				if (player != null) {
+					TownyRegenAPI.regenChunk(player);
+				}
+
+			} else if (split[0].equalsIgnoreCase("undo")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_UNDO.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (player != null)
+					try {
+						TownyUniverse.getDataSource().getResident(player.getName()).regenUndo();
+					} catch (NotRegisteredException e) {
+						// Failed to get resident
+					}
+
+			} else {
+				/*
+				 * try { TownyWorld world =
+				 * plugin.getTownyUniverse().getWorld(split[0]);
+				 * TownyMessaging.sendMessage(player,
+				 * plugin.getTownyUniverse().getStatus(world)); } catch
+				 * (NotRegisteredException x) { plugin.sendErrorMsg(player,
+				 * String.format(TownySettings.getLangString
+				 * ("msg_err_not_registered_1"), split[0])); }
+				 */
+			}
+
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 	}
 
@@ -213,7 +228,7 @@ public class TownyWorldCommand implements CommandExecutor {
 				player.sendMessage(line);
 	}
 
-	public void worldToggle(Player player, CommandSender sender, String[] split) {
+	public void worldToggle(Player player, CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/TownyWorld toggle"));
@@ -225,6 +240,9 @@ public class TownyWorldCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/worldmobs", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim/revertexpl", ""));
 		} else {
+
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			String msg;
 

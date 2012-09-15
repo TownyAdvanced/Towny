@@ -86,12 +86,12 @@ public class FileMgmt {
 		return file;
 	}
 
-	public static File unpackLanguageFile(String filePath, String resource, String defaultRes) {
+	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
 
 		// open a handle to yml file
 		File file = new File(filePath);
 
-		if ((file.exists()) && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes)))
+		if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
 			return file;
 
 		String resString;

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.18
+version: 0.19
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -166,8 +166,8 @@ msg_join_town: '&b%s joined the town!'
 msg_friend_add: '&b%s added you as a friend.'
 msg_friend_remove: '&b%s removed you as a friend.'
 msg_removed: '&bRemoved '
-msg_from_list: 'from your friend list.'
-msg_to_list: 'to your friend list.'
+msg_from_list: ' from your friend list.'
+msg_to_list: ' to your friend list.'
 msg_left_town: '&b%s left town'
 msg_you_left: '&bYou left %s.'
 msg_not_mayor: '&bYou are not the mayor.'

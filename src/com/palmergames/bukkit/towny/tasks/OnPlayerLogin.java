@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 
 
@@ -25,7 +26,7 @@ import com.palmergames.bukkit.util.BukkitTools;
  * @author ElgarL
  *
  */
-public class OnPlayerLogin extends Thread{
+public class OnPlayerLogin implements Runnable {
 	
 	Towny plugin;
 	TownyUniverse universe;
@@ -94,6 +95,10 @@ public class OnPlayerLogin extends Thread{
 		}
 
 		if (resident != null)
+			
+			TownyPerms.assignPermissions(resident, player);
+			
+			
 			try {
 				TownyMessaging.sendTownBoard(player, resident.getTown());
 			} catch (NotRegisteredException ex) {
