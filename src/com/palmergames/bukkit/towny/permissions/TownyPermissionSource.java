@@ -225,7 +225,7 @@ public abstract class TownyPermissionSource {
 
 	public boolean isTownyAdmin(Player player) {
 
-		return (player.isOp()) || (plugin.isPermissions() && has(player, PermissionNodes.TOWNY_ADMIN.getNode()));
+		return ((player == null) || player.isOp()) || (plugin.isPermissions() && has(player, PermissionNodes.TOWNY_ADMIN.getNode()));
 
 	}
 	
