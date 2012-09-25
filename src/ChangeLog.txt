@@ -1717,3 +1717,5 @@ v0.81.0.19:
 	- Added a manual flag on each town allowing a server owner to set a town to disable ALL PvP (adminDisabledPvP).
 v0.81.0.20:
 	- Fix SQL table updating for the new pvp field.
+v0.81.0.21:
+	- Embassy plots now charge the correct Plot Tax.
