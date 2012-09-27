@@ -1719,3 +1719,4 @@ v0.81.0.20:
 	- Fix SQL table updating for the new pvp field.
 v0.81.0.21:
 	- Embassy plots now charge the correct Plot Tax.
+	- Better handling of stale or dead connections for SQL.
