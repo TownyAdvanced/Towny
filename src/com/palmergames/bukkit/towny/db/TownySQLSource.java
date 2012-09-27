@@ -330,16 +330,26 @@ public class TownySQLSource extends TownyFlatFileSource {
 	public boolean getContext() {
 
 		try {
-			if (cntx == null || cntx.isClosed()) {
+			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
+				if (cntx != null && !cntx.isClosed()) {
+					try {
+						cntx.close();
+					} catch (SQLException e) {
+						// We're disposing of an old stale connection just be nice to the GC
+						// as well as mysql, so ignore the error there's nothing we can do
+						// if it fails
+					}
+					cntx = null;
+				}
 				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
 					cntx = DriverManager.getConnection(this.dsn);
 				} else
 					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
 
+				if (cntx == null || cntx.isClosed())
+					return false;
 			}
 
-			if (cntx == null || cntx.isClosed())
-				return false;
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
