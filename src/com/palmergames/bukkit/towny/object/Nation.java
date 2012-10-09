@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -406,6 +407,23 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 			if (town.hasResident(resident))
 				return true;
 		return false;
+	}
+	
+	@Override
+	public void collect(double amount) throws EconomyException {
+		
+		if (TownySettings.isUsingEconomy()) {
+			double bankcap = TownySettings.getNationBankCap();
+			if (bankcap > 0) {
+				if (amount + this.getHoldingBalance() > bankcap) {
+					TownyMessaging.sendNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					return;
+				}
+			}
+			
+			this.collect(amount, null);
+		}
+
 	}
 
 	public void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {

@@ -307,11 +307,11 @@ public class TownyCommand implements CommandExecutor {
 		if (town != null) {
 			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");
 			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-			output.add(Colors.Rose + "    [Upkeep] " + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
+			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
 
 			if (nation != null) {
 				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;

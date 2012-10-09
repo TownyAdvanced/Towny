@@ -1711,7 +1711,7 @@ v0.81.0.16:
 v0.81.0.17:
 	- Added missing permission for the new '/town ranklist' command.
 v0.81.0.18:
-	- '/Nation rank remove' now correctly removed nation ranks not ttown ranks.
+	- '/Nation rank remove' now correctly removed nation ranks not town ranks.
 v0.81.0.19:
 	- Fixed plot claim message to correctly indicate success/failure.
 	- Added a manual flag on each town allowing a server owner to set a town to disable ALL PvP (adminDisabledPvP).
@@ -1725,3 +1725,5 @@ v0.81.0.22:
 	- Prevent Shears and other items uses on Entities (sheep) if no permissions.
 	- Removed '/Towny top money' command. Use your Eco plugin to perform this action.
 	- '/town add {name}' now correctly displays the players current town if they are already in one.
+	- All payments into a Town or Nations bank now observe the Bank caps (if enabled).
+	- Fix '/towny prices' so it now shows Taxes instead of Upkeep for Towns/Nations.
