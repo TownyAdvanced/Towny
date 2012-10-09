@@ -1720,3 +1720,5 @@ v0.81.0.20:
 v0.81.0.21:
 	- Embassy plots now charge the correct Plot Tax.
 	- Better handling of stale or dead connections for SQL.
+v0.81.0.22:
+	- Fix town limit code.

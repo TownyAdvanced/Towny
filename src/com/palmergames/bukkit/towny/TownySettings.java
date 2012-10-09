@@ -1116,7 +1116,7 @@ public class TownySettings {
 
 	public static boolean hasTownLimit() {
 
-		return getTownLimit() == 0;
+		return getTownLimit() != 0;
 	}
 
 	public static int getTownLimit() {
