@@ -208,33 +208,9 @@ public class TownyCommand implements CommandExecutor {
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
-			towny_top.add(ChatTools.formatCommand("", "/towny top", "money [all/resident/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
-		} else if (args[0].equalsIgnoreCase("money"))
-			try {
-				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-					List<TownyEconomyObject> list = new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getResidents());
-					list.addAll(TownyUniverse.getDataSource().getTowns());
-					list.addAll(TownyUniverse.getDataSource().getNations());
-					towny_top.add(ChatTools.formatTitle("Top Bank Accounts"));
-					towny_top.addAll(getTopBankBalance(list, 10));
-				} else if (args[1].equalsIgnoreCase("resident")) {
-					towny_top.add(ChatTools.formatTitle("Top Resident Bank Accounts"));
-					towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getResidents()), 10));
-				} else if (args[1].equalsIgnoreCase("town")) {
-					towny_top.add(ChatTools.formatTitle("Top Town Bank Accounts"));
-					towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getTowns()), 10));
-				} else if (args[1].equalsIgnoreCase("nation")) {
-					towny_top.add(ChatTools.formatTitle("Top Nation Bank Accounts"));
-					towny_top.addAll(getTopBankBalance(new ArrayList<TownyEconomyObject>(TownyUniverse.getDataSource().getNations()), 10));
-				} else
-					sendErrorMsg(player, "Invalid sub command.");
-			} catch (EconomyException e) {
-				sendErrorMsg(player, "Economy error.");
-				sendErrorMsg(player, e.getError());
-			}
-		else if (args[0].equalsIgnoreCase("residents"))
+		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns());
 				list.addAll(TownyUniverse.getDataSource().getNations());

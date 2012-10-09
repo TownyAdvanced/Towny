@@ -1723,3 +1723,4 @@ v0.81.0.21:
 v0.81.0.22:
 	- Fix town limit code.
 	- Prevent Shears and other items uses on Entities (sheep) if no permissions.
+	- Removed '/Towny top money' command. Use your Eco plugin to perform this action.
