@@ -1728,3 +1728,5 @@ v0.81.0.22:
 	- All payments into a Town or Nations bank now observe the Bank caps (if enabled).
 	- Fix '/towny prices' so it now shows Taxes instead of Upkeep for Towns/Nations.
 	- Added plot type prices and taxes to '/towny prices'.
+v0.82.0.0:
+	- Release for bukkit 1.3.2-R1.0 #2377
