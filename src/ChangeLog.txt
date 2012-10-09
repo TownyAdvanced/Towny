@@ -1727,3 +1727,4 @@ v0.81.0.22:
 	- '/town add {name}' now correctly displays the players current town if they are already in one.
 	- All payments into a Town or Nations bank now observe the Bank caps (if enabled).
 	- Fix '/towny prices' so it now shows Taxes instead of Upkeep for Towns/Nations.
+	- Added plot type prices and taxes to '/towny prices'.
