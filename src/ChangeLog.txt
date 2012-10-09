@@ -1722,3 +1722,4 @@ v0.81.0.21:
 	- Better handling of stale or dead connections for SQL.
 v0.81.0.22:
 	- Fix town limit code.
+	- Prevent Shears and other items uses on Entities (sheep) if no permissions.

@@ -206,6 +206,42 @@ public class TownyPlayerListener implements Listener {
 		}
 
 	}
+	
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (event.getRightClicked() != null) {
+			
+			TownyWorld World = null;
+			
+			try {
+				World = TownyUniverse.getDataSource().getWorld(event.getPlayer().getWorld().getName());
+				if (!World.isUsingTowny())
+					return;
+
+			} catch (NotRegisteredException e) {
+				// World not registered with Towny.
+				e.printStackTrace();
+				return;
+			}
+			
+			if (event.getPlayer().getItemInHand() != null) {
+				
+				if (TownySettings.isItemUseId(event.getPlayer().getItemInHand().getTypeId())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+					return;
+				}
+			}
+		}
+		
+	}
+	
+	
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {

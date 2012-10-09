@@ -550,7 +550,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_ID(
 			"protection.item_use_ids",
-			"259,325,326,327,351,368,374,385",
+			"259,325,326,327,351,359,368,374,385",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -558,6 +558,7 @@ public enum ConfigNodes {
 			"# 326 - water bucket",
 			"# 327 - lava bucket",
 			"# 351 - bone/bonemeal",
+			"# 359 - shears",
 			"# 368 - ender pearl",
 			"# 374 - glass bottle",
 			"# 385 - fire charge"),
