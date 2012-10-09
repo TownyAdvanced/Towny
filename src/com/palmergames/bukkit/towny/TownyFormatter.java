@@ -43,9 +43,9 @@ public class TownyFormatter {
 		//TownyFormatter.plugin = plugin;
 	}
 
-	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList) {
+	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
 
-		List<Resident> onlineResidents = TownyUniverse.getOnlineResidents(residentList);
+		List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 

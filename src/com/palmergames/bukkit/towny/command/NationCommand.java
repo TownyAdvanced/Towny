@@ -262,7 +262,7 @@ public class NationCommand implements CommandExecutor {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
 						Nation nation = town.getNation();
-						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation));
+						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 					} catch (NotRegisteredException x) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
 					}

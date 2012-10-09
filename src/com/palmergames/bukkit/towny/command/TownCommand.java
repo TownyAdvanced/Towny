@@ -289,7 +289,7 @@ public class TownCommand implements CommandExecutor {
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
-						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town));
+						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 					} catch (NotRegisteredException x) {
 						throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 					}
@@ -1415,8 +1415,7 @@ public class TownCommand implements CommandExecutor {
 			try {
 				// only add players with the right permissions.
 				if (plugin.isPermissions()) {
-					if (BukkitTools.getServer().matchPlayer(newMember.getName()).isEmpty()) { // Not
-																								// online
+					if (BukkitTools.getServer().matchPlayer(newMember.getName()).isEmpty()) { // Not online
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
 						invited.remove(newMember);
 					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {

@@ -194,7 +194,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		else if (resident.hasTown())
 			try {
 				if (!resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), getFormattedName()));
+					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -536,6 +536,26 @@ public class TownyUniverse extends TownyObject {
 
 		return onlineResidents;
 	}
+	
+	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
+
+		List<Resident> onlineResidents = new ArrayList<Resident>();
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			if (player != null) {
+				/*
+				 * Loop town/nation resident list
+				 */
+				for (Resident resident : residentList.getResidents()) {
+					if (resident.getName().equalsIgnoreCase(player.getName()))
+						if ((viewer == null) || (viewer.canSee(BukkitTools.getPlayerExact(resident.getName())))) {
+							onlineResidents.add(resident);
+						}
+				}
+			}
+		}
+
+		return onlineResidents;
+	}
 
 	public void requestTeleport(Player player, Location spawnLoc, double cost) {
 
