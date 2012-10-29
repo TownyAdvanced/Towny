@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
 
-	private static final String ECONOMY_ACCOUNT_PREFIX = "town-";
+	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownPrefix();
 
 	private List<Resident> residents = new ArrayList<Resident>();
 	//private List<Resident> assistants = new ArrayList<Resident>();
