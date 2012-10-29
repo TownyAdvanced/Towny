@@ -1393,6 +1393,16 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NWS_WORLD_PVP);
 	}
+	
+        public static String getTownPrefix() {
+
+                return getString(ConfigNodes.NWS_TOWN_PREFIX);
+        }
+
+        public static String getNationPrefix() {
+
+                return getString(ConfigNodes.NWS_NATION_PREFIX);
+        }
 
 	public static boolean isForcingPvP() {
 
