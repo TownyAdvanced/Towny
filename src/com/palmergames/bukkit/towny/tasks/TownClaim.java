@@ -103,6 +103,11 @@ public class TownClaim extends Thread {
 
 		} else if (!claim) {
 
+			if (town == null) {
+				TownyMessaging.sendMsg(player, "Nothing to unclaim!");
+				return;
+			}
+			
 			townUnclaimAll(town);
 		}
 
@@ -123,7 +128,7 @@ public class TownClaim extends Thread {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			} else if (forced) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				if (town.getWorld().isUsingPlotManagementRevert())
+				if ((town != null) &&(town.getWorld().isUsingPlotManagementRevert()))
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			}
 		}

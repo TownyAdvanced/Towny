@@ -269,6 +269,7 @@ public class TownyAdminCommand implements CommandExecutor {
 
 				List<WorldCoord> selection;
 				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
+				selection = AreaSelectionUtil.filterWildernessBlocks(selection);
 
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 

@@ -56,7 +56,7 @@ public class AreaSelectionUtil {
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
 		if (pos.getTownyWorld().isClaimable()) {
 			if (args.length > 0) {
-				int r = 0, available = 0;
+				int r = 0, available = 1000;
 
 				if (owner instanceof Town) {
 					Town town = (Town) owner;
@@ -133,6 +133,12 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Returns a list containing only wilderness townblocks.
+	 * 
+	 * @param selection
+	 * @return List of townblocks
+	 */
 	public static List<WorldCoord> filterTownOwnedBlocks(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<WorldCoord>();
@@ -142,6 +148,24 @@ public class AreaSelectionUtil {
 					out.add(worldCoord);
 			} catch (NotRegisteredException e) {
 				out.add(worldCoord);
+			}
+		return out;
+	}
+	
+	/**
+	 * Returns a List containing only claimed townblocks.
+	 * 
+	 * @param selection
+	 * @return List of townblocks
+	 */
+	public static List<WorldCoord> filterWildernessBlocks(List<WorldCoord> selection) {
+
+		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		for (WorldCoord worldCoord : selection)
+			try {
+				if (worldCoord.getTownBlock().hasTown())
+					out.add(worldCoord);
+			} catch (NotRegisteredException e) {
 			}
 		return out;
 	}
