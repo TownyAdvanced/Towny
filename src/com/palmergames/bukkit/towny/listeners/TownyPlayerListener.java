@@ -22,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -230,6 +231,36 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 			
+			/*
+			 * Protect Item Frames.
+			 */
+			if (event.getRightClicked() instanceof Hanging) {
+				
+				Player player = event.getPlayer();
+				
+				//Get build permissions (updates if none exist)
+				boolean bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), 389, (byte)0, TownyPermission.ActionType.BUILD);
+				
+				// Allow the removal if we are permitted
+				if (bBuild)
+					return;
+
+				/*
+				 * Fetch the players cache
+				 */
+				PlayerCache cache = plugin.getCache(player);
+
+				event.setCancelled(true);
+				
+				if (cache.hasBlockErrMsg())
+					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+				
+				return;
+			}
+			
+			/*
+			 * Item_use protection.
+			 */
 			if (event.getPlayer().getItemInHand() != null) {
 				
 				if (TownySettings.isItemUseId(event.getPlayer().getItemInHand().getTypeId())) {

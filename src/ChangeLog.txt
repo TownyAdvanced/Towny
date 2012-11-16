@@ -1734,3 +1734,5 @@ v0.82.0.1:
 	- Add support for Wither explosion protection.
 	- Add protection for Hanging object protection (originally only paintings).
 	- Update minimum CraftBukkit version to #2459 (MC 1.4.4).
+v0.82.0.2:
+	- Prevent players with no build permissions from rotating item frames.
