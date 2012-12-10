@@ -45,7 +45,6 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -70,8 +69,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Prevent PvP and PvM damage dependent upon PvP
-	 * settings and location.
+	 * Prevent PvP and PvM damage dependent upon PvP settings and location.
 	 * 
 	 * @param event
 	 */
@@ -93,7 +91,7 @@ public class TownyEntityListener implements Listener {
 				// other events can fire to cause damage
 				if (attacker instanceof Projectile)
 					attacker.remove();
-				
+
 				event.setCancelled(true);
 			}
 		}
@@ -121,7 +119,7 @@ public class TownyEntityListener implements Listener {
 			try {
 				townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
 
-				//remove drops from monster deaths if in an arena plot           
+				// remove drops from monster deaths if in an arena plot
 				if (townyWorld.isUsingTowny()) {
 					if (townyWorld.getTownBlock(Coord.parseCoord(loc)).getType() == TownBlockType.ARENA)
 						event.getDrops().clear();
@@ -184,29 +182,31 @@ public class TownyEntityListener implements Listener {
 				return;
 			}
 
-			//remove from world if set to remove mobs globally
+			// remove from world if set to remove mobs globally
 			if (townyWorld.isUsingTowny())
-				if (!townyWorld.hasWorldMobs() && ((MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)
-													|| ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld()))))) {
+				if (!townyWorld.hasWorldMobs() && ((MobRemovalTimerTask.isRemovingWorldEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld()))))) {
 					if (plugin.isCitizens2()) {
 						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
-							//TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+							// TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled "
+							// + event.getEntityType().name() +
+							// " from spawning within "+coord.toString()+".");
 							event.setCancelled(true);
 						}
 					} else
 						event.setCancelled(true);
 				}
 
-			//remove from towns if in the list and set to remove            
+			// remove from towns if in the list and set to remove
 			try {
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
-						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity)
-								|| ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesTown())))) {
+						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesTown())))) {
 							if (plugin.isCitizens2()) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
-									//TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled " + event.getEntityType().name() + " from spawning within "+coord.toString()+".");
+									// TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled "
+									// + event.getEntityType().name() +
+									// " from spawning within "+coord.toString()+".");
 									event.setCancelled(true);
 								}
 							} else
@@ -258,53 +258,62 @@ public class TownyEntityListener implements Listener {
 		}
 
 		switch (event.getEntity().getType()) {
-		
+
 		case WITHER:
-			
+
 			try {
 				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
-	
+
 				if (!townyWorld.isUsingTowny())
 					return;
-				
-				if (!blockCanExplode(townyWorld, event.getBlock())) {
+
+				if (!locationCanExplode(townyWorld, event.getBlock().getLocation())) {
 					event.setCancelled(true);
 					return;
 				}
-				
+
 			} catch (NotRegisteredException e) {
 				// Failed to fetch world
 			}
 			break;
-			
+
 		case ENDERMAN:
-			
+
 			try {
 				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
-	
+
 				if (!townyWorld.isUsingTowny())
 					return;
-	
+
 				if (townyWorld.isEndermanProtect())
 					event.setCancelled(true);
-	
+
 			} catch (NotRegisteredException e) {
 				// Failed to fetch world
 			}
 			break;
-			
+
 		default:
-		
+
 		}
 
 	}
-	
-	public boolean blockCanExplode(TownyWorld world, Block block) {
-		Coord coord = Coord.parseCoord(block);
+
+	/**
+	 * Test if this location has explosions enabled.
+	 * 
+	 * @param world
+	 * @param target
+	 * @return true if allowed.
+	 */
+	public boolean locationCanExplode(TownyWorld world, Location target) {
+
+		Coord coord = Coord.parseCoord(target);
+
 		if (world.isWarZone(coord) && !TownyWarConfig.isAllowingExplosionsInWarZone()) {
 			return false;
 		}
-		
+
 		try {
 			TownBlock townBlock = world.getTownBlock(coord);
 			if (world.isUsingTowny() && !world.isForceExpl()) {
@@ -329,8 +338,8 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld;
 
 		/**
-		 * Perform this test outside the block loop so we
-		 * only get the world once per explosion.
+		 * Perform this test outside the block loop so we only get the world
+		 * once per explosion.
 		 */
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());
@@ -368,7 +377,8 @@ public class TownyEntityListener implements Listener {
 							// ***********************************
 							// TODO
 
-							// On completion, remove TODO from config.yml comments.
+							// On completion, remove TODO from config.yml
+							// comments.
 
 							/*
 							 * if
@@ -381,9 +391,8 @@ public class TownyEntityListener implements Listener {
 							 * scheduleSyncDelayedTask(plugin, task,
 							 * ((TownySettings.getPlotManagementWildRegenDelay()
 							 * + count)*20)));
-							 * plugin.getTownyUniverse().addProtectionRegenTask(task
-							 * );
-							 * }
+							 * plugin.getTownyUniverse().addProtectionRegenTask
+							 * (task ); }
 							 */
 
 							// TODO
@@ -398,11 +407,12 @@ public class TownyEntityListener implements Listener {
 				return;
 			}
 
-			//TODO: expand to protect neutrals during a war
+			// TODO: expand to protect neutrals during a war
 			try {
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 
-				// If explosions are off, or it's wartime and explosions are off and the towns has no nation
+				// If explosions are off, or it's wartime and explosions are off
+				// and the towns has no nation
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceExpl()) {
 					if ((!townBlock.getPermissions().explosion) || (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
 						if (event.getEntity() != null)
@@ -476,60 +486,68 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		TownyWorld townyWorld = null;
+		String worldName = null;
+		Entity hanging = event.getEntity();
+		Object remover = null;
+
+		try {
+			worldName = hanging.getWorld().getName();
+			townyWorld = TownyUniverse.getDataSource().getWorld(worldName);
+
+			if (!townyWorld.isUsingTowny())
+				return;
+
+		} catch (NotRegisteredException e1) {
+			// Not a known Towny world.
+			// event.setCancelled(true);
+			return;
+		}
+
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
-			Entity hanging = evt.getEntity();
-			Object remover = evt.getRemover();
 
-			try {
-				String worldName = hanging.getWorld().getName();
-				TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(worldName);
+			remover = evt.getRemover();
 
-				if (!townyWorld.isUsingTowny())
+			if (remover instanceof Player) {
+				Player player = (Player) evt.getRemover();
+
+				// Get destroy permissions (updates if none exist)
+				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.DESTROY);
+
+				// Allow the removal if we are permitted
+				if (bDestroy)
 					return;
 
+				/*
+				 * Fetch the players cache
+				 */
+				PlayerCache cache = plugin.getCache(player);
 
-				if (remover instanceof Player) {
-					Player player = (Player) evt.getRemover();
-
-					//Get destroy permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte)0, TownyPermission.ActionType.DESTROY);
-					
-					// Allow the removal if we are permitted
-					if (bDestroy)
-						return;
-
-					/*
-					 * Fetch the players cache
-					 */
-					PlayerCache cache = plugin.getCache(player);
-
-					event.setCancelled(true);
-					
-					if (cache.hasBlockErrMsg())
-						TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-				} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
-
-					try {
-						TownBlock townBlock = new WorldCoord(worldName, Coord.parseCoord(hanging.getLocation())).getTownBlock();
-
-						// Explosions are blocked in this plot
-						if ((!townBlock.getPermissions().explosion) && (!townBlock.getWorld().isForceExpl()))
-							event.setCancelled(true);
-
-					} catch (NotRegisteredException e) {
-						// Not in a town
-						if ((!townyWorld.isExpl()) && (!townyWorld.isForceExpl()))
-							event.setCancelled(true);
-					}
-
-				}
-
-			} catch (NotRegisteredException e1) {
-				//TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
 				event.setCancelled(true);
-				return;
+
+				if (cache.hasBlockErrMsg())
+					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+
+			} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
+
+				// Explosions are blocked in this plot
+				if (!locationCanExplode(townyWorld, hanging.getLocation()))
+					event.setCancelled(true);
+			}
+
+		} else {
+
+			switch (event.getCause()) {
+
+			case EXPLOSION:
+
+				if (!locationCanExplode(townyWorld, event.getEntity().getLocation()))
+					event.setCancelled(true);
+				break;
+
+			default:
+
 			}
 
 		}
@@ -555,13 +573,13 @@ public class TownyEntityListener implements Listener {
 			if (!townyWorld.isUsingTowny())
 				return;
 
-			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte)0, TownyPermission.ActionType.BUILD);
-			
+			// Get build permissions (updates if none exist)
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.BUILD);
+
 			// Allow placing if we are permitted
 			if (bBuild)
 				return;
-			
+
 			/*
 			 * Fetch the players cache
 			 */

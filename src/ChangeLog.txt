@@ -1740,3 +1740,4 @@ v0.82.0.2:
 	- Correctly select townblocks to unclaim when using '/ta unclaim x'
 v0.82.0.3:
 	- Fix Ender peral teleports into protected areas.
+	- Protect Hanging items from explosions per plot settings.
