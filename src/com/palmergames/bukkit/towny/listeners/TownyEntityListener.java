@@ -10,8 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -508,6 +506,13 @@ public class TownyEntityListener implements Listener {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 
 			remover = evt.getRemover();
+			
+			/*
+			 * Check if this has a shooter.
+			 */
+			if (remover instanceof Projectile) {
+				remover = ((Projectile)remover).getShooter();
+			}
 
 			if (remover instanceof Player) {
 				Player player = (Player) evt.getRemover();
@@ -529,7 +534,7 @@ public class TownyEntityListener implements Listener {
 				if (cache.hasBlockErrMsg())
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
-			} else if ((remover instanceof Fireball) || (remover instanceof LightningStrike)) {
+			} else {
 
 				// Explosions are blocked in this plot
 				if (!locationCanExplode(townyWorld, hanging.getLocation()))

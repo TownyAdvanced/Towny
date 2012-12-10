@@ -1741,3 +1741,4 @@ v0.82.0.2:
 v0.82.0.3:
 	- Fix Ender peral teleports into protected areas.
 	- Protect Hanging items from explosions per plot settings.
+	- Prevent monsters breaking frames unless explosions are enabled.
