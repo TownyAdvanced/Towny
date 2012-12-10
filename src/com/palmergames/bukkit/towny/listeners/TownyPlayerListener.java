@@ -336,7 +336,7 @@ public class TownyPlayerListener implements Listener {
 			TownyWorld toWorld = TownyUniverse.getDataSource().getWorld(to.getWorld().getName());
 			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
 			if (!fromCoord.equals(toCoord))
-				onPlayerMoveChunk(player, fromCoord, toCoord, from, to);
+				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
 			else {
 				//plugin.sendDebugMsg("    From: " + fromCoord);
 				//plugin.sendDebugMsg("    To:   " + toCoord);
@@ -492,12 +492,12 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 	}
 
-	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc) {
+	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc, PlayerMoveEvent moveEvent) {
 
 		plugin.getCache(player).setLastLocation(toLoc);
 		plugin.getCache(player).updateCoord(to);
 
-		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to);
+		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 }
