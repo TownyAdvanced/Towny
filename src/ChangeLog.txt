@@ -1738,3 +1738,5 @@ v0.82.0.2:
 	- Prevent players with no build permissions from rotating item frames.
 	- Stop throwing NPE's on '/ta unclaim x'.
 	- Correctly select townblocks to unclaim when using '/ta unclaim x'
+v0.82.0.3:
+	- Fix Ender peral teleports into protected areas.

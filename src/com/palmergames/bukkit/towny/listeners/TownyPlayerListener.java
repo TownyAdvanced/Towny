@@ -365,7 +365,7 @@ public class TownyPlayerListener implements Listener {
 		if (event.getCause() == TeleportCause.ENDER_PEARL) {
 			
 			if (TownySettings.isItemUseId(Material.ENDER_PEARL.getId())) {
-				if (onPlayerInteract(event.getPlayer(), null, new ItemStack(Material.ENDER_PEARL))) {
+				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
 					TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Ender Pearls are disabled!");
 					return;
