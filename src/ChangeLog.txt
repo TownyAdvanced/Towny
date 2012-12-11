@@ -1743,3 +1743,5 @@ v0.82.0.3:
 	- Protect Hanging items from explosions per plot settings.
 	- Prevent monsters breaking frames unless explosions are enabled.
 	- attach PlayerMoveEvent to its related PlayerMoveChunkEvent (andre)
+v0.82.0.4:
+	- Fix outpost spawns to correctly use the outpost spawn permission when using no outpost number.
