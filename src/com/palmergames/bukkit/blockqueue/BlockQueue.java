@@ -42,7 +42,7 @@ public class BlockQueue {
 		//TODO: null = plugin
 		//TODO: null = plugin
 		//TODO: null = plugin
-		server.getScheduler().scheduleAsyncDelayedTask(null, instance.getWorker());
+		server.getScheduler().runTaskLaterAsynchronously(null, instance.getWorker(),0);
 
 		return instance;
 	}

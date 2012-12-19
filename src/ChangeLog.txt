@@ -1745,3 +1745,7 @@ v0.82.0.3:
 	- attach PlayerMoveEvent to its related PlayerMoveChunkEvent (andre)
 v0.82.0.4:
 	- Fix outpost spawns to correctly use the outpost spawn permission when using no outpost number.
+v0.82.0.5:
+	- Ignore depreciated material.Door in Bukkit.
+	- Update for altered Async task management in Bukkit.
+	- Update minimum CraftBukkit version to #2543 (1.4.5-R1.0).

@@ -108,7 +108,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncDelayedTask(Runnable task, long delay) {
-		return getScheduler().scheduleAsyncDelayedTask(plugin, task, delay);
+		return getScheduler().runTaskLaterAsynchronously(plugin, task, delay).getTaskId();
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncRepeatingTask(Runnable task, long delay, long repeat) {
-		return getScheduler().scheduleAsyncRepeatingTask(plugin, task, delay, repeat);
+		return getScheduler().runTaskTimerAsynchronously(plugin, task, delay, repeat).getTaskId();
 	}
 	
 	/**

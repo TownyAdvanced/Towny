@@ -105,7 +105,7 @@ public class War {
 				//              new ServerBroadCastTimerTask(plugin,
 				//                              String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))),
 				//                              (delay-t)*1000);
-				int id = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(getPlugin(), new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
 				if (id == -1) {
 					TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
 					end();
@@ -163,7 +163,7 @@ public class War {
 			}
 		}
 		//warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
-		int id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(getPlugin(), new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
+		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
 		if (id == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
 			end();

@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
+@SuppressWarnings("deprecation")
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
