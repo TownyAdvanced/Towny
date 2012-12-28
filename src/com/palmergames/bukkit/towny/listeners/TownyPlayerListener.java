@@ -172,7 +172,7 @@ public class TownyPlayerListener implements Listener {
 
 		if ((event.getAction() == Action.PHYSICAL)) {
 			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
-				if (World.isDisablePlayerTrample()) {
+				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 					return;
 				}
