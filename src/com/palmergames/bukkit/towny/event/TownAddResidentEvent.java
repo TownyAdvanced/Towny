@@ -14,9 +14,20 @@ import org.bukkit.event.HandlerList;
 public class TownAddResidentEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
+    
     private Resident resident;
     private Town town;
 
+    @Override
+    public HandlerList getHandlers() {
+    	
+        return handlers;
+    }
+    
+    public static HandlerList getHandlerList() {
+
+		return handlers;
+	}
 
     public TownAddResidentEvent(Resident resident, Town town) {
         this.resident = resident;
@@ -39,8 +50,4 @@ public class TownAddResidentEvent extends Event {
         return town;
     }
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
 }

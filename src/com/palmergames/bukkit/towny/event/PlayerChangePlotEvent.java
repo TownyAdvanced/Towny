@@ -13,9 +13,21 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerChangePlotEvent extends PlayerEvent {
 
 	private static final HandlerList handlers = new HandlerList();
+	
 	private WorldCoord from;
 	private WorldCoord to;
 	private PlayerMoveEvent moveEvent;
+	
+	@Override
+    public HandlerList getHandlers() {
+    	
+        return handlers;
+    }
+    
+    public static HandlerList getHandlerList() {
+
+		return handlers;
+	}
 	
 	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
 
@@ -40,14 +52,4 @@ public class PlayerChangePlotEvent extends PlayerEvent {
 		return to;
 	}
 
-	@Override
-	public HandlerList getHandlers() {
-
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-
-		return handlers;
-	}
 }
