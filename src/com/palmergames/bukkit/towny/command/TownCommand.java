@@ -233,7 +233,7 @@ public class TownCommand implements CommandExecutor {
 
 					townDelete(player, newSplit);
 					
-				}else if(split[0].equalsIgnoreCase("ranklist")){
+				} else if (split[0].equalsIgnoreCase("ranklist")){
 					
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANKLIST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -268,9 +268,6 @@ public class TownCommand implements CommandExecutor {
 					townKick(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("claim")) {
-
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					parseTownClaimCommand(player, newSplit);
 
@@ -1816,6 +1813,10 @@ public class TownCommand implements CommandExecutor {
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
 					if (TownySettings.isAllowingOutposts()) {
 
 						if (world.hasTownBlock(key))
@@ -1831,6 +1832,10 @@ public class TownCommand implements CommandExecutor {
 					} else
 						throw new TownyException(TownySettings.getLangString("msg_outpost_disable"));
 				} else {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
