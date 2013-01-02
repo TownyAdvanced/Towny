@@ -1150,7 +1150,7 @@ public class TownCommand implements CommandExecutor {
 		}
 
 		try {
-			town.removeResident(resident);
+			townRemoveResident(town,resident);
 		} catch (EmptyTownException et) {
 			TownyUniverse.getDataSource().removeTown(et.getTown());
 
