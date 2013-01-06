@@ -1749,7 +1749,7 @@ v0.82.0.5:
 	- Ignore depreciated material.Door in Bukkit.
 	- Update for altered Async task management in Bukkit.
 	- Update minimum CraftBukkit version to #2543 (1.4.5-R1.0).
-v0.85.0.6:
+v0.82.0.6:
 	- Fix town and outpost claiming to use the correct permission child nodes.
 	- Add missing getHandlersList() to Towny events.
 	- '/town leave' now triggers a TownRemoveResidentEvent.
