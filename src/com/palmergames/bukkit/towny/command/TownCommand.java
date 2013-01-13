@@ -6,8 +6,6 @@ import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.*;
-import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -1461,7 +1459,6 @@ public class TownCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveTown(town);
 
 		plugin.getTownyUniverse().setChangedNotify(TOWN_ADD_RESIDENT);
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, town));
 	}
 
 	private static void townInviteResident(Town town, Resident newMember) throws AlreadyRegisteredException {
@@ -1503,7 +1500,6 @@ public class TownCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveTown(town);
 
 		plugin.getTownyUniverse().setChangedNotify(TOWN_REMOVE_RESIDENT);
-		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, town));
 	}
 
 	public static void townKickResidents(Object sender, Resident resident, Town town, List<Resident> kicking) {

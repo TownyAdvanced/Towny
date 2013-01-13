@@ -228,8 +228,27 @@ public class TownyFormatter {
 		out.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
 
 		// Assistants [2]: Sammy, Ginger
-		if (town.getAssistants().size() > 0)
-			out.addAll(getFormattedResidents("Assistants", town.getAssistants()));
+		//if (town.getAssistants().size() > 0)
+		//	out.addAll(getFormattedResidents("Assistants", town.getAssistants()));
+		
+
+		List<String> ranklist = new ArrayList<String>();
+		List<Resident> residentss = town.getResidents();
+		List<String> townranks = TownyPerms.getTownRanks();
+		List<Resident> residentwithrank = new ArrayList<Resident>();
+
+		for (String rank : townranks) {
+			for (Resident r : residentss) {
+				
+				if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank))) {
+					residentwithrank.add(r);
+				}
+			}
+			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			residentwithrank.clear();
+		}
+		
+		out.addAll(ranklist);
 
 		// Nation: Azur Empire
 		try {

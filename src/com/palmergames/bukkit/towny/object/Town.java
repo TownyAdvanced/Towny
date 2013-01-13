@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -186,6 +188,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		addResidentCheck(resident);
 		residents.add(resident);
 		resident.setTown(this);
+		
+		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(resident, this));
 	}
 
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
@@ -511,31 +515,22 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		}
 
-//		if (hasNation() && nation.hasAssistant(resident))
-//			try {
-//				nation.removeAssistant(resident);
-//			} catch (NotRegisteredException e) {
-//			}
-//		if (hasAssistant(resident))
-//			try {
-//				removeAssistant(resident);
-//			} catch (NotRegisteredException e) {
-//			}
-
 		try {
+			/* 
+			 * Trigger a resident removal event if they are in a town.
+			 */
+			if (resident.hasTown()) {
+				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, resident.getTown()));
+			}
 			resident.setTown(null);
 		} catch (AlreadyRegisteredException e) {
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
 		}
 		residents.remove(resident);
 	}
-
-//	public void removeAssistant(Resident resident) throws NotRegisteredException {
-//
-//		if (!hasAssistant(resident))
-//			throw new NotRegisteredException();
-//		else
-//			assistants.remove(resident);
-//	}
 
 	public void setSpawn(Location spawn) throws TownyException {
 
