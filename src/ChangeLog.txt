@@ -1759,3 +1759,4 @@ v0.82.0.7:
 	- Town status now shows all player ranks, not just assistants (for testing to see if it's too much spam).
 	- Players with no destroy perms for crops/soil can no longer trample even if the feature is disabled.
 	- Added cancellable mob-removal event.
+	- Added Shade's Closed economy system. You can now define an account in the config where any deleted money goes (needs serious testing).

@@ -143,9 +143,11 @@ public class TownyEconomyObject extends TownyObject {
 		}
 	}
 
+	/*
 	private boolean _setBalance(double amount) {
 		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
 	}
+	*/
 
 	public double getHoldingBalance() throws EconomyException {
 

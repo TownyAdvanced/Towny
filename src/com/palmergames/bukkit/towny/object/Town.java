@@ -823,7 +823,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		return isOpen;
 	}
 
-	@Override
 	public void collect(double amount) throws EconomyException {
 		
 		if (TownySettings.isUsingEconomy()) {

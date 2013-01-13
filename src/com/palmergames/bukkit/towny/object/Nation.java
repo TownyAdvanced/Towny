@@ -409,7 +409,6 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		return false;
 	}
 	
-	@Override
 	public void collect(double amount) throws EconomyException {
 		
 		if (TownySettings.isUsingEconomy()) {
