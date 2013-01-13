@@ -5,8 +5,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityEvent;
 
-import com.palmergames.bukkit.towny.object.TownBlock;
-
 public class MobRemovalEvent extends EntityEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
