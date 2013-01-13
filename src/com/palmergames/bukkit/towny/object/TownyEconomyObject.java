@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
@@ -13,6 +15,14 @@ import org.bukkit.World;
  * 
  */
 public class TownyEconomyObject extends TownyObject {
+	private static final class TownyServerAccount extends TownyEconomyObject {
+		@Override
+		public String getName() {
+			return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+		}
+	}
+
+	private static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 
 	/**
 	 * Tries to pay from the players holdings
@@ -23,16 +33,14 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
-
-		boolean payed = _pay(amount);
-		if (payed)
-			TownyLogger.logMoneyTransaction(this, amount, null, reason);
-		return payed;
-	}
-
-	public boolean pay(double amount) throws EconomyException {
-
-		return pay(amount, null);
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return payTo(amount, SERVER_ACCOUNT, reason);
+		} else {
+			boolean payed = _pay(amount);
+			if (payed)
+				TownyLogger.logMoneyTransaction(this, amount, null, reason);
+			return payed;
+		}
 	}
 
 	private boolean _pay(double amount) throws EconomyException {
@@ -51,15 +59,19 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param reason
 	 * @throws EconomyException
 	 */
-	public void collect(double amount, String reason) throws EconomyException {
-
-		TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
-		TownyLogger.logMoneyTransaction(null, amount, this, reason);
+	public boolean collect(double amount, String reason) throws EconomyException {
+		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
+			return SERVER_ACCOUNT.payTo(amount, this, reason);
+		} else {
+			boolean collected = _collect(amount);
+			if (collected)
+				TownyLogger.logMoneyTransaction(null, amount, this, reason);
+			return collected;
+		}
 	}
 
-	public void collect(double amount) throws EconomyException {
-
-		collect(amount, null);
+	private boolean _collect(double amount) throws EconomyException {
+		return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
 	}
 
 	/**
@@ -79,15 +91,10 @@ public class TownyEconomyObject extends TownyObject {
 		return payed;
 	}
 
-	public boolean payTo(double amount, TownyEconomyObject collector) throws EconomyException {
-
-		return payTo(amount, collector, null);
-	}
-
 	private boolean _payTo(double amount, TownyEconomyObject collector) throws EconomyException {
 
 		if (_pay(amount)) {
-			collector.collect(amount);
+			collector._collect(amount);
 			return true;
 		} else {
 			return false;
@@ -120,20 +127,24 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param amount
 	 * @param reason
 	 */
-	public void setBalance(double amount, String reason) {
-
-		setBalance(amount);
-		TownyLogger.logMoneyTransaction(null, amount, this, reason);
+	public boolean setBalance(double amount, String reason) throws EconomyException {
+		double balance = getHoldingBalance();
+		double diff = amount - balance;
+		if (diff > 0) {
+			// Adding to
+			return collect(diff, reason);
+		} else if (balance > amount) {
+			// Subtracting from
+			diff = -diff;
+			return pay(diff, reason);
+		} else {
+			// Same amount, do nothing.
+			return true;
+		}
 	}
 
-	/**
-	 * Set balance without logging the action
-	 * 
-	 * @param amount
-	 */
-	public void setBalance(double amount) {
-
-		TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
+	private boolean _setBalance(double amount) {
+		return TownyEconomyHandler.setBalance(getEconomyName(), amount, getBukkitWorld());
 	}
 
 	public double getHoldingBalance() throws EconomyException {

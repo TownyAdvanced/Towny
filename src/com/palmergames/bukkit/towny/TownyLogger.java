@@ -1,16 +1,16 @@
 package com.palmergames.bukkit.towny;
 
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.util.FileMgmt;
+
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 public class TownyLogger {
 
@@ -79,7 +79,7 @@ public class TownyLogger {
 		else if (obj instanceof Nation)
 			type = "Nation";
 		else
-			type = "Server";
+			type = "?";
 
 		return String.format("[%s] %s", type, obj != null ? obj.getName() : "");
 	}

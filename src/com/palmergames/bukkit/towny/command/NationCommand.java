@@ -501,7 +501,12 @@ public class NationCommand implements CommandExecutor {
 		nation.addTown(town);
 		nation.setCapital(town);
 		if (TownySettings.isUsingEconomy()) {
-			nation.setBalance(0);
+			//TODO
+			try {
+				nation.setBalance(0, "Deleting Nation");
+			} catch (EconomyException e) {
+				e.printStackTrace();
+			}
 		}
 		TownyUniverse.getDataSource().saveTown(town);
 		TownyUniverse.getDataSource().saveNation(nation);

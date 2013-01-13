@@ -881,6 +881,18 @@ public enum ConfigNodes {
 			"true",
 			"# Set to true to allow withdrawls from nation banks"),
 
+	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
+			"economy.closed_economy.server_account",
+			"towny-server",
+			"# The name of the account that all money that normally disappears goes into."),
+	ECO_CLOSED_ECONOMY_ENABLED(
+			"economy.closed_economy.enabled",
+			"false",
+			"# Turn on/off whether all transactions that normally don't have a second party are to be done with a certain account.",
+			"# Eg: The money taken during Daily Taxes is just removed. With this on, the amount taken would be funneled into an account.",
+			"#     This also applies when a player collects money, like when the player is refunded money when a delayed teleport fails."),
+
+
 	ECO_DAILY_TAXES("economy.daily_taxes", "", ""),
 	ECO_DAILY_TAXES_ENABLED(
 			"economy.daily_taxes.enabled",

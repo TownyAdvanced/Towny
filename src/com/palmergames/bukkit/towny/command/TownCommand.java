@@ -1100,7 +1100,12 @@ public class TownCommand implements CommandExecutor {
 		}
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
-			town.setBalance(0);
+			//TODO
+			try {
+				town.setBalance(0, "Deleting Town");
+			} catch (EconomyException e) {
+				e.printStackTrace();
+			}
 		}
 
 		TownyUniverse.getDataSource().saveResident(resident);
