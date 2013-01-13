@@ -94,9 +94,9 @@ public class TownyPerms {
 	 * @param resident
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
-		
-		PermissionAttachment playersAttachment= null;
-		
+
+		PermissionAttachment playersAttachment = null;
+
 		if (resident == null) {
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -108,17 +108,17 @@ public class TownyPerms {
 		} else {
 			player = BukkitTools.getPlayer(resident.getName());
 		}
-		
+
 		/*
-		 * Find the current attachment
-		 * or create a new one (if the player is online)
+		 * Find the current attachment or create a new one (if the player is
+		 * online)
 		 */
 
 		if ((player == null) || !player.isOnline()) {
 			attachments.remove(resident.getName());
 			return;
 		}
-		
+
 		TownyWorld World = null;
 
 		try {
@@ -128,48 +128,51 @@ public class TownyPerms {
 			e.printStackTrace();
 			return;
 		}
-		
+
 		if (attachments.containsKey(resident.getName())) {
 			playersAttachment = attachments.get(resident.getName());
 		} else
 			playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
-		
+
 		/*
-		 * Set all our Towny default permissions using reflection else
-		 * bukkit will perform a recalculation of perms for each addition.
+		 * Set all our Towny default permissions using reflection else bukkit
+		 * will perform a recalculation of perms for each addition.
 		 */
 
 		try {
-			@SuppressWarnings("unchecked")
-			Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(playersAttachment);
-			/*
-			 *  Clear the map (faster than removing the attachment and recalculating)
-			 */
-			orig.clear();
-			
-			if (World.isUsingTowny()) {
+			synchronized (playersAttachment) {
+				@SuppressWarnings("unchecked")
+				Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(playersAttachment);
 				/*
-				 * Fill with the fresh perm nodes
+				 * Clear the map (faster than removing the attachment and
+				 * recalculating)
 				 */
-				orig.putAll(TownyPerms.getResidentPerms(resident));
-				
-				//System.out.print("Perms set for: " + resident.getName());
+				orig.clear();
+
+				if (World.isUsingTowny()) {
+					/*
+					 * Fill with the fresh perm nodes
+					 */
+					orig.putAll(TownyPerms.getResidentPerms(resident));
+
+					// System.out.print("Perms set for: " + resident.getName());
+				}
+				/*
+				 * Tell bukkit to update it's permissions
+				 */
+				playersAttachment.getPermissible().recalculatePermissions();
 			}
-			/*
-			 * Tell bukkit to update it's permissions
-			 */
-			playersAttachment.getPermissible().recalculatePermissions();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		/*
 		 * Store the attachment for future reference
 		 */
 		attachments.put(resident.getName(), playersAttachment);
-		
+
 	}
 	
 	/**
