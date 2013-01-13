@@ -1757,3 +1757,4 @@ v0.82.0.7:
 	- Resident purges and admin deletion of residents now trigger a TownRemoveResidentEvent.
 	- Moved the TownAddResidentEvent to the Town class so it is always triggered.
 	- Town status now shows all player ranks, not just assistants (for testing to see if it's too much spam).
+	- Players with no destroy perms for crops/soil can no longer trample even if the feature is disabled.
