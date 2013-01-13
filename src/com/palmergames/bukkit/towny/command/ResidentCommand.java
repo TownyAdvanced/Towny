@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -28,10 +30,15 @@ import com.palmergames.util.StringMgmt;
  * Send a list of all towny resident help commands to player Command: /resident
  */
 
-public class ResidentCommand implements CommandExecutor {
+public class ResidentCommand implements TabExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<String>();
+ 	private static final List<String> subCommands = new ArrayList<String>();
+ 	private static final List<String> setVars = new ArrayList<String>();
+ 	public static final List<String> toggles = new ArrayList<String>();
+ 	public static final List<String> modes = new ArrayList<String>();
+ 	public static final List<String> addRemoves = new ArrayList<String>();
 
 	static {
 		output.add(ChatTools.formatTitle("/resident"));
@@ -44,6 +51,33 @@ public class ResidentCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
 		//output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/resident", "delete " + TownySettings.getLangString("res_2"), ""));
+		subCommands.add("list");
+		subCommands.add("tax");
+		subCommands.add("toggle");
+		subCommands.add("set");
+		subCommands.add("friend");
+
+		toggles.add("mobs");
+		toggles.add("explosion");
+		toggles.add("fire");
+		toggles.add("pvp");
+		
+		setVars.add("perm");
+		setVars.add("mode");
+		
+		modes.add("map");
+		modes.add("townclaim");
+		modes.add("townunclaim");
+		modes.add("clear");
+		modes.add("reset");
+		modes.add("town");
+		modes.add("nation");
+		modes.add("general");
+		
+		addRemoves.add("add");
+		addRemoves.add("remove");
+		addRemoves.add("add+");
+		addRemoves.add("remove+");
 	}
 
 	public ResidentCommand(Towny instance) {
@@ -416,4 +450,106 @@ public class ResidentCommand implements CommandExecutor {
 
 	}
 
+	
+	public List<String> residentListCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (Player p: Bukkit.matchPlayer(partial)) {
+			matches.add(p.getName());
+		}
+		return matches;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command,
+			String alias, String[] args) {
+		if (args.length == 1) {
+			List<String> matches = subCommandCompletion(args[0]);
+			matches.addAll(residentListCompletion(args[0]));
+			return matches;
+		} else if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+			case "set":
+				return setCompletion(args[1]);
+			case "toggle":
+				return toggleCompletion(args[1]);
+			case "friend":
+				return addRemoveCompletion(args[1]);
+			default:
+				return null;
+			}
+		} else if (args.length >= 3) {
+			if (args[0].toLowerCase().equals("set")) {
+				switch(args[1].toLowerCase()) {
+				case "perm":
+					return PermCompletion.handleSetPerm(args, "friend");
+				case "mode":
+					return modeCompletion(args[2]);
+				default:
+					return null;
+				}
+			} else if (args[0].toLowerCase().equals("friend")) {
+				switch (args[1].toLowerCase()) {
+				case "add":
+					return ObjectCompletion.playerCompletion(args[2], true);
+				case "add+":
+					return ObjectCompletion.playerCompletion(args[2], false);
+				case "remove":
+				case "remove+":
+					return ObjectCompletion.friendCompletion((Player)sender, args[2]);
+				}
+			}
+		}
+		return null;
+	}
+
+	public List<String> addRemoveCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: addRemoves) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+	public List<String> subCommandCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String c: subCommands) {
+			if (c.startsWith(partial.toLowerCase())) {
+				matches.add(c);
+			}
+		}
+		return matches;
+	}
+	
+
+	public List<String> modeCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String m: modes) {
+			if (m.startsWith(partial.toLowerCase())) {
+				matches.add(m);
+			}
+		}
+		return matches;
+	}
+
+	public List<String> toggleCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String t: toggles) {
+			if (t.startsWith(partial.toLowerCase())) {
+				matches.add(t);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> setCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: setVars) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+	
 }

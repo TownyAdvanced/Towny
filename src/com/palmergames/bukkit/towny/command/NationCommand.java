@@ -9,6 +9,7 @@ import javax.naming.InvalidNameException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -47,11 +48,15 @@ import com.palmergames.util.StringMgmt;
  *            handles all nation based commands
  */
 
-public class NationCommand implements CommandExecutor {
+public class NationCommand implements TabExecutor {
 
 	private static Towny plugin;
 	private static final List<String> nation_help = new ArrayList<String>();
 	private static final List<String> king_help = new ArrayList<String>();
+	private static final List<String> subCommands = new ArrayList<String>();
+	private static final List<String> setVars = new ArrayList<String>();
+	private static final List<String> toggles = new ArrayList<String>();
+	public static final List<String> addRemoves = new ArrayList<String>();
 
 	static {
 
@@ -79,6 +84,34 @@ public class NationCommand implements CommandExecutor {
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "enemy [add/remove] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_3")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "delete", ""));
 
+		subCommands.add("deposit");
+		subCommands.add("new");
+		subCommands.add("toggle");
+		subCommands.add("ally");
+		subCommands.add("enemy");
+		subCommands.add("set");
+		subCommands.add("assistant");
+		subCommands.add("add");
+		subCommands.add("kick");
+		subCommands.add("delete");
+		subCommands.add("withdraw");
+		subCommands.add("online");
+		subCommands.add("list");
+		subCommands.add("leave");
+		
+		setVars.add("king");
+		setVars.add("capital");
+		setVars.add("taxes");
+		setVars.add("name");
+		setVars.add("tag");
+		setVars.add("title");
+		setVars.add("surname");
+		
+
+		addRemoves.add("add");
+		addRemoves.add("remove");
+		addRemoves.add("add+");
+		addRemoves.add("remove+");
 	}
 
 	public NationCommand(Towny instance) {
@@ -1205,6 +1238,132 @@ public class NationCommand implements CommandExecutor {
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
+	}
+
+	public List<String> subCommandCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String c: subCommands) {
+			if (c.startsWith(partial.toLowerCase())) {
+				matches.add(c);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> toggleCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String t: toggles) {
+			if (t.startsWith(partial.toLowerCase())) {
+				matches.add(t);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> setCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: setVars) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+
+	public List<String> addRemoveCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: addRemoves) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command,
+			String alias, String[] args) {
+		if (args.length == 1) {
+			List<String> matches = ObjectCompletion.nationCompletion(args[0]);
+			matches.addAll(subCommandCompletion(args[0]));
+			return matches;
+		} else if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+			case "add":
+				return ObjectCompletion.townCompletion(args[1].toLowerCase());
+			case "kick":
+				Nation n;
+				Resident r;
+				try {
+					r = TownyUniverse.getDataSource().getResident(sender.getName());
+					n = r.getTown().getNation();
+				} catch (NotRegisteredException e) {
+					return null;
+				}
+				return ObjectCompletion.nationTownCompletion(n, args[1]);
+			case "ally":
+			case "enemy":
+				return addRemoveCompletion(args[1]);
+			case "set":
+				return setCompletion(args[1]);
+			case "toggle":
+				if ("neutral".startsWith(args[1].toLowerCase())) {
+					List<String> neutral = new ArrayList<String>(1);
+					neutral.add("neutral");
+					return neutral;
+				}
+				return null;
+				
+			}
+		} else if (args.length == 3) {
+			Nation n;
+			Resident r;
+			switch (args[0].toLowerCase()) {
+			case "ally":
+			case "enemy":
+				if (addRemoves.contains(args[1].toLowerCase())) {
+					return ObjectCompletion.nationCompletion(args[2]);
+				}
+				return null;
+			case "assistant":
+				if (addRemoves.contains(args[1].toLowerCase())) {
+					try {
+						r = TownyUniverse.getDataSource().getResident(sender.getName());
+						n = r.getTown().getNation();
+					} catch (NotRegisteredException e) { 
+						return null; 
+					}
+					return ObjectCompletion.nationResidentCompletion(n, args[2]);
+				}
+				return null;
+			case "set":
+				switch(args[1].toLowerCase()) {
+				case "title":
+				case "surname":
+				case "king":
+					try {
+						r = TownyUniverse.getDataSource().getResident(sender.getName());
+						n = r.getTown().getNation();
+					} catch (NotRegisteredException e) { 
+						return null; 
+					}
+					return ObjectCompletion.nationResidentCompletion(n, args[2]);
+				case "capital":
+					TownyMessaging.sendDebugMsg("tab on set capital");
+					try {
+						r = TownyUniverse.getDataSource().getResident(sender.getName());
+						n = r.getTown().getNation();
+					} catch (NotRegisteredException e) { 
+						TownyMessaging.sendDebugMsg("can't retrieve sender's nation");
+						return null; 
+					}
+					TownyMessaging.sendDebugMsg("sending completions for " + args[2]);
+					return ObjectCompletion.nationTownCompletion(n, args[2]);
+					
+				}
+			
+			}
+		}
+		return null;
 	}
 
 }

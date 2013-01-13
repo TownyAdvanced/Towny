@@ -21,11 +21,14 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
@@ -42,12 +45,16 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_REMOV
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand implements CommandExecutor {
+public class TownCommand implements TabExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<String>();
+ 	private static final List<String> toggles = new ArrayList<String>();
+ 	private static final List<String> subCommands = new ArrayList<String>();
+ 	private static final List<String> setVars = new ArrayList<String>();
 
 	static {
+		
 		output.add(ChatTools.formatTitle("/town"));
 		output.add(ChatTools.formatCommand("", "/town", "", TownySettings.getLangString("town_help_1")));
 		output.add(ChatTools.formatCommand("", "/town", "[town]", TownySettings.getLangString("town_help_3")));
@@ -64,6 +71,41 @@ public class TownCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/town", "rank add/remove [resident] [rank]", ""));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "mayor ?", TownySettings.getLangString("town_help_8")));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/town", "delete [town]", ""));
+		
+		subCommands.add("here");
+		subCommands.add("list");
+		subCommands.add("online");
+		subCommands.add("leave");
+		subCommands.add("spawn");
+		subCommands.add("deposit");
+		subCommands.add("withdraw");
+		subCommands.add("mayor");
+		subCommands.add("rank");
+		subCommands.add("set");
+		subCommands.add("toggle");
+		
+		toggles.add("mobs");
+		toggles.add("explosion");
+		toggles.add("pvp");
+		toggles.add("fire");
+		toggles.add("open");
+		toggles.add("public");
+		
+		setVars.add("board");
+		setVars.add("mayor");
+		setVars.add("homeblock");
+		setVars.add("spawn");
+		setVars.add("outpost");
+		setVars.add("perm");
+		setVars.add("taxes");
+		setVars.add("plottax");
+		setVars.add("shoptax");
+		setVars.add("embassytax");
+		setVars.add("plotprice");
+		setVars.add("shopprice");
+		setVars.add("embassyprice");
+		setVars.add("name");
+		setVars.add("tag");
 	}
 
 	public TownCommand(Towny instance) {
@@ -2013,4 +2055,73 @@ public class TownCommand implements CommandExecutor {
 		}
 	}
 
+	
+	public List<String> subCommandCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String c: subCommands) {
+			if (c.startsWith(partial.toLowerCase())) {
+				matches.add(c);
+			}
+		}
+		return matches;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command,
+			String alias, String[] args) {
+		TownyMessaging.sendDebugMsg("Tab Completion for Town command: " + args.length + " args.");
+		if (args.length == 1) {
+			List<String> matches = subCommandCompletion(args[0]);
+			matches.addAll(ObjectCompletion.townCompletion(args[0]));
+			return matches;
+		} else if (args.length == 2 && args[0].equalsIgnoreCase("toggle")) {
+			return toggleCompletion(args[1]);
+		} else if (args.length == 2) {
+			switch (args[0].toLowerCase()) {
+			case "set":
+				return setCompletion(args[1]);
+			case "spawn":
+			case "delete":
+				return ObjectCompletion.townCompletion(args[1]);
+			case "kick":
+				Resident r;
+				Town town;
+				try {
+					r = TownyUniverse.getDataSource().getResident(sender.getName());
+					town = r.getTown();
+				} catch (NotRegisteredException e) {
+					return null;
+				}
+				return ObjectCompletion.townResidentCompletion(town, args[1]);
+			default:
+				return null;
+			}
+			
+		} else if (args.length >= 3 && args[0].equalsIgnoreCase("set") && args[1].equalsIgnoreCase("perm")) {
+			return PermCompletion.handleSetPerm(args, "resident");
+		}
+		
+		return null;
+	}
+	
+	public List<String> setCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: setVars) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> toggleCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String t: toggles) {
+			if (t.startsWith(partial.toLowerCase())) {
+				matches.add(t);
+			}
+		}
+		return matches;
+	}
+	
 }

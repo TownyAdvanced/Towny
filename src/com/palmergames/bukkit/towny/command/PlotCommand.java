@@ -7,8 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import com.google.common.collect.Sets.SetView;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -37,10 +39,13 @@ import com.palmergames.util.StringMgmt;
  * Send a list of all general towny plot help commands to player Command: /plot
  */
 
-public class PlotCommand implements CommandExecutor {
+public class PlotCommand implements TabExecutor {
 
 	private static Towny plugin;
 	public static final List<String> output = new ArrayList<String>();
+ 	public static final List<String> subCommands = new ArrayList<String>();
+ 	public static final List<String> toggles = new ArrayList<String>();
+ 	public static final List<String> setVars = new ArrayList<String>();
 
 	static {
 		output.add(ChatTools.formatTitle("/plot"));
@@ -54,6 +59,29 @@ public class PlotCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing") + "/" + TownySettings.getLangString("mayor_sing"), "/plot set ...", "", TownySettings.getLangString("msg_plot_fs")));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/plot toggle", "[pvp/fire/explosion/mobs]", ""));
 		output.add(TownySettings.getLangString("msg_nfs_abr"));
+		
+		subCommands.add("claim");
+		subCommands.add("unclaim");
+		subCommands.add("forsale");
+		subCommands.add("fs");
+		subCommands.add("notforsale");
+		subCommands.add("nfs");
+		subCommands.add("toggle");
+		subCommands.add("set");
+		subCommands.add("clear");
+		
+		toggles.add("mobs");
+		toggles.add("explosion");
+		toggles.add("fire");
+		toggles.add("pvp");
+		
+		setVars.add("perm");
+		setVars.add("reset");
+		setVars.add("shop");
+		setVars.add("embassy");
+		setVars.add("wilds");
+		setVars.add("arena");
+		setVars.add("spleef");
 	}
 
 	public PlotCommand(Towny instance) {
@@ -550,6 +578,58 @@ public class PlotCommand implements CommandExecutor {
 			return owner;
 		}
 
+	}
+
+	public List<String> subCommandCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String c: subCommands) {
+			if (c.startsWith(partial.toLowerCase())) {
+				matches.add(c);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> toggleCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String t: toggles) {
+			if (t.startsWith(partial.toLowerCase())) {
+				matches.add(t);
+			}
+		}
+		return matches;
+	}
+	
+	public List<String> setCompletion(String partial) {
+		List<String> matches = new ArrayList<String>();
+		for (String s: setVars) {
+			if (s.startsWith(partial.toLowerCase())) {
+				matches.add(s);
+			}
+		}
+		return matches;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command,
+			String alias, String[] args) {
+		
+		if (args.length == 1) {
+			return subCommandCompletion(args[0]);
+		} else if (args.length >= 2 && args[0].equalsIgnoreCase("toggle")) {
+			if (args.length == 2) {
+				if (args[1].equalsIgnoreCase("toggle")) {
+					return toggleCompletion(args[1]);
+				} else if (args[0].equalsIgnoreCase("set")) {
+					return setCompletion(args[1]);
+				}
+			} else if (args.length == 3) {
+				return PermCompletion.onOffCompletion(args[2]);
+			}
+		} else if (args.length >= 3 && args[0].equalsIgnoreCase("set") && args[1].equalsIgnoreCase("perm")) {
+			return PermCompletion.handleSetPerm(args, "friend");
+		}
+		return null;
 	}
 
 }
