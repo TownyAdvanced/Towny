@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.NationAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -174,6 +176,8 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		else {
 			towns.add(town);
 			town.setNation(this);
+			
+			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
 		}
 	}
 
@@ -323,6 +327,8 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		} catch (AlreadyRegisteredException e) {
 		}
 		towns.remove(town);
+		
+		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
 	private void removeAllTowns() {

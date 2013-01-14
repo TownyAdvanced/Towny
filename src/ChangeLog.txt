@@ -1761,3 +1761,5 @@ v0.82.0.7:
 	- Added cancellable mob-removal event.
 	- Added Shade's Closed economy system. You can now define an account in the config where any deleted money goes (needs serious testing).
 	- Synchronize on playersAttachment so we don't push new perms to bukkit causing a ConcurrentModificationException.
+v0.82.0.8:
+	- Added events for towns leaving and joining nations.
