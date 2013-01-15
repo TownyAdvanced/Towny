@@ -22,8 +22,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -142,17 +143,6 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		if (event.isCancelled()) {
-			// Fix for bucket bug.
-			//if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-			//	Integer item = event.getPlayer().getItemInHand().getTypeId();
-			//	// block cheats for placing water/lava/fire/lighter use.
-			//	if (item == 326 || item == 327 || item == 259 || (item >= 8 && item <= 11) || item == 51)
-			//		event.setCancelled(true);
-			//}
-			return;
-		}
-
 		Player player = event.getPlayer();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		TownyWorld World = null;
@@ -231,32 +221,69 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 			
+			Player player = event.getPlayer();
+			boolean bBuild = true;
+			int blockID = 0;
+			
 			/*
-			 * Protect Item Frames.
+			 * Protect specific entity interactions.
 			 */
-			if (event.getRightClicked() instanceof Hanging) {
+			switch(event.getRightClicked().getType()) {
+			
+				case ITEM_FRAME:
+					
+					blockID = 389;
+					//Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.DESTROY);
+					break;
+					
+				case PAINTING:
+					
+					blockID = 321;
+					//Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.DESTROY);
+					break;
+					
+				case MINECART:
+					
+					if (event.getRightClicked() instanceof StorageMinecart) {
+						
+						blockID = 342;
+						
+					} else if (event.getRightClicked() instanceof PoweredMinecart) {
+						
+						blockID = 321;
+						
+					} else {
+					
+						blockID = 321;
+					}
+					
+					//Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.SWITCH);
+					break;
 				
-				Player player = event.getPlayer();
-				
-				//Get build permissions (updates if none exist)
-				boolean bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), 389, (byte)0, TownyPermission.ActionType.BUILD);
+			}
+			
+			if (blockID != 0) {
 				
 				// Allow the removal if we are permitted
 				if (bBuild)
 					return;
-
+	
+				event.setCancelled(true);
+				
 				/*
 				 * Fetch the players cache
 				 */
 				PlayerCache cache = plugin.getCache(player);
-
-				event.setCancelled(true);
 				
 				if (cache.hasBlockErrMsg())
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 				
 				return;
 			}
+				
 			
 			/*
 			 * Item_use protection.

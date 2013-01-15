@@ -1763,3 +1763,4 @@ v0.82.0.7:
 	- Synchronize on playersAttachment so we don't push new perms to bukkit causing a ConcurrentModificationException.
 v0.82.0.8:
 	- Added events for towns leaving and joining nations.
+	- Allow protection of Pictures, Item frames, Minecarts, TNT carts and Storage carts seperately.
