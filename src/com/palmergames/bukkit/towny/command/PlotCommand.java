@@ -290,10 +290,13 @@ public class PlotCommand implements CommandExecutor {
 						}
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
-						TownBlock townBlock = worldCoord.getTownBlock();
+						
 						setPlotType(resident, worldCoord, split[0]);
+						
+						TownBlock townBlock = worldCoord.getTownBlock();
 						townBlock.setChanged(true);
 						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						
 						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
 
 					} else {

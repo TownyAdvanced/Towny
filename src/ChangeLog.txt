@@ -1764,3 +1764,5 @@ v0.82.0.7:
 v0.82.0.8:
 	- Added events for towns leaving and joining nations.
 	- Allow protection of Pictures, Item frames, Minecarts, TNT carts and Storage carts seperately.
+v0.82.0.9:
+	- Fix saving a change of plot type.
