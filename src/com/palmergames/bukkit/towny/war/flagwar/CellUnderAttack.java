@@ -145,7 +145,7 @@ public class CellUnderAttack extends Cell {
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
 			int woolId = Material.WOOL.getId();
-			byte woolData = woolColors[flagColorId].getData();
+			byte woolData = woolColors[flagColorId].getDyeData();
 
 			flagBlock.setTypeIdAndData(woolId, woolData, true);
 			for (Block block : beaconFlagBlocks)

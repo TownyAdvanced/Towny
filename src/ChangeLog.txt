@@ -1766,3 +1766,7 @@ v0.82.0.8:
 	- Allow protection of Pictures, Item frames, Minecarts, TNT carts and Storage carts seperately.
 v0.82.0.9:
 	- Fix saving a change of plot type.
+v0.82.1.0:
+	- Update minimum CraftBukkit version to #2602.
+	- Update for Bukkit API changes associated with dye Colour.
+	- Release.
