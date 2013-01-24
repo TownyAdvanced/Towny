@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Towny" default="jar" basedir=".">
-    <property name="build" value="bin"/>
-    <property file="build.properties"/>
-    
-    <target name="clean">
-        <delete dir="${build}"/>
-    </target>
+	<property name="build" value="bin" />
+	<property file="build.properties" />
 
-    <target name="init" depends="clean">
-        <mkdir dir="${build}"/>
-    </target>   
-    
-    <target name="compile" depends="init">
-        <!-- Compile the java code -->
-        <javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6">
-            <classpath>
-                <pathelement location="${env.LIB}/bukkit.jar"/>
-                <pathelement location="${env.LIB}/bpermissions.jar"/>
-                <pathelement location="${env.LIB}/Essentials.jar"/>
-                <pathelement location="${env.LIB}/EssentialsGroupManager.jar"/>
-                <pathelement location="${env.LIB}/Permissions.jar"/>
-                <pathelement location="${env.LIB}/PermissionsEx.jar"/>
-                <pathelement location="${env.LIB}/PermissionsBukkit.jar"/>
-                <pathelement location="${env.LIB}/Register.jar"/>
-                <pathelement location="${env.LIB}/iConomy.jar"/>
-                <pathelement location="${env.LIB}/Questioner.jar"/>
-                <pathelement location="${env.LIB}/Vault.jar"/>
-                <pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar"/>
-            </classpath>
-        </javac>
-    </target>   
-    
-    <target name="jar" depends="compile">
-        <!-- Build the jar file -->
-        <jar basedir="${build}" destfile="${env.LIB}/Towny.jar">
-	        <fileset dir="./src" includes="ChangeLog.txt"/>
-        	<fileset dir="./src" includes="english.yml"/>
-        	<fileset dir="./src" includes="german.yml"/>
-        	<fileset dir="./src" includes="plugin.yml"/>
-        	<fileset dir="./src" includes="spanish.yml"/>
-        	<fileset dir="./src" includes="townyperms.yml"/>
-          <fileset dir="./src" includes="ToDo.txt"/>
-        </jar>
-    </target>
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${env.LIB}" />
+
+	</target>
+	
+	<target name="download" depends="init">
+	
+		<get src="http://palmergames.com/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/Permissions.jar" dest="${env.LIB}/Permissions.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/Register.jar" dest="${env.LIB}/Register.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/Questioner.jar" dest="${env.LIB}/Questioner.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
+			<get src="http://palmergames.com/libs/citizensapi-2.0-SNAPSHOT.jar" dest="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" skipexisting="true" />
+	
+	</target>
+
+	<target name="compile" depends="download">
+		<!-- Compile the java code -->
+		<javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6">
+			<classpath>
+				<pathelement location="${env.LIB}/bukkit.jar" />
+				<pathelement location="${env.LIB}/bpermissions.jar" />
+				<pathelement location="${env.LIB}/Essentials.jar" />
+				<pathelement location="${env.LIB}/EssentialsGroupManager.jar" />
+				<pathelement location="${env.LIB}/Permissions.jar" />
+				<pathelement location="${env.LIB}/PermissionsEx.jar" />
+				<pathelement location="${env.LIB}/PermissionsBukkit.jar" />
+				<pathelement location="${env.LIB}/Register.jar" />
+				<pathelement location="${env.LIB}/iConomy.jar" />
+				<pathelement location="${env.LIB}/Questioner.jar" />
+				<pathelement location="${env.LIB}/Vault.jar" />
+				<pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<!-- Build the jar file -->
+		<jar basedir="${build}" destfile="${env.LIB}/Towny.jar">
+			<fileset dir="./src" includes="ChangeLog.txt" />
+			<fileset dir="./src" includes="english.yml" />
+			<fileset dir="./src" includes="german.yml" />
+			<fileset dir="./src" includes="plugin.yml" />
+			<fileset dir="./src" includes="spanish.yml" />
+			<fileset dir="./src" includes="townyperms.yml" />
+			<fileset dir="./src" includes="ToDo.txt" />
+		</jar>
+	</target>
 </project>
