@@ -6,6 +6,7 @@ import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -1116,6 +1117,9 @@ public class TownCommand implements CommandExecutor {
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
+		
+		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
+		
 		return town;
 	}
 

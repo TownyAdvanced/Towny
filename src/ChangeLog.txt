@@ -1770,3 +1770,5 @@ v0.82.1.0:
 	- Update minimum CraftBukkit version to #2602.
 	- Update for Bukkit API changes associated with dye Colour.
 	- Release.
+v0.82.1.1:
+	- Added new events for other plugins to utilize - DeleteNationEvent, DeleteTownEvent, NewNationEvent, NewTownEvent, RenameNationEvent, RenameTownEvent.

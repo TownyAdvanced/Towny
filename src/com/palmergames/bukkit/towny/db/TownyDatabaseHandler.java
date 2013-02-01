@@ -3,11 +3,16 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.RenameNationEvent;
+import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
 
@@ -458,6 +463,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Must already be removed
 		}
 		saveWorld(townyWorld);
+		
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 
 		universe.setChangedNotify(REMOVE_TOWN);
 	}
@@ -523,6 +530,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		saveNationList();
 
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
+		
 		universe.setChangedNotify(REMOVE_NATION);
 	}
 
@@ -590,6 +599,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Boolean isCapital = false;
 		Nation nation = null;
 		Double townBalance = 0.0;
+		String oldName = town.getName();
 
 		// Save the towns bank balance to set in the new account.
 		// Clear accounts
@@ -643,6 +653,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveTown(town);
 		saveTownList();
 		saveWorld(town.getWorld());
+		
+		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
 
 		universe.setChangedNotify(RENAME_TOWN);
 	}
@@ -725,6 +737,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
+		
+		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
 
 		universe.setChangedNotify(RENAME_NATION);
 	}
