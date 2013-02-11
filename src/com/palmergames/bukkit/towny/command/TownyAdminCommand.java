@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
@@ -491,7 +492,15 @@ public class TownyAdminCommand implements CommandExecutor {
 			TownyUniverse.getDataSource().deleteFile(plugin.getConfigPath());
 		}
 		TownyLogger.shutDown();
-		plugin.load();
+		if (plugin.load()) {
+			
+			// Register all child permissions for ranks
+			TownyPerms.registerPermissionNodes();
+			
+			// Update permissions for all online players
+			TownyPerms.updateOnlinePerms();
+						
+		}
 
 		TownyMessaging.sendMsg(sender, TownySettings.getLangString("msg_reloaded"));
 		// TownyMessaging.sendMsg(TownySettings.getLangString("msg_reloaded"));

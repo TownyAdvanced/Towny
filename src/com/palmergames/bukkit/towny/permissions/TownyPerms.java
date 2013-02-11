@@ -188,6 +188,18 @@ public class TownyPerms {
 	}
 	
 	/**
+	 * Update the permissions for all online residents
+	 * 
+	 */
+	public static void updateOnlinePerms() {
+		
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			assignPermissions(null, player);
+		}
+		
+	}
+	
+	/**
 	 * Update the permissions for all residents of a town (if online)
 	 * 
 	 * @param town
