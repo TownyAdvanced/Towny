@@ -235,6 +235,10 @@ public enum ConfigNodes {
 			"new_world_settings.disable_creature_crop_trampling",
 			"true",
 			"# Disable creatures trampling crops"),
+	NWS_DISABLE_CREATURE_PRESSUREPLATE(
+					"new_world_settings.disable_creature_pressureplate",
+					"true",
+					"# Disable creatures triggering stone pressure plates"),
 
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",

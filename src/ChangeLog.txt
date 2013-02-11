@@ -1775,3 +1775,4 @@ v0.82.1.1:
 v0.82.1.2:
 	- Better directory/file handling when using nested world folders.
 	- Fix '/nation ?' to show the new rank command instead of the old assistant one.
+	- Add a config toggle to disable creatures triggering stone pressure plates.

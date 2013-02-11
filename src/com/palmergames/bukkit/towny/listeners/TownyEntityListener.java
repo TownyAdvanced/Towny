@@ -231,12 +231,26 @@ public class TownyEntityListener implements Listener {
 		try {
 			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
 
-			// Prevent creatures trampling crops
-			if ((townyWorld.isUsingTowny()) && (townyWorld.isDisableCreatureTrample())) {
-				if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS)) {
-					if (entity instanceof Creature)
-						event.setCancelled(true);
-					return;
+			if (townyWorld.isUsingTowny()) {
+
+				// Prevent creatures trampling crops
+				if (townyWorld.isDisableCreatureTrample()) {
+					if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS)) {
+						if (entity instanceof Creature) {
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
+
+				// Prevent creatures triggering stone pressure plates
+				if (townyWorld.isDisableCreatureTriggerPressurePlate()) {
+					if (block.getType() == Material.STONE_PLATE) {
+						if (entity instanceof Creature) {
+							event.setCancelled(true);
+							return;
+						}
+					}
 				}
 			}
 
@@ -506,12 +520,12 @@ public class TownyEntityListener implements Listener {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 
 			remover = evt.getRemover();
-			
+
 			/*
 			 * Check if this has a shooter.
 			 */
 			if (remover instanceof Projectile) {
-				remover = ((Projectile)remover).getShooter();
+				remover = ((Projectile) remover).getShooter();
 			}
 
 			if (remover instanceof Player) {

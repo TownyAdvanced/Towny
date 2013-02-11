@@ -1408,6 +1408,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NWS_DISABLE_CREATURE_CROP_TRAMPLING);
 	}
+	
+	public static boolean isCreatureTriggeringPressurePlateDisabled() {
+
+		return getBoolean(ConfigNodes.NWS_DISABLE_CREATURE_PRESSUREPLATE);
+	}
 
 	public static boolean isWorldMonstersOn() {
 
@@ -1915,4 +1920,5 @@ public class TownySettings {
 
 		return NameValidation.filterName(input);
 	}
+
 }
