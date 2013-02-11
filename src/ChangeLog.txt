@@ -1774,3 +1774,4 @@ v0.82.1.1:
 	- Added new events for other plugins to utilize - DeleteNationEvent, DeleteTownEvent, NewNationEvent, NewTownEvent, RenameNationEvent, RenameTownEvent.
 v0.82.1.2:
 	- Better directory/file handling when using nested world folders.
+	- Fix '/nation ?' to show the new rank command instead of the old assistant one.
