@@ -24,8 +24,11 @@ public class FileMgmt {
 
 		for (String folder : folders) {
 			File f = new File(folder);
-			if (!(f.exists() && f.isDirectory()))
+			if (!(f.exists() && f.isDirectory())) {
+				f.getParentFile().mkdirs();
 				f.mkdir();
+				
+			}
 		}
 	}
 
@@ -33,8 +36,10 @@ public class FileMgmt {
 
 		for (String file : files) {
 			File f = new File(file);
-			if (!(f.exists() && f.isFile()))
+			if (!(f.exists() && f.isFile())) {
+				f.getParentFile().mkdirs();
 				f.createNewFile();
+			}
 		}
 	}
 
