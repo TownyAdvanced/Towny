@@ -235,10 +235,6 @@ public enum ConfigNodes {
 			"new_world_settings.disable_creature_crop_trampling",
 			"true",
 			"# Disable creatures trampling crops"),
-	NWS_DISABLE_CREATURE_PRESSUREPLATE(
-					"new_world_settings.disable_creature_pressureplate",
-					"true",
-					"# Disable creatures triggering stone pressure plates"),
 
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",
@@ -600,6 +596,11 @@ public enum ConfigNodes {
 			"",
 			"# Prevent the spawning of villager babies in towns."),
 			
+	PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE(
+			"protection.disable_creature_pressureplate_stone",
+			"true",
+			"# Disable creatures triggering stone pressure plates"),
+					
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime",

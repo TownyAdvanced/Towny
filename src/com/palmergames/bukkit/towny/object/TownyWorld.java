@@ -20,7 +20,7 @@ public class TownyWorld extends TownyObject {
 	private List<Town> towns = new ArrayList<Town>();
 	private boolean isClaimable = true, isPVP, isForcePVP, isExplosion,
 			isForceExpl, isFire, isForceFire, isForceTownMobs, hasWorldMobs,
-			isDisableCreatureTrample, isDisablePlayerTrample, isDisableCreaturePressurePlate,
+			isDisableCreatureTrample, isDisablePlayerTrample,
 			isEndermanProtect, isUsingTowny = true,
 			isUsingPlotManagementDelete = true,
 			isUsingPlotManagementMayorDelete = true,
@@ -57,7 +57,6 @@ public class TownyWorld extends TownyObject {
 
 		isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 		isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-		isDisableCreaturePressurePlate = TownySettings.isCreatureTriggeringPressurePlateDisabled();
 
 		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
 		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
@@ -280,16 +279,6 @@ public class TownyWorld extends TownyObject {
 	public boolean isDisableCreatureTrample() {
 
 		return isDisableCreatureTrample;
-	}
-	
-	public void setDisableCreatureTriggerPressurePlate(boolean isDisableCreatureTriggerPressurePlate) {
-
-		this.isDisableCreaturePressurePlate = isDisableCreatureTriggerPressurePlate;
-	}
-
-	public boolean isDisableCreatureTriggerPressurePlate() {
-
-		return isDisableCreaturePressurePlate;
 	}
 
 	public void setWorldMobs(boolean hasMobs) {

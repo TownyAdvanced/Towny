@@ -244,7 +244,7 @@ public class TownyEntityListener implements Listener {
 				}
 
 				// Prevent creatures triggering stone pressure plates
-				if (townyWorld.isDisableCreatureTriggerPressurePlate()) {
+				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
 					if (block.getType() == Material.STONE_PLATE) {
 						if (entity instanceof Creature) {
 							event.setCancelled(true);

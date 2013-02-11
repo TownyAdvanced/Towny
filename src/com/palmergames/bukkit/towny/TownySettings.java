@@ -1076,6 +1076,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD);
 	}
+	
+	public static boolean isCreatureTriggeringPressurePlateDisabled() {
+
+		return getBoolean(ConfigNodes.PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE);
+	}
 
 	public static boolean isRemovingVillagerBabiesTown() {
 		
@@ -1407,11 +1412,6 @@ public class TownySettings {
 	public static boolean isCreatureTramplingCropsDisabled() {
 
 		return getBoolean(ConfigNodes.NWS_DISABLE_CREATURE_CROP_TRAMPLING);
-	}
-	
-	public static boolean isCreatureTriggeringPressurePlateDisabled() {
-
-		return getBoolean(ConfigNodes.NWS_DISABLE_CREATURE_PRESSUREPLATE);
 	}
 
 	public static boolean isWorldMonstersOn() {
