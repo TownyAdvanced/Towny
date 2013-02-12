@@ -1780,3 +1780,5 @@ v0.82.1.3:
 	- Update townyperms upon a '/ta reload'.
 v0.82.1.4:
 	- Move stone pressure plate protection to the 'block/item/mob protection' section of the config.
+v0.82.1.5:
+	- Added TownClaim and Unclaim events for plugins to utilise.

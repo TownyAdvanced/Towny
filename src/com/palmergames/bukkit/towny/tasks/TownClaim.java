@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -21,6 +23,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -145,7 +148,7 @@ public class TownClaim extends Thread {
 				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
 			}
 		} catch (NotRegisteredException e) {
-			TownBlock townBlock = worldCoord.getTownyWorld().newTownBlock(worldCoord);
+			final TownBlock townBlock = worldCoord.getTownyWorld().newTownBlock(worldCoord);
 			townBlock.setTown(town);
 			if (!town.hasHomeBlock())
 				town.setHomeBlock(townBlock);
@@ -179,10 +182,14 @@ public class TownClaim extends Thread {
 			}
 
 			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+			
+			// Raise an event for the claim
+			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
+				
 		}
 	}
 
-	private void townUnclaim(Town town, WorldCoord worldCoord, boolean force) throws TownyException {
+	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force) throws TownyException {
 
 		try {
 			final TownBlock townBlock = worldCoord.getTownBlock();
@@ -195,6 +202,9 @@ public class TownClaim extends Thread {
 				public void run() {
 
 					TownyUniverse.getDataSource().removeTownBlock(townBlock);
+					
+					// Raise an event to signal the unclaim
+					BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
 				}
 			}, 1);
 
@@ -212,6 +222,9 @@ public class TownClaim extends Thread {
 
 				TownyUniverse.getDataSource().removeTownBlocks(town);
 				TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
+				
+				// Raise an event to signal the unclaim
+				BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, null));
 			}
 		}, 1);
 
