@@ -38,7 +38,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private TownyWorld world;
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
-
+	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	
 	public Town(String name) {
 
 		setName(name);
@@ -266,9 +267,18 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		this.adminDisabledPVP = isPVPDisabled;
 	}
+	
+	public void setAdminEnabledPVP(boolean isPVPEnabled) {
+
+		this.adminEnabledPVP = isPVPEnabled;
+	}
 
 	public boolean isPVP() {
 
+		// Admin has enabled PvP for this town.
+		if (isAdminEnabledPVP()) 
+			return false;
+				
 		// Admin has disabled PvP for this town.
 		if (isAdminDisabledPVP()) 
 			return false;
@@ -280,6 +290,12 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		// Admin has disabled PvP for this town.
 		return this.adminDisabledPVP;
+	}
+	
+	public boolean isAdminEnabledPVP() {
+
+		// Admin has enabled PvP for this town.
+		return this.adminEnabledPVP;
 	}
 
 	public void setBANG(boolean isBANG) {

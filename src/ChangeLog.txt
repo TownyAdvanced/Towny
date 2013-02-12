@@ -1782,3 +1782,7 @@ v0.82.1.4:
 	- Move stone pressure plate protection to the 'block/item/mob protection' section of the config.
 v0.82.1.5:
 	- Added TownClaim and Unclaim events for plugins to utilise.
+v0.82.1.6:
+	- Added a hook to the Town object for other plugins to foce PvP on in a town 'setAdminEnabledPVP(true/false)'
+	  This setting does not save on shutdown/restart adn can not be set via any configuration files.
+	  It is solely for War plugins to gain control over a towns PvP setting.
