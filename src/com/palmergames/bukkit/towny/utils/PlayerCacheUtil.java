@@ -409,15 +409,6 @@ public class PlayerCacheUtil {
 		if (TownyUniverse.getPermissionSource().isTownyAdmin(player))
 			return true;
 
-		/*
-		 * special case plots
-		 */
-		try {
-			if ((townBlock.getType() == TownBlockType.WILDS) && (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)))
-				return true;
-
-		} catch (NotRegisteredException e) {
-		}
 
 		// Plot Permissions
 
@@ -433,27 +424,66 @@ public class PlayerCacheUtil {
 				return true;
 
 			} else if (status == TownBlockStatus.PLOT_FRIEND) {
-				if (townBlock.getPermissions().getResidentPerm(action))
-					return true;
-				else {
-					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", action.toString()));
-					return false;
+				if (townBlock.getPermissions().getResidentPerm(action)) {
+
+					if (townBlock.getType() == TownBlockType.WILDS) {
+
+						try {
+							if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+								return true;
+						} catch (NotRegisteredException e) {
+						}
+
+					} else {
+						return true;
+					}
+
 				}
-			} else if (status == TownBlockStatus.PLOT_ALLY)
-				if (townBlock.getPermissions().getAllyPerm(action))
-					return true;
-				else {
-					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", action.toString()));
-					return false;
+
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", action.toString()));
+				return false;
+
+			} else if (status == TownBlockStatus.PLOT_ALLY) {
+				if (townBlock.getPermissions().getAllyPerm(action)) {
+
+					if (townBlock.getType() == TownBlockType.WILDS) {
+
+						try {
+							if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+								return true;
+						} catch (NotRegisteredException e) {
+						}
+
+					} else {
+						return true;
+					}
+
 				}
-			else {
+				
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", action.toString()));
+				return false;
+
+			} else {
 
 				if (townBlock.getPermissions().getOutsiderPerm(action)) {
-					return true;
-				} else {
-					cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", action.toString()));
-					return false;
+
+					if (townBlock.getType() == TownBlockType.WILDS) {
+
+						try {
+							if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+								return true;
+						} catch (NotRegisteredException e) {
+						}
+
+					} else {
+						return true;
+					}
+
 				}
+
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", action.toString()));
+				return false;
+
 			}
 		}
 
@@ -469,14 +499,27 @@ public class PlayerCacheUtil {
 			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, data, action))) {
 				return true;
 
-			} else if (townBlock.getPermissions().getResidentPerm(action))
-				return true;
-			else {
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), action.toString()));
-				return false;
+			} else if (townBlock.getPermissions().getResidentPerm(action)) {
+
+				if (townBlock.getType() == TownBlockType.WILDS) {
+
+					try {
+						if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+							return true;
+					} catch (NotRegisteredException e) {
+					}
+
+				} else {
+					return true;
+				}
+
 			}
-		} else if (status == TownBlockStatus.TOWN_ALLY)
-			
+
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), action.toString()));
+			return false;
+
+		} else if (status == TownBlockStatus.TOWN_ALLY) {
+
 			/*
 			 * Check town overrides before testing town permissions
 			 */
@@ -486,26 +529,51 @@ public class PlayerCacheUtil {
 			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, data, action))) {
 				return true;
 
-			} else if (townBlock.getPermissions().getAllyPerm(action))
-				return true;
-			else {
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), action.toString()));
-				return false;
+			} else if (townBlock.getPermissions().getAllyPerm(action)) {
+
+				if (townBlock.getType() == TownBlockType.WILDS) {
+
+					try {
+						if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+							return true;
+					} catch (NotRegisteredException e) {
+					}
+
+				} else {
+					return true;
+				}
+
 			}
-		else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY)
-			
+
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), action.toString()));
+			return false;
+
+		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
+
 			/*
 			 * Check town overrides before testing town permissions
 			 */
-			 if (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, data, action)) {
+			if (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, data, action)) {
 				return true;
 
-			} else if (townBlock.getPermissions().getOutsiderPerm(action))
-				return true;
-			else {
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), action.toString()));
-				return false;
+			} else if (townBlock.getPermissions().getOutsiderPerm(action)) {
+
+				if (townBlock.getType() == TownBlockType.WILDS) {
+
+					try {
+						if (TownyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), blockId, action))
+							return true;
+					} catch (NotRegisteredException e) {
+					}
+
+				} else {
+					return true;
+				}
+
 			}
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), action.toString()));
+			return false;
+		}
 
 		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 		return false;

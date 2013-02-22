@@ -1786,3 +1786,5 @@ v0.82.1.6:
 	- Added a hook to the Town object for other plugins to foce PvP on in a town 'setAdminEnabledPVP(true/false)'
 	  This setting does not save on shutdown/restart adn can not be set via any configuration files.
 	  It is solely for War plugins to gain control over a towns PvP setting.
+v0.82.1.7:
+	- Make wild plots use the relevant worlds 'unclaimed_zone_ignore' settings.

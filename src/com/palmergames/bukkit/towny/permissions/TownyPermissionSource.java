@@ -133,6 +133,23 @@ public abstract class TownyPermissionSource {
 		return false;
 	}
 	
+	public boolean unclaimedZoneAction(TownyWorld world, int blockId, TownyPermission.ActionType action) {
+		
+		switch (action) {
+
+		case BUILD:
+			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+		case DESTROY:
+			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+		case SWITCH:
+			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+		case ITEM_USE:
+			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Test if the player has an own town (or all town) override to permit this action.
 	 * 
