@@ -1788,3 +1788,5 @@ v0.82.1.6:
 	  It is solely for War plugins to gain control over a towns PvP setting.
 v0.82.1.7:
 	- Make wild plots use the relevant worlds 'unclaimed_zone_ignore' settings.
+v0.82.1.8:
+	- Prevent '/res toggle spy' bypassing the perm check for 'towny.chat.spy' permission.

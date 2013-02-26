@@ -157,7 +157,8 @@ public class ResidentCommand implements CommandExecutor {
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
 
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
+		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase()))
+				|| newSplit[0].equalsIgnoreCase("spy"))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		try {
