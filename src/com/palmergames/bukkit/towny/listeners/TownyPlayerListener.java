@@ -120,9 +120,15 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
+		// Test against the item in hand as we need to test the bucket contents we are trying to empty.
+		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+		
+		//Test on the resulting empty bucket to see if we have permission to empty a bucket.
+		if (!event.isCancelled())
+			event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
 		
 	}
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
 		
@@ -130,7 +136,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+		//test against the bucket we will finish up with to see if we are allowed to fill this item.
 		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
 		
 	}
