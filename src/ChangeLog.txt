@@ -1797,3 +1797,4 @@ v0.82.1.9:
 	 To empty a water bucket in the wild the player requires...
 	 - towny.wild.item_use.326
 	 - towny.wild.item_use.325
+	 - Update the nations data in SQL when renaming towns.

@@ -634,7 +634,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// If this was a nation capitol
 		if (isCapital) {
 			nation.setCapital(town);
-			saveNation(nation);
 		}
 
 		if (TownySettings.isUsingEconomy()) {
@@ -653,6 +652,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveTown(town);
 		saveTownList();
 		saveWorld(town.getWorld());
+		
+		if (nation != null) {
+			saveNation(nation);
+		}
 		
 		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
 
