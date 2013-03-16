@@ -1798,3 +1798,5 @@ v0.82.1.9:
 	 - towny.wild.item_use.326
 	 - towny.wild.item_use.325
 	 - Update the nations data in SQL when renaming towns.
+v0.82.1.10:
+	- Remove assitant override for town perms build/break. Thes should now only belong to the town Mayor. Assistant is just another rank.
