@@ -51,6 +51,7 @@ public class Towny extends JavaPlugin {
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyBlockListener blockListener = new TownyBlockListener(this);
+	private final TownyBlockPhysicsListener physicsListener = new TownyBlockPhysicsListener(this);
 	private final TownyCustomListener customListener = new TownyCustomListener(this);
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
@@ -343,6 +344,10 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(townyWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
+			
+			// Only register a physics listener if we need to.
+			if (TownySettings.getRegenDelay() > 0)
+				pluginManager.registerEvents(physicsListener, this);
 
 		}
 
@@ -350,6 +355,8 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(playerListener, this);
 		pluginManager.registerEvents(blockListener, this);
 		pluginManager.registerEvents(entityListener, this);
+		
+		
 
 	}
 

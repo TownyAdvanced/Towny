@@ -23,8 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.PoweredMinecart;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -252,16 +250,24 @@ public class TownyPlayerListener implements Listener {
 					
 				case MINECART:
 					
-					if (event.getRightClicked() instanceof StorageMinecart) {
+					if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
 						
 						blockID = 342;
 						
-					} else if (event.getRightClicked() instanceof PoweredMinecart) {
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
 						
-						blockID = 321;
+						blockID = 328;
+						
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
+						
+						blockID = 343;
+						
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
+						
+						blockID = 408;
 						
 					} else {
-					
+						
 						blockID = 321;
 					}
 					
