@@ -521,8 +521,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Resident resident = getResident(token);
-							if (resident != null)
-								town.addResident(resident);
+							if (resident != null) {
+								try {
+									town.addResident(resident);
+								} catch (AlreadyRegisteredException e) {
+									TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+								}
+								
+							}
 						}
 					}
 				}
