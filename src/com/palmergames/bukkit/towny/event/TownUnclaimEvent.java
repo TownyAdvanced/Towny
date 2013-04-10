@@ -42,7 +42,6 @@ public class TownUnclaimEvent extends Event  {
     *
     * @return the Unclaimed WorldCoord.
     * 
-    * If this returns null then ALL townBlocks were unclaimed.
     */
    public WorldCoord getWorldCoord() {
        return worldCoord;

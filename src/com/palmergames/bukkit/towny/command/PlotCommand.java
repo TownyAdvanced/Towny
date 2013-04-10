@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -29,6 +30,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -335,6 +337,9 @@ public class PlotCommand implements CommandExecutor {
 							} else
 								throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
 
+						// Raise an event for the claim
+						BukkitTools.getPluginManager().callEvent(new PlotClearEvent(townBlock));
+						
 					} else {
 						// Shouldn't ever reach here as a null townBlock should
 						// be caught already in WorldCoord.

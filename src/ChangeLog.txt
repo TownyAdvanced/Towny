@@ -1806,3 +1806,5 @@ v0.82.1.11:
 v0.82.1.12:
 	- Attempt to load town data even if there is a resident listed who is in another town (flatfile manual editing of files can cause this).
 	- Minor english.yml fixes.
+v0.82.1.13:
+	- Ad a PlotClear event.
