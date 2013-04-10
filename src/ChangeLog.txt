@@ -1803,3 +1803,6 @@ v0.82.1.10:
 v0.82.1.11:
 	- Move the BlockPhysics listener to it's own class so we don't register it if it's not needed.
 	- Allow protection of hopper minecarts from being right clicked.
+v0.82.1.12:
+	- Attempt to load town data even if there is a resident listed who is in another town (flatfile manual editing of files can cause this).
+	- Minor english.yml fixes.
