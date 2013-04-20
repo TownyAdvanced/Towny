@@ -1808,3 +1808,5 @@ v0.82.1.12:
 	- Minor english.yml fixes.
 v0.82.1.13:
 	- Ad a PlotClear event.
+v0.82.1.14:
+	- Trap NPE's caused by Spigot unloading a world yet still reporting the world in the world list.

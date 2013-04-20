@@ -81,6 +81,9 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			} catch (NotRegisteredException e) {
 				// World was not registered by Towny, so we skip all mobs in it.
 				continue;
+			} catch (NullPointerException ex) {
+				// Spigot has unloaded this world.
+				continue;
 			}
 
 			// Filter worlds not using towny.
