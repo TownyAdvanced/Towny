@@ -217,6 +217,7 @@ msg_no_funds_claim: '&cLa ciudad no tiene dinero suficiente para reclamar %s blo
 msg_no_funds_to_buy: '&cLa ciudad no tiene dinero suficiente para comprar %s %s con un costo de %s. Agrega mas dinero al banco de la ciudad.'
 msg_annexed_area: '&2Area anexada: %s'
 msg_max_plot_own: '&cNo puedes tener mas de %s parcelas.'
+mas_max_outposts_own: '&cNo peudes tener mas de %s puestos de avanzada.'
 msg_wait_locked: '&2Por favor se paciente, la parcela estara disponible pronto.'
 msg_no_funds_new_nation: '&cLa ciudad no tiene suficiente dinero para fundar un pais.'
 msg_already_claimed: '&cEsta area ya fue reclamada por: %s'

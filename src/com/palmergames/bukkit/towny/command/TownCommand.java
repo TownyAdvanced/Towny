@@ -1822,6 +1822,10 @@ public class TownCommand implements CommandExecutor {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					
+					int maxOutposts = TownySettings.getMaxResidentOutposts(resident); 
+		            if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && maxOutposts != -1 &&(maxOutposts <= resident.getTown().getAllOutpostSpawns().size())) 
+		            	throw new TownyException(String.format(TownySettings.getLangString("msg_max_outposts_own"), maxOutposts));
+		            
 					if (TownySettings.isAllowingOutposts()) {
 
 						if (world.hasTownBlock(key))
