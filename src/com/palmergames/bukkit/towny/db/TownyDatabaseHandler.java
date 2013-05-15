@@ -448,7 +448,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			try {
 				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
 				town.removeAccount();
-			} catch (EconomyException e) {
+			} catch (Exception e) {
 			}
 
 		universe.getTownsMap().remove(town.getName().toLowerCase());
@@ -497,7 +497,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			try {
 				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
 				nation.removeAccount();
-			} catch (EconomyException e) {
+			} catch (Exception e) {
 			}
 
 		//Delete nation and save towns

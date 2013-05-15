@@ -1,5 +1,9 @@
 package com.palmergames.bukkit.towny.command;
 
+import ca.xshade.bukkit.questioner.Questioner;
+import ca.xshade.questionmanager.Option;
+import ca.xshade.questionmanager.Question;
+
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -8,6 +12,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.questioner.PurgeQuestionTask;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
@@ -22,6 +27,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -530,9 +536,38 @@ public class TownyAdminCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
+		
+		
+		// Use questioner to confirm.
+		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
-		// Run a purge in it's own thread
-		new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
+		if (this.sender instanceof Player && TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+			Questioner questioner = (Questioner) test;
+			questioner.loadClasses();
+
+			List<Option> options = new ArrayList<Option>();
+			options.add(new Option(TownySettings.questionerAccept(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d"))));
+			options.add(new Option(TownySettings.questionerDeny(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d")) {
+
+				@Override
+				public void run() {
+
+					TownyMessaging.sendMessage(getSender(), "Purge Aborted!");
+				}
+			}));
+			
+			Question question = new Question(this.sender.getName(), "Do you really want to perform this purge", options);
+			
+			try {
+				plugin.appendQuestion(questioner, question);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} else {
+
+			// Run a purge in it's own thread
+			new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
+		}
 
 	}
 

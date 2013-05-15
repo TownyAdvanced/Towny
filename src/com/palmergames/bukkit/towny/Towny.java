@@ -50,6 +50,7 @@ public class Towny extends JavaPlugin {
 	public static PermissionHandler permissionHandler;
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
+	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
 	private final TownyBlockListener blockListener = new TownyBlockListener(this);
 	private final TownyBlockPhysicsListener physicsListener = new TownyBlockPhysicsListener(this);
 	private final TownyCustomListener customListener = new TownyCustomListener(this);
@@ -340,6 +341,7 @@ public class Towny extends JavaPlugin {
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
+			pluginManager.registerEvents(vehicleListener, this);
 			pluginManager.registerEvents(weatherListener, this);
 			pluginManager.registerEvents(townyWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);

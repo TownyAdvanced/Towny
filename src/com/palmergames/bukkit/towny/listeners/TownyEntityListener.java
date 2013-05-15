@@ -93,6 +93,7 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
+		
 	}
 
 	/**
@@ -346,7 +347,7 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		TownyWorld townyWorld;
 
 		/**

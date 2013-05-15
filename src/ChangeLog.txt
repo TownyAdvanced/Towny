@@ -1810,3 +1810,13 @@ v0.82.1.13:
 	- Ad a PlotClear event.
 v0.82.1.14:
 	- Trap NPE's caused by Spigot unloading a world yet still reporting the world in the world list.
+	- Update to only work with CB #2771+ (craftbukkit-1.5.2-R0.1).
+	- Add new block Ids to the switch/item protection lists.
+	- Added a 'using_towny' setting to the 'Default new world settings' of the config. You can now set Towny to default to dsiabled in new worlds.
+	- Fix Minecart protection so it works in towns again.
+	- Minecart place/break is covered under Item_use nodes in the config 'block/item/mob protection'.
+	- Minecart use is covered under switch_ids in the config 'block/item/mob protection'.
+	- PvP prevention no longer prevents you harming yourself and no longer stops Ender pearl damage.
+	- Catch ALL exceptions when deleting a Town/Nation so any economy errors will not prevent them being deleted.
+	- Added a confirmation message to the purge command.
+	- Added Town and Wilderness PvP entries in the 'Town Notifications' section of the config. You can now disable or customize the PVP message when moving between plots.

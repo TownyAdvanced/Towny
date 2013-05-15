@@ -1393,6 +1393,11 @@ public class TownySettings {
 			t = minT;
 		return t;
 	}
+	
+	public static boolean isUsingTowny() {
+
+		return getBoolean(ConfigNodes.NWS_WORLD_USING_TOWNY);
+	}
 
 	public static boolean isPvP() {
 

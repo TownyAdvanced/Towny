@@ -23,7 +23,9 @@ public class ChunkNotification {
 	public static String notificationFormat = Colors.Gold + " ~ %s";
 	public static String notificationSpliter = Colors.LightGray + " - ";
 	public static String areaWildernessNotificationFormat = Colors.Green + "%s";
+	public static String areaWildernessPvPNotificationFormat = Colors.Green + "%s";
 	public static String areaTownNotificationFormat = Colors.Green + "%s";
+	public static String areaTownPvPNotificationFormat = Colors.Green + "%s";
 	public static String ownerNotificationFormat = Colors.LightGreen + "%s";
 	public static String noOwnerNotificationFormat = Colors.LightGreen + "%s";
 	public static String plotNotficationSplitter = " ";
@@ -42,7 +44,9 @@ public class ChunkNotification {
 		notificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_FORMAT);
 		notificationSpliter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_SPLITTER);
 		areaWildernessNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS);
+		areaWildernessPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP);
 		areaTownNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN);
+		areaTownPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP);
 		ownerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_OWNER);
 		noOwnerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_NO_OWNER);
 		plotNotficationSplitter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_SPLITTER);
@@ -119,12 +123,19 @@ public class ChunkNotification {
 		output = getAreaNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
+		
+		// Only adds this if entering the wilderness
+		output = getAreaPvPNotification();
+		if (output != null && output.length() > 0)
+			out.add(output);
 
 		output = getOwnerNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
 
-		output = getPVPNotification();
+		
+		// Only adds this IF in town.
+		output = getTownPVPNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
 
@@ -140,12 +151,25 @@ public class ChunkNotification {
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
 				try {
-					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName()) + ((to.getTownyWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : "");
+					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
 				} catch (NotRegisteredException ex) {
 					// Not a Towny registered world
 				}
 			else
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
+		}
+		return null;
+	}
+	
+	public String getAreaPvPNotification() {
+
+		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
+			if (toWild)
+				try {
+					return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : ""));
+				} catch (NotRegisteredException ex) {
+					// Not a Towny registered world
+				}
 		}
 		return null;
 	}
@@ -162,11 +186,11 @@ public class ChunkNotification {
 		return null;
 	}
 
-	public String getPVPNotification() {
+	public String getTownPVPNotification() {
 
 		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP()))) {
 			try {
-				return ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)");
+				return String.format(areaTownPvPNotificationFormat, ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)"));
 			} catch (NotRegisteredException e) {
 				// Not a Towny registered world.
 			}

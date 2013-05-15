@@ -7,13 +7,11 @@ import java.util.List;
 
 import org.bukkit.entity.Entity;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.util.JavaUtil;
 
 public class TownyWorld extends TownyObject {
 
@@ -21,7 +19,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isClaimable = true, isPVP, isForcePVP, isExplosion,
 			isForceExpl, isFire, isForceFire, isForceTownMobs, hasWorldMobs,
 			isDisableCreatureTrample, isDisablePlayerTrample,
-			isEndermanProtect, isUsingTowny = true,
+			isEndermanProtect, isUsingTowny,
 			isUsingPlotManagementDelete = true,
 			isUsingPlotManagementMayorDelete = true,
 			isUsingPlotManagementRevert = true,
@@ -36,7 +34,7 @@ public class TownyWorld extends TownyObject {
 	private String unclaimedZoneName = null;
 	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
 	private List<Coord> warZones = new ArrayList<Coord>();
-	private List<Class<?>> entityExplosionProtection = null;
+	private List<String> entityExplosionProtection = null;
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
@@ -45,6 +43,7 @@ public class TownyWorld extends TownyObject {
 
 		setName(name);
 
+		isUsingTowny = TownySettings.isUsingTowny();
 		isPVP = TownySettings.isPvP();
 		isForcePVP = TownySettings.isForcingPvP();
 		isFire = TownySettings.isFire();
@@ -470,21 +469,13 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 
-		entityExplosionProtection = new ArrayList<Class<?>>();
+		entityExplosionProtection = new ArrayList<String>();
 
 		for (String mob : entities)
-			if (!mob.equals(""))
-				try {
-					Class<?> c = Class.forName("org.bukkit.entity." + mob);
-					if (JavaUtil.isSubInterface(Entity.class, c))
-						entityExplosionProtection.add(c);
-					else
-						throw new Exception();
-				} catch (ClassNotFoundException e) {
-					TownyMessaging.sendErrorMsg("Explosion Regen: " + mob + " is not an acceptable class.");
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg("Explosion Regen: " + mob + " is not an acceptable entity.");
-				}
+			if (!mob.equals("")) {
+				entityExplosionProtection.add(mob.toLowerCase());
+			}
+
 	}
 
 	public List<String> getPlotManagementWildRevertEntities() {
@@ -492,24 +483,16 @@ public class TownyWorld extends TownyObject {
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
-		List<String> entities = new ArrayList<String>();
-		for (Class<?> c : entityExplosionProtection)
-			entities.add(c.getSimpleName());
-
-		return entities;
+		return entityExplosionProtection;
 	}
 
-	public boolean isProtectingExplosionEntity(Entity Entity) {
+	public boolean isProtectingExplosionEntity(Entity entity) {
 
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
+		
+		return (entityExplosionProtection.contains(entity.getType().getName().toLowerCase()));
 
-		for (Class<?> c : entityExplosionProtection)
-			if (c.isInstance(Entity))
-				return true;
-			else if (c.getName().contains(Entity.toString()))
-				System.out.print(Entity.toString());
-		return false;
 	}
 
 	public List<Integer> getUnclaimedZoneIgnoreIds() {

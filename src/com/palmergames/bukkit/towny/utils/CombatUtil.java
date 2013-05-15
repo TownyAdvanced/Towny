@@ -65,7 +65,10 @@ public class CombatUtil {
 				a = (Player) attacker;
 			if (defender instanceof Player)
 				b = (Player) defender;
+			
+			if (a == b) return false;
 
+			// Allow players to injure themselves
 			return preventDamageCall(world, attacker, defender, a, b);
 
 		} catch (Exception e) {

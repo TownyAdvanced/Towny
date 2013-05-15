@@ -35,7 +35,7 @@ import org.bukkit.material.Attachable;
 /**
  * Handle events for all Player related events
  * 
- * @author Shade
+ * @author Shade/ElgarL
  * 
  */
 public class TownyPlayerListener implements Listener {
@@ -146,7 +146,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		Player player = event.getPlayer();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		TownyWorld World = null;
@@ -270,6 +270,9 @@ public class TownyPlayerListener implements Listener {
 						
 						blockID = 321;
 					}
+					
+					if ((blockID != 0) && (!TownySettings.isSwitchId(blockID)))
+						return;
 					
 					//Get permissions (updates if none exist)
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.SWITCH);

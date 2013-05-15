@@ -12,7 +12,7 @@ public enum ConfigNodes {
 			"# This is for showing the changelog on updates.  Please do not edit."),
 	VERSION_BUKKIT(
 			"version.bukkit_version",
-			"2602",
+			"2771",
 			"# Minimum required version of CraftBukkit.  Please do not edit."),
 	VERSION_BUKKIT_BYPASS(
 			"version.bypass_version_check",
@@ -180,7 +180,9 @@ public enum ConfigNodes {
 			"# Once Towny is running each world can be altered from within game",
 			"# using '/townyworld toggle'",
 			""),
-
+			
+	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true", "# Default for new worlds to have towny enabled."),
+			
 	NWS_WORLD_PVP_HEADER("new_world_settings.pvp", "", ""),
 	NWS_WORLD_PVP(
 			"new_world_settings.pvp.world_pvp",
@@ -303,7 +305,7 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,TNTPrimed"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,TNTPrimed,MinecartTNT"),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
@@ -550,7 +552,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_ID(
 			"protection.item_use_ids",
-			"259,325,326,327,351,359,368,374,385",
+			"259,325,326,327,328,342,351,359,368,374,385",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -564,22 +566,11 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_ID(
 			"protection.switch_ids",
-			"23,25,54,61,62,64,69,70,71,72,77,96,84,93,94,107",
+			"23,25,54,61,62,64,69,70,71,72,77,96,84,93,94,107,146,147,148,149,150,138,154,158,328,342,343,407,408",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
-			"# 54 - chest",
-			"# 61 - furnace",
-			"# 62 - lit furnace",
-			"# 64 - wooden door",
-			"# 69 - lever",
-			"# 70 - stone pressure plate",
-			"# 71 - iron door",
-			"# 72 - wooden pressure plate",
-			"# 77 - stone button",
-			"# 96 - trap door",
-			"# 84 - jukebox",
-			"# 93/94 - redstone repeater"),
+			"# 54 - chest ...etc"),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime",
@@ -678,7 +669,9 @@ public enum ConfigNodes {
 	NOTIFICATION_FORMAT("notification.format", "&6 ~ %s"),
 	NOTIFICATION_SPLITTER("notification.splitter", "&7 - "),
 	NOTIFICATION_AREA_WILDERNESS("notification.area_wilderness", "&2%s"),
+	NOTIFICATION_AREA_WILDERNESS_PVP("notification.area_wilderness_pvp", "%s"),
 	NOTIFICATION_AREA_TOWN("notification.area_town", "&6%s"),
+	NOTIFICATION_AREA_TOWN_PVP("notification.area_town_pvp", "%s"),
 	NOTIFICATION_OWNER("notification.owner", "&a%s"),
 	NOTIFICATION_NO_OWNER("notification.no_owner", "&a%s"),
 	NOTIFICATION_PLOT("notification.plot", ""),
