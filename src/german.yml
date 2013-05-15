@@ -221,6 +221,7 @@ msg_no_funds_claim: '&cDie Stadt erlaubt es nicht %s  zu beanspruchen. Stadtbloc
 msg_no_funds_to_buy: '&cDie stadt erlaubt es nicht %s %s zu kaufen. Die Kosten betragen %s. Fuege deiner Bank mehr Geld hinzu.'
 msg_annexed_area: '&2Beigefuegter Bereich: %s'
 msg_max_plot_own: '&cDu kannst nicht mehr als %s Grundstuecke besitzen.'
+msg_max_outposts_own: '&cDu kannst nicht mehr als %s Vorposten besitzen.'
 msg_no_funds_new_nation: '&cDiese Stadt kann es sich nicht leisten eine neue Nation zu gruenden.'
 msg_already_claimed: '&cDieser Bereich wurde bereits von %s beansprucht'
 msg_already_claimed_1: '&cBereich (%s) gehoert bereits jemanden.'
