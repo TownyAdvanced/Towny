@@ -1823,3 +1823,5 @@ v0.82.1.14:
 	- Added Town and Wilderness PvP entries in the 'Town Notifications' section of the config. You can now disable or customize the PVP message when moving between plots.
 	- Add ability to limit outposts. Permissions info/option node based 'towny_maxoutposts' (TomSki).
 	- Added a '/townyadmin toggle npc [resident]' command to set/reset the players exemption from tax.
+v0.82.1.15:
+	- When a player leaves or is kicked from a town they will no longer lose their plots if they are of the Embassy type.

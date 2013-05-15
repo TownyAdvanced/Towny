@@ -491,14 +491,18 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private void remove(Resident resident) {
 
 		for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
-			townBlock.setResident(null);
-			try {
-				townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
+			// Do not remove Embassy plots
+			if (townBlock.getType() != TownBlockType.EMBASSY) {
+				townBlock.setResident(null);
+				try {
+					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
+				} catch (NotRegisteredException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
 			}
-			//getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
 		}
 
 		if (isMayor(resident)) {
