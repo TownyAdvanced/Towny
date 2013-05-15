@@ -53,6 +53,8 @@ public class PlotClaim extends Thread {
 
 	@Override
 	public void run() {
+		
+		int claimed = 0;
 
 		if (player != null)
 			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Plot Claim..." : "Plot unclaim..."));
@@ -70,7 +72,8 @@ public class PlotClaim extends Thread {
 				}
 				try {
 					if (claim) {
-						residentClaim(worldCoord);
+						if (residentClaim(worldCoord))
+							claimed++;
 					} else {
 						residentUnclaim(worldCoord);
 					}
@@ -91,7 +94,7 @@ public class PlotClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				if ((selection != null) && (selection.size() > 0))
+				if ((selection != null) && (selection.size() > 0) && (claimed > 0))
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				else
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_not_claimed_1"));
@@ -108,11 +111,11 @@ public class PlotClaim extends Thread {
 
 	private boolean residentClaim(WorldCoord worldCoord) throws TownyException, EconomyException {
 
-		if (resident.hasTown())
+		//if (resident.hasTown())
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
 				Town town = townBlock.getTown();
-				if (resident.getTown() != town && !townBlock.getType().equals(TownBlockType.EMBASSY))
+				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 
 				try {
@@ -185,8 +188,8 @@ public class PlotClaim extends Thread {
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}
-		else
-			throw new TownyException(TownySettings.getLangString("msg_err_not_in_town_claim"));
+		//else
+		//	throw new TownyException(TownySettings.getLangString("msg_err_not_in_town_claim"));
 	}
 
 	private boolean residentUnclaim(WorldCoord worldCoord) throws TownyException {

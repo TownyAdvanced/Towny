@@ -1825,3 +1825,4 @@ v0.82.1.14:
 	- Added a '/townyadmin toggle npc [resident]' command to set/reset the players exemption from tax.
 v0.82.1.15:
 	- When a player leaves or is kicked from a town they will no longer lose their plots if they are of the Embassy type.
+	- Nomads can now purchase Embassy plots, IF they have the plot claim permissions.

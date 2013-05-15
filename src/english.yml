@@ -1,5 +1,5 @@
 name: Towny
-version: 0.20
+version: 0.21
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -226,7 +226,7 @@ msg_already_claimed_2: '&cThis area has already been claimed.'
 msg_too_close: '&cThis area is too close to another town.'
 msg_too_far: '&cThis area is too far away from the other towns.'
 msg_not_claimed: '&bThis area (%s) hasn''t been claimed.'
-msg_not_claimed_1: '&bThis area had not been claimed.'
+msg_not_claimed_1: '&bThis area has not been claimed.'
 msg_not_own_area: '&cYou do not own the selected area.'
 msg_not_own_place: '&bThis place is not owned by anyone.'
 msg_area_not_own: '&cThis area does not belong to you.'

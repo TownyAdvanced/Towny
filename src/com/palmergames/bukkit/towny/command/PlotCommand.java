@@ -101,7 +101,7 @@ public class PlotCommand implements CommandExecutor {
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
 				world = player.getWorld().getName();
-				resident.getTown();
+				//resident.getTown();
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return true;
