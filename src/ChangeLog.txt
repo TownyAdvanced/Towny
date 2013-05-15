@@ -1818,6 +1818,8 @@ v0.82.1.14:
 	- Minecart use is covered under switch_ids in the config 'block/item/mob protection'.
 	- PvP prevention no longer prevents you harming yourself and no longer stops Ender pearl damage.
 	- Catch ALL exceptions when deleting a Town/Nation so any economy errors will not prevent them being deleted.
-	- Added a confirmation message to the purge command.
+	- Added a confirmation message to the admin purge command.
+	- Added a confirmation message to the town delete command.
 	- Added Town and Wilderness PvP entries in the 'Town Notifications' section of the config. You can now disable or customize the PVP message when moving between plots.
 	- Add ability to limit outposts. Permissions info/option node based 'towny_maxoutposts' (TomSki).
+	- Added a '/townyadmin toggle npc [resident]' command to set/reset the players exemption from tax.

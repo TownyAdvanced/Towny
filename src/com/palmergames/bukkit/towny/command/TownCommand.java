@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.questioner.JoinTownTask;
 import com.palmergames.bukkit.towny.questioner.ResidentTownQuestionTask;
+import com.palmergames.bukkit.towny.questioner.TownQuestionTask;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
@@ -22,6 +23,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -1351,13 +1353,13 @@ public class TownCommand implements CommandExecutor {
 
 	public void townDelete(Player player, String[] split) {
 
+		Town town = null;
+		
 		if (split.length == 0)
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
+				town = resident.getTown();
 
-				TownyUniverse.getDataSource().removeTown(town);
-				TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -1367,13 +1369,53 @@ public class TownCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete_town"));
 
-				Town town = TownyUniverse.getDataSource().getTown(split[0]);
-				TownyUniverse.getDataSource().removeTown(town);
-				TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+				town = TownyUniverse.getDataSource().getTown(split[0]);
+
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
+		
+		
+		// Use questioner to confirm.
+		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+		
+		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+			Questioner questioner = (Questioner) test;
+			questioner.loadClasses();
+
+			List<Option> options = new ArrayList<Option>();
+			options.add(new Option(TownySettings.questionerAccept(), new TownQuestionTask(player, town) {
+				
+				@Override
+				public void run() {
+
+					TownyUniverse.getDataSource().removeTown(town);
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+				}
+				
+			}));
+			options.add(new Option(TownySettings.questionerDeny(), new TownQuestionTask(player, town) {
+
+				@Override
+				public void run() {
+
+					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
+				}
+			}));
+			
+			Question question = new Question(player.getName(), "Do you really want to delete this town", options);
+			
+			try {
+				plugin.appendQuestion(questioner, question);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} else {
+
+			TownyUniverse.getDataSource().removeTown(town);
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+		}
 	}
 
 	/**

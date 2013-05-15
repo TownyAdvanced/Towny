@@ -1,5 +1,5 @@
 name: Towny
-version: 0.17
+version: 0.18
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -405,6 +405,7 @@ msg_err_warzone_cannot_edit_material: '&c %s %s ist in einem Kriegsgebiet nicht 
 msg_err_warzone_cannot_use_switches: '&cDu kannst keine Schalter in einem Kriegsgebiet benutzen.'
 msg_err_warzone_cannot_use_item: '&cDu kannst dieses Item nicht in einem Kriegsgebiet benutzen.'
 msg_err_cannot_perform_action: '&cDu kannst diese Aktion nicht in %s ausfuehren.'
+msg_npc_flag: '&bNPC Flagge ist nun %s für %s.'
 
 # Diese Nachricht wird nur dann benutzt, wenn die entsprechende Einstellung von "town/nation_creation_admin_only" eingeschaltet ist. 
 

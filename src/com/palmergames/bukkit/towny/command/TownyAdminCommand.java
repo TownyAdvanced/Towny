@@ -620,6 +620,7 @@ public class TownyAdminCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "devmode", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "debug", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "townwithdraw/nationwithdraw", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle npc", "[resident]", ""));
 			return;
 
 		}
@@ -681,6 +682,24 @@ public class TownyAdminCommand implements CommandExecutor {
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 			}
+			
+		} else if (split[0].equalsIgnoreCase("npc")) {
+			
+			if (split.length != 2)
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: toggle npc [resident]"));
+			
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(split[1]);
+				resident.setNPC(!resident.isNPC());
+				
+				TownyUniverse.getDataSource().saveResident(resident);
+				
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_npc_flag"), resident.isNPC(), resident.getName()));
+				
+			} catch (NotRegisteredException x) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[1]));
+			}
+			
 		} else {
 			// parameter error message
 			// neutral/war/townmobs/worldmobs

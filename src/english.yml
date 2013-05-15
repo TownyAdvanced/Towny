@@ -1,5 +1,5 @@
 name: Towny
-version: 0.19
+version: 0.20
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -411,6 +411,7 @@ msg_err_warzone_cannot_edit_material: '&cCannot %s %s in warzone.'
 msg_err_warzone_cannot_use_switches: '&cCannot use switches in warzone.'
 msg_err_warzone_cannot_use_item: '&cCannot use this item in a warzones.'
 msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
+msg_npc_flag: '&bNPC flag is now %s for %s.'
 
 # WarFlag Economy
 msg_enemy_war_purchased_warflag: '&6[War]&c You paid %s in fees to attack.'
