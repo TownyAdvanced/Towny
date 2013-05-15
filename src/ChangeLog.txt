@@ -1820,3 +1820,4 @@ v0.82.1.14:
 	- Catch ALL exceptions when deleting a Town/Nation so any economy errors will not prevent them being deleted.
 	- Added a confirmation message to the purge command.
 	- Added Town and Wilderness PvP entries in the 'Town Notifications' section of the config. You can now disable or customize the PVP message when moving between plots.
+	- Add ability to limit outposts. Permissions info/option node based 'towny_maxoutposts' (TomSki).
