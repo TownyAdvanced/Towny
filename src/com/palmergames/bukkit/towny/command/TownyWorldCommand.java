@@ -61,7 +61,7 @@ public class TownyWorldCommand implements CommandExecutor {
 		// if using permissions and it's active disable this command
 		if (!plugin.isPermissions()) {
 			townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "usedefault", ""));
-			townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildperm [perm] .. [perm]", "build,destroy,switch,useitem"));
+			townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildperm [perm] .. [perm]", "build,destroy,switch,itemuse"));
 			townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildignore [id] [id] [id]", ""));
 		}
 
