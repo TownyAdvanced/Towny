@@ -13,4 +13,4 @@ Licensing:
 http://creativecommons.org/licenses/by-nc-nd/3.0/
 
 We don't object to you making your own forks and builds but we do object to people being selfish, which is why we specify No Derivative Works.
-If you modify the code to add some nice feature the least you can do is submit a pull request and allow everyone to benefit from it.
+If you want to modify the code to add some nice feature the least you can do is ask and submit a pull request to allow everyone to benefit from it.
