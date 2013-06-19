@@ -7,7 +7,7 @@ description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -370,4 +370,3 @@ permissions:
             towny.command.townyworld.toggle.worldmobs: true
             towny.command.townyworld.toggle.revertunclaim: true
             towny.command.townyworld.toggle.revertexpl: true
-    
