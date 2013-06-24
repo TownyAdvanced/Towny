@@ -14,10 +14,6 @@ public enum ConfigNodes {
 			"version.bukkit_version",
 			"2771",
 			"# Minimum required version of CraftBukkit.  Please do not edit."),
-	VERSION_BUKKIT_BYPASS(
-			"version.bypass_version_check",
-			"false",
-			"# If enabled we will not check the CraftBukkit version at startup."),
 	LANGUAGE(
 			"language",
 			"english.yml",

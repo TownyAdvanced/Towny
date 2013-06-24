@@ -82,7 +82,7 @@ public class PlayerCacheUtil {
 			
 			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
 
-			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + " = " + cache.getCachePermission(blockId, data, action));
+			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + ":" + status.name() + " = " + cache.getCachePermission(blockId, data, action));
 			return cache.getCachePermission(blockId, data, action);
 		}
 	}

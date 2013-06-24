@@ -54,7 +54,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	public void incHealth(Player player) {
 
 		int currentHP = player.getHealth();
-		if (currentHP < 20) {
+		if (currentHP < player.getMaxHealth()) {
 			player.setHealth(++currentHP);
 
 			// Raise an event so other plugins can keep in sync.

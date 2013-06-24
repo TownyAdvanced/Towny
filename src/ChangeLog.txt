@@ -1832,3 +1832,7 @@ v0.83.0.0:
 v0.83.0.1:
 	- Change 'TNTPrimed' in the config to 'PrimedTNT'. This fixes TNT damage not being regen'd in the wilderness.
 	  (You will need to update this change in your world data files too)
+v0.84.0.0:
+	- Stop Item_use perms overriding Switch perms.
+	- Regen health in town only upto the maximum (allows for modded health levels).
+	- Towny will now always try to run no matter what version of CraftBukkit you are running. Instead of disabling it will output a warning message.

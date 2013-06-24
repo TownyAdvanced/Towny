@@ -1517,11 +1517,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.VERSION_BUKKIT);
 	}
 
-	public static boolean isBypassVersionCheck() {
-
-		return getBoolean(ConfigNodes.VERSION_BUKKIT_BYPASS);
-	}
-
 	public static boolean isTownyUpToDate(String currentVersion) {
 
 		return currentVersion.equals(getLastRunVersion(currentVersion));

@@ -110,7 +110,7 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 		
 		if (plugin.isError()) {
@@ -119,15 +119,15 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		// Test against the item in hand as we need to test the bucket contents we are trying to empty.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getItemInHand()));
 		
 		//Test on the resulting empty bucket to see if we have permission to empty a bucket.
 		if (!event.isCancelled())
-			event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
+			event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
 		
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
 		
 		if (plugin.isError()) {
@@ -135,7 +135,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		//test against the bucket we will finish up with to see if we are allowed to fill this item.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getItemStack()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
 		
 	}
 
@@ -175,8 +175,7 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
-				event.setCancelled(onPlayerInteract(player, null, event.getItem()));
-				return;
+				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
 		}
 
@@ -441,7 +440,7 @@ public class TownyPlayerListener implements Listener {
 			boolean bItemUse;
 
 			if (block != null)
-				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
 			else
 				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
 
