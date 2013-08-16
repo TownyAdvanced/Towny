@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.citizensnpcs.api.CitizensAPI;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -228,6 +229,7 @@ public class TownyEntityListener implements Listener {
 
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
+		Entity passenger = entity.getPassenger();
 
 		try {
 			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
@@ -242,6 +244,12 @@ public class TownyEntityListener implements Listener {
 							return;
 						}
 					}
+				}
+				
+				if (passenger != null && passenger instanceof Player) {
+					
+					EntityInteractEvent newEvent = new EntityInteractEvent(passenger, block);
+					Bukkit.getServer().getPluginManager().callEvent(newEvent);
 				}
 
 				// Prevent creatures triggering stone pressure plates
