@@ -538,7 +538,7 @@ public class TownyEntityListener implements Listener {
 			}
 
 			if (remover instanceof Player) {
-				Player player = (Player) evt.getRemover();
+				Player player = (Player) remover;
 
 				// Get destroy permissions (updates if none exist)
 				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.DESTROY);

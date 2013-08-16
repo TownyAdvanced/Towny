@@ -1838,3 +1838,4 @@ v0.84.0.0:
 	- Towny will now always try to run no matter what version of CraftBukkit you are running. Instead of disabling it will output a warning message.
 v0.84.0.1:
 	- Fire interact events for players when riding horses/carts/pigs.
+	- Fix possible error when a picture is removed by a projectile.
