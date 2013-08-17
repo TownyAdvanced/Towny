@@ -165,6 +165,8 @@ public class TownyPlayerListener implements Listener {
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
+			System.out.println("Event PlayerInteractEvent Physical " + player.getName() + " : " + event.getBlockFace().name());
+			
 			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
 				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
@@ -173,6 +175,8 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		if (event.hasItem()) {
+			
+			System.out.println("Has Item!");
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
@@ -493,44 +497,52 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg, TownyWorld world) {
-
+		
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
+		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg, world));
+		
+	}
+	
+	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
+
 
 		if (!TownySettings.isSwitchId(block.getTypeId()))
-			return;
+			return false;
 
 		//Get switch permissions (updates if none exist)
 		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.SWITCH);
 
 		// Allow switch if we are permitted
 		if (bSwitch)
-			return;
+			return false;
 		
 		/*
 		 * Fetch the players cache
 		 */
 		PlayerCache cache = plugin.getCache(player);
 		TownBlockStatus status = cache.getStatus();
-
-		/*
-		 * Flag war
-		 */
-		if (status == TownBlockStatus.WARZONE) {
-			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
-				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
-			}
-			return;
-		} else {
-			event.setCancelled(true);
-		}
 		
 		/* 
 		 * display any error recorded for this plot
 		 */
 		if (cache.hasBlockErrMsg())
 			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+
+		/*
+		 * Flag war
+		 */
+		if (status == TownBlockStatus.WARZONE) {
+			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
+				return true;
+			}
+			return false;
+		} else {
+			return true;
+		}
+		
+		
 	}
 
 	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc, PlayerMoveEvent moveEvent) {

@@ -666,4 +666,94 @@ public class Towny extends JavaPlugin {
 		else
 			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 	}
+
+	
+	/**
+	 * @return the playerListener
+	 */
+	public TownyPlayerListener getPlayerListener() {
+	
+		return playerListener;
+	}
+
+	
+	/**
+	 * @return the vehicleListener
+	 */
+	public TownyVehicleListener getVehicleListener() {
+	
+		return vehicleListener;
+	}
+
+	
+	/**
+	 * @return the physicsListener
+	 */
+	public TownyBlockPhysicsListener getPhysicsListener() {
+	
+		return physicsListener;
+	}
+
+	
+	/**
+	 * @return the entityListener
+	 */
+	public TownyEntityListener getEntityListener() {
+	
+		return entityListener;
+	}
+
+	
+	/**
+	 * @return the weatherListener
+	 */
+	public TownyWeatherListener getWeatherListener() {
+	
+		return weatherListener;
+	}
+
+	
+	/**
+	 * @return the entityMonitorListener
+	 */
+	public TownyEntityMonitorListener getEntityMonitorListener() {
+	
+		return entityMonitorListener;
+	}
+
+	
+	/**
+	 * @return the worldListener
+	 */
+	public TownyWorldListener getWorldListener() {
+	
+		return worldListener;
+	}
+
+	
+	/**
+	 * @return the townyWarBlockListener
+	 */
+	public TownyWarBlockListener getTownyWarBlockListener() {
+	
+		return townyWarBlockListener;
+	}
+
+	
+	/**
+	 * @return the townyWarCustomListener
+	 */
+	public TownyWarCustomListener getTownyWarCustomListener() {
+	
+		return townyWarCustomListener;
+	}
+
+	
+	/**
+	 * @return the townyWarEntityListener
+	 */
+	public TownyWarEntityListener getTownyWarEntityListener() {
+	
+		return townyWarEntityListener;
+	}
 }

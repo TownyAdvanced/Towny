@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.citizensnpcs.api.CitizensAPI;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -230,6 +229,19 @@ public class TownyEntityListener implements Listener {
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
 		Entity passenger = entity.getPassenger();
+		
+		TownyWorld World = null;
+
+		try {
+			World = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			if (!World.isUsingTowny())
+				return;
+
+		} catch (NotRegisteredException e) {
+			// World not registered with Towny.
+			e.printStackTrace();
+			return;
+		}
 
 		try {
 			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
@@ -246,11 +258,22 @@ public class TownyEntityListener implements Listener {
 					}
 				}
 				
+				/*
+				 * Allow players in vehicles to activate pressure plates if they are permitted.
+				 */
 				if (passenger != null && passenger instanceof Player) {
 					
-					EntityInteractEvent newEvent = new EntityInteractEvent(passenger, block);
-					Bukkit.getServer().getPluginManager().callEvent(newEvent);
+					//PlayerInteractEvent newEvent = new PlayerInteractEvent((Player)passenger, Action.PHYSICAL, null, block, BlockFace.SELF);
+					//Bukkit.getServer().getPluginManager().callEvent(newEvent);
+					
+					if (TownySettings.isSwitchId(block.getTypeId())) {
+						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player)passenger, block, null, World))
+							return;
+					}
+
 				}
+				
+				//System.out.println("EntityInteractEvent triggered for " + entity.toString());
 
 				// Prevent creatures triggering stone pressure plates
 				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
