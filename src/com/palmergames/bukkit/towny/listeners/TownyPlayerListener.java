@@ -165,8 +165,7 @@ public class TownyPlayerListener implements Listener {
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
-			System.out.println("Event PlayerInteractEvent Physical " + player.getName() + " : " + event.getBlockFace().name());
-			
+
 			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
 				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
@@ -175,8 +174,6 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		if (event.hasItem()) {
-			
-			System.out.println("Has Item!");
 			
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
