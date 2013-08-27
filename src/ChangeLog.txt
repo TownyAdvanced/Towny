@@ -1839,3 +1839,5 @@ v0.84.0.0:
 v0.84.0.1:
 	- Allow players in vehicles to activate pressure plates if they are permitted.
 	- Fix possible error when a picture is removed by a projectile.
+v0.84.0.2:
+	- Allow negative upkeep on nations.

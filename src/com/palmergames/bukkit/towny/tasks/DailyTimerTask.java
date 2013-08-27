@@ -60,7 +60,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_day")));
 
-		// Automatically delete old residents 
+		// Automatically delete old residents
 		if (TownySettings.isDeletingOldResidents()) {
 			// Run a purge in it's own thread
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000).start();
@@ -348,7 +348,8 @@ public class DailyTimerTask extends TownyTimerTask {
 					} else if (upkeep < 0) {
 						// Negative upkeep
 						if (TownySettings.isUpkeepPayingPlots()) {
-							// Pay each plot owner a share of the negative upkeep
+							// Pay each plot owner a share of the negative
+							// upkeep
 							List<TownBlock> plots = new ArrayList<TownBlock>(town.getTownBlocks());
 
 							for (TownBlock townBlock : plots) {
@@ -359,7 +360,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							}
 
 						} else {
-							//Not paying plot owners so just pay the town
+							// Not paying plot owners so just pay the town
 							town.pay(upkeep, "Negative Town Upkeep");
 						}
 
@@ -391,21 +392,32 @@ public class DailyTimerTask extends TownyTimerTask {
 			 */
 			if (TownyUniverse.getDataSource().hasNation(nation.getName())) {
 
-				if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
-					TownyUniverse.getDataSource().removeNation(nation);
-					TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
-				}
-				if (nation.isNeutral())
-					if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Neutrality Upkeep")) {
-						try {
-							nation.setNeutral(false);
-						} catch (TownyException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						TownyUniverse.getDataSource().saveNation(nation);
-						TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_neutral"));
+				double upkeep = TownySettings.getNationUpkeepCost(nation);
+
+				if (upkeep > 0) {
+					// Town is paying upkeep
+
+					if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
+						TownyUniverse.getDataSource().removeNation(nation);
+						TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
 					}
+					if (nation.isNeutral()) {
+						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Neutrality Upkeep")) {
+							try {
+								nation.setNeutral(false);
+							} catch (TownyException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							TownyUniverse.getDataSource().saveNation(nation);
+							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_neutral"));
+						}
+					}
+				} else if (upkeep < 0) {
+					
+					nation.pay(upkeep, "Negative Nation Upkeep");
+
+				}
 			}
 		}
 
