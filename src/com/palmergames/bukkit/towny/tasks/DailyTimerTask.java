@@ -413,8 +413,9 @@ public class DailyTimerTask extends TownyTimerTask {
 							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_neutral"));
 						}
 					}
-				} else if (upkeep < 0) {
 					
+				} else if (upkeep < 0) {
+
 					nation.pay(upkeep, "Negative Nation Upkeep");
 
 				}

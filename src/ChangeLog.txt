@@ -1841,3 +1841,5 @@ v0.84.0.1:
 	- Fix possible error when a picture is removed by a projectile.
 v0.84.0.2:
 	- Allow negative upkeep on nations.
+v0.84.0.3:
+	- Change health regen to implement Bukkits new method for health measurement.
