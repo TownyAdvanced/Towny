@@ -174,8 +174,18 @@ public class TownyEconomyHandler {
 			case REGISTER:
 				MethodAccount account = (MethodAccount) getEconomyAccount(accountName);
 				account.remove();
+				break;
+				
+			case VAULT: // Attempt to zero the account as Vault provides no delete method.
+				if (!vaultEconomy.hasAccount(accountName))
+					vaultEconomy.createPlayerAccount(accountName);
+				
+				vaultEconomy.withdrawPlayer(accountName, (vaultEconomy.getBalance(accountName)));
+
+				return;
 
 			}
+
 
 		} catch (NoClassDefFoundError e) {
 		}

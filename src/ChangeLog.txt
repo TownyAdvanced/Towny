@@ -1843,3 +1843,5 @@ v0.84.0.2:
 	- Allow negative upkeep on nations.
 v0.84.0.3:
 	- Change health regen to implement Bukkits new method for health measurement.
+v0.84.0.4:
+	- Zero Economy accounts when renaming/deleting Towns/Nation as Vault doesn't support deleting them.
