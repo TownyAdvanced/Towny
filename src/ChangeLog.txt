@@ -1847,3 +1847,4 @@ v0.84.0.4:
 	- Zero Economy accounts when renaming/deleting Towns/Nation as Vault doesn't support deleting them.
 v0.84.0.5:
 	- Minor performace changes to plot regen code.
+	- Add TownyPermissionSource implementation that uses Vault Chat API (ZerothAngel).
