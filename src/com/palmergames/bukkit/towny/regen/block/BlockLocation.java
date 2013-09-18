@@ -62,12 +62,12 @@ public class BlockLocation {
 		return false;
 	}
 
-	public boolean isLocation(BlockLocation blockLocation) {
-
-		if ((blockLocation.getWorld() == getWorld()) && (blockLocation.getX() == getX()) && (blockLocation.getY() == getY()) && (blockLocation.getZ() == getZ()))
-			return true;
-
-		return false;
-	}
+//	public boolean isLocation(BlockLocation blockLocation) {
+//
+//		if ((blockLocation.getWorld() == getWorld()) && (blockLocation.getX() == getX()) && (blockLocation.getY() == getY()) && (blockLocation.getZ() == getZ()))
+//			return true;
+//
+//		return false;
+//	}
 
 }

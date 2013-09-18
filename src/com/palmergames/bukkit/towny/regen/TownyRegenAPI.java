@@ -472,12 +472,8 @@ public class TownyRegenAPI {
 	 */
 	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
 
-		for (BlockLocation location : protectionRegenTasks.keySet()) {
-			if (location.isLocation(blockLocation)) {
-				return true;
-			}
-		}
-		return false;
+		return protectionRegenTasks.containsKey(blockLocation);
+
 	}
 
 	/**
@@ -488,11 +484,9 @@ public class TownyRegenAPI {
 	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
 
-		for (BlockLocation location : protectionRegenTasks.keySet()) {
-			if (location.isLocation(blockLocation)) {
-				return protectionRegenTasks.get(location);
-			}
-		}
+		if (protectionRegenTasks.containsKey(blockLocation))
+			return protectionRegenTasks.get(blockLocation);
+
 		return null;
 	}
 
@@ -507,7 +501,7 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Remove this task form teh protection regen queue
+	 * Remove this task form the protection regen queue
 	 * 
 	 * @param task
 	 */
