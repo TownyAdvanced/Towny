@@ -274,8 +274,24 @@ public class Towny extends JavaPlugin {
 							getTownyUniverse().setPermissionSource(new Perms3Source(this, test));
 							using.add(String.format("%s v%s", "Permissions", test.getDescription().getVersion()));
 						} else {
-							getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
-							using.add("BukkitPermissions");
+							// Try Vault
+							test = getServer().getPluginManager().getPlugin("Vault");
+							if (test != null) {
+								net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
+								if (chat == null) {
+									// No Chat implementation
+									test = null;
+									// Fall back to BukkitPermissions below
+								} else {
+									getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
+									using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+								}
+							}
+
+							if (test == null) {
+								getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+								using.add("BukkitPermissions");
+							}
 						}
 					}
 				}
