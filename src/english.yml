@@ -1,5 +1,5 @@
 name: Towny
-version: 0.21
+version: 0.22
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -305,7 +305,7 @@ msg_set_town_tag: '&b%s has set the town tag to [%s]'
 msg_reset_nation_tag: '&b%s has cleared the nation tag.'
 msg_reset_town_tag: '&b%s has cleared the town tag.'
 
-msg_mayor_abandon: '&bYou would abandon your people? Choose another mayor with ''/town set mayor'' if your sure.'
+msg_mayor_abandon: '&bYou would abandon your people? Choose another mayor with ''/town set mayor'' if you''re sure.'
 msg_new_day_tax: '&bA new day is here! Taxes and rent have been collected'
 msg_new_day: '&bA new day is here!'
 msg_new_king: '&b%s is now the king of %s!'
