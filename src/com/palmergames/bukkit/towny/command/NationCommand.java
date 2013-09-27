@@ -213,7 +213,7 @@ public class NationCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("kick")) {
 
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_KICK.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					nationKick(player, newSplit);

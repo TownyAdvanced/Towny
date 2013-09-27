@@ -1848,3 +1848,5 @@ v0.84.0.4:
 v0.84.0.5:
 	- Minor performace changes to plot regen code.
 	- Add TownyPermissionSource implementation that uses Vault Chat API (ZerothAngel).
+v0.84.0.6:
+	- Fix permission check to use nation.kick command.
