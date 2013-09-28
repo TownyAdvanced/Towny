@@ -1143,6 +1143,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK);
 	}
+	
+	public static double getPurchasedBonusBlocksIncreaseValue() {
+
+		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE);
+	}
 
 	public static double getNationNeutralityCost() {
 

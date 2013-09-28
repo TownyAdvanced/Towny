@@ -852,6 +852,11 @@ public enum ConfigNodes {
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",
 			"# How much it costs a player to buy extra blocks."),
+	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE(
+			"economy.new_expand.price_purchased_bonus_townblock_increase",
+			"1.1",
+			"# How much every extra bonus block costs more."),
+
 
 	ECO_PRICE_DEATH("economy.price_death", "1.0", ""),
 

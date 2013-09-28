@@ -355,6 +355,38 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		return bonusBlocks;
 	}
+	
+	public double getBonusBlockCost() {
+		double nextprice = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
+		return nextprice;
+	}	
+
+	public double getBonusBlockCostN(int inputN) throws TownyException {
+		
+		if (inputN < 0)
+			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
+
+		int current = getPurchasedBlocks();
+		int n;
+		if (current + inputN > TownySettings.getMaxPurchedBlocks()) {
+			n = TownySettings.getMaxPurchedBlocks() - current;
+		} else {
+			n = inputN;
+		}
+
+		if (n == 0)
+			return n;
+		
+		double nextprice = getBonusBlockCost();
+		int i = 1;
+		double cost = nextprice;
+		while (i < n){
+			nextprice = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+i) * TownySettings.getPurchasedBonusBlocksCost());
+			cost += nextprice;
+			i++;
+		}
+		return cost;
+	}
 
 	public void addBonusBlocks(int bonusBlocks) {
 
