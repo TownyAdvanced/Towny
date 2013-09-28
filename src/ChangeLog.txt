@@ -1851,3 +1851,5 @@ v0.84.0.5:
 v0.84.0.6:
 	- Fix permission check to use nation.kick command.
 	- Grammar fix in english.yml
+v0.84.0.7:
+	- Incremental price change for bonus plots (by Slind).
