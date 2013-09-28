@@ -950,14 +950,6 @@ public class TownCommand implements CommandExecutor {
 				player.sendMessage("Nothing for sale right now.");
 			}
 		} else {
-	      try {
-		     resident = TownyUniverse.getDataSource().getResident(player.getName());
-		     town = resident.getTown();
-	
-	      } catch (TownyException x) {
-	        TownyMessaging.sendErrorMsg(player, x.getMessage());
-	        return;
-	      }
 			try {
 				if (split[0].equalsIgnoreCase("bonus")) {
 					if (split.length == 2) {
