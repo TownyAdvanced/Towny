@@ -929,34 +929,32 @@ public class TownCommand implements CommandExecutor {
 
 	public void townBuy(Player player, String[] split) {
 
+		Resident resident;
+		Town town;
+		try {
+			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			town = resident.getTown();
+
+		} catch (TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			return;
+		}
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/town buy"));
 			if (TownySettings.isSellingBonusBlocks()) {
 				String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-				player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(TownySettings.getPurchasedBonusBlocksCost()), TownySettings.getMaxPurchedBlocks()));
+				player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
 				player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 			} else {
 				// Temp placeholder.
 				player.sendMessage("Nothing for sale right now.");
 			}
 		} else {
-			Resident resident;
-			Town town;
-			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
-				town = resident.getTown();
-
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
-			}
 			try {
 				if (split[0].equalsIgnoreCase("bonus")) {
 					if (split.length == 2) {
 						try {
-							int bought = townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()));
-							double cost = bought * TownySettings.getPurchasedBonusBlocksCost();
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), bought, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
+							townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
 						} catch (NumberFormatException e) {
 							throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 						}
@@ -977,10 +975,11 @@ public class TownCommand implements CommandExecutor {
 	 * 
 	 * @param town
 	 * @param inputN
+	 * @param player 
 	 * @return The number of purchased bonus blocks.
 	 * @throws TownyException
 	 */
-	public static int townBuyBonusTownBlocks(Town town, int inputN) throws TownyException {
+	public static int townBuyBonusTownBlocks(Town town, int inputN, Object player) throws TownyException {
 
 		if (inputN < 0)
 			throw new TownyException(TownySettings.getLangString("msg_err_negative"));
@@ -996,9 +995,8 @@ public class TownCommand implements CommandExecutor {
 
 		if (n == 0)
 			return n;
-
-		try {
-			double cost = n * TownySettings.getPurchasedBonusBlocksCost();
+		double cost = town.getBonusBlockCostN(n);
+		try {			
 			if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Buy Bonus (%d)", n)))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_to_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
 
@@ -1007,7 +1005,7 @@ public class TownCommand implements CommandExecutor {
 		}
 
 		town.addPurchasedBlocks(n);
-
+		TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_buy"), n, "bonus town blocks", TownyEconomyHandler.getFormattedBalance(cost)));
 		return n;
 	}
 
