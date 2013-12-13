@@ -209,7 +209,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 */
 				if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
 
-					if (town.isMayor(resident) || town.hasAssistant(resident)) {
+					if (town.isMayor(resident) || town.hasAssistant(resident) || resident.isNPC()) {
 						try {
 							TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
 						} catch (TownyException e) {
@@ -274,7 +274,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					 */
 					if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
 
-						if (town.isMayor(resident) || town.hasAssistant(resident)) {
+						if (town.isMayor(resident) || town.hasAssistant(resident) || resident.isNPC()) {
 							continue;
 						}
 						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {

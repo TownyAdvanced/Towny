@@ -1853,3 +1853,6 @@ v0.84.0.6:
 	- Grammar fix in english.yml
 v0.84.0.7:
 	- Incremental price change for bonus plots (by Slind).
+v0.84.0.8:
+	- Exclude NPC's from all Tax and upkeep checks.
+	- Update to dev Bukkit 1.7.2
