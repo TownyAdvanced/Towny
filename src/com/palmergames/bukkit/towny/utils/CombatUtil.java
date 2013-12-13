@@ -10,15 +10,19 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -41,7 +45,7 @@ public class CombatUtil {
 	 * @param defender
 	 * @return true if we should cancel.
 	 */
-	public static boolean preventDamageCall(Entity attacker, Entity defender) {
+	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
 		
 		try {
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
@@ -69,7 +73,7 @@ public class CombatUtil {
 			if (a == b) return false;
 
 			// Allow players to injure themselves
-			return preventDamageCall(world, attacker, defender, a, b);
+			return preventDamageCall(plugin, world, attacker, defender, a, b);
 
 		} catch (Exception e) {
 			// Failed to fetch world
@@ -92,7 +96,7 @@ public class CombatUtil {
 	 * @param defendingPlayer
 	 * @return true if we should cancel.
 	 */
-	public static boolean preventDamageCall(TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) {
+	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) {
 
 		// World using Towny
 		if (!world.isUsingTowny())
@@ -173,7 +177,72 @@ public class CombatUtil {
 						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, (byte)0, ActionType.DESTROY))
 							return true;
 					}
+					
 				}
+				
+				/*
+				 * Protect specific entity interactions (faked with block ID's).
+				 */
+				int blockID = 0;
+				
+				switch (defendingEntity.getType()) {
+				
+				case ITEM_FRAME:
+					
+					blockID = 389;
+					break;
+					
+				case PAINTING:
+					
+					blockID = 321;
+					
+					break;
+					
+				case MINECART:
+					
+					if (defendingEntity instanceof org.bukkit.entity.minecart.StorageMinecart) {
+						
+						blockID = 342;
+						
+					} else if (defendingEntity instanceof org.bukkit.entity.minecart.RideableMinecart) {
+						
+						blockID = 328;
+						
+					} else if (defendingEntity instanceof org.bukkit.entity.minecart.PoweredMinecart) {
+						
+						blockID = 343;
+						
+					} else if (defendingEntity instanceof org.bukkit.entity.minecart.HopperMinecart) {
+						
+						blockID = 408;
+						
+					} else {
+						
+						blockID = 321;
+					}
+					
+				}
+				
+				if (blockID != 0) {
+					//Get permissions (updates if none exist)
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), blockID, (byte)0, TownyPermission.ActionType.DESTROY);
+				
+					if (!bDestroy) {
+						
+						/*
+						 * Fetch the players cache
+						 */
+						PlayerCache cache = plugin.getCache(attackingPlayer);
+						
+						if (cache.hasBlockErrMsg())
+							TownyMessaging.sendErrorMsg(attackingPlayer, cache.getBlockErrMsg());
+						
+						return true;
+					}
+				
+				
+				}
+				
 			}
 		}
 

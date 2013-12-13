@@ -84,7 +84,7 @@ public class TownyEntityListener implements Listener {
 		// Not wartime
 		if (!TownyUniverse.isWarTime()) {
 
-			if (CombatUtil.preventDamageCall(attacker, event.getEntity())) {
+			if (CombatUtil.preventDamageCall(plugin, attacker, event.getEntity())) {
 				// Remove the projectile here so no
 				// other events can fire to cause damage
 				if (attacker instanceof Projectile)
@@ -150,7 +150,7 @@ public class TownyEntityListener implements Listener {
 				 * Don't block potion use on ourselves.
 				 */
 				if (attacker != defender)
-					if (CombatUtil.preventDamageCall(attacker, defender))
+					if (CombatUtil.preventDamageCall(plugin, attacker, defender))
 						event.setIntensity(defender, -1.0);
 			}
 
@@ -273,7 +273,7 @@ public class TownyEntityListener implements Listener {
 
 				}
 				
-				//System.out.println("EntityInteractEvent triggered for " + entity.toString());
+				// System.out.println("EntityInteractEvent triggered for " + entity.toString());
 
 				// Prevent creatures triggering stone pressure plates
 				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
@@ -511,7 +511,7 @@ public class TownyEntityListener implements Listener {
 			// There is an attacker and Not war time.
 			if ((attacker != null) && (!TownyUniverse.isWarTime())) {
 
-				if (CombatUtil.preventDamageCall(attacker, defender)) {
+				if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
 					// Remove the projectile here so no
 					// other events can fire to cause damage
 					combuster.remove();

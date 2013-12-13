@@ -1856,3 +1856,12 @@ v0.84.0.7:
 v0.84.0.8:
 	- Exclude NPC's from all Tax and upkeep checks.
 	- Update to dev Bukkit 1.7.2
+	- Temporary fix for ItemFrames and Minecart protection (need to rewrite major code to implement the new block naming system).
+		To protect ItemFrames from right click in town add id 389 to the Switch list.
+		To prevent/allow breaking/emptying grant the perm for 'towny.wild.destroy.389' or relevant town perm.
+		For other items use the following codes...
+		Painting = 321
+		StorageMinecart = 342
+		HopperMinecart = 408
+		PoweredMinecart = 343 (furnace)
+		RideableMinecart = 328

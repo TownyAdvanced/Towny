@@ -562,7 +562,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_ID(
 			"protection.switch_ids",
-			"23,25,54,61,62,64,69,70,71,72,77,96,84,93,94,107,146,147,148,149,150,138,154,158,328,342,343,407,408",
+			"23,25,54,61,62,64,69,70,71,72,77,96,84,93,94,107,146,147,148,149,150,138,154,158,328,342,343,389,407,408",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
