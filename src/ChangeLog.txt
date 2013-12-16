@@ -1865,3 +1865,5 @@ v0.84.0.8:
 		HopperMinecart = 408
 		PoweredMinecart = 343 (furnace)
 		RideableMinecart = 328
+v0.84.0.9:
+	- Fix negative nation upkeep problems when using Vault.
