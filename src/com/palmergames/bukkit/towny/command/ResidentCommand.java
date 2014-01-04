@@ -209,13 +209,15 @@ public class ResidentCommand implements CommandExecutor {
 		String colour;
 		ArrayList<String> formatedList = new ArrayList<String>();
 		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
-			if (resident.isKing())
-				colour = Colors.Gold;
-			else if (resident.isMayor())
-				colour = Colors.LightBlue;
-			else
-				colour = Colors.White;
-			formatedList.add(colour + resident.getName() + Colors.White);
+			if(player.canSee(plugin.getServer().getPlayerExact(resident.getName()))) {
+				if (resident.isKing())
+					colour = Colors.Gold;
+				else if (resident.isMayor())
+					colour = Colors.LightBlue;
+				else
+					colour = Colors.White;
+				formatedList.add(colour + resident.getName() + Colors.White);
+			}
 		}
 		for (String line : ChatTools.list(formatedList))
 			player.sendMessage(line);
