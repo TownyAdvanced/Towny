@@ -65,8 +65,8 @@ public class ChatTools {
 
 		String c = "f";
 		for (int i = 0; i < out.size(); i++) {
-			if (!out.get(i).startsWith("§") && !c.equalsIgnoreCase("f"))
-				out.set(i, "§" + c + out.get(i));
+			if (!out.get(i).startsWith("Â§") && !c.equalsIgnoreCase("f"))
+				out.set(i, "Â§" + c + out.get(i));
 
 			for (int index = 0; index < lineLength; index++)
 				try {
@@ -89,7 +89,7 @@ public class ChatTools {
 		String out = "";
 		for (int i = 0; i < s.length(); i++) {
 			String c = s.substring(i, i + 1);
-			if (c.equals("§"))
+			if (c.equals("Â§"))
 				i += 1;
 			else
 				out += c;
@@ -128,7 +128,7 @@ public class ChatTools {
 		for (String line : ChatTools.listArr(players))
 			System.out.println(line);
 
-		String testLine = "Loren Ipsum blarg voila tssssssh, boom wakka wakka §apacman on a boat bitch. From the boat union. Beata lingiushtically §1nootchie lolk erness.";
+		String testLine = "Loren Ipsum blarg voila tssssssh, boom wakka wakka Â§apacman on a boat bitch. From the boat union. Beata lingiushtically Â§1nootchie lolk erness.";
 		for (String line : ChatTools.color(testLine))
 			System.out.println(line);
 	}

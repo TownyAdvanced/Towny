@@ -251,13 +251,13 @@ public class TownyCommand implements CommandExecutor {
 	public List<String> getUniverseStats() {
 
 		List<String> output = new ArrayList<String>();
-		output.add("ง0-ง4###ง0---ง4###ง0-");
-		output.add("ง4#งc###ง4#ง0-ง4#งc###ง4#ง0   ง6[งeTowny " + plugin.getVersion() + "ง6]");
-		output.add("ง4#งc####ง4#งc####ง4#   ง3By: งbChris H (Shade)/Llmdl/ElgarL");
-		output.add("ง0-ง4#งc#######ง4#ง0-");
-		output.add("ง0--ง4##งc###ง4##ง0-- " + "ง3Residents: งb" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "ง3Towns: งb" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "ง3Nations: งb" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
-		output.add("ง0----ง4#งc#ง4#ง0---- " + "ง3Worlds: งb" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "ง3TownBlocks: งb" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
-		output.add("ง0-----ง4#ง0----- ");
+		output.add("ยง0-ยง4###ยง0---ยง4###ยง0-");
+		output.add("ยง4#ยงc###ยง4#ยง0-ยง4#ยงc###ยง4#ยง0   ยง6[ยงeTowny " + plugin.getVersion() + "ยง6]");
+		output.add("ยง4#ยงc####ยง4#ยงc####ยง4#   ยง3By: ยงbChris H (Shade)/Llmdl/ElgarL");
+		output.add("ยง0-ยง4#ยงc#######ยง4#ยง0-");
+		output.add("ยง0--ยง4##ยงc###ยง4##ยง0-- " + "ยง3Residents: ยงb" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "ยง3Towns: ยงb" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "ยง3Nations: ยงb" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
+		output.add("ยง0----ยง4#ยงc#ยง4#ยง0---- " + "ยง3Worlds: ยงb" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "ยง3TownBlocks: ยงb" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
+		output.add("ยง0-----ยง4#ยง0----- ");
 		return output;
 	}
 
