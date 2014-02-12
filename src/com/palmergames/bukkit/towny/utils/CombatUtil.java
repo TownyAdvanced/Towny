@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.projectiles.ProjectileSource;
 
 /**
  * 
@@ -62,7 +63,14 @@ public class CombatUtil {
 			 */
 			if (attacker instanceof Projectile) {
 				Projectile projectile = (Projectile) attacker;
-				attacker = projectile.getShooter();
+				ProjectileSource source = projectile.getShooter();
+				if(source instanceof Entity) {
+				attacker = (Entity) source;
+				}
+				else {
+					return false;	//TODO: prevent damage from dispensers
+				}
+				
 			}
 
 			if (attacker instanceof Player)

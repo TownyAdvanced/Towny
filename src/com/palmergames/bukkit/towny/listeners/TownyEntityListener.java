@@ -30,6 +30,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -140,8 +141,15 @@ public class TownyEntityListener implements Listener {
 
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
-
-		Entity attacker = potion.getShooter();
+		Entity attacker;
+		
+		ProjectileSource source = potion.getShooter();
+		if(!(source instanceof Entity)) {
+			return;	//TODO: prevent damage from dispensers
+		}
+		else {
+			attacker = (Entity) source;
+		}
 
 		// Not Wartime
 		if (!TownyUniverse.isWarTime())
@@ -503,10 +511,15 @@ public class TownyEntityListener implements Listener {
 
 		Entity combuster = event.getCombuster();
 		Entity defender = event.getEntity();
-
+		LivingEntity attacker;
 		if (combuster instanceof Projectile) {
-
-			LivingEntity attacker = ((Projectile) combuster).getShooter();
+			ProjectileSource source = ((Projectile) combuster).getShooter();
+			if(!(source instanceof LivingEntity)) {
+				return; //TODO: prevent damage from dispensers
+			}
+			else {
+				attacker = (LivingEntity) source;
+			}
 
 			// There is an attacker and Not war time.
 			if ((attacker != null) && (!TownyUniverse.isWarTime())) {
