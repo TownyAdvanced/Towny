@@ -836,8 +836,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	}
 
 	public void setPlotTax(double plotTax) {
-
-		this.plotTax = plotTax;
+		
+		if (plotTax > TownySettings.getMaxTax())
+			this.plotTax = TownySettings.getMaxTax();
+		else
+			this.plotTax = plotTax;
 	}
 
 	public double getPlotTax() {
@@ -847,7 +850,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public void setCommercialPlotTax(double commercialTax) {
 
-		this.commercialPlotTax = commercialTax;
+		if (commercialTax > TownySettings.getMaxTax())
+			this.commercialPlotTax = TownySettings.getMaxTax();
+		else
+			this.commercialPlotTax = commercialTax;
 	}
 
 	public double getCommercialPlotTax() {
@@ -857,7 +863,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public void setEmbassyPlotTax(double embassyPlotTax) {
 
-		this.embassyPlotTax = embassyPlotTax;
+		if (embassyPlotTax > TownySettings.getMaxTax())
+			this.embassyPlotTax = TownySettings.getMaxTax();
+		else
+			this.embassyPlotTax = embassyPlotTax;
 	}
 
 	public double getEmbassyPlotTax() {

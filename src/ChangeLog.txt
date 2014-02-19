@@ -1867,3 +1867,5 @@ v0.84.0.8:
 		RideableMinecart = 328
 v0.84.0.9:
 	- Fix negative nation upkeep problems when using Vault.
+v0.84.0.10:
+	- Force shoptax, plottax and embassytax to obey the max tax setting in the config.
