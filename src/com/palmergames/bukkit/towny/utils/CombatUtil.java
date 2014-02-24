@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.AnimalTamer;
@@ -165,12 +166,18 @@ public class CombatUtil {
 			} else {
 				
 				/*
+				 * Remove animal killing prevention start
+				 */
+				
+				/*
 				 * Defender is not a player so check for PvM
 				 */
 				if (defenderTB != null) {
-					if ((defendingEntity instanceof Animals) || (defendingEntity instanceof Villager)) {
+					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
+					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity))
+					{
 						/*
-						 * Only allow the player to kill animals etc,
+						 * Only allow the player to kill protected entities etc,
 						 * if they are from the same town
 						 * and have destroy permissions (grass) in the defending TownBlock
 						 */
@@ -179,6 +186,10 @@ public class CombatUtil {
 					}
 					
 				}
+				
+				/*
+				 * Remove prevention end
+				 */
 				
 				/*
 				 * Protect specific entity interactions (faked with block ID's).

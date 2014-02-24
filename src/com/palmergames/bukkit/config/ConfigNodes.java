@@ -607,6 +607,15 @@ public enum ConfigNodes {
 			"# The maximum amount of time a mob could be inside a town's boundaries before being sent to the void.",
 			"# Lower values will check all entities more often at the risk of heavier burden and resource use.",
 			"# NEVER set below 1."),
+	PROT_MOB_TYPES(
+			"protection.mob_types",
+			"Animals",
+			"",
+			"# permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html",
+			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
+			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
+			"",
+			"# Protect living entities within a town's boundaries from being killed by players."),
 	PROT_CHEAT(
 			"protection.cheat_protection",
 			"true",

@@ -6,8 +6,10 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.util.JavaUtil;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+
 import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -27,44 +29,16 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		super(plugin);
 		this.server = server;
 
-		classesOfWorldMobsToRemove = parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
-		classesOfTownMobsToRemove = parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
-	}
-
-	public static List<Class<?>> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {
-		List<Class<?>> livingEntityClasses = new ArrayList<Class<?>>();
-		for (String mobClassName : mobClassNames) {
-			if (mobClassName.isEmpty())
-				continue;
-
-			try {
-				Class<?> c = Class.forName("org.bukkit.entity." + mobClassName);
-				if (JavaUtil.isSubInterface(LivingEntity.class, c))
-					livingEntityClasses.add(c);
-				else
-					throw new Exception();
-			} catch (ClassNotFoundException e) {
-				TownyMessaging.sendErrorMsg(String.format("%s%s is not an acceptable class.", errorPrefix, mobClassName));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(String.format("%s%s is not an acceptable living entity.", errorPrefix, mobClassName));
-			}
-		}
-		return livingEntityClasses;
+		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
+		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
-		return isInstanceOfAny(classesOfWorldMobsToRemove, livingEntity);
+		return EntityTypeUtil.isInstanceOfAny(classesOfWorldMobsToRemove, livingEntity);
 	}
 
 	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
-		return isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
-	}
-
-	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
-		for (Class<?> c : classesOfWorldMobsToRemove2)
-			if (c.isInstance(obj))
-				return true;
-		return false;
+		return EntityTypeUtil.isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
 	}
 
 	@Override
