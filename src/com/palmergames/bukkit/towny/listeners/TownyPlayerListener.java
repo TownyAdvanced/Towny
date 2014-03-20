@@ -103,8 +103,12 @@ public class TownyPlayerListener implements Listener {
 			// Check if only respawning in the same world as the town's spawn.
 			if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
 				return;
-
-			event.setRespawnLocation(respawn);
+			
+			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null)
+				event.setRespawnLocation(player.getBedSpawnLocation());
+			else 
+				event.setRespawnLocation(respawn);
+			
 		} catch (TownyException e) {
 			// Town has not set respawn location. Using default.
 		}
@@ -423,6 +427,22 @@ public class TownyPlayerListener implements Listener {
 		TownyPerms.assignPermissions(null, event.getPlayer());
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
+		if (!TownySettings.getBedUse()) return; 
+		WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
+        try {
+			boolean isOwner =  worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
+			if (!isOwner) {
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
+			}
+		} catch (NotRegisteredException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
 
 

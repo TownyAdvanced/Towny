@@ -145,7 +145,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS("towny.command.resident.toggle.mobs"),
 	
 	TOWNY_COMMAND_RESIDENT_FRIEND("towny.command.resident.friend"),
-	
+	TOWNY_COMMAND_RESIDENT_SPAWN("towny.command.resident.spawn"),	
 	
 	/*
 	 * TownyAdmin command permissions

@@ -1869,3 +1869,9 @@ v0.84.0.9:
 	- Fix negative nation upkeep problems when using Vault.
 v0.84.0.10:
 	- Force shoptax, plottax and embassytax to obey the max tax setting in the config.
+v0.84.0.11:
+	- Add config setting to restrict beduse to personally-owned plots only. Found in Resident Settings @ Deny_Bed_Use.
+	- If deny_bed_use is true and town_respawn is true, a player will respawn at their bed if there is a bed spawn set.
+	- Added new permission node: towny.command.resident.spawn - Allows players to use /resident spawn command.
+	- Added new command: /resident spawn - If deny_bed_use: true and player has a current bed spawn, command will teleport player to their bed.
+	  Behaves according to town spawn command's costs and rules.
