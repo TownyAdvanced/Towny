@@ -796,6 +796,10 @@ public enum ConfigNodes {
 			"resident_settings.default_town_name",
 			"",
 			"# The name of the town a resident will automatically join when he first registers."),
+	RES_SETTING_DENY_BED_USE(
+			"resident_settings.deny_bed_use",
+			"false",
+			"# If true, players can only use beds in plots they personally own."),
 	ECO(
 			"economy",
 			"",

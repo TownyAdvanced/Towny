@@ -788,6 +788,11 @@ public class TownySettings {
 		return getSeconds(ConfigNodes.RES_SETTING_INACTIVE_AFTER_TIME);
 	}
 
+	public static boolean getBedUse() {
+
+		return getBoolean(ConfigNodes.RES_SETTING_DENY_BED_USE);
+	}
+
 	public static String getLoadDatabase() {
 
 		return getString(ConfigNodes.PLUGIN_DATABASE_LOAD);
