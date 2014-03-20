@@ -13,6 +13,7 @@ import org.bukkit.entity.Wolf;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -146,21 +147,17 @@ public class CombatUtil {
 
 				/*
 				 * Check if we are preventing friendly fire between allies
-				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer))
-					return true;
-
-				/*
 				 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
-				 */
-				if (preventPvP(world, attackerTB))
-					return true;
-				
-				/*
 				 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
 				 */
-				if (preventPvP(world, defenderTB))
-					return true;
+				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
+						|| preventPvP(world, attackerTB)
+						|| preventPvP(world, defenderTB)) {
+					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
+					plugin.getServer().getPluginManager().callEvent(event);
+
+					return !event.isCancelled();
+				}
 	
 			} else {
 				
