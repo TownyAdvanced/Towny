@@ -103,44 +103,53 @@ public class TownyPlayerListener implements Listener {
 			// Check if only respawning in the same world as the town's spawn.
 			if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
 				return;
-			
-			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null)
+
+			// Bed spawn or town.
+			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null) {
+
 				event.setRespawnLocation(player.getBedSpawnLocation());
-			else 
+				
+			} else {
+				
 				event.setRespawnLocation(respawn);
-			
+				
+			}
+
 		} catch (TownyException e) {
 			// Town has not set respawn location. Using default.
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-		
+
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-		
-		// Test against the item in hand as we need to test the bucket contents we are trying to empty.
+
+		// Test against the item in hand as we need to test the bucket contents
+		// we are trying to empty.
 		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getItemInHand()));
-		
-		//Test on the resulting empty bucket to see if we have permission to empty a bucket.
+
+		// Test on the resulting empty bucket to see if we have permission to
+		// empty a bucket.
 		if (!event.isCancelled())
 			event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
-		
+
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
-		
+
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-		//test against the bucket we will finish up with to see if we are allowed to fill this item.
+		// test against the bucket we will finish up with to see if we are
+		// allowed to fill this item.
 		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getItemStack()));
-		
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -150,7 +159,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		Player player = event.getPlayer();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		TownyWorld World = null;
@@ -176,9 +185,9 @@ public class TownyPlayerListener implements Listener {
 					return;
 				}
 		}
-		
+
 		if (event.hasItem()) {
-			
+
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
@@ -197,7 +206,7 @@ public class TownyPlayerListener implements Listener {
 					}
 				}
 			}
-		
+
 			if (TownySettings.isSwitchId(event.getClickedBlock().getTypeId()) || event.getAction() == Action.PHYSICAL) {
 				onPlayerSwitchEvent(event, null, World);
 				return;
@@ -205,7 +214,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
@@ -213,11 +222,11 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		if (event.getRightClicked() != null) {
-			
+
 			TownyWorld World = null;
-			
+
 			try {
 				World = TownyUniverse.getDataSource().getWorld(event.getPlayer().getWorld().getName());
 				if (!World.isUsingTowny())
@@ -228,97 +237,94 @@ public class TownyPlayerListener implements Listener {
 				e.printStackTrace();
 				return;
 			}
-			
+
 			Player player = event.getPlayer();
 			boolean bBuild = true;
 			int blockID = 0;
-			
+
 			/*
 			 * Protect specific entity interactions.
 			 */
-			switch(event.getRightClicked().getType()) {
-			
-				case ITEM_FRAME:
-					
-					blockID = 389;
-					//Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.DESTROY);
-					break;
-					
-				case PAINTING:
-					
+			switch (event.getRightClicked().getType()) {
+
+			case ITEM_FRAME:
+
+				blockID = 389;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+				break;
+
+			case PAINTING:
+
+				blockID = 321;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+				break;
+
+			case MINECART:
+
+				if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
+
+					blockID = 342;
+
+				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
+
+					blockID = 328;
+
+				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
+
+					blockID = 343;
+
+				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
+
+					blockID = 408;
+
+				} else {
+
 					blockID = 321;
-					//Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.DESTROY);
-					break;
-					
-				case MINECART:
-					
-					if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
-						
-						blockID = 342;
-						
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
-						
-						blockID = 328;
-						
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-						
-						blockID = 343;
-						
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
-						
-						blockID = 408;
-						
-					} else {
-						
-						blockID = 321;
-					}
-					
-					if ((blockID != 0) && (!TownySettings.isSwitchId(blockID)))
-						return;
-					
-					//Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte)0, TownyPermission.ActionType.SWITCH);
-					break;
-				
+				}
+
+				if ((blockID != 0) && (!TownySettings.isSwitchId(blockID)))
+					return;
+
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.SWITCH);
+				break;
+
 			}
-			
+
 			if (blockID != 0) {
-				
+
 				// Allow the removal if we are permitted
 				if (bBuild)
 					return;
-	
+
 				event.setCancelled(true);
-				
+
 				/*
 				 * Fetch the players cache
 				 */
 				PlayerCache cache = plugin.getCache(player);
-				
+
 				if (cache.hasBlockErrMsg())
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-				
+
 				return;
 			}
-				
-			
+
 			/*
 			 * Item_use protection.
 			 */
 			if (event.getPlayer().getItemInHand() != null) {
-				
+
 				if (TownySettings.isItemUseId(event.getPlayer().getItemInHand().getTypeId())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
 					return;
 				}
 			}
 		}
-		
+
 	}
-	
-	
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
@@ -327,25 +333,24 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		/*
 		 * Abort if we havn't really moved
 		 */
 		if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY()) {
 			return;
-		 }
+		}
 
 		Player player = event.getPlayer();
 		Location to = event.getTo();
 		Location from;
 		PlayerCache cache = plugin.getCache(player);
-		
+
 		try {
 			from = cache.getLastLocation();
 		} catch (NullPointerException e) {
 			from = event.getFrom();
 		}
-		
 
 		// Prevent fly/double jump cheats
 		if (!(event instanceof PlayerTeleportEvent)) {
@@ -353,18 +358,20 @@ public class TownyPlayerListener implements Listener {
 				try {
 					if (TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny())
 						if ((from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) && (player.getFallDistance() == 0) && (player.getVelocity().getY() <= -0.6) && (player.getLocation().getY() > 0)) {
-							//plugin.sendErrorMsg(player, "Cheat Detected!");
+							// plugin.sendErrorMsg(player, "Cheat Detected!");
 
 							Location blockLocation = from;
 
-							//find the first non air block below us
+							// find the first non air block below us
 							while ((blockLocation.getBlock().getType() == Material.AIR) && (blockLocation.getY() > 0))
 								blockLocation.setY(blockLocation.getY() - 1);
 
-							// set to 1 block up so we are not sunk in the ground
+							// set to 1 block up so we are not sunk in the
+							// ground
 							blockLocation.setY(blockLocation.getY() + 1);
 
-							// Update the cache for this location (same WorldCoord).
+							// Update the cache for this location (same
+							// WorldCoord).
 							cache.setLastLocation(blockLocation);
 							player.teleport(blockLocation);
 							return;
@@ -384,10 +391,10 @@ public class TownyPlayerListener implements Listener {
 			if (!fromCoord.equals(toCoord))
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
 			else {
-				//plugin.sendDebugMsg("    From: " + fromCoord);
-				//plugin.sendDebugMsg("    To:   " + toCoord);
-				//plugin.sendDebugMsg("        " + from.toString());
-				//plugin.sendDebugMsg("        " + to.toString());
+				// plugin.sendDebugMsg("    From: " + fromCoord);
+				// plugin.sendDebugMsg("    To:   " + toCoord);
+				// plugin.sendDebugMsg("        " + from.toString());
+				// plugin.sendDebugMsg("        " + to.toString());
 			}
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -395,11 +402,11 @@ public class TownyPlayerListener implements Listener {
 
 		// Update the cached players current location
 		cache.setLastLocation(to);
-		
-		//plugin.updateCache(player);
-		//plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
-		//plugin.sendDebugMsg("        " + from.toString());
-		//plugin.sendDebugMsg("        " + to.toString());
+
+		// plugin.updateCache(player);
+		// plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
+		// plugin.sendDebugMsg("        " + from.toString());
+		// plugin.sendDebugMsg("        " + to.toString());
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -409,7 +416,7 @@ public class TownyPlayerListener implements Listener {
 		 * Test to see if Ender pearls are disabled.
 		 */
 		if (event.getCause() == TeleportCause.ENDER_PEARL) {
-			
+
 			if (TownySettings.isItemUseId(Material.ENDER_PEARL.getId())) {
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
@@ -420,7 +427,7 @@ public class TownyPlayerListener implements Listener {
 		}
 		onPlayerMove(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChangeWorld(PlayerChangedWorldEvent event) { // has changed worlds
 
@@ -429,22 +436,30 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-		if (!TownySettings.getBedUse()) return; 
+
+		if (!TownySettings.getBedUse())
+			return;
+		
 		WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
-        try {
-			boolean isOwner =  worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
+		
+		try {
+			
+			boolean isOwner = worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
+			
 			if (!isOwner) {
+				
 				event.setCancelled(true);
 				TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
+				
 			}
+			
 		} catch (NotRegisteredException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
 
+	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
 
 		boolean cancelState = false;
 		WorldCoord worldCoord;
@@ -457,7 +472,7 @@ public class TownyPlayerListener implements Listener {
 			else
 				worldCoord = new WorldCoord(worldName, Coord.parseCoord(player));
 
-			//Get itemUse permissions (updates if none exist)
+			// Get itemUse permissions (updates if none exist)
 			boolean bItemUse;
 
 			if (block != null)
@@ -468,7 +483,7 @@ public class TownyPlayerListener implements Listener {
 			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
 
 			PlayerCache cache = plugin.getCache(player);
-			//cache.updateCoord(worldCoord);
+			// cache.updateCoord(worldCoord);
 			try {
 
 				TownBlockStatus status = cache.getStatus();
@@ -487,20 +502,23 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 				}
 				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-					//if (status == TownBlockStatus.UNCLAIMED_ZONE)
-					//	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_perform_action"), world.getUnclaimedZoneName()));
+					// if (status == TownBlockStatus.UNCLAIMED_ZONE)
+					// TownyMessaging.sendErrorMsg(player,
+					// String.format(TownySettings.getLangString("msg_err_cannot_perform_action"),
+					// world.getUnclaimedZoneName()));
 
 					cancelState = true;
 				}
 
-				if ((cache.hasBlockErrMsg())) // && (status != TownBlockStatus.UNCLAIMED_ZONE))
+				if ((cache.hasBlockErrMsg())) // && (status !=
+												// TownBlockStatus.UNCLAIMED_ZONE))
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 			} catch (NullPointerException e) {
 				System.out.print("NPE generated!");
 				System.out.print("Player: " + player.getName());
 				System.out.print("Item: " + item.getData().getItemType().name());
-				//System.out.print("Block: " + block.getType().toString());
+				// System.out.print("Block: " + block.getType().toString());
 			}
 
 		} catch (NotRegisteredException e1) {
@@ -508,39 +526,38 @@ public class TownyPlayerListener implements Listener {
 			cancelState = true;
 			return cancelState;
 		}
-		
+
 		return cancelState;
 
 	}
 
 	public void onPlayerSwitchEvent(PlayerInteractEvent event, String errMsg, TownyWorld world) {
-		
+
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg, world));
-		
-	}
-	
-	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
 
+	}
+
+	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
 
 		if (!TownySettings.isSwitchId(block.getTypeId()))
 			return false;
 
-		//Get switch permissions (updates if none exist)
+		// Get switch permissions (updates if none exist)
 		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.SWITCH);
 
 		// Allow switch if we are permitted
 		if (bSwitch)
 			return false;
-		
+
 		/*
 		 * Fetch the players cache
 		 */
 		PlayerCache cache = plugin.getCache(player);
 		TownBlockStatus status = cache.getStatus();
-		
-		/* 
+
+		/*
 		 * display any error recorded for this plot
 		 */
 		if (cache.hasBlockErrMsg())
@@ -558,8 +575,7 @@ public class TownyPlayerListener implements Listener {
 		} else {
 			return true;
 		}
-		
-		
+
 	}
 
 	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc, PlayerMoveEvent moveEvent) {

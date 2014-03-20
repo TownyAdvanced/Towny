@@ -153,6 +153,7 @@ public class CombatUtil {
 				if (preventFriendlyFire(attackingPlayer, defendingPlayer)
 						|| preventPvP(world, attackerTB)
 						|| preventPvP(world, defenderTB)) {
+					
 					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
 					plugin.getServer().getPluginManager().callEvent(event);
 

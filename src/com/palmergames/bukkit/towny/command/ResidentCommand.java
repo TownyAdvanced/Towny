@@ -55,7 +55,8 @@ public class ResidentCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add+/remove+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
 		output.add(ChatTools.formatCommand("", "/resident", "spawn", ""));
-		//output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/resident", "delete " + TownySettings.getLangString("res_2"), ""));
+		// output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"),
+		// "/resident", "delete " + TownySettings.getLangString("res_2"), ""));
 	}
 
 	public ResidentCommand(Towny instance) {
@@ -149,9 +150,9 @@ public class ResidentCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-				
+
 				residentSpawn(player);
-								
+
 			} else {
 
 				try {
@@ -160,53 +161,53 @@ public class ResidentCommand implements CommandExecutor {
 				} catch (NotRegisteredException x) {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 				}
-			
-			}
 
+			}
 
 		} catch (Exception x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Attempt to send player to bed spawn.
 	 * 
 	 * @param player
 	 */
 	public void residentSpawn(Player player) {
-		
+
 		boolean isTownyAdmin = TownyUniverse.getPermissionSource().isTownyAdmin(player);
 		Resident resident;
+
 		try {
+
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
-		Town town;
-		Location spawnLoc;
-		String notAffordMSG;
-		TownSpawnLevel townSpawnPermission;
+			Town town;
+			Location spawnLoc;
+			String notAffordMSG;
+			TownSpawnLevel townSpawnPermission;
 
-		// Set target town and affiliated messages.
-		
-		town = resident.getTown();
-		notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
-		
-		if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null ) {
-			
-			spawnLoc=player.getBedSpawnLocation();
-			
-		} else {
-			spawnLoc = town.getSpawn();			
-		}
+			// Set target town and affiliated messages.
 
-		if (isTownyAdmin) {
-			townSpawnPermission = TownSpawnLevel.ADMIN;
-		} else {
-			townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
-		}
-		
+			town = resident.getTown();
+			notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
+
+			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null) {
+
+				spawnLoc = player.getBedSpawnLocation();
+
+			} else {
+				spawnLoc = town.getSpawn();
+			}
+
+			if (isTownyAdmin) {
+				townSpawnPermission = TownSpawnLevel.ADMIN;
+			} else {
+				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
+			}
+
 			if (!isTownyAdmin) {
-				// Prevent spawn travel while in disallowed zones (if
-				// configured)
+				// Prevent spawn travel while in disallowed zones (if configured)
 				List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
 				if (!disallowedZones.isEmpty()) {
@@ -263,8 +264,7 @@ public class ResidentCommand implements CommandExecutor {
 				}
 			}
 
-			// Show message if we are using iConomy and are charging for spawn
-			// travel.
+			// Show message if we are using iConomy and are charging for spawn travel.
 			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Resident Spawn (%s)", townSpawnPermission))) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
 																																									// TownyEconomyObject.getEconomyCurrency()));
@@ -299,10 +299,8 @@ public class ResidentCommand implements CommandExecutor {
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-			
-		
-	}
 
+	}
 
 	/**
 	 * Toggle modes for this player.
@@ -313,8 +311,7 @@ public class ResidentCommand implements CommandExecutor {
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
 
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase()))
-				|| newSplit[0].equalsIgnoreCase("spy"))
+		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())) || newSplit[0].equalsIgnoreCase("spy"))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		try {

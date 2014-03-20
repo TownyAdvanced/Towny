@@ -1875,3 +1875,4 @@ v0.84.0.11:
 	- Added new permission node: towny.command.resident.spawn - Allows players to use /resident spawn command.
 	- Added new command: /resident spawn - If deny_bed_use: true and player has a current bed spawn, command will teleport player to their bed.
 	  Behaves according to town spawn command's costs and rules.
+	- Added cancellable DisallowedPVPEvent.
