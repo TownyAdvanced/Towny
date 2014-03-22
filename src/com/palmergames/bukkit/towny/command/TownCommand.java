@@ -1043,8 +1043,12 @@ public class TownCommand implements CommandExecutor {
 
 			if (!world.isUsingTowny())
 				throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
-
+			
+			if (world.isClaimable())
+				throw new TownyException(TownySettings.getLangString("msg_not_claimable"));
+			
 			Coord key = Coord.parseCoord(player);
+			
 			if (world.hasTownBlock(key))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
 

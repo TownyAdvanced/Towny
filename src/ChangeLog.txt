@@ -1876,3 +1876,5 @@ v0.84.0.11:
 	- Added new command: /resident spawn - If deny_bed_use: true and player has a current bed spawn, command will teleport player to their bed.
 	  Behaves according to town spawn command's costs and rules.
 	- Added cancellable DisallowedPVPEvent.
+v0.84.0.12:
+	- Fix a bug where you could create new towns in unclaimable worlds.
