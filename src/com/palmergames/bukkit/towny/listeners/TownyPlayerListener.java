@@ -105,7 +105,7 @@ public class TownyPlayerListener implements Listener {
 				return;
 
 			// Bed spawn or town.
-			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null) {
+			if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {
 
 				event.setRespawnLocation(player.getBedSpawnLocation());
 				
