@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 
 public class DailyTimerTask extends TownyTimerTask {
 
@@ -209,7 +210,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 */
 				if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
 
-					if (town.isMayor(resident) || town.hasAssistant(resident) || resident.isNPC()) {
+					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC()) {
 						try {
 							TownyMessaging.sendResidentMessage(resident, TownySettings.getTaxExemptMsg());
 						} catch (TownyException e) {
@@ -274,7 +275,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					 */
 					if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
 
-						if (town.isMayor(resident) || town.hasAssistant(resident) || resident.isNPC()) {
+						if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC()) {
 							continue;
 						}
 						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {

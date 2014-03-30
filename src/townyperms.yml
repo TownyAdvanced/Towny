@@ -45,6 +45,7 @@ towns:
         - towny.chat.town
     mayor:
         # Mayors get these permissions in addition to the default set.
+        - towny.tax_exempt
         - towny.command.towny.top
         - towny.command.town.*
         - towny.command.plot.*
@@ -55,6 +56,7 @@ towns:
         # Ranks contain additional permissions residents will be
         # granted if they are assigned that specific rank.
         assistant:
+            - towny.tax_exempt
             - towny.command.town.claim.*
             - towny.command.town.add
             - towny.command.plot.*

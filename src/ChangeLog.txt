@@ -1881,3 +1881,7 @@ v0.84.0.12:
 v0.84.0.13:
 	- Expand GroupManager/PEX/bPerms and any other Permission plugin recognised by Vault to handle towny_maxplots.X as a valid permission node.
 	- Add tab Auto Complete on all commands for Town/Nation names.
+v0.84.0.14:
+	- Added a Towny permission node 'towny.tax_exempt'.
+	  Grant this permisison to any rank you do not want to pay taxes. ** ONLY works in TownyPerms **. Will not work in external permission plugins.
+	  WARNING: Mayors without this permission will now be taxed along with the rest.
