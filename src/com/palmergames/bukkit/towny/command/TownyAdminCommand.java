@@ -480,7 +480,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			if (split.length < 2) {
 				
-				sender.sendMessage(ChatTools.formatTitle("/townyadmin set mayor"));
+				sender.sendMessage(ChatTools.formatTitle("/townyadmin set capital"));
 				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", ""));
 				
 			} else {
