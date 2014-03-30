@@ -415,9 +415,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("mayor")) {
 			if (split.length < 3) {
+				
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set mayor"));
 				sender.sendMessage(ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] " + TownySettings.getLangString("town_help_2"), ""));
 				sender.sendMessage(ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] npc", ""));
+				
 			} else
 				try {
 					Resident newMayor = null;
@@ -473,6 +475,35 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 				}
+			
+		} else if (split[0].equalsIgnoreCase("capital")) {
+
+			if (split.length < 2) {
+				
+				sender.sendMessage(ChatTools.formatTitle("/townyadmin set mayor"));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", ""));
+				
+			} else {
+				
+				try {
+					Town newCapital = TownyUniverse.getDataSource().getTown(split[1]);
+					Nation nation = newCapital.getNation();
+					
+					nation.setCapital(newCapital);
+					plugin.resetCache();
+					
+					TownyMessaging.sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+					
+					TownyUniverse.getDataSource().saveNation(nation);
+					TownyUniverse.getDataSource().saveNationList();
+					
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
+				
+			}
+			
+
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), String.format(TownySettings.getLangString("msg_err_invalid_property"), "administrative"));
 			return;

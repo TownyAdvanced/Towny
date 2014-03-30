@@ -1885,3 +1885,5 @@ v0.84.0.14:
 	- Added a Towny permission node 'towny.tax_exempt'.
 	  Grant this permisison to any rank you do not want to pay taxes. ** ONLY works in TownyPerms **. Will not work in external permission plugins.
 	  WARNING: Mayors without this permission will now be taxed along with the rest.
+	- Added a command for admins to be able to change a nations capital. Town to be set must already be a member of the nation.
+	  /ta set capital [town name]
