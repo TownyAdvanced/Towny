@@ -1887,3 +1887,4 @@ v0.84.0.14:
 	  WARNING: Mayors without this permission will now be taxed along with the rest.
 	- Added a command for admins to be able to change a nations capital. Town to be set must already be a member of the nation.
 	  /ta set capital [town name]
+	- Added a command '/town reslist' to obtain a FULL list of all residents in a town.

@@ -101,6 +101,7 @@ public enum PermissionNodes {
 		
 		TOWNY_COMMAND_TOWN_UNCLAIM("towny.command.town.unclaim"),
 		TOWNY_COMMAND_TOWN_ONLINE("towny.command.town.online"),
+		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 	
 	/*
 	 * Plot command permissions
