@@ -39,7 +39,7 @@ import com.palmergames.util.StringMgmt;
  * Send a list of all towny resident help commands to player Command: /resident
  */
 
-public class ResidentCommand implements CommandExecutor {
+public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<String>();

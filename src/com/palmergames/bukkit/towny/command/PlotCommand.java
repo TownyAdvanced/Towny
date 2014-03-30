@@ -39,7 +39,7 @@ import com.palmergames.util.StringMgmt;
  * Send a list of all general towny plot help commands to player Command: /plot
  */
 
-public class PlotCommand implements CommandExecutor {
+public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	public static final List<String> output = new ArrayList<String>();

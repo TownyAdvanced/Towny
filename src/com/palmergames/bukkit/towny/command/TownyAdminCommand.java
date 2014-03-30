@@ -38,7 +38,7 @@ import java.util.List;
  * /townyadmin
  */
 
-public class TownyAdminCommand implements CommandExecutor {
+public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> ta_help = new ArrayList<String>();

@@ -45,7 +45,7 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_REMOV
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand implements CommandExecutor {
+public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<String>();

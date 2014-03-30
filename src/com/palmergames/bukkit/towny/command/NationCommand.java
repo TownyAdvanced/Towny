@@ -47,7 +47,7 @@ import com.palmergames.util.StringMgmt;
  *            handles all nation based commands
  */
 
-public class NationCommand implements CommandExecutor {
+public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> nation_help = new ArrayList<String>();
@@ -1211,5 +1211,6 @@ public class NationCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 	}
+
 
 }

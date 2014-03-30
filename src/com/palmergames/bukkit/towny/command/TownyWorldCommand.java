@@ -30,7 +30,7 @@ import com.palmergames.util.StringMgmt;
  * /townyworld
  */
 
-public class TownyWorldCommand implements CommandExecutor {
+public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> townyworld_help = new ArrayList<String>();

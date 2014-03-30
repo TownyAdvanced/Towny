@@ -34,7 +34,7 @@ import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 
-public class TownyCommand implements CommandExecutor {
+public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
