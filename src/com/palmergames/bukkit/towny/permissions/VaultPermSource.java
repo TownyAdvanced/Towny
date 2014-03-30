@@ -58,14 +58,23 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
+		
+		int iReturn = -1;
+		
 		Player player = Bukkit.getPlayerExact(playerName);
+		
 		if (player != null) {
 			String primaryGroup = getPlayerGroup(player);
 
 			if (!primaryGroup.isEmpty())
-				return chat.getGroupInfoInteger(player.getWorld(), primaryGroup, node, -1);
+				iReturn = chat.getGroupInfoInteger(player.getWorld(), primaryGroup, node, -1);
 		}
-		return -1;
+		
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
 	}
 
 	@Override

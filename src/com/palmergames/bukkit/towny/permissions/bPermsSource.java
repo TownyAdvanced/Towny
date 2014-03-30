@@ -9,6 +9,7 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class bPermsSource extends TownyPermissionSource {
 
@@ -58,15 +59,20 @@ public class bPermsSource extends TownyPermissionSource {
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
 
 		String result = ApiLayer.getValue(player.getWorld().getName(), CalculableType.GROUP, getPlayerGroup(player), node);
 
 		try {
-			return Integer.parseInt(result);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
+			iReturn = Integer.parseInt(result);
+		} catch (NumberFormatException e) {}
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
 
 	}
 

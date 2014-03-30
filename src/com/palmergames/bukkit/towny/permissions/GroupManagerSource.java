@@ -51,7 +51,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	public String getPrefixSuffix(Resident resident, String node) {
 
 		String group = "", user = "";
-		Player player = this.plugin.getServer().getPlayer(resident.getName());
+		Player player = BukkitTools.getPlayer(resident.getName());
 
 		//sendDebugMsg("    GroupManager installed.");
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
@@ -81,10 +81,17 @@ public class GroupManagerSource extends TownyPermissionSource {
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
-		return handler.getPermissionInteger(playerName, node);
+		iReturn  = handler.getPermissionInteger(playerName, node);
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
 
 	}
 
@@ -97,7 +104,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		Player player = BukkitTools.getPlayer(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 
@@ -135,7 +142,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 					try {
 						resident = TownyUniverse.getDataSource().getResident(event.getUserName());
-						player = plugin.getServer().getPlayerExact(resident.getName());
+						player = BukkitTools.getPlayerExact(resident.getName());
 						if (player != null) {
 							//setup default modes for this player.
 							String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");

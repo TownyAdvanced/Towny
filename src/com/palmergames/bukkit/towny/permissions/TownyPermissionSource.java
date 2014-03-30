@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.permissions;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 //import org.bukkit.permissions.Permission;
 //import org.bukkit.permissions.PermissionDefault;
 
@@ -14,6 +15,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -55,6 +57,29 @@ public abstract class TownyPermissionSource {
 	@Deprecated
 	public boolean hasAllTownOverride(Player player, int blockId, TownyPermission.ActionType action) {
 		return hasAllTownOverride(player, blockId, (byte)0, action);
+	}
+	
+	
+	protected int getEffectivePermIntNode(String playerName, String node) {
+		
+		/*
+		 * Bukkit doesn't support non boolean nodes
+		 * so treat the same as bPerms
+		 */
+		Player player = BukkitTools.getPlayer(playerName);
+
+		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
+			if (test.getPermission().startsWith(node + ".")) {
+				String[] split = test.getPermission().split("\\.");
+				try {
+					return Integer.parseInt(split[split.length - 1]);
+				} catch (NumberFormatException e) {
+				}
+			}
+		}
+		
+		return -1;
+		
 	}
 
 	/*

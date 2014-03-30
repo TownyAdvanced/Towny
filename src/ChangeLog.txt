@@ -1878,3 +1878,5 @@ v0.84.0.11:
 	- Added cancellable DisallowedPVPEvent.
 v0.84.0.12:
 	- Fix a bug where you could create new towns in unclaimable worlds.
+v0.84.0.13:
+	- Expand GroupManager/PEX/bPerms and any other Permission plugin recognised by Vault to handle towny_maxplots.X as a valid permission node.

@@ -41,24 +41,7 @@ public class BukkitPermSource extends TownyPermissionSource {
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
 
-		/*
-		 * Bukkit doesn't support non boolean nodes
-		 * so treat the same as bPerms
-		 */
-
-		Player player = plugin.getServer().getPlayer(playerName);
-
-		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
-			if (test.getPermission().startsWith(node + ".")) {
-				String[] split = test.getPermission().split("\\.");
-				try {
-					return Integer.parseInt(split[split.length - 1]);
-				} catch (NumberFormatException e) {
-				}
-			}
-		}
-
-		return -1;
+		return getEffectivePermIntNode(playerName, node);
 	}
 
 	/**

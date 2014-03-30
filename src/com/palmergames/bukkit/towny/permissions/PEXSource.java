@@ -88,20 +88,23 @@ public class PEXSource extends TownyPermissionSource {
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
 		String worldName = player.getWorld().getName();
 
 		PermissionManager pexPM = PermissionsEx.getPermissionManager();
 
-		//return pexPM.getUser(player).getOptionInteger(node, worldName, -1);
-
 		String result = pexPM.getUser(player).getOption(node, worldName);
 
 		try {
-			return Integer.parseInt(result);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
+			iReturn =  Integer.parseInt(result);
+		} catch (NumberFormatException e) {}
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
 
 	}
 
@@ -114,7 +117,7 @@ public class PEXSource extends TownyPermissionSource {
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		Player player = BukkitTools.getPlayer(playerName);
 		String worldName = player.getWorld().getName();
 
 		PermissionManager pexPM = PermissionsEx.getPermissionManager();
