@@ -52,8 +52,13 @@ public class TownyTimerHandler{
 		if (!isDailyTimerRunning())
 			toggleDailyTimer(true);
 		//dailyTimer.schedule(new DailyTimerTask(this), 0);
-		if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
-			TownyMessaging.sendErrorMsg("Could not schedule newDay.");
+		if (TownySettings.isEconomyAsync()) {
+			if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
+		} else {
+			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
+		}
 		universe.setChangedNotify(NEW_DAY);
 	}
 
@@ -88,7 +93,12 @@ public class TownyTimerHandler{
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
 			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-			dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
+			
+			if (TownySettings.isEconomyAsync())
+				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
+			else
+				dailyTask = BukkitTools.scheduleSyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
+			
 			if (dailyTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
 		} else if (!on && isDailyTimerRunning()) {

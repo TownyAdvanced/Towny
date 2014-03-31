@@ -1077,6 +1077,10 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
 	}
 	
+	public static boolean isEconomyAsync() {
+		return getBoolean(ConfigNodes.ECO_USE_ASYNC);
+	}
+	
 	public static boolean isRemovingVillagerBabiesWorld() {
 		
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD);

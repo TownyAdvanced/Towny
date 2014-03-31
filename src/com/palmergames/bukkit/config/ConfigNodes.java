@@ -820,6 +820,11 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	ECO_USE_ASYNC(
+			"economy.use_async",
+			"true",
+			"# By default it is set to true.",
+			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
