@@ -184,6 +184,8 @@ public enum ConfigNodes {
 			"new_world_settings.pvp.world_pvp",
 			"true",
 			"# Set if PVP is enabled in this world"),
+	NWS_TOWN_PREFIX("new_world_settings.town.prefix", "Town-"),
+	NWS_NATION_PREFIX("new_world_settings.nation.prefix", "Nation-"),
 	NWS_FORCE_PVP_ON(
 			"new_world_settings.pvp.force_pvp_on",
 			"false",

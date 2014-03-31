@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
 
-	private static final String ECONOMY_ACCOUNT_PREFIX = "nation-";
+	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationPrefix();
 
 	//private List<Resident> assistants = new ArrayList<Resident>();
 	private List<Town> towns = new ArrayList<Town>();
