@@ -1894,4 +1894,4 @@ v0.84.0.14:
 	  Toggle perms and plot settings on any plot in the town.
 	  Put plots up for sale and take them down again.
 	- Added protected Mobs setting for town animal protection (coaster3000).
-	  
+	- Hide players from '/res list' Who can't be seen (graywolf336).

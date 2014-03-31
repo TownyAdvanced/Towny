@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownSpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -207,7 +208,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (!isTownyAdmin) {
-				// Prevent spawn travel while in disallowed zones (if configured)
+				// Prevent spawn travel while in disallowed zones (if
+				// configured)
 				List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
 				if (!disallowedZones.isEmpty()) {
@@ -264,7 +266,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			// Show message if we are using iConomy and are charging for spawn travel.
+			// Show message if we are using iConomy and are charging for spawn
+			// travel.
 			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Resident Spawn (%s)", townSpawnPermission))) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
 																																									// TownyEconomyObject.getEconomyCurrency()));
@@ -362,7 +365,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		String colour;
 		ArrayList<String> formatedList = new ArrayList<String>();
 		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
-			if(player.canSee(plugin.getServer().getPlayerExact(resident.getName()))) {
+			if (player.canSee(BukkitTools.getPlayerExact(resident.getName()))) {
 				if (resident.isKing())
 					colour = Colors.Gold;
 				else if (resident.isMayor())
