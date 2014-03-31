@@ -1896,3 +1896,4 @@ v0.84.0.14:
 	- Added protected Mobs setting for town animal protection (coaster3000).
 	- Hide players from '/res list' Who can't be seen (graywolf336).
 	- Fix an issue with public town spawns.
+	- Added settings to make economy daily tax timer async or synced (coaster3000).
