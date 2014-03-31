@@ -1888,3 +1888,9 @@ v0.84.0.14:
 	- Added a command for admins to be able to change a nations capital. Town to be set must already be a member of the nation.
 	  /ta set capital [town name]
 	- Added a command '/town reslist' to obtain a FULL list of all residents in a town.
+	- Added new permission node for town plot management.
+	  'towny.command.plot.asmayor' - grant this to any ranks you want to have the ability to...
+	  reclaim plots from players for the town.
+	  Toggle perms and plot settings on any plot in the town.
+	  Put plots up for sale and take them down again.
+	  

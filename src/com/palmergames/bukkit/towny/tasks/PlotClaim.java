@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 /**
  * @author ElgarL
@@ -144,7 +145,7 @@ public class PlotClaim extends Thread {
 						// Update any caches for this WorldCoord
 						plugin.updateCache(worldCoord);
 						return true;
-					} else if (town.isMayor(resident) || town.hasAssistant(resident)) {
+					} else if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())) {
 						//Plot isn't for sale but re-possessing for town.
 
 						if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, "Plot - Buy Back"))

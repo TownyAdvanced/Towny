@@ -541,7 +541,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Resident owner = townBlock.getResident();
 
 			// If not the plot owner or the towns mayor
-			if ((resident != owner) && (!townBlock.getTown().getMayor().equals(resident)) && (!townBlock.getTown().hasAssistant(resident)))
+			if ((resident != owner) && (!BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
 				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
 
 			return owner;
@@ -549,7 +549,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			Town owner = townBlock.getTown();
 
-			if ((!owner.isMayor(resident)) && (!owner.hasAssistant(resident)))
+			if (!BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
 
 			if ((resident.getTown() != owner))

@@ -107,6 +107,7 @@ public enum PermissionNodes {
 	 * Plot command permissions
 	 */
 	TOWNY_COMMAND_PLOT("towny.command.plot.*"),
+		TOWNY_COMMAND_PLOT_ASMAYOR("towny.command.plot.asmayor"),
 		TOWNY_COMMAND_PLOT_CLAIM("towny.command.plot.claim"),
 		TOWNY_COMMAND_PLOT_UNCLAIM("towny.command.plot.unclaim"),
 		TOWNY_COMMAND_PLOT_NOTFORSALE("towny.command.plot.notforsale"),

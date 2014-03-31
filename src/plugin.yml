@@ -216,6 +216,7 @@ permissions:
         description: User can access all town related commands.
         default: false
         children:
+            towny.command.plot.asmayor: true
             towny.command.plot.claim: true
             towny.command.plot.unclaim: true
             towny.command.plot.notforsale: true
