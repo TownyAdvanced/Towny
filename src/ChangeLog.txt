@@ -1895,3 +1895,4 @@ v0.84.0.14:
 	  Put plots up for sale and take them down again.
 	- Added protected Mobs setting for town animal protection (coaster3000).
 	- Hide players from '/res list' Who can't be seen (graywolf336).
+	- Fix an issue with public town spawns.
