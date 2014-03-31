@@ -1893,4 +1893,5 @@ v0.84.0.14:
 	  reclaim plots from players for the town.
 	  Toggle perms and plot settings on any plot in the town.
 	  Put plots up for sale and take them down again.
+	- Added protected Mobs setting for town animal protection (coaster3000).
 	  
