@@ -251,13 +251,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	public List<String> getUniverseStats() {
 
 		List<String> output = new ArrayList<String>();
-		output.add("§0-§4###§0---§4###§0-");
-		output.add("§4#§c###§4#§0-§4#§c###§4#§0   §6[§eTowny " + plugin.getVersion() + "§6]");
-		output.add("§4#§c####§4#§c####§4#   §3By: §bChris H (Shade)/Llmdl/ElgarL");
-		output.add("§0-§4#§c#######§4#§0-");
-		output.add("§0--§4##§c###§4##§0-- " + "§3Residents: §b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "§3Towns: §b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "§3Nations: §b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
-		output.add("§0----§4#§c#§4#§0---- " + "§3Worlds: §b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "§3TownBlocks: §b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
-		output.add("§0-----§4#§0----- ");
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/Llmdl/ElgarL");
+		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73Residents: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73Worlds: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
+		output.add("\u00A70-----\u00A74#\u00A70----- ");
 		return output;
 	}
 
