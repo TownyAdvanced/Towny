@@ -1,14 +1,11 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 
 import com.palmergames.bukkit.towny.Towny;
