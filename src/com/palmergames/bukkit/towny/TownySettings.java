@@ -1183,6 +1183,10 @@ public class TownySettings {
 
 		return getIntArr(ConfigNodes.PROT_ITEM_USE_ID);
 	}
+	
+	public static List<String> getEntityTypes() {
+		return getStrArr(ConfigNodes.PROT_MOB_TYPES);
+	}
 
 	public static boolean isUnclaimedZoneIgnoreId(int id) {
 
