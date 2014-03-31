@@ -1898,3 +1898,4 @@ v0.84.0.14:
 	- Fix an issue with public town spawns.
 	- Added settings to make economy daily tax timer async or synced (coaster3000).
 	- Adding the ability to change the Economy prefix from the config (dadealus).
+	- Added minimal claim distance from other town plots (coaster3000). 

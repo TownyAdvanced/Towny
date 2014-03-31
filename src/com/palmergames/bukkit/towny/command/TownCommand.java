@@ -1907,6 +1907,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 						if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
+						
+						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
+							throw new TownyException(TownySettings.getLangString("msg_too_close"));
+
 
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
 						blockCost = TownySettings.getOutpostCost();
@@ -1922,6 +1926,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
+				
+				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
+					throw new TownyException(TownySettings.getLangString("msg_too_close"));
+
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);

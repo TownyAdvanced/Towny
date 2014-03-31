@@ -38,27 +38,15 @@ public class TownySettings {
 
 	// Town Level
 	public enum TownLevel {
-		NAME_PREFIX,
-		NAME_POSTFIX,
-		MAYOR_PREFIX,
-		MAYOR_POSTFIX,
-		TOWN_BLOCK_LIMIT,
-		UPKEEP_MULTIPLIER
+		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER
 	};
 
 	// Nation Level
 	public enum NationLevel {
-		NAME_PREFIX,
-		NAME_POSTFIX,
-		CAPITAL_PREFIX,
-		CAPITAL_POSTFIX,
-		KING_PREFIX,
-		KING_POSTFIX,
-		TOWN_BLOCK_LIMIT_BONUS,
-		UPKEEP_MULTIPLIER
+		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER
 	};
 
-	//private static Pattern namePattern = null;      
+	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
@@ -151,7 +139,7 @@ public class TownySettings {
 		return getNationLevel(calcNationLevel(nation));
 	}
 
-	//TODO: more efficient way
+	// TODO: more efficient way
 	public static int calcTownLevel(Town town) {
 
 		int n = town.getNumResidents();
@@ -161,7 +149,7 @@ public class TownySettings {
 		return 0;
 	}
 
-	//TODO: more efficient way
+	// TODO: more efficient way
 	public static int calcNationLevel(Nation nation) {
 
 		int n = nation.getNumResidents();
@@ -206,7 +194,8 @@ public class TownySettings {
 		ChunkNotification.loadFormatStrings();
 	}
 
-	// This will read the language entry in the config.yml to attempt to load custom languages
+	// This will read the language entry in the config.yml to attempt to load
+	// custom languages
 	// if the file is not found it will load the default from resource
 	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
 
@@ -368,7 +357,8 @@ public class TownySettings {
 			if (root.getRoot() == ConfigNodes.LEVELS.getRoot())
 				setDefaultLevels();
 			else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
-				// Do nothing here as setDefaultLevels configured town and nation levels.
+				// Do nothing here as setDefaultLevels configured town and
+				// nation levels.
 			} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
@@ -388,9 +378,11 @@ public class TownySettings {
 
 		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "", "# default Town levels.");
 		if (!config.contains(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) {
-			//List<Map<String, Object>> townLevels = config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
+			// List<Map<String, Object>> townLevels =
+			// config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
 
-			//if (townLevels == null || townLevels.isEmpty() || townLevels.size() == 0) {
+			// if (townLevels == null || townLevels.isEmpty() ||
+			// townLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
 			Map<String, Object> level = new HashMap<String, Object>();
 			level.put("numResidents", 0);
@@ -482,9 +474,11 @@ public class TownySettings {
 		addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "", "# default Nation levels.");
 
 		if (!config.contains(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
-			//List<Map<String, Object>> nationLevels = config.getMapList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
+			// List<Map<String, Object>> nationLevels =
+			// config.getMapList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
 
-			//if (nationLevels == null || nationLevels.isEmpty() || nationLevels.size() == 0) {
+			// if (nationLevels == null || nationLevels.isEmpty() ||
+			// nationLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
 			Map<String, Object> level = new HashMap<String, Object>();
 			level.put("numResidents", 0);
@@ -915,11 +909,11 @@ public class TownySettings {
 	public static boolean isUsingEconomy() {
 
 		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
-		//return (isUsingIConomy() || isUsingRegister());
+		// return (isUsingIConomy() || isUsingRegister());
 	}
-	
+
 	public static boolean isFakeResident(String name) {
-		
+
 		return getString(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS).toLowerCase().contains(name.toLowerCase());
 	}
 
@@ -1076,23 +1070,24 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Reading Town Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
 	}
-	
+
 	public static boolean isEconomyAsync() {
+
 		return getBoolean(ConfigNodes.ECO_USE_ASYNC);
 	}
-	
+
 	public static boolean isRemovingVillagerBabiesWorld() {
-		
+
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD);
 	}
-	
+
 	public static boolean isCreatureTriggeringPressurePlateDisabled() {
 
 		return getBoolean(ConfigNodes.PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE);
 	}
 
 	public static boolean isRemovingVillagerBabiesTown() {
-		
+
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN);
 	}
 
@@ -1152,7 +1147,7 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK);
 	}
-	
+
 	public static double getPurchasedBonusBlocksIncreaseValue() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE);
@@ -1187,8 +1182,9 @@ public class TownySettings {
 
 		return getIntArr(ConfigNodes.PROT_ITEM_USE_ID);
 	}
-	
+
 	public static List<String> getEntityTypes() {
+
 		return getStrArr(ConfigNodes.PROT_MOB_TYPES);
 	}
 
@@ -1215,7 +1211,7 @@ public class TownySettings {
 	private static void setNewProperty(String root, Object value) {
 
 		if (value == null) {
-			//System.out.print("value is null for " + root.toLowerCase());
+			// System.out.print("value is null for " + root.toLowerCase());
 			value = "";
 		}
 		newConfig.set(root.toLowerCase(), value.toString());
@@ -1248,7 +1244,7 @@ public class TownySettings {
 
 	public static long getDayInterval() {
 
-		//return TimeTools.secondsFromDhms("24h");
+		// return TimeTools.secondsFromDhms("24h");
 		return getSeconds(ConfigNodes.PLUGIN_DAY_INTERVAL);
 	}
 
@@ -1356,7 +1352,7 @@ public class TownySettings {
 
 		if (town != null) {
 			if (isUpkeepByPlot()) {
-				multiplier = town.getTownBlocks().size(); //town.getTotalBlocks();
+				multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
 			} else {
 				multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 			}
@@ -1411,7 +1407,7 @@ public class TownySettings {
 			t = minT;
 		return t;
 	}
-	
+
 	public static boolean isUsingTowny() {
 
 		return getBoolean(ConfigNodes.NWS_WORLD_USING_TOWNY);
@@ -1421,16 +1417,16 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NWS_WORLD_PVP);
 	}
-	
-        public static String getTownPrefix() {
 
-                return getString(ConfigNodes.NWS_TOWN_PREFIX);
-        }
+	public static String getTownPrefix() {
 
-        public static String getNationPrefix() {
+		return getString(ConfigNodes.NWS_TOWN_PREFIX);
+	}
 
-                return getString(ConfigNodes.NWS_NATION_PREFIX);
-        }
+	public static String getNationPrefix() {
+
+		return getString(ConfigNodes.NWS_NATION_PREFIX);
+	}
 
 	public static boolean isForcingPvP() {
 
@@ -1537,7 +1533,7 @@ public class TownySettings {
 		if (isTownyUpToDate(currentVersion))
 			return false;
 		else
-			return true; //Assume
+			return true; // Assume
 	}
 
 	public static int getMinBukkitVersion() {
@@ -1566,6 +1562,12 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
 
+	public static int getMinDistanceFromTownPlotblocks() {
+
+		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
+
+	}
+
 	public static int getMaxDistanceBetweenHomeblocks() {
 
 		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);
@@ -1579,10 +1581,11 @@ public class TownySettings {
 		return maxPlots;
 	}
 
-   public static int getMaxResidentOutposts(Resident resident){ 
-	   	int maxOutposts = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(),PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode()); 
-     	return maxOutposts; 
-   }
+	public static int getMaxResidentOutposts(Resident resident) {
+
+		int maxOutposts = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
+		return maxOutposts;
+	}
 
 	public static boolean getPermFlag_Resident_Friend_Build() {
 
@@ -1934,7 +1937,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
 	}
 
-	///////////////////////////////////////
+	// /////////////////////////////////////
 
 	@Deprecated
 	public static boolean isValidRegionName(String name) {

@@ -135,6 +135,12 @@ public enum ConfigNodes {
 			"town.town_limit",
 			"3000",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
+			"town.min_plot_distance_from_town_plot",
+			"5",
+			"",
+			"# Minimum number of plots any towns plot must be from the next town's own plots.",
+			"# This will prevent town encasement to a certain degree."),
 	TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"town.min_distance_from_town_homeblock",
 			"5",

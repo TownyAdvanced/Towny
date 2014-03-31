@@ -490,7 +490,7 @@ public class TownyWorld extends TownyObject {
 
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
-		
+
 		return (entityExplosionProtection.contains(entity.getType().getName().toLowerCase()));
 
 	}
@@ -635,6 +635,44 @@ public class TownyWorld extends TownyObject {
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min)
 					min = dist;
+			} catch (TownyException e) {
+			}
+
+		return (int) Math.ceil(min);
+	}
+
+	/**
+	 * Checks the distance from the closest town block.
+	 * 
+	 * @param key
+	 * @return the distance to nearest towns townblock.
+	 */
+	public int getMinDistanceFromOtherTownsPlots(Coord key) {
+
+		return getMinDistanceFromOtherTownsPlots(key, null);
+	}
+
+	/**
+	 * Checks the distance from a another town's plots.
+	 * 
+	 * @param key
+	 * @param homeTown Players town
+	 * @return the closest distance to another towns nearest plot.
+	 */
+	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+
+		double min = Integer.MAX_VALUE;
+		for (Town town : getTowns())
+			try {
+				if (homeTown != null)
+					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+						continue;
+				for (TownBlock b : town.getTownBlocks()) {
+					Coord townCoord = b.getCoord();
+					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
+					if (dist < min)
+						min = dist;
+				}
 			} catch (TownyException e) {
 			}
 
