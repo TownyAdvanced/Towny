@@ -294,7 +294,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 							// Test we are allowed to work on this plot
-							TownBlockOwner owner = plotTestOwner(resident, townBlock);
+							plotTestOwner(resident, townBlock);
 							
 							townBlock.setName(split[1]);
 							
