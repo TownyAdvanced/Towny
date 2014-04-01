@@ -390,11 +390,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} else {
 
 			List<Object> parameters = new ArrayList<Object>();
-
+			
 			// Push all keys and values to a parameter list.
-
-			parameters.addAll(args.keySet());
-			parameters.addAll(args.values());
+			
+			String[] aKeys = (String[]) args.keySet().toArray();
 
 			// Build the prepared statement string appropriate for
 			// the number of keys/values we are inserting.
@@ -404,6 +403,11 @@ public class TownySQLSource extends TownyFlatFileSource {
 			for (int count = 0; count < args.size(); count++) {
 
 				code += "`?` = '?'";
+				
+				// Push key and value for each entry.
+				
+				parameters.add(aKeys[count]);
+				parameters.add(args.get(count));
 
 				if ((count < args.size())) {
 					code += ",";
