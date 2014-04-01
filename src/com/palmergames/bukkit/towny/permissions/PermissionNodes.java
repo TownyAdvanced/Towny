@@ -121,6 +121,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_PLOT_TOGGLE_MOBS("towny.command.plot.toggle.mobs"),
 		
 		TOWNY_COMMAND_PLOT_SET("towny.command.plot.set.*"),
+			TOWNY_COMMAND_PLOT_SET_NAME("towny.command.plot.set.name"),
 			TOWNY_COMMAND_PLOT_SET_PERM("towny.command.plot.set.perm"),
 			TOWNY_COMMAND_PLOT_SET_RESET("towny.command.plot.set.reset"),
 			TOWNY_COMMAND_PLOT_SET_SHOP("towny.command.plot.set.shop"),

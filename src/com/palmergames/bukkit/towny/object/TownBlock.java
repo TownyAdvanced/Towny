@@ -13,6 +13,7 @@ public class TownBlock {
 	private Town town;
 	private Resident resident;
 	private TownBlockType type;
+	private String name;
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
@@ -29,6 +30,7 @@ public class TownBlock {
 		this.setWorld(world);
 		this.type = TownBlockType.RESIDENTIAL;
 		isChanged = false;
+		this.name = "";
 	}
 
 	public void setTown(Town town) {
@@ -236,6 +238,16 @@ public class TownBlock {
 		} catch (NotRegisteredException e) {
 			return false;
 		}
+	}
+	
+	public void setName(String newName) {
+
+		this.name = newName;
+	}
+
+	public String getName() {
+
+		return this.name;
 	}
 
 	public void setX(int x) {

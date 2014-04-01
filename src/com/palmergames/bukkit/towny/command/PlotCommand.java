@@ -268,7 +268,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					split = StringMgmt.remFirstArg(split);
 
-					if (split.length > 0) {
+					if (split.length > 1) {
 						
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -289,7 +289,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							return true;
-						}
+							
+						} else if (split[0].equalsIgnoreCase("name")) {
+							
+							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+							// Test we are allowed to work on this plot
+							TownBlockOwner owner = plotTestOwner(resident, townBlock);
+							
+							townBlock.setName(split[1]);
+							
+							townBlock.setChanged(true);
+							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							return true;
+							
+						} 
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
 						
@@ -302,6 +315,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
 
 					} else {
+
+						player.sendMessage(ChatTools.formatCommand("", "/plot set", "name", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set perm", "?", ""));

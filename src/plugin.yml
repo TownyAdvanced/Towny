@@ -239,6 +239,7 @@ permissions:
         description: User can access the plot set command.
         default: false
         children:
+            towny.command.plot.set.name: true
             towny.command.plot.set.perm: true
             towny.command.plot.set.reset: true
             towny.command.plot.set.shop: true

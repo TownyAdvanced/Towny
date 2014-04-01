@@ -1176,6 +1176,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				try {
 					KeyValueFile kvFile = new KeyValueFile(path);
 
+					line = kvFile.get("name");
+					if (line != null)
+						try {
+							townBlock.setName(line.trim());
+						} catch (Exception e) {
+						}
+					
 					line = kvFile.get("permissions");
 					if (line != null)
 						try {
@@ -1761,6 +1768,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		try {
 			fout = new BufferedWriter(new FileWriter(path));
+			// name
+			fout.write("permissions=" + townBlock.getName() + newLine);
 			// permissions
 			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
 			// Have permissions been manually changed

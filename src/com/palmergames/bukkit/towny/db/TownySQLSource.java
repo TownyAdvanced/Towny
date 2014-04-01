@@ -276,6 +276,23 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
 		}
+		
+		/*
+		 * Update the table structure for older databases.
+		 */
+		String townblocks_update;
+		
+		try {
+			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN `name`  mediumtext";
+			Statement s = cntx.createStatement();
+			s.executeUpdate(townblocks_update);
+			
+			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
+		} catch (SQLException ee) {
+			if (ee.getErrorCode() != 1060)
+			TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
+			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
+		}
 
 		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" 
 				+ "`name` VARCHAR(32) NOT NULL," 
@@ -1234,6 +1251,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
 				
 				while (rs.next()) {
+					line = rs.getString("name");
+					if (line != null)
+						try {
+							townBlock.setName(line.trim());
+						} catch (Exception e) {
+						}
+					
 					line = rs.getString("permissions");
 					if (line != null)
 						try {
@@ -1509,6 +1533,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			tb_hm.put("world", townBlock.getWorld().getName());
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());
+			tb_hm.put("name", townBlock.getName());
 			tb_hm.put("permissions", townBlock.getPermissions().toString());
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
