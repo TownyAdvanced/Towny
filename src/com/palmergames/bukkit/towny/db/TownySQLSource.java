@@ -106,7 +106,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		}
 		if (this.type.equals("mysql")) {
 			this.driver = "com.mysql.jdbc.Driver";
-			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name);
+			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8");
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
 		} else {

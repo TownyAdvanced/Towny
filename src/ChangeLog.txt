@@ -1905,3 +1905,4 @@ v0.85.0.0:
 	- Add command '/plot set name'.
 v0.85.0.1:
 	- Update SQL code to prevent sql injection and handle foreign characters. ****** USE WITH CAUTION. BACKUP ANY DATABSE FIRST *****
+	- Set SQL to use UTF-8 by default.
