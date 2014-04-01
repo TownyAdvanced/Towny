@@ -315,20 +315,20 @@ public class TownyBlockListener implements Listener {
 					if (TownyWarConfig.isAllowingFireInWarZone()) {
 						return false;
 					} else {
-						TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within " + coord.toString() + ".");
+						TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within " + coord.toString() + ".");
 						return true;
 					}
 				}
 
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 				if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && ((!townBlock.getTown().isFire() && !townyWorld.isForceFire() && !townBlock.getPermissions().fire) || (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation()))) {
-					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within " + coord.toString() + ".");
+					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within " + coord.toString() + ".");
 					return true;
 				}
 			} catch (TownyException x) {
 				// Not a town so check the world setting for fire
 				if (!townyWorld.isFire()) {
-					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getTypeId() + " from igniting within " + coord.toString() + ".");
+					TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within " + coord.toString() + ".");
 					return true;
 				}
 			}
