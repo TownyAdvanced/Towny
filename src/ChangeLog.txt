@@ -1911,3 +1911,5 @@ v0.85.0.2:
 	  This section allows you to specify any potion effects you want blocked when preventing PvP.
 	- Move Economy account prefixes to the correct section of the config.
 	- Fix plot naming to not break plot permissions.
+	- Add conformation on setting a plot name.
+	- Display _ characters in plot names as spaces.
