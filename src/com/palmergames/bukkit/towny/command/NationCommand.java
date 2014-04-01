@@ -740,9 +740,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			for (Town town : kicking) {
 				msg += town.getName() + ", ";
 
-				msg = msg.substring(0, msg.length() - 2);
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_nation_kicked_by"), player.getName()));
 			}
+			
 			msg = msg.substring(0, msg.length() - 2);
 			msg = String.format(TownySettings.getLangString("msg_nation_kicked"), player.getName(), msg);
 			TownyMessaging.sendNationMessage(nation, ChatTools.color(msg));
