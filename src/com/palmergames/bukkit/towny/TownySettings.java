@@ -1423,16 +1423,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_WORLD_PVP);
 	}
 
-	public static String getTownPrefix() {
-
-		return getString(ConfigNodes.NWS_TOWN_PREFIX);
-	}
-
-	public static String getNationPrefix() {
-
-		return getString(ConfigNodes.NWS_NATION_PREFIX);
-	}
-
 	public static boolean isForcingPvP() {
 
 		return getBoolean(ConfigNodes.NWS_FORCE_PVP_ON);
@@ -1910,6 +1900,16 @@ public class TownySettings {
 	public static int getTeleportWarmupTime() {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
+	}
+	
+	public static String getTownAccountPrefix() {
+
+		return getString(ConfigNodes.ECO_TOWN_PREFIX);
+	}
+
+	public static String getNationAccountPrefix() {
+
+		return getString(ConfigNodes.ECO_NATION_PREFIX);
 	}
 
 	public static double getTownBankCap() {

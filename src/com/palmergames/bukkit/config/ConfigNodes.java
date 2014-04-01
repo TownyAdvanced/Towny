@@ -191,8 +191,6 @@ public enum ConfigNodes {
 			"new_world_settings.pvp.world_pvp",
 			"true",
 			"# Set if PVP is enabled in this world"),
-	NWS_TOWN_PREFIX("new_world_settings.town.prefix", "Town-"),
-	NWS_NATION_PREFIX("new_world_settings.nation.prefix", "Nation-"),
 	NWS_FORCE_PVP_ON(
 			"new_world_settings.pvp.force_pvp_on",
 			"false",
@@ -844,6 +842,14 @@ public enum ConfigNodes {
 			"true",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
+	ECO_TOWN_PREFIX(
+			"economy.town_prefix",
+			"town-",
+			"# Prefix to apply to all town economy accounts."),
+	ECO_NATION_PREFIX(
+			"economy.nation_prefix",
+			"nation-",
+			"# Prefix to apply to all nation economy accounts."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
