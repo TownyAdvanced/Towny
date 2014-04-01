@@ -182,9 +182,10 @@ public enum ConfigNodes {
 			"# Once Towny is running each world can be altered from within game",
 			"# using '/townyworld toggle'",
 			""),
-			
-	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true", "# Default for new worlds to have towny enabled."),
-			
+
+	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true",
+			"# Default for new worlds to have towny enabled."),
+
 	NWS_WORLD_PVP_HEADER("new_world_settings.pvp", "", ""),
 	NWS_WORLD_PVP(
 			"new_world_settings.pvp.world_pvp",
@@ -429,9 +430,9 @@ public enum ConfigNodes {
 	PLUGIN_MODS(
 			"plugin.interfacing.tekkit", "", ""),
 	PLUGIN_MODS_FAKE_RESIDENTS(
-					"plugin.interfacing.tekkit.fake_residents",
-					"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
-					"# Add any fake players for client/server mods (aka Tekkit) here"),
+			"plugin.interfacing.tekkit.fake_residents",
+			"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
+			"# Add any fake players for client/server mods (aka Tekkit) here"),
 	PLUGIN_USING_ESSENTIALS(
 			"plugin.interfacing.using_essentials",
 			"false",
@@ -584,30 +585,30 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-			
+
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in towns."),
-			
+
 	PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE(
 			"protection.disable_creature_pressureplate_stone",
 			"true",
 			"# Disable creatures triggering stone pressure plates"),
-					
+
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime",
 			"",
 			"# Globally remove living entities in all worlds that have their flag set."),
-			
+
 	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
 			"protection.world_prevent_villager_breeding",
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in the world."),
-					
+
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",
@@ -624,6 +625,16 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Protect living entities within a town's boundaries from being killed by players."),
+	PROT_POTION_TYPES(
+			"protection.potion_types",
+			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER",
+			"",
+			"# permitted Potion Types http://jd.bukkit.org/apidocs/org/bukkit/potion/PotionType.html",
+			"# ABSORPTION, BLINDNESS, CONFUSION, DAMAGE_RESISTANCE, FAST_DIGGING, FIRE_RESISTANCE, HARM, HEAL, HEALTH_BOOST, HUNGER, ",
+			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW , SLOW_DIGGING, ",
+			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
+			"",
+			"# When preventing PVP prevent the use of these potions."),
 	PROT_CHEAT(
 			"protection.cheat_protection",
 			"true",
@@ -883,7 +894,6 @@ public enum ConfigNodes {
 			"1.0",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
 
-
 	ECO_PRICE_DEATH("economy.price_death", "1.0", ""),
 
 	ECO_BANK_CAP("economy.banks", "", ""),
@@ -916,7 +926,6 @@ public enum ConfigNodes {
 			"# Turn on/off whether all transactions that normally don't have a second party are to be done with a certain account.",
 			"# Eg: The money taken during Daily Taxes is just removed. With this on, the amount taken would be funneled into an account.",
 			"#     This also applies when a player collects money, like when the player is refunded money when a delayed teleport fails."),
-
 
 	ECO_DAILY_TAXES("economy.daily_taxes", "", ""),
 	ECO_DAILY_TAXES_ENABLED(
@@ -1087,10 +1096,10 @@ public enum ConfigNodes {
 			"war.enemy.allow_attacks",
 			"false",
 			"# If false, players won't be able to place war flags, effectively disabling warzones."),
-    WAR_ENEMY_ONLY_ATTACK_BORDER(
-            "war.enemy.only_attack_borders",
-            "true",
-            "# If true, enemy's can only attack the edge plots of a town with war flags."),
+	WAR_ENEMY_ONLY_ATTACK_BORDER(
+			"war.enemy.only_attack_borders",
+			"true",
+			"# If true, enemy's can only attack the edge plots of a town with war flags."),
 	WAR_ENEMY_MIN_PLAYERS_ONLINE_IN_TOWN(
 			"war.enemy.min_players_online_in_town",
 			"2",

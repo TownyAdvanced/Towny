@@ -1187,6 +1187,11 @@ public class TownySettings {
 
 		return getStrArr(ConfigNodes.PROT_MOB_TYPES);
 	}
+	
+	public static List<String> getPotionTypes() {
+
+		return getStrArr(ConfigNodes.PROT_POTION_TYPES);
+	}
 
 	public static boolean isUnclaimedZoneIgnoreId(int id) {
 

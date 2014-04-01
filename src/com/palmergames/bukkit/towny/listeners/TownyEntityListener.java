@@ -30,6 +30,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -49,7 +50,9 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.PotionTypeUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
 
@@ -94,7 +97,7 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
-		
+
 	}
 
 	/**
@@ -142,24 +145,51 @@ public class TownyEntityListener implements Listener {
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
 		Entity attacker;
+
+		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
+		boolean detrimental = false;
+
+		/*
+		 * List of potion effects blocked from PvP.
+		 */
+		List<Class<?>> prots = PotionTypeUtil.parsePotionTypeClassNames(TownySettings.getPotionTypes(), "PotionPvP:");
 		
-		ProjectileSource source = potion.getShooter();
-		if(!(source instanceof Entity)) {
-			return;	//TODO: prevent damage from dispensers
+		for (PotionEffect effect : effects) {
+
+			/*
+			 * Check to see if any of the potion effects are protected.
+			 */
+			
+			if (EntityTypeUtil.isInstanceOfAny(prots, effect)) {
+				detrimental = true;
+			}
+
 		}
-		else {
+
+		ProjectileSource source = potion.getShooter();
+
+		if (!(source instanceof Entity)) {
+
+			return;	// TODO: prevent damage from dispensers
+
+		} else {
+
 			attacker = (Entity) source;
+
 		}
 
 		// Not Wartime
 		if (!TownyUniverse.isWarTime())
 			for (LivingEntity defender : affectedEntities) {
 				/*
-				 * Don't block potion use on ourselves.
+				 * Don't block potion use on ourselves
+				 * yet allow the use of beneficial potions on all.
 				 */
 				if (attacker != defender)
-					if (CombatUtil.preventDamageCall(plugin, attacker, defender))
+					if (CombatUtil.preventDamageCall(plugin, attacker, defender) && detrimental) {
+
 						event.setIntensity(defender, -1.0);
+					}
 			}
 
 	}
@@ -237,7 +267,7 @@ public class TownyEntityListener implements Listener {
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
 		Entity passenger = entity.getPassenger();
-		
+
 		TownyWorld World = null;
 
 		try {
@@ -265,23 +295,27 @@ public class TownyEntityListener implements Listener {
 						}
 					}
 				}
-				
+
 				/*
-				 * Allow players in vehicles to activate pressure plates if they are permitted.
+				 * Allow players in vehicles to activate pressure plates if they
+				 * are permitted.
 				 */
 				if (passenger != null && passenger instanceof Player) {
-					
-					//PlayerInteractEvent newEvent = new PlayerInteractEvent((Player)passenger, Action.PHYSICAL, null, block, BlockFace.SELF);
-					//Bukkit.getServer().getPluginManager().callEvent(newEvent);
-					
+
+					// PlayerInteractEvent newEvent = new
+					// PlayerInteractEvent((Player)passenger, Action.PHYSICAL,
+					// null, block, BlockFace.SELF);
+					// Bukkit.getServer().getPluginManager().callEvent(newEvent);
+
 					if (TownySettings.isSwitchId(block.getTypeId())) {
-						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player)passenger, block, null, World))
+						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
 							return;
 					}
 
 				}
-				
-				// System.out.println("EntityInteractEvent triggered for " + entity.toString());
+
+				// System.out.println("EntityInteractEvent triggered for " +
+				// entity.toString());
 
 				// Prevent creatures triggering stone pressure plates
 				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
@@ -386,7 +420,7 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		TownyWorld townyWorld;
 
 		/**
@@ -514,10 +548,9 @@ public class TownyEntityListener implements Listener {
 		LivingEntity attacker;
 		if (combuster instanceof Projectile) {
 			ProjectileSource source = ((Projectile) combuster).getShooter();
-			if(!(source instanceof LivingEntity)) {
-				return; //TODO: prevent damage from dispensers
-			}
-			else {
+			if (!(source instanceof LivingEntity)) {
+				return; // TODO: prevent damage from dispensers
+			} else {
 				attacker = (LivingEntity) source;
 			}
 
