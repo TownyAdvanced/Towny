@@ -421,7 +421,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				parameters.add(keys.get(count));
 				parameters.add(args.get(keys.get(count)));
 
-				if ((count < args.size())) {
+				if ((count < keys.size())) {
 					code += " AND ";
 				}
 			}
