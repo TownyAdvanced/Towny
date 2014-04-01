@@ -39,6 +39,7 @@ import java.sql.Connection;
 //import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -56,7 +57,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 	private Connection cntx = null;
 	private String type = "";
-	//private boolean ish2 = false;
+
+	// private boolean ish2 = false;
 
 	/**
 	 * Flag if we are using h2 or standard SQL connectivity.
@@ -66,8 +68,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 	public TownySQLSource(String type) {
 
 		this.type = type.toLowerCase();
-		//if ((type.equalsIgnoreCase("sqlite")) || (type.equalsIgnoreCase("h2")))
-		//	this.ish2 = true;
+		// if ((type.equalsIgnoreCase("sqlite")) ||
+		// (type.equalsIgnoreCase("h2")))
+		// this.ish2 = true;
 	}
 
 	@Override
@@ -78,8 +81,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 		this.rootFolder = universe.getRootFolder();
 
 		try {
-			FileMgmt.checkFolders(new String[] { rootFolder, rootFolder + dataFolder, rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" });
-			FileMgmt.checkFiles(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt", rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
+			FileMgmt.checkFolders(new String[] {
+					rootFolder,
+					rootFolder + dataFolder,
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" });
+			FileMgmt.checkFiles(new String[] {
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
@@ -120,7 +128,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		// Checking for db tables
 		TownyMessaging.sendDebugMsg("Checking for tables existence");
-		//DatabaseMetaData dbm;
+		// DatabaseMetaData dbm;
 		if (getContext())
 			TownyMessaging.sendDebugMsg("[Towny] Connected to Database");
 		else {
@@ -129,45 +137,17 @@ public class TownySQLSource extends TownyFlatFileSource {
 		}
 
 		/*
-		try {
-			dbm = cntx.getMetaData();
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Cannot get Table metadata");
-			return;
-		}
-		*/
+		 * try {
+		 * dbm = cntx.getMetaData();
+		 * } catch (SQLException e) {
+		 * TownyMessaging.sendErrorMsg("Cannot get Table metadata");
+		 * return;
+		 * }
+		 */
 
-		//String[] types = { "TABLE" };
+		// String[] types = { "TABLE" };
 
-		String town_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
-				+ "`name` VARCHAR(32) NOT NULL," 
-				+ "`residents` mediumtext,"
-				+ "`mayor` mediumtext," 
-				+ "`nation` mediumtext NOT NULL," 
-				+ "`assistants` text DEFAULT NULL," 
-				+ "`townBoard` mediumtext DEFAULT NULL," 
-				+ "`tag` mediumtext DEFAULT NULL," 
-				+ "`protectionStatus` mediumtext DEFAULT NULL," 
-				+ "`bonus` int(11) DEFAULT 0," 
-				+ "`purchased` int(11)  DEFAULT 0," 
-				+ "`taxpercent` bool NOT NULL DEFAULT '0'," 
-				+ "`taxes` float DEFAULT 0," 
-				+ "`hasUpkeep` bool NOT NULL DEFAULT '0'," 
-				+ "`plotPrice` float DEFAULT NULL," 
-				+ "`plotTax` float DEFAULT NULL," 
-				+ "`commercialPlotPrice` float DEFAULT NULL," 
-				+ "`commercialPlotTax` float NOT NULL," 
-				+ "`embassyPlotPrice` float NOT NULL," 
-				+ "`embassyPlotTax` float NOT NULL," 
-				+ "`open` bool NOT NULL DEFAULT '0'," 
-				+ "`public` bool NOT NULL DEFAULT '0'," 
-				+ "`admindisabledpvp` bool NOT NULL DEFAULT '0'," 
-				+ "`homeblock` mediumtext NOT NULL,"
-				+ "`townBlocks` mediumtext NOT NULL," 
-				+ "`spawn` mediumtext NOT NULL," 
-				+ "`outpostSpawns` mediumtext DEFAULT NULL," 
-				+ "PRIMARY KEY (`name`)" 
-				+ ")";
+		String town_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS (" + "`name` VARCHAR(32) NOT NULL," + "`residents` mediumtext," + "`mayor` mediumtext," + "`nation` mediumtext NOT NULL," + "`assistants` text DEFAULT NULL," + "`townBoard` mediumtext DEFAULT NULL," + "`tag` mediumtext DEFAULT NULL," + "`protectionStatus` mediumtext DEFAULT NULL," + "`bonus` int(11) DEFAULT 0," + "`purchased` int(11)  DEFAULT 0," + "`taxpercent` bool NOT NULL DEFAULT '0'," + "`taxes` float DEFAULT 0," + "`hasUpkeep` bool NOT NULL DEFAULT '0'," + "`plotPrice` float DEFAULT NULL," + "`plotTax` float DEFAULT NULL," + "`commercialPlotPrice` float DEFAULT NULL," + "`commercialPlotTax` float NOT NULL," + "`embassyPlotPrice` float NOT NULL," + "`embassyPlotTax` float NOT NULL," + "`open` bool NOT NULL DEFAULT '0'," + "`public` bool NOT NULL DEFAULT '0'," + "`admindisabledpvp` bool NOT NULL DEFAULT '0'," + "`homeblock` mediumtext NOT NULL," + "`townBlocks` mediumtext NOT NULL," + "`spawn` mediumtext NOT NULL," + "`outpostSpawns` mediumtext DEFAULT NULL," + "PRIMARY KEY (`name`)" + ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_create);
@@ -180,35 +160,20 @@ public class TownySQLSource extends TownyFlatFileSource {
 		 * Update the table structure for older databases.
 		 */
 		String town_update;
-		
+
 		try {
 			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN `admindisabledpvp`  bool";
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_update);
-			
+
 			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
 		} catch (SQLException ee) {
 			if (ee.getErrorCode() != 1060)
-			TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
+				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
+			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
 		}
-		
-		
-		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
-				+ " `name` VARCHAR(16) NOT NULL," 
-				+ "`town` mediumtext," 
-				+ "`town-ranks` mediumtext," 
-				+ "`nation-ranks` mediumtext," 
-				+ "`lastOnline` BIGINT NOT NULL," 
-				+ "`registered` BIGINT NOT NULL," 
-				+ "`isNPC` bool NOT NULL DEFAULT '0'," 
-				+ "`title` mediumtext," 
-				+ "`surname` mediumtext," 
-				+ "`protectionStatus` mediumtext," 
-				+ "`friends` mediumtext," 
-				+ "`townBlocks` mediumtext," 
-				+ "PRIMARY KEY (`name`)" 
-				+ ")";
+
+		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS (" + " `name` VARCHAR(16) NOT NULL," + "`town` mediumtext," + "`town-ranks` mediumtext," + "`nation-ranks` mediumtext," + "`lastOnline` BIGINT NOT NULL," + "`registered` BIGINT NOT NULL," + "`isNPC` bool NOT NULL DEFAULT '0'," + "`title` mediumtext," + "`surname` mediumtext," + "`protectionStatus` mediumtext," + "`friends` mediumtext," + "`townBlocks` mediumtext," + "PRIMARY KEY (`name`)" + ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_create);
@@ -216,42 +181,29 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage());
 		}
-		
+
 		/*
 		 * Update the table structure for older databases.
 		 */
 		String resident_update;
-		
+
 		try {
 			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `town-ranks`  mediumtext";
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
-			
+
 			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `nation-ranks`  mediumtext";
 			s = cntx.createStatement();
 			s.executeUpdate(resident_update);
-			
+
 			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
 		} catch (SQLException ee) {
 			if (ee.getErrorCode() != 1060)
-			TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
+				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
 		}
-		
-		
 
-		String nation_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS ("
-				+ "`name` VARCHAR(32) NOT NULL," 
-				+ "`towns` mediumtext NOT NULL," 
-				+ "`capital` mediumtext NOT NULL," 
-				+ "`assistants` mediumtext NOT NULL," 
-				+ "`tag` mediumtext NOT NULL," 
-				+ "`allies` mediumtext NOT NULL," 
-				+ "`enemies` mediumtext NOT NULL," 
-				+ "`taxes` float NOT NULL," 
-				+ "`neutral` bool NOT NULL DEFAULT '0', " 
-				+ "PRIMARY KEY (`name`)" 
-				+ ")";
+		String nation_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`capital` mediumtext NOT NULL," + "`assistants` mediumtext NOT NULL," + "`tag` mediumtext NOT NULL," + "`allies` mediumtext NOT NULL," + "`enemies` mediumtext NOT NULL," + "`taxes` float NOT NULL," + "`neutral` bool NOT NULL DEFAULT '0', " + "PRIMARY KEY (`name`)" + ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(nation_create);
@@ -260,15 +212,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
 		}
 
-		String townblock_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
-				+ "`world` VARCHAR(32) NOT NULL," 
-				+ "`x` bigint(20) NOT NULL," 
-				+ "`z` bigint(20) NOT NULL," 
-				+ "`permissions` mediumtext NOT NULL," 
-				+ "`locked` bool NOT NULL DEFAULT '0',"
-				+ "`changed` bool NOT NULL DEFAULT '0'," 
-				+ "PRIMARY KEY (`world`,`x`,`z`)" 
-				+ ")";
+		String townblock_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS (" + "`world` VARCHAR(32) NOT NULL," + "`x` bigint(20) NOT NULL," + "`z` bigint(20) NOT NULL," + "`permissions` mediumtext NOT NULL," + "`locked` bool NOT NULL DEFAULT '0'," + "`changed` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`world`,`x`,`z`)" + ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(townblock_create);
@@ -276,58 +220,25 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
 		}
-		
+
 		/*
 		 * Update the table structure for older databases.
 		 */
 		String townblocks_update;
-		
+
 		try {
 			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN `name`  mediumtext";
 			Statement s = cntx.createStatement();
 			s.executeUpdate(townblocks_update);
-			
+
 			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
 		} catch (SQLException ee) {
 			if (ee.getErrorCode() != 1060)
-			TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
-			//TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
+				TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
+			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
 		}
 
-		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" 
-				+ "`name` VARCHAR(32) NOT NULL," 
-				+ "`towns` mediumtext NOT NULL," 
-				+ "`claimable` bool NOT NULL DEFAULT '0'," 
-				+ "`pvp` bool NOT NULL DEFAULT '0'," 
-				+ "`forcepvp` bool NOT NULL DEFAULT '0'," 
-				+ "`forcetownmobs` bool NOT NULL DEFAULT '0'," 
-				+ "`worldmobs` bool NOT NULL DEFAULT '0'," 
-				+ "`firespread` bool NOT NULL DEFAULT '0'," 
-				+ "`forcefirespread` bool NOT NULL DEFAULT '0'," 
-				+ "`explosions` bool NOT NULL DEFAULT '0'," 
-				+ "`forceexplosions` bool NOT NULL DEFAULT '0'," 
-				+ "`endermanprotect` bool NOT NULL DEFAULT '0'," 
-				+ "`disableplayertrample` bool NOT NULL DEFAULT '0'," 
-				+ "`disablecreaturetrample` bool NOT NULL DEFAULT '0'," 
-				+ "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'," 
-				+ "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'," 
-				+ "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'," 
-				+ "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'," 
-				+ "`unclaimedZoneName` mediumtext NOT NULL," 
-				+ "`unclaimedZoneIgnoreIds` mediumtext NOT NULL," 
-				+ "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'," 
-				+ "`plotManagementDeleteIds` mediumtext NOT NULL," 
-				+ "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'," 
-				+ "`plotManagementMayorDelete` mediumtext NOT NULL," 
-				+ "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'," 
-				+ "`plotManagementRevertSpeed` long NOT NULL," 
-				+ "`plotManagementIgnoreIds` mediumtext NOT NULL," 
-				+ "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'," 
-				+ "`plotManagementWildRegenEntities` mediumtext NOT NULL," 
-				+ "`plotManagementWildRegenSpeed` long NOT NULL," 
-				+ "`usingTowny` bool NOT NULL DEFAULT '0'," 
-				+ "PRIMARY KEY (`name`)" 
-				+ ")";
+		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`claimable` bool NOT NULL DEFAULT '0'," + "`pvp` bool NOT NULL DEFAULT '0'," + "`forcepvp` bool NOT NULL DEFAULT '0'," + "`forcetownmobs` bool NOT NULL DEFAULT '0'," + "`worldmobs` bool NOT NULL DEFAULT '0'," + "`firespread` bool NOT NULL DEFAULT '0'," + "`forcefirespread` bool NOT NULL DEFAULT '0'," + "`explosions` bool NOT NULL DEFAULT '0'," + "`forceexplosions` bool NOT NULL DEFAULT '0'," + "`endermanprotect` bool NOT NULL DEFAULT '0'," + "`disableplayertrample` bool NOT NULL DEFAULT '0'," + "`disablecreaturetrample` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneName` mediumtext NOT NULL," + "`unclaimedZoneIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementDeleteIds` mediumtext NOT NULL," + "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementMayorDelete` mediumtext NOT NULL," + "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'," + "`plotManagementRevertSpeed` long NOT NULL," + "`plotManagementIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'," + "`plotManagementWildRegenEntities` mediumtext NOT NULL," + "`plotManagementWildRegenSpeed` long NOT NULL," + "`usingTowny` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`name`)" + ")";
 		try {
 			Statement s = cntx.createStatement();
 			s.executeUpdate(world_create);
@@ -352,8 +263,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 					try {
 						cntx.close();
 					} catch (SQLException e) {
-						// We're disposing of an old stale connection just be nice to the GC
-						// as well as mysql, so ignore the error there's nothing we can do
+						// We're disposing of an old stale connection just be
+						// nice to the GC
+						// as well as mysql, so ignore the error there's nothing
+						// we can do
 						// if it fails
 					}
 					cntx = null;
@@ -384,86 +297,188 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
 
+		// Attempt to get a database connection.
+		
 		if (!getContext())
 			return false;
+
 		String code;
-		Statement s;
+		PreparedStatement stmt = null;
+		int rs = 0;
+
 		if (keys == null) {
+
+			List<Object> parameters = new ArrayList<Object>();
+
+			// Push all keys and values to a parameter list.
+
+			parameters.addAll(args.keySet());
+			parameters.addAll(args.values());
+
+			// Build the prepared statement string appropriate for
+			// the number of keys/values we are inserting.
+
 			code = "INSERT INTO " + tb_prefix + (tb_name.toUpperCase()) + " ";
 			String keycode = "(";
 			String valuecode = " VALUES (";
 
-			Set<Map.Entry<String, Object>> set = args.entrySet();
-			Iterator<Map.Entry<String, Object>> i = set.iterator();
-			while (i.hasNext()) {
-				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
+			for (int count = 0; count < args.size(); count++) {
 
-				keycode += "`" + me.getKey() + "`";
-				keycode += "" + (i.hasNext() ? ", " : ")");
-				if (me.getValue() instanceof String)
-					valuecode += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
-				else if (me.getValue() instanceof Boolean)
-					valuecode += "'" + (((Boolean)me.getValue()) ? "1":"0") + "'";
-				else
-					valuecode += "'" + me.getValue() + "'";
-				valuecode += (i.hasNext() ? "," : ")");
+				keycode += "`?`";
+				valuecode += "'?'";
+
+				if ((count < args.size())) {
+					keycode += ", ";
+					valuecode += ", ";
+				}
 			}
+
 			code += keycode;
 			code += valuecode;
+
 			try {
-				s = cntx.createStatement();
-				int rs = s.executeUpdate(code);
-				s.close();
-				if (rs == 0)
-					return false;
-				return true;
+
+				// Populate the prepared statement parameters.
+				
+				stmt = cntx.prepareStatement(code);
+
+				for (int count = 0; count < parameters.size(); count++) {
+
+					Object element = parameters.get(count);
+
+					if (element instanceof String) {
+
+						stmt.setString(count + 1, (String) element);
+
+					} else if (element instanceof Boolean) {
+
+						stmt.setBoolean(count + 1, (Boolean) element);
+
+					} else {
+
+						stmt.setObject(count + 1, element);
+
+					}
+
+				}
+
+				rs = stmt.executeUpdate();
+
 			} catch (SQLException e) {
 				TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
+			} finally {
+
+				try {
+
+					if (stmt != null) {
+						stmt.close();
+					}
+
+				} catch (SQLException e) {
+					TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
+				}
+
 			}
-			return false;
+
+			// Failed?
+			if (rs == 0)
+				return false;
+			
+			// Success!
+			return true;
+
 		} else {
+
+			List<Object> parameters = new ArrayList<Object>();
+
+			// Push all keys and values to a parameter list.
+
+			parameters.addAll(args.keySet());
+			parameters.addAll(args.values());
+
+			// Build the prepared statement string appropriate for
+			// the number of keys/values we are inserting.
+
 			code = "UPDATE " + tb_prefix + (tb_name.toUpperCase()) + " SET ";
-			Set<Map.Entry<String, Object>> set = args.entrySet();
-			Iterator<Map.Entry<String, Object>> i = set.iterator();
-			while (i.hasNext()) {
-				Map.Entry<String, Object> me = (Map.Entry<String, Object>) i.next();
-				code += "`" + me.getKey() + "` = ";
-				if (me.getValue() instanceof String)
-					code += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
-				else if (me.getValue() instanceof Boolean)
-					code += "'" + (((Boolean)me.getValue()) ? "1":"0") + "'";
-				else
-					code += "'" + me.getValue() + "'";
-				code += (i.hasNext() ? "," : "");
+
+			for (int count = 0; count < args.size(); count++) {
+
+				code += "`?` = '?'";
+
+				if ((count < args.size())) {
+					code += ",";
+				}
 			}
+			
 			code += " WHERE ";
+			
+			for (int count = 0; count < keys.size(); count++) {
 
-			Iterator<String> keys_i = keys.iterator();
-			while (keys_i.hasNext()) {
-				String key = (String) keys_i.next();
-				code += "`" + key + "` = ";
-				Object v = args.get(key);
-				if (v instanceof String)
-					code += "'" + v + "'";
-				else if (v instanceof Boolean)
-					code += "'" + (((Boolean)v) ? "1":"0") + "'";
-				else
-					code += v;
-				code += (keys_i.hasNext() ? " AND " : "");
+				code += "`?` = '?'";
+				
+				// Add extra values for the WHERE conditionals.
+				
+				parameters.add(keys.get(count));
+				parameters.add(args.get(keys.get(count)));
+
+				if ((count < args.size())) {
+					code += " AND ";
+				}
 			}
-
+			
 			try {
-				s = cntx.createStatement();
-				int rs = s.executeUpdate(code);
-				s.close();
-				if (rs == 0) // if entry doesn't exist then try to insert 
-					return UpdateDB(tb_name, args, null);
-				return true;
+
+				// Populate the prepared statement parameters.
+				
+				stmt = cntx.prepareStatement(code);
+
+				for (int count = 0; count < parameters.size(); count++) {
+
+					Object element = parameters.get(count);
+
+					if (element instanceof String) {
+
+						stmt.setString(count + 1, (String) element);
+
+					} else if (element instanceof Boolean) {
+
+						stmt.setBoolean(count + 1, (Boolean) element);
+
+					} else {
+
+						stmt.setObject(count + 1, element);
+
+					}
+
+				}
+
+				rs = stmt.executeUpdate();
+
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL: Update sql error " + e.getMessage() + " --> " + code);
+				TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
+			} finally {
+
+				try {
+
+					if (stmt != null) {
+						stmt.close();
+					}
+
+				} catch (SQLException e) {
+					TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
+				}
+
 			}
+
+			// Failed?
+			if (rs == 0)
+				return false;
+			
+			// Success!
+			return true;
+			
 		}
-		return false;
+
 	}
 
 	/**
@@ -487,7 +502,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (me.getValue() instanceof String)
 					wherecode += "'" + ((String) me.getValue()).replace("'", "\''") + "'";
 				else if (me.getValue() instanceof Boolean)
-					wherecode += "'" + (((Boolean)me.getValue()) ? "1":"0") + "'";
+					wherecode += "'" + (((Boolean) me.getValue()) ? "1" : "0") + "'";
 				else
 					wherecode += "'" + me.getValue() + "'";
 
@@ -518,7 +533,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
-			
+
 			while (rs.next()) {
 				try {
 					newResident(rs.getString("name"));
@@ -544,7 +559,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
-			
+
 			while (rs.next()) {
 				try {
 					newTown(rs.getString("name"));
@@ -618,9 +633,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 				try {
 					newWorld(world.getName());
 				} catch (AlreadyRegisteredException e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				} catch (NotRegisteredException e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				}
 		}
 		return true;
@@ -639,7 +654,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
-			
+
 			while (rs.next()) {
 				try {
 					resident.setLastOnline(rs.getLong("lastOnline"));
@@ -672,13 +687,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 					resident.setTown(getTown(line));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set to Town " + line);
 				}
-				
+
 				line = rs.getString("town-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 				}
-				
+
 				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
 					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
@@ -709,7 +724,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				line = rs.getString("townBlocks");
 				if ((line != null) && (!line.isEmpty()))
 					utilLoadTownBlocks(line, null, resident);
-				
+
 				s.close();
 				return true;
 			}
@@ -735,7 +750,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
-			
+
 			while (rs.next()) {
 
 				line = rs.getString("residents");
@@ -750,17 +765,17 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 				}
 				town.setMayor(getResident(rs.getString("mayor")));
-//				line = rs.getString("assistants");
-//				if (line != null) {
-//					tokens = line.split(",");
-//					for (String token : tokens) {
-//						if (!token.isEmpty()) {
-//							Resident assistant = getResident(token);
-//							if ((assistant != null) && (town.hasResident(assistant)))
-//								town.addAssistant(assistant);
-//						}
-//					}
-//				}
+				// line = rs.getString("assistants");
+				// if (line != null) {
+				// tokens = line.split(",");
+				// for (String token : tokens) {
+				// if (!token.isEmpty()) {
+				// Resident assistant = getResident(token);
+				// if ((assistant != null) && (town.hasResident(assistant)))
+				// town.addAssistant(assistant);
+				// }
+				// }
+				// }
 				town.setTownBoard(rs.getString("townBoard"));
 				line = rs.getString("tag");
 				if (line != null)
@@ -888,7 +903,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
-			
+
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
@@ -902,17 +917,17 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 				}
 				nation.setCapital(getTown(rs.getString("capital")));
-//				line = rs.getString("assistants");
-//				if (line != null) {
-//					tokens = line.split(",");
-//					for (String token : tokens) {
-//						if (!token.isEmpty()) {
-//							Resident assistant = getResident(token);
-//							if (assistant != null)
-//								nation.addAssistant(assistant);
-//						}
-//					}
-//				}
+				// line = rs.getString("assistants");
+				// if (line != null) {
+				// tokens = line.split(",");
+				// for (String token : tokens) {
+				// if (!token.isEmpty()) {
+				// Resident assistant = getResident(token);
+				// if (assistant != null)
+				// nation.addAssistant(assistant);
+				// }
+				// }
+				// }
 
 				nation.setTag(rs.getString("tag"));
 
@@ -923,7 +938,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 						if (!token.isEmpty()) {
 							Nation friend = getNation(token);
 							if (friend != null)
-								nation.addAlly(friend); //("ally", friend);
+								nation.addAlly(friend); // ("ally", friend);
 						}
 					}
 				}
@@ -935,14 +950,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 						if (!token.isEmpty()) {
 							Nation enemy = getNation(token);
 							if (enemy != null)
-								nation.addEnemy(enemy); //("enemy", enemy);
+								nation.addEnemy(enemy); // ("enemy", enemy);
 						}
 					}
 				}
 				nation.setTaxes(rs.getDouble("taxes"));
 				nation.setNeutral(rs.getBoolean("neutral"));
 			}
-			
+
 			s.close();
 			return true;
 		} catch (SQLException e) {
@@ -967,7 +982,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");
-			
+
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
@@ -1221,7 +1236,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 
 			}
-			
+
 			s.close();
 			return true;
 
@@ -1249,7 +1264,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
-				
+
 				while (rs.next()) {
 					line = rs.getString("name");
 					if (line != null)
@@ -1257,7 +1272,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 							townBlock.setName(line.trim());
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("permissions");
 					if (line != null)
 						try {
@@ -1281,7 +1296,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 
 					if (!set) {
-						// no permissions found so set in relation to it's owners perms.
+						// no permissions found so set in relation to it's
+						// owners perms.
 						try {
 							if (townBlock.hasResident()) {
 								townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
@@ -1293,9 +1309,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				}
-				
+
 				s.close();
-				
+
 			} catch (SQLException e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlocks ");
 				e.printStackTrace();
@@ -1369,7 +1385,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("open", town.isOpen());
 			twn_hm.put("public", town.isPublic());
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
-			
+
 			twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
 			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()) : "");
 			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()) : "");
@@ -1447,9 +1463,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("forcepvp", world.isForcePVP());
 			// Claimable
 			nat_hm.put("claimable", world.isClaimable());
-			// has monster spawns			
+			// has monster spawns
 			nat_hm.put("worldmobs", world.hasWorldMobs());
-			// force town mob spawns			
+			// force town mob spawns
 			nat_hm.put("forcetownmobs", world.isForceTownMobs());
 			// has firespread enabled
 			nat_hm.put("firespread", world.isFire());
@@ -1594,8 +1610,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			long t = System.currentTimeMillis();
 			String newBackupFolder = rootFolder + FileMgmt.fileSeparator() + "backup" + FileMgmt.fileSeparator() + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + Long.toString(t);
-			FileMgmt.checkFolders(new String[] {
-					rootFolder,
+			FileMgmt.checkFolders(new String[] { rootFolder,
 					rootFolder + FileMgmt.fileSeparator() + "backup" });
 			if (backupType.equalsIgnoreCase("folder")) {
 				FileMgmt.checkFolders(new String[] { newBackupFolder });
