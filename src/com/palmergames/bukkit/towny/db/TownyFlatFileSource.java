@@ -1769,7 +1769,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			fout = new BufferedWriter(new FileWriter(path));
 			// name
-			fout.write("permissions=" + townBlock.getName() + newLine);
+			fout.write("name=" + townBlock.getName() + newLine);
 			// permissions
 			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
 			// Have permissions been manually changed
