@@ -296,12 +296,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							
-							townBlock.setName(split[1]);
+							townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 							
 							townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							
-							player.sendMessage(String.format("Plot name set to [%s]", split[1]));
+							player.sendMessage(String.format("Plot name set to [%s]", townBlock.getName()));
 							return true;
 							
 						} 
