@@ -134,9 +134,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} catch (Exception e) {
 			System.out.println("[Towny] Driver error: " + e);
 		}
-
-		// Checking for db tables
-		//TownyMessaging.sendDebugMsg("Checking for tables existence");
 		
 		/*
 		 * Attempt to get a connection to the database

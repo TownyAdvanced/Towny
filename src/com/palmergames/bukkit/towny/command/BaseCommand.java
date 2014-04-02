@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -45,12 +46,12 @@ public class BaseCommand implements TabCompleter{
 			}
 
 			// Match residents
-			//for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
-			//	if (resident.getName().toLowerCase().startsWith(lastArg)) {
-			//		output.add(resident.getName());
-			//	}
-			//
-			//}
+			for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
+				if (resident.getName().toLowerCase().startsWith(lastArg)) {
+					output.add(resident.getName());
+				}
+			
+			}
 
 		}
 

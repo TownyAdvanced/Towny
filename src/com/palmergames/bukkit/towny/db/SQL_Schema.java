@@ -14,9 +14,9 @@ import com.palmergames.bukkit.towny.TownySettings;
  */
 public class SQL_Schema {
 	
-	protected static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+	private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 	
-	public static String getTOWNS() {
+	private static String getTOWNS() {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
 				+ "`name` VARCHAR(32) NOT NULL,"
@@ -49,7 +49,7 @@ public class SQL_Schema {
 				+ ")";
 	}
 	
-	public static String getRESIDENTS() {
+	private static String getRESIDENTS() {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
 				+ " `name` VARCHAR(16) NOT NULL,"
@@ -68,7 +68,7 @@ public class SQL_Schema {
 				+ ")";
 	}
 	
-	public static String getNATIONS() {
+	private static String getNATIONS() {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS ("
 				+ "`name` VARCHAR(32) NOT NULL,"
@@ -84,7 +84,7 @@ public class SQL_Schema {
 				+ ")";
 	}
 	
-	public static String getTOWNBLOCKS() {
+	private static String getTOWNBLOCKS() {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
 				+ "`world` VARCHAR(32) NOT NULL,"
@@ -97,7 +97,7 @@ public class SQL_Schema {
 				+ ")";
 	}
 	
-	public static String getWORLDS() {
+	private static String getWORLDS() {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS ("
 				+ "`name` VARCHAR(32) NOT NULL,"
