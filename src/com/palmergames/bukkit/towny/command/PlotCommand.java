@@ -268,7 +268,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					split = StringMgmt.remFirstArg(split);
 
-					if (split.length > 1) {
+					if (split.length > 0) {
 						
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
