@@ -52,7 +52,7 @@
 
 	<target name="jar" depends="compile">
 		<!-- Update the version in the plugin.yml -->
-		<replace file="./src/plugin.yml" token="{BUILD_VER}" value=${env.TOWNY_BUILD_VER}/>
+		<replace file="./src/plugin.yml" token="{BUILD_VER}" value="${env.TOWNY_BUILD_VER}"/>
 		<!-- Build the jar file -->
 		<jar basedir="${build}" destfile="${env.LIB}/Towny.jar">
 			<fileset dir="./src" includes="ChangeLog.txt" />
