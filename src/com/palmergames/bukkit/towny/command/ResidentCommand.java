@@ -478,58 +478,80 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("add")) {
+
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendAdd(player, resident, getResidents(player, names));
+				residentFriendAdd(player, resident, TownyUniverse.getDataSource().getResidents(player, names));
+
 			} else if (split[0].equalsIgnoreCase("remove")) {
+
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendRemove(player, resident, getResidents(player, names));
+				residentFriendRemove(player, resident, TownyUniverse.getDataSource().getResidents(player, names));
+
 			} else if (split[0].equalsIgnoreCase("clearlist") || split[0].equalsIgnoreCase("clear")) {
+
 				residentFriendRemove(player, resident, resident.getFriends());
+
 			}
 
 		}
 	}
 
-	private static List<Resident> getResidents(Player player, String[] names) {
-
-		List<Resident> invited = new ArrayList<Resident>();
-		for (String name : names)
-			try {
-				Resident target = TownyUniverse.getDataSource().getResident(name);
-				invited.add(target);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-			}
-		return invited;
-	}
-
 	public void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
 
 		ArrayList<Resident> remove = new ArrayList<Resident>();
+
 		for (Resident newFriend : invited)
+
 			try {
+
 				resident.addFriend(newFriend);
 				plugin.deleteCache(newFriend.getName());
-			} catch (AlreadyRegisteredException e) {
-				remove.add(newFriend);
-			}
-		for (Resident newFriend : remove)
-			invited.remove(newFriend);
 
-		if (invited.size() > 0) {
-			String msg = "Added ";
-			for (Resident newFriend : invited) {
-				msg += newFriend.getName() + ", ";
-				Player p = plugin.getServer().getPlayer(newFriend.getName());
-				if (p != null)
-					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
+			} catch (AlreadyRegisteredException e) {
+
+				remove.add(newFriend);
+
 			}
+
+		/*
+		 *  Remove any names from the list who were already listed as friends
+		 */
+		for (Resident newFriend : remove) {
+			
+			invited.remove(newFriend);
+			
+		}
+
+		/*
+		 * If we added any friends format the confirmation message.
+		 */
+		if (invited.size() > 0) {
+			
+			String msg = "Added ";
+			
+			for (Resident newFriend : invited) {
+				
+				msg += newFriend.getName() + ", ";
+				Player p = BukkitTools.getPlayer(newFriend.getName());
+				
+				if (p != null) {
+					
+					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
+					
+				}
+				
+			}
+			
 			msg = msg.substring(0, msg.length() - 2);
 			msg += TownySettings.getLangString("msg_to_list");
 			TownyMessaging.sendMsg(player, msg);
 			TownyUniverse.getDataSource().saveResident(resident);
-		} else
+			
+		} else {
+			
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+			
+		}
 	}
 
 	public void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {

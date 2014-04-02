@@ -81,6 +81,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		this.rootFolder = universe.getRootFolder();
 
 		try {
+			
 			FileMgmt.checkFolders(new String[] {
 					rootFolder,
 					rootFolder + dataFolder,
@@ -88,32 +89,40 @@ public class TownySQLSource extends TownyFlatFileSource {
 			FileMgmt.checkFiles(new String[] {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
+			
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
 
-		// Setup SQL connection
+		/*
+		 *  Setup SQL connection
+		 */
 		hostname = TownySettings.getSQLHostName();
 		port = TownySettings.getSQLPort();
 		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
 		if (this.type.equals("h2")) {
+			
 			this.driver = "org.h2.Driver";
 			this.dsn = ("jdbc:h2:" + rootFolder + dataFolder + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
 			username = "sa";
 			password = "sa";
-		}
-		if (this.type.equals("mysql")) {
+			
+		} else if (this.type.equals("mysql")) {
+			
 			this.driver = "com.mysql.jdbc.Driver";
 			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8");
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
+			
 		} else {
+			
 			this.driver = "org.sqlite.JDBC";
 			this.dsn = ("jdbc:sqlite:" + rootFolder + dataFolder + File.separator + db_name + ".sqldb");
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
+			
 		}
 
 		/*
@@ -127,127 +136,26 @@ public class TownySQLSource extends TownyFlatFileSource {
 		}
 
 		// Checking for db tables
-		TownyMessaging.sendDebugMsg("Checking for tables existence");
-		// DatabaseMetaData dbm;
-		if (getContext())
+		//TownyMessaging.sendDebugMsg("Checking for tables existence");
+		
+		/*
+		 * Attempt to get a connection to the database
+		 */
+		if (getContext()) {
+			
 			TownyMessaging.sendDebugMsg("[Towny] Connected to Database");
-		else {
+			
+		} else {
+			
 			TownyMessaging.sendErrorMsg("Failed when connecting to Database");
 			return;
+			
 		}
 
 		/*
-		 * try {
-		 * dbm = cntx.getMetaData();
-		 * } catch (SQLException e) {
-		 * TownyMessaging.sendErrorMsg("Cannot get Table metadata");
-		 * return;
-		 * }
+		 *  Initialise database Schema.
 		 */
-
-		// String[] types = { "TABLE" };
-
-		String town_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS (" + "`name` VARCHAR(32) NOT NULL," + "`residents` mediumtext," + "`mayor` mediumtext," + "`nation` mediumtext NOT NULL," + "`assistants` text DEFAULT NULL," + "`townBoard` mediumtext DEFAULT NULL," + "`tag` mediumtext DEFAULT NULL," + "`protectionStatus` mediumtext DEFAULT NULL," + "`bonus` int(11) DEFAULT 0," + "`purchased` int(11)  DEFAULT 0," + "`taxpercent` bool NOT NULL DEFAULT '0'," + "`taxes` float DEFAULT 0," + "`hasUpkeep` bool NOT NULL DEFAULT '0'," + "`plotPrice` float DEFAULT NULL," + "`plotTax` float DEFAULT NULL," + "`commercialPlotPrice` float DEFAULT NULL," + "`commercialPlotTax` float NOT NULL," + "`embassyPlotPrice` float NOT NULL," + "`embassyPlotTax` float NOT NULL," + "`open` bool NOT NULL DEFAULT '0'," + "`public` bool NOT NULL DEFAULT '0'," + "`admindisabledpvp` bool NOT NULL DEFAULT '0'," + "`homeblock` mediumtext NOT NULL," + "`townBlocks` mediumtext NOT NULL," + "`spawn` mediumtext NOT NULL," + "`outpostSpawns` mediumtext DEFAULT NULL," + "PRIMARY KEY (`name`)" + ")";
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(town_create);
-			TownyMessaging.sendDebugMsg("Table TOWNS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage());
-		}
-
-		/*
-		 * Update the table structure for older databases.
-		 */
-		String town_update;
-
-		try {
-			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN `admindisabledpvp`  bool";
-			Statement s = cntx.createStatement();
-			s.executeUpdate(town_update);
-
-			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
-		} catch (SQLException ee) {
-			if (ee.getErrorCode() != 1060)
-				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
-		}
-
-		String resident_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS (" + " `name` VARCHAR(16) NOT NULL," + "`town` mediumtext," + "`town-ranks` mediumtext," + "`nation-ranks` mediumtext," + "`lastOnline` BIGINT NOT NULL," + "`registered` BIGINT NOT NULL," + "`isNPC` bool NOT NULL DEFAULT '0'," + "`title` mediumtext," + "`surname` mediumtext," + "`protectionStatus` mediumtext," + "`friends` mediumtext," + "`townBlocks` mediumtext," + "PRIMARY KEY (`name`)" + ")";
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(resident_create);
-			TownyMessaging.sendDebugMsg("Table RESIDENTS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage());
-		}
-
-		/*
-		 * Update the table structure for older databases.
-		 */
-		String resident_update;
-
-		try {
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `town-ranks`  mediumtext";
-			Statement s = cntx.createStatement();
-			s.executeUpdate(resident_update);
-
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `nation-ranks`  mediumtext";
-			s = cntx.createStatement();
-			s.executeUpdate(resident_update);
-
-			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-		} catch (SQLException ee) {
-			if (ee.getErrorCode() != 1060)
-				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
-		}
-
-		String nation_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`capital` mediumtext NOT NULL," + "`assistants` mediumtext NOT NULL," + "`tag` mediumtext NOT NULL," + "`allies` mediumtext NOT NULL," + "`enemies` mediumtext NOT NULL," + "`taxes` float NOT NULL," + "`neutral` bool NOT NULL DEFAULT '0', " + "PRIMARY KEY (`name`)" + ")";
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(nation_create);
-			TownyMessaging.sendDebugMsg("Table NATIONS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
-		}
-
-		String townblock_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS (" + "`world` VARCHAR(32) NOT NULL," + "`x` bigint(20) NOT NULL," + "`z` bigint(20) NOT NULL," + "`permissions` mediumtext NOT NULL," + "`locked` bool NOT NULL DEFAULT '0'," + "`changed` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`world`,`x`,`z`)" + ")";
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(townblock_create);
-			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
-		}
-
-		/*
-		 * Update the table structure for older databases.
-		 */
-		String townblocks_update;
-
-		try {
-			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN `name`  mediumtext";
-			Statement s = cntx.createStatement();
-			s.executeUpdate(townblocks_update);
-
-			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
-		} catch (SQLException ee) {
-			if (ee.getErrorCode() != 1060)
-				TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
-			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
-		}
-
-		String world_create = "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS (" + "`name` VARCHAR(32) NOT NULL," + "`towns` mediumtext NOT NULL," + "`claimable` bool NOT NULL DEFAULT '0'," + "`pvp` bool NOT NULL DEFAULT '0'," + "`forcepvp` bool NOT NULL DEFAULT '0'," + "`forcetownmobs` bool NOT NULL DEFAULT '0'," + "`worldmobs` bool NOT NULL DEFAULT '0'," + "`firespread` bool NOT NULL DEFAULT '0'," + "`forcefirespread` bool NOT NULL DEFAULT '0'," + "`explosions` bool NOT NULL DEFAULT '0'," + "`forceexplosions` bool NOT NULL DEFAULT '0'," + "`endermanprotect` bool NOT NULL DEFAULT '0'," + "`disableplayertrample` bool NOT NULL DEFAULT '0'," + "`disablecreaturetrample` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'," + "`unclaimedZoneName` mediumtext NOT NULL," + "`unclaimedZoneIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementDeleteIds` mediumtext NOT NULL," + "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'," + "`plotManagementMayorDelete` mediumtext NOT NULL," + "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'," + "`plotManagementRevertSpeed` long NOT NULL," + "`plotManagementIgnoreIds` mediumtext NOT NULL," + "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'," + "`plotManagementWildRegenEntities` mediumtext NOT NULL," + "`plotManagementWildRegenSpeed` long NOT NULL," + "`usingTowny` bool NOT NULL DEFAULT '0'," + "PRIMARY KEY (`name`)" + ")";
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(world_create);
-			TownyMessaging.sendDebugMsg("Table WORLDS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table WORLDS : " + ee.getMessage());
-		}
-
-		TownyMessaging.sendDebugMsg("Checking done!");
+		SQL_Schema.initTables(cntx, db_name);
 	}
 
 	/**
@@ -259,31 +167,42 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		try {
 			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
+				
 				if (cntx != null && !cntx.isClosed()) {
+					
 					try {
+						
 						cntx.close();
+						
 					} catch (SQLException e) {
-						// We're disposing of an old stale connection just be
-						// nice to the GC
-						// as well as mysql, so ignore the error there's nothing
-						// we can do
-						// if it fails
+						/*
+						 *  We're disposing of an old stale connection just be nice to the GC
+						 *  as well as mysql, so ignore the error as there's nothing we can do
+						 *  if it fails
+						 */
 					}
 					cntx = null;
 				}
+				
 				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
+					
 					cntx = DriverManager.getConnection(this.dsn);
-				} else
+					
+				} else {
+					
 					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
+				}
 
 				if (cntx == null || cntx.isClosed())
 					return false;
 			}
 
 			return true;
+			
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
 		}
+		
 		return false;
 	}
 
@@ -297,191 +216,146 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
 
-		// Attempt to get a database connection.
-		
+		/*
+		 *  Attempt to get a database connection.
+		 */
 		if (!getContext())
 			return false;
 
-		String code;
+		String code = null;
 		PreparedStatement stmt = null;
+		List<Object> parameters = new ArrayList<Object>();
 		int rs = 0;
 
-		if (keys == null) {
+		try {
 
-			List<Object> parameters = new ArrayList<Object>();
+			if (keys == null) {
 
-			// Push all keys and values to a parameter list.
+				/*
+				 * No keys so this is an INSERT not an UPDATE.
+				 */
 
-			parameters.addAll(args.keySet());
-			parameters.addAll(args.values());
+				// Push all keys and values to a parameter list.
 
-			// Build the prepared statement string appropriate for
-			// the number of keys/values we are inserting.
+				parameters.addAll(args.keySet());
+				parameters.addAll(args.values());
 
-			code = "INSERT INTO " + tb_prefix + (tb_name.toUpperCase()) + " ";
-			String keycode = "(";
-			String valuecode = " VALUES (";
+				// Build the prepared statement string appropriate for
+				// the number of keys/values we are inserting.
 
-			for (int count = 0; count < args.size(); count++) {
+				code = "INSERT INTO " + tb_prefix + (tb_name.toUpperCase()) + " ";
+				String keycode = "(";
+				String valuecode = " VALUES (";
 
-				keycode += "`?`";
-				valuecode += "'?'";
+				for (int count = 0; count < args.size(); count++) {
 
-				if ((count < args.size())) {
-					keycode += ", ";
-					valuecode += ", ";
+					keycode += "`?`";
+					valuecode += "'?'";
+
+					if ((count < args.size())) {
+						keycode += ", ";
+						valuecode += ", ";
+					}
 				}
+
+				code += keycode;
+				code += valuecode;
+
+			} else {
+
+				/*
+				 * We have keys so this is a conditional UPDATE.
+				 */
+				
+				String[] aKeys = (String[]) args.keySet().toArray();
+
+				// Build the prepared statement string appropriate for
+				// the number of keys/values we are inserting.
+
+				code = "UPDATE " + tb_prefix + (tb_name.toUpperCase()) + " SET ";
+
+				for (int count = 0; count < args.size(); count++) {
+
+					code += "`?` = '?'";
+
+					// Push key and value for each entry.
+
+					parameters.add(aKeys[count]);
+					parameters.add(args.get(count));
+
+					if ((count < args.size())) {
+						code += ",";
+					}
+				}
+
+				code += " WHERE ";
+
+				for (int count = 0; count < keys.size(); count++) {
+
+					code += "`?` = '?'";
+
+					// Add extra values for the WHERE conditionals.
+
+					parameters.add(keys.get(count));
+					parameters.add(args.get(keys.get(count)));
+
+					if ((count < keys.size())) {
+						code += " AND ";
+					}
+				}
+
 			}
 
-			code += keycode;
-			code += valuecode;
+			// Populate the prepared statement parameters.
+
+			stmt = cntx.prepareStatement(code);
+
+			for (int count = 0; count < parameters.size(); count++) {
+
+				Object element = parameters.get(count);
+
+				if (element instanceof String) {
+
+					stmt.setString(count + 1, (String) element);
+
+				} else if (element instanceof Boolean) {
+
+					stmt.setBoolean(count + 1, (Boolean) element);
+
+				} else {
+
+					stmt.setObject(count + 1, element);
+
+				}
+
+			}
+
+			rs = stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			
+			TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
+			
+		} finally {
 
 			try {
 
-				// Populate the prepared statement parameters.
-				
-				stmt = cntx.prepareStatement(code);
-
-				for (int count = 0; count < parameters.size(); count++) {
-
-					Object element = parameters.get(count);
-
-					if (element instanceof String) {
-
-						stmt.setString(count + 1, (String) element);
-
-					} else if (element instanceof Boolean) {
-
-						stmt.setBoolean(count + 1, (Boolean) element);
-
-					} else {
-
-						stmt.setObject(count + 1, element);
-
-					}
-
+				if (stmt != null) {
+					stmt.close();
 				}
-
-				rs = stmt.executeUpdate();
 
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
-			} finally {
-
-				try {
-
-					if (stmt != null) {
-						stmt.close();
-					}
-
-				} catch (SQLException e) {
-					TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
-				}
-
+				TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
 			}
 
-			// Failed?
-			if (rs == 0)
-				return false;
-			
-			// Success!
-			return true;
-
-		} else {
-
-			List<Object> parameters = new ArrayList<Object>();
-			
-			// Push all keys and values to a parameter list.
-			
-			String[] aKeys = (String[]) args.keySet().toArray();
-
-			// Build the prepared statement string appropriate for
-			// the number of keys/values we are inserting.
-
-			code = "UPDATE " + tb_prefix + (tb_name.toUpperCase()) + " SET ";
-
-			for (int count = 0; count < args.size(); count++) {
-
-				code += "`?` = '?'";
-				
-				// Push key and value for each entry.
-				
-				parameters.add(aKeys[count]);
-				parameters.add(args.get(count));
-
-				if ((count < args.size())) {
-					code += ",";
-				}
-			}
-			
-			code += " WHERE ";
-			
-			for (int count = 0; count < keys.size(); count++) {
-
-				code += "`?` = '?'";
-				
-				// Add extra values for the WHERE conditionals.
-				
-				parameters.add(keys.get(count));
-				parameters.add(args.get(keys.get(count)));
-
-				if ((count < keys.size())) {
-					code += " AND ";
-				}
-			}
-			
-			try {
-
-				// Populate the prepared statement parameters.
-				
-				stmt = cntx.prepareStatement(code);
-
-				for (int count = 0; count < parameters.size(); count++) {
-
-					Object element = parameters.get(count);
-
-					if (element instanceof String) {
-
-						stmt.setString(count + 1, (String) element);
-
-					} else if (element instanceof Boolean) {
-
-						stmt.setBoolean(count + 1, (Boolean) element);
-
-					} else {
-
-						stmt.setObject(count + 1, element);
-
-					}
-
-				}
-
-				rs = stmt.executeUpdate();
-
-			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
-			} finally {
-
-				try {
-
-					if (stmt != null) {
-						stmt.close();
-					}
-
-				} catch (SQLException e) {
-					TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
-				}
-
-			}
-
-			// Failed?
-			if (rs == 0)
-				return false;
-			
-			// Success!
-			return true;
-			
 		}
+
+		// Failed?
+		if (rs == 0)
+			return false;
+
+		// Success!
+		return true;
 
 	}
 
