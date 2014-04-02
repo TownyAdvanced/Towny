@@ -1914,4 +1914,5 @@ v0.85.0.2:
 	- Add conformation on setting a plot name.
 	- Display _ characters in plot names as spaces.
 	- Add Resident names to auto completion.
-	
+v0.85.0.3:
+	- Reduce storage size of x and z townblock coordinate when usign SQL.

@@ -88,8 +88,8 @@ public class SQL_Schema {
 		
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
 				+ "`world` VARCHAR(32) NOT NULL,"
-				+ "`x` bigint(20) NOT NULL,"
-				+ "`z` bigint(20) NOT NULL,"
+				+ "`x` mediumint NOT NULL,"
+				+ "`z` mediumint NOT NULL,"
 				+ "`permissions` mediumtext NOT NULL,"
 				+ "`locked` bool NOT NULL DEFAULT '0',"
 				+ "`changed` bool NOT NULL DEFAULT '0',"
