@@ -1927,4 +1927,5 @@ v0.85.0.5:
 	- Revert plugin.yml change to fix CI build version.
 v0.85.0.6:
 	- Only save plot permissions if they have been altered.
-	
+v0.85.0.7:
+	- Finally fix build version on CI.

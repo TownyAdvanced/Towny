@@ -52,13 +52,13 @@
 
 	<target name="jar" depends="compile">
 		<!-- Update the version in the plugin.yml -->
-		<replace file="./src/plugin.yml" token="{BUILD_VER}" value="${env.TOWNY_BUILD_VER}"/>
+		<copy file="./src/plugin.yml" tofile="${build}/plugin.yml" overwrite="true" />
+		<replace file="${build}/plugin.yml" token="{BUILD_VER}" value="${env.TOWNY_BUILD_VER}"/>
 		<!-- Build the jar file -->
 		<jar basedir="${build}" destfile="${env.LIB}/Towny.jar">
 			<fileset dir="./src" includes="ChangeLog.txt" />
 			<fileset dir="./src" includes="english.yml" />
 			<fileset dir="./src" includes="german.yml" />
-			<fileset dir="./src" includes="plugin.yml" />
 			<fileset dir="./src" includes="spanish.yml" />
 			<fileset dir="./src" includes="townyperms.yml" />
 			<fileset dir="./src" includes="ToDo.txt" />
