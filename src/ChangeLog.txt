@@ -1925,3 +1925,6 @@ v0.85.0.4:
 	- Townblock data now contains all relevant information. Removes duplicate entries in resident and town data and speeds up loading/saving.
 v0.85.0.5:
 	- Revert plugin.yml change to fix CI build version.
+v0.85.0.6:
+	- Only save plot permissions if they have been altered.
+	

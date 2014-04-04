@@ -1228,7 +1228,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			path = getTownBlockFilename(townBlock);
-			boolean set = false;
+			//boolean set = false;
 
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
@@ -1283,7 +1283,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null)
 						try {
 							townBlock.setPermissions(line.trim());
-							set = true;
+							//set = true;
 						} catch (Exception e) {
 						}
 
@@ -1305,18 +1305,23 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path);
 					return false;
 				}
-				if (!set) {
-					// no permissions found so set in relation to it's owners perms.
-					try {
-						if (townBlock.hasResident()) {
-							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-						} else {
-							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-						}
-					} catch (NotRegisteredException e) {
-						// Will never reach here
-					}
-				}
+				
+				/*
+				 * No longer required due to the way we report perms now.
+				 */
+				
+//				if (!set) {
+//					// no permissions found so set in relation to it's owners perms.
+//					try {
+//						if (townBlock.hasResident()) {
+//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+//						} else {
+//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+//						}
+//					} catch (NotRegisteredException e) {
+//						// Will never reach here
+//					}
+//				}
 			}
 		}
 
@@ -1927,8 +1932,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			// outpost
 			fout.write("outpost=" + Boolean.toString(townBlock.isOutpost()) + newLine);
 
-			// permissions
-			fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
+			/*
+			 * Only include a permissions line IF the plot perms are custom.
+			 */
+			if (townBlock.isChanged()) {
+				// permissions
+				fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
+			}
 			// Have permissions been manually changed
 			fout.write("changed=" + Boolean.toString(townBlock.isChanged()) + newLine);
 

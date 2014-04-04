@@ -1149,7 +1149,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 			return false;
 		ResultSet rs;
 		for (TownBlock townBlock : getAllTownBlocks()) {
-			boolean set = false;
+			//boolean set = false;
+			
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
@@ -1202,8 +1203,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 					line = rs.getString("permissions");
 					if (line != null)
 						try {
-							townBlock.setPermissions(line.trim());
-							set = true;
+							if (!line.isEmpty())
+								townBlock.setPermissions(line.trim());
+							//set = true;
 						} catch (Exception e) {
 						}
 
@@ -1223,19 +1225,23 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				}
 				
-				if (!set) {
-					// no permissions found so set in relation to it's
-					// owners perms.
-					try {
-						if (townBlock.hasResident()) {
-							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-						} else {
-							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-						}
-					} catch (NotRegisteredException e) {
-						// Will never reach here
-					}
-				}
+				/*
+				 * No longer required due to the way plots report perms now.
+				 */
+				
+//				if (!set) {
+//					// no permissions found so set in relation to it's
+//					// owners perms.
+//					try {
+//						if (townBlock.hasResident()) {
+//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+//						} else {
+//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+//						}
+//					} catch (NotRegisteredException e) {
+//						// Will never reach here
+//					}
+//				}
 
 				s.close();
 
@@ -1482,7 +1488,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
-			tb_hm.put("permissions", townBlock.getPermissions().toString());
+			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString() : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
 			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));

@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: {BUILD_VER}
+version: ${env.TOWNY_BUILD_VER}
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
