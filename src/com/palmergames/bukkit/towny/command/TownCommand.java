@@ -478,13 +478,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 			}
 
-			// Propagate perms to all unchanged, town owned, townblocks
-			for (TownBlock townBlock : town.getTownBlocks()) {
-				if (!townBlock.hasResident() && !townBlock.isChanged()) {
-					townBlock.setType(townBlock.getType());
-					TownyUniverse.getDataSource().saveTownBlock(townBlock);
-				}
-			}
+			/*
+			 * We no longer need to propagate perms as the townblock only returns custom perms or it's owners.
+			 */
+			
+			//Propagate perms to all unchanged, town owned, townblocks
+			
+//			for (TownBlock townBlock : town.getTownBlocks()) {
+//				if (!townBlock.hasResident() && !townBlock.isChanged()) {
+//					townBlock.setType(townBlock.getType());
+//					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+//				}
+//			}
 
 			TownyUniverse.getDataSource().saveTown(town);
 		}
@@ -1112,14 +1117,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 			if (plotChunk != null) {
-				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so
-															// stop
-															// regeneration.
+				
+				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
+				
 			} else {
-				plotChunk = new PlotBlockData(townBlock); // Not regenerating so
-															// create a new
-															// snapshot.
+				
+				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
 				plotChunk.initialize();
+				
 			}
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
@@ -1138,7 +1143,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveTownBlock(townBlock);
 		TownyUniverse.getDataSource().saveTown(town);
 		TownyUniverse.getDataSource().saveWorld(world);
+		
 		TownyUniverse.getDataSource().saveTownList();
+		TownyUniverse.getDataSource().saveTownBlockList();
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -1841,16 +1848,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} catch (Exception e) {
 				}
 
+			/*
+			 * No longer needed as townBlocks now only return custom perms if altered.
+			 */
+			
 			// Propagate perms to all unchanged, town owned, townblocks
-			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
-					if (!townBlock.isChanged()) {
-						townBlock.setType(townBlock.getType());
-						TownyUniverse.getDataSource().deleteTownBlock(townBlock);
-					}
-				}
-			}
-			// String perms = perm.toString();
+//			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+//				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
+//					if (!townBlock.isChanged()) {
+//						townBlock.setType(townBlock.getType());
+//						TownyUniverse.getDataSource().deleteTownBlock(townBlock);
+//					}
+//				}
+//			}
+			
 			// change perm name to friend is this is a resident setting
 			// if (friend)
 			// perms = perms.replaceAll("resident", "friend");

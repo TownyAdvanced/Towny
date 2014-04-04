@@ -1916,3 +1916,11 @@ v0.85.0.2:
 	- Add Resident names to auto completion.
 v0.85.0.3:
 	- Reduce storage size of x and z townblock coordinate when usign SQL.
+v0.85.0.4:
+	- Config.yml and World defaults updated (auto converts the first time you startup)...
+		Update PlotManagementDeleteIds to use Material Names instead of id numbers.
+		Update unclaimedZoneIgnoreIds to use Material Names instead of id numbers.
+		Update plotManagementIgnoreIds to use Material Names instead of id numbers.
+	- Townblocks no longer need to be re-saved unless direct plot permissions change.
+	- Townblock data now contains all relevant information. Removes duplicate entries in resident and town data and speeds up loading/saving.
+	

@@ -257,6 +257,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		saveWorld(world);
 		deleteTownBlock(townBlock);
+		
+		saveTownBlockList();
 
 		if (resident != null)
 			saveResident(resident);
@@ -647,6 +649,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			saveResident(resident);
+		}
+		
+		// Update all townBlocks with the new name
+		
+		for (TownBlock townBlock: town.getTownBlocks()) {
+			townBlock.setTown(town);
+			saveTownBlock(townBlock);
 		}
 
 		saveTown(town);

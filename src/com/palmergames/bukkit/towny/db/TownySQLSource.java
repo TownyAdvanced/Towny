@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -675,6 +676,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 
 				town.setPurchasedBlocks(rs.getInt("purchased"));
+				
 				line = rs.getString("townBlocks");
 				if (line != null)
 					utilLoadTownBlocks(line, town, null);
@@ -994,14 +996,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 				line = rs.getString("unclaimedZoneIgnoreIds");
 				if (line != null)
 					try {
-						List<Integer> nums = new ArrayList<Integer>();
+						List<String> mats = new ArrayList<String>();
 						for (String split : line.split(","))
 							if (!split.isEmpty())
 								try {
-									nums.add(Integer.parseInt(split));
+									int id = Integer.parseInt(split);
+									
+									mats.add(Material.getMaterial(id).name());
+									
 								} catch (NumberFormatException e) {
+									mats.add(split);
 								}
-						world.setUnclaimedZoneIgnore(nums);
+						world.setUnclaimedZoneIgnore(mats);
 					} catch (Exception e) {
 					}
 
@@ -1015,14 +1021,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 				line = rs.getString("plotManagementDeleteIds");
 				if (line != null)
 					try {
-						List<Integer> nums = new ArrayList<Integer>();
+						List<String> mats = new ArrayList<String>();
 						for (String split : line.split(","))
 							if (!split.isEmpty())
 								try {
-									nums.add(Integer.parseInt(split));
+									int id = Integer.parseInt(split);
+									
+									mats.add(Material.getMaterial(id).name());
+									
 								} catch (NumberFormatException e) {
+									mats.add(split);
 								}
-						world.setPlotManagementDeleteIds(nums);
+						world.setPlotManagementDeleteIds(mats);
 					} catch (Exception e) {
 					}
 
@@ -1064,14 +1074,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 				line = rs.getString("plotManagementIgnoreIds");
 				if (line != null)
 					try {
-						List<Integer> nums = new ArrayList<Integer>();
+						List<String> mats = new ArrayList<String>();
 						for (String split : line.split(","))
 							if (!split.isEmpty())
 								try {
-									nums.add(Integer.parseInt(split));
+									int id = Integer.parseInt(split);
+									
+									mats.add(Material.getMaterial(id).name());
+									
 								} catch (NumberFormatException e) {
+									mats.add(split);
 								}
-						world.setPlotManagementIgnoreIds(nums);
+						world.setPlotManagementIgnoreIds(mats);
 					} catch (Exception e) {
 					}
 
@@ -1147,6 +1161,43 @@ public class TownySQLSource extends TownyFlatFileSource {
 							townBlock.setName(line.trim());
 						} catch (Exception e) {
 						}
+					
+					line = rs.getString("price");
+					if (line != null)
+						try {
+							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("town");
+					if (line != null)
+						try {
+							Town town = getTown(line.trim());
+							townBlock.setTown(town);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("resident");
+					if (line != null)
+						try {
+							Resident res = getResident(line.trim());
+							townBlock.setResident(res);
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("type");
+					if (line != null)
+						try {
+							townBlock.setType(Integer.parseInt(line));
+						} catch (Exception e) {
+						}
+					
+					line = rs.getString("outpost");
+					if (line != null)
+						try {
+							townBlock.setOutpost(Boolean.parseBoolean(line));
+						} catch (Exception e) {
+						}
 
 					line = rs.getString("permissions");
 					if (line != null)
@@ -1170,18 +1221,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 						} catch (Exception e) {
 						}
 
-					if (!set) {
-						// no permissions found so set in relation to it's
-						// owners perms.
-						try {
-							if (townBlock.hasResident()) {
-								townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-							} else {
-								townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-							}
-						} catch (NotRegisteredException e) {
-							// Will never reach here
+				}
+				
+				if (!set) {
+					// no permissions found so set in relation to it's
+					// owners perms.
+					try {
+						if (townBlock.hasResident()) {
+							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+						} else {
+							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
 						}
+					} catch (NotRegisteredException e) {
+						// Will never reach here
 					}
 				}
 
@@ -1219,10 +1271,12 @@ public class TownySQLSource extends TownyFlatFileSource {
 			for (Resident friend : resident.getFriends())
 				fstr += friend.getName() + ",";
 			res_hm.put("friends", fstr);
-			res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
+			//res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
 			res_hm.put("protectionStatus", resident.getPermissions().toString());
+			
 			UpdateDB("RESIDENTS", res_hm, Arrays.asList("name"));
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
 		}
@@ -1261,7 +1315,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("public", town.isPublic());
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 
-			twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
+			//twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
 			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()) : "");
 			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()) : "");
 			// Outpost Spawns
@@ -1275,6 +1329,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
 			return true;
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
 			e.printStackTrace();
@@ -1309,7 +1364,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("enemies", fstr);
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("neutral", nation.isNeutral());
+			
 			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
 			e.printStackTrace();
@@ -1504,11 +1561,31 @@ public class TownySQLSource extends TownyFlatFileSource {
 			plugin.setupLogger();
 		}
 	}
-
+	
+	@Override
+	public boolean cleanup(){
+		
+		/*
+		 *  Attempt to get a database connection.
+		 */
+		if (!getContext())
+			return false;
+		
+		SQL_Schema.cleanup(cntx, db_name);
+		
+		return true;
+	}
+	
 	/*
 	 * Save keys
 	 */
 
+	@Override
+	public boolean saveTownBlockList() {
+
+		return true;
+	}
+	
 	@Override
 	public boolean saveResidentList() {
 

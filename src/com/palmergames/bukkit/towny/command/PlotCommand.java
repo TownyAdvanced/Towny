@@ -310,10 +310,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 						setPlotType(resident, worldCoord, split[0]);
 						
-						TownBlock townBlock = worldCoord.getTownBlock();
-						townBlock.setChanged(true);
-						TownyUniverse.getDataSource().saveTownBlock(townBlock);
-						
 						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
 
 					} else {
@@ -349,7 +345,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						for (String material : TownyUniverse.getDataSource().getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
-								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material).getId());
+								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
 								player.sendMessage(String.format(TownySettings.getLangString("msg_clear_plot_material"), material));
 							} else
 								throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), material));
@@ -396,6 +392,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 													// exception
 
 				townBlock.setType(type);
+				
+				townBlock.setChanged(true);
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -430,9 +429,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 
-				// Save this townblocks town so the for sale status to
-				// remembered.
-				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
+				// Save this townblock so the for sale status is remembered.
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -494,7 +492,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				townBlock.setChanged(true);
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());

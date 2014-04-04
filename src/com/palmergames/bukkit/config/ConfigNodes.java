@@ -256,7 +256,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"26,50,55,63,64,68,70,71,72,75,76,93,94",
+			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -294,7 +294,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"14,21,22,41,42,48,50,52,56,57,63,68,89",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN_POST,WALL_SIGN,GLOWSTONE",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
@@ -662,7 +662,7 @@ public enum ConfigNodes {
 	UNCLAIMED_ZONE_ITEM_USE("unclaimed.unclaimed_zone_item_use", "false"),
 	UNCLAIMED_ZONE_IGNORE(
 			"unclaimed.unclaimed_zone_ignore",
-			"6,14,15,16,17,18,21,31,37,38,39,40,50,56,65,66,73,74,81,82,83,86,89"),
+			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE"),
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch", "false"),
 	//UNCLAIMED_ZONE_NAME("unclaimed.unclaimed_zone_name",""),
 	//UNCLAIMED_PLOT_NAME("unclaimed.unclaimed_plot_name",""),

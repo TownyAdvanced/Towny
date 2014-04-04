@@ -90,12 +90,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadRegenList() && loadSnapshotList() && loadTownBlocks();
+		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTownBlocks() && loadTowns() && loadResidents() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveNationList() && saveTownList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -107,6 +107,8 @@ public abstract class TownyDataSource {
 
 		return saveRegenList() && saveSnapshotList();
 	}
+	
+	abstract public boolean loadTownBlockList();
 
 	abstract public boolean loadResidentList();
 
@@ -130,6 +132,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorld(TownyWorld world);
 
+	abstract public boolean saveTownBlockList();
+	
 	abstract public boolean saveResidentList();
 
 	abstract public boolean saveTownList();
@@ -199,6 +203,12 @@ public abstract class TownyDataSource {
 	/*
 	 * Load all of category
 	 */
+	
+	public boolean cleanup() {
+		
+		return true;
+		
+	}
 
 	public boolean loadResidents() {
 

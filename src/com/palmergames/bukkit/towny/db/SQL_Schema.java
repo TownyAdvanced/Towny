@@ -13,92 +13,11 @@ import com.palmergames.bukkit.towny.TownySettings;
  *
  */
 public class SQL_Schema {
-	
+
 	private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
-	
-	private static String getTOWNS() {
-		
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
-				+ "`name` VARCHAR(32) NOT NULL,"
-				+ "`residents` mediumtext,"
-				+ "`mayor` mediumtext,"
-				+ "`nation` mediumtext NOT NULL,"
-				+ "`assistants` text DEFAULT NULL,"
-				+ "`townBoard` mediumtext DEFAULT NULL,"
-				+ "`tag` mediumtext DEFAULT NULL,"
-				+ "`protectionStatus` mediumtext DEFAULT NULL,"
-				+ "`bonus` int(11) DEFAULT 0,"
-				+ "`purchased` int(11)  DEFAULT 0,"
-				+ "`taxpercent` bool NOT NULL DEFAULT '0',"
-				+ "`taxes` float DEFAULT 0,"
-				+ "`hasUpkeep` bool NOT NULL DEFAULT '0',"
-				+ "`plotPrice` float DEFAULT NULL,"
-				+ "`plotTax` float DEFAULT NULL,"
-				+ "`commercialPlotPrice` float DEFAULT NULL,"
-				+ "`commercialPlotTax` float NOT NULL,"
-				+ "`embassyPlotPrice` float NOT NULL,"
-				+ "`embassyPlotTax` float NOT NULL,"
-				+ "`open` bool NOT NULL DEFAULT '0',"
-				+ "`public` bool NOT NULL DEFAULT '0',"
-				+ "`admindisabledpvp` bool NOT NULL DEFAULT '0',"
-				+ "`homeblock` mediumtext NOT NULL,"
-				+ "`townBlocks` mediumtext NOT NULL,"
-				+ "`spawn` mediumtext NOT NULL,"
-				+ "`outpostSpawns` mediumtext DEFAULT NULL,"
-				+ "PRIMARY KEY (`name`)"
-				+ ")";
-	}
-	
-	private static String getRESIDENTS() {
-		
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
-				+ " `name` VARCHAR(16) NOT NULL,"
-				+ "`town` mediumtext,"
-				+ "`town-ranks` mediumtext,"
-				+ "`nation-ranks` mediumtext,"
-				+ "`lastOnline` BIGINT NOT NULL,"
-				+ "`registered` BIGINT NOT NULL,"
-				+ "`isNPC` bool NOT NULL DEFAULT '0',"
-				+ "`title` mediumtext,"
-				+ "`surname` mediumtext,"
-				+ "`protectionStatus` mediumtext,"
-				+ "`friends` mediumtext,"
-				+ "`townBlocks` mediumtext,"
-				+ "PRIMARY KEY (`name`)"
-				+ ")";
-	}
-	
-	private static String getNATIONS() {
-		
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS ("
-				+ "`name` VARCHAR(32) NOT NULL,"
-				+ "`towns` mediumtext NOT NULL,"
-				+ "`capital` mediumtext NOT NULL,"
-				+ "`assistants` mediumtext NOT NULL,"
-				+ "`tag` mediumtext NOT NULL,"
-				+ "`allies` mediumtext NOT NULL,"
-				+ "`enemies` mediumtext NOT NULL,"
-				+ "`taxes` float NOT NULL,"
-				+ "`neutral` bool NOT NULL DEFAULT '0', "
-				+ "PRIMARY KEY (`name`)"
-				+ ")";
-	}
-	
-	private static String getTOWNBLOCKS() {
-		
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
-				+ "`world` VARCHAR(32) NOT NULL,"
-				+ "`x` mediumint NOT NULL,"
-				+ "`z` mediumint NOT NULL,"
-				+ "`permissions` mediumtext NOT NULL,"
-				+ "`locked` bool NOT NULL DEFAULT '0',"
-				+ "`changed` bool NOT NULL DEFAULT '0',"
-				+ "PRIMARY KEY (`world`,`x`,`z`)"
-				+ ")";
-	}
-	
+
 	private static String getWORLDS() {
-		
+
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS ("
 				+ "`name` VARCHAR(32) NOT NULL,"
 				+ "`towns` mediumtext NOT NULL,"
@@ -134,7 +53,93 @@ public class SQL_Schema {
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}
-	
+
+	private static String getNATIONS() {
+
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS ("
+				+ "`name` VARCHAR(32) NOT NULL,"
+				+ "`towns` mediumtext NOT NULL,"
+				+ "`capital` mediumtext NOT NULL,"
+				+ "`assistants` mediumtext NOT NULL,"
+				+ "`tag` mediumtext NOT NULL,"
+				+ "`allies` mediumtext NOT NULL,"
+				+ "`enemies` mediumtext NOT NULL,"
+				+ "`taxes` float NOT NULL,"
+				+ "`neutral` bool NOT NULL DEFAULT '0', "
+				+ "PRIMARY KEY (`name`)"
+				+ ")";
+	}
+
+	private static String getTOWNS() {
+
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
+				+ "`name` VARCHAR(32) NOT NULL,"
+				+ "`residents` mediumtext,"
+				+ "`mayor` mediumtext,"
+				+ "`nation` mediumtext NOT NULL,"
+				+ "`assistants` text DEFAULT NULL,"
+				+ "`townBoard` mediumtext DEFAULT NULL,"
+				+ "`tag` mediumtext DEFAULT NULL,"
+				+ "`protectionStatus` mediumtext DEFAULT NULL,"
+				+ "`bonus` int(11) DEFAULT 0,"
+				+ "`purchased` int(11)  DEFAULT 0,"
+				+ "`taxpercent` bool NOT NULL DEFAULT '0',"
+				+ "`taxes` float DEFAULT 0,"
+				+ "`hasUpkeep` bool NOT NULL DEFAULT '0',"
+				+ "`plotPrice` float DEFAULT NULL,"
+				+ "`plotTax` float DEFAULT NULL,"
+				+ "`commercialPlotPrice` float DEFAULT NULL,"
+				+ "`commercialPlotTax` float NOT NULL,"
+				+ "`embassyPlotPrice` float NOT NULL,"
+				+ "`embassyPlotTax` float NOT NULL,"
+				+ "`open` bool NOT NULL DEFAULT '0',"
+				+ "`public` bool NOT NULL DEFAULT '0',"
+				+ "`admindisabledpvp` bool NOT NULL DEFAULT '0',"
+				+ "`homeblock` mediumtext NOT NULL,"
+				//+ "`townBlocks` mediumtext NOT NULL,"
+				+ "`spawn` mediumtext NOT NULL,"
+				+ "`outpostSpawns` mediumtext DEFAULT NULL,"
+				+ "PRIMARY KEY (`name`)"
+				+ ")";
+	}
+
+	private static String getRESIDENTS() {
+
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
+				+ " `name` VARCHAR(16) NOT NULL,"
+				+ "`town` mediumtext,"
+				+ "`town-ranks` mediumtext,"
+				+ "`nation-ranks` mediumtext,"
+				+ "`lastOnline` BIGINT NOT NULL,"
+				+ "`registered` BIGINT NOT NULL,"
+				+ "`isNPC` bool NOT NULL DEFAULT '0',"
+				+ "`title` mediumtext,"
+				+ "`surname` mediumtext,"
+				+ "`protectionStatus` mediumtext,"
+				+ "`friends` mediumtext,"
+				//+ "`townBlocks` mediumtext,"
+				+ "PRIMARY KEY (`name`)"
+				+ ")";
+	}
+
+	private static String getTOWNBLOCKS() {
+
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("
+				+ "`world` VARCHAR(32) NOT NULL,"
+				+ "`x` mediumint NOT NULL,"
+				+ "`z` mediumint NOT NULL,"
+				+ "`price` float DEFAULT 0,"
+				+ "`town` mediumtext NOT NULL,"
+				+ "`resident` mediumtext,"
+				+ "`type` int NOT NULL DEFAULT '0',"
+				+ "`outpost` bool NOT NULL DEFAULT '0',"
+				+ "`permissions` mediumtext NOT NULL,"
+				+ "`locked` bool NOT NULL DEFAULT '0',"
+				+ "`changed` bool NOT NULL DEFAULT '0',"
+				+ "PRIMARY KEY (`world`,`x`,`z`)"
+				+ ")";
+	}
+
 	/**
 	 * Create and update database schema.
 	 * 
@@ -142,149 +147,222 @@ public class SQL_Schema {
 	 * @param db_name the name of a database
 	 */
 	public static void initTables(Connection cntx, String db_name) {
+
+		/*
+		 *  Fetch WORLDS Table schema.
+		 */
+		String world_create = SQL_Schema.getWORLDS();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(world_create);
+			TownyMessaging.sendDebugMsg("Table WORLDS is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table WORLDS : " + ee.getMessage());
+
+		}
+		
+		/*
+		 *  Fetch NATIONS Table schema.
+		 */
+		String nation_create = SQL_Schema.getNATIONS();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(nation_create);
+			TownyMessaging.sendDebugMsg("Table NATIONS is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
+
+		}
 		
 		/*
 		 *  Fetch TOWNS Table schema.
 		 */
 		String town_create = SQL_Schema.getTOWNS();
-		
+
 		try {
-			
+
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_create);
-			
+
 			TownyMessaging.sendDebugMsg("Table TOWNS is ok!");
-			
+
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage());
-		}
-
-		/*
-		 * Update the table structure for older databases.
-		 */
-		String town_update;
-
-		try {
-			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN `admindisabledpvp`  bool";
-			Statement s = cntx.createStatement();
-			s.executeUpdate(town_update);
-
-			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
-			
-		} catch (SQLException ee) {
-			
-			if (ee.getErrorCode() != 1060)
-				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-			
 		}
 
 		/*
 		 *  Fetch RESIDENTS Table schema.
 		 */
 		String resident_create = SQL_Schema.getRESIDENTS();
-		
+
 		try {
-			
+
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_create);
 			TownyMessaging.sendDebugMsg("Table RESIDENTS is ok!");
-			
+
 		} catch (SQLException ee) {
-			
+
 			TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage());
-			
+
 		}
 
 		/*
-		 * Update the table structure for older databases.
+		 *  Fetch TOWNBLOCKS Table schema.
+		 */
+		String townblock_create = SQL_Schema.getTOWNBLOCKS();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(townblock_create);
+			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
+
+		}
+		
+		
+		
+		/*
+		 * Update the table structures for older databases.
+		 * 
+		 * Update TOWNS.
+		 */
+		String town_update;
+
+		try {
+			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN "
+						+ "`admindisabledpvp` bool";
+			
+			Statement s = cntx.createStatement();
+			s.executeUpdate(town_update);
+
+			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
+
+		} catch (SQLException ee) {
+
+			if (ee.getErrorCode() != 1060)
+				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
+
+		}
+		
+		/*
+		 * Update RESIDENTS.
 		 */
 		String resident_update;
 
 		try {
-			
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `town-ranks`  mediumtext";
-			Statement s = cntx.createStatement();
-			s.executeUpdate(resident_update);
 
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN `nation-ranks`  mediumtext";
-			s = cntx.createStatement();
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN "
+						+ "`town-ranks` mediumtext,"
+						+ "`nation-ranks` mediumtext";
+			
+			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
 
 			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-			
+
 		} catch (SQLException ee) {
-			
+
 			if (ee.getErrorCode() != 1060)
 				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-			
+
 		}
 
 		/*
-		 *  Fetch NATIONS Table schema.
-		 */
-		String nation_create = SQL_Schema.getNATIONS();
-		
-		try {
-			
-			Statement s = cntx.createStatement();
-			s.executeUpdate(nation_create);
-			TownyMessaging.sendDebugMsg("Table NATIONS is ok!");
-			
-		} catch (SQLException ee) {
-			
-			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
-			
-		}
-
-		String townblock_create = SQL_Schema.getTOWNBLOCKS();
-		
-		try {
-			
-			Statement s = cntx.createStatement();
-			s.executeUpdate(townblock_create);
-			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is ok!");
-			
-		} catch (SQLException ee) {
-			
-			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
-			
-		}
-
-		/*
-		 * Update the table structure for older databases.
+		 * TOWNBLOCKS.
 		 */
 		String townblocks_update;
 
 		try {
-			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN `name`  mediumtext";
+			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN "
+					+ "`name` mediumtext,"
+					+ "`price` float DEFAULT 0,"
+					+ "`town` mediumtext NOT NULL,"
+					+ "`resident` mediumtext,"
+					+ "`type` int NOT NULL DEFAULT '0',"
+					+ "`outpost` bool NOT NULL DEFAULT '0'";
+			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(townblocks_update);
 
 			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
+			
 		} catch (SQLException ee) {
+			
 			if (ee.getErrorCode() != 1060)
 				TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
-			// TownyMessaging.sendErrorMsg("Code: " + ee.getErrorCode());
-		}
 
-		/*
-		 *  Fetch WORLDS Table schema.
-		 */
-		String world_create = SQL_Schema.getWORLDS();
-		
-		try {
-			
-			Statement s = cntx.createStatement();
-			s.executeUpdate(world_create);
-			TownyMessaging.sendDebugMsg("Table WORLDS is ok!");
-			
-		} catch (SQLException ee) {
-			
-			TownyMessaging.sendErrorMsg("Error Creating table WORLDS : " + ee.getMessage());
-			
 		}
 
 		TownyMessaging.sendDebugMsg("Checking done!");
+	}
+	
+	/**
+	 * Call after loading to remove any old database elements we no longer need.
+	 * 
+	 * @param cntx
+	 * @param db_name
+	 */
+	public static void cleanup(Connection cntx, String db_name) {
+		
+		/*
+		 * Update RESIDENTS.
+		 */
+		String resident_update;
+
+		try {
+
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` DROP COLUMN "
+						+ "`townBlocks`";
+			
+			Statement s = cntx.createStatement();
+			s.executeUpdate(resident_update);
+
+			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
+
+		} catch (SQLException ee) {
+
+			if (ee.getErrorCode() != 1060)
+				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+
+		}
+		
+		/*
+		 * Update RESIDENTS.
+		 */
+		String towns_update;
+
+		try {
+
+			towns_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` DROP COLUMN "
+						+ "`townBlocks`";
+			
+			Statement s = cntx.createStatement();
+			s.executeUpdate(towns_update);
+
+			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
+
+		} catch (SQLException ee) {
+
+			if (ee.getErrorCode() != 1060)
+				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+
+		}
+		
+		
+		
 	}
 
 }

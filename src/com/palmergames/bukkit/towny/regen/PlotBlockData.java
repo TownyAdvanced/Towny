@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.regen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
@@ -127,7 +128,7 @@ public class PlotBlockData {
 			// If this block isn't correct, replace
 			// and return as done.
 			if ((blockId != storedData.getTypeId())) {
-				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(storedData.getTypeId())) {
+				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(Material.getMaterial(storedData.getTypeId()).name())) {
 
 					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
 

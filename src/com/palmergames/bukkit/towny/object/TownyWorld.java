@@ -25,10 +25,10 @@ public class TownyWorld extends TownyObject {
 			isUsingPlotManagementRevert = true,
 			isUsingPlotManagementWildRevert = true;
 	private Long plotManagementRevertSpeed, plotManagementWildRevertDelay;
-	private List<Integer> unclaimedZoneIgnoreIds = null;
-	private List<Integer> plotManagementDeleteIds = null;
+	private List<String> unclaimedZoneIgnoreIds = null;
+	private List<String> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;
-	private List<Integer> plotManagementIgnoreIds = null;
+	private List<String> plotManagementIgnoreIds = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
@@ -363,7 +363,7 @@ public class TownyWorld extends TownyObject {
 		return isUsingPlotManagementRevert;
 	}
 
-	public List<Integer> getPlotManagementDeleteIds() {
+	public List<String> getPlotManagementDeleteIds() {
 
 		if (plotManagementDeleteIds == null)
 			return TownySettings.getPlotManagementDeleteIds();
@@ -371,12 +371,12 @@ public class TownyWorld extends TownyObject {
 			return plotManagementDeleteIds;
 	}
 
-	public boolean isPlotManagementDeleteIds(int id) {
+	public boolean isPlotManagementDeleteIds(String id) {
 
 		return getPlotManagementDeleteIds().contains(id);
 	}
 
-	public void setPlotManagementDeleteIds(List<Integer> plotManagementDeleteIds) {
+	public void setPlotManagementDeleteIds(List<String> plotManagementDeleteIds) {
 
 		this.plotManagementDeleteIds = plotManagementDeleteIds;
 	}
@@ -399,7 +399,7 @@ public class TownyWorld extends TownyObject {
 		this.plotManagementMayorDelete = plotManagementMayorDelete;
 	}
 
-	public List<Integer> getPlotManagementIgnoreIds() {
+	public List<String> getPlotManagementIgnoreIds() {
 
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
@@ -407,12 +407,12 @@ public class TownyWorld extends TownyObject {
 			return plotManagementIgnoreIds;
 	}
 
-	public boolean isPlotManagementIgnoreIds(int id) {
+	public boolean isPlotManagementIgnoreIds(String id) {
 
 		return getPlotManagementIgnoreIds().contains(id);
 	}
 
-	public void setPlotManagementIgnoreIds(List<Integer> plotManagementIgnoreIds) {
+	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
 
 		this.plotManagementIgnoreIds = plotManagementIgnoreIds;
 	}
@@ -495,7 +495,7 @@ public class TownyWorld extends TownyObject {
 
 	}
 
-	public List<Integer> getUnclaimedZoneIgnoreIds() {
+	public List<String> getUnclaimedZoneIgnoreIds() {
 
 		if (unclaimedZoneIgnoreIds == null)
 			return TownySettings.getUnclaimedZoneIgnoreIds();
@@ -508,7 +508,7 @@ public class TownyWorld extends TownyObject {
 		return getUnclaimedZoneIgnoreIds().contains(id);
 	}
 
-	public void setUnclaimedZoneIgnore(List<Integer> unclaimedZoneIgnoreIds) {
+	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
 		this.unclaimedZoneIgnoreIds = unclaimedZoneIgnoreIds;
 	}

@@ -128,7 +128,23 @@ public class TownBlock {
 
 	public TownyPermission getPermissions() {
 
-		return permissions;
+		/*
+		 * If we have different permissions return them for this townblock
+		 * else return our owners perms.
+		 */
+		if (this.isChanged) {
+			
+			return permissions;
+			
+		} else {
+			
+			if (this.hasResident()) {
+				return this.resident.getPermissions();
+			}
+			
+			return this.town.getPermissions();
+			
+		}
 	}
 
 	/**

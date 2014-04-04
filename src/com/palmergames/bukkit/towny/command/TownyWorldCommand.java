@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -423,24 +424,22 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length < 2)
 					if (player != null)
-						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildignore 11,25,45,67");
+						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE");
 					else
-						sender.sendMessage("Eg: /townyworld set wildignore 11,25,45,67 <world>");
+						sender.sendMessage("Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
 				else
 					try {
-						List<Integer> nums = new ArrayList<Integer>();
+						List<String> mats = new ArrayList<String>();
 						for (String s : StringMgmt.remFirstArg(split))
-							try {
-								nums.add(Integer.parseInt(s.trim()));
-							} catch (NumberFormatException e) {
-							}
-						Globalworld.setUnclaimedZoneIgnore(nums);
+							mats.add(Material.matchMaterial(s.trim().toUpperCase()).name());
+						Globalworld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
 						if (player != null)
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreIds()));
 						else
-							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Arrays.toString(nums.toArray(new Integer[0]))));
+							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreIds()));
+						
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 					}

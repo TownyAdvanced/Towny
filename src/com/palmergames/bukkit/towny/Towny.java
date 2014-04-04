@@ -385,6 +385,9 @@ public class Towny extends JavaPlugin {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}
 		TownySettings.setLastRunVersion(getVersion());
+		
+		TownyUniverse.getDataSource().saveAll();
+		TownyUniverse.getDataSource().cleanup();
 	}
 
 	/**

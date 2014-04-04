@@ -1173,9 +1173,9 @@ public class TownySettings {
 		return getIntArr(ConfigNodes.PROT_SWITCH_ID);
 	}
 
-	public static List<Integer> getUnclaimedZoneIgnoreIds() {
+	public static List<String> getUnclaimedZoneIgnoreIds() {
 
-		return getIntArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
+		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
 	}
 
 	public static List<Integer> getItemUseIds() {
@@ -1473,9 +1473,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE_ENABLE);
 	}
 
-	public static List<Integer> getPlotManagementDeleteIds() {
+	public static List<String> getPlotManagementDeleteIds() {
 
-		return getIntArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE);
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE);
 	}
 
 	public static boolean isUsingPlotManagementMayorDelete() {
@@ -1508,9 +1508,9 @@ public class TownySettings {
 		return getSeconds(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME);
 	}
 
-	public static List<Integer> getPlotManagementIgnoreIds() {
+	public static List<String> getPlotManagementIgnoreIds() {
 
-		return getIntArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE);
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE);
 	}
 
 	public static boolean isTownRespawning() {
