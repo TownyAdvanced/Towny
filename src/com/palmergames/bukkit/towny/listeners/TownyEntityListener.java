@@ -50,9 +50,7 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.PotionTypeUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
 
@@ -152,7 +150,8 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
-		List<Class<?>> prots = PotionTypeUtil.parsePotionTypeClassNames(TownySettings.getPotionTypes(), "PotionPvP:");
+		List<String> prots = TownySettings.getPotionTypes();
+		
 		
 		for (PotionEffect effect : effects) {
 
@@ -160,7 +159,7 @@ public class TownyEntityListener implements Listener {
 			 * Check to see if any of the potion effects are protected.
 			 */
 			
-			if (EntityTypeUtil.isInstanceOfAny(prots, effect)) {
+			if (prots.contains(effect.getType().getName())) {
 				detrimental = true;
 			}
 

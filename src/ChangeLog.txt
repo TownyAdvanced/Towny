@@ -1931,3 +1931,5 @@ v0.85.0.7:
 	- Finally fix build version on CI.
 v0.85.0.8:
 	- Correct an error when attempting to get Townblock permissions on an unclaimed plot.
+v0.85.0.9:
+	- Fix Potion use checking (enums are nto classes, duh!).
