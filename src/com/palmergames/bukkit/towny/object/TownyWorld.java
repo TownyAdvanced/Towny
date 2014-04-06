@@ -491,7 +491,7 @@ public class TownyWorld extends TownyObject {
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
-		return (entityExplosionProtection.contains(entity.getType().getName().toLowerCase()));
+		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
 
 	}
 
