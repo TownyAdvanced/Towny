@@ -127,11 +127,13 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 			} else if (state instanceof InventoryHolder) {
 
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				block.setTypeId(state.getTypeId(), false);
 
 				// Container to receive the inventory
 				Inventory container = ((InventoryHolder) block.getState()).getInventory();
 				container.setContents(contents.toArray(new ItemStack[0]));
+				
+				block.setData(state.getData().getData(), false);
 
 			} else if (state.getData() instanceof PistonExtensionMaterial) {
 
