@@ -72,7 +72,7 @@ public class BlockObject {
 	}
 	
 	/**
-	 * @return the id
+	 * @return the location
 	 */
 	public BlockLocation getLocation() {
 

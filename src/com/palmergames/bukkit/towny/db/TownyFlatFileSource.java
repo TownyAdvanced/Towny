@@ -4,6 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -2104,11 +2107,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data" + FileMgmt.fileSeparator() + plotChunk.getWorldName() });
 
-		BufferedOutputStream fout = null;
+		DataOutputStream fout = null;
 		String path = getPlotFilename(plotChunk);
 
 		try {
-			fout = new BufferedOutputStream(new FileOutputStream(path));
+			fout = new DataOutputStream(new FileOutputStream(path));
 
 			switch (plotChunk.getVersion()) {
 
@@ -2118,7 +2121,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				 * version data first
 				 */
 				fout.write("VER".getBytes(Charset.forName("UTF-8")));
-				fout.write(plotChunk.getVersion());
+				fout.writeInt(plotChunk.getVersion());
 
 				break;
 
@@ -2127,9 +2130,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 
 			// Push the plot height, then the plot block data types.
-			fout.write(plotChunk.getHeight());
+			fout.writeInt(plotChunk.getHeight());
 			for (int block : new ArrayList<Integer>(plotChunk.getBlockList())) {
-				fout.write(block);
+				fout.writeInt(block);
 			}
 
 		} catch (Exception e) {
@@ -2188,10 +2191,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			PlotBlockData plotBlockData = new PlotBlockData(townBlock);
 			List<Integer> IntArr = new ArrayList<Integer>();
 
-			BufferedInputStream fin = null;
+			DataInputStream fin = null;
 
 			try {
-				fin = new BufferedInputStream(new FileInputStream(fileName));
+				fin = new DataInputStream(new FileInputStream(fileName));
 
 				//read the first 3 characters to test for version info
 				byte[] key = new byte[3];
@@ -2201,11 +2204,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				switch (elements.fromString(test)) {
 				case VER:
 					// Read the file version
-					int version = fin.read();
+					int version = fin.readInt();
 					plotBlockData.setVersion(version);
 
 					// next entry is the plot height
-					plotBlockData.setHeight(fin.read());
+					plotBlockData.setHeight(fin.readInt());
 					break;
 
 				default:
@@ -2221,10 +2224,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 				// load remainder of file
-				while ((value = fin.read()) >= 0) {
+				while ((value = fin.readInt()) >= 0) {
 					IntArr.add(value);
 				}
 
+			} catch (EOFException e) {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {

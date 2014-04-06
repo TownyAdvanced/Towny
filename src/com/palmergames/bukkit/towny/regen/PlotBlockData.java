@@ -78,7 +78,6 @@ public class PlotBlockData {
 
 				}
 
-
 		return list;
 	}
 
@@ -97,7 +96,7 @@ public class PlotBlockData {
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
-
+		
 		//Scale for the number of elements
 		switch (version) {
 
@@ -128,19 +127,27 @@ public class PlotBlockData {
 			// If this block isn't correct, replace
 			// and return as done.
 			if ((blockId != storedData.getTypeId())) {
-				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(Material.getMaterial(storedData.getTypeId()).name())) {
+
+				Material mat = Material.getMaterial(storedData.getTypeId());
+
+				if ((mat == null) || ((mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name()))) {
 
 					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
 
-					//restore based upon version
-					switch (version) {
+					try {
+						//restore based upon version
+						switch (version) {
 
-					case 1:
-						block.setTypeIdAndData(storedData.getTypeId(), storedData.getData(), false);
+						case 1:
+							block.setTypeId(storedData.getTypeId(), false);
+							block.setData(storedData.getData(), false);
+							break;
+						default:
+							block.setTypeId(storedData.getTypeId());
+						}
+						
+					} catch (Exception e) {
 
-						break;
-					default:
-						block.setTypeId(storedData.getTypeId());
 					}
 
 				} else
