@@ -1937,6 +1937,6 @@ v0.85.0.10:
 	- Fix plot snapshots so they save correctly (incompatible with older snapshot files).
 	- Fix chest facing when regenerating due to explosion regen.
 	- Add an admin tool (default is a Clay Brick) for server admins to query blocks and entities. Helpful when configuring the Towny settings.
-	- ** WARNING ** Changed method of obtaining Explotding entity names. Be sure to update your config.yml for the following.
+	- ** WARNING ** Changed method of obtaining Exploding entity names. Be sure to update your config.yml for the following.
 	  PrimedTNT - has become - TNTPrimed
 	  MinecartTNT - has become - ExplosiveMinecart
