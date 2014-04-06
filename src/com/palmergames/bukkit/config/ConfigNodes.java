@@ -489,7 +489,7 @@ public enum ConfigNodes {
 			"# Lots of messages to tell you what's going on in the server with time taken for events."),
 	PLUGIN_INFO_TOOL(
 			"plugin.info_tool",
-			"STICK",
+			"CLAY_BRICK",
 			"",
 			"# Info tool for server admins to use to query in game blocks and entities."),
 	PLUGIN_DEV_MODE(
