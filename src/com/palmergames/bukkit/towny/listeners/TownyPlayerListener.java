@@ -1,5 +1,34 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import java.util.Arrays;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Attachable;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -7,30 +36,21 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Attachable;
 
 /**
  * Handle events for all Player related events
@@ -108,11 +128,11 @@ public class TownyPlayerListener implements Listener {
 			if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {
 
 				event.setRespawnLocation(player.getBedSpawnLocation());
-				
+
 			} else {
-				
+
 				event.setRespawnLocation(respawn);
-				
+
 			}
 
 		} catch (TownyException e) {
@@ -187,6 +207,29 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		if (event.hasItem()) {
+
+			/*
+			 * Info Tool
+			 */
+			if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+
+				if (TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
+					if (event.getClickedBlock() instanceof Block) {
+
+						block = (Block) event.getClickedBlock();
+
+						TownyMessaging.sendMessage(player, Arrays.asList(
+								ChatTools.formatTitle("Block Info"),
+								ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
+								ChatTools.formatCommand("", "Data value", "", Byte.toString(block.getData()))
+								));
+
+						event.setCancelled(true);
+
+					}
+				}
+
+			}
 
 			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
@@ -317,6 +360,22 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (event.getPlayer().getItemInHand() != null) {
 
+				/*
+				 * Info Tool
+				 */
+				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+
+					Entity entity = event.getRightClicked();
+
+					TownyMessaging.sendMessage(player, Arrays.asList(
+							ChatTools.formatTitle("Entity Info"),
+							ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
+							));
+
+					event.setCancelled(true);
+
+				}
+
 				if (TownySettings.isItemUseId(event.getPlayer().getItemInHand().getTypeId())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
 					return;
@@ -439,20 +498,20 @@ public class TownyPlayerListener implements Listener {
 
 		if (!TownySettings.getBedUse())
 			return;
-		
+
 		WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
-		
+
 		try {
-			
+
 			boolean isOwner = worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
-			
+
 			if (!isOwner) {
-				
+
 				event.setCancelled(true);
 				TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
-				
+
 			}
-			
+
 		} catch (NotRegisteredException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -308,7 +308,7 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,PrimedTNT,MinecartTNT"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,TNTPrimed,ExplosiveMinecart"),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
@@ -487,6 +487,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Lots of messages to tell you what's going on in the server with time taken for events."),
+	PLUGIN_INFO_TOOL(
+			"plugin.info_tool",
+			"STICK",
+			"",
+			"# Info tool for server admins to use to query in game blocks and entities."),
 	PLUGIN_DEV_MODE(
 			"plugin.dev_mode",
 			"",

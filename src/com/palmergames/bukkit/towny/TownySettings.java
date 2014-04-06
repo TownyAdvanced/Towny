@@ -956,6 +956,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEBUG_MODE);
 	}
+	
+	public static String getTool() {
+
+		return getString(ConfigNodes.PLUGIN_INFO_TOOL);
+	}
 
 	public static void setDebug(boolean b) {
 
