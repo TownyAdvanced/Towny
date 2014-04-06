@@ -1940,3 +1940,5 @@ v0.85.0.10:
 	- ** WARNING ** Changed method of obtaining Exploding entity names. Be sure to update your config.yml for the following.
 	  PrimedTNT - has become - TNTPrimed
 	  MinecartTNT - has become - ExplosiveMinecart
+v0.85.0.11:
+	- Add NPC and Snowman to the protected list of entities in a town.
