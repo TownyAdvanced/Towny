@@ -1261,7 +1261,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 
 					line = kvFile.getString("resident");
-					if (line != null)
+					if (line != null && !line.isEmpty())
 						try {
 							Resident res = getResident(line.trim());
 							townBlock.setResident(res);

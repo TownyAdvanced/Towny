@@ -28,6 +28,7 @@ public class TownBlock {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+		this.resident = null;
 		this.type = TownBlockType.RESIDENTIAL;
 		isChanged = false;
 		this.name = "";

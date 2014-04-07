@@ -1179,7 +1179,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					
 					line = rs.getString("resident");
-					if (line != null)
+					if (line != null && !line.isEmpty())
 						try {
 							Resident res = getResident(line.trim());
 							townBlock.setResident(res);
