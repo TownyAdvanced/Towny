@@ -176,7 +176,8 @@ public class ChunkNotification {
 
 	public String getOwnerNotification() {
 			
-		if (((fromResident != toResident) || (!fromTownBlock.getName().equalsIgnoreCase(toTownBlock.getName()))) && !toWild) {
+		if (((fromResident != toResident) || 
+				((fromTownBlock != null) && (toTownBlock != null) && (!fromTownBlock.getName().equalsIgnoreCase(toTownBlock.getName())))) && !toWild) {
 			if (toResident != null)
 				return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
 			else
