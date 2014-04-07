@@ -301,7 +301,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							
-							TownyMessaging.sendMessage(player, String.format("Plot name set to [%s]", townBlock.getName()));
+							TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
 							return true;
 							
 						} 
