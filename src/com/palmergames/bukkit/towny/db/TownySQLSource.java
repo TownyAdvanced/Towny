@@ -265,7 +265,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				 * We have keys so this is a conditional UPDATE.
 				 */
 				
-				String[] aKeys = keys.toArray(new String[keys.size()]);
+				String[] aKeys = args.keySet().toArray(new String[args.keySet().size()]);
 
 				// Build the prepared statement string appropriate for
 				// the number of keys/values we are inserting.
