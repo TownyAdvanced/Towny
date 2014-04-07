@@ -1942,5 +1942,5 @@ v0.85.0.10:
 	  MinecartTNT - has become - ExplosiveMinecart
 v0.85.0.11:
 	- Add NPC and Snowman to the protected list of entities in a town.
-	- Properly formate the message when setting a plot name.
+	- Properly format the message when setting a plot name.
 	- Fix plot notification spam.
