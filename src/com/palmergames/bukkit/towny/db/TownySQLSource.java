@@ -602,10 +602,20 @@ public class TownySQLSource extends TownyFlatFileSource {
 					e.printStackTrace();
 				}
 
-				line = rs.getString("townBlocks");
-				if ((line != null) && (!line.isEmpty()))
-					utilLoadTownBlocks(line, null, resident);
+				
 
+				/*
+				 * Attempt these for older databases.
+				 */
+				try {
+					
+					line = rs.getString("townBlocks");
+					if ((line != null) && (!line.isEmpty()))
+						utilLoadTownBlocks(line, null, resident);
+					
+				} catch (SQLException e) {
+				}
+				
 				s.close();
 				return true;
 			}
@@ -681,10 +691,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 
 				town.setPurchasedBlocks(rs.getInt("purchased"));
-				
-				line = rs.getString("townBlocks");
-				if (line != null)
-					utilLoadTownBlocks(line, town, null);
 
 				line = rs.getString("homeBlock");
 				if (line != null) {
@@ -758,6 +764,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				}
+				
+				/*
+				 * Attempt these for older databases.
+				 */
+				try {
+					
+					line = rs.getString("townBlocks");
+					if (line != null)
+						utilLoadTownBlocks(line, town, null);
+					
+				} catch (SQLException e) {
+				}
+				
 				s.close();
 				return true;
 			}

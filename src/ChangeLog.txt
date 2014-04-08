@@ -1966,3 +1966,4 @@ v0.85.0.18:
 	- Decrease warning level for the message at startup when using custom CraftBukkit/Spout builds.
 	- Fix SQL saving extra characters on the end of some data.
 	- Fix FlatFiles from appending an extra comma.
+	- Only attempt to load townBlocks for older databases.
