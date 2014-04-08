@@ -569,6 +569,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
+							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
 							Resident resident = getResident(token);
 							if (resident != null) {
 								try {
@@ -854,6 +855,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
+							TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
 							Town town = getTown(token);
 							if (town != null)
 								nation.addTown(town);
@@ -958,6 +960,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
+							TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
 							Town town = getTown(token);
 							if (town != null) {
 								town.setWorld(world);
