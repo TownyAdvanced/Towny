@@ -90,7 +90,7 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTownBlocks() && loadTowns() && loadResidents() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {

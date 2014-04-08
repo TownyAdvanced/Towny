@@ -443,6 +443,31 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		return true;
 	}
+	
+	/**
+	 * Only to be called from the Loading methods.
+	 * 
+	 * @param homeBlock
+	 * @throws TownyException
+	 */
+	public void forceSetHomeBlock(TownBlock homeBlock) throws TownyException {
+
+		if (homeBlock == null) {
+			this.homeBlock = null;
+			return;
+		}
+
+		this.homeBlock = homeBlock;
+
+		// Set the world as it may have changed
+		if (this.world != homeBlock.getWorld()) {
+			if ((world != null) && (world.hasTown(this)))
+				world.removeTown(this);
+
+			setWorld(homeBlock.getWorld());
+		}
+
+	}
 
 	public TownBlock getHomeBlock() throws TownyException {
 
@@ -594,6 +619,17 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		} else
 			throw new TownyException("Spawn is not within the homeBlock.");
 	}
+	
+	/**
+	 * Only to be called from the Loading methods.
+	 * 
+	 * @param spawn
+	 */
+	public void forceSetSpawn(Location spawn) {
+
+		this.spawn = spawn;
+
+	}
 
 	public Location getSpawn() throws TownyException {
 
@@ -690,6 +726,18 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		} catch (NotRegisteredException e) {
 			throw new TownyException("Location is not within a Town.");
 		}
+
+	}
+	
+	/**
+	 * Only to be called from the Loading methods.
+	 * 
+	 * @param spawn
+	 */
+	public void forceAddOutpostSpawn(Location spawn) {
+
+		outpostSpawns.add(spawn);
+
 
 	}
 

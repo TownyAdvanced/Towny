@@ -1961,3 +1961,5 @@ v0.85.0.17:
 	- Fix plot perms on load when using the new TownBlock save data.
 v0.85.0.18:
 	- Revert townblock perm setting on data load.
+v0.85.0.18:
+	- Fix custom plot perms being overwritten by town when updating.

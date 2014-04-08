@@ -697,7 +697,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 								int x = Integer.parseInt(tokens[1]);
 								int z = Integer.parseInt(tokens[2]);
 								TownBlock homeBlock = world.getTownBlock(x, z);
-								town.setHomeBlock(homeBlock);
+								town.forceSetHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
 								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
 							} catch (NotRegisteredException e) {
@@ -726,12 +726,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 								loc.setPitch(Float.parseFloat(tokens[4]));
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
-							town.setSpawn(loc);
+							town.forceSetSpawn(loc);
 						} catch (NumberFormatException e) {
 						} catch (NotRegisteredException e) {
 						} catch (NullPointerException e) {
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a spawn point.");
 						}
 					// Load outpost spawns
 					line = rs.getString("outpostSpawns");
@@ -751,7 +749,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 										loc.setPitch(Float.parseFloat(tokens[4]));
 										loc.setYaw(Float.parseFloat(tokens[5]));
 									}
-									town.addOutpostSpawn(loc);
+									town.forceAddOutpostSpawn(loc);
 								} catch (NumberFormatException e) {
 								} catch (NotRegisteredException e) {
 								} catch (NullPointerException e) {
@@ -1149,12 +1147,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		String line = "";
 		Boolean result = false;
+		
 		// Load town blocks
 		if (!getContext())
 			return false;
+		
 		ResultSet rs;
+		
 		for (TownBlock townBlock : getAllTownBlocks()) {
-			boolean set = false;
+			//boolean set = false;
 			
 			try {
 				Statement s = cntx.createStatement();
@@ -1206,12 +1207,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 
 					line = rs.getString("permissions");
-					if (line != null)
+					if ((line != null) && !line.isEmpty())
 						try {
-							if (!line.isEmpty()) {
-								townBlock.setPermissions(line.trim().replaceAll("#", ","));
-								set = true;
-							}
+							townBlock.setPermissions(line.trim().replaceAll("#", ","));
+							//set = true;
 						} catch (Exception e) {
 						}
 
@@ -1231,19 +1230,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				}
 				
-				if (!set) {
-					// no permissions found so set in relation to it's
-					// owners perms.
-					try {
-						if (townBlock.hasResident()) {
-							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-						} else {
-							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-						}
-					} catch (NotRegisteredException e) {
-						// Will never reach here
-					}
-				}
+//				if (!set) {
+//					// no permissions found so set in relation to it's
+//					// owners perms.
+//					try {
+//						if (townBlock.hasResident()) {
+//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+//						} else {
+//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+//						}
+//					} catch (NotRegisteredException e) {
+//						// Will never reach here
+//					}
+//				}
 
 				s.close();
 
