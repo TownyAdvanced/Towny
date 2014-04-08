@@ -1704,27 +1704,22 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		try {
 			String path = getNationFilename(nation);
+			
 			fout = new BufferedWriter(new FileWriter(path));
-			fout.write("towns=");
-			for (Town town : nation.getTowns())
-				fout.write(town.getName() + ",");
-			fout.write(newLine);
+			fout.write("towns=" + StringMgmt.join(nation.getTowns(), ",") + newLine);
+
 			if (nation.hasCapital())
 				fout.write("capital=" + nation.getCapital().getName() + newLine);
+			
 			if (nation.hasTag())
 				fout.write("tag=" + nation.getTag() + newLine);
-			fout.write("assistants=");
-			for (Resident assistant : nation.getAssistants())
-				fout.write(assistant.getName() + ",");
-			fout.write(newLine);
-			fout.write("allies=");
-			for (Nation allyNation : nation.getAllies())
-				fout.write(allyNation.getName() + ",");
-			fout.write(newLine);
-			fout.write("enemies=");
-			for (Nation enemyNation : nation.getEnemies())
-				fout.write(enemyNation.getName() + ",");
-			fout.write(newLine);
+			
+			fout.write("assistants=" + StringMgmt.join(nation.getAssistants(), ",") + newLine);
+
+			fout.write("allies=" + StringMgmt.join(nation.getAllies(), ",") + newLine);
+
+			fout.write("enemies=" + StringMgmt.join(nation.getEnemies(), ",") + newLine);
+
 			// Taxes
 			fout.write("taxes=" + Double.toString(nation.getTaxes()) + newLine);
 			// Neutral
@@ -1758,13 +1753,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			fout = new BufferedWriter(new FileWriter(path));
 
 			// Towns
-			fout.write("towns=");
-			for (Town town : world.getTowns()) {
-				TownyMessaging.sendDebugMsg("   Town - " + town.getName());
-				fout.write(town.getName() + ",");
-			}
+			fout.write("towns=" + StringMgmt.join(world.getTowns(), ",") + newLine);
 
-			fout.write(newLine);
 			fout.write(newLine);
 
 			// PvP
@@ -1964,23 +1954,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 
 	}
-
-	/*
-	 * public boolean saveTownBlocks(TownyWorld world) { try { BufferedWriter
-	 * fout = new BufferedWriter(new FileWriter(rootFolder +
-	 * dataFolder + "/townblocks/"+world.getName()+".csv")); for (TownBlock
-	 * townblock :
-	 * world.getTownBlocks()) { String line = townblock.getX() + "," +
-	 * Long.toString(townblock.getZ()); line += ","; if (townblock.hasTown())
-	 * line += townblock.getTown().getName(); line += ","; if
-	 * (townblock.hasResident()) line += townblock.getResident().getName(); line
-	 * += "," + Boolean.toString(townblock.getPlotPrice()); fout.write(line +
-	 * newLine); } fout.close(); return true; } catch (Exception e) {
-	 * System.out.println(
-	 * "[Towny] Loading Error: Exception while saving town blocks list file");
-	 * e.printStackTrace();
-	 * return false; } }
-	 */
 
 	/**
 	 * Load townblocks according to the given line Townblock: x,y,forSale Eg:
