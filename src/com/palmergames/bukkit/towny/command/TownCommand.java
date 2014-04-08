@@ -478,18 +478,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 			}
 
-			/*
-			 * We no longer need to propagate perms as the townblock only returns custom perms or it's owners.
-			 */
-			
 			//Propagate perms to all unchanged, town owned, townblocks
 			
-//			for (TownBlock townBlock : town.getTownBlocks()) {
-//				if (!townBlock.hasResident() && !townBlock.isChanged()) {
-//					townBlock.setType(townBlock.getType());
-//					TownyUniverse.getDataSource().saveTownBlock(townBlock);
-//				}
-//			}
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				if (!townBlock.hasResident() && !townBlock.isChanged()) {
+					townBlock.setType(townBlock.getType());
+					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				}
+			}
 
 			TownyUniverse.getDataSource().saveTown(town);
 		}
@@ -1765,7 +1761,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
-							TownyUniverse.getDataSource().deleteTownBlock(townBlock);
+							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 						}
 					}
 					if (townBlockOwner instanceof Town)
@@ -1775,6 +1771,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					plugin.resetCache();
 					return;
+					
 				} else {
 					// Set all perms to On or Off
 					// '/town set perm off'
@@ -1847,20 +1844,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					perm.set(s, b);
 				} catch (Exception e) {
 				}
-
-			/*
-			 * No longer needed as townBlocks now only return custom perms if altered.
-			 */
 			
 			// Propagate perms to all unchanged, town owned, townblocks
-//			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-//				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
-//					if (!townBlock.isChanged()) {
-//						townBlock.setType(townBlock.getType());
-//						TownyUniverse.getDataSource().deleteTownBlock(townBlock);
-//					}
-//				}
-//			}
+			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
+				}
+			}
 			
 			// change perm name to friend is this is a resident setting
 			// if (friend)

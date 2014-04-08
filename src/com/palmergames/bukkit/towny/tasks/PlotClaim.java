@@ -159,7 +159,7 @@ public class PlotClaim extends Thread {
 						townBlock.setType(townBlock.getType());
 
 						TownyUniverse.getDataSource().saveResident(owner);
-						// Remove the townBlock data file so it's no longer using custom settings.
+						// Update the townBlock data file so it's no longer using custom settings.
 						TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						return true;

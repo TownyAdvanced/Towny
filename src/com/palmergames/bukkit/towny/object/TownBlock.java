@@ -130,22 +130,8 @@ public class TownBlock {
 	public TownyPermission getPermissions() {
 
 		/*
-		 * If we have different permissions return them for this townblock
-		 * else return our owners perms.
+		 * Return our perms
 		 */
-		if (!this.isChanged) {
-			
-			if (this.hasResident()) {
-				
-				return this.resident.getPermissions();
-				
-			} else if (this.hasTown()) {
-			
-				return this.town.getPermissions();
-			}
-			
-		}
-		
 		return permissions;
 	}
 
@@ -196,42 +182,61 @@ public class TownBlock {
 			this.permissions.reset();
 		
 		this.type = type;
+		
+		// Set the changed status.
+		this.setChanged(false);
 
 		// Custom plot settings here
 		switch (type) {
+		
 		case RESIDENTIAL:
+			
 			if (this.hasResident()) {
 				setPermissions(this.resident.permissions.toString());
 			} else {
 				setPermissions(this.town.permissions.toString());
 			}
+			this.setChanged(false);
 			break;
+			
 		case COMMERCIAL:
+			
 			//setPermissions("residentSwitch,allySwitch,outsiderSwitch");
-			if (this.hasResident())
+			if (this.hasResident()) {
 				setPermissions(this.resident.permissions.toString());
-			else
+			} else {
 				setPermissions(this.town.permissions.toString());
+			}
+			this.setChanged(false);
 			break;
+			
 		case ARENA:
+			
 			setPermissions("pvp");
 			break;
+			
 		case EMBASSY:
-			if (this.hasResident())
+			
+			if (this.hasResident()) {
 				setPermissions(this.resident.permissions.toString());
-			else
+			} else {
 				setPermissions(this.town.permissions.toString());
+			}
+			this.setChanged(false);
 			break;
+			
 		case WILDS:
+			
 			setPermissions("denyAll");
 			break;
+			
 		case SPLEEF:
+			
 			setPermissions("denyAll");
 			break;
+			
 		}
 		
-		// Reset any changed status.
-		this.setChanged(false);
 	}
 
 	public void setType(int typeId) {

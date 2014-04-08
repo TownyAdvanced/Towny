@@ -286,7 +286,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 
 							TownCommand.setTownBlockPermissions(player, owner, townBlock.getPermissions(), StringMgmt.remFirstArg(split), true);
-							townBlock.setChanged(true);
+							//townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							return true;
 							
@@ -298,7 +298,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 							
-							townBlock.setChanged(true);
+							//townBlock.setChanged(true);
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							
 							TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
@@ -393,7 +393,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				townBlock.setType(type);
 				
-				townBlock.setChanged(true);
+				//townBlock.setChanged(true);
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
