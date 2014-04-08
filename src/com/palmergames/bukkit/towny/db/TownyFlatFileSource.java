@@ -1234,7 +1234,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			path = getTownBlockFilename(townBlock);
-			//boolean set = false;
+			boolean set = false;
 
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
@@ -1288,8 +1288,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = kvFile.get("permissions");
 					if (line != null)
 						try {
-							townBlock.setPermissions(line.trim());
-							//set = true;
+							if (!line.isEmpty()) {
+								townBlock.setPermissions(line.trim());
+								set = true;
+							}
 						} catch (Exception e) {
 						}
 
@@ -1312,22 +1314,19 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					return false;
 				}
 				
-				/*
-				 * No longer required due to the way we report perms now.
-				 */
 				
-//				if (!set) {
-//					// no permissions found so set in relation to it's owners perms.
-//					try {
-//						if (townBlock.hasResident()) {
-//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-//						} else {
-//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-//						}
-//					} catch (NotRegisteredException e) {
-//						// Will never reach here
-//					}
-//				}
+				if (!set) {
+					// no permissions found so set in relation to it's owners perms.
+					try {
+						if (townBlock.hasResident()) {
+							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+						} else {
+							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+						}
+					} catch (NotRegisteredException e) {
+						// Will never reach here
+					}
+				}
 			}
 		}
 

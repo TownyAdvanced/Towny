@@ -1154,7 +1154,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			return false;
 		ResultSet rs;
 		for (TownBlock townBlock : getAllTownBlocks()) {
-			//boolean set = false;
+			boolean set = false;
 			
 			try {
 				Statement s = cntx.createStatement();
@@ -1208,9 +1208,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 					line = rs.getString("permissions");
 					if (line != null)
 						try {
-							if (!line.isEmpty())
+							if (!line.isEmpty()) {
 								townBlock.setPermissions(line.trim().replaceAll("#", ","));
-							//set = true;
+								set = true;
+							}
 						} catch (Exception e) {
 						}
 
@@ -1230,23 +1231,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				}
 				
-				/*
-				 * No longer required due to the way plots report perms now.
-				 */
-				
-//				if (!set) {
-//					// no permissions found so set in relation to it's
-//					// owners perms.
-//					try {
-//						if (townBlock.hasResident()) {
-//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-//						} else {
-//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-//						}
-//					} catch (NotRegisteredException e) {
-//						// Will never reach here
-//					}
-//				}
+				if (!set) {
+					// no permissions found so set in relation to it's
+					// owners perms.
+					try {
+						if (townBlock.hasResident()) {
+							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+						} else {
+							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+						}
+					} catch (NotRegisteredException e) {
+						// Will never reach here
+					}
+				}
 
 				s.close();
 
