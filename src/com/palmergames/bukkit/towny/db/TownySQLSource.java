@@ -1191,7 +1191,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					line = rs.getString("price");
 					if (line != null)
 						try {
-							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
+							townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 						} catch (Exception e) {
 						}
 					
@@ -1486,10 +1486,17 @@ public class TownySQLSource extends TownyFlatFileSource {
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
+			tb_hm.put("price", townBlock.getPlotPrice());
+			tb_hm.put("town", townBlock.getTown().getName());
+			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResident().getName() : "");
+			tb_hm.put("type", townBlock.getType().getId());
+			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
+			
 			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
+			
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
 			e.printStackTrace();

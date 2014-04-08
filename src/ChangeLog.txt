@@ -1967,3 +1967,5 @@ v0.85.0.18:
 	- Fix SQL saving extra characters on the end of some data.
 	- Fix FlatFiles from appending an extra comma.
 	- Only attempt to load townBlocks for older databases.
+	- Add missing field saving on TownBlocks to SQL.
+	- Only delete old files if using flatfile for saving or loading.

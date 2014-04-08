@@ -286,7 +286,10 @@ public class TownyUniverse extends TownyObject {
 			getDataSource().initialize(plugin, this);
 			try {
 				getDataSource().backup();
-				getDataSource().deleteUnusedResidentFiles();
+				
+				if (load.equalsIgnoreCase("flatfile") || save.equalsIgnoreCase("flatfile"))
+					getDataSource().deleteUnusedResidentFiles();
+				
 			} catch (IOException e) {
 				System.out.println("[Towny] Error: Could not create backup.");
 				e.printStackTrace();
