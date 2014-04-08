@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -232,6 +234,38 @@ public class FileMgmt {
 			source.replaceAll("\n", System.getProperty("line.separator"));
 
 			out.write(source);
+			out.close();
+			return true;
+
+		} catch (IOException e) {
+			System.out.println("Exception ");
+			return false;
+		}
+	}
+	
+	/**
+	 * Write a list to a file, terminating each line with a system specific new line.
+	 * 
+	 * @param source
+	 * @param targetLocation
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean listToFile(List<String> source, String targetLocation) throws IOException {
+
+		try {
+
+			File file = new File(targetLocation);
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+
+			Iterator<String> itr = source.iterator();
+			
+			while (itr.hasNext()) {
+				
+				out.write(itr.next() + System.getProperty("line.separator"));
+				
+			}
+
 			out.close();
 			return true;
 

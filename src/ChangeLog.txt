@@ -1972,3 +1972,4 @@ v0.85.0.19:
 	- Only delete old files if using flatfile for saving or loading.
 v0.85.0.20:
 	- Move all SQL Saving to an Async task.
+	- Move flatfile data saving (excluding regen and plot images) to an Async task.

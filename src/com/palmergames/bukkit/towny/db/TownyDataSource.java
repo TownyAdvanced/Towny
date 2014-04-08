@@ -108,6 +108,8 @@ public abstract class TownyDataSource {
 		return saveRegenList() && saveSnapshotList();
 	}
 	
+	abstract public void cancelTask();
+	
 	abstract public boolean loadTownBlockList();
 
 	abstract public boolean loadResidentList();

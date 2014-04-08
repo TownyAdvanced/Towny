@@ -7,6 +7,13 @@ package com.palmergames.bukkit.towny.db;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
@@ -39,19 +47,11 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 
-import java.sql.Connection;
-//import java.sql.DatabaseMetaData;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
-
 public class TownySQLSource extends TownyFlatFileSource {
 	
 	private Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<SQL_Task>();
-
+	private BukkitTask task = null;
+	
 	protected String driver = "";
 	protected String dsn = "";
 	protected String hostname = "";
@@ -163,7 +163,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		/*
 		 * Start our Async queue for pushing data to the database.
 		 */
-		BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
 			public void run() {
 
@@ -186,6 +186,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 			}
 
 		}, 5L, 5L);
+	}
+	
+	@Override
+	public void cancelTask() {
+		
+		task.cancel();
+		
 	}
 
 	/**

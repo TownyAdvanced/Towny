@@ -178,6 +178,9 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
+		
+		// Shut down our saving task.
+		TownyUniverse.getDataSource().cancelTask();
 
 		townyUniverse = null;
 

@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -20,11 +18,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.naming.InvalidNameException;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
@@ -42,6 +45,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
@@ -50,6 +54,9 @@ import com.palmergames.util.StringMgmt;
 // TODO: Make sure the lack of a particular value doesn't error out the entire file
 
 public class TownyFlatFileSource extends TownyDatabaseHandler {
+
+	private Queue<FlatFile_Task> queryQueue = new ConcurrentLinkedQueue<FlatFile_Task>();
+	private BukkitTask task = null;
 
 	protected final String newLine = System.getProperty("line.separator");
 	protected String rootFolder = "";
@@ -102,6 +109,40 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
+
+		/*
+		 * Start our Async queue for pushing data to the database.
+		 */
+		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+
+			public void run() {
+
+				while (!TownyFlatFileSource.this.queryQueue.isEmpty()) {
+
+					FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
+
+					try {
+
+						FileMgmt.listToFile(query.list, query.path);
+
+					} catch (IOException e) {
+
+						TownyMessaging.sendErrorMsg("Error saving file - " + query.path);
+
+					}
+
+				}
+
+			}
+
+		}, 5L, 5L);
+	}
+	
+	@Override
+	public void cancelTask() {
+		
+		task.cancel();
+		
 	}
 
 	@Override
@@ -210,10 +251,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (!line.equals("")) {
 
 					String[] tokens = line.split(",");
-					
+
 					if (tokens.length < 3)
 						continue;
-					
+
 					TownyWorld world = getWorld(tokens[0]);
 					int x = Integer.parseInt(tokens[1]);
 					int z = Integer.parseInt(tokens[2]);
@@ -228,12 +269,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 			return false;
 
 		} finally {
-			
+
 			if (fin != null) {
 				try {
 					fin.close();
@@ -1308,20 +1349,19 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path);
 					return false;
 				}
-				
-				
-//				if (!set) {
-//					// no permissions found so set in relation to it's owners perms.
-//					try {
-//						if (townBlock.hasResident()) {
-//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-//						} else {
-//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-//						}
-//					} catch (NotRegisteredException e) {
-//						// Will never reach here
-//					}
-//				}
+
+				//				if (!set) {
+				//					// no permissions found so set in relation to it's owners perms.
+				//					try {
+				//						if (townBlock.hasResident()) {
+				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+				//						} else {
+				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+				//						}
+				//					} catch (NotRegisteredException e) {
+				//						// Will never reach here
+				//					}
+				//				}
 			}
 		}
 
@@ -1335,146 +1375,471 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveTownBlockList() {
 
-		BufferedWriter fout = null;
+		List<String> list = new ArrayList<String>();
 
-		try {
-			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks.txt"));
-			
-			for (TownBlock townBlock : getAllTownBlocks()) {
-				fout.write(townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ() + newLine);
-			}
-			
-			TownyMessaging.sendMsg("Saved " + getAllTownBlocks().size() + " townblocks");
-			
+		for (TownBlock townBlock : getAllTownBlocks()) {
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving townblocks list file");
-			e.printStackTrace();
-			return false;
+			list.add(townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
 
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
 		}
-		
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks.txt"));
+
 		return true;
-		
+
 	}
-	
+
 	@Override
 	public boolean saveResidentList() {
 
-		BufferedWriter fout = null;
+		List<String> list = new ArrayList<String>();
 
-		try {
-			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
-			for (Resident resident : getResidents())
-				fout.write(NameValidation.checkAndFilterPlayerName(resident.getName()) + newLine);
+		for (Resident resident : getResidents()) {
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving residents list file");
-			e.printStackTrace();
-			return false;
+			try {
 
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
+				list.add(NameValidation.checkAndFilterPlayerName(resident.getName()));
+
+			} catch (InvalidNameException e) {
+
+				TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file:" + resident.getName());
 			}
 		}
-		
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt"));
+
 		return true;
-		
+
 	}
 
 	@Override
 	public boolean saveTownList() {
 
-		BufferedWriter fout = null;
+		List<String> list = new ArrayList<String>();
 
-		try {
-			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt"));
-			for (Town town : getTowns())
-				fout.write(town.getName() + newLine);
+		for (Town town : getTowns()) {
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town list file");
-			e.printStackTrace();
-			return false;
+			list.add(town.getName());
 
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
 		}
-		
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt"));
+
 		return true;
-		
+
 	}
 
 	@Override
 	public boolean saveNationList() {
 
-		BufferedWriter fout = null;
+		List<String> list = new ArrayList<String>();
 
-		try {
-			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt"));
-			for (Nation nation : getNations())
-				fout.write(nation.getName() + newLine);
+		for (Nation nation : getNations()) {
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving nation list file");
-			e.printStackTrace();
-			return false;
+			list.add(nation.getName());
 
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
 		}
-		
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt"));
+
 		return true;
-		
+
 	}
 
 	@Override
 	public boolean saveWorldList() {
 
-		BufferedWriter fout = null;
+		List<String> list = new ArrayList<String>();
 
+		for (TownyWorld world : getWorlds()) {
+
+			list.add(world.getName());
+
+		}
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
+
+		return true;
+
+	}
+
+	/*
+	 * Save individual towny objects
+	 */
+
+	@Override
+	public boolean saveResident(Resident resident) {
+
+		List<String> list = new ArrayList<String>();
+
+		// Last Online
+		list.add("lastOnline=" + Long.toString(resident.getLastOnline()));
+		// Registered
+		list.add("registered=" + Long.toString(resident.getRegistered()));
+		// isNPC
+		list.add("isNPC=" + Boolean.toString(resident.isNPC()));
+		// title
+		list.add("title=" + resident.getTitle());
+		// surname
+		list.add("surname=" + resident.getSurname());
+
+		if (resident.hasTown()) {
+			try {
+				list.add("town=" + resident.getTown().getName());
+			} catch (NotRegisteredException e) {
+			}
+			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ","));
+			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ","));
+		}
+
+		// Friends
+		list.add("friends=" + StringMgmt.join(resident.getFriends(), ","));
+		list.add("");
+
+		// Plot Protection
+		list.add("protectionStatus=" + resident.getPermissions().toString());
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getResidentFilename(resident)));
+
+		return true;
+
+	}
+
+	@Override
+	public boolean saveTown(Town town) {
+
+		List<String> list = new ArrayList<String>();
+
+		// Name
+		list.add("name=" + town.getName());
+		// Residents
+		list.add("residents=" + StringMgmt.join(town.getResidents(), ","));
+		// Mayor
+		if (town.hasMayor())
+			list.add("mayor=" + town.getMayor().getName());
+		// Nation
+		if (town.hasNation())
+			try {
+				list.add("nation=" + town.getNation().getName());
+			} catch (NotRegisteredException e) {
+			}
+
+		// Assistants
+		list.add("assistants=" + StringMgmt.join(town.getAssistants(), ","));
+
+		list.add(newLine);
+		// Town Board
+		list.add("townBoard=" + town.getTownBoard());
+		// tag
+		list.add("tag=" + town.getTag());
+		// Town Protection
+		list.add("protectionStatus=" + town.getPermissions().toString());
+		// Bonus Blocks
+		list.add("bonusBlocks=" + Integer.toString(town.getBonusBlocks()));
+		// Purchased Blocks
+		list.add("purchasedBlocks=" + Integer.toString(town.getPurchasedBlocks()));
+		// Taxpercent
+		list.add("taxpercent=" + Boolean.toString(town.isTaxPercentage()));
+		// Taxes
+		list.add("taxes=" + Double.toString(town.getTaxes()));
+		// Plot Price
+		list.add("plotPrice=" + Double.toString(town.getPlotPrice()));
+		// Plot Tax
+		list.add("plotTax=" + Double.toString(town.getPlotTax()));
+		// Commercial Plot Price
+		list.add("commercialPlotPrice=" + Double.toString(town.getCommercialPlotPrice()));
+		// Commercial Tax
+		list.add("commercialPlotTax=" + Double.toString(town.getCommercialPlotTax()));
+		// Embassy Plot Price
+		list.add("embassyPlotPrice=" + Double.toString(town.getEmbassyPlotPrice()));
+		// Embassy Tax
+		list.add("embassyPlotTax=" + Double.toString(town.getEmbassyPlotTax()));
+		// Upkeep
+		list.add("hasUpkeep=" + Boolean.toString(town.hasUpkeep()));
+		// Open
+		list.add("open=" + Boolean.toString(town.isOpen()));
+		// PVP
+		list.add("adminDisabledPvP=" + Boolean.toString(town.isAdminDisabledPVP()));
+		/* // Mobs
+		* fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
+		*/
+		// Public
+		list.add("public=" + Boolean.toString(town.isPublic()));
+
+		// Home Block
+		if (town.hasHomeBlock())
+			try {
+				list.add("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()));
+			} catch (TownyException e) {
+			}
+
+		// Spawn
+		if (town.hasSpawn())
+			try {
+				list.add("spawn=" + town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()));
+			} catch (TownyException e) {
+			}
+
+		// Outpost Spawns
+		if (town.hasOutpostSpawn()) {
+			String outpostArray = "outpostspawns=";
+			for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
+				outpostArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
+			}
+			list.add(outpostArray);
+		}
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
+
+		return true;
+
+	}
+
+	@Override
+	public boolean saveNation(Nation nation) {
+
+		List<String> list = new ArrayList<String>();
+
+		list.add("towns=" + StringMgmt.join(nation.getTowns(), ","));
+
+		if (nation.hasCapital())
+			list.add("capital=" + nation.getCapital().getName());
+
+		if (nation.hasTag())
+			list.add("tag=" + nation.getTag());
+
+		list.add("assistants=" + StringMgmt.join(nation.getAssistants(), ","));
+
+		list.add("allies=" + StringMgmt.join(nation.getAllies(), ","));
+
+		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
+
+		// Taxes
+		list.add("taxes=" + Double.toString(nation.getTaxes()));
+		// Neutral
+		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getNationFilename(nation)));
+
+		return true;
+
+	}
+
+	@Override
+	public boolean saveWorld(TownyWorld world) {
+
+		List<String> list = new ArrayList<String>();
+
+		// Towns
+		list.add("towns=" + StringMgmt.join(world.getTowns(), ","));
+
+		list.add("");
+
+		// PvP
+		list.add("pvp=" + Boolean.toString(world.isPVP()));
+		// Force PvP
+		list.add("forcepvp=" + Boolean.toString(world.isForcePVP()));
+		// Claimable
+		list.add("# Can players found towns and claim plots in this world?");
+		list.add("claimable=" + Boolean.toString(world.isClaimable()));
+		// has monster spawns			
+		list.add("worldmobs=" + Boolean.toString(world.hasWorldMobs()));
+		// force town mob spawns			
+		list.add("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()));
+		// has firespread enabled
+		list.add("firespread=" + Boolean.toString(world.isFire()));
+		list.add("forcefirespread=" + Boolean.toString(world.isForceFire()));
+		// has explosions enabled
+		list.add("explosions=" + Boolean.toString(world.isExpl()));
+		list.add("forceexplosions=" + Boolean.toString(world.isForceExpl()));
+		// Enderman block protection
+		list.add("endermanprotect=" + Boolean.toString(world.isEndermanProtect()));
+		// PlayerTrample
+		list.add("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()));
+		// CreatureTrample
+		list.add("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()));
+
+		// Unclaimed
+		list.add(newLine);
+		list.add("# Unclaimed Zone settings.");
+
+		// Unclaimed Zone Build
+		if (world.getUnclaimedZoneBuild() != null)
+			list.add("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()));
+		// Unclaimed Zone Destroy
+		if (world.getUnclaimedZoneDestroy() != null)
+			list.add("unclaimedZoneDestroy=" + Boolean.toString(world.getUnclaimedZoneDestroy()));
+		// Unclaimed Zone Switch
+		if (world.getUnclaimedZoneSwitch() != null)
+			list.add("unclaimedZoneSwitch=" + Boolean.toString(world.getUnclaimedZoneSwitch()));
+		// Unclaimed Zone Item Use
+		if (world.getUnclaimedZoneItemUse() != null)
+			list.add("unclaimedZoneItemUse=" + Boolean.toString(world.getUnclaimedZoneItemUse()));
+		// Unclaimed Zone Name
+		if (world.getUnclaimedZoneName() != null)
+			list.add("unclaimedZoneName=" + world.getUnclaimedZoneName());
+
+		list.add("");
+		list.add("# The following settings are only used if you are not using any permissions provider plugin");
+
+		// Unclaimed Zone Ignore Ids
+		if (world.getUnclaimedZoneIgnoreIds() != null)
+			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ","));
+
+		// PlotManagement Delete
+		list.add(newLine);
+		list.add("# The following settings control what blocks are deleted upon a townblock being unclaimed");
+
+		// Using PlotManagement Delete
+		list.add("usingPlotManagementDelete=" + Boolean.toString(world.isUsingPlotManagementDelete()));
+		// Plot Management Delete Ids
+		if (world.getPlotManagementDeleteIds() != null)
+			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+
+		// PlotManagement
+		list.add(newLine);
+		list.add("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command");
+
+		// Using PlotManagement Mayor Delete
+		list.add("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()));
+		// Plot Management Mayor Delete
+		if (world.getPlotManagementMayorDelete() != null)
+			list.add("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ","));
+
+		// PlotManagement Revert
+		list.add(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed.");
+		list.add("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot.");
+
+		// Using PlotManagement Revert
+		list.add("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()));
+		// Using PlotManagement Revert Speed
+		list.add("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()));
+
+		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air.");
+
+		// Plot Management Ignore Ids
+		if (world.getPlotManagementIgnoreIds() != null)
+			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
+
+		// PlotManagement Wild Regen
+		list.add("");
+		list.add("# If enabled any damage caused by explosions will repair itself.");
+
+		// Using PlotManagement Wild Regen
+		list.add("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()));
+
+		// Wilderness Explosion Protection entities
+		if (world.getPlotManagementWildRevertEntities() != null)
+			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ","));
+
+		// Using PlotManagement Wild Regen Delay
+		list.add("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()));
+
+		// Using Towny
+		list.add("");
+		list.add("# This setting is used to enable or disable Towny in this world.");
+
+		// Using Towny
+		list.add("usingTowny=" + Boolean.toString(world.isUsingTowny()));
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getWorldFilename(world)));
+
+		return true;
+
+	}
+
+	@Override
+	public boolean saveAllTownBlocks() {
+
+		for (TownyWorld world : getWorlds()) {
+			for (TownBlock townBlock : world.getTownBlocks())
+				saveTownBlock(townBlock);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean saveTownBlock(TownBlock townBlock) {
+
+		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks" + FileMgmt.fileSeparator() + townBlock.getWorld().getName() });
+
+		List<String> list = new ArrayList<String>();
+
+		// name
+		list.add("name=" + townBlock.getName());
+
+		// price
+		list.add("price=" + townBlock.getPlotPrice());
+
+		// town
 		try {
-			fout = new BufferedWriter(new FileWriter(rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt"));
-			for (TownyWorld world : getWorlds())
-				fout.write(world.getName() + newLine);
+			list.add("town=" + townBlock.getTown().getName());
+		} catch (NotRegisteredException e) {
+		}
 
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving world list file");
-			e.printStackTrace();
-			return false;
+		// resident
+		if (townBlock.hasResident()) {
 
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
+			try {
+				list.add("resident=" + townBlock.getResident().getName());
+			} catch (NotRegisteredException e) {
 			}
 		}
-		
+
+		// type
+		list.add("type=" + townBlock.getType().getId());
+
+		// outpost
+		list.add("outpost=" + Boolean.toString(townBlock.isOutpost()));
+
+		/*
+		 * Only include a permissions line IF the plot perms are custom.
+		 */
+		if (townBlock.isChanged()) {
+			// permissions
+			list.add("permissions=" + townBlock.getPermissions().toString());
+		}
+
+		// Have permissions been manually changed
+		list.add("changed=" + Boolean.toString(townBlock.isChanged()));
+
+		list.add("locked=" + Boolean.toString(townBlock.isLocked()));
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getTownBlockFilename(townBlock)));
+
 		return true;
-		
+
 	}
 
 	@Override
@@ -1500,9 +1865,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 			}
 		}
-		
+
 		return true;
-		
+
 	}
 
 	@Override
@@ -1529,426 +1894,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				} catch (IOException ignore) {
 				}
 			}
-		}
-		
-		return true;
-		
-	}
-
-	/*
-	 * Save individual towny objects
-	 */
-
-	@Override
-	public boolean saveResident(Resident resident) {
-
-		BufferedWriter fout = null;
-
-		try {
-			String path = getResidentFilename(resident);
-			fout = new BufferedWriter(new FileWriter(path));
-			// Last Online
-			fout.write("lastOnline=" + Long.toString(resident.getLastOnline()) + newLine);
-			// Registered
-			fout.write("registered=" + Long.toString(resident.getRegistered()) + newLine);
-			// isNPC
-			fout.write("isNPC=" + Boolean.toString(resident.isNPC()) + newLine);
-			// title
-			fout.write("title=" + resident.getTitle() + newLine);
-			// surname
-			fout.write("surname=" + resident.getSurname() + newLine);
-			if (resident.hasTown()) {
-				fout.write("town=" + resident.getTown().getName() + newLine);
-				fout.write("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ",") + newLine);
-				fout.write("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ",") + newLine);
-			}
-			// Friends
-			fout.write("friends=");
-			for (Resident friend : resident.getFriends())
-				fout.write(friend.getName() + ",");
-			fout.write(newLine);
-			
-			// TownBlocks
-			//fout.write("townBlocks=" + utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())) + newLine);
-			
-			// Plot Protection
-			fout.write("protectionStatus=" + resident.getPermissions().toString() + newLine);
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving resident file (" + resident.getName() + ")");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
-		}
-		
-		return true;
-
-	}
-
-	@Override
-	public boolean saveTown(Town town) {
-
-		BufferedWriter fout = null;
-
-		try {
-			String path = getTownFilename(town);
-			fout = new BufferedWriter(new FileWriter(path));
-			// Name
-			fout.write("name=" + town.getName() + newLine);
-			// Residents
-			fout.write("residents=" + StringMgmt.join(town.getResidents(), ",") + newLine);
-			// Mayor
-			if (town.hasMayor())
-				fout.write("mayor=" + town.getMayor().getName() + newLine);
-			// Nation
-			if (town.hasNation())
-				fout.write("nation=" + town.getNation().getName() + newLine);
-			// Assistants
-			fout.write("assistants=");
-			for (Resident assistant : town.getAssistants())
-				fout.write(assistant.getName() + ",");
-			fout.write(newLine);
-			// Town Board
-			fout.write("townBoard=" + town.getTownBoard() + newLine);
-			// tag
-			fout.write("tag=" + town.getTag() + newLine);
-			// Town Protection
-			fout.write("protectionStatus=" + town.getPermissions().toString() + newLine);
-			// Bonus Blocks
-			fout.write("bonusBlocks=" + Integer.toString(town.getBonusBlocks()) + newLine);
-			// Purchased Blocks
-			fout.write("purchasedBlocks=" + Integer.toString(town.getPurchasedBlocks()) + newLine);
-			// Taxpercent
-			fout.write("taxpercent=" + Boolean.toString(town.isTaxPercentage()) + newLine);
-			// Taxes
-			fout.write("taxes=" + Double.toString(town.getTaxes()) + newLine);
-			// Plot Price
-			fout.write("plotPrice=" + Double.toString(town.getPlotPrice()) + newLine);
-			// Plot Tax
-			fout.write("plotTax=" + Double.toString(town.getPlotTax()) + newLine);
-			// Commercial Plot Price
-			fout.write("commercialPlotPrice=" + Double.toString(town.getCommercialPlotPrice()) + newLine);
-			// Commercial Tax
-			fout.write("commercialPlotTax=" + Double.toString(town.getCommercialPlotTax()) + newLine);
-			// Embassy Plot Price
-			fout.write("embassyPlotPrice=" + Double.toString(town.getEmbassyPlotPrice()) + newLine);
-			// Embassy Tax
-			fout.write("embassyPlotTax=" + Double.toString(town.getEmbassyPlotTax()) + newLine);
-			// Upkeep
-			fout.write("hasUpkeep=" + Boolean.toString(town.hasUpkeep()) + newLine);
-			// Open
-			fout.write("open=" + Boolean.toString(town.isOpen()) + newLine);
-			// PVP
-			fout.write("adminDisabledPvP=" + Boolean.toString(town.isAdminDisabledPVP()) + newLine);
-			/* // Mobs
-			* fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
-			*/
-			// Public
-			fout.write("public=" + Boolean.toString(town.isPublic()) + newLine);
-			/*
-			 * // Explosions
-			 * fout.write("explosion=" + Boolean.toString(town.isBANG()) +
-			 * newLine);
-			 * // Firespread
-			 * fout.write("fire=" + Boolean.toString(town.isFire()) + newLine);
-			 */
-			
-			// TownBlocks
-			//fout.write("townBlocks=" + utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())) + newLine);
-			
-			// Home Block
-			if (town.hasHomeBlock())
-				fout.write("homeBlock=" + town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()) + newLine);
-			// Spawn
-			if (town.hasSpawn())
-				fout.write("spawn=" + town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()) + newLine);
-
-			// Outpost Spawns
-			if (town.hasOutpostSpawn()) {
-				String outpostArray = "outpostspawns=";
-				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
-					outpostArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
-				}
-				fout.write(outpostArray);
-			}
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving town file (" + town.getName() + ")");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
-		}
-		
-		return true;
-
-	}
-
-	@Override
-	public boolean saveNation(Nation nation) {
-
-		BufferedWriter fout = null;
-
-		try {
-			String path = getNationFilename(nation);
-			
-			fout = new BufferedWriter(new FileWriter(path));
-			fout.write("towns=" + StringMgmt.join(nation.getTowns(), ",") + newLine);
-
-			if (nation.hasCapital())
-				fout.write("capital=" + nation.getCapital().getName() + newLine);
-			
-			if (nation.hasTag())
-				fout.write("tag=" + nation.getTag() + newLine);
-			
-			fout.write("assistants=" + StringMgmt.join(nation.getAssistants(), ",") + newLine);
-
-			fout.write("allies=" + StringMgmt.join(nation.getAllies(), ",") + newLine);
-
-			fout.write("enemies=" + StringMgmt.join(nation.getEnemies(), ",") + newLine);
-
-			// Taxes
-			fout.write("taxes=" + Double.toString(nation.getTaxes()) + newLine);
-			// Neutral
-			fout.write("neutral=" + Boolean.toString(nation.isNeutral()) + newLine);
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving nation file (" + nation.getName() + ")");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
-		}
-		
-		return true;
-
-	}
-
-	@Override
-	public boolean saveWorld(TownyWorld world) {
-
-		BufferedWriter fout = null;
-
-		try {
-			String path = getWorldFilename(world);
-			fout = new BufferedWriter(new FileWriter(path));
-
-			// Towns
-			fout.write("towns=" + StringMgmt.join(world.getTowns(), ",") + newLine);
-
-			fout.write(newLine);
-
-			// PvP
-			fout.write("pvp=" + Boolean.toString(world.isPVP()) + newLine);
-			// Force PvP
-			fout.write("forcepvp=" + Boolean.toString(world.isForcePVP()) + newLine);
-			// Claimable
-			fout.write("# Can players found towns and claim plots in this world?" + newLine);
-			fout.write("claimable=" + Boolean.toString(world.isClaimable()) + newLine);
-			// has monster spawns			
-			fout.write("worldmobs=" + Boolean.toString(world.hasWorldMobs()) + newLine);
-			// force town mob spawns			
-			fout.write("forcetownmobs=" + Boolean.toString(world.isForceTownMobs()) + newLine);
-			// has firespread enabled
-			fout.write("firespread=" + Boolean.toString(world.isFire()) + newLine);
-			fout.write("forcefirespread=" + Boolean.toString(world.isForceFire()) + newLine);
-			// has explosions enabled
-			fout.write("explosions=" + Boolean.toString(world.isExpl()) + newLine);
-			fout.write("forceexplosions=" + Boolean.toString(world.isForceExpl()) + newLine);
-			// Enderman block protection
-			fout.write("endermanprotect=" + Boolean.toString(world.isEndermanProtect()) + newLine);
-			// PlayerTrample
-			fout.write("disableplayertrample=" + Boolean.toString(world.isDisablePlayerTrample()) + newLine);
-			// CreatureTrample
-			fout.write("disablecreaturetrample=" + Boolean.toString(world.isDisableCreatureTrample()) + newLine);
-
-			// Unclaimed
-			fout.write(newLine);
-			fout.write("# Unclaimed Zone settings." + newLine);
-
-			// Unclaimed Zone Build
-			if (world.getUnclaimedZoneBuild() != null)
-				fout.write("unclaimedZoneBuild=" + Boolean.toString(world.getUnclaimedZoneBuild()) + newLine);
-			// Unclaimed Zone Destroy
-			if (world.getUnclaimedZoneDestroy() != null)
-				fout.write("unclaimedZoneDestroy=" + Boolean.toString(world.getUnclaimedZoneDestroy()) + newLine);
-			// Unclaimed Zone Switch
-			if (world.getUnclaimedZoneSwitch() != null)
-				fout.write("unclaimedZoneSwitch=" + Boolean.toString(world.getUnclaimedZoneSwitch()) + newLine);
-			// Unclaimed Zone Item Use
-			if (world.getUnclaimedZoneItemUse() != null)
-				fout.write("unclaimedZoneItemUse=" + Boolean.toString(world.getUnclaimedZoneItemUse()) + newLine);
-			// Unclaimed Zone Name
-			if (world.getUnclaimedZoneName() != null)
-				fout.write("unclaimedZoneName=" + world.getUnclaimedZoneName() + newLine);
-
-			fout.write(newLine);
-			fout.write("# The following settings are only used if you are not using any permissions provider plugin" + newLine);
-
-			// Unclaimed Zone Ignore Ids
-			if (world.getUnclaimedZoneIgnoreIds() != null)
-				fout.write("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ",") + newLine);
-
-			// PlotManagement Delete
-			fout.write(newLine);
-			fout.write("# The following settings control what blocks are deleted upon a townblock being unclaimed" + newLine);
-
-			// Using PlotManagement Delete
-			fout.write("usingPlotManagementDelete=" + Boolean.toString(world.isUsingPlotManagementDelete()) + newLine);
-			// Plot Management Delete Ids
-			if (world.getPlotManagementDeleteIds() != null)
-				fout.write("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ",") + newLine);
-
-			// PlotManagement
-			fout.write(newLine);
-			fout.write("# The following settings control what blocks are deleted upon a mayor issuing a '/plot clear' command" + newLine);
-
-			// Using PlotManagement Mayor Delete
-			fout.write("usingPlotManagementMayorDelete=" + Boolean.toString(world.isUsingPlotManagementMayorDelete()) + newLine);
-			// Plot Management Mayor Delete
-			if (world.getPlotManagementMayorDelete() != null)
-				fout.write("plotManagementMayorDelete=" + StringMgmt.join(world.getPlotManagementMayorDelete(), ",") + newLine);
-
-			// PlotManagement Revert
-			fout.write(newLine + "# If enabled when a town claims a townblock a snapshot will be taken at the time it is claimed." + newLine);
-			fout.write("# When the townblock is unclaimded its blocks will begin to revert to the original snapshot." + newLine);
-
-			// Using PlotManagement Revert
-			fout.write("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()) + newLine);
-			// Using PlotManagement Revert Speed
-			fout.write("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()) + newLine);
-
-			fout.write("# Any block Id's listed here will not be respawned. Instead it will revert to air." + newLine);
-
-			// Plot Management Ignore Ids
-			if (world.getPlotManagementIgnoreIds() != null)
-				fout.write("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ",") + newLine);
-
-			// PlotManagement Wild Regen
-			fout.write(newLine);
-			fout.write("# If enabled any damage caused by explosions will repair itself." + newLine);
-
-			// Using PlotManagement Wild Regen
-			fout.write("usingPlotManagementWildRegen=" + Boolean.toString(world.isUsingPlotManagementWildRevert()) + newLine);
-
-			// Wilderness Explosion Protection entities
-			if (world.getPlotManagementWildRevertEntities() != null)
-				fout.write("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities(), ",") + newLine);
-
-			// Using PlotManagement Wild Regen Delay
-			fout.write("usingPlotManagementWildRegenDelay=" + Long.toString(world.getPlotManagementWildRevertDelay()) + newLine);
-
-			// Using Towny
-			fout.write(newLine);
-			fout.write("# This setting is used to enable or disable Towny in this world." + newLine);
-
-			// Using Towny
-			fout.write("usingTowny=" + Boolean.toString(world.isUsingTowny()) + newLine);
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving world file (" + world.getName() + ")");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
-		}
-		
-		return true;
-
-	}
-
-	@Override
-	public boolean saveAllTownBlocks() {
-
-		for (TownyWorld world : getWorlds()) {
-			for (TownBlock townBlock : world.getTownBlocks())
-				saveTownBlock(townBlock);
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean saveTownBlock(TownBlock townBlock) {
-
-		FileMgmt.checkFolders(new String[] { rootFolder + dataFolder + FileMgmt.fileSeparator() + "townblocks" + FileMgmt.fileSeparator() + townBlock.getWorld().getName() });
-
-		BufferedWriter fout = null;
-		String path = getTownBlockFilename(townBlock);
-
-		try {
-
-			fout = new BufferedWriter(new FileWriter(path));
-			// name
-			fout.write("name=" + townBlock.getName() + newLine);
-
-			// price
-			fout.write("price=" + townBlock.getPlotPrice() + newLine);
-			// town
-			fout.write("town=" + townBlock.getTown().getName() + newLine);
-
-			if (townBlock.hasResident()) {
-				// resident
-				fout.write("resident=" + townBlock.getResident().getName() + newLine);
-			}
-
-			// type
-			fout.write("type=" + townBlock.getType().getId() + newLine);
-			// outpost
-			fout.write("outpost=" + Boolean.toString(townBlock.isOutpost()) + newLine);
-
-			/*
-			 * Only include a permissions line IF the plot perms are custom.
-			 */
-			if (townBlock.isChanged()) {
-				// permissions
-				fout.write("permissions=" + townBlock.getPermissions().toString() + newLine);
-			}
-			// Have permissions been manually changed
-			fout.write("changed=" + Boolean.toString(townBlock.isChanged()) + newLine);
-
-			fout.write("locked=" + Boolean.toString(townBlock.isLocked()) + newLine);
-
-		} catch (Exception e) {
-
-			TownyMessaging.sendErrorMsg("Saving Error: Exception while saving TownBlock file (" + path + ")");
-			e.printStackTrace();
-			return false;
-
-		} finally {
-
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException ignore) {
-				}
-			}
-
 		}
 
 		return true;
