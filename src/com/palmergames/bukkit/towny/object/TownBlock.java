@@ -182,9 +182,6 @@ public class TownBlock {
 			this.permissions.reset();
 		
 		this.type = type;
-		
-		// Set the changed status.
-		this.setChanged(false);
 
 		// Custom plot settings here
 		switch (type) {
@@ -196,7 +193,7 @@ public class TownBlock {
 			} else {
 				setPermissions(this.town.permissions.toString());
 			}
-			this.setChanged(false);
+			
 			break;
 			
 		case COMMERCIAL:
@@ -207,7 +204,7 @@ public class TownBlock {
 			} else {
 				setPermissions(this.town.permissions.toString());
 			}
-			this.setChanged(false);
+			
 			break;
 			
 		case ARENA:
@@ -222,7 +219,7 @@ public class TownBlock {
 			} else {
 				setPermissions(this.town.permissions.toString());
 			}
-			this.setChanged(false);
+			
 			break;
 			
 		case WILDS:
@@ -237,6 +234,9 @@ public class TownBlock {
 			
 		}
 		
+		// Set the changed status.
+		this.setChanged(false);
+				
 	}
 
 	public void setType(int typeId) {
@@ -248,9 +248,12 @@ public class TownBlock {
 
 		if (typeName.equalsIgnoreCase("reset"))
 			typeName = "default";
+		
 		TownBlockType type = TownBlockType.lookup(typeName);
+		
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+		
 		setType(type);
 	}
 

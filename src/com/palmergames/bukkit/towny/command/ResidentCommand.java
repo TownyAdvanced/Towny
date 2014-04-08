@@ -409,16 +409,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET.getNode(split[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("perm")) {
+				
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), newSplit, true);
+				
 			} else if (split[0].equalsIgnoreCase("mode")) {
+				
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				setMode(player, newSplit);
 			} else {
+				
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
 				return;
+				
 			}
 
 			TownyUniverse.getDataSource().saveResident(resident);

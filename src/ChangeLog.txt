@@ -1955,4 +1955,7 @@ v0.85.0.14:
 	- Fix SQL prepared statement code (BIG thanks to JamieKG for all his testing).
 v0.85.0.15:
 	- Add a debug to world/town/nation loading to better show if something is missing in the data files.
+v0.85.0.16
 	- Revert plot perm changes and no longer delete any townblock data unless it's unclaimed.
+v0.85.0.17:
+	- Fix plot perms on load when using the new TownBlock save data.

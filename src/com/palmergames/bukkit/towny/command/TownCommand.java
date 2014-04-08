@@ -1734,6 +1734,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+			
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
 			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
@@ -1744,35 +1745,44 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (townBlockOwner instanceof Town)
 				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
 			if (townBlockOwner instanceof Resident)
-				player.sendMessage(ChatTools.formatCommand("Eg", "/resident|plot set perm", "friend build on", ""));
+				player.sendMessage(ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
 			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
+			
 		} else {
-			// TownyPermission perm = townBlockOwner.getPermissions();
 
 			// reset the friend to resident so the perm settings don't fail
 			if (friend && split[0].equalsIgnoreCase("friend"))
 				split[0] = "resident";
 
 			if (split.length == 1) {
+				
 				if (split[0].equalsIgnoreCase("reset")) {
+					
 					// reset all townBlock permissions (by town/resident)
 					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+						
 						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
+							
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							
 						}
 					}
+					
 					if (townBlockOwner instanceof Town)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
 					else
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
 
+					// Reset all caches as this can affect everyone.
 					plugin.resetCache();
+					
 					return;
 					
 				} else {
+					
 					// Set all perms to On or Off
 					// '/town set perm off'
 
@@ -1790,9 +1800,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 
 				}
-			} else if (split.length == 2)
+				
+			} else if (split.length == 2) {
+				
 				try {
+					
 					boolean b = plugin.parseOnOff(split[1]);
+					
 					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
 						perm.residentBuild = b;
 						perm.residentDestroy = b;
@@ -1825,18 +1839,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						perm.outsiderItemUse = b;
 						perm.allyItemUse = b;
 					}
-					/*
-					 * } else if (split[0].equalsIgnoreCase("pvp")) { perm.pvp =
-					 * b; } else if (split[0].equalsIgnoreCase("fire")) {
-					 * perm.fire = b; } else if
-					 * (split[0].equalsIgnoreCase("explosion")) { perm.explosion
-					 * = b; } else if (split[0].equalsIgnoreCase("mobs")) {
-					 * perm.mobs = b; }
-					 */
 
 				} catch (Exception e) {
 				}
-			else if (split.length == 3)
+				
+			} else if (split.length == 3) {
+				
 				try {
 					boolean b = plugin.parseOnOff(split[2]);
 					String s = "";
@@ -1844,6 +1852,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					perm.set(s, b);
 				} catch (Exception e) {
 				}
+				
+			}
 			
 			// Propagate perms to all unchanged, town owned, townblocks
 			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
@@ -1855,9 +1865,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			// change perm name to friend is this is a resident setting
-			// if (friend)
-			// perms = perms.replaceAll("resident", "friend");
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
 			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));

@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -285,9 +286,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Check we are allowed to set these perms
 							toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 
-							TownCommand.setTownBlockPermissions(player, owner, townBlock.getPermissions(), StringMgmt.remFirstArg(split), true);
-							//townBlock.setChanged(true);
-							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
+
 							return true;
 							
 						} else if (split[0].equalsIgnoreCase("name")) {
@@ -370,6 +370,133 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+	
+	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
+
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+			
+			player.sendMessage(ChatTools.formatTitle("/... set perm"));
+			player.sendMessage(ChatTools.formatCommand("Level", "[friend/ally/outsider]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
+			player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
+			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", ""));
+			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
+			
+		} else {
+			
+			TownyPermission perm = townBlock.getPermissions();
+
+			if (split.length == 1) {
+				
+				if (split[0].equalsIgnoreCase("reset")) {
+					
+					// reset this townBlock permissions (by town/resident)
+					townBlock.setType(townBlock.getType());
+					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+
+					if (townBlockOwner instanceof Town)
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
+					else
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "your"));
+
+					// Reset all caches as this can affect everyone.
+					plugin.resetCache();
+					
+					return;
+					
+				} else {
+					
+					// Set all perms to On or Off
+					// '/plot set perm off'
+
+					try {
+						boolean b = plugin.parseOnOff(split[0]);
+						for (String element : new String[] { "residentBuild",
+								"residentDestroy", "residentSwitch",
+								"residentItemUse", "outsiderBuild",
+								"outsiderDestroy", "outsiderSwitch",
+								"outsiderItemUse", "allyBuild", "allyDestroy",
+								"allySwitch", "allyItemUse" })
+							perm.set(element, b);
+					} catch (Exception e) {
+						// invalid entry
+					}
+
+				}
+				
+			} else if (split.length == 2) {
+				
+				try {
+					
+					boolean b = plugin.parseOnOff(split[1]);
+					
+					if (split[0].equalsIgnoreCase("friend")) {
+						perm.residentBuild = b;
+						perm.residentDestroy = b;
+						perm.residentSwitch = b;
+						perm.residentItemUse = b;
+					} else if (split[0].equalsIgnoreCase("outsider")) {
+						perm.outsiderBuild = b;
+						perm.outsiderDestroy = b;
+						perm.outsiderSwitch = b;
+						perm.outsiderItemUse = b;
+					} else if (split[0].equalsIgnoreCase("ally")) {
+						perm.allyBuild = b;
+						perm.allyDestroy = b;
+						perm.allySwitch = b;
+						perm.allyItemUse = b;
+					} else if (split[0].equalsIgnoreCase("build")) {
+						perm.residentBuild = b;
+						perm.outsiderBuild = b;
+						perm.allyBuild = b;
+					} else if (split[0].equalsIgnoreCase("destroy")) {
+						perm.residentDestroy = b;
+						perm.outsiderDestroy = b;
+						perm.allyDestroy = b;
+					} else if (split[0].equalsIgnoreCase("switch")) {
+						perm.residentSwitch = b;
+						perm.outsiderSwitch = b;
+						perm.allySwitch = b;
+					} else if (split[0].equalsIgnoreCase("itemuse")) {
+						perm.residentItemUse = b;
+						perm.outsiderItemUse = b;
+						perm.allyItemUse = b;
+					}
+
+				} catch (Exception e) {
+				}
+				
+			} else if (split.length == 3) {
+				
+				// reset the friend to resident so the perm settings don't fail
+				if (split[0].equalsIgnoreCase("friend"))
+					split[0] = "resident";
+				
+				try {
+					boolean b = plugin.parseOnOff(split[2]);
+					String s = "";
+					s = split[0] + split[1];
+					perm.set(s, b);
+				} catch (Exception e) {
+				}
+				
+			}
+			
+			townBlock.setChanged(true);
+			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+			
+			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
+			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+
+			// Reset all caches as this can affect everyone.
+			plugin.resetCache();
+		}
 	}
 
 	/**
