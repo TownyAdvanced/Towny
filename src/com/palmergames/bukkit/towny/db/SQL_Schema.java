@@ -132,7 +132,7 @@ public class SQL_Schema {
 				+ "`price` float DEFAULT 0,"
 				+ "`town` mediumtext,"
 				+ "`resident` mediumtext,"
-				+ "`type` int NOT NULL DEFAULT '0',"
+				+ "`type` TINYINT NOT  NULL DEFAULT '0',"
 				+ "`outpost` bool NOT NULL DEFAULT '0',"
 				+ "`permissions` mediumtext NOT NULL,"
 				+ "`locked` bool NOT NULL DEFAULT '0',"
@@ -292,7 +292,7 @@ public class SQL_Schema {
 					+ "ADD COLUMN `price` float DEFAULT 0,"
 					+ "ADD COLUMN `town` mediumtext,"
 					+ "ADD COLUMN `resident` mediumtext,"
-					+ "ADD COLUMN `type` int NOT NULL DEFAULT '0',"
+					+ "ADD COLUMN `type` TINYINT NOT  NULL DEFAULT '0',"
 					+ "ADD COLUMN `outpost` bool NOT NULL DEFAULT '0'";
 			
 			Statement s = cntx.createStatement();

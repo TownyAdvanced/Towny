@@ -1963,7 +1963,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * @param town
 	 * @param resident
 	 */
-
+	@Deprecated
 	public void utilLoadTownBlocks(String line, Town town, Resident resident) {
 
 		String[] worlds = line.split("\\|");
@@ -2026,6 +2026,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 	}
 
+	@Deprecated
 	public void utilLoadTownBlockTypeData(TownBlock townBlock, String data) {
 
 		String[] tokens = data.split(",");
@@ -2039,6 +2040,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			townBlock.setOutpost(tokens[1].equalsIgnoreCase("1") ? true : false);
 	}
 
+	@Deprecated
 	public String utilSaveTownBlocks(List<TownBlock> townBlocks) {
 
 		HashMap<TownyWorld, ArrayList<TownBlock>> worlds = new HashMap<TownyWorld, ArrayList<TownBlock>>();

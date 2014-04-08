@@ -1970,3 +1970,5 @@ v0.85.0.19:
 	- Only attempt to load townBlocks for older databases.
 	- Add missing field saving on TownBlocks to SQL.
 	- Only delete old files if using flatfile for saving or loading.
+v0.85.0.20:
+	- Move all SQL Saving to an Async task.

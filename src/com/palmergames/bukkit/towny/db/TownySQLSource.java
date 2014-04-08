@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,6 +35,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 
@@ -46,6 +49,8 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class TownySQLSource extends TownyFlatFileSource {
+	
+	private Queue<SQL_Query> queryQueue = new ConcurrentLinkedQueue<SQL_Query>();
 
 	protected String driver = "";
 	protected String dsn = "";
@@ -82,7 +87,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		this.rootFolder = universe.getRootFolder();
 
 		try {
-			
+
 			FileMgmt.checkFolders(new String[] {
 					rootFolder,
 					rootFolder + dataFolder,
@@ -90,7 +95,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			FileMgmt.checkFiles(new String[] {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
-			
+
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
@@ -104,26 +109,26 @@ public class TownySQLSource extends TownyFlatFileSource {
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
 		if (this.type.equals("h2")) {
-			
+
 			this.driver = "org.h2.Driver";
 			this.dsn = ("jdbc:h2:" + rootFolder + dataFolder + File.separator + db_name + ".h2db;AUTO_RECONNECT=TRUE");
 			username = "sa";
 			password = "sa";
-			
+
 		} else if (this.type.equals("mysql")) {
-			
+
 			this.driver = "com.mysql.jdbc.Driver";
 			this.dsn = ("jdbc:mysql://" + hostname + ":" + port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8");
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
-			
+
 		} else {
-			
+
 			this.driver = "org.sqlite.JDBC";
 			this.dsn = ("jdbc:sqlite:" + rootFolder + dataFolder + File.separator + db_name + ".sqldb");
 			username = TownySettings.getSQLUsername();
 			password = TownySettings.getSQLPassword();
-			
+
 		}
 
 		/*
@@ -135,25 +140,52 @@ public class TownySQLSource extends TownyFlatFileSource {
 		} catch (Exception e) {
 			System.out.println("[Towny] Driver error: " + e);
 		}
-		
+
 		/*
 		 * Attempt to get a connection to the database
 		 */
 		if (getContext()) {
-			
+
 			TownyMessaging.sendDebugMsg("[Towny] Connected to Database");
-			
+
 		} else {
-			
+
 			TownyMessaging.sendErrorMsg("Failed when connecting to Database");
 			return;
-			
+
 		}
 
 		/*
 		 *  Initialise database Schema.
 		 */
 		SQL_Schema.initTables(cntx, db_name);
+
+		/*
+		 * Start our Async queue for pushing data to the database.
+		 */
+		BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+
+			public void run() {
+
+				while (!TownySQLSource.this.queryQueue.isEmpty()) {
+
+					SQL_Query query = TownySQLSource.this.queryQueue.poll();
+
+					if (query.update) {
+
+						TownySQLSource.this.UpdateDB(query.tb_name, query.args, query.keys);
+
+					} else {
+
+						TownySQLSource.this.DeleteDB(query.tb_name, query.args);
+						
+					}
+
+				}
+
+			}
+
+		}, 5L, 5L);
 	}
 
 	/**
@@ -165,13 +197,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		try {
 			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
-				
+
 				if (cntx != null && !cntx.isClosed()) {
-					
+
 					try {
-						
+
 						cntx.close();
-						
+
 					} catch (SQLException e) {
 						/*
 						 *  We're disposing of an old stale connection just be nice to the GC
@@ -181,13 +213,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 					cntx = null;
 				}
-				
+
 				if ((this.username.equalsIgnoreCase("")) && (this.password.equalsIgnoreCase(""))) {
-					
+
 					cntx = DriverManager.getConnection(this.dsn);
-					
+
 				} else {
-					
+
 					cntx = DriverManager.getConnection(this.dsn, this.username, this.password);
 				}
 
@@ -196,11 +228,11 @@ public class TownySQLSource extends TownyFlatFileSource {
 			}
 
 			return true;
-			
+
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
 		}
-		
+
 		return false;
 	}
 
@@ -213,6 +245,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 * @return true if the update was successfull.
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
+
+		/*
+		 *  Make sure we only execute queries in async
+		 */
+
+		if (BukkitTools.isPrimaryThread()) {
+
+			this.queryQueue.add(new SQL_Query(tb_name, args, keys));
+
+			return true;
+
+		}
 
 		/*
 		 *  Attempt to get a database connection.
@@ -236,7 +280,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				// Push all values to a parameter list.
 
 				parameters.addAll(args.values());
-				
+
 				String[] aKeys = args.keySet().toArray(new String[args.keySet().size()]);
 
 				// Build the prepared statement string appropriate for
@@ -268,7 +312,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				/*
 				 * We have keys so this is a conditional UPDATE.
 				 */
-				
+
 				String[] aKeys = args.keySet().toArray(new String[args.keySet().size()]);
 
 				// Build the prepared statement string appropriate for
@@ -320,7 +364,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				} else if (element instanceof Boolean) {
 
-					stmt.setString(count + 1, ((Boolean) element) ? "1":"0");
+					stmt.setString(count + 1, ((Boolean) element) ? "1" : "0");
 
 				} else {
 
@@ -329,13 +373,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 				}
 
 			}
-			
+
 			rs = stmt.executeUpdate();
 
 		} catch (SQLException e) {
-			
+
 			TownyMessaging.sendErrorMsg("SQL: " + e.getMessage() + " --> " + stmt.toString());
-			
+
 		} finally {
 
 			try {
@@ -343,7 +387,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (stmt != null) {
 					stmt.close();
 				}
-				
+
 				if (rs == 0) // if entry doesn't exist then try to insert
 					return UpdateDB(tb_name, args, null);
 
@@ -370,6 +414,16 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 * @return true if the delete was a success.
 	 */
 	public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
+
+		// Make sure we only execute queries in async
+
+		if (BukkitTools.isPrimaryThread()) {
+
+			this.queryQueue.add(new SQL_Query(tb_name, args));
+
+			return true;
+
+		}
 
 		if (!getContext())
 			return false;
@@ -400,6 +454,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		}
 		return false;
 	}
+
 
 	/*
 	 * Load keys
@@ -602,20 +657,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 					e.printStackTrace();
 				}
 
-				
-
 				/*
 				 * Attempt these for older databases.
 				 */
 				try {
-					
+
 					line = rs.getString("townBlocks");
 					if ((line != null) && (!line.isEmpty()))
 						utilLoadTownBlocks(line, null, resident);
-					
+
 				} catch (SQLException e) {
 				}
-				
+
 				s.close();
 				return true;
 			}
@@ -764,19 +817,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				}
-				
+
 				/*
 				 * Attempt these for older databases.
 				 */
 				try {
-					
+
 					line = rs.getString("townBlocks");
 					if (line != null)
 						utilLoadTownBlocks(line, town, null);
-					
+
 				} catch (SQLException e) {
 				}
-				
+
 				s.close();
 				return true;
 			}
@@ -1023,9 +1076,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
-									
+
 									mats.add(Material.getMaterial(id).name());
-									
+
 								} catch (NumberFormatException e) {
 									mats.add(split);
 								}
@@ -1048,9 +1101,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
-									
+
 									mats.add(Material.getMaterial(id).name());
-									
+
 								} catch (NumberFormatException e) {
 									mats.add(split);
 								}
@@ -1101,9 +1154,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
-									
+
 									mats.add(Material.getMaterial(id).name());
-									
+
 								} catch (NumberFormatException e) {
 									mats.add(split);
 								}
@@ -1166,16 +1219,16 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		String line = "";
 		Boolean result = false;
-		
+
 		// Load town blocks
 		if (!getContext())
 			return false;
-		
+
 		ResultSet rs;
-		
+
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			//boolean set = false;
-			
+
 			try {
 				Statement s = cntx.createStatement();
 				rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS" + " WHERE world='" + townBlock.getWorld().getName() + "' AND x='" + townBlock.getX() + "' AND z='" + townBlock.getZ() + "'");
@@ -1187,14 +1240,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 							townBlock.setName(line.trim());
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("price");
 					if (line != null)
 						try {
 							townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("town");
 					if (line != null)
 						try {
@@ -1202,7 +1255,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 							townBlock.setTown(town);
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("resident");
 					if (line != null && !line.isEmpty())
 						try {
@@ -1210,14 +1263,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 							townBlock.setResident(res);
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("type");
 					if (line != null)
 						try {
 							townBlock.setType(Integer.parseInt(line));
 						} catch (Exception e) {
 						}
-					
+
 					line = rs.getString("outpost");
 					if (line != null)
 						try {
@@ -1248,20 +1301,20 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 
 				}
-				
-//				if (!set) {
-//					// no permissions found so set in relation to it's
-//					// owners perms.
-//					try {
-//						if (townBlock.hasResident()) {
-//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-//						} else {
-//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-//						}
-//					} catch (NotRegisteredException e) {
-//						// Will never reach here
-//					}
-//				}
+
+				//				if (!set) {
+				//					// no permissions found so set in relation to it's
+				//					// owners perms.
+				//					try {
+				//						if (townBlock.hasResident()) {
+				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
+				//						} else {
+				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+				//						}
+				//					} catch (NotRegisteredException e) {
+				//						// Will never reach here
+				//					}
+				//				}
 
 				s.close();
 
@@ -1296,10 +1349,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
 			//res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-			
+
 			UpdateDB("RESIDENTS", res_hm, Arrays.asList("name"));
 			return true;
-			
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
 		}
@@ -1349,7 +1402,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
 			return true;
-			
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
 			e.printStackTrace();
@@ -1372,9 +1425,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("neutral", nation.isNeutral());
-			
+
 			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
-			
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
 			e.printStackTrace();
@@ -1494,9 +1547,9 @@ public class TownySQLSource extends TownyFlatFileSource {
 			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
-			
+
 			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
-			
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
 			e.printStackTrace();
@@ -1572,21 +1625,21 @@ public class TownySQLSource extends TownyFlatFileSource {
 			plugin.setupLogger();
 		}
 	}
-	
+
 	@Override
-	public boolean cleanup(){
-		
+	public boolean cleanup() {
+
 		/*
 		 *  Attempt to get a database connection.
 		 */
 		if (!getContext())
 			return false;
-		
+
 		SQL_Schema.cleanup(cntx, db_name);
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * Save keys
 	 */
@@ -1596,7 +1649,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		return true;
 	}
-	
+
 	@Override
 	public boolean saveResidentList() {
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -87,6 +88,10 @@ public class BukkitTools {
 	
 	public static BukkitScheduler getScheduler() {
 		return getServer().getScheduler();
+	}
+	
+	public static boolean isPrimaryThread() {
+		return Bukkit.isPrimaryThread();
 	}
 	
 	/**
