@@ -50,7 +50,7 @@ import java.sql.ResultSet;
 
 public class TownySQLSource extends TownyFlatFileSource {
 	
-	private Queue<SQL_Query> queryQueue = new ConcurrentLinkedQueue<SQL_Query>();
+	private Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<SQL_Task>();
 
 	protected String driver = "";
 	protected String dsn = "";
@@ -169,7 +169,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				while (!TownySQLSource.this.queryQueue.isEmpty()) {
 
-					SQL_Query query = TownySQLSource.this.queryQueue.poll();
+					SQL_Task query = TownySQLSource.this.queryQueue.poll();
 
 					if (query.update) {
 
@@ -252,7 +252,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		if (BukkitTools.isPrimaryThread()) {
 
-			this.queryQueue.add(new SQL_Query(tb_name, args, keys));
+			this.queryQueue.add(new SQL_Task(tb_name, args, keys));
 
 			return true;
 
@@ -419,7 +419,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 		if (BukkitTools.isPrimaryThread()) {
 
-			this.queryQueue.add(new SQL_Query(tb_name, args));
+			this.queryQueue.add(new SQL_Task(tb_name, args));
 
 			return true;
 
