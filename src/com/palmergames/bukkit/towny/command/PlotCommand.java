@@ -551,22 +551,33 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public TownBlockOwner plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 
+		Player player = BukkitTools.getPlayer(resident.getName());
+		boolean isAdmin = TownyUniverse.getPermissionSource().isTownyAdmin(player);
+		
 		if (townBlock.hasResident()) {
+			
 			Resident owner = townBlock.getResident();
+			boolean isSameTown = (resident.hasTown()) ? resident.getTown() == owner.getTown() : false;
+			
+			if ((resident == owner)
+					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
+					|| isAdmin) {
+				
+				return owner;
+			}
 
-			// If not the plot owner or the towns mayor
-			if ((resident != owner) && (!BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
-				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
-
-			return owner;
+			// Not the plot owner or the towns mayor or an admin.
+			throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
 
 		} else {
+			
 			Town owner = townBlock.getTown();
+			boolean isSameTown = (resident.hasTown()) ? resident.getTown() == owner : false;
 
-			if (!BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
+			if (isSameTown && !BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_not_mayor_ass"));
 
-			if ((resident.getTown() != owner))
+			if (!isSameTown && !isAdmin)
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 
 			return owner;

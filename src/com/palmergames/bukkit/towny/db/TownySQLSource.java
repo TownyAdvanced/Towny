@@ -233,10 +233,11 @@ public class TownySQLSource extends TownyFlatFileSource {
 				 * No keys so this is an INSERT not an UPDATE.
 				 */
 
-				// Push all keys and values to a parameter list.
+				// Push all values to a parameter list.
 
-				parameters.addAll(args.keySet());
 				parameters.addAll(args.values());
+				
+				String[] aKeys = args.keySet().toArray(new String[args.keySet().size()]);
 
 				// Build the prepared statement string appropriate for
 				// the number of keys/values we are inserting.
@@ -247,12 +248,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				for (int count = 0; count < args.size(); count++) {
 
-					keycode += "`?`";
-					valuecode += "'?'";
+					keycode += "`" + aKeys[count] + "`";
+					valuecode += "?";
 
-					if ((count < args.size())) {
+					if ((count < (args.size() - 1))) {
 						keycode += ", ";
-						valuecode += ", ";
+						valuecode += ",";
+					} else {
+						keycode += ")";
+						valuecode += ")";
 					}
 				}
 
@@ -274,14 +278,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				for (int count = 0; count < args.size(); count++) {
 
-					code += "`?` = '?'";
+					code += "`" + aKeys[count] + "` = ?";
 
-					// Push key and value for each entry.
+					// Push value for each entry.
 
-					parameters.add(aKeys[count]);
-					parameters.add(args.get(count));
+					parameters.add(args.get(aKeys[count]));
 
-					if ((count < args.size())) {
+					if ((count < (args.size() - 1))) {
 						code += ",";
 					}
 				}
@@ -290,14 +293,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				for (int count = 0; count < keys.size(); count++) {
 
-					code += "`?` = '?'";
+					code += "`" + keys.get(count) + "` = ?";
 
 					// Add extra values for the WHERE conditionals.
 
-					parameters.add(keys.get(count));
 					parameters.add(args.get(keys.get(count)));
 
-					if ((count < keys.size())) {
+					if ((count < (keys.size() - 1))) {
 						code += " AND ";
 					}
 				}
@@ -318,21 +320,21 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				} else if (element instanceof Boolean) {
 
-					stmt.setBoolean(count + 1, (Boolean) element);
+					stmt.setString(count + 1, ((Boolean) element) ? "1":"0");
 
 				} else {
 
-					stmt.setObject(count + 1, element);
+					stmt.setObject(count + 1, element.toString());
 
 				}
 
 			}
-
+			
 			rs = stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			
-			TownyMessaging.sendErrorMsg("SQL: Insert sql error " + e.getMessage() + " --> " + code);
+			TownyMessaging.sendErrorMsg("SQL: " + e.getMessage() + " --> " + stmt.toString());
 			
 		} finally {
 
@@ -341,9 +343,12 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (stmt != null) {
 					stmt.close();
 				}
+				
+				if (rs == 0) // if entry doesn't exist then try to insert
+					return UpdateDB(tb_name, args, null);
 
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL: Insert sql error closing " + e.getMessage() + " --> " + code);
+				TownyMessaging.sendErrorMsg("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
 			}
 
 		}
@@ -566,20 +571,20 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("town-ranks");
 				if ((line != null) && (!line.isEmpty())) {
-					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
+					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split("#")))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 				}
 
 				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
-					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split(",")))));
+					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split("#")))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
 				}
 
 				try {
 					line = rs.getString("friends");
 					if (line != null) {
-						String[] tokens = line.split(",");
+						String[] tokens = line.split("#");
 						for (String token : tokens) {
 							if (!token.isEmpty()) {
 								Resident friend = getResident(token);
@@ -592,7 +597,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					e.printStackTrace();
 				}
 				try {
-					resident.setPermissions(rs.getString("protectionStatus"));
+					resident.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -631,7 +636,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("residents");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("-");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Resident resident = getResident(token);
@@ -660,7 +665,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					} catch (TownyException e) {
 						town.setTag("");
 					}
-				town.setPermissions(rs.getString("protectionStatus"));
+				town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 				town.setBonusBlocks(rs.getInt("bonus"));
 				town.setTaxPercentage(rs.getBoolean("taxpercent"));
 				town.setTaxes(rs.getFloat("taxes"));
@@ -683,7 +688,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("homeBlock");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					if (tokens.length == 3)
 						try {
 							TownyWorld world = getWorld(tokens[0]);
@@ -708,7 +713,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("spawn");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					if (tokens.length >= 4)
 						try {
 							World world = plugin.getServerWorld(tokens[0]);
@@ -784,7 +789,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Town town = getTown(token);
@@ -810,7 +815,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("allies");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Nation friend = getNation(token);
@@ -822,7 +827,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("enemies");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Nation enemy = getNation(token);
@@ -863,7 +868,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
-					tokens = line.split(",");
+					tokens = line.split("#");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Town town = getTown(token);
@@ -997,7 +1002,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split(","))
+						for (String split : line.split("#"))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1022,7 +1027,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split(","))
+						for (String split : line.split("#"))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1047,7 +1052,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> materials = new ArrayList<String>();
-						for (String split : line.split(","))
+						for (String split : line.split("'"))
 							if (!split.isEmpty())
 								try {
 									materials.add(split.toUpperCase().trim());
@@ -1075,7 +1080,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split(","))
+						for (String split : line.split("#"))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1100,7 +1105,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> entities = new ArrayList<String>();
-						for (String split : line.split(","))
+						for (String split : line.split("#"))
 							if (!split.isEmpty())
 								try {
 									entities.add(split.trim());
@@ -1204,7 +1209,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					if (line != null)
 						try {
 							if (!line.isEmpty())
-								townBlock.setPermissions(line.trim());
+								townBlock.setPermissions(line.trim().replaceAll("#", ","));
 							//set = true;
 						} catch (Exception e) {
 						}
@@ -1271,14 +1276,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
-			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), ",") : "");
-			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), ",") : "");
+			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
+			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
 			String fstr = "";
 			for (Resident friend : resident.getFriends())
-				fstr += friend.getName() + ",";
+				fstr += friend.getName() + "#";
 			res_hm.put("friends", fstr);
 			//res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
-			res_hm.put("protectionStatus", resident.getPermissions().toString());
+			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
 			
 			UpdateDB("RESIDENTS", res_hm, Arrays.asList("name"));
 			return true;
@@ -1296,16 +1301,16 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 			twn_hm.put("name", town.getName());
-			twn_hm.put("residents", StringMgmt.join(town.getResidents(), ","));
+			twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
 			twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
 			twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
 			String fstr = "";
 			for (Resident assist : town.getAssistants())
-				fstr += assist.getName() + ",";
+				fstr += assist.getName() + "#";
 			twn_hm.put("assistants", fstr);
 			twn_hm.put("townBoard", town.getTownBoard());
 			twn_hm.put("tag", town.getTag());
-			twn_hm.put("protectionStatus", town.getPermissions().toString());
+			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
 			twn_hm.put("bonus", town.getBonusBlocks());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
 			twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
@@ -1322,13 +1327,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 
 			//twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
-			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "," + Integer.toString(town.getHomeBlock().getX()) + "," + Integer.toString(town.getHomeBlock().getZ()) : "");
-			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "," + Double.toString(town.getSpawn().getX()) + "," + Double.toString(town.getSpawn().getY()) + "," + Double.toString(town.getSpawn().getZ()) + "," + Float.toString(town.getSpawn().getPitch()) + "," + Float.toString(town.getSpawn().getYaw()) : "");
+			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + Integer.toString(town.getHomeBlock().getX()) + "#" + Integer.toString(town.getHomeBlock().getZ()) : "");
+			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + Double.toString(town.getSpawn().getX()) + "#" + Double.toString(town.getSpawn().getY()) + "#" + Double.toString(town.getSpawn().getZ()) + "#" + Float.toString(town.getSpawn().getPitch()) + "#" + Float.toString(town.getSpawn().getYaw()) : "");
 			// Outpost Spawns
 			if (town.hasOutpostSpawn()) {
 				String outpostArray = "";
 				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
-					outpostArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
+					outpostArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}
 				twn_hm.put("outpostSpawns", outpostArray);
 			}
@@ -1352,21 +1357,21 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("name", nation.getName());
 			String fstr = "";
 			for (Town town : nation.getTowns())
-				fstr += town.getName() + ",";
+				fstr += town.getName() + "#";
 			nat_hm.put("towns", fstr);
 			nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
 			nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
 			fstr = "";
 			for (Resident assistant : nation.getAssistants())
-				fstr += assistant.getName() + ",";
+				fstr += assistant.getName() + "#";
 			nat_hm.put("assistants", fstr);
 			fstr = "";
 			for (Nation allyNation : nation.getAllies())
-				fstr += allyNation.getName() + ",";
+				fstr += allyNation.getName() + "#";
 			nat_hm.put("allies", fstr);
 			fstr = "";
 			for (Nation enemyNation : nation.getEnemies())
-				fstr += enemyNation.getName() + ",";
+				fstr += enemyNation.getName() + "#";
 			nat_hm.put("enemies", fstr);
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("neutral", nation.isNeutral());
@@ -1391,7 +1396,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			String fstr = "";
 			for (Town town : world.getTowns())
-				fstr += town.getName() + ",";
+				fstr += town.getName() + "#";
 
 			// Towns
 			nat_hm.put("towns", fstr);
@@ -1432,19 +1437,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			// Unclaimed Zone Ignore Ids
 			if (world.getUnclaimedZoneIgnoreIds() != null)
-				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ","));
+				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
 			// Plot Management Delete Ids
 			if (world.getPlotManagementDeleteIds() != null)
-				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), "#"));
 
 			// Using PlotManagement Mayor Delete
 			nat_hm.put("usingPlotManagementMayorDelete", world.isUsingPlotManagementMayorDelete());
 			// Plot Management Mayor Delete
 			if (world.getPlotManagementMayorDelete() != null)
-				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), ","));
+				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), "#"));
 
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
@@ -1453,14 +1458,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)
-				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
+				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
 
 			// Using PlotManagement Wild Regen
 			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildRevert());
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities(), ","));
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
@@ -1488,7 +1493,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
-			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString() : "");
+			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
 			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));

@@ -128,8 +128,9 @@ public class SQL_Schema {
 				+ "`world` VARCHAR(32) NOT NULL,"
 				+ "`x` mediumint NOT NULL,"
 				+ "`z` mediumint NOT NULL,"
+				+ "`name` mediumtext,"
 				+ "`price` float DEFAULT 0,"
-				+ "`town` mediumtext NOT NULL,"
+				+ "`town` mediumtext,"
 				+ "`resident` mediumtext,"
 				+ "`type` int NOT NULL DEFAULT '0',"
 				+ "`outpost` bool NOT NULL DEFAULT '0',"
@@ -243,7 +244,7 @@ public class SQL_Schema {
 
 		try {
 			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN "
-						+ "`admindisabledpvp` bool";
+						+ "`admindisabledpvp` bool NOT NULL DEFAULT '0'";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_update);
@@ -264,9 +265,9 @@ public class SQL_Schema {
 
 		try {
 
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` ADD COLUMN "
-						+ "`town-ranks` mediumtext,"
-						+ "`nation-ranks` mediumtext";
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
+						+ "ADD COLUMN `town-ranks` mediumtext,"
+						+ "ADD COLUMN `nation-ranks` mediumtext";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
@@ -286,13 +287,13 @@ public class SQL_Schema {
 		String townblocks_update;
 
 		try {
-			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` ADD COLUMN "
-					+ "`name` mediumtext,"
-					+ "`price` float DEFAULT 0,"
-					+ "`town` mediumtext NOT NULL,"
-					+ "`resident` mediumtext,"
-					+ "`type` int NOT NULL DEFAULT '0',"
-					+ "`outpost` bool NOT NULL DEFAULT '0'";
+			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` "
+					+ "ADD COLUMN `name` mediumtext,"
+					+ "ADD COLUMN `price` float DEFAULT 0,"
+					+ "ADD COLUMN `town` mediumtext,"
+					+ "ADD COLUMN `resident` mediumtext,"
+					+ "ADD COLUMN `type` int NOT NULL DEFAULT '0',"
+					+ "ADD COLUMN `outpost` bool NOT NULL DEFAULT '0'";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(townblocks_update);
