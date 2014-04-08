@@ -206,9 +206,9 @@ public class Towny extends JavaPlugin {
 
 		if (!matcher.find() || matcher.group(1) == null) {
 
-			TownyLogger.log.severe("[Towny Warning] Unable to read CraftBukkit Version.");
-			TownyLogger.log.severe("[Towny Warning] Towny requires version " + bukkitVer + " or higher.");
-			TownyLogger.log.severe("[Towny Warning] Check your CraftBukkit version as we do not test on custom/old builds.");
+			TownyLogger.log.warning("[Towny Warning] Unable to read CraftBukkit Version.");
+			TownyLogger.log.warning("[Towny Warning] Towny requires version " + bukkitVer + " or higher.");
+			TownyLogger.log.warning("[Towny Warning] Check your CraftBukkit version as we do not test on custom/old builds.");
 
 		} else {
 

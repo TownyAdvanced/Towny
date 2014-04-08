@@ -1963,3 +1963,4 @@ v0.85.0.18:
 	- Revert townblock perm setting on data load.
 v0.85.0.18:
 	- Fix custom plot perms being overwritten by town when updating.
+	- Decrease warning level for the message at startup when using custom CraftBukkit/Spout builds.
