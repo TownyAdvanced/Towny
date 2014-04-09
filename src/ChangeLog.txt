@@ -1982,3 +1982,5 @@ v0.85.0.23:
 	- Fix VER for plot-block-data so it doesn't throw a divide by zero error on old plot data.
 v0.85.0.24:
 	- Add missing loadTownBlockList() for sql.
+v0.85.0.25:
+	- Support old sql databases still using a comma delimiter.

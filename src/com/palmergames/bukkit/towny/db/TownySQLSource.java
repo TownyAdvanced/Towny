@@ -633,6 +633,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS " + " WHERE name='" + resident.getName() + "'");
+			String search;
 
 			while (rs.next()) {
 				try {
@@ -669,20 +670,23 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("town-ranks");
 				if ((line != null) && (!line.isEmpty())) {
-					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split("#")))));
+					search = (line.contains("#")) ? "#" : ",";
+					resident.setTownRanks(new ArrayList<String>(Arrays.asList((line.split(search)))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Town-ranks " + line);
 				}
 
 				line = rs.getString("nation-ranks");
 				if ((line != null) && (!line.isEmpty())) {
-					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split("#")))));
+					search = (line.contains("#")) ? "#" : ",";
+					resident.setNationRanks(new ArrayList<String>(Arrays.asList((line.split(search)))));
 					TownyMessaging.sendDebugMsg("Resident " + resident.getName() + " set Nation-ranks " + line);
 				}
 
 				try {
 					line = rs.getString("friends");
 					if (line != null) {
-						String[] tokens = line.split("#");
+						search = (line.contains("#")) ? "#" : ",";
+						String[] tokens = line.split(search);
 						for (String token : tokens) {
 							if (!token.isEmpty()) {
 								Resident friend = getResident(token);
@@ -737,11 +741,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
-
+			String search;
+			
 			while (rs.next()) {
 
 				line = rs.getString("residents");
 				if (line != null) {
+					search = (line.contains("#")) ? "#" : ",";
 					tokens = line.split("#");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
@@ -898,11 +904,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
-
+			String search;
+			
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Town town = getTown(token);
@@ -928,7 +936,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("allies");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Nation friend = getNation(token);
@@ -940,7 +949,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("enemies");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Nation enemy = getNation(token);
@@ -977,11 +987,13 @@ public class TownySQLSource extends TownyFlatFileSource {
 		try {
 			Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");
-
+			String search;
+			
 			while (rs.next()) {
 				line = rs.getString("towns");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Town town = getTown(token);
@@ -1115,7 +1127,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split("#"))
+						search = (line.contains("#")) ? "#" : ",";
+						for (String split : line.split(search))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1140,7 +1153,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split("#"))
+						search = (line.contains("#")) ? "#" : ",";
+						for (String split : line.split(search))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1165,7 +1179,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> materials = new ArrayList<String>();
-						for (String split : line.split("'"))
+						search = (line.contains("#")) ? "#" : ",";
+						for (String split : line.split(search))
 							if (!split.isEmpty())
 								try {
 									materials.add(split.toUpperCase().trim());
@@ -1193,7 +1208,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> mats = new ArrayList<String>();
-						for (String split : line.split("#"))
+						search = (line.contains("#")) ? "#" : ",";
+						for (String split : line.split(search))
 							if (!split.isEmpty())
 								try {
 									int id = Integer.parseInt(split);
@@ -1218,7 +1234,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				if (line != null)
 					try {
 						List<String> entities = new ArrayList<String>();
-						for (String split : line.split("#"))
+						search = (line.contains("#")) ? "#" : ",";
+						for (String split : line.split(search))
 							if (!split.isEmpty())
 								try {
 									entities.add(split.trim());
