@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -710,6 +712,36 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			return owner;
 		}
 
+	}
+	
+	/**
+	 * Overridden method custom for this command set.
+	 * 
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+		LinkedList<String> output = new LinkedList<String>();
+		String lastArg = "";
+
+		// Get the last argument
+		if (args.length > 0) {
+			lastArg = args[args.length - 1].toLowerCase();
+		}
+
+		if (!lastArg.equalsIgnoreCase("")) {
+
+			// Match residents
+			for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
+				if (resident.getName().toLowerCase().startsWith(lastArg)) {
+					output.add(resident.getName());
+				}
+			
+			}
+
+		}
+
+		return output;
 	}
 
 }

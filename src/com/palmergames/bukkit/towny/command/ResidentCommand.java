@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.Chunk;
@@ -593,6 +594,36 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 
+	}
+	
+	/**
+	 * Overridden method custom for this command set.
+	 * 
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+		LinkedList<String> output = new LinkedList<String>();
+		String lastArg = "";
+
+		// Get the last argument
+		if (args.length > 0) {
+			lastArg = args[args.length - 1].toLowerCase();
+		}
+
+		if (!lastArg.equalsIgnoreCase("")) {
+
+			// Match residents
+			for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
+				if (resident.getName().toLowerCase().startsWith(lastArg)) {
+					output.add(resident.getName());
+				}
+			
+			}
+
+		}
+
+		return output;
 	}
 
 }
