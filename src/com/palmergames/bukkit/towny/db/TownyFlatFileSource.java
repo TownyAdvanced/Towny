@@ -2033,12 +2033,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			switch (plotChunk.getVersion()) {
 
 			case 1:
+			case 2:
 				/*
 				 * New system requires pushing
 				 * version data first
 				 */
 				fout.write("VER".getBytes(Charset.forName("UTF-8")));
-				fout.writeInt(plotChunk.getVersion());
+				fout.write(plotChunk.getVersion());
 
 				break;
 
@@ -2123,7 +2124,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				case VER:
 					// Read the file version
-					version = fin.readInt();
+					version = fin.read();
 					plotBlockData.setVersion(version);
 
 					// next entry is the plot height

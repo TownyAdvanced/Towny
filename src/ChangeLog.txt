@@ -1978,3 +1978,5 @@ v0.85.0.21:
 	  (Likely the last version to be compatible with 1.6.4 as the UUID changes coming will be 1.7.2+)
 v0.85.0.22:
 	- Restore support for old plot-block-data.
+v0.85.0.23:
+	- Fix VER for plot-block-data so it doesn't throw a divide by zero error on old plot data.
