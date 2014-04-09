@@ -466,6 +466,42 @@ public class TownySQLSource extends TownyFlatFileSource {
 	/*
 	 * Load keys
 	 */
+	@Override
+	public boolean loadTownBlockList() {
+		
+		TownyMessaging.sendDebugMsg("Loading TownBlock List");
+		if (!getContext())
+			return false;
+		try {
+			Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
+
+			while (rs.next()) {
+				
+				TownyWorld world = getWorld(rs.getString("world"));
+				int x = Integer.parseInt(rs.getString("x"));
+				int z = Integer.parseInt(rs.getString("z"));
+
+				try {
+					world.newTownBlock(x, z);
+				} catch (AlreadyRegisteredException e) {
+				}
+				
+			}
+			
+			s.close();
+			
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+		
+		
+	}
 
 	@Override
 	public boolean loadResidentList() {
