@@ -503,7 +503,7 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreIds;
 	}
 
-	public boolean isUnclaimedZoneIgnoreId(int id) {
+	public boolean isUnclaimedZoneIgnoreId(String id) {
 
 		return getUnclaimedZoneIgnoreIds().contains(id);
 	}

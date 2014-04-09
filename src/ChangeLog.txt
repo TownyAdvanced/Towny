@@ -1984,3 +1984,5 @@ v0.85.0.24:
 	- Add missing loadTownBlockList() for sql.
 v0.85.0.25:
 	- Support old sql databases still using a comma delimiter.
+v0.85.0.26:
+	- Fix Wilds and Unclaimd block Ignore settings.

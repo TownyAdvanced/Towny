@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 //import org.bukkit.permissions.Permission;
@@ -140,18 +141,20 @@ public abstract class TownyPermissionSource {
 			// Allow ops all access when no permissions
 			if (isTownyAdmin(player))
 				return true;
+			
+			String mat = Material.getMaterial(blockId).name();
 
 			// Check world settings as we are not using permissions.
 			switch (action) {
 
 			case BUILD:
-				return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+				return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(mat);
 			case DESTROY:
-				return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+				return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(mat);
 			case SWITCH:
-				return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+				return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(mat);
 			case ITEM_USE:
-				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(mat);
 			}
 		}
 
@@ -160,16 +163,18 @@ public abstract class TownyPermissionSource {
 	
 	public boolean unclaimedZoneAction(TownyWorld world, int blockId, TownyPermission.ActionType action) {
 		
+		String mat = Material.getMaterial(blockId).name();
+		
 		switch (action) {
 
 		case BUILD:
-			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneBuild() || world.isUnclaimedZoneIgnoreId(mat);
 		case DESTROY:
-			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneDestroy() || world.isUnclaimedZoneIgnoreId(mat);
 		case SWITCH:
-			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreId(mat);
 		case ITEM_USE:
-			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(blockId);
+			return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreId(mat);
 		}
 		
 		return false;
