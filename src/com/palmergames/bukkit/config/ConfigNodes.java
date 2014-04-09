@@ -12,7 +12,7 @@ public enum ConfigNodes {
 			"# This is for showing the changelog on updates.  Please do not edit."),
 	VERSION_BUKKIT(
 			"version.bukkit_version",
-			"3020",
+			"2918",
 			"# Minimum required version of CraftBukkit.  Please do not edit."),
 	LANGUAGE(
 			"language",

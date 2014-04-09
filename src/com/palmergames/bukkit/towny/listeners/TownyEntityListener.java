@@ -31,7 +31,6 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.projectiles.ProjectileSource;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -165,7 +164,7 @@ public class TownyEntityListener implements Listener {
 
 		}
 
-		ProjectileSource source = potion.getShooter();
+		Object source = potion.getShooter();
 
 		if (!(source instanceof Entity)) {
 
@@ -546,7 +545,9 @@ public class TownyEntityListener implements Listener {
 		Entity defender = event.getEntity();
 		LivingEntity attacker;
 		if (combuster instanceof Projectile) {
-			ProjectileSource source = ((Projectile) combuster).getShooter();
+			
+			Object source = ((Projectile) combuster).getShooter();
+			
 			if (!(source instanceof LivingEntity)) {
 				return; // TODO: prevent damage from dispensers
 			} else {
@@ -578,7 +579,6 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld = null;
 		String worldName = null;
 		Entity hanging = event.getEntity();
-		Object remover = null;
 
 		try {
 			worldName = hanging.getWorld().getName();
@@ -596,7 +596,7 @@ public class TownyEntityListener implements Listener {
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 
-			remover = evt.getRemover();
+			Object remover = evt.getRemover();
 
 			/*
 			 * Check if this has a shooter.
