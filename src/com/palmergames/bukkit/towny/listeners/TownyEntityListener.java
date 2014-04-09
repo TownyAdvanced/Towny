@@ -305,7 +305,7 @@ public class TownyEntityListener implements Listener {
 					// null, block, BlockFace.SELF);
 					// Bukkit.getServer().getPluginManager().callEvent(newEvent);
 
-					if (TownySettings.isSwitchId(block.getTypeId())) {
+					if (TownySettings.isSwitchMaterial(block.getType().name())) {
 						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
 							return;
 					}

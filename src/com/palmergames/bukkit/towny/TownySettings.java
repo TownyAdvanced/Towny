@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 public class TownySettings {
@@ -354,17 +355,56 @@ public class TownySettings {
 			if (root.getComments().length > 0)
 				addComment(root.getRoot(), root.getComments());
 
-			if (root.getRoot() == ConfigNodes.LEVELS.getRoot())
+			if (root.getRoot() == ConfigNodes.LEVELS.getRoot()) {
+				
 				setDefaultLevels();
-			else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+				
+			} else if ((root.getRoot() == ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()) || (root.getRoot() == ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
+				
 				// Do nothing here as setDefaultLevels configured town and
 				// nation levels.
+				
 			} else if (root.getRoot() == ConfigNodes.VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			} else if (root.getRoot() == ConfigNodes.VERSION_BUKKIT.getRoot()) {
 				setNewProperty(root.getRoot(), ConfigNodes.VERSION_BUKKIT.getDefault());
+			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()) {
+				
+				/*
+				 * Update any Id's to Material names (where required).
+				 */
+				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
+				
+			} else if (root.getRoot() == ConfigNodes.PROT_SWITCH_MAT.getRoot()) {
+				
+				/*
+				 * Update any Id's to Material names (where required).
+				 */
+				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.PROT_SWITCH_MAT)));
+				
+			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE.getRoot()) {
+				
+				/*
+				 * Update any Id's to Material names (where required).
+				 */
+				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE)));
+				
+			} else if (root.getRoot() == ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE.getRoot()) {
+				
+				/*
+				 * Update any Id's to Material names (where required).
+				 */
+				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE)));
+				
+			} else if (root.getRoot() == ConfigNodes.UNCLAIMED_ZONE_IGNORE.getRoot()) {
+				
+				/*
+				 * Update any Id's to Material names (where required).
+				 */
+				setNewProperty(root.getRoot(), convertIds(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE)));
+				
 			} else
 				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
 
@@ -372,6 +412,31 @@ public class TownySettings {
 
 		config = newConfig;
 		newConfig = null;
+	}
+	
+	private static String convertIds(List<String> list) {
+		
+		int value;
+		List<String> newValues = new ArrayList<String>();
+		
+		for (String id : list) {
+				
+			try {
+				
+				// Try to read a value
+				value = Integer.parseInt(id);
+				newValues.add(Material.getMaterial(value).name());
+				
+			} catch (NumberFormatException e) {
+				
+				// Is already a string.
+				newValues.add(id);
+				
+			}
+			
+		}
+		
+		return StringMgmt.join(newValues, ",");
 	}
 
 	private static void setDefaultLevels() {
@@ -1173,19 +1238,29 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_OUTPOST);
 	}
 
-	public static List<Integer> getSwitchIds() {
+	private static List<String> getSwitchMaterials() {
 
-		return getIntArr(ConfigNodes.PROT_SWITCH_ID);
+		return getStrArr(ConfigNodes.PROT_SWITCH_MAT);
+	}
+	
+	private static List<String> getItemUseMaterials() {
+
+		return getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
+	}
+	
+	public static boolean isSwitchMaterial(String mat) {
+
+		return getSwitchMaterials().contains(mat);
 	}
 
-	public static List<String> getUnclaimedZoneIgnoreIds() {
+	public static boolean isItemUseMaterial(String mat) {
+
+		return getItemUseMaterials().contains(mat);
+	}
+	
+	public static List<String> getUnclaimedZoneIgnoreMaterials() {
 
 		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
-	}
-
-	public static List<Integer> getItemUseIds() {
-
-		return getIntArr(ConfigNodes.PROT_ITEM_USE_ID);
 	}
 
 	public static List<String> getEntityTypes() {
@@ -1196,21 +1271,6 @@ public class TownySettings {
 	public static List<String> getPotionTypes() {
 
 		return getStrArr(ConfigNodes.PROT_POTION_TYPES);
-	}
-
-	public static boolean isUnclaimedZoneIgnoreId(int id) {
-
-		return getUnclaimedZoneIgnoreIds().contains(id);
-	}
-
-	public static boolean isSwitchId(int id) {
-
-		return getSwitchIds().contains(id);
-	}
-
-	public static boolean isItemUseId(int id) {
-
-		return getItemUseIds().contains(id);
 	}
 
 	private static void setProperty(String root, Object value) {

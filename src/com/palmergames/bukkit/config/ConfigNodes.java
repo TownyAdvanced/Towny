@@ -558,7 +558,7 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	PROT_ITEM_USE_ID(
+	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
 			"259,325,326,327,328,342,351,359,368,374,385",
 			"",
@@ -572,7 +572,7 @@ public enum ConfigNodes {
 			"# 368 - ender pearl",
 			"# 374 - glass bottle",
 			"# 385 - fire charge"),
-	PROT_SWITCH_ID(
+	PROT_SWITCH_MAT(
 			"protection.switch_ids",
 			"23,25,54,61,62,64,69,70,71,72,77,96,84,93,94,107,146,147,148,149,150,138,154,158,328,342,343,389,407,408",
 			"",

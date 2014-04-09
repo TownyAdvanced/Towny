@@ -25,7 +25,7 @@ public class TownyWorld extends TownyObject {
 			isUsingPlotManagementRevert = true,
 			isUsingPlotManagementWildRevert = true;
 	private Long plotManagementRevertSpeed, plotManagementWildRevertDelay;
-	private List<String> unclaimedZoneIgnoreIds = null;
+	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;
 	private List<String> plotManagementIgnoreIds = null;
@@ -495,23 +495,49 @@ public class TownyWorld extends TownyObject {
 
 	}
 
+	/**
+	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
+	 * 
+	 * @return
+	 */
+	@Deprecated
 	public List<String> getUnclaimedZoneIgnoreIds() {
 
-		if (unclaimedZoneIgnoreIds == null)
-			return TownySettings.getUnclaimedZoneIgnoreIds();
+		if (unclaimedZoneIgnoreBlockMaterials == null)
+			return TownySettings.getUnclaimedZoneIgnoreMaterials();
 		else
-			return unclaimedZoneIgnoreIds;
+			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
+	/**
+	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial()}
+	 * 
+	 * @return
+	 */
+	@Deprecated
 	public boolean isUnclaimedZoneIgnoreId(String id) {
 
-		return getUnclaimedZoneIgnoreIds().contains(id);
+		return getUnclaimedZoneIgnoreMaterials().contains(id);
 	}
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
-		this.unclaimedZoneIgnoreIds = unclaimedZoneIgnoreIds;
+		this.unclaimedZoneIgnoreBlockMaterials = unclaimedZoneIgnoreIds;
 	}
+	
+	public List<String> getUnclaimedZoneIgnoreMaterials() {
+
+		if (unclaimedZoneIgnoreBlockMaterials == null)
+			return TownySettings.getUnclaimedZoneIgnoreMaterials();
+		else
+			return unclaimedZoneIgnoreBlockMaterials;
+	}
+
+	public boolean isUnclaimedZoneIgnoreMaterial(String mat) {
+
+		return getUnclaimedZoneIgnoreMaterials().contains(mat);
+	}
+
 
 	public boolean getUnclaimedZonePerm(ActionType type) {
 

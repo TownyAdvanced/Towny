@@ -1986,3 +1986,5 @@ v0.85.0.25:
 	- Support old sql databases still using a comma delimiter.
 v0.85.0.26:
 	- Fix Wilds and Unclaimd block Ignore settings.
+v0.85.0.27:
+	- Auto convert remaining Config settings which still use item Ids to use Material names.

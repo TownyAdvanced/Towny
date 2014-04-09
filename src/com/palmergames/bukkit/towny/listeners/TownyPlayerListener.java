@@ -231,7 +231,7 @@ public class TownyPlayerListener implements Listener {
 
 			}
 
-			if (TownySettings.isItemUseId(event.getItem().getTypeId())) {
+			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
 		}
@@ -250,7 +250,7 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 
-			if (TownySettings.isSwitchId(event.getClickedBlock().getTypeId()) || event.getAction() == Action.PHYSICAL) {
+			if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 				onPlayerSwitchEvent(event, null, World);
 				return;
 			}
@@ -327,7 +327,7 @@ public class TownyPlayerListener implements Listener {
 					blockID = 321;
 				}
 
-				if ((blockID != 0) && (!TownySettings.isSwitchId(blockID)))
+				if ((blockID != 0) && (!TownySettings.isSwitchMaterial(Material.getMaterial(blockID).name())))
 					return;
 
 				// Get permissions (updates if none exist)
@@ -376,7 +376,7 @@ public class TownyPlayerListener implements Listener {
 
 				}
 
-				if (TownySettings.isItemUseId(event.getPlayer().getItemInHand().getTypeId())) {
+				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
 					return;
 				}
@@ -476,7 +476,7 @@ public class TownyPlayerListener implements Listener {
 		 */
 		if (event.getCause() == TeleportCause.ENDER_PEARL) {
 
-			if (TownySettings.isItemUseId(Material.ENDER_PEARL.getId())) {
+			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
 					TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Ender Pearls are disabled!");
@@ -600,7 +600,7 @@ public class TownyPlayerListener implements Listener {
 
 	public boolean onPlayerSwitchEvent(Player player, Block block, String errMsg, TownyWorld world) {
 
-		if (!TownySettings.isSwitchId(block.getTypeId()))
+		if (!TownySettings.isSwitchMaterial(block.getType().name()))
 			return false;
 
 		// Get switch permissions (updates if none exist)

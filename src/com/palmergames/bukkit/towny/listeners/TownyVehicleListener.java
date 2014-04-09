@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,7 +70,7 @@ public class TownyVehicleListener implements Listener {
 					blockID = 321;
 				}
 
-				if ((blockID != 0) && (!TownySettings.isItemUseId(blockID)))
+				if ((blockID != 0) && (!TownySettings.isItemUseMaterial(Material.getMaterial(blockID).name())))
 					return;
 
 				// Get permissions (updates if none exist)
