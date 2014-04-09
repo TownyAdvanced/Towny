@@ -14,7 +14,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 public class PlotBlockData {
 
-	private int defaultVersion = 1;
+	private int defaultVersion = 2;
 
 	private String worldName;
 	private TownBlock townBlock;
@@ -68,6 +68,7 @@ public class PlotBlockData {
 					switch (defaultVersion) {
 
 					case 1:
+					case 2:
 						list.add(block.getTypeId());
 						list.add((int) block.getData());
 						break;
@@ -101,6 +102,7 @@ public class PlotBlockData {
 		switch (version) {
 
 		case 1:
+		case 2:
 			scale = 2;
 			break;
 
@@ -139,6 +141,7 @@ public class PlotBlockData {
 						switch (version) {
 
 						case 1:
+						case 2:
 							block.setTypeId(storedData.getTypeId(), false);
 							block.setData(storedData.getData(), false);
 							break;
@@ -168,6 +171,7 @@ public class PlotBlockData {
 		switch (version) {
 
 		case 1:
+		case 2:
 			return new BlockObject(blockList.get(index - 1), (byte) (blockList.get(index) & 0xff));
 
 		default:

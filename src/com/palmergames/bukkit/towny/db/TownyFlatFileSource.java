@@ -2107,6 +2107,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (isFile(fileName)) {
 			PlotBlockData plotBlockData = new PlotBlockData(townBlock);
 			List<Integer> IntArr = new ArrayList<Integer>();
+			int version = 0;
 
 			DataInputStream fin = null;
 
@@ -2119,9 +2120,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				String test = new String(key);
 
 				switch (elements.fromString(test)) {
+				
 				case VER:
 					// Read the file version
-					int version = fin.readInt();
+					version = fin.readInt();
 					plotBlockData.setVersion(version);
 
 					// next entry is the plot height
@@ -2133,17 +2135,39 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					 * no version field so set height
 					 * and push rest to queue
 					 */
-					plotBlockData.setVersion(0);
+					plotBlockData.setVersion(version);
 					// First entry is the plot height
 					plotBlockData.setHeight(key[0]);
 					IntArr.add((int) key[1]);
 					IntArr.add((int) key[2]);
 				}
-
-				// load remainder of file
-				while ((value = fin.readInt()) >= 0) {
-					IntArr.add(value);
+				
+				/*
+				 * Load plot block data based upon the stored version number.
+				 */
+				switch (version) {
+				
+				default:
+				case 1:
+					
+					// load remainder of file
+					while ((value = fin.read()) >= 0) {
+						IntArr.add(value);
+					}
+					
+					break;
+					
+				case 2:
+					
+					// load remainder of file
+					while ((value = fin.readInt()) >= 0) {
+						IntArr.add(value);
+					}
+					
+					break;
+				
 				}
+				
 
 			} catch (EOFException e) {
 			} catch (IOException e) {

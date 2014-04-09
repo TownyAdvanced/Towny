@@ -1976,3 +1976,5 @@ v0.85.0.20:
 v0.85.0.21:
 	- Retain backwards compatability for CraftBukkit-1.6.4-R2.0 (#2918).
 	  (Likely the last version to be compatible with 1.6.4 as the UUID changes coming will be 1.7.2+)
+v0.85.0.22:
+	- Restore support for old plot-block-data.
