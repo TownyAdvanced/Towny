@@ -479,7 +479,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			//Propagate perms to all unchanged, town owned, townblocks
-			
+
 			for (TownBlock townBlock : town.getTownBlocks()) {
 				if (!townBlock.hasResident() && !townBlock.isChanged()) {
 					townBlock.setType(townBlock.getType());
@@ -1113,14 +1113,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 			if (plotChunk != null) {
-				
+
 				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-				
+
 			} else {
-				
+
 				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
 				plotChunk.initialize();
-				
+
 			}
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
@@ -1139,7 +1139,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveTownBlock(townBlock);
 		TownyUniverse.getDataSource().saveTown(town);
 		TownyUniverse.getDataSource().saveWorld(world);
-		
+
 		TownyUniverse.getDataSource().saveTownList();
 		TownyUniverse.getDataSource().saveTownBlockList();
 
@@ -1205,25 +1205,61 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_left_town"), resident.getName()));
 	}
 
+	/**
+	 * Wrapper for the townSpawn() method. All calls should be through here
+	 * unless bypassing for admins.
+	 * 
+	 * @param player
+	 * @param split
+	 * @param outpost
+	 */
 	public static void townSpawn(Player player, String[] split, Boolean outpost) {
 
 		try {
-			boolean isTownyAdmin = TownyUniverse.getPermissionSource().isTownyAdmin(player);
+
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Town town;
-			Location spawnLoc;
 			String notAffordMSG;
-			TownSpawnLevel townSpawnPermission;
 
 			// Set target town and affiliated messages.
 			if ((split.length == 0) || ((split.length > 0) && (outpost))) {
+
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
+				
+				townSpawn(player, split, town, notAffordMSG, outpost);
+				
 			} else {
 				// split.length > 1
 				town = TownyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
+				
 			}
+		} catch (NotRegisteredException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+
+	/**
+	 * Core spawn function to allow admin use.
+	 * 
+	 * @param player
+	 * @param split
+	 * @param town
+	 * @param notAffordMSG
+	 * @param outpost
+	 */
+	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
+
+		try {
+
+			boolean isTownyAdmin = TownyUniverse.getPermissionSource().isTownyAdmin(player);
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Location spawnLoc;
+			TownSpawnLevel townSpawnPermission;
 
 			if (outpost) {
 
@@ -1734,7 +1770,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			
+
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
 			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
@@ -1748,7 +1784,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
 			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
-			
+
 		} else {
 
 			// reset the friend to resident so the perm settings don't fail
@@ -1756,21 +1792,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				split[0] = "resident";
 
 			if (split.length == 1) {
-				
+
 				if (split[0].equalsIgnoreCase("reset")) {
-					
+
 					// reset all townBlock permissions (by town/resident)
 					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-						
+
 						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
-							
+
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
 							TownyUniverse.getDataSource().saveTownBlock(townBlock);
-							
+
 						}
 					}
-					
+
 					if (townBlockOwner instanceof Town)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_perms_reset"), "Town owned"));
 					else
@@ -1778,11 +1814,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					// Reset all caches as this can affect everyone.
 					plugin.resetCache();
-					
+
 					return;
-					
+
 				} else {
-					
+
 					// Set all perms to On or Off
 					// '/town set perm off'
 
@@ -1800,13 +1836,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 
 				}
-				
+
 			} else if (split.length == 2) {
-				
+
 				try {
-					
+
 					boolean b = plugin.parseOnOff(split[1]);
-					
+
 					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
 						perm.residentBuild = b;
 						perm.residentDestroy = b;
@@ -1842,9 +1878,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				} catch (Exception e) {
 				}
-				
+
 			} else if (split.length == 3) {
-				
+
 				try {
 					boolean b = plugin.parseOnOff(split[2]);
 					String s = "";
@@ -1852,9 +1888,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					perm.set(s, b);
 				} catch (Exception e) {
 				}
-				
+
 			}
-			
+
 			// Propagate perms to all unchanged, town owned, townblocks
 			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
@@ -1864,7 +1900,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			}
-			
+
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
 			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
 			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
@@ -1918,10 +1954,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 						if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
-						
+
 						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
-
 
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
 						blockCost = TownySettings.getOutpostCost();
@@ -1937,10 +1972,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
 					blockCost = TownySettings.getClaimPrice();
 				}
-				
+
 				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
 					throw new TownyException(TownySettings.getLangString("msg_too_close"));
-
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);

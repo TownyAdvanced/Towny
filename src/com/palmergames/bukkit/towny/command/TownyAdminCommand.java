@@ -297,12 +297,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] rename [newname]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] delete", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] spawn", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outpost #", ""));
 
 			return;
 		}
 
 		try {
+			
 			Town town = TownyUniverse.getDataSource().getTown(split[0]);
+			
 			if (split.length == 1) {
 				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(town));
 				return;
@@ -334,6 +338,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
+				
+			} else if (split[1].equalsIgnoreCase("spawn")) {
+
+				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", false);
+
+			} else if (split[1].equalsIgnoreCase("outpost")) {
+
+				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", true);
+
 			}
 
 		} catch (NotRegisteredException e) {
