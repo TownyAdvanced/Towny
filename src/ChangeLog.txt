@@ -1994,3 +1994,5 @@ v0.85.0.29:
 	- Added two new commands...
 	  '/townyadmin town [townname] spawn'       - Admin command to spawn at at town spawn.
 	  '/townyadmin town [townname] outpost #'   - Admin command to spawn at any towns outposts.
+v0.85.0.30:
+	- newTown, newNation, renameTown and renameNation are now thread safe to prevent players spamming commands to corrupt data.

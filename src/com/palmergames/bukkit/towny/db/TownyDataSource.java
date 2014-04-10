@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.bukkit.entity.Player;
 
@@ -40,6 +42,8 @@ import com.palmergames.util.FileMgmt;
 
 public abstract class TownyDataSource {
 
+	protected final Lock lock = new ReentrantLock();
+	
 	protected TownyUniverse universe;
 	protected Towny plugin;
 	protected boolean firstRun = true;
