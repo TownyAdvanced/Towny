@@ -229,14 +229,22 @@ public class DailyTimerTask extends TownyTimerTask {
 						 */
 					} else if (!resident.payTo(town.getTaxes(), town, "Town Tax")) {
 						TownyMessaging.sendTownMessage(town, TownySettings.getCouldntPayTaxesMsg(resident, "town"));
+						
 						try {
-							// town.removeResident(resident);
+							
+							// reset this resident and remove him from the town.
 							resident.clear();
+							TownyUniverse.getDataSource().saveTown(town);
+							
 						} catch (EmptyTownException e) {
-							// Mayor doesn't pay taxes so will always have 1.
+							
+							// No mayor so remove the town.
+							TownyUniverse.getDataSource().removeTown(town);
+							
 						}
+						
 						TownyUniverse.getDataSource().saveResident(resident);
-						TownyUniverse.getDataSource().saveTown(town);
+						
 					}// else
 					/*
 					 * Don't send individual message anymore to ease up on the
