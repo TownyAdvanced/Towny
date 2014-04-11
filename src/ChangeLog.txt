@@ -1998,3 +1998,5 @@ v0.85.0.30:
 	- newTown, newNation, renameTown and renameNation are now thread safe to prevent players spamming commands to corrupt data.
 v0.85.0.31:
 	- Fix a town removal bug if a mayor doesn't have the permission 'towny.tax_exempt' and is the last person to be removed from a town during a tax cycle.
+v0.85.0.32:
+	- Fix Resident loading for towns using SQL data.

@@ -748,7 +748,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				line = rs.getString("residents");
 				if (line != null) {
 					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split("#");
+					tokens = line.split(search);
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							Resident resident = getResident(token);
@@ -796,7 +796,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("homeBlock");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					if (tokens.length == 3)
 						try {
 							TownyWorld world = getWorld(tokens[0]);
@@ -821,7 +822,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 				line = rs.getString("spawn");
 				if (line != null) {
-					tokens = line.split("#");
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
 					if (tokens.length >= 4)
 						try {
 							World world = plugin.getServerWorld(tokens[0]);
@@ -844,7 +846,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 					if (line != null) {
 						String[] outposts = line.split(";");
 						for (String spawn : outposts) {
-							tokens = spawn.split(",");
+							search = (line.contains("#")) ? "#" : ",";
+							tokens = spawn.split(search);
 							if (tokens.length >= 4)
 								try {
 									World world = plugin.getServerWorld(tokens[0]);
