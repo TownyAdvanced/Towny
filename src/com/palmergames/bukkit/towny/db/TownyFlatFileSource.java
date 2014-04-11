@@ -255,7 +255,24 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (tokens.length < 3)
 						continue;
 
-					TownyWorld world = getWorld(tokens[0]);
+					TownyWorld world;
+					
+					try {
+						
+						world = getWorld(tokens[0]);
+						
+					} catch (NotRegisteredException ex) {
+						
+						/*
+						 * The world is not listed.
+						 * Allow the creation of new worlds here to account
+						 * for mod worlds which are not reported at startup.
+						 */
+						newWorld(tokens[0]);
+						world = getWorld(tokens[0]);
+						
+					}
+					
 					int x = Integer.parseInt(tokens[1]);
 					int z = Integer.parseInt(tokens[2]);
 
