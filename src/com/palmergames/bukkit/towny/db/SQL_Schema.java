@@ -129,7 +129,7 @@ public class SQL_Schema {
 				+ "`x` mediumint NOT NULL,"
 				+ "`z` mediumint NOT NULL,"
 				+ "`name` mediumtext,"
-				+ "`price` float DEFAULT 0,"
+				+ "`price` float DEFAULT '-1',"
 				+ "`town` mediumtext,"
 				+ "`resident` mediumtext,"
 				+ "`type` TINYINT NOT  NULL DEFAULT '0',"
