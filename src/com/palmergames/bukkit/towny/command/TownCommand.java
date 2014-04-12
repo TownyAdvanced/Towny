@@ -1235,6 +1235,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town = TownyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
 				
+				townSpawn(player, split, town, notAffordMSG, outpost);
+				
 			}
 		} catch (NotRegisteredException e) {
 
