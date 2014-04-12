@@ -1212,8 +1212,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param player
 	 * @param split
 	 * @param outpost
+	 * @throws TownyException 
 	 */
-	public static void townSpawn(Player player, String[] split, Boolean outpost) {
+	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException {
 
 		try {
 
@@ -1236,8 +1237,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 			}
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+			
 		}
 		
 

@@ -2002,3 +2002,5 @@ v0.85.0.32:
 	- Fix Resident loading for towns using SQL data.
 v0.85.0.33:
 	- Allow world creation when loading the TownBlockList to account for mods which do not report their world at startup.
+v0.85.0.34:
+	- Give a valid message when trying to '/town spawn' to an invalid town.
