@@ -2005,3 +2005,5 @@ v0.85.0.33:
 v0.85.0.34:
 	- Give a valid message when trying to '/town spawn' to an invalid town.
 	- Set default plot price for SQL databases to -1. Fixes plots being set for sale when updating.
+v0.85.0.35:
+	- Fix SQL Table update query for plot price too.

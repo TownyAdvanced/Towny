@@ -289,7 +289,7 @@ public class SQL_Schema {
 		try {
 			townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` "
 					+ "ADD COLUMN `name` mediumtext,"
-					+ "ADD COLUMN `price` float DEFAULT 0,"
+					+ "ADD COLUMN `price` float DEFAULT '-1',"
 					+ "ADD COLUMN `town` mediumtext,"
 					+ "ADD COLUMN `resident` mediumtext,"
 					+ "ADD COLUMN `type` TINYINT NOT  NULL DEFAULT '0',"
