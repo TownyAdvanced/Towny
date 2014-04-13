@@ -147,6 +147,18 @@ public class TownyFormatter {
 				line += "Error: " + e.getMessage();
 			}
 		out.add(line);
+		
+		// Town ranks
+		if (resident.hasTown()) {
+			if (!resident.getTownRanks().isEmpty())
+				out.add(Colors.Green + "Town Ranks: " + Colors.LightGreen + StringMgmt.join(resident.getTownRanks(), ","));
+		}
+		
+		//Nation ranks
+		if (resident.hasNation()) {
+			if (!resident.getNationRanks().isEmpty())
+				out.add(Colors.Green + "Nation Ranks: " + Colors.LightGreen + StringMgmt.join(resident.getNationRanks(), ","));
+		}
 
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
