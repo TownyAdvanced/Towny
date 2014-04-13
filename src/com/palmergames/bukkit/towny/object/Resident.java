@@ -333,12 +333,10 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 	@Override
 	public void toggleMode(String newModes[], boolean notify) {
-		
-		if (newModes.length == 0) {
-			clearModes();
-			return;
-		}
 
+		/*
+		 * Toggle any modes passed to us on/off.
+		 */
 		for (String mode : newModes) {
 			mode = mode.toLowerCase();
 			if (this.modes.contains(mode))
@@ -347,17 +345,21 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				this.modes.add(mode);
 		}
 		
+		/*
+		 *  If we have toggled all modes off we need to set their defaults.
+		 */
+		if (this.modes.isEmpty()) {
+			
+			clearModes();
+			return;
+		}
+		
 		if (notify)
 			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
 	}
 
 	@Override
 	public void setModes(String[] modes, boolean notify) {
-
-		if (modes.length == 0) {
-			clearModes();
-			return;
-		}
 			
 		this.modes.clear();
 		this.toggleMode(modes, false);
@@ -371,11 +373,26 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	@Override
 	public void clearModes() {
 
-		modes.clear();
+		this.modes.clear();
 		
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
 		
+	}
+	
+	/**
+	 * Only for internal Towny use. NEVER call this from any other plugin.
+	 * 
+	 * @param modes
+	 * @param notify
+	 */
+	public void resetModes(String[] modes, boolean notify) {
+		
+		if (modes.length > 0)
+			this.toggleMode(modes, false);
+		
+		if (notify)
+			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
 	}
 	
 	

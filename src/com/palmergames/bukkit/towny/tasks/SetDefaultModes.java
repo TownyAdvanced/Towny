@@ -28,11 +28,16 @@ public class SetDefaultModes extends TimerTask {
 		// Is the player still available
 		if (!BukkitTools.isOnline(name))
 			return;
-
+		
 		//setup default modes
-		String[] modes = TownyUniverse.getPermissionSource().getPlayerPermissionStringNode(name, PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+		String modeString = TownyUniverse.getPermissionSource().getPlayerPermissionStringNode(name, PermissionNodes.TOWNY_DEFAULT_MODES.getNode());
+		String[] modes = new String[]{};
+		
+		if (!modeString.isEmpty())
+			modes = modeString.split(",");
+		
 		try {
-			TownyUniverse.getDataSource().getResident(name).setModes(modes, notify);
+			TownyUniverse.getDataSource().getResident(name).resetModes(modes, notify);
 		} catch (NotRegisteredException e) {
 			// No resident by this name.
 		}
