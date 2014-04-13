@@ -325,8 +325,8 @@ public class SQL_Schema {
 
 		try {
 
-			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` DROP COLUMN "
-						+ "`townBlocks`";
+			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
+						+ "DROP COLUMN `townBlocks`";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
@@ -341,24 +341,24 @@ public class SQL_Schema {
 		}
 		
 		/*
-		 * Update RESIDENTS.
+		 * Update TOWNS.
 		 */
 		String towns_update;
 
 		try {
 
-			towns_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` DROP COLUMN "
-						+ "`townBlocks`";
+			towns_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` "
+						+ "DROP COLUMN `townBlocks`";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(towns_update);
 
-			TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
+			TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
 
 		} catch (SQLException ee) {
 
 			if (ee.getErrorCode() != 1060)
-				TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
+				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
 
 		}
 		
