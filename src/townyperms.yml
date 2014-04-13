@@ -62,8 +62,11 @@ towns:
             - towny.command.plot.*
             - towny.command.town.toggle.public
             - towny.claimed.owntown.switch.*
-            # assistants are able to grant VIP rank
+            # assistants are able to grant VIP and helper rank
             - towny.command.town.rank.vip
+            - towny.command.town.rank.helper
+        helper:
+            towny.claimed.townowned.switch.*
         donator:
             # Currently only an example rank holder with no extra permissions
         vip:
@@ -81,6 +84,7 @@ nations:
     king:
         # Kings get these permissions in addition to the default set.
         - towny.command.nation.*
+        
     ranks:
         assistant:
             - towny.command.nation.rank.helper

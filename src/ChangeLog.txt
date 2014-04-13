@@ -2021,3 +2021,5 @@ v0.85.0.37:
 		'towny.claimed.townowned.destroy.[block id]' : (handy to allow clearing of snow '78' on town owned roads/plots)
 		'towny.claimed.townowned.switch.[block id]'
 		'towny.claimed.townowned.item_use.[block id]'
+v0.85.0.38:
+	- Added an example town helper rank in TownyPerms to demonstrate the new town owned permission.
