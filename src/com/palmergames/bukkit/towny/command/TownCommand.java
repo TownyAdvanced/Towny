@@ -888,7 +888,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						townBlock = TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getTownBlock(coord);
 						oldWorld = town.getWorld();
 						town.setHomeBlock(townBlock);
+						town.setSpawn(player.getLocation());
+						
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_town_home"), coord.toString()));
+						
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						return;

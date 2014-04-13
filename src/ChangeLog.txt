@@ -2014,3 +2014,4 @@ v0.85.0.37:
 	- Add a help page to '/res toggle'.
 	- Add a residents ranks to the '/res' status page.
 	- Keep a players saturation level (no hunger) if regen in town is enabled.
+	- Set the Town Spawn when the Homeblock is moved via '/town set homeblock'.
