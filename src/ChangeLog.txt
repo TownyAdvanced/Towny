@@ -2015,3 +2015,9 @@ v0.85.0.37:
 	- Add a residents ranks to the '/res' status page.
 	- Keep a players saturation level (no hunger) if regen in town is enabled.
 	- Set the Town Spawn when the Homeblock is moved via '/town set homeblock'.
+	- Added a new set of permissions to allow special residents permissions on town owned plots..
+	  'towny.claimed.townowned.*' : User is able to edit specified/all block types in their towns owned plots (Town only, not resident owned).
+		'towny.claimed.townowned.build.[block id]'
+		'towny.claimed.townowned.destroy.[block id]' : (handy to allow clearing of snow '78' on town owned roads/plots)
+		'towny.claimed.townowned.switch.[block id]'
+		'towny.claimed.townowned.item_use.[block id]'

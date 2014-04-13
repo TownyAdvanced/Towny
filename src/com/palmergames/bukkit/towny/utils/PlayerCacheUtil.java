@@ -493,7 +493,7 @@ public class PlayerCacheUtil {
 			/*
 			 * Check town overrides before testing town permissions
 			 */
-			if (targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, blockId, data, action))) {
+			if (targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasTownOwnedOverride(player, blockId, data, action))) {
 				return true;
 
 			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, blockId, data, action))) {

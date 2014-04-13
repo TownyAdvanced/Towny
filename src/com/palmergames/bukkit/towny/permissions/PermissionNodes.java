@@ -284,6 +284,11 @@ public enum PermissionNodes {
 	TOWNY_CLAIMED_OWNTOWN_BLOCK_DESTROY("towny.claimed.owntown.destroy.*"),
 	TOWNY_CLAIMED_OWNTOWN_BLOCK_SWITCH("towny.claimed.owntown.switch.*"),
 	TOWNY_CLAIMED_OWNTOWN_BLOCK_ITEM_USE("towny.claimed.owntown.item_use.*"),
+	
+	TOWNY_CLAIMED_TOWNOWNED_BLOCK_BUILD("towny.claimed.townowned.build.*"),
+	TOWNY_CLAIMED_TOWNOWNED_BLOCK_DESTROY("towny.claimed.townowned.destroy.*"),
+	TOWNY_CLAIMED_TOWNOWNED_BLOCK_SWITCH("towny.claimed.townowned.switch.*"),
+	TOWNY_CLAIMED_TOWNOWNED_BLOCK_ITEM_USE("towny.claimed.townowned.item_use.*"),
 
 	TOWNY_CHAT_ALL("towny.chat.*"),
 

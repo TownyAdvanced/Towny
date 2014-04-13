@@ -94,14 +94,18 @@ permissions:
         children:
             # You can grant these child nodes and replace the * with a block Id
             # to directly set or negate specific block permissions
+            towny.claimed.townowned.build.*: true
+            towny.claimed.townowned.item_use.*: true
+            towny.claimed.townowned.destroy.*: true
+            towny.claimed.townowned.switch.*: true
             towny.claimed.owntown.build.*: true
-            towny.claimed.alltown.build.*: true
             towny.claimed.owntown.item_use.*: true
-            towny.claimed.alltown.item_use.*: true
             towny.claimed.owntown.destroy.*: true
-            towny.claimed.alltown.destroy.*: true
             towny.claimed.owntown.switch.*: true
             towny.claimed.alltown.switch.*: true
+            towny.claimed.alltown.build.*: true
+            towny.claimed.alltown.item_use.*: true
+            towny.claimed.alltown.destroy.*: true
     
     #
     # New command permissions (replaces many of the older permissions)
