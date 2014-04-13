@@ -53,6 +53,14 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 	public void incHealth(Player player) {
 
+		// Keep saturation above zero while in town.
+		float currentSat = player.getSaturation();
+		if (currentSat == 0) {
+			
+			player.setSaturation(1F);
+		}
+		
+		// Heal while in town.
 		double currentHP = player.getHealth();
 		if (currentHP < player.getMaxHealth()) {
 			player.setHealth(Math.min(player.getMaxHealth(), ++currentHP));
@@ -62,6 +70,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			Bukkit.getServer().getPluginManager().callEvent(event);
 
 		}
+		
 	}
 
 }
