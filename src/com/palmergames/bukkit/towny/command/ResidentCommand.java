@@ -598,7 +598,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			Player p;
 			for (Resident member : toKick) {
 				msg += member.getName() + ", ";
-				p = plugin.getServer().getPlayer(member.getName());
+				p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
 					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
 			}

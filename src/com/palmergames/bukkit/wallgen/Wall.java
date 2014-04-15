@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+import com.palmergames.bukkit.util.BukkitTools;
+
 public class Wall {
 
 	private List<WallSection> wallSections = new ArrayList<WallSection>();
@@ -48,7 +50,7 @@ public class Wall {
 
 	public Wall() {
 
-		blockType = Material.COBBLESTONE.getId();
+		blockType = BukkitTools.getMaterialId(Material.COBBLESTONE);
 		height = 2;
 		walkwayHeight = 0;
 	}

@@ -436,9 +436,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 						plugin.resetCache();
 						if (player != null)
-							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreIds()));
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreMaterials()));
 						else
-							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreIds()));
+							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreMaterials()));
 						
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));

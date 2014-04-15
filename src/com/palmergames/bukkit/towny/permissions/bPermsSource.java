@@ -32,7 +32,7 @@ public class bPermsSource extends TownyPermissionSource {
 	public String getPrefixSuffix(Resident resident, String node) {
 
 		String group = "", user = "";
-		Player player = plugin.getServer().getPlayer(resident.getName());
+		Player player = BukkitTools.getPlayer(resident.getName());
 
 		group = ApiLayer.getValue(player.getWorld().getName(), CalculableType.GROUP, getPlayerGroup(player), node);
 		user = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
@@ -85,7 +85,7 @@ public class bPermsSource extends TownyPermissionSource {
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
 
-		Player player = plugin.getServer().getPlayer(playerName);
+		Player player = BukkitTools.getPlayer(playerName);
 
 		String result = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), node);
 

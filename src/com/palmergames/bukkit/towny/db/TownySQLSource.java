@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -624,6 +623,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 * Load individual towny object
 	 */
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean loadResident(Resident resident) {
 
@@ -729,6 +729,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean loadTown(Town town) {
 
@@ -864,7 +865,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 								} catch (NumberFormatException e) {
 								} catch (NotRegisteredException e) {
 								} catch (NullPointerException e) {
-								} catch (TownyException e) {
 								}
 						}
 					}
@@ -1136,7 +1136,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 								try {
 									int id = Integer.parseInt(split);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(split);
@@ -1162,7 +1162,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 								try {
 									int id = Integer.parseInt(split);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(split);
@@ -1217,7 +1217,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 								try {
 									int id = Integer.parseInt(split);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(split);
@@ -1545,8 +1545,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 				nat_hm.put("unclaimedZoneName", world.getUnclaimedZoneName());
 
 			// Unclaimed Zone Ignore Ids
-			if (world.getUnclaimedZoneIgnoreIds() != null)
-				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), "#"));
+			if (world.getUnclaimedZoneIgnoreMaterials() != null)
+				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());

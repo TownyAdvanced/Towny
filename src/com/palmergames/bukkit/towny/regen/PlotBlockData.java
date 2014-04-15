@@ -69,12 +69,12 @@ public class PlotBlockData {
 
 					case 1:
 					case 2:
-						list.add(block.getTypeId());
-						list.add((int) block.getData());
+						list.add(BukkitTools.getTypeId(block));
+						list.add((int) BukkitTools.getData(block));
 						break;
 
 					default:
-						list.add(block.getTypeId());
+						list.add(BukkitTools.getTypeId(block));
 					}
 
 				}
@@ -120,7 +120,7 @@ public class PlotBlockData {
 			z = ((int) (reverse / height) / size) % size;
 
 			block = world.getBlockAt(worldx + x, y, worldz + z);
-			blockId = block.getTypeId();
+			blockId = BukkitTools.getTypeId(block);
 			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
 
 			// Increment based upon number of elements
@@ -130,7 +130,7 @@ public class PlotBlockData {
 			// and return as done.
 			if ((blockId != storedData.getTypeId())) {
 
-				Material mat = Material.getMaterial(storedData.getTypeId());
+				Material mat = BukkitTools.getMaterial(storedData.getTypeId());
 
 				if ((mat == null) || ((mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name()))) {
 
@@ -142,19 +142,22 @@ public class PlotBlockData {
 
 						case 1:
 						case 2:
-							block.setTypeId(storedData.getTypeId(), false);
-							block.setData(storedData.getData(), false);
+							BukkitTools.setTypeIdAndData(block, storedData.getTypeId(), storedData.getData(), false);
+
 							break;
 						default:
-							block.setTypeId(storedData.getTypeId());
+							BukkitTools.setTypeId(block, storedData.getTypeId(), false);
 						}
 						
 					} catch (Exception e) {
 
 					}
 
-				} else
-					block.setTypeId(0);
+				} else {
+					
+					BukkitTools.setTypeId(block, 0, false);
+					
+				}
 
 				return true;
 			}

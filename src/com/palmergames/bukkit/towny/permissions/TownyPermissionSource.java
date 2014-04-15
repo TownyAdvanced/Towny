@@ -1,11 +1,8 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-//import org.bukkit.permissions.Permission;
-//import org.bukkit.permissions.PermissionDefault;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -144,7 +141,7 @@ public abstract class TownyPermissionSource {
 			if (isTownyAdmin(player))
 				return true;
 
-			String mat = Material.getMaterial(blockId).name();
+			String mat = BukkitTools.getMaterial(blockId).name();
 
 			// Check world settings as we are not using permissions.
 			switch (action) {
@@ -165,7 +162,7 @@ public abstract class TownyPermissionSource {
 
 	public boolean unclaimedZoneAction(TownyWorld world, int blockId, TownyPermission.ActionType action) {
 
-		String mat = Material.getMaterial(blockId).name();
+		String mat = BukkitTools.getMaterial(blockId).name();
 
 		switch (action) {
 

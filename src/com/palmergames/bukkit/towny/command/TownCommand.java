@@ -1533,11 +1533,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				// only add players with the right permissions.
 				if (plugin.isPermissions()) {
-					if (BukkitTools.getServer().matchPlayer(newMember.getName()).isEmpty()) { // Not
+					if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not
 																								// online
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_offline_no_join"), newMember.getName()));
 						invited.remove(newMember);
-					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getServer().getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
 						invited.remove(newMember);
 					} else {
@@ -1653,7 +1653,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String msg = "";
 			for (Resident member : kicking) {
 				msg += member.getName() + ", ";
-				Player p = BukkitTools.getServer().getPlayer(member.getName());
+				Player p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
 					p.sendMessage(String.format(TownySettings.getLangString("msg_kicked_by"), (player != null) ? player.getName() : "CONSOLE"));
 			}

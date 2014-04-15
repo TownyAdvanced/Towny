@@ -2024,3 +2024,6 @@ v0.85.0.37:
 v0.86.0.0:
 	- Added an example town helper rank in TownyPerms to demonstrate the new town owned permission.
 	- Release.
+v0.86.0.1:
+	- Move more Bukkit calls to the BukkitTools class. Code cleaning and organising.
+	

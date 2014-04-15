@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
+import com.palmergames.bukkit.util.BukkitTools;
 
 
 public class TownyBlockPhysicsListener implements Listener {
@@ -49,7 +50,7 @@ public class TownyBlockPhysicsListener implements Listener {
 		// if this is a placeholder remove it, as it's no longer needed.
 		if (TownyRegenAPI.isPlaceholder(block)) {
 			TownyRegenAPI.removePlaceholder(block);
-			block.setTypeId(0, false);
+			BukkitTools.setTypeId(block, 0, false);
 		}
 
 		if (TownyRegenAPI.hasProtectionRegenTask(blockLocation)) {

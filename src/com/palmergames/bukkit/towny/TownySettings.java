@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -425,7 +426,7 @@ public class TownySettings {
 				
 				// Try to read a value
 				value = Integer.parseInt(id);
-				newValues.add(Material.getMaterial(value).name());
+				newValues.add(BukkitTools.getMaterial(value).name());
 				
 			} catch (NumberFormatException e) {
 				

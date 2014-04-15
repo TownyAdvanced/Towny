@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -141,7 +140,7 @@ public class TownyMessaging {
 	public static void sendDevMsg(String msg) {
 
 		if (TownySettings.isDevMode()) {
-			Player townyDev = Bukkit.getServer().getPlayer(TownySettings.getDevName());
+			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev == null)
 				return;
 			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
@@ -158,7 +157,7 @@ public class TownyMessaging {
 	public static void sendDevMsg(String[] msg) {
 
 		if (TownySettings.isDevMode()) {
-			Player townyDev = Bukkit.getServer().getPlayer(TownySettings.getDevName());
+			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev == null)
 				return;
 			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))

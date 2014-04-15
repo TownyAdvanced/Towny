@@ -2,12 +2,12 @@ package com.palmergames.bukkit.towny.permissions;
 
 import net.milkbowl.vault.chat.Chat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class VaultPermSource extends TownyPermissionSource {
 
@@ -20,7 +20,7 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPrefixSuffix(Resident resident, String node) {
-		Player player = Bukkit.getPlayerExact(resident.getName());
+		Player player = BukkitTools.getPlayerExact(resident.getName());
 		if (player != null) {
 			// Fetch primary group
 			String primaryGroup = getPlayerGroup(player);
@@ -61,7 +61,7 @@ public class VaultPermSource extends TownyPermissionSource {
 		
 		int iReturn = -1;
 		
-		Player player = Bukkit.getPlayerExact(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
 		
 		if (player != null) {
 			String primaryGroup = getPlayerGroup(player);
@@ -85,7 +85,7 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
-		Player player = Bukkit.getPlayerExact(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
 		if (player != null) {
 			return chat.getPlayerInfoString(player, node, "");
 		}

@@ -4,6 +4,8 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import com.palmergames.bukkit.util.BukkitTools;
+
 public class BlockWorker implements Runnable {
 
 	private BlockQueue blockQueue;
@@ -72,12 +74,12 @@ public class BlockWorker implements Runnable {
 
 		Block block = blockWork.getWorld().getBlockAt(blockWork.getX(), blockWork.getY(), blockWork.getZ());
 
-		if (blockWork.getId() == block.getTypeId())
+		if (blockWork.getId() == BukkitTools.getTypeId(block))
 			return;
 
 		// TODO: Set block
-		block.setTypeId(blockWork.getId());
-		block.setData(blockWork.getData());
+		BukkitTools.setTypeIdAndData(block, blockWork.getId(), blockWork.getData(), true);
+
 	}
 
 	public void setServer(Server server) {
@@ -93,7 +95,7 @@ public class BlockWorker implements Runnable {
 	public void onJobFinish(BlockJob job) {
 
 		if (job.isNotify()) {
-			Player player = getServer().getPlayer(job.getBoss());
+			Player player = BukkitTools.getPlayer(job.getBoss());
 			player.sendMessage("Generated: " + blocks + " Blocks");
 			if (skipped > 0)
 				player.sendMessage("Skipped: " + skipped + " Blocks");

@@ -7,12 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -26,6 +31,7 @@ import com.palmergames.bukkit.towny.TownySettings;
  * @version 1.0
  */
 
+@SuppressWarnings("deprecation")
 public class BukkitTools {
 
 	private static Towny plugin = null;
@@ -54,18 +60,38 @@ public class BukkitTools {
 		return getServer().getPlayerExact(name);
 	}
 	
-	public static Player getPlayer(String name) {
-		return getServer().getPlayer(name);
+	public static Player getPlayer(String playerId) {
+		
+		if (playerId.length() < 36) {
+			
+			return getServer().getPlayer(playerId);
+			
+		} else {
+			
+			return getServer().getPlayer(UUID.fromString(playerId));
+			
+		}
+		
 	}
 	
 	/**
 	 * Tests if this player is online.
 	 * 
-	 * @param playerName
-	 * @return true if online
+	 * @param playerId the UUID or name of the player.
+	 * @return a true value if online
 	 */
-	public static boolean isOnline(String playerName) {
-		return getServer().getPlayer(playerName) != null;
+	public static boolean isOnline(String playerId) {
+		
+		if (playerId.length() < 36) {
+			
+			return getServer().getPlayer(playerId) != null;
+			
+		} else {
+			
+			return getServer().getPlayer(UUID.fromString(playerId)) != null;
+			
+		}	
+		
 	}
 	
 	public static List<World> getWorlds() {
@@ -154,7 +180,15 @@ public class BukkitTools {
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
 	}
+	
+	
+	
+	/*
+	 * Block handling Methods.
+	 */
 
+	
+	
 	/**
 	 * Find a block at a specific offset.
 	 * 
@@ -168,6 +202,121 @@ public class BukkitTools {
 
 		return block.getWorld().getBlockAt(block.getX() + xOffset, block.getY() + yOffset, block.getZ() + zOffset);
 	}
+	
+	public static int getTypeId(Block block) {
+		
+		return block.getTypeId();
+	}
+	
+	public static byte getData(Block block) {
+		
+		return block.getData();
+	}
+	
+	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
+		
+		block.setTypeIdAndData(type, data, applyPhysics);
+		
+	}
+	
+	public static void setTypeId(Block block, int type, boolean applyPhysics) {
+		
+		block.setTypeId(type, applyPhysics);
+	}
+	
+	public static void setData(Block block, byte data, boolean applyPhysics) {
+		
+		block.setData(data, applyPhysics);
+	}
+	
+	
+	/*
+	 * BlockState Methods
+	 */
+	
+	
+	public static Material getType(BlockState state) {
+		
+		return state.getType();
+	}
+	
+	public static int getTypeId(BlockState state) {
+		
+		return state.getTypeId();
+	}
+	
+	
+	public static MaterialData getData(BlockState state) {
+		
+		return state.getData();
+	}
+	
+	public static byte getDataData(BlockState state) {
+		
+		return getData(state).getData();
+	}
+	
+	
+	/*
+	 * Item Handling Methods
+	 */
+	
+	
+	public static int getTypeId(ItemStack stack) {
+		
+		return stack.getTypeId();
+	}
+	
+	public static MaterialData getData(ItemStack stack) {
+		
+		return stack.getData();
+	}
+	
+	public static byte getDataData(ItemStack stack) {
+		
+		return getData(stack).getData();
+	}
+	
+	
+	/*
+	 * Material handling Methods.
+	 */
+	
+	
+	
+	/**
+	 * Find a Material from an Id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Material getMaterial(int id) {
+		
+		return Material.getMaterial(id);
+	}
+	
+	/**
+	 * Find a Material from an enum name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static Material getMaterial(String name) {
+		
+		return Material.getMaterial(name);
+	}
+	
+	/**
+	 * Get the Id (magic number) of a Material type.
+	 * 
+	 * @param material
+	 * @return
+	 */
+	public static int getMaterialId(Material material) {
+		
+		return material.getId();
+	}
+	
 
 	/**
 	 * Compiles a list of all whitelisted users.

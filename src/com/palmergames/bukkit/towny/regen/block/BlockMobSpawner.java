@@ -6,6 +6,8 @@ package com.palmergames.bukkit.towny.regen.block;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
+import com.palmergames.bukkit.util.BukkitTools;
+
 /**
  * @author ElgarL
  * 
@@ -20,7 +22,7 @@ public class BlockMobSpawner extends BlockObject {
 	 */
 	public BlockMobSpawner(EntityType type) {
 
-		super(Material.MOB_SPAWNER.getId());
+		super(BukkitTools.getMaterialId(Material.MOB_SPAWNER));
 		this.mobType = type;
 	}
 

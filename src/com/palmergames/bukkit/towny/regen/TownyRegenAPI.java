@@ -237,7 +237,7 @@ public class TownyRegenAPI {
 						
 						if (state instanceof org.bukkit.block.Sign) {
 							
-							BlockSign sign = new BlockSign(state.getTypeId(), state.getData().getData(), ((org.bukkit.block.Sign) state).getLines());
+							BlockSign sign = new BlockSign(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((org.bukkit.block.Sign) state).getLines());
 							sign.setLocation(state.getLocation());
 							snapshot[x][y][z] = sign;
 							
@@ -250,13 +250,13 @@ public class TownyRegenAPI {
 							
 						} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
 							
-							BlockInventoryHolder holder = new BlockInventoryHolder(state.getTypeId(), state.getData().getData(), ((InventoryHolder) state).getInventory().getContents());
+							BlockInventoryHolder holder = new BlockInventoryHolder(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((InventoryHolder) state).getInventory().getContents());
 							holder.setLocation(state.getLocation());
 							snapshot[x][y][z] = holder;
 							
 						} else {
 						
-							snapshot[x][y][z] = new BlockObject(state.getTypeId(), state.getData().getData(), state.getLocation());
+							snapshot[x][y][z] = new BlockObject(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), state.getLocation());
 									
 						}
 						
@@ -303,7 +303,7 @@ public class TownyRegenAPI {
 					if (state instanceof BlockSign) {
 
 						BlockSign signData = (BlockSign)state;
-						block.setTypeIdAndData(signData.getTypeId(), signData.getData(), false);
+						BukkitTools.setTypeIdAndData(block, signData.getTypeId(), signData.getData(), false);
 						
 						Sign sign = (Sign) block.getState();
 						int i = 0;
@@ -316,14 +316,14 @@ public class TownyRegenAPI {
 						
 						BlockMobSpawner spawnerData = (BlockMobSpawner) state;
 						
-						block.setTypeIdAndData(spawnerData.getTypeId(), spawnerData.getData(), false);
+						BukkitTools.setTypeIdAndData(block, spawnerData.getTypeId(), spawnerData.getData(), false);
 						((CreatureSpawner) block.getState()).setSpawnedType(spawnerData.getSpawnedType());
 						((CreatureSpawner) block.getState()).setDelay(spawnerData.getDelay());
 						
 					} else if ((state instanceof BlockInventoryHolder) && !(state instanceof Player)) {
 						
 						BlockInventoryHolder containerData = (BlockInventoryHolder) state;
-						block.setTypeIdAndData(containerData.getTypeId(), containerData.getData(), false);
+						BukkitTools.setTypeIdAndData(block, containerData.getTypeId(), containerData.getData(), false);
 						
 						// Container to receive the inventory
 						InventoryHolder container = (InventoryHolder) block.getState();
@@ -334,8 +334,8 @@ public class TownyRegenAPI {
 						
 					} else {
 						
-						BlockObject blockData = (BlockObject) state;						
-						block.setTypeIdAndData(blockData.getTypeId(), blockData.getData(), false);
+						BlockObject blockData = (BlockObject) state;	
+						BukkitTools.setTypeIdAndData(block, blockData.getTypeId(), blockData.getData(), false);
 					}
 					
 					
@@ -346,7 +346,7 @@ public class TownyRegenAPI {
 
 		}
 
-		TownyMessaging.sendMessage(BukkitTools.getServer().getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
+		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
 
 	}
 

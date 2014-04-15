@@ -24,18 +24,19 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class TownyBlockListener implements Listener {
 
@@ -58,7 +59,7 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();
 
 		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY);
+		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY);
 		
 		// Allow destroy if we are permitted
 		if (bDestroy)
@@ -93,7 +94,7 @@ public class TownyBlockListener implements Listener {
 				}
 			} else {
 				TownyRegenAPI.removePlaceholder(block);
-				block.setTypeId(0, false);
+				BukkitTools.setTypeId(block, 0, false);
 			}
 		} else {
 			event.setCancelled(true);
@@ -124,7 +125,7 @@ public class TownyBlockListener implements Listener {
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.BUILD);
 
 			// Allow build if we are permitted
 			if (bBuild)

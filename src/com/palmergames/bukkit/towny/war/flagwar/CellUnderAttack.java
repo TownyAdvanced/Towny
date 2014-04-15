@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class CellUnderAttack extends Cell {
 
@@ -139,17 +140,20 @@ public class CellUnderAttack extends Cell {
 			block.setType(TownyWarConfig.getBeaconWireFrameMaterial());
 	}
 
+	@SuppressWarnings("deprecation")
 	public void updateFlag() {
 
 		DyeColor[] woolColors = TownyWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
-			int woolId = Material.WOOL.getId();
+			int woolId = BukkitTools.getMaterialId(Material.WOOL);
 			byte woolData = woolColors[flagColorId].getDyeData();
 
-			flagBlock.setTypeIdAndData(woolId, woolData, true);
+			BukkitTools.setTypeIdAndData(flagBlock, woolId, woolData, true);
+
 			for (Block block : beaconFlagBlocks)
-				block.setTypeIdAndData(woolId, woolData, true);
+				BukkitTools.setTypeIdAndData(block, woolId, woolData, true);
+			
 		}
 	}
 

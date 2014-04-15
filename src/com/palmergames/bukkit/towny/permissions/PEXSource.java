@@ -55,7 +55,7 @@ public class PEXSource extends TownyPermissionSource {
 	public String getPrefixSuffix(Resident resident, String node) {
 
 		String group = "", user = "";
-		Player player = plugin.getServer().getPlayer(resident.getName());
+		Player player = BukkitTools.getPlayer(resident.getName());
 
 		PermissionManager pexPM = PermissionsEx.getPermissionManager();
 
@@ -194,7 +194,7 @@ public class PEXSource extends TownyPermissionSource {
 
 						try {
 							resident = TownyUniverse.getDataSource().getResident(((PermissionUser) entity).getName());
-							player = plugin.getServer().getPlayerExact(resident.getName());
+							player = BukkitTools.getPlayerExact(resident.getName());
 							if (player != null) {
 								//setup default modes for this player.
 								String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");

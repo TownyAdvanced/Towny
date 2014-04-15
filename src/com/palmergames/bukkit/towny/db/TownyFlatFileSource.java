@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.naming.InvalidNameException;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -1148,7 +1147,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									int id = Integer.parseInt(s);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(s);
@@ -1173,7 +1172,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									int id = Integer.parseInt(s);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(s);
@@ -1223,7 +1222,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									int id = Integer.parseInt(s);
 
-									mats.add(Material.getMaterial(id).name());
+									mats.add(BukkitTools.getMaterial(id).name());
 
 								} catch (NumberFormatException e) {
 									mats.add(s);
@@ -1724,8 +1723,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The following settings are only used if you are not using any permissions provider plugin");
 
 		// Unclaimed Zone Ignore Ids
-		if (world.getUnclaimedZoneIgnoreIds() != null)
-			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreIds(), ","));
+		if (world.getUnclaimedZoneIgnoreMaterials() != null)
+			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ","));
 
 		// PlotManagement Delete
 		list.add(newLine);

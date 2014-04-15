@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -200,7 +201,7 @@ public class TownyPlayerListener implements Listener {
 		if ((event.getAction() == Action.PHYSICAL)) {
 
 			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
-				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.DESTROY)) {
+				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 					return;
 				}
@@ -221,7 +222,7 @@ public class TownyPlayerListener implements Listener {
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Block Info"),
 								ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "Data value", "", Byte.toString(block.getData()))
+								ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
 								));
 
 						event.setCancelled(true);
@@ -327,7 +328,7 @@ public class TownyPlayerListener implements Listener {
 					blockID = 321;
 				}
 
-				if ((blockID != 0) && (!TownySettings.isSwitchMaterial(Material.getMaterial(blockID).name())))
+				if ((blockID != 0) && (!TownySettings.isSwitchMaterial(BukkitTools.getMaterial(blockID).name())))
 					return;
 
 				// Get permissions (updates if none exist)
@@ -513,7 +514,6 @@ public class TownyPlayerListener implements Listener {
 			}
 
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -535,11 +535,11 @@ public class TownyPlayerListener implements Listener {
 			boolean bItemUse;
 
 			if (block != null)
-				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE);
 			else
-				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
+				bItemUse = PlayerCacheUtil.getCachePermission(player, player.getLocation(), BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE);
 
-			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE);
+			boolean wildOverride = TownyUniverse.getPermissionSource().hasWildOverride(worldCoord.getTownyWorld(), player, BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE);
 
 			PlayerCache cache = plugin.getCache(player);
 			// cache.updateCoord(worldCoord);
@@ -550,7 +550,7 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 
 				// Allow item_use if we have an override
-				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, item.getTypeId(), item.getData().getData(), TownyPermission.ActionType.ITEM_USE))))
+				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE))))
 					return cancelState;
 
 				if (status == TownBlockStatus.WARZONE) {
@@ -604,7 +604,7 @@ public class TownyPlayerListener implements Listener {
 			return false;
 
 		// Get switch permissions (updates if none exist)
-		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getTypeId(), block.getData(), TownyPermission.ActionType.SWITCH);
+		boolean bSwitch = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.SWITCH);
 
 		// Allow switch if we are permitted
 		if (bSwitch)
