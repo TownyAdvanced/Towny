@@ -2026,4 +2026,4 @@ v0.86.0.0:
 	- Release.
 v0.86.0.1:
 	- Move more Bukkit calls to the BukkitTools class. Code cleaning and organising.
-	- Fix Preventing bed setting of bed respawn in the wilderness without permission.
+	- Fix Preventing the setting of bed respawn in the wilderness without permission.
