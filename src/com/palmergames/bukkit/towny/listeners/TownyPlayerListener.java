@@ -500,22 +500,25 @@ public class TownyPlayerListener implements Listener {
 		if (!TownySettings.getBedUse())
 			return;
 
-		WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
+		boolean isOwner = false;
 
 		try {
+			
+			WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
 
-			boolean isOwner = worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
-
-			if (!isOwner) {
-
-				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
-
-			}
+			isOwner = worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
 
 		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+			// Wilderness as it error'd getting a townblock.
 		}
+		
+		if (!isOwner) {
+
+			event.setCancelled(true);
+			TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
+
+		}
+		
 	}
 
 	public boolean onPlayerInteract(Player player, Block block, ItemStack item) {
