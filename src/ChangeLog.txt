@@ -2030,3 +2030,4 @@ v0.86.0.1:
 v0.86.0.2:
 	- Fix renaming towns so they no longer forget their townblocks part way through updating.
 	- Revert UUID implementation to remain backward compatible (for now).
+	- Fix moving deleted files to the 'deleted' folder when a file of that name already exists.

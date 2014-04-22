@@ -281,7 +281,7 @@ public class FileMgmt {
 		synchronized(sourceFile) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
-				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation));
+				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation + fileSeparator() + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
 					f.delete();
 				// Move file to new directory
