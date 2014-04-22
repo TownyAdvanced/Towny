@@ -2027,3 +2027,6 @@ v0.86.0.0:
 v0.86.0.1:
 	- Move more Bukkit calls to the BukkitTools class. Code cleaning and organising.
 	- Fix Preventing the setting of bed respawn in the wilderness without permission.
+v0.86.0.2:
+	- Fix renaming towns so they no longer forget their townblocks part way through updating.
+	- Revert UUID implementation to remain backward compatible (for now).

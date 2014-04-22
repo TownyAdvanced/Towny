@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -62,15 +61,17 @@ public class BukkitTools {
 	
 	public static Player getPlayer(String playerId) {
 		
-		if (playerId.length() < 36) {
-			
-			return getServer().getPlayer(playerId);
-			
-		} else {
-			
-			return getServer().getPlayer(UUID.fromString(playerId));
-			
-		}
+		return getServer().getPlayer(playerId);
+		
+//		if (playerId.length() < 36) {
+//			
+//			return getServer().getPlayer(playerId);
+//			
+//		} else {
+//			
+//			return getServer().getPlayer(UUID.fromString(playerId));
+//			
+//		}
 		
 	}
 	
@@ -82,15 +83,17 @@ public class BukkitTools {
 	 */
 	public static boolean isOnline(String playerId) {
 		
-		if (playerId.length() < 36) {
-			
-			return getServer().getPlayer(playerId) != null;
-			
-		} else {
-			
-			return getServer().getPlayer(UUID.fromString(playerId)) != null;
-			
-		}	
+		return getServer().getPlayer(playerId) != null;
+		
+//		if (playerId.length() < 36) {
+//			
+//			return getServer().getPlayer(playerId) != null;
+//			
+//		} else {
+//			
+//			return getServer().getPlayer(UUID.fromString(playerId)) != null;
+//			
+//		}	
 		
 	}
 	

@@ -673,7 +673,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Update all townBlocks with the new name
 
 			for (TownBlock townBlock : town.getTownBlocks()) {
-				townBlock.setTown(town);
+				//townBlock.setTown(town);
 				saveTownBlock(townBlock);
 			}
 
