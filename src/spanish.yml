@@ -1,5 +1,5 @@
 name: Towny
-version: 0.17
+version: 0.18
 language: spanish
 author: Shark
 website: http://code.google.com/a/eclipselabs.org/p/towny/
@@ -284,6 +284,7 @@ msg_usedefault: '&bThis world (%s) is now using the global default settings.'
 msg_set_wild_perms: '&bSuccessfully changed %s''s wild permissions %s'
 msg_set_wild_ignore: '&bSuccessfully changed %s''s wild ignore blocks to %s'
 msg_set_wild_name: '&bSuccessfully changed %s''s wild name to %s'
+msg_set_wild_regen: '&bSuccessfully changed %s''s wild regen to ''%s'''
 msg_set_use_towny_on: '&bThis world now follows towny rules.'
 msg_set_use_towny_off: '&cThis world is exempt of all towny interactions.'
 

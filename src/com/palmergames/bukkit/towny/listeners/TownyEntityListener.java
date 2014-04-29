@@ -510,6 +510,9 @@ public class TownyEntityListener implements Listener {
 				if (townyWorld.isUsingTowny())
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
+							
+							TownyMessaging.sendDebugMsg("onEntityExplode: Testing entity: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
+							
 							if (townyWorld.isProtectingExplosionEntity(entity)) {
 								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);

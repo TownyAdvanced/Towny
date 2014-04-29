@@ -1,5 +1,5 @@
 name: Towny
-version: 0.18
+version: 0.19
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -285,6 +285,7 @@ msg_usedefault: '&bDie Welt(%s) benutzt nun die globale Standarteinstellungen .'
 msg_set_wild_perms: '&bDie Berechtigungen fuer die Wildnis %s''s wurde erfolgreich gaendert zu %s'
 msg_set_wild_ignore: '&bDie zu ignorierende Bloecke %s''s fuer die Wildnis wurde erfolgreich gaendert zu %s'
 msg_set_wild_name: '&bDer Name fuer die Wildnis %s''s wurde erfolgreich gaendert zu %s'
+msg_set_wild_regen: '&bSuccessfully changed %s''s wild regen to ''%s'''
 msg_set_use_towny_on: '&bDiese Welt befolgt nun die Regeln von Towny.'
 msg_set_use_towny_off: '&cDiese Welt ist nun von jedem Einfluss von Towny befreit.'
 

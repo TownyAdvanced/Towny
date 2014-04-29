@@ -2033,3 +2033,7 @@ v0.86.0.2:
 	- Fix moving deleted files to the 'deleted' folder when a file of that name already exists.
 v0.86.1.0:
 	- Release.
+v0.86.1.1:
+	- Add 'LargeFireball' to the wild revert explosion entities.
+	- Added a TownyWorld command for setting the wilderness regen entities.
+	  '/townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart'

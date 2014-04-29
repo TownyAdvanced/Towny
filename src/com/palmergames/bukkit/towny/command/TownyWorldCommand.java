@@ -420,6 +420,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						else
 							sender.sendMessage("Eg: /townyworld set wildperm build destroy <world>");
 					}
+
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
@@ -432,6 +433,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						List<String> mats = new ArrayList<String>();
 						for (String s : StringMgmt.remFirstArg(split))
 							mats.add(Material.matchMaterial(s.trim().toUpperCase()).name());
+
 						Globalworld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
@@ -439,11 +441,33 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreMaterials()));
 						else
 							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_ignore"), Globalworld.getName(), Globalworld.getUnclaimedZoneIgnoreMaterials()));
-						
+
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 					}
+
+			} else if (split[0].equalsIgnoreCase("wildregen")) {
+
+				if (split.length < 2)
+					if (player != null)
+						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart");
+					else
+						sender.sendMessage("Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
+				else {
+
+					List<String> entities = new ArrayList<String>(Arrays.asList(StringMgmt.remFirstArg(split)));
+
+					Globalworld.setPlotManagementWildRevertEntities(entities);
+
+					if (player != null)
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_set_wild_regen"), Globalworld.getName(), Globalworld.getPlotManagementWildRevertEntities()));
+					else
+						sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_regen"), Globalworld.getName(), Globalworld.getPlotManagementWildRevertEntities()));
+
+				}
+
 			} else if (split[0].equalsIgnoreCase("wildname")) {
+
 				if (split.length < 2) {
 					if (player != null)
 						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildname Wildy");
