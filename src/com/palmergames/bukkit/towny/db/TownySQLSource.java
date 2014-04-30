@@ -125,8 +125,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 			this.driver = "org.sqlite.JDBC";
 			this.dsn = ("jdbc:sqlite:" + rootFolder + dataFolder + File.separator + db_name + ".sqldb");
-			username = TownySettings.getSQLUsername();
-			password = TownySettings.getSQLPassword();
+			username = "";
+			password = "";
 
 		}
 
@@ -202,7 +202,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	public boolean getContext() {
 
 		try {
-			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
+			if (cntx == null || cntx.isClosed() || ( !this.type.equals("sqlite") && !cntx.isValid(1))) {
 
 				if (cntx != null && !cntx.isClosed()) {
 
