@@ -433,7 +433,7 @@ public class TownySettings {
 				// Is already a string.
 				newValues.add(id);
 				
-			} catch (NullPointerException ex) {
+			} catch (NullPointerException e) {
 				
 				// Assume modded item.
 				if (!id.startsWith("X")) {
