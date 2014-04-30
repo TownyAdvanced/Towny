@@ -2038,3 +2038,5 @@ v0.86.1.1:
 	- Added a TownyWorld command for setting the wilderness regen entities.
 	  '/townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart'
 	- Fix sqlite implementation so it actually works.
+v0.86.1.2:
+	- Update last default entries in the config under 'block/item/mob protection' to use material types instead of Ids.
