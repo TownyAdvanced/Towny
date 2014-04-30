@@ -2040,3 +2040,4 @@ v0.86.1.1:
 	- Fix sqlite implementation so it actually works.
 v0.86.1.2:
 	- Update last default entries in the config under 'block/item/mob protection' to use material types instead of Ids.
+	- Better handle unknown and modded item Id's in update/conversion.

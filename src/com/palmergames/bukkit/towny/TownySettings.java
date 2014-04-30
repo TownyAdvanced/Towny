@@ -433,6 +433,18 @@ public class TownySettings {
 				// Is already a string.
 				newValues.add(id);
 				
+			} catch (NullPointerException ex) {
+				
+				// Assume modded item.
+				if (!id.startsWith("X")) {
+					
+					// Prepend an X
+					newValues.add("X" + id);
+				} else {
+					
+					// Already has an X
+					newValues.add(id);
+				}
 			}
 			
 		}
