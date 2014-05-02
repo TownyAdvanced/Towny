@@ -4,11 +4,11 @@
 	<property file="build.properties" />
 	<property environment="env"/>
 
-	<target name="test">
+	<target name="clean">
 		<delete dir="${build}" />
 	</target>
 
-	<target name="init" depends="test">
+	<target name="init" depends="clean">
 		<mkdir dir="${build}" />
 		<mkdir dir="${env.LIB}" />
 
