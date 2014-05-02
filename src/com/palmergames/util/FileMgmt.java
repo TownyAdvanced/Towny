@@ -142,7 +142,8 @@ public class FileMgmt {
 
 			char[] buffer = new char[1024];
 			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); //should be UTF-8
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For Linux
+				// Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -178,7 +179,8 @@ public class FileMgmt {
 			char[] buffer = new char[1024];
 			try {
 				is = new FileInputStream(file);
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For Linux
+				// Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -227,7 +229,8 @@ public class FileMgmt {
 
 		try {
 
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"); // For Linux
+			// OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
 
 			//BufferedWriter out = new BufferedWriter(new FileWriter(FileName));
 
@@ -256,7 +259,8 @@ public class FileMgmt {
 		try {
 
 			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"); // For Linux
+			// OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
 
 			Iterator<String> itr = source.iterator();
 			

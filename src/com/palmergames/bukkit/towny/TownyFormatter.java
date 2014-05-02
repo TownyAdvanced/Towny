@@ -27,8 +27,8 @@ public class TownyFormatter {
 
 	// private static Towny plugin = null;
 
-	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
-	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
+	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MM월 dd일 '@' HH:mm"); // May 02 @ 21:02 => 05월 02일 @ 21:02
+	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("yyyy년 MM월 dd일"); // 2014 May 02 => 2014년 05월 02일
 
 	/**
 	 * 1 = Description 2 = Count

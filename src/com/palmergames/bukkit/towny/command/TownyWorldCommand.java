@@ -250,7 +250,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("claimable")) {
 
 				Globalworld.setClaimable(!Globalworld.isClaimable());
-				msg = String.format(TownySettings.getLangString("msg_set_claim"), Globalworld.getName(), Globalworld.isClaimable() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_set_claim"), Globalworld.getName(), Globalworld.isClaimable() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -269,7 +269,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
 				Globalworld.setPVP(!Globalworld.isPVP());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Global PVP", Globalworld.getName(), Globalworld.isPVP() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "월드 내 PVP",Globalworld.isPVP() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -278,7 +278,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("forcepvp")) {
 
 				Globalworld.setForcePVP(!Globalworld.isForcePVP());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Force town PVP", Globalworld.getName(), Globalworld.isForcePVP() ? "Forced" : "Adjustable");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "강제적인 마을 내 PvP 허용", Globalworld.isForcePVP() ? "강제적" : "조정 가능");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -287,7 +287,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
 				Globalworld.setExpl(!Globalworld.isExpl());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Explosions", Globalworld.getName(), Globalworld.isExpl() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "폭발", Globalworld.isExpl() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -296,7 +296,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("forceexplosion")) {
 
 				Globalworld.setForceExpl(!Globalworld.isForceExpl());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Force town Explosions", Globalworld.getName(), Globalworld.isForceExpl() ? "Forced" : "Adjustable");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "강제적인 마을 내 폭발 허용", Globalworld.isForceExpl() ? "강제적" : "조정 가능");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -305,7 +305,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("fire")) {
 
 				Globalworld.setFire(!Globalworld.isFire());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Fire Spread", Globalworld.getName(), Globalworld.isFire() ? "enabled" : "disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "불번짐", Globalworld.isFire() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -314,7 +314,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("forcefire")) {
 
 				Globalworld.setForceFire(!Globalworld.isForceFire());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Force town Fire Spread", Globalworld.getName(), Globalworld.isForceFire() ? "Forced" : "Adjustable");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "강제적인 마을 내 불번짐 허용", Globalworld.isForceFire() ? "강제적" : "조정 가능");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -323,7 +323,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("townmobs")) {
 
 				Globalworld.setForceTownMobs(!Globalworld.isForceTownMobs());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Town Mob spawns", Globalworld.getName(), Globalworld.isForceTownMobs() ? "Forced" : "Adjustable");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "마을 몹 스폰", Globalworld.isForceTownMobs() ? "강제적" : "조정 가능");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -332,7 +332,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("worldmobs")) {
 
 				Globalworld.setWorldMobs(!Globalworld.hasWorldMobs());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "World Mob spawns", Globalworld.getName(), Globalworld.hasWorldMobs() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "월드 몹 스폰", Globalworld.hasWorldMobs() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -341,7 +341,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("revertunclaim")) {
 
 				Globalworld.setUsingPlotManagementRevert(!Globalworld.isUsingPlotManagementRevert());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Unclaim Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementRevert() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "점유해제시 지형 원상복구", Globalworld.isUsingPlotManagementRevert() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -350,7 +350,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("revertexpl")) {
 
 				Globalworld.setUsingPlotManagementWildRevert(!Globalworld.isUsingPlotManagementWildRevert());
-				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), "Wilderness Explosion Revert", Globalworld.getName(), Globalworld.isUsingPlotManagementWildRevert() ? "Enabled" : "Disabled");
+				msg = String.format(TownySettings.getLangString("msg_changed_world_setting"), Globalworld.getName(), "야생구역 폭발 발생시 지형 복구", Globalworld.isUsingPlotManagementWildRevert() ? "활성" : "비활성");
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
@@ -416,18 +416,18 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 							sender.sendMessage(String.format(TownySettings.getLangString("msg_set_wild_perms"), Globalworld.getName(), perms.toString()));
 					} catch (Exception e) {
 						if (player != null)
-							TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildperm build destroy");
+							TownyMessaging.sendErrorMsg(player, "예시: /townyworld set wildperm build destroy");
 						else
-							sender.sendMessage("Eg: /townyworld set wildperm build destroy <world>");
+							sender.sendMessage("예시: /townyworld set wildperm build destroy <world>");
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
 					if (player != null)
-						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE");
+						TownyMessaging.sendErrorMsg(player, "예시: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE");
 					else
-						sender.sendMessage("Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
+						sender.sendMessage("예시: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
 				else
 					try {
 						List<String> mats = new ArrayList<String>();
@@ -450,9 +450,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length < 2)
 					if (player != null)
-						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart");
+						TownyMessaging.sendErrorMsg(player, "예시: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart");
 					else
-						sender.sendMessage("Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
+						sender.sendMessage("예시: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
 				else {
 
 					List<String> entities = new ArrayList<String>(Arrays.asList(StringMgmt.remFirstArg(split)));
@@ -470,7 +470,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length < 2) {
 					if (player != null)
-						TownyMessaging.sendErrorMsg(player, "Eg: /townyworld set wildname Wildy");
+						TownyMessaging.sendErrorMsg(player, "예시: /townyworld set wildname Wildy");
 				} else
 					try {
 						Globalworld.setUnclaimedZoneName(split[1]);
