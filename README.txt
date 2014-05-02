@@ -1,3 +1,5 @@
+* 2014년 5월 2일부터 새로 작업하는 번역입니다. 이전 번역은 https://github.com/Neder/Towny_Korean 을 참조하세요.
+
 <Towny 플러그인의 설명에 대한 번역입니다>
 
 Towny advanced는 ElgarL이 개발했습니다.
