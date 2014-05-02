@@ -1,4 +1,4 @@
-package com.palmergames.util;
+package com.palmergames.util; /* Localized on 2014-05-02 by Neder */
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -74,7 +74,7 @@ public class FileMgmt {
 					out.close();
 				} catch (IOException ex) {
 					// failed to access file.
-					System.out.println("Error: Could not access: " + sourceLocation);
+					System.out.println("오류: 엑세스 거부: " + sourceLocation);
 				}
 				out.close();
 			}
@@ -142,7 +142,7 @@ public class FileMgmt {
 
 			char[] buffer = new char[1024];
 			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "US-ASCII")); //should be UTF-8
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); //should be UTF-8
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -353,11 +353,11 @@ public class FileMgmt {
 				children = file.listFiles();
 				if (children == null || children.length == 0) {
 					if (!file.delete())
-						System.out.println("Error: Could not delete folder: " + file.getPath());
+						System.out.println("오류: 폴더 삭제 실패: " + file.getPath());
 				}
 			} else if (file.isFile()) {
 				if (!file.delete())
-					System.out.println("Error: Could not delete file: " + file.getPath());
+					System.out.println("오류: 파일 삭제 실패: " + file.getPath());
 			}
 		}
 	}
@@ -400,7 +400,7 @@ public class FileMgmt {
 			}
 
 			if (deleted.size() > 0) {
-				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
+				System.out.println(String.format("[타우니] %d 개의 오래된 백업들을 삭제했습니다 (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
 		}
 	}
@@ -434,7 +434,7 @@ public class FileMgmt {
 					}
 	
 					if (count > 0) {
-						System.out.println(String.format("[Towny] Deleted %d old files.", count));
+						System.out.println(String.format("[타우니] %d 개의 오래된 파일들을 삭제했습니다.", count));
 					}
 				}
 			}
