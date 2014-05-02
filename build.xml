@@ -3,16 +3,12 @@
 	<property name="build" value="bin" />
 	<property file="build.properties" />
 	<property environment="env"/>
-	
-	<target name="test">
-		
-	</target>	
 
-	<target name="clean" depends="test">
+	<target name="test">
 		<delete dir="${build}" />
 	</target>
 
-	<target name="init" depends="clean">
+	<target name="init" depends="test">
 		<mkdir dir="${build}" />
 		<mkdir dir="${env.LIB}" />
 
