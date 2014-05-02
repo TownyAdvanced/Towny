@@ -3,8 +3,12 @@
 	<property name="build" value="bin" />
 	<property file="build.properties" />
 	<property environment="env"/>
+	
+	<target name="test">
+		
+	</target>	
 
-	<target name="clean">
+	<target name="clean" depends="test">
 		<delete dir="${build}" />
 	</target>
 
