@@ -14,7 +14,7 @@ nomad:
     - -towny.command.towny.spy
     - towny.command.town.new
     - towny.command.town.join
-	- towny.command.town.here
+    - towny.command.town.here
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list
