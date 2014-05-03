@@ -1,4 +1,6 @@
 language: java
 jdk:
   - openjdk6
-script: "/home/travis/Neder/Towny/build.sh"
+script:
+  - "chmod 777 ./build.sh"
+  - "./build.sh"
