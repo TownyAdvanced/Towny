@@ -2,17 +2,17 @@ language: java
 jdk:
   - openjdk6
 script:
-  - name=$(date +%Y%H%M)
+  - name=$(date +%Y%m%d)
   - sudo apt-get install ftp
   - cd /home/travis/build/Neder/Towny
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_UTF-8_$name.jar
+  - mv ./out/Towny.jar ./out/Towny_UTF-8_${name}.jar
   - iconv -f UTF-8 -t cp949 ./src/korean.yml > ./src/koreancp949.yml
   - rm ./src/korean.yml
   - mv ./src/koreancp949.yml ./src/korean.yml
   - rm ./src/com/palmergames/util/FileMgmt.java
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_CP949_$name.jar
+  - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
   - chmod 777 ./build.sh
   - ./build.sh
