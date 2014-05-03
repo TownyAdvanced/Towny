@@ -18,7 +18,6 @@ script:
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
-  - chmod 777 ./build.sh
 after_success:
   - "curl --ftp-create-dirs -T Towny_CP949_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
   - "curl --ftp-create-dirs -T Towny_UTF-8_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
