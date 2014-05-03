@@ -17,3 +17,7 @@ http://creativecommons.org/licenses/by-nc-nd/3.0/
 
 이 레포를 Fork해서 개인적으로 수정하고 빌드하는 것은 신경쓰지 않습니다. 다만 이걸 개인적으로만 소유하고 있는 것은 되도록이면 자제해 주십시오. 
 플러그인의 코드를 수정하거나 쓸만한 기능을 추가하고 싶을 때는 문의해 주시거나 pull request를 넣어 주세요. 모두에게 이익이 됩니다.
+
+* Travis -> https://travis-ci.org/Neder/Towny
+* Download Travis Builds
+  -> http://ocw5902.w.pw/Towny
