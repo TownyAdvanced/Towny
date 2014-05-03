@@ -1,4 +1,4 @@
-package com.palmergames.util;
+package com.palmergames.util; /* Localized on 2014-05-04 by Neder */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,16 +53,16 @@ public class TimeMgmt {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) Math.floor(l / 3600);
-			out = h + " hours";
+			out = h + " 시간";
 			l -= h * 3600;
 		}
 		if (l >= 60) {
 			int m = (int) Math.floor(l / 60);
-			out += (out.length() > 0 ? ", " : "") + m + " minutes";
+			out += (out.length() > 0 ? ", " : "") + m + " 분";
 			l -= m * 60;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + " seconds";
+			out += (out.length() > 0 ? ", " : "") + l + " 초";
 		return out;
 	}
 

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.command;
+package com.palmergames.bukkit.towny.command; /* Localized on 2014-05-04 by Neder */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +51,17 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_general_help.add(ChatTools.formatCommand("", "/resident", "?", "") + ", " + ChatTools.formatCommand("", "/town", "?", "") + ", " + ChatTools.formatCommand("", "/nation", "?", "") + ", " + ChatTools.formatCommand("", "/plot", "?", "") + ", " + ChatTools.formatCommand("", "/towny", "?", ""));
 		towny_general_help.add(ChatTools.formatCommand("", "/tc", "[msg]", TownySettings.getLangString("help_2")) + ", " + ChatTools.formatCommand("", "/nc", "[msg]", TownySettings.getLangString("help_3")).trim());
 		towny_general_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin", "?", ""));
+		towny_general_help.add(ChatTools.formatCommand("한글화", "§3Neder", "§cGitHub", "§3https://github.com/Neder/Towny"));
 
 		towny_help.add(ChatTools.formatTitle("/towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "", "General help for Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "map", "Displays a map of the nearby townblocks"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "Display the prices used with Economy"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "top", "Display highscores"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "time", "Display time until a new day"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "universe", "Displays stats"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "v", "Displays the version of Towny"));
-		towny_help.add(ChatTools.formatCommand("", "/towny", "war", "'/towny war' for more info"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "", "기본적인 타우니 도움말"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "map", "주위에 있는 마을블록 지도 표시"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "prices", "마을/국가 관련 가격 보기"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "top", "스코어보드 출력"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "time", "다음날까지 남은 시간 보기"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "universe", "상태 표시"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "v", "타우니 버전 표시"));
+		towny_help.add(ChatTools.formatCommand("", "/towny", "war", "'/towny war' 을 입력해서 자세하게 알아보세요"));
 
 	}
 
@@ -90,7 +91,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("tree"))
 				plugin.getTownyUniverse().sendUniverseTree(sender);
 			else if (args[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg("다음날까지 남은 시간: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
 				sender.sendMessage(Colors.strip(towny_version));
 			else if (args[0].equalsIgnoreCase("war")) {
@@ -98,7 +99,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				for (String line : towny_war)
 					sender.sendMessage(Colors.strip(line));
 				if (!war)
-					sender.sendMessage("The world isn't currently at war.");
+					sender.sendMessage("이 월드에는 전쟁이 일어나지 않았습니다.");
 
 				towny_war.clear();
 			} else if (args[0].equalsIgnoreCase("universe")) {
@@ -158,7 +159,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("tree")) {
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(player, "다음날까지 남은 시간: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (split[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats())
 					player.sendMessage(line);
@@ -169,7 +170,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				for (String line : towny_war)
 					player.sendMessage(Colors.strip(line));
 				if (!war)
-					sendErrorMsg(player, "The world isn't currently at war.");
+					sendErrorMsg(player, "이 월드에는 전쟁이 일어나지 않았습니다.");
 
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
@@ -183,7 +184,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 
 			} else
-				sendErrorMsg(player, "Invalid sub command.");
+				sendErrorMsg(player, "서브 명령어가 잘못되었습니다.");
 
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -214,32 +215,32 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns());
 				list.addAll(TownyUniverse.getDataSource().getNations());
-				towny_top.add(ChatTools.formatTitle("Most Residents"));
+				towny_top.add(ChatTools.formatTitle("주민 순위"));
 				towny_top.addAll(getMostResidents(list, 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
-				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
+				towny_top.add(ChatTools.formatTitle("주민이 가장 많은 마을"));
 				towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns()), 10));
 			} else if (args[1].equalsIgnoreCase("nation")) {
-				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
+				towny_top.add(ChatTools.formatTitle("주민이 가장 많은 국가"));
 				towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getNations()), 10));
 			} else
-				sendErrorMsg(player, "Invalid sub command.");
+				sendErrorMsg(player, "서브 명령어가 잘못되었습니다.");
 		else if (args[0].equalsIgnoreCase("land"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<TownBlockOwner> list = new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents());
 				list.addAll(TownyUniverse.getDataSource().getTowns());
-				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
+				towny_top.add(ChatTools.formatTitle("토지 순위"));
 				towny_top.addAll(getMostLand(list, 10));
 			} else if (args[1].equalsIgnoreCase("resident")) {
-				towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
+				towny_top.add(ChatTools.formatTitle("토지를 가장 많이 소유한 주민"));
 				towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents()), 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
-				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
+				towny_top.add(ChatTools.formatTitle("토지를 가장 많이 소유한 국가"));
 				towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getTowns()), 10));
 			} else
-				sendErrorMsg(player, "Invalid sub command.");
+				sendErrorMsg(player, "서브 명령어가 잘못되었습니다.");
 		else
-			sendErrorMsg(player, "Invalid sub command.");
+			sendErrorMsg(player, "서브 명령어가 잘못되었습니다.");
 
 		for (String line : towny_top)
 			player.sendMessage(line);
@@ -252,11 +253,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		List<String> output = new ArrayList<String>();
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7e타우니 " + plugin.getVersion() + "\u00A76]");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/Llmdl/ElgarL");
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73Residents: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73Worlds: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
+		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-   Korean Localized by Neder");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73주민 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73마을 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73국가 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73월드 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73마을블록 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
 		output.add("\u00A70-----\u00A74#\u00A70----- ");
 		return output;
 	}
@@ -299,22 +300,22 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					e.printStackTrace();
 				}
 
-		output.add(ChatTools.formatTitle("Prices"));
-		output.add(Colors.Yellow + "[New] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
-		output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
-		output.add(Colors.Gray + "Town upkeep is based on " + Colors.LightGreen + " the " + (TownySettings.isUpkeepByPlot() ? " number of plots" : " town level (num residents)."));
+		output.add(ChatTools.formatTitle("가격"));
+		output.add(Colors.Yellow + "[신설] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
+		output.add(Colors.Yellow + "[유지비] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
+		output.add(Colors.Gray + "마을 유지비는 다음과 비례합니다" + Colors.LightGreen + ": " + (TownySettings.isUpkeepByPlot() ? "마을블록 수" : " 마을레벨 (주민 수)."));
 
 		if (town != null) {
-			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");
-			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + Double.toString(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotPrice()));
+			output.add(Colors.Yellow + "마을 [" + TownyFormatter.getFormattedName(town) + "]");
+			output.add(Colors.Rose + "    [가격] " + Colors.Green + "토지: " + Colors.LightGreen + Double.toString(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "전초기지: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
+			output.add(Colors.Rose + "            " + Colors.Green + "상점: " + Colors.LightGreen + Double.toString(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "대사관: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotPrice()));
 
-			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes()) + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
-			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + Double.toString(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotTax()));
+			output.add(Colors.Rose + "    [세금] " + Colors.Green + "주민: " + Colors.LightGreen + Double.toString(town.getTaxes()) + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "주민: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
+			output.add(Colors.Rose + "            " + Colors.Green + "상점: " + Colors.LightGreen + Double.toString(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "대사관: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotTax()));
 			
 			if (nation != null) {
-				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Yellow + "주민 [" + TownyFormatter.getFormattedName(nation) + "]");
+				output.add(Colors.Rose + "    [세금] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "중립선언: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;
