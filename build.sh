@@ -1,4 +1,3 @@
-#!/bin/sh
 name=$(date +%Y%H%M)
 
 cd /home/travis/build/Neder/Towny
