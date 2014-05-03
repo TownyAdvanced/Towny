@@ -1,3 +1,4 @@
+name=$(date +%Y%m%d)
 ftp -inv neder1.cloudapp.net << EOT
 user Towny \n
 lcd /home/travis/build/Neder/Towny/out
