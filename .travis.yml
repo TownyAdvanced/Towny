@@ -2,11 +2,11 @@ language: java
 jdk:
   - openjdk6
 script:
-  - apt-get install ftp
+  - sudo apt-get install ftp
   - cd /home/travis/build/Neder/Towny
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_UTF-8_$name.jar
-  - iconv -f UTF-8 -t cp949 ./src/korean.yml > koreancp949.yml
+  - iconv -f UTF-8 -t cp949 ./src/korean.yml > ./src/koreancp949.yml
   - rm ./src/korean.yml
   - mv ./src/koreancp949.yml ./src/korean.yml
   - rm ./src/com/palmergames/util/FileMgmt.java
