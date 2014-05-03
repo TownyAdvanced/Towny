@@ -9,15 +9,15 @@ script:
   - name=$(date +%Y%m%d-%H%M%S)
   - cd /home/travis/build/Neder/Towny
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_UTF-8_${name}_${TRAVIS_COMMIT}.jar
+  - mv ./out/Towny.jar ./out/Towny_${name}_UTF-8_${TRAVIS_COMMIT}.jar
   - iconv -f UTF-8 -t cp949 ./src/korean.yml > ./src/koreancp949.yml
   - rm ./src/korean.yml
   - mv ./src/koreancp949.yml ./src/korean.yml
   - rm ./src/com/palmergames/util/FileMgmt.java
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_CP949_${name}_${TRAVIS_COMMIT}.jar
+  - mv ./out/Towny.jar ./out/Towny_${name}_CP949_${TRAVIS_COMMIT}.jar
   - ls ./out
 after_success:
-  - "sudo curl -T ./out/Towny_CP949_${name}_${TRAVIS_COMMIT}.jar -u u833935363:TownyTowny ftp://ftp.ocw5902.w.pw/Towny/"
-  - "sudo curl -T ./out/Towny_UTF-8_${name}_${TRAVIS_COMMIT}.jar -u u833935363:TownyTowny ftp://ftp.ocw5902.w.pw/Towny/"
+  - "sudo curl -T ./out/Towny_${name}_CP949_${TRAVIS_COMMIT}.jar -u u833935363:TownyTowny ftp://ftp.ocw5902.w.pw/Towny/"
+  - "sudo curl -T ./out/Towny_${name}_UTF-8_${TRAVIS_COMMIT}.jar -u u833935363:TownyTowny ftp://ftp.ocw5902.w.pw/Towny/"
