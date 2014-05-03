@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.config;
+package com.palmergames.bukkit.config; /* Localized on 2014-05-04 by Neder */
 
 public enum ConfigNodes {
 	VERSION_HEADER("version", "", ""),
@@ -16,7 +16,7 @@ public enum ConfigNodes {
 			"# Minimum required version of CraftBukkit.  Please do not edit."),
 	LANGUAGE(
 			"language",
-			"english.yml",
+			"korean.yml",
 			"",
 			"# The language file you wish to use"),
 	PERMS(

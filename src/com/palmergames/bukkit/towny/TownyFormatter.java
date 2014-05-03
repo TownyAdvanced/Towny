@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-04 by Neder */
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class TownyFormatter {
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(residents, Colors.Green + "주민 수 " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 		return out;
 
@@ -97,12 +97,12 @@ public class TownyFormatter {
 				owner = townBlock.getTown();
 			}
 
-			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? Colors.LightGreen + " (Online)" : "")));
-			out.add(Colors.Green + " Perm: " + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString() : townBlock.getPermissions().getColourString().replace("f", "r")));
-			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? Colors.LightGreen + " (온라인)" : "")));
+			out.add(Colors.Green + " 권한: " + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString() : townBlock.getPermissions().getColourString().replace("f", "r")));
+			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  폭발: " + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  불번짐: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  몹 스폰: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐"));
 
 		} catch (NotRegisteredException e) {
-			out.add("Error: " + e.getMessage());
+			out.add("오류: " + e.getMessage());
 		}
 
 		return out;
@@ -121,48 +121,48 @@ public class TownyFormatter {
 		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? Colors.LightGreen + " (Online)" : "")));
 
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
-		out.add(Colors.Green + "Registered: " + Colors.LightGreen + registeredFormat.format(resident.getRegistered()) + Colors.Gray + " | " + Colors.Green + "Last Online: " + Colors.LightGreen + lastOnlineFormat.format(resident.getLastOnline()));
+		out.add(Colors.Green + "가입일: " + Colors.LightGreen + registeredFormat.format(resident.getRegistered()) + Colors.Gray + " | " + Colors.Green + "최근 접속: " + Colors.LightGreen + lastOnlineFormat.format(resident.getLastOnline()));
 
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
 		// if (resident.getTownBlocks().size() > 0) {
-		out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
-		out.add(Colors.Green + "    Perm: " + resident.getPermissions().getColourString());
-		out.add(Colors.Green + "PVP: " + ((resident.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((resident.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((resident.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((resident.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		out.add(Colors.Green + "소유함: " + Colors.LightGreen + resident.getTownBlocks().size() + " 개의 토지");
+		out.add(Colors.Green + "    권한: " + resident.getPermissions().getColourString());
+		out.add(Colors.Green + "PVP: " + ((resident.getPermissions().pvp) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  폭발: " + ((resident.getPermissions().explosion) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  불번짐: " + ((resident.getPermissions().fire) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  몹 스폰: " + ((resident.getPermissions().mobs) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐"));
 		// }
 
 		// Bank: 534 coins
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive())
-				out.add(Colors.Green + "Bank: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
+				out.add(Colors.Green + "소지금: " + Colors.LightGreen + resident.getHoldingFormattedBalance());
 
 		// Town: Camelot
-		String line = Colors.Green + "Town: " + Colors.LightGreen;
+		String line = Colors.Green + "마을: " + Colors.LightGreen;
 		if (!resident.hasTown())
 			line += "None";
 		else
 			try {
 				line += getFormattedName(resident.getTown());
 			} catch (TownyException e) {
-				line += "Error: " + e.getMessage();
+				line += "오류: " + e.getMessage();
 			}
 		out.add(line);
 		
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
-				out.add(Colors.Green + "Town Ranks: " + Colors.LightGreen + StringMgmt.join(resident.getTownRanks(), ","));
+				out.add(Colors.Green + "마을 등급: " + Colors.LightGreen + StringMgmt.join(resident.getTownRanks(), ","));
 		}
 		
 		//Nation ranks
 		if (resident.hasNation()) {
 			if (!resident.getNationRanks().isEmpty())
-				out.add(Colors.Green + "Nation Ranks: " + Colors.LightGreen + StringMgmt.join(resident.getNationRanks(), ","));
+				out.add(Colors.Green + "국가 등급: " + Colors.LightGreen + StringMgmt.join(resident.getNationRanks(), ","));
 		}
 
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
-		out.addAll(getFormattedResidents("Friends", friends));
+		out.addAll(getFormattedResidents("친구", friends));
 
 		return out;
 	}
@@ -178,9 +178,9 @@ public class TownyFormatter {
 		List<String> ranklist = new ArrayList<String>();
 
 		String towntitle = getFormattedName(town);
-		towntitle += Colors.Blue + " Rank List";
+		towntitle += Colors.Blue + " 등급 목록";
 		ranklist.add(ChatTools.formatTitle(towntitle));
-		ranklist.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
+		ranklist.add(Colors.Green + "촌장: " + Colors.LightGreen + getFormattedName(town.getMayor()));
 
 		List<Resident> residents = town.getResidents();
 		List<String> townranks = TownyPerms.getTownRanks();
@@ -219,18 +219,18 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(Colors.Green + "Board: " + Colors.LightGreen + town.getTownBoard());
+			out.add(Colors.Green + "공지: " + Colors.LightGreen + town.getTownBoard());
 		} catch (NullPointerException e) {
 		}
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
+			out.add(Colors.Green + "마을 크기: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
 		} catch (TownyException e) {
 		}
 
 		if (town.hasOutpostSpawn())
-			out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
+			out.add(Colors.Green + "전초기지: " + Colors.LightGreen + town.getMaxOutpostSpawn());
 
 		// Permissions: B=rao D=--- S=ra-
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r"));
@@ -240,16 +240,16 @@ public class TownyFormatter {
 		String bankString = "";
 		if (TownySettings.isUsingEconomy()) {
 			if (TownyEconomyHandler.isActive()) {
-				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
+				bankString = Colors.Green + "금고 잔액: " + Colors.LightGreen + town.getHoldingFormattedBalance();
 				if (town.hasUpkeep())
-					bankString += Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getTownUpkeepCost(town);
-				bankString += Colors.Gray + " | " + Colors.Green + "Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
+					bankString += Colors.Gray + " | " + Colors.Green + "유지비: " + Colors.Red + TownySettings.getTownUpkeepCost(town);
+				bankString += Colors.Gray + " | " + Colors.Green + "세금: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
+		out.add(Colors.Green + "촌장: " + Colors.LightGreen + getFormattedName(town.getMayor()));
 
 		// Assistants [2]: Sammy, Ginger
 		// if (town.getAssistants().size() > 0)
@@ -276,7 +276,7 @@ public class TownyFormatter {
 
 		// Nation: Azur Empire
 		try {
-			out.add(Colors.Green + "Nation: " + Colors.LightGreen + getFormattedName(town.getNation()));
+			out.add(Colors.Green + "소속된 국가: " + Colors.LightGreen + getFormattedName(town.getNation()));
 		} catch (TownyException e) {
 		}
 
@@ -287,9 +287,9 @@ public class TownyFormatter {
 			String[] entire = residents;
 			residents = new String[36];
 			System.arraycopy(entire, 0, residents, 0, 35);
-			residents[35] = "and more...";
+			residents[35] = "등등...";
 		}
-		out.addAll(ChatTools.listArr(residents, Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(residents, Colors.Green + "주민 " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 		return out;
 	}
 
@@ -309,17 +309,17 @@ public class TownyFormatter {
 		String line = "";
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
-				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
+				line = Colors.Green + "금고 잔액: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
 
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
-					line += (Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
+					line += (Colors.Gray + " | " + Colors.Green + "유지비: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
 
 			}
 
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += Colors.LightGray + "Neutral";
+			line += Colors.LightGray + "중립";
 		}
 		// Bank: 534 coins | Neutral
 		if (line.length() > 0)
@@ -327,16 +327,16 @@ public class TownyFormatter {
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
-			out.add(Colors.Green + "King: " + Colors.LightGreen + getFormattedName(nation.getCapital().getMayor()) + Colors.Green + "  NationTax: " + Colors.Red + nation.getTaxes());
+			out.add(Colors.Green + "왕: " + Colors.LightGreen + getFormattedName(nation.getCapital().getMayor()) + Colors.Green + "  국가세금: " + Colors.Red + nation.getTaxes());
 		// Assistants: Mayor Rockefel, Sammy, Ginger
 		if (nation.getAssistants().size() > 0)
 			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), Colors.Green + "Assistants:" + Colors.White + " "));
 		// Towns [44]: James City, Carry Grove, Mason Town
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "Towns " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "소속된 마을 " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));
 		// Allies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), Colors.Green + "Allies " + Colors.LightGreen + "[" + nation.getAllies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), Colors.Green + "동맹국 " + Colors.LightGreen + "[" + nation.getAllies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), Colors.Green + "Enemies " + Colors.LightGreen + "[" + nation.getEnemies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), Colors.Green + "적국 " + Colors.LightGreen + "[" + nation.getEnemies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 		return out;
 	}
@@ -353,29 +353,29 @@ public class TownyFormatter {
 		// ___[ World (PvP) ]___
 		String title = getFormattedName(world);
 		title += ((world.isPVP() || world.isForcePVP()) ? Colors.Red + " (PvP)" : "");
-		title += (world.isClaimable() ? Colors.LightGreen + " Claimable" : Colors.Rose + " NoClaims");
+		title += (world.isClaimable() ? Colors.LightGreen + " 점유가능" : Colors.Rose + " 점유불가");
 		out.add(ChatTools.formatTitle(title));
 
 		if (!world.isUsingTowny()) {
 			out.add(TownySettings.getLangString("msg_set_use_towny_off"));
 		} else {
 			// ForcePvP: No | Fire: Off
-			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			out.add(Colors.Green + "강제적 마을 PVP: " + (world.isForcePVP() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성") + Colors.Gray + " | " + Colors.Green + "불번짐: " + (world.isFire() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 불번짐: " + (world.isForceFire() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 
-			out.add(Colors.Green + "Explosions: " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-			out.add(Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			out.add(Colors.Green + "폭발: " + (world.isExpl() ? Colors.Rose + "켜짐:" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + " 강제적 폭발 켜짐: " + (world.isForceExpl() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
+			out.add(Colors.Green + "월드 몹 " + (world.hasWorldMobs() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 마을 몹 스폰: " + (world.isForceTownMobs() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 			// Using Default Settings: Yes
 			// out.add(Colors.Green + "Using Default Settings: " +
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
 			// + "No"));
 
-			out.add(Colors.Green + "Unclaim Revert: " + (world.isUsingPlotManagementRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off") + Colors.Gray + " | " + Colors.Green + "Explosion Revert: " + (world.isUsingPlotManagementWildRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off"));
+			out.add(Colors.Green + "점유해제시 지형 복구: " + (world.isUsingPlotManagementRevert() ? Colors.LightGreen + "켜짐" : Colors.Rose + "꺼짐") + Colors.Gray + " | " + Colors.Green + "폭발 되돌리기: " + (world.isUsingPlotManagementWildRevert() ? Colors.LightGreen + "켜짐" : Colors.Rose + "꺼짐"));
 			// Wilderness:
 			// Build, Destroy, Switch
 			// Ignored Blocks: 34, 45, 64
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
-			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
-			out.add("    " + Colors.Green + "Ignored Blocks:" + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "건축" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "파괴" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "스위치" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "아이템사용");
+			out.add("    " + Colors.Green + "예외 블록:" + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
 		}
 		return out;
 	}
@@ -398,15 +398,15 @@ public class TownyFormatter {
 		if (resident.hasTown()) {
 			try {
 				town = resident.getTown();
-				out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
+				out.add(Colors.Green + "소유함: " + Colors.LightGreen + resident.getTownBlocks().size() + " 토지");
 
 				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
-					out.add(Colors.Green + "Staff are exempt from paying town taxes.");
+					out.add(Colors.Green + "마을의 스탭들은 세금이 면제됩니다.");
 				} else {
 					if (town.isTaxPercentage()) {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes() / 100));
+						out.add(Colors.Green + "마을 세금: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes() / 100));
 					} else {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + town.getTaxes());
+						out.add(Colors.Green + "마을 세금: " + Colors.LightGreen + town.getTaxes());
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
@@ -414,9 +414,9 @@ public class TownyFormatter {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
 
-							out.add(Colors.Green + "Total Plot Taxes: " + Colors.LightGreen + plotTax);
+							out.add(Colors.Green + "총 토지 세금: " + Colors.LightGreen + plotTax);
 						}
-						out.add(Colors.Green + "Total Tax to pay: " + Colors.LightGreen + (town.getTaxes() + plotTax));
+						out.add(Colors.Green + "내야할 세금: " + Colors.LightGreen + (town.getTaxes() + plotTax));
 					}
 				}
 

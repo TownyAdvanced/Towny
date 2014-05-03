@@ -10,15 +10,11 @@
 
 # The 'nomad' permission set covers players not in any town
 nomad:
-    - towny.command.towny.map
-    - towny.command.towny.prices
-    - towny.command.towny.tree
-    - towny.command.towny.time
-    - towny.command.towny.universe
-    - towny.command.towny.version
-    - towny.command.towny.war
+    - towny.command.towny.*
+    - -towny.command.towny.spy
     - towny.command.town.new
     - towny.command.town.join
+	- towny.command.town.here
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.command;
+package com.palmergames.bukkit.towny.command; /* Localized on 2014-05-02 by Neder */
 
 import java.util.ArrayList;
 import java.util.Arrays;
