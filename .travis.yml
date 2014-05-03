@@ -7,7 +7,6 @@ env:
     - "FTP_PASSWORD="
 script:
   - name=$(date +%Y%m%d)
-  - sudo apt-get install ftp
   - cd /home/travis/build/Neder/Towny
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_UTF-8_${name}.jar
@@ -19,5 +18,4 @@ script:
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
 after_success:
-  - "curl --ftp-create-dirs -T Towny_CP949_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
-  - "curl --ftp-create-dirs -T Towny_UTF-8_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
+  - "sudo curl --ftp-create-dirs -T /home/travis/build/Neder/Towny/out/Towny*.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
