@@ -10,8 +10,8 @@ lcd build
 lcd Neder
 lcd Towny
 lcd out
-put Towny_CP949_${name}.jar
-put Towny_UTF-8_${name}.jar
+put Towny_C*
+put Towny_U*
 bye
 bye
 EOT
