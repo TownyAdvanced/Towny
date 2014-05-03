@@ -6,7 +6,7 @@ env:
     - "FTP_USER=Towny"
     - "FTP_PASSWORD="
 script:
-  - name=$(date +%Y%m%d)
+  - name=$(date +%Y%m%d%H%M%S)
   - cd /home/travis/build/Neder/Towny
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_UTF-8_${name}.jar
@@ -19,4 +19,4 @@ script:
   - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
   - ls ./out
 after_success:
-  - "curl -T Towny*.jar -u Towny: -P - ftp://neder1.cloudapp.net"
+  - "curl -T ./out/Towny*.jar -u Towny: -P - ftp://neder1.cloudapp.net"
