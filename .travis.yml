@@ -1,6 +1,10 @@
 language: java
 jdk:
   - openjdk6
+env:
+  global:
+    - "FTP_USER=Towny"
+    - "FTP_PASSWORD="
 script:
   - name=$(date +%Y%m%d)
   - sudo apt-get install ftp
@@ -15,4 +19,6 @@ script:
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
   - chmod 777 ./build.sh
-  - ./build.sh
+after_success:
+    "curl --ftp-create-dirs -T Towny_CP949_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
+    "curl --ftp-create-dirs -T Towny_UTF-8_${name}.jar -u $FTP_USER:$FTP_PASSWORD ftp://neder1.cloudapp.net"
