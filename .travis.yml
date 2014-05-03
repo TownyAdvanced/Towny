@@ -19,5 +19,5 @@ script:
   - mv ./out/Towny.jar ./out/Towny_CP949_${name}.jar
   - ls ./out
 after_success:
-  - "sudo curl -T ./out/Towny_CP949_${name}.jar -u Towny: -P - ftp://neder1.cloudapp.net"
-  - "sudo curl -T ./out/Towny_UTF-8_${name}.jar -u Towny: -P - ftp://neder1.cloudapp.net"
+  - "sudo curl -T ./out/Towny_CP949_${name}.jar -u Towny: ftp://ocw5902.hosting.paran.com"
+  - "sudo curl -T ./out/Towny_UTF-8_${name}.jar -u Towny: ftp://ocw5902.hosting.paran.com"
