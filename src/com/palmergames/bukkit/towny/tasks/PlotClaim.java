@@ -173,6 +173,12 @@ public class PlotClaim extends Thread {
 
 					if (townBlock.getPlotPrice() == -1)
 						throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
+					
+					double bankcap = TownySettings.getTownBankCap();
+					if (bankcap > 0) {
+						if (townBlock.getPlotPrice() + town.getHoldingBalance() > bankcap)
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					}
 
 					if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), town, "Plot - Buy From Town"))
 						throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
