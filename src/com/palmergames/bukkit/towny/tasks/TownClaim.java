@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.tasks;
+package com.palmergames.bukkit.towny.tasks; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class TownClaim extends Thread {
 		TownyWorld world;
 
 		if (player != null)
-			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Town Claim..." : "Town unclaim..."));
+			TownyMessaging.sendMsg(player, "진행중 " + ((claim) ? "마을 점유..." : "마을 점유해제..."));
 
 		if (selection != null) {
 
@@ -107,7 +107,7 @@ public class TownClaim extends Thread {
 		} else if (!claim) {
 
 			if (town == null) {
-				TownyMessaging.sendMsg(player, "Nothing to unclaim!");
+				TownyMessaging.sendMsg(player, "점유해제할 토지가 없습니다!");
 				return;
 			}
 			
@@ -126,11 +126,11 @@ public class TownClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "총 망르블록: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if (town.getWorld().isUsingPlotManagementRevert())
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			} else if (forced) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "총 마을블록: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if ((town != null) &&(town.getWorld().isUsingPlotManagementRevert()))
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			}

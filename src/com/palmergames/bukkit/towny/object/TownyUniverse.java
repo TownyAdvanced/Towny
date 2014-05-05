@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -63,7 +63,7 @@ public class TownyUniverse extends TownyObject {
 
 		// Test and kick any players with invalid names.
 		if ((player.getName().trim() == null) || (player.getName().contains(" "))) {
-			player.kickPlayer("Invalid name!");
+			player.kickPlayer("잘못된 이름입니다!");
 			return;
 		}
 
@@ -92,7 +92,7 @@ public class TownyUniverse extends TownyObject {
 			Town town = resident.getTown();
 			return town.getSpawn();
 		} catch (TownyException x) {
-			throw new TownyException("Unable to get spawn location");
+			throw new TownyException("스폰 장소를 찾지 못했습니다");
 		}
 	}
 
@@ -109,7 +109,7 @@ public class TownyUniverse extends TownyObject {
 			if (player != null)
 				if (player.getName().equals(resident.getName()))
 					return player;
-		throw new TownyException(String.format("%s is not online", resident.getName()));
+		throw new TownyException(String.format("%s 는 접속하고 있지 않습니다", resident.getName()));
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static TownBlock getTownBlock(Location loc) {
 
-		TownyMessaging.sendDebugMsg("Fetching TownBlock");
+		TownyMessaging.sendDebugMsg("마을블록 패치 중");
 
 		try {
 			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
@@ -267,7 +267,7 @@ public class TownyUniverse extends TownyObject {
 		// Setup any defaults before we load the database.
 		Coord.setCellSize(TownySettings.getTownBlockSize());
 
-		System.out.println("[Towny] Database: [Load] " + load + " [Save] " + save);
+		System.out.println("[타우니] Database: [로드] " + load + " [저장] " + save);
 
 		worlds.clear();
 		nations.clear();
@@ -275,7 +275,7 @@ public class TownyUniverse extends TownyObject {
 		residents.clear();
 
 		if (!loadDatabase(load)) {
-			System.out.println("[Towny] Error: Failed to load!");
+			System.out.println("[타우니] 오류: 로드 실패!");
 			return false;
 		}
 
@@ -291,7 +291,7 @@ public class TownyUniverse extends TownyObject {
 					getDataSource().deleteUnusedResidentFiles();
 				
 			} catch (IOException e) {
-				System.out.println("[Towny] Error: Could not create backup.");
+				System.out.println("[타우니] 오류: 백업 생성 실패.");
 				e.printStackTrace();
 				return false;
 			}
@@ -307,7 +307,7 @@ public class TownyUniverse extends TownyObject {
 			//if (TownySettings.isSavingOnLoad())
 			//      townyUniverse.getDataSource().saveAll();
 		} catch (UnsupportedOperationException e) {
-			System.out.println("[Towny] Error: Unsupported save format!");
+			System.out.println("[타우니] 오류: 이 저장 포맷은 지원하지 않습니다!");
 			return false;
 		}
 
@@ -446,28 +446,28 @@ public class TownyUniverse extends TownyObject {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "Universe (" + getName() + ")");
+		out.add(getTreeDepth(depth) + "상태 (" + getName() + ")");
 		if (plugin != null) {
-			out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
-			out.add(getTreeDepth(depth + 2) + "Version: " + BukkitTools.getServer().getVersion());
-			out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
-			out.add(getTreeDepth(depth + 2) + "Worlds (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
+			out.add(getTreeDepth(depth + 1) + "서버 (" + BukkitTools.getServer().getName() + ")");
+			out.add(getTreeDepth(depth + 2) + "버전: " + BukkitTools.getServer().getVersion());
+			out.add(getTreeDepth(depth + 2) + "플레이어: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
+			out.add(getTreeDepth(depth + 2) + "월드 (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
 		}
-		out.add(getTreeDepth(depth + 1) + "Worlds (" + getDataSource().getWorlds().size() + "):");
+		out.add(getTreeDepth(depth + 1) + "월드 (" + getDataSource().getWorlds().size() + "):");
 		for (TownyWorld world : getDataSource().getWorlds())
 			out.addAll(world.getTreeString(depth + 2));
 
-		out.add(getTreeDepth(depth + 1) + "Nations (" + getDataSource().getNations().size() + "):");
+		out.add(getTreeDepth(depth + 1) + "국가 (" + getDataSource().getNations().size() + "):");
 		for (Nation nation : getDataSource().getNations())
 			out.addAll(nation.getTreeString(depth + 2));
 
 		Collection<Town> townsWithoutNation = getDataSource().getTownsWithoutNation();
-		out.add(getTreeDepth(depth + 1) + "Towns (" + townsWithoutNation.size() + "):");
+		out.add(getTreeDepth(depth + 1) + "마을 (" + townsWithoutNation.size() + "):");
 		for (Town town : townsWithoutNation)
 			out.addAll(town.getTreeString(depth + 2));
 
 		Collection<Resident> residentsWithoutTown = getDataSource().getResidentsWithoutTown();
-		out.add(getTreeDepth(depth + 1) + "Residents (" + residentsWithoutTown.size() + "):");
+		out.add(getTreeDepth(depth + 1) + "주민 (" + residentsWithoutTown.size() + "):");
 		for (Resident resident : residentsWithoutTown)
 			out.addAll(resident.getTreeString(depth + 2));
 		return out;
@@ -479,7 +479,7 @@ public class TownyUniverse extends TownyObject {
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
-				String line = "Multiple players selected";
+				String line = "여러 플레이어가 선택되었습니다";
 				for (Player p : matches)
 					line += ", " + p.getName();
 				TownyMessaging.sendErrorMsg(sender, line);
@@ -511,7 +511,7 @@ public class TownyUniverse extends TownyObject {
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
-				String line = "Multiple players selected";
+				String line = "여러 플레이어가 선택되었습니다";
 				for (Player p : matches)
 					line += ", " + p.getName();
 				TownyMessaging.sendErrorMsg(player, line);

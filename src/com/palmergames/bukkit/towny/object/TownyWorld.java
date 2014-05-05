@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -190,8 +190,8 @@ public class TownyWorld extends TownyObject {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "World (" + getName() + ")");
-		out.add(getTreeDepth(depth + 1) + "TownBlocks (" + getTownBlocks().size() + "): " /*
+		out.add(getTreeDepth(depth) + "월드 (" + getName() + ")");
+		out.add(getTreeDepth(depth + 1) + "마을블록 (" + getTownBlocks().size() + "): " /*
 																						 * +
 																						 * getTownBlocks
 																						 * (

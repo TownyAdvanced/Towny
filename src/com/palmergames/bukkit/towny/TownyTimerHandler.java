@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-05 by Neder */
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_DAY;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_REPEATING_TIMER;
@@ -67,7 +67,7 @@ public class TownyTimerHandler{
 		if (on && !isTownyRepeatingTaskRunning()) {
 			townyRepeatingTask = BukkitTools.scheduleSyncRepeatingTask(new RepeatingTimerTask(plugin), 0, TimeTools.convertToTicks(1L));
 			if (townyRepeatingTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule Towny Timer Task.");
+				TownyMessaging.sendErrorMsg("타우니 타이머를 구성할 수 없습니다");
 		} else if (!on && isTownyRepeatingTaskRunning()) {
 			BukkitTools.getScheduler().cancelTask(townyRepeatingTask);
 			townyRepeatingTask = -1;
@@ -80,7 +80,7 @@ public class TownyTimerHandler{
 		if (on && !isMobRemovalRunning()) {
 			mobRemoveTask = BukkitTools.scheduleSyncRepeatingTask(new MobRemovalTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 			if (mobRemoveTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule mob removal loop.");
+				TownyMessaging.sendErrorMsg("몹 제거 주기를 구성할 수 없습니다.");
 		} else if (!on && isMobRemovalRunning()) {
 			BukkitTools.getScheduler().cancelTask(mobRemoveTask);
 			mobRemoveTask = -1;
@@ -92,7 +92,7 @@ public class TownyTimerHandler{
 
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
-			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
+			TownyMessaging.sendMsg("다음날까지 남은 시간: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
@@ -100,7 +100,7 @@ public class TownyTimerHandler{
 				dailyTask = BukkitTools.scheduleSyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
 			
 			if (dailyTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
+				TownyMessaging.sendErrorMsg("하루 주기를 구성할 수 없습니다.");
 		} else if (!on && isDailyTimerRunning()) {
 			BukkitTools.getScheduler().cancelTask(dailyTask);
 			dailyTask = -1;
@@ -113,7 +113,7 @@ public class TownyTimerHandler{
 		if (on && !isHealthRegenRunning()) {
 			healthRegenTask = BukkitTools.scheduleSyncRepeatingTask(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 			if (healthRegenTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule health regen loop.");
+				TownyMessaging.sendErrorMsg("체력 회복 주기를 구성할 수 없습니다.");
 		} else if (!on && isHealthRegenRunning()) {
 			BukkitTools.getScheduler().cancelTask(healthRegenTask);
 			healthRegenTask = -1;
@@ -126,7 +126,7 @@ public class TownyTimerHandler{
 		if (on && !isTeleportWarmupRunning()) {
 			teleportWarmupTask = BukkitTools.scheduleSyncRepeatingTask(new TeleportWarmupTimerTask(plugin), 0, 20);
 			if (teleportWarmupTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule teleport warmup loop.");
+				TownyMessaging.sendErrorMsg("텔레포트 대기시간을 구성할 수 없습니다.");
 		} else if (!on && isTeleportWarmupRunning()) {
 			BukkitTools.getScheduler().cancelTask(teleportWarmupTask);
 			teleportWarmupTask = -1;

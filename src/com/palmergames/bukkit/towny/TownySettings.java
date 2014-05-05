@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-05 by Neder */
 
 import java.io.File;
 import java.io.IOException;
@@ -169,7 +169,7 @@ public class TownySettings {
 			// read the config.yml into memory
 			config = new CommentedConfiguration(file);
 			if (!config.load())
-				System.out.print("Failed to load Config!");
+				System.out.print("설정파일을 읽지 못했습니다!");
 
 			setDefaults(version, file);
 
@@ -216,7 +216,7 @@ public class TownySettings {
 
 	private static void sendError(String msg) {
 
-		System.out.println("[Towny] Error could not read " + msg);
+		System.out.println("[Towny] 읽지 못함 " + msg);
 	}
 
 	private static String[] parseString(String str) {
@@ -453,8 +453,8 @@ public class TownySettings {
 			Map<String, Object> level = new HashMap<String, Object>();
 			level.put("numResidents", 0);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " Ruins");
-			level.put("mayorPrefix", "Spirit ");
+			level.put("namePostfix", " 파멸");
+			level.put("mayorPrefix", "정신 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 1);
 			level.put("upkeepModifier", 1.0);
@@ -462,8 +462,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 1);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Settlement)");
-			level.put("mayorPrefix", "Hermit ");
+			level.put("namePostfix", " (정착지)");
+			level.put("mayorPrefix", "대표 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 16);
 			level.put("upkeepModifier", 1.0);
@@ -471,8 +471,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 2);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Hamlet)");
-			level.put("mayorPrefix", "Chief ");
+			level.put("namePostfix", " (부락)");
+			level.put("mayorPrefix", "족장 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 32);
 			level.put("upkeepModifier", 1.0);
@@ -480,8 +480,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 6);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Village)");
-			level.put("mayorPrefix", "Baron Von ");
+			level.put("namePostfix", " (촌락)");
+			level.put("mayorPrefix", "남작 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 96);
 			level.put("upkeepModifier", 1.0);
@@ -489,8 +489,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 10);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Town)");
-			level.put("mayorPrefix", "Viscount ");
+			level.put("namePostfix", " (마을)");
+			level.put("mayorPrefix", "자작 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 160);
 			level.put("upkeepModifier", 1.0);
@@ -498,8 +498,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 14);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Large Town)");
-			level.put("mayorPrefix", "Count Von ");
+			level.put("namePostfix", " (큰 마을)");
+			level.put("mayorPrefix", "백작 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 224);
 			level.put("upkeepModifier", 1.0);
@@ -507,8 +507,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 20);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (City)");
-			level.put("mayorPrefix", "Earl ");
+			level.put("namePostfix", " (도시)");
+			level.put("mayorPrefix", "백장 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
@@ -516,8 +516,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 24);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Large City)");
-			level.put("mayorPrefix", "Duke ");
+			level.put("namePostfix", " (큰 도시)");
+			level.put("mayorPrefix", "공작 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 384);
 			level.put("upkeepModifier", 1.0);
@@ -525,8 +525,8 @@ public class TownySettings {
 			level.clear();
 			level.put("numResidents", 28);
 			level.put("namePrefix", "");
-			level.put("namePostfix", " (Metropolis)");
-			level.put("mayorPrefix", "Lord ");
+			level.put("namePostfix", " (수도)");
+			level.put("mayorPrefix", "군주 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 448);
 			level.put("upkeepModifier", 1.0);
@@ -548,66 +548,66 @@ public class TownySettings {
 			List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
 			Map<String, Object> level = new HashMap<String, Object>();
 			level.put("numResidents", 0);
-			level.put("namePrefix", "Land of ");
-			level.put("namePostfix", " (Nation)");
+			level.put("namePrefix", "");
+			level.put("namePostfix", "의 영토");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "Leader ");
+			level.put("kingPrefix", "지도자 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 10);
 			level.put("upkeepModifier", 1.0);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 10);
-			level.put("namePrefix", "Federation of ");
-			level.put("namePostfix", " (Nation)");
+			level.put("namePrefix", "");
+			level.put("namePostfix", " 연합");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "Count ");
+			level.put("kingPrefix", "백작 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 20);
 			level.put("upkeepModifier", 1.0);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 20);
-			level.put("namePrefix", "Dominion of ");
-			level.put("namePostfix", " (Nation)");
+			level.put("namePrefix", "");
+			level.put("namePostfix", " 자치령");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "Duke ");
+			level.put("kingPrefix", "백작 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 40);
 			level.put("upkeepModifier", 1.0);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 30);
-			level.put("namePrefix", "Kingdom of ");
-			level.put("namePostfix", " (Nation)");
+			level.put("namePrefix", "");
+			level.put("namePostfix", " 왕국");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "King ");
+			level.put("kingPrefix", "군주 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 60);
 			level.put("upkeepModifier", 1.0);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 40);
-			level.put("namePrefix", "The ");
-			level.put("namePostfix", " Empire");
+			level.put("namePrefix", "");
+			level.put("namePostfix", " 제국");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "Emperor ");
+			level.put("kingPrefix", "황제 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 100);
 			level.put("upkeepModifier", 1.0);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 60);
-			level.put("namePrefix", "The ");
-			level.put("namePostfix", " Realm");
+			level.put("namePrefix", "");
+			level.put("namePostfix", " 공화국");
 			level.put("capitalPrefix", "");
 			level.put("capitalPostfix", "");
-			level.put("kingPrefix", "God Emperor ");
+			level.put("kingPrefix", "대통령 ");
 			level.put("kingPostfix", "");
 			level.put("townBlockLimitBonus", 140);
 			level.put("upkeepModifier", 1.0);

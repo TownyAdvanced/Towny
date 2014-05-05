@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -37,7 +37,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
-			throw new TownyException("Tag too long");
+			throw new TownyException("태그가 너무 깁니다");
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
@@ -456,18 +456,18 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "Nation (" + getName() + ")");
-		out.add(getTreeDepth(depth + 1) + "Capital: " + getCapital().getName());
+		out.add(getTreeDepth(depth) + "국가 (" + getName() + ")");
+		out.add(getTreeDepth(depth + 1) + "수도: " + getCapital().getName());
 		
 		List<Resident> assistants = getAssistants();
 		
 		if (assistants.size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Assistants (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
+			out.add(getTreeDepth(depth + 1) + "신하 (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
 		if (getAllies().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Allies (" + getAllies().size() + "): " + Arrays.toString(getAllies().toArray(new Nation[0])));
+			out.add(getTreeDepth(depth + 1) + "동맹 (" + getAllies().size() + "): " + Arrays.toString(getAllies().toArray(new Nation[0])));
 		if (getEnemies().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Enemies (" + getEnemies().size() + "): " + Arrays.toString(getEnemies().toArray(new Nation[0])));
-		out.add(getTreeDepth(depth + 1) + "Towns (" + getTowns().size() + "):");
+			out.add(getTreeDepth(depth + 1) + "적 (" + getEnemies().size() + "): " + Arrays.toString(getEnemies().toArray(new Nation[0])));
+		out.add(getTreeDepth(depth + 1) + "소속된 마을 (" + getTowns().size() + "):");
 		for (Town town : getTowns())
 			out.addAll(town.getTreeString(depth + 2));
 		return out;

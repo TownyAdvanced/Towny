@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-05 by Neder */
 
 import org.bukkit.entity.Player;
 
@@ -20,13 +20,13 @@ public class TownyAsciiMap {
 	public static final int lineWidth = 27;
 	public static final int halfLineWidth = lineWidth / 2;
 	public static final String[] help = {
-			"  " + Colors.Gray + "-" + Colors.LightGray + " = Unclaimed",
-			"  " + Colors.White + "+" + Colors.LightGray + " = Claimed",
-			"  " + Colors.White + "$" + Colors.LightGray + " = For sale",
-			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = Your town",
-			"  " + Colors.Yellow + "+" + Colors.LightGray + " = Your plot",
-			"  " + Colors.Green + "+" + Colors.LightGray + " = Ally",
-			"  " + Colors.Red + "+" + Colors.LightGray + " = Enemy" };
+			"  " + Colors.Gray + "-" + Colors.LightGray + " = 점유해제됨",
+			"  " + Colors.White + "+" + Colors.LightGray + " = 점유됨",
+			"  " + Colors.White + "$" + Colors.LightGray + " = 판매중",
+			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = 속해있는 마을",
+			"  " + Colors.Yellow + "+" + Colors.LightGray + " = 소유한 토지",
+			"  " + Colors.Green + "+" + Colors.LightGray + " = 동맹",
+			"  " + Colors.Red + "+" + Colors.LightGray + " = 적" };
 
 	public static String[] generateCompass(Player player) {
 
@@ -57,11 +57,11 @@ public class TownyAsciiMap {
 		try {
 			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
+			TownyMessaging.sendErrorMsg(player, "등록된 월드가 아닙니다.");
 			return;
 		}
 		if (!world.isUsingTowny()) {
-			TownyMessaging.sendErrorMsg(player, "This world is not using towny.");
+			TownyMessaging.sendErrorMsg(player, "이 월드는 타우니를 사용하지 않습니다.");
 			return;
 		}
 		Coord pos = Coord.parseCoord(plugin.getCache(player).getLastLocation());
@@ -138,7 +138,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		player.sendMessage(ChatTools.formatTitle("Towny Map " + Colors.White + "(" + pos.toString() + ")"));
+		player.sendMessage(ChatTools.formatTitle("타우니 지도 " + Colors.White + "(" + pos.toString() + ")"));
 		String line;
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly
@@ -160,7 +160,7 @@ public class TownyAsciiMap {
 		// Current town block data
 		try {
 			TownBlock townblock = world.getTownBlock(pos);
-			TownyMessaging.sendMsg(player, ("Town: " + (townblock.hasTown() ? townblock.getTown().getName() : "None") + " : " + "Owner: " + (townblock.hasResident() ? townblock.getResident().getName() : "None")));
+			TownyMessaging.sendMsg(player, ("마을: " + (townblock.hasTown() ? townblock.getTown().getName() : "없음") + " : " + "소유자: " + (townblock.hasResident() ? townblock.getResident().getName() : "없음")));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.

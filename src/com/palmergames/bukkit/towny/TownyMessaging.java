@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-05 by Neder */
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TownyMessaging {
 	 */
 	public static void sendErrorMsg(String msg) {
 
-		TownyLogger.log.warning(ChatTools.stripColour("[Towny] Error: " + msg));
+		TownyLogger.log.warning(ChatTools.stripColour("[타우니] 오류: " + msg));
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class TownyMessaging {
 			isPlayer = true;
 
 		if (sender == null)
-			System.out.print("Message called with null sender");
+			System.out.print("메시지의 sender가 없습니다.");
 
 		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
 			if (isPlayer)
@@ -143,7 +143,7 @@ public class TownyMessaging {
 			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev == null)
 				return;
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
+			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " 개발모드: " + Colors.Rose + msg))
 				townyDev.sendMessage(line);
 		}
 	}
@@ -160,7 +160,7 @@ public class TownyMessaging {
 			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev == null)
 				return;
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
+			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " 개발모드: " + Colors.Rose + msg))
 				townyDev.sendMessage(line);
 		}
 	}
@@ -174,7 +174,7 @@ public class TownyMessaging {
 	public static void sendDebugMsg(String msg) {
 
 		if (TownySettings.getDebug())
-			TownyLogger.debug.info(ChatTools.stripColour("[Towny] Debug: " + msg));
+			TownyLogger.debug.info(ChatTools.stripColour("[타우니] 디버그: " + msg));
 		sendDevMsg(msg);
 	}
 
@@ -271,7 +271,7 @@ public class TownyMessaging {
 	public static void sendGlobalMessage(String[] lines) {
 
 		for (String line : lines) {
-			TownyLogger.log.info(ChatTools.stripColour("[Global Msg] " + line));
+			TownyLogger.log.info(ChatTools.stripColour("[전체 메시지] " + line));
 		}
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
@@ -286,7 +286,7 @@ public class TownyMessaging {
 	 */
 	public static void sendGlobalMessage(String line) {
 
-		TownyLogger.log.info(ChatTools.stripColour("[Global Message] " + line));
+		TownyLogger.log.info(ChatTools.stripColour("[전체 메시지] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				player.sendMessage(line);
@@ -303,7 +303,7 @@ public class TownyMessaging {
 	public static void sendResidentMessage(Resident resident, String[] lines) throws TownyException {
 
 		for (String line : lines) {
-			TownyLogger.log.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
+			TownyLogger.log.info(ChatTools.stripColour("[주민 메시지] " + resident.getName() + ": " + line));
 		}
 		Player player = TownyUniverse.getPlayer(resident);
 		for (String line : lines)
@@ -320,7 +320,7 @@ public class TownyMessaging {
 	 */
 	public static void sendResidentMessage(Resident resident, String line) throws TownyException {
 
-		TownyLogger.log.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
+		TownyLogger.log.info(ChatTools.stripColour("[주민 메시지] " + resident.getName() + ": " + line));
 		Player player = TownyUniverse.getPlayer(resident);
 		player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}
@@ -334,7 +334,7 @@ public class TownyMessaging {
 	public static void sendTownMessage(Town town, String[] lines) {
 
 		for (String line : lines) {
-			TownyLogger.log.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+			TownyLogger.log.info(ChatTools.stripColour("[마을 메시지] " + town.getName() + ": " + line));
 		}
 		for (Player player : TownyUniverse.getOnlinePlayers(town)) {
 			for (String line : lines)
@@ -363,7 +363,7 @@ public class TownyMessaging {
 	 */
 	public static void sendTownMessage(Town town, String line) {
 
-		TownyLogger.log.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		TownyLogger.log.info(ChatTools.stripColour("[마을 메시지] " + town.getName() + ": " + line));
 		for (Player player : TownyUniverse.getOnlinePlayers(town))
 			player.sendMessage(line);
 	}
@@ -377,7 +377,7 @@ public class TownyMessaging {
 	public static void sendNationMessage(Nation nation, String[] lines) {
 
 		for (String line : lines) {
-			TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			TownyLogger.log.info(ChatTools.stripColour("[국가 메시지] " + nation.getName() + ": " + line));
 		}
 		for (Player player : TownyUniverse.getOnlinePlayers(nation))
 			for (String line : lines)
@@ -392,7 +392,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessage(Nation nation, String line) {
 
-		TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		TownyLogger.log.info(ChatTools.stripColour("[국가 메시지] " + nation.getName() + ": " + line));
 		for (Player player : TownyUniverse.getOnlinePlayers(nation))
 			player.sendMessage(line);
 	}
@@ -405,7 +405,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
 
-		TownyLogger.log.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		TownyLogger.log.info(ChatTools.stripColour("[국가 메시지] " + nation.getName() + ": " + line));
 		for (Player player : TownyUniverse.getOnlinePlayers(nation))
 			player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
 	}

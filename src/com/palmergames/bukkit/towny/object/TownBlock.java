@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -52,7 +52,7 @@ public class TownBlock {
 	public Town getTown() throws NotRegisteredException {
 
 		if (!hasTown())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
+			throw new NotRegisteredException(String.format("이 마을블록 (%s, %d, %d) 은 마을이 점유하지 않았습니다.", world.getName(), x, z));
 		return town;
 	}
 
@@ -79,7 +79,7 @@ public class TownBlock {
 	public Resident getResident() throws NotRegisteredException {
 
 		if (!hasResident())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
+			throw new NotRegisteredException(String.format("이 마을블록 (%s, %d, %d) 은 주민이 점유하지 않았습니다.", world.getName(), x, z));
 		return resident;
 	}
 

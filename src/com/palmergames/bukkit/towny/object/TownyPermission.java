@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.Colors;
@@ -199,7 +199,7 @@ public class TownyPermission {
 
 	public String getColourString() {
 
-		return Colors.LightGreen + "Build = " + Colors.LightGray + (residentBuild ? "f" : "-") + (allyBuild ? "a" : "-") + (outsiderBuild ? "o" : "-") + Colors.LightGreen + " Destroy = " + Colors.LightGray + (residentDestroy ? "f" : "-") + (allyDestroy ? "a" : "-") + (outsiderDestroy ? "o" : "-") + Colors.LightGreen + " Switch = " + Colors.LightGray + (residentSwitch ? "f" : "-") + (allySwitch ? "a" : "-") + (outsiderSwitch ? "o" : "-") + Colors.LightGreen + " Item = " + Colors.LightGray + (residentItemUse ? "f" : "-") + (allyItemUse ? "a" : "-") + (outsiderItemUse ? "o" : "-");
+		return Colors.LightGreen + "건축 = " + Colors.LightGray + (residentBuild ? "f" : "-") + (allyBuild ? "a" : "-") + (outsiderBuild ? "o" : "-") + Colors.LightGreen + " 파괴 = " + Colors.LightGray + (residentDestroy ? "f" : "-") + (allyDestroy ? "a" : "-") + (outsiderDestroy ? "o" : "-") + Colors.LightGreen + " 스위치 = " + Colors.LightGray + (residentSwitch ? "f" : "-") + (allySwitch ? "a" : "-") + (outsiderSwitch ? "o" : "-") + Colors.LightGreen + " 아이템사용 = " + Colors.LightGray + (residentItemUse ? "f" : "-") + (allyItemUse ? "a" : "-") + (outsiderItemUse ? "o" : "-");
 	}
 
 	public void loadDefault(TownBlockOwner owner) {
