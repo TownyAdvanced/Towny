@@ -213,7 +213,7 @@ public class TownyFormatter {
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = getFormattedName(town);
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? Colors.Red + " (PvP)" : "");
-		title += (town.isOpen() ? Colors.LightBlue + " (Open)" : "");
+		title += (town.isOpen() ? Colors.LightBlue + " (개방)" : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Lord: Mayor Quimby

@@ -51,7 +51,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_general_help.add(ChatTools.formatCommand("", "/resident", "?", "") + ", " + ChatTools.formatCommand("", "/town", "?", "") + ", " + ChatTools.formatCommand("", "/nation", "?", "") + ", " + ChatTools.formatCommand("", "/plot", "?", "") + ", " + ChatTools.formatCommand("", "/towny", "?", ""));
 		towny_general_help.add(ChatTools.formatCommand("", "/tc", "[msg]", TownySettings.getLangString("help_2")) + ", " + ChatTools.formatCommand("", "/nc", "[msg]", TownySettings.getLangString("help_3")).trim());
 		towny_general_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin", "?", ""));
-		towny_general_help.add(ChatTools.formatCommand("한글화", "§3Neder", "§cGitHub", "§3https://github.com/Neder/Towny"));
+		towny_general_help.add(ChatTools.formatCommand("한글화", "§3Neder", "", "§cGitHub: §3https://github.com/Neder/Towny"));
 
 		towny_help.add(ChatTools.formatTitle("/towny"));
 		towny_help.add(ChatTools.formatCommand("", "/towny", "", "기본적인 타우니 도움말"));
@@ -255,7 +255,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7e타우니 " + plugin.getVersion() + "\u00A76]");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/Llmdl/ElgarL");
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-   Korean Localized by Neder");
+		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-   \u00A73Korean Localized by \u00A7bNeder");
 		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73주민 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73마을 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73국가 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73월드 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73마을블록 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
 		output.add("\u00A70-----\u00A74#\u00A70----- ");
