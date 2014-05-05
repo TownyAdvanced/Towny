@@ -233,8 +233,8 @@ public class TownyFormatter {
 			out.add(Colors.Green + "전초기지: " + Colors.LightGreen + town.getMaxOutpostSpawn());
 
 		// Permissions: B=rao D=--- S=ra-
-		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r"));
-		out.add(Colors.Green + "Explosions: " + ((town.isBANG() || world.isForceExpl()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		out.add(Colors.Green + "권한: " + town.getPermissions().getColourString().replace("f", "r"));
+		out.add(Colors.Green + "폭발: " + ((town.isBANG() || world.isForceExpl()) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  불번짐: " + ((town.isFire() || world.isForceFire()) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  몹 스폰: " + ((town.hasMobs() || world.isForceTownMobs()) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐"));
 
 		// | Bank: 534 coins
 		String bankString = "";
@@ -330,7 +330,7 @@ public class TownyFormatter {
 			out.add(Colors.Green + "왕: " + Colors.LightGreen + getFormattedName(nation.getCapital().getMayor()) + Colors.Green + "  국가세금: " + Colors.Red + nation.getTaxes());
 		// Assistants: Mayor Rockefel, Sammy, Ginger
 		if (nation.getAssistants().size() > 0)
-			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), Colors.Green + "Assistants:" + Colors.White + " "));
+			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), Colors.Green + "신하:" + Colors.White + " "));
 		// Towns [44]: James City, Carry Grove, Mason Town
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "소속된 마을 " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));
 		// Allies [4]: James Nation, Carry Territory, Mason Country
