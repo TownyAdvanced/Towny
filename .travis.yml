@@ -6,7 +6,7 @@ env:
     - "FTP_USER=Towny"
     - "FTP_PASSWORD="
 script:
-  - name=$(date +%Y%m%d-%H%M%S)
+  - name=$(date +%Y%m%d)
   - cd /home/travis/build/Neder/Towny
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_${name}_UTF-8_${TRAVIS_COMMIT}.jar
