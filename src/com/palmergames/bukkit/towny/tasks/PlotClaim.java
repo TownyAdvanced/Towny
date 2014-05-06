@@ -205,7 +205,7 @@ public class PlotClaim extends Thread {
 			TownBlock townBlock = worldCoord.getTownBlock();
 
 			townBlock.setResident(null);
-			townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
+			townBlock.setPlotPrice(townBlock.getTown().getPlotTypePrice(townBlock.getType()));
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());

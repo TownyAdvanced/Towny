@@ -2043,3 +2043,5 @@ v0.86.1.2:
 	- Better handle unknown and modded item Id's in update/conversion.
 v0.86.1.3:
 	- Plot claim can no longer be abused to avoid the bank cap (if set).
+v0.86.1.4:
+	- Using '/plot unclaim' now sets the plot for sale at the correct price for it's type.
