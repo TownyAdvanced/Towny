@@ -709,11 +709,11 @@ public enum ConfigNodes {
 	NOTIFICATION_PLOT("notification.plot", ""),
 	NOTIFICATION_PLOT_SPLITTER("notification.plot.splitter", " "),
 	NOTIFICATION_PLOT_FORMAT("notification.plot.format", "%s"),
-	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[Home]"),
+	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[홈]"),
 	NOTIFICATION_PLOT_OUTPOSTBLOCK(
 			"notification.plot.outpostblock",
-			"&b[Outpost]"),
-	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+			"&b[전초기지]"),
+	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[판매중: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	FLAGS_DEFAULT(
 			"default_perm_flags",

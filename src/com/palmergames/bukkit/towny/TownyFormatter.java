@@ -225,7 +225,7 @@ public class TownyFormatter {
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(Colors.Green + "마을 크기: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
+			out.add(Colors.Green + "마을 크기: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [구매함: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [보너스: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [국가보너스: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [홈블록: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "없음") + "]" : ""));
 		} catch (TownyException e) {
 		}
 
@@ -362,7 +362,7 @@ public class TownyFormatter {
 			// ForcePvP: No | Fire: Off
 			out.add(Colors.Green + "강제적 마을 PVP: " + (world.isForcePVP() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성") + Colors.Gray + " | " + Colors.Green + "불번짐: " + (world.isFire() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 불번짐: " + (world.isForceFire() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 
-			out.add(Colors.Green + "폭발: " + (world.isExpl() ? Colors.Rose + "켜짐:" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + " 강제적 폭발 켜짐: " + (world.isForceExpl() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
+			out.add(Colors.Green + "폭발: " + (world.isExpl() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + " 강제적 폭발 켜짐: " + (world.isForceExpl() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 			out.add(Colors.Green + "월드 몹 " + (world.hasWorldMobs() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 마을 몹 스폰: " + (world.isForceTownMobs() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 			// Using Default Settings: Yes
 			// out.add(Colors.Green + "Using Default Settings: " +

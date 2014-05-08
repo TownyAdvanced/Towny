@@ -65,13 +65,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (!TownySettings.isNationCreationAdminOnly())
 			nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_6")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
-		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2") + " [capital]", TownySettings.getLangString("nation_help_8")));
+		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2") + " [수도]", TownySettings.getLangString("nation_help_8")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "delete " + TownySettings.getLangString("nation_help_2"), ""));
 
 		king_help.add(ChatTools.formatTitle(TownySettings.getLangString("king_help_1")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "withdraw [$]", ""));
-		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "[add/kick] [town] .. [town]", ""));
-		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "rank [add/remove] " + TownySettings.getLangString("res_2"), "[Rank]"));
+		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "[add/kick] [마을] .. [마을]", ""));
+		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "rank [add/remove] " + TownySettings.getLangString("res_2"), "[등급]"));
 		//king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "assistant [add+/remove+] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_7")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "set [] .. []", ""));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "toggle [] .. []", ""));
@@ -286,7 +286,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			// Help output.
 			player.sendMessage(ChatTools.formatTitle("/nation rank"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation rank", "add/remove [resident] rank", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation rank", "add/remove [주민] rank", ""));
 
 		} else {
 
@@ -299,7 +299,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3) {
-				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [resident] [rank]");
+				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [주민] [등급]");
 				return;
 			}
 
@@ -310,7 +310,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				targetTown = target.getTown();
 
 				if (town.getNation() != targetTown.getNation())
-					throw new TownyException("This resident is not a member of your Town!");
+					throw new TownyException("이 주민은 당신의 마을에 소속되어 있지 않습니다!");
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -322,7 +322,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Is this a known rank?
 			 */
 			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, "Unknown rank '" + rank + "'. Permissible ranks are :- " + StringMgmt.join(TownyPerms.getNationRanks(), ",") + ".");
+				TownyMessaging.sendErrorMsg(player, "'" + rank + "' (이)라는 등급은 없습니다. 존재하는 등급 :- " + StringMgmt.join(TownyPerms.getNationRanks(), ",") + ".");
 				return;
 			}
 			/*
@@ -330,7 +330,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * for it.
 			 */
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank))) {
-				TownyMessaging.sendErrorMsg(player, "You do not have permission to modify this rank.");
+				TownyMessaging.sendErrorMsg(player, "등급 수정 권한이 없습니다.");
 				return;
 			}
 
@@ -1179,7 +1179,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_nation_set_neutral"));
 
-					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_neutral") + (nation.isNeutral() ? Colors.Green : Colors.Red + " not") + " neutral.");
+					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_neutral") + (nation.isNeutral() ? Colors.Green + " 중립상태임" : Colors.Red + "중립상태가 아님") + "");
 				} catch (EconomyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (TownyException e) {
@@ -1193,7 +1193,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 			} else {
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "국가"));
 				return;
 			}
 

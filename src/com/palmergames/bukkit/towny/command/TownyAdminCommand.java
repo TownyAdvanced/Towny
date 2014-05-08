@@ -596,11 +596,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				@Override
 				public void run() {
 
-					TownyMessaging.sendMessage(getSender(), "Purge Aborted!");
+					TownyMessaging.sendMessage(getSender(), "삭제가 취소되었습니다!");
 				}
 			}));
 			
-			Question question = new Question(this.sender.getName(), "Do you really want to perform this purge", options);
+			Question question = new Question(this.sender.getName(), "정말로 삭제하시겠습니까?", options);
 			
 			try {
 				plugin.appendQuestion(questioner, question);
@@ -664,7 +664,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "devmode", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "debug", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "townwithdraw/nationwithdraw", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle npc", "[resident]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle npc", "[주민]", ""));
 			return;
 
 		}
