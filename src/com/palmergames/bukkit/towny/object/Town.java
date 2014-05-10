@@ -33,7 +33,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			plotPrice, commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
 	private boolean hasUpkeep, isPublic, isTaxPercentage, isOpen;
-	private String townBoard = "/town set board [메시지]", tag;
+	private String townBoard = "/town set board [메시지] 로 메시지 수정가능", tag;
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private Location spawn;

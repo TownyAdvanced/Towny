@@ -535,7 +535,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3)
-				throw new TownyException("Eg: /town rank add/remove [주민] [등급]");
+				throw new TownyException("예시: /town rank add/remove [주민] [등급]");
 
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -566,11 +566,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addTownRank(rank)) {
-						TownyMessaging.sendMsg(target, "'" + rank + "' 등급을 하사받았습니다.");
-						TownyMessaging.sendMsg(player, "'" + rank + "' 등급을 " + target.getName() + "님께 하사했습니다.");
+						TownyMessaging.sendMsg(target, "'" + rank + "' 마을 등급을 하사받았습니다.");
+						TownyMessaging.sendMsg(player, "'" + rank + "' 마을 등급을 " + target.getName() + "님께 하사했습니다.");
 					} else {
 						// Not in a town or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, "이 주민은 당신의 마을에 소속되어 있지 않스빈다!");
+						TownyMessaging.sendErrorMsg(player, "이 주민은 당신의 마을에 소속되어 있지 않습니다!");
 						return;
 					}
 				} catch (AlreadyRegisteredException e) {
@@ -582,8 +582,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeTownRank(rank)) {
-						TownyMessaging.sendMsg(target, "'" + rank + "' 등급을 박탈당했씁니다.");
-						TownyMessaging.sendMsg(player, "'" + rank + "' 등급을 " + target.getName() + "님에게서 박탈했습니다.");
+						TownyMessaging.sendMsg(target, "'" + rank + "' 마을 등급을 박탈당했습니다.");
+						TownyMessaging.sendMsg(player, "'" + rank + "' 마을 등급을 " + target.getName() + "님에게서 박탈했습니다.");
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank
@@ -654,7 +654,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2) {
-					TownyMessaging.sendErrorMsg(player, "Eg: /town set board " + TownySettings.getLangString("town_help_9"));
+					TownyMessaging.sendErrorMsg(player, "예시: /town set board " + TownySettings.getLangString("town_help_9"));
 					return;
 				} else {
 					String line = split[1];
@@ -675,7 +675,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (split[0].equalsIgnoreCase("mayor")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set mayor Dumbo");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set mayor Dumbo");
 						return;
 					} else
 						try {
@@ -696,7 +696,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("taxes")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set taxes 7");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set taxes 7");
 						return;
 					} else {
 						try {
@@ -720,7 +720,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("plottax")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set plottax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set plottax 10");
 						return;
 					} else {
 						try {
@@ -739,7 +739,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("shoptax")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set shoptax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set shoptax 10");
 						return;
 					} else {
 						try {
@@ -759,7 +759,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("embassytax")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set embassytax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set embassytax 10");
 						return;
 					} else {
 						try {
@@ -779,7 +779,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("plotprice")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set plotprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set plotprice 50");
 						return;
 					} else {
 						try {
@@ -799,7 +799,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("shopprice")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set shopprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set shopprice 50");
 						return;
 					} else {
 						try {
@@ -818,7 +818,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("embassyprice")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set embassyprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set embassyprice 50");
 						return;
 					} else {
 						try {
@@ -838,7 +838,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("name")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set name BillyBobTown");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set name BillyBobTown");
 						return;
 					}
 
@@ -850,7 +850,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("tag")) {
 
 					if (split.length < 2)
-						TownyMessaging.sendErrorMsg(player, "Eg: /town set tag PLTC");
+						TownyMessaging.sendErrorMsg(player, "예시: /town set tag PLTC");
 					else if (split[1].equalsIgnoreCase("clear")) {
 						try {
 							town.setTag(" ");

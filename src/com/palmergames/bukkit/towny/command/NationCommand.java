@@ -299,7 +299,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3) {
-				TownyMessaging.sendErrorMsg(player, "Eg: /town rank add/remove [주민] [등급]");
+				TownyMessaging.sendErrorMsg(player, "예시: /town rank add/remove [주민] [등급]");
 				return;
 			}
 
@@ -337,28 +337,28 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "You have been granted the Nation rank of '" + rank + "'.");
-						TownyMessaging.sendMsg(player, "You have granted the Nation rank of '" + rank + "' to " + target.getName() + ".");
+						TownyMessaging.sendMsg(target, "'" + rank + "' 국가 등급을 하사받았습니다.");
+						TownyMessaging.sendMsg(player, "'" + rank + "' 국가 등급을 " + target.getName() + "님께 하사했습니다.");
 					} else {
 						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, "That resident isn't a member of a town!");
+						TownyMessaging.sendErrorMsg(player, "이 주민은 당신의 마을에 소속되어 있지 않습니다!");
 						return;
 					}
 				} catch (AlreadyRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + " already holds this Nation rank.");
+					TownyMessaging.sendMsg(player, target.getName() + "님은 이미 국가 등급을 하사받았습니다.");
 					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "You have been demoted from the Nation rank of '" + rank + "'.");
-						TownyMessaging.sendMsg(player, "You have removed the Nation rank of '" + rank + "' from " + target.getName() + ".");
+						TownyMessaging.sendMsg(target, "'" + rank + "' 국가 등급을 박탈당했씁니다..");
+						TownyMessaging.sendMsg(player, "'" + rank + "' 국가 등급을 " + target.getName() + "님에게서 박탈했습니다..");
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + " doesn't hold this Nation rank.");
+					TownyMessaging.sendMsg(player, target.getName() + "님은 아직 국가 등급을 하사받지 않았습니다.");
 					return;
 				}
 
@@ -596,7 +596,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationAdd(Player player, String[] names) {
 
 		if (names.length < 1) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation add [names]");
+			TownyMessaging.sendErrorMsg(player, "예시: /nation add [마을이름]");
 			return;
 		}
 
@@ -695,7 +695,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationKick(Player player, String[] names) {
 
 		if (names.length < 1) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation kick [names]");
+			TownyMessaging.sendErrorMsg(player, "예시: /nation kick [마을이름]");
 			return;
 		}
 
@@ -756,7 +756,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationAlly(Player player, String[] split) {
 
 		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation ally [add/remove] [name]");
+			TownyMessaging.sendErrorMsg(player, "예시: /nation ally [add/remove] [국가이름]");
 			return;
 		}
 
@@ -857,7 +857,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation nation;
 
 		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
+			TownyMessaging.sendErrorMsg(player, "예시: /nation enemy [add/remove] [국가이름]");
 			return;
 		}
 
@@ -949,11 +949,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation set"));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "king " + TownySettings.getLangString("res_2"), ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "capital [town]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "capital [마을이름]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "taxes [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [name]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [이름]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [닉네임] [텍스트]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [4글자까지] or clear", ""));
 		} else {
 			Resident resident;
 			Nation nation;
@@ -973,7 +973,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set king Dumbo");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set king Dumbo");
 				else
 					try {
 						Resident newKing = TownyUniverse.getDataSource().getResident(split[1]);
@@ -991,7 +991,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set capital {town name}");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set capital {마을 이름}");
 				else
 					try {
 						Town newCapital = TownyUniverse.getDataSource().getTown(split[1]);
@@ -1008,7 +1008,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set taxes 70");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set taxes 70");
 				else {
 					Integer amount = Integer.parseInt(split[1].trim());
 					if (amount < 0) {
@@ -1030,7 +1030,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set name Plutoria");
 				else {
 
 					if (!NameValidation.isBlacklistName(split[1]))
@@ -1045,7 +1045,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set tag PLT");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set tag PLT");
 				else if (split[1].equalsIgnoreCase("clear")) {
 					try {
 						nation.setTag(" ");
@@ -1065,7 +1065,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				// Give the resident a title
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set title bilbo Jester ");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set title bilbo Jester ");
 				else
 
 					resident = TownyUniverse.getDataSource().getResident(split[1]);
@@ -1100,7 +1100,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				// Give the resident a title
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(player, "Eg: /nation set surname bilbo the dwarf ");
+					TownyMessaging.sendErrorMsg(player, "예시: /nation set surname bilbo the dwarf ");
 				else
 
 					resident = TownyUniverse.getDataSource().getResident(split[1]);

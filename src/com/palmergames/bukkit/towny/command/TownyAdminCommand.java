@@ -210,7 +210,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 			if (split.length != 2)
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: givebonus [town/player] [n]"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "예시: givebonus [town/player] [n]"));
 			try {
 				town = TownyUniverse.getDataSource().getTown(split[0]);
 			} catch (NotRegisteredException e) {
@@ -730,7 +730,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("npc")) {
 			
 			if (split.length != 2)
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: toggle npc [resident]"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "예시: toggle npc [resident]"));
 			
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(split[1]);
