@@ -9,14 +9,14 @@ script:
   - name=$(date +%Y%m%d)
   - cd /home/travis/build/Neder/Towny
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_${name}_UTF-8_${TRAVIS_COMMIT}_${TRAVIS_JOB_NUMBER}.jar
+  - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar
   - iconv -f UTF-8 -t cp949 ./src/korean.yml > ./src/koreancp949.yml
   - rm ./src/korean.yml
   - mv ./src/koreancp949.yml ./src/korean.yml
   - rm ./src/com/palmergames/util/FileMgmt.java
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_${name}_CP949_${TRAVIS_COMMIT}_${TRAVIS_JOB_NUMBER}.jar
+  - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar
   - ls ./out
 after_success:
   - "chmod 777 /home/travis/build/Neder/Towny/upload.sh"
