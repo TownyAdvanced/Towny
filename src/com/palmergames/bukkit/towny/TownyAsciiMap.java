@@ -25,8 +25,8 @@ public class TownyAsciiMap {
 			"  " + Colors.White + "$" + Colors.LightGray + " = 판매중",
 			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = 속해있는 마을",
 			"  " + Colors.Yellow + "+" + Colors.LightGray + " = 소유한 토지",
-			"  " + Colors.Green + "+" + Colors.LightGray + " = 동맹",
-			"  " + Colors.Red + "+" + Colors.LightGray + " = 적" };
+			"  " + Colors.Green + "+" + Colors.LightGray + " = 동맹국",
+			"  " + Colors.Red + "+" + Colors.LightGray + " = 적국" };
 
 	public static String[] generateCompass(Player player) {
 
@@ -57,7 +57,7 @@ public class TownyAsciiMap {
 		try {
 			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, "등록된 월드가 아닙니다.");
+			TownyMessaging.sendErrorMsg(player, "이 월드는 등록된 월드가 아닙니다.");
 			return;
 		}
 		if (!world.isUsingTowny()) {

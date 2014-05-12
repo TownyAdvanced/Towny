@@ -363,7 +363,7 @@ public class TownyFormatter {
 			out.add(Colors.Green + "강제적 마을 PVP: " + (world.isForcePVP() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성") + Colors.Gray + " | " + Colors.Green + "불번짐: " + (world.isFire() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 불번짐: " + (world.isForceFire() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 
 			out.add(Colors.Green + "폭발: " + (world.isExpl() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + " 강제적 폭발 켜짐: " + (world.isForceExpl() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
-			out.add(Colors.Green + "월드 몹 " + (world.hasWorldMobs() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 마을 몹 스폰: " + (world.isForceTownMobs() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
+			out.add(Colors.Green + "월드 몹: " + (world.hasWorldMobs() ? Colors.Rose + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Gray + " | " + Colors.Green + "강제적 마을 몹 스폰: " + (world.isForceTownMobs() ? Colors.Rose + "활성" : Colors.LightGreen + "비활성"));
 			// Using Default Settings: Yes
 			// out.add(Colors.Green + "Using Default Settings: " +
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose

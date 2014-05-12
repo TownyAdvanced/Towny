@@ -73,7 +73,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
-		towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getVersion();
+		towny_version = Colors.Green + "타우니 버전: " + Colors.LightGreen + plugin.getVersion();
 
 		towny_war.add(ChatTools.formatTitle("/towny war"));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
@@ -301,8 +301,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 
 		output.add(ChatTools.formatTitle("가격"));
-		output.add(Colors.Yellow + "[신설] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
-		output.add(Colors.Yellow + "[유지비] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
+		output.add(Colors.Yellow + "[신설] " + Colors.Green + "마을: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
+		output.add(Colors.Yellow + "[유지비] " + Colors.Green + "마을: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
 		output.add(Colors.Gray + "마을 유지비는 다음과 비례합니다" + Colors.LightGreen + ": " + (TownySettings.isUpkeepByPlot() ? "마을블록 수" : " 마을레벨 (주민 수)."));
 
 		if (town != null) {
@@ -315,7 +315,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			
 			if (nation != null) {
 				output.add(Colors.Yellow + "주민 [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [세금] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "중립선언: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Rose + "    [세금] " + Colors.Green + "마을: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "중립선언: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;
@@ -381,12 +381,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public void consoleUseOnly(Player player) {
 
-		TownyMessaging.sendErrorMsg(player, "This command was designed for use in the console only.");
+		TownyMessaging.sendErrorMsg(player, "이 명령어는 콘솔에서만 사용할 수 있습니다.");
 	}
 
 	public void inGameUseOnly(CommandSender sender) {
 
-		sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
+		sender.sendMessage("[타우니] 입력오류: 이 명령어는 게임 내에서만 사용할 수 있습니다.");
 	}
 
 	public boolean sendErrorMsg(CommandSender sender, String msg) {
@@ -396,7 +396,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, msg);
 		} else
 			// Console
-			sender.sendMessage("[Towny] ConsoleError: " + msg);
+			sender.sendMessage("[타우니] 콘솔 오류: " + msg);
 
 		return false;
 	}
