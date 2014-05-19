@@ -2048,3 +2048,5 @@ v0.86.1.4:
 v0.87.0.0:
 	- Added metrics.
 	- Release.
+v0.87.0.1:
+	- Fix displaying the changelog update in console.

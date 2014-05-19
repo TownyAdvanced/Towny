@@ -386,7 +386,7 @@ public class Towny extends JavaPlugin {
 			boolean display = false;
 			TownyLogger.log.info("------------------------------------");
 			TownyLogger.log.info("[Towny] ChangeLog up until v" + getVersion());
-			String lastVersion = TownySettings.getLastRunVersion(getVersion());
+			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith("v" + lastVersion))
