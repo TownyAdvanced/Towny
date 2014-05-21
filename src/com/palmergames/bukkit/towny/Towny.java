@@ -5,6 +5,7 @@ import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
+import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.command.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -74,7 +75,21 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+<<<<<<< HEAD
 		System.out.println("====================      타우니      ========================");
+=======
+		System.out.println("====================      Towny      ========================");
+		
+		/*
+		 * Register Metrics
+		 */
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+			System.err.println("[Towny] Error setting up metrics");
+		}
+>>>>>>> upstream/master
 
 		version = this.getDescription().getVersion();
 
