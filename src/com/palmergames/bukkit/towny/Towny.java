@@ -75,10 +75,7 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-<<<<<<< HEAD
 		System.out.println("====================      타우니      ========================");
-=======
-		System.out.println("====================      Towny      ========================");
 		
 		/*
 		 * Register Metrics
@@ -89,7 +86,6 @@ public class Towny extends JavaPlugin {
 		} catch (IOException e) {
 			System.err.println("[Towny] Error setting up metrics");
 		}
->>>>>>> upstream/master
 
 		version = this.getDescription().getVersion();
 
