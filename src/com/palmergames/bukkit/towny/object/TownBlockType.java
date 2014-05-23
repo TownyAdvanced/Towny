@@ -20,10 +20,10 @@ public enum TownBlockType {
 		}
 	},
 
-	ARENA(2, "arena", "A") {	//Always PVP enabled.
+	ARENA(2, "Arena", "A") {	//Always PVP enabled.
 	},
 
-	EMBASSY(3, "embassy", "E") {  // For other towns to own a plot in your town.
+	EMBASSY(3, "Embassy", "E") {  // For other towns to own a plot in your town.
 
 		@Override
 		public double getTax(Town town) {
@@ -31,10 +31,13 @@ public enum TownBlockType {
 			return town.getEmbassyPlotTax() + town.getPlotTax();
 		}
 	},
-	WILDS(4, "wilds", "W") {	//Follows wilderness protection settings, but town owned.
+	WILDS(4, "Wilds", "W") {	//Follows wilderness protection settings, but town owned.
 	},
-	SPLEEF(5, "spleef", "+") {	//Follows wilderness protection settings, but town owned.
+	SPLEEF(5, "Spleef", "+") {	//Follows wilderness protection settings, but town owned.
 	},
+	INN(6, "Inn", "I") {	//Allows use of beds outside your own plot.
+	},
+
 	// These are subject to change:
 /*
  * PUBLIC(6, "") { // Will have it's own permission set
