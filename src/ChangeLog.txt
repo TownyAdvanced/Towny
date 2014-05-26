@@ -2052,3 +2052,9 @@ v0.87.0.1:
 	- Fix displaying the changelog update in console.
 	- Add debug message on errors saving data.
 	- Fix a bug where a server restart after a resident leaves a town results in him retaining his old town plots.
+v0.87.0.2:
+	- Git pull requests added.
+v0.87.0.3:
+	- Added and expanded upon PriceDeath. Adds ability to do fixed or percentage penalties to dying. These can affect personal, town, nation banks and be configured to be PVP only or from monster-deaths.
+	- Added Inn plot types.
+	- Prevent starting an Event War if using_economy: false in the config.
