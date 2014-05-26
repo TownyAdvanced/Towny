@@ -2051,3 +2051,4 @@ v0.87.0.0:
 v0.87.0.1:
 	- Fix displaying the changelog update in console.
 	- Add debug message on errors saving data.
+	- Fix a bug where a server restart after a resident leaves a town results in him retaining his old town plots.
