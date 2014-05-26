@@ -37,8 +37,12 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -501,21 +505,41 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		boolean isOwner = false;
+		boolean isInnPlot = false;
 
 		try {
 			
+			Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
+			
 			WorldCoord worldCoord = new WorldCoord(event.getPlayer().getWorld().getName(), Coord.parseCoord(event.getBed().getLocation()));
 
-			isOwner = worldCoord.getTownBlock().isOwner(TownyUniverse.getDataSource().getResident(event.getPlayer().getName()));
+			TownBlock townblock = worldCoord.getTownBlock();
+			
+			isOwner = townblock.isOwner(resident);
 
+			isInnPlot = townblock.getType() == TownBlockType.INN;			
+			
+			if (resident.hasNation() && townblock.getTown().hasNation()) {
+				
+				Nation residentNation = resident.getTown().getNation();
+				
+				Nation townblockNation = townblock.getTown().getNation();			
+				
+				if (townblockNation.hasEnemy(residentNation)) {
+					event.setCancelled(true);
+					TownyMessaging.sendErrorMsg(event.getPlayer(), "You cannot sleep in an enemy's Inn.");
+					return;
+				}
+			}
+			
 		} catch (NotRegisteredException e) {
 			// Wilderness as it error'd getting a townblock.
 		}
 		
-		if (!isOwner) {
+		if (!isOwner && !isInnPlot) {
 
 			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies.");
+			TownyMessaging.sendErrorMsg(event.getPlayer(), "You do not own the land this bed occupies and it is not an Inn plot.");
 
 		}
 		

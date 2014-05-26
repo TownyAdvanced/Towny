@@ -910,7 +910,12 @@ public enum ConfigNodes {
 			"1.0",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
 
-	ECO_PRICE_DEATH("economy.price_death", "1.0", ""),
+    ECO_DEATH("economy.death", "", ""),			
+    ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
+    ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
+	ECO_PRICE_DEATH("economy.death.price_death", "1.0", ""),
+	ECO_PRICE_DEATH_TOWN("economy.death.price_death_town", "0.0", ""),
+	ECO_PRICE_DEATH_NATION("economy.death.price_death_nation", "0.0", ""),
 
 	ECO_BANK_CAP("economy.banks", "", ""),
 	ECO_BANK_CAP_TOWN(
