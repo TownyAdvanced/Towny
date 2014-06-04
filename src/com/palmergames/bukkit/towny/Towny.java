@@ -385,8 +385,13 @@ public class Towny extends JavaPlugin {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
 			TownyLogger.log.info("------------------------------------");
+<<<<<<< HEAD
 			TownyLogger.log.info("[타우니] v" + getVersion() + "의 변경사항");
 			String lastVersion = TownySettings.getLastRunVersion(getVersion());
+=======
+			TownyLogger.log.info("[Towny] ChangeLog up until v" + getVersion());
+			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
+>>>>>>> upstream/master
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
 				if (line.startsWith("v" + lastVersion))

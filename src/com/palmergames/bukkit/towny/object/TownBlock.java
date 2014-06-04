@@ -176,6 +176,8 @@ public class TownBlock {
 		return type;
 	}
 
+	
+	
 	public void setType(TownBlockType type) {
 
 		if (type != this.type)
@@ -226,10 +228,15 @@ public class TownBlock {
 			
 			setPermissions("denyAll");
 			break;
-			
+		
 		case SPLEEF:
 			
 			setPermissions("denyAll");
+			break;
+
+		case INN:
+			
+			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
 			break;
 			
 		}

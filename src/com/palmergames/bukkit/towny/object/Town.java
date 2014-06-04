@@ -558,7 +558,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//getPlugin().getTownyUniverse().getDataSource().saveResident(resident); //TODO: BAD!
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 			}
 		}
 

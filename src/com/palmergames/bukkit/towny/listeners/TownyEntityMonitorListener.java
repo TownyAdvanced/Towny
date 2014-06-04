@@ -160,7 +160,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (attackerPlayer != null && defenderPlayer != null && TownyUniverse.isWarTime())
 			try {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
-                    return;
+					return;
 
 				if (TownySettings.getWarPointsForKill() > 0)
 					plugin.getTownyUniverse().getWarEvent().townScored(attackerResident.getTown(), TownySettings.getWarPointsForKill());
@@ -235,17 +235,96 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
 			}
-		else if (TownySettings.getDeathPrice() > 0)
-			try {
-				double price = TownySettings.getDeathPrice();
-				if (!defenderResident.canPayFromHoldings(price))
-					price = defenderResident.getHoldingBalance();
+		else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))) {
 
-				defenderResident.payTo(price, new WarSpoils(), "Death Payment");
-				TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+			double total = 0.0;
+
+			try {
+				if (TownySettings.getDeathPrice() > 0) {
+
+					double price = TownySettings.getDeathPrice();
+
+					if (!TownySettings.isDeathPriceType()) {
+						price = defenderResident.getHoldingBalance() * price;
+					}
+
+					if (!defenderResident.canPayFromHoldings(price))
+						price = defenderResident.getHoldingBalance();
+
+					if (attackerResident == null) {
+						defenderResident.payTo(price, new WarSpoils(), "Death Payment");
+					} else {
+						defenderResident.payTo(price, attackerResident, "Death Payment");
+					}
+					total = total + price;
+
+					TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+				}
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
 			}
+
+			try {
+				if (TownySettings.getDeathPriceTown() > 0) {
+
+					double price = TownySettings.getDeathPriceTown();
+
+					if (!TownySettings.isDeathPriceType()) {
+						price = defenderResident.getTown().getHoldingBalance() * price;
+					}
+
+					if (!defenderResident.getTown().canPayFromHoldings(price))
+						price = defenderResident.getTown().getHoldingBalance();
+
+					if (attackerResident == null) {
+						defenderResident.getTown().payTo(price, new WarSpoils(), "Death Payment Town");
+					} else {
+						defenderResident.getTown().payTo(price, attackerResident, "Death Payment Town");
+					}
+					total = total + price;
+
+					TownyMessaging.sendTownMessagePrefixed(defenderResident.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+				}
+			} catch (EconomyException e) {
+				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
+			} catch (NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take town death funds.");
+			}
+
+			try {
+				if (TownySettings.getDeathPriceNation() > 0) {
+
+					double price = TownySettings.getDeathPriceNation();
+
+					if (!TownySettings.isDeathPriceType()) {
+						price = defenderResident.getTown().getNation().getHoldingBalance() * price;
+					}
+
+					if (!defenderResident.canPayFromHoldings(price))
+						price = defenderResident.getTown().getNation().getHoldingBalance();
+
+					if (attackerResident == null) {
+						defenderResident.getTown().getNation().payTo(price, new WarSpoils(), "Death Payment Nation");
+					} else {
+						defenderResident.getTown().getNation().payTo(price, attackerResident, "Death Payment Nation");
+					}
+					total = total + price;
+
+					TownyMessaging.sendNationMessagePrefixed(defenderResident.getTown().getNation(), "Your nation lost " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+				}
+			} catch (EconomyException e) {
+				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take death funds.");
+			} catch (NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take nation death funds.");
+			}
+
+			if (attackerResident != null) {
+
+				TownyMessaging.sendMsg(attackerResident, "You gained " + TownyEconomyHandler.getFormattedBalance(total) + " for killing " + defenderPlayer.getName() + ".");
+
+			}
+
+		}
 	}
 
 }

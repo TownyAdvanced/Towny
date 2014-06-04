@@ -1389,11 +1389,37 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_EVENT_PRICE_DEATH);
 	}
 
+	public static boolean isChargingDeath() {
+		
+		return (getDeathPrice()>0 || getDeathPriceTown()>0 || getDeathPriceNation()>0 );
+	}
+	
+	public static boolean isDeathPriceType() {
+
+		return getString(ConfigNodes.ECO_PRICE_DEATH_TYPE).equalsIgnoreCase("fixed");
+	}
+
+	public static boolean isDeathPricePVPOnly() {
+
+		return getBoolean(ConfigNodes.ECO_PRICE_DEATH_PVP_ONLY);
+		
+	}	
+	
 	public static double getDeathPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH);
 	}
 
+	public static double getDeathPriceTown() {
+
+		return getDouble(ConfigNodes.ECO_PRICE_DEATH_TOWN);
+	}
+
+	public static double getDeathPriceNation() {
+
+		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
+	}
+	
 	public static double getWartimeTownBlockLossPrice() {
 
 		return getDouble(ConfigNodes.WAR_EVENT_TOWN_BLOCK_LOSS_PRICE);
