@@ -76,7 +76,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_version = Colors.Green + "타우니 버전: " + Colors.LightGreen + plugin.getVersion();
 
 		towny_war.add(ChatTools.formatTitle("/타우니 전쟁"));
-		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "상태", ""));
+		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "상황", ""));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "점수", ""));
 
 		if (sender instanceof Player) {
