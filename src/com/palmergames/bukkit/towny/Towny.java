@@ -692,12 +692,12 @@ public class Towny extends JavaPlugin {
 
 	public boolean parseOnOff(String s) throws Exception {
 
-		if (s.equalsIgnoreCase("on"))
+		if (s.equalsIgnoreCase("on") || s.equalsIgnoreCase("켜기"))
 			return true;
-		else if (s.equalsIgnoreCase("off"))
+		else if (s.equalsIgnoreCase("off") || s.equalsIgnoreCase("끄기"))
 			return false;
 		else
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " 켜기/끄기."));
 	}
 
 	

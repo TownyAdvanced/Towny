@@ -392,7 +392,7 @@ msg_err_invalid_name: '&c%s(이)라는 이름은 정확한 이름이 아닙니�
 msg_err_already_res: '&c%s님은 이미 다른 마을에 있습니다.'
 msg_err_already_in_town: '&c%s은/는 이미 %s의 일부입니다.'
 msg_err_already_nation: '&c대상 마을은 이미 국가에 속해 있습니다.'
-msg_err_invalid_property: '&c잘못된 ''%s'' 소유권입니다.'
+msg_err_invalid_property: '&c잘못된 ''%s'' 속성입니다.'
 msg_err_not_supported: '&c아직 지원하지 않습니다.'
 msg_err_invalid_input: '&c입력이 잘못되었습니다. %s을(를) 사용하세요.'
 msg_err_negative: '&c음수를 입력할 수 없습니다.'
