@@ -253,7 +253,7 @@ public class TownBlock {
 
 	public void setType(String typeName) throws TownyException {
 
-		if (typeName.equalsIgnoreCase("reset"))
+		if (typeName.equalsIgnoreCase("초기화"))
 			typeName = "default";
 		
 		TownBlockType type = TownBlockType.lookup(typeName);

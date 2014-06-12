@@ -216,17 +216,17 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public boolean setAllegiance(String type, Nation nation) {
 
 		try {
-			if (type.equalsIgnoreCase("ally")) {
+			if (type.equalsIgnoreCase("동맹국")) {
 				removeEnemy(nation);
 				addAlly(nation);
 				if (!hasEnemy(nation) && hasAlly(nation))
 					return true;
-			} else if (type.equalsIgnoreCase("neutral")) {
+			} else if (type.equalsIgnoreCase("중립")) {
 				removeEnemy(nation);
 				removeAlly(nation);
 				if (!hasEnemy(nation) && !hasAlly(nation))
 					return true;
-			} else if (type.equalsIgnoreCase("enemy")) {
+			} else if (type.equalsIgnoreCase("적국")) {
 				removeAlly(nation);
 				addEnemy(nation);
 				if (hasEnemy(nation) && !hasAlly(nation))
