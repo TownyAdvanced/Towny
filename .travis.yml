@@ -16,7 +16,7 @@ script:
   - rm ./src/townyperms.yml
   - rm ./src/com/palmergames/util/FileMgmt.java
   - mv ./src/koreancp949.yml ./src/korean.yml
-  - mv ./src/townypermscp949yml ./src/townyperms.yml 
+  - mv ./src/townypermscp949.yml ./src/townyperms.yml 
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar
