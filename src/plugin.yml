@@ -18,8 +18,8 @@ softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWo
 commands:
     towny:
         aliases: []
-    nation:
-        aliases: [n, nat]
+    국가:
+        aliases: [n, nat, nation]
     plot:
         aliases: []
     resident:
