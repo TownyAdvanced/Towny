@@ -609,7 +609,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/주민 토글"));
-			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "pvp", "(끄기)"));
+			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "pvp", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "폭발", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "불", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "몹", ""));
