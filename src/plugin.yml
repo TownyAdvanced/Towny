@@ -16,20 +16,20 @@ softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWo
 ############################################################
 
 commands:
-    towny:
-        aliases: []
+    타우니:
+        aliases: [towny]
     국가:
         aliases: [n, nat, nation]
-    plot:
-        aliases: []
-    resident:
-        aliases: [res, p, player]
-    town:
-        aliases: [t]
-    townyadmin:
-        aliases: [ta]
-    townyworld:
-        aliases: [tw]
+    토지:
+        aliases: [plot]
+    주민:
+        aliases: [res, p, player, resident]
+    마을:
+        aliases: [t, town]
+    타우니관리:
+        aliases: [ta, townyadmin]
+    타우니월드:
+        aliases: [tw, townyworld]
 
 ############################################################
 # +------------------------------------------------------+ #
