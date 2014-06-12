@@ -131,7 +131,7 @@ admin_panel_3: '새로운 하루단위 타이머'
 
 msg_block_claim: '이 마을블록 점유'
 msg_plot_nfs: '토지 판매를 철회'
-msg_nfs_abr: '&e''fs'' 과 ''nfs'' 을 ''forsale'' 와 ''notforsale''에 대한 단축 명령어로 사용합니다.'
+msg_nfs_abr: '&e''팜'' 과 ''안팜'' 을 ''판매'' 와 ''판매취소''에 대한 단축 명령어로 사용합니다.'
 msg_plot_fs: '이 토지를 경매.'
 
 ############################################################
@@ -249,7 +249,7 @@ msg_changed_fire: '&c%s의 불번짐 설정 : %s.'
 msg_changed_mobs: '&c%s의 몬스터 스폰 설정 : %s.'
 msg_changed_taxpercent: '&c세금부과 기준 : %s.'
 msg_changed_open: '&c마을의 개방 여부 : %s.'
-msg_toggle_open_on_warning: '경고: 마을을 개방하기로 결정했다면 마을의 권한을 수정해야 합니다 . ''/town set perm off'' 를 입력한 뒤  ''/town set perm reset'' 을 입력하세요'
+msg_toggle_open_on_warning: '경고: 마을을 개방하기로 결정했다면 마을의 권한을 수정해야 합니다 . ''/마을 설정 권한 끄기'' 를 입력한 뒤  ''/마을 설정 권한 재설정'' 을 입력하세요'
 
 msg_changed_world_setting: '&c%s 월드의 %s : %s.'
 
