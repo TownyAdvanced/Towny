@@ -163,8 +163,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
-					if (split.length == 2 && split[1].equalsIgnoreCase("all") || split[1].equalsIgnoreCase("모두")) {
+					if (split.length == 2 && split[1].equalsIgnoreCase("모두")) {// Additional Code by Neder. 2014-06-14
+						split[1] = "all";
+					}										// End of Additional Code.
+					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task
 						new PlotClaim(plugin, player, resident, null, false).start();
 
