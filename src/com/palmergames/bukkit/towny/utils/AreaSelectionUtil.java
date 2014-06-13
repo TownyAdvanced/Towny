@@ -65,7 +65,7 @@ public class AreaSelectionUtil {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
 
-				if (args[0].equalsIgnoreCase("auto")) {
+				if (args[0].equalsIgnoreCase("auto") || args[0].equalsIgnoreCase("자동")) {
 					// Attempt to select outwards until no town blocks remain
 
 					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
@@ -105,7 +105,7 @@ public class AreaSelectionUtil {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
 
-				if (args[0].equalsIgnoreCase("auto")) {
+				if (args[0].equalsIgnoreCase("auto") || args[0].equalsIgnoreCase("자동")) {
 					// Attempt to select outwards until no town blocks remain
 
 					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.

@@ -126,7 +126,7 @@ public class TownClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "총 망르블록: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "총 마을블록: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if (town.getWorld().isUsingPlotManagementRevert())
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			} else if (forced) {

@@ -1974,8 +1974,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				List<WorldCoord> selection;
 				boolean attachedToEdge = true, outpost = false;
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-
-				if (split.length == 1 && split[0].equalsIgnoreCase("outpost") || split[0].equalsIgnoreCase("전초기지")) {
+				
+				// Additional Code by Neder / 2014-06-14
+				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
+					split[0] = "전초기지";
+				}
+				// End of Additional Code.
+				
+				if (split.length == 1 && split[0].equalsIgnoreCase("전초기지")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -2055,7 +2061,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				List<WorldCoord> selection;
-				if (split.length == 1 && split[0].equalsIgnoreCase("all") || split[0].equalsIgnoreCase("모두")) {
+				if (split.length == 1 && split[0].equalsIgnoreCase("모두")) {// Additional Code by Neder. / 2014-06-14
+					split[0] = "all";
+				}										// End of Additional Code.
+				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					new TownClaim(plugin, player, town, null, false, false, false).start();
 					// townUnclaimAll(town);
 				} else {

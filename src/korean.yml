@@ -263,7 +263,7 @@ msg_plot_regen_wrong_size: '&c재생성 기능은 기본 토지 크기(16)에서
 
 msg_reloaded: '&2타우니 설정을 다시 불러왔습니다.'
 msg_undo_complete: '&2실행이 취소되었습니다.'
-msg_give_total: '&b%s 개의 토지 보너스를 줍니다. (총 보유량: %s개)'
+msg_give_total: '&b%s 마을에게 토지 보너스를 줍니다. (총 보유량: %s개)'
 mag_backup_success: '&2백업 성공!'
 msg_xx_withdrew_xx: '&b%s님이 %s 를 출금하였습니다.'
 msg_xx_deposited_xx: '&b%s님이 %s 를 입금하였습니다.'

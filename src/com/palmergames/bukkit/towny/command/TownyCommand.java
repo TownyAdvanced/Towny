@@ -131,8 +131,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if (split[0].equalsIgnoreCase("map") || split[0].equalsIgnoreCase("지도"))
-				if (split.length > 1 && split[1].equalsIgnoreCase("big") || split[1].equalsIgnoreCase("크게"))
+				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
 					TownyAsciiMap.generateAndSend(plugin, player, 18);
+				else
+				if (split.length > 1 && split[1].equalsIgnoreCase("크게"))
+					TownyAsciiMap.generateAndSend(plugin, player, 18); // Additional Code by Neder / 2014-06-14
 				else
 					showMap(player);
 			else if (split[0].equalsIgnoreCase("prices") || split[0].equalsIgnoreCase("가격")) {
