@@ -2060,3 +2060,4 @@ v0.87.0.3:
 	- Prevent starting an Event War if using_economy: false in the config.
 v0.87.0.4:
 	- Prevent toggling chat spy without the relevant permission node (towny.chat.spy).
+	- Prevent lost funds on purchasing bonus plots.
