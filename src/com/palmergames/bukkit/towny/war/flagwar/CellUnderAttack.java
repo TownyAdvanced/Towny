@@ -145,7 +145,7 @@ public class CellUnderAttack extends Cell {
 
 		DyeColor[] woolColors = TownyWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
-			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
+			System.out.println(String.format("%s색 깃발이 %s색으로 바뀌었습니다.", getCellString(), woolColors[flagColorId].toString())); // 오역 가능성 농후
 			int woolId = BukkitTools.getMaterialId(Material.WOOL);
 			byte woolData = woolColors[flagColorId].getDyeData();
 

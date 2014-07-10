@@ -187,7 +187,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage("Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
+					TownyMessaging.sendGlobalMessage("승리한 국가: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -196,7 +196,7 @@ public class War {
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-				TownyMessaging.sendGlobalMessage("Highest Score: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
+				TownyMessaging.sendGlobalMessage("최고 점수: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {
@@ -256,9 +256,9 @@ public class War {
 		try {
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				remove(townBlock.getTown());
-				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+				TownyMessaging.sendTownMessage(townBlock.getTown(), "당신의 마을은 자금이 부족해 전쟁을 계속할 수 없습니다.");
 			} else
-				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
+				TownyMessaging.sendTownMessage(townBlock.getTown(), "당신의 마을은 " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + "만큼의 마을 자금을 잃었습니다.");
 		} catch (EconomyException e) {
 		}
 		if (townBlock.getTown().isHomeBlock(townBlock))
@@ -419,12 +419,12 @@ public class War {
 	public List<String> getStats() {
 
 		List<String> output = new ArrayList<String>();
-		output.add(ChatTools.formatTitle("War Stats"));
-		output.add(Colors.Green + "  Nations: " + Colors.LightGreen + warringNations.size());
-		output.add(Colors.Green + "  Towns: " + Colors.LightGreen + warringTowns.size() + " / " + townScores.size());
-		output.add(Colors.Green + "  WarZone: " + Colors.LightGreen + warZone.size() + " Town blocks");
+		output.add(ChatTools.formatTitle("전쟁 상황"));
+		output.add(Colors.Green + "  국가: " + Colors.LightGreen + warringNations.size());
+		output.add(Colors.Green + "  마을: " + Colors.LightGreen + warringTowns.size() + " / " + townScores.size());
+		output.add(Colors.Green + "  전쟁 지역: " + Colors.LightGreen + warZone.size() + " 개의 마을블록");
 		try {
-			output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
+			output.add(Colors.Green + "  전쟁의 전리품: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
 			return output;
 		} catch (EconomyException e) {
 		}
@@ -451,7 +451,7 @@ public class War {
 	public List<String> getScores(int maxListing) {
 
 		List<String> output = new ArrayList<String>();
-		output.add(ChatTools.formatTitle("War - Top Scores"));
+		output.add(ChatTools.formatTitle("전쟁 - 최고 기록"));
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
 		kvTable.sortByValue();
 		kvTable.revese();

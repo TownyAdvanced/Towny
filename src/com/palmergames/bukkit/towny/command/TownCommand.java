@@ -51,23 +51,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> output = new ArrayList<String>();
 
 	static {
-		output.add(ChatTools.formatTitle("/town"));
-		output.add(ChatTools.formatCommand("", "/town", "", TownySettings.getLangString("town_help_1")));
-		output.add(ChatTools.formatCommand("", "/town", "[town]", TownySettings.getLangString("town_help_3")));
-		output.add(ChatTools.formatCommand("", "/town", "here", TownySettings.getLangString("town_help_4")));
-		output.add(ChatTools.formatCommand("", "/town", "list", ""));
-		output.add(ChatTools.formatCommand("", "/town", "online", TownySettings.getLangString("town_help_10")));
-		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
-		output.add(ChatTools.formatCommand("", "/town", "reslist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
-		output.add(ChatTools.formatCommand("", "/town", "spawn", TownySettings.getLangString("town_help_5")));
+		output.add(ChatTools.formatTitle("/마을"));
+		output.add(ChatTools.formatCommand("", "/마을", "", TownySettings.getLangString("town_help_1")));
+		output.add(ChatTools.formatCommand("", "/마을", "[마을]", TownySettings.getLangString("town_help_3")));
+		output.add(ChatTools.formatCommand("", "/마을", "여기", TownySettings.getLangString("town_help_4")));
+		output.add(ChatTools.formatCommand("", "/마을", "목록", ""));
+		output.add(ChatTools.formatCommand("", "/마을", "온라인", TownySettings.getLangString("town_help_10")));
+		output.add(ChatTools.formatCommand("", "/마을", "떠나기", ""));
+		output.add(ChatTools.formatCommand("", "/마을", "주민목록", ""));
+		output.add(ChatTools.formatCommand("", "/마을", "등급목록", ""));
+		output.add(ChatTools.formatCommand("", "/마을", "스폰", TownySettings.getLangString("town_help_5")));
 		if (!TownySettings.isTownCreationAdminOnly())
-			output.add(ChatTools.formatCommand("", "/town", "new [town]", TownySettings.getLangString("town_help_6")));
-		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/town", "new [town] " + TownySettings.getLangString("town_help_2"), TownySettings.getLangString("town_help_7")));
-		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/town", "deposit [$]", ""));
-		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/town", "rank add/remove [resident] [rank]", ""));
-		output.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "mayor ?", TownySettings.getLangString("town_help_8")));
-		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/town", "delete [town]", ""));
+			output.add(ChatTools.formatCommand("", "/마을", "신설 [마을이름]", TownySettings.getLangString("town_help_6")));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/마을", "신설 [마을] " + TownySettings.getLangString("town_help_2"), TownySettings.getLangString("town_help_7")));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/마을", "입금 [$]", ""));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/마을", "등급 추가/제거 [주민] [등급]", ""));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "촌장 ?", TownySettings.getLangString("town_help_8")));
+		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/마을", "삭제 [마을]", ""));
 	}
 
 	public TownCommand(Towny instance) {
@@ -103,26 +103,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 				}
 
-			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")  || split[0].equalsIgnoreCase("도움말")) {
 
 				for (String line : output)
 					player.sendMessage(line);
 
-			} else if (split[0].equalsIgnoreCase("here")) {
+			} else if (split[0].equalsIgnoreCase("here") || split[0].equalsIgnoreCase("여기")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_HERE.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				showTownStatusHere(player);
 
-			} else if (split[0].equalsIgnoreCase("list")) {
+			} else if (split[0].equalsIgnoreCase("list") || split[0].equalsIgnoreCase("목록")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				listTowns(player);
 
-			} else if (split[0].equalsIgnoreCase("new")) {
+			} else if (split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("신설")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_NEW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -142,14 +142,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					newTown(player, split[1], split[2]);
 				}
 
-			} else if (split[0].equalsIgnoreCase("leave")) {
+			} else if (split[0].equalsIgnoreCase("leave") || split[0].equalsIgnoreCase("떠나기")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LEAVE.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				townLeave(player);
 
-			} else if (split[0].equalsIgnoreCase("withdraw")) {
+			} else if (split[0].equalsIgnoreCase("withdraw") || split[0].equalsIgnoreCase("출금")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -163,7 +163,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				else
 					throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town withdraw"));
 
-			} else if (split[0].equalsIgnoreCase("deposit")) {
+			} else if (split[0].equalsIgnoreCase("deposit") || split[0].equalsIgnoreCase("입금")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -180,62 +180,62 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
-				if (split[0].equalsIgnoreCase("rank")) {
+				if (split[0].equalsIgnoreCase("rank") || split[0].equalsIgnoreCase("등급")) {
 
 					/*
 					 * perm tests performed in method.
 					 */
 					townRank(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("set")) {
+				} else if (split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("설정")) {
 
 					/*
 					 * perm test performed in method.
 					 */
 					townSet(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("buy")) {
+				} else if (split[0].equalsIgnoreCase("buy") || split[0].equalsIgnoreCase("구매")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townBuy(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("toggle")) {
+				} else if (split[0].equalsIgnoreCase("toggle") || split[0].equalsIgnoreCase("토글")) {
 
 					/*
 					 * perm test performed in method.
 					 */
 					townToggle(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("mayor")) {
+				} else if (split[0].equalsIgnoreCase("mayor") || split[0].equalsIgnoreCase("촌장")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_MAYOR.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townMayor(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("spawn")) {
+				} else if (split[0].equalsIgnoreCase("spawn") || split[0].equalsIgnoreCase("스폰")) {
 
 					/*
 					 * town spawn handles it's own perms.
 					 */
 					townSpawn(player, newSplit, false);
 
-				} else if (split[0].equalsIgnoreCase("outpost")) {
+				} else if (split[0].equalsIgnoreCase("outpost") || split[0].equalsIgnoreCase("전초기지")) {
 					/*
 					 * outpost spawns handle their own perms.
 					 */
 					townSpawn(player, newSplit, true);
 
-				} else if (split[0].equalsIgnoreCase("delete")) {
+				} else if (split[0].equalsIgnoreCase("delete") || split[0].equalsIgnoreCase("삭제")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DELETE.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townDelete(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("reslist")) {
+				} else if (split[0].equalsIgnoreCase("reslist") || split[0].equalsIgnoreCase("주민목록")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RESLIST.getNode()))
 
@@ -255,7 +255,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					}
 
-				} else if (split[0].equalsIgnoreCase("ranklist")) {
+				} else if (split[0].equalsIgnoreCase("ranklist") || split[0].equalsIgnoreCase("등급목록")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANKLIST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -268,39 +268,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 					}
 
-				} else if (split[0].equalsIgnoreCase("join")) {
+				} else if (split[0].equalsIgnoreCase("join") || split[0].equalsIgnoreCase("가입")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					parseTownJoin(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("add")) {
+				} else if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("주민추가")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ADD.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townAdd(player, null, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("kick")) {
+				} else if (split[0].equalsIgnoreCase("kick") || split[0].equalsIgnoreCase("주민추방")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_KICK.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townKick(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("claim")) {
+				} else if (split[0].equalsIgnoreCase("claim") || split[0].equalsIgnoreCase("점유")) {
 
 					parseTownClaimCommand(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("unclaim")) {
+				} else if (split[0].equalsIgnoreCase("unclaim") || split[0].equalsIgnoreCase("점유해제")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					parseTownUnclaimCommand(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("online")) {
+				} else if (split[0].equalsIgnoreCase("online") || split[0].equalsIgnoreCase("온라인")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ONLINE.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -339,7 +339,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<String> formatedList = new ArrayList<String>();
 		for (Town town : TownyUniverse.getDataSource().getTowns()) {
 			String townToken = Colors.LightBlue + town.getName();
-			townToken += town.isOpen() ? Colors.White + " (Open)" : "";
+			townToken += town.isOpen() ? Colors.White + " (개방)" : "";
 			townToken += Colors.Blue + " [" + town.getNumResidents() + "]";
 			townToken += Colors.White;
 			formatedList.add(townToken);
@@ -390,33 +390,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public void showTownMayorHelp(Player player) {
 
 		player.sendMessage(ChatTools.formatTitle("마을 촌장 도움말"));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "withdraw [$]", ""));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "claim", "'/town claim ?' " + TownySettings.getLangString("res_5")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "unclaim", "'/town " + TownySettings.getLangString("res_5")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "[add/kick] " + TownySettings.getLangString("res_2") + " .. []", TownySettings.getLangString("res_6")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "[add+/kick+] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_7")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "set [] .. []", "'/town set' " + TownySettings.getLangString("res_5")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "buy [] .. []", "'/town buy' " + TownySettings.getLangString("res_5")));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "toggle", ""));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + TownySettings.getLangString("res_5")));
-		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/town",
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "출금 [$]", ""));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "점유", "'/마을 점유 ?' " + TownySettings.getLangString("res_5")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "점유해제", "'/마을 " + TownySettings.getLangString("res_5")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "[주민추가/주민추방] " + TownySettings.getLangString("res_2") + " .. []", TownySettings.getLangString("res_6")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "[주민추가+/주민추방+] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_7")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "설정 [] .. []", "'/마을 설정' " + TownySettings.getLangString("res_5")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "구매 [] .. []", "'/마을 구매' " + TownySettings.getLangString("res_5")));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "토글", ""));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "등급 /추가/제거 [주민] [등급]", "'/마을 등급 ?' " + TownySettings.getLangString("res_5")));
+		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/마을",
 		// "wall [type] [height]", ""));
-		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/town",
+		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/마을",
 		// "wall remove", ""));
-		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "delete", ""));
+		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을", "삭제", ""));
 	}
 
 	public void townToggle(Player player, String[] split) throws TownyException {
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/town toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "pvp", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "public", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "explosion", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "fire", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "mobs", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "taxpercent", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "open", ""));
+			player.sendMessage(ChatTools.formatTitle("/마을 토글"));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "pvp", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "공용", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "폭발", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "불번짐", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "몹스폰", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "퍼센트세금", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 토글", "개방", ""));
 		} else {
 			Resident resident;
 			Town town;
@@ -432,7 +432,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			// TODO: Let admin's call a subfunction of this.
-			if (split[0].equalsIgnoreCase("public")) {
+			if (split[0].equalsIgnoreCase("public") || split[0].equalsIgnoreCase("공용")) {
 
 				town.setPublic(!town.isPublic());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_public"), town.isPublic() ? "활성" : "비활성"));
@@ -443,28 +443,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town.setPVP(!town.isPVP());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), "마을", town.isPVP() ? "활성" : "비활성"));
 
-			} else if (split[0].equalsIgnoreCase("explosion")) {
+			} else if (split[0].equalsIgnoreCase("explosion") || split[0].equalsIgnoreCase("폭발")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setBANG(!town.isBANG());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_expl"), "마을", town.isBANG() ? "활성" : "비활성"));
 
-			} else if (split[0].equalsIgnoreCase("fire")) {
+			} else if (split[0].equalsIgnoreCase("fire") || split[0].equalsIgnoreCase("불번짐")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setFire(!town.isFire());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_fire"), "마을", town.isFire() ? "활성" : "비활성"));
 
-			} else if (split[0].equalsIgnoreCase("mobs")) {
+			} else if (split[0].equalsIgnoreCase("mobs") || split[0].equalsIgnoreCase("몹스폰")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setHasMobs(!town.hasMobs());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_mobs"), "마을", town.hasMobs() ? "활성" : "비활성"));
 
-			} else if (split[0].equalsIgnoreCase("taxpercent")) {
+			} else if (split[0].equalsIgnoreCase("taxpercent") || split[0].equalsIgnoreCase("퍼센트세금")) {
 				town.setTaxPercentage(!town.isTaxPercentage());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_taxpercent"), town.isTaxPercentage() ? "활성" : "비활성"));
-			} else if (split[0].equalsIgnoreCase("open")) {
+			} else if (split[0].equalsIgnoreCase("open") || split[0].equalsIgnoreCase("개방")) {
 
 				town.setOpen(!town.isOpen());
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_open"), town.isOpen() ? "활성" : "비활성"));
@@ -497,17 +497,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		split = split.toLowerCase();
 
-		if (split.contains("mobs")) {
+		if (split.contains("mobs") || split.contains("몹스폰")) {
 			if (town.getWorld().isForceTownMobs())
 				throw new TownyException(TownySettings.getLangString("msg_world_mobs"));
 		}
 
-		if (split.contains("fire")) {
+		if (split.contains("fire") || split.contains("불번짐")) {
 			if (town.getWorld().isForceFire())
 				throw new TownyException(TownySettings.getLangString("msg_world_fire"));
 		}
 
-		if (split.contains("explosion")) {
+		if (split.contains("explosion") || split.contains("폭발")) {
 			if (town.getWorld().isForceExpl())
 				throw new TownyException(TownySettings.getLangString("msg_world_expl"));
 		}
@@ -522,8 +522,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// Help output.
-			player.sendMessage(ChatTools.formatTitle("/town rank"));
-			player.sendMessage(ChatTools.formatCommand("", "/town rank", "add/remove [주민] rank", ""));
+			player.sendMessage(ChatTools.formatTitle("/마을 등급"));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 등급", "추가/제거 [주민] 등급", ""));
 
 		} else {
 
@@ -535,7 +535,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 3)
-				throw new TownyException("예시: /town rank add/remove [주민] [등급]");
+				throw new TownyException("예시: /마을 등급 추가/제거 [주민] [등급]");
 
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -563,7 +563,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank)))
 				throw new TownyException("등급 수정 권한이 없습니다.");
 
-			if (split[0].equalsIgnoreCase("add")) {
+			if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("추가")) {
 				try {
 					if (target.addTownRank(rank)) {
 						TownyMessaging.sendMsg(target, "'" + rank + "' 마을 등급을 하사받았습니다.");
@@ -579,7 +579,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-			} else if (split[0].equalsIgnoreCase("remove")) {
+			} else if (split[0].equalsIgnoreCase("remove") || split[0].equalsIgnoreCase("제거")) {
 				try {
 					if (target.removeTownRank(rank)) {
 						TownyMessaging.sendMsg(target, "'" + rank + "' 마을 등급을 박탈당했습니다.");
@@ -609,26 +609,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public void townSet(Player player, String[] split) throws TownyException {
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/town set"));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "board [메시지 ... ]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "mayor " + TownySettings.getLangString("town_help_2"), ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "homeblock", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawn/outpost", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "perm ...", "'/town set perm' " + TownySettings.getLangString("res_5")));
-			// player.sendMessage(ChatTools.formatCommand("", "/town set",
+			player.sendMessage(ChatTools.formatTitle("/마을 설정"));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "공지 [메시지 ... ]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "촌장 " + TownySettings.getLangString("town_help_2"), ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "홈블록", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "스폰/전초기지스폰", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "권한 ...", "'/마을 설정 권한' " + TownySettings.getLangString("res_5")));
+			// player.sendMessage(ChatTools.formatCommand("", "/마을 설정",
 			// "pvp [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxes [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plottax/shoptax/embassytax] [$]", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/town set",
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "세금 [$]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "[토지세/상점세/대사관세] [$]", ""));
+			// player.sendMessage(ChatTools.formatCommand("", "/마을 설정",
 			// "shoptax [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plotprice/shopprice/embassyprice] [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [이름]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [4글자까지] 나 clear", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/town set",
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "[토지가격/상점가격/대사관가격] [$]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "이름 [이름]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/마을 설정", "태그 [4글자까지] or 초기화", ""));
+			// player.sendMessage(ChatTools.formatCommand("", "/마을 설정",
 			// "public [on/off]", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/town set",
+			// player.sendMessage(ChatTools.formatCommand("", "/마을 설정",
 			// "explosion [on/off]", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/town set",
+			// player.sendMessage(ChatTools.formatCommand("", "/마을 설정",
 			// "fire [on/off]", ""));
 		} else {
 			Resident resident;
@@ -648,13 +648,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			// TODO: Let admin's call a subfunction of this.
-			if (split[0].equalsIgnoreCase("board")) {
+			if (split[0].equalsIgnoreCase("board") || split[0].equalsIgnoreCase("공지")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_BOARD.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (split.length < 2) {
-					TownyMessaging.sendErrorMsg(player, "예시: /town set board " + TownySettings.getLangString("town_help_9"));
+					TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 공지 " + TownySettings.getLangString("town_help_9"));
 					return;
 				} else {
 					String line = split[1];
@@ -672,10 +672,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET.getNode(split[0].toLowerCase())))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				if (split[0].equalsIgnoreCase("mayor")) {
+				if (split[0].equalsIgnoreCase("mayor") || split[0].equalsIgnoreCase("촌장")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set mayor Dumbo");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 촌장 Dumbo");
 						return;
 					} else
 						try {
@@ -693,10 +693,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 
-				} else if (split[0].equalsIgnoreCase("taxes")) {
+				} else if (split[0].equalsIgnoreCase("taxes") || split[0].equalsIgnoreCase("세금")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set taxes 7");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 세금 7");
 						return;
 					} else {
 						try {
@@ -717,10 +717,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 					}
 
-				} else if (split[0].equalsIgnoreCase("plottax")) {
+				} else if (split[0].equalsIgnoreCase("plottax") || split[0].equalsIgnoreCase("토지세")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set plottax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: 마을 설정 토지세 10");
 						return;
 					} else {
 						try {
@@ -736,10 +736,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 					}
-				} else if (split[0].equalsIgnoreCase("shoptax")) {
+				} else if (split[0].equalsIgnoreCase("shoptax") || split[0].equalsIgnoreCase("상점세")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set shoptax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 상점세 10");
 						return;
 					} else {
 						try {
@@ -749,17 +749,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setCommercialPlotTax(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "shop", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "상점", split[1]));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
 						}
 					}
 
-				} else if (split[0].equalsIgnoreCase("embassytax")) {
+				} else if (split[0].equalsIgnoreCase("embassytax") || split[0].equalsIgnoreCase("대사관세")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set embassytax 10");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 대사관세 10");
 						return;
 					} else {
 						try {
@@ -769,17 +769,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setEmbassyPlotTax(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "embassy", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "대사관", split[1]));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
 						}
 					}
 
-				} else if (split[0].equalsIgnoreCase("plotprice")) {
+				} else if (split[0].equalsIgnoreCase("plotprice") || split[0].equalsIgnoreCase("토지가격")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set plotprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 토지가격 50");
 						return;
 					} else {
 						try {
@@ -796,10 +796,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 					}
 
-				} else if (split[0].equalsIgnoreCase("shopprice")) {
+				} else if (split[0].equalsIgnoreCase("shopprice") || split[0].equalsIgnoreCase("상점가격")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set shopprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 상점가격 50");
 						return;
 					} else {
 						try {
@@ -809,16 +809,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setCommercialPlotPrice(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "shop", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "상점", split[1]));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
 						}
 					}
-				} else if (split[0].equalsIgnoreCase("embassyprice")) {
+				} else if (split[0].equalsIgnoreCase("embassyprice") || split[0].equalsIgnoreCase("대사관가격")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set embassyprice 50");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 대사관가격 50");
 						return;
 					} else {
 						try {
@@ -828,17 +828,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setEmbassyPlotPrice(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "embassy", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "대사관", split[1]));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
 						}
 					}
 
-				} else if (split[0].equalsIgnoreCase("name")) {
+				} else if (split[0].equalsIgnoreCase("name") || split[0].equalsIgnoreCase("이름")) {
 
 					if (split.length < 2) {
-						TownyMessaging.sendErrorMsg(player, "예시: /town set name BillyBobTown");
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 이름 BillyBobTown");
 						return;
 					}
 
@@ -847,11 +847,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					else
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 
-				} else if (split[0].equalsIgnoreCase("tag")) {
+				} else if (split[0].equalsIgnoreCase("tag") || split[0].equalsIgnoreCase("태그")) {
 
 					if (split.length < 2)
-						TownyMessaging.sendErrorMsg(player, "예시: /town set tag PLTC");
-					else if (split[1].equalsIgnoreCase("clear")) {
+						TownyMessaging.sendErrorMsg(player, "예시: /마을 설정 태그 PLTC");
+					else if (split[1].equalsIgnoreCase("clear") || split[1].equalsIgnoreCase("초기화")) {
 						try {
 							town.setTag(" ");
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_reset_town_tag"), player.getName()));
@@ -868,7 +868,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 						}
 
-				} else if (split[0].equalsIgnoreCase("homeblock")) {
+				} else if (split[0].equalsIgnoreCase("homeblock") || split[0].equalsIgnoreCase("홈블록")) {
 
 					Coord coord = Coord.parseCoord(player);
 					TownBlock townBlock;
@@ -897,7 +897,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-				} else if (split[0].equalsIgnoreCase("spawn")) {
+				} else if (split[0].equalsIgnoreCase("spawn") || split[0].equalsIgnoreCase("스폰")) {
 
 					try {
 						town.setSpawn(player.getLocation());
@@ -907,7 +907,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-				} else if (split[0].equalsIgnoreCase("outpost")) {
+				} else if (split[0].equalsIgnoreCase("outpost") || split[0].equalsIgnoreCase("전초기지스폰")) {
 
 					try {
 						town.addOutpostSpawn(player.getLocation());
@@ -917,7 +917,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-				} else if (split[0].equalsIgnoreCase("perm")) {
+				} else if (split[0].equalsIgnoreCase("perm") || split[0].equalsIgnoreCase("권한")) {
 
 					// Make sure we are allowed to set these permissions.
 					try {
@@ -930,7 +930,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					setTownBlockOwnerPermissions(player, town, newSplit);
 
 				} else {
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
+					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "마을"));
 					return;
 				}
 			}
@@ -965,7 +965,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/town buy"));
+			player.sendMessage(ChatTools.formatTitle("/마을 구매"));
 			if (TownySettings.isSellingBonusBlocks()) {
 				String line = Colors.Yellow + "[구매한 보너스] " + Colors.Green + "비용: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "최고: " + Colors.LightGreen + "%d";
 				player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
@@ -976,7 +976,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 			try {
-				if (split[0].equalsIgnoreCase("bonus")) {
+				if (split[0].equalsIgnoreCase("bonus") || split[0].equalsIgnoreCase("보너스")) {
 					if (split.length == 2) {
 						try {
 							townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
@@ -984,7 +984,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 						}
 					} else {
-						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus"));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/마을 구매 보너스"));
 					}
 				}
 
@@ -1088,7 +1088,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
 			if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "You" : resident.getName())));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "당신" : resident.getName())));
 
 			newTown(world, name, resident, key, player.getLocation());
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
@@ -1686,7 +1686,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (sender instanceof Player) {
 				// Player
 				if (args.length < 1)
-					throw new Exception(String.format("Usage: /town join [town]"));
+					throw new Exception(String.format("사용법: /마을 가입 [마을]"));
 
 				Player player = (Player) sender;
 				residentName = player.getName();
@@ -1695,7 +1695,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				// Console
 				if (args.length < 2)
-					throw new Exception(String.format("Usage: town join [resident] [town]"));
+					throw new Exception(String.format("사용법: /마을 가입 [주민] [마을]"));
 
 				residentName = args[0];
 				townName = args[1];
@@ -1780,18 +1780,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-			player.sendMessage(ChatTools.formatTitle("/... set perm"));
-			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
+			player.sendMessage(ChatTools.formatTitle("/... 설정 권한"));
+			player.sendMessage(ChatTools.formatCommand("대상", "[주민/동맹/외부인]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("동작", "[건축/파괴/스위치/아이템사용]", "", ""));
+			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[켜기/끄기]", "모든 권한을 토글합니다"));
+			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[대상/동작] [켜기/끄기]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[대상] [동작] [켜기/끄기]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "초기화", ""));
 			if (townBlockOwner instanceof Town)
-				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
+				player.sendMessage(ChatTools.formatCommand("예시", "/마을 설정 권한", "동맹 끄기", ""));
 			if (townBlockOwner instanceof Resident)
-				player.sendMessage(ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
-			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
+				player.sendMessage(ChatTools.formatCommand("예시", "/주민 설정 권한", "친구 건축 켜기", ""));
+			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'친구'", "'친구'"));
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
 
 		} else {
@@ -1799,10 +1799,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// reset the friend to resident so the perm settings don't fail
 			if (friend && split[0].equalsIgnoreCase("friend"))
 				split[0] = "resident";
-
+			else if (friend && split[0].equalsIgnoreCase("친구")) // Additional Code by Neder, 2014-06-12
+				split[0] = "주민";
+			
 			if (split.length == 1) {
 
-				if (split[0].equalsIgnoreCase("reset")) {
+				if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("초기화")) {
 
 					// reset all townBlock permissions (by town/resident)
 					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
@@ -1852,34 +1854,34 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					boolean b = plugin.parseOnOff(split[1]);
 
-					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend")) {
+					if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("friend") || split[0].equalsIgnoreCase("주민") || split[0].equalsIgnoreCase("친구")) {
 						perm.residentBuild = b;
 						perm.residentDestroy = b;
 						perm.residentSwitch = b;
 						perm.residentItemUse = b;
-					} else if (split[0].equalsIgnoreCase("outsider")) {
+					} else if (split[0].equalsIgnoreCase("outsider") || split[0].equalsIgnoreCase("외부인")) {
 						perm.outsiderBuild = b;
 						perm.outsiderDestroy = b;
 						perm.outsiderSwitch = b;
 						perm.outsiderItemUse = b;
-					} else if (split[0].equalsIgnoreCase("ally")) {
+					} else if (split[0].equalsIgnoreCase("ally") || split[0].equalsIgnoreCase("동맹")) {
 						perm.allyBuild = b;
 						perm.allyDestroy = b;
 						perm.allySwitch = b;
 						perm.allyItemUse = b;
-					} else if (split[0].equalsIgnoreCase("build")) {
+					} else if (split[0].equalsIgnoreCase("build") || split[0].equalsIgnoreCase("건축")) {
 						perm.residentBuild = b;
 						perm.outsiderBuild = b;
 						perm.allyBuild = b;
-					} else if (split[0].equalsIgnoreCase("destroy")) {
+					} else if (split[0].equalsIgnoreCase("destroy") || split[0].equalsIgnoreCase("파괴")) {
 						perm.residentDestroy = b;
 						perm.outsiderDestroy = b;
 						perm.allyDestroy = b;
-					} else if (split[0].equalsIgnoreCase("switch")) {
+					} else if (split[0].equalsIgnoreCase("switch") || split[0].equalsIgnoreCase("스위치")) {
 						perm.residentSwitch = b;
 						perm.outsiderSwitch = b;
 						perm.allySwitch = b;
-					} else if (split[0].equalsIgnoreCase("itemuse")) {
+					} else if (split[0].equalsIgnoreCase("itemuse") || split[0].equalsIgnoreCase("아이템사용")) {
 						perm.residentItemUse = b;
 						perm.outsiderItemUse = b;
 						perm.allyItemUse = b;
@@ -1894,6 +1896,34 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					boolean b = plugin.parseOnOff(split[2]);
 					String s = "";
 					s = split[0] + split[1];
+					// Additional Code by Neder. "Special Thanks to itstake"
+					if (s.equalsIgnoreCase("주민"+"건축")) {
+						s = "residentBuild";
+					} else if (s.equalsIgnoreCase("주민"+"파괴")) {
+						s = "residentDestroy";
+					} else if (s.equalsIgnoreCase("주민"+"스위치")) {
+						s = "residentSwitch";
+					} else if (s.equalsIgnoreCase("주민"+"아이템사용")) {
+						s = "residentItemuse";
+					} else if (s.equalsIgnoreCase("동맹"+"건축")) {
+						s = "allyBuild";
+					} else if (s.equalsIgnoreCase("동맹"+"파괴")) {
+						s = "allyDestroy";
+					} else if (s.equalsIgnoreCase("동맹"+"스위치")) {
+						s = "allySwitch";
+					} else if (s.equalsIgnoreCase("동맹"+"아이템사용")) {
+						s = "allyItemuse";
+					} else if (s.equalsIgnoreCase("외부인"+"건축")) {
+						s = "outsiderBuild";
+					} else if (s.equalsIgnoreCase("외부인"+"파괴")) {
+						s = "outsiderDestroy";
+					} else if (s.equalsIgnoreCase("외부인"+"스위치")) {
+						s = "outsiderSwitch";
+					} else if (s.equalsIgnoreCase("외부인"+"아이템사용")) {
+						s = "outsiderItemuse";
+					} else {
+					}
+					// End of Additional Code. Coded in 2014-02-28, by Neder(neder(@)neder.me).
 					perm.set(s, b);
 				} catch (Exception e) {
 				}
@@ -1911,8 +1941,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
-			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			TownyMessaging.sendMessage(player, (Colors.Green + " 권한: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("f", "r") : perm.getColourString())));
+			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  폭발: " + ((perm.explosion) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  불번짐: " + ((perm.fire) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐") + Colors.Green + "  몹 스폰: " + ((perm.mobs) ? Colors.Red + "켜짐" : Colors.LightGreen + "꺼짐"));
 
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();
@@ -1922,11 +1952,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownClaimCommand(Player player, String[] split) {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/town claim"));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "", TownySettings.getLangString("msg_block_claim")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "outpost", TownySettings.getLangString("mayor_help_3")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "[circle/rect] [radius]", TownySettings.getLangString("mayor_help_4")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town claim", "[circle/rect] auto", TownySettings.getLangString("mayor_help_5")));
+			player.sendMessage(ChatTools.formatTitle("/마을 점유"));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유", "", TownySettings.getLangString("msg_block_claim")));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유", "전초기지", TownySettings.getLangString("mayor_help_3")));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유", "[원형/각형] [반지름]", TownySettings.getLangString("mayor_help_4")));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유", "[원형/각형] 자동", TownySettings.getLangString("mayor_help_5")));
 		} else {
 			Resident resident;
 			Town town;
@@ -1946,8 +1976,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				List<WorldCoord> selection;
 				boolean attachedToEdge = true, outpost = false;
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-
+				
+				// Additional Code by Neder / 2014-06-14
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
+					split[0] = "전초기지";
+				}
+				// End of Additional Code.
+				
+				if (split.length == 1 && split[0].equalsIgnoreCase("전초기지")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -1992,7 +2028,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				try {
 					double cost = blockCost * selection.size();
-					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
+					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("town claim (%d)", selection.size())))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
@@ -2010,10 +2046,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownUnclaimCommand(Player player, String[] split) {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/town unclaim"));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "", TownySettings.getLangString("mayor_help_6")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "[circle/rect] [radius]", TownySettings.getLangString("mayor_help_7")));
-			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "all", TownySettings.getLangString("mayor_help_8")));
+			player.sendMessage(ChatTools.formatTitle("/마을 점유해제"));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유해제", "", TownySettings.getLangString("mayor_help_6")));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유해제", "[원형/각형] [반지름]", TownySettings.getLangString("mayor_help_7")));
+			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/마을 점유해제", "모두", TownySettings.getLangString("mayor_help_8")));
 		} else {
 			Resident resident;
 			Town town;
@@ -2027,6 +2063,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				List<WorldCoord> selection;
+				if (split.length == 1 && split[0].equalsIgnoreCase("모두")) {// Additional Code by Neder. / 2014-06-14
+					split[0] = "all";
+				}										// End of Additional Code.
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					new TownClaim(plugin, player, town, null, false, false, false).start();
 					// townUnclaimAll(town);
@@ -2126,7 +2165,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 
 			town.withdrawFromBank(resident, amount);
-			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "마을"));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		} catch (EconomyException x) {
@@ -2154,7 +2193,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.payTo(amount, town, "Town Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
-			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "town"));
+			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "마을"));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		} catch (EconomyException x) {

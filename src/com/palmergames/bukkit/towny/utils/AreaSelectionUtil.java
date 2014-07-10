@@ -28,14 +28,14 @@ public class AreaSelectionUtil {
 				throw new TownyException(TownySettings.getLangString("msg_not_claimable"));
 		} else {
 			if (args.length > 1) {
-				if (args[0].equalsIgnoreCase("rect")) {
+				if (args[0].equalsIgnoreCase("rect") || args[0].equalsIgnoreCase("각형")) {
 					out = selectWorldCoordAreaRect(owner, pos, StringMgmt.remFirstArg(args));
-				} else if (args[0].equalsIgnoreCase("circle")) {
+				} else if (args[0].equalsIgnoreCase("circle") || args[0].equalsIgnoreCase("원형")) {
 					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
 				} else {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), StringMgmt.join(args, " ")));
 				}
-			} else if (args[0].equalsIgnoreCase("auto")) {
+			} else if (args[0].equalsIgnoreCase("auto") || args[0].equalsIgnoreCase("자동")) {
 				out = selectWorldCoordAreaRect(owner, pos, args);
 			} else {
 				try {
@@ -65,7 +65,7 @@ public class AreaSelectionUtil {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
 
-				if (args[0].equalsIgnoreCase("auto")) {
+				if (args[0].equalsIgnoreCase("auto") || args[0].equalsIgnoreCase("자동")) {
 					// Attempt to select outwards until no town blocks remain
 
 					while (available - Math.pow((r + 1) * 2 - 1, 2) >= 0)
@@ -105,7 +105,7 @@ public class AreaSelectionUtil {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
 
-				if (args[0].equalsIgnoreCase("auto")) {
+				if (args[0].equalsIgnoreCase("auto") || args[0].equalsIgnoreCase("자동")) {
 					// Attempt to select outwards until no town blocks remain
 
 					if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.

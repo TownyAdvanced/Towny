@@ -102,13 +102,13 @@ public class Towny extends JavaPlugin {
 
 		if (load()) {
 			// Setup bukkit command interfaces
-			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-			getCommand("resident").setExecutor(new ResidentCommand(this));
-			getCommand("towny").setExecutor(new TownyCommand(this));
-			getCommand("town").setExecutor(new TownCommand(this));
-			getCommand("nation").setExecutor(new NationCommand(this));
-			getCommand("plot").setExecutor(new PlotCommand(this));
+			getCommand("타우니관리").setExecutor(new TownyAdminCommand(this));
+			getCommand("타우니월드").setExecutor(new TownyWorldCommand(this));
+			getCommand("주민").setExecutor(new ResidentCommand(this));
+			getCommand("타우니").setExecutor(new TownyCommand(this));
+			getCommand("마을").setExecutor(new TownCommand(this));
+			getCommand("국가").setExecutor(new NationCommand(this));
+			getCommand("토지").setExecutor(new PlotCommand(this));
 
 			TownyWar.onEnable();
 
@@ -692,12 +692,12 @@ public class Towny extends JavaPlugin {
 
 	public boolean parseOnOff(String s) throws Exception {
 
-		if (s.equalsIgnoreCase("on"))
+		if (s.equalsIgnoreCase("on") || s.equalsIgnoreCase("켜기"))
 			return true;
-		else if (s.equalsIgnoreCase("off"))
+		else if (s.equalsIgnoreCase("off") || s.equalsIgnoreCase("끄기"))
 			return false;
 		else
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " 켜기/끄기."));
 	}
 
 	
