@@ -331,7 +331,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "불", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "몹", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "토지경계", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "spy", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/주민 토글", "스파이", ""));
 
 			TownyMessaging.sendMsg(resident, ("모드 설정됨: " + StringMgmt.join(resident.getModes(), ",")));
 			return;
@@ -344,7 +344,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyPermission perm = resident.getPermissions();
 
 		// Special case chat spy
-		if (newSplit[0].equalsIgnoreCase("spy")) {
+		if (newSplit[0].equalsIgnoreCase("spy") || newSplit[0].equalsIgnoreCase("스파이")) {
 			
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
