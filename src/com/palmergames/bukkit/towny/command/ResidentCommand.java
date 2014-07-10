@@ -343,7 +343,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		TownyPermission perm = resident.getPermissions();
 
-		if (newSplit[0].equalsIgnoreCase("pvp")) {
+		// Special case chat spy
+		if (newSplit[0].equalsIgnoreCase("spy")) {
+			
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
+			resident.toggleMode(newSplit, true);
+			return;
+			
+		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
 			perm.pvp = !perm.pvp;
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
 			perm.fire = !perm.fire;

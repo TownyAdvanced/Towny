@@ -15,9 +15,12 @@ import org.bukkit.World;
  * 
  */
 public class TownyEconomyObject extends TownyObject {
+
 	private static final class TownyServerAccount extends TownyEconomyObject {
+
 		@Override
 		public String getName() {
+
 			return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
 		}
 	}
@@ -33,6 +36,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
+
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return payTo(amount, SERVER_ACCOUNT, reason);
 		} else {
@@ -47,7 +51,7 @@ public class TownyEconomyObject extends TownyObject {
 
 		if (canPayFromHoldings(amount)) {
 			if (TownyEconomyHandler.isActive())
-				if(amount > 0) {
+				if (amount > 0) {
 					return TownyEconomyHandler.subtract(getEconomyName(), amount, getBukkitWorld());
 				} else {
 					return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
@@ -64,6 +68,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @throws EconomyException
 	 */
 	public boolean collect(double amount, String reason) throws EconomyException {
+
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
 			return SERVER_ACCOUNT.payTo(amount, this, reason);
 		} else {
@@ -75,6 +80,7 @@ public class TownyEconomyObject extends TownyObject {
 	}
 
 	private boolean _collect(double amount) throws EconomyException {
+
 		return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
 	}
 
@@ -98,8 +104,12 @@ public class TownyEconomyObject extends TownyObject {
 	private boolean _payTo(double amount, TownyEconomyObject collector) throws EconomyException {
 
 		if (_pay(amount)) {
-			collector._collect(amount);
-			return true;
+			if (!collector._collect(amount)) {
+				_collect(amount); //Transaction failed. Refunding amount.
+				return false;
+			} else {
+				return true;
+			}
 		} else {
 			return false;
 		}
@@ -132,6 +142,7 @@ public class TownyEconomyObject extends TownyObject {
 	 * @param reason
 	 */
 	public boolean setBalance(double amount, String reason) throws EconomyException {
+
 		double balance = getHoldingBalance();
 		double diff = amount - balance;
 		if (diff > 0) {

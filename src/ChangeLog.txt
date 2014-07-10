@@ -2058,3 +2058,10 @@ v0.87.0.3:
 	- Added and expanded upon PriceDeath. Adds ability to do fixed or percentage penalties to dying. These can affect personal, town, nation banks and be configured to be PVP only or from monster-deaths.
 	- Added Inn plot types.
 	- Prevent starting an Event War if using_economy: false in the config.
+v0.87.0.4:
+	- Prevent toggling chat spy without the relevant permission node (towny.chat.spy).
+	- Prevent lost funds on purchasing bonus plots.
+v0.87.0.5:
+	- Add missing refund code to the Eco object (coaster3000).
+v0.88.0.0:
+	- Release.
