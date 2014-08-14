@@ -520,7 +520,7 @@ public class TownySettings {
 			level.put("numResidents", 20);
 			level.put("namePrefix", "");
 			level.put("namePostfix", " (도시)");
-			level.put("mayorPrefix", "백장 ");
+			level.put("mayorPrefix", "백작 ");
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
