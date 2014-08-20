@@ -306,7 +306,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatTitle("가격"));
 		output.add(Colors.Yellow + "[신설] " + Colors.Green + "마을: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
 		output.add(Colors.Yellow + "[유지비] " + Colors.Green + "마을: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "국가: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
-		output.add(Colors.Gray + "마을 유지비는 다음과 비례합니다" + Colors.LightGreen + ": " + (TownySettings.isUpkeepByPlot() ? "마을블록 수" : " 마을레벨 (주민 수)."));
+		output.add(Colors.Yellow + "마을 유지비는 다음과 비례합니다" + Colors.LightGreen + ": " + (TownySettings.isUpkeepByPlot() ? "마을블록 수" : " 마을레벨 (주민 수)."));
 
 		if (town != null) {
 			output.add(Colors.Yellow + "마을 [" + TownyFormatter.getFormattedName(town) + "]");
