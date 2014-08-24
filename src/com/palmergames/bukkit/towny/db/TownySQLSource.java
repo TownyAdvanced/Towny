@@ -172,11 +172,11 @@ public class TownySQLSource extends TownyFlatFileSource {
 
 					if (query.update) {
 
-						TownySQLSource.this.UpdateDB(query.tb_name, query.args, query.keys);
+						TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
 
 					} else {
 
-						TownySQLSource.this.DeleteDB(query.tb_name, query.args);
+						TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
 						
 					}
 
@@ -248,7 +248,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 * @param tb_name
 	 * @param args
 	 * @param keys
-	 * @return true if the update was successfull.
+	 * @return true if the update was successful.
 	 */
 	public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
 
@@ -256,13 +256,14 @@ public class TownySQLSource extends TownyFlatFileSource {
 		 *  Make sure we only execute queries in async
 		 */
 
-		if (BukkitTools.isPrimaryThread()) {
+		this.queryQueue.add(new SQL_Task(tb_name, args, keys));
 
-			this.queryQueue.add(new SQL_Task(tb_name, args, keys));
+		return true;
 
-			return true;
-
-		}
+		
+	}
+	
+	public boolean QueueUpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
 
 		/*
 		 *  Attempt to get a database connection.
@@ -422,14 +423,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 	public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
 
 		// Make sure we only execute queries in async
+		
+		this.queryQueue.add(new SQL_Task(tb_name, args));
+		
+		return true;
 
-		if (BukkitTools.isPrimaryThread()) {
 
-			this.queryQueue.add(new SQL_Task(tb_name, args));
-
-			return true;
-
-		}
+	}
+	
+	public boolean QueueDeleteDB(String tb_name, HashMap<String, Object> args) {
 
 		if (!getContext())
 			return false;
