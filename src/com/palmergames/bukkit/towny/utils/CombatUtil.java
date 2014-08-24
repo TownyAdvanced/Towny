@@ -232,6 +232,8 @@ public class CombatUtil {
 
 						blockID = 321;
 					}
+				default:
+					break;
 
 				}
 

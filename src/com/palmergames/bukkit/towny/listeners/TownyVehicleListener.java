@@ -76,6 +76,8 @@ public class TownyVehicleListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.ITEM_USE);
 				break;
+			default:
+				break;
 
 			}
 

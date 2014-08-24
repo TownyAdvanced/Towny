@@ -153,6 +153,9 @@ public class TownyEconomyHandler {
 				Methods.getMethod().createAccount(accountName);
 
 			return Methods.getMethod().getAccount(accountName);
+			
+		default:
+			break;
 
 		}
 
@@ -183,6 +186,9 @@ public class TownyEconomyHandler {
 				vaultEconomy.withdrawPlayer(accountName, (vaultEconomy.getBalance(accountName)));
 
 				return;
+				
+			default:
+				break;
 
 			}
 
@@ -221,6 +227,9 @@ public class TownyEconomyHandler {
 				vaultEconomy.createPlayerAccount(accountName);
 
 			return vaultEconomy.getBalance(accountName);
+			
+		default:
+			break;
 
 		}
 
@@ -272,6 +281,9 @@ public class TownyEconomyHandler {
 				vaultEconomy.createPlayerAccount(accountName);
 
 			return vaultEconomy.withdrawPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
+			
+		default:
+			break;
 
 		}
 
@@ -309,6 +321,9 @@ public class TownyEconomyHandler {
 				vaultEconomy.createPlayerAccount(accountName);
 
 			return vaultEconomy.depositPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
+			
+		default:
+			break;
 
 		}
 
@@ -338,6 +353,9 @@ public class TownyEconomyHandler {
 				vaultEconomy.createPlayerAccount(accountName);
 
 			return vaultEconomy.depositPlayer(accountName, (amount - vaultEconomy.getBalance(accountName))).type == EconomyResponse.ResponseType.SUCCESS;
+			
+		default:
+			break;
 
 		}
 
@@ -363,6 +381,9 @@ public class TownyEconomyHandler {
 
 			case VAULT:
 				return vaultEconomy.format(balance);
+				
+			default:
+				break;
 
 			}
 

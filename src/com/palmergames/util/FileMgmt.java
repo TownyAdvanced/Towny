@@ -183,6 +183,7 @@ public class FileMgmt {
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
 				}
+				reader.close();
 			} catch (IOException e) {
 				System.out.println("Exception ");
 			} finally {
