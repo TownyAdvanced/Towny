@@ -2065,3 +2065,5 @@ v0.87.0.5:
 	- Add missing refund code to the Eco object (coaster3000).
 v0.88.0.0:
 	- Release.
+v0.88.0.1:
+	- Ensure Database updates generated from async chat do not jump the queue and cause data corruption.
