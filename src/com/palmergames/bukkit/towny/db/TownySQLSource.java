@@ -293,7 +293,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				// Build the prepared statement string appropriate for
 				// the number of keys/values we are inserting.
 
-				code = "INSERT INTO " + tb_prefix + (tb_name.toUpperCase()) + " ";
+				code = "REPLACE INTO " + tb_prefix + (tb_name.toUpperCase()) + " ";
 				String keycode = "(";
 				String valuecode = " VALUES (";
 
