@@ -2067,3 +2067,8 @@ v0.88.0.0:
 	- Release.
 v0.88.0.1:
 	- Ensure Database updates generated from async chat do not jump the queue and cause data corruption.
+v0.88.0.2:
+	- Change from 'INSERT' to 'REPLACE INTO' to prevent any SQL hiccups.
+v0.88.0.3:
+	- Fix ignored result of String.replaceAll().
+	- Grammar fixes.

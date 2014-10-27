@@ -338,6 +338,8 @@ public class TownyPlayerListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.SWITCH);
 				break;
+			default:
+				break;
 
 			}
 
