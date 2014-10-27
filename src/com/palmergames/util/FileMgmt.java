@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-package com.palmergames.util; /* Localized on 2014-05-02 by Neder */
+package com.palmergames.util; /* Localized on 2014-05-02 by Neder, Modified on 2014-10-28 */
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -75,7 +74,7 @@ public class FileMgmt {
 					out.close();
 				} catch (IOException ex) {
 					// failed to access file.
-					System.out.println("오류: 엑세스 거부: " + sourceLocation);
+					System.out.println("오류: 엑세스할 수 없음" + sourceLocation);
 				}
 				out.close();
 			}
@@ -143,8 +142,8 @@ public class FileMgmt {
 
 			char[] buffer = new char[1024];
 			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For Linux
-				// Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
+				//Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For *nix
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -180,455 +179,8 @@ public class FileMgmt {
 			char[] buffer = new char[1024];
 			try {
 				is = new FileInputStream(file);
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For Linux
-				// Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} catch (IOException e) {
-				System.out.println("Exception ");
-			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException ignore) {
-					}
-				}
-			}
-			return writer.toString();
-		} else {
-			return "";
-		}
-	}
-
-	//writes a string to a file making all newline codes platform specific
-	public static boolean stringToFile(String source, String FileName) {
-
-		if (source != null) {
-			// Save the string to file (*.yml)
-			try {
-				return stringToFile(source, new File(FileName));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Writes the contents of a string to a file.
-	 * 
-	 * @param source String to write.
-	 * @param file File to write to.
-	 * @return True on success.
-	 * @throws IOException
-	 */
-	public static boolean stringToFile(String source, File file) throws IOException {
-
-		try {
-
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"); // For Linux
-			// OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
-
-			//BufferedWriter out = new BufferedWriter(new FileWriter(FileName));
-
-			source.replaceAll("\n", System.getProperty("line.separator"));
-
-			out.write(source);
-			out.close();
-			return true;
-
-		} catch (IOException e) {
-			System.out.println("Exception ");
-			return false;
-		}
-	}
-	
-	/**
-	 * Write a list to a file, terminating each line with a system specific new line.
-	 * 
-	 * @param source
-	 * @param targetLocation
-	 * @return
-	 * @throws IOException
-	 */
-	public static boolean listToFile(List<String> source, String targetLocation) throws IOException {
-
-		try {
-
-			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"); // For Linux
-			// OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
-
-			Iterator<String> itr = source.iterator();
-			
-			while (itr.hasNext()) {
-				
-				out.write(itr.next() + System.getProperty("line.separator"));
-				
-			}
-
-			out.close();
-			return true;
-
-		} catch (IOException e) {
-			System.out.println("Exception ");
-			return false;
-		}
-	}
-
-	// move a file to a sub directory
-	public static void moveFile(File sourceFile, String targetLocation) throws IOException {
-
-		synchronized(sourceFile) {
-			if (sourceFile.isFile()) {
-				// check for an already existing file of that name
-				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation + fileSeparator() + sourceFile.getName()));
-				if ((f.exists() && f.isFile()))
-					f.delete();
-				// Move file to new directory
-				boolean success = sourceFile.renameTo(new File((sourceFile.getParent() + fileSeparator() + targetLocation), sourceFile.getName()));
-				if (!success) {
-					// File was not successfully moved
-				}
-			}
-		}
-	}
-
-	public static void zipDirectory(File sourceFolder, File destination) throws IOException {
-
-		synchronized(sourceFolder) {
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
-			recursiveZipDirectory(sourceFolder, output);
-			output.close();
-		}
-	}
-
-	public static void zipDirectories(File[] sourceFolders, File destination) throws IOException {
-
-		synchronized(sourceFolders) {
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
-			for (File sourceFolder : sourceFolders)
-				recursiveZipDirectory(sourceFolder, output);
-			output.close();
-		}
-	}
-
-	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
-
-		synchronized(sourceFolder) {
-			
-			String[] dirList = sourceFolder.list();
-			byte[] readBuffer = new byte[2156];
-			int bytesIn = 0;
-			for (int i = 0; i < dirList.length; i++) {
-				File f = new File(sourceFolder, dirList[i]);
-				if (f.isDirectory()) {
-					recursiveZipDirectory(f, zipStream);
-					continue;
-				} else if (f.isFile() && f.canRead()) {
-					FileInputStream input = new FileInputStream(f);
-					ZipEntry anEntry = new ZipEntry(f.getPath());
-					zipStream.putNextEntry(anEntry);
-					while ((bytesIn = input.read(readBuffer)) != -1)
-						zipStream.write(readBuffer, 0, bytesIn);
-					input.close();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Delete file, or if path represents a directory, recursively
-	 * delete it's contents beforehand.
-	 */
-	public static void deleteFile(File file) {
-		
-		synchronized(file) {
-			
-			if (file.isDirectory()) {
-				File[] children = file.listFiles();
-				if (children != null) {
-					for (File child : children)
-						deleteFile(child);
-				}
-				children = file.listFiles();
-				if (children == null || children.length == 0) {
-					if (!file.delete())
-						System.out.println("오류: 폴더 삭제 실패: " + file.getPath());
-				}
-			} else if (file.isFile()) {
-				if (!file.delete())
-					System.out.println("오류: 파일 삭제 실패: " + file.getPath());
-			}
-		}
-	}
-
-	/**
-	 * Delete child files/folders of backupsDir with a filename ending
-	 * in milliseconds that is older than deleteAfter milliseconds in age.
-	 */
-	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
-
-		synchronized(backupsDir) {
-			
-			TreeSet<Long> deleted = new TreeSet<Long>();
-			if (backupsDir.isDirectory()) {
-				File[] children = backupsDir.listFiles();
-				if (children != null) {
-					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains("."))
-									filename = filename.split("\\.")[0];
-							}
-							String[] tokens = filename.split(" ");
-							String lastToken = tokens[tokens.length - 1];
-							long timeMade = Long.parseLong(lastToken);
-	
-							if (timeMade >= 0) {
-								long age = System.currentTimeMillis() - timeMade;
-								if (age >= deleteAfter) {
-									deleteFile(child);
-									deleted.add(age);
-								}
-							}
-						} catch (Exception e) {
-							// Ignore file as it doesn't follow the backup format.
-						}
-					}
-				}
-			}
-
-			if (deleted.size() > 0) {
-				System.out.println(String.format("[타우니] %d 개의 오래된 백업들을 삭제했습니다 (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
-			}
-		}
-	}
-
-	public synchronized static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
-
-		synchronized(residentDir) {
-			
-			int count = 0;
-	
-			if (residentDir.isDirectory()) {
-				File[] children = residentDir.listFiles();
-				if (children != null) {
-					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains(".txt"))
-									filename = filename.split("\\.txt")[0];
-	
-								// Delete the file if there is no matching resident.
-								if (!fileNames.contains(filename.toLowerCase())) {
-									deleteFile(child);
-									count++;
-								}
-							}
-	
-						} catch (Exception e) {
-							// Ignore file
-						}
-					}
-	
-					if (count > 0) {
-						System.out.println(String.format("[타우니] %d 개의 오래된 파일들을 삭제했습니다.", count));
-					}
-				}
-			}
-		}
-
-	}
-}
-=======
-package com.palmergames.util;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-public class FileMgmt {
-
-	public static void checkFolders(String[] folders) {
-
-		for (String folder : folders) {
-			File f = new File(folder);
-			if (!(f.exists() && f.isDirectory())) {
-				f.getParentFile().mkdirs();
-				f.mkdir();
-				
-			}
-		}
-	}
-
-	public static void checkFiles(String[] files) throws IOException {
-
-		for (String file : files) {
-			File f = new File(file);
-			if (!(f.exists() && f.isFile())) {
-				f.getParentFile().mkdirs();
-				f.createNewFile();
-			}
-		}
-	}
-
-	public static String fileSeparator() {
-
-		return System.getProperty("file.separator");
-	}
-
-	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
-	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-
-		synchronized(sourceLocation) {
-			if (sourceLocation.isDirectory()) {
-				if (!targetLocation.exists())
-					targetLocation.mkdir();
-	
-				String[] children = sourceLocation.list();
-				for (int i = 0; i < children.length; i++)
-					copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
-			} else {
-				OutputStream out = new FileOutputStream(targetLocation);
-				try {
-					InputStream in = new FileInputStream(sourceLocation);
-					// Copy the bits from in stream to out stream.
-					byte[] buf = new byte[1024];
-					int len;
-					while ((len = in.read(buf)) > 0)
-						out.write(buf, 0, len);
-					in.close();
-					out.close();
-				} catch (IOException ex) {
-					// failed to access file.
-					System.out.println("Error: Could not access: " + sourceLocation);
-				}
-				out.close();
-			}
-		}
-	}
-
-	public static File CheckYMLExists(File file) {
-
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return file;
-	}
-
-	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
-
-		// open a handle to yml file
-		File file = new File(filePath);
-
-		if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
-			return file;
-
-		String resString;
-
-		/*
-		 * create the file as it doesn't exist,
-		 * or it's the default file
-		 * so refresh just in case.
-		 */
-		try {
-			checkFiles(new String[] { filePath });
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// Populate a new file
-		try {
-			resString = convertStreamToString("/" + resource);
-			FileMgmt.stringToFile(resString, filePath);
-
-		} catch (IOException e) {
-			// No resource file found
-			try {
-				resString = convertStreamToString("/" + defaultRes);
-				FileMgmt.stringToFile(resString, filePath);
-			} catch (IOException e1) {
-				// Default resource not found
-				e1.printStackTrace();
-			}
-		}
-
-		return file;
-	}
-
-	// pass a resource name and it will return it's contents as a string
-	public static String convertStreamToString(String name) throws IOException {
-
-		if (name != null) {
-			Writer writer = new StringWriter();
-			InputStream is = FileMgmt.class.getResourceAsStream(name);
-
-			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "US-ASCII")); //should be UTF-8
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} catch (IOException e) {
-				System.out.println("Exception ");
-			} finally {
-				try {
-					is.close();
-				} catch (NullPointerException e) {
-					//Failed to open a stream
-					throw new IOException();
-				}
-			}
-			return writer.toString();
-		} else {
-			return "";
-		}
-	}
-
-	/**
-	 * Pass a file and it will return it's contents as a string.
-	 * 
-	 * @param file File to read.
-	 * @return Contents of file. String will be empty in case of any errors.
-	 */
-	public static String convertFileToString(File file) {
-
-		if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
-			Writer writer = new StringWriter();
-			InputStream is = null;
-
-			char[] buffer = new char[1024];
-			try {
-				is = new FileInputStream(file);
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				//Reader reader = new BufferedReader(new InputStreamReader(is, "cp949")); // For Windows
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); // For *nix
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -678,6 +230,7 @@ public class FileMgmt {
 
 		try {
 
+			//OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 
 			//BufferedWriter out = new BufferedWriter(new FileWriter(FileName));
@@ -707,7 +260,8 @@ public class FileMgmt {
 		try {
 
 			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			//OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "cp949"); // For Windows
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"); // For *nix
 
 			Iterator<String> itr = source.iterator();
 			
@@ -804,11 +358,11 @@ public class FileMgmt {
 				children = file.listFiles();
 				if (children == null || children.length == 0) {
 					if (!file.delete())
-						System.out.println("Error: Could not delete folder: " + file.getPath());
+						System.out.println("Error: 폴더를 지울 수 없습니다: " + file.getPath());
 				}
 			} else if (file.isFile()) {
 				if (!file.delete())
-					System.out.println("Error: Could not delete file: " + file.getPath());
+					System.out.println("Error: 파일을 지울 수 없습니다: " + file.getPath());
 			}
 		}
 	}
@@ -851,7 +405,7 @@ public class FileMgmt {
 			}
 
 			if (deleted.size() > 0) {
-				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
+				System.out.println(String.format("[Towny] %d 개의 오래된 백업을 삭제합니다 (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d 이 지난", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d 일이 지난", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
 		}
 	}
@@ -885,7 +439,7 @@ public class FileMgmt {
 					}
 	
 					if (count > 0) {
-						System.out.println(String.format("[Towny] Deleted %d old files.", count));
+						System.out.println(String.format("[Towny] %d 개의 오래된 파일을 삭제했습니다.", count));
 					}
 				}
 			}
@@ -893,4 +447,3 @@ public class FileMgmt {
 
 	}
 }
->>>>>>> upstream/master
