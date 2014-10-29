@@ -1,10 +1,6 @@
 language: java
 jdk:
   - openjdk6
-env:
-  global:
-    - "FTP_USER=Towny"
-    - "FTP_PASSWORD="
 script:
   - name=$(date +%Y%m%d)
   - cd /home/travis/build/Neder/Towny
@@ -22,8 +18,5 @@ script:
   - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar
   - ls ./out
 after_success:
-  - "echo MD5:"
-  - "md5sum ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar"
-  - "md5sum ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar"
   - "chmod 777 /home/travis/build/Neder/Towny/upload.sh"
   - "/home/travis/build/Neder/Towny/upload.sh"
