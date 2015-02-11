@@ -2072,3 +2072,10 @@ v0.88.0.2:
 v0.88.0.3:
 	- Fix ignored result of String.replaceAll().
 	- Grammar fixes.
+v0.88.0.4:
+    - Added command /ta resident
+    - Added command /ta resident <name>
+    - Added command /ta resident <name> rename <newname> (to be used to fix name change issues)
+    - Added permission node towny.command.townyadmin.resident.*
+    - Added permission node towny.command.townyadmin.resident.rename
+    - Added event RenameResidentEvent(String oldname, Resident resident)

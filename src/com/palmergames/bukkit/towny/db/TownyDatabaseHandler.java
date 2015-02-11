@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
+import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
@@ -14,9 +15,11 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -786,6 +789,104 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
 
 		universe.setChangedNotify(RENAME_NATION);
+	}
+	
+	@Override
+	public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+		
+		lock.lock();
+		
+		String oldName = resident.getName();
+		
+		try {
+			
+			String filteredName;
+			try {
+				filteredName = NameValidation.checkAndFilterName(newName);
+			} catch (InvalidNameException e) {
+				throw new NotRegisteredException(e.getMessage());
+			}
+		
+			//data needed for a new resident
+			double balance = 0.0D;
+			Town town = null;
+			long registered = 0L;
+			long lastOnline = 0L;
+			boolean isMayor = false;
+			
+			//get data needed for resident
+			if(TownySettings.isUsingEconomy()){
+				try {
+					balance = resident.getHoldingBalance();
+					resident.removeAccount();
+				} catch (EconomyException e) {
+				}
+			}
+			List<Resident> friends = resident.getFriends();
+			List<String> nationRanks = resident.getNationRanks();
+			TownyPermission permissions = resident.getPermissions();
+			String surname = resident.getSurname();
+			String title = resident.getTitle();
+			if (resident.hasTown()) {
+				town = resident.getTown();
+			}
+			List<TownBlock> townBlocks = resident.getTownBlocks();
+			List<String> townRanks = resident.getTownRanks();
+			registered = resident.getRegistered();
+			lastOnline = resident.getLastOnline();
+			isMayor = resident.isMayor();
+			
+			//delete the resident and tidy up files
+			deleteResident(resident);
+			
+			//remove old resident from residentsMap
+			//rename the resident
+			universe.getResidentMap().remove(oldName.toLowerCase());
+			resident.setName(filteredName);
+			universe.getResidentMap().put(filteredName.toLowerCase(), resident);
+
+			//add everything back to the resident
+			if (TownySettings.isUsingEconomy()) {
+				//TODO
+				try {
+					resident.setBalance(balance, "Rename Player - Transfer to new account");
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
+			}
+			resident.setFriends(friends);
+			resident.setNationRanks(nationRanks);
+			resident.setPermissions(permissions.toString()); //not sure if this will work
+			resident.setSurname(surname);
+			resident.setTitle(title);
+			resident.setTown(town);
+			resident.setTownblocks(townBlocks);
+			resident.setTownRanks(townRanks);
+			resident.setRegistered(registered);
+			resident.setLastOnline(lastOnline);
+			if(isMayor){
+				try {
+					town.setMayor(resident);
+				} catch (TownyException e) {
+				}
+			}
+			
+			//save stuff
+			saveResidentList();
+			saveResident(resident);
+			saveTown(town);
+			for(TownBlock tb: townBlocks){
+				saveTownBlock(tb);
+			}
+			
+		} finally {
+			lock.unlock();
+		}
+		
+		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
+
+		universe.setChangedNotify(RENAME_RESIDENT);
+		
 	}
 
 }
