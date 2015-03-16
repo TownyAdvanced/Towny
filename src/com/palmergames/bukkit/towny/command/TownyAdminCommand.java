@@ -57,6 +57,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "town/nation", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givebonus [town/player] [num]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle neutral/war/debug/devmode", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "resident/town/nation", ""));
 
 		// TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin",
 		// "npc rename [old name] [new name]", ""));
@@ -129,6 +130,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("set")) {
 
 				adminSet(StringMgmt.remFirstArg(split));
+				return true;
+			} else if (split[0].equalsIgnoreCase("resident")){
+				
+				parseAdminResidentCommand(StringMgmt.remFirstArg(split));
 				return true;
 
 			} else if (split[0].equalsIgnoreCase("town")) {
@@ -287,6 +292,40 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	public void parseAdminResidentCommand(String[] split) throws TownyException {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")){
+			sender.sendMessage(ChatTools.formatTitle("/townyadmin resident"));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin resident", "[resident]", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin resident", "[resident] rename [newname]", ""));
+			
+			return;
+		}
+
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
+
+			if (split.length == 1){
+				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
+				return;
+			}
+
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode(split[1].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+			if(split[1].equalsIgnoreCase("rename")){	
+				if (!NameValidation.isBlacklistName(split[2])) {
+					TownyUniverse.getDataSource().renamePlayer(resident, split[2]);
+				} else
+					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
+			}
+
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
+		} catch (TownyException e) {	
+			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
+		}
+	}
+	
 	public void parseAdminTownCommand(String[] split) throws TownyException {
 
 		// TODO Make this use the actual town command procedually.

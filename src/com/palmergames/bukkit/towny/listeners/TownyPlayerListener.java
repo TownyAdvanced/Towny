@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -264,7 +265,7 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+	public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -295,8 +296,102 @@ public class TownyPlayerListener implements Listener {
 			 */
 			switch (event.getRightClicked().getType()) {
 
-			case ITEM_FRAME:
+			case ARMOR_STAND:
+				
+				TownyMessaging.sendDebugMsg("ArmorStand Right Clicked");
+				blockID = 416;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+				break;
+			
+			default:
+				break;
 
+			}
+
+			if (blockID != 0) {
+
+				// Allow the removal if we are permitted
+				if (bBuild)
+					return;
+
+				event.setCancelled(true);
+
+				/*
+				 * Fetch the players cache
+				 */
+				PlayerCache cache = plugin.getCache(player);
+
+				if (cache.hasBlockErrMsg())
+					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+
+				return;
+			}
+
+			/*
+			 * Item_use protection.
+			 */
+			if (event.getPlayer().getItemInHand() != null) {
+
+				/*
+				 * Info Tool
+				 */
+				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+
+					Entity entity = event.getRightClicked();
+
+					TownyMessaging.sendMessage(player, Arrays.asList(
+							ChatTools.formatTitle("Entity Info"),
+							ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
+							));
+
+					event.setCancelled(true);
+
+				}
+
+				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+					return;
+				}
+			}
+		}
+
+	}
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (event.getRightClicked() != null) {
+
+			TownyWorld World = null;
+
+			try {
+				World = TownyUniverse.getDataSource().getWorld(event.getPlayer().getWorld().getName());
+				if (!World.isUsingTowny())
+					return;
+
+			} catch (NotRegisteredException e) {
+				// World not registered with Towny.
+				e.printStackTrace();
+				return;
+			}
+
+			Player player = event.getPlayer();
+			boolean bBuild = true;
+			int blockID = 0;
+
+			/*
+			 * Protect specific entity interactions.
+			 */
+			switch (event.getRightClicked().getType()) {
+			
+			case ITEM_FRAME:
+				
+				TownyMessaging.sendDebugMsg("ItemFrame Right Clicked");
 				blockID = 389;
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);

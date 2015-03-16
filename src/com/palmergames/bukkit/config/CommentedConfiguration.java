@@ -205,7 +205,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 				line = " ";
 			}
 			if (commentstring.length() > 0) {
-				commentstring.append("\r\n");
+				commentstring.append(System.getProperty("line.separator"));
 			}
 			commentstring.append(line);
 		}

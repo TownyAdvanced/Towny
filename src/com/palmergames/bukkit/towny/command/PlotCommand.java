@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -297,14 +298,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							
-							townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
+							// Test if the plot name contains invalid characters.
+							if (!NameValidation.isBlacklistName(split[1])) {								
+								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 							
-							//townBlock.setChanged(true);
-							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+     							//townBlock.setChanged(true);
+							    TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							
-							TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
+							    TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
+							    
+							} else {
+								
+								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+								
+							}
 							return true;
-							
 						} 
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
@@ -549,16 +557,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				plotTestOwner(resident, townBlock); // ignore the return as we
 													// are only checking for an
 													// exception
+				if (forSale > 1000000 ) {
+					TownyUniverse.getPlayer(resident).sendMessage("Plot price too expensive.");
+				    
+				} else {
+				    townBlock.setPlotPrice(forSale);
 
-				townBlock.setPlotPrice(forSale);
+				    if (forSale != -1)
+				    	TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+				    else
+				    	TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 
-				if (forSale != -1)
-					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
-				else
-					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
-
-				// Save this townblock so the for sale status is remembered.
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				    // Save this townblock so the for sale status is remembered.
+				    TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				}
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));

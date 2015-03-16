@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -197,7 +198,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
+		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0 )
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
@@ -235,7 +236,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
 			}
-		else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))) {
+		else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null)) && (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.ARENA) ) {
 
 			double total = 0.0;
 
@@ -300,7 +301,7 @@ public class TownyEntityMonitorListener implements Listener {
 						price = defenderResident.getTown().getNation().getHoldingBalance() * price;
 					}
 
-					if (!defenderResident.canPayFromHoldings(price))
+					if (!defenderResident.getTown().getNation().canPayFromHoldings(price))
 						price = defenderResident.getTown().getNation().getHoldingBalance();
 
 					if (attackerResident == null) {
