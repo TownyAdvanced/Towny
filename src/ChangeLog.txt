@@ -2109,4 +2109,6 @@ v0.89.2.4:
 v0.89.2.5:
 	- Plot prices are now capped at 1000000 in order to keep mysql databases from storing exponential numbers and crashing.
 v0.89.2.6:
-    - Fix /ta resident rename command to also alter friends list. Care of backcab.	 		 	
+	- Fix /ta resident rename command to also alter friends list. Care of backcab.
+v0.89.2.7:
+	- Fix renaming players who did not have a town.	 		 	

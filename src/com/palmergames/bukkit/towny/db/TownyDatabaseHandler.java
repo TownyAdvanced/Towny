@@ -872,7 +872,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//save stuff
 			saveResidentList();
 			saveResident(resident);
-			saveTown(town);
+			if(town !=null){
+			    saveTown(town);
+		    }
 			for(TownBlock tb: townBlocks){
 				saveTownBlock(tb);				
 			}
