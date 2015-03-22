@@ -250,7 +250,7 @@ public class War {
 
 	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForTownBlock());
+		//townScored(attacker, TownySettings.getWarPointsForTownBlock());
 		townBlock.getTown().addBonusBlocks(-1);
 		attacker.addBonusBlocks(1);
 		try {
@@ -261,10 +261,14 @@ public class War {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
 		} catch (EconomyException e) {
 		}
-		if (townBlock.getTown().isHomeBlock(townBlock))
-			remove(townBlock.getTown());
-		else
+		if (townBlock.getTown().isHomeBlock(townBlock) && townBlock.getTown().isCapital()){
+			remove(attacker, townBlock.getTown().getNation());
+		} else if (townBlock.getTown().isHomeBlock(townBlock)){
+			remove(attacker, townBlock.getTown());
+		} else{
+			townScored(attacker, TownySettings.getWarPointsForTownBlock());
 			remove(townBlock.getWorldCoord());
+		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
 		TownyUniverse.getDataSource().saveTown(attacker);
 	}
@@ -315,12 +319,14 @@ public class War {
 	public void remove(Town attacker, Nation nation) {
 
 		townScored(attacker, TownySettings.getWarPointsForNation());
-		warringNations.remove(nation);
+		remove(nation);
 	}
 
 	public void remove(Nation nation) {
 
 		warringNations.remove(nation);
+		for (Town town : nation.getTowns())
+			remove(town);
 	}
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
@@ -351,7 +357,7 @@ public class War {
 
 	public boolean townsLeft(Nation nation) {
 
-		return warringTowns.containsAll(nation.getTowns());
+		return countActiveTowns(nation) > 0;
 	}
 
 	public void remove(WorldCoord worldCoord) {
