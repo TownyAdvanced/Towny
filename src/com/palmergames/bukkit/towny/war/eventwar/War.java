@@ -177,7 +177,7 @@ public class War {
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
-		
+
 		double halfWinnings;
 		try {
 			// Transactions might leave 1 coin. (OH noez!)
@@ -261,10 +261,20 @@ public class War {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
 		} catch (EconomyException e) {
 		}
-		if (townBlock.getTown().isHomeBlock(townBlock))
-			remove(townBlock.getTown());
-		else
+		if (townBlock.getTown().isHomeBlock(townBlock) && townBlock.getTown().isCapital()){
+			remove(attacker, townBlock.getTown().getNation());
+		} else if (townBlock.getTown().isHomeBlock(townBlock)){
+			remove(attacker, townBlock.getTown());
+		} else{
+			townScored(attacker, TownySettings.getWarPointsForTownBlock());
+			try {
+				Town town = townBlock.getTown();
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(townBlock.getWorldCoord(), town.getName()));
+			} catch (NotRegisteredException e) {
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(townBlock.getWorldCoord()));
+			}
 			remove(townBlock.getWorldCoord());
+		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
 		TownyUniverse.getDataSource().saveTown(attacker);
 	}
@@ -279,21 +289,33 @@ public class War {
 
 	public void eliminate(Town town) {
 
-		remove(town);
+		//remove(town);
 		try {
 			checkNation(town.getNation());
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
 		}
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
-		checkEnd();
+		//checkEnd();
+	}
+
+	public void eliminate(Town town, String townBlocksFallen) {
+
+		//remove(town);
+		try {
+			checkNation(town.getNation());
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
+		}
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()) + " (" + townBlocksFallen + " town blocks captured");
+		//checkEnd();
 	}
 
 	public void eliminate(Nation nation) {
 
-		remove(nation);
+		//remove(nation);
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getName()));
-		checkEnd();
+		//checkEnd();
 	}
 
 	public void nationLeave(Nation nation) {
@@ -312,41 +334,52 @@ public class War {
 		checkEnd();
 	}
 
-	public void remove(Town attacker, Nation nation) {
+	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
 		townScored(attacker, TownySettings.getWarPointsForNation());
 		warringNations.remove(nation);
+		eliminate(nation);
+		for (Town town : nation.getTowns())
+			if (warringTowns.contains(town))
+				remove(attacker, town);
+		checkEnd();
 	}
 
 	public void remove(Nation nation) {
 
 		warringNations.remove(nation);
+		eliminate(nation);
+		for (Town town : nation.getTowns())
+			remove(town);
 	}
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
 		townScored(attacker, TownySettings.getWarPointsForTown());
-
-		for (TownBlock townBlock : town.getTownBlocks())
-			remove(townBlock.getWorldCoord());
-		warringTowns.remove(town);
-		try {
-			if (!townsLeft(town.getNation()))
-				eliminate(town.getNation());
-		} catch (NotRegisteredException e) {
-		}
+		remove(town);
+		//		try {
+		//			if (!townsLeft(town.getNation()))
+		//				eliminate(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//		}
 	}
 
 	public void remove(Town town) {
 
-		for (TownBlock townBlock : town.getTownBlocks())
-			remove(townBlock.getWorldCoord());
+		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
-		try {
-			if (!townsLeft(town.getNation()))
-				eliminate(town.getNation());
-		} catch (NotRegisteredException e) {
-		}
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.contains(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		eliminate (town, fallenTownBlocks + "");
+
+		//		try {
+		//			if (!townsLeft(town.getNation()))
+		//				eliminate(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//		}
 	}
 
 	public boolean townsLeft(Nation nation) {
@@ -357,11 +390,11 @@ public class War {
 	public void remove(WorldCoord worldCoord) {
 
 		try {
-			Town town = worldCoord.getTownBlock().getTown();
-			TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
+			//Town town = worldCoord.getTownBlock().getTown();
+			//TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
 			warZone.remove(worldCoord);
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
+			//TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
 			warZone.remove(worldCoord);
 		}
 
