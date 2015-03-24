@@ -179,17 +179,19 @@ public class TownyEntityMonitorListener implements Listener {
 				if (warEvent.isWarringNation(defenderNation))
 					if (defenderResident.isMayor())
 						if (defenderResident.isKing()) {
+							TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed!");
 							if (attackerResident != null && attackerResident.hasTown())
 								warEvent.remove(attackerResident.getTown(), defenderNation);
 							else
 								warEvent.remove(defenderNation);
-							TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
+							//TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
 						} else {
+							TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed!");
 							if (attackerResident != null && attackerResident.hasTown())
 								warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
 							else
 								warEvent.remove(defenderResident.getTown());
-							TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
+							//TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
 						}
 			} catch (NotRegisteredException e) {
 			}
