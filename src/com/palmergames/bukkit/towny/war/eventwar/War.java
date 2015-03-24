@@ -250,7 +250,7 @@ public class War {
 
 	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForTownBlock());
+		//townScored(attacker, TownySettings.getWarPointsForTownBlock());
 		townBlock.getTown().addBonusBlocks(-1);
 		attacker.addBonusBlocks(1);
 		try {
@@ -307,7 +307,7 @@ public class War {
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
 		}
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()) + " (" + townBlocksFallen + " town blocks captured");
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()) + " " + townBlocksFallen);
 		//checkEnd();
 	}
 
@@ -351,6 +351,7 @@ public class War {
 		eliminate(nation);
 		for (Town town : nation.getTowns())
 			remove(town);
+		checkEnd();
 	}
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
@@ -369,11 +370,12 @@ public class War {
 		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
 		for (TownBlock townBlock : town.getTownBlocks())
-			if (warZone.contains(townBlock.getWorldCoord())){
+			if (warZone.containsKey(townBlock.getWorldCoord())){
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
-		eliminate (town, fallenTownBlocks + "");
+		String format = "(" + fallenTownBlocks + " town blocks captured)";
+		eliminate (town, format);
 
 		//		try {
 		//			if (!townsLeft(town.getNation()))
@@ -384,20 +386,11 @@ public class War {
 
 	public boolean townsLeft(Nation nation) {
 
-		return warringTowns.containsAll(nation.getTowns());
+		return countActiveTowns(nation) > 0;
 	}
 
-	public void remove(WorldCoord worldCoord) {
-
-		try {
-			//Town town = worldCoord.getTownBlock().getTown();
-			//TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
-			warZone.remove(worldCoord);
-		} catch (NotRegisteredException e) {
-			//TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
-			warZone.remove(worldCoord);
-		}
-
+	public void remove(WorldCoord worldCoord) {	
+		warZone.remove(worldCoord);
 	}
 
 	public void checkEnd() {
