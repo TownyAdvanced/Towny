@@ -308,7 +308,7 @@ public class War {
 		//		} catch (NotRegisteredException e) {
 		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
 		//		}
-		String message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName()) + " " + townBlocksFallen;
+		String[] message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName() + " " + townBlocksFallen);
 		TownyMessaging.sendGlobalMessage(message);
 		//checkEnd();
 	}
@@ -317,7 +317,6 @@ public class War {
 
 		//remove(nation);
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getFormattedName()));
-		TownyMessaging.sendGlobalMessage("Elim method called.");
 		//checkEnd();
 	}
 
