@@ -453,7 +453,7 @@ public class TownyMessaging {
 	/**
 	 * Send a message to all residents in the nation with the required mode
 	 * 
-	 * @param town
+	 * @param nation
 	 * @param msg
 	 * @param modeRequired
 	 */
