@@ -228,10 +228,18 @@ public class War {
 		return warZone.containsKey(worldCoord);
 	}
 
-	public void townScored(Town town, int n) {
+	public void townScored(Town town, int n, Object fallenObject, String extraString) {
 
+		String pointMessage = town.getName() + " was awarded " + n + " points for taking";
+		if (fallenObject instanceof Nation)
+			pointMessage += " the nation " + ((Nation)fallenObject).getName() + ".";
+		else if (fallenObject instanceof Town)
+			pointMessage += " the town " + ((Town)fallenObject).getName() + ".";
+		else if (fallenObject instanceof TownBlock)
+			pointMessage += " the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+		pointMessage += extraString;
 		townScores.put(town, townScores.get(town) + n);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeScoreMsg(town, n));
+		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
 
 	public void damage(Town attacker, TownBlock townBlock) throws NotRegisteredException {
@@ -267,7 +275,7 @@ public class War {
 		} else if (townBlock.getTown().isHomeBlock(townBlock)){
 			remove(attacker, townBlock.getTown());
 		} else{
-			townScored(attacker, TownySettings.getWarPointsForTownBlock());
+			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, "");
 			try {
 				Town town = townBlock.getTown();
 				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(townBlock.getWorldCoord(), town.getName()));
@@ -308,7 +316,7 @@ public class War {
 		//		} catch (NotRegisteredException e) {
 		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
 		//		}
-		String message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName()) + " " + townBlocksFallen;
+		String[] message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName() + " " + townBlocksFallen);
 		TownyMessaging.sendGlobalMessage(message);
 		//checkEnd();
 	}
@@ -317,7 +325,6 @@ public class War {
 
 		//remove(nation);
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getFormattedName()));
-		TownyMessaging.sendGlobalMessage("Elim method called.");
 		//checkEnd();
 	}
 
@@ -339,9 +346,8 @@ public class War {
 
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForNation());
+		townScored(attacker, TownySettings.getWarPointsForNation(), nation, "");
 		warringNations.remove(nation);
-		eliminate(nation);
 		for (Town town : nation.getTowns())
 			if (warringTowns.contains(town))
 				remove(attacker, town);
@@ -359,13 +365,15 @@ public class War {
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForTown());
-		remove(town);
-		//		try {
-		//			if (!townsLeft(town.getNation()))
-		//				eliminate(town.getNation());
-		//		} catch (NotRegisteredException e) {
-		//		}
+		int fallenTownBlocks = 0;
+		warringTowns.remove(town);
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.containsKey(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		String extra = " (" + fallenTownBlocks + " town blocks captured)";
+		townScored(attacker, TownySettings.getWarPointsForTown(), town, extra);
 	}
 
 	public void remove(Town town) {
