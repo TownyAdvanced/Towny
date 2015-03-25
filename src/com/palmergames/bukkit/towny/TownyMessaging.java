@@ -449,4 +449,18 @@ public class TownyMessaging {
 			if (BukkitTools.isOnline(resident.getName()))
 				sendMessage(resident,msg);
 	}
+	
+	/**
+	 * Send a message to all residents in the nation with the required mode
+	 * 
+	 * @param town
+	 * @param msg
+	 * @param modeRequired
+	 */
+	public static void sendMessageToMode(Nation nation, String msg, String modeRequired) {
+
+		for (Resident resident : nation.getResidents())
+			if (BukkitTools.isOnline(resident.getName()))
+				sendMessage(resident,msg);
+	}
 }

@@ -231,7 +231,7 @@ public class War {
 	public void townScored(Town town, int n) {
 
 		townScores.put(town, townScores.get(town) + n);
-		TownyMessaging.sendTownMessage(town, TownySettings.getWarTimeScoreMsg(town, n));
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeScoreMsg(town, n));
 	}
 
 	public void damage(Town attacker, TownBlock townBlock) throws NotRegisteredException {
@@ -240,10 +240,11 @@ public class War {
 		int hp = warZone.get(worldCoord) - 1;
 		if (hp > 0) {
 			warZone.put(worldCoord, hp);
-			//if (hp % 10 == 0) {
-			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			//TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			if ((hp >= 10 && hp % 10 == 0) || hp < 10){
+				TownyMessaging.sendMessageToMode(townBlock.getTown().getNation(), Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			}
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			//}
 		} else
 			remove(attacker, townBlock);
 	}
@@ -290,11 +291,11 @@ public class War {
 	public void eliminate(Town town) {
 
 		//remove(town);
-		try {
-			checkNation(town.getNation());
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
-		}
+		//		try {
+		//			checkNation(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
+		//		}
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
 		//checkEnd();
 	}
@@ -302,19 +303,21 @@ public class War {
 	public void eliminate(Town town, String townBlocksFallen) {
 
 		//remove(town);
-		try {
-			checkNation(town.getNation());
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
-		}
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()) + " " + townBlocksFallen);
+		//		try {
+		//			checkNation(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
+		//		}
+		String message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName()) + " " + townBlocksFallen;
+		TownyMessaging.sendGlobalMessage(message);
 		//checkEnd();
 	}
 
 	public void eliminate(Nation nation) {
 
 		//remove(nation);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getName()));
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getFormattedName()));
+		TownyMessaging.sendGlobalMessage("Elim method called.");
 		//checkEnd();
 	}
 
