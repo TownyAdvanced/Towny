@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -230,15 +231,31 @@ public class War {
 
 	public void townScored(Town town, int n, Object fallenObject, String extraString) {
 
-		String pointMessage = town.getName() + " was awarded " + n + " points for taking";
+		String pointMessage = town.getName() + " was awarded " + n + " points for ";
 		if (fallenObject instanceof Nation)
-			pointMessage += " the nation " + ((Nation)fallenObject).getName() + ".";
+			pointMessage += " taking the nation " + ((Nation)fallenObject).getName() + ".";
 		else if (fallenObject instanceof Town)
-			pointMessage += " the town " + ((Town)fallenObject).getName() + ".";
+			pointMessage += " taking the town " + ((Town)fallenObject).getName() + ".";
 		else if (fallenObject instanceof TownBlock)
-			pointMessage += " the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+			pointMessage += " taking the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+		
 		pointMessage += extraString;
 		townScores.put(town, townScores.get(town) + n);
+		TownyMessaging.sendGlobalMessage(pointMessage);
+	}
+	
+	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
+	{
+		String pointMessage = "";
+		TownBlock deathLoc = TownyUniverse.getTownBlock(defenderPlayer.getLocation());
+		if (deathLoc == null)
+			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + ".";
+		else if (warZone.containsKey(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
+			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + " while " + attackerPlayer.getName() + " was defending.";
+		else if (warZone.containsKey(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
+			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + " while " + defenderPlayer.getName() + " was defending.";
+		pointMessage += " (" + n + " points for " + attackerTown.getName() + ")";
+		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
 
@@ -249,7 +266,7 @@ public class War {
 		if (hp > 0) {
 			warZone.put(worldCoord, hp);
 			//TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			if ((hp >= 10 && hp % 10 == 0) || hp < 10){
+			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
 				TownyMessaging.sendMessageToMode(townBlock.getTown().getNation(), Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			}
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");

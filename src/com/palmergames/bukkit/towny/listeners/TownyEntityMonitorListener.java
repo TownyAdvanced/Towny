@@ -162,10 +162,10 @@ public class TownyEntityMonitorListener implements Listener {
 			try {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
-
-				if (TownySettings.getWarPointsForKill() > 0)
-					plugin.getTownyUniverse().getWarEvent().townScored(attackerResident.getTown(), TownySettings.getWarPointsForKill());
-
+				
+				if (TownySettings.getWarPointsForKill() > 0){
+					plugin.getTownyUniverse().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
+				}
 			} catch (NotRegisteredException e) {
 			}
 	}
