@@ -230,13 +230,16 @@ public class War {
 
 	public void townScored(Town town, int n, Object fallenObject, String extraString) {
 
-		String pointMessage = town.getName() + " was awarded " + n + " points for taking";
+		String pointMessage = town.getName() + " was awarded " + n + " points for ";
 		if (fallenObject instanceof Nation)
-			pointMessage += " the nation " + ((Nation)fallenObject).getName() + ".";
+			pointMessage += " taking the nation " + ((Nation)fallenObject).getName() + ".";
 		else if (fallenObject instanceof Town)
-			pointMessage += " the town " + ((Town)fallenObject).getName() + ".";
+			pointMessage += " taking the town " + ((Town)fallenObject).getName() + ".";
 		else if (fallenObject instanceof TownBlock)
-			pointMessage += " the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+			pointMessage += " taking the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+		else if (fallenObject instanceof Player)
+			pointMessage = extraString + " killed " + ((Player)fallenObject).getName() + ". (" + n + " points for " + town.getName() + ")";
+		
 		pointMessage += extraString;
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
