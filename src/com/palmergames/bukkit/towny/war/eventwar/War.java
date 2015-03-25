@@ -231,13 +231,19 @@ public class War {
 
 	public void townScored(Town town, int n, Object fallenObject, String extraString) {
 
-		String pointMessage = town.getName() + " was awarded " + n + " points for ";
+		String pointMessage = town.getName() + " was awarded " + n + " points for";
 		if (fallenObject instanceof Nation)
 			pointMessage += " taking the nation " + ((Nation)fallenObject).getName() + ".";
 		else if (fallenObject instanceof Town)
 			pointMessage += " taking the town " + ((Town)fallenObject).getName() + ".";
-		else if (fallenObject instanceof TownBlock)
-			pointMessage += " taking the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+		else if (fallenObject instanceof TownBlock){
+			try {
+				Town fallenTown = ((TownBlock)fallenObject).getTown();
+				pointMessage += " taking the town block [" + fallenTown.getName() + "]" + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+			} catch (NotRegisteredException e) {
+				pointMessage += " taking the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
+			}	
+		}
 		
 		pointMessage += extraString;
 		townScores.put(town, townScores.get(town) + n);
@@ -293,12 +299,6 @@ public class War {
 			remove(attacker, townBlock.getTown());
 		} else{
 			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, "");
-			try {
-				Town town = townBlock.getTown();
-				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(townBlock.getWorldCoord(), town.getName()));
-			} catch (NotRegisteredException e) {
-				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(townBlock.getWorldCoord()));
-			}
 			remove(townBlock.getWorldCoord());
 		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
