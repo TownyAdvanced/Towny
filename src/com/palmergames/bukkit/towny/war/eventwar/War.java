@@ -229,38 +229,34 @@ public class War {
 		return warZone.containsKey(worldCoord);
 	}
 
-	public void townScored(Town town, int n, Object fallenObject, String extraString) {
+	public void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
 
-		String pointMessage = town.getName() + " was awarded " + n + " points for";
+		String[] pointMessage = {"error"};
 		if (fallenObject instanceof Nation)
-			pointMessage += " taking the nation " + ((Nation)fallenObject).getName() + ".";
+			pointMessage = TownySettings.getWarTimeScoreNationEliminatedMsg(town, n, (Nation)fallenObject);
 		else if (fallenObject instanceof Town)
-			pointMessage += " taking the town " + ((Town)fallenObject).getName() + ".";
-		else if (fallenObject instanceof TownBlock){
-			try {
-				Town fallenTown = ((TownBlock)fallenObject).getTown();
-				pointMessage += " taking the town block [" + fallenTown.getName() + "]" + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
-			} catch (NotRegisteredException e) {
-				pointMessage += " taking the town block " + ((TownBlock)fallenObject).getWorldCoord().toString() + ".";
-			}	
+			pointMessage = TownySettings.getWarTimeScoreTownEliminatedMsg(town, n, (Town)fallenObject, townBlocksFallen);
+		else if (fallenObject instanceof TownBlock){	
+			pointMessage = TownySettings.getWarTimeScoreTownBlockEliminatedMsg(town, n, (TownBlock)fallenObject);
 		}
 		
-		pointMessage += extraString;
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
 	
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
 	{
-		String pointMessage = "";
+		String[] pointMessage = {"error"};
 		TownBlock deathLoc = TownyUniverse.getTownBlock(defenderPlayer.getLocation());
 		if (deathLoc == null)
-			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + ".";
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
 		else if (warZone.containsKey(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
-			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + " while " + attackerPlayer.getName() + " was defending.";
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, attackerPlayer, n, attackerTown);
 		else if (warZone.containsKey(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
-			pointMessage = attackerPlayer.getName() + " killed " + defenderPlayer.getName() + " while " + defenderPlayer.getName() + " was defending.";
-		pointMessage += " (" + n + " points for " + attackerTown.getName() + ")";
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, defenderPlayer, n, attackerTown);
+		else
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
+		
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
@@ -298,7 +294,7 @@ public class War {
 		} else if (townBlock.getTown().isHomeBlock(townBlock)){
 			remove(attacker, townBlock.getTown());
 		} else{
-			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, "");
+			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
 		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
@@ -363,7 +359,7 @@ public class War {
 
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForNation(), nation, "");
+		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
 		warringNations.remove(nation);
 		for (Town town : nation.getTowns())
 			if (warringTowns.contains(town))
@@ -389,8 +385,7 @@ public class War {
 				fallenTownBlocks++;
 				remove(townBlock.getWorldCoord());
 			}
-		String extra = " (" + fallenTownBlocks + " town blocks captured)";
-		townScored(attacker, TownySettings.getWarPointsForTown(), town, extra);
+		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
 	}
 
 	public void remove(Town town) {
@@ -523,6 +518,11 @@ public class War {
 	public boolean isWarringNation(Nation nation) {
 
 		return warringNations.contains(nation);
+	}
+	
+	public boolean isWarringTown(Town town) {
+
+		return warringTowns.contains(town);
 	}
 
 	public KeyValue<Town, Integer> getWinningTownScore() throws TownyException {
