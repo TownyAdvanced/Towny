@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -22,6 +23,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -689,6 +691,50 @@ public class TownySettings {
 
 		return parseString(String.format(getLangString("MSG_WAR_SCORE"), town.getName(), n));
 	}
+	
+	//Score Methods
+	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
+
+		return parseString(String.format(getLangString("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
+	}
+	
+	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
+
+		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWN_ELIM"), town.getName(), n, fallenTown.getName(), fallenTownBlocks));
+	}
+	
+	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
+
+		String townBlockName = "";
+		try {
+			Town fallenTown = ((TownBlock)fallenTownBlock).getTown();
+			townBlockName = "[" + fallenTown.getName() + "](" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+		} catch (NotRegisteredException e) {
+			townBlockName = "(" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
+		}
+		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
+	}
+	        
+	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
+
+		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL"), attacker.getName(), dead.getName(), n, attackingTown.getName()));
+	}
+	
+	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, Player defender, int n, Town attackingTown) {
+
+		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING"), attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
+	}
+	
+	public static String[] getWarTimeKingKilled(Nation kingsNation) {
+
+		return parseString(String.format(getLangString("MSG_WAR_KING_KILLED"), kingsNation.getName()));
+	}
+	
+	public static String[] getWarTimeMayorKilled(Town mayorsTown) {
+
+		return parseString(String.format(getLangString("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
+	}
+	//Score Methods
 
 	public static String[] getCouldntPayTaxesMsg(TownyObject obj, String type) {
 

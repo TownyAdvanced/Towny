@@ -162,7 +162,7 @@ public class TownyEntityMonitorListener implements Listener {
 			try {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
-				
+
 				if (TownySettings.getWarPointsForKill() > 0){
 					plugin.getTownyUniverse().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
 				}
@@ -176,23 +176,20 @@ public class TownyEntityMonitorListener implements Listener {
 			War warEvent = plugin.getTownyUniverse().getWarEvent();
 			try {
 				Nation defenderNation = defenderResident.getTown().getNation();
-				if (warEvent.isWarringNation(defenderNation))
-					if (defenderResident.isMayor())
-						if (defenderResident.isKing()) {
-							TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed!");
-							if (attackerResident != null && attackerResident.hasTown())
-								warEvent.remove(attackerResident.getTown(), defenderNation);
-							else
-								warEvent.remove(defenderNation);
-							//TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
-						} else {
-							TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed!");
-							if (attackerResident != null && attackerResident.hasTown())
-								warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
-							else
-								warEvent.remove(defenderResident.getTown());
-							//TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
-						}
+				Town defenderTown = defenderResident.getTown();
+				if (warEvent.isWarringNation(defenderNation) && defenderResident.isKing()){
+					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeKingKilled(defenderNation));
+					if (attackerResident != null && attackerResident.hasTown())
+						warEvent.remove(attackerResident.getTown(), defenderNation);
+					else
+						warEvent.remove(defenderNation);
+				}else if (warEvent.isWarringNation(defenderNation) && warEvent.isWarringTown(defenderTown)) {
+					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeMayorKilled(defenderTown));
+					if (attackerResident != null && attackerResident.hasTown())
+						warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
+					else
+						warEvent.remove(defenderResident.getTown());
+				}
 			} catch (NotRegisteredException e) {
 			}
 		}
