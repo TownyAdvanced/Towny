@@ -268,8 +268,11 @@ public class War {
 		if (hp > 0) {
 			warZone.put(worldCoord, hp);
 			//TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Red + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
-				TownyMessaging.sendMessageToMode(townBlock.getTown().getNation(), Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+				for (Town town: townBlock.getTown().getNation().getTowns())
+					if (town != townBlock.getTown())
+						TownyMessaging.sendMessageToMode(town, Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			}
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 		} else
