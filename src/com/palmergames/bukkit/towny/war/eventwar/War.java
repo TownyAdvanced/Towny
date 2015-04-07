@@ -195,7 +195,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage("&6[War]&b Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
+					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -204,7 +204,7 @@ public class War {
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-				TownyMessaging.sendGlobalMessage("Highest Score: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {
@@ -297,7 +297,7 @@ public class War {
 	private void launchFireworkForDamage(TownBlock townblock, Player attacker, FireworkEffect.Type type)
 	{
 		double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
-		double z = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+		double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
 		double y = attacker.getLocation().getY() + 25;
 		TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
 		Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);

@@ -692,7 +692,7 @@ public class TownySettings {
 		return parseString(String.format(getLangString("MSG_WAR_SCORE"), town.getName(), n));
 	}
 	
-	//Score Methods
+	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
 		return parseString(String.format(getLangString("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
@@ -733,6 +733,16 @@ public class TownySettings {
 	public static String[] getWarTimeMayorKilled(Town mayorsTown) {
 
 		return parseString(String.format(getLangString("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
+	}
+	
+	public static String[] getWarTimeWinningNationSpoilsMsg(Nation winningNation, String money)
+	{
+		return parseString(String.format(getLangString("MSG_WAR_WINNING_NATION_SPOILS"), winningNation.getName(), money));
+	}
+	
+	public static String[] getWarTimeWinningTownSpoilsMsg(Town winningTown, String money, int score)
+	{
+		return parseString(String.format(getLangString("MSG_WAR_WINNING_TOWN_SPOILS"), winningTown.getName(), money, score));
 	}
 	//Score Methods
 

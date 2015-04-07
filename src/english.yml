@@ -1,5 +1,5 @@
 name: Towny
-version: 0.24
+version: 0.25
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -335,6 +335,8 @@ msg_war_score_player_kill: '&6[War]&b %s killed %s. (%d points for %s)'
 msg_war_score_player_kill_defending: '&6[War]&b %s killed %s while %s was defending. (%d points for %s)'
 msg_war_king_killed: '&6[War]&b %s''s king was killed!'
 msg_war_mayor_killed: '&6[War]&b %s''s mayor was killed!'
+msg_war_winning_nation_spoils: '&6[War]&b Winning Nation: %s won %s.'
+msg_war_winning_town_spoils: '&6[War]&b Highest Score: %s won %s with the score %d.'
 msg_war_cannot_do: '&cYou cannot do this when the world is at war.'
 msg_war_started: '&eStarted the war countdown.'
 msg_war_ended: '&eEnded the current war.'
