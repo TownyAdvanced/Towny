@@ -1439,6 +1439,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.WAR_EVENT_BASE_SPOILS);
 	}
+	
+	public static boolean getOnlyAttackEdgesInWar() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_ENEMY_ONLY_ATTACK_BORDER);
+	}
 
 	public static double getWartimeDeathPrice() {
 
