@@ -298,8 +298,8 @@ public class War {
 	{
 		double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
 		double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
-		double y = attacker.getLocation().getY() + 25;
-		TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
+		double y = attacker.getLocation().getY() + 20;
+		//TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
 		Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
 		FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
 		data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(type).trail(false).withFade(Color.MAROON).build());

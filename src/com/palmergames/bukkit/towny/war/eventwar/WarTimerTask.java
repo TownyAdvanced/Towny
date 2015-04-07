@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
@@ -70,8 +71,16 @@ public class WarTimerTask extends TownyTimerTask {
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   notAlly");
 						//Enemy nation
+						
+						boolean edgesOnly = TownySettings.getOnlyAttackEdgesInWar();
+						if (edgesOnly && !isOnEdgeOfOwnership(townBlock.getResident(), worldCoord, warEvent))
+							continue;
+						if (edgesOnly)
+							TownyMessaging.sendDebugMsg("[War]   onEdge");
+						
 						warEvent.damage(player, townBlock);
 						TownyMessaging.sendDebugMsg("[War]   damaged");
+				
 					}
 				} catch (NotRegisteredException e) {
 					continue;
@@ -81,4 +90,19 @@ public class WarTimerTask extends TownyTimerTask {
 
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}	
+	
+	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord, War warEvent) {
+
+		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+		for (int i = 0; i < 4; i++)
+			try {
+				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+				if (!edgeTownBlock.isOwner(owner) || (edgeTownBlock.isOwner(owner) && !warEvent.isWarZone(worldCoord))) {
+					return true;
+				}
+			} catch (NotRegisteredException e) {
+				return true;
+			}
+		return false;
+	}
 }
