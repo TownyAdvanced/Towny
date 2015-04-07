@@ -73,7 +73,7 @@ public class WarTimerTask extends TownyTimerTask {
 						//Enemy nation
 						
 						boolean edgesOnly = TownySettings.getOnlyAttackEdgesInWar();
-						if (edgesOnly && !isOnEdgeOfOwnership(townBlock.getResident(), worldCoord, warEvent))
+						if (edgesOnly && !isOnEdgeOfTown(townBlock, worldCoord, warEvent))
 							continue;
 						if (edgesOnly)
 							TownyMessaging.sendDebugMsg("[War]   onEdge");
@@ -91,13 +91,15 @@ public class WarTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}	
 	
-	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord, War warEvent) {
+	public static boolean isOnEdgeOfTown(TownBlock townBlock, WorldCoord worldCoord, War warEvent) {
 
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-				if (!edgeTownBlock.isOwner(owner) || (edgeTownBlock.isOwner(owner) && !warEvent.isWarZone(worldCoord))) {
+				boolean sameTown = edgeTownBlock.getTown() == townBlock.getTown();
+				TownyMessaging.sendDebugMsg("[WAR] Ole8pieTesting: (For townBlock:" + townBlock.getCoord().toString() + ")  SameTown:" + sameTown + "  IsWarZone:" + warEvent.isWarZone(worldCoord));
+				if (!sameTown || (sameTown && !warEvent.isWarZone(worldCoord))) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {
