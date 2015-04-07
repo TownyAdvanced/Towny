@@ -70,7 +70,7 @@ public class WarTimerTask extends TownyTimerTask {
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   notAlly");
 						//Enemy nation
-						warEvent.damage(resident.getTown(), townBlock);
+						warEvent.damage(player, townBlock);
 						TownyMessaging.sendDebugMsg("[War]   damaged");
 					}
 				} catch (NotRegisteredException e) {
@@ -80,5 +80,5 @@ public class WarTimerTask extends TownyTimerTask {
 		}
 
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
-	}
+	}	
 }

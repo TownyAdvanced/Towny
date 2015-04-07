@@ -178,7 +178,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		try {
-			
+
 			Nation defenderNation = defenderResident.getTown().getNation();
 			Town defenderTown = defenderResident.getTown();
 			if (warEvent.isWarringNation(defenderNation) && defenderResident.isKing()){
