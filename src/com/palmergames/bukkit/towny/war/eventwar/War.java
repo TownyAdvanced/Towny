@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -188,7 +194,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage("Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
+					TownyMessaging.sendGlobalMessage("&6[War]&b Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -239,11 +245,11 @@ public class War {
 		else if (fallenObject instanceof TownBlock){	
 			pointMessage = TownySettings.getWarTimeScoreTownBlockEliminatedMsg(town, n, (TownBlock)fallenObject);
 		}
-		
+
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
-	
+
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
 	{
 		String[] pointMessage = {"error"};
@@ -256,13 +262,15 @@ public class War {
 			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, defenderPlayer, n, attackerTown);
 		else
 			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
-		
+
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 	}
 
-	public void damage(Town attacker, TownBlock townBlock) throws NotRegisteredException {
+	public void damage(Player attackerPlayer, TownBlock townBlock) throws NotRegisteredException {
 
+		Resident attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
+		Town attacker = attackerResident.getTown();
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int hp = warZone.get(worldCoord) - 1;
 		if (hp > 0) {
@@ -270,13 +278,32 @@ public class War {
 			//TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Red + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
+				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL_LARGE);
 				for (Town town: townBlock.getTown().getNation().getTowns())
 					if (town != townBlock.getTown())
 						TownyMessaging.sendMessageToMode(town, Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
 			}
+			else
+				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL);
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-		} else
+			
+		} else {
+			launchFireworkForDamage (townBlock, attackerPlayer, Type.CREEPER);
 			remove(attacker, townBlock);
+		}
+	}
+	
+	private void launchFireworkForDamage(TownBlock townblock, Player attacker, FireworkEffect.Type type)
+	{
+		double x = (double)townblock.getX() + 8.5;
+		double z = (double)townblock.getZ() + 8.5;
+		double y = attacker.getLocation().getY() + 25;
+		TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
+		Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
+		FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
+		data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(type).trail(false).withFade(Color.MAROON).build());
+		firework.setFireworkMeta(data);            
+		firework.detonate();
 	}
 
 	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
@@ -522,7 +549,7 @@ public class War {
 
 		return warringNations.contains(nation);
 	}
-	
+
 	public boolean isWarringTown(Town town) {
 
 		return warringTowns.contains(town);
