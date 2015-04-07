@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -295,8 +296,8 @@ public class War {
 	
 	private void launchFireworkForDamage(TownBlock townblock, Player attacker, FireworkEffect.Type type)
 	{
-		double x = (double)townblock.getX() + 8.5;
-		double z = (double)townblock.getZ() + 8.5;
+		double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+		double z = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
 		double y = attacker.getLocation().getY() + 25;
 		TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
 		Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
