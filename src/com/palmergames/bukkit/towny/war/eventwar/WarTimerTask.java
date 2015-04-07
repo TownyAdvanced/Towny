@@ -98,8 +98,8 @@ public class WarTimerTask extends TownyTimerTask {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				boolean sameTown = edgeTownBlock.getTown() == townBlock.getTown();
-				TownyMessaging.sendDebugMsg("[WAR] Ole8pieTesting: (For townBlock:" + townBlock.getCoord().toString() + ")  SameTown:" + sameTown + "  IsWarZone:" + warEvent.isWarZone(worldCoord));
-				if (!sameTown || (sameTown && !warEvent.isWarZone(worldCoord))) {
+				TownyMessaging.sendDebugMsg("[WAR] Ole8pieTesting: (For townBlock:" + edgeTownBlock.getCoord().toString() + ")  SameTown:" + sameTown + "  IsWarZone:" + warEvent.isWarZone(edgeTownBlock.getWorldCoord()));
+				if (!sameTown || (sameTown && !warEvent.isWarZone(edgeTownBlock.getWorldCoord()))) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {
