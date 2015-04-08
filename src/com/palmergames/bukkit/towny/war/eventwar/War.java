@@ -294,17 +294,20 @@ public class War {
 		}
 	}
 	
-	private void launchFireworkForDamage(TownBlock townblock, Player attacker, FireworkEffect.Type type)
+	private void launchFireworkForDamage(final TownBlock townblock, final Player attacker, final FireworkEffect.Type type)
 	{
-		double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
-		double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
-		double y = attacker.getLocation().getY() + 20;
-		//TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
-		Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
-		FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
-		data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(type).trail(false).withFade(Color.MAROON).build());
-		firework.setFireworkMeta(data);            
-		firework.detonate();
+		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
+			public void run() {
+				double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+				double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+				double y = attacker.getLocation().getY() + 20;
+				//TownyMessaging.sendGlobalMessage("DEBUG: (" + x + "," + y + "," + z +")");
+				Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
+				FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
+				data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(type).trail(false).withFade(Color.MAROON).build());
+				firework.setFireworkMeta(data);            
+				firework.detonate();
+		}}, 0);	
 	}
 
 	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
