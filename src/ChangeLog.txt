@@ -2111,4 +2111,6 @@ v0.89.2.5:
 v0.89.2.6:
 	- Fix /ta resident rename command to also alter friends list. Care of backcab.
 v0.89.2.7:
-	- Fix renaming players who did not have a town.	 		 	
+	- Fix renaming players who did not have a town.
+v0.89.2.8:
+    - Fix removing plot names using /plot set name.		 		 	

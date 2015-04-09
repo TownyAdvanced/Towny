@@ -298,6 +298,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							
+							if (split.length == 1) {
+								townBlock.setName("");
+								TownyMessaging.sendMsg(player, String.format("Plot name removed"));
+								TownyUniverse.getDataSource().saveTownBlock(townBlock);
+								return true;
+							}
+							
 							// Test if the plot name contains invalid characters.
 							if (!NameValidation.isBlacklistName(split[1])) {								
 								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
