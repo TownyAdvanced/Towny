@@ -145,8 +145,9 @@ public class TownyEntityListener implements Listener {
 		Entity entity = event.getEntity();
 				
 		if (entity instanceof ArmorStand) {
+			String damager = event.getDamager().getType().name();
 
-			if (event.getDamager().getType().name() == "PRIMED_TNT") {
+			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER") {
 											
 				try {
 					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
