@@ -2115,4 +2115,6 @@ v0.89.2.7:
 v0.89.2.8:
     - Fix removing plot names using /plot set name.
 v0.89.2.9:
-    - Protect Armour Stands from Wither Skulls and the initial Wither explosion.		 		 			 		 	
+    - Protect Armour Stands from Wither Skulls and the initial Wither explosion.
+v0.89.2.10:
+	- Fix min/max distance from towns so they only check in the same world.
