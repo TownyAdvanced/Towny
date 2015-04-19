@@ -658,6 +658,9 @@ public class TownyWorld extends TownyObject {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
 						continue;
+				
+				if (!town.getWorld().equals(this)) continue;
+				
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min)
 					min = dist;
@@ -694,6 +697,8 @@ public class TownyWorld extends TownyObject {
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
+					if (!b.getWorld().equals(this)) continue;
+					
 					Coord townCoord = b.getCoord();
 					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 					if (dist < min)
