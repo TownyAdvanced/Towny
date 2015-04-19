@@ -2114,5 +2114,5 @@ v0.89.2.7:
 	- Fix renaming players who did not have a town.
 v0.89.2.8:
     - Fix removing plot names using /plot set name.
-v0.89.2.8:
+v0.89.2.9:
     - Protect Armour Stands from Wither Skulls and the initial Wither explosion.		 		 			 		 	
