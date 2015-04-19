@@ -450,7 +450,7 @@ public class TownyUniverse extends TownyObject {
 		if (plugin != null) {
 			out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
 			out.add(getTreeDepth(depth + 2) + "Version: " + BukkitTools.getServer().getVersion());
-			out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
+			//out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
 			out.add(getTreeDepth(depth + 2) + "Worlds (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
 		}
 		out.add(getTreeDepth(depth + 1) + "Worlds (" + getDataSource().getWorlds().size() + "):");

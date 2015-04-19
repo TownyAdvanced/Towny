@@ -2072,3 +2072,47 @@ v0.88.0.2:
 v0.88.0.3:
 	- Fix ignored result of String.replaceAll().
 	- Grammar fixes.
+v0.89.0.0:
+    - Update bukkit.jar to 1.8 version.
+    - Fix/remove getOnlinePlayers deprecations.
+    - Fix items on ArmorStands not being protected.
+    - Added armorstands to default config for protections.
+      - Old configs need to have ArmorStand added to the mob_types: in the config.
+      - Old configs need to have Armor_Stand added to the item_use_ids: in the config.
+v0.89.0.1:
+    - Fix config.yml growing with blank spaces and #'s.
+      - If your config has been growing do the following:
+        - Stop your server and add the new Towny.jar.
+        - Start the server, let it load completely.
+        - Open the Towny config.yml and remove any empty lines and lines beginning with # at the top of the file.
+        - Save the config.yml
+        - use /ta reload to reload the config.
+      - If this process does not work you can manually add 2 spaces before any line directly beginning with a # symbol, (replace "#..." with "  #...")
+v0.89.0.2:
+    - Fix ArmorStands being taken from by outsiders.
+v0.89.1.0:
+    - Update to release.
+v0.89.2.0:
+    - Fix ArmorStands not being protected from projectiles.    
+v0.89.2.1:
+    - Fix price_death_nation paying out 100% of a nation's bank even when set less than 100%.
+v0.89.2.2:
+	- Courtesy of backcab ( http://brierieserver.co.uk/ ) we have the following new commands:
+	- Added /ta resident {oldname} rename {newname}
+		- This renames a player's account to a new name. Useful for players who've changed their minecraft account name.
+	- Added /ta resident {name} 
+		- This command can be used from console to look up a resident's information, similar to /ta town {name}.
+v0.89.2.3:
+	- Arena plots no longer allow for PVP death payments.
+v0.89.2.4:
+	- Check if a plot name contains invalid characters when using /plot set name NAME.
+v0.89.2.5:
+	- Plot prices are now capped at 1000000 in order to keep mysql databases from storing exponential numbers and crashing.
+v0.89.2.6:
+	- Fix /ta resident rename command to also alter friends list. Care of backcab.
+v0.89.2.7:
+	- Fix renaming players who did not have a town.
+v0.89.2.8:
+    - Fix removing plot names using /plot set name.
+v0.89.2.9:
+    - Protect Armour Stands from Wither Skulls and the initial Wither explosion.		 		 			 		 	
