@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	private Town town = null;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
+	private boolean isJailed = false;
 	private String title, surname;
 	private long teleportRequestTime;
 	private Location teleportDestination;
@@ -64,6 +66,41 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	public boolean isNPC() {
 
 		return isNPC;
+	}
+	
+	public void setJailed(boolean isJailed) {
+
+		this.isJailed = isJailed;
+	}
+    
+	public void setJailed(Player player, Integer index, Town town) {		
+
+		if (this.isJailed) {
+			this.setJailed(false);			
+			try {
+				Location loc = town.getSpawn();
+				player.teleport(loc);
+			} catch (TownyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+	
+		} else {
+			this.setJailed(true);
+			try {
+				Location loc = town.getJailSpawn(index);
+				player.teleport(loc);
+			} catch (TownyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+    public boolean isJailed() {
+
+			return isJailed;
 	}
 
 	public void setTitle(String title) {

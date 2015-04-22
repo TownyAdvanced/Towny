@@ -125,6 +125,10 @@ public class TownyPlayerListener implements Listener {
 
 		try {
 			Location respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
+			
+			// If player is jailed send them to first Jail found.
+			if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
+				respawn = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getJailSpawn(0);
 
 			// Check if only respawning in the same world as the town's spawn.
 			if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
@@ -576,6 +580,18 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if Ender pearls are disabled.
 		 */
+		Player player = event.getPlayer();
+		// Cancel teleport if Jailed by Towny.
+		try {
+			if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
+				TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Jailed players cannot be teleported!");
+				event.setCancelled(true);
+		} catch (NotRegisteredException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		
 		if (event.getCause() == TeleportCause.ENDER_PEARL) {
 
 			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {

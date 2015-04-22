@@ -78,6 +78,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 		
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
+		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
 		
 		TOWNY_COMMAND_TOWN_TOGGLE("towny.command.town.toggle.*"),
 			TOWNY_COMMAND_TOWN_TOGGLE_PVP("towny.command.town.toggle.pvp"),
@@ -307,6 +308,7 @@ public enum PermissionNodes {
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
 	TOWNY_MAX_PLOTS("towny_maxplots"), 
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
+	
 
 	private String value;
 

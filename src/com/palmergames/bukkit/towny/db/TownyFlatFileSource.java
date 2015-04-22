@@ -563,6 +563,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("isNPC");
 				if (line != null)
 					resident.setNPC(Boolean.parseBoolean(line));
+				
+				line = kvFile.get("isJailed");
+				if (line != null)
+					resident.setJailed(Boolean.parseBoolean(line));
 
 				line = kvFile.get("title");
 				if (line != null)
@@ -880,6 +884,32 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 									loc.setYaw(Float.parseFloat(tokens[5]));
 								}
 								town.forceAddOutpostSpawn(loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
+				
+				// Load jail spawns
+				line = kvFile.get("jailspawns");
+				if (line != null) {
+					String[] jails = line.split(";");
+					for (String spawn : jails) {
+						tokens = spawn.split(",");
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
+
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
+								}
+								town.forceAddJailSpawn(loc);
 							} catch (NumberFormatException e) {
 							} catch (NotRegisteredException e) {
 							} catch (NullPointerException e) {
@@ -1513,6 +1543,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("registered=" + Long.toString(resident.getRegistered()));
 		// isNPC
 		list.add("isNPC=" + Boolean.toString(resident.isNPC()));
+		// isJailed
+		list.add("isJailed=" + Boolean.toString(resident.isJailed()));
 		// title
 		list.add("title=" + resident.getTitle());
 		// surname
@@ -1627,6 +1659,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add(outpostArray);
 		}
 
+		// Jail Spawns
+		if (town.hasJailSpawn()) {
+			String jailArray = "jailspawns=";
+			for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
+				jailArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
+			}
+			list.add(jailArray);
+		}
+		
 		/*
 		 *  Make sure we only save in async
 		 */

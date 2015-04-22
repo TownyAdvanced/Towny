@@ -159,10 +159,16 @@ public class TownyFormatter {
 			if (!resident.getNationRanks().isEmpty())
 				out.add(Colors.Green + "Nation Ranks: " + Colors.LightGreen + StringMgmt.join(resident.getNationRanks(), ","));
 		}
-
+		
+		// Jailed: yes if they are jailed.
+		if (resident.isJailed()){
+			out.add(Colors.Green + "Jailed: Yes");
+		}
+		
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
 		out.addAll(getFormattedResidents("Friends", friends));
+		
 
 		return out;
 	}

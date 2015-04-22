@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -17,12 +18,12 @@ public class TownBlock {
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
-	private boolean outpost = false;
+	private boolean outpost = false;	
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
 	protected boolean isChanged;
-
+	
 	public TownBlock(int x, int z, TownyWorld world) {
 
 		this.x = x;
@@ -239,6 +240,11 @@ public class TownBlock {
 			setPermissions("residentSwitch,allySwitch,outsiderSwitch");
 			break;
 			
+		case JAIL:
+			
+			setPermissions("denyAll");			
+			break;
+			
 		}
 		
 		// Set the changed status.
@@ -253,8 +259,14 @@ public class TownBlock {
 
 	public void setType(String typeName) throws TownyException {
 
-		if (typeName.equalsIgnoreCase("reset"))
+		if (typeName.equalsIgnoreCase("reset")){
 			typeName = "default";
+			TownyMessaging.sendMsg("TownBlock.java setType this.isjail: " + this.isJail());
+			if (this.isJail()){
+				this.getTown().removeJailSpawn(this.getCoord());				
+			}
+		}
+			
 		
 		TownBlockType type = TownBlockType.lookup(typeName);
 		
@@ -369,5 +381,16 @@ public class TownBlock {
 	public boolean isWarZone() {
 
 		return getWorld().isWarZone(getCoord());
+	}
+
+	public boolean isJail() {
+		
+		if (this.getType() == getType().JAIL) {
+			TownyMessaging.sendMsg("isjail: true");
+			return true;
+		} else {
+			TownyMessaging.sendMsg("isjail: false");
+			return false;
+		}
 	}
 }

@@ -332,7 +332,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "name", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef|inn|jail", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set perm", "?", ""));
 					}
 
@@ -535,9 +535,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 													// exception
 
 				townBlock.setType(type);
-				
-				//townBlock.setChanged(true);
+				TownyMessaging.sendMsg("PlotCommand.java townBlock.setType(type)");
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				Town town = resident.getTown();
+				if (townBlock.isJail()) {
+					TownyMessaging.sendMsg("PlotCommand.java townBlock.getType()==TownBlockType.Jail");					
+					town.addJailSpawn(TownyUniverse.getPlayer(resident).getLocation());
+					
+				}
+				TownyUniverse.getDataSource().saveTown(town);
+				//townBlock.setChanged(true);
+				
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));

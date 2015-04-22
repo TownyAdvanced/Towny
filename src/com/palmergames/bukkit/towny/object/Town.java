@@ -26,6 +26,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private List<Resident> residents = new ArrayList<Resident>();
 	//private List<Resident> assistants = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
+	private List<Location> jailSpawns = new ArrayList<Location>();
 	private Wall wall = new Wall();
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
@@ -662,6 +663,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		//assistants.clear();
 		homeBlock = null;
 		outpostSpawns.clear();
+		jailSpawns.clear();
 
 		try {
 			if (hasWorld()) {
@@ -691,7 +693,9 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost())
 				removeOutpostSpawn(townBlock.getCoord());
-
+			if (townBlock.isJail())
+				removeJailSpawn(townBlock.getCoord());
+			
 			// Clear the towns homeblock if this is it.
 			try {
 				if (getHomeBlock() == townBlock)
@@ -1008,5 +1012,88 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	@Override
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
+	}
+
+	public List<Location> getJailSpawns() {
+
+		return jailSpawns;
+	}
+
+	public void addJailSpawn(Location spawn) throws TownyException {
+
+		removeJailSpawn(Coord.parseCoord(spawn));
+
+		Coord spawnBlock = Coord.parseCoord(spawn);
+
+		try {
+			TownBlock jail = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
+				if (!jail.isJail())
+					throw new TownyException("Location is not within a Jail plot.");
+				
+				TownyMessaging.sendMsg("Town.java addJailSpawn jailSpawns.add(spawn)" + spawn);
+				jailSpawns.add(spawn);
+				
+			}
+
+		} catch (NotRegisteredException e) {
+			throw new TownyException("Location is not within a Town.");
+		}
+
+	}
+	
+	public void removeJailSpawn(Coord coord) {
+
+		for (Location spawn : new ArrayList<Location>(jailSpawns)) {
+			Coord spawnBlock = Coord.parseCoord(spawn);
+			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == coord.getZ())) {
+				jailSpawns.remove(spawn);
+			}
+		}
+	}
+
+	/**
+	 * Only to be called from the Loading methods.
+	 * 
+	 * @param spawn
+	 */
+	public void forceAddJailSpawn(Location spawn) {
+
+		jailSpawns.add(spawn);
+	}
+
+	/**
+	 * Return the Location for this Jail index.
+	 * 
+	 * @param index
+	 * @return Location of jail spawn
+	 * @throws TownyException
+	 */
+	public Location getJailSpawn(Integer index) throws TownyException {
+
+		if (getMaxJailSpawn() == 0)
+			throw new TownyException("Town has no jail spawns set.");
+
+		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
+	}
+
+	public int getMaxJailSpawn() {
+
+		return jailSpawns.size();
+	}
+
+	public boolean hasJailSpawn() {
+
+		return (jailSpawns.size() > 0);
+	}
+	
+	/**
+	 * Get an unmodifiable List of all jail spawns.
+	 * 
+	 * @return List of jailSpawns
+	 */
+	public List<Location> getAllJailSpawns() {
+
+		return Collections.unmodifiableList(jailSpawns);
 	}
 }
