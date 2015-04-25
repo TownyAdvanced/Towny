@@ -104,7 +104,8 @@ public class TownyEntityMonitorListener implements Listener {
 
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-				isJailingAttackingEnemies(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (attackerPlayer instanceof Player)
+					isJailingAttackingEnemies(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
 				if (TownySettings.isRemovingOnMonarchDeath())
 					monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
@@ -336,6 +337,10 @@ public class TownyEntityMonitorListener implements Listener {
 	public void isJailingAttackingEnemies(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		if (TownySettings.isJailingAttackingEnemies()) {
 			Location loc = defenderPlayer.getLocation();
+			if (!TownyUniverse.getTownBlock(defenderPlayer.getLocation()).hasTown())
+				return;
+			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
+				return;
 			if (defenderResident.isJailed()) {
 				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.JAIL) {
 					TownyMessaging.sendGlobalMessage(Colors.Red + defenderPlayer.getName() + " was killed attempting to escape jail.");

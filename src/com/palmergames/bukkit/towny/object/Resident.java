@@ -85,6 +85,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				player.teleport(loc);
 				this.removeJailSpawn();
 				this.setJailTown(" ");
+				TownyMessaging.sendMsg(player, "You have been freed from jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
@@ -98,6 +99,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				this.setJailed(true);
 				this.setJailSpawn(index);
 				this.setJailTown(town.toString());
+				TownyMessaging.sendMsg(player, "You have been sent to jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
