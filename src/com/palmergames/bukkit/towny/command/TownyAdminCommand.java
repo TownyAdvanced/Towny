@@ -454,6 +454,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			// "/townyadmin set", "king [nation] [king]", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] " + TownySettings.getLangString("town_help_2"), ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] npc", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "capital [town]", ""));
 			// player.sendMessage(ChatTools.formatCommand("", "/townyadmin set",
 			// "debugmode [on/off]", ""));
 			// player.sendMessage(ChatTools.formatCommand("", "/townyadmin set",

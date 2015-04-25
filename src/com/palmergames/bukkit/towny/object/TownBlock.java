@@ -242,7 +242,8 @@ public class TownBlock {
 			
 		case JAIL:
 			
-			setPermissions("denyAll");			
+			setPermissions("denyAll");
+			
 			break;
 			
 		}
@@ -259,21 +260,19 @@ public class TownBlock {
 
 	public void setType(String typeName) throws TownyException {
 
-		if (typeName.equalsIgnoreCase("reset")){
-			typeName = "default";
-			TownyMessaging.sendMsg("TownBlock.java setType this.isjail: " + this.isJail());
-			if (this.isJail()){
-				this.getTown().removeJailSpawn(this.getCoord());				
-			}
-		}
-			
+		if (typeName.equalsIgnoreCase("reset"))
+			typeName = "default";					
 		
 		TownBlockType type = TownBlockType.lookup(typeName);
 		
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
 		
+		if (this.isJail())
+			this.getTown().removeJailSpawn(this.getCoord());
+		
 		setType(type);
+		
 	}
 
 	public boolean isHomeBlock() {
@@ -386,10 +385,8 @@ public class TownBlock {
 	public boolean isJail() {
 		
 		if (this.getType() == getType().JAIL) {
-			TownyMessaging.sendMsg("isjail: true");
 			return true;
 		} else {
-			TownyMessaging.sendMsg("isjail: false");
 			return false;
 		}
 	}

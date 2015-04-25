@@ -534,18 +534,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 													// are only checking for an
 													// exception
 
-				townBlock.setType(type);
-				TownyMessaging.sendMsg("PlotCommand.java townBlock.setType(type)");
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				townBlock.setType(type);		
 				Town town = resident.getTown();
-				if (townBlock.isJail()) {
-					TownyMessaging.sendMsg("PlotCommand.java townBlock.getType()==TownBlockType.Jail");					
-					town.addJailSpawn(TownyUniverse.getPlayer(resident).getLocation());
-					
-				}
-				TownyUniverse.getDataSource().saveTown(town);
-				//townBlock.setChanged(true);
+				if (townBlock.isJail())			
+					town.addJailSpawn(TownyUniverse.getPlayer(resident).getLocation());				
 				
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));

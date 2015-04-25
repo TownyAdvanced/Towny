@@ -11,6 +11,7 @@ import com.palmergames.bukkit.wallgen.Wall;
 import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -784,7 +785,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		for (Location spawn : new ArrayList<Location>(outpostSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
-			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == coord.getZ())) {
+			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
 			}
 		}
@@ -1031,9 +1032,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 				if (!jail.isJail())
 					throw new TownyException("Location is not within a Jail plot.");
 				
-				TownyMessaging.sendMsg("Town.java addJailSpawn jailSpawns.add(spawn)" + spawn);
 				jailSpawns.add(spawn);
-				
+				TownyUniverse.getDataSource().saveTown(this);			
 			}
 
 		} catch (NotRegisteredException e) {
@@ -1046,8 +1046,9 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		for (Location spawn : new ArrayList<Location>(jailSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
-			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == coord.getZ())) {
+			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
+				TownyUniverse.getDataSource().saveTown(this);
 			}
 		}
 	}

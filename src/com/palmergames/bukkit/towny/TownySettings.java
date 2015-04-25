@@ -1420,6 +1420,26 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
 	}
 	
+	public static boolean isJailingAttackingEnemies() {
+		
+		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_ENEMIES);	
+	}
+
+	public static boolean JailAllowsEnderPearls() {
+		
+		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_ENDER_PEARLS);	
+	}
+
+	public static boolean isAllowingBail() {
+		
+		return getBoolean(ConfigNodes.JAIL_BAIL_IS_ALLOWING_BAIL);	
+	}
+	
+	public static double getBailAmount() {
+		
+		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT);
+	}
+
 	public static double getWartimeTownBlockLossPrice() {
 
 		return getDouble(ConfigNodes.WAR_EVENT_TOWN_BLOCK_LOSS_PRICE);

@@ -162,7 +162,7 @@ public class TownyFormatter {
 		
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
-			out.add(Colors.Green + "Jailed: Yes");
+			out.add(Colors.Green + "Jailed: Yes" + " in Town: " + resident.getJailTown());
 		}
 		
 		// Friends [12]: James, Carry, Mason

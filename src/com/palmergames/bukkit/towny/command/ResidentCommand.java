@@ -52,6 +52,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/resident", TownySettings.getLangString("res_2"), TownySettings.getLangString("res_3")));
 		output.add(ChatTools.formatCommand("", "/resident", "list", TownySettings.getLangString("res_4")));
 		output.add(ChatTools.formatCommand("", "/resident", "tax", ""));
+		output.add(ChatTools.formatCommand("", "/resident", "jail", ""));
 		output.add(ChatTools.formatCommand("", "/resident", "toggle", "[mode]...[mode]"));
 		output.add(ChatTools.formatCommand("", "/resident", "set [] .. []", "'/resident set' " + TownySettings.getLangString("res_5")));
 		output.add(ChatTools.formatCommand("", "/resident", "friend [add/remove] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
@@ -122,6 +123,46 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(resident));
 				} catch (NotRegisteredException x) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
+				}
+			
+			} else if (split[0].equalsIgnoreCase("jail")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (!TownySettings.isAllowingBail()) {
+					TownyMessaging.sendErrorMsg(player, Colors.Red + "Bail is not enabled");
+					return;
+				}
+				
+				if (split.length == 1 ) {
+					player.sendMessage(ChatTools.formatTitle("/resident jail"));
+					player.sendMessage(ChatTools.formatCommand("", "/resident", "jail paybail", ""));
+					player.sendMessage(Colors.LightBlue + "Bail costs: " + Colors.Green + TownySettings.getBailAmount());
+					return;
+				}
+
+				if (!TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
+					return;
+				
+				if (split[1].equalsIgnoreCase("paybail")) {
+					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					if (resident.canPayFromHoldings(TownySettings.getBailAmount())) {
+						Town JailTown = TownyUniverse.getDataSource().getTown(resident.getJailTown());
+						resident.payTo(TownySettings.getBailAmount(), JailTown, "Bail");
+						resident.setJailed(false);
+						resident.setJailSpawn(0);
+						resident.setJailTown("");
+						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + "has paid bail and is free.");
+						player.teleport(resident.getTown().getSpawn());
+						TownyUniverse.getDataSource().saveResident(resident);
+					} else {
+						TownyMessaging.sendErrorMsg(player, Colors.Red + "Unable to afford bail.");
+					}
+				} else {
+					player.sendMessage(ChatTools.formatTitle("/resident jail"));
+					player.sendMessage(ChatTools.formatCommand("", "/resident", "jail paybail", ""));
+					player.sendMessage(Colors.LightBlue + "Bail costs: " + Colors.Green + TownySettings.getBailAmount());					
 				}
 
 			} else if (split[0].equalsIgnoreCase("set")) {

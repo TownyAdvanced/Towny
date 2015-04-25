@@ -985,7 +985,34 @@ public enum ConfigNodes {
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
-
+	JAIL(
+			"jail",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Jail Plot settings                   | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			""),
+	JAIL_IS_JAILING_ATTACKING_ENEMIES(
+			"jail.is_jailing_attacking_enemies",
+			"false",
+			"#If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists."),
+	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
+			"jail.jail_allows_ender_pearls",
+			"false",
+			"#If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting."),			
+	JAIL_BAIL("jail.bail", "", ""),
+	JAIL_BAIL_IS_ALLOWING_BAIL(
+			"jail.bail.is_allowing_bail",
+			"false",
+			"#If true players can pay a bail amount to be unjailed."),	
+	JAIL_BAIL_BAIL_AMOUNT(
+			"jail.bail.bail_amount",
+			"10",
+			"#Amount that bail costs."),	
 	WAR(
 			"war",
 			"",
@@ -995,7 +1022,7 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  # |                     War settings                     | #",
 			"  # +------------------------------------------------------+ #",
-			"############################################################",
+			"  ############################################################",
 			""),
 	WARTIME_NATION_CAN_BE_NEUTRAL(
 			"war.nation_can_be_neutral",

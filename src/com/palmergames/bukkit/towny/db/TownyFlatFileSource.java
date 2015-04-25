@@ -567,6 +567,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("isJailed");
 				if (line != null)
 					resident.setJailed(Boolean.parseBoolean(line));
+				
+				line = kvFile.get("JailSpawn");
+				if (line != null)
+					resident.setJailSpawn(Integer.valueOf(line));
+				
+				line = kvFile.get("JailTown");
+				if (line != null)
+					resident.setJailTown(line);
 
 				line = kvFile.get("title");
 				if (line != null)
@@ -1545,7 +1553,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isNPC=" + Boolean.toString(resident.isNPC()));
 		// isJailed
 		list.add("isJailed=" + Boolean.toString(resident.isJailed()));
-		// title
+		// JailSpawn
+		list.add("JailSpawn=" + Integer.toString(resident.getJailSpawn()));
+		// JailTown
+		list.add("JailTown=" + resident.getJailTown());
+
+		// title		
 		list.add("title=" + resident.getTitle());
 		// surname
 		list.add("surname=" + resident.getSurname());

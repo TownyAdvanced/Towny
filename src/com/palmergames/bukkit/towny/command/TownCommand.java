@@ -490,27 +490,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split.length == 3) {
 				    try { 
 				        Integer.parseInt(split[1]);
-						index = Integer.valueOf(split[1]);					
-						
+						index = Integer.valueOf(split[1]);
+						Resident jailedresident = TownyUniverse.getDataSource().getResident(split[2]);
+						if (!jailedresident.hasTown())
+							throw new TownyException("That player is not a part of any town.");
+																		
 						try {
-							Resident jailedresident = TownyUniverse.getDataSource().getResident(split[2]);
+							
+							if (jailedresident.isJailed() && index != jailedresident.getJailSpawn())
+								index = jailedresident.getJailSpawn();
+								
 							Player jailedplayer = TownyUniverse.getPlayer(jailedresident);
 							Town sendertown = resident.getTown();
-							if (jailedresident.getTown() == sendertown) {
-								
-								jailedresident.setJailed(jailedplayer, index, sendertown);
-								if (jailedresident.isJailed()) {
-									TownyMessaging.sendTownMessagePrefixed(sendertown, jailedresident + " has been sent to jail number " + index);
-									
+							if (jailedresident.isJailed()) {
+								Town jailTown = TownyUniverse.getDataSource().getTown(jailedresident.getJailTown());
+								if (jailTown != sendertown) {
+									throw new TownyException("That player is not jailed in your town.");
 								} else {
-									TownyMessaging.sendTownMessagePrefixed(sendertown, jailedresident + " has been freed from jail number " + index);
-								}
-								TownyUniverse.getDataSource().saveResident(jailedresident);
+									jailedresident.setJailed(jailedplayer, index, sendertown);
+									return;
 								
-							} else {
-								// TODO: add language string.
-								TownyMessaging.sendErrorMsg(player, "That player is not a member of your town.");
+								}
 							}
+							
+							if (jailedresident.getTown() != sendertown) 
+								throw new TownyException("That player is not a resident of your town.");
+							
+							jailedresident.setJailed(jailedplayer, index, sendertown);
+							
+
+														
 						} catch (NotRegisteredException x) {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 						}
@@ -1226,6 +1235,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 			TownyUniverse.getDataSource().renameTown(town, newName);
+			town = TownyUniverse.getDataSource().getTown(newName);
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), player.getName(), town.getName()));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -1265,9 +1275,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		if (resident.isJailed())
+		if (resident.isJailed()) {
 			resident.setJailed(false);
-
+			resident.setJailSpawn(0);
+			resident.setJailTown("");
+			TownyMessaging.sendTownMessage(town, String.format(resident.getName() + " has escaped jail and becoming a nomad.", resident.getName()));
+		} 
 		TownyUniverse.getDataSource().saveResident(resident);
 		TownyUniverse.getDataSource().saveTown(town);
 

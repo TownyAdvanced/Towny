@@ -659,6 +659,16 @@ public class TownySQLSource extends TownyFlatFileSource {
 					e.printStackTrace();
 				}
 				try {
+					resident.setJailSpawn(rs.getInt("JailSpawn"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					resident.setJailTown(rs.getString("JailTown"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
 					resident.setTitle(rs.getString("title"));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -1438,6 +1448,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 			res_hm.put("registered", resident.getRegistered());
 			res_hm.put("isNPC", resident.isNPC());
 			res_hm.put("isJailed", resident.isJailed());
+			res_hm.put("JailSpawn", resident.getJailSpawn());
+			res_hm.put("JailTown", resident.getJailTown());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
