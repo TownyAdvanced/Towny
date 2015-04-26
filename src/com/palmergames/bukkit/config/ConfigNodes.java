@@ -118,7 +118,6 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			""),
-
 	TOWN_DEF_PUBLIC(
 			"town.default_public",
 			"true",
@@ -127,7 +126,8 @@ public enum ConfigNodes {
 			"town.default_open",
 			"false",
 			"# Default Open status of the town (are new towns open and joinable by anyone at creation?)"),
-	TOWN_DEF_TAXES("default_taxes", "", "# Default tax settings for new towns."),
+	TOWN_DEF_TAXES(
+			"town.default_taxes", "", "# Default tax settings for new towns."),
 	TOWN_DEF_TAXES_TAX(
 			"town.default_taxes.tax",
 			"0.0",
@@ -198,10 +198,10 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			"",
-			"  # These flags are only used at the initial setp of a new world.",
+			"  # These flags are only used at the initial setup of a new world.",
 			"",
-			" # Once Towny is running each world can be altered from within game",
-			" # using '/townyworld toggle'",
+			"  # Once Towny is running each world can be altered from within game",
+			"  # using '/townyworld toggle'",
 			""),
 
 	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true",

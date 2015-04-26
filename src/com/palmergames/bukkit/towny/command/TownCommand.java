@@ -38,6 +38,8 @@ import javax.naming.InvalidNameException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_ADD_RESIDENT;
@@ -336,19 +338,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	public void listTowns(Player player) {
-
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Town town : TownyUniverse.getDataSource().getTowns()) {
-			String townToken = Colors.LightBlue + town.getName();
-			townToken += town.isOpen() ? Colors.White + " (Open)" : "";
-			townToken += Colors.Blue + " [" + town.getNumResidents() + "]";
-			townToken += Colors.White;
-			formatedList.add(townToken);
-		}
-		for (String line : ChatTools.list(formatedList))
-			player.sendMessage(line);
+		player.sendMessage(Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)");
+		List<Town> townsToSort = TownyUniverse.getDataSource().getTowns();		 
+
+		Collections.sort(townsToSort, new Comparator() {
+			@Override
+	        public int compare(Object t1, Object t2) {
+				return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
+	        }
+		});
+		for (Town town : townsToSort) {
+			String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
+            if (town.isOpen())
+                    output += Colors.White + " (Open)";
+            player.sendMessage(output);
+		}		
 	}
+		
+//		for (String line : ChatTools.list(formatedList))
+//			player.sendMessage(line);
+//	}
+
+//		for (Town town : TownyUniverse.getDataSource().getTowns()) {
+//			String townToken = Colors.LightBlue + town.getName();
+//			townToken += town.isOpen() ? Colors.White + " (Open)" : "";
+//			townToken += Colors.Blue + " [" + town.getNumResidents() + "]";
+//			townToken += Colors.White;
+//			formatedList.add(townToken);
+//		}
+
 
 	public void townMayor(Player player, String[] split) {
 

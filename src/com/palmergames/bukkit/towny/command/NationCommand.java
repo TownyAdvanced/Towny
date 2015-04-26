@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.naming.InvalidNameException;
@@ -438,12 +440,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void listNations(Player player) {
 
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Nation nation : TownyUniverse.getDataSource().getNations())
-			formatedList.add(Colors.LightBlue + nation.getName() + Colors.Blue + " [" + nation.getNumTowns() + "]" + Colors.White);
-		for (String line : ChatTools.list(formatedList))
-			player.sendMessage(line);
+		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)");		
+		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();		 
+
+		Collections.sort(nationsToSort, new Comparator() {
+			@Override
+	        public int compare(Object n1, Object n2) {
+				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
+	        }
+		});
+		for (Nation nation : nationsToSort) {
+			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+            player.sendMessage(output);
+		}		
 	}
+	
 
 	/**
 	 * Create a new nation. Command: /nation new [nation] *[capital]

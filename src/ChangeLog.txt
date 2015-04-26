@@ -2128,6 +2128,7 @@ v0.89.2.11:
 	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
 	- Add missing nodes to plugin.yml.
 	- Add default tax, embassytax, shoptax and taxpercentage settings for new towns in teh config.yml.
+	- Add a better /town list and /nation list screen. /n list now shows resident count as well as town count.
 	- Add Jail plots.
 		- Players can become jailed if:
 			- The player's mayor/sheriffs send them to jail.
