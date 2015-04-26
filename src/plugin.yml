@@ -193,6 +193,7 @@ permissions:
             towny.command.town.set.spawn: true
             towny.command.town.set.outpost: true
             towny.command.town.set.perm: true
+            towny.command.town.set.jail: true
             towny.command.town.set.taxes: true
             towny.command.town.set.plottax: true
             towny.command.town.set.shoptax: true
@@ -214,6 +215,7 @@ permissions:
             towny.command.town.toggle.mobs: true
             towny.command.town.toggle.taxpercent: true
             towny.command.town.toggle.open: true
+            towny.command.town.toggle.jail: true
     
     # Plot command permissions
     towny.command.plot.*:
@@ -251,6 +253,8 @@ permissions:
             towny.command.plot.set.arena: true
             towny.command.plot.set.wilds: true
             towny.command.plot.set.spleef: true
+            towny.command.plot.set.inn: true
+            towny.command.plot.set.jail: true
     
     # Resident command permissions
     towny.command.resident.*:
@@ -259,6 +263,7 @@ permissions:
         children:
             towny.command.resident.list: true
             towny.command.resident.tax: true
+            towny.command.resident.jail: true
             towny.command.resident.set.*: true
             towny.command.resident.toggle.*: true
             towny.command.resident.friend: true

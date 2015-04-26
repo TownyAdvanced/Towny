@@ -2125,6 +2125,7 @@ v0.89.2.11:
 	- Fix help screen of '/plot set perm ?'
 	- Add missing '/ta set capital' information to command.
 	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
+	- Add missing nodes to plugin.yml
 	- Add Jail plots.
 		- Players can become jailed if:
 			- The player's mayor/sheriffs send them to jail.
