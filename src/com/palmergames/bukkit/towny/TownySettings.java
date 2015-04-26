@@ -1206,6 +1206,26 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
 
+	public static double getTownDefaultTax() {
+
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_TAX);
+	}
+
+	public static double getTownDefaultShopTax() {
+
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_SHOP_TAX);
+	}
+	
+	public static double getTownDefaultEmbassyTax() {
+
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_EMBASSY_TAX);
+	}
+
+	public static boolean getTownDefaultTaxPercentage() {
+
+		return getBoolean(ConfigNodes.TOWN_DEF_TAXES_TAXPERCENTAGE);
+	}
+	
 	public static boolean hasTownLimit() {
 
 		return getTownLimit() != 0;

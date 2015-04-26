@@ -2126,7 +2126,8 @@ v0.89.2.11:
 	- Possible fix to deleted towns not announcing their deletion message.
 	- Add missing '/ta set capital' information to command.
 	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
-	- Add missing nodes to plugin.yml
+	- Add missing nodes to plugin.yml.
+	- Add default tax, embassytax, shoptax and taxpercentage settings for new towns in teh config.yml.
 	- Add Jail plots.
 		- Players can become jailed if:
 			- The player's mayor/sheriffs send them to jail.
@@ -2142,22 +2143,30 @@ v0.89.2.11:
 		- Jailed players do not give monetary payouts when they are killed.
 		- Jailed players show their jailed status in the /res [playername] screen, along with the town they are jailed in.
 		- It is suggested you make a new town rank in the townyperms.yml called Sheriff, and give that rank the towny.command.town.toggle.jail node. Newly generated townyperms.yml files will contain this rank by default.
-		- New commands:
-			- /plot set jail - Sets a jail plot and jail spawn.
-			- /resident jail paybail - Allows a player to pay to get out of jail. Funds go to the town which owns the Jail.
-			- /town set jail - Resets a jail plot's spawn to current position within a jail plot.
-			- /town toggle jail [number] [residentname] - Sends a resident of your town to the jail spawn number specified. Same command unjails a player.
-		- New permission nodes:
-			- towny.command.plot.set.jail
-			- towny.command.resident.jail
-			- towny.command.town.set.jail
-			- towny.command.town.toggle.jail
-		- New config nodes:
-			- jail.is_jailing_attacking_enemies: (default: false)
-				- If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists.
-			- jail.jail_is_allowing_ender_pearls: (default: false)
-				- If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting.
-			- jail.bail.is_allowing_bail: (default: false)
-				- If true players can pay a bail amount to be unjailed.
-			- jail.bail.bail_cost: (default: 10)
-				- Amount that bail costs.
+	- New commands:
+		- /plot set jail - Sets a jail plot and jail spawn.
+		- /resident jail paybail - Allows a player to pay to get out of jail. Funds go to the town which owns the Jail.
+		- /town set jail - Resets a jail plot's spawn to current position within a jail plot.
+		- /town toggle jail [number] [residentname] - Sends a resident of your town to the jail spawn number specified. Same command unjails a player.
+	- New permission nodes:
+		- towny.command.plot.set.jail
+		- towny.command.resident.jail
+		- towny.command.town.set.jail
+		- towny.command.town.toggle.jail
+	- New config nodes:
+		- jail.is_jailing_attacking_enemies: (default: false)
+			- If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists.
+		- jail.jail_is_allowing_ender_pearls: (default: false)
+			- If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting.
+		- jail.bail.is_allowing_bail: (default: false)
+			- If true players can pay a bail amount to be unjailed.
+		- jail.bail.bail_cost: (default: 10)
+			- Amount that bail costs.
+	  	- default_taxes.tax: (default: 0.0)
+	    	 Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_tax_percent setting.
+		- default_taxes.shop_tax: (default: 0.0)
+			- Default amount of shop tax of a new town.
+		- default_taxes.embassy_tax: (default: 0.0)
+	    	- Default amount of embassy tax of a new town.
+		- default_taxes.taxpercentage: (default: false)
+	    	- Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount.

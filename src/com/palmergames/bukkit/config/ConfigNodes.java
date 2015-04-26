@@ -127,6 +127,23 @@ public enum ConfigNodes {
 			"town.default_open",
 			"false",
 			"# Default Open status of the town (are new towns open and joinable by anyone at creation?)"),
+	TOWN_DEF_TAXES("default_taxes", "", "# Default tax settings for new towns."),
+	TOWN_DEF_TAXES_TAX(
+			"town.default_taxes.tax",
+			"0.0",
+			"# Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_tax_percent setting."),
+	TOWN_DEF_TAXES_SHOP_TAX(
+			"town.default_taxes.shop_tax",
+			"0.0",
+			"# Default amount of shop tax of a new town."),
+	TOWN_DEF_TAXES_EMBASSY_TAX(
+			"town.default_taxes.embassy_tax",
+			"0.0",
+			"# Default amount of embassy tax of a new town."),
+	TOWN_DEF_TAXES_TAXPERCENTAGE(
+			"town.default_taxes.taxpercentage",
+			"false",
+			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),	
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
