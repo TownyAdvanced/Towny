@@ -355,19 +355,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
             player.sendMessage(output);
 		}		
 	}
-		
-//		for (String line : ChatTools.list(formatedList))
-//			player.sendMessage(line);
-//	}
-
-//		for (Town town : TownyUniverse.getDataSource().getTowns()) {
-//			String townToken = Colors.LightBlue + town.getName();
-//			townToken += town.isOpen() ? Colors.White + " (Open)" : "";
-//			townToken += Colors.Blue + " [" + town.getNumResidents() + "]";
-//			townToken += Colors.White;
-//			formatedList.add(townToken);
-//		}
-
 
 	public void townMayor(Player player, String[] split) {
 
