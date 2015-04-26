@@ -2123,6 +2123,7 @@ v0.89.2.11:
 	- Fix bug with DeathPayments not handling some monster and pvp kills.
 	- Fix Towny globalmessages from displaying in worlds with Towny turned off.
 	- Fix help screen of '/plot set perm ?'
+	- Possible fix to deleted towns not announcing their deletion message.
 	- Add missing '/ta set capital' information to command.
 	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
 	- Add missing nodes to plugin.yml

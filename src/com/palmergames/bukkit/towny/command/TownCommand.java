@@ -1575,9 +1575,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				System.out.println(e.getMessage());
 			}
 		} else {
-
-			TownyUniverse.getDataSource().removeTown(town);
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+			TownyUniverse.getDataSource().removeTown(town);
+			
 		}
 	}
 
