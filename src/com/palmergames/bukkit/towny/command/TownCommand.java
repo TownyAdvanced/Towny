@@ -1564,8 +1564,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
 				}
 			}));
-
-			Question question = new Question(player.getName(), "Do you really want to delete this town", options);
+			String output = "Do you really want to delete this town";
+			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
+				output += " (This will revert all townblocks to their pre-claimed state.";
+			Question question = new Question(player.getName(), output, options);
 
 			try {
 				plugin.appendQuestion(questioner, question);

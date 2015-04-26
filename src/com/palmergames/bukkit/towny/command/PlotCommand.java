@@ -400,7 +400,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
-			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", ""));
+			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
 			
 		} else {

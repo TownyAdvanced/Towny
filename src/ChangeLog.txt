@@ -2121,7 +2121,10 @@ v0.89.2.10:
 v0.89.2.11:
 	- Fix long-standing issue with rare cases of OutpostSpawns not being set and removed properly.
 	- Fix bug with DeathPayments not handling some monster and pvp kills.
+	- Fix Towny globalmessages from displaying in worlds with Towny turned off.
+	- Fix help screen of '/plot set perm ?'
 	- Add missing '/ta set capital' information to command.
+	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
 	- Add Jail plots.
 		- Players can become jailed if:
 			- The player's mayor/sheriffs send them to jail.

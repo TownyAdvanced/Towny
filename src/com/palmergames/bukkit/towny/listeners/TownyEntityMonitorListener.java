@@ -242,7 +242,7 @@ public class TownyEntityMonitorListener implements Listener {
 			}			
 		} else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))  ) {
 			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) != null) {
-				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
+				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
 					return;				
 			}
 			if (defenderResident.isJailed())
