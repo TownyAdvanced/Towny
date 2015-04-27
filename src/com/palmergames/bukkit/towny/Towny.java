@@ -32,8 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Towny Plugin for Bukkit
@@ -203,9 +201,6 @@ public class Towny extends JavaPlugin {
 
 	public boolean load() {
 
-		Pattern pattern = Pattern.compile("-b(\\d*?)jnks", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(getServer().getVersion());
-
 		// TownyEconomyHandler.setupEconomy();
 
 		if (!townyUniverse.loadSettings()) {
@@ -215,26 +210,6 @@ public class Towny extends JavaPlugin {
 		}
 
 		setupLogger();
-
-		int bukkitVer = TownySettings.getMinBukkitVersion();
-
-		if (!matcher.find() || matcher.group(1) == null) {
-
-			TownyLogger.log.warning("[Towny Warning] Unable to read CraftBukkit Version.");
-			TownyLogger.log.warning("[Towny Warning] Towny requires version " + bukkitVer + " or higher.");
-			TownyLogger.log.warning("[Towny Warning] Check your CraftBukkit version as we do not test on custom/old builds.");
-
-		} else {
-
-			int curBuild = Integer.parseInt(matcher.group(1));
-
-			if (curBuild < bukkitVer) {
-
-				TownyLogger.log.severe("[Towny Warning] CraftBukkit Version (" + curBuild + ") is outdated! ");
-				TownyLogger.log.severe("[Towny Warning] Towny requires version " + bukkitVer + " or higher.");
-
-			}
-		}
 
 		checkPlugins();
 

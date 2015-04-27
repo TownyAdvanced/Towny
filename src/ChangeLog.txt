@@ -2124,6 +2124,7 @@ v0.89.2.11:
 	- Fix Towny globalmessages from displaying in worlds with Towny turned off.
 	- Fix help screen of '/plot set perm ?'
 	- Possible fix to deleted towns not announcing their deletion message.
+	- Remove bukkit version matching on startup as there are no new official version of bukkit to test against.
 	- Add missing '/ta set capital' information to command.
 	- Add to town delete confirmation question, clarifying that townblocks will revert if the town's world has revertonunclaim: true status.
 	- Add missing nodes to plugin.yml.
