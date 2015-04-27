@@ -2129,6 +2129,7 @@ v0.89.2.11:
 	- Add missing nodes to plugin.yml.
 	- Add default tax, embassytax, shoptax and taxpercentage settings for new towns in teh config.yml.
 	- Add a better /town list and /nation list screen. /n list now shows resident count as well as town count.
+	- Add mention of Town and Nation to question posed to people receiving town and nation invites.
 	- Add Jail plots.
 		- Players can become jailed if:
 			- The player's mayor/sheriffs send them to jail.

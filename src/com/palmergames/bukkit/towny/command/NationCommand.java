@@ -437,6 +437,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param player
 	 */
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listNations(Player player) {
 
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
@@ -674,7 +675,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
 				}
 			}));
-			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), nation.getName()), options);
+			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("nation_sing") + ": " + nation.getName()), options);
 			try {
 				plugin.appendQuestion(questioner, question);
 			} catch (Exception e) {

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.23
+version: 0.24
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -96,6 +96,7 @@ res_list: 'Residents'
 res_sing: 'Resident'
 mayor_sing: 'Mayor'
 admin_sing: 'Admin'
+town_sing: 'Town'
 nation_sing: 'Nation'
 nation_plu: 'Nations'
 king_sing: 'King'
@@ -190,7 +191,7 @@ msg_invalid_name: '&bNone of those names were valid.'
 msg_invited_join_town: '&b%s invited %s to the town.'
 msg_invited_join_nation: '&b%s invited %s to the nation.'
 msg_deny_invite: '&b%s denied your invite.'
-msg_invited: '&bYou''ve been invited to join %s.'
+msg_invited: '&bYou''ve been invited to join the %s.'
 msg_town_online: 'Online in Town'
 msg_nation_online: 'Online in Nation'
 

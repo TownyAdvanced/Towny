@@ -337,6 +337,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param player
 	 */
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(Player player) {
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
 		player.sendMessage(Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)");
@@ -1572,7 +1573,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}));
 			String output = "Do you really want to delete this town";
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
-				output += " (This will revert all townblocks to their pre-claimed state.";
+				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting this town will revert all townblocks to their pre-claimed state.");
 			Question question = new Question(player.getName(), output, options);
 
 			try {
@@ -1700,7 +1701,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendTownMessage(getTown(), String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
 				}
 			}));
-			Question question = new Question(newMember.getName(), String.format(TownySettings.getLangString("msg_invited"), town.getName()), options);
+			Question question = new Question(newMember.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("town_sing") + ": " +  town.getName()), options);
 			try {
 				plugin.appendQuestion(questioner, question);
 			} catch (Exception e) {
