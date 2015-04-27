@@ -707,9 +707,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			Resident owner = townBlock.getResident();
 			boolean isSameTown = (resident.hasTown()) ? resident.getTown() == owner.getTown() : false;
-			
 			if ((resident == owner)
 					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
+					|| (townBlock.getTown() == resident.getTown() && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
 					|| isAdmin) {
 				
 				return owner;

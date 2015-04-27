@@ -2123,6 +2123,7 @@ v0.89.2.11:
 	- Fix bug with DeathPayments not handling some monster and pvp kills.
 	- Fix Towny globalmessages from displaying in worlds with Towny turned off.
 	- Fix help screen of '/plot set perm ?'
+	- Fix plots owned by non-townmembers notFix plots owned by non-townmembers not being alterabled by the town's mayor and other priviledged town members. being alterabled by the town's mayor and other priviledged town members.
 	- Possible fix to deleted towns not announcing their deletion message.
 	- Remove bukkit version matching on startup as there are no new official version of bukkit to test against.
 	- Add missing '/ta set capital' information to command.
