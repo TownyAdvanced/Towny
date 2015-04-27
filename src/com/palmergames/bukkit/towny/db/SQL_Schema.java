@@ -99,6 +99,7 @@ public class SQL_Schema {
 				//+ "`townBlocks` mediumtext NOT NULL,"
 				+ "`spawn` mediumtext NOT NULL,"
 				+ "`outpostSpawns` mediumtext DEFAULT NULL,"
+				+ "`jailSpawns` mediumtext DEFAULT NULL,"
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}
@@ -113,6 +114,9 @@ public class SQL_Schema {
 				+ "`lastOnline` BIGINT NOT NULL,"
 				+ "`registered` BIGINT NOT NULL,"
 				+ "`isNPC` bool NOT NULL DEFAULT '0',"
+				+ "`isJailed` bool NOT NULL DEFAULT '0',"
+				+ "`JailSpawn` mediumint,"
+				+ "`JailTown` mediumtext,"
 				+ "`title` mediumtext,"
 				+ "`surname` mediumtext,"
 				+ "`protectionStatus` mediumtext,"
