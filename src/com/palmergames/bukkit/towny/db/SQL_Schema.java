@@ -99,7 +99,7 @@ public class SQL_Schema {
 				//+ "`townBlocks` mediumtext NOT NULL,"
 				+ "`spawn` mediumtext NOT NULL,"
 				+ "`outpostSpawns` mediumtext DEFAULT NULL,"
-				+ "`jailSpawns` mediumtext DEFAULT NULL,"
+				+ "`JailSpawns` mediumtext DEFAULT NULL,"
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}

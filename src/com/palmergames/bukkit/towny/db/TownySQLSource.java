@@ -859,59 +859,60 @@ public class TownySQLSource extends TownyFlatFileSource {
 						} catch (NotRegisteredException e) {
 						} catch (NullPointerException e) {
 						}
-					// Load outpost spawns
-					line = rs.getString("outpostSpawns");
-					if (line != null) {
-						String[] outposts = line.split(";");
-						for (String spawn : outposts) {
-							search = (line.contains("#")) ? "#" : ",";
-							tokens = spawn.split(search);
-							if (tokens.length >= 4)
-								try {
-									World world = plugin.getServerWorld(tokens[0]);
-									double x = Double.parseDouble(tokens[1]);
-									double y = Double.parseDouble(tokens[2]);
-									double z = Double.parseDouble(tokens[3]);
+				}
+				// Load outpost spawns
+				line = rs.getString("outpostSpawns");
+				if (line != null) {
+					String[] outposts = line.split(";");
+					for (String spawn : outposts) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = spawn.split(search);
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
 
-									Location loc = new Location(world, x, y, z);
-									if (tokens.length == 6) {
-										loc.setPitch(Float.parseFloat(tokens[4]));
-										loc.setYaw(Float.parseFloat(tokens[5]));
-									}
-									town.forceAddOutpostSpawn(loc);
-								} catch (NumberFormatException e) {
-								} catch (NotRegisteredException e) {
-								} catch (NullPointerException e) {
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
 								}
+								town.forceAddOutpostSpawn(loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
 						}
 					}
-					// Load jail spawns
-					line = rs.getString("JailSpawns");
-					if (line != null) {
-						String[] jails = line.split(";");
-						for (String spawn : jails) {
-							search = (line.contains("#")) ? "#" : ",";
-							tokens = spawn.split(search);
-							if (tokens.length >= 4)
-								try {
-									World world = plugin.getServerWorld(tokens[0]);
-									double x = Double.parseDouble(tokens[1]);
-									double y = Double.parseDouble(tokens[2]);
-									double z = Double.parseDouble(tokens[3]);
+				// Load jail spawns
+				line = rs.getString("JailSpawns");
+				if (line != null) {
+					String[] jails = line.split(";");
+					for (String spawn : jails) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = spawn.split(search);
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
 
-									Location loc = new Location(world, x, y, z);
-									if (tokens.length == 6) {
-										loc.setPitch(Float.parseFloat(tokens[4]));
-										loc.setYaw(Float.parseFloat(tokens[5]));
-									}
-									town.forceAddJailSpawn(loc);
-								} catch (NumberFormatException e) {
-								} catch (NotRegisteredException e) {
-								} catch (NullPointerException e) {
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
 								}
-						}
+								town.forceAddJailSpawn(loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
 					}
 				}
+
 
 				/*
 				 * Attempt these for older databases.
@@ -1514,7 +1515,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
 					jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}
-				twn_hm.put("jailSpawns", jailArray);
+				twn_hm.put("JailSpawns", jailArray);
 			}
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));

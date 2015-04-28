@@ -2175,5 +2175,6 @@ v0.89.2.11:
 		- default_taxes.taxpercentage: (default: false)
 	    	- Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount.
 v0.89.2.12:
-	- Fix SQL
-	- Fix uncalled newNationEvent.	    	
+	- Fix uncalled newNationEvent.
+v0.89.2.13:
+	- Fix SQL	    	
