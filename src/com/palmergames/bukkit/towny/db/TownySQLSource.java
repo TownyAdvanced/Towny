@@ -858,7 +858,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 						} catch (NumberFormatException e) {
 						} catch (NotRegisteredException e) {
 						} catch (NullPointerException e) {
-						}
+					}
 				}
 				// Load outpost spawns
 				line = rs.getString("outpostSpawns");
@@ -884,8 +884,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 							} catch (NotRegisteredException e) {
 							} catch (NullPointerException e) {
 							}
-						}
 					}
+				}
 				// Load jail spawns
 				line = rs.getString("jailSpawns");
 				if (line != null) {

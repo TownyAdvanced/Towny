@@ -335,7 +335,6 @@ public class SQL_Schema {
 
 			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
 						+ "DROP COLUMN `townBlocks`";
-
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(resident_update);
