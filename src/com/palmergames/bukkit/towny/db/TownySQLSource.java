@@ -887,7 +887,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				// Load jail spawns
-				line = rs.getString("JailSpawns");
+				line = rs.getString("jailSpawns");
 				if (line != null) {
 					String[] jails = line.split(";");
 					for (String spawn : jails) {
@@ -1515,7 +1515,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
 					jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}
-				twn_hm.put("JailSpawns", jailArray);
+				twn_hm.put("jailSpawns", jailArray);
 			}
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
