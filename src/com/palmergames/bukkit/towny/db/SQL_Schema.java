@@ -247,9 +247,9 @@ public class SQL_Schema {
 		String town_update;
 
 		try {
-			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` ADD COLUMN "
-						+ "`admindisabledpvp` bool NOT NULL DEFAULT '0',"
-						+ "`jailSpawns` mediumtext DEFAULT NULL";
+			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` "
+						+ "ADD COLUMN `admindisabledpvp` bool NOT NULL DEFAULT '0',"
+						+ "ADD COLUMN `jailSpawns` mediumtext DEFAULT NULL";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_update);
