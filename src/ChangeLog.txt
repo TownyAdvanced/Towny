@@ -2178,3 +2178,5 @@ v0.89.2.12:
 	- Fix uncalled newNationEvent.
 v0.89.2.13:
 	- Fix SQL	    	
+v0.89.2.14:
+	- Fix language files not updating automatically.	

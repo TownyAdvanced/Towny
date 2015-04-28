@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -33,6 +34,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
@@ -49,7 +51,7 @@ public class TownySettings {
 	};
 
 	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, language;
+	private static CommentedConfiguration config, newConfig, language, newLanguage;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -205,13 +207,33 @@ public class TownySettings {
 		String fullPath = filepath + FileMgmt.fileSeparator() + res;
 
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
+		
 		if (file != null) {
 
 			// read the (language).yml into memory
 			language = new CommentedConfiguration(file);
 			language.load();
-
+			//String resVersion = null;
+			newLanguage = new CommentedConfiguration(file);
+			try {
+				newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
+			} catch (InvalidConfigurationException e) {
+				TownyMessaging.sendMsg("Custom language file detected, not updating.");
+				return;
+			}
+			String resVersion = newLanguage.getString("version");
+			
+			String langVersion = TownySettings.getLangString("version");
+			
+			if (!langVersion.equalsIgnoreCase(resVersion)) {
+				language = newLanguage;
+				newLanguage = null;
+				TownyMessaging.sendMsg("Newer language file detected, language file updated.");
+				FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
+			}
+			
 		}
+
 	}
 
 	private static void sendError(String msg) {
