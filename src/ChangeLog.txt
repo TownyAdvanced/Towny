@@ -2184,3 +2184,9 @@ v0.89.2.15:
 	- New config nodes:
 		- jail.jail_denies_town_leave: (default: false)
 			- If false jailed players can use /town leave, and escape a jail.
+v0.89.2.16:
+	- Added a new entry in Nation levels 'nationTownUpkeepModifier'. (default: 1.0)
+		- Joining a nation can now lower/raise how much town upkeep your town pays.
+		- This multiplier is calculated after all other multipliers have their effect on the town upkeep cost.
+		- (Configs will not update for this. To enable, delete the nation_level entries and Towny will add a fresh set of data upon startup, 
+		  OR manually add nationTownUpkeepModifier: 1.0 to each nation_level.)
