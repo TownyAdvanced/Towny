@@ -2180,3 +2180,7 @@ v0.89.2.13:
 	- Fix SQL	    	
 v0.89.2.14:
 	- Fix language files not updating automatically.	
+v0.89.2.15:
+	- New config nodes:
+		- jail.jail_denies_town_leave: (default: false)
+			- If false jailed players can use /town leave, and escape a jail.

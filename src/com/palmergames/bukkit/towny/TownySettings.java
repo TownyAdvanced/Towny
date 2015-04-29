@@ -34,7 +34,6 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
@@ -205,7 +204,6 @@ public class TownySettings {
 
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		String fullPath = filepath + FileMgmt.fileSeparator() + res;
-
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		
 		if (file != null) {
@@ -213,7 +211,6 @@ public class TownySettings {
 			// read the (language).yml into memory
 			language = new CommentedConfiguration(file);
 			language.load();
-			//String resVersion = null;
 			newLanguage = new CommentedConfiguration(file);
 			try {
 				newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
@@ -221,19 +218,16 @@ public class TownySettings {
 				TownyMessaging.sendMsg("Custom language file detected, not updating.");
 				return;
 			}
-			String resVersion = newLanguage.getString("version");
-			
+			String resVersion = newLanguage.getString("version");			
 			String langVersion = TownySettings.getLangString("version");
 			
 			if (!langVersion.equalsIgnoreCase(resVersion)) {
 				language = newLanguage;
 				newLanguage = null;
-				TownyMessaging.sendMsg("Newer language file detected, language file updated.");
+				TownyMessaging.sendMsg("Newer language file available, language file updated.");
 				FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
-			}
-			
+			}			
 		}
-
 	}
 
 	private static void sendError(String msg) {
@@ -1471,6 +1465,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_ENDER_PEARLS);	
 	}
+	
+	public static boolean JailDeniesTownLeave() {
+		
+		return getBoolean(ConfigNodes.JAIL_JAIL_DENIES_TOWN_LEAVE);	
+	}	
 
 	public static boolean isAllowingBail() {
 		

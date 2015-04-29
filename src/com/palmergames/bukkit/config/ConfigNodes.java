@@ -1012,7 +1012,7 @@ public enum ConfigNodes {
 			"  # |                 Jail Plot settings                   | #",
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
-			""),
+			""),	
 	JAIL_IS_JAILING_ATTACKING_ENEMIES(
 			"jail.is_jailing_attacking_enemies",
 			"false",
@@ -1020,7 +1020,11 @@ public enum ConfigNodes {
 	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
 			"jail.jail_allows_ender_pearls",
 			"false",
-			"#If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting."),			
+			"#If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting."),
+	JAIL_JAIL_DENIES_TOWN_LEAVE(
+			"jail.jail_denies_town_leave",
+			"false",
+			"#If false jailed players can use /town leave, and escape a jail."),		
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",

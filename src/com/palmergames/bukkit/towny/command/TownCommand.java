@@ -1272,6 +1272,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (resident.isJailed()) {
+			if (TownySettings.JailDeniesTownLeave()) {
+				TownyMessaging.sendErrorMsg(player, "Abandoning your town is not allowed when you are jailed.");
+				return;
+			}
+			resident.setJailed(false);
+			resident.setJailSpawn(0);
+			resident.setJailTown("");
+			TownyMessaging.sendTownMessage(town, String.format(resident.getName() + " has escaped jail by becoming a nomad.", resident.getName()));
+		} 
+		
 		try {
 			townRemoveResident(town, resident);
 		} catch (EmptyTownException et) {
@@ -1282,12 +1293,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		if (resident.isJailed()) {
-			resident.setJailed(false);
-			resident.setJailSpawn(0);
-			resident.setJailTown("");
-			TownyMessaging.sendTownMessage(town, String.format(resident.getName() + " has escaped jail and becoming a nomad.", resident.getName()));
-		} 
+		
 		TownyUniverse.getDataSource().saveResident(resident);
 		TownyUniverse.getDataSource().saveTown(town);
 
