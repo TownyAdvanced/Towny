@@ -248,7 +248,6 @@ public class SQL_Schema {
 
 		try {
 			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` "
-						+ "ADD COLUMN `admindisabledpvp` bool NOT NULL DEFAULT '0',"
 						+ "ADD COLUMN `jailSpawns` mediumtext DEFAULT NULL";
 			
 			Statement s = cntx.createStatement();
@@ -271,8 +270,6 @@ public class SQL_Schema {
 		try {
 
 			resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
-						+ "ADD COLUMN `town-ranks` mediumtext,"
-						+ "ADD COLUMN `nation-ranks` mediumtext,"
 						+ "ADD COLUMN `isJailed` bool NOT NULL DEFAULT '0',"
 						+ "ADD COLUMN `JailSpawn` mediumint,"
 						+ "ADD COLUMN `JailTown` mediumtext";

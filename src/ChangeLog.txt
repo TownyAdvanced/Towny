@@ -2190,3 +2190,6 @@ v0.89.2.16:
 		- This multiplier is calculated after all other multipliers have their effect on the town upkeep cost.
 		- (Configs will not update for this. To enable, delete the nation_level entries and Towny will add a fresh set of data upon startup, 
 		  OR manually add nationTownUpkeepModifier: 1.0 to each nation_level.)
+v0.89.2.17:
+	- Probably actually fix sql loading this time.
+	- Fix to handle moving NPCs from Citizens2.

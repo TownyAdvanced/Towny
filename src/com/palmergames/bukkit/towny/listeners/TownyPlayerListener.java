@@ -599,8 +599,7 @@ public class TownyPlayerListener implements Listener {
 				}				
 			}
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Not a valid resident, probably an NPC from Citizens.
 		}
 			
 		/*

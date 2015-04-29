@@ -146,6 +146,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
     }
     
     public void setJailTown(String jailTown){
+    	if (jailTown.equals(null))
+    		jailTown = "";
     	if (jailTown.matches(" "))
     		jailTown = "";
     	this.JailTown = jailTown;
