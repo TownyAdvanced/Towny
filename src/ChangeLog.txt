@@ -2193,3 +2193,5 @@ v0.89.2.16:
 v0.89.2.17:
 	- Probably actually fix sql loading this time.
 	- Fix to handle moving NPCs from Citizens2.
+v0.89.2.18:
+	- Fix for creepers damaging ItemFrames.
