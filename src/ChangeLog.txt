@@ -2196,4 +2196,6 @@ v0.89.2.17:
 v0.89.2.18:
 	- Fix for creepers damaging ItemFrames.
 v0.89.2.19:
-	- Remove config options for Nation and Town creation for admins only, as this has been controlled by permission nodes for a long time now. 
+	- Remove config options for Nation and Town creation for admins only, as this has been controlled by permission nodes for a long time now.
+v0.89.2.20:
+	- Fix case where plots couldn't be altered by the mayor if the player who owns it has no town.	 
