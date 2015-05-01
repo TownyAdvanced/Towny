@@ -24,7 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -143,7 +145,7 @@ public class TownyEntityListener implements Listener {
 
 		TownyWorld townyWorld = null;
 		
-		Entity entity = event.getEntity();
+		Entity entity = event.getEntity();		
 		
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame) {
 			String damager = event.getDamager().getType().name();
@@ -766,4 +768,23 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
 
+//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//	public void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
+//		DamageCause type = event.getCause();
+//		Location loc = event.getDamager().getLocation();
+//		TownyWorld townyWorld = null;
+
+//		if (type == DamageCause.BLOCK_EXPLOSION) {
+//			try {
+//				townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
+//				if (!locationCanExplode(townyWorld, loc)) {
+//					event.setCancelled(true);
+//					return;
+//				}
+//			} catch (NotRegisteredException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

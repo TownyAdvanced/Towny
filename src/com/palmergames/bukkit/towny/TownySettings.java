@@ -999,15 +999,12 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_FRIENDLY_FIRE);
 	}
 
-	public static boolean isTownCreationAdminOnly() {
-
-		return getBoolean(ConfigNodes.PERMS_TOWN_CREATION_ADMIN_ONLY);
-	}
-
-	public static boolean isNationCreationAdminOnly() {
-
-		return getBoolean(ConfigNodes.PERMS_NATION_CREATION_ADMIN_ONLY);
-	}
+//	public static boolean isTownCreationAdminOnly() {
+//		return getBoolean(ConfigNodes.PERMS_TOWN_CREATION_ADMIN_ONLY);
+//	}
+//	public static boolean isNationCreationAdminOnly() {
+//		return getBoolean(ConfigNodes.PERMS_NATION_CREATION_ADMIN_ONLY);
+//	}
 
 	/*
 	 * public static boolean isUsingRegister() {

@@ -66,8 +66,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
-		if (!TownySettings.isNationCreationAdminOnly())
-			nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_6")));
+//		if (!TownySettings.isNationCreationAdminOnly())
+//			nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_6")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2") + " [capital]", TownySettings.getLangString("nation_help_8")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "delete " + TownySettings.getLangString("nation_help_2"), ""));

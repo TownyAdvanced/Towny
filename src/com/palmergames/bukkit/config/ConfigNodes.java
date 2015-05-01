@@ -90,12 +90,12 @@ public enum ConfigNodes {
 			"  #        towny.town.spawn.public : Ability to spawn to unaffilated public towns.",
 			"  #",
 			"  # these will be moved to permissions nodes at a later date"),
-	PERMS_TOWN_CREATION_ADMIN_ONLY(
-			"permissions.town_creation_admin_only",
-			"false"),
-	PERMS_NATION_CREATION_ADMIN_ONLY(
-			"permissions.nation_creation_admin_only",
-			"false"),
+//	PERMS_TOWN_CREATION_ADMIN_ONLY(
+//			"permissions.town_creation_admin_only",
+//			"false"),
+//	PERMS_NATION_CREATION_ADMIN_ONLY(
+//			"permissions.nation_creation_admin_only",
+//			"false"),
 	LEVELS(
 			"levels",
 			"",
