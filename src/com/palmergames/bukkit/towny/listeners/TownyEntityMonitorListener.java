@@ -337,7 +337,9 @@ public class TownyEntityMonitorListener implements Listener {
 	public void isJailingAttackingEnemies(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		if (TownySettings.isJailingAttackingEnemies()) {
 			Location loc = defenderPlayer.getLocation();
-			if (!TownyUniverse.getTownBlock(defenderPlayer.getLocation()).hasTown())
+			if (!TownyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
+				return;
+			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) == null)
 				return;
 			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
 				return;
