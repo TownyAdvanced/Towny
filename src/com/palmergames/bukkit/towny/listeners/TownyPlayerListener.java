@@ -824,8 +824,7 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// If not registered, it is most likely an NPC			
 		}
 		
 	}

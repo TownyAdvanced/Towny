@@ -2201,3 +2201,5 @@ v0.89.2.20:
 	- Fix case where plots couldn't be altered by the mayor if the player who owns it has no town.	 
 v0.89.2.21:
 	- Fix TownyEntityMonitorListener error.
+v0.89.2.22:
+	- Another fix for NPCs from Citizens2.
