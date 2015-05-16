@@ -346,6 +346,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Collections.sort(townsToSort, new Comparator() {
 			@Override
 	        public int compare(Object t1, Object t2) {
+				if (((Town) t2).getNumResidents() == ((Town) t1).getNumResidents()) return 0;
 				return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
 	        }
 		});

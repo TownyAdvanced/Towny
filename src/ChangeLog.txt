@@ -2203,3 +2203,6 @@ v0.89.2.21:
 	- Fix TownyEntityMonitorListener error.
 v0.89.2.22:
 	- Another fix for NPCs from Citizens2.
+v0.89.2.23:
+    - Fix to the new /town and /nation list commands.
+    - Update spanish.yml to version 0.23 courtesy of Alvarote1998

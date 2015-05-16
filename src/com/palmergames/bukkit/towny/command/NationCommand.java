@@ -449,6 +449,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Collections.sort(nationsToSort, new Comparator() {
 			@Override
 	        public int compare(Object n1, Object n2) {
+				if (((Nation) n2).getNumResidents() == ((Nation) n1).getNumResidents()) return 0;
 				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
 	        }
 		});
