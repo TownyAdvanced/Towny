@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 public class NameValidation {
 
 	private static Pattern namePattern = null;
+	private static Pattern stringPattern = null;
 
 	/**
 	 * Check and perform getNameCheckRegex on any town/nation names
@@ -99,18 +100,30 @@ public class NameValidation {
 		return !isValidName(name);
 	}
 
+	public static boolean isValidName(String name) {
+	
+		try {
+			if (namePattern == null)
+				namePattern = Pattern.compile(TownySettings.getNameCheckRegex());
+			return namePattern.matcher(name).find();
+		} catch (PatternSyntaxException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 	/**
 	 * Is this a valid name via getNameCheckRegex
 	 * 
 	 * @param name
 	 * @return true if this name is valid.
 	 */
-	public static boolean isValidName(String name) {
+	public static boolean isValidString(String name) {
 
 		try {
-			if (namePattern == null)
-				namePattern = Pattern.compile(TownySettings.getNameCheckRegex());
-			return namePattern.matcher(name).find();
+			if (stringPattern == null)
+				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex());
+			return stringPattern.matcher(name).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
 			return false;

@@ -2083,6 +2083,11 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_CHECK_REGEX);
 	}
 
+	public static String getStringCheckRegex() {
+
+		return getString(ConfigNodes.FILTERS_REGEX_STRING_CHECK_REGEX);
+	}
+
 	public static String getNameRemoveRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);

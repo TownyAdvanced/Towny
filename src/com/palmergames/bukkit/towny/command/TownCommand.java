@@ -727,9 +727,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /town set board " + TownySettings.getLangString("town_help_9"));
 					return;
 				} else {
-					String line = split[1];
-					for (int i = 2; i < split.length; i++)
-						line += " " + split[i];
+					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");									
+					
+					if (!NameValidation.isValidString(line)){
+						TownyMessaging.sendErrorMsg(player, "Invalid string, Town Board not set.");
+						return;
+					}
+						
 					town.setTownBoard(line);
 					TownyMessaging.sendTownBoard(player, town);
 				}

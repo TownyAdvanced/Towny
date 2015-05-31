@@ -554,6 +554,9 @@ public enum ConfigNodes {
 	FILTERS_REGEX_NAME_CHECK_REGEX(
 			"filters_colour_chat.regex.name_check_regex",
 			"^[a-zA-Z0-9._\\[\\]-]*$"),
+	FILTERS_REGEX_STRING_CHECK_REGEX(
+			"filters_colour_chat.regex.string_check_regex",
+			"^[a-zA-Z0-9\\s._\\[\\]-]*$"),		
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
 			"[^a-zA-Z0-9._\\[\\]-]"),

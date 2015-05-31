@@ -2207,3 +2207,4 @@ v0.89.2.23:
     - Fix to the new /town and /nation list commands.
     - Update spanish.yml to version 0.23 courtesy of Alvarote1998.
     - Add new es-mx.yml for Mexican spanish courtesy of VreyaViress.
+    - Filter bad characters from /town set board command. 
