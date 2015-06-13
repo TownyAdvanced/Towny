@@ -2208,3 +2208,7 @@ v0.89.2.23:
     - Update spanish.yml to version 0.23 courtesy of Alvarote1998.
     - Add new es-mx.yml for Mexican spanish courtesy of VreyaViress.
     - Filter bad characters from /town set board command. 
+v0.89.2.24:
+    - Allow worldname.txt PlotManageIgnoreIDs to handle datavalues to blocks, ex: STONE:1 
+v0.89.2.25:
+    - Fix internal error when a player with no town does /towny prices.

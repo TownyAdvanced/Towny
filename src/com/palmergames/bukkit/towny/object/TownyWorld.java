@@ -400,15 +400,18 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public List<String> getPlotManagementIgnoreIds() {
-
+		
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
 		else
 			return plotManagementIgnoreIds;
 	}
 
-	public boolean isPlotManagementIgnoreIds(String id) {
+	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 
+		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
+			return true;
+		
 		return getPlotManagementIgnoreIds().contains(id);
 	}
 

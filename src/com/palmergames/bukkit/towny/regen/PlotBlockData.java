@@ -128,11 +128,11 @@ public class PlotBlockData {
 
 			// If this block isn't correct, replace
 			// and return as done.
-			if ((blockId != storedData.getTypeId())) {
+			if ((blockId != storedData.getTypeId()) || (BukkitTools.getData(block) != storedData.getData())) {
 
 				Material mat = BukkitTools.getMaterial(storedData.getTypeId());
 
-				if ((mat == null) || ((mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name()))) {
+				if ((mat == null) || ((mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData()))) {
 
 					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
 
