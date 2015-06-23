@@ -2212,3 +2212,7 @@ v0.89.2.24:
     - Allow worldname.txt PlotManageIgnoreIDs to handle datavalues to blocks, ex: STONE:1 
 v0.89.2.25:
     - Fix internal error when a player with no town does /towny prices.
+v0.89.2.26:
+	- Add message to be more helpful when players are attempting to kick themselves, a mayor or an assistant from town.
+	- Removed /town help message regarding add+/kick+ commands which are no longer used.
+	- Fix loading older databases where resident has no jailTown yet.
