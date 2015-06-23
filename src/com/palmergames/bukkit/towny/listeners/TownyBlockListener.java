@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.material.Dispenser;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -202,102 +204,151 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-
+	public void onBlockDispense(BlockDispenseEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-
-		//fetch the piston base
+		
 		Block block = event.getBlock();
+		if (block.getType() == Material.DISPENSER) {
+			// These are the only items that are placed in the wild that come to my mind
+			if (event.getItem().getType() == Material.LAVA_BUCKET ||
+			   event.getItem().getType() == Material.WATER_BUCKET ||
+			   event.getItem().getType() == Material.BUCKET ||
+			   event.getItem().getType() == Material.TNT) {
 
-		if (block.getType() != Material.PISTON_STICKY_BASE)
-			return;
-
-		//Get the block attached to the PISTON_EXTENSION of the PISTON_STICKY_BASE
-		block = block.getRelative(event.getDirection()).getRelative(event.getDirection());
-
-		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
-
-			//check the block to see if it's going to pass a plot boundary
-			if (testBlockMove(block, event.getDirection().getOppositeFace()))
-				event.setCancelled(true);
+				Block adjBlock = block.getRelative(((Dispenser) block.getState().getData()).getFacing());
+				if (!canChangeBlock(block, adjBlock)) {
+					event.setCancelled(true);
+				}
+			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-
+	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
 
 		List<Block> blocks = event.getBlocks();
-
+		
 		if (!blocks.isEmpty()) {
+			// Test against the position of the piston 
+			Block testBlock = event.getBlock();
+			
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				// Check adjBlock to see where it would be after moving
+				Block adjBlock = block.getRelative(event.getDirection().getOppositeFace());
+				if (!canChangeBlock(testBlock, block)) {
 					event.setCancelled(true);
+					break;
+				}
 			}
 		}
 	}
 
-	private boolean testBlockMove(Block block, BlockFace direction) {
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
 
-		Block blockTo = block.getRelative(direction);
+		List<Block> blocks = event.getBlocks();
+		
+		if (!blocks.isEmpty()) {
+			// Test against the position of the piston 
+			Block testBlock = event.getBlock();
+			
+			//check each block to see if it's going to pass a plot boundary
+			for (Block block : blocks) {
+				// Check adjBlock to see where it would be after moving
+				Block adjBlock = block.getRelative(event.getDirection());
+				if (!canChangeBlock(testBlock, adjBlock)) {
+					event.setCancelled(true);
+					break;
+				}
+			}
+		}
+	}
+	
+	/*
+	 * Returns whether or not the destBlock can be modified.
+	 * 
+	 * Returns false under following conditions, otherwise true:
+	 *   Plots belong to different towns
+	 *   Plots belong to different residents
+	 *   Plot being tipped into is for sale
+	 */
+	private boolean canChangeBlock(Block block, Block destBlock) {
 		Location loc = block.getLocation();
-		Location locTo = blockTo.getLocation();
-		Coord coord = Coord.parseCoord(loc);
-		Coord coordTo = Coord.parseCoord(locTo);
-
+		Coord coord = Coord.parseCoord(block.getLocation());
+		Coord destCoord = Coord.parseCoord(destBlock.getLocation());
+		
 		TownyWorld townyWorld = null;
-		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
+		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
-			CurrentTownBlock = townyWorld.getTownBlock(coord);
+			currentTownBlock = townyWorld.getTownBlock(coord);
+			destinationTownBlock = townyWorld.getTownBlock(destCoord);
 		} catch (NotRegisteredException e) {
-			//System.out.print("Failed to fetch TownBlock");
 		}
-
-		try {
-			destinationTownBlock = townyWorld.getTownBlock(coordTo);
-		} catch (NotRegisteredException e1) {
-			//System.out.print("Failed to fetch TownBlockTo");
-		}
-
-		if (CurrentTownBlock != destinationTownBlock) {
-
-			// Cancel if either is not null, but other is (wild to town).
-			if (((CurrentTownBlock == null) && (destinationTownBlock != null)) || ((CurrentTownBlock != null) && (destinationTownBlock == null))) {
-				//event.setCancelled(true);
-				return true;
-			}
-
-			// If both blocks are owned by the town.
-			if (!CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+		
+		// If they're in the same plot, allow the action
+		if (currentTownBlock != destinationTownBlock) {
+			// Disallow tipping into towns from wild
+			if ((currentTownBlock == null) && (destinationTownBlock != null)) {
 				return false;
-
-			try {
-				if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
-
-				|| (CurrentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
+			}
+			
+			// Make sure both plots are in a town for the rest
+			if ((currentTownBlock != null) && (destinationTownBlock != null)) {
+				try {
+					if (currentTownBlock.getTown() != destinationTownBlock.getTown()) {
+						return false;
+					}
+				} catch (NotRegisteredException e) {
+					// Shouldn't happen but allow...
 					return true;
 				}
-			} catch (NotRegisteredException e) {
-				// Failed to fetch a resident
-				return true;
+				
+				// Disallow if the plots have different residents owning them
+				if (currentTownBlock.hasResident() && destinationTownBlock.hasResident()) {
+					try {
+						if (currentTownBlock.getResident() != destinationTownBlock.getResident()) {
+							return false;
+						}
+					} catch (NotRegisteredException e) {
+						// Shouldn't happen but allow...
+						return true;
+					}
+				}
+				
+				// Disallow if either plot has a resident and the other doesn't
+				// Java XOR operator doesn't skip evaluating the second part of the expression
+				// and it's clearer to leave it in DNF
+				if ((currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) ||
+					(!currentTownBlock.hasResident() && destinationTownBlock.hasResident())) {
+					return false;
+				}
+				
+				// Disallow if it would involve stealing from a plot for sale
+				if (destinationTownBlock.getPlotPrice() != -1) {
+					return false;
+				}
 			}
 		}
-
-		return false;
+		
+		return true;
 	}
-
+	
 	private boolean onBurn(Block block) {
 
 		Location loc = block.getLocation();
