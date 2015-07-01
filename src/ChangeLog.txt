@@ -2216,3 +2216,6 @@ v0.89.2.26:
 	- Add message to be more helpful when players are attempting to kick themselves, a mayor or an assistant from town.
 	- Removed /town help message regarding add+/kick+ commands which are no longer used.
 	- Fix loading older databases where resident has no jailTown yet.
+	- Handle new BlockExplodeEvent, caused by world.createExplosion().
+	- If a world's revert explosion setting is true, a world.createExplosion() will automatically revert.
+	- As of this build Towny requires a version of Craftbukkit or Spigot made after March 22, 2015. MC 1.8.3 and newer.
