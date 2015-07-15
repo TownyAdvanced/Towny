@@ -1,13 +1,13 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.89.2.26
+version: 0.89.2.27
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,MultiWorld]
 
 ############################################################
 # +------------------------------------------------------+ #

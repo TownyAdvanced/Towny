@@ -2219,3 +2219,5 @@ v0.89.2.26:
 	- Handle new BlockExplodeEvent, caused by world.createExplosion().
 	- If a world's revert explosion setting is true, a world.createExplosion() will automatically revert.
 	- As of this build Towny requires a version of Craftbukkit or Spigot made after March 22, 2015. MC 1.8.3 and newer.
+v0.89.2.27:
+	- Add MultiWorld to plugin.yml softdepend list.
