@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;

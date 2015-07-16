@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

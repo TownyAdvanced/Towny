@@ -13,12 +13,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarListener implements Listener {
 
-	private Towny plugin;
 	War warEvent;
 	
 	public WarListener(Towny plugin)
 	{
-		this.plugin = plugin;
 		warEvent = plugin.getTownyUniverse().getWarEvent();
 	}
 	
