@@ -361,6 +361,7 @@ public class Towny extends JavaPlugin {
 			// Have War Events get launched before regular events.
 			pluginManager.registerEvents(townyWarBlockListener, this);
 			pluginManager.registerEvents(townyWarEntityListener, this);
+			pluginManager.registerEvents(warListener, this);
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -798,6 +799,7 @@ public class Towny extends JavaPlugin {
 	 * @return the warListener
 	 */
 	public WarListener getWarListener() {
+		
 		return warListener;
 	}
 }
