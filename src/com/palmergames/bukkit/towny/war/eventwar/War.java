@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -29,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -51,6 +54,7 @@ public class War {
 	//private Timer warTimer = new Timer();
 	private List<Integer> warTaskIds = new ArrayList<Integer>();
 	private WarSpoils warSpoils = new WarSpoils();
+	private Hashtable<Player, WarHUD> playersWithHUD = new Hashtable<Player, WarHUD>();
 
 	public War(Towny plugin, int startDelay) {
 
@@ -249,6 +253,9 @@ public class War {
 
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
+		
+		TownScoredEvent event = new TownScoredEvent(town);
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
@@ -266,6 +273,9 @@ public class War {
 
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
+		
+		TownScoredEvent event = new TownScoredEvent(attackerTown);
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
 	public void damage(Player attackerPlayer, TownBlock townBlock) throws NotRegisteredException {
@@ -545,7 +555,9 @@ public class War {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", TownyFormatter.getFormattedName(town), (Integer) kv.value));
+			int score = (Integer) kv.value;
+			if (score > 0)
+				output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", TownyFormatter.getFormattedName(town), score));
 		}
 		return output;
 	}
@@ -574,5 +586,35 @@ public class War {
 	public WarSpoils getWarSpoils() {
 
 		return warSpoils;
+	}
+	
+	/**
+	 * Adds/Removes the player from the list of players who have the war HUD toggled on.
+	 * 
+	 * @param p The player who has toggled the HUD
+	 * @return True if the player is not in the list and has been added, false if the player has been removed from the list
+	 */
+	public boolean togglePlayerHud(Player p)
+	{
+		if (!playersWithHUD.containsKey(p)){
+			playersWithHUD.put(p, new WarHUD(plugin, p));
+			return true;
+		}
+		playersWithHUD.remove(p);
+		
+		//Remove the score board
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		p.setScoreboard(manager.getNewScoreboard());
+		return false;
+	}
+	
+	public Hashtable<Player, WarHUD> getPlayersWithHUD()
+	{
+		return playersWithHUD;
+	}
+	
+	public Hashtable<Town, Integer> getTownScores()
+	{
+		return townScores;
 	}
 }
