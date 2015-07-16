@@ -13,16 +13,17 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarListener implements Listener {
 
-	War warEvent;
+	Towny plugin;
 	
 	public WarListener(Towny plugin)
 	{
-		warEvent = plugin.getTownyUniverse().getWarEvent();
+		this.plugin = plugin;
 	}
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		//Removes a player from the HUD list on logout
 		Player p = event.getPlayer();
 		if (warEvent.isWarTime() && warEvent.getPlayersWithHUD().containsKey(p)){
@@ -33,6 +34,7 @@ public class WarListener implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) throws NotRegisteredException
 	{
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		Player p = event.getPlayer();
 		if (!warEvent.getPlayersWithHUD().containsKey(p))
 			return;
@@ -45,6 +47,7 @@ public class WarListener implements Listener {
 	@EventHandler
 	public void onTownScored (TownScoredEvent event)
 	{
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		for (Resident r : event.getTown().getResidents())
 		{
 			Player player = BukkitTools.getPlayer(r.getName());
