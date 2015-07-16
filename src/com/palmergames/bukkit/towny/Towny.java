@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
+
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarListener;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -23,6 +25,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -62,6 +65,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
+	private final WarListener warListener = new WarListener(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -788,5 +792,12 @@ public class Towny extends JavaPlugin {
 	public TownyWarEntityListener getTownyWarEntityListener() {
 	
 		return townyWarEntityListener;
+	}
+	
+	/**
+	 * @return the warListener
+	 */
+	public WarListener getWarListener() {
+		return warListener;
 	}
 }
