@@ -66,9 +66,8 @@ public class WarListener implements Listener {
 		for (Resident r : event.getTown().getResidents())
 		{
 			Player player = BukkitTools.getPlayer(r.getName());
-			if (!warEvent.getPlayersWithHUD().containsKey(player))
-				continue;
-			warEvent.getPlayersWithHUD().get(player).updateScore();
+			if (player != null && warEvent.getPlayersWithHUD().containsKey(player))
+				warEvent.getPlayersWithHUD().get(player).updateScore();
 		}
 		//Update top scores for all HUD users
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(warEvent.getTownScores());
