@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
@@ -30,7 +31,9 @@ public class WarListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		TownyMessaging.sendDebugMsg("[HUD]  player quit game");
+		System.out.println("[HUD]  player quit game");
+		if (!TownyUniverse.isWarTime())
+			return;
 		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		//Removes a player from the HUD list on logout
 		Player p = event.getPlayer();
@@ -42,7 +45,9 @@ public class WarListener implements Listener {
 	@EventHandler
 	public void onPlayerMoveDuringWar(PlayerChangePlotEvent event) throws NotRegisteredException
 	{
-		TownyMessaging.sendDebugMsg("[HUD]  player change plot");
+		System.out.println("[HUD]  player change plot");
+		if (!TownyUniverse.isWarTime())
+			return;
 		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		Player p = event.getPlayer();
 		if (!warEvent.getPlayersWithHUD().containsKey(p))
@@ -53,7 +58,9 @@ public class WarListener implements Listener {
 	@EventHandler
 	public void onTownScored (TownScoredEvent event)
 	{
-		TownyMessaging.sendDebugMsg("[HUD]  town scored event caught");
+		System.out.println("[HUD]  town scored event caught");
+		if (!TownyUniverse.isWarTime())
+			return;
 		//Update town score
 		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		for (Resident r : event.getTown().getResidents())
