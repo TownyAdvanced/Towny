@@ -11,6 +11,12 @@ public class TownScoredEvent extends Event {
 	
 	@Override
 	public HandlerList getHandlers() {
+
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+
 		return handlers;
 	}
 	
@@ -18,6 +24,7 @@ public class TownScoredEvent extends Event {
 	
 	public TownScoredEvent (Town town)
 	{
+		super();
 		this.town = town;
 	}
 	
