@@ -595,6 +595,17 @@ public class War {
 	 */
 	public boolean togglePlayerHud(Player p)
 	{
+		Town playerTown = null;
+		try {
+			playerTown = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
+		} catch (NotRegisteredException e) {
+			p.sendMessage("You are not in war!");
+			return false;
+		}
+		if (!warringTowns.contains(playerTown)) {
+			p.sendMessage("You are not in war!");
+			return false;
+		}
 		if (!playersWithHUD.containsKey(p)){
 			playersWithHUD.put(p, new WarHUD(plugin, p));
 			return true;
