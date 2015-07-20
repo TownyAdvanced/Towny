@@ -296,7 +296,9 @@ public class War {
 			else
 				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL);
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-
+			//Call PlotAttackedEvent to update scoreboard users
+			PlotAttackedEvent event = new PlotAttackedEvent(hp, attackerPlayer);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 		} else {
 			launchFireworkForDamage (townBlock, attackerPlayer, Type.CREEPER);
 			remove(attacker, townBlock);
@@ -626,5 +628,10 @@ public class War {
 	public Hashtable<Town, Integer> getTownScores()
 	{
 		return townScores;
+	}
+	
+	public Hashtable<WorldCoord, Integer> getWarZone()
+	{
+		return warZone;
 	}
 }

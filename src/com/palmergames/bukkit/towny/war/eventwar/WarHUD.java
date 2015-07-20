@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
 
+import java.util.Hashtable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,24 +21,27 @@ import com.palmergames.util.KeyValue;
 
 public class WarHUD {
 
+	//The maximum length for a scoreboard output. Will cut off at the maximum length. *CANT BE > 16*
+	final int MAX_OUT_LEN = 16; 
+	
 	String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + "War";
 	
 	Team space1, town_title, town_score, space2, location_title, nation, town, health, home, space3, top_title, first, second, third;
 	
-	String space1_player = ChatColor.DARK_AQUA.toString();
+	String space1_player = ChatColor.DARK_PURPLE.toString();
 	String town_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE;
-	String town_score_player = ChatColor.WHITE + "Score: " + ChatColor.GREEN;
+	String town_score_player = ChatColor.WHITE + "Score: " + ChatColor.RED;
 	String space2_player = ChatColor.DARK_BLUE.toString();
 	String location_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Location";
-	String nation_player = ChatColor.WHITE + "Nation: " + ChatColor.GREEN;
-	String town_player = ChatColor.WHITE + "Town: " + ChatColor.GREEN;
-	String health_player = ChatColor.WHITE + "Health: " + ChatColor.GREEN;
+	String nation_player = ChatColor.WHITE + "Nation: " + ChatColor.GOLD;
+	String town_player = ChatColor.WHITE + "Town: " + ChatColor.DARK_AQUA;
+	String health_player = ChatColor.WHITE + "Health: " + ChatColor.RED;
 	String home_player = ChatColor.RED + "";
 	String space3_player = ChatColor.DARK_GREEN.toString();
 	String top_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Top Towns";
-	String first_player = ChatColor.GOLD + "";
-	String second_player = ChatColor.GRAY + "";
-	String third_player = ChatColor.DARK_GRAY + "";
+	String first_player = ChatColor.DARK_AQUA + "";
+	String second_player = ChatColor.DARK_AQUA + "";
+	String third_player = ChatColor.DARK_AQUA + "";
 	
 	Towny plugin;
 	Player p;
@@ -115,7 +120,7 @@ public class WarHUD {
 		} catch (NotRegisteredException e) {
 			homeTown = "Townless!";
 		}
-		town_title.setSuffix(homeTown);
+		town_title.setSuffix(checkString(homeTown));
 	}
 	
 	public void updateScore()
@@ -127,12 +132,12 @@ public class WarHUD {
 		} catch (NotRegisteredException e) {
 			score = "";
 		}
-		town_score.setSuffix(score);
+		town_score.setSuffix(checkString(score));
 	}
 	
 	public void updateLocation()
 	{
-		String nation_loc, town_loc, homeblock_loc;
+		String nation_loc, town_loc, homeblock_loc, hp;
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
 		try {
 			town_loc = worldCoord.getTownBlock().getTown().getName();
@@ -140,20 +145,36 @@ public class WarHUD {
 				homeblock_loc = "HOME BLOCK";
 			else
 				homeblock_loc = "";
-		} catch (NotRegisteredException e) { town_loc = "Wilderness"; homeblock_loc = "";}
+			Hashtable<WorldCoord, Integer> warZone = plugin.getTownyUniverse().getWarEvent().getWarZone();
+			if (warZone.contains(worldCoord))
+				hp = warZone.get(worldCoord) + "";
+			else
+				hp = "Neutral Town";
+		} catch (NotRegisteredException e) { town_loc = "Wilderness"; homeblock_loc = ""; hp = "";}
 		try {
 			nation_loc = worldCoord.getTownBlock().getTown().getNation().getName();
 		} catch (NotRegisteredException e) { nation_loc = ""; }
-		nation.setSuffix(nation_loc);
-		town.setSuffix(town_loc);
-		home.setSuffix(homeblock_loc);
+		nation.setSuffix(checkString(nation_loc));
+		town.setSuffix(checkString(town_loc));
+		home.setSuffix(checkString(homeblock_loc));
+		health.setSuffix(hp);
 	}
 	
 	public void updateTopThree(KeyValue<Town, Integer> f, KeyValue<Town, Integer> s, KeyValue<Town, Integer> t)
 	{
-		first.setSuffix((f != null) ? (f.value + "-" + f.key.getName()) : "" );
-		second.setSuffix((s != null) ? (s.value + "-" + s.key.getName()) : "" );
-		third.setSuffix((t != null) ? (t.value + "-" + t.key.getName()) : "" );
+		first.setSuffix((f != null && f.value > 0) ? (f.value + "-" + f.key.getName()) : "" );
+		second.setSuffix((s != null && s.value > 0) ? (s.value + "-" + s.key.getName()) : "" );
+		third.setSuffix((t != null && t.value > 0) ? (t.value + "-" + t.key.getName()) : "" );
+	}
+	
+	public void updateHealth(int hp)
+	{
+		health.setSuffix(hp + "");
+	}
+	
+	private String checkString(String checkme)
+	{
+		return checkme.length() > 16 ? checkme.substring(0, MAX_OUT_LEN) : checkme;
 	}
 	
 }
