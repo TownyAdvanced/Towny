@@ -137,23 +137,32 @@ public class WarHUD {
 	
 	public void updateLocation()
 	{
+		updateLocation(new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p)));
+	}
+	
+	public void updateLocation(WorldCoord worldCoord)
+	{
 		String nation_loc, town_loc, homeblock_loc, hp;
-		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
+		boolean hasTown = false;
 		try {
-			town_loc = worldCoord.getTownBlock().getTown().getName();
+			Town town = worldCoord.getTownBlock().getTown();
+			town_loc = town.getName();
 			if (worldCoord.getTownBlock().isHomeBlock())
 				homeblock_loc = "HOME BLOCK";
 			else
 				homeblock_loc = "";
 			Hashtable<WorldCoord, Integer> warZone = plugin.getTownyUniverse().getWarEvent().getWarZone();
-			if (warZone.contains(worldCoord))
+			if (warZone.containsKey(worldCoord))
 				hp = warZone.get(worldCoord) + "";
-			else
-				hp = "Neutral Town";
+			else 
+				hp = "Fallen";
+			hasTown = true;
 		} catch (NotRegisteredException e) { town_loc = "Wilderness"; homeblock_loc = ""; hp = "";}
 		try {
 			nation_loc = worldCoord.getTownBlock().getTown().getNation().getName();
-		} catch (NotRegisteredException e) { nation_loc = ""; }
+		} catch (NotRegisteredException e) { nation_loc = ""; hp = "Neutral";}
+		if (!hasTown)
+			hp = "";
 		nation.setSuffix(checkString(nation_loc));
 		town.setSuffix(checkString(town_loc));
 		home.setSuffix(checkString(homeblock_loc));
@@ -162,6 +171,7 @@ public class WarHUD {
 	
 	public void updateTopThree(KeyValue<Town, Integer> f, KeyValue<Town, Integer> s, KeyValue<Town, Integer> t)
 	{
+		System.out.println("[HUD] Update Top Three (first): " + (f != null ? f.value + " " + f.key.getName() : "Null"));
 		first.setSuffix((f != null && f.value > 0) ? (f.value + "-" + f.key.getName()) : "" );
 		second.setSuffix((s != null && s.value > 0) ? (s.value + "-" + s.key.getName()) : "" );
 		third.setSuffix((t != null && t.value > 0) ? (t.value + "-" + t.key.getName()) : "" );

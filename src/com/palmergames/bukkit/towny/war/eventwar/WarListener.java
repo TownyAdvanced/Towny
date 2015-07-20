@@ -52,7 +52,7 @@ public class WarListener implements Listener {
 		Player p = event.getPlayer();
 		if (!warEvent.getPlayersWithHUD().containsKey(p))
 			return;
-		warEvent.getPlayersWithHUD().get(p).updateLocation();
+		warEvent.getPlayersWithHUD().get(p).updateLocation(event.getTo());
 	}
 
 	@EventHandler
