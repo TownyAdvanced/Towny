@@ -85,4 +85,17 @@ public class WarListener implements Listener {
 		for (Entry<Player, WarHUD> hud : warEvent.getPlayersWithHUD().entrySet())
 			hud.getValue().updateTopThree(first, second, third);
 	}
+	
+	@EventHandler
+	public void onPlotAttacked(PlotAttackedEvent event) 
+	{
+		System.out.println("[HUD] plot attacked event caught");
+		if (!TownyUniverse.isWarTime())
+			return;
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
+		Player p = event.getAttacker();
+		if (!warEvent.getPlayersWithHUD().containsKey(p))
+			return;
+		warEvent.getPlayersWithHUD().get(p).updateHealth(event.getHP());
+	}
 }
