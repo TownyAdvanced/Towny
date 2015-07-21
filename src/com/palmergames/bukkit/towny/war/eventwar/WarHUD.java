@@ -12,9 +12,12 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.KeyValue;
@@ -24,9 +27,12 @@ public class WarHUD {
 	//The maximum length for a scoreboard output. Will cut off at the maximum length. *CANT BE > 16*
 	final int MAX_OUT_LEN = 16; 
 	
+	//Checks if attack edges only is on in the config
+	boolean edges = TownySettings.getOnlyAttackEdgesInWar();
+	
 	String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + "War";
 	
-	Team space1, town_title, town_score, space2, location_title, nation, town, health, home, space3, top_title, first, second, third;
+	Team space1, town_title, town_score, space2, location_title, nation, town, edge, health, home, space3, top_title, first, second, third;
 	
 	String space1_player = ChatColor.DARK_PURPLE.toString();
 	String town_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE;
@@ -35,6 +41,7 @@ public class WarHUD {
 	String location_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Location";
 	String nation_player = ChatColor.WHITE + "Nation: " + ChatColor.GOLD;
 	String town_player = ChatColor.WHITE + "Town: " + ChatColor.DARK_AQUA;
+	String edge_player = ChatColor.WHITE + "Attackable: " + ChatColor.RED;
 	String health_player = ChatColor.WHITE + "Health: " + ChatColor.RED;
 	String home_player = ChatColor.RED + "";
 	String space3_player = ChatColor.DARK_GREEN.toString();
@@ -101,13 +108,19 @@ public class WarHUD {
 		obj.getScore(location_title_player).setScore(10);
 		obj.getScore(nation_player).setScore(9);
 		obj.getScore(town_player).setScore(8);
-		obj.getScore(health_player).setScore(7);
-		obj.getScore(home_player).setScore(6);
-		obj.getScore(space3_player).setScore(5);
-		obj.getScore(top_title_player).setScore(4);
-		obj.getScore(first_player).setScore(3);
-		obj.getScore(second_player).setScore(2);
-		obj.getScore(third_player).setScore(1);
+		obj.getScore(health_player).setScore(edges ? 6 : 7);
+		obj.getScore(home_player).setScore(edges ? 5 : 6);
+		obj.getScore(space3_player).setScore(edges ? 4 : 5);
+		obj.getScore(top_title_player).setScore(edges ? 3 : 4);
+		obj.getScore(first_player).setScore(edges ? 2 : 3);
+		obj.getScore(second_player).setScore(edges ? 1 : 2);
+		obj.getScore(third_player).setScore(edges ? 0 : 1);
+		
+		if (edges) {
+			edge = board.registerNewTeam("edge");
+			edge.addPlayer(Bukkit.getOfflinePlayer(edge_player));
+			obj.getScore(edge_player).setScore(7);
+		}
 		//set the board
 		p.setScoreboard(board);
 	}
@@ -146,8 +159,9 @@ public class WarHUD {
 	
 	public void updateLocation(WorldCoord worldCoord)
 	{
-		String nation_loc, town_loc, homeblock_loc, hp;
+		String nation_loc, town_loc, homeblock_loc, hp, onEdge;
 		boolean hasTown = false;
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
 		try {
 			Town town = worldCoord.getTownBlock().getTown();
 			town_loc = town.getName();
@@ -155,13 +169,18 @@ public class WarHUD {
 				homeblock_loc = "HOME BLOCK";
 			else
 				homeblock_loc = "";
-			Hashtable<WorldCoord, Integer> warZone = plugin.getTownyUniverse().getWarEvent().getWarZone();
-			if (warZone.containsKey(worldCoord))
+			Hashtable<WorldCoord, Integer> warZone = warEvent.getWarZone();
+			boolean inWar = warZone.containsKey(worldCoord);
+			if (inWar)
 				hp = warZone.get(worldCoord) + "";
 			else 
 				hp = "Fallen";
 			hasTown = true;
-		} catch (NotRegisteredException e) { town_loc = "Wilderness"; homeblock_loc = ""; hp = "";}
+			if (edges && inWar && isOnEdgeOfTown(worldCoord.getTownBlock(), worldCoord, warEvent))
+				onEdge = "True";
+			else 
+				onEdge = "False";
+		} catch (NotRegisteredException e) { town_loc = "Wilderness"; homeblock_loc = ""; hp = ""; onEdge = "";}
 		try {
 			nation_loc = worldCoord.getTownBlock().getTown().getNation().getName();
 		} catch (NotRegisteredException e) { nation_loc = ""; hp = "Neutral";}
@@ -171,6 +190,7 @@ public class WarHUD {
 		town.setSuffix(checkString(town_loc));
 		home.setSuffix(checkString(homeblock_loc));
 		health.setSuffix(hp);
+		edge.setSuffix(onEdge);
 	}
 	
 	public void updateTopThree(KeyValue<Town, Integer> f, KeyValue<Town, Integer> s, KeyValue<Town, Integer> t)
@@ -192,6 +212,23 @@ public class WarHUD {
 	private String checkString(String checkme)
 	{
 		return checkme.length() > 16 ? checkme.substring(0, MAX_OUT_LEN) : checkme;
+	}
+	
+	public static boolean isOnEdgeOfTown(TownBlock townBlock, WorldCoord worldCoord, War warEvent) {
+
+		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+		for (int i = 0; i < 4; i++)
+			try {
+				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+				boolean sameTown = edgeTownBlock.getTown() == townBlock.getTown();
+				TownyMessaging.sendDebugMsg("[WAR] Ole8pieTesting: (For townBlock:" + edgeTownBlock.getCoord().toString() + ")  SameTown:" + sameTown + "  IsWarZone:" + warEvent.isWarZone(edgeTownBlock.getWorldCoord()));
+				if (!sameTown || (sameTown && !warEvent.isWarZone(edgeTownBlock.getWorldCoord()))) {
+					return true;
+				}
+			} catch (NotRegisteredException e) {
+				return true;
+			}
+		return false;
 	}
 	
 }
