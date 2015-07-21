@@ -13,6 +13,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -252,7 +253,7 @@ public class War {
 
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
-		
+
 		TownScoredEvent event = new TownScoredEvent(town);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
@@ -272,7 +273,7 @@ public class War {
 
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
-		
+
 		TownScoredEvent event = new TownScoredEvent(attackerTown);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
@@ -304,11 +305,11 @@ public class War {
 		PlotAttackedEvent event = new PlotAttackedEvent(hp, attackerPlayer);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
-	
+
 	private void launchFireworkForDamage(final TownBlock townblock, final Player attacker, final FireworkEffect.Type type)
 	{
 		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
-			
+
 			public void run() {
 				double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
 				double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
@@ -588,7 +589,7 @@ public class War {
 
 		return warSpoils;
 	}
-	
+
 	/**
 	 * Adds/Removes the player from the list of players who have the war HUD toggled on.
 	 * 
@@ -598,6 +599,10 @@ public class War {
 	public boolean togglePlayerHud(Player p)
 	{
 		Town playerTown = null;
+		if (p.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null){
+			p.sendMessage("Something is already up on your sidebar! (Llmdl, for testing, I let it still add the board)");
+			p.sendMessage("Name: " + p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getDisplayName());
+		}
 		try {
 			playerTown = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
 		} catch (NotRegisteredException e) {
@@ -613,23 +618,23 @@ public class War {
 			return true;
 		}
 		playersWithHUD.remove(p);
-		
+
 		//Remove the score board
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		p.setScoreboard(manager.getNewScoreboard());
 		return false;
 	}
-	
+
 	public Hashtable<Player, WarHUD> getPlayersWithHUD()
 	{
 		return playersWithHUD;
 	}
-	
+
 	public Hashtable<Town, Integer> getTownScores()
 	{
 		return townScores;
 	}
-	
+
 	public Hashtable<WorldCoord, Integer> getWarZone()
 	{
 		return warZone;
