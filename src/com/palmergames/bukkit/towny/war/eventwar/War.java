@@ -296,15 +296,15 @@ public class War {
 			else
 				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL);
 			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			//Call PlotAttackedEvent to update scoreboard users
-			PlotAttackedEvent event = new PlotAttackedEvent(hp, attackerPlayer);
-			Bukkit.getServer().getPluginManager().callEvent(event);
 		} else {
 			launchFireworkForDamage (townBlock, attackerPlayer, Type.CREEPER);
 			remove(attacker, townBlock);
 		}
+		//Call PlotAttackedEvent to update scoreboard users
+		PlotAttackedEvent event = new PlotAttackedEvent(hp, attackerPlayer);
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
-
+	
 	private void launchFireworkForDamage(final TownBlock townblock, final Player attacker, final FireworkEffect.Type type)
 	{
 		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
