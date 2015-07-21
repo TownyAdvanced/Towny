@@ -39,9 +39,9 @@ public class WarHUD {
 	String home_player = ChatColor.RED + "";
 	String space3_player = ChatColor.DARK_GREEN.toString();
 	String top_title_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Top Towns";
-	String first_player = ChatColor.DARK_AQUA + "";
-	String second_player = ChatColor.DARK_AQUA + "";
-	String third_player = ChatColor.DARK_AQUA + "";
+	String first_player = ChatColor.DARK_GREEN + "" + ChatColor.DARK_AQUA + "";
+	String second_player = ChatColor.BLACK + "" + ChatColor.DARK_AQUA + "";
+	String third_player = ChatColor.YELLOW + "" + ChatColor.DARK_AQUA + "";
 	
 	Towny plugin;
 	Player p;
@@ -128,7 +128,11 @@ public class WarHUD {
 		String score;
 		try {
 			Town home = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
-			score = plugin.getTownyUniverse().getWarEvent().getTownScores().get(home) + "";
+			Hashtable<Town, Integer> scores = plugin.getTownyUniverse().getWarEvent().getTownScores();
+			if (scores.containsKey(home))
+				score = scores.get(home) + "";
+			else
+				score = "";
 		} catch (NotRegisteredException e) {
 			score = "";
 		}
@@ -179,7 +183,10 @@ public class WarHUD {
 	
 	public void updateHealth(int hp)
 	{
-		health.setSuffix(hp + "");
+		if (hp > 0)
+			health.setSuffix(hp + "");
+		else
+			health.setSuffix("Fallen");
 	}
 	
 	private String checkString(String checkme)
