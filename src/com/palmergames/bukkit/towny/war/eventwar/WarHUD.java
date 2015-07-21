@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.KeyValue;
+import com.palmergames.util.KeyValueTable;
 
 public class WarHUD {
 
@@ -60,6 +61,7 @@ public class WarHUD {
 		updateHomeTown();
 		updateScore();
 		updateLocation();
+		updateTopThree();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -191,6 +193,23 @@ public class WarHUD {
 		home.setSuffix(checkString(homeblock_loc));
 		health.setSuffix(hp);
 		edge.setSuffix(onEdge);
+	}
+	
+	public void updateTopThree()
+	{
+		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(plugin.getTownyUniverse().getWarEvent().getTownScores());
+		kvTable.sortByValue();
+		kvTable.revese();
+		KeyValue<Town, Integer> first = null;
+		KeyValue<Town, Integer> second = null;
+		KeyValue<Town, Integer> third = null;
+		if (kvTable.getKeyValues().size() >= 1)
+			first = kvTable.getKeyValues().get(0);
+		if (kvTable.getKeyValues().size() >= 2)
+			second = kvTable.getKeyValues().get(1);
+		if (kvTable.getKeyValues().size() >= 3)
+			third = kvTable.getKeyValues().get(2);
+		updateTopThree(first, second, third);
 	}
 	
 	public void updateTopThree(KeyValue<Town, Integer> f, KeyValue<Town, Integer> s, KeyValue<Town, Integer> t)
