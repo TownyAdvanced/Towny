@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.eventwar;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -189,6 +190,10 @@ public class War {
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
+		
+		for (Entry<Player, WarHUD> hud : playersWithHUD.entrySet())
+			hud.getKey().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		playersWithHUD.clear();
 
 		double halfWinnings;
 		try {
@@ -599,10 +604,6 @@ public class War {
 	public boolean togglePlayerHud(Player p)
 	{
 		Town playerTown = null;
-		if (p.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null){
-			p.sendMessage("Something is already up on your sidebar! (Llmdl, for testing, I let it still add the board)");
-			p.sendMessage("Name: " + p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getDisplayName());
-		}
 		try {
 			playerTown = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
 		} catch (NotRegisteredException e) {
