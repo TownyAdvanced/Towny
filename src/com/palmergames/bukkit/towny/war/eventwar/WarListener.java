@@ -5,16 +5,17 @@ import java.util.Map.Entry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
@@ -93,9 +94,14 @@ public class WarListener implements Listener {
 		if (!TownyUniverse.isWarTime())
 			return;
 		War warEvent = plugin.getTownyUniverse().getWarEvent();
-		Player p = event.getAttacker();
-		if (!warEvent.getPlayersWithHUD().containsKey(p))
-			return;
-		warEvent.getPlayersWithHUD().get(p).updateHealth(event.getHP());
+		TownBlock townBlock = event.getTownBlock();
+		for (Player p : warEvent.getPlayersWithHUD().keySet()){
+			WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
+			try {
+				if (worldCoord.getTownBlock().equals(townBlock))
+					warEvent.getPlayersWithHUD().get(p).updateHealth(event.getHP());
+			} catch (NotRegisteredException e) {}
+		}
+		
 	}
 }

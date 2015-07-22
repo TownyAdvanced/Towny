@@ -14,7 +14,6 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -191,8 +190,8 @@ public class War {
 			if (player != null)
 				sendStats(player);
 		
-		for (Entry<Player, WarHUD> hud : playersWithHUD.entrySet())
-			hud.getKey().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		for (Player p : playersWithHUD.keySet())
+			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 		playersWithHUD.clear();
 
 		double halfWinnings;
@@ -307,7 +306,7 @@ public class War {
 			remove(attacker, townBlock);
 		}
 		//Call PlotAttackedEvent to update scoreboard users
-		PlotAttackedEvent event = new PlotAttackedEvent(hp, attackerPlayer);
+		PlotAttackedEvent event = new PlotAttackedEvent(hp, townBlock);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
@@ -335,8 +334,9 @@ public class War {
 		attacker.addBonusBlocks(1);
 		try {
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				remove(townBlock.getTown());
+				remove(townBlock.getTown(), attacker);
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
 		} catch (EconomyException e) {
