@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
+
 public class PlotAttackedEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -20,13 +22,13 @@ public class PlotAttackedEvent extends Event {
 	}
 	
 	private int hp;
-	private Player player;
+	private TownBlock townBlock;
 	
-	public PlotAttackedEvent (int hp, Player attacker)
+	public PlotAttackedEvent (int hp, TownBlock townBlock)
 	{
 		super();
 		this.hp = hp;
-		this.player = attacker;
+		this.townBlock = townBlock;
 	}
 	
 	public int getHP()
@@ -34,9 +36,9 @@ public class PlotAttackedEvent extends Event {
 		return hp;
 	}
 	
-	public Player getAttacker()
+	public TownBlock getTownBlock()
 	{
-		return player;
+		return townBlock;
 	}
 	
 
