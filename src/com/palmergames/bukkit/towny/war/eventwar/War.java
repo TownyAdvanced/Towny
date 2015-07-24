@@ -338,6 +338,8 @@ public class War {
 					remove(attacker, townBlock.getTown().getNation());
 				else
 					remove(attacker, townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
