@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.eventwar;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -334,8 +333,13 @@ public class War {
 		attacker.addBonusBlocks(1);
 		try {
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				remove(townBlock.getTown(), attacker);
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+				if (townBlock.getTown().isCapital())
+					remove(attacker, townBlock.getTown().getNation());
+				else
+					remove(attacker, townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");

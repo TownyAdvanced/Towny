@@ -215,9 +215,9 @@ public class WarHUD {
 	public void updateTopThree(KeyValue<Town, Integer> f, KeyValue<Town, Integer> s, KeyValue<Town, Integer> t)
 	{
 		System.out.println("[HUD] Update Top Three (first): " + (f != null ? f.value + " " + f.key.getName() : "Null"));
-		first.setSuffix((f != null && f.value > 0) ? (f.value + "-" + f.key.getName()) : "" );
-		second.setSuffix((s != null && s.value > 0) ? (s.value + "-" + s.key.getName()) : "" );
-		third.setSuffix((t != null && t.value > 0) ? (t.value + "-" + t.key.getName()) : "" );
+		first.setSuffix((f != null && f.value > 0) ? (checkString(f.value + "-" + f.key.getName())) : "" );
+		second.setSuffix((s != null && s.value > 0) ? (checkString(s.value + "-" + s.key.getName())) : "" );
+		third.setSuffix((t != null && t.value > 0) ? (checkString(t.value + "-" + t.key.getName())) : "" );
 	}
 	
 	public void updateHealth(int hp)
