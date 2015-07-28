@@ -729,7 +729,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");									
 					
 					if (!NameValidation.isValidString(line)){
-						TownyMessaging.sendErrorMsg(player, "Invalid string, Town Board not set.");
+						TownyMessaging.sendErrorMsg(player, "사용할 수 없는 문자가 포함되어 있습니다. 공지가 변경되지 않았습니다.");
 						return;
 					}
 						
@@ -1465,7 +1465,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			// isJailed test
 			if (resident.isJailed()) {
-				TownyMessaging.sendErrorMsg(player, "Can not spawn while Jailed.");
+				TownyMessaging.sendErrorMsg(player, "감옥에 갇혀있기 때문에 스폰할 수 없습니다.");
 				return;
 			}
 			

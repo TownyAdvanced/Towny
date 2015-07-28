@@ -963,7 +963,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			if (!payTo(amount, resident, "마을 출금"))
 				throw new TownyException("금고에 충분한 자금이 없습니다.");
 		} else
-			throw new TownyException("이코노미 시스템이 비활성화되어있습니다.");
+			throw new TownyException("이코노미 시스템이 비활성화 되어있습니다.");
 
 	}
 
@@ -1031,14 +1031,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			TownBlock jail = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
-					throw new TownyException("Location is not within a Jail plot.");
+					throw new TownyException("이 토지의 유형이 감옥이 아닙니다.");
 				
 				jailSpawns.add(spawn);
 				TownyUniverse.getDataSource().saveTown(this);			
 			}
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException("Location is not within a Town.");
+			throw new TownyException("마을에 소속된 곳이어야 합니다.");
 		}
 
 	}
@@ -1074,7 +1074,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public Location getJailSpawn(Integer index) throws TownyException {
 
 		if (getMaxJailSpawn() == 0)
-			throw new TownyException("Town has no jail spawns set.");
+			throw new TownyException("마을이 감옥 스폰을 설정하지 않았습니다.");
 
 		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
 	}
