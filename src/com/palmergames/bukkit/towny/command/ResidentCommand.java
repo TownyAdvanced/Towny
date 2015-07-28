@@ -125,7 +125,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
 				}
 			
-			} else if (split[0].equalsIgnoreCase("jail")) || (split[0].equalsIgnoreCase("감옥")) {
+			} else if (split[0].equalsIgnoreCase("jail") || split[0].equalsIgnoreCase("감옥")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -145,7 +145,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
 					return;
 				
-				if (split[1].equalsIgnoreCase("paybail")) || (split[1].equalsIgnoreCase("보석금")) {
+				if (split[1].equalsIgnoreCase("paybail") || split[1].equalsIgnoreCase("보석금")) {
 					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 					if (resident.canPayFromHoldings(TownySettings.getBailAmount())) {
 						Town JailTown = TownyUniverse.getDataSource().getTown(resident.getJailTown());

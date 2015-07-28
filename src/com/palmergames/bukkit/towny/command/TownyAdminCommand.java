@@ -131,7 +131,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				adminSet(StringMgmt.remFirstArg(split));
 				return true;
-			} else if (split[0].equalsIgnoreCase("resident")) || (split[0].equalsIgnoreCase("주민")){
+			} else if (split[0].equalsIgnoreCase("resident") || split[0].equalsIgnoreCase("주민")){
 				
 				parseAdminResidentCommand(StringMgmt.remFirstArg(split));
 				return true;
@@ -312,7 +312,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode(split[1].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if(split[1].equalsIgnoreCase("rename")) || (split[1].equalsIgnoreCase("이름변경")){	
+			if(split[1].equalsIgnoreCase("rename") || split[1].equalsIgnoreCase("이름변경")){	
 				if (!NameValidation.isBlacklistName(split[2])) {
 					TownyUniverse.getDataSource().renamePlayer(resident, split[2]);
 				} else

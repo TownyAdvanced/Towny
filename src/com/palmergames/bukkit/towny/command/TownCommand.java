@@ -485,7 +485,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (town.isOpen())
 					throw new TownyException(String.format(TownySettings.getLangString("msg_toggle_open_on_warning")));
 				
-			} else if (split[0].equalsIgnoreCase("jail")) || (split[0].equalsIgnoreCase("감옥")) {
+			} else if (split[0].equalsIgnoreCase("jail") || split[0].equalsIgnoreCase("감옥")) {
 				if (!town.hasJailSpawn())
 					throw new TownyException(String.format("마을에 설정된 감옥이 없습니다."));
 								
@@ -990,7 +990,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 					
-				} else if (split[0].equalsIgnoreCase("jail")) || (split[0].equalsIgnoreCase("감옥")) {
+				} else if (split[0].equalsIgnoreCase("jail") || split[0].equalsIgnoreCase("감옥")) {
 
 					try {
 						town.addJailSpawn(player.getLocation());
@@ -1584,7 +1584,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String output = "정말 마을을 삭제하실 건가요";
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
 				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "경고: 마을을 삭제하면 모든 마을블록이 점유 전의 상태로 돌아갑니다.");
-			Question question = new Question(player.getName(), output, options);=
+			Question question = new Question(player.getName(), output, options);
 
 			try {
 				plugin.appendQuestion(questioner, question);
