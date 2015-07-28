@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.naming.InvalidNameException;
@@ -21,6 +23,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -34,6 +37,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.questioner.JoinNationTask;
 import com.palmergames.bukkit.towny.questioner.ResidentNationQuestionTask;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
@@ -62,8 +66,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/국가", "온라인", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/국가", "입금 [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/국가", "떠나기", TownySettings.getLangString("nation_help_5")));
-		if (!TownySettings.isNationCreationAdminOnly())
-			nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/국가", "신설 " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_6")));
+//		if (!TownySettings.isNationCreationAdminOnly())
+//			nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/국가", "신설 " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_6")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "왕 ?", TownySettings.getLangString("nation_help_7")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/국가", "신설 " + TownySettings.getLangString("nation_help_2") + " [수도]", TownySettings.getLangString("nation_help_8")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/국가", "삭제 " + TownySettings.getLangString("nation_help_2"), ""));
@@ -435,15 +439,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param player
 	 */
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listNations(Player player) {
 
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Nation nation : TownyUniverse.getDataSource().getNations())
-			formatedList.add(Colors.LightBlue + nation.getName() + Colors.Blue + " [" + nation.getNumTowns() + "]" + Colors.White);
-		for (String line : ChatTools.list(formatedList))
-			player.sendMessage(line);
+		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)");		
+		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();		 
+
+		Collections.sort(nationsToSort, new Comparator() {
+			@Override
+	        public int compare(Object n1, Object n2) {
+				if (((Nation) n2).getNumResidents() == ((Nation) n1).getNumResidents()) return 0;
+				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
+	        }
+		});
+		for (Nation nation : nationsToSort) {
+			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+            player.sendMessage(output);
+		}		
 	}
+	
 
 	/**
 	 * Create a new nation. Command: /nation new [nation] *[capital]
@@ -512,6 +527,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse.getDataSource().saveNation(nation);
 		TownyUniverse.getDataSource().saveNationList();
 
+		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
+		
 		return nation;
 	}
 
@@ -663,7 +680,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
 				}
 			}));
-			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), nation.getName()), options);
+			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("nation_sing") + ": " + nation.getName()), options);
 			try {
 				plugin.appendQuestion(questioner, question);
 			} catch (Exception e) {

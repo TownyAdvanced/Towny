@@ -450,7 +450,7 @@ public class TownyUniverse extends TownyObject {
 		if (plugin != null) {
 			out.add(getTreeDepth(depth + 1) + "서버 (" + BukkitTools.getServer().getName() + ")");
 			out.add(getTreeDepth(depth + 2) + "버전: " + BukkitTools.getServer().getVersion());
-			out.add(getTreeDepth(depth + 2) + "플레이어: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
+			//out.add(getTreeDepth(depth + 2) + "플레이어: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
 			out.add(getTreeDepth(depth + 2) + "월드 (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
 		}
 		out.add(getTreeDepth(depth + 1) + "월드 (" + getDataSource().getWorlds().size() + "):");

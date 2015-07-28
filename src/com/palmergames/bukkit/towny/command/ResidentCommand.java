@@ -52,11 +52,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/주민", TownySettings.getLangString("res_2"), TownySettings.getLangString("res_3")));
 		output.add(ChatTools.formatCommand("", "/주민", "목록", TownySettings.getLangString("res_4")));
 		output.add(ChatTools.formatCommand("", "/주민", "세금", ""));
+		output.add(ChatTools.formatCommand("", "/주민", "감옥", ""));
 		output.add(ChatTools.formatCommand("", "/주민", "토글", "[모드]...[모드]"));
 		output.add(ChatTools.formatCommand("", "/주민", "설정 [] .. []", "'/주민 설정' " + TownySettings.getLangString("res_5")));
 		output.add(ChatTools.formatCommand("", "/주민", "친구 [추가/제거] " + TownySettings.getLangString("res_2"), TownySettings.getLangString("res_6")));
 		output.add(ChatTools.formatCommand("", "/주민", "친구 [추가+/제거+] " + TownySettings.getLangString("res_2") + " ", TownySettings.getLangString("res_7")));
-		output.add(ChatTools.formatCommand("", "/주민", "spawn", ""));
+		output.add(ChatTools.formatCommand("", "/주민", "스폰", ""));
 		// output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"),
 		// "/주민", "delete " + TownySettings.getLangString("res_2"), ""));
 	}
@@ -122,6 +123,46 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(resident));
 				} catch (NotRegisteredException x) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
+				}
+			
+			} else if (split[0].equalsIgnoreCase("jail")) || (split[0].equalsIgnoreCase("감옥")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (!TownySettings.isAllowingBail()) {
+					TownyMessaging.sendErrorMsg(player, Colors.Red + "보석금 시스템이 비활성화 되어있습니다.");
+					return;
+				}
+				
+				if (split.length == 1 ) {
+					player.sendMessage(ChatTools.formatTitle("/주민 감옥"));
+					player.sendMessage(ChatTools.formatCommand("", "/주민", "감옥 보석금", ""));
+					player.sendMessage(Colors.LightBlue + "보석금: " + Colors.Green + TownySettings.getBailAmount());
+					return;
+				}
+
+				if (!TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
+					return;
+				
+				if (split[1].equalsIgnoreCase("paybail")) || (split[1].equalsIgnoreCase("보석금")) {
+					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					if (resident.canPayFromHoldings(TownySettings.getBailAmount())) {
+						Town JailTown = TownyUniverse.getDataSource().getTown(resident.getJailTown());
+						resident.payTo(TownySettings.getBailAmount(), JailTown, "보석금");
+						resident.setJailed(false);
+						resident.setJailSpawn(0);
+						resident.setJailTown("");
+						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + "님이 보석금을 내고 풀려났습니다.");
+						player.teleport(resident.getTown().getSpawn());
+						TownyUniverse.getDataSource().saveResident(resident);
+					} else {
+						TownyMessaging.sendErrorMsg(player, Colors.Red + "소지금이 부족합니다.");
+					}
+				} else {
+					player.sendMessage(ChatTools.formatTitle("/주민 감옥"));
+					player.sendMessage(ChatTools.formatCommand("", "/주민", "감옥 보석금", ""));
+					player.sendMessage(Colors.LightBlue + "보석금: " + Colors.Green + TownySettings.getBailAmount());					
 				}
 
 			} else if (split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("설정")) {

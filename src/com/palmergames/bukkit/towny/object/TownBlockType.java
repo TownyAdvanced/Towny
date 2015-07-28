@@ -37,20 +37,18 @@ public enum TownBlockType {
 	},
 	INN(6, "여관", "I") {	//Allows use of beds outside your own plot. // 자신의 토지가 아닐 경우에도 침대를 사용할 수 있습니다.
 	},
+	JAIL(7, "감옥", "J") {	//Enables setting the jail spawn.		
+	}
 
 	// These are subject to change:
 /*
- * PUBLIC(6, "") { // Will have it's own permission set
+ * PUBLIC(8, "") { // Will have it's own permission set
  * },
  * 
- * MINE(7, "") { // Will have it's own permission set within a y range
+ * MINE(9, "") { // Will have it's own permission set within a y range
  * },
  * 
- * HOTEL(8, "") { // Will stack multiple y-ranges and function like a micro town
- * },
- * 
- * JAIL(9, "") { // Where people will spawn when they die in enemy (neutral)
- * towns
+ * HOTEL(10, "") { // Will stack multiple y-ranges and function like a micro town
  * },
  */
 	;

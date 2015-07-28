@@ -8,8 +8,10 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -22,7 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -127,6 +131,68 @@ public class TownyEntityListener implements Listener {
 
 			} catch (NotRegisteredException e) {
 				// Unknown world or not in a town
+			}
+		}
+		
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+
+		if (plugin.isError()) {
+				return;
+		}
+
+		TownyWorld townyWorld = null;
+		
+		Entity entity = event.getEntity();		
+		
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame) {
+			String damager = event.getDamager().getType().name();
+
+			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER") {
+											
+				try {
+					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+				} catch (NotRegisteredException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				if (!locationCanExplode(townyWorld, entity.getLocation())) {
+					event.setCancelled(true);
+					return;
+				}
+			}
+			if (event.getDamager() instanceof Projectile) {
+				
+				try {
+					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+				} catch (NotRegisteredException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			Object remover = event.getDamager();
+			remover = ((Projectile) remover).getShooter();
+				if (remover instanceof Monster) {
+					event.setCancelled(true);	
+				} else if (remover instanceof Player) {
+					Player player = (Player) remover;
+			
+					// Get destroy permissions (updates if none exist)
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
+
+					// Allow the removal if we are permitted
+					if (bDestroy)
+						return;
+
+					/*
+					 * Fetch the players cache
+					 */
+					PlayerCache cache = plugin.getCache(player);
+
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -534,10 +600,13 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * Prevent fire arrows and charges igniting players when PvP is disabled
 	 * 
+	 * Can also prevent tnt from destroying armorstands
+	 * 
 	 * @param event
+	 * @throws NotRegisteredException 
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) {
+	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) throws NotRegisteredException {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -653,6 +722,7 @@ public class TownyEntityListener implements Listener {
 
 	}
 
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingPlace(HangingPlaceEvent event) {
 
@@ -698,4 +768,23 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
 
+//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//	public void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
+//		DamageCause type = event.getCause();
+//		Location loc = event.getDamager().getLocation();
+//		TownyWorld townyWorld = null;
+
+//		if (type == DamageCause.BLOCK_EXPLOSION) {
+//			try {
+//				townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
+//				if (!locationCanExplode(townyWorld, loc)) {
+//					event.setCancelled(true);
+//					return;
+//				}
+//			} catch (NotRegisteredException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

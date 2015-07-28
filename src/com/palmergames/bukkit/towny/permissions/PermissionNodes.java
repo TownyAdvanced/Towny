@@ -76,8 +76,10 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_PLOTPRICE("towny.command.town.set.plotprice"),
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
+			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
 		
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
+		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
 		
 		TOWNY_COMMAND_TOWN_TOGGLE("towny.command.town.toggle.*"),
 			TOWNY_COMMAND_TOWN_TOGGLE_PVP("towny.command.town.toggle.pvp"),
@@ -87,6 +89,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_TOGGLE_MOBS("towny.command.town.toggle.mobs"),
 			TOWNY_COMMAND_TOWN_TOGGLE_TAXPERCENT("towny.command.town.toggle.taxpercent"),
 			TOWNY_COMMAND_TOWN_TOGGLE_OPEN("towny.command.town.toggle.open"),
+			TOWNY_COMMAND_TOWN_TOGGLE_JAIL("towny.command.town.toggle.jail"),
 		
 		
 		TOWNY_COMMAND_TOWN_MAYOR("towny.command.town.mayor"),
@@ -129,6 +132,8 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_PLOT_SET_ARENA("towny.command.plot.set.arena"),
 			TOWNY_COMMAND_PLOT_SET_WILDS("towny.command.plot.set.wilds"),
 			TOWNY_COMMAND_PLOT_SET_SPLEEF("towny.command.plot.set.spleef"),
+			TOWNY_COMMAND_PLOT_SET_INN("towny.command.plot.set.inn"),
+			TOWNY_COMMAND_PLOT_SET_JAIL("towny.command.plot.set.jail"),
 		
 		TOWNY_COMMAND_PLOT_CLEAR("towny.command.plot.clear"),
 	
@@ -137,6 +142,7 @@ public enum PermissionNodes {
 	 */
 	TOWNY_COMMAND_RESIDENT_LIST("towny.command.resident.list"),
 	TOWNY_COMMAND_RESIDENT_TAX("towny.command.resident.tax"),
+	TOWNY_COMMAND_RESIDENT_JAIL("towny.command.resident.jail"),
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),
 		TOWNY_COMMAND_RESIDENT_SET_MODE("towny.command.resident.set.mode"),
@@ -157,6 +163,9 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_SET("towny.command.townyadmin.set.*"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR("towny.command.townyadmin.set.mayor"),
 	
+	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
+		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
+		
 	TOWNY_COMMAND_TOWNYADMIN_TOWN("towny.command.townyadmin.town.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW("towny.command.townyadmin.town.new"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_ADD("towny.command.townyadmin.town.add"),
@@ -304,6 +313,7 @@ public enum PermissionNodes {
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
 	TOWNY_MAX_PLOTS("towny_maxplots"), 
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
+	
 
 	private String value;
 

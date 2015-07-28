@@ -10,6 +10,9 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.util.Colors;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -37,7 +40,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onEntityDeath(EntityDeathEvent event) {
+	public void onEntityDeath(EntityDeathEvent event) throws NotRegisteredException {
 
 		Entity defenderEntity = event.getEntity();
 
@@ -99,8 +102,10 @@ public class TownyEntityMonitorListener implements Listener {
 				 * it was a natural death, not PvP.
 				 */
 
-				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (attackerPlayer instanceof Player)
+					isJailingAttackingEnemies(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
 				if (TownySettings.isRemovingOnMonarchDeath())
 					monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
@@ -195,9 +200,9 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 	}
 
-	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
+	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 
-		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0)
+		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0 ) {
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
@@ -234,8 +239,14 @@ public class TownyEntityMonitorListener implements Listener {
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(attackerPlayer, "Could not take wartime death funds.");
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take wartime death funds.");
+			}			
+		} else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))  ) {
+			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) != null) {
+				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
+					return;				
 			}
-		else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))) {
+			if (defenderResident.isJailed())
+				return;
 
 			double total = 0.0;
 
@@ -293,14 +304,13 @@ public class TownyEntityMonitorListener implements Listener {
 
 			try {
 				if (TownySettings.getDeathPriceNation() > 0) {
-
 					double price = TownySettings.getDeathPriceNation();
 
 					if (!TownySettings.isDeathPriceType()) {
 						price = defenderResident.getTown().getNation().getHoldingBalance() * price;
 					}
 
-					if (!defenderResident.canPayFromHoldings(price))
+					if (!defenderResident.getTown().getNation().canPayFromHoldings(price))
 						price = defenderResident.getTown().getNation().getHoldingBalance();
 
 					if (attackerResident == null) {
@@ -319,12 +329,62 @@ public class TownyEntityMonitorListener implements Listener {
 			}
 
 			if (attackerResident != null) {
-
 				TownyMessaging.sendMsg(attackerResident, "You gained " + TownyEconomyHandler.getFormattedBalance(total) + " for killing " + defenderPlayer.getName() + ".");
 
 			}
-
 		}
 	}
-
+	public void isJailingAttackingEnemies(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
+		if (TownySettings.isJailingAttackingEnemies()) {
+			Location loc = defenderPlayer.getLocation();
+			if (!TownyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
+				return;
+			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) == null)
+				return;
+			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
+				return;
+			if (defenderResident.isJailed()) {
+				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.JAIL) {
+					TownyMessaging.sendGlobalMessage(Colors.Red + defenderPlayer.getName() + " was killed attempting to escape jail.");
+					return;
+				}							
+				return;			
+			}
+			if (!attackerResident.hasTown()) { 
+				return;
+			} else {
+				Town town = null;
+				try {					
+					town = attackerResident.getTown();
+				} catch (NotRegisteredException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}			
+			
+				if (TownyUniverse.getTownBlock(loc) == null)
+					return;
+					
+				try {
+					if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
+						return;
+				} catch (NotRegisteredException e1) {
+					e1.printStackTrace();
+				}
+				if (!attackerResident.hasNation() || !defenderResident.hasNation()) 
+					return;
+				try {
+					if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
+						return;
+				} catch (NotRegisteredException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}								
+				if (!town.hasJailSpawn()) 
+					return;
+					
+				Integer index = 1;				
+				defenderResident.setJailed(defenderPlayer, index, town);
+			}
+		}
+	}
 }

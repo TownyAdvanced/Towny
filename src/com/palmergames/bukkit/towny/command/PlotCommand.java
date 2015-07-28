@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 /**
@@ -299,14 +300,28 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							
-							townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
+							if (split.length == 1) {
+								townBlock.setName("");
+								TownyMessaging.sendMsg(player, String.format("Plot name removed"));
+								TownyUniverse.getDataSource().saveTownBlock(townBlock);
+								return true;
+							}
 							
-							//townBlock.setChanged(true);
-							TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							// Test if the plot name contains invalid characters.
+							if (!NameValidation.isBlacklistName(split[1])) {								
+								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 							
-							TownyMessaging.sendMsg(player, String.format("토지의 이름이 [%s] 로 설정되었습니다", townBlock.getName()));
+     							//townBlock.setChanged(true);
+							    TownyUniverse.getDataSource().saveTownBlock(townBlock);
+							
+							    TownyMessaging.sendMsg(player, String.format("토지의 이름이 [%s] (으)로 설정되었습니다", townBlock.getName()));
+							    
+							} else {
+								
+								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+								
+							}
 							return true;
-							
 						} 
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
@@ -319,7 +334,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "이름", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "초기화", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "상점|대사관|전장|야생|보호구역|여관", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "상점|대사관|전장|야생|보호구역|여관|감옥", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정 권한", "?", ""));
 					}
 
@@ -387,7 +402,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[대상] [동작] [켜기/끄기]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "초기화", ""));
 			player.sendMessage(ChatTools.formatCommand("예시", "/토지 설정 권한", "친구 건축 켜기", ""));
-			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'친구'", ""));
+			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'친구'", "'주민'"));
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
 			
 		} else {
@@ -541,7 +556,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException
 	 */
 	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException {
-
+		
 		if (resident.hasTown())
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
@@ -551,14 +566,32 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 													// are only checking for an
 													// exception
 
-				townBlock.setType(type);
+				townBlock.setType(type);		
+				Town town = resident.getTown();
+				if (townBlock.isJail())			
+					town.addJailSpawn(TownyUniverse.getPlayer(resident).getLocation());				
 				
-				//townBlock.setChanged(true);
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 			}
+		else if (!resident.hasTown()) {
+			
+			TownBlock townBlock = worldCoord.getTownBlock();
+
+			// Test we are allowed to work on this plot
+			plotTestOwner(resident, townBlock); // ignore the return as we
+												// are only checking for an
+												// exception
+			townBlock.setType(type);		
+			Town town = resident.getTown();
+			if (townBlock.isJail())			
+				town.addJailSpawn(TownyUniverse.getPlayer(resident).getLocation());				
+			
+			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+		
+		}
 		else
 			throw new TownyException(TownySettings.getLangString("msg_err_must_belong_town"));
 	}
@@ -581,16 +614,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				plotTestOwner(resident, townBlock); // ignore the return as we
 													// are only checking for an
 													// exception
+				if (forSale > 1000000 ) {
+					TownyUniverse.getPlayer(resident).sendMessage("Plot price too expensive.");
+				    
+				} else {
+				    townBlock.setPlotPrice(forSale);
 
-				townBlock.setPlotPrice(forSale);
+				    if (forSale != -1)
+				    	TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+				    else
+				    	TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 
-				if (forSale != -1)
-					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
-				else
-					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
-
-				// Save this townblock so the for sale status is remembered.
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				    // Save this townblock so the for sale status is remembered.
+				    TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				}
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
@@ -716,11 +753,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		
 		if (townBlock.hasResident()) {
 			
-			Resident owner = townBlock.getResident();
-			boolean isSameTown = (resident.hasTown()) ? resident.getTown() == owner.getTown() : false;
-			
+			Resident owner = townBlock.getResident();		
+			if ((!owner.hasTown() 
+					&& (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
+					&& (townBlock.getTown() == resident.getTown()))				
+					return owner;
+					
+			boolean isSameTown = (resident.hasTown()) ? resident.getTown() == owner.getTown() : false;			
 			if ((resident == owner)
 					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
+					|| ((townBlock.getTown() == resident.getTown())) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
 					|| isAdmin) {
 				
 				return owner;

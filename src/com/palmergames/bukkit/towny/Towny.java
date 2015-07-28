@@ -32,8 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Towny Plugin for Bukkit
@@ -203,9 +201,6 @@ public class Towny extends JavaPlugin {
 
 	public boolean load() {
 
-		Pattern pattern = Pattern.compile("-b(\\d*?)jnks", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(getServer().getVersion());
-
 		// TownyEconomyHandler.setupEconomy();
 
 		if (!townyUniverse.loadSettings()) {
@@ -215,26 +210,6 @@ public class Towny extends JavaPlugin {
 		}
 
 		setupLogger();
-
-		int bukkitVer = TownySettings.getMinBukkitVersion();
-
-		if (!matcher.find() || matcher.group(1) == null) {
-
-			TownyLogger.log.warning("[타우니 경고] 버킷 버전을 읽어오지 못했습니다.");
-			TownyLogger.log.warning("[타우니 경고] 타우니는 버킷 빌드 " + bukkitVer + " 이상에서 정상적으로 작동합니다.");
-			TownyLogger.log.warning("[타우니 경고] 버킷 버전을 체크해 주시고, 구버전/커스텀 버킷에 대해서는 테스트하지 않았습니다.");
-
-		} else {
-
-			int curBuild = Integer.parseInt(matcher.group(1));
-
-			if (curBuild < bukkitVer) {
-
-				TownyLogger.log.severe("[타우니 경고] 현재 사용 중인 버킷빌드 (" + curBuild + ") 는 구버전입니다!");
-				TownyLogger.log.severe("[타우니 경고] 타우니는 버킷 빌드 " + bukkitVer + " 이상에서 정상적으로 작동합니다.");
-
-			}
-		}
 
 		checkPlugins();
 

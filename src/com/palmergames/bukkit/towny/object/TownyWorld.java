@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
+package com.palmergames.bukkit.towny.object;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -400,15 +400,18 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public List<String> getPlotManagementIgnoreIds() {
-
+		
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
 		else
 			return plotManagementIgnoreIds;
 	}
 
-	public boolean isPlotManagementIgnoreIds(String id) {
+	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 
+		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
+			return true;
+		
 		return getPlotManagementIgnoreIds().contains(id);
 	}
 
@@ -658,6 +661,9 @@ public class TownyWorld extends TownyObject {
 				if (homeTown != null)
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
 						continue;
+				
+				if (!town.getWorld().equals(this)) continue;
+				
 				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 				if (dist < min)
 					min = dist;
@@ -694,6 +700,8 @@ public class TownyWorld extends TownyObject {
 					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
+					if (!b.getWorld().equals(this)) continue;
+					
 					Coord townCoord = b.getCoord();
 					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 					if (dist < min)
