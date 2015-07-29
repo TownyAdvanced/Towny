@@ -10,10 +10,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.TownScoredEvent;
@@ -23,11 +25,13 @@ import com.palmergames.bukkit.util.BukkitTools;
 public class HUDManager implements Listener{
 
 	ArrayList<Player> warUsers;
+	ArrayList<Player> permUsers;
 
 	Towny plugin;
 	public HUDManager (Towny plugin) {
 		this.plugin = plugin;
 		warUsers = new ArrayList<Player>();
+		permUsers = new ArrayList<Player>();
 	}
 
 	//**TOGGLES**//
@@ -35,9 +39,16 @@ public class HUDManager implements Listener{
 		if (!warUsers.contains(p)){
 			toggleAllOff(p);
 			WarHUD.toggleOn(p, plugin.getTownyUniverse().getWarEvent());
-		} else {
+		} else 
 			toggleAllOff(p);
-		}
+	}
+
+	public void togglePermHuD (Player p) {
+		if (!permUsers.contains(p)) {
+			toggleAllOff(p);
+			PermHUD.toggleOn(p);
+		} else 
+			toggleAllOff(p);
 	}
 
 	public void toggleAllWarHUD () {
@@ -48,9 +59,10 @@ public class HUDManager implements Listener{
 
 	public void toggleAllOff (Player p) {
 		warUsers.remove(p);
+		permUsers.remove(p);
 		toggleOff(p);
 	}
-	
+
 	public static void toggleOff(Player p) {
 		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
@@ -70,6 +82,8 @@ public class HUDManager implements Listener{
 			WarHUD.updateLocation(p, event.getTo());
 			WarHUD.updateAttackable(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
 			WarHUD.updateHealth(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
+		} else if (permUsers.contains(p)) {
+			PermHUD.updatePerms(p, event.getTo().getTownBlock());
 		}
 	}
 
@@ -103,6 +117,27 @@ public class HUDManager implements Listener{
 		String[] top = warEvent.getTopThree();
 		for (Player p : warUsers)
 			WarHUD.updateTopScores(p, top);
+	}
+
+	//Perm Specific
+	@EventHandler
+	public void onTownBlockSettingsChanged (TownBlockSettingsChangedEvent e) {
+
+		if (e.getTownyWorld() != null)
+			for (Player p : permUsers)
+				PermHUD.updatePerms(p);
+		else if (e.getTown() != null)
+			for (Player p : permUsers)
+				try {
+					if (new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p)).getTownBlock().getTown() == e.getTown())
+						PermHUD.updatePerms(p);
+				} catch (Exception ex) {}
+		else if (e.getTownBlock() != null)
+			for (Player p : permUsers)
+				try {
+					if (new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p)).getTownBlock() == e.getTownBlock())
+						PermHUD.updatePerms(p);
+				} catch (Exception ex) {}
 	}
 
 	//**UTILS**//
