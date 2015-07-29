@@ -205,7 +205,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
 				towny_war.add("No hud for console!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null)
-				plugin.getTownyUniverse().getWarEvent().togglePlayerHud(p);
+				plugin.getHUDManager().toggleWarHUD(p);
 		}
 
 		return TownyUniverse.isWarTime();

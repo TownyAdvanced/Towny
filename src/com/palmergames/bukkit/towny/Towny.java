@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.permissions.*;
 import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarListener;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
@@ -25,6 +24,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.bukkit.towny.huds.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -65,7 +65,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
-	private final WarListener warListener = new WarListener(this);
+	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -361,7 +361,9 @@ public class Towny extends JavaPlugin {
 			// Have War Events get launched before regular events.
 			pluginManager.registerEvents(townyWarBlockListener, this);
 			pluginManager.registerEvents(townyWarEntityListener, this);
-			pluginManager.registerEvents(warListener, this);
+			
+			// Huds
+			pluginManager.registerEvents(HUDManager, this);
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -796,10 +798,10 @@ public class Towny extends JavaPlugin {
 	}
 	
 	/**
-	 * @return the warListener
+	 * @return the HUDManager
 	 */
-	public WarListener getWarListener() {
+	public HUDManager getHUDManager() {
 		
-		return warListener;
+		return HUDManager;
 	}
 }

@@ -53,7 +53,6 @@ public class War {
 	//private Timer warTimer = new Timer();
 	private List<Integer> warTaskIds = new ArrayList<Integer>();
 	private WarSpoils warSpoils = new WarSpoils();
-	private Hashtable<Player, WarHUD> playersWithHUD = new Hashtable<Player, WarHUD>();
 
 	public War(Towny plugin, int startDelay) {
 
@@ -188,11 +187,7 @@ public class War {
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
-		
-		for (Player p : playersWithHUD.keySet())
-			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		playersWithHUD.clear();
-
+		plugin.getHUDManager().toggleAllWarHUD();
 		double halfWinnings;
 		try {
 			// Transactions might leave 1 coin. (OH noez!)
@@ -257,7 +252,7 @@ public class War {
 		townScores.put(town, townScores.get(town) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 
-		TownScoredEvent event = new TownScoredEvent(town);
+		TownScoredEvent event = new TownScoredEvent(town, townScores.get(town));
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
@@ -277,7 +272,7 @@ public class War {
 		townScores.put(attackerTown, townScores.get(attackerTown) + n);
 		TownyMessaging.sendGlobalMessage(pointMessage);
 
-		TownScoredEvent event = new TownScoredEvent(attackerTown);
+		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown));
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
@@ -572,6 +567,17 @@ public class War {
 		}
 		return output;
 	}
+	
+	public String[] getTopThree() {
+		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
+		kvTable.sortByValue();
+		kvTable.revese();
+		String[] top = new String[3];
+		top[0] = kvTable.getKeyValues().size() >= 1 ? kvTable.getKeyValues().get(0).value + "-" + kvTable.getKeyValues().get(0).key : "";
+		top[1] = kvTable.getKeyValues().size() >= 2 ? kvTable.getKeyValues().get(1).value + "-" + kvTable.getKeyValues().get(1).key : "";
+		top[2] = kvTable.getKeyValues().size() >= 3 ? kvTable.getKeyValues().get(2).value + "-" + kvTable.getKeyValues().get(2).key : "";
+		return top;
+	}
 
 	public boolean isWarringNation(Nation nation) {
 
@@ -599,42 +605,6 @@ public class War {
 		return warSpoils;
 	}
 
-	/**
-	 * Adds/Removes the player from the list of players who have the war HUD toggled on.
-	 * 
-	 * @param p The player who has toggled the HUD
-	 * @return True if the player is not in the list and has been added, false if the player has been removed from the list
-	 */
-	public boolean togglePlayerHud(Player p)
-	{
-		Town playerTown = null;
-		try {
-			playerTown = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
-		} catch (NotRegisteredException e) {
-			p.sendMessage("You are not in war!");
-			return false;
-		}
-		if (!warringTowns.contains(playerTown)) {
-			p.sendMessage("You are not in war!");
-			return false;
-		}
-		if (!playersWithHUD.containsKey(p)){
-			playersWithHUD.put(p, new WarHUD(plugin, p));
-			return true;
-		}
-		playersWithHUD.remove(p);
-
-		//Remove the score board
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		p.setScoreboard(manager.getNewScoreboard());
-		return false;
-	}
-
-	public Hashtable<Player, WarHUD> getPlayersWithHUD()
-	{
-		return playersWithHUD;
-	}
-
 	public Hashtable<Town, Integer> getTownScores()
 	{
 		return townScores;
@@ -643,5 +613,10 @@ public class War {
 	public Hashtable<WorldCoord, Integer> getWarZone()
 	{
 		return warZone;
+	}
+	
+	public List<Town> getWarringTowns()
+	{
+		return warringTowns;
 	}
 }

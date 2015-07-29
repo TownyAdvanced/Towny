@@ -21,16 +21,23 @@ public class TownScoredEvent extends Event {
 	}
 	
 	private Town town;
+	private int score;
 	
-	public TownScoredEvent (Town town)
+	public TownScoredEvent (Town town, int score)
 	{
 		super();
 		this.town = town;
+		this.score = score;
 	}
 	
 	public Town getTown()
 	{
 		return town;
+	}
+	
+	public int getScore()
+	{
+		return score;
 	}
 
 }
