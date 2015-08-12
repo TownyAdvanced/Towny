@@ -24,7 +24,7 @@ public class WarHUD {
 
 	final static int home_health = TownySettings.getWarzoneHomeBlockHealth();
 	final static int town_health = TownySettings.getWarzoneTownBlockHealth();
-	
+
 	public static void updateLocation(Player p, WorldCoord at) {
 		String nation_loc, town_loc, homeblock;
 		try {
@@ -57,13 +57,15 @@ public class WarHUD {
 		String health;
 		boolean isTown = false;
 		try { 
-			if (at.getTownBlock().isWarZone()) 
+			if (at.getTownBlock().isWarZone()) {
 				health = war.getWarZone().get(at) + "" + ChatColor.AQUA + "/" + (at.getTownBlock().isHomeBlock() ? home_health : town_health);
-			isTown = true;
-			if (at.getTownBlock().getTown().getNation().isNeutral())
-				health = "Neutral";
-			else
-				health = "Fallen";
+			} else {
+				isTown = true;
+				if (at.getTownBlock().getTown().getNation().isNeutral())
+					health = "Neutral";
+				else
+					health = "Fallen";
+			}
 		} catch (NotRegisteredException e) {
 			if (isTown)
 				health = "Neutral";
@@ -72,7 +74,7 @@ public class WarHUD {
 		}
 		p.getScoreboard().getTeam("health").setSuffix(health);
 	}
-	
+
 	public static void updateHealth (Player p, int health, boolean home) {
 		if (health > 0) 
 			p.getScoreboard().getTeam("health").setSuffix(health + "" + ChatColor.AQUA + "/" + (home ? home_health : town_health));
@@ -82,7 +84,7 @@ public class WarHUD {
 				p.getScoreboard().getTeam("edge").setSuffix("False");
 		}
 	}
-	
+
 	public static void updateHomeTown(Player p) {
 		String homeTown;
 		try {
@@ -92,7 +94,7 @@ public class WarHUD {
 		}
 		p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
 	}
-	
+
 	public static void updateScore(Player p, War war) {
 		String score;
 		try {
@@ -105,7 +107,7 @@ public class WarHUD {
 		} catch (NotRegisteredException e) {score = "";}
 		p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score));
 	}
-	
+
 	public static void updateTopScores(Player p, String[] top) {
 		String fprefix = top[0].contains("-") ? ChatColor.GOLD + top[0].split("-")[0] + ChatColor.WHITE + "-": "";
 		String sprefix = top[1].contains("-") ? ChatColor.GRAY + top[1].split("-")[0] + ChatColor.WHITE + "-": "";
@@ -120,7 +122,7 @@ public class WarHUD {
 		p.getScoreboard().getTeam("third").setPrefix(HUDManager.check(tprefix));
 		p.getScoreboard().getTeam("third").setSuffix(HUDManager.check(tsuffix));
 	}
-	
+
 	public static void updateScore(Player p, int score) {
 		p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score + ""));
 	}
