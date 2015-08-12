@@ -85,8 +85,8 @@ public class PermHUD {
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
 		String build_player = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
 		String destroy_player = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
-		String switching_player = ChatColor.DARK_GREEN + "Switching: " + ChatColor.GRAY;
-		String item_player = ChatColor.DARK_GREEN + "item: " + ChatColor.GRAY;
+		String switching_player = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
+		String item_player = ChatColor.DARK_GREEN + "Item: " + ChatColor.GRAY;
 		String pvp_player = ChatColor.DARK_GREEN + "PvP: ";
 		String explosions_player = ChatColor.DARK_GREEN + "Explosions: ";
 		String firespread_player = ChatColor.DARK_GREEN + "Firespread: ";
@@ -95,8 +95,8 @@ public class PermHUD {
 		String keyTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Key";
 		String keyResident_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "residents";
 		String keyFriend_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + "friends";
-		String keyAlly_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "allies";
-		String keyOutsider_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "outsiders";
+		String keyAlly_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + "allies";
+		String keyOutsider_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + "outsiders";
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", "dummy");

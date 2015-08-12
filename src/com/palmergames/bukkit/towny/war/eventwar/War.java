@@ -275,6 +275,18 @@ public class War {
 		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown));
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
+	
+	public void heal(Player healPlayer, TownBlock townBlock) throws NotRegisteredException {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		if (townBlock.isHomeBlock() && warZone.get(worldCoord) == TownySettings.getWarzoneHomeBlockHealth())
+			return;
+		if (!townBlock.isHomeBlock() && warZone.get(worldCoord) == TownySettings.getWarzoneTownBlockHealth())
+			return;
+		int hp = warZone.get(worldCoord) + 1;
+		warZone.put(worldCoord, hp);
+		Resident healResident = TownyUniverse.getDataSource().getResident(healPlayer.getName());
+		TownyMessaging.sendMessageToMode(healResident.getTown(), Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
+	}
 
 	public void damage(Player attackerPlayer, TownBlock townBlock) throws NotRegisteredException {
 

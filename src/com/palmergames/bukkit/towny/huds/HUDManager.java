@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.TownScoredEvent;
@@ -27,7 +26,8 @@ public class HUDManager implements Listener{
 	ArrayList<Player> warUsers;
 	ArrayList<Player> permUsers;
 
-	Towny plugin;
+	private final Towny plugin;
+	
 	public HUDManager (Towny plugin) {
 		this.plugin = plugin;
 		warUsers = new ArrayList<Player>();
@@ -38,6 +38,7 @@ public class HUDManager implements Listener{
 	public void toggleWarHUD (Player p) {
 		if (!warUsers.contains(p)){
 			toggleAllOff(p);
+			warUsers.add(p);
 			WarHUD.toggleOn(p, plugin.getTownyUniverse().getWarEvent());
 		} else 
 			toggleAllOff(p);
@@ -46,6 +47,7 @@ public class HUDManager implements Listener{
 	public void togglePermHuD (Player p) {
 		if (!permUsers.contains(p)) {
 			toggleAllOff(p);
+			permUsers.add(p);
 			PermHUD.toggleOn(p);
 		} else 
 			toggleAllOff(p);
