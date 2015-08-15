@@ -243,11 +243,11 @@ msg_town_set_name: '&b%s님이 촌장인 마을의 이름은 이제 %s입니다.
 msg_nation_set_name: '&b%s님이 왕인 국가의 이름은 이제 %s입니다.'
 
 msg_changed_pvp: '&c%s의 PVP 는 이제 %s.'
-msg_changed_public: '&c%s의 공용 설정 : %s.'
+msg_changed_public: '&c마을의 공용 설정 : %s.'
 msg_changed_expl: '&c%s의 폭발 설정 : %s.'
 msg_changed_fire: '&c%s의 불번짐 설정 : %s.'
 msg_changed_mobs: '&c%s의 몬스터 스폰 설정 : %s.'
-msg_changed_taxpercent: '&c세금부과 기준 : %s.'
+msg_changed_taxpercent: '&c세금 부과 기준 : %s.'
 msg_changed_open: '&c마을의 개방 여부 : %s.'
 msg_toggle_open_on_warning: '경고: 마을을 개방하기로 결정했다면 마을의 권한을 수정해야 합니다 . ''/마을 설정 권한 끄기'' 를 입력한 뒤  ''/마을 설정 권한 재설정'' 을 입력하세요'
 
