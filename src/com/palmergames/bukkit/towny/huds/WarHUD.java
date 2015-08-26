@@ -215,11 +215,22 @@ public class WarHUD {
 
 	public static boolean isOnEdgeOfTown(WorldCoord worldCoord, War war) {
 
+		Town currentTown;
+		
+		//Checks to make sure the worldCoord is actually in war
+		try {
+			currentTown = worldCoord.getTownBlock().getTown();
+			if (!war.isWarZone(worldCoord))
+				return false;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-				boolean sameTown = edgeTownBlock.getTown() == worldCoord.getTownBlock().getTown();
+				boolean sameTown = edgeTownBlock.getTown() == currentTown;
 				if (!sameTown || (sameTown && !war.isWarZone(edgeTownBlock.getWorldCoord()))) {
 					return true;
 				}
