@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.TownScoredEvent;
@@ -93,14 +92,10 @@ public class HUDManager implements Listener{
 	@EventHandler
 	public void onPlotAttacked(PlotAttackedEvent event) 
 	{
-		TownBlock townBlock = event.getTownBlock();
-		for (Player p : warUsers){
-			WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
-			boolean home = townBlock.isHomeBlock();
-			try {
-				if (worldCoord.getTownBlock().equals(townBlock))
-					WarHUD.updateHealth(p, event.getHP(), home);
-			} catch (NotRegisteredException e) {}
+		boolean home = event.getTownBlock().isHomeBlock();
+		for (Player p : event.getPlayers()){
+			if (warUsers.contains(p))
+				WarHUD.updateHealth(p, event.getHP(), home);
 		}
 	}
 
