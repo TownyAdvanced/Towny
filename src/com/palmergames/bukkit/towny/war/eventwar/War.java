@@ -347,7 +347,7 @@ public class War {
 		return hp;
 	}
 
-	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, Color c)
+	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c)
 	{
 		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
 
