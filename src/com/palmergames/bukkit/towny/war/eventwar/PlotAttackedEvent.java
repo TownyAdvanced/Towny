@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
+import java.util.HashSet;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -20,25 +23,31 @@ public class PlotAttackedEvent extends Event {
 		return handlers;
 	}
 	
-	private int hp;
 	private TownBlock townBlock;
+	private HashSet<Player> players;
+	private int hp;
 	
-	public PlotAttackedEvent (int hp, TownBlock townBlock)
+	public PlotAttackedEvent (TownBlock townBlock, HashSet<Player> players, int hp)
 	{
 		super();
-		this.hp = hp;
 		this.townBlock = townBlock;
+		this.players = players;
+		this.hp = hp;
+	}
+	
+	public TownBlock getTownBlock() 
+	{
+		return townBlock;
+	}
+	
+	public HashSet<Player> getPlayers()
+	{
+		return players;
 	}
 	
 	public int getHP()
 	{
 		return hp;
 	}
-	
-	public TownBlock getTownBlock()
-	{
-		return townBlock;
-	}
-	
 
 }

@@ -273,58 +273,91 @@ public class War {
 		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown));
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
-	
-	public void heal(Player healPlayer, TownBlock townBlock) throws NotRegisteredException {
-		WorldCoord worldCoord = townBlock.getWorldCoord();
-		if (townBlock.isHomeBlock() && warZone.get(worldCoord) == TownySettings.getWarzoneHomeBlockHealth())
-			return;
-		if (!townBlock.isHomeBlock() && warZone.get(worldCoord) == TownySettings.getWarzoneTownBlockHealth())
-			return;
-		int hp = warZone.get(worldCoord) + 1;
-		warZone.put(worldCoord, hp);
-		Resident healResident = TownyUniverse.getDataSource().getResident(healPlayer.getName());
-		TownyMessaging.sendMessageToMode(healResident.getTown(), Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-	}
 
-	public void damage(Player attackerPlayer, TownBlock townBlock) throws NotRegisteredException {
+	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+		if (!wzd.hasAttackers()) 
+			healPlot(townBlock, wzd);
+		else
+			attackPlot(townBlock, wzd);
 
-		Resident attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
-		Town attacker = attackerResident.getTown();
-		WorldCoord worldCoord = townBlock.getWorldCoord();
-		int hp = warZone.get(worldCoord) - 1;
-		if (hp > 0) {
-			warZone.put(worldCoord, hp);
-			//TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Red + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
-				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL_LARGE);
-				for (Town town: townBlock.getTown().getNation().getTowns())
-					if (town != townBlock.getTown())
-						TownyMessaging.sendMessageToMode(town, Colors.Red + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			}
-			else
-				launchFireworkForDamage (townBlock, attackerPlayer, Type.BALL);
-			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-		} else {
-			launchFireworkForDamage (townBlock, attackerPlayer, Type.CREEPER);
-			remove(attacker, townBlock);
-		}
 		//Call PlotAttackedEvent to update scoreboard users
-		PlotAttackedEvent event = new PlotAttackedEvent(hp, townBlock);
+		int hp = getHealth(townBlock, wzd.getHealthChange());
+		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
-	private void launchFireworkForDamage(final TownBlock townblock, final Player attacker, final FireworkEffect.Type type)
+	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		int healthChange = wzd.getHealthChange();
+		int hp = getHealth(townBlock, healthChange);
+		warZone.put(worldCoord, hp);
+		TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Color.LIME + "+" + healthChange + Color.GRAY + ")", "");
+	}
+
+	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+
+		Player attackerPlayer = wzd.getRandomAttacker();
+		Resident attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
+		Town attacker = attackerResident.getTown();
+
+		//Health, messaging, fireworks..
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		int healthChange = wzd.getHealthChange();
+		int hp = getHealth(townBlock, healthChange);
+		Color fwc = healthChange < 0 ? Color.RED : (healthChange > 0 ? Color.LIME : Color.GRAY);
+		if (hp > 0) {
+			warZone.put(worldCoord, hp);
+			String healthChangeStringDef, healthChangeStringAtk;
+			if (healthChange > 0) { 
+				healthChangeStringDef = "(" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+				healthChangeStringAtk = "(" + Colors.Red + "+" + healthChange + Colors.Gray + ")";
+			}
+			else if (healthChange < 0) {
+				healthChangeStringDef = "(" + Colors.Red + healthChange + Colors.Gray + ")";
+				healthChangeStringAtk = "(" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+			}
+			else {
+				healthChangeStringDef = "(+0)";
+				healthChangeStringAtk = "(+0)";
+			}
+			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
+				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
+				for (Town town: townBlock.getTown().getNation().getTowns())
+					if (town != townBlock.getTown())
+						TownyMessaging.sendMessageToMode(town, Colors.Gray + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+			}
+			else
+				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
+			for (Town attackingTown : wzd.getAttackerTowns())
+				TownyMessaging.sendMessageToMode(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk, "");
+		} else {
+			launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
+			remove(attacker, townBlock);
+		}
+	}
+
+	private int getHealth(TownBlock townBlock, int healthChange) {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		int hp = warZone.get(worldCoord) + healthChange;
+		if (townBlock.isHomeBlock() && hp > TownySettings.getWarzoneHomeBlockHealth())
+			return TownySettings.getWarzoneHomeBlockHealth();
+		else if (hp > TownySettings.getWarzoneTownBlockHealth())
+			return TownySettings.getWarzoneTownBlockHealth();
+		return hp;
+	}
+
+	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, Color c)
 	{
 		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
 
 			public void run() {
 				double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
 				double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
-				double y = attacker.getLocation().getY() + 20;
-				Firework firework = attacker.getWorld().spawn(new Location(attacker.getWorld(), x, y, z), Firework.class);
+				double y = atPlayer.getLocation().getY() + 20;
+				Firework firework = atPlayer.getWorld().spawn(new Location(atPlayer.getWorld(), x, y, z), Firework.class);
 				FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
-				data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(type).trail(false).withFade(Color.MAROON).build());
+				data.addEffects(FireworkEffect.builder().withColor(c).with(type).trail(false).build());
 				firework.setFireworkMeta(data);            
 				firework.detonate();
 			}
@@ -577,7 +610,7 @@ public class War {
 		}
 		return output;
 	}
-	
+
 	public String[] getTopThree() {
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
 		kvTable.sortByValue();
@@ -624,7 +657,7 @@ public class War {
 	{
 		return warZone;
 	}
-	
+
 	public List<Town> getWarringTowns()
 	{
 		return warringTowns;
