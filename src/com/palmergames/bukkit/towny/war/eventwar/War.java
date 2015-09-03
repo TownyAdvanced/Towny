@@ -281,7 +281,7 @@ public class War {
 			attackPlot(townBlock, wzd);
 
 		//Call PlotAttackedEvent to update scoreboard users
-		int hp = getHealth(townBlock, wzd.getHealthChange());
+		int hp = warZone.get(townBlock.getWorldCoord());
 		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
@@ -289,7 +289,10 @@ public class War {
 	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int healthChange = wzd.getHealthChange();
+		int oldHP = warZone.get(worldCoord);
 		int hp = getHealth(townBlock, healthChange);
+		if (oldHP == hp)
+			return;
 		warZone.put(worldCoord, hp);
 		TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Color.LIME + "+" + healthChange + Color.GRAY + ")", "");
 	}
@@ -314,7 +317,7 @@ public class War {
 			}
 			else if (healthChange < 0) {
 				healthChangeStringDef = "(" + Colors.Red + healthChange + Colors.Gray + ")";
-				healthChangeStringAtk = "(" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+				healthChangeStringAtk = "(" + Colors.LightGreen + healthChange + Colors.Gray + ")";
 			}
 			else {
 				healthChangeStringDef = "(+0)";
