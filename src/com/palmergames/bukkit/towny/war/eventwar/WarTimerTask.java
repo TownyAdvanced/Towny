@@ -69,7 +69,7 @@ public class WarTimerTask extends TownyTimerTask {
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   aboveMinHeight");
 						TownBlock townBlock = worldCoord.getTownBlock(); //universe.getWorld(player.getWorld().getName()).getTownBlock(worldCoord);
-						if (resident.getTown() == townBlock.getTown()) {
+						if (nation == townBlock.getTown().getNation() || townBlock.getTown().getNation().hasAlly(nation)) {
 							if (plotList.containsKey(townBlock))
 								plotList.get(townBlock).addDefender(player);
 							else {
@@ -78,9 +78,6 @@ public class WarTimerTask extends TownyTimerTask {
 								plotList.put(townBlock, wzd);
 							}
 							TownyMessaging.sendDebugMsg("[War]   healed");
-							continue;
-						}
-						if (nation == townBlock.getTown().getNation() || townBlock.getTown().getNation().hasAlly(nation)) {
 							continue;
 						}
 						TownyMessaging.sendDebugMsg("[War]   notAlly");

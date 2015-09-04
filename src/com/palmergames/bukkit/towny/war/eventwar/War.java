@@ -279,11 +279,6 @@ public class War {
 			healPlot(townBlock, wzd);
 		else
 			attackPlot(townBlock, wzd);
-
-		//Call PlotAttackedEvent to update scoreboard users
-		int hp = warZone.get(townBlock.getWorldCoord());
-		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
-		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
 	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
@@ -294,7 +289,17 @@ public class War {
 		if (oldHP == hp)
 			return;
 		warZone.put(worldCoord, hp);
-		TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Color.LIME + "+" + healthChange + Color.GRAY + ")", "");
+		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+		TownyMessaging.sendMessageToMode(townBlock.getTown(), healString, "");
+		for (Player p : wzd.getDefenders()) {
+			if (TownyUniverse.getDataSource().getResident(p.getName()).getTown() != townBlock.getTown())
+				TownyMessaging.sendMessage(p, healString);
+		}
+		launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
+
+		//Call PlotAttackedEvent to update scoreboard users
+		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
@@ -338,6 +343,10 @@ public class War {
 			launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
 			remove(attacker, townBlock);
 		}
+
+		//Call PlotAttackedEvent to update scoreboard users
+		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
 	private int getHealth(TownBlock townBlock, int healthChange) {
