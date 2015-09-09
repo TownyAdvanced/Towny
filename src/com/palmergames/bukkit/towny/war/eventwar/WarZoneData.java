@@ -72,6 +72,18 @@ public class WarZoneData {
 		return null;
 	}
 	
+	public Player getRandomDefender() {
+		int index = (int)(Math.random() * defenders.size());
+		int curIndex = 0;
+		for (Player p : defenders) {
+			if (curIndex == index)
+				return p;
+			curIndex++;
+		}
+		//No players in the list
+		return null;
+	}
+	
 	public HashSet<Player> getAllPlayers() {
 		return allPlayers;
 	}
