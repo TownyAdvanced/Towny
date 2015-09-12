@@ -8,6 +8,8 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -147,7 +149,7 @@ public class TownyEntityListener implements Listener {
 		
 		Entity entity = event.getEntity();		
 		
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame) {
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals) {
 			String damager = event.getDamager().getType().name();
 
 			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER") {
