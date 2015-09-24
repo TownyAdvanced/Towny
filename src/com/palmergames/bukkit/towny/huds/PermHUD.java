@@ -26,17 +26,14 @@ public class PermHUD {
 
 	public static void updatePerms (Player p) {
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
-		try {
-			updatePerms(p, worldCoord.getTownBlock());
-		} catch (NotRegisteredException e) {
-			clearPerms(p);
-		}
+		updatePerms(p, worldCoord);
 	}
 
-	public static void updatePerms(Player p, TownBlock townBlock) {
+	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		String build, destroy, switching, item, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
 		try {
+			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
