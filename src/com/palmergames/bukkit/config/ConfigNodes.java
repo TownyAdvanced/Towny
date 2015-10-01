@@ -1064,6 +1064,10 @@ public enum ConfigNodes {
 			"war.event.enemy.only_attack_borders",
 			"true",
 			"# If true, enemy's can only attack the edge plots of a town in war."),
+	WAR_EVENT_PLOTS_HEALABLE(
+			"war.event.plots.healable",
+			"true",
+			"# If true, nation members and allies can regen health on plots during war."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
 			"false",
