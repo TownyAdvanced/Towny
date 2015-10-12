@@ -84,11 +84,12 @@ public class HUDManager implements Listener{
 			WarHUD.updateAttackable(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
 			WarHUD.updateHealth(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
 		} else if (permUsers.contains(p)) {
-			PermHUD.updatePerms(p, event.getTo().getTownBlock());
+			PermHUD.updatePerms(p, event.getTo());
 		}
 	}
 
 	//War specific//
+	
 	@EventHandler
 	public void onPlotAttacked(PlotAttackedEvent event) 
 	{

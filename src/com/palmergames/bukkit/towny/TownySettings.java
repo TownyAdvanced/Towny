@@ -1444,6 +1444,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_EVENT_ENEMY_ONLY_ATTACK_BORDER);
 	}
+	
+	public static boolean getPlotsHealableInWar() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_HEALABLE);
+	}
 
 	public static double getWartimeDeathPrice() {
 
