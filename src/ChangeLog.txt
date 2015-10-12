@@ -2223,3 +2223,5 @@ v0.89.2.27:
 	- Add MultiWorld to plugin.yml softdepend list.
 v0.89.2.28:
     - Fix animals in Towns not being protected in some cases when shot from an unclaimed/wilderness plot.
+v0.90.0.0:
+	- Update to release build number.
