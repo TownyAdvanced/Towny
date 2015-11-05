@@ -1111,6 +1111,14 @@ public enum ConfigNodes {
 			"war.event.towns_are_neutral",
 			"true",
 			"#If false all towns not in nations can be attacked during a war event."),
+	WAR_EVENT_ENEMY_ONLY_ATTACK_BORDER(
+			"war.event.enemy.only_attack_borders",
+			"true",
+			"# If true, enemy's can only attack the edge plots of a town in war."),
+	WAR_EVENT_PLOTS_HEALABLE(
+			"war.event.plots.healable",
+			"true",
+			"# If true, nation members and allies can regen health on plots during war."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
 			"false",

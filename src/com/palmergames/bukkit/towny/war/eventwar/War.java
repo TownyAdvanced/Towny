@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitScheduler;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -15,7 +21,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -177,7 +185,7 @@ public class War {
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
-		
+		plugin.getHUDManager().toggleAllWarHUD();
 		double halfWinnings;
 		try {
 			// Transactions might leave 1 coin. (OH noez!)
@@ -187,7 +195,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage("Winning Nation: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
+					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -196,7 +204,7 @@ public class War {
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-				TownyMessaging.sendGlobalMessage("Highest Score: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {
@@ -228,43 +236,173 @@ public class War {
 		return warZone.containsKey(worldCoord);
 	}
 
-	public void townScored(Town town, int n) {
+	public void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
+
+		String[] pointMessage = {"error"};
+		if (fallenObject instanceof Nation)
+			pointMessage = TownySettings.getWarTimeScoreNationEliminatedMsg(town, n, (Nation)fallenObject);
+		else if (fallenObject instanceof Town)
+			pointMessage = TownySettings.getWarTimeScoreTownEliminatedMsg(town, n, (Town)fallenObject, townBlocksFallen);
+		else if (fallenObject instanceof TownBlock){	
+			pointMessage = TownySettings.getWarTimeScoreTownBlockEliminatedMsg(town, n, (TownBlock)fallenObject);
+		}
 
 		townScores.put(town, townScores.get(town) + n);
-		TownyMessaging.sendTownMessage(town, TownySettings.getWarTimeScoreMsg(town, n));
+		TownyMessaging.sendGlobalMessage(pointMessage);
+
+		TownScoredEvent event = new TownScoredEvent(town, townScores.get(town));
+		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
-	public void damage(Town attacker, TownBlock townBlock) throws NotRegisteredException {
+	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
+	{
+		String[] pointMessage = {"error"};
+		TownBlock deathLoc = TownyUniverse.getTownBlock(defenderPlayer.getLocation());
+		if (deathLoc == null)
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
+		else if (warZone.containsKey(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, attackerPlayer, n, attackerTown);
+		else if (warZone.containsKey(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, defenderPlayer, n, attackerTown);
+		else
+			pointMessage = TownySettings.getWarTimeScorePlayerKillMsg(attackerPlayer, defenderPlayer, n, attackerTown);
 
+		townScores.put(attackerTown, townScores.get(attackerTown) + n);
+		TownyMessaging.sendGlobalMessage(pointMessage);
+
+		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown));
+		Bukkit.getServer().getPluginManager().callEvent(event);
+	}
+
+	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+		if (!wzd.hasAttackers()) 
+			healPlot(townBlock, wzd);
+		else
+			attackPlot(townBlock, wzd);
+	}
+
+	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
-		int hp = warZone.get(worldCoord) - 1;
+		int healthChange = wzd.getHealthChange();
+		int oldHP = warZone.get(worldCoord);
+		int hp = getHealth(townBlock, healthChange);
+		if (oldHP == hp)
+			return;
+		warZone.put(worldCoord, hp);
+		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+		TownyMessaging.sendMessageToMode(townBlock.getTown(), healString, "");
+		for (Player p : wzd.getDefenders()) {
+			if (TownyUniverse.getDataSource().getResident(p.getName()).getTown() != townBlock.getTown())
+				TownyMessaging.sendMessage(p, healString);
+		}
+		launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
+
+		//Call PlotAttackedEvent to update scoreboard users
+		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+	}
+
+	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+
+		Player attackerPlayer = wzd.getRandomAttacker();
+		Resident attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
+		Town attacker = attackerResident.getTown();
+
+		//Health, messaging, fireworks..
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		int healthChange = wzd.getHealthChange();
+		int hp = getHealth(townBlock, healthChange);
+		Color fwc = healthChange < 0 ? Color.RED : (healthChange > 0 ? Color.LIME : Color.GRAY);
 		if (hp > 0) {
 			warZone.put(worldCoord, hp);
-			//if (hp % 10 == 0) {
-			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			TownyMessaging.sendMessageToMode(attacker, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp, "");
-			//}
-		} else
+			String healthChangeStringDef, healthChangeStringAtk;
+			if (healthChange > 0) { 
+				healthChangeStringDef = "(" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
+				healthChangeStringAtk = "(" + Colors.Red + "+" + healthChange + Colors.Gray + ")";
+			}
+			else if (healthChange < 0) {
+				healthChangeStringDef = "(" + Colors.Red + healthChange + Colors.Gray + ")";
+				healthChangeStringAtk = "(" + Colors.LightGreen + healthChange + Colors.Gray + ")";
+			}
+			else {
+				healthChangeStringDef = "(+0)";
+				healthChangeStringAtk = "(+0)";
+			}
+			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
+				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
+				for (Town town: townBlock.getTown().getNation().getTowns())
+					if (town != townBlock.getTown())
+						TownyMessaging.sendMessageToMode(town, Colors.Gray + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+			}
+			else
+				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
+			for (Town attackingTown : wzd.getAttackerTowns())
+				TownyMessaging.sendMessageToMode(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk, "");
+		} else {
+			launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
 			remove(attacker, townBlock);
+		}
+
+		//Call PlotAttackedEvent to update scoreboard users
+		PlotAttackedEvent event = new PlotAttackedEvent(townBlock, wzd.getAllPlayers(), hp);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+	}
+
+	private int getHealth(TownBlock townBlock, int healthChange) {
+		WorldCoord worldCoord = townBlock.getWorldCoord();
+		int hp = warZone.get(worldCoord) + healthChange;
+		if (townBlock.isHomeBlock() && hp > TownySettings.getWarzoneHomeBlockHealth())
+			return TownySettings.getWarzoneHomeBlockHealth();
+		else if (hp > TownySettings.getWarzoneTownBlockHealth())
+			return TownySettings.getWarzoneTownBlockHealth();
+		return hp;
+	}
+
+	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c)
+	{
+		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
+
+			public void run() {
+				double x = (double)townblock.getX() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+				double z = (double)townblock.getZ() * Coord.getCellSize() + Coord.getCellSize()/2.0;
+				double y = atPlayer.getLocation().getY() + 20;
+				Firework firework = atPlayer.getWorld().spawn(new Location(atPlayer.getWorld(), x, y, z), Firework.class);
+				FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
+				data.addEffects(FireworkEffect.builder().withColor(c).with(type).trail(false).build());
+				firework.setFireworkMeta(data);            
+				firework.detonate();
+			}
+		}, 0);	
 	}
 
 	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForTownBlock());
+		//townScored(attacker, TownySettings.getWarPointsForTownBlock());
 		townBlock.getTown().addBonusBlocks(-1);
 		attacker.addBonusBlocks(1);
 		try {
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				remove(townBlock.getTown());
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+				if (townBlock.getTown().isCapital())
+					remove(attacker, townBlock.getTown().getNation());
+				else
+					remove(attacker, townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
+				TownyUniverse.getDataSource().saveTown(attacker);
+				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
 		} catch (EconomyException e) {
 		}
-		if (townBlock.getTown().isHomeBlock(townBlock))
-			remove(townBlock.getTown());
-		else
+		if (townBlock.getTown().isHomeBlock(townBlock) && townBlock.getTown().isCapital()){
+			remove(attacker, townBlock.getTown().getNation());
+		} else if (townBlock.getTown().isHomeBlock(townBlock)){
+			remove(attacker, townBlock.getTown());
+		} else{
+			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
+		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
 		TownyUniverse.getDataSource().saveTown(attacker);
 	}
@@ -279,21 +417,34 @@ public class War {
 
 	public void eliminate(Town town) {
 
-		remove(town);
-		try {
-			checkNation(town.getNation());
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
-		}
+		//remove(town);
+		//		try {
+		//			checkNation(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
+		//		}
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
-		checkEnd();
+		//checkEnd();
+	}
+
+	public void eliminate(Town town, String townBlocksFallen) {
+
+		//remove(town);
+		//		try {
+		//			checkNation(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
+		//		}
+		String[] message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName() + " " + townBlocksFallen);
+		TownyMessaging.sendGlobalMessage(message);
+		//checkEnd();
 	}
 
 	public void eliminate(Nation nation) {
 
-		remove(nation);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getName()));
-		checkEnd();
+		//remove(nation);
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getFormattedName()));
+		//checkEnd();
 	}
 
 	public void nationLeave(Nation nation) {
@@ -312,59 +463,63 @@ public class War {
 		checkEnd();
 	}
 
-	public void remove(Town attacker, Nation nation) {
+	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForNation());
+		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
 		warringNations.remove(nation);
+		for (Town town : nation.getTowns())
+			if (warringTowns.contains(town))
+				remove(attacker, town);
+		checkEnd();
 	}
 
 	public void remove(Nation nation) {
 
 		warringNations.remove(nation);
+		eliminate(nation);
+		for (Town town : nation.getTowns())
+			remove(town);
+		checkEnd();
 	}
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
-		townScored(attacker, TownySettings.getWarPointsForTown());
-
-		for (TownBlock townBlock : town.getTownBlocks())
-			remove(townBlock.getWorldCoord());
+		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
-		try {
-			if (!townsLeft(town.getNation()))
-				eliminate(town.getNation());
-		} catch (NotRegisteredException e) {
-		}
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.containsKey(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
 	}
 
 	public void remove(Town town) {
 
-		for (TownBlock townBlock : town.getTownBlocks())
-			remove(townBlock.getWorldCoord());
+		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
-		try {
-			if (!townsLeft(town.getNation()))
-				eliminate(town.getNation());
-		} catch (NotRegisteredException e) {
-		}
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.containsKey(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		String format = "(" + fallenTownBlocks + " town blocks captured)";
+		eliminate (town, format);
+
+		//		try {
+		//			if (!townsLeft(town.getNation()))
+		//				eliminate(town.getNation());
+		//		} catch (NotRegisteredException e) {
+		//		}
 	}
 
 	public boolean townsLeft(Nation nation) {
 
-		return warringTowns.containsAll(nation.getTowns());
+		return countActiveTowns(nation) > 0;
 	}
 
-	public void remove(WorldCoord worldCoord) {
-
-		try {
-			Town town = worldCoord.getTownBlock().getTown();
-			TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord, town.getName()));
-			warZone.remove(worldCoord);
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeLoseTownBlockMsg(worldCoord));
-			warZone.remove(worldCoord);
-		}
-
+	public void remove(WorldCoord worldCoord) {	
+		warZone.remove(worldCoord);
 	}
 
 	public void checkEnd() {
@@ -461,14 +616,32 @@ public class War {
 			if (maxListing != -1 && n > maxListing)
 				break;
 			Town town = (Town) kv.key;
-			output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", TownyFormatter.getFormattedName(town), (Integer) kv.value));
+			int score = (Integer) kv.value;
+			if (score > 0)
+				output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", TownyFormatter.getFormattedName(town), score));
 		}
 		return output;
+	}
+
+	public String[] getTopThree() {
+		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
+		kvTable.sortByValue();
+		kvTable.revese();
+		String[] top = new String[3];
+		top[0] = kvTable.getKeyValues().size() >= 1 ? kvTable.getKeyValues().get(0).value + "-" + kvTable.getKeyValues().get(0).key : "";
+		top[1] = kvTable.getKeyValues().size() >= 2 ? kvTable.getKeyValues().get(1).value + "-" + kvTable.getKeyValues().get(1).key : "";
+		top[2] = kvTable.getKeyValues().size() >= 3 ? kvTable.getKeyValues().get(2).value + "-" + kvTable.getKeyValues().get(2).key : "";
+		return top;
 	}
 
 	public boolean isWarringNation(Nation nation) {
 
 		return warringNations.contains(nation);
+	}
+
+	public boolean isWarringTown(Town town) {
+
+		return warringTowns.contains(town);
 	}
 
 	public KeyValue<Town, Integer> getWinningTownScore() throws TownyException {
@@ -485,5 +658,20 @@ public class War {
 	public WarSpoils getWarSpoils() {
 
 		return warSpoils;
+	}
+
+	public Hashtable<Town, Integer> getTownScores()
+	{
+		return townScores;
+	}
+
+	public Hashtable<WorldCoord, Integer> getWarZone()
+	{
+		return warZone;
+	}
+
+	public List<Town> getWarringTowns()
+	{
+		return warringTowns;
 	}
 }

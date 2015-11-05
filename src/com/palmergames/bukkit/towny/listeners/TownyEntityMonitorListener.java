@@ -101,14 +101,12 @@ public class TownyEntityMonitorListener implements Listener {
 				 * If attackerPlayer or attackerResident are null at this point
 				 * it was a natural death, not PvP.
 				 */
-
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
-				wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 				if (attackerPlayer instanceof Player)
 					isJailingAttackingEnemies(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
-				if (TownySettings.isRemovingOnMonarchDeath())
-					monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (TownyUniverse.isWarTime())
+					wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
 			}
 		}
@@ -167,36 +165,36 @@ public class TownyEntityMonitorListener implements Listener {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
 
-				if (TownySettings.getWarPointsForKill() > 0)
-					plugin.getTownyUniverse().getWarEvent().townScored(attackerResident.getTown(), TownySettings.getWarPointsForKill());
+				War warEvent = plugin.getTownyUniverse().getWarEvent();
+				if (attackerResident.hasTown() && warEvent.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && warEvent.isWarringTown(defenderResident.getTown())){
+					if (TownySettings.isRemovingOnMonarchDeath())
+						monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
+					if (TownySettings.getWarPointsForKill() > 0){
+						plugin.getTownyUniverse().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
+					}
+				}
 			} catch (NotRegisteredException e) {
 			}
 	}
 
 	private void monarchDeath(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		if (TownyUniverse.isWarTime()) {
-			War warEvent = plugin.getTownyUniverse().getWarEvent();
-			try {
-				Nation defenderNation = defenderResident.getTown().getNation();
-				if (warEvent.isWarringNation(defenderNation))
-					if (defenderResident.isMayor())
-						if (defenderResident.isKing()) {
-							if (attackerResident != null && attackerResident.hasTown())
-								warEvent.remove(attackerResident.getTown(), defenderNation);
-							else
-								warEvent.remove(defenderNation);
-							TownyMessaging.sendGlobalMessage(defenderNation.getName() + "'s king was killed. Nation removed from war.");
-						} else {
-							if (attackerResident != null && attackerResident.hasTown())
-								warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
-							else
-								warEvent.remove(defenderResident.getTown());
-							TownyMessaging.sendGlobalMessage(defenderResident.getTown() + "'s mayor was killed. Town removed from war.");
-						}
-			} catch (NotRegisteredException e) {
+		War warEvent = plugin.getTownyUniverse().getWarEvent();
+		try {
+
+			Nation defenderNation = defenderResident.getTown().getNation();
+			Town defenderTown = defenderResident.getTown();
+			if (warEvent.isWarringNation(defenderNation) && defenderResident.isKing()){
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeKingKilled(defenderNation));
+				if (attackerResident != null)
+					warEvent.remove(attackerResident.getTown(), defenderNation);
+			}else if (warEvent.isWarringNation(defenderNation) && defenderResident.isMayor()) {
+				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeMayorKilled(defenderTown));
+				if (attackerResident != null)
+					warEvent.remove(attackerResident.getTown(), defenderResident.getTown());
 			}
+		} catch (NotRegisteredException e) {
 		}
 	}
 

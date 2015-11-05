@@ -8,6 +8,7 @@ import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
+import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -555,6 +557,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyUniverse.getDataSource().saveTownBlock(townBlock);
 				}
 			}
+			
+			//Change settings event
+			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(town);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 
 			TownyUniverse.getDataSource().saveTown(town);
 		}
