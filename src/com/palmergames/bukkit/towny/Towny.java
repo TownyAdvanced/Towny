@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny; /* Localized on 2014-05-02 by Neder */
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
+
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
@@ -23,6 +24,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.bukkit.towny.huds.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -60,6 +63,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
+	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -332,6 +336,9 @@ public class Towny extends JavaPlugin {
 			// Have War Events get launched before regular events.
 			pluginManager.registerEvents(townyWarBlockListener, this);
 			pluginManager.registerEvents(townyWarEntityListener, this);
+			
+			// Huds
+			pluginManager.registerEvents(HUDManager, this);
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -763,5 +770,13 @@ public class Towny extends JavaPlugin {
 	public TownyWarEntityListener getTownyWarEntityListener() {
 	
 		return townyWarEntityListener;
+	}
+	
+	/**
+	 * @return the HUDManager
+	 */
+	public HUDManager getHUDManager() {
+		
+		return HUDManager;
 	}
 }
