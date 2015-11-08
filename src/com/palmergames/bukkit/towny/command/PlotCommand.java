@@ -283,13 +283,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-<<<<<<< HEAD
 						
 						if (split[0].equalsIgnoreCase("perm") || split[0].equalsIgnoreCase("권한")) {
-=======
-
-						if (split[0].equalsIgnoreCase("perm")) {
->>>>>>> refs/remotes/LlmDl/master
 
 							// Set plot level permissions (if the plot owner) or
 							// Mayor/Assistant of the town.
@@ -304,15 +299,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
-<<<<<<< HEAD
 							
 						} else if (split[0].equalsIgnoreCase("name") || split[0].equalsIgnoreCase("이름")) {
-							
-=======
 
-						} else if (split[0].equalsIgnoreCase("name")) {
-
->>>>>>> refs/remotes/LlmDl/master
 							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
@@ -326,21 +315,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test if the plot name contains invalid characters.
 							if (!NameValidation.isBlacklistName(split[1])) {								
 								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
-<<<<<<< HEAD
 							
      							//townBlock.setChanged(true);
 							    TownyUniverse.getDataSource().saveTownBlock(townBlock);
 							
 							    TownyMessaging.sendMsg(player, String.format("토지의 이름이 [%s] (으)로 설정되었습니다", townBlock.getName()));
-							    
-=======
 
-								//townBlock.setChanged(true);
-								TownyUniverse.getDataSource().saveTownBlock(townBlock);
-
-								TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
-
->>>>>>> refs/remotes/LlmDl/master
 							} else {
 
 								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
@@ -418,7 +398,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-<<<<<<< HEAD
 			
 			player.sendMessage(ChatTools.formatTitle("/... 설정 권한"));
 			player.sendMessage(ChatTools.formatCommand("대상", "[친구/동맹/외부인]", "", ""));
@@ -429,18 +408,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "설정 권한", "초기화", ""));
 			player.sendMessage(ChatTools.formatCommand("예시", "/토지 설정 권한", "친구 건축 켜기", ""));
 			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'친구'", "'주민'"));
-=======
-
-			player.sendMessage(ChatTools.formatTitle("/... set perm"));
-			player.sendMessage(ChatTools.formatCommand("Level", "[friend/ally/outsider]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
-			player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
-			player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
->>>>>>> refs/remotes/LlmDl/master
 			player.sendMessage(TownySettings.getLangString("plot_perms_1"));
 
 		} else {
@@ -448,15 +415,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyPermission perm = townBlock.getPermissions();
 
 			if (split.length == 1) {
-<<<<<<< HEAD
 				
 				if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("초기화")) {
 					
-=======
-
-				if (split[0].equalsIgnoreCase("reset")) {
-
->>>>>>> refs/remotes/LlmDl/master
 					// reset this townBlock permissions (by town/resident)
 					townBlock.setType(townBlock.getType());
 					TownyUniverse.getDataSource().saveTownBlock(townBlock);
@@ -496,13 +457,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				try {
 
 					boolean b = plugin.parseOnOff(split[1]);
-<<<<<<< HEAD
 					
 					if (split[0].equalsIgnoreCase("friend") || split[0].equalsIgnoreCase("친구")) {
-=======
-
-					if (split[0].equalsIgnoreCase("friend")) {
->>>>>>> refs/remotes/LlmDl/master
 						perm.residentBuild = b;
 						perm.residentDestroy = b;
 						perm.residentSwitch = b;
@@ -543,13 +499,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// reset the friend to resident so the perm settings don't fail
 				if (split[0].equalsIgnoreCase("friend"))
 					split[0] = "resident";
-<<<<<<< HEAD
 				else if (split[0].equalsIgnoreCase("친구")) // Additional Code by Neder, 2014-06-12
 					split[0] = "주민";
 				
-=======
-
->>>>>>> refs/remotes/LlmDl/master
 				try {
 					boolean b = plugin.parseOnOff(split[2]);
 					String s = "";

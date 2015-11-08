@@ -1,13 +1,13 @@
 name: Towny
-version: 0.21
+version: 0.25
 language: korean
 author: Neder & wolfwork, Based by 6four's translations
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
 description: >
-    Language file for all game messages.  Do not alter this file.
-    If you wish to change any of the entries, make a copy named something else.
-    Alternate language files can be enabled by altering the
-    [language] entry in config.yml
+    모든 게임 메시지가 저장된 언어 파일입니다. 수정하지 않는 것을 권장합니다.
+    만약 수정하고자 한다면 이 파일의 복사본을 만들어 두시기 바랍니다.
+    다른 언어 파일은 config.yml의 [language] 부분에서 변경할 수 있습니다.
+    * 현재 0.89.0.1에서 추가된 전쟁 관련 메시지는 미번역 상태입니다.
     
 #
 #
@@ -285,9 +285,10 @@ msg_set_claim: '&b%s''의 토지 구매 가능 여부 : %s'
 msg_set_perms_reset: '&b%s 토지의 권한이 리셋되었습니다.'
 
 msg_usedefault: '&b(%s)은(는) 기본 설정값을 사용중입니다.'
-msg_set_wild_perms: '& %s''월드의 야생권한이 %s으로 바뀌었습니다'
-msg_set_wild_ignore: '&b%s''의 야생 예외블록이 %s로 바뀌었습니다'
-msg_set_wild_name: '&b %s''의 의 야생 이름이 %s으로 바뀌었습니다'
+msg_set_wild_perms: '&b%s 월드의 야생권한이 ''%s''(으)로 바뀌었습니다'
+msg_set_wild_ignore: '&b%s 월드의 야생 예외블록이 ''%s''(으)로 바뀌었습니다'
+msg_set_wild_name: '&b%s 월드의 야생 이름이 ''%s''(으)로 바뀌었습니다'
+msg_set_wild_regen: '&b%s 월드의 야생 리젠 설정이 ''%s''(으)로 바뀌었습니다'
 msg_set_use_towny_on: '&b이 월드는 이제 타우니의 규칙을 따릅니다.'
 msg_set_use_towny_off: '&c이 월드는 모든 타우니 규칙에서 제외됩니다.'
 
@@ -328,6 +329,15 @@ msg_war_join_forced: '&6[전쟁]&b 국가 %s 은(는) 글로벌 설정에 의해
 msg_war_join_nation: '&6[전쟁]&b 국가%s이(가) 전쟁에 참가했습니다!'
 msg_war_lose_block: '&6[전쟁]&b %s에 속한 (%s)는 떨어져나갔습니다.'
 msg_war_score: '&6[전쟁]&b %s 는 %d 점을 기록했습니다!'
+msg_war_score_nation_elim: '&6[War]&b %s was awarded %d points for eliminating the nation %s!'
+msg_war_score_town_elim: '&6[War]&b %s was awarded %d points for eliminating the town %s! (%d town blocks captured)'
+msg_war_score_townblock_elim: '&6[War]&b %s was awarded %d points for eliminating the town block %s!'
+msg_war_score_player_kill: '&6[War]&b %s killed %s. (%d points for %s)'
+msg_war_score_player_kill_defending: '&6[War]&b %s killed %s while %s was defending. (%d points for %s)'
+msg_war_king_killed: '&6[War]&b %s''s king was killed!'
+msg_war_mayor_killed: '&6[War]&b %s''s mayor was killed!'
+msg_war_winning_nation_spoils: '&6[War]&b Winning Nation: %s won %s.'
+msg_war_winning_town_spoils: '&6[War]&b Highest Score: %s won %s with the score %d.'
 msg_war_cannot_do: '&c전쟁기간에는 할 수 없습니다.'
 msg_war_started: '&e전쟁 카운트다운이 시작되었습니다.'
 msg_war_ended: '&e전쟁이 종결되었습니다.'

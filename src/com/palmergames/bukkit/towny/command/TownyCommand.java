@@ -75,16 +75,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		towny_version = Colors.Green + "타우니 버전: " + Colors.LightGreen + plugin.getVersion();
 
-<<<<<<< HEAD
 		towny_war.add(ChatTools.formatTitle("/타우니 전쟁"));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "상황", ""));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "점수", ""));
-=======
-		towny_war.add(ChatTools.formatTitle("/towny war"));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "scores", ""));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
->>>>>>> refs/remotes/LlmDl/master
+		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "hud", ""));
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
@@ -101,22 +95,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg("다음날까지 남은 시간: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v") || args[0].equalsIgnoreCase("버전"))
 				sender.sendMessage(Colors.strip(towny_version));
-<<<<<<< HEAD
 			else if (args[0].equalsIgnoreCase("war") || args[0].equalsIgnoreCase("전쟁")) {
-				boolean war = TownyWar(StringMgmt.remFirstArg(args));
-				for (String line : towny_war)
-					sender.sendMessage(Colors.strip(line));
-				if (!war)
-					sender.sendMessage("이 월드에는 전쟁이 일어나지 않았습니다.");
-=======
-			else if (args[0].equalsIgnoreCase("war")) {
 				boolean war = TownyWar(StringMgmt.remFirstArg(args), null);
 				if (war)
 					for (String line : towny_war)
 						sender.sendMessage(Colors.strip(line));
 				else
-					sender.sendMessage("The world isn't currently at war.");
->>>>>>> refs/remotes/LlmDl/master
+					sender.sendMessage("이 월드에는 전쟁이 일어나지 않았습니다.");
 
 				towny_war.clear();
 			} else if (args[0].equalsIgnoreCase("universe") || args[0].equalsIgnoreCase("상태")) {
@@ -185,22 +170,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v") || split[0].equalsIgnoreCase("버전")) {
 				player.sendMessage(towny_version);
-<<<<<<< HEAD
 			} else if (split[0].equalsIgnoreCase("war") || split[0].equalsIgnoreCase("전쟁")) {
-				boolean war = TownyWar(StringMgmt.remFirstArg(split));
-				for (String line : towny_war)
-					player.sendMessage(Colors.strip(line));
-				if (!war)
-					sendErrorMsg(player, "이 월드에는 전쟁이 일어나지 않았습니다.");
-=======
-			} else if (split[0].equalsIgnoreCase("war")) {
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
 					for (String line : towny_war)
 						player.sendMessage(Colors.strip(line));
 				else
-					sendErrorMsg(player, "The world isn't currently at war.");
->>>>>>> refs/remotes/LlmDl/master
+					sendErrorMsg(player, "이 월드에는 전쟁이 일어나지 않았습니다.");
 
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy") || split[0].equalsIgnoreCase("스파이")) {
@@ -231,7 +207,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("scores") || args[0].equalsIgnoreCase("점수"))
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
-				towny_war.add("No hud for console!");
+				towny_war.add("콘솔에서는 hud를 사용할 수 없습니다!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null)
 				plugin.getHUDManager().toggleWarHUD(p);
 		}
@@ -347,15 +323,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(Colors.Rose + "    [가격] " + Colors.Green + "토지: " + Colors.LightGreen + Double.toString(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "전초기지: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
 			output.add(Colors.Rose + "            " + Colors.Green + "상점: " + Colors.LightGreen + Double.toString(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "대사관: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotPrice()));
 
-<<<<<<< HEAD
 			output.add(Colors.Rose + "    [세금] " + Colors.Green + "주민: " + Colors.LightGreen + Double.toString(town.getTaxes()) + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "주민: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
 			output.add(Colors.Rose + "            " + Colors.Green + "상점: " + Colors.LightGreen + Double.toString(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "대사관: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotTax()));
 			
-=======
-			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes()) + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
-			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + Double.toString(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotTax()));
-
->>>>>>> refs/remotes/LlmDl/master
 			if (nation != null) {
 				output.add(Colors.Yellow + "주민 [" + TownyFormatter.getFormattedName(nation) + "]");
 				output.add(Colors.Rose + "    [세금] " + Colors.Green + "마을: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "중립선언: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));

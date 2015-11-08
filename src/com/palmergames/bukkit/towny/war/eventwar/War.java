@@ -195,11 +195,7 @@ public class War {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-<<<<<<< HEAD
-					TownyMessaging.sendGlobalMessage("승리한 국가: " + winningNation.getName() + " won " + TownyEconomyHandler.getFormattedBalance(nationWinnings) + ".");
-=======
 					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
->>>>>>> refs/remotes/LlmDl/master
 				}
 			} catch (ArithmeticException e) {
 				// A war ended with 0 nations.
@@ -208,11 +204,7 @@ public class War {
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-<<<<<<< HEAD
-				TownyMessaging.sendGlobalMessage("최고 점수: " + winningTownScore.key.getName() + " won " + TownyEconomyHandler.getFormattedBalance(halfWinnings) + " with the score " + winningTownScore.value + ".");
-=======
 				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
->>>>>>> refs/remotes/LlmDl/master
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {
@@ -391,11 +383,7 @@ public class War {
 		attacker.addBonusBlocks(1);
 		try {
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-<<<<<<< HEAD
-				remove(townBlock.getTown());
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "당신의 마을은 자금이 부족해 전쟁을 계속할 수 없습니다.");
-=======
-				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
 				if (townBlock.getTown().isCapital())
 					remove(attacker, townBlock.getTown().getNation());
 				else
@@ -403,7 +391,6 @@ public class War {
 				TownyUniverse.getDataSource().saveTown(townBlock.getTown());
 				TownyUniverse.getDataSource().saveTown(attacker);
 				return;
->>>>>>> refs/remotes/LlmDl/master
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "당신의 마을은 " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + "만큼의 마을 자금을 잃었습니다.");
 		} catch (EconomyException e) {
