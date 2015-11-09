@@ -501,6 +501,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				        Integer.parseInt(split[1]);
 						index = Integer.valueOf(split[1]);
 						Resident jailedresident = TownyUniverse.getDataSource().getResident(split[2]);
+						if (!player.hasPermission("towny.command.town.toggle.jail")) 
+							throw new TownyException("You do not have permission to jail your own resident.");
 						if (!jailedresident.hasTown())
 							throw new TownyException("That player is not a part of any town.");
 																		
