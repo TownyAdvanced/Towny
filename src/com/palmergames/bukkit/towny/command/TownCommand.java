@@ -501,6 +501,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				        Integer.parseInt(split[1]);
 						index = Integer.valueOf(split[1]);
 						Resident jailedresident = TownyUniverse.getDataSource().getResident(split[2]);
+						if (!player.hasPermission("towny.command.town.toggle.jail")) 
+							throw new TownyException("당신의 마을 주민을 감옥에 보낼 권한이 없습니다.");
 						if (!jailedresident.hasTown())
 							throw new TownyException("그 플레이어는 마을에 소속되어 있지 않습니다.");
 																		
@@ -514,7 +516,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if (jailedresident.isJailed()) {
 								Town jailTown = TownyUniverse.getDataSource().getTown(jailedresident.getJailTown());
 								if (jailTown != sendertown) {
-									throw new TownyException("그 플레이어는 이 마을에 갇혀있지 않습니다.");
+									throw new TownyException("그 플레이어는 이 마을에 갇혀 있지 않습니다.");
 								} else {
 									jailedresident.setJailed(jailedplayer, index, sendertown);
 									return;
