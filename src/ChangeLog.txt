@@ -2243,3 +2243,4 @@ v0.90.0.1:
 		- Added ability for defenders to heal damaged plot HP.
 	- Added /plot perm hud - A new HUD to help with individual plot perms. Same command toggles it off.
 	- Fix /t toggle jail not requiring the proper permission node.
+	- Fix libs hosting.
