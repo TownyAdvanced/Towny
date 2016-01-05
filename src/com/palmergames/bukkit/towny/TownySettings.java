@@ -1315,6 +1315,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.TOWN_DEF_TAXES_EMBASSY_TAX);
 	}
+	
+	public static double getTownDefaultPlotTax() {
+		
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_PLOT_TAX);		
+	}
 
 	public static boolean getTownDefaultTaxPercentage() {
 

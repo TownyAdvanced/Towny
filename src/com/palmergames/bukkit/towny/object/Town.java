@@ -49,7 +49,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		bonusBlocks = 0;
 		purchasedBlocks = 0;
 		taxes = TownySettings.getTownDefaultTax();
-		plotTax = 0.0;
+		plotTax = TownySettings.getTownDefaultPlotTax();
 		embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 		commercialPlotTax = TownySettings.getTownDefaultShopTax();
 		plotPrice = 0.0;
