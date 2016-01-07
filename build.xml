@@ -16,17 +16,17 @@
 
 	<target name="download" depends="init">
 
-		<get src="http://palmergames.com/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Permissions.jar" dest="${env.LIB}/Permissions.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Register.jar" dest="${env.LIB}/Register.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Questioner.jar" dest="${env.LIB}/Questioner.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/citizensapi-2.0-SNAPSHOT.jar" dest="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Permissions.jar" dest="${env.LIB}/Permissions.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Register.jar" dest="${env.LIB}/Register.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Questioner.jar" dest="${env.LIB}/Questioner.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/citizensapi-2_0-SNAPSHOT.jar" dest="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" skipexisting="true" />
 
 	</target>
 

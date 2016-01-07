@@ -140,6 +140,10 @@ public enum ConfigNodes {
 			"town.default_taxes.embassy_tax",
 			"0.0",
 			"# Default amount of embassy tax of a new town."),
+	TOWN_DEF_TAXES_PLOT_TAX(
+			"town.default_taxes.plot_tax",
+			"0.0",
+			"# Default amount for town's plottax costs."),
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
 			"false",
