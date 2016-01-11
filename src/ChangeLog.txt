@@ -2246,3 +2246,5 @@ v0.90.0.1:
 	- Fix libs hosting.
 	- New config option: town.default_taxes.plot_tax, a setting for choosing the default plot tax of newly formed towns.
 	- Add try/catch in case permission plugin doesn't have the ability to set Default Modes. 
+	- Fix retracting pistons pulling blocks from where they shouldn't.
+	- Add support for slimeblocks pulling blocks from where they shouldn't.
