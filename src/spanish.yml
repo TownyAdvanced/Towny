@@ -365,7 +365,7 @@ msg_err_outpost_spawn: '&cNo hay outpost spawns establecidos para esta Ciudad.'
 msg_err_cant_afford_tp: '&bNo tienes dinero suficiente para teletransportarte al spawn de tu ciudad.'
 msg_err_plot_nfs: '&cEsta parcela no esta a la venta.'
 msg_err_not_part_town: '&cEl area seleccionada no es parte de tu ciudad.'
-msg_err_not_attached_edge: '&cEl area seleccionada no esta tocando un borde de tu ciudad.
+msg_err_not_attached_edge: '&cEl area seleccionada no esta tocando un borde de tu ciudad.'
 msg_err_empty_area_selection: '&cEl area seleccionada contiene parcelas no validas.'
 msg_err_not_enough_blocks: '&cTu Ciudad ya no tiene mas areas disponibles para reclamar.'
 msg_err_cant_afford_blocks: '&ccLa Ciudad no tiene suficiente dinero para reclamar %s bloques con un costo de %s'

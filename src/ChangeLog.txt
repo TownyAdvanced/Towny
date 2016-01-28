@@ -2248,3 +2248,4 @@ v0.90.0.1:
 	- Add try/catch in case permission plugin doesn't have the ability to set Default Modes. 
 	- Fix retracting pistons pulling blocks from where they shouldn't.
 	- Add support for slimeblocks pulling blocks from where they shouldn't.
+	- Fix spanish.yml, missing ' on the end of line 368.
