@@ -55,7 +55,7 @@ public class WarTimerTask extends TownyTimerTask {
 								warEvent.nationLeave(nation);
 							continue;
 						}
-						TownyMessaging.sendDebugMsg("[War]   notNeutral");
+						TownyMessaging.sendDebugMsg("[War]   notPeaceful");
 						if (!warEvent.isWarringNation(nation))
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   warringNation");

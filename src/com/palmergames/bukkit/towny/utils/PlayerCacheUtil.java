@@ -285,7 +285,7 @@ public class PlayerCacheUtil {
 
 					}
 				}
-				//If this town is not in a nation and we are set to non neutral status during war.
+				//If this town is not in a nation and we are set to non peaceful status during war.
 				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation())
 					return TownBlockStatus.WARZONE;
 			}

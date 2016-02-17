@@ -1056,6 +1056,11 @@ public enum ConfigNodes {
 			"war.nation_can_be_neutral",
 			"true",
 			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
+	WAR_DISALLOW_ONE_WAY_ALLIANCE(
+			"war.disallow_one_way_alliance",
+			"false",
+			"#By setting this to true, nations will receive a questioner prompt for alliances and alliances will show on both nations."
+			),
 	WAR_ECONOMY(
 			"war.economy",
 			"",
@@ -1302,5 +1307,4 @@ public enum ConfigNodes {
 		comments[0] = "";
 		return comments;
 	}
-
 }

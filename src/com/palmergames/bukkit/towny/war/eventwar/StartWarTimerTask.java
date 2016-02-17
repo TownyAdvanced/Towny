@@ -21,5 +21,4 @@ public class StartWarTimerTask extends TownyTimerTask {
         	universe.getWarEvent().start();
         }
 	}
-
 }

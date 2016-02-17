@@ -221,7 +221,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 				addAlly(nation);
 				if (!hasEnemy(nation) && hasAlly(nation))
 					return true;
-			} else if (type.equalsIgnoreCase("neutral")) {
+			} else if (type.equalsIgnoreCase("peaceful") || type.equalsIgnoreCase("neutral")) {
 				removeEnemy(nation);
 				removeAlly(nation);
 				if (!hasEnemy(nation) && !hasAlly(nation))

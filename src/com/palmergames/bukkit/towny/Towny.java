@@ -73,6 +73,13 @@ public class Towny extends JavaPlugin {
 	private boolean citizens2 = false;
 
 	private boolean error = false;
+	
+	public static Towny plugin;
+	
+	public Towny() {
+		
+		plugin = this;
+	}
 
 	@Override
 	public void onEnable() {
