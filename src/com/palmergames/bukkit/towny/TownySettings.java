@@ -2243,9 +2243,4 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
-
-	public static boolean isDeclaringPeaceful() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

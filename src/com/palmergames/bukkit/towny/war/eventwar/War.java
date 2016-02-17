@@ -159,7 +159,7 @@ public class War {
 			if (!nation.isNeutral()) {
 				add(nation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
-			} else if (!TownySettings.isDeclaringPeaceful()) {
+			} else if (!TownySettings.isDeclaringNeutral()) {
 				try {
 					nation.setNeutral(false);
 					add(nation);

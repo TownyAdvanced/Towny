@@ -38,7 +38,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
-	TOWNY_COMMAND_NATION_TOGGLE_PEACEFUL("towny.command.nation.toggle.peaceful"),
+	TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
 	
 	TOWNY_COMMAND_NATION_ALLY("towny.command.nation.ally"),
 	TOWNY_COMMAND_NATION_ENEMY("towny.command.nation.enemy"),
@@ -180,7 +180,7 @@ public enum PermissionNodes {
 	
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_WAR("towny.command.townyadmin.toggle.war"),
-		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_PEACEFUL("towny.command.townyadmin.toggle.peaceful"),
+		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NEUTRAL("towny.command.townyadmin.toggle.neutral"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE("towny.command.townyadmin.toggle.devmode"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG("towny.command.townyadmin.toggle.debug"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_TOWNWITHDRAW("towny.command.townyadmin.toggle.townwithdraw"),

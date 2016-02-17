@@ -383,7 +383,6 @@ public class TownBlock {
 
 	public boolean isJail() {
 		
-		getType();
 		if (this.getType() == TownBlockType.JAIL) {
 			return true;
 		} else {

@@ -221,7 +221,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 				addAlly(nation);
 				if (!hasEnemy(nation) && hasAlly(nation))
 					return true;
-			} else if (type.equalsIgnoreCase("peaceful")) {
+			} else if (type.equalsIgnoreCase("peaceful") || type.equalsIgnoreCase("neutral")) {
 				removeEnemy(nation);
 				removeAlly(nation);
 				if (!hasEnemy(nation) && !hasAlly(nation))
@@ -381,7 +381,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 
 	public void setNeutral(boolean neutral) throws TownyException {
 
-		if (!TownySettings.isDeclaringPeaceful() && neutral)
+		if (!TownySettings.isDeclaringNeutral() && neutral)
 			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
 		else {
 			if (neutral) {
