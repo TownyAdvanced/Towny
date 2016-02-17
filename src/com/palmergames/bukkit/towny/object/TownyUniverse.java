@@ -707,7 +707,7 @@ public class TownyUniverse extends TownyObject {
 				return false;
 			Nation nationA = residentA.getTown().getNation();
 			Nation nationB = residentB.getTown().getNation();
-			if (nationA.isNeutral() || nationB.isNeutral())
+			if (nationA.isPeaceful() || nationB.isPeaceful())
 				return false;
 			if (nationA.hasEnemy(nationB))
 				return true;

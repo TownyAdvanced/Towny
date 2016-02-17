@@ -156,12 +156,12 @@ public class War {
 
 		//Gather all nations at war
 		for (Nation nation : TownyUniverse.getDataSource().getNations()) {
-			if (!nation.isNeutral()) {
+			if (!nation.isPeaceful()) {
 				add(nation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
-			} else if (!TownySettings.isDeclaringNeutral()) {
+			} else if (!TownySettings.isDeclaringPeaceful()) {
 				try {
-					nation.setNeutral(false);
+					nation.setPeaceful(false);
 					add(nation);
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 				} catch (TownyException e) {

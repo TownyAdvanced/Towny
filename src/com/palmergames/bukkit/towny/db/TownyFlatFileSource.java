@@ -1015,10 +1015,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setTaxes(0.0);
 					}
 
-				line = kvFile.get("neutral");
+				line = kvFile.get("peaceful");
 				if (line != null)
 					try {
-						nation.setNeutral(Boolean.parseBoolean(line));
+						nation.setPeaceful(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
 
@@ -1711,8 +1711,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Taxes
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
-		// Neutral
-		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
+		// Peaceful
+		list.add("peaceful=" + Boolean.toString(nation.isPeaceful()));
 
 		/*
 		 *  Make sure we only save in async

@@ -65,7 +65,7 @@ public class SQL_Schema {
 				+ "`allies` mediumtext NOT NULL,"
 				+ "`enemies` mediumtext NOT NULL,"
 				+ "`taxes` float NOT NULL,"
-				+ "`neutral` bool NOT NULL DEFAULT '0', "
+				+ "`peaceful` bool NOT NULL DEFAULT '0', "
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}
@@ -364,11 +364,6 @@ public class SQL_Schema {
 
 			if (ee.getErrorCode() != 1060)
 				TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-
 		}
-		
-		
-		
 	}
-
 }

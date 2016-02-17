@@ -396,8 +396,8 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN(
 			"global_town_settings.prevent_town_spawn_in",
 			"enemy",
-			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
-			"# Allowed options: unclaimed,enemy,neutral"),
+			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/peaceful towns.",
+			"# Allowed options: unclaimed,enemy,peaceful"),
 	GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS(
 			"global_town_settings.show_town_notifications",
 			"true",
@@ -901,11 +901,11 @@ public enum ConfigNodes {
 			"10.0",
 			"# Cost to use /town spawn [town]",
 			"# This is paid to the town you goto."),
-	ECO_PRICE_NATION_NEUTRALITY(
-			"economy.price_nation_neutrality",
+	ECO_PRICE_NATION_PEACE(
+			"economy.price_nation_peace",
 			"100.0",
 			"",
-			"# The daily upkeep to remain neutral during a war. Neutrality will exclude you from a war event, as well as deterring enemies."),
+			"# The daily upkeep to remain peaceful during a war. Peace will exclude you from a war event, as well as deterring enemies."),
 
 	ECO_NEW_EXPAND("economy.new_expand", "", ""),
 	ECO_PRICE_NEW_NATION(
@@ -1052,10 +1052,15 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			""),
-	WARTIME_NATION_CAN_BE_NEUTRAL(
-			"war.nation_can_be_neutral",
+	WARTIME_NATION_CAN_BE_PEACEFUL(
+			"war.nation_can_be_peaceful",
 			"true",
-			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
+			"#This setting allows you disable the ability for a nation to pay to remain peaceful during a war."),
+	WAR_DISALLOW_ONE_WAY_ALLIANCE(
+			"war.disallow_one_way_alliance",
+			"false",
+			"#By setting this to true, nations will receive a questioner prompt for alliances and alliances will show on both nations."
+			),
 	WAR_ECONOMY(
 			"war.economy",
 			"",
@@ -1111,8 +1116,8 @@ public enum ConfigNodes {
 			"# The remaining half is paid to the town which took the most town blocks, and lost the least.",
 			""),
 	WAR_EVENT_WARNING_DELAY("war.event.warning_delay", "30"),
-	WAR_EVENT_TOWNS_NEUTRAL(
-			"war.event.towns_are_neutral",
+	WAR_EVENT_TOWNS_PEACEFUL(
+			"war.event.towns_are_peaceful",
 			"true",
 			"#If false all towns not in nations can be attacked during a war event."),
 	WAR_EVENT_ENEMY_ONLY_ATTACK_BORDER(

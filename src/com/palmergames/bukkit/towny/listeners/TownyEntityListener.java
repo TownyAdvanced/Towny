@@ -8,7 +8,6 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
@@ -26,9 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -187,11 +184,6 @@ public class TownyEntityListener implements Listener {
 					// Allow the removal if we are permitted
 					if (bDestroy)
 						return;
-
-					/*
-					 * Fetch the players cache
-					 */
-					PlayerCache cache = plugin.getCache(player);
 
 					event.setCancelled(true);
 				}
@@ -559,7 +551,6 @@ public class TownyEntityListener implements Listener {
 				return;
 			}
 
-			// TODO: expand to protect neutrals during a war
 			try {
 				TownBlock townBlock = townyWorld.getTownBlock(coord);
 

@@ -1180,9 +1180,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
 	}
 
-	public static boolean isWarTimeTownsNeutral() {
+	public static boolean isWarTimeTownsPeaceful() {
 
-		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
+		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_PEACEFUL);
 	}
 
 	public static boolean isAllowWarBlockGriefing() {
@@ -1356,9 +1356,9 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE);
 	}
 
-	public static double getNationNeutralityCost() {
+	public static double getNationPeaceCost() {
 
-		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
+		return getDouble(ConfigNodes.ECO_PRICE_NATION_PEACE);
 	}
 
 	public static boolean isAllowingOutposts() {
@@ -1595,14 +1595,14 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME);
 	}
 
-	public static boolean isDeclaringNeutral() {
+	public static boolean isDeclaringPeaceful() {
 
-		return getBoolean(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL);
+		return getBoolean(ConfigNodes.WARTIME_NATION_CAN_BE_PEACEFUL);
 	}
 
-	public static void setDeclaringNeutral(boolean choice) {
+	public static void setDeclaringPeaceful(boolean choice) {
 
-		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL.getRoot(), choice);
+		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_PEACEFUL.getRoot(), choice);
 	}
 
 	public static boolean isRemovingOnMonarchDeath() {
@@ -2209,7 +2209,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS.getRoot(), newSetting);
 	}
 
-	public static boolean geNationBankAllowWithdrawls() {
+	public static boolean getNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS);
 	}
@@ -2217,6 +2217,11 @@ public class TownySettings {
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
+	}
+	
+	public static boolean isDisallowOneWayAlliance() {
+		
+		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
 
 	// /////////////////////////////////////

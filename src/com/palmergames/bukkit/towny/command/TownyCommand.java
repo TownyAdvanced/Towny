@@ -288,7 +288,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	/*
 	 * [New] Town: 100 | Nation: 500 [Upkeep] Town: 10 | Nation: 100 Town
 	 * [Elden]: [Price] Plot: 100 | Outpost: 250 [Upkeep] Resident: 20 | Plot:
-	 * 50 Nation [Albion]: [Upkeep] Town: 100 | Neutrality: 100
+	 * 50 Nation [Albion]: [Upkeep] Town: 100 | Peace: 100
 	 */
 
 	// TODO: Proceduralize and make parse function for /towny prices [town]
@@ -324,7 +324,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			if (nation != null) {
 				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Neutrality: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationPeaceCost()));
 			}
 		}
 		return output;

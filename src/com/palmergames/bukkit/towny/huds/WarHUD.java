@@ -60,14 +60,14 @@ public class WarHUD {
 				health = war.getWarZone().get(at) + "" + ChatColor.AQUA + "/" + (at.getTownBlock().isHomeBlock() ? home_health : town_health);
 			} else {
 				isTown = true;
-				if (at.getTownBlock().getTown().getNation().isNeutral())
-					health = "Neutral";
+				if (at.getTownBlock().getTown().getNation().isPeaceful())
+					health = "Peaceful";
 				else
 					health = "Fallen";
 			}
 		} catch (NotRegisteredException e) {
 			if (isTown)
-				health = "Neutral";
+				health = "Peaceful";
 			else
 				health = "";
 		}

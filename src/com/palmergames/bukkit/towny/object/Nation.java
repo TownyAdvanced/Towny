@@ -25,7 +25,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private List<Nation> enemies = new ArrayList<Nation>();
 	private Town capital;
 	private double taxes;
-	private boolean neutral = false;
+	private boolean peaceful = false;
 	private String tag;
 
 	public Nation(String name) {
@@ -221,7 +221,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 				addAlly(nation);
 				if (!hasEnemy(nation) && hasAlly(nation))
 					return true;
-			} else if (type.equalsIgnoreCase("neutral")) {
+			} else if (type.equalsIgnoreCase("peaceful")) {
 				removeEnemy(nation);
 				removeAlly(nation);
 				if (!hasEnemy(nation) && !hasAlly(nation))
@@ -379,23 +379,23 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		//assistants.clear();
 	}
 
-	public void setNeutral(boolean neutral) throws TownyException {
+	public void setPeaceful(boolean peaceful) throws TownyException {
 
-		if (!TownySettings.isDeclaringNeutral() && neutral)
+		if (!TownySettings.isDeclaringPeaceful() && peaceful)
 			throw new TownyException(TownySettings.getLangString("msg_err_fight_like_king"));
 		else {
-			if (neutral) {
+			if (peaceful) {
 				for (Resident resident : getResidents()) {
 					TownyWar.removeAttackerFlags(resident.getName());
 				}
 			}
-			this.neutral = neutral;
+			this.peaceful = peaceful;
 		}
 	}
 
-	public boolean isNeutral() {
+	public boolean isPeaceful() {
 
-		return neutral;
+		return peaceful;
 	}
 
 	public void setKing(Resident king) throws TownyException {

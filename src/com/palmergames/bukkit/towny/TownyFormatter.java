@@ -322,12 +322,12 @@ public class TownyFormatter {
 
 			}
 
-		if (nation.isNeutral()) {
+		if (nation.isPeaceful()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += Colors.LightGray + "Neutral";
+			line += Colors.LightGray + "Peaceful";
 		}
-		// Bank: 534 coins | Neutral
+		// Bank: 534 coins | Peaceful
 		if (line.length() > 0)
 			out.add(line);
 

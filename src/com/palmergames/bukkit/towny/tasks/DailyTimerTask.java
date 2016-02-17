@@ -410,16 +410,16 @@ public class DailyTimerTask extends TownyTimerTask {
 						TownyUniverse.getDataSource().removeNation(nation);
 						TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
 					}
-					if (nation.isNeutral()) {
-						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Neutrality Upkeep")) {
+					if (nation.isPeaceful()) {
+						if (!nation.pay(TownySettings.getNationPeaceCost(), "Nation Peace Upkeep")) {
 							try {
-								nation.setNeutral(false);
+								nation.setPeaceful(false);
 							} catch (TownyException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							TownyUniverse.getDataSource().saveNation(nation);
-							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_neutral"));
+							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_peaceful"));
 						}
 					}
 					
