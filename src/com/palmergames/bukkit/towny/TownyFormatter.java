@@ -322,7 +322,7 @@ public class TownyFormatter {
 
 			}
 
-		if (nation.isPeaceful()) {
+		if (nation.isNeutral()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
 			line += Colors.LightGray + "Peaceful";

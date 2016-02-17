@@ -439,7 +439,7 @@ public class CombatUtil {
 				return false;
 			Nation nationA = residentA.getTown().getNation();
 			Nation nationB = residentB.getTown().getNation();
-			if (nationA.isPeaceful() || nationB.isPeaceful())
+			if (nationA.isNeutral() || nationB.isNeutral())
 				return false;
 			if (nationA.hasEnemy(nationB))
 				return true;

@@ -65,7 +65,7 @@ public class SQL_Schema {
 				+ "`allies` mediumtext NOT NULL,"
 				+ "`enemies` mediumtext NOT NULL,"
 				+ "`taxes` float NOT NULL,"
-				+ "`peaceful` bool NOT NULL DEFAULT '0', "
+				+ "`neutral` bool NOT NULL DEFAULT '0', "
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}

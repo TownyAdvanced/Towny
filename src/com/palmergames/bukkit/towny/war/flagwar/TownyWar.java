@@ -196,9 +196,9 @@ public class TownyWar {
 		}
 
 		// Check Peace
-		if (landOwnerNation.isPeaceful())
+		if (landOwnerNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isPeaceful())
+		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online

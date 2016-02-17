@@ -726,7 +726,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			try {
 				choice = !TownySettings.isDeclaringPeaceful();
-				TownySettings.setDeclaringPeaceful(choice);
+				TownySettings.setDeclaringNeutral(choice);
 				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_nation_allow_peaceful"), choice ? "Enabled" : "Disabled"));
 
 			} catch (Exception e) {
@@ -760,7 +760,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
-				choice = !TownySettings.getNationBankAllowWithdrawls();
+				choice = !TownySettings.geNationBankAllowWithdrawls();
 				TownySettings.SetNationBankAllowWithdrawls(choice);
 				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
 			} catch (Exception e) {

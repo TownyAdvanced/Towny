@@ -50,7 +50,7 @@ public class WarTimerTask extends TownyTimerTask {
 					if (resident.hasNation()) {
 						Nation nation = resident.getTown().getNation();
 						TownyMessaging.sendDebugMsg("[War]   hasNation");
-						if (nation.isPeaceful()) {
+						if (nation.isNeutral()) {
 							if (warEvent.isWarringNation(nation))
 								warEvent.nationLeave(nation);
 							continue;

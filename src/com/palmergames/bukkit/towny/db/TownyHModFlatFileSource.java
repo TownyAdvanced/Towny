@@ -360,10 +360,10 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 						nation.setTaxes(0);
 					}
 
-				line = kvFile.get("peaceful");
+				line = kvFile.get("neutral");
 				if (line != null)
 					try {
-						nation.setPeaceful(Boolean.parseBoolean(line));
+						nation.setNeutral(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
 

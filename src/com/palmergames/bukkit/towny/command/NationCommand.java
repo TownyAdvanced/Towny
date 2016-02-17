@@ -384,7 +384,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Nation nation;
 		try {
-			if (!TownySettings.getNationBankAllowWithdrawls())
+			if (!TownySettings.geNationBankAllowWithdrawls())
 				throw new TownyException(TownySettings.getLangString("msg_err_withdraw_disabled"));
 
 			if (amount < 0)
@@ -1208,13 +1208,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				try {
-					boolean choice = !nation.isPeaceful();
-					Double cost = TownySettings.getNationPeaceCost();
+					boolean choice = !nation.isNeutral();
+					Double cost = TownySettings.getNationNeutralityCost();
 
 					if (choice && TownySettings.isUsingEconomy() && !nation.pay(cost, "Peaceful Nation Cost"))
 						throw new TownyException(TownySettings.getLangString("msg_nation_cant_peaceful"));
 
-					nation.setPeaceful(choice);
+					nation.setNeutral(choice);
 
 					// send message depending on if using IConomy and charging
 					// for peaceful
@@ -1223,13 +1223,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_nation_set_peaceful"));
 
-					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isPeaceful
+					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isNeutral
 							() ? Colors.Green : Colors.Red + " not") + " peaceful.");
 				} catch (EconomyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (TownyException e) {
 					try {
-						nation.setPeaceful(false);
+						nation.setNeutral(false);
 					} catch (TownyException e1) {
 						e1.printStackTrace();
 					}

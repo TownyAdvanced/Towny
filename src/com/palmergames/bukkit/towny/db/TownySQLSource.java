@@ -1007,7 +1007,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 				}
 				nation.setTaxes(rs.getDouble("taxes"));
-				nation.setPeaceful(rs.getBoolean("peaceful"));
+				nation.setNeutral(rs.getBoolean("neutral"));
 			}
 
 			s.close();
@@ -1542,7 +1542,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
-			nat_hm.put("peaceful", nation.isPeaceful());
+			nat_hm.put("neutral", nation.isNeutral());
 
 			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 

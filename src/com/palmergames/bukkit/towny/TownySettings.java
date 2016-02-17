@@ -1180,9 +1180,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
 	}
 
-	public static boolean isWarTimeTownsPeaceful() {
+	public static boolean isWarTimeTownsNeutral() {
 
-		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_PEACEFUL);
+		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
 	}
 
 	public static boolean isAllowWarBlockGriefing() {
@@ -1356,9 +1356,9 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE);
 	}
 
-	public static double getNationPeaceCost() {
+	public static double getNationNeutralityCost() {
 
-		return getDouble(ConfigNodes.ECO_PRICE_NATION_PEACE);
+		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
 	}
 
 	public static boolean isAllowingOutposts() {
@@ -1595,14 +1595,14 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME);
 	}
 
-	public static boolean isDeclaringPeaceful() {
+	public static boolean isDeclaringNeutral() {
 
-		return getBoolean(ConfigNodes.WARTIME_NATION_CAN_BE_PEACEFUL);
+		return getBoolean(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL);
 	}
 
-	public static void setDeclaringPeaceful(boolean choice) {
+	public static void setDeclaringNeutral(boolean choice) {
 
-		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_PEACEFUL.getRoot(), choice);
+		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL.getRoot(), choice);
 	}
 
 	public static boolean isRemovingOnMonarchDeath() {
@@ -2209,7 +2209,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS.getRoot(), newSetting);
 	}
 
-	public static boolean getNationBankAllowWithdrawls() {
+	public static boolean geNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS);
 	}
@@ -2217,11 +2217,6 @@ public class TownySettings {
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
-	}
-	
-	public static boolean isDisallowOneWayAlliance() {
-		
-		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
 
 	// /////////////////////////////////////
@@ -2244,4 +2239,13 @@ public class TownySettings {
 		return NameValidation.filterName(input);
 	}
 
+	public static boolean isDisallowOneWayAlliance() {
+		
+		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
+	}
+
+	public static boolean isDeclaringPeaceful() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
