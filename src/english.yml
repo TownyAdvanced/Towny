@@ -1,5 +1,5 @@
 name: Towny
-version: 0.26
+version: 0.27
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -207,6 +207,8 @@ msg_deny_ally: '&b%s denied your request for an alliance.'
 msg_accept_ally: '&bThe nation %s accepted your request for an alliance.'
 msg_ally_req_sent: '&bThe request for an alliance has been sent to the nation %s.'
 msg_ally_request: '&bThe %s would like to form an alliance.'
+msg_unable_ally_offline: "&cUnable to request an alliance because the mayor of the target nation is offline."
+msg_unable_ally_npc: "&cUnable to request an alliance because the mayor of the target nation is an NPC."
 
 msg_claimed: '&2Successfully claimed'
 msg_unclaimed: '&2Successfully unclaimed'

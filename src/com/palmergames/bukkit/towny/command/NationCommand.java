@@ -808,12 +808,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "[add/remove]"));
 		}
-
 	}
 
 	public void nationAlly(Resident resident, final Nation nation, List<Nation> allies, boolean add) {
 		
-		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+		Player player = BukkitTools.getPlayer(resident.getName());
 
 		ArrayList<Nation> remove = new ArrayList<Nation>();
 		
@@ -821,39 +820,67 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				if (add && !nation.getAllies().contains(targetNation)) {
 					if (!targetNation.hasEnemy(nation)) {
-						if(TownySettings.isDisallowOneWayAlliance()) {
-							// We are not set as an enemy so we can set as ally.
-							if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-								Questioner questioner = (Questioner) test;
-								questioner.loadClasses();
+						if (TownySettings.isDisallowOneWayAlliance()) {
+							Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+							
+							Player targetPlayer = BukkitTools.getPlayer(targetNation.getCapital().getMayor().getName());
+							
+							try {
+								if (!targetNation.getCapital().getMayor().isNPC()) {
+									if (targetPlayer.isOnline()) {
+										// We are not set as an enemy so we can set as ally.
+										if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+											Questioner questioner = (Questioner) test;
+											questioner.loadClasses();
 
-								List<Option> options = new ArrayList<Option>();
-								
-								options.add(new Option(TownySettings.questionerAccept(), new NationAllyTask(resident, targetNation)));
-								options.add(new Option(TownySettings.questionerDeny(), new AllyQuestionTask(resident, targetNation) {
+											List<Option> options = new ArrayList<Option>();
+											
+											options.add(new Option(TownySettings.questionerAccept(), new NationAllyTask(resident, targetNation)));
+											options.add(new Option(TownySettings.questionerDeny(), new AllyQuestionTask(resident, targetNation) {
 
-									@Override
-									public void run() {
+												@Override
+												public void run() {
 
+													try {
+														TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + resident.getTown().getNation().getName()));
+													} catch (NotRegisteredException e) {
+														e.printStackTrace();
+													}
+												}
+											}));
+											Question question = new Question(targetNation.getCapital().getMayor().getName(), String.format(TownySettings.getLangString("msg_ally_request"), TownySettings.getLangString("nation_sing") + ": " +  nation.getName()), options);
+											try {
+												plugin.appendQuestion(questioner, question);
+											} catch (Exception e) {
+												System.out.println(e.getMessage());
+											}
+										} else
+											try {
+												nation.addAlly(targetNation);
+												targetNation.addAlly(nation);
+											} catch (AlreadyRegisteredException e) {
+											}
+									}
+								if (TownySettings.isDisallowOneWayAlliance() && add)
+									for (Nation newAlly : allies)
+										TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName())));
+								} else {
+									// If the player has the permission node towny.command.townyadmin.* allow them to bypass the NPC check and force alliance
+									if (TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode())) {
 										try {
-											TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + resident.getTown().getNation().getName()));
-										} catch (NotRegisteredException e) {
+											targetNation.addAlly(nation);
+											nation.addAlly(targetNation);
+										} catch (AlreadyRegisteredException e) {
 											e.printStackTrace();
 										}
-									}
-								}));
-								Question question = new Question(targetNation.getCapital().getMayor().getName(), String.format(TownySettings.getLangString("msg_ally_request"), TownySettings.getLangString("nation_sing") + ": " +  nation.getName()), options);
-								try {
-									plugin.appendQuestion(questioner, question);
-								} catch (Exception e) {
-									System.out.println(e.getMessage());
+										TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_allied_nations"), resident.getName(), targetNation.getName()));
+										TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_added_ally"), nation.getName()));
+									} else
+										TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unable_ally_npc"), nation.getName()));
 								}
-							} else
-								try {
-									nation.addAlly(targetNation);
-									targetNation.addAlly(nation);
-								} catch (AlreadyRegisteredException e) {
-								}
+							} catch (NullPointerException e) {
+								TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unable_ally_offline"), nation.getName()));
+							}
 						} else {
 							try {
 								nation.addAlly(targetNation);
@@ -887,16 +914,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (allies.size() > 0) {
 			
-			if(TownySettings.isDisallowOneWayAlliance() && add) {
-				for (Nation newAlly : allies)
-					TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName())));
-			}
-			
 			TownyUniverse.getDataSource().saveNations();
 
 			plugin.resetCache();
 		} else
-			TownyMessaging.sendErrorMsg(resident, TownySettings.getLangString("msg_invalid_name"));
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 
 	}
 
