@@ -1,5 +1,5 @@
 name: Towny
-version: 0.24
+version: 0.25
 language: spanish
 author: Alvarote1998
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -206,6 +206,8 @@ msg_deny_ally: '&b%s negó su solicitud de una alianza.'
 msg_accept_ally: '&bEl %s nación aceptó su solicitud de una alianza.'
 msg_ally_req_sent: '&bLa solicitud de una alianza ha sido enviada a %s nación.'
 msg_ally_request: '&b%s le gustaría formar una alianza.'
+msg_unable_ally_offline: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino no está en línea."
+msg_unable_ally_npc: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino es un NPC."
 
 msg_claimed: '&2Reclamado exitosamente'
 msg_unclaimed: '&2Abandonado exitosamente'

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.20
+version: 0.21
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -210,6 +210,8 @@ msg_deny_ally: '&b%s verweigert Ihre Anfrage zu einer Allianz.'
 msg_accept_ally: '&bDie Nation %s akzeptiert Ihre Anfrage zu einer Allianz.'
 msg_ally_req_sent: '&bDer Antrag für ein Bündnis wurde an die Nation %s geschickt.'
 msg_ally_request: '&bDie %s möchte eine Allianz zu bilden.'
+msg_unable_ally_offline: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bürgermeister der Zielnation offline ist."
+msg_unable_ally_npc: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bürgermeister der Zielnation ein NPC ist."
 
 msg_claimed: '&2Erfolgreich beansprucht'
 msg_unclaimed: '&2Beanspruchung erfolgreich aufgegeben'
