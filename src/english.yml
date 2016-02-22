@@ -1,5 +1,5 @@
 name: Towny
-version: 0.27
+version: 0.28
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -449,3 +449,12 @@ msg_warning_delete: '&4*** WARNING, %s WILL BE DELETED AT NEXT NEW DAY DUE TO LA
 
 msg_admin_only_create_nation: '&cOnly admins are allowed to create nations.'
 msg_admin_only_create_town: '&cOnly admins are allowed to create towns.'
+
+# Required residents to be part of a nation
+msg_err_not_enough_residents_new_nation: '&cYour town does not have enough residents to create a nation.'
+msg_err_not_enough_residents_join_nation: '&bThe town %s does not have enough residents to join a nation.'
+msg_not_enough_residents_no_longer_capital: '&bThe nation''s old capital no longer has enough residents to be the capital of the nation. The new capital of the nation is %s.'
+msg_town_not_enough_residents_left_nation: '&bThe town %s no longer has enough residents to be a member of a nation, and has been removed from the nation.'
+msg_nation_disbanded_town_not_enough_residents: '&bThe town %s no longer has enough residents to run the nation and has forced the nation to disband.'
+msg_not_enough_residents_refunded: '&bYou have been refunded $%s for your nation being disbanded due to not having enough residents.'
+msg_not_enough_residents_capital: '&bThe town %s does not have enough residents to be the capital of the nation.'

@@ -540,6 +540,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				try {
 					Town newCapital = TownyUniverse.getDataSource().getTown(split[1]);
+					
+			        if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
+			            TownyMessaging.sendErrorMsg(this.player, String.format(TownySettings.getLangString("msg_not_enough_residents_capital"), newCapital.getName()));
+			            return;
+			        }
+			        
 					Nation nation = newCapital.getNation();
 					
 					nation.setCapital(newCapital);
