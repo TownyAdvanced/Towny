@@ -1,5 +1,5 @@
 name: Towny
-version: 0.21
+version: 0.22
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -417,3 +417,12 @@ msg_npc_flag: '&bNPC Flagge ist nun %s für %s.'
 
 msg_admin_only_create_nation: '&cNur Admins ist es erlaubt Nationen zu gruenden.'
 msg_admin_only_create_town: '&cNur Admins ist es erlaubt Staedte zu gruenden.'
+
+# Erforderliche Bewohner Teil einer Nation zu sein
+msg_err_not_enough_residents_new_nation: '&cIhre Stadt hat nicht genug Bewohner, eine Nation zu schaffen.'
+msg_err_not_enough_residents_join_nation: '&bDie Stadt %s nicht genügend Einwohner, eine Nation zu verbinden'
+msg_not_enough_residents_no_longer_capital: '&bDie Nation der alten Hauptstadt hat nicht mehr genug Bewohner der Hauptstadt der Nation zu sein. Das neue Kapital der Nation %s.'
+msg_town_not_enough_residents_left_nation: '&bDie Stadt %s hat nicht mehr genug Bewohner ein Mitglied einer Nation zu sein, und hat sich von der Nation entfernt worden.'
+msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Bewohner, die Nation zu führen und hat die Nation gezwungen, sich aufzulösen.'
+msg_not_enough_residents_refunded: '&bSie wurden wegen nicht mit genug Bewohner $%s für Ihre Nation wird aufgelöst erstattet.'
+msg_not_enough_residents_capital: '&bDie Stadt %s hat nicht genug Bewohner der Hauptstadt der Nation zu sein.'

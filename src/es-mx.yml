@@ -1,5 +1,5 @@
 name: Towny
-version: 0.25
+version: 0.26
 language: spanish
 author: VreyaViress
 website: 'http://amicu.enjin.com/'
@@ -435,7 +435,16 @@ msg_enemy_war_area_defended_greater_forces: '&6[Guerra]&c Tu ataque fallido te c
 
 msg_warning_delete: '&4*** ADVERTENCIA, %s SERÁ BORRADO MAÑANA POR FALTA DE FONDOS***'
 
-# these messages are only used if town/nation creation is set to admins only
+# estos mensajes sólo se utilizan si la creación de una ciudad / país se establece sólo la administración
 
 msg_admin_only_create_nation: '&cSolo los administradores tienen permitido crear naciones.'
 msg_admin_only_create_town: '&cSolo los administradores tienen permitido crear ciudades.'
+
+# Residentes necesarias para formar parte de una nación
+msg_err_not_enough_residents_new_nation: "&cSu ciudad no tiene suficientes residentes para crear una nación."
+msg_not_enough_residents_no_longer_capital: '&bAntigua capital del país ya no tiene suficientes residentes para ser la capital de la nación. La nueva capital de la nación es %s.'
+msg_err_not_enough_residents_join_nation: '&bLa ciudad %s no tiene suficientes residentes para unirse a una nación.'
+msg_town_not_enough_residents_left_nation: '&bLa ciudad %s no tiene suficientes residentes que ser miembro de una nación, y se ha eliminado de la nación.'
+msg_nation_disbanded_town_not_enough_residents: '&bLa ciudad %s no tiene suficientes residentes para ejecutar la nación y ha obligado a la nación de disolver.'
+msg_not_enough_residents_refunded: '&bSe le ha reembolsado $%s para que se disolvió su país debido a no tener suficientes residentes.'
+msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residentes para ser la capital de la nación.'
