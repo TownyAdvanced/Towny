@@ -1814,8 +1814,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			      TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
 			      TownyUniverse.getDataSource().removeNation(town.getNation());
 			      
-			      TownyEconomyHandler.add(town.getEconomyName(), Double.valueOf(TownySettings.getNewNationPrice()), BukkitTools.getWorld(town.getWorld().getName()));
-			      TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_not_enough_residents_refunded"), Double.valueOf(TownySettings.getNewNationPrice())));
+			      if(TownySettings.isRefundNationDisbandLowResidents()) {
+			    	  try {
+						town.pay(TownySettings.getNewNationPrice(), "nation refund");
+					} catch (EconomyException e) {
+						e.printStackTrace();
+					}
+				      TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_not_enough_residents_refunded"), Double.valueOf(TownySettings.getNewNationPrice())));
+			      }
 		    } else if ((!town.isCapital()) && (TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 			      try {
 			    	  TownyMessaging.sendNationMessage(town.getNation(), String.format(TownySettings.getLangString("msg_capital_not_enough_residents_left_nation"), town.getName()));

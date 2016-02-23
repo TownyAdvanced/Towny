@@ -415,6 +415,11 @@ public enum ConfigNodes {
 			"# The required number of residents in a town to create a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to create a nation"
 			),
+	GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS(
+			"global_town_settings.refund_disband_low_residents",
+			"false",
+			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
+			),
 	PLUGIN(
 			"plugin",
 			"",

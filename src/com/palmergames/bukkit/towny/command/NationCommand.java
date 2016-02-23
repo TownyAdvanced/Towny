@@ -626,7 +626,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
 			
-	        if ((TownySettings.getNumResidentsCreateNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
+	        if ((TownySettings.getNumResidentsJoinNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
 	        	return;
 	        }

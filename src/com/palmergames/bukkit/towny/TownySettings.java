@@ -2251,4 +2251,8 @@ public class TownySettings {
 	public static int getNumResidentsCreateNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION);
 	}
+	
+	public static boolean isRefundNationDisbandLowResidents() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
+	}
 }
