@@ -1814,7 +1814,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			      TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
 			      TownyUniverse.getDataSource().removeNation(town.getNation());
 			      
-			      if(TownySettings.isRefundNationDisbandLowResidents()) {
+			      if (TownySettings.isRefundNationDisbandLowResidents()) {
 			    	  try {
 						town.pay(TownySettings.getNewNationPrice(), "nation refund");
 					} catch (EconomyException e) {
