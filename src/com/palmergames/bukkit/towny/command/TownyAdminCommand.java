@@ -726,7 +726,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_war_ended"));
 			}
 		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")
-				|| split[0].equalsIgnoreCase("평화로움")) || split[0].equalsIgnoreCase("중립") {
+				|| split[0].equalsIgnoreCase("평화로움") || split[0].equalsIgnoreCase("중립")) {
 
 			try {
 				choice = !TownySettings.isDeclaringNeutral();

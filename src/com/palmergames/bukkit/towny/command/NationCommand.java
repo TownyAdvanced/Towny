@@ -61,7 +61,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	static {
 		
-		nation_help.add(ChatTools.formatTitle("/국가""));
+		nation_help.add(ChatTools.formatTitle("/국가"));
 		nation_help.add(ChatTools.formatCommand("", "/국가", "", TownySettings.getLangString("nation_help_1")));
 		nation_help.add(ChatTools.formatCommand("", "/국가", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
 		nation_help.add(ChatTools.formatCommand("", "/국가", "목록", TownySettings.getLangString("nation_help_4")));
@@ -1224,7 +1224,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-<<<<<<< HEAD
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")
 				|| split[0].equalsIgnoreCase("평화로움") || split[0].equalsIgnoreCase("중립")) {
 
