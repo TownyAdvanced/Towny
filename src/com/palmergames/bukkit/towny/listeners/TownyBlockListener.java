@@ -211,22 +211,33 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		List<Block> blocks = event.getBlocks();
 
-		//fetch the piston base
-		Block block = event.getBlock();
-
-		if (block.getType() != Material.PISTON_STICKY_BASE)
-			return;
-
-		//Get the block attached to the PISTON_EXTENSION of the PISTON_STICKY_BASE
-		block = block.getRelative(event.getDirection()).getRelative(event.getDirection());
-
-		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
-
-			//check the block to see if it's going to pass a plot boundary
-			if (testBlockMove(block, event.getDirection().getOppositeFace()))
-				event.setCancelled(true);
+		if (!blocks.isEmpty()) {
+			//check each block to see if it's going to pass a plot boundary
+			for (Block block : blocks) {
+				if (testBlockMove(block, event.getDirection()))
+					event.setCancelled(true);
+			}
 		}
+
+//      OLD PISTON RETRACTION CODE		
+//		//fetch the piston base
+//		Block block = event.getBlock();
+//
+//		if (block.getType() != Material.PISTON_MOVING_PIECE) 
+//			return;
+//
+//		//Get the block attached to the PISTON_EXTENSION of the PISTON_STICKY_BASE
+//		block = block.getRelative(event.getDirection().getOppositeFace()).getRelative(event.getDirection().getOppositeFace());
+//
+//		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
+//
+//			//check the block to see if it's going to pass a plot boundary
+//			if (testBlockMove(block, event.getDirection()))// .getOppositeFace()))
+//				event.setCancelled(true);
+//		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

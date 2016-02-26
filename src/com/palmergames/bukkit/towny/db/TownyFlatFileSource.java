@@ -1711,7 +1711,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Taxes
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
-		// Neutral
+		// Peaceful
 		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
 
 		/*

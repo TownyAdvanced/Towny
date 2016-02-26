@@ -195,11 +195,11 @@ public class TownyWar {
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_not_part_of_nation"));
 		}
 
-		// Check Neutrality
+		// Check Peace
 		if (landOwnerNation.isNeutral())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_neutral"), landOwnerNation.getFormattedName()));
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
 		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_neutral"), attackingNation.getFormattedName()));
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online
 		checkIfTownHasMinOnlineForWar(landOwnerTown);

@@ -411,7 +411,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
 					}
 					if (nation.isNeutral()) {
-						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Neutrality Upkeep")) {
+						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							try {
 								nation.setNeutral(false);
 							} catch (TownyException e) {
@@ -419,7 +419,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								e.printStackTrace();
 							}
 							TownyUniverse.getDataSource().saveNation(nation);
-							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_neutral"));
+							TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_not_peaceful"));
 						}
 					}
 					

@@ -61,13 +61,13 @@ public class WarHUD {
 			} else {
 				isTown = true;
 				if (at.getTownBlock().getTown().getNation().isNeutral())
-					health = "Neutral";
+					health = "Peaceful";
 				else
 					health = "Fallen";
 			}
 		} catch (NotRegisteredException e) {
 			if (isTown)
-				health = "Neutral";
+				health = "Peaceful";
 			else
 				health = "";
 		}

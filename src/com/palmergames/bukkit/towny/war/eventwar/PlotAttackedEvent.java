@@ -49,5 +49,4 @@ public class PlotAttackedEvent extends Event {
 	{
 		return hp;
 	}
-
 }

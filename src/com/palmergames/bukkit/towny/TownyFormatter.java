@@ -324,9 +324,9 @@ public class TownyFormatter {
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += Colors.LightGray + "중립";
+			line += Colors.LightGray + "평화로움";
 		}
-		// Bank: 534 coins | Neutral
+		// Bank: 534 coins | Peaceful
 		if (line.length() > 0)
 			out.add(line);
 

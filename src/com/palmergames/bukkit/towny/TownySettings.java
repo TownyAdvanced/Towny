@@ -2239,4 +2239,8 @@ public class TownySettings {
 		return NameValidation.filterName(input);
 	}
 
+	public static boolean isDisallowOneWayAlliance() {
+		
+		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
+	}
 }

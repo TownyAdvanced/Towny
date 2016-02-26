@@ -224,6 +224,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[1].trim()));
 				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_give_total"), town.getName(), split[1], town.getBonusBlocks()));
+				TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
+				TownyMessaging.sendTownMessagePrefixed(town, "If you have paid any real-life money for these townblocks please understand that the creators of Towny do not condone this transaction. The server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which your server admin did not create.");
+				TownyMessaging.sendTownMessagePrefixed(town, "You should consider changing servers and requesting a refund of your money.");
 			} catch (NumberFormatException nfe) {
 				throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 			}
@@ -722,12 +725,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				plugin.getTownyUniverse().endWarEvent();
 				TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_war_ended"));
 			}
-		} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("중립")) {
+		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")
+				|| split[0].equalsIgnoreCase("평화로움")) || split[0].equalsIgnoreCase("중립") {
 
 			try {
 				choice = !TownySettings.isDeclaringNeutral();
 				TownySettings.setDeclaringNeutral(choice);
-				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_nation_allow_neutral"), choice ? "활성" : "비활성"));
+				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_nation_allow_peaceful"), choice ? "활성" : "비활성"));
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
@@ -786,7 +790,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 		} else {
 			// parameter error message
-			// neutral/war/townmobs/worldmobs
+			// peaceful/war/townmobs/worldmobs
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 		}
 	}

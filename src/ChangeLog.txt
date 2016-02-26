@@ -2246,3 +2246,14 @@ v0.90.0.1:
 	- Fix libs hosting.
 	- New config option: town.default_taxes.plot_tax, a setting for choosing the default plot tax of newly formed towns.
 	- Add try/catch in case permission plugin doesn't have the ability to set Default Modes. 
+	- Fix retracting pistons pulling blocks from where they shouldn't.
+	- Add support for slimeblocks pulling blocks from where they shouldn't.
+	- Fix spanish.yml, missing ' on the end of line 368.
+v0.90.0.2:
+    - Courtesy of andrewyunt:
+        - Questioner integration for nation alliances.
+        - Turn on by setting in the config: war.disallow_one_way_alliance, which defaults to false.
+        - When a king set another nation as an alliance, the 2nd king will receive a message from questioner asking if the approve of this relationship.
+        - If the 2nd king accepts, both nations will treat each other as an ally.
+        - new alias command for /n toggle neutral: /n toggle peaceful.
+        - /nation screen and ingame messages which mention 'neutral' now say 'peaceful'.

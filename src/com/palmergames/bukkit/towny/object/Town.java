@@ -846,7 +846,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		return embassyPlotPrice;
 	}
-
+	
 	@Override
 	public Wall getWall() {
 
