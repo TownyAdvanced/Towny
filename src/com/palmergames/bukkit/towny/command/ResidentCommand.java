@@ -271,7 +271,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "적의 영토"));
 						if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation) && disallowedZones.contains("neutral"))
-							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "중립 마을"));
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "평화로운 마을"));
 					}
 				}
 			}

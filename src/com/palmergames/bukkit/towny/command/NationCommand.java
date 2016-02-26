@@ -1247,7 +1247,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_nation_set_peaceful"));
 
-					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isNeutral() ? Colors.Green + " 중립상태임" : Colors.Red + "중립상태가 아님") + "");
+					TownyMessaging.sendNationMessage(nation, TownySettings.getLangString("msg_nation_peaceful") + (nation.isNeutral() ? Colors.Green + " 평화로운 상태입니다" : Colors.Red + "평화로운 상태가 아닙니다") + ".");
 				} catch (EconomyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				} catch (TownyException e) {

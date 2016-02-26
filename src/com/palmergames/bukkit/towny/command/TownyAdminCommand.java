@@ -56,7 +56,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "점유해제 [반지름]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "마을/국가", ""));
 		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "보너스주기 [마을/플레이어] [갯수]", ""));
-		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "토글 중립/전쟁/디버그/개발모드", ""));
+		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "토글 평화로움/전쟁/디버그/개발모드", ""));
 		ta_help.add(ChatTools.formatCommand("", "/타우니관리", "주민/마을/국가", ""));
 
 		// TODO: ta_help.add(ChatTools.formatCommand("", "/타우니관리",
@@ -224,9 +224,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[1].trim()));
 				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_give_total"), town.getName(), split[1], town.getBonusBlocks()));
-				TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
-				TownyMessaging.sendTownMessagePrefixed(town, "If you have paid any real-life money for these townblocks please understand that the creators of Towny do not condone this transaction. The server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which your server admin did not create.");
-				TownyMessaging.sendTownMessagePrefixed(town, "You should consider changing servers and requesting a refund of your money.");
+				TownyMessaging.sendTownMessagePrefixed(town, "마을블록 보너스 " + Integer.parseInt(split[1].trim()) + "개를 받았습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, "만약 현실 화폐를 주고 이 마을블록 보너스를 지급받았다면 Towny를 만들고 번역하는 사람들은 이 거래를 용납하지 않는다는 것을 알아두시기 바랍니다. 지금 플레이 중인 이 서버는 마인크래프트의 EULA를 위반하고 있고, 심지어 이 서버의 관리자가 만들지 않은 Towny의 일부를 판매하고 있습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, "환불받고 다른 서버로 옮기는 것을 고려해보세요.");
 			} catch (NumberFormatException nfe) {
 				throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 			}
@@ -703,7 +703,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			// command was '/타우니관리 토글'
 			player.sendMessage(ChatTools.formatTitle("/타우니관리 토글"));
 			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "전쟁", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "중립", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "평화로움", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "개발모드", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "디버그", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/타우니관리 토글", "마을출금/국가출금", ""));

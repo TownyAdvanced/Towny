@@ -328,7 +328,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			
 			if (nation != null) {
 				output.add(Colors.Yellow + "주민 [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [세금] " + Colors.Green + "마을: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "중립선언: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Rose + "    [세금] " + Colors.Green + "마을: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "평화상태 유지: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;
