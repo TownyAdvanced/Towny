@@ -5,9 +5,9 @@ md5sum ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar
 md5sum ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
     echo Uploading Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar ...
-    sudo curl -T ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar -u ${USERNAME}:${PASSWORD} ${HOST}
+    sudo curl -T ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar -u ${username}:${password} ${host}
     echo Uploading Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar ...
-    sudo curl -T ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar -u ${USERNAME}:${PASSWORD} ${HOST}
+    sudo curl -T ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar -u ${username}:${password} ${host}
 else
     echo "It's not master build."
 fi
