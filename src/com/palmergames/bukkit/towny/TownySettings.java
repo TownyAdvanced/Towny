@@ -2243,4 +2243,16 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
+	
+	public static int getNumResidentsJoinNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);
+	}
+	
+	public static int getNumResidentsCreateNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION);
+	}
+	
+	public static boolean isRefundNationDisbandLowResidents() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
+	}
 }

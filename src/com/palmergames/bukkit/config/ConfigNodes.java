@@ -403,6 +403,23 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
+			"global_town_settings.required_number_residents_join_nation",
+			"0",
+			"# The required number of residents in a town to join a nation",
+			"# If the number is 0, towns will not require a certain amount of residents to join a nation"
+			),
+	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION(
+			"global_town_settings.required_number_residents_create_nation",
+			"0",
+			"# The required number of residents in a town to create a nation",
+			"# If the number is 0, towns will not require a certain amount of residents to create a nation"
+			),
+	GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS(
+			"global_town_settings.refund_disband_low_residents",
+			"false",
+			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
+			),
 	PLUGIN(
 			"plugin",
 			"",
