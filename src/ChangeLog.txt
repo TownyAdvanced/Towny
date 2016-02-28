@@ -2257,3 +2257,18 @@ v0.90.0.2:
         - If the 2nd king accepts, both nations will treat each other as an ally.
         - new alias command for /n toggle neutral: /n toggle peaceful.
         - /nation screen and ingame messages which mention 'neutral' now say 'peaceful'.
+v0.90.0.3:
+    - Courtesy of andrewyunt:
+        - Optional residentcount requirements for creating/joining/maintaining nations.
+        - New Config settings:
+            - global_town_settings.required_number_residents_join_nation
+              - default: 0
+              - The required number of residents in a town to join a nation.
+              - If the number is 0, towns will not require a certain amount of residents to join a nation.
+            - global_town_settings.required_number_residents_create_nation
+              - default: 0 
+              - The required number of residents in a town to create a nation.
+              - If the number is 0, towns will not require a certain amount of residents to create a nation.
+            - global_town_settings.refund_disband_low_residents
+              - default: true
+              - If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation.        
