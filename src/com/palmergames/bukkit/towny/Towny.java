@@ -26,6 +26,7 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.huds.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -139,7 +140,7 @@ public class Towny extends JavaPlugin {
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
-			for (Player player : BukkitTools.getOnlinePlayers())
+			for (Player player : Bukkit.getServer().getOnlinePlayers())
 				if (player != null)
 					try {
 						getTownyUniverse().onLogin(player);
@@ -511,7 +512,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public void resetCache() {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				getCache(player).resetAndUpdate(new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player))); // Automatically
 																														// resets
@@ -523,7 +524,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				if (Coord.parseCoord(player).equals(worldCoord))
 					getCache(player).resetAndUpdate(worldCoord); // Automatically
@@ -538,7 +539,7 @@ public class Towny extends JavaPlugin {
 
 		WorldCoord worldCoord = null;
 
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if (player != null) {
 				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
 				PlayerCache cache = getCache(player);

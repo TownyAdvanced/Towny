@@ -169,7 +169,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Test against the item in hand as we need to test the bucket contents
 		// we are trying to empty.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getItemInHand()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getInventory().getItemInMainHand()));
 
 		// Test on the resulting empty bucket to see if we have permission to
 		// empty a bucket.
@@ -230,7 +230,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Info Tool
 			 */
-			if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+			if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
 				if (TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
 					if (event.getClickedBlock() instanceof Block) {
@@ -344,12 +344,12 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Item_use protection.
 			 */
-			if (event.getPlayer().getItemInHand() != null) {
+			if (event.getPlayer().getInventory().getItemInMainHand() != null) {
 
 				/*
 				 * Info Tool
 				 */
-				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
 					Entity entity = event.getRightClicked();
 
@@ -362,8 +362,8 @@ public class TownyPlayerListener implements Listener {
 
 				}
 
-				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
 					return;
 				}
 			}
@@ -473,12 +473,12 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Item_use protection.
 			 */
-			if (event.getPlayer().getItemInHand() != null) {
+			if (event.getPlayer().getInventory().getItemInMainHand() != null) {
 
 				/*
 				 * Info Tool
 				 */
-				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
 					Entity entity = event.getRightClicked();
 
@@ -491,8 +491,8 @@ public class TownyPlayerListener implements Listener {
 
 				}
 
-				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
 					return;
 				}
 			}

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.util.Hashtable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -15,7 +16,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
-import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarTimerTask extends TownyTimerTask {
 
@@ -41,7 +41,7 @@ public class WarTimerTask extends TownyTimerTask {
 
 		int numPlayers = 0;
 		Hashtable<TownBlock, WarZoneData> plotList = new Hashtable<TownBlock, WarZoneData>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if (player != null) {
 				numPlayers += 1;
 				TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");

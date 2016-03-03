@@ -16,6 +16,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -193,7 +194,7 @@ public class TownyPerms {
 	 */
 	public static void updateOnlinePerms() {
 		
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			assignPermissions(null, player);
 		}
 		

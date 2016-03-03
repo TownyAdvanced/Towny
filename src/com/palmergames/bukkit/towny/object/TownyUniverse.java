@@ -20,6 +20,8 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -105,7 +107,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static Player getPlayer(Resident resident) throws TownyException {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				if (player.getName().equals(resident.getName()))
 					return player;
@@ -121,7 +123,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Player> getOnlinePlayers(ResidentList residents) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				if (residents.hasResident(player.getName()))
 					players.add(player);
@@ -137,7 +139,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Player> getOnlinePlayers(Town town) {
 
 		ArrayList<Player> players = new ArrayList<Player>();
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				if (town.hasResident(player.getName()))
 					players.add(player);
@@ -529,7 +531,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Resident> getOnlineResidents(ResidentList residentList) {
 
 		List<Resident> onlineResidents = new ArrayList<Resident>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if (player != null)
 				for (Resident resident : residentList.getResidents()) {
 					if (resident.getName().equalsIgnoreCase(player.getName()))
@@ -543,7 +545,7 @@ public class TownyUniverse extends TownyObject {
 	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
 
 		List<Resident> onlineResidents = new ArrayList<Resident>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if (player != null) {
 				/*
 				 * Loop town/nation resident list

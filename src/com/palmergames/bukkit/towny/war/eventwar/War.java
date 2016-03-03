@@ -182,7 +182,7 @@ public class War {
 
 	public void end() {
 
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
 		plugin.getHUDManager().toggleAllWarHUD();

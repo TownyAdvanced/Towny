@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.permissions;
 
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -180,7 +181,7 @@ public class PEXSource extends TownyPermissionSource {
 						PermissionGroup group = (PermissionGroup) entity;
 
 						// Update all players who are in this group.
-						for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+						for (Player toUpdate : Bukkit.getServer().getOnlinePlayers()) {
 							if (toUpdate != null)
 								if (Arrays.asList(getPlayerGroups(toUpdate)).contains(group)) {
 									//setup default modes
@@ -216,7 +217,7 @@ public class PEXSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.PEXSystem_Action.valueOf(event.getEventName()) != null) {
 					// Update all players.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+					for (Player toUpdate : Bukkit.getServer().getOnlinePlayers()) {
 						if (toUpdate != null) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
