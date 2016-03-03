@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -274,7 +275,7 @@ public class TownyMessaging {
 		for (String line : lines) {
 			TownyLogger.log.info(ChatTools.stripColour("[Global Msg] " + line));
 		}
-		for (Player player : BukkitTools.getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player != null)
 				for (String line : lines)
 					player.sendMessage(line);
@@ -288,7 +289,7 @@ public class TownyMessaging {
 	public static void sendGlobalMessage(String line) {
 
 		TownyLogger.log.info(ChatTools.stripColour("[Global Message] " + line));
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if (player != null)
 				try {
 					if (TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())

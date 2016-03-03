@@ -6,6 +6,7 @@ import org.anjocaido.groupmanager.events.GMGroupEvent;
 import org.anjocaido.groupmanager.events.GMSystemEvent;
 import org.anjocaido.groupmanager.events.GMUserEvent;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -167,7 +168,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 					Group group = event.getGroup();
 					// Update all players who are in this group.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+					for (Player toUpdate : Bukkit.getServer().getOnlinePlayers()) {
 						if (toUpdate != null) {
 							if (group.equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
@@ -190,7 +191,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+					for (Player toUpdate : Bukkit.getServer().getOnlinePlayers()) {
 						if (toUpdate != null) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
