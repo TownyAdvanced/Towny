@@ -1333,7 +1333,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			//boolean set = false;
 
 			File fileTownBlock = new File(path);
-			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
+			if (fileTownBlock.exists() && fileTownBlock.isFile()) {				
 				try {
 					KeyValueFile kvFile = new KeyValueFile(path);
 
@@ -1420,6 +1420,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//						// Will never reach here
 				//					}
 				//				}
+			} else {
+				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+				removeTownBlock(townBlock);
 			}
 		}
 
@@ -1436,7 +1439,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<String>();
 
 		for (TownBlock townBlock : getAllTownBlocks()) {
-
+			
 			list.add(townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
 
 		}

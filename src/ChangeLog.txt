@@ -2272,3 +2272,4 @@ v0.90.0.3:
             - global_town_settings.refund_disband_low_residents
               - default: true
               - If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation.        
+    - Added automatic cleanup to the townblocks.txt file for flatfile databases. If a townblock is recorded in the townblocks.txt but does not have a corresponding townblocks\world\ file then the townblock is removed from the townblocks.txt.

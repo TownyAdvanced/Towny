@@ -144,7 +144,7 @@ public class TownClaim extends Thread {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			try {
 				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), townBlock.getTown().getName()));
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException e) {				
 				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
 			}
 		} catch (NotRegisteredException e) {
