@@ -1,7 +1,7 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.90.0.3
-author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
+version: 0.91.0.0
+author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
