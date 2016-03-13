@@ -1402,6 +1402,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception e) {
 						}
+					
+					line = kvFile.getString("town");
+					if (line.isEmpty()) {
+						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
+						deleteTownBlock(townBlock);
+						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+						TownyWorld world = townBlock.getWorld();
+						world.removeTownBlock(townBlock);	
+					}						
 
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path);
@@ -1423,10 +1432,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			} else {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 				TownyWorld world = townBlock.getWorld();
-				world.removeTownBlock(townBlock);
-				//removeTownBlock(townBlock);
+				world.removeTownBlock(townBlock);			
 			}
-		}
+		}		
+		saveTownBlockList();
 
 		return true;
 	}

@@ -2253,9 +2253,9 @@ v0.90.0.2:
     - Courtesy of andrewyunt:
         - Questioner integration for nation alliances.
         - Turn on by setting in the config: war.disallow_one_way_alliance, which defaults to false.
-        - When a king set another nation as an alliance, the 2nd king will receive a message from questioner asking if the approve of this relationship.
+        - When a king sets another nation as an alliance, the 2nd king will receive a message from questioner asking if they approve of this relationship.
         - If the 2nd king accepts, both nations will treat each other as an ally.
-        - new alias command for /n toggle neutral: /n toggle peaceful.
+        - new alias command for /n toggle neutral: /n toggle peaceful
         - /nation screen and ingame messages which mention 'neutral' now say 'peaceful'.
 v0.90.0.3:
     - Courtesy of andrewyunt:
@@ -2273,3 +2273,4 @@ v0.90.0.3:
               - default: true
               - If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation.        
     - Added automatic cleanup to the townblocks.txt file for flatfile databases. If a townblock is recorded in the townblocks.txt but does not have a corresponding townblocks\world\ file then the townblock is removed from the townblocks.txt.
+    - Added automatic cleanup of the towny\data\townblocks\ folder for flatfile databases. If a townblock file is found to be missing a town, that file will be deleted and the entry will be removed from the townblocks.txt.    
