@@ -1422,7 +1422,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//				}
 			} else {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
-				removeTownBlock(townBlock);
+				TownyWorld world = townBlock.getWorld();
+				world.removeTownBlock(townBlock);
+				//removeTownBlock(townBlock);
 			}
 		}
 
