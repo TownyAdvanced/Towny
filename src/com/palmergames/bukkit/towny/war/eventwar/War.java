@@ -40,36 +40,33 @@ import com.palmergames.util.TimeTools;
 
 //TODO: Extend a new class called TownyEvent
 public class War {
-
+	
+	// War Data
 	private Hashtable<WorldCoord, Integer> warZone = new Hashtable<WorldCoord, Integer>();
 	private Hashtable<Town, Integer> townScores = new Hashtable<Town, Integer>();
 	private List<Town> warringTowns = new ArrayList<Town>();
 	private List<Nation> warringNations = new ArrayList<Nation>();
+	private WarSpoils warSpoils = new WarSpoils();
+	
 	private Towny plugin;
 	private TownyUniverse universe;
 	private boolean warTime = false;
-	//private Timer warTimer = new Timer();
 	private List<Integer> warTaskIds = new ArrayList<Integer>();
-	private WarSpoils warSpoils = new WarSpoils();
 
+	/**
+	 * Creates a new War instance.
+	 * @param plugin
+	 * @param startDelay - the delay before war will begin
+	 */
 	public War(Towny plugin, int startDelay) {
 
 		this.plugin = plugin;
 		this.universe = plugin.getTownyUniverse();
-
 		setupDelay(startDelay);
 	}
 
-	/*
-	 * public void setWarTimer(Timer warTimer) {
-	 * this.warTimer = warTimer;
-	 * }
-	 * 
-	 * public Timer getWarTimer() {
-	 * return warTimer;
-	 * }
-	 */
-
+	////START GETTERS/SETTERS ////
+	
 	public void addTaskId(int id) {
 
 		warTaskIds.add(id);
@@ -86,6 +83,11 @@ public class War {
 			scheduler.cancelTask(id);
 		clearTaskIds();
 	}
+	
+	public void setPlugin(Towny plugin) {
+
+		this.plugin = plugin;
+	}
 
 	public List<Integer> getTaskIds() {
 
@@ -97,39 +99,6 @@ public class War {
 		return plugin;
 	}
 
-	public void setPlugin(Towny plugin) {
-
-		this.plugin = plugin;
-	}
-
-	public void setupDelay(int delay) {
-
-		if (delay <= 0)
-			start();
-		else {
-			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
-				//Schedule the warnings leading up to the start of the war event
-				//warTimer.schedule(
-				//              new ServerBroadCastTimerTask(plugin,
-				//                              String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))),
-				//                              (delay-t)*1000);
-				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
-				if (id == -1) {
-					TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
-					end();
-				} else
-					addTaskId(id);
-			}
-			//warTimer.schedule(new StartWarTimerTask(universe), delay*1000);
-			int id = BukkitTools.scheduleAsyncDelayedTask(new StartWarTimerTask(plugin), TimeTools.convertToTicks(delay));
-			if (id == -1) {
-				TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
-				end();
-			} else
-				addTaskId(id);
-		}
-	}
-
 	public boolean isWarTime() {
 
 		return warTime;
@@ -139,12 +108,84 @@ public class War {
 
 		return universe;
 	}
+	
+	public WarSpoils getWarSpoils() {
 
+		return warSpoils;
+	}
+
+	public Hashtable<Town, Integer> getTownScores()
+	{
+		return townScores;
+	}
+
+	public Hashtable<WorldCoord, Integer> getWarZone()
+	{
+		return warZone;
+	}
+
+	public List<Town> getWarringTowns()
+	{
+		return warringTowns;
+	}
+	
+	public boolean isWarZone(WorldCoord worldCoord) {
+
+		return warZone.containsKey(worldCoord);
+	}
+	
+	public boolean isWarringNation(Nation nation) {
+
+		return warringNations.contains(nation);
+	}
+
+	public boolean isWarringTown(Town town) {
+
+		return warringTowns.contains(town);
+	}
+	
+	public void toggleEnd() {
+
+		warTime = false;
+	}
+
+	//// END GETTERS/SETTERS ////
+	
+	/**
+	 * Creates a delay before war begins
+	 * @param delay
+	 */
+	public void setupDelay(int delay) {
+
+		if (delay <= 0)
+			start();
+		else {
+			// Create a countdown timer
+			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
+				if (id == -1) {
+					TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
+					end();
+				} else
+					addTaskId(id);
+			}
+			// Schedule set up delay
+			int id = BukkitTools.scheduleAsyncDelayedTask(new StartWarTimerTask(plugin), TimeTools.convertToTicks(delay));
+			if (id == -1) {
+				TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
+				end();
+			} else
+				addTaskId(id);
+		}
+	}
+
+	/**
+	 * Start war.
+	 * Seed the spoils, add the nations, start the timer task.
+	 */
 	public void start() {
 
 		warTime = true;
-
-		//Announce
 
 		// Seed spoils of war
 		try {
@@ -170,7 +211,8 @@ public class War {
 				}
 			}
 		}
-		//warTimer.scheduleAtFixedRate(new WarTimerTask(this), 0, 1000);
+
+		// Start the WarTimerTask
 		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
 		if (id == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule war event loop.");
@@ -180,17 +222,25 @@ public class War {
 		checkEnd();
 	}
 
+	/**
+	 * End war.
+	 * Send the stats to all the players, toggle all the war HUDS.
+	 */
 	public void end() {
-
+		
+		// Send stats to the players
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				sendStats(player);
+		
+		// Toggle the war huds off for all players
 		plugin.getHUDManager().toggleAllWarHUD();
+
 		double halfWinnings;
 		try {
-			// Transactions might leave 1 coin. (OH noez!)
+			
+			// Compute war spoils
 			halfWinnings = getWarSpoils().getHoldingBalance() / 2.0;
-
 			try {
 				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
@@ -198,28 +248,35 @@ public class War {
 					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
 				}
 			} catch (ArithmeticException e) {
-				// A war ended with 0 nations.
+				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
 			}
 
+			// Pay money to winning town and print message
 			try {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
 				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
 			} catch (TownyException e) {
 			}
-		} catch (EconomyException e1) {
-		}
-
+		} catch (EconomyException e1) {}
 	}
 
-	public void add(Nation nation) {
+	/**
+	 * Add a nation to war, and all the towns within it.
+	 * @param nation
+	 */
+	private void add(Nation nation) {
 
 		for (Town town : nation.getTowns())
 			add(town);
 		warringNations.add(nation);
 	}
 
-	public void add(Town town) {
+	/**
+	 * Add a town to war. Set the townblocks in the town to the correct health.
+	 * @param town
+	 */
+	private void add(Town town) {
 
 		TownyMessaging.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
 		townScores.put(town, 0);
@@ -231,11 +288,13 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 	}
 
-	public boolean isWarZone(WorldCoord worldCoord) {
-
-		return warZone.containsKey(worldCoord);
-	}
-
+	/**
+	 * A town has scored.
+	 * @param town - the scoring town
+	 * @param n - the score to be added
+	 * @param fallenObject - the object that fell
+	 * @param townBlocksFallen -  the number of fallen townblocks
+	 */
 	public void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
 
 		String[] pointMessage = {"error"};
@@ -254,6 +313,14 @@ public class War {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
+	/**
+	 * A town has scored and there is data on the attacking/defending town
+	 * @param defenderTown
+	 * @param attackerTown
+	 * @param defenderPlayer
+	 * @param attackerPlayer
+	 * @param n - the score to be added
+	 */
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n)
 	{
 		String[] pointMessage = {"error"};
@@ -274,6 +341,12 @@ public class War {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
+	/**
+	 * Update a plot given the WarZoneData on the TownBlock
+	 * @param townBlock
+	 * @param wzd
+	 * @throws NotRegisteredException
+	 */
 	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		if (!wzd.hasAttackers()) 
 			healPlot(townBlock, wzd);
@@ -281,6 +354,12 @@ public class War {
 			attackPlot(townBlock, wzd);
 	}
 
+	/**
+	 * Heals a plot. Only occurs when the plot has no attackers.s
+	 * @param townBlock
+	 * @param wzd
+	 * @throws NotRegisteredException
+	 */
 	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int healthChange = wzd.getHealthChange();
@@ -302,6 +381,12 @@ public class War {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
+	/**
+	 * There are attackers on the plot, update the health.
+	 * @param townBlock
+	 * @param wzd
+	 * @throws NotRegisteredException
+	 */
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 
 		Player attackerPlayer = wzd.getRandomAttacker();
@@ -349,6 +434,12 @@ public class War {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
+	/**
+	 * Correctly returns the health of a TownBlock given the change in the health.
+	 * @param townBlock
+	 * @param healthChange
+	 * @return
+	 */
 	private int getHealth(TownBlock townBlock, int healthChange) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int hp = warZone.get(worldCoord) + healthChange;
@@ -359,6 +450,13 @@ public class War {
 		return hp;
 	}
 
+	/**
+	 * Launch a firework at a given plot
+	 * @param townblock
+	 * @param atPlayer
+	 * @param type
+	 * @param c
+	 */
 	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c)
 	{
 		BukkitTools.scheduleSyncDelayedTask(new Runnable() { 
@@ -376,12 +474,14 @@ public class War {
 		}, 0);	
 	}
 
-	public void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
+	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 
-		//townScored(attacker, TownySettings.getWarPointsForTownBlock());
+		// Add bonus blocks
 		townBlock.getTown().addBonusBlocks(-1);
 		attacker.addBonusBlocks(1);
+		
 		try {
+			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
 				if (townBlock.getTown().isCapital())
@@ -393,8 +493,9 @@ public class War {
 				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town lost " + TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice()) + ".");
-		} catch (EconomyException e) {
-		}
+		} catch (EconomyException e) {}
+		
+		// Check to see if this is a special TownBlock
 		if (townBlock.getTown().isHomeBlock(townBlock) && townBlock.getTown().isCapital()){
 			remove(attacker, townBlock.getTown().getNation());
 		} else if (townBlock.getTown().isHomeBlock(townBlock)){
@@ -407,51 +508,69 @@ public class War {
 		TownyUniverse.getDataSource().saveTown(attacker);
 	}
 
-	public void remove(TownBlock townBlock) throws NotRegisteredException {
+	private void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
-		if (townBlock.getTown().isHomeBlock(townBlock))
-			remove(townBlock.getTown());
-		else
-			remove(townBlock.getWorldCoord());
+		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
+		warringNations.remove(nation);
+		for (Town town : nation.getTowns())
+			if (warringTowns.contains(town))
+				remove(attacker, town);
+		checkEnd();
 	}
 
-	public void eliminate(Town town) {
+	private void remove(Town attacker, Town town) throws NotRegisteredException {
 
-		//remove(town);
-		//		try {
-		//			checkNation(town.getNation());
-		//		} catch (NotRegisteredException e) {
-		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
-		//		}
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(town.getName()));
-		//checkEnd();
+		int fallenTownBlocks = 0;
+		warringTowns.remove(town);
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.containsKey(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
+	}
+	
+	private void remove(Nation nation) {
+
+		warringNations.remove(nation);
+		sendEliminateMessage(nation.getFormattedName());
+		for (Town town : nation.getTowns())
+			remove(town);
+		checkEnd();
 	}
 
-	public void eliminate(Town town, String townBlocksFallen) {
+	private void remove(Town town) {
 
-		//remove(town);
-		//		try {
-		//			checkNation(town.getNation());
-		//		} catch (NotRegisteredException e) {
-		//			TownyMessaging.sendErrorMsg("[War] Error checking " + town.getName() + "'s nation.");
-		//		}
-		String[] message = TownySettings.getWarTimeEliminatedMsg(town.getFormattedName() + " " + townBlocksFallen);
-		TownyMessaging.sendGlobalMessage(message);
-		//checkEnd();
+		// If a town is removed, is a capital, and the nation has not been removed, call remove(nation) instead.
+		try {
+			if (town.isCapital() && warringNations.contains(town.getNation())) {
+				remove(town.getNation());
+				return;
+			}
+		} catch (NotRegisteredException e) {}
+		
+		int fallenTownBlocks = 0;
+		warringTowns.remove(town);
+		for (TownBlock townBlock : town.getTownBlocks())
+			if (warZone.containsKey(townBlock.getWorldCoord())){
+				fallenTownBlocks++;
+				remove(townBlock.getWorldCoord());
+			}
+		StringBuilder sb = new StringBuilder(town.getFormattedName()).append(" (").append(fallenTownBlocks).append(" town blocks fallen)");
+		sendEliminateMessage(sb.toString());
 	}
-
-	public void eliminate(Nation nation) {
-
-		//remove(nation);
-		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(nation.getFormattedName()));
-		//checkEnd();
+	
+	private void remove(WorldCoord worldCoord) {	
+		warZone.remove(worldCoord);
 	}
-
+	
+	private void sendEliminateMessage(String name) {
+		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeEliminatedMsg(name));
+	}
+	
 	public void nationLeave(Nation nation) {
 
 		remove(nation);
-		for (Town town : nation.getTowns())
-			remove(town);
 		TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeForfeitMsg(nation.getName()));
 		checkEnd();
 	}
@@ -463,63 +582,9 @@ public class War {
 		checkEnd();
 	}
 
-	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
-
-		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
-		warringNations.remove(nation);
-		for (Town town : nation.getTowns())
-			if (warringTowns.contains(town))
-				remove(attacker, town);
-		checkEnd();
-	}
-
-	public void remove(Nation nation) {
-
-		warringNations.remove(nation);
-		eliminate(nation);
-		for (Town town : nation.getTowns())
-			remove(town);
-		checkEnd();
-	}
-
-	public void remove(Town attacker, Town town) throws NotRegisteredException {
-
-		int fallenTownBlocks = 0;
-		warringTowns.remove(town);
-		for (TownBlock townBlock : town.getTownBlocks())
-			if (warZone.containsKey(townBlock.getWorldCoord())){
-				fallenTownBlocks++;
-				remove(townBlock.getWorldCoord());
-			}
-		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
-	}
-
-	public void remove(Town town) {
-
-		int fallenTownBlocks = 0;
-		warringTowns.remove(town);
-		for (TownBlock townBlock : town.getTownBlocks())
-			if (warZone.containsKey(townBlock.getWorldCoord())){
-				fallenTownBlocks++;
-				remove(townBlock.getWorldCoord());
-			}
-		String format = "(" + fallenTownBlocks + " town blocks captured)";
-		eliminate (town, format);
-
-		//		try {
-		//			if (!townsLeft(town.getNation()))
-		//				eliminate(town.getNation());
-		//		} catch (NotRegisteredException e) {
-		//		}
-	}
-
 	public boolean townsLeft(Nation nation) {
 
 		return countActiveTowns(nation) > 0;
-	}
-
-	public void remove(WorldCoord worldCoord) {	
-		warZone.remove(worldCoord);
 	}
 
 	public void checkEnd() {
@@ -528,18 +593,6 @@ public class War {
 			toggleEnd();
 		else if (CombatUtil.areAllAllies(warringNations))
 			toggleEnd();
-	}
-
-	public void checkTown(Town town) {
-
-		if (countActiveWarBlocks(town) == 0)
-			eliminate(town);
-	}
-
-	public void checkNation(Nation nation) {
-
-		if (countActiveTowns(nation) == 0)
-			eliminate(nation);
 	}
 
 	public int countActiveWarBlocks(Town town) {
@@ -559,17 +612,8 @@ public class War {
 				n++;
 		return n;
 	}
-
-	public void toggleEnd() {
-
-		warTime = false;
-	}
-
-	public void sendStats(Player player) {
-
-		for (String line : getStats())
-			player.sendMessage(line);
-	}
+	
+	//// CALCULATE STATS ////
 
 	public List<String> getStats() {
 
@@ -585,24 +629,20 @@ public class War {
 		}
 		return null;
 	}
+	
+	public void sendStats(Player player) {
 
-	public void sendScores(Player player) {
-
-		sendScores(player, 10);
-	}
-
-	public void sendScores(Player player, int maxListing) {
-
-		for (String line : getScores(maxListing))
+		for (String line : getStats())
 			player.sendMessage(line);
 	}
 
+	//// SCORE CALCULATIONS ////
+	
 	/**
 	 * 
 	 * @param maxListing Maximum lines to return. Value of -1 return all.
 	 * @return A list of the current scores per town sorted in descending order.
 	 */
-
 	public List<String> getScores(int maxListing) {
 
 		List<String> output = new ArrayList<String>();
@@ -634,16 +674,6 @@ public class War {
 		return top;
 	}
 
-	public boolean isWarringNation(Nation nation) {
-
-		return warringNations.contains(nation);
-	}
-
-	public boolean isWarringTown(Town town) {
-
-		return warringTowns.contains(town);
-	}
-
 	public KeyValue<Town, Integer> getWinningTownScore() throws TownyException {
 
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
@@ -654,24 +684,16 @@ public class War {
 		else
 			throw new TownyException();
 	}
+	
+	public void sendScores(Player player) {
 
-	public WarSpoils getWarSpoils() {
-
-		return warSpoils;
+		sendScores(player, 10);
 	}
 
-	public Hashtable<Town, Integer> getTownScores()
-	{
-		return townScores;
-	}
+	public void sendScores(Player player, int maxListing) {
 
-	public Hashtable<WorldCoord, Integer> getWarZone()
-	{
-		return warZone;
+		for (String line : getScores(maxListing))
+			player.sendMessage(line);
 	}
-
-	public List<Town> getWarringTowns()
-	{
-		return warringTowns;
-	}
+	
 }
