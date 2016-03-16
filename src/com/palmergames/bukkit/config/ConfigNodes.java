@@ -1145,6 +1145,10 @@ public enum ConfigNodes {
 			"war.event.plots.healable",
 			"true",
 			"# If true, nation members and allies can regen health on plots during war."),
+	WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED(
+			"war.event.plots.firework_on_attacked",
+			"true",				
+			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
 			"false",

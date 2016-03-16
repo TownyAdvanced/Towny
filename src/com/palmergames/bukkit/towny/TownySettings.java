@@ -1513,6 +1513,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_HEALABLE);
 	}
+	
+	public static boolean getPlotsFireworkOnAttacked() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED);
+	}
 
 	public static double getWartimeDeathPrice() {
 
