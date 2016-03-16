@@ -49,7 +49,11 @@ public class PermHUD {
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
-			title = ChatColor.GOLD + town.getName();
+			if (townBlock.hasResident()) {
+				title = ChatColor.GOLD + townBlock.getResident().getName() + "(" + townBlock.getTown().getName() + ")";
+			} else {
+				title = ChatColor.GOLD + townBlock.getTown().getName();
+			}
 			plotName = townBlock.getName() == null ? "" : (PLOTNAME_TITLE + townBlock.getName());
 		} catch (NotRegisteredException e) {
 			clearPerms(p);
@@ -82,7 +86,7 @@ public class PermHUD {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void toggleOn (Player p) {
+	public static void toggleOn (Player  p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
 		String plotName_player = "";
