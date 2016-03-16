@@ -8,7 +8,6 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -16,11 +15,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 
 public class PermHUD {
 	
@@ -86,7 +83,7 @@ public class PermHUD {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void toggleOn (Player  p) {
+	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
 		String plotName_player = "";
