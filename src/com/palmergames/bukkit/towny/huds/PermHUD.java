@@ -23,6 +23,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
 public class PermHUD {
+	
+	private static final String PLOTNAME_TITLE = ChatColor.DARK_GREEN + "Plot: " + ChatColor.GRAY;
 
 	public static void updatePerms (Player p) {
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
@@ -30,7 +32,7 @@ public class PermHUD {
 	}
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
-		String build, destroy, switching, item, pvp, explosions, firespread, mobspawn, title;
+		String plotName, build, destroy, switching, item, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
@@ -47,11 +49,13 @@ public class PermHUD {
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
-			title = ChatColor.GOLD + TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? Colors.LightGreen + " (Online)" : "");
+			title = ChatColor.GOLD + town.getName();
+			plotName = townBlock.getName() == null ? "" : (PLOTNAME_TITLE + townBlock.getName());
 		} catch (NotRegisteredException e) {
 			clearPerms(p);
 			return;
 		}
+		board.getTeam("plot").setSuffix(HUDManager.check(plotName));
 		board.getTeam("build").setSuffix(build);
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);
@@ -65,6 +69,7 @@ public class PermHUD {
 
 	private static void clearPerms (Player p) {
 		Scoreboard board = p.getScoreboard();
+		board.getTeam("plot").setSuffix("");
 		board.getTeam("build").setSuffix("");
 		board.getTeam("destroy").setSuffix("");
 		board.getTeam("switching").setSuffix("");
@@ -80,6 +85,7 @@ public class PermHUD {
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
+		String plotName_player = "";
 		String build_player = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
 		String destroy_player = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
 		String switching_player = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
@@ -88,7 +94,6 @@ public class PermHUD {
 		String explosions_player = ChatColor.DARK_GREEN + "Explosions: ";
 		String firespread_player = ChatColor.DARK_GREEN + "Firespread: ";
 		String mobspawn_player = ChatColor.DARK_GREEN + "Mob Spawns: ";
-		String space2_player = ChatColor.DARK_GRAY + "";
 		String keyTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Key";
 		String keyResident_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "residents";
 		String keyFriend_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + "friends";
@@ -101,6 +106,7 @@ public class PermHUD {
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams
 		Team permsTitle = board.registerNewTeam("permsTitle");
+		Team plotName = board.registerNewTeam("plot");
 		Team build = board.registerNewTeam("build");
 		Team destroy = board.registerNewTeam("destroy");
 		Team switching = board.registerNewTeam("switching");
@@ -109,7 +115,6 @@ public class PermHUD {
 		Team explosions = board.registerNewTeam("explosions");
 		Team firespread = board.registerNewTeam("firespread");
 		Team mobspawn= board.registerNewTeam("mobspawn");
-		Team space2 = board.registerNewTeam("space2");
 		Team keyTitle = board.registerNewTeam("keyTitle");
 		Team keyResident = board.registerNewTeam("keyResident");
 		Team keyFriend = board.registerNewTeam("keyFriend");
@@ -117,6 +122,7 @@ public class PermHUD {
 		Team keyOutsider = board.registerNewTeam("keyOutsider");
 		//register players
 		permsTitle.addPlayer(Bukkit.getOfflinePlayer(permsTitle_player));
+		plotName.addPlayer(Bukkit.getOfflinePlayer(plotName_player));
 		build.addPlayer(Bukkit.getOfflinePlayer(build_player));
 		destroy.addPlayer(Bukkit.getOfflinePlayer(destroy_player));
 		switching.addPlayer(Bukkit.getOfflinePlayer(switching_player));
@@ -125,7 +131,6 @@ public class PermHUD {
 		explosions.addPlayer(Bukkit.getOfflinePlayer(explosions_player));
 		firespread.addPlayer(Bukkit.getOfflinePlayer(firespread_player));
 		mobspawn.addPlayer(Bukkit.getOfflinePlayer(mobspawn_player));
-		space2.addPlayer(Bukkit.getOfflinePlayer(space2_player));
 		keyTitle.addPlayer(Bukkit.getOfflinePlayer(keyTitle_player));
 		keyResident.addPlayer(Bukkit.getOfflinePlayer(keyResident_player));
 		keyFriend.addPlayer(Bukkit.getOfflinePlayer(keyFriend_player));
@@ -133,15 +138,15 @@ public class PermHUD {
 		keyOutsider.addPlayer(Bukkit.getOfflinePlayer(keyOutsider_player));
 		//set scores for positioning
 		obj.getScore(permsTitle_player).setScore(15);
-		obj.getScore(build_player).setScore(14);
-		obj.getScore(destroy_player).setScore(13);
-		obj.getScore(switching_player).setScore(12);
-		obj.getScore(item_player).setScore(11);
-		obj.getScore(pvp_player).setScore(10);
-		obj.getScore(explosions_player).setScore(9);
-		obj.getScore(firespread_player).setScore(8);
-		obj.getScore(mobspawn_player).setScore(7);
-		obj.getScore(space2_player).setScore(6);
+		obj.getScore(plotName_player).setScore(14);
+		obj.getScore(build_player).setScore(13);
+		obj.getScore(destroy_player).setScore(12);
+		obj.getScore(switching_player).setScore(11);
+		obj.getScore(item_player).setScore(10);
+		obj.getScore(pvp_player).setScore(9);
+		obj.getScore(explosions_player).setScore(8);
+		obj.getScore(firespread_player).setScore(7);
+		obj.getScore(mobspawn_player).setScore(6);
 		obj.getScore(keyTitle_player).setScore(5);
 		obj.getScore(keyResident_player).setScore(4);
 		obj.getScore(keyFriend_player).setScore(3);
