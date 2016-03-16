@@ -2276,3 +2276,5 @@ v0.90.0.3:
     - Added automatic cleanup of the towny\data\townblocks\ folder for flatfile databases. If a townblock file is found to be missing a town, that file will be deleted and the entry will be removed from the townblocks.txt.
 v0.91.0.0:
     - Update to release build number.        
+v0.91.0.1:
+    - Fix Event War's handling of neutrality declarations that end a war.

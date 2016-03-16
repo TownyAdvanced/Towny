@@ -508,7 +508,7 @@ public class War {
 		TownyUniverse.getDataSource().saveTown(attacker);
 	}
 
-	private void remove(Town attacker, Nation nation) throws NotRegisteredException {
+	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
 
 		townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
 		warringNations.remove(nation);
@@ -518,7 +518,7 @@ public class War {
 		checkEnd();
 	}
 
-	private void remove(Town attacker, Town town) throws NotRegisteredException {
+	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
 		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
@@ -539,7 +539,7 @@ public class War {
 		checkEnd();
 	}
 
-	private void remove(Town town) {
+	public void remove(Town town) {
 
 		// If a town is removed, is a capital, and the nation has not been removed, call remove(nation) instead.
 		try {
