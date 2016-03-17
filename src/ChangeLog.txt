@@ -2278,3 +2278,10 @@ v0.91.0.0:
     - Update to release build number.        
 v0.91.0.1:
     - Fix Event War's handling of neutrality declarations that end a war.
+v0.91.0.2:
+    - New config setting:
+        - war.event.plots.firework_on_attacked:
+			- default: true
+			- If true, fireworks will be launched at plots being attacked or healed in war every war tick.
+	- Add plot name to /plot perm hud.
+	- Change title line of /plot perm hud to be less cluttered.   
