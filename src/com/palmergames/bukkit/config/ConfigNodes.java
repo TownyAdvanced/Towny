@@ -423,7 +423,7 @@ public enum ConfigNodes {
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
 			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO",
-			"# List of blocks which can be modified on farm plots"
+			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
 			),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",

@@ -59,7 +59,7 @@ public class TownyEntityMonitorListener implements Listener {
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
 
-			// Killed by another entity?
+			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
 				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderEntity.getLastDamageCause();

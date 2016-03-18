@@ -2285,3 +2285,19 @@ v0.91.0.2:
 			- If true, fireworks will be launched at plots being attacked or healed in war every war tick.
 	- Add plot name to /plot perm hud.
 	- Change title line of /plot perm hud to be less cluttered.   
+v0.91.0.3:
+    - New plot type: Farm
+        - Make a farm plot using /plot set farm
+        - Allows killing of animals by town members.
+        - Allows planting and breaking of specific blocks set in the config.
+            - These plots still require the normal Build, Destroy, Switch, ItemUse plot permissions to allow residents/allies/outsiders to be configured.
+            - A farm plot that allows only town residents to use it would have a plot perm line like so: Perm: Build:R-- Destroy:R-- Switch:--- Item:---.
+            - If you wish to allow the ground to be tilled by hoes (by people other than the mayor/assistant,) you must add SOIL to the farm_plot_allow_blocks list in the config. 
+    - New config setting:
+        - global_town_settings.farm_plot_allow_blocks:
+			- default: LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO
+			- List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's "/plot perm" line.
+        - global_town_settings.farm_animals:
+			- default: PIG,COW,CHICKEN,SHEEP,MOOSHROOM
+			- List of animals which can be kiled on farm plots.
+			

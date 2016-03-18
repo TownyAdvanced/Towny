@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
