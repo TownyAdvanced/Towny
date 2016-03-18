@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -174,8 +175,13 @@ public class CombatUtil {
 				 * Defender is not a player so check for PvM
 				 */
 				if (defenderTB != null) {
+					if(defenderTB.getType() == TownBlockType.FARM)
+						if(TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
+							return false;
+					
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
 					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) {
+						
 						/*
 						 * Only allow the player to kill protected entities etc,
 						 * if they are from the same town
@@ -185,7 +191,6 @@ public class CombatUtil {
 						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, (byte) 0, ActionType.DESTROY))
 							return true;
 					}
-
 				}
 
 				/*
