@@ -176,7 +176,7 @@ public class CombatUtil {
 				 */
 				if (defenderTB != null) {
 					if(defenderTB.getType() == TownBlockType.FARM)
-						if(TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
+						if(TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
 							return false;
 					
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
