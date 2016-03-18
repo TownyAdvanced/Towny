@@ -337,7 +337,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "name", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef|inn|jail", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef|inn|jail|farm", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/plot set perm", "?", ""));
 					}
 

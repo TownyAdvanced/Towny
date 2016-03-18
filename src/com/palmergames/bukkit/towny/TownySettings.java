@@ -2224,8 +2224,6 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
 	}
 
-	// /////////////////////////////////////
-
 	@Deprecated
 	public static boolean isValidRegionName(String name) {
 
@@ -2259,5 +2257,13 @@ public class TownySettings {
 	
 	public static boolean isRefundNationDisbandLowResidents() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
+	}
+	
+	public static List<String> getFarmPlotBlocks() {
+		return getStrArr(ConfigNodes.GTOWN_FARM_PLOT_ALLOW_BLOCKS);
+	}
+	
+	public static List<String> getFarmAnimals() {
+		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
 	}
 }

@@ -38,17 +38,19 @@ public enum TownBlockType {
 	INN(6, "Inn", "I") {	//Allows use of beds outside your own plot.
 	},
 	JAIL(7, "Jail", "J") {	//Enables setting the jail spawn.		
+	},
+	FARM(8, "Farm", "F") {	//Follows wilderness protection settings, but town owned.
 	}
 
 	// These are subject to change:
 /*
- * PUBLIC(8, "") { // Will have it's own permission set
+ * PUBLIC(9, "") { // Will have it's own permission set
  * },
  * 
- * MINE(9, "") { // Will have it's own permission set within a y range
+ * MINE(10, "") { // Will have it's own permission set within a y range
  * },
  * 
- * HOTEL(10, "") { // Will stack multiple y-ranges and function like a micro town
+ * HOTEL(11, "") { // Will stack multiple y-ranges and function like a micro town
  * },
  */
 	;

@@ -420,6 +420,16 @@ public enum ConfigNodes {
 			"true",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
 			),
+	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
+			"global_town_settings.farm_plot_allow_blocks",
+			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO",
+			"# List of blocks which can be modified on farm plots"
+			),
+	GTOWN_FARM_ANIMALS(
+			"global_town_settings.farm_animals",
+			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
+			"# List of animals which can be kiled on farm plots"
+			),
 	PLUGIN(
 			"plugin",
 			"",
