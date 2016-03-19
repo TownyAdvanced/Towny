@@ -2300,4 +2300,4 @@ v0.91.0.3:
         - global_town_settings.farm_animals:
 			- default: PIG,COW,CHICKEN,SHEEP,MOOSHROOM
 			- List of animals which can be kiled on farm plots.
-			
+	- Fix /town spawn error when not in a town. 
