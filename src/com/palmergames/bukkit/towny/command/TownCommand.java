@@ -1343,6 +1343,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Set target town and affiliated messages.
 			if ((split.length == 0) || ((split.length > 0) && (outpost))) {
 
+				if(!resident.hasTown()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
+					return;
+				}
+				
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
