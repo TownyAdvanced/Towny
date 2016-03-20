@@ -372,6 +372,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("delete")) {
 
 				TownyUniverse.getDataSource().removeTown(town);
+				TownyMessaging.sendMessage(sender, town + " deleted.");
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
