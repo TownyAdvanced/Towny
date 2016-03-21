@@ -403,6 +403,33 @@ public enum ConfigNodes {
 			"true",
 			"# Enables the [~Home] message.",
 			"# If false it will make it harder for enemies to find the home block during a war"),
+	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
+			"global_town_settings.required_number_residents_join_nation",
+			"0",
+			"# The required number of residents in a town to join a nation",
+			"# If the number is 0, towns will not require a certain amount of residents to join a nation"
+			),
+	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION(
+			"global_town_settings.required_number_residents_create_nation",
+			"0",
+			"# The required number of residents in a town to create a nation",
+			"# If the number is 0, towns will not require a certain amount of residents to create a nation"
+			),
+	GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS(
+			"global_town_settings.refund_disband_low_residents",
+			"true",
+			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
+			),
+	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
+			"global_town_settings.farm_plot_allow_blocks",
+			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO",
+			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
+			),
+	GTOWN_FARM_ANIMALS(
+			"global_town_settings.farm_animals",
+			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
+			"# List of animals which can be kiled on farm plots"
+			),
 	PLUGIN(
 			"plugin",
 			"",
@@ -1128,6 +1155,10 @@ public enum ConfigNodes {
 			"war.event.plots.healable",
 			"true",
 			"# If true, nation members and allies can regen health on plots during war."),
+	WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED(
+			"war.event.plots.firework_on_attacked",
+			"true",				
+			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
 			"false",

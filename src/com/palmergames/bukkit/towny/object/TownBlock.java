@@ -226,7 +226,12 @@ public class TownBlock {
 			
 		case WILDS:
 			
-			setPermissions("denyAll");
+			if (this.hasResident()) {
+				setPermissions(this.resident.permissions.toString());
+			} else {
+				setPermissions(this.town.permissions.toString());
+			}
+			
 			break;
 		
 		case SPLEEF:
@@ -242,9 +247,17 @@ public class TownBlock {
 		case JAIL:
 			
 			setPermissions("denyAll");
+			break;
+		
+		case FARM:
+			
+			if (this.hasResident()) {
+				setPermissions(this.resident.permissions.toString());
+			} else {
+				setPermissions(this.town.permissions.toString());
+			}
 			
 			break;
-			
 		}
 		
 		// Set the changed status.

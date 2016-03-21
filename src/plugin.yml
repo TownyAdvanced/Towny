@@ -1,7 +1,7 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.90.0.2
-author: Shade, Modified by FuzzeWuzze. Forked by ElgarL
+version: 0.91.0.3
+author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
@@ -228,6 +228,7 @@ permissions:
             towny.command.plot.notforsale: true
             towny.command.plot.forsale: true
             towny.command.plot.perm: true
+            towny.command.plot.perm.hud: true
             towny.command.plot.toggle.*: true
             towny.command.plot.set.*: true
             towny.command.plot.clear: true
@@ -251,6 +252,8 @@ permissions:
             towny.command.plot.set.shop: true
             towny.command.plot.set.embassy: true
             towny.command.plot.set.arena: true
+            towny.command.plot.set.farm: true
+            towny.command.plot.set.inn: true
             towny.command.plot.set.wilds: true
             towny.command.plot.set.spleef: true
             towny.command.plot.set.inn: true
@@ -353,6 +356,7 @@ permissions:
             towny.command.towny.universe: true
             towny.command.towny.version: true
             towny.command.towny.war: true
+            towny.command.towny.war.hud: true
             towny.command.towny.spy: true
     
     # TownyWorld command permissions

@@ -1513,6 +1513,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_HEALABLE);
 	}
+	
+	public static boolean getPlotsFireworkOnAttacked() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED);
+	}
 
 	public static double getWartimeDeathPrice() {
 
@@ -2219,8 +2224,6 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
 	}
 
-	// /////////////////////////////////////
-
 	@Deprecated
 	public static boolean isValidRegionName(String name) {
 
@@ -2242,5 +2245,25 @@ public class TownySettings {
 	public static boolean isDisallowOneWayAlliance() {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
+	}
+	
+	public static int getNumResidentsJoinNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);
+	}
+	
+	public static int getNumResidentsCreateNation() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION);
+	}
+	
+	public static boolean isRefundNationDisbandLowResidents() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
+	}
+	
+	public static List<String> getFarmPlotBlocks() {
+		return getStrArr(ConfigNodes.GTOWN_FARM_PLOT_ALLOW_BLOCKS);
+	}
+	
+	public static List<String> getFarmAnimals() {
+		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
 	}
 }

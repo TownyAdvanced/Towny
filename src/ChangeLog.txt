@@ -2253,7 +2253,51 @@ v0.90.0.2:
     - Courtesy of andrewyunt:
         - Questioner integration for nation alliances.
         - Turn on by setting in the config: war.disallow_one_way_alliance, which defaults to false.
-        - When a king set another nation as an alliance, the 2nd king will receive a message from questioner asking if the approve of this relationship.
+        - When a king sets another nation as an alliance, the 2nd king will receive a message from questioner asking if they approve of this relationship.
         - If the 2nd king accepts, both nations will treat each other as an ally.
-        - new alias command for /n toggle neutral: /n toggle peaceful.
+        - new alias command for /n toggle neutral: /n toggle peaceful
         - /nation screen and ingame messages which mention 'neutral' now say 'peaceful'.
+v0.90.0.3:
+    - Courtesy of andrewyunt:
+        - Optional residentcount requirements for creating/joining/maintaining nations.
+        - New Config settings:
+            - global_town_settings.required_number_residents_join_nation
+              - default: 0
+              - The required number of residents in a town to join a nation.
+              - If the number is 0, towns will not require a certain amount of residents to join a nation.
+            - global_town_settings.required_number_residents_create_nation
+              - default: 0 
+              - The required number of residents in a town to create a nation.
+              - If the number is 0, towns will not require a certain amount of residents to create a nation.
+            - global_town_settings.refund_disband_low_residents
+              - default: true
+              - If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation.        
+    - Added automatic cleanup to the townblocks.txt file for flatfile databases. If a townblock is recorded in the townblocks.txt but does not have a corresponding townblocks\world\ file then the townblock is removed from the townblocks.txt.
+    - Added automatic cleanup of the towny\data\townblocks\ folder for flatfile databases. If a townblock file is found to be missing a town, that file will be deleted and the entry will be removed from the townblocks.txt.
+v0.91.0.0:
+    - Update to release build number.        
+v0.91.0.1:
+    - Fix Event War's handling of neutrality declarations that end a war.
+v0.91.0.2:
+    - New config setting:
+        - war.event.plots.firework_on_attacked:
+			- default: true
+			- If true, fireworks will be launched at plots being attacked or healed in war every war tick.
+	- Add plot name to /plot perm hud.
+	- Change title line of /plot perm hud to be less cluttered.   
+v0.91.0.3:
+    - New plot type: Farm
+        - Make a farm plot using /plot set farm
+        - Allows killing of animals by town members.
+        - Allows planting and breaking of specific blocks set in the config.
+            - These plots still require the normal Build, Destroy, Switch, ItemUse plot permissions to allow residents/allies/outsiders to be configured.
+            - A farm plot that allows only town residents to use it would have a plot perm line like so: Perm: Build:R-- Destroy:R-- Switch:--- Item:---.
+            - If you wish to allow the ground to be tilled by hoes (by people other than the mayor/assistant,) you must add SOIL to the farm_plot_allow_blocks list in the config. 
+    - New config setting:
+        - global_town_settings.farm_plot_allow_blocks:
+			- default: LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO
+			- List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's "/plot perm" line.
+        - global_town_settings.farm_animals:
+			- default: PIG,COW,CHICKEN,SHEEP,MOOSHROOM
+			- List of animals which can be kiled on farm plots.
+			

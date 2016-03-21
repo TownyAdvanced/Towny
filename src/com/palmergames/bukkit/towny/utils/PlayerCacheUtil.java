@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * Groups all the cache status and permissions in one place.
@@ -434,6 +435,11 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
+					} else if (townBlock.getType() == TownBlockType.FARM) {		
+						
+						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+							return true;
+						
 					} else {
 						return true;
 					}
@@ -454,6 +460,11 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
+					} else if (townBlock.getType() == TownBlockType.FARM) {		
+						
+						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+							return true;
+						
 					} else {
 						return true;
 					}
@@ -475,6 +486,11 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
+					} else if (townBlock.getType() == TownBlockType.FARM) {		
+						
+						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+							return true;
+						
 					} else {
 						return true;
 					}
@@ -509,6 +525,11 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
+				} else if (townBlock.getType() == TownBlockType.FARM) {		
+					
+					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+						return true;
+					
 				} else {
 					return true;
 				}
@@ -539,6 +560,11 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
+				} else if (townBlock.getType() == TownBlockType.FARM) {		
+					
+					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+						return true;
+					
 				} else {
 					return true;
 				}
@@ -566,6 +592,11 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
+				} else if (townBlock.getType() == TownBlockType.FARM) {		
+					
+					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
+						return true;
+					
 				} else {
 					return true;
 				}

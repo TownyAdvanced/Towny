@@ -339,7 +339,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "이름", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "초기화", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "상점|대사관|전장|야생|보호구역|여관|감옥", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/토지 설정", "상점|대사관|전장|야생|보호구역|여관|감옥|농장", ""));
 						player.sendMessage(ChatTools.formatCommand("", "/토지 설정 권한", "?", ""));
 					}
 
