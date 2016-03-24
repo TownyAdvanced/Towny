@@ -454,9 +454,10 @@ public class War {
 	private int getHealth(TownBlock townBlock, int healthChange) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int hp = warZone.get(worldCoord) + healthChange;
-		if (townBlock.isHomeBlock() && hp > TownySettings.getWarzoneHomeBlockHealth())
+		boolean isHomeBlock = townBlock.isHomeBlock();
+		if (isHomeBlock && hp > TownySettings.getWarzoneHomeBlockHealth())
 			return TownySettings.getWarzoneHomeBlockHealth();
-		else if (hp > TownySettings.getWarzoneTownBlockHealth())
+		else if (!isHomeBlock && hp > TownySettings.getWarzoneTownBlockHealth())
 			return TownySettings.getWarzoneTownBlockHealth();
 		return hp;
 	}
