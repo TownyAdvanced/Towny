@@ -204,8 +204,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
 				towny_war.add("No hud for console!");
-			else if (args[0].equalsIgnoreCase("hud") && p != null)
-				plugin.getHUDManager().toggleWarHUD(p);
+			else if (args[0].equalsIgnoreCase("hud") && p != null) {
+				if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
+					plugin.getHUDManager().toggleWarHUD(p);
+				} else {
+					TownyMessaging.sendErrorMsg(p, TownySettings.getLangString("msg_err_command_disable"));
+				}
+			}
 		}
 
 		return TownyUniverse.isWarTime();

@@ -116,6 +116,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_PLOT_NOTFORSALE("towny.command.plot.notforsale"),
 		TOWNY_COMMAND_PLOT_FORSALE("towny.command.plot.forsale"),
 		TOWNY_COMMAND_PLOT_PERM("towny.command.plot.perm"),
+		TOWNY_COMMAND_PLOT_PERM_HUD("towny.command.plot.perm.hud"),
 		
 		TOWNY_COMMAND_PLOT_TOGGLE("towny.command.plot.toggle.*"),
 			TOWNY_COMMAND_PLOT_TOGGLE_PVP("towny.command.plot.toggle.pvp"),
@@ -207,6 +208,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNY_UNIVERSE("towny.command.towny.universe"),
 	TOWNY_COMMAND_TOWNY_VERSION("towny.command.towny.version"),
 	TOWNY_COMMAND_TOWNY_WAR("towny.command.towny.war"),
+	TOWNY_COMMAND_TOWNY_WAR_HUD("towny.command.towny.war.hud"),
 	TOWNY_COMMAND_TOWNY_SPY("towny.command.towny.spy"),
 	
 	/*

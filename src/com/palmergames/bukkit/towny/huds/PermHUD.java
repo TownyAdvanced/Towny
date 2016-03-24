@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class PermHUD {
 	
-	private static final String PLOTNAME_TITLE = ChatColor.DARK_GREEN + "Plot: " + ChatColor.GRAY;
+	private static final String PLOTNAME_TITLE = "Plot: " + ChatColor.GRAY;
 
 	public static void updatePerms (Player p) {
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
@@ -86,7 +86,7 @@ public class PermHUD {
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
-		String plotName_player = "";
+		String plotName_player = ChatColor.DARK_GREEN + "";
 		String build_player = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
 		String destroy_player = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
 		String switching_player = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
