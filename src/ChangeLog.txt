@@ -2302,3 +2302,6 @@ v0.91.0.3:
 			- List of animals which can be kiled on farm plots.
 	- Fix /town spawn error when not in a town. 
 	- Add confirmation message to /ta town delete TOWNNAME.
+	- Fix missing permission nodes for war and plot perm huds.
+	- Fix Negative Upkeep not working at all.
+	- Fix plot perm hud colour. 
