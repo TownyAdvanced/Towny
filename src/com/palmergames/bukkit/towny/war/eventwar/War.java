@@ -12,7 +12,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -233,8 +235,17 @@ public class War {
 			if (player != null)
 				sendStats(player);
 		
-		// Toggle the war huds off for all players
-		plugin.getHUDManager().toggleAllWarHUD();
+		// Toggle the war huds off for all players (This method is called from an async task so 
+		// we create a sync task to use the scoreboard api)
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				plugin.getHUDManager().toggleAllWarHUD();
+			}
+			
+		}.runTask(plugin);
+		
 
 		double halfWinnings;
 		try {
@@ -443,9 +454,10 @@ public class War {
 	private int getHealth(TownBlock townBlock, int healthChange) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int hp = warZone.get(worldCoord) + healthChange;
-		if (townBlock.isHomeBlock() && hp > TownySettings.getWarzoneHomeBlockHealth())
+		boolean isHomeBlock = townBlock.isHomeBlock();
+		if (isHomeBlock && hp > TownySettings.getWarzoneHomeBlockHealth())
 			return TownySettings.getWarzoneHomeBlockHealth();
-		else if (hp > TownySettings.getWarzoneTownBlockHealth())
+		else if (!isHomeBlock && hp > TownySettings.getWarzoneTownBlockHealth())
 			return TownySettings.getWarzoneTownBlockHealth();
 		return hp;
 	}
