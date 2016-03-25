@@ -428,7 +428,7 @@ public enum ConfigNodes {
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
-			"# List of animals which can be kiled on farm plots"
+			"# List of animals which can be kiled on farm plots by town residents."
 			),
 	PLUGIN(
 			"plugin",
