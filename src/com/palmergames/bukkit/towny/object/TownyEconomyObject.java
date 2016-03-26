@@ -54,7 +54,7 @@ public class TownyEconomyObject extends TownyObject {
 				if (amount > 0) {
 					return TownyEconomyHandler.subtract(getEconomyName(), amount, getBukkitWorld());
 				} else {
-					return TownyEconomyHandler.add(getEconomyName(), amount, getBukkitWorld());
+					return TownyEconomyHandler.add(getEconomyName(), Math.abs(amount), getBukkitWorld());
 				}
 		}
 		return false;

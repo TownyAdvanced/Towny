@@ -2300,4 +2300,15 @@ v0.91.0.3:
         - global_town_settings.farm_animals:
 			- default: PIG,COW,CHICKEN,SHEEP,MOOSHROOM
 			- List of animals which can be kiled on farm plots.
-			
+	- Fix /town spawn error when not in a town. 
+	- Add confirmation message to /ta town delete TOWNNAME.
+	- Fix missing permission nodes for war and plot perm huds.
+	- Fix Negative Upkeep not working at all.
+	- Fix plot perm hud colour. 
+	- Fix hud errors when war ends.
+	- Fix plot perm hud title.
+	- Fix homeblock health in war.
+	- Fix farm plots not limiting animal kills to residents.
+v0.91.1.0:
+    - Update to release build number.
+    

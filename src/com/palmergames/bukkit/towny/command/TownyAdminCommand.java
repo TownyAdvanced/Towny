@@ -372,6 +372,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("delete") || split[1].equalsIgnoreCase("삭제")) {
 
 				TownyUniverse.getDataSource().removeTown(town);
+				TownyMessaging.sendMessage(sender, town + " 이(가) 삭제되었습니다.");
 
 			} else if (split[1].equalsIgnoreCase("rename") || split[1].equalsIgnoreCase("이름변경")) {
 

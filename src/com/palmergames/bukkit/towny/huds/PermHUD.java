@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.huds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -16,12 +17,13 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class PermHUD {
 	
-	private static final String PLOTNAME_TITLE = ChatColor.DARK_GREEN + "Plot: " + ChatColor.GRAY;
+	private static final String PLOTNAME_TITLE = "Plot: " + ChatColor.GRAY;
 
 	public static void updatePerms (Player p) {
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
@@ -79,14 +81,24 @@ public class PermHUD {
 		board.getTeam("explosions").setSuffix("");
 		board.getTeam("firespread").setSuffix("");
 		board.getTeam("mobspawn").setSuffix("");
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Wilderness");
+		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+	}
+	
+	private static String getFormattedWildernessName(World w) {
+		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
+		try {
+			wildernessName.append(TownyUniverse.getDataSource().getWorld(w.getName()).getUnclaimedZoneName());
+		} catch (NotRegisteredException e) {
+			wildernessName.append("Unknown");
+		}
+		return wildernessName.toString();
 	}
 
 	@SuppressWarnings("deprecation")
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
 		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
-		String plotName_player = "";
+		String plotName_player = ChatColor.DARK_GREEN + "";
 		String build_player = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
 		String destroy_player = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
 		String switching_player = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
