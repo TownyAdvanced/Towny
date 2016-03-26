@@ -20,6 +20,8 @@ Do not say "latest".
 
 
 ### Please use Pastebin.com to link the following files:
+
+Skipping these files is not an option. It is the easiest way to diagnose an issue ticket properly. If you do skip this step then your ticket will most likely be deleted and you will be asked to resubmit.
 1. Your full server startup from the logs\latest.log :
 2. Your Towny config.yml (if using MySQL please remove password,) :
 3. Your townyperms.yml :
@@ -30,5 +32,3 @@ Do not say "latest".
 (optional) If this is to do with chat,
 5. Your chatconfig.yml :
 6. Your channels.yml :
-
-### Skipping these files is not an option. It is the easiest way to diagnose an issue ticket properly. If you do skip this step then your ticket will most likely be deleted and you will be asked to resubmit.
