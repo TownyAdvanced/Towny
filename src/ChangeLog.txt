@@ -2311,4 +2311,6 @@ v0.91.0.3:
 	- Fix farm plots not limiting animal kills to residents.
 v0.91.1.0:
     - Update to release build number.
+v0.91.1.1:
+    - Fix the jail command's permission node.
     
