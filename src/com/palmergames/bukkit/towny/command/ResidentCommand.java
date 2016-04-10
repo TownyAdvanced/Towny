@@ -127,7 +127,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			
 			} else if (split[0].equalsIgnoreCase("jail") || split[0].equalsIgnoreCase("감옥")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (!TownySettings.isAllowingBail()) {
