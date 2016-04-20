@@ -20,4 +20,4 @@ http://creativecommons.org/licenses/by-nc-nd/3.0/
 
 * Travis -> https://travis-ci.org/Neder/Towny
 * Download Travis Builds
-  -> http://ocw5902.w.pw/Towny
+  -> http://kosaki.neder.me/towny
