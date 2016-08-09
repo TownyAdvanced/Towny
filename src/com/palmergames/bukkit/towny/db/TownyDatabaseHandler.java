@@ -263,8 +263,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (resident != null)
 			saveResident(resident);
-		if (town != null)
-			saveTown(town);
+//		if (town != null)         		- Removed in 0.91.1.2, possibly fixing SQL database corruption 
+//		    saveTown(town);				  occuring when towns are deleted. 
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
