@@ -429,10 +429,51 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	}
 
+    
+    private void removeTownBlocks2(Town town)
+    {
+        for (TownBlock townBlock : new ArrayList<TownBlock>(town.getTownBlocks())){
+            Resident resident = null;
+            Town town2 = null;
+            try {
+                resident = townBlock.getResident();
+            } catch (NotRegisteredException e) {
+            }
+            try {
+                town2 = townBlock.getTown();
+            } catch (NotRegisteredException e) {
+            }
+            TownyWorld world = townBlock.getWorld();
+            world.removeTownBlock(townBlock);
+
+            saveWorld(world);
+            deleteTownBlock(townBlock);
+
+            saveTownBlockList();
+
+            if (resident != null)
+                saveResident(resident);
+
+            if (townBlock.getWorld().isUsingPlotManagementDelete())
+                TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
+
+            // Move the plot to be restored
+            if (townBlock.getWorld().isUsingPlotManagementRevert()) {
+                PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
+                if (plotData != null && !plotData.getBlockList().isEmpty()) {
+                    TownyRegenAPI.addPlotChunk(plotData, true);
+                }
+            }
+
+            universe.setChangedNotify(REMOVE_TOWN_BLOCK);
+        }
+        
+    }
+    
 	@Override
 	public void removeTown(Town town) {
 
-		removeTownBlocks(town);
+        removeTownBlocks2(town);
 
 		List<Resident> toSave = new ArrayList<Resident>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
@@ -446,7 +487,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			// Clear all town blocks so the sign removal triggers.
-			removeTownBlocks(town);
+			removeTownBlocks2(town);
 
 			town.clear();
 		} catch (EmptyNationException e) {
