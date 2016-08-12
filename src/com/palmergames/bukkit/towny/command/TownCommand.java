@@ -766,6 +766,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							String oldMayor = town.getMayor().getName();
 							Resident newMayor = TownyUniverse.getDataSource().getResident(split[1]);
 							town.setMayor(newMayor);
+							TownyPerms.assignPermissions(TownyUniverse.getDataSource().getResident(oldMayor), null);
 							plugin.deleteCache(oldMayor);
 							plugin.deleteCache(newMayor.getName());
 							TownyMessaging.sendTownMessage(town, TownySettings.getNewMayorMsg(newMayor.getName()));
