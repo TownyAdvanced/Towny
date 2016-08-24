@@ -255,9 +255,10 @@ public class TownyEntityListener implements Listener {
 	/**
 	 * 
 	 * @param event
+	 * @throws NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
+	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -291,9 +292,12 @@ public class TownyEntityListener implements Listener {
 						event.setCancelled(true);
 				}
 
-			// remove from towns if in the list and set to remove
+			if (!townyWorld.hasTownBlock(coord))
+				return;
+			
+			TownBlock townBlock = townyWorld.getTownBlock(coord);
 			try {
-				TownBlock townBlock = townyWorld.getTownBlock(coord);
+				
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
 						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesTown())))) {
@@ -310,6 +314,7 @@ public class TownyEntityListener implements Listener {
 					}
 				}
 			} catch (TownyException x) {
+				
 			}
 		}
 	}

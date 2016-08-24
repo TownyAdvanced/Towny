@@ -75,6 +75,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					continue;
 
 				Coord coord = Coord.parseCoord(livingEntityLoc);
+				
+
+				if (!townyWorld.hasTownBlock(coord))
+					continue;
 
 				try {
 					TownBlock townBlock = townyWorld.getTownBlock(coord);
