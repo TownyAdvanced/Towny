@@ -161,6 +161,33 @@ public class TownyEconomyHandler {
 
 		return null;
 	}
+	
+	/**
+	 * Check if account exists
+	 * 
+	 * @param accountName
+	 * @return
+	 */
+	public static boolean hasEconomyAccount(String accountName) {
+
+		switch (Type) {
+
+		case ICO5:
+			return iConomy.hasAccount(accountName);
+
+		case REGISTER:
+			return Methods.getMethod().hasAccount(accountName);
+			
+		case VAULT:
+			return vaultEconomy.hasAccount(accountName);
+			
+		default:
+			break;
+
+		}
+
+		return false;
+	}
 
 	/**
 	 * Attempt to delete the economy account.

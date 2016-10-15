@@ -263,8 +263,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (resident != null)
 			saveResident(resident);
-		if (town != null)
-			saveTown(town);
+//		if (town != null)         		- Removed in 0.91.1.2, possibly fixing SQL database corruption 
+//		    saveTown(town);				  occuring when towns are deleted. 
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
@@ -824,8 +824,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			boolean isJailed = false;
 			int JailSpawn = 0;
 			
+			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(filteredName);
+			
 			//get data needed for resident
-			if(TownySettings.isUsingEconomy()){
+			if(transferBalance && TownySettings.isUsingEconomy()){
 				try {
 					balance = resident.getHoldingBalance();
 					resident.removeAccount();
@@ -858,7 +860,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getResidentMap().put(filteredName.toLowerCase(), resident);
 			
 			//add everything back to the resident
-			if (TownySettings.isUsingEconomy()) {
+			if (transferBalance && TownySettings.isUsingEconomy()) {
 				//TODO
 				try {
 					resident.setBalance(balance, "Rename Player - Transfer to new account");

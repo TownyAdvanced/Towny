@@ -2313,4 +2313,16 @@ v0.91.1.0:
     - Update to release build number.
 v0.91.1.1:
     - Fix the jail command's permission node.
-    
+v0.91.1.2:
+    - Portanna's fix for SQL databases corrupting when towns are deleted.
+        - IMPORTANT: this is a modification of the TownyDatabaseHandler that affects flatfile and SQL databases.
+        - MAKE BACKUPS BEFORE USING THIS BUILD, VERY LIMITED TESTING HAS BEEN DONE.   
+    - ezeiger92's fix:
+        - Fix for name changing with Vault economies that already support UUIDs 	
+v0.91.1.3:
+    - Fix old mayors having their mayor permissions when they set a new mayor.  
+v0.91.1.4:
+    - Fix for custom language files not loading.
+    - Possible fix/enabling of special characters in language files, including but not limited to accents and umlauts.
+v0.91.1.5: 
+    - Performance improvements in mob-removal feature. Thanks to Alekso56 for pointing out the issue.

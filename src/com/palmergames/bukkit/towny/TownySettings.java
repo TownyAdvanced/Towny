@@ -236,9 +236,11 @@ public class TownySettings {
 			newLanguage = new CommentedConfiguration(file);
 			try {
 				newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
-			} catch (InvalidConfigurationException e) {
+			} catch (IOException e) {
 				TownyMessaging.sendMsg("Custom language file detected, not updating.");
 				return;
+			} catch (InvalidConfigurationException e) {
+				TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
 			}
 			String resVersion = newLanguage.getString("version");			
 			String langVersion = TownySettings.getLangString("version");
