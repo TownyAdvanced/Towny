@@ -2326,3 +2326,5 @@ v0.91.1.4:
     - Possible fix/enabling of special characters in language files, including but not limited to accents and umlauts.
 v0.91.1.5: 
     - Performance improvements in mob-removal feature. Thanks to Alekso56 for pointing out the issue.
+v0.91.1.6: 
+    - Make /townyadmin 'panel' require towny.admin permission node.   

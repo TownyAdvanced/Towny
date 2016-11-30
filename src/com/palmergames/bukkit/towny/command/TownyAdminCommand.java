@@ -116,6 +116,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public boolean parseTownyAdminCommand(String[] split) throws TownyException {
 
 		if (split.length == 0) {
+			if (getSender()==player && !TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			buildTAPanel();
 			for (String line : ta_panel) {
 				sender.sendMessage(line);
