@@ -454,25 +454,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setPVP(!town.isPVP());
-				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), "마을", town.isPVP() ? "활성" : "비활성"));
+				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? "활성" : "비활성"));
 
 			} else if (split[0].equalsIgnoreCase("explosion") || split[0].equalsIgnoreCase("폭발")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setBANG(!town.isBANG());
-				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_expl"), "마을", town.isBANG() ? "활성" : "비활성"));
+				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_expl"), town.getName(), town.isBANG() ? "활성" : "비활성"));
 
 			} else if (split[0].equalsIgnoreCase("fire") || split[0].equalsIgnoreCase("불번짐")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setFire(!town.isFire());
-				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_fire"), "마을", town.isFire() ? "활성" : "비활성"));
+				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_fire"), town.getName(), town.isFire() ? "활성" : "비활성"));
 
 			} else if (split[0].equalsIgnoreCase("mobs") || split[0].equalsIgnoreCase("몹스폰")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				town.setHasMobs(!town.hasMobs());
-				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_mobs"), "마을", town.hasMobs() ? "활성" : "비활성"));
+				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_mobs"), town.getName(), town.hasMobs() ? "활성" : "비활성"));
 
 			} else if (split[0].equalsIgnoreCase("taxpercent") || split[0].equalsIgnoreCase("퍼센트세금")) {
 				town.setTaxPercentage(!town.isTaxPercentage());
