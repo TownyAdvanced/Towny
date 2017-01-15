@@ -2328,3 +2328,5 @@ v0.91.1.5:
     - Performance improvements in mob-removal feature. Thanks to Alekso56 for pointing out the issue.
 v0.91.1.6: 
     - Make /townyadmin 'panel' require towny.admin permission node.   
+v0.91.1.7:
+    - Made the /t toggle commands display the town name rather than just "Town".
