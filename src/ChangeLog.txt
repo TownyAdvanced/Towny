@@ -2332,3 +2332,6 @@ v0.91.1.7:
     - Made the /t toggle commands display the town name rather than just "Town".
 v0.91.1.8:
     - Fixed displaying of economy plugin when using Vault during startup.
+v0.91.2.0:
+    - Bump version number to release number.
+    - (Probably) marks the last version made using MC 1.8.5. After this point you must MC 1.9.2 or newer. 
