@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -88,6 +89,58 @@ public class PlayerCacheUtil {
 		}
 	}
 
+	/**
+	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
+	 * at this location for the specified item id.
+	 * 
+	 * Generates the cache if it doesn't exist.
+	 * 
+	 * @param player
+	 * @param location
+	 * @param material
+	 * @param action
+	 * @return true if the player has permission.
+	 */
+	public static boolean getCachePermission(Player player, Location location, Material material, ActionType action) {
+
+		WorldCoord worldCoord;
+		Integer blockId = null;
+		byte data = 0;
+		getIDfromMaterial(material, blockId);
+
+		try {
+			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
+			PlayerCache cache = plugin.getCache(player);
+			cache.updateCoord(worldCoord);
+
+			TownyMessaging.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(blockId, data, action));
+			return cache.getCachePermission(blockId, data, action); // Throws NullPointerException if the cache is empty
+
+		} catch (NullPointerException e) {
+			// New or old cache permission was null, update it
+
+			worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
+
+			TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
+			triggerCacheCreate(player, location, worldCoord, status, blockId, data, action);
+
+			PlayerCache cache = plugin.getCache(player);
+			cache.updateCoord(worldCoord);
+			
+			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
+
+			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + ":" + status.name() + " = " + cache.getCachePermission(blockId, data, action));
+			return cache.getCachePermission(blockId, data, action);
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static void getIDfromMaterial(Material material, Integer id) {
+		id = material.getId();
+	    return;	     
+	}
+
+		
 	/**
 	 * Generate a new cache for this player/action.
 	 * 

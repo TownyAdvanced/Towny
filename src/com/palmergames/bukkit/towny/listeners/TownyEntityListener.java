@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,8 +12,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LingeringPotion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -29,6 +32,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -146,7 +150,7 @@ public class TownyEntityListener implements Listener {
 		
 		Entity entity = event.getEntity();		
 		
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals) {
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
 			String damager = event.getDamager().getType().name();
 
 			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER") {
@@ -154,7 +158,6 @@ public class TownyEntityListener implements Listener {
 				try {
 					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -168,7 +171,6 @@ public class TownyEntityListener implements Listener {
 				try {
 					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			Object remover = event.getDamager();
@@ -191,8 +193,84 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
+	
 	/**
-	 * Prevent potion damage on players in non PVP areas
+	 * Prevent lingering potion damage on players in non PVP areas
+	 * 
+	 *  @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
+
+		LingeringPotion potion = event.getEntity();		
+		Location loc = potion.getLocation();		
+		TownyWorld townyWorld = null;
+		
+		try {
+			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
+		} catch (NotRegisteredException e) {
+			// Failed to fetch a world
+			return;
+		}
+		
+		float radius = event.getAreaEffectCloud().getRadius();
+		List<Block> blocks = new ArrayList<Block>();
+		
+		for(double x = loc.getX() - radius; x < loc.getX() + radius; x++ ) {
+			for(double z = loc.getZ() - radius; z < loc.getZ() + radius; z++ ) {
+				Location loc2 = new Location(potion.getWorld(), x, loc.getY(), z);
+			    Block b = loc2.getBlock();
+			    if (b.getType().equals(Material.AIR)) blocks.add(b);
+			}		   
+		}
+		
+		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
+		boolean detrimental = false;
+
+		/*
+		 * List of potion effects blocked from PvP.
+		 */
+		List<String> prots = TownySettings.getPotionTypes();
+				
+		for (PotionEffect effect : effects) {
+
+			/*
+			 * Check to see if any of the potion effects are protected.
+			 */
+			if (prots.contains(effect.getType().getName())) {
+				detrimental = true;
+			}
+		}
+
+		Object source = potion.getShooter();
+
+		if (!(source instanceof Entity))
+			return;	// TODO: prevent damage from dispensers
+
+		for (Block block : blocks) {
+						
+			Coord coord = Coord.parseCoord(block.getLocation());
+			if (townyWorld.hasTownBlock(coord)) {
+			
+				TownBlock townBlock = null;
+				try {
+					townBlock = townyWorld.getTownBlock(coord);
+				} catch (NotRegisteredException e) {
+					e.printStackTrace();
+				}
+				
+				// Not Wartime
+				if (!TownyUniverse.isWarTime()) 
+					if (CombatUtil.preventPvP(townyWorld, townBlock) && detrimental) {
+						event.setCancelled(true);
+						break;
+					}				
+			}			
+		}	
+	}	
+	
+	/**
+	 * Prevent splash potion damage on players in non PVP areas
 	 * 
 	 * @param event
 	 */

@@ -2334,4 +2334,16 @@ v0.91.1.8:
     - Fixed displaying of economy plugin when using Vault during startup.
 v0.91.2.0:
     - Bump version number to release number.
-    - (Probably) marks the last version made using MC 1.8.5. After this point you must MC 1.9.2 or newer. 
+    - (Probably) marks the last version made using MC 1.8.5. After this point you must MC 1.9.2 or newer.
+v0.91.2.1:
+	- Bukkit.jar used for development set to 1.9.2
+ 	- Cancel bad lingering potions from being used in plots without pvp.
+ 	- REQUIRED CONFIG ADDITIONS for existing installs:
+ 	  - under town_mob_removal_entities: add Shulker, 
+ 	  - they are not considered Monsters and if you want them to not teleport into town they must be added to the config.
+ 	  - new installs will have Shulker as a default.
+ 	- API Addition: 
+ 	  - Added getCachePermission(Player player, Location location, Material material, ActionType action)
+ 	- Add EnderCrystal to the group of entities which are protected in a town.  
+ 	- Fix CraftPlayer Error due to Scoreboards when players quit the server.
+ 	- Bukkit.jar used for development set to 1.9.4

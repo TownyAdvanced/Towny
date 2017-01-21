@@ -212,11 +212,8 @@ public class Towny extends JavaPlugin {
 
 	public boolean load() {
 
-		// TownyEconomyHandler.setupEconomy();
-
 		if (!townyUniverse.loadSettings()) {
 			setError(true);
-			// getServer().getPluginManager().disablePlugin(this);
 			return false;
 		}
 

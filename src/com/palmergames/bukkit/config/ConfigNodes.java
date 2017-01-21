@@ -636,11 +636,11 @@ public enum ConfigNodes {
 			"# 54 - chest ...etc"),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime",
+			"Monster,WaterMob,Flying,Slime,Shulker",
 			"",
 			"# permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
-			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
+			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
 
