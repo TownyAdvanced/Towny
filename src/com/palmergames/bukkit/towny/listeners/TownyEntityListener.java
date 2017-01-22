@@ -139,6 +139,12 @@ public class TownyEntityListener implements Listener {
 		
 	}
 	
+	/**
+	 * Prevent explosions from hurting non-living entities in towns.
+	 * Includes: Armorstands, itemframes, animals, endercrystals
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 
@@ -331,6 +337,8 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
+	 * Handles removal of newly spawned animals/monsters for use in the 
+	 * world-removal and town-removal lists.
 	 * 
 	 * @param event
 	 * @throws NotRegisteredException
@@ -844,23 +852,4 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
 
-//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-//	public void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
-//		DamageCause type = event.getCause();
-//		Location loc = event.getDamager().getLocation();
-//		TownyWorld townyWorld = null;
-
-//		if (type == DamageCause.BLOCK_EXPLOSION) {
-//			try {
-//				townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
-//				if (!locationCanExplode(townyWorld, loc)) {
-//					event.setCancelled(true);
-//					return;
-//				}
-//			} catch (NotRegisteredException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 }

@@ -2149,6 +2149,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
+					if ((selection.size() > 1) && (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						
+
 					blockCost = TownySettings.getClaimPrice();
 				}
 

@@ -2349,3 +2349,6 @@ v0.91.2.1:
  	- Bukkit.jar used for development set to 1.9.4
 v0.91.2.2:
     - Fix for piston bug care of NathanAdhitya.
+    - New Permission Node: towny.command.town.claim.town.muliple: this node allows the use of "/t claim #, /t claim rect # and /t claim auto".
+      - It is not given by default to normal users having the node to use /t claim.
+      - It is given to players have "towny.admin".

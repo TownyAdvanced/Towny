@@ -113,51 +113,6 @@ public class TownyEntityMonitorListener implements Listener {
 
 	}
 
-	/*
-	 * @Override
-	 * public void onEntityDamage(EntityDamageEvent event) {
-	 * if (event instanceof EntityDamageByEntityEvent) {
-	 * EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent)event;
-	 * Entity attackerEntity = entityEvent.getDamager();
-	 * Entity defenderEntity = entityEvent.getEntity();
-	 * 
-	 * if (defenderEntity instanceof Player) {
-	 * Player defenderPlayer = (Player) defenderEntity;
-	 * Player attackerPlayer = null;
-	 * if (defenderPlayer.getHealth() > 0)
-	 * return;
-	 * 
-	 * Resident attackerResident = null;
-	 * Resident defenderResident = null;
-	 * 
-	 * try {
-	 * defenderResident =
-	 * plugin.getTownyUniverse().getResident(defenderPlayer.getName());
-	 * } catch (NotRegisteredException e) {
-	 * return;
-	 * }
-	 * 
-	 * if (attackerEntity instanceof Player) {
-	 * attackerPlayer = (Player) attackerEntity;
-	 * try {
-	 * attackerResident =
-	 * plugin.getTownyUniverse().getResident(attackerPlayer.getName());
-	 * } catch (NotRegisteredException e) {
-	 * }
-	 * }
-	 * 
-	 * deathPayment(attackerPlayer, defenderPlayer, attackerResident,
-	 * defenderResident);
-	 * wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident,
-	 * defenderResident);
-	 * 
-	 * if (TownySettings.isRemovingOnMonarchDeath())
-	 * monarchDeath(attackerPlayer, defenderPlayer, attackerResident,
-	 * defenderResident);
-	 * }
-	 * }
-	 * }
-	 */
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
 		if (attackerPlayer != null && defenderPlayer != null && TownyUniverse.isWarTime())
@@ -332,6 +287,7 @@ public class TownyEntityMonitorListener implements Listener {
 			}
 		}
 	}
+	
 	public void isJailingAttackingEnemies(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		if (TownySettings.isJailingAttackingEnemies()) {
 			Location loc = defenderPlayer.getLocation();
