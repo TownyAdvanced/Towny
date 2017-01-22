@@ -213,6 +213,8 @@ public class TownyBlockListener implements Listener {
 		}
 		
 		List<Block> blocks = event.getBlocks();
+		if (testBlockMove(event.getBlock(), event.getDirection()))
+			event.setCancelled(true);
 
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
@@ -247,7 +249,10 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
+		
+		if (testBlockMove(event.getBlock(), event.getDirection()))
+			event.setCancelled(true);
+		
 		List<Block> blocks = event.getBlocks();
 
 		if (!blocks.isEmpty()) {
