@@ -2347,3 +2347,5 @@ v0.91.2.1:
  	- Add EnderCrystal to the group of entities which are protected in a town.  
  	- Fix CraftPlayer Error due to Scoreboards when players quit the server.
  	- Bukkit.jar used for development set to 1.9.4
+v0.91.2.2:
+    - Fix for piston bug care of NathanAdhitya.
