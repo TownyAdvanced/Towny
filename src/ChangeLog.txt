@@ -2352,3 +2352,5 @@ v0.91.2.2:
     - New Permission Node: towny.command.town.claim.town.muliple: this node allows the use of "/t claim #, /t claim rect # and /t claim auto".
       - It is not given by default to normal users having the node to use /t claim.
       - It is given to players have "towny.admin".
+v0.91.2.3:     
+    - Fix for bug that will effect 1.11 involving trampling of crops (Credit for finding bug goes to Qball.)
