@@ -2354,3 +2354,7 @@ v0.91.2.2:
       - It is given to players have "towny.admin".
 v0.91.2.3:     
     - Fix for bug that will effect 1.11 involving trampling of crops (Credit for finding bug goes to Qball.)
+v0.91.2.4:
+    - REQUIRED CONFIG ADDITIONS for existing installs:
+ 	  - under global_town_settings.farm_plot_allow_blocks: add ",BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER", 
+ 	  - new installs will have have these already as they are considered plants for farm plots by default.
