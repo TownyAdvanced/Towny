@@ -641,6 +641,7 @@ public enum ConfigNodes {
 			"# permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
+			"# Husk, Stray",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
 

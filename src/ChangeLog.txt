@@ -2359,4 +2359,7 @@ v0.91.2.4:
  	  - under global_town_settings.farm_plot_allow_blocks: add ",BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER", 
  	  - new installs will have have these already as they are considered plants for farm plots by default.
 v0.91.3.0:
-	- Bump for release version number. First 1.9 release version.
+	- Bump for release version number. 1.9 release version.
+v0.91.4.0:
+	- Bukkit.jar used for development set to 1.10.2
+	- Bump for release version number. 1.10 release version.
