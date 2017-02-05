@@ -2330,3 +2330,47 @@ v0.91.1.6:
     - Make /townyadmin 'panel' require towny.admin permission node.   
 v0.91.1.7:
     - Made the /t toggle commands display the town name rather than just "Town".
+v0.91.1.8:
+    - Fixed displaying of economy plugin when using Vault during startup.
+v0.91.2.0:
+    - Bump version number to release number.
+    - (Probably) marks the last version made using MC 1.8.5. After this point you must MC 1.9.2 or newer.
+v0.91.2.1:
+	- Bukkit.jar used for development set to 1.9.2
+ 	- Cancel bad lingering potions from being used in plots without pvp.
+ 	- REQUIRED CONFIG ADDITIONS for existing installs:
+ 	  - under town_mob_removal_entities: add Shulker, 
+ 	  - they are not considered Monsters and if you want them to not teleport into town they must be added to the config.
+ 	  - new installs will have Shulker as a default.
+ 	- API Addition: 
+ 	  - Added getCachePermission(Player player, Location location, Material material, ActionType action)
+ 	- Add EnderCrystal to the group of entities which are protected in a town.  
+ 	- Fix CraftPlayer Error due to Scoreboards when players quit the server.
+ 	- Bukkit.jar used for development set to 1.9.4
+v0.91.2.2:
+    - Fix for piston bug care of NathanAdhitya.
+    - New Permission Node: towny.command.town.claim.town.muliple: this node allows the use of "/t claim #, /t claim rect # and /t claim auto".
+      - It is not given by default to normal users having the node to use /t claim.
+      - It is given to players have "towny.admin".
+v0.91.2.3:     
+    - Fix for bug that will effect 1.11 involving trampling of crops (Credit for finding bug goes to Qball.)
+v0.91.2.4:
+    - REQUIRED CONFIG ADDITIONS for existing installs:
+ 	  - under global_town_settings.farm_plot_allow_blocks: add ",BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER", 
+ 	  - new installs will have have these already as they are considered plants for farm plots by default.
+v0.91.3.0:
+	- Bump for release version number. 1.9 release version.
+v0.91.4.0:
+	- Bukkit.jar used for development set to 1.10.2
+	- Bump for release version number. 1.10 release version.
+v0.91.4.1:
+	- Bukkit.jar used for development set to 1.11.2
+	- REQUIRED CONFIG ADDITIONS for existing installs:
+ 	  - under town_mob_removal_entities: add SkeletonHorse,ZombieHorse,
+ 	    - they are not considered Monsters and if you want them spawning or walking into town they must be added to the config.
+ 	    - new installs will have them added by default.
+ 	  - under protection.switch_ids: add WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX
+ 	    - this will add shulker boxes under the protection of the switch flag.
+ 	    - new installs will have them added by default.
+ 	
+ 	

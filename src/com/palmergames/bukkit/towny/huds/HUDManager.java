@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -61,9 +62,14 @@ public class HUDManager implements Listener{
 	public void toggleAllOff (Player p) {
 		warUsers.remove(p);
 		permUsers.remove(p);
-		toggleOff(p);
+		if (p.isOnline()) toggleOff(p);
 	}
 
+	public void toggleAllOffForQuit (Player p) {
+		warUsers.remove(p);
+		permUsers.remove(p);
+	}
+	
 	public static void toggleOff(Player p) {
 		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
@@ -72,7 +78,7 @@ public class HUDManager implements Listener{
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		toggleAllOff(event.getPlayer());
+		toggleAllOffForQuit(event.getPlayer());
 	}
 
 	@EventHandler

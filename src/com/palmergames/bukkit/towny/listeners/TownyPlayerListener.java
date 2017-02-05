@@ -200,7 +200,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+		Block block = event.getClickedBlock();
 		TownyWorld World = null;
 
 		try {
@@ -217,8 +217,7 @@ public class TownyPlayerListener implements Listener {
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
-
-			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))
+			if ((block.getType() == Material.SOIL))				
 				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 					return;

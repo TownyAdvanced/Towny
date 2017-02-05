@@ -422,7 +422,7 @@ public enum ConfigNodes {
 			),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
-			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN",
+			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN,BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
 			),
 	GTOWN_FARM_ANIMALS(
@@ -629,18 +629,19 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART",
+			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
 			"# 54 - chest ...etc"),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime",
+			"Monster,WaterMob,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html",
+			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.htmll",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
-			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
+			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
+			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
 

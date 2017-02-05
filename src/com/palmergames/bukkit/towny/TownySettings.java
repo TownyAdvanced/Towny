@@ -1057,34 +1057,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_FRIENDLY_FIRE);
 	}
 
-//	public static boolean isTownCreationAdminOnly() {
-//		return getBoolean(ConfigNodes.PERMS_TOWN_CREATION_ADMIN_ONLY);
-//	}
-//	public static boolean isNationCreationAdminOnly() {
-//		return getBoolean(ConfigNodes.PERMS_NATION_CREATION_ADMIN_ONLY);
-//	}
-
-	/*
-	 * public static boolean isUsingRegister() {
-	 * return getBoolean(ConfigNodes.PLUGIN_USING_REGISTER);
-	 * }
-	 * 
-	 * public static void setUsingRegister(boolean newSetting) {
-	 * setProperty(ConfigNodes.PLUGIN_USING_REGISTER.getRoot(), newSetting);
-	 * }
-	 * 
-	 * public static boolean isUsingIConomy() {
-	 * return getBoolean(ConfigNodes.PLUGIN_USING_ICONOMY);
-	 * }
-	 * 
-	 * public static void setUsingIConomy(boolean newSetting) {
-	 * setProperty(ConfigNodes.PLUGIN_USING_ICONOMY.getRoot(), newSetting);
-	 * }
-	 */
 	public static boolean isUsingEconomy() {
 
 		return getBoolean(ConfigNodes.PLUGIN_USING_ECONOMY);
-		// return (isUsingIConomy() || isUsingRegister());
 	}
 
 	public static boolean isFakeResident(String name) {
