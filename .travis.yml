@@ -17,7 +17,6 @@ script:
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
   - mv ./out/Towny.jar ./out/Towny_CP949.jar
-  - zip 
   - ls ./out
 
 deploy:
