@@ -6,7 +6,7 @@ script:
   - name=$(date +%Y%m%d)
   - cd /home/travis/build/Neder/Towny
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_UTF-8_${TRAVIS_COMMIT}.jar
+  - mv ./out/Towny.jar ./out/Towny_UTF-8.jar
   - iconv -f UTF-8 -t cp949 ./src/korean.yml > ./src/koreancp949.yml
   - iconv -f UTF-8 -t cp949 ./src/townyperms.yml > ./src/townypermscp949.yml 
   - rm ./src/korean.yml
@@ -16,8 +16,17 @@ script:
   - mv ./src/townypermscp949.yml ./src/townyperms.yml 
   - mv ./src/com/palmergames/util/FileMgmt.java.cp949 ./src/com/palmergames/util/FileMgmt.java
   - ant jar
-  - mv ./out/Towny.jar ./out/Towny_${TRAVIS_JOB_NUMBER}_${name}_CP949_${TRAVIS_COMMIT}.jar
+  - mv ./out/Towny.jar ./out/Towny_CP949.jar
+  - zip 
   - ls ./out
-after_success:
-  - "chmod 777 /home/travis/build/Neder/Towny/upload.sh"
-  - "/home/travis/build/Neder/Towny/upload.sh"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: CmQpT/SOQTdxb29gSMEedbGhC7OFkxP3wJWBOad00hGoXBdDjFsv0vgSz2MVuNfAIaWqcbppAM2NzLoRdiXr+jjHfoy/TWIigiFja0V+RC6Eah2RkixvRq6N5xO223eBS10dtDtxmY5dZ0pv2sfuCxMccaeNanPiDd4kR8+ykPuwXHcSz9XYdGGxxYfYnPBWELlGQsdcB92Lek3fHj7KmLpj+5pvjVFLa3TOP7OmKBRgsZbYKeYV77gVainbm1P27uymNUxcGLM36rMrGFyS96QurKvSibqwjV++QHgUhkKG9lHuYlLVQKg3VdJOZsm1Y/bkZy2GsCd2sBDigX14qp4EZkO2hpPpXdVIwtMmbwp/5oC3FqFOM+Cbou+77gkd7704QhZv6eeGjJpMb7oQ1qpcV9miz607pFGmZNQ14xSdNDJNzmRTe6NUPh0/DSzCH2MwBJvCLoJB6itRLlBcZ6nbcInQt8SiB9XEPuPwhipvngPkYOsMaLxmuhzqvqSl26IGJt6QZEkBM5M6E92TSmmTf4GqcXdaSitbfwwsOpdAYAsiX5ylzyvw6NR6px65U6f6hsb2azo/wWWGiZhed2p7PrVenq41chmRMHy1+INkD13bkkV4khZ1D60XTK2Ow5Ob8snAa5cDro6uZR4TE6kFkrsNrOXvBPuEGHXwHZ4=
+  file:
+    - out/Towny_UTF-8.jar
+    - out/Towny_CP949.jar
+  on:
+    repo: Neder/Towny
+    tags: true
