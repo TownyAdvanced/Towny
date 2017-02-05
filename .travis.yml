@@ -29,4 +29,3 @@ deploy:
     - out/Towny_CP949.jar
   on:
     repo: Neder/Towny
-    tags: true
