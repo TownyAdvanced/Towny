@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -74,6 +75,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
+			try {
+				if (!TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_set_use_towny_off"));
+					return false;
+				}
+			} catch (NotRegisteredException e) {
+				// World not registered				
+			}
+
 			if (args == null) {
 				for (String line : output)
 					player.sendMessage(line);
@@ -82,7 +92,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					return parsePlotCommand(player, args);
 				} catch (TownyException x) {
 					// No permisisons
-					TownyMessaging.sendErrorMsg(player, x.getMessage());
+					 x.getMessage();
 				}
 			}
 

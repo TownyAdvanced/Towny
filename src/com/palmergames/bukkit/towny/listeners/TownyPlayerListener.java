@@ -213,7 +213,7 @@ public class TownyPlayerListener implements Listener {
 			e.printStackTrace();
 			return;
 		}
-
+		
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
@@ -600,20 +600,29 @@ public class TownyPlayerListener implements Listener {
 		} catch (NotRegisteredException e) {
 			// Not a valid resident, probably an NPC from Citizens.
 		}
+		
+
+		/*
+		 * Test to see if CHORUS_FRUIT is in the item_use list.
+		 */
+		if (event.getCause() == TeleportCause.CHORUS_FRUIT)
+			if (TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name()))
+				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.CHORUS_FRUIT))) {
+					event.setCancelled(true);					
+					return;
+				}	
 			
 		/*
 		 * Test to see if Ender pearls are disabled.
 		 */		
-		if (event.getCause() == TeleportCause.ENDER_PEARL) {
-
-			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {
+		if (event.getCause() == TeleportCause.ENDER_PEARL)
+			if (TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name()))
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.ENDER_PEARL))) {
 					event.setCancelled(true);
 					TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Ender Pearls are disabled!");
 					return;
 				}
-			}
-		}
+		
 		onPlayerMove(event);
 	}
 
