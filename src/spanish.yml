@@ -133,6 +133,9 @@ msg_plot_nfs: 'Sacar esta parcela de la venta'
 msg_nfs_abr: '&e''fs'' and ''nfs'' son abreviaciones aceptadas para ''forsale'' y ''notforsale''.'
 msg_plot_fs: 'Poner esta parcela en subasta.'
 
+list_page: 'PÃ¡gina %s de %s'
+list_not_enough_pages: 'SÃ³lo %s pÃ¡ginas disponibles'
+
 ############################################################
 # +------------------------------------------------------+ #
 # |   Messages                                           | #
@@ -148,15 +151,15 @@ msg_payed_plot_cost: '&bPago %s por %s parcelas en %s'
 msg_payed_resident_tax: '&bago impuestos de habitante de '
 msg_bankrupt_town: ' no podia permitirse el lujo de seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no podia permitirse el lujo de seguir siendo un pais.'
-msg_nation_not_peaceful: '&bEl pais no puede pagar su Estado pacífico.'
-msg_nation_cant_peaceful: '&bEl pais no podia darse el lujo de convertirse en un Pais pacífico.'
+msg_nation_not_peaceful: '&bEl pais no puede pagar su Estado pacï¿½fico.'
+msg_nation_cant_peaceful: '&bEl pais no podia darse el lujo de convertirse en un Pais pacï¿½fico.'
 msg_peaceful_disabled: '&bLa paz nacional esta desactivada globalmente.'
-msg_you_paid: '&bPagaste %s para convertirte en un pais pacífico.'
+msg_you_paid: '&bPagaste %s para convertirte en un pais pacï¿½fico.'
 msg_nation_set_peaceful: '&bCambio exitosamente la paz del pais.'
-msg_nation_allow_peaceful: '&bLos permisos de pais para permanecer pacífico son ahora: %s'
+msg_nation_allow_peaceful: '&bLos permisos de pais para permanecer pacï¿½fico son ahora: %s'
 msg_mobremoval_world: '&bBloqueo de spawneo de mobs en el mundo: %s'
 msg_mobremoval_town: '&bPermiso de spawneo de mobs en el mundo: %s'
-msg_nation_peaceful: '&bTu pais esta ahora pacífico.'
+msg_nation_peaceful: '&bTu pais esta ahora pacï¿½fico.'
 msg_tax_exempt: '&bEl staff de la ciudad esta exento de pagar impuestos.'
 msg_del_nation: '&bEl pais %s se derrumbo!'
 msg_del_resident: '&b%s perdio todos sus datos en Towny!'
@@ -196,18 +199,18 @@ msg_nation_online: 'Conectados en el Pais'
 
 msg_allied_nations: '&b%s se alio con el Pais %s.'
 msg_enemy_nations: '&b%s desarrollo un odio contra el Pais %s.'
-msg_enemy_to_neutral: '&b%s ha cambiado su estado a pacífico contra %s.'
+msg_enemy_to_neutral: '&b%s ha cambiado su estado a pacï¿½fico contra %s.'
 msg_added_ally: '&b%s se alio con tu Pais.'
 msg_removed_ally: '&b%s cancelo la alianza con tu Pais.'
 msg_added_enemy: '&b%s desarrollo un odio contra tu pais.'
 msg_removed_enemy: '&b%s se ha convertido en pacifica contra tu Pais.'
 msg_unable_ally_enemy: '&cNo es posible aliarse con %s porque te tienen como enemigo.'
-msg_deny_ally: '&b%s negó su solicitud de una alianza.'
-msg_accept_ally: '&bEl %s nación aceptó su solicitud de una alianza.'
-msg_ally_req_sent: '&bLa solicitud de una alianza ha sido enviada a %s nación.'
-msg_ally_request: '&b%s le gustaría formar una alianza.'
-msg_unable_ally_offline: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino no está en línea."
-msg_unable_ally_npc: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino es un NPC."
+msg_deny_ally: '&b%s negï¿½ su solicitud de una alianza.'
+msg_accept_ally: '&bEl %s naciï¿½n aceptï¿½ su solicitud de una alianza.'
+msg_ally_req_sent: '&bLa solicitud de una alianza ha sido enviada a %s naciï¿½n.'
+msg_ally_request: '&b%s le gustarï¿½a formar una alianza.'
+msg_unable_ally_offline: "&cNo se puede pedir una alianza porque el alcalde de la naciï¿½n de destino no estï¿½ en lï¿½nea."
+msg_unable_ally_npc: "&cNo se puede pedir una alianza porque el alcalde de la naciï¿½n de destino es un NPC."
 
 msg_claimed: '&2Reclamado exitosamente'
 msg_unclaimed: '&2Abandonado exitosamente'
@@ -435,16 +438,16 @@ msg_enemy_war_area_defended_greater_forces: '&6[Guerra]&c Tu ataque fallido cost
 
 msg_warning_delete: '&4*** ATENCION, %s VA A SER BORRADO EL PROXIMO DIA POR LA FALTA DE FONDO ***'
 
-# estos mensajes sólo se utilizan si la creación de una ciudad / país se establece sólo la administración
+# estos mensajes sï¿½lo se utilizan si la creaciï¿½n de una ciudad / paï¿½s se establece sï¿½lo la administraciï¿½n
 
 msg_admin_only_create_nation: '&cSolo admins pueden crear Paises.'
 msg_admin_only_create_town: '&cSolo admins pueden crear Ciudades.'
 
-# Residentes necesarias para formar parte de una nación
-msg_err_not_enough_residents_new_nation: "&cSu ciudad no tiene suficientes residentes para crear una nación."
-msg_err_not_enough_residents_join_nation: '&bLa ciudad %s no tiene suficientes residentes para unirse a una nación.'
-msg_not_enough_residents_no_longer_capital: '&bAntigua capital del país ya no tiene suficientes residentes para ser la capital de la nación. La nueva capital de la nación es %s.'
-msg_town_not_enough_residents_left_nation: '&bLa ciudad %s no tiene suficientes residentes que ser miembro de una nación, y se ha eliminado de la nación.'
-msg_nation_disbanded_town_not_enough_residents: '&bLa ciudad %s no tiene suficientes residentes para ejecutar la nación y ha obligado a la nación de disolver.'
-msg_not_enough_residents_refunded: '&bSe le ha reembolsado $%s para que se disolvió su país debido a no tener suficientes residentes.'
-msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residentes para ser la capital de la nación.'
+# Residentes necesarias para formar parte de una naciï¿½n
+msg_err_not_enough_residents_new_nation: "&cSu ciudad no tiene suficientes residentes para crear una naciï¿½n."
+msg_err_not_enough_residents_join_nation: '&bLa ciudad %s no tiene suficientes residentes para unirse a una naciï¿½n.'
+msg_not_enough_residents_no_longer_capital: '&bAntigua capital del paï¿½s ya no tiene suficientes residentes para ser la capital de la naciï¿½n. La nueva capital de la naciï¿½n es %s.'
+msg_town_not_enough_residents_left_nation: '&bLa ciudad %s no tiene suficientes residentes que ser miembro de una naciï¿½n, y se ha eliminado de la naciï¿½n.'
+msg_nation_disbanded_town_not_enough_residents: '&bLa ciudad %s no tiene suficientes residentes para ejecutar la naciï¿½n y ha obligado a la naciï¿½n de disolver.'
+msg_not_enough_residents_refunded: '&bSe le ha reembolsado $%s para que se disolviï¿½ su paï¿½s debido a no tener suficientes residentes.'
+msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residentes para ser la capital de la naciï¿½n.'

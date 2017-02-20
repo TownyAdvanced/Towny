@@ -138,6 +138,9 @@ msg_plot_nfs: 'Grundstueck zum Verkauf anbieten'
 msg_nfs_abr: '&e''fs'' und ''nfs'' sind erlaubte Kuerzel fuer ''Zu verkaufen'' und ''Nicht zu verkaufen''.'
 msg_plot_fs: 'Dieses Grundstueck fuer eine Auktion freigeben.'
 
+list_page: 'Seite %s von %s'
+list_not_enough_pages: 'Nur noch %s Seiten verfÃ¼gbar'
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                    Nachrichten                       | #
@@ -208,10 +211,10 @@ msg_added_enemy: '&b%s entwickelt ein Hass auf deine Nation.'
 msg_removed_enemy: '&b%s hat nun friedliche Absichten gegenueber deiner Nation.'
 msg_deny_ally: '&b%s verweigert Ihre Anfrage zu einer Allianz.'
 msg_accept_ally: '&bDie Nation %s akzeptiert Ihre Anfrage zu einer Allianz.'
-msg_ally_req_sent: '&bDer Antrag für ein Bündnis wurde an die Nation %s geschickt.'
-msg_ally_request: '&bDie %s möchte eine Allianz zu bilden.'
-msg_unable_ally_offline: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bürgermeister der Zielnation offline ist."
-msg_unable_ally_npc: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bürgermeister der Zielnation ein NPC ist."
+msg_ally_req_sent: '&bDer Antrag fï¿½r ein Bï¿½ndnis wurde an die Nation %s geschickt.'
+msg_ally_request: '&bDie %s mï¿½chte eine Allianz zu bilden.'
+msg_unable_ally_offline: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bï¿½rgermeister der Zielnation offline ist."
+msg_unable_ally_npc: "&cNicht in der Lage, eine Allianz zu verlangen, weil der Bï¿½rgermeister der Zielnation ein NPC ist."
 
 msg_claimed: '&2Erfolgreich beansprucht'
 msg_unclaimed: '&2Beanspruchung erfolgreich aufgegeben'
@@ -411,7 +414,7 @@ msg_err_warzone_cannot_edit_material: '&c %s %s ist in einem Kriegsgebiet nicht 
 msg_err_warzone_cannot_use_switches: '&cDu kannst keine Schalter in einem Kriegsgebiet benutzen.'
 msg_err_warzone_cannot_use_item: '&cDu kannst dieses Item nicht in einem Kriegsgebiet benutzen.'
 msg_err_cannot_perform_action: '&cDu kannst diese Aktion nicht in %s ausfuehren.'
-msg_npc_flag: '&bNPC Flagge ist nun %s für %s.'
+msg_npc_flag: '&bNPC Flagge ist nun %s fï¿½r %s.'
 
 # Diese Nachricht wird nur dann benutzt, wenn die entsprechende Einstellung von "town/nation_creation_admin_only" eingeschaltet ist. 
 
@@ -420,9 +423,9 @@ msg_admin_only_create_town: '&cNur Admins ist es erlaubt Staedte zu gruenden.'
 
 # Erforderliche Bewohner Teil einer Nation zu sein
 msg_err_not_enough_residents_new_nation: '&cIhre Stadt hat nicht genug Bewohner, eine Nation zu schaffen.'
-msg_err_not_enough_residents_join_nation: '&bDie Stadt %s nicht genügend Einwohner, eine Nation zu verbinden'
+msg_err_not_enough_residents_join_nation: '&bDie Stadt %s nicht genï¿½gend Einwohner, eine Nation zu verbinden'
 msg_not_enough_residents_no_longer_capital: '&bDie Nation der alten Hauptstadt hat nicht mehr genug Bewohner der Hauptstadt der Nation zu sein. Das neue Kapital der Nation %s.'
 msg_town_not_enough_residents_left_nation: '&bDie Stadt %s hat nicht mehr genug Bewohner ein Mitglied einer Nation zu sein, und hat sich von der Nation entfernt worden.'
-msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Bewohner, die Nation zu führen und hat die Nation gezwungen, sich aufzulösen.'
-msg_not_enough_residents_refunded: '&bSie wurden wegen nicht mit genug Bewohner $%s für Ihre Nation wird aufgelöst erstattet.'
+msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Bewohner, die Nation zu fï¿½hren und hat die Nation gezwungen, sich aufzulï¿½sen.'
+msg_not_enough_residents_refunded: '&bSie wurden wegen nicht mit genug Bewohner $%s fï¿½r Ihre Nation wird aufgelï¿½st erstattet.'
 msg_not_enough_residents_capital: '&bDie Stadt %s hat nicht genug Bewohner der Hauptstadt der Nation zu sein.'
