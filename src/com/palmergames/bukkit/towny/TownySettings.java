@@ -825,6 +825,16 @@ public class TownySettings {
 		return parseString(String.format(getLangString("MSG_DEL_NATION"), nation.getName()));
 	}
 
+	public static String getListPageMsg(int page, int total) {
+
+		return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	}
+
+	public static String getListNotEnoughPagesMsg(int max) {
+
+		return parseString(String.format(getLangString("LIST_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	}
+
 	public static String[] getBuyResidentPlotMsg(String who, String owner, Double price) {
 
 		return parseString(String.format(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner, price));

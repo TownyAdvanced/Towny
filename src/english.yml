@@ -134,6 +134,9 @@ msg_plot_nfs: 'Take down a plot for sale'
 msg_nfs_abr: '&e''fs'' and ''nfs'' are accepted abbreviations for ''forsale'' and ''notforsale''.'
 msg_plot_fs: 'Put this area up for auction.'
 
+list_page: 'Page %s of %s'
+list_not_enough_pages: 'Only %s pages available'
+
 ############################################################
 # +------------------------------------------------------+ #
 # |   Messages                                           | #
