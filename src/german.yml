@@ -1,5 +1,5 @@
 name: Towny
-version: 0.22
+version: 0.29
 language: german
 author: Konkurrent
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -426,3 +426,6 @@ msg_town_not_enough_residents_left_nation: '&bDie Stadt %s hat nicht mehr genug 
 msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Bewohner, die Nation zu führen und hat die Nation gezwungen, sich aufzulösen.'
 msg_not_enough_residents_refunded: '&bSie wurden wegen nicht mit genug Bewohner $%s für Ihre Nation wird aufgelöst erstattet.'
 msg_not_enough_residents_capital: '&bDie Stadt %s hat nicht genug Bewohner der Hauptstadt der Nation zu sein.'
+
+list_page: '&bSeite %s von %s'
+list_err_not_enough_pages: '&cNur noch %s Seiten verfugbar'

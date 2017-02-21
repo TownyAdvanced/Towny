@@ -1,5 +1,5 @@
 name: Towny
-version: 0.26
+version: 0.29
 language: spanish
 author: Alvarote1998
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -448,3 +448,6 @@ msg_town_not_enough_residents_left_nation: '&bLa ciudad %s no tiene suficientes 
 msg_nation_disbanded_town_not_enough_residents: '&bLa ciudad %s no tiene suficientes residentes para ejecutar la nación y ha obligado a la nación de disolver.'
 msg_not_enough_residents_refunded: '&bSe le ha reembolsado $%s para que se disolvió su país debido a no tener suficientes residentes.'
 msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residentes para ser la capital de la nación.'
+
+list_page: '&bPagina %s de %s'
+list_err_not_enough_pages: '&cSolo %s paginas disponibles'

@@ -126,7 +126,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				listTowns(player);
+				listTowns(player, split);
 
 			} else if (split[0].equalsIgnoreCase("new")) {
 
@@ -340,24 +340,51 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void listTowns(Player player) {
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
-		player.sendMessage(Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)");
-		List<Town> townsToSort = TownyUniverse.getDataSource().getTowns();		 
-
-		Collections.sort(townsToSort, new Comparator() {
-			@Override
-	        public int compare(Object t1, Object t2) {
-				if (((Town) t2).getNumResidents() == ((Town) t1).getNumResidents()) return 0;
-				return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
+	public void listTowns(Player player, String[] split) {
+	    List<Town> townsToSort = TownyUniverse.getDataSource().getTowns();       
+	    int page = 1;
+	    int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
+	    if (split.length > 1) {
+	        try {
+	            page = Integer.parseInt(split[1]);
+	            if (page < 0) {
+	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+	                return;
+	            } else if (page == 0) {
+	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	                return;
+	            }
+	        } catch (NumberFormatException e) {
+	            TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	            return;
 	        }
-		});
-		for (Town town : townsToSort) {
-			String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
-            if (town.isOpen())
-                    output += Colors.White + " (Open)";
-            player.sendMessage(output);
-		}		
+	    }
+	    if (page > total) {
+	        TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+	        return;
+	    }
+	    player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
+	    player.sendMessage(Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)");
+	 
+	    Collections.sort(townsToSort, new Comparator() {
+	        @Override
+	        public int compare(Object t1, Object t2) {
+	            if (((Town) t2).getNumResidents() == ((Town) t1).getNumResidents()) return 0;
+	            return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
+	        }
+	    });
+	    int iMax = page * 10;
+	    if ((page * 10) > townsToSort.size()) {
+	        iMax = townsToSort.size();
+	    }
+	    for (int i = (page - 1) * 10; i < iMax; i++) {
+	        Town town = townsToSort.get(i);
+	        String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
+	        if (town.isOpen())
+	            output += Colors.White + " (Open)";
+	        player.sendMessage(output);
+	    }
+	    TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
 	}
 
 	public void townMayor(Player player, String[] split) {

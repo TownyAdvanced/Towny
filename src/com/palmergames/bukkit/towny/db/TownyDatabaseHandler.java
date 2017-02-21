@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
+import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -15,9 +16,11 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -278,6 +281,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		universe.setChangedNotify(REMOVE_TOWN_BLOCK);
+		// Raise an event to signal the unclaim
+		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
 	}
 
 	@Override

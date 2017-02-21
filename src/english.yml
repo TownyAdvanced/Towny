@@ -1,5 +1,5 @@
 name: Towny
-version: 0.28
+version: 0.29
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -458,3 +458,6 @@ msg_town_not_enough_residents_left_nation: '&bThe town %s no longer has enough r
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s no longer has enough residents to run the nation and has forced the nation to disband.'
 msg_not_enough_residents_refunded: '&bYou have been refunded $%s for your nation being disbanded due to not having enough residents.'
 msg_not_enough_residents_capital: '&bThe town %s does not have enough residents to be the capital of the nation.'
+
+list_page: '&bPage %s of %s'
+list_err_not_enough_pages: '&cOnly %s pages available'

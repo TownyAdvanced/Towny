@@ -2243,4 +2243,14 @@ public class TownySettings {
 	public static List<String> getFarmAnimals() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
 	}
+	
+	public static String getListPageMsg(int page, int total) {
+		 
+	    return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	}
+	 
+	public static String getListNotEnoughPagesMsg(int max) {
+	 
+	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	}
 }

@@ -2376,3 +2376,7 @@ v0.91.4.2:
     - Disabled /plot command in worlds where Towny is disabled.
     - Handle CHORUS_FRUIT teleports and ties them to whether a player has permission to ITEM_USE on the plot they would teleport to.
       - Requires CHORUS_FRUIT to be in the item_use_ids list in the config.   
+v0.91.4.3:
+    - Have removeTownblock fire an TownUnclaimEvent.
+    - Courtesy of WolfLeader116:
+      - The /town list and /nation list commands will now paginate and accept page numbers. 
