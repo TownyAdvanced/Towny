@@ -2380,3 +2380,6 @@ v0.91.4.3:
     - Have removeTownblock fire an TownUnclaimEvent.
     - Courtesy of WolfLeader116:
       - The /town list and /nation list commands will now paginate and accept page numbers. 
+v0.91.4.4:
+    - Courtesy of BillyGalbreath:
+      - Removes the [PLAYER_COMMAND] spam from Towny commands from the log. Thanks Billy.
