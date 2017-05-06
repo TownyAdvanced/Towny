@@ -86,7 +86,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 			parseTownCommand(player, args);
 		} else
 			// Console
