@@ -89,7 +89,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			player = (Player) sender;
 			isConsole = false;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 
 		} else {
 			isConsole = true;

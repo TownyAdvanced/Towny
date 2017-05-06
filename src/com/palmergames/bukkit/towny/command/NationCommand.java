@@ -94,7 +94,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 			if (args == null) {
 				for (String line : nation_help)
 					player.sendMessage(line);
