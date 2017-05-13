@@ -2383,3 +2383,5 @@ v0.91.4.3:
 v0.91.4.4:
     - Courtesy of BillyGalbreath:
       - Removes the [PLAYER_COMMAND] spam from Towny commands from the log. Thanks Billy.
+v0.91.4.5:
+    - Fix mundane edge-case scenario where leaving a town that has no nation triggers an error.

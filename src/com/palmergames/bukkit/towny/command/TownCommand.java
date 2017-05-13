@@ -1827,6 +1827,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	  public static void checkTownResidents(Town town, Resident removedResident) throws NotRegisteredException {
+		    if (!town.hasNation())
+		    	return;
 		    if ((town.isCapital()) && (TownySettings.getNumResidentsCreateNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
 			      for (Town newCapital : town.getNation().getTowns())
 				        if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
