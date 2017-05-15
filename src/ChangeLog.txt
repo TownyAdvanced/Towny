@@ -2385,3 +2385,4 @@ v0.91.4.4:
       - Removes the [PLAYER_COMMAND] spam from Towny commands from the log. Thanks Billy.
 v0.91.4.5:
     - Fix mundane edge-case scenario where leaving a town that has no nation triggers an error.
+    - Add note to players wanting to delete their town which clarifies that the money in their Town Bank will be removed.

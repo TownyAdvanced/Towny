@@ -1627,7 +1627,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
 				}
 			}));
-			String output = "Do you really want to delete this town";
+			String output = "Do you really want to delete this town? Doing so will cause all money currently in the Town's bank to be lost.";
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
 				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting this town will revert all townblocks to their pre-claimed state.");
 			Question question = new Question(player.getName(), output, options);
