@@ -54,6 +54,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -590,6 +591,11 @@ public class TownyPlayerListener implements Listener {
 		// Cancel teleport if Jailed by Towny.
 		try {
 			if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
+				if ((event.getCause() == TeleportCause.COMMAND)) {
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Colors.Red + "Jailed players cannot be teleported!");
+					event.setCancelled(true);
+					return;
+				}					
 				if ((event.getCause() == TeleportCause.ENDER_PEARL) && (TownySettings.JailAllowsEnderPearls())) {
 					
 				} else {
@@ -713,8 +719,23 @@ public class TownyPlayerListener implements Listener {
 				// Allow item_use if we have an override
 				if (((status == TownBlockStatus.TOWN_RESIDENT) && (TownyUniverse.getPermissionSource().hasOwnTownOverride(player, BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE))) || (((status == TownBlockStatus.OUTSIDER) || (status == TownBlockStatus.TOWN_ALLY) || (status == TownBlockStatus.ENEMY)) && (TownyUniverse.getPermissionSource().hasAllTownOverride(player, BukkitTools.getTypeId(item), BukkitTools.getDataData(item), TownyPermission.ActionType.ITEM_USE))))
 					return cancelState;
+				
+								// Allow item_use for Event War if isAllowingItemUseInWarZone is true,
+				boolean playerNeutral = false;
+				if (TownyUniverse.isWarTime()) {			
+					try {
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						if (resident.isJailed())
+							playerNeutral = true;
+						if (resident.hasTown())
+							if (!War.isWarringTown(resident.getTown())) {
+								playerNeutral = true;
+							}
+					} catch (NotRegisteredException e) {
+					}			
+				}
 
-				if (status == TownBlockStatus.WARZONE) {
+				if (status == TownBlockStatus.WARZONE || (TownyUniverse.isWarTime() && status == TownBlockStatus.ENEMY && !playerNeutral)) {
 					if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
 						cancelState = true;
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
@@ -776,23 +797,36 @@ public class TownyPlayerListener implements Listener {
 		 */
 		PlayerCache cache = plugin.getCache(player);
 		TownBlockStatus status = cache.getStatus();
+		
+		boolean playerNeutral = false;
+		if (TownyUniverse.isWarTime()) {			
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				if (resident.isJailed())
+					playerNeutral = true;
+				if (resident.hasTown())
+					if (!War.isWarringTown(resident.getTown())) {
+						playerNeutral = true;
+					}
+			} catch (NotRegisteredException e) {
+			}			
+		}
 
 		/*
-		 * display any error recorded for this plot
+		 * Flag war & now Event War
 		 */
-		if (cache.hasBlockErrMsg())
-			TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		/*
-		 * Flag war
-		 */
-		if (status == TownBlockStatus.WARZONE) {
+		if (status == TownBlockStatus.WARZONE || (TownyUniverse.isWarTime() && status == TownBlockStatus.ENEMY && !playerNeutral)) {
 			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
 				return true;
 			}
 			return false;
 		} else {
+			/*
+			 * display any error recorded for this plot
+			 */
+			if (cache.hasBlockErrMsg())
+				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 			return true;
 		}
 

@@ -229,7 +229,6 @@ public class TownySettings {
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		
 		if (file != null) {
-
 			// read the (language).yml into memory
 			language = new CommentedConfiguration(file);
 			language.load();
@@ -342,7 +341,7 @@ public class TownySettings {
 		return list;
 	}
 
-	private static List<String> getStrArr(ConfigNodes node) {
+	public static List<String> getStrArr(ConfigNodes node) {
 
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
 		List<String> list = new ArrayList<String>();
@@ -1500,6 +1499,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.WAR_EVENT_PRICE_DEATH);
 	}
+	
+	public static boolean getWarEventCostsTownblocks() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_COSTS_TOWNBLOCKS);
+	}
 
 	public static boolean isChargingDeath() {
 		
@@ -1530,6 +1534,11 @@ public class TownySettings {
 	public static double getDeathPriceNation() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
+	}
+	
+	public static boolean isEcoClosedEconomyEnabled() {
+		
+		return getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED);
 	}
 	
 	public static boolean isJailingAttackingEnemies() {
@@ -2253,4 +2262,29 @@ public class TownySettings {
 	 
 	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
 	}
+	
+	public static String[] getWarAPlayerHasNoTownMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_town"))); 
+	}
+	
+	public static String[] getWarAPlayerHasNoNationMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_nation"))); 
+	}
+	
+	public static String[] getWarAPlayerHasANeutralNationMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_a_neutral_nation"))); 
+	}
+	
+	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_been_removed_from_war")));
+	}
+	
+	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
+		return parseString(String.format(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
+	}
+	
+	public static String[] getWarAPlayerIsAnAllyMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
+	}
+	
 }

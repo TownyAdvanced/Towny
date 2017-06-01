@@ -59,7 +59,10 @@ public class TownyWorld extends TownyObject {
 
 		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
 		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
-		setPlotManagementRevertSpeed(TownySettings.getPlotManagementSpeed());
+		/*
+		 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
+		 */
+//		setPlotManagementRevertSpeed(TownySettings.getPlotManagementSpeed());
 		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
 		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());
 
@@ -437,21 +440,24 @@ public class TownyWorld extends TownyObject {
 		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
 	}
 
-	/**
-	 * @return the plotManagementRevertSpeed
+	/*
+	 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
 	 */
-	public long getPlotManagementRevertSpeed() {
-
-		return plotManagementRevertSpeed;
-	}
-
-	/**
-	 * @param plotManagementRevertSpeed the plotManagementRevertSpeed to set
-	 */
-	public void setPlotManagementRevertSpeed(long plotManagementRevertSpeed) {
-
-		this.plotManagementRevertSpeed = plotManagementRevertSpeed;
-	}
+//	/**
+//	 * @return the plotManagementRevertSpeed
+//	 */
+//	public long getPlotManagementRevertSpeed() {
+//
+//		return plotManagementRevertSpeed;
+//	}
+//
+//	/**
+//	 * @param plotManagementRevertSpeed the plotManagementRevertSpeed to set
+//	 */
+//	public void setPlotManagementRevertSpeed(long plotManagementRevertSpeed) {
+//
+//		this.plotManagementRevertSpeed = plotManagementRevertSpeed;
+//	}
 
 	/**
 	 * @return the plotManagementWildRevertDelay

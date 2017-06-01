@@ -2386,3 +2386,43 @@ v0.91.4.4:
 v0.91.4.5:
     - Fix mundane edge-case scenario where leaving a town that has no nation triggers an error.
     - Add note to players wanting to delete their town which clarifies that the money in their Town Bank will be removed.
+v0.91.4.6:
+    - Added newish doors and fence types to default switch list. (Why doesn't anyone report something simple like this?)
+    - Added new options to TownyMessaging to handle Minecraft's Title and Subtitle messages.
+      - So far only implemented during cases in war including: when your jailed, when your town or nation is eliminated from the war.
+    - Fix jailed players being able to use commands to get out of jail.
+    - Fix revert on unclaim speed not being respected. This setting will now require you to set it in the config in the New World Settings section. It is sadly not something that can be configured per-world.
+      - New configs will no longer have a delay option in the towny\data\worlds\worldname.txt file.
+    - Fix deathpayments when Closed_Economy is enabled. 
+    - Language files updated to version 0.30. All except English require translation of new strings.
+      - If your language file does not update to 0.30 automatically and is not custom delete your file and Towny will give you the newest one available.
+      - If you have translated the new language strings please send a Pull Request on the github.
+    - Add support for town and nation names following the /t online and /n online commands.
+      - Ex: Doing /t online townname will show visible residents who are currenly online. 
+    - Fix problem with outposts being set-able in outposts not belonging to the person sending the command.
+    - Update README.txt to be accurate and more informative.
+    - Event War Overhaul:
+      - Fix defenders harming their own plots when plot-healing is not turned on.
+      - Fix neutral/nationless players from interfering in war events.
+      - Fix pvp to obey the towns_are_neutral flag in the war config.
+      - Fix default spoils of war set in the config not populating into the towny-war-chest at the beginning of war.
+      - Fix allies from causing harm to each other, requires friendly_fire to be false.
+      - Fix griefing of non-town and neutral players during war.
+      - Add support for Flag War's Editable_materials list from Flag War to work in Event War. Leave allow_block_griefing false and instead use the WarzoneBlockPermissions section of the config, which will take precendence.
+      - Add support for Flag War's Switch support to Event War. Setting the Switch: true in the WarzoneBlockPermissions will cause switches to be used by players involved in the war.
+      - Add support for Flag War's Item_use support to Event War. Setting the item_use: true in the WarzoneBlockPermissions will cause item_use to be allowed for players involved in the war.
+      - Add support for Flag War's Fire option to Event War. Setting the fire: true in the WarzoneBlockPermissions will cause fires to spread in townblocks involved in the war.
+      - Add support for Flag War's Explosion option to Event War. Setting the explosion: true in the WarzoneBlockPermissions will cause explosions to happen in townblocks involved in the war.
+      - Complete the regeneration of blocks from explosions feature first thought up by Shade (original author of Towny and creator of the Flag War system)
+        - Blocks that are not part of the new explosion-ignore-list in the WarzoneBlockPermissions will explode if explosions are set to true, and will regenerate after the world's regeneration time.
+      - Jailed players who are trapped in a town jail which has been won during war will be unjailed.
+      - Jailed players will be exempt of the WarzoneBlockPermissions EditableMaterials, Item_use and Switch options.
+      - Jails will be gone through in order, if a jail has fallen during the war it will not be used any more to jail enemies.
+      - Config Change: war.event.allow_block_griefing is now false by default, this setting should not be used unless the server wants the most chaotic war possible.
+      - New Config options: war.event.costs_townblocks, set to false by default. Setting to true causes bonus townblocks to be traded between winning and losing towns during war. Used to be always on, not configurable. See config's comments for more details.
+      - Fix towns that have been knocked out of the war from being able to interfere in it any further.
+      - Fix dead players being able to defend/attack plots.
+      - Add information to explain if it is a homeblock that is under attack.
+      
+       
+

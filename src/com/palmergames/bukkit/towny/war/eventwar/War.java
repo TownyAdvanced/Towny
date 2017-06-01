@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -44,9 +45,9 @@ import com.palmergames.util.TimeTools;
 public class War {
 	
 	// War Data
-	private Hashtable<WorldCoord, Integer> warZone = new Hashtable<WorldCoord, Integer>();
+	private static Hashtable<WorldCoord, Integer> warZone = new Hashtable<WorldCoord, Integer>();
 	private Hashtable<Town, Integer> townScores = new Hashtable<Town, Integer>();
-	private List<Town> warringTowns = new ArrayList<Town>();
+	private static List<Town> warringTowns = new ArrayList<Town>();
 	private List<Nation> warringNations = new ArrayList<Nation>();
 	private WarSpoils warSpoils = new WarSpoils();
 	
@@ -131,17 +132,17 @@ public class War {
 		return warringTowns;
 	}
 	
-	public boolean isWarZone(WorldCoord worldCoord) {
+	public static boolean isWarZone(WorldCoord worldCoord) {
 
 		return warZone.containsKey(worldCoord);
 	}
-	
+
 	public boolean isWarringNation(Nation nation) {
 
 		return warringNations.contains(nation);
 	}
 
-	public boolean isWarringTown(Town town) {
+	public static boolean isWarringTown(Town town) {
 
 		return warringTowns.contains(town);
 	}
@@ -176,8 +177,10 @@ public class War {
 			if (id == -1) {
 				TownyMessaging.sendErrorMsg("Could not schedule setup delay for war event.");
 				end();
-			} else
+			} else {
 				addTaskId(id);
+				//start();
+			}
 		}
 	}
 
@@ -189,10 +192,12 @@ public class War {
 
 		warTime = true;
 
-		// Seed spoils of war
+		// Seed spoils of war		
 		try {
-			warSpoils.pay(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");
-			TownyMessaging.sendMsg("[War] Seeding spoils of war with " + TownySettings.getBaseSpoilsOfWar());
+			warSpoils.collect(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
+			TownyMessaging.sendGlobalMessage(Colors.Gold + "[War]" + Colors.White +" Seeding spoils of war with " + TownySettings.getBaseSpoilsOfWar());			
+			TownyMessaging.sendGlobalMessage(Colors.Gold + "[War]" + Colors.White +" Total Spoils of war at play for this war: " + warSpoils.getHoldingBalance());
+			TownyMessaging.sendGlobalMessage(Colors.Gold + "[War]" + Colors.White +" Use '/towny war hud' to activate the War hud.");
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
 		}
@@ -424,17 +429,37 @@ public class War {
 				healthChangeStringDef = "(+0)";
 				healthChangeStringAtk = "(+0)";
 			}
-			TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
-			if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
-				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
-				for (Town town: townBlock.getTown().getNation().getTowns())
-					if (town != townBlock.getTown())
-						TownyMessaging.sendMessageToMode(town, Colors.Gray + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+			if (!townBlock.isHomeBlock()){
+				TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "Your town is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
+					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
+					for (Town town: townBlock.getTown().getNation().getTowns())
+						if (town != townBlock.getTown())
+							TownyMessaging.sendMessageToMode(town, Colors.Gray + "Your nation is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+					for (Nation nation: townBlock.getTown().getNation().getAllies())
+						if (nation != townBlock.getTown().getNation())
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + "Your nation's ally: " + townBlock.getTown().getName() + ", is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+				}
+				else
+					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
+				for (Town attackingTown : wzd.getAttackerTowns())
+					TownyMessaging.sendMessageToMode(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk, "");
+			} else {
+				TownyMessaging.sendMessageToMode(townBlock.getTown(), Colors.Gray + "Your town's homeblock is under attack! (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
+					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
+					for (Town town: townBlock.getTown().getNation().getTowns())
+						if (town != townBlock.getTown())
+							TownyMessaging.sendMessageToMode(town, Colors.Gray + "Your nation member: " + townBlock.getTown().getName() +"'s townblock is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+					for (Nation nation: townBlock.getTown().getNation().getAllies())
+						if (nation != townBlock.getTown().getNation())
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + "Your nation's ally: " + townBlock.getTown().getName() + "'s homeblock is under attack! [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+				}
+				else
+					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
+				for (Town attackingTown : wzd.getAttackerTowns())
+					TownyMessaging.sendMessageToMode(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk, "");
 			}
-			else
-				launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
-			for (Town attackingTown : wzd.getAttackerTowns())
-				TownyMessaging.sendMessageToMode(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk, "");
 		} else {
 			launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
 			remove(attacker, townBlock);
@@ -494,13 +519,16 @@ public class War {
 	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 
 		// Add bonus blocks
-		townBlock.getTown().addBonusBlocks(-1);
-		attacker.addBonusBlocks(1);
+		if (TownySettings.getWarEventCostsTownblocks()){		
+			townBlock.getTown().addBonusBlocks(-1);
+			attacker.addBonusBlocks(1);
+		}
 		
 		try {
 			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), "Your town ran out of funds to support yourself in war.");
+				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), "Your town has been removed from the war", "");
 				if (townBlock.getTown().isCapital())
 					remove(attacker, townBlock.getTown().getNation());
 				else
@@ -520,6 +548,25 @@ public class War {
 		} else{
 			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
+			// Free players who are jailed in the jail plot.
+			if (townBlock.getType().equals(TownBlockType.JAIL)){
+				Town town = townBlock.getTown();				
+				int count = 0;
+				for (Resident resident : TownyUniverse.getDataSource().getResidents()){
+					try {						
+						if (resident.isJailed())
+							if (resident.getJailTown().equals(town.toString())) 
+								if (Coord.parseCoord(town.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
+									resident.setJailed(false);
+									TownyUniverse.getDataSource().saveResident(resident);
+									count++;
+								}
+					} catch (TownyException e) {
+					}
+				}
+				if (count>0)
+					TownyMessaging.sendGlobalMessage(Colors.Gold + "[War]" + Colors.White + " There has been a jailbreak in "+town+", freeing "+count+" prisioner(s)!");
+			}				
 		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
 		TownyUniverse.getDataSource().saveTown(attacker);
@@ -551,6 +598,7 @@ public class War {
 
 		warringNations.remove(nation);
 		sendEliminateMessage(nation.getFormattedName());
+		TownyMessaging.sendTitleMessageToNation(nation, "Your nation has been removed from the war", "");
 		for (Town town : nation.getTowns())
 			remove(town);
 		checkEnd();

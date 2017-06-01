@@ -264,15 +264,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ONLINE.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-					try {
-						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-						Town town = resident.getTown();
-						Nation nation = town.getNation();
-						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
-					} catch (NotRegisteredException x) {
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-					}
+					
+					parseNationOnlineCommand(player, newSplit);
+					
 				} else
 					try {
 						Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
@@ -286,6 +280,33 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
+	}
+
+	private void parseNationOnlineCommand(Player player, String[] split) throws TownyException {
+		
+		if (split.length > 0) {			
+			try {
+				Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+				List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, nation);
+				if (onlineResidents.size() > 0 ) {				
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+				} else {
+					TownyMessaging.sendMessage(player, ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation)));
+				}
+					
+			} catch (NotRegisteredException e) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));				
+			}
+		} else {
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				Town town = resident.getTown();
+				Nation nation = town.getNation();
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+			} catch (NotRegisteredException x) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+			}
+		}		
 	}
 
 	public void nationRank(Player player, String[] split) {

@@ -81,7 +81,7 @@ public class PlayerCacheUtil {
 
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
-			
+						
 			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
 
 			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + ":" + status.name() + " = " + cache.getCachePermission(blockId, data, action));
@@ -339,7 +339,7 @@ public class PlayerCacheUtil {
 
 					}
 				}
-				//If this town is not in a nation and we are set to non peaceful status during war.
+				//If this town is not in a nation and we are set to non peaceful/neutral status during war.
 				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation())
 					return TownBlockStatus.WARZONE;
 			}

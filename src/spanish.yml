@@ -1,5 +1,5 @@
 name: Towny
-version: 0.29
+version: 0.30
 language: spanish
 author: Alvarote1998
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -451,3 +451,12 @@ msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residente
 
 list_page: '&bPagina %s de %s'
 list_err_not_enough_pages: '&cSolo %s paginas disponibles'
+
+# Added in 0.30
+msg_war_a_player_has_no_town: '&6[War]&f One of the players in combat has no town and cannot interfere during the War Event.'
+msg_war_a_player_has_no_nation: '&6[War]&f One of the players in combat has a town without a nation and cannot interfere during the War Event.'
+msg_war_a_player_has_a_neutral_nation: '&6[War]&f One of the players in combat is part of a neutral nation and cannot interfere during the War vent.'
+msg_war_a_player_has_been_removed_from_war: '&6[War]&f One of the players in combat is part of a town which cannot interfere with the War Event.'
+msg_war_a_player_is_an_ally: '&6[War]&f One of the players in combat considers the other an ally.'
+
+msg_war_player_cant_be_jailed_plot_fallen: '&6[War]&f The player could not be put in jail, the jail plot has 0 hp.'

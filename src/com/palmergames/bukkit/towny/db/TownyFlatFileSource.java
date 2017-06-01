@@ -1249,12 +1249,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
-				line = kvFile.get("usingPlotManagementRevertSpeed");
-				if (line != null)
-					try {
-						world.setPlotManagementRevertSpeed(Long.parseLong(line));
-					} catch (Exception e) {
-					}
+				/*
+				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
+				 */
+//				line = kvFile.get("usingPlotManagementRevertSpeed");
+//				if (line != null)
+//					try {
+//						world.setPlotManagementRevertSpeed(Long.parseLong(line));
+//					} catch (Exception e) {
+//					}
 				line = kvFile.get("plotManagementIgnoreIds");
 				if (line != null)
 					try {
@@ -1825,7 +1828,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Using PlotManagement Revert
 		list.add("usingPlotManagementRevert=" + Boolean.toString(world.isUsingPlotManagementRevert()));
 		// Using PlotManagement Revert Speed
-		list.add("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()));
+		//list.add("usingPlotManagementRevertSpeed=" + Long.toString(world.getPlotManagementRevertSpeed()));
 
 		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air.");
 

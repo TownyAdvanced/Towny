@@ -29,15 +29,19 @@ public class WarZoneData {
 	}
 	
 	public void addAttacker (Player p) throws NotRegisteredException {
-		Resident resident = TownyUniverse.getDataSource().getResident(p.getName());
-		attackerTowns.add(resident.getTown());
-		allPlayers.add(p);
-		attackers.add(p);
+		if (!p.isDead()){
+			Resident resident = TownyUniverse.getDataSource().getResident(p.getName());
+			attackerTowns.add(resident.getTown());
+			allPlayers.add(p);
+			attackers.add(p);
+		}
 	}
 	
 	public void addDefender (Player p) {
-		allPlayers.add(p);
-		defenders.add(p);
+		if (!p.isDead()){
+			allPlayers.add(p);
+			defenders.add(p);
+		}
 	}
 	
 	public boolean hasAttackers() {

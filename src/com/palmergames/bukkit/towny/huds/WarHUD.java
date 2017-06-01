@@ -56,7 +56,7 @@ public class WarHUD {
 		String health;
 		boolean isTown = false;
 		try { 
-			if (war.isWarZone(at.getTownBlock().getWorldCoord())) {
+			if (War.isWarZone(at.getTownBlock().getWorldCoord())) {
 				health = war.getWarZone().get(at) + "" + ChatColor.AQUA + "/" + (at.getTownBlock().isHomeBlock() ? home_health : town_health);
 			} else {
 				isTown = true;
@@ -219,7 +219,7 @@ public class WarHUD {
 		//Checks to make sure the worldCoord is actually in war
 		try {
 			currentTown = worldCoord.getTownBlock().getTown();
-			if (!war.isWarZone(worldCoord))
+			if (!War.isWarZone(worldCoord))
 				return false;
 		} catch (NotRegisteredException e) {
 			return false;
@@ -230,7 +230,7 @@ public class WarHUD {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				boolean sameTown = edgeTownBlock.getTown() == currentTown;
-				if (!sameTown || (sameTown && !war.isWarZone(edgeTownBlock.getWorldCoord()))) {
+				if (!sameTown || (sameTown && !War.isWarZone(edgeTownBlock.getWorldCoord()))) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {

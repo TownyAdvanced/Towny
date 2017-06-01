@@ -629,7 +629,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
+			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,SPRUCE_FENCE_GATE,BIRCH_FENCE_GATE,JUNGLE_FENCE_GATE,DARK_OAK_FENCE_GATE,ACACIA_FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
@@ -1167,9 +1167,10 @@ public enum ConfigNodes {
 			"# If true and the monarch/king dies the nation is removed from the war."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
-			"true",
-			"# If enabled players will be able to break/place blocks in enemy plots during a war."),
-
+			"false",
+			"# If enabled players will be able to break/place any blocks in enemy plots during a war.",
+			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.", 
+			"# The editable_materials list in the Warzone Block Permission section should be used instead."),
 	WAR_EVENT_BLOCK_HP_HEADER(
 			"war.event.block_hp",
 			"",
@@ -1191,6 +1192,11 @@ public enum ConfigNodes {
 			"war.event.eco.price_death_wartime",
 			"200.0",
 			"# This amount is taken from the player if they die during the event"),
+	WAR_EVENT_COSTS_TOWNBLOCKS(
+			"war.event.costs_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
+			"# and the losing town gains a negative (-1) bonus townblock."),
 
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
@@ -1209,6 +1215,9 @@ public enum ConfigNodes {
 			"############################################################",
 			"# +------------------------------------------------------+ #",
 			"# |                   Flag war settings                  | #",
+			"# |                                                      | #",
+			"# |               Separate from Event War                | #",
+			"# |                 Unsupported / Buggy                  | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1267,6 +1276,8 @@ public enum ConfigNodes {
 			"############################################################",
 			"# +------------------------------------------------------+ #",
 			"# |              Warzone Block Permissions               | #",
+			"# |                                                      | #",
+			"# |              Used in Flag & Event Wars               | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1291,6 +1302,12 @@ public enum ConfigNodes {
 			"war.warzone.explosions_regen_blocks",
 			"true",
 			"# TODO: Blocks will not regen as of yet. Stay tuned for later changes.",
+			"# Only under affect when explosions_break_blocks is true."),
+	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
+			"war.warzone.explosions_ignore_list",
+			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
+			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
+			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
 			"# Only under affect when explosions_break_blocks is true."), ;
 
 	private final String Root;

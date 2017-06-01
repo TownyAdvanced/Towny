@@ -1244,12 +1244,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 					} catch (Exception e) {
 					}
 
-				resultLong = rs.getLong("PlotManagementRevertSpeed");
-				if (resultLong != null)
-					try {
-						world.setPlotManagementRevertSpeed(resultLong);
-					} catch (Exception e) {
-					}
+				/*
+				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
+				 */
+//				resultLong = rs.getLong("PlotManagementRevertSpeed");
+////				if (resultLong != null)
+////					try {
+////						world.setPlotManagementRevertSpeed(resultLong);
+////					} catch (Exception e) {
+////					}
 
 				line = rs.getString("plotManagementIgnoreIds");
 				if (line != null)
@@ -1618,7 +1621,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
 			// Using PlotManagement Revert Speed
-			nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
+			//nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
 
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)

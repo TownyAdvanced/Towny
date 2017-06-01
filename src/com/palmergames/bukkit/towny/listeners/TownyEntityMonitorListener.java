@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -120,8 +121,7 @@ public class TownyEntityMonitorListener implements Listener {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
 
-				War warEvent = plugin.getTownyUniverse().getWarEvent();
-				if (attackerResident.hasTown() && warEvent.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && warEvent.isWarringTown(defenderResident.getTown())){
+				if (attackerResident.hasTown() && War.isWarringTown(attackerResident.getTown()) && defenderResident.hasTown() && War.isWarringTown(defenderResident.getTown())){
 					if (TownySettings.isRemovingOnMonarchDeath())
 						monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
@@ -168,9 +168,14 @@ public class TownyEntityMonitorListener implements Listener {
 				}
 
 				if (price > 0) {
-					defenderResident.payTo(price, attackerResident, "Death Payment (War)");
-					TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
-					TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+					if (!TownySettings.isEcoClosedEconomyEnabled()){
+						defenderResident.payTo(price, attackerResident, "Death Payment (War)");
+						TownyMessaging.sendMsg(attackerPlayer, "You robbed " + defenderResident.getName() + " of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+						TownyMessaging.sendMsg(defenderPlayer, attackerResident.getName() + " robbed you of " + TownyEconomyHandler.getFormattedBalance(price) + ".");
+					} else {
+						defenderResident.pay(price, "Death Payment (War)");
+						TownyMessaging.sendMsg(defenderPlayer, "You lost " + TownyEconomyHandler.getFormattedBalance(price) + " for dying.");
+					}
 				}
 
 				// Resident doesn't have enough funds.
@@ -184,9 +189,13 @@ public class TownyEntityMonitorListener implements Listener {
 						} catch (NotRegisteredException e) {
 							plugin.getTownyUniverse().getWarEvent().remove(town);
 						}
-					} else
+					} else if (!TownySettings.isEcoClosedEconomyEnabled()){
 						TownyMessaging.sendTownMessage(town, defenderResident.getName() + "'s wallet couldn't satisfy " + attackerResident.getName() + ". " + townPrice + " taken from town bank.");
-					town.payTo(townPrice, attackerResident, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
+						town.payTo(townPrice, attackerResident, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
+					} else {
+						TownyMessaging.sendTownMessage(town, defenderResident.getName() + "'s wallet couldn't satisfy " + attackerResident.getName() + ". " + townPrice + " taken from town bank.");
+						town.pay(townPrice, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
+					}
 				}
 			} catch (NotRegisteredException e) {
 			} catch (EconomyException e) {
@@ -216,9 +225,15 @@ public class TownyEntityMonitorListener implements Listener {
 						price = defenderResident.getHoldingBalance();
 
 					if (attackerResident == null) {
-						defenderResident.payTo(price, new WarSpoils(), "Death Payment");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.payTo(price, new WarSpoils(), "Death Payment");
+						else 
+							defenderResident.pay(price, "Death Payment");
 					} else {
-						defenderResident.payTo(price, attackerResident, "Death Payment");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.payTo(price, attackerResident, "Death Payment");
+						else 
+							defenderResident.pay(price, "Death Payment");
 					}
 					total = total + price;
 
@@ -241,9 +256,15 @@ public class TownyEntityMonitorListener implements Listener {
 						price = defenderResident.getTown().getHoldingBalance();
 
 					if (attackerResident == null) {
-						defenderResident.getTown().payTo(price, new WarSpoils(), "Death Payment Town");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.getTown().payTo(price, new WarSpoils(), "Death Payment Town");
+						else 
+							defenderResident.getTown().pay(price, "Death Payment Town");
 					} else {
-						defenderResident.getTown().payTo(price, attackerResident, "Death Payment Town");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.getTown().payTo(price, attackerResident, "Death Payment Town");
+						else 
+							defenderResident.getTown().pay(price, "Death Payment Town");
 					}
 					total = total + price;
 
@@ -267,9 +288,15 @@ public class TownyEntityMonitorListener implements Listener {
 						price = defenderResident.getTown().getNation().getHoldingBalance();
 
 					if (attackerResident == null) {
-						defenderResident.getTown().getNation().payTo(price, new WarSpoils(), "Death Payment Nation");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.getTown().getNation().payTo(price, new WarSpoils(), "Death Payment Nation");
+						else 
+							defenderResident.getTown().getNation().pay(price, "Death Payment Nation");
 					} else {
-						defenderResident.getTown().getNation().payTo(price, attackerResident, "Death Payment Nation");
+						if (!TownySettings.isEcoClosedEconomyEnabled())
+							defenderResident.getTown().getNation().payTo(price, attackerResident, "Death Payment Nation");
+						else 
+							defenderResident.getTown().getNation().pay(price, "Death Payment Nation");
 					}
 					total = total + price;
 
@@ -281,7 +308,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(defenderPlayer, "Could not take nation death funds.");
 			}
 
-			if (attackerResident != null) {
+			if (attackerResident != null && !TownySettings.isEcoClosedEconomyEnabled()) {
 				TownyMessaging.sendMsg(attackerResident, "You gained " + TownyEconomyHandler.getFormattedBalance(total) + " for killing " + defenderPlayer.getName() + ".");
 
 			}
@@ -335,9 +362,33 @@ public class TownyEntityMonitorListener implements Listener {
 				}								
 				if (!town.hasJailSpawn()) 
 					return;
-					
-				Integer index = 1;				
-				defenderResident.setJailed(defenderPlayer, index, town);
+				
+				if (!TownyUniverse.isWarTime()) {
+					defenderResident.setJailed(defenderPlayer, 1, town);
+				} else {
+					TownBlock jailBlock = null;
+					Integer index = 1;
+					for (Location jailSpawn : town.getAllJailSpawns()) {
+						try {
+							jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
+						} catch (TownyException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
+						if (War.isWarZone(jailBlock.getWorldCoord())) {
+							defenderResident.setJailed(defenderPlayer, index, town);
+							try {
+								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+							} catch (TownyException e) {
+							}
+							return;
+						}
+						index++;
+						TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
+					}
+					TownyMessaging.sendTownMessage(town, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+					return;
+				}
 			}
 		}
 	}

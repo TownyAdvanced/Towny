@@ -1,4 +1,10 @@
-Towny advanced is developed by ELgarL.
+Towny Advanced is developed by LlmDl.
+
+I took over from ElgarL after MC 1.8 was released. Past developers have included: Shadeness, FuzzieWuzzie, ElgarL. 
+With help coming from other developers from time to time including dumptruckman, ole8pie, SwearWord, gravypod and more.
+
+Towny is one of the oldest still-in-development plugins for Minecraft. It was created by Shadeness for the now-defunct server platform called hMod.
+It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months.
 
 Releases, Dev builds and all other plugins I maintain/dev are available from...
 
@@ -6,7 +12,6 @@ Releases, Dev builds and all other plugins I maintain/dev are available from...
 
 If you need help or just want to chat, join us in our IRC channel #towny on the Esper.net network.
 
-I took over a few years ago and am just one of many devs who have held this position in the past.
 
 Licensing:
 
