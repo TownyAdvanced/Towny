@@ -90,12 +90,6 @@ public enum ConfigNodes {
 			"  #        towny.town.spawn.public : Ability to spawn to unaffilated public towns.",
 			"  #",
 			"  # these will be moved to permissions nodes at a later date"),
-//	PERMS_TOWN_CREATION_ADMIN_ONLY(
-//			"permissions.town_creation_admin_only",
-//			"false"),
-//	PERMS_NATION_CREATION_ADMIN_ONLY(
-//			"permissions.nation_creation_admin_only",
-//			"false"),
 	LEVELS(
 			"levels",
 			"",
@@ -148,6 +142,11 @@ public enum ConfigNodes {
 			"town.default_taxes.taxpercentage",
 			"false",
 			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),	
+	TOWN_DEF_TAXES_MINIMUMTAX(
+			"town.default_taxes.minimumtax",
+			"0.0",			
+			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
+			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
@@ -311,6 +310,8 @@ public enum ConfigNodes {
 			"# Regeneration will only work if the plot was",
 			"# claimed under version 0.76.2, or",
 			"# later with this feature enabled",
+			"# Unlike the rest of this config section, the speed setting is not",
+			"# set per-world. What you set for speed will be used in all worlds.",
 			"#",
 			"# If you allow players to break/build in the wild the snapshot will",
 			"# include any changes made before the plot was claimed."),
@@ -725,8 +726,6 @@ public enum ConfigNodes {
 			"unclaimed.unclaimed_zone_ignore",
 			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE"),
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch", "false"),
-	//UNCLAIMED_ZONE_NAME("unclaimed.unclaimed_zone_name",""),
-	//UNCLAIMED_PLOT_NAME("unclaimed.unclaimed_plot_name",""),
 
 	NOTIFICATION(
 			"notification",
@@ -766,8 +765,14 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
+	NOTIFICATION_USING_TITLES(
+			"notification.using_titles", 
+			"false", 
+			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
+			"# Could be seen as intrusive/distracting, so false by default."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
+			"",	
 			"",
 			"",
 			"",

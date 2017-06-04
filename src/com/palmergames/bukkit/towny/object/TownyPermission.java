@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.Colors;
 
 //TODO: 12 permission so far. Anything else will expand it to include even more variables. Possibly change the data structure.

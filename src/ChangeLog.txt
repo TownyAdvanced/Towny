@@ -2423,6 +2423,30 @@ v0.91.4.6:
       - Fix towns that have been knocked out of the war from being able to interfere in it any further.
       - Fix dead players being able to defend/attack plots.
       - Add information to explain if it is a homeblock that is under attack.
-      
-       
-
+v0.91.4.7:
+    - Added Config option: Notification.Using_Titles
+      - Defaults to false
+      - When set to true when players cross into a Town they will see one of the new subtitles added to MC recently, broadcasting the town name.
+    - Language files updated to 0.31 (55 more messages now translatable)
+      - If your language file does not update automatically and is not custom delete your file and Towny will give you the newest one available.
+      - If you have translated the new language strings please send a Pull Request on the github.
+      - If you can find more messages that aren't translateable please submit a github ticket!
+    - New Config Option: Minimum Town tax. 
+      - Found in the config at town.default_taxes.minimumtax
+      - Default: 0.0
+      - Sets the minimum tax required when mayors use the /t set taxes command. Affects both taxpercent/nontaxpercent situations.
+      - Will not change any taxes already set by mayors.
+    - New Command: /town plots {townname}
+      - Screen displays number of Town-owned plots, number of claimed/available claims.
+      - Displays numbers of different plot types (ex: farms, jails)
+      - Displays detailed stats on Embassies, Shops and Residential plots which includes:
+        - Number owned by residents,
+        - Number currently for sale, 
+        - Number in town,
+        - Estimated revenue from different types of plot tax.
+      - Optional {towname} to look up plot type information for other towns.
+      - Command uses towny.command.town.plots permission node.
+    - New Command: /town reslist {townname}    
+      - Previously you could only reslist your own town, now you can view the full resident list of any town.
+    - Fix Bug with Farm plots not handling switch permissions correctly.
+    - Add error messages when a player doesn't use '/town set perm' or '/plot set perm' correctly.

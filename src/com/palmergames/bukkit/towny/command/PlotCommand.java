@@ -317,7 +317,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							plotTestOwner(resident, townBlock);
 							if (split.length == 1) {
 								townBlock.setName("");
-								TownyMessaging.sendMsg(player, String.format("Plot name removed"));
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_removed")));
 								TownyUniverse.getDataSource().saveTownBlock(townBlock);
 								return true;
 							}
@@ -329,7 +329,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								//townBlock.setChanged(true);
 								TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
-								TownyMessaging.sendMsg(player, String.format("Plot name set to [%s]", townBlock.getName()));
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_set_to"), townBlock.getName()));
 
 							} else {
 
@@ -457,12 +457,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								"allySwitch", "allyItemUse" })
 							perm.set(element, b);
 					} catch (Exception e) {
-						// invalid entry
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+						return;
 					}
 
 				}
 
 			} else if (split.length == 2) {
+				if ((!split[0].equalsIgnoreCase("resident") 
+						&& !split[0].equalsIgnoreCase("friend") 
+						&& !split[0].equalsIgnoreCase("ally") 
+						&& !split[0].equalsIgnoreCase("outsider")) 
+						&& !split[0].equalsIgnoreCase("build")
+						&& !split[0].equalsIgnoreCase("destroy")
+						&& !split[0].equalsIgnoreCase("switch")
+						&& !split[0].equalsIgnoreCase("itemuse")) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
+				}
 
 				try {
 
@@ -502,9 +514,22 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 
 				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
 				}
 
 			} else if (split.length == 3) {
+				if ((!split[0].equalsIgnoreCase("resident") 
+						&& !split[0].equalsIgnoreCase("friend") 
+						&& !split[0].equalsIgnoreCase("ally") 
+						&& !split[0].equalsIgnoreCase("outsider")) 
+						|| (!split[1].equalsIgnoreCase("build")
+						&& !split[1].equalsIgnoreCase("destroy")
+						&& !split[1].equalsIgnoreCase("switch")
+						&& !split[1].equalsIgnoreCase("itemuse"))) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
+				}
 
 				// reset the friend to resident so the perm settings don't fail
 				if (split[0].equalsIgnoreCase("friend"))
@@ -516,6 +541,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					s = split[0] + split[1];
 					perm.set(s, b);
 				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
 				}
 
 			}
@@ -604,7 +631,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// are only checking for an
 				// exception
 				if (forSale > 1000000 ) {
-					TownyUniverse.getPlayer(resident).sendMessage("Plot price too expensive.");
+					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_plot_price_too_expensive"));
 
 				} else {
 					townBlock.setPlotPrice(forSale);

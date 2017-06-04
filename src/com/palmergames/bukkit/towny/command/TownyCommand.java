@@ -264,7 +264,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<String> output = new ArrayList<String>();
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/Llmdl/ElgarL");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
 		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73Residents: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73Worlds: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));

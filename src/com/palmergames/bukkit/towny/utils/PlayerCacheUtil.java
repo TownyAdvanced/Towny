@@ -488,7 +488,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -513,7 +513,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -539,7 +539,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -578,7 +578,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;
@@ -613,7 +613,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;
@@ -645,7 +645,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(action.BUILD) || action.equals(action.DESTROY))) {		
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;

@@ -1302,6 +1302,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_DEF_TAXES_TAXPERCENTAGE);
 	}
 	
+	public static double getTownDefaultTaxMinimumTax() {
+		
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_MINIMUMTAX);
+	}
+	
 	public static boolean hasTownLimit() {
 
 		return getTownLimit() != 0;
@@ -2285,6 +2290,10 @@ public class TownySettings {
 	
 	public static String[] getWarAPlayerIsAnAllyMsg() {
 		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
+	}
+	
+	public static boolean isNotificationUsingTitles() {
+		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
 	}
 	
 }

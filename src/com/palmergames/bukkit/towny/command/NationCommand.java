@@ -350,7 +350,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Is this a known rank?
 			 */
 			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, "Unknown rank '" + rank + "'. Permissible ranks are :- " + StringMgmt.join(TownyPerms.getNationRanks(), ",") + ".");
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getNationRanks(), ",") ));
 				return;
 			}
 			/*
@@ -358,35 +358,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * for it.
 			 */
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank))) {
-				TownyMessaging.sendErrorMsg(player, "You do not have permission to modify this rank.");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_permission_to_give_rank"));
 				return;
 			}
 
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "You have been granted the Nation rank of '" + rank + "'.");
-						TownyMessaging.sendMsg(player, "You have granted the Nation rank of '" + rank + "' to " + target.getName() + ".");
+						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Nation", rank));
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Nation", rank, target.getName()));
 					} else {
 						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, "That resident isn't a member of a town!");
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_resident_not_part_of_any_town"));
 						return;
 					}
 				} catch (AlreadyRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + " already holds this Nation rank.");
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_resident_already_has_rank"), target.getName(), "Nation"));
 					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "You have been demoted from the Nation rank of '" + rank + "'.");
-						TownyMessaging.sendMsg(player, "You have removed the Nation rank of '" + rank + "' from " + target.getName() + ".");
+						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Nation", rank));
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Nation", rank, target.getName()));
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + " doesn't hold this Nation rank.");
+					TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
 					return;
 				}
 

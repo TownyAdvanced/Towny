@@ -57,6 +57,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_LEAVE("towny.command.town.leave"),
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
+		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),

@@ -702,21 +702,15 @@ public class TownyEntityListener implements Listener {
 				}
 				
 				if (!isNeutralTownBlock) {
-					//System.out.println("TownyEntityListener : onEntityExplode : isWarTime && !isNeutralTownblock");
 					if (!TownyWarConfig.isAllowingExplosionsInWarZone()) {
 						if (event.getEntity() != null)
 							TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + Coord.parseCoord(block.getLocation()).toString() + ".");
 						event.setCancelled(true);
 						return;
 					} else {
-						//System.out.println("TownyEntityListener : onEntityExplode : isAllowExplosionsInWarZone");
 						event.setCancelled(false);
 						if (TownyWarConfig.explosionsBreakBlocksInWarZone()) {
-							//System.out.println("Block: "+ block.getType());
-							//System.out.println(TownyWarConfig.getExplosionsIgnoreList());
 							if (TownyWarConfig.getExplosionsIgnoreList().contains(block.getType().toString()) || TownyWarConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())){
-								//System.out.println("Count: " + count + " - Block above " + block.getType() + " is " + block.getRelative(BlockFace.UP).getType());
-								//System.out.println("getExplosionsIgnoreList contains " + block.getType() + " preventing explosion");
 								it.remove();
 								continue;
 							}
