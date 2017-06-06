@@ -2450,3 +2450,42 @@ v0.91.4.7:
       - Previously you could only reslist your own town, now you can view the full resident list of any town.
     - Fix Bug with Farm plots not handling switch permissions correctly.
     - Add error messages when a player doesn't use '/town set perm' or '/plot set perm' correctly.
+v0.91.4.8:
+    - Fix lighting portals in the wilderness when fire is disabled in that world's wilderness.
+    - New Command: /townyadmin set title [name] [title]
+      - Ability for admins to edit titles' of anyone on the server, 
+      - bypasses nation-requirement.
+    - New Command: /townyadmin set surname [name] [surname]
+      - Ability for admins to edit surnames' of anyone on the server,
+      - bypasses nation-requirement. 
+    - Fix /t toggle jail command not behaving according to the Towny config 'teleport_warmup_time'
+      - This lead to mayors exploiting the teleport behaviour during raids, able to TP their residents to their jail when they were in danger of dying.
+    - New Command: /townyadmin town [townname] rank [add/remove] [name] [rank]
+      - Allows an admin to give a resident a rank.
+      - Still requires the resident to be a member of town of course.
+    - New Command: /town say [message]
+      - Broadcasts message to your town, prefixed with the town name.
+      - Requires permission node towny.command.town.say      
+    - New Command: /nation say [message]
+      - Broadcasts message to your nation, prefixed with the nation name.
+      - Requires permission node towny.command.nation.say
+    - New Command: /town outlaw [add/remove] [name]
+      - Requires permission node towny.command.town.outlaw
+      - Outlaws can be any player.
+        - They do not need to be a member of a nation or a town.
+      	- If you outlaw a member of your town, they are automatically kicked from the town.
+        - Open towns can declare people outlaws to keep them from rejoining.
+        - When you kill an outlaw in your town, they are sent to your jail if you have a jail
+          - Requires jail.is_jailing_attacking_outlaws set to be true in your config.yml
+          - Also requires the towny.outlaw.jailer permission node.
+          - Outlaws can escape from jail in the usual ways:
+            - Pay bail, escape into the wilderness, being let go via /t toggle jail command.
+            - Outlaws are not freed by using /t leave.
+    - New Permission Node: towny.outlaw.jailer
+      - Required to cause outlaws killed in your town to be sent to your jail.
+      - Newly made Townyperms.yml files will have this node given to mayors, assistants and sheriffs by default.
+        - Add this node to those ranks to properly make use of the isJailingAttackingOutlaws.
+        - Add it to the default town rank if you want anyone in town to be able to jail outlaws killed in town.
+    - New Command: /town outlawlist {town}
+      - Requires no permission node to use.
+      - View outlaws of your town, or for other towns when the optional {town} is added to the command.

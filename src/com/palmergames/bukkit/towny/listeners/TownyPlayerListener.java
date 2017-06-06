@@ -127,30 +127,28 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		try {
-			Location respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
-			
+			Location respawn = null;			
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
 			// If player is jailed send them to their jailspawn.
 			if (resident.isJailed()) {
 				Town respawnTown = TownyUniverse.getDataSource().getTown(resident.getJailTown()); 
 				respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
-				resident.setJailed(false);
+//				resident.setJailed(false);
 				event.setRespawnLocation(respawn);
-				resident.setJailed(true);
+//				resident.setJailed(true);
 				return;
 			} else {				
-
+				respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
 				// Check if only respawning in the same world as the town's spawn.
 				if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
 					return;
 		
 				// Bed spawn or town.
-				if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {
-		
+				if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {		
 					event.setRespawnLocation(player.getBedSpawnLocation());
 		
-				} else {
-		
+				} else {		
 					event.setRespawnLocation(respawn);
 		
 				}

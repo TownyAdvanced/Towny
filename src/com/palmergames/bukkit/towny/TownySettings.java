@@ -1550,6 +1550,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_ENEMIES);	
 	}
+	
+	public static boolean isJailingAttackingOutlaws() {
+		
+		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);	
+	}
 
 	public static boolean JailAllowsEnderPearls() {
 		

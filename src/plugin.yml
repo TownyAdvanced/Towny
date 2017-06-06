@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.91.4.7
+version: 0.91.4.8
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -58,6 +58,10 @@ permissions:
     towny.cheat.bypass:
         description: Disables the anti cheat code for players with this node.
         default: op
+        
+    towny.outlaw.jailer:
+        description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
+        default: false
         
     towny.town.resident:
         description: User is permitted to join towns.
@@ -130,6 +134,7 @@ permissions:
             towny.command.nation.enemy: true
             towny.command.nation.delete: true
             towny.command.nation.online: true
+            towny.command.nation.say: true
             towny.command.nation.add: true
             towny.command.nation.kick: true
 
@@ -176,6 +181,7 @@ permissions:
             towny.command.town.claim.*: true
             towny.command.town.unclaim: true
             towny.command.town.online: true
+            towny.command.town.say: true
             towny.command.town.plots: true
             
     towny.command.town.claim.*:
@@ -326,6 +332,7 @@ permissions:
             towny.command.townyadmin.town.kick: true
             towny.command.townyadmin.town.delete: true
             towny.command.townyadmin.town.rename: true
+            towny.command.townyadmin.town.rank: true
     
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.

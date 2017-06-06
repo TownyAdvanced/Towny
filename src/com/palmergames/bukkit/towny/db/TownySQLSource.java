@@ -775,6 +775,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				}
+				line = rs.getString("outlaws");
+				if (line != null) {
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = line.split(search);
+					for (String token : tokens) {
+						if (!token.isEmpty()) {
+							Resident resident = getResident(token);
+							if (resident != null)
+								town.addOutlaw(resident);
+						}
+					}
+				}
 				town.setMayor(getResident(rs.getString("mayor")));
 				// line = rs.getString("assistants");
 				// if (line != null) {
@@ -1480,6 +1492,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			HashMap<String, Object> twn_hm = new HashMap<String, Object>();
 			twn_hm.put("name", town.getName());
 			twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
+			twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
 			twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
 			twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
 			twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));

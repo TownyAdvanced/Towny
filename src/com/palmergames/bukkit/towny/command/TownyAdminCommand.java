@@ -23,6 +23,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -342,6 +343,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] delete", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] spawn", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] outpost #", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] rank", "")); 
 
 			return;
 		}
@@ -391,6 +393,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", true);
 
+			} else if (split[1].equalsIgnoreCase("rank")) {
+				
+				parseAdminTownRankCommand(player, town, StringMgmt.remArgs(split, 2));
 			}
 
 		} catch (NotRegisteredException e) {
@@ -399,6 +404,78 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
 
+	}
+
+	private void parseAdminTownRankCommand(Player player, Town town, String[] split) throws TownyException {
+
+		/*
+		 * Does the command have enough arguments?
+		 */
+		if (split.length < 3)
+			throw new TownyException("Eg: /townyadmin town [townname] rank add/remove [resident] [rank]");
+
+		Resident target;
+		
+		try {
+
+			target = TownyUniverse.getDataSource().getResident(split[1]);
+			if (!target.hasTown()) {
+				throw new TownyException(TownySettings.getLangString("msg_resident_not_your_town"));
+			}
+			if (target.getTown() != town) {
+				throw new TownyException(TownySettings.getLangString("msg_err_townadmintownrank_wrong_town"));
+			}
+				
+		} catch (TownyException x) {
+			throw new TownyException(x.getMessage());
+		}
+
+		String rank = split[2].toLowerCase();
+		/*
+		 * Is this a known rank?
+		 */
+		if (!TownyPerms.getTownRanks().contains(rank))
+			throw new TownyException(String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getTownRanks(), ",") ));
+
+		if (split[0].equalsIgnoreCase("add")) {
+			try {
+				if (target.addTownRank(rank)) {
+					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Town", rank));
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Town", rank, target.getName()));
+				} else {
+					// Not in a town or Rank doesn't exist
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_resident_not_your_town"));
+					return;
+				}
+			} catch (AlreadyRegisteredException e) {
+				// Must already have this rank
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_resident_already_has_rank"), target.getName(), "Town"));
+				return;
+			}
+
+		} else if (split[0].equalsIgnoreCase("remove")) {
+			try {
+				if (target.removeTownRank(rank)) {
+					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Town", rank));
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Town", rank, target.getName()));
+				}
+			} catch (NotRegisteredException e) {
+				// Must already have this rank
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_resident_doesnt_have_rank"), target.getName(), "Town"));
+				return;
+			}
+
+		} else {
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
+			return;
+		}
+
+		/*
+		 * If we got here we have made a change Save the altered resident
+		 * data.
+		 */
+		TownyUniverse.getDataSource().saveResident(target);
+		
 	}
 
 	public void parseAdminNationCommand(String[] split) throws TownyException {
@@ -460,10 +537,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] " + TownySettings.getLangString("town_help_2"), ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] npc", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "capital [town]", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/townyadmin set",
-			// "debugmode [on/off]", ""));
-			// player.sendMessage(ChatTools.formatCommand("", "/townyadmin set",
-			// "devmode [on/off]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "title [resident] [title]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "surname [resident] [surname]", ""));
 
 			return;
 		}
@@ -566,7 +641,57 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 			}
+		} else if (split[0].equalsIgnoreCase("title")) {
+			Resident resident = null;
+			// Give the resident a title
+			if (split.length < 2)
+				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set title bilbo Jester");
+			else
+				resident = TownyUniverse.getDataSource().getResident(split[1]);
 			
+			split = StringMgmt.remArgs(split, 2);
+			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_input_too_long"));
+				return;
+			}
+
+			String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+			resident.setTitle(title + " ");
+			TownyUniverse.getDataSource().saveResident(resident);
+
+			if (resident.hasTitle()){
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_set_title"), resident.getName(), resident.getTitle()));
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_set_title"), resident.getName(), resident.getTitle()));
+			} else {
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
+			}
+			
+		} else if (split[0].equalsIgnoreCase("surname")) {
+			Resident resident = null;
+			// Give the resident a surname
+			if (split.length < 2)
+				TownyMessaging.sendErrorMsg(player, "Eg: /townyadmin set surname bilbo Jester");
+			else
+				resident = TownyUniverse.getDataSource().getResident(split[1]);
+			
+			split = StringMgmt.remArgs(split, 2);
+			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_input_too_long"));
+				return;
+			}
+
+			String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+			resident.setSurname(surname + " ");
+			TownyUniverse.getDataSource().saveResident(resident);
+
+			if (resident.hasSurname()){
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_set_surname"), resident.getName(), resident.getSurname()));
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_set_surname"), resident.getName(), resident.getSurname()));
+			} else {
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
+				TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
+			}
 
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), String.format(TownySettings.getLangString("msg_err_invalid_property"), "administrative"));

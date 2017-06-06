@@ -232,6 +232,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTown(town);
 			}
 			resident.clear();
+			
+			
+			for (Town townOutlaw : TownyUniverse.getDataSource().getTowns()) {
+				if (townOutlaw.hasOutlaw(resident)) {
+					townOutlaw.removeOutlaw(resident);
+					saveTown(townOutlaw);
+				}
+			}
+			
 		} catch (EmptyTownException e) {
 			removeTown(town);
 
@@ -903,6 +912,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			
 			//search and update all friends lists
+			//followed by outlaw lists
 			Resident oldResident = new Resident(oldName);
 			List<Resident> toSaveResident = new ArrayList<Resident>(getResidents());
 			for (Resident toCheck : toSaveResident){
@@ -916,9 +926,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}
 				}
 			}
-
 			for (Resident toCheck : toSaveResident)
 				saveResident(toCheck);
+			
+			List<Town> toSaveTown = new ArrayList<Town>(getTowns());
+			for (Town toCheckTown : toSaveTown) {
+				if (toCheckTown.hasOutlaw(oldResident)) {
+					try {
+						toCheckTown.removeOutlaw(resident);
+						toCheckTown.addOutlaw(resident);
+					} catch (NotRegisteredException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+				}
+			}
+			for (Town toCheckTown : toSaveTown)
+				saveTown(toCheckTown);	
 		
 		} finally {
 			lock.unlock();			

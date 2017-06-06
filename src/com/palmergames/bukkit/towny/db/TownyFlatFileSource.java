@@ -655,6 +655,19 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
+				
+				line = kvFile.get("outlaws");
+				if (line != null) {
+					tokens = line.split(",");
+					for (String token : tokens) {
+						if (!token.isEmpty()) {
+							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
+							Resident outlaw = getResident(token);
+							if (outlaw != null) 
+								town.addOutlaw(outlaw);
+						}
+					}
+				}
 
 				line = kvFile.get("mayor");
 				if (line != null)
@@ -1697,6 +1710,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 			list.add(jailArray);
 		}
+		
+		// Outlaws
+		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 		
 		/*
 		 *  Make sure we only save in async

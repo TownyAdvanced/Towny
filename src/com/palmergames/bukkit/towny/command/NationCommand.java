@@ -71,6 +71,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "new " + TownySettings.getLangString("nation_help_2") + " [capital]", TownySettings.getLangString("nation_help_8")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "delete " + TownySettings.getLangString("nation_help_2"), ""));
+		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/nation", "say", "[message]"));
 
 		king_help.add(ChatTools.formatTitle(TownySettings.getLangString("king_help_1")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "withdraw [$]", ""));
@@ -81,6 +82,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "ally [add/remove] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_2")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "enemy [add/remove] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_3")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "delete", ""));
+		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "say", "[message]"));
 
 	}
 
@@ -266,6 +268,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					
 					parseNationOnlineCommand(player, newSplit);
+				
+				} else if (split[0].equalsIgnoreCase("say")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					try {
+						Nation nation = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+						StringBuilder builder = new StringBuilder();
+						for(String s : newSplit) {
+						    builder.append(s + " ");
+						}
+						String message = builder.toString();
+						TownyMessaging.sendPrefixedNationMessage(nation, message);
+					} catch (Exception e) {
+					}					
 					
 				} else
 					try {

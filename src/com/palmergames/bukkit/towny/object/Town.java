@@ -25,7 +25,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private List<Resident> residents = new ArrayList<Resident>();
-	//private List<Resident> assistants = new ArrayList<Resident>();
+	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
 	private Wall wall = new Wall();
@@ -209,17 +209,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 				e.printStackTrace();
 			}
 	}
-
-//	public void addAssistant(Resident resident) throws AlreadyRegisteredException, NotRegisteredException {
-//
-//		if (hasAssistant(resident))
-//			throw new AlreadyRegisteredException();
-//
-//		if (!hasResident(resident))
-//			throw new NotRegisteredException(resident.getName() + " doesn't belong to your town.");
-//
-//		assistants.add(resident);
-//	}
 
 	public boolean isMayor(Resident resident) {
 
@@ -1098,4 +1087,53 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		return Collections.unmodifiableList(jailSpawns);
 	}
+
+	@Override
+	public List<Resident> getOutlaws() {
+
+		return outlaws;
+	}
+	
+	public boolean hasOutlaw (String name) {
+		
+		for (Resident outlaw : outlaws)
+			if (outlaw.getName().equalsIgnoreCase(name))
+				return true;
+		return false;		
+	}
+	
+	public boolean hasOutlaw(Resident outlaw) {
+
+		return outlaws.contains(outlaw);
+	}
+	
+	public void addOutlaw(Resident resident) throws AlreadyRegisteredException {
+
+		addOutlawCheck(resident);
+		outlaws.add(resident);
+	}
+	
+	public void addOutlawCheck(Resident resident) throws AlreadyRegisteredException {
+
+		if (hasOutlaw(resident))
+			throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
+		else if (resident.hasTown())
+			try {
+				if (resident.getTown().equals(this))
+					throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
+			} catch (NotRegisteredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public void removeOutlaw(Resident resident) throws NotRegisteredException {
+
+		if (!hasOutlaw(resident))
+			throw new NotRegisteredException();
+		else 
+			outlaws.remove(resident);			
+	}
+	
+	
 }

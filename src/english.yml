@@ -1,5 +1,5 @@
 name: Towny
-version: 0.31
+version: 0.32
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -26,6 +26,8 @@ description: >
 
 
 default_towny_prefix: '&6[Towny] &b'
+default_town_prefix: '&6[%s] &b'
+default_nation_prefix: '&6[%s] &6'
 
 unclaimed_plot_name: 'Unowned'
 unclaimed_zone_name: 'Wilderness'
@@ -540,3 +542,14 @@ msg_war_append_townblocks_fallen: ' town blocks fallen)'
 msg_town_plots_revenue_disclaimer: '&aRevenue shown is estimated and whether the owner of the plot can pay is a factor.'
 msg_town_set_perm_syntax_error: 'Invalid word combination for this command. See ''/town set perm ?'' For proper command syntax.'
 msg_plot_set_perm_syntax_error: 'Invalid word combination for this command. See ''/plot set perm ?'' For proper command syntax.'
+
+# Added in 0.32
+msg_err_townadmintownrank_wrong_town: 'That resident doesn''t belong to that town.'
+msg_err_resident_already_an_outlaw: 'That player is already considered an outlaw by your town.'
+msg_err_not_outlaw_in_your_town: 'You cannot set a town member as an outlaw.'
+msg_you_have_been_declared_outlaw: 'You have been declared an outlaw in %s. Don''t be caught dead in that town.'
+msg_you_have_declared_an_outlaw: '%s has been declared an outlaw in %s.'
+msg_you_have_been_undeclared_outlaw: 'You are no longer an outlaw in %s.'
+msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
+msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
+msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'

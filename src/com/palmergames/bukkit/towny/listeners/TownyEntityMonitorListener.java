@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -103,8 +104,10 @@ public class TownyEntityMonitorListener implements Listener {
 				 * it was a natural death, not PvP.
 				 */
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
-				if (attackerPlayer instanceof Player)
-					isJailingAttackingEnemies(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+				if (attackerPlayer instanceof Player) {
+					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+					
+				}
 
 				if (TownyUniverse.isWarTime())
 					wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
@@ -315,8 +318,8 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 	}
 	
-	public void isJailingAttackingEnemies(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
-		if (TownySettings.isJailingAttackingEnemies()) {
+	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
+		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
 			Location loc = defenderPlayer.getLocation();
 			if (!TownyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
 				return;
@@ -331,6 +334,63 @@ public class TownyEntityMonitorListener implements Listener {
 				}							
 				return;			
 			}
+
+			// Try outlaw jailing first.
+			if (TownySettings.isJailingAttackingOutlaws()) {
+				Town attackerTown = null;
+				try {					
+					attackerTown = attackerResident.getTown();
+				} catch (NotRegisteredException e1) {				
+				}
+				
+				if (attackerTown.hasOutlaw(defenderResident)) {
+
+					if (TownyUniverse.getTownBlock(loc) == null)
+						return;
+
+					try {
+						if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
+							return;
+					} catch (NotRegisteredException e1) {
+						e1.printStackTrace();
+					}
+
+					if (!attackerTown.hasJailSpawn()) 
+						return;
+
+					if (!TownyUniverse.isWarTime()) {
+						if (!TownyUniverse.getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
+							return;
+						defenderResident.setJailed(defenderPlayer, 1, attackerTown);
+						return;
+						
+					} else {
+						TownBlock jailBlock = null;
+						Integer index = 1;
+						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
+							try {
+								jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
+							} catch (TownyException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+							if (War.isWarZone(jailBlock.getWorldCoord())) {
+								defenderResident.setJailed(defenderPlayer, index, attackerTown);
+								try {
+									TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+								} catch (TownyException e) {
+								}
+								return;
+							}
+							index++;
+							TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
+						}
+						TownyMessaging.sendTownMessage(attackerTown, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+						return;
+					}
+				}
+			}
+			// Try enemy jailing second
 			if (!attackerResident.hasTown()) { 
 				return;
 			} else {

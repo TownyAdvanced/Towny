@@ -103,6 +103,7 @@ public class SQL_Schema {
 				+ "`spawn` mediumtext NOT NULL,"
 				+ "`outpostSpawns` mediumtext DEFAULT NULL,"
 				+ "`jailSpawns` mediumtext DEFAULT NULL,"
+				+ "`outlaws` mediumtext NOT NULL,"
 				+ "PRIMARY KEY (`name`)"
 				+ ")";
 	}
@@ -251,7 +252,8 @@ public class SQL_Schema {
 
 		try {
 			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` "
-						+ "ADD COLUMN `jailSpawns` mediumtext DEFAULT NULL";
+						+ "ADD COLUMN `jailSpawns` mediumtext DEFAULT NULL,"
+						+ "ADD COLUMN `outlaws` mediumtext DEFAULT NULL";
 			
 			Statement s = cntx.createStatement();
 			s.executeUpdate(town_update);

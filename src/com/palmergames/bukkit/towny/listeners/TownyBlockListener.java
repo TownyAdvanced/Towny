@@ -351,10 +351,19 @@ public class TownyBlockListener implements Listener {
 
 			if (!townyWorld.isUsingTowny())
 				return false;
+			
+			TownBlock townBlock = TownyUniverse.getTownBlock(loc);
+			
+		
+			// Give the wilderness a pass on portal ignition, like we do in towns when fire is disabled.
+			if ((block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN) && ((townBlock == null && !townyWorld.isForceFire() && !townyWorld.isFire()))) {
+				TownyMessaging.sendDebugMsg("onBlockIgnite: Canceled " + block.getType().name() + " from igniting within " + coord.toString() + ".");
+				return true;
+			}
 
 			try {
 
-				TownBlock townBlock = townyWorld.getTownBlock(coord);
+				//TownBlock townBlock = townyWorld.getTownBlock(coord);
 				
 				boolean inWarringTown = false;
 				if (TownyUniverse.isWarTime()) {					

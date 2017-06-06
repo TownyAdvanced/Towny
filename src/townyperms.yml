@@ -51,6 +51,7 @@ towns:
         - towny.command.plot.*
         - towny.claimed.owntown.*
         - towny.command.nation.new
+        - towny.outlaw.jailer
 
     ranks:
         # Ranks contain additional permissions residents will be
@@ -65,6 +66,7 @@ towns:
             # assistants are able to grant VIP and helper rank
             - towny.command.town.rank.vip
             - towny.command.town.rank.helper
+            - towny.outlaw.jailer
         helper:
             - towny.claimed.townowned.switch.*
         donator:
@@ -74,6 +76,7 @@ towns:
         # Sheriff rank is able to jail other town members.
         sheriff:
             - towny.command.town.toggle.jail
+            - towny.outlaw.jailer
             
 # This section of permissions covers players who are members of any town in a nation.
 nations:
