@@ -2489,3 +2489,4 @@ v0.91.4.8:
     - New Command: /town outlawlist {town}
       - Requires no permission node to use.
       - View outlaws of your town, or for other towns when the optional {town} is added to the command.
+    - Add /plot set perm ?

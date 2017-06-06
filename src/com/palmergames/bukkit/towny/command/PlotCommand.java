@@ -288,8 +288,22 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("set")) {
 
 					split = StringMgmt.remFirstArg(split);
+					
+					if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-					if (split.length > 0) {
+						player.sendMessage(ChatTools.formatTitle("/... set perm"));
+						player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
+						player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+						player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+						player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+						player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+						player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
+						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "ally off", ""));
+						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
+						player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'friend'", "'resident'"));
+						player.sendMessage(TownySettings.getLangString("plot_perms_1"));
+
+					} else if (split.length > 0) {
 
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
