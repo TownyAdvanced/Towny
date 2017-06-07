@@ -60,7 +60,7 @@ public class KeyValueTable<K, V> {
 		Collections.sort(keyValues, new Sorting.ValueSort());
 	}
 
-	public void revese() {
+	public void reverse() {
 
 		Collections.reverse(keyValues);
 	}

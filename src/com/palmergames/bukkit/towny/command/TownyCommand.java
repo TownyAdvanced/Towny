@@ -342,7 +342,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<TownyEconomyObject, Double> kv : kvTable.getKeyValues()) {
 			n++;
@@ -361,7 +361,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		for (ResidentList obj : list)
 			kvTable.put(obj, obj.getResidents().size());
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<ResidentList, Integer> kv : kvTable.getKeyValues()) {
 			n++;
@@ -380,7 +380,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		for (TownBlockOwner obj : list)
 			kvTable.put(obj, obj.getTownBlocks().size());
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<TownBlockOwner, Integer> kv : kvTable.getKeyValues()) {
 			n++;
