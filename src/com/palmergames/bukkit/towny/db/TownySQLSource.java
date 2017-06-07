@@ -29,6 +29,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.lang.Thread;
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -255,9 +258,10 @@ public class TownySQLSource extends TownyFlatFileSource {
 		/*
 		 *  Make sure we only execute queries in async
 		 */
-
+        //Bukkit.getLogger().info("UpdateDB "+tb_name);
+        //Thread.dumpStack();
 		this.queryQueue.add(new SQL_Task(tb_name, args, keys));
-
+        
 		return true;
 
 		
@@ -423,7 +427,8 @@ public class TownySQLSource extends TownyFlatFileSource {
 	public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
 
 		// Make sure we only execute queries in async
-		
+		//Bukkit.getLogger().info("DeleteDB "+tb_name);
+        //Thread.dumpStack();
 		this.queryQueue.add(new SQL_Task(tb_name, args));
 		
 		return true;
