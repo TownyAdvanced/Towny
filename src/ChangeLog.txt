@@ -2490,3 +2490,4 @@ v0.91.4.8:
       - Requires no permission node to use.
       - View outlaws of your town, or for other towns when the optional {town} is added to the command.
     - Add /plot set perm ?
+    - Fix mayors of other towns not paying plottax in any town, (ie: in embassies in towns they don't own.)
