@@ -714,7 +714,7 @@ public class War {
 		output.add(ChatTools.formatTitle("War - Top Scores"));
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<Town, Integer> kv : kvTable.getKeyValues()) {
 			n++;
@@ -731,7 +731,7 @@ public class War {
 	public String[] getTopThree() {
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		String[] top = new String[3];
 		top[0] = kvTable.getKeyValues().size() >= 1 ? kvTable.getKeyValues().get(0).value + "-" + kvTable.getKeyValues().get(0).key : "";
 		top[1] = kvTable.getKeyValues().size() >= 2 ? kvTable.getKeyValues().get(1).value + "-" + kvTable.getKeyValues().get(1).key : "";
@@ -743,7 +743,7 @@ public class War {
 
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<Town, Integer>(townScores);
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		if (kvTable.getKeyValues().size() > 0)
 			return kvTable.getKeyValues().get(0);
 		else
