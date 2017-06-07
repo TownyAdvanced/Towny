@@ -48,7 +48,6 @@ public class BukkitTools {
 	 * 
 	 * @return array of online players
 	 */
-	@SuppressWarnings("deprecation")
 	public static Collection<? extends Player> getOnlinePlayers() {
 		return getServer().getOnlinePlayers();
 	}
