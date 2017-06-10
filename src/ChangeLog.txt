@@ -2493,5 +2493,5 @@ v0.91.4.8:
     - Fix mayors of other towns not paying plottax in any town, (ie: in embassies in towns they don't own.)
     - Fix players who are in Town or Nation chat when their town is removed ending up in chat limbo.
     - Merge Pull Request from SkeletonEye - Minor coding fixes.
-    - Merge Pull Request from Noiknex - French.yml
-      - This french.yml was translated when the language file was on 0.28 and requires new strings to be translated.
+    - Merge Pull Request from Noiknez - French.yml
+    - French.yml updated to 0.32 by Noiknez.
