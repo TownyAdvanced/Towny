@@ -1311,8 +1311,7 @@ public enum ConfigNodes {
 			"true"),
 	WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS(
 			"war.warzone.explosions_regen_blocks",
-			"true",
-			"# TODO: Blocks will not regen as of yet. Stay tuned for later changes.",
+			"true",			
 			"# Only under affect when explosions_break_blocks is true."),
 	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
 			"war.warzone.explosions_ignore_list",

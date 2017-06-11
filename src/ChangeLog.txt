@@ -2495,3 +2495,5 @@ v0.91.4.8:
     - Merge Pull Request from SkeletonEye - Minor coding fixes.
     - Merge Pull Request from Noiknez - French.yml
     - French.yml updated to 0.32 by Noiknez.
+    - Purchasing townblocks using /t bonus buy will now round itself to solid numbers.
+      - This fixes a bug when using an increasing price for buying bonus townblocks, which manifested in many decimal places being factored into the cost.
