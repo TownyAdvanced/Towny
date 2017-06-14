@@ -2497,3 +2497,4 @@ v0.91.4.8:
     - French.yml updated to 0.32 by Noiknez.
     - Purchasing townblocks using /t bonus buy will now round itself to solid numbers.
       - This fixes a bug when using an increasing price for buying bonus townblocks, which manifested in many decimal places being factored into the cost.
+    - Fix NPE caused by fire in the wilderness.
