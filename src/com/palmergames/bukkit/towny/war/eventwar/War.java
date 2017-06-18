@@ -47,8 +47,8 @@ public class War {
 	// War Data
 	private static Hashtable<WorldCoord, Integer> warZone = new Hashtable<WorldCoord, Integer>();
 	private Hashtable<Town, Integer> townScores = new Hashtable<Town, Integer>();
-	private static List<Town> warringTowns = new ArrayList<Town>();
-	private List<Nation> warringNations = new ArrayList<Nation>();
+	public static List<Town> warringTowns = new ArrayList<Town>();
+	public static List<Nation> warringNations = new ArrayList<Nation>();
 	private WarSpoils warSpoils = new WarSpoils();
 	
 	private Towny plugin;

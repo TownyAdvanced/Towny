@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -27,6 +29,7 @@ import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -77,6 +80,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_war.add(ChatTools.formatTitle("/towny war"));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "scores", ""));
+		towny_war.add(ChatTools.formatCommand("", "/towny war", "participants [page #]", ""));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
 
 		if (sender instanceof Player) {
@@ -201,6 +205,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getStats());
 			else if (args[0].equalsIgnoreCase("scores"))
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
+			else if (args[0].equalsIgnoreCase("participants")) {
+				try {
+					parseWarParticipants(p, args);
+				} catch (NotRegisteredException e) {
+				}
+				return true;
+			}
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
 				towny_war.add("No hud for console!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null) {
@@ -215,6 +226,68 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyUniverse.isWarTime();
 	}
 
+	@SuppressWarnings("null")
+	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
+
+		List<Town> townsToSort = War.warringTowns;
+		List<Nation> nationsToSort = War.warringNations;
+		int page = 1;
+		List<String> output = new ArrayList<String>();
+		String nationLine = null;
+		String townLine = null;
+		for (Nation nations : nationsToSort) {
+			nationLine = Colors.Gold + "-" + nations.getName().toString();
+			if (TownyUniverse.getDataSource().getResident(player.getName()).hasNation())
+				if (TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasEnemy(nations))
+					nationLine += Colors.Red + " (Enemy)";
+				else if (TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasAlly(nations))
+					nationLine += Colors.Green + " (Ally)";
+			output.add(nationLine);
+			for (Town towns : townsToSort) {
+				if (towns.getNation().equals(nations)) {
+					townLine = Colors.Blue +"  -" + towns.getName().toString();
+					if (towns.isCapital())
+						townLine += Colors.LightBlue + " (Capital)";
+					output.add(townLine);
+				}
+			}			
+		}
+		int total = (int) Math.ceil( (output.size()) / (double) 10 );		
+		if (split.length > 1) {
+			try {
+				page = Integer.parseInt(split[1]);
+				if (page < 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+					return;
+				} else if (page == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+			} catch (NumberFormatException e) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+				return;
+			}
+		}
+		if (page > total) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+			return;
+		}
+		
+		player.sendMessage(ChatTools.formatTitle("War Participants"));
+		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names");
+
+		int iMax = page * 10;
+		if ((page * 10) > output.size()) {
+			iMax = output.size();
+		}
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			String line = output.get(i);
+			player.sendMessage(line);			
+		}
+		TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
+		output.clear();
+	}	
+	
 	private void TopCommand(Player player, String[] args) {
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {

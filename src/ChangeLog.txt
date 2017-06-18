@@ -2498,3 +2498,8 @@ v0.91.4.8:
     - Purchasing townblocks using /t bonus buy will now round itself to solid numbers.
       - This fixes a bug when using an increasing price for buying bonus townblocks, which manifested in many decimal places being factored into the cost.
     - Fix NPE caused by fire in the wilderness.
+    - New Command: /towny war participants {page #}
+      - Shows a list of towns and their nation who are in war events,
+      - List highlights enemies, allies and capital towns,
+      - Accepts page numbers for long lists.
+    - Fix NPE caused by fire in the wilderness during wartime.
