@@ -24,7 +24,7 @@ public class TownyWorld extends TownyObject {
 			isUsingPlotManagementMayorDelete = true,
 			isUsingPlotManagementRevert = true,
 			isUsingPlotManagementWildRevert = true;
-	private Long plotManagementRevertSpeed, plotManagementWildRevertDelay;
+	private Long plotManagementWildRevertDelay;
 	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;

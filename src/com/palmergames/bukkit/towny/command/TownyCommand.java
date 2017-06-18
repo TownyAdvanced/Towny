@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.command.Command;
