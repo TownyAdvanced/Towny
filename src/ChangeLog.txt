@@ -2503,3 +2503,5 @@ v0.91.4.8:
       - List highlights enemies, allies and capital towns,
       - Accepts page numbers for long lists.
     - Fix NPE caused by fire in the wilderness during wartime.
+    - Fix handling of dispensers firing arrows during wartime.
+      - Dispensers in neutral lands will not harm people during wartime.

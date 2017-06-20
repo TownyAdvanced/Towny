@@ -40,6 +40,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -122,7 +123,26 @@ public class TownyEntityListener implements Listener {
 				//Check if attacker is an arrow, make attacker the shooter.				
 				if (attacker instanceof Projectile) {
 					ProjectileSource shooter = ((Projectile) attacker).getShooter();
-					attacker = (Entity) shooter;				
+					if (shooter instanceof Entity)
+						attacker = (Entity) shooter;
+					else {
+						BlockProjectileSource bShooter = (BlockProjectileSource) ((Projectile) attacker).getShooter();
+						if (TownyUniverse.getTownBlock(bShooter.getBlock().getLocation()) != null) {
+							Town bTown = TownyUniverse.getTownBlock(bShooter.getBlock().getLocation()).getTown();
+							if (!bTown.hasNation() && TownySettings.isWarTimeTownsNeutral()) {
+								event.setCancelled(true);
+								return;
+							}
+							if (bTown.getNation().isNeutral()) {
+								event.setCancelled(true);
+								return;
+							}
+							if (!War.isWarringTown(bTown)) {
+								event.setCancelled(true);
+								return;
+							}							
+						}
+					}						
 				}				
 				
 				// One of the attackers/defenders is not a player.
