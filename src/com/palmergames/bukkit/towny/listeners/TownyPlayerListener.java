@@ -882,4 +882,35 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onOutlawEnterTown(PlayerChangePlotEvent event) {
+		
+		Player player = event.getPlayer();		
+		WorldCoord from = event.getFrom();
+		WorldCoord to = event.getTo();
+		try {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			if (to.getTownBlock().hasTown()) {
+				try {
+					Town fromTown = from.getTownBlock().getTown();
+					if (!to.getTownBlock().getTown().equals(fromTown)) {
+						if (to.getTownBlock().getTown().hasOutlaw(resident))
+							TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_are_an_outlaw_in_this_town"),to.getTownBlock().getTown()));
+						return;
+						}
+
+				} catch (NotRegisteredException e) {
+					Town town = to.getTownBlock().getTown();
+					if (town.hasOutlaw(resident))
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_are_an_outlaw_in_this_town"),town));
+				}			
+			}
+
+		} catch (NotRegisteredException e) {
+			// If not registered, it is most likely an NPC			
+		} catch (TownyException e) {
+		}
+		
+	}
 }

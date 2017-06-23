@@ -1004,6 +1004,11 @@ public class TownySettings {
 
 		return getString(ConfigNodes.PLUGIN_DATABASE_PASSWORD);
 	}
+	
+	public static boolean getSQLUsingSSL() {
+
+		return getBoolean(ConfigNodes.PLUGIN_DATABASE_SSL);
+	}
 
 	public static int getMaxTownBlocks(Town town) {
 

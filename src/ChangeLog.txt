@@ -2505,3 +2505,11 @@ v0.91.4.8:
     - Fix NPE caused by fire in the wilderness during wartime.
     - Fix handling of dispensers firing arrows during wartime.
       - Dispensers in neutral lands will not harm people during wartime.
+    - New Config Option: plugin.database.sql.ssl
+      - Defaults to false.
+      - Adapts to Spigot's recommendation that MySQL databases use SSL.  
+    - Language files updated to 0.32
+      - If your language file does not update automatically and is not custom delete your file and Towny will give you the newest one available.
+      - If you have translated the new language strings please send a Pull Request on the github.
+      - If you can find more messages that aren't translateable please submit a github ticket!
+    - Players are now given a message warning them when they enter a town where they are considered outlaws.
