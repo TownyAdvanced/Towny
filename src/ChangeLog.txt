@@ -2513,3 +2513,5 @@ v0.91.4.8:
       - If you have translated the new language strings please send a Pull Request on the github.
       - If you can find more messages that aren't translateable please submit a github ticket!
     - Players are now given a message warning them when they enter a town where they are considered outlaws.
+    - Fix message not showing when a town is removed from a nation for not having enough residents.
+    - Fix minimum # of residents required in a town to join a nation not being checked where it counts.

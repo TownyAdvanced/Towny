@@ -2097,7 +2097,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if ((!town.isCapital()) && (TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 			try {
-				TownyMessaging.sendNationMessage(town.getNation(), String.format(TownySettings.getLangString("msg_capital_not_enough_residents_left_nation"), town.getName()));
+				TownyMessaging.sendNationMessage(town.getNation(), String.format(TownySettings.getLangString("msg_town_not_enough_residents_left_nation"), town.getName()));
 				town.getNation().removeTown(town);
 			} catch (EmptyNationException e) {
 				e.printStackTrace();

@@ -708,9 +708,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public static void nationAdd(Player player, Nation nation, List<Town> invited) {
 
 		ArrayList<Town> remove = new ArrayList<Town>();
-		for (Town town : invited)
+		for (Town town : invited)			
+
 			try {
 				// nation.addTown(town);
+				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
+		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
+		        	invited.remove(town);
+		        } 
 
 				nationInviteTown(player, nation, town);
 			} catch (AlreadyRegisteredException e) {
