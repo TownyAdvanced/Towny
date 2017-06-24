@@ -2515,3 +2515,8 @@ v0.91.4.8:
     - Players are now given a message warning them when they enter a town where they are considered outlaws.
     - Fix message not showing when a town is removed from a nation for not having enough residents.
     - Fix minimum # of residents required in a town to join a nation not being checked where it counts.
+    - New Config Option: Nation's require towns to be within X townblocks. 
+      - Found in the config at global_town_settings.nation_requires_proximity
+      - Default: 0.0
+      - If greater than zero, towns must have their homeblock within that many or less townblocks from the nation's capital's homeblock to join. 
+      - If greater than zero, towns must have their homeblocks in the same world as the nation to join.

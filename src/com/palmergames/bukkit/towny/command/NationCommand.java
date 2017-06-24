@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -708,18 +709,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public static void nationAdd(Player player, Nation nation, List<Town> invited) {
 
 		ArrayList<Town> remove = new ArrayList<Town>();
-		for (Town town : invited)			
-
-			try {
-				// nation.addTown(town);
+		for (Town town : invited)
+			try {				
 				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
-		        	invited.remove(town);
-		        } 
+		        	remove.add(town);
+		        	continue;
+		        }
+				
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = town.getHomeBlock().getCoord();
+				if (nation.getCapital().getHomeBlock().getWorld().getName() != town.getHomeBlock().getWorld().getName()) {
+					remove.add(town);
+					continue;
+				}
+				double distance = 0;
+				if (TownySettings.getNationRequiresProximity() > 0) {					
+					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
+					if (distance > TownySettings.getNationRequiresProximity()) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
+						remove.add(town);
+						continue;
+					}
+				}
 
 				nationInviteTown(player, nation, town);
 			} catch (AlreadyRegisteredException e) {
 				remove.add(town);
+			} catch (TownyException e) {
+				e.printStackTrace();
 			}
 		for (Town town : remove)
 			invited.remove(town);

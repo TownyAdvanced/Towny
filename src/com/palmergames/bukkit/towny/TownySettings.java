@@ -2260,6 +2260,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
 	}
 	
+	public static double getNationRequiresProximity() {
+		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
+	}
+	
 	public static List<String> getFarmPlotBlocks() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_PLOT_ALLOW_BLOCKS);
 	}

@@ -421,6 +421,13 @@ public enum ConfigNodes {
 			"true",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
 			),
+	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
+			"global_town_settings.nation_requires_proximity",
+			"0.0",
+			"# The maximum number of townblocks a town can be away from a nation capital,",
+			"# Automatically precludes towns from one world joining a nation in another world.",
+			"# If the number is 0, towns will not a proximity to a nation."
+			),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
 			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN,BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER",
