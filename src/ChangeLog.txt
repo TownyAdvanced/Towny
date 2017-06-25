@@ -2520,3 +2520,4 @@ v0.91.4.8:
       - Default: 0.0
       - If greater than zero, towns must have their homeblock within that many or less townblocks from the nation's capital's homeblock to join. 
       - If greater than zero, towns must have their homeblocks in the same world as the nation to join.
+      - Also checked when a town moves their homeblock.

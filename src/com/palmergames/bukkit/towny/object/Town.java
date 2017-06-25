@@ -433,7 +433,31 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		} catch (NullPointerException e) {
 			// In the event that spawn is already null
 		}
-
+		if (this.hasNation() && TownySettings.getNationRequiresProximity() > 0)
+			if (!this.getNation().getCapital().equals(this)) {
+				Nation nation = this.getNation();
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = this.getHomeBlock().getCoord();
+				if (nation.getCapital().getHomeBlock().getWorld().getName() != this.getHomeBlock().getWorld().getName()) {
+					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					try {
+						nation.removeTown(this);
+					} catch (EmptyNationException e) {
+						e.printStackTrace();
+					}
+				}
+				double distance = 0;
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
+				if (distance > TownySettings.getNationRequiresProximity()) {
+					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
+					try {
+						nation.removeTown(this);
+					} catch (EmptyNationException e) {
+						e.printStackTrace();
+					}
+				}	
+			}
+			
 		return true;
 	}
 	
