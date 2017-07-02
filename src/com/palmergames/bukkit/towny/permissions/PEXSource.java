@@ -65,6 +65,10 @@ public class PEXSource extends TownyPermissionSource {
 		} else if (node == "suffix") {
 			group = pexPM.getUser(player).getSuffix(player.getWorld().getName());
 			user = pexPM.getUser(player).getOwnSuffix();
+		} else if (node == "userprefix") {
+			user = pexPM.getUser(player).getOwnPrefix();					
+		} else if (node == "usersuffix") {
+			user = pexPM.getUser(player).getOwnSuffix();					
 		}
 		if (group == null)
 			group = "";

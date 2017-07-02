@@ -1444,7 +1444,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				s.close();
 
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlocks ");
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: " + townBlock + " at line: " + line + " in the sql database");
 				e.printStackTrace();
 				return false;
 			}
@@ -1521,21 +1521,18 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + Integer.toString(town.getHomeBlock().getX()) + "#" + Integer.toString(town.getHomeBlock().getZ()) : "");
 			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + Double.toString(town.getSpawn().getX()) + "#" + Double.toString(town.getSpawn().getY()) + "#" + Double.toString(town.getSpawn().getZ()) + "#" + Float.toString(town.getSpawn().getPitch()) + "#" + Float.toString(town.getSpawn().getYaw()) : "");
 			// Outpost Spawns
-			if (town.hasOutpostSpawn()) {
-				String outpostArray = "";
+			String outpostArray = "";
+			if (town.hasOutpostSpawn()) 
 				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
 					outpostArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}
-				twn_hm.put("outpostSpawns", outpostArray);
-			}
-			// Jail Spawns
-			if (town.hasJailSpawn()) {
-				String jailArray = "";
+			twn_hm.put("outpostSpawns", outpostArray);			// Jail Spawns
+			String jailArray = "";
+			if (town.hasJailSpawn()) 		
 				for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
 					jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
-				}
-				twn_hm.put("jailSpawns", jailArray);
-			}
+				}				
+			twn_hm.put("jailSpawns", jailArray);
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
 			return true;

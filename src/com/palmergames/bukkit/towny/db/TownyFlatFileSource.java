@@ -244,7 +244,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadTownBlockList() {
 
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 
 		try {
@@ -289,7 +289,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
-
+			TownyMessaging.sendErrorMsg("Error Loading Townblock List at " + line + ", in towny\\data\\townblocks.txt");
 			e.printStackTrace();
 			return false;
 
@@ -308,7 +308,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadResidentList() {
 
 		TownyMessaging.sendDebugMsg("Loading Resident List");
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 
 		try {
@@ -321,10 +321,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (AlreadyRegisteredException e) {
+			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", resident is possibly listed twice.");
 			e.printStackTrace();
 			return false;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
 			e.printStackTrace();
 			return false;
 
@@ -342,7 +344,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadTownList() {
 
 		TownyMessaging.sendDebugMsg("Loading Town List");
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 
 		try {
@@ -363,6 +365,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Town List at " + line + ", in towny\\data\\towns.txt");
 			e.printStackTrace();
 			return false;
 
@@ -381,7 +384,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadNationList() {
 
 		TownyMessaging.sendDebugMsg("Loading Nation List");
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 
 		try {
@@ -402,6 +405,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Nation List at " + line + ", in towny\\data\\nations.txt");
 			e.printStackTrace();
 			return false;
 
@@ -434,7 +438,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading World List");
 
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 
 		try {
@@ -451,6 +455,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading World List at " + line + ", in towny\\data\\worlds.txt");
 			e.printStackTrace();
 			return false;
 
@@ -470,7 +475,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Regen List");
 
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 		String[] split;
 		PlotBlockData plotData;
@@ -490,6 +495,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
 			e.printStackTrace();
 			return false;
 
@@ -509,7 +515,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
 
-		String line;
+		String line = null;
 		BufferedReader fin = null;
 		String[] split;
 
@@ -525,6 +531,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
 			e.printStackTrace();
 			return false;
 
@@ -546,7 +553,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadResident(Resident resident) {
 
-		String line;
+		String line = null;
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
 		if (fileResident.exists() && fileResident.isFile()) {
@@ -617,7 +624,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					utilLoadTownBlocks(line, null, resident);
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName());
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
 				return false;
 			}
 
@@ -629,7 +636,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadTown(Town town) {
 
-		String line;
+		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
 		File fileTown = new File(path);
@@ -939,7 +946,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName());
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
 			}
 
@@ -1036,7 +1043,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName());
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 				return false;
 			}
 
@@ -1327,13 +1334,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				// loadTownBlocks(world);
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path);
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 				return false;
 			}
 
 			return true;
 		} else {
-			TownyMessaging.sendErrorMsg("Loading Error: File error while reading " + world.getName());
+			TownyMessaging.sendErrorMsg("Loading Error: File error while reading " + world.getName() + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 			return false;
 		}
 	}
@@ -1429,7 +1436,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}						
 
 				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path);
+					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
 
@@ -1694,22 +1701,20 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 
 		// Outpost Spawns
-		if (town.hasOutpostSpawn()) {
-			String outpostArray = "outpostspawns=";
+		String outpostArray = "outpostspawns=";
+		if (town.hasOutpostSpawn())			
 			for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
 				outpostArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
 			}
-			list.add(outpostArray);
-		}
+		list.add(outpostArray);
 
 		// Jail Spawns
-		if (town.hasJailSpawn()) {
-			String jailArray = "jailspawns=";
+		String jailArray = "jailspawns=";
+		if (town.hasJailSpawn())			
 			for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
 				jailArray += (spawn.getWorld().getName() + "," + Double.toString(spawn.getX()) + "," + Double.toString(spawn.getY()) + "," + Double.toString(spawn.getZ()) + "," + Float.toString(spawn.getPitch()) + "," + Float.toString(spawn.getYaw()) + ";");
 			}
-			list.add(jailArray);
-		}
+		list.add(jailArray);		
 		
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));

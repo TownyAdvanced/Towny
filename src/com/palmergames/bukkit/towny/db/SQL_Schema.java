@@ -47,7 +47,7 @@ public class SQL_Schema {
 				/*
 				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
 				 */
-//				+ "`plotManagementRevertSpeed` long NOT NULL,"
+				+ "`plotManagementRevertSpeed` long NOT NULL,"
 				+ "`plotManagementIgnoreIds` mediumtext NOT NULL,"
 				+ "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0',"
 				+ "`plotManagementWildRegenEntities` mediumtext NOT NULL,"

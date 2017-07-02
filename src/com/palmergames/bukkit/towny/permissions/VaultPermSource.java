@@ -38,6 +38,10 @@ public class VaultPermSource extends TownyPermissionSource {
 				if (!primaryGroup.isEmpty())
 					groupPrefixSuffix = chat.getGroupSuffix(player.getWorld(), primaryGroup);
 				playerPrefixSuffix = chat.getPlayerSuffix(player);
+			} else if (node == "userprefix") {
+				playerPrefixSuffix = chat.getPlayerPrefix(player);					
+			} else if (node == "usersuffix") {
+				playerPrefixSuffix = chat.getPlayerSuffix(player);					
 			}
 
 			// Normalize

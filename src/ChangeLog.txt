@@ -2521,3 +2521,7 @@ v0.91.4.8:
       - If greater than zero, towns must have their homeblock within that many or less townblocks from the nation's capital's homeblock to join. 
       - If greater than zero, towns must have their homeblocks in the same world as the nation to join.
       - Also checked when a town moves their homeblock.
+    - Fix rare occurance of newly made worlds having an SQL error.
+    - Add support for new chat tags in TownyChat
+    - Possible fix for outpost spawns not being removed from the database when outposts are unclaimed.
+    - Add more detail to messages shown in log when Towny enters safe mode. 
