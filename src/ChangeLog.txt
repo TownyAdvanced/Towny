@@ -2525,3 +2525,5 @@ v0.91.4.8:
     - Add support for new chat tags in TownyChat
     - Possible fix for outpost spawns not being removed from the database when outposts are unclaimed.
     - Add more detail to messages shown in log when Towny enters safe mode. 
+v0.91.4.9:
+    - Remove leading spaceon the "(PVP)" chunk notification, to match the the no-pvp-message. Thanks for pointing this out Locknlol

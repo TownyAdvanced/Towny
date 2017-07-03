@@ -192,7 +192,7 @@ public class ChunkNotification {
 
 		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP()))) {
 			try {
-				return String.format(areaTownPvPNotificationFormat, ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + " (PvP)" : Colors.Green + "(No PVP)"));
+				return String.format(areaTownPvPNotificationFormat, ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
 			} catch (NotRegisteredException e) {
 				// Not a Towny registered world.
 			}
