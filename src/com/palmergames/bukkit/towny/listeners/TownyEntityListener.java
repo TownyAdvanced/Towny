@@ -292,7 +292,14 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);	
 				} else if (remover instanceof Player) {
 					Player player = (Player) remover;
-			
+					Coord coord = Coord.parseCoord(entity);
+					try {
+						@SuppressWarnings("unused")
+						TownBlock defenderTB = townyWorld.getTownBlock(coord);
+					} catch (NotRegisteredException ex) {
+						//wilderness, return false.
+						return;
+					}			
 					// Get destroy permissions (updates if none exist)
 					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
 

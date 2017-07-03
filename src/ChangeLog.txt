@@ -2527,3 +2527,5 @@ v0.91.4.8:
     - Add more detail to messages shown in log when Towny enters safe mode. 
 v0.91.4.9:
     - Remove leading spaceon the "(PVP)" chunk notification, to match the the no-pvp-message. Thanks for pointing this out Locknlol
+    - Fix for servers that do not allow wilderness full build/destroy permissions, where animals could not be killed in the wilderness with arrows.
+    - Fix a typo in the CombatUtil, which clarifies which block's destroy permissions we are testing to determine whether animals can be killed.   
