@@ -155,6 +155,13 @@ public enum ConfigNodes {
 			"town.max_plots_per_resident",
 			"100",
 			"# maximum number of plots any single resident can own"),
+	TOWN_MAX_CLAIM_RADIUS_VALUE(
+			"town.max_claim_radius_value",
+			"4",
+			"# maximum number used in /town claim/unclaim # commands.",
+			"# set to 0 to disable limiting of claim radius value check.",
+			"# keep in mind that the default value of 4 is a radius, ",
+			"# and it will allow claiming 9x9 (80 plots) at once."),
 	TOWN_LIMIT(
 			"town.town_limit",
 			"3000",

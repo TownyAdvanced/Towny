@@ -1326,6 +1326,11 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
 	}
+	
+	public static int getMaxClaimRadiusValue() {
+		
+		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
+	}
 
 	public static boolean isSellingBonusBlocks() {
 

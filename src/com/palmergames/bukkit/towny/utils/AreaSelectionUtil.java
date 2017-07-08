@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,8 @@ public class AreaSelectionUtil {
 				} else if (owner instanceof Resident) {
 					available = TownySettings.getMaxResidentPlots((Resident) owner);
 				}
+				
+				
 
 				if (args[0].equalsIgnoreCase("auto")) {
 					// Attempt to select outwards until no town blocks remain
@@ -78,6 +81,10 @@ public class AreaSelectionUtil {
 						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 					}
 				}
+				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+				}
+					
 				if (r > 1000)
 					r = 1000;
 				for (int z = -r; z <= r; z++)
@@ -119,6 +126,11 @@ public class AreaSelectionUtil {
 						throw new TownyException(TownySettings.getLangString("msg_err_invalid_radius"));
 					}
 				}
+				
+				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+				}
+				
 				if (r > 1000)
 					r = 1000;
 				for (int z = -r; z <= r; z++)
