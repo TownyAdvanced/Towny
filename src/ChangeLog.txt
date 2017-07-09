@@ -2535,3 +2535,4 @@ v0.91.4.9:
 	  - maximum number used in /town claim/unclaim # commands.
 	  - set to 0 to disable limiting of claim radius value check.
 	  - keep in mind that the default value of 4 is a radius, and it will allow claiming 9x9 (80 plots) at once.
+	- Change to permission calculation, should properly choose a player's group based on weighted priorities included in some permission plugins such as LuckPerms.
