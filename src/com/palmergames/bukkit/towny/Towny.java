@@ -324,9 +324,9 @@ public class Towny extends JavaPlugin {
 		 * Test for Citizens2 so we can avoid removing their NPC's
 		 */
 		test = getServer().getPluginManager().getPlugin("Citizens");
-		if (test != null) {
-			citizens2 = test.getDescription().getVersion().startsWith("2");
-		}
+		if (test != null) 
+			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled())
+				citizens2 = test.getDescription().getVersion().startsWith("2");
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
