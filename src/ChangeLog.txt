@@ -2535,8 +2535,8 @@ v0.91.4.9:
 	  - maximum number used in /town claim/unclaim # commands.
 	  - set to 0 to disable limiting of claim radius value check.
 	  - keep in mind that the default value of 4 is a radius, and it will allow claiming 9x9 (80 plots) at once.
-	- Change to permission calculation, should properly choose a player's group based on weighted priorities included in some permission plugins such as LuckPerms.
-	- Fix outlaws column not generating in mysql databases.
-	- Change our testing of whether Citizens2 is present to account for the plugin failing to enable.
-	  - The failure to enable is from using an out of date Citizens on a new MC version.
-	  - Monsters would spawn in towns and the log would be flooded with errors. 
+    - Change to permission calculation, should properly choose a player's group based on weighted priorities included in some permission plugins such as LuckPerms.
+    - Fix outlaws column not generating in mysql databases.
+    - Change our testing of whether Citizens2 is present to account for the plugin failing to enable.
+      - The failure to enable is from using an out of date Citizens on a new MC version.
+      - Monsters would spawn in towns and the log would be flooded with errors. 
