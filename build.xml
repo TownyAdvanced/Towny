@@ -63,5 +63,7 @@
 			<fileset dir="./src" includes="townyperms.yml" />
 			<fileset dir="./src" includes="ToDo.txt" />
 		</jar>
+		<!-- Copy the jar to the base dir -->
+                <copy file="${env.LIB}/Towny.jar" todir="./"/>
 	</target>
 </project>
