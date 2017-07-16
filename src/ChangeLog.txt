@@ -2540,3 +2540,6 @@ v0.91.4.9:
     - Change our testing of whether Citizens2 is present to account for the plugin failing to enable.
       - The failure to enable is from using an out of date Citizens on a new MC version.
       - Monsters would spawn in towns and the log would be flooded with errors. 
+v0.91.4.10:
+    - Spanish.yml updated to 0.33 by Beelzebu.
+      - All messages were translated to the latest version and some spelling errors were fixed.
