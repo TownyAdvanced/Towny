@@ -302,8 +302,10 @@ public class Towny extends JavaPlugin {
 
 			if (TownyEconomyHandler.setupEconomy())
 				using.add(TownyEconomyHandler.getVersion());
-			else
-				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. You need iConomy 5.01, or the vault/Register.jar with any of the supported eco systems.");
+			else {
+				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. Install Vault.jar with any of the supported eco systems.");
+				TownyMessaging.sendErrorMsg("If you do not want an economy to be used, set using_economy: false in your Towny config.yml.");
+			}
 		}
 
 		test = getServer().getPluginManager().getPlugin("Essentials");

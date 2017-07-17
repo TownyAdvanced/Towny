@@ -1441,7 +1441,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			// TODO: delete town data that might have been done
 		} catch (EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			TownyMessaging.sendErrorMsg(player, "No valid economy found, your server admin might need to install Vault.jar or set using_economy: false in the Towny config.yml");
 		}
 	}
 

@@ -2547,3 +2547,5 @@ v0.91.4.10:
       - When toggled or set using '/res set mode ignoreplots' or '/res toggle ignoreplots' players will not see plot notifications in town.
       - This includes plot owners' names, homeblock, outpost, forsale, plottypes and plotnames.
       - It does not include PVP notifications, town border notifications.
+    - Improve message sent to players who try to start new Towns while their economy plugin is non-functional.
+    - Improve message at startup when vault is not found.
