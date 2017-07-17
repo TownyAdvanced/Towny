@@ -2541,7 +2541,7 @@ v0.91.4.9:
       - The failure to enable is from using an out of date Citizens on a new MC version.
       - Monsters would spawn in towns and the log would be flooded with errors. 
 v0.91.4.10:
-    - Spanish.yml updated to 0.33 by Beelzebu.
+    - Spanish.yml updated to 0.33 by Beelzebu and SeDark
       - All messages were translated to the latest version and some spelling errors were fixed.
     - Add new resident Mod "ignoreplots"
       - When toggled or set using '/res set mode ignoreplots' or '/res toggle ignoreplots' players will not see plot notifications in town.
