@@ -9,12 +9,14 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DAI
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEALTH_REGEN;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DRAW_SMOKE_TIMER;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
+import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
@@ -46,6 +48,7 @@ public class TownyTimerHandler{
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
+	private static int drawSmokeTask = -1;
 
 	public static void newDay() {
 
@@ -133,6 +136,18 @@ public class TownyTimerHandler{
 		}
 		universe.setChangedNotify(TOGGLE_TELEPORT_WARMUP);
 	}
+	
+	public static void toggleDrawSmokeTask(boolean on) {
+		if (on && !isDrawSmokeTaskRunning()) {
+			drawSmokeTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSmokeTask(plugin), 0, 100);
+			if (drawSmokeTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule draw smoke loop");			
+		} else if (!on && isDrawSmokeTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(drawSmokeTask);
+			drawSmokeTask = -1;
+		}
+		universe.setChangedNotify(TOGGLE_DRAW_SMOKE_TIMER);			
+	}
 
 	public static boolean isTownyRepeatingTaskRunning() {
 
@@ -158,6 +173,11 @@ public class TownyTimerHandler{
 	public static boolean isTeleportWarmupRunning() {
 
 		return teleportWarmupTask != -1;
+	}
+	
+	public static boolean isDrawSmokeTaskRunning() {
+		
+		return drawSmokeTask != -1;
 	}
 	
 	/**

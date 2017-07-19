@@ -194,6 +194,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
@@ -229,6 +230,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
@@ -236,6 +238,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleDrawSmokeTask(true);
 		resetCache();
 
 		return true;

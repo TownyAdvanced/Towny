@@ -2543,10 +2543,12 @@ v0.91.4.9:
 v0.91.4.10:
     - Spanish.yml updated to 0.33 by Beelzebu and SeDark.
       - All messages were translated to the latest version and some spelling errors were fixed.
-    - Add new resident Mod "ignoreplots"
+    - Add new resident Mode "ignoreplots"
       - When toggled or set using '/res set mode ignoreplots' or '/res toggle ignoreplots' players will not see plot notifications in town.
       - This includes plot owners' names, homeblock, outpost, forsale, plottypes and plotnames.
       - It does not include PVP notifications, town border notifications.
     - Improve message sent to players who try to start new Towns while their economy plugin is non-functional.
     - Improve message at startup when vault is not found.
     - Fix an occaision where explosions in the wilderness can cause an NPE.
+    - Add new resident Mode "constantplotboder"
+      - When toggled or set using '/res set mode constantplotborder' or '/res toggle constantplotborder' the player will see plot borders appear every 5 seconds
