@@ -2541,7 +2541,7 @@ v0.91.4.9:
       - The failure to enable is from using an out of date Citizens on a new MC version.
       - Monsters would spawn in towns and the log would be flooded with errors. 
 v0.91.4.10:
-    - Spanish.yml updated to 0.33 by Beelzebu and SeDark
+    - Spanish.yml updated to 0.33 by Beelzebu and SeDark.
       - All messages were translated to the latest version and some spelling errors were fixed.
     - Add new resident Mod "ignoreplots"
       - When toggled or set using '/res set mode ignoreplots' or '/res toggle ignoreplots' players will not see plot notifications in town.
@@ -2549,3 +2549,4 @@ v0.91.4.10:
       - It does not include PVP notifications, town border notifications.
     - Improve message sent to players who try to start new Towns while their economy plugin is non-functional.
     - Improve message at startup when vault is not found.
+    - Fix an occaision where explosions in the wilderness can cause an NPE.
