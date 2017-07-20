@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.util;
 
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -40,7 +42,12 @@ public class DrawSmokeTaskFactory {
 
             @Override
             public void run(Location loc) {
-                player.playEffect(loc.add(offset), Effect.SMOKE, smokeDirection);
+            	// Considering changing from Smoke to this Green coloured particle. It is difficult to see however.
+            	// Colours could be changed to differentiate between friendly and enemy lands, but we'd have to be passing colour data.
+            	//
+                // player.spawnParticle(Particle.REDSTONE, loc.add(offset), 0, Float.MIN_VALUE, 255, 0, 1);
+            	
+            	player.playEffect(loc.add(offset), Effect.SMOKE, smokeDirection);
             }
         };
     }
