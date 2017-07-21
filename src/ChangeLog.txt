@@ -2553,3 +2553,4 @@ v0.91.4.10:
     - Fix an occaision where explosions in the wilderness can cause an NPE.
     - Add new resident Mode "constantplotboder"
       - When toggled or set using '/res set mode constantplotborder' or '/res toggle constantplotborder' the player will see plot borders appear every 5 seconds
+    - Fix safemode when an outlaw is added to a town.

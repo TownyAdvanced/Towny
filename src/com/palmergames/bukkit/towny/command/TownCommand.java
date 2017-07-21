@@ -1943,8 +1943,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				invited.remove(newMember);
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
+			if (town.hasOutlaw(newMember)) {
+				try {
+					town.removeOutlaw(newMember);
+				} catch (NotRegisteredException e) {
+				}
+			}
 		}
-
+		
 		if (invited.size() > 0) {
 			String msg = "";
 			for (Resident newMember : invited)
