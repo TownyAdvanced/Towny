@@ -205,7 +205,8 @@ public class TownClaim extends Thread {
 					TownyUniverse.getDataSource().removeTownBlock(townBlock);
 					
 					// Raise an event to signal the unclaim
-					BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
+					// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
+					//BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
 				}
 			}, 1);
 

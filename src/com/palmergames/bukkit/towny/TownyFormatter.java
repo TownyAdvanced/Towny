@@ -61,6 +61,18 @@ public class TownyFormatter {
 
 	}
 
+	public static List<String> getFormattedOutlaws(Town town) {
+
+		List<String> out = new ArrayList<String>();
+
+		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
+
+		out.addAll(ChatTools.listArr(residents, Colors.Green + "Outlaws: " + Colors.White + " "));
+
+		return out;
+
+	}
+	
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
 		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Colors.Green, Colors.LightGreen, Colors.White));

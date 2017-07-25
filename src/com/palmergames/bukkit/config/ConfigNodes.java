@@ -90,12 +90,6 @@ public enum ConfigNodes {
 			"  #        towny.town.spawn.public : Ability to spawn to unaffilated public towns.",
 			"  #",
 			"  # these will be moved to permissions nodes at a later date"),
-//	PERMS_TOWN_CREATION_ADMIN_ONLY(
-//			"permissions.town_creation_admin_only",
-//			"false"),
-//	PERMS_NATION_CREATION_ADMIN_ONLY(
-//			"permissions.nation_creation_admin_only",
-//			"false"),
 	LEVELS(
 			"levels",
 			"",
@@ -148,6 +142,11 @@ public enum ConfigNodes {
 			"town.default_taxes.taxpercentage",
 			"false",
 			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),	
+	TOWN_DEF_TAXES_MINIMUMTAX(
+			"town.default_taxes.minimumtax",
+			"0.0",			
+			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
+			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
@@ -156,6 +155,13 @@ public enum ConfigNodes {
 			"town.max_plots_per_resident",
 			"100",
 			"# maximum number of plots any single resident can own"),
+	TOWN_MAX_CLAIM_RADIUS_VALUE(
+			"town.max_claim_radius_value",
+			"4",
+			"# maximum number used in /town claim/unclaim # commands.",
+			"# set to 0 to disable limiting of claim radius value check.",
+			"# keep in mind that the default value of 4 is a radius, ",
+			"# and it will allow claiming 9x9 (80 plots) at once."),
 	TOWN_LIMIT(
 			"town.town_limit",
 			"3000",
@@ -311,6 +317,8 @@ public enum ConfigNodes {
 			"# Regeneration will only work if the plot was",
 			"# claimed under version 0.76.2, or",
 			"# later with this feature enabled",
+			"# Unlike the rest of this config section, the speed setting is not",
+			"# set per-world. What you set for speed will be used in all worlds.",
 			"#",
 			"# If you allow players to break/build in the wild the snapshot will",
 			"# include any changes made before the plot was claimed."),
@@ -420,6 +428,13 @@ public enum ConfigNodes {
 			"true",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
 			),
+	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
+			"global_town_settings.nation_requires_proximity",
+			"0.0",
+			"# The maximum number of townblocks a town can be away from a nation capital,",
+			"# Automatically precludes towns from one world joining a nation in another world.",
+			"# If the number is 0, towns will not a proximity to a nation."
+			),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
 			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN,BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER",
@@ -460,6 +475,7 @@ public enum ConfigNodes {
 	PLUGIN_DATABASE_TABLEPREFIX("plugin.database.sql.table_prefix", "towny_"),
 	PLUGIN_DATABASE_USERNAME("plugin.database.sql.username", "root"),
 	PLUGIN_DATABASE_PASSWORD("plugin.database.sql.password", ""),
+	PLUGIN_DATABASE_SSL("plugin.database.sql.ssl", "false"),
 
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",
@@ -629,7 +645,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
+			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,SPRUCE_FENCE_GATE,BIRCH_FENCE_GATE,JUNGLE_FENCE_GATE,DARK_OAK_FENCE_GATE,ACACIA_FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
@@ -725,8 +741,6 @@ public enum ConfigNodes {
 			"unclaimed.unclaimed_zone_ignore",
 			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE"),
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch", "false"),
-	//UNCLAIMED_ZONE_NAME("unclaimed.unclaimed_zone_name",""),
-	//UNCLAIMED_PLOT_NAME("unclaimed.unclaimed_plot_name",""),
 
 	NOTIFICATION(
 			"notification",
@@ -766,8 +780,14 @@ public enum ConfigNodes {
 			"&b[전초기지]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[판매중: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
+	NOTIFICATION_USING_TITLES(
+			"notification.using_titles", 
+			"false", 
+			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
+			"# Could be seen as intrusive/distracting, so false by default."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
+			"",	
 			"",
 			"",
 			"",
@@ -1051,7 +1071,13 @@ public enum ConfigNodes {
 	JAIL_IS_JAILING_ATTACKING_ENEMIES(
 			"jail.is_jailing_attacking_enemies",
 			"false",
-			"#If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists."),
+			"#If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists.",
+			"#Requires town_respawn to be true in order to work."),
+	JAIL_IS_JAILING_ATTACKING_OUTLAWS(
+			"jail.is_jailing_attacking_outlaws",
+			"false",
+			"#If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
+			"#Requires town_respawn to be true in order to work."),
 	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
 			"jail.jail_allows_ender_pearls",
 			"false",
@@ -1167,9 +1193,10 @@ public enum ConfigNodes {
 			"# If true and the monarch/king dies the nation is removed from the war."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
-			"true",
-			"# If enabled players will be able to break/place blocks in enemy plots during a war."),
-
+			"false",
+			"# If enabled players will be able to break/place any blocks in enemy plots during a war.",
+			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.", 
+			"# The editable_materials list in the Warzone Block Permission section should be used instead."),
 	WAR_EVENT_BLOCK_HP_HEADER(
 			"war.event.block_hp",
 			"",
@@ -1191,6 +1218,11 @@ public enum ConfigNodes {
 			"war.event.eco.price_death_wartime",
 			"200.0",
 			"# This amount is taken from the player if they die during the event"),
+	WAR_EVENT_COSTS_TOWNBLOCKS(
+			"war.event.costs_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
+			"# and the losing town gains a negative (-1) bonus townblock."),
 
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
@@ -1209,6 +1241,9 @@ public enum ConfigNodes {
 			"############################################################",
 			"# +------------------------------------------------------+ #",
 			"# |                   Flag war settings                  | #",
+			"# |                                                      | #",
+			"# |               Separate from Event War                | #",
+			"# |                 Unsupported / Buggy                  | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1267,6 +1302,8 @@ public enum ConfigNodes {
 			"############################################################",
 			"# +------------------------------------------------------+ #",
 			"# |              Warzone Block Permissions               | #",
+			"# |                                                      | #",
+			"# |              Used in Flag & Event Wars               | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1289,8 +1326,13 @@ public enum ConfigNodes {
 			"true"),
 	WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS(
 			"war.warzone.explosions_regen_blocks",
-			"true",
-			"# TODO: Blocks will not regen as of yet. Stay tuned for later changes.",
+			"true",			
+			"# Only under affect when explosions_break_blocks is true."),
+	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
+			"war.warzone.explosions_ignore_list",
+			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
+			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
+			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
 			"# Only under affect when explosions_break_blocks is true."), ;
 
 	private final String Root;

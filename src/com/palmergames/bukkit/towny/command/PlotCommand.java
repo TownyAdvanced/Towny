@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.command;
+package com.palmergames.bukkit.towny.command; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,7 +29,6 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -74,7 +73,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 			try {
 				if (!TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny()) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_set_use_towny_off"));
@@ -292,8 +290,22 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("set") || split[0].equalsIgnoreCase("설정")) {
 
 					split = StringMgmt.remFirstArg(split);
+					
+					if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-					if (split.length > 0) {
+						player.sendMessage(ChatTools.formatTitle("/... 설정 권한"));
+						player.sendMessage(ChatTools.formatCommand("대상", "[주민/동맹/외부인]", "", ""));
+						player.sendMessage(ChatTools.formatCommand("동작", "[건축/파괴/스위치/아이템사용]", "", ""));
+						player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[켜기/끄기]", "모든 권한을 토글합니다"));
+						player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[대상/동작] [켜기/끄기]", ""));
+						player.sendMessage(ChatTools.formatCommand("", "설정 권한", "[대상] [동작] [켜기/끄기]", ""));
+						player.sendMessage(ChatTools.formatCommand("", "설정 권한", "초기화", ""));
+						player.sendMessage(ChatTools.formatCommand("Eg", "/토지 설정 권한", "동맹 끄기", ""));
+						player.sendMessage(ChatTools.formatCommand("Eg", "/토지 설정 권한", "친구 건축 켜기", ""));
+						player.sendMessage(String.format(TownySettings.getLangString("plot_perms"), "'친구'", "'주민'"));
+						player.sendMessage(TownySettings.getLangString("plot_perms_1"));
+
+					} else if (split.length > 0) {
 
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -321,7 +333,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							plotTestOwner(resident, townBlock);
 							if (split.length == 1) {
 								townBlock.setName("");
-								TownyMessaging.sendMsg(player, String.format("Plot name removed"));
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_removed")));
 								TownyUniverse.getDataSource().saveTownBlock(townBlock);
 								return true;
 							}
@@ -329,11 +341,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test if the plot name contains invalid characters.
 							if (!NameValidation.isBlacklistName(split[1])) {								
 								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
-							
-     							//townBlock.setChanged(true);
-							    TownyUniverse.getDataSource().saveTownBlock(townBlock);
-							
-							    TownyMessaging.sendMsg(player, String.format("토지의 이름이 [%s] (으)로 설정되었습니다", townBlock.getName()));
+
+								//townBlock.setChanged(true);
+								TownyUniverse.getDataSource().saveTownBlock(townBlock);
+
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_set_to"), townBlock.getName()));
 
 							} else {
 
@@ -461,12 +473,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								"allySwitch", "allyItemUse" })
 							perm.set(element, b);
 					} catch (Exception e) {
-						// invalid entry
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+						return;
 					}
 
 				}
 
 			} else if (split.length == 2) {
+				if ((!split[0].equalsIgnoreCase("resident") && !split[0].equalsIgnoreCase("주민")
+						&& !split[0].equalsIgnoreCase("friend") && !split[0].equalsIgnoreCase("친구")
+						&& !split[0].equalsIgnoreCase("ally") && !split[0].equalsIgnoreCase("동맹")
+						&& !split[0].equalsIgnoreCase("outsider") && !split[0].equalsIgnoreCase("외부인"))
+						&& !split[0].equalsIgnoreCase("build") && !split[0].equalsIgnoreCase("건축")
+						&& !split[0].equalsIgnoreCase("destroy") && !split[0].equalsIgnoreCase("파괴")
+						&& !split[0].equalsIgnoreCase("switch") && !split[0].equalsIgnoreCase("스위치")
+						&& !split[0].equalsIgnoreCase("itemuse") && !split[0].equalsIgnoreCase("아이템사용")) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
+				}
 
 				try {
 
@@ -506,9 +530,22 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 
 				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
 				}
 
 			} else if (split.length == 3) {
+				if ((!split[0].equalsIgnoreCase("resident") && !split[0].equalsIgnoreCase("주민")
+						&& !split[0].equalsIgnoreCase("friend") && !split[0].equalsIgnoreCase("친구")
+						&& !split[0].equalsIgnoreCase("ally") && !split[0].equalsIgnoreCase("동맹")
+						&& !split[0].equalsIgnoreCase("outsider") && !split[0].equalsIgnoreCase("외부인")) 
+						|| (!split[1].equalsIgnoreCase("build") && !split[0].equalsIgnoreCase("건축")
+						&& !split[1].equalsIgnoreCase("destroy") && !split[0].equalsIgnoreCase("파괴")
+						&& !split[1].equalsIgnoreCase("switch") && !split[0].equalsIgnoreCase("스위치")
+						&& !split[1].equalsIgnoreCase("itemuse") && !split[0].equalsIgnoreCase("아이템사용"))) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
+				}
 
 				// reset the friend to resident so the perm settings don't fail
 				if (split[0].equalsIgnoreCase("friend"))
@@ -550,6 +587,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// End of Additional Code. Coded in 2014-02-28, by Neder(neder(@)neder.me).
 					perm.set(s, b);
 				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_set_perm_syntax_error"));
+					return;
 				}
 
 			}
@@ -638,7 +677,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// are only checking for an
 				// exception
 				if (forSale > 1000000 ) {
-					TownyUniverse.getPlayer(resident).sendMessage("Plot price too expensive.");
+					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_plot_price_too_expensive"));
 
 				} else {
 					townBlock.setPlotPrice(forSale);

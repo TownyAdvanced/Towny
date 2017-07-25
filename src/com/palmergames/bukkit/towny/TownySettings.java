@@ -229,7 +229,6 @@ public class TownySettings {
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		
 		if (file != null) {
-
 			// read the (language).yml into memory
 			language = new CommentedConfiguration(file);
 			language.load();
@@ -342,7 +341,7 @@ public class TownySettings {
 		return list;
 	}
 
-	private static List<String> getStrArr(ConfigNodes node) {
+	public static List<String> getStrArr(ConfigNodes node) {
 
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
 		List<String> list = new ArrayList<String>();
@@ -1005,6 +1004,11 @@ public class TownySettings {
 
 		return getString(ConfigNodes.PLUGIN_DATABASE_PASSWORD);
 	}
+	
+	public static boolean getSQLUsingSSL() {
+
+		return getBoolean(ConfigNodes.PLUGIN_DATABASE_SSL);
+	}
 
 	public static int getMaxTownBlocks(Town town) {
 
@@ -1303,6 +1307,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_DEF_TAXES_TAXPERCENTAGE);
 	}
 	
+	public static double getTownDefaultTaxMinimumTax() {
+		
+		return getDouble(ConfigNodes.TOWN_DEF_TAXES_MINIMUMTAX);
+	}
+	
 	public static boolean hasTownLimit() {
 
 		return getTownLimit() != 0;
@@ -1316,6 +1325,11 @@ public class TownySettings {
 	public static int getMaxPurchedBlocks() {
 
 		return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+	}
+	
+	public static int getMaxClaimRadiusValue() {
+		
+		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
 	}
 
 	public static boolean isSellingBonusBlocks() {
@@ -1500,6 +1514,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.WAR_EVENT_PRICE_DEATH);
 	}
+	
+	public static boolean getWarEventCostsTownblocks() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_COSTS_TOWNBLOCKS);
+	}
 
 	public static boolean isChargingDeath() {
 		
@@ -1532,9 +1551,19 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
 	}
 	
+	public static boolean isEcoClosedEconomyEnabled() {
+		
+		return getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED);
+	}
+	
 	public static boolean isJailingAttackingEnemies() {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_ENEMIES);	
+	}
+	
+	public static boolean isJailingAttackingOutlaws() {
+		
+		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);	
 	}
 
 	public static boolean JailAllowsEnderPearls() {
@@ -2236,6 +2265,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
 	}
 	
+	public static double getNationRequiresProximity() {
+		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
+	}
+	
 	public static List<String> getFarmPlotBlocks() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_PLOT_ALLOW_BLOCKS);
 	}
@@ -2243,4 +2276,43 @@ public class TownySettings {
 	public static List<String> getFarmAnimals() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
 	}
+	
+	public static String getListPageMsg(int page, int total) {
+		 
+	    return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	}
+	 
+	public static String getListNotEnoughPagesMsg(int max) {
+	 
+	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	}
+	
+	public static String[] getWarAPlayerHasNoTownMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_town"))); 
+	}
+	
+	public static String[] getWarAPlayerHasNoNationMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_no_nation"))); 
+	}
+	
+	public static String[] getWarAPlayerHasANeutralNationMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_a_neutral_nation"))); 
+	}
+	
+	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_has_been_removed_from_war")));
+	}
+	
+	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
+		return parseString(String.format(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
+	}
+	
+	public static String[] getWarAPlayerIsAnAllyMsg() {
+		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
+	}
+	
+	public static boolean isNotificationUsingTitles() {
+		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
+	}
+	
 }

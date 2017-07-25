@@ -497,4 +497,13 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
+
+	@Override
+	public List<Resident> getOutlaws() {
+
+		List<Resident> out = new ArrayList<Resident>();
+		for (Town town : getTowns())
+			out.addAll(town.getOutlaws());
+		return out;
+	}
 }

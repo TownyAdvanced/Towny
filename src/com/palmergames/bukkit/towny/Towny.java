@@ -194,6 +194,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
@@ -229,6 +230,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
@@ -236,6 +238,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleDrawSmokeTask(true);
 		resetCache();
 
 		return true;
@@ -302,8 +305,10 @@ public class Towny extends JavaPlugin {
 
 			if (TownyEconomyHandler.setupEconomy())
 				using.add(TownyEconomyHandler.getVersion());
-			else
-				TownyMessaging.sendErrorMsg("사용 가능한 이코노미 플러그인이 없습니다. iConomy 5.01이나 Vault 호환 이코노미 플러그인이 있는지 확인해주세요.");
+			else {
+				TownyMessaging.sendErrorMsg("호환 가능한 이코노미 플러그인을 찾을 수 없습니다. Vault.jar과 지원되는 이코노미 플러그인을 설치해 주세요.");
+				TownyMessaging.sendErrorMsg("이코노미를 사용하지 않으시려면 config.yml에서 using_economy를 false로 설정해 주세요.");
+			}
 		}
 
 		test = getServer().getPluginManager().getPlugin("Essentials");
@@ -324,9 +329,9 @@ public class Towny extends JavaPlugin {
 		 * Test for Citizens2 so we can avoid removing their NPC's
 		 */
 		test = getServer().getPluginManager().getPlugin("Citizens");
-		if (test != null) {
-			citizens2 = test.getDescription().getVersion().startsWith("2");
-		}
+		if (test != null) 
+			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled())
+				citizens2 = test.getDescription().getVersion().startsWith("2");
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] 다음과 연동됨: " + StringMgmt.join(using, ", "));

@@ -282,10 +282,11 @@ public class DailyTimerTask extends TownyTimerTask {
 					 * verify all objects.
 					 */
 					if (TownyUniverse.getDataSource().hasResident(resident.getName())) {
-
-						if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC()) {
-							continue;
-						}
+						if (resident.hasTown())
+							if (resident.getTown() == townBlock.getTown())
+								if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
+									continue;
+							
 						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
 

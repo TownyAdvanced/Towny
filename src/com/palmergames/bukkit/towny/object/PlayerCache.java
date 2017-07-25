@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.object;
 import java.util.HashMap;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;

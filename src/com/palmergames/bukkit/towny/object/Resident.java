@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -11,9 +14,11 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +43,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	
 	private List<String> townRanks = new ArrayList<String>();
 	private List<String> nationRanks = new ArrayList<String>();
+	
+	private static Towny plugin;
 
 	public Resident(String name) {
 
@@ -76,17 +83,79 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		this.isJailed = isJailed;		
 	}
     
-	public void setJailed(Player player, Integer index, Town town) {		
+	public void setJailedByMayor(Player player, Integer index, Town town) {		
 
 		if (this.isJailed) {
 			this.setJailed(false);			
 			try {
 				Location loc = this.getTown().getSpawn();
+				if (TownyTimerHandler.isTeleportWarmupRunning()) {
+					// Use teleport warmup
+					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					plugin.getTownyUniverse().requestTeleport(player, loc, 0);
+				} else {
+					// Don't use teleport warmup
+					Chunk chunk = loc.getChunk();
+					if (player.getVehicle() != null)
+						player.getVehicle().eject();
+					if (!chunk.isLoaded())
+						chunk.load();
+					player.teleport(loc, TeleportCause.COMMAND);
+				}				
+				this.removeJailSpawn();
+				this.setJailTown(" ");
+				TownyMessaging.sendMsg(player, "감옥에서 풀려났습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에서 풀어줬습니다.");
+			} catch (TownyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+	
+		} else {
+			try {
+				Location loc = town.getJailSpawn(index);				
+				if (TownyTimerHandler.isTeleportWarmupRunning()) {
+					// Use teleport warmup
+					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					plugin.getTownyUniverse().requestTeleport(player, loc, 0);
+				} else {
+					// Don't use teleport warmup
+					Chunk chunk = loc.getChunk();
+					if (player.getVehicle() != null)
+						player.getVehicle().eject();
+					if (!chunk.isLoaded())
+						chunk.load();
+					player.teleport(loc, TeleportCause.COMMAND);
+				}	
+				this.setJailed(true);
+				this.setJailSpawn(index);
+				this.setJailTown(town.toString());
+				TownyMessaging.sendMsg(player, "감옥에 갇혔습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에 가뒀습니다.");
+			} catch (TownyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		TownyUniverse.getDataSource().saveResident(this);
+	}
+	
+	public void setJailed(Player player, Integer index, Town town) {		
+
+		if (this.isJailed) {
+			this.setJailed(false);			
+			try {
+				Location loc = null;
+				if (this.hasTown())
+					loc = this.getTown().getSpawn();
+				else
+					loc = player.getWorld().getSpawnLocation();
+				
 				player.teleport(loc);
 				this.removeJailSpawn();
 				this.setJailTown(" ");
-				TownyMessaging.sendMsg(player, "You have been freed from jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에서 풀려났습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에서 풀어줬습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,8 +168,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				this.setJailed(true);
 				this.setJailSpawn(index);
 				this.setJailTown(town.toString());
-				TownyMessaging.sendMsg(player, "You have been sent to jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에 갇혔습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에 가뒀습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

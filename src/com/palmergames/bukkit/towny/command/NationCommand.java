@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.command;
+package com.palmergames.bukkit.towny.command; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -60,7 +61,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> king_help = new ArrayList<String>();
 
 	static {
-		
 		nation_help.add(ChatTools.formatTitle("/국가"));
 		nation_help.add(ChatTools.formatCommand("", "/국가", "", TownySettings.getLangString("nation_help_1")));
 		nation_help.add(ChatTools.formatCommand("", "/국가", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
@@ -71,6 +71,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "왕 ?", TownySettings.getLangString("nation_help_7")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/국가", "신설 " + TownySettings.getLangString("nation_help_2") + " [수도]", TownySettings.getLangString("nation_help_8")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/국가", "삭제 " + TownySettings.getLangString("nation_help_2"), ""));
+		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/국가", "말하기", "[메시지]"));
 
 		king_help.add(ChatTools.formatTitle(TownySettings.getLangString("king_help_1")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "출금 [$]", ""));
@@ -81,6 +82,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "동맹국 [추가/제거] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_2")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "적국 [추가/제거] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_3")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "삭제", ""));
+		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/국가", "말하기", "[메시지]"));
 
 	}
 
@@ -94,7 +96,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 			if (args == null) {
 				for (String line : nation_help)
 					player.sendMessage(line);
@@ -133,9 +134,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				listNations(player);
+				listNations(player, split);
 
-			} else if (split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("신설")) {
+			} else if (split[0].equalsIgnoreCase("new")) || split[0].equalsIgnoreCase("신설")) {
 				
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 				
@@ -265,15 +266,25 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ONLINE.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
+					
+					parseNationOnlineCommand(player, newSplit);
+				
+				} else if (split[0].equalsIgnoreCase("say")) || split[0].equalsIgnoreCase("말하기")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
 					try {
-						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-						Town town = resident.getTown();
-						Nation nation = town.getNation();
-						TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
-					} catch (NotRegisteredException x) {
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-					}
+						Nation nation = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+						StringBuilder builder = new StringBuilder();
+						for(String s : newSplit) {
+						    builder.append(s + " ");
+						}
+						String message = builder.toString();
+						TownyMessaging.sendPrefixedNationMessage(nation, message);
+					} catch (Exception e) {
+					}					
+					
 				} else
 					try {
 						Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
@@ -287,6 +298,33 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
+	}
+
+	private void parseNationOnlineCommand(Player player, String[] split) throws TownyException {
+		
+		if (split.length > 0) {			
+			try {
+				Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+				List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, nation);
+				if (onlineResidents.size() > 0 ) {				
+					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+				} else {
+					TownyMessaging.sendMessage(player, ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation)));
+				}
+					
+			} catch (NotRegisteredException e) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));				
+			}
+		} else {
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				Town town = resident.getTown();
+				Nation nation = town.getNation();
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
+			} catch (NotRegisteredException x) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+			}
+		}		
 	}
 
 	public void nationRank(Player player, String[] split) {
@@ -330,7 +368,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Is this a known rank?
 			 */
 			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, "'" + rank + "' (이)라는 등급은 없습니다. 존재하는 등급 :- " + StringMgmt.join(TownyPerms.getNationRanks(), ",") + ".");
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getNationRanks(), ",") ));
 				return;
 			}
 			/*
@@ -338,35 +376,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * for it.
 			 */
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank))) {
-				TownyMessaging.sendErrorMsg(player, "등급 수정 권한이 없습니다.");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_permission_to_give_rank"));
 				return;
 			}
 
 			if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("추가")) {
 				try {
 					if (target.addNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "'" + rank + "' 국가 등급을 하사받았습니다.");
-						TownyMessaging.sendMsg(player, "'" + rank + "' 국가 등급을 " + target.getName() + "님께 하사했습니다.");
+						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "국가", rank));
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "국가", rank, target.getName()));
 					} else {
 						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, "이 주민은 당신의 마을에 소속되어 있지 않습니다!");
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_resident_not_part_of_any_town"));
 						return;
 					}
 				} catch (AlreadyRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + "님은 이미 국가 등급을 하사받았습니다.");
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_resident_already_has_rank"), target.getName(), "국가"));
 					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove") || split[0].equalsIgnoreCase("제거")) {
 				try {
 					if (target.removeNationRank(rank)) {
-						TownyMessaging.sendMsg(target, "'" + rank + "' 국가 등급을 박탈당했씁니다..");
-						TownyMessaging.sendMsg(player, "'" + rank + "' 국가 등급을 " + target.getName() + "님에게서 박탈했습니다..");
+						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "국가", rank));
+						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "국가", rank, target.getName()));
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, target.getName() + "님은 아직 국가 등급을 하사받지 않았습니다.");
+					TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "국가"));
 					return;
 				}
 
@@ -400,7 +438,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation = resident.getTown().getNation();
 
 			nation.withdrawFromBank(resident, amount);
-			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "국가"));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		} catch (EconomyException x) {
@@ -428,7 +466,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.payTo(amount, nation, "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
-			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
+			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "국가"));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		} catch (EconomyException x) {
@@ -444,12 +482,33 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void listNations(Player player) {
-
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
-		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)");		
-		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();		 
-
+	public void listNations(Player player, String[] split) {
+		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();
+		
+		int page = 1;
+	    int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
+	    if (split.length > 1) {
+	        try {
+	            page = Integer.parseInt(split[1]);
+	            if (page < 0) {
+	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+	                return;
+	            } else if (page == 0) {
+	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	                return;
+	            }
+	        } catch (NumberFormatException e) {
+	            TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	            return;
+	        }
+	    }
+	    if (page > total) {
+	        TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+	        return;
+	    }
+	    player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
+		player.sendMessage(Colors.Gold + "국가 이름" + Colors.Gray + " - " + Colors.LightBlue + "(주민 수)" + Colors.Gray + " - " + Colors.LightBlue + "(마을 수)");
+	 
 		Collections.sort(nationsToSort, new Comparator() {
 			@Override
 	        public int compare(Object n1, Object n2) {
@@ -457,10 +516,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
 	        }
 		});
-		for (Nation nation : nationsToSort) {
-			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
-            player.sendMessage(output);
-		}		
+	    int iMax = page * 10;
+	    if ((page * 10) > nationsToSort.size()) {
+	        iMax = nationsToSort.size();
+	    }
+	    for (int i = (page - 1) * 10; i < iMax; i++) {
+	        Nation nation = nationsToSort.get(i);
+	        String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+	        player.sendMessage(output);
+	    }
+	    TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
+	
 	}
 	
 
@@ -643,12 +709,34 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Town> remove = new ArrayList<Town>();
 		for (Town town : invited)
-			try {
-				// nation.addTown(town);
+			try {				
+				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
+		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
+		        	remove.add(town);
+		        	continue;
+		        }
+				
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = town.getHomeBlock().getCoord();
+				if (nation.getCapital().getHomeBlock().getWorld().getName() != town.getHomeBlock().getWorld().getName()) {
+					remove.add(town);
+					continue;
+				}
+				double distance = 0;
+				if (TownySettings.getNationRequiresProximity() > 0) {					
+					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
+					if (distance > TownySettings.getNationRequiresProximity()) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
+						remove.add(town);
+						continue;
+					}
+				}
 
 				nationInviteTown(player, nation, town);
 			} catch (AlreadyRegisteredException e) {
 				remove.add(town);
+			} catch (TownyException e) {
+				e.printStackTrace();
 			}
 		for (Town town : remove)
 			invited.remove(town);

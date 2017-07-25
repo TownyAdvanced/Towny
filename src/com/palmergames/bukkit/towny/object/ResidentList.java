@@ -7,4 +7,6 @@ public interface ResidentList {
 	public List<Resident> getResidents();
 
 	public boolean hasResident(String name);
+
+	List<Resident> getOutlaws();
 }

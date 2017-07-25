@@ -3,9 +3,11 @@ package com.palmergames.bukkit.towny.war.flagwar;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 
+import java.util.List;
 import java.util.Set;
 
 public class TownyWarConfig {
@@ -154,6 +156,11 @@ public class TownyWarConfig {
 	public static boolean regenBlocksAfterExplosionInWarZone() {
 
 		return TownySettings.getBoolean(ConfigNodes.WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS);
+	}
+	
+	public static List<String> getExplosionsIgnoreList() {
+
+		return TownySettings.getStrArr(ConfigNodes.WAR_WARZONE_EXPLOSIONS_IGNORE_LIST);
 	}
 
 	public static double getWonTownblockReward() {

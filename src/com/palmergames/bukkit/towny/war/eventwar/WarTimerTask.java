@@ -81,8 +81,14 @@ public class WarTimerTask extends TownyTimerTask {
 							TownyMessaging.sendDebugMsg("[War]   healed");
 							continue;
 						}
+						
+						if (!resident.getTown().getNation().hasEnemy(townBlock.getTown().getNation()))
+							continue;
 						TownyMessaging.sendDebugMsg("[War]   notAlly");
 						//Enemy nation
+						
+						if (resident.isJailed())
+							continue;
 
 						boolean edgesOnly = TownySettings.getOnlyAttackEdgesInWar();
 						if (edgesOnly && !isOnEdgeOfTown(townBlock, worldCoord, warEvent))

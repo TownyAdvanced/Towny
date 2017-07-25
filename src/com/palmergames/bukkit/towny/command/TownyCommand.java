@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -78,11 +79,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		towny_war.add(ChatTools.formatTitle("/타우니 전쟁"));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "상황", ""));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "점수", ""));
+		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "참가자 [페이지 #]", ""));
 		towny_war.add(ChatTools.formatCommand("", "/타우니 전쟁", "hud", ""));
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			System.out.println("[PLAYER_COMMAND] " + player.getName() + ": /" + commandLabel + " " + StringMgmt.join(args));
 			parseTownyCommand(player, args);
 		} else {
 			// Console output
@@ -206,6 +207,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getStats());
 			else if (args[0].equalsIgnoreCase("scores") || args[0].equalsIgnoreCase("점수"))
 				towny_war.addAll(plugin.getTownyUniverse().getWarEvent().getScores(-1));
+			else if (args[0].equalsIgnoreCase("participants") || args[0].equalsIgnoreCase("참가자")) {
+				try {
+					parseWarParticipants(p, args);
+				} catch (NotRegisteredException e) {
+				}
+				return true;
+			}
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
 				towny_war.add("콘솔에서는 hud를 사용할 수 없습니다!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null) {
@@ -220,6 +228,68 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyUniverse.isWarTime();
 	}
 
+	@SuppressWarnings("null")
+	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
+
+		List<Town> townsToSort = War.warringTowns;
+		List<Nation> nationsToSort = War.warringNations;
+		int page = 1;
+		List<String> output = new ArrayList<String>();
+		String nationLine = null;
+		String townLine = null;
+		for (Nation nations : nationsToSort) {
+			nationLine = Colors.Gold + "-" + nations.getName().toString();
+			if (TownyUniverse.getDataSource().getResident(player.getName()).hasNation())
+				if (TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasEnemy(nations))
+					nationLine += Colors.Red + " (적)";
+				else if (TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasAlly(nations))
+					nationLine += Colors.Green + " (동맹)";
+			output.add(nationLine);
+			for (Town towns : townsToSort) {
+				if (towns.getNation().equals(nations)) {
+					townLine = Colors.Blue +"  -" + towns.getName().toString();
+					if (towns.isCapital())
+						townLine += Colors.LightBlue + " (수도)";
+					output.add(townLine);
+				}
+			}			
+		}
+		int total = (int) Math.ceil( (output.size()) / (double) 10 );		
+		if (split.length > 1) {
+			try {
+				page = Integer.parseInt(split[1]);
+				if (page < 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+					return;
+				} else if (page == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+			} catch (NumberFormatException e) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+				return;
+			}
+		}
+		if (page > total) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+			return;
+		}
+		
+		player.sendMessage(ChatTools.formatTitle("전쟁 참가자"));
+		player.sendMessage(Colors.Gold + "국가명" + Colors.Gray + " - " + Colors.Blue + "마을명");
+
+		int iMax = page * 10;
+		if ((page * 10) > output.size()) {
+			iMax = output.size();
+		}
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			String line = output.get(i);
+			player.sendMessage(line);			
+		}
+		TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
+		output.clear();
+	}	
+	
 	private void TopCommand(Player player, String[] args) {
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
@@ -269,7 +339,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<String> output = new ArrayList<String>();
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7e타우니 " + plugin.getVersion() + "\u00A76]");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/Llmdl/ElgarL");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-   \u00A73Korean Localized by \u00A7bNeder");
 		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70-- " + "\u00A73주민 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getResidents().size()) + Colors.Gray + " | " + "\u00A73마을 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getTowns().size()) + Colors.Gray + " | " + "\u00A73국가 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getNations().size()));
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70---- " + "\u00A73월드 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getWorlds().size()) + Colors.Gray + " | " + "\u00A73마을블록 수: \u00A7b" + Integer.toString(TownyUniverse.getDataSource().getAllTownBlocks().size()));
@@ -347,7 +417,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<TownyEconomyObject, Double> kv : kvTable.getKeyValues()) {
 			n++;
@@ -366,7 +436,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		for (ResidentList obj : list)
 			kvTable.put(obj, obj.getResidents().size());
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<ResidentList, Integer> kv : kvTable.getKeyValues()) {
 			n++;
@@ -385,7 +455,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		for (TownBlockOwner obj : list)
 			kvTable.put(obj, obj.getTownBlocks().size());
 		kvTable.sortByValue();
-		kvTable.revese();
+		kvTable.reverse();
 		int n = 0;
 		for (KeyValue<TownBlockOwner, Integer> kv : kvTable.getKeyValues()) {
 			n++;

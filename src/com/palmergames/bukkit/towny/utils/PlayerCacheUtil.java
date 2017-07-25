@@ -81,7 +81,7 @@ public class PlayerCacheUtil {
 
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
-			
+						
 			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
 
 			TownyMessaging.sendDebugMsg("New Cache permissions for " + blockId + ":" + action.toString() + ":" + status.name() + " = " + cache.getCachePermission(blockId, data, action));
@@ -339,7 +339,7 @@ public class PlayerCacheUtil {
 
 					}
 				}
-				//If this town is not in a nation and we are set to non peaceful status during war.
+				//If this town is not in a nation and we are set to non peaceful/neutral status during war.
 				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation())
 					return TownBlockStatus.WARZONE;
 			}
@@ -488,7 +488,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY))) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -513,7 +513,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -539,7 +539,7 @@ public class PlayerCacheUtil {
 						} catch (NotRegisteredException e) {
 						}
 
-					} else if (townBlock.getType() == TownBlockType.FARM) {		
+					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
 						
 						if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 							return true;
@@ -578,7 +578,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;
@@ -613,7 +613,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;
@@ -645,7 +645,7 @@ public class PlayerCacheUtil {
 					} catch (NotRegisteredException e) {
 					}
 
-				} else if (townBlock.getType() == TownBlockType.FARM) {		
+				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {
 					
 					if (TownySettings.getFarmPlotBlocks().contains(BukkitTools.getMaterial(blockId).name()))
 						return true;
