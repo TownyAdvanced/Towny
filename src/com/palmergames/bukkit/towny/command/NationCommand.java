@@ -136,7 +136,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				listNations(player, split);
 
-			} else if (split[0].equalsIgnoreCase("new")) || split[0].equalsIgnoreCase("신설")) {
+			} else if (split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("신설")) {
 				
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 				
@@ -269,7 +269,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					
 					parseNationOnlineCommand(player, newSplit);
 				
-				} else if (split[0].equalsIgnoreCase("say")) || split[0].equalsIgnoreCase("말하기")) {
+				} else if (split[0].equalsIgnoreCase("say") || split[0].equalsIgnoreCase("말하기")) {
 					
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));

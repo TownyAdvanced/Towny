@@ -393,7 +393,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", true);
 
-			} else if (split[1].equalsIgnoreCase("rank")) || split[1].equalsIgnoreCase("등급")) {
+			} else if (split[1].equalsIgnoreCase("rank") || split[1].equalsIgnoreCase("등급")) {
 				
 				parseAdminTownRankCommand(player, town, StringMgmt.remArgs(split, 2));
 			}
