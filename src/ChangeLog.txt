@@ -2551,6 +2551,10 @@ v0.91.4.10:
     - Improve message sent to players who try to start new Towns while their economy plugin is non-functional.
     - Improve message at startup when vault is not found.
     - Fix an occaision where explosions in the wilderness can cause an NPE.
-    - Add new resident Mode "constantplotboder"
+    - Add new resident Mode "constantplotborder"
       - When toggled or set using '/res set mode constantplotborder' or '/res toggle constantplotborder' the player will see plot borders appear every 5 seconds
     - Fix safemode when an outlaw is added to a town.
+    - Fix mayors being able to be made into Outlaws.
+    - Fix an issue with plotManagementRevertSpeed on mysql databases.
+    - Fix issue plaguing Mysql DB's in 0.91.4.9 where the console was spammed endlessly by revert speed default settings.
+    - Fix issue with outposts not unclaim their outpostspawns.

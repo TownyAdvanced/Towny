@@ -1263,12 +1263,12 @@ public class TownySQLSource extends TownyFlatFileSource {
 				/*
 				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
 				 */
-//				resultLong = rs.getLong("PlotManagementRevertSpeed");
-////				if (resultLong != null)
-////					try {
-////						world.setPlotManagementRevertSpeed(resultLong);
-////					} catch (Exception e) {
-////					}
+				resultLong = rs.getLong("PlotManagementRevertSpeed");
+				if (resultLong != null)
+					try {
+						world.setPlotManagementRevertSpeed(resultLong);
+					} catch (Exception e) {
+					}
 
 				line = rs.getString("plotManagementIgnoreIds");
 				if (line != null)
@@ -1523,11 +1523,11 @@ public class TownySQLSource extends TownyFlatFileSource {
 			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + Double.toString(town.getSpawn().getX()) + "#" + Double.toString(town.getSpawn().getY()) + "#" + Double.toString(town.getSpawn().getZ()) + "#" + Float.toString(town.getSpawn().getPitch()) + "#" + Float.toString(town.getSpawn().getYaw()) : "");
 			// Outpost Spawns
 			String outpostArray = "";
-			if (town.hasOutpostSpawn()) 
+			if (town.hasOutpostSpawn())
 				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
 					outpostArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}
-			twn_hm.put("outpostSpawns", outpostArray);			// Jail Spawns
+			twn_hm.put("outpostSpawns", outpostArray);			
 			String jailArray = "";
 			if (town.hasJailSpawn()) 		
 				for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
@@ -1635,7 +1635,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
 			// Using PlotManagement Revert Speed
-			//nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
+			nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
 
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)

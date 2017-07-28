@@ -115,7 +115,7 @@ public class TownClaim extends Thread {
 		}
 
 		if (!towns.isEmpty())
-			for (Town test : towns)
+			for (Town test : towns) 
 				TownyUniverse.getDataSource().saveTown(test);
 
 		if (!worlds.isEmpty())
@@ -202,6 +202,7 @@ public class TownClaim extends Thread {
 				@Override
 				public void run() {
 
+					
 					TownyUniverse.getDataSource().removeTownBlock(townBlock);
 					
 					// Raise an event to signal the unclaim

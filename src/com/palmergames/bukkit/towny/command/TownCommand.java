@@ -414,6 +414,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						targetTown = target.getTown();
 					} catch (Exception e1) {
 					}
+					if (targetTown.getMayor().equals(target))
+						return;
 					if (targetTown != null)
 						if (targetTown == town){
 							townRemoveResident(town, target);
