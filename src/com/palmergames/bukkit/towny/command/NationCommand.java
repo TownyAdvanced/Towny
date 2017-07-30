@@ -694,7 +694,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation = resident.getTown().getNation();
 			
 	        if ((TownySettings.getNumResidentsJoinNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
+	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), resident.getTown().getName()));
 	        	return;
 	        }
 
@@ -712,7 +712,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Town town : invited)
 			try {				
 				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
+		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
 		        	remove.add(town);
 		        	continue;
 		        }
