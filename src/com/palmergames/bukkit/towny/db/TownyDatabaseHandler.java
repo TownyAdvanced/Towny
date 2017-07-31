@@ -265,6 +265,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town = townBlock.getTown();
 		} catch (NotRegisteredException e) {
 		}
+		
+		
 		TownyWorld world = townBlock.getWorld();
 		world.removeTownBlock(townBlock);
 
@@ -272,6 +274,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteTownBlock(townBlock);
 
 		saveTownBlockList();
+		
 
 		if (resident != null)
 			saveResident(resident);

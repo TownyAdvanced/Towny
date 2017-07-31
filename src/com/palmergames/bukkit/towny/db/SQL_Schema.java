@@ -44,9 +44,6 @@ public class SQL_Schema {
 				+ "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0',"
 				+ "`plotManagementMayorDelete` mediumtext NOT NULL,"
 				+ "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0',"
-				/*
-				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-				 */
 				+ "`plotManagementRevertSpeed` long NOT NULL,"
 				+ "`plotManagementIgnoreIds` mediumtext NOT NULL,"
 				+ "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0',"
@@ -252,7 +249,6 @@ public class SQL_Schema {
 
 		try {
 			town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` "
-						//+ "ADD COLUMN `jailSpawns` mediumtext DEFAULT NULL,"
 						+ "ADD COLUMN `outlaws` mediumtext DEFAULT NULL";
 			
 			Statement s = cntx.createStatement();

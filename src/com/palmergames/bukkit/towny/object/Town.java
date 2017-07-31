@@ -719,6 +719,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			} catch (TownyException e) {
 			}
 			townBlocks.remove(townBlock);
+			TownyUniverse.getDataSource().saveTown(this);
 		}
 	}
 
@@ -802,6 +803,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
+			} else {
+				TownyMessaging.sendErrorMsg("removeOutPostSpawn : no outpost found where one ought to be");
 			}
 		}
 	}
