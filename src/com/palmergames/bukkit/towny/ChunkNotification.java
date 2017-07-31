@@ -30,9 +30,9 @@ public class ChunkNotification {
 	public static String noOwnerNotificationFormat = Colors.LightGreen + "%s";
 	public static String plotNotficationSplitter = " ";
 	public static String plotNotificationFormat = "%s";
-	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
-	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
-	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
+	public static String homeBlockNotification = Colors.LightBlue + "[홈]";
+	public static String outpostBlockNotification = Colors.LightBlue + "[전초기지]";
+	public static String forSaleNotificationFormat = Colors.Yellow + "[판매중: %s]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";
 
 	/**

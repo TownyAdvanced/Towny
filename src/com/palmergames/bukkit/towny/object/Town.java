@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -35,7 +35,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			plotPrice, commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
 	private boolean hasUpkeep, isPublic, isTaxPercentage, isOpen;
-	private String townBoard = "/town set board [msg]", tag;
+	private String townBoard = "/town set board [메시지] 로 메시지 수정가능", tag;
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private Location spawn;
@@ -78,7 +78,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
-			throw new TownyException("Tag too long");
+			throw new TownyException("태그가 너무 깁니다");
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
@@ -122,7 +122,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public void setMayor(Resident mayor) throws TownyException {
 
 		if (!hasResident(mayor))
-			throw new TownyException("Mayor doesn't belong to town.");
+			throw new TownyException("촌장이 마을에 속해 있지 않습니다.");
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);
@@ -133,7 +133,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		if (hasNation())
 			return nation;
 		else
-			throw new NotRegisteredException("Town doesn't belong to any nation.");
+			throw new NotRegisteredException("이 마을은 아직 국가에 속해 있지 않습니다.");
 	}
 
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -413,7 +413,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			return false;
 		}
 		if (!hasTownBlock(homeBlock))
-			throw new TownyException("Town has no claim over this town block.");
+			throw new TownyException("아직 이 마을블록을 점유하지 않았습니다.");
 		this.homeBlock = homeBlock;
 
 		// Set the world as it may have changed
@@ -491,7 +491,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		if (hasHomeBlock())
 			return homeBlock;
 		else
-			throw new TownyException("Town has not set a home block.");
+			throw new TownyException("아직 홈블록을 설정하지 않았습니다.");
 	}
 
 	/**
@@ -629,12 +629,12 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public void setSpawn(Location spawn) throws TownyException {
 
 		if (!hasHomeBlock())
-			throw new TownyException("Home Block has not been set");
+			throw new TownyException("마을에 홈블록이 아직 설정되지 않았습니다");
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ()) {
 			this.spawn = spawn;
 		} else
-			throw new TownyException("Spawn is not within the homeBlock.");
+			throw new TownyException("마을 스폰이 홈블록에 존재하지 않습니다.");
 	}
 	
 	/**
@@ -656,7 +656,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		else {
 			this.spawn = null;
-			throw new TownyException("Town has not set a spawn location.");
+			throw new TownyException("마을 스폰지역이 설정되지 않았습니다.");
 		}
 	}
 
@@ -739,13 +739,13 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			TownBlock outpost = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (outpost.getX() == spawnBlock.getX() && outpost.getZ() == spawnBlock.getZ()) {
 				if (!outpost.isOutpost())
-					throw new TownyException("Location is not within an outpost plot.");
+					throw new TownyException("전초기지 안이 아닙니다.");
 
 				outpostSpawns.add(spawn);
 			}
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException("Location is not within a Town.");
+			throw new TownyException("마을 안이 아닙니다.");
 		}
 
 	}
@@ -772,7 +772,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public Location getOutpostSpawn(Integer index) throws TownyException {
 
 		if (getMaxOutpostSpawn() == 0)
-			throw new TownyException("Town has no outpost spawns set.");
+			throw new TownyException("마을 전초기지 스폰이 설정되지 않았습니다.");
 
 		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1)));
 	}
@@ -977,10 +977,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
-			if (!payTo(amount, resident, "Town Widthdraw"))
-				throw new TownyException("There is not enough money in the bank.");
+			if (!payTo(amount, resident, "마을 출금"))
+				throw new TownyException("금고에 충분한 자금이 없습니다.");
 		} else
-			throw new TownyException("Economy has not been turned on.");
+			throw new TownyException("이코노미 시스템이 비활성화 되어있습니다.");
 
 	}
 
@@ -988,11 +988,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "Town (" + getName() + ")");
-		out.add(getTreeDepth(depth + 1) + "Mayor: " + (hasMayor() ? getMayor().getName() : "None"));
-		out.add(getTreeDepth(depth + 1) + "Home: " + homeBlock);
-		out.add(getTreeDepth(depth + 1) + "Bonus: " + bonusBlocks);
-		out.add(getTreeDepth(depth + 1) + "TownBlocks (" + getTownBlocks().size() + "): " /*
+		out.add(getTreeDepth(depth) + "마을 (" + getName() + ")");
+		out.add(getTreeDepth(depth + 1) + "촌장: " + (hasMayor() ? getMayor().getName() : "없음"));
+		out.add(getTreeDepth(depth + 1) + "홈블록: " + homeBlock);
+		out.add(getTreeDepth(depth + 1) + "보너스: " + bonusBlocks);
+		out.add(getTreeDepth(depth + 1) + "마을블록 (" + getTownBlocks().size() + "): " /*
 																						 * +
 																						 * getTownBlocks
 																						 * (
@@ -1001,9 +1001,9 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		List<Resident> assistants = getAssistants();
 		
 		if (assistants.size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Assistants (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
+			out.add(getTreeDepth(depth + 1) + "부촌장 (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
 		
-		out.add(getTreeDepth(depth + 1) + "Residents (" + getResidents().size() + "):");
+		out.add(getTreeDepth(depth + 1) + "주민 (" + getResidents().size() + "):");
 		for (Resident resident : getResidents())
 			out.addAll(resident.getTreeString(depth + 2));
 		return out;
@@ -1048,14 +1048,14 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			TownBlock jail = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
-					throw new TownyException("Location is not within a Jail plot.");
+					throw new TownyException("이 토지의 유형이 감옥이 아닙니다.");
 				
 				jailSpawns.add(spawn);
 				TownyUniverse.getDataSource().saveTown(this);			
 			}
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException("Location is not within a Town.");
+			throw new TownyException("마을에 소속된 곳이어야 합니다.");
 		}
 
 	}
@@ -1091,7 +1091,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public Location getJailSpawn(Integer index) throws TownyException {
 
 		if (getMaxJailSpawn() == 0)
-			throw new TownyException("Town has no jail spawns set.");
+			throw new TownyException("마을이 감옥 스폰을 설정하지 않았습니다.");
 
 		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
 	}

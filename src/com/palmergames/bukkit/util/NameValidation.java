@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.palmergames.bukkit.util;
+package com.palmergames.bukkit.util; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class NameValidation {
 		String out = filterName(name);
 
 		if (isBlacklistName(out))
-			throw new InvalidNameException(out + " is an invalid name.");
+			throw new InvalidNameException(out + " 은(는) 잘못된 이름입니다.");
 
 		return out;
 	}
@@ -50,7 +50,7 @@ public class NameValidation {
 		String out = filterName(name);
 
 		if (!isValidName(out))
-			throw new InvalidNameException(out + " is an invalid name.");
+			throw new InvalidNameException(out + " 은(는) 잘못된 이름입니다.");
 
 		return out;
 	}

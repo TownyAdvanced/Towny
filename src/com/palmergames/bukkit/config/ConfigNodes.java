@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.config;
+package com.palmergames.bukkit.config; /* Localized on 2014-05-04 by Neder */
 
 public enum ConfigNodes {
 	VERSION_HEADER("version", "", ""),
@@ -16,7 +16,7 @@ public enum ConfigNodes {
 			"  # Minimum required version of CraftBukkit.  Please do not edit."),
 	LANGUAGE(
 			"language",
-			"english.yml",
+			"korean.yml",
 			"",
 			"  # The language file you wish to use"),
 	PERMS(
@@ -774,11 +774,11 @@ public enum ConfigNodes {
 	NOTIFICATION_PLOT("notification.plot", ""),
 	NOTIFICATION_PLOT_SPLITTER("notification.plot.splitter", " "),
 	NOTIFICATION_PLOT_FORMAT("notification.plot.format", "%s"),
-	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[Home]"),
+	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[홈]"),
 	NOTIFICATION_PLOT_OUTPOSTBLOCK(
 			"notification.plot.outpostblock",
-			"&b[Outpost]"),
-	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+			"&b[전초기지]"),
+	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[판매중: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_USING_TITLES(
 			"notification.using_titles", 

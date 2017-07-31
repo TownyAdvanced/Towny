@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.db;
+package com.palmergames.bukkit.towny.db; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -97,7 +97,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (!hasResident(name)) {
 
-			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+			throw new NotRegisteredException(String.format("주민 '%s'은(는) 등록되지 않았습니다.", name));
 
 		} else if (TownySettings.isFakeResident(name)) {
 
@@ -139,7 +139,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (!hasTown(name))
-			throw new NotRegisteredException(String.format("The town '%s' is not registered.", name));
+			throw new NotRegisteredException(String.format("마을 '%s'은(는) 등록되지 않았습니다.", name));
 
 		return universe.getTownsMap().get(name);
 	}
@@ -171,7 +171,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (!hasNation(name))
-			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
+			throw new NotRegisteredException(String.format("국가 '%s'은(는) 등록되지 않았습니다.", name));
 
 		return universe.getNationsMap().get(name.toLowerCase());
 	}
@@ -182,7 +182,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		TownyWorld world = universe.getWorldMap().get(name.toLowerCase());
 
 		if (world == null)
-			throw new NotRegisteredException("World not registered!");
+			throw new NotRegisteredException("이 월드는 등록되지 않았습니다!");
 
 		return world;
 	}
@@ -324,7 +324,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (universe.getResidentMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
+			throw new AlreadyRegisteredException("" + filteredName + " 라는 닉네임은 이미 사용중입니다.");
 
 		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
 
@@ -346,7 +346,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			if (universe.getTownsMap().containsKey(filteredName.toLowerCase()))
-				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+				throw new AlreadyRegisteredException("" + filteredName + " 라는 마을이 이미 있습니다.");
 
 			universe.getTownsMap().put(filteredName.toLowerCase(), new Town(filteredName));
 
@@ -372,7 +372,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			if (universe.getNationsMap().containsKey(filteredName.toLowerCase()))
-				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+				throw new AlreadyRegisteredException("" + filteredName + " 라는 국가가 이미 있습니다.");
 
 			universe.getNationsMap().put(filteredName.toLowerCase(), new Nation(filteredName));
 
@@ -394,7 +394,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		 * }
 		 */
 		if (universe.getWorldMap().containsKey(filteredName.toLowerCase()))
-			throw new AlreadyRegisteredException("The world " + filteredName + " is already in use.");
+			throw new AlreadyRegisteredException("" + filteredName + " 라는 월드가 이미 있습니다.");
 
 		universe.getWorldMap().put(filteredName.toLowerCase(), new TownyWorld(filteredName));
 
@@ -482,7 +482,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (TownyEconomyHandler.isActive())
 			try {
-				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.payTo(town.getHoldingBalance(), new WarSpoils(), "마을 삭제");
 				town.removeAccount();
 			} catch (Exception e) {
 			}
@@ -531,7 +531,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			try {
-				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "Remove Nation");
+				nation.payTo(nation.getHoldingBalance(), new WarSpoils(), "국가 삭제");
 				nation.removeAccount();
 			} catch (Exception e) {
 			}
@@ -631,7 +631,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			if (hasTown(filteredName))
-				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
+				throw new AlreadyRegisteredException("" + filteredName + " 라는 마을이 이미 있습니다.");
 
 			// TODO: Delete/rename any invites.
 
@@ -679,7 +679,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownySettings.isUsingEconomy()) {
 				//TODO
 				try {
-					town.setBalance(townBalance, "Rename Town - Transfer to new account");
+					town.setBalance(townBalance, "마을 이름 변경 - 새로운 계정으로 이동");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -741,7 +741,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			if (hasNation(filteredName))
-				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
+				throw new AlreadyRegisteredException("" + filteredName + " 라는 국가가 이미 있습니다.");
 
 			// TODO: Delete/rename any invites.
 
@@ -772,7 +772,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive()) {
 				//TODO
 				try {
-					nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
+					nation.setBalance(nationBalance, "국가 이름 변경 - 새로운 계정으로 이동");
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}

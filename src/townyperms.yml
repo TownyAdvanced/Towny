@@ -58,7 +58,7 @@ towns:
     ranks:
         # Ranks contain additional permissions residents will be
         # granted if they are assigned that specific rank.
-        assistant:
+        부촌장:
             - towny.tax_exempt
             - towny.command.town.claim.*
             - towny.command.town.add
@@ -69,14 +69,14 @@ towns:
             - towny.command.town.rank.vip
             - towny.command.town.rank.helper
             - towny.outlaw.jailer
-        helper:
+        도우미:
             - towny.claimed.townowned.switch.*
-        donator:
+        후원자:
             # Currently only an example rank holder with no extra permissions
         vip:
             - towny.cheat.bypass
         # Sheriff rank is able to jail other town members.
-        sheriff:
+        보안관:
             - towny.command.town.toggle.jail
             - towny.outlaw.jailer
             
@@ -94,10 +94,10 @@ nations:
         - towny.command.nation.*
         
     ranks:
-        assistant:
+        신하:
             - towny.command.nation.rank.helper
             - towny.command.nation.add
             - towny.command.nation.ally
             - towny.command.nation enemy
-        helper:
+        도우미:
             - towny.command.nation.add

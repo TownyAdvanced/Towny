@@ -18,7 +18,7 @@ public class MemMgmt {
 
 	public static String getMemSize(long num) {
 
-		String[] s = { "By", "Kb", "Mb", "Gb", "Tb" };
+		String[] s = { "By", "KB", "MB", "GB", "TB" };
 		double n = num;
 		int w = 0;
 		while (n > 1024 && w < s.length - 1) {

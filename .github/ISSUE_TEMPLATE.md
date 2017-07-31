@@ -1,38 +1,40 @@
-This ticket template is for bug/error reports. If you are suggesting a feature and not reporting a bug please delete all the text here and begin your ticket Title with Suggestion:
+이 티켓 양식은 버그/오류 보고 양식입니다. 버그 리포트가 아닌 기능 제안 등을 하려고 하신다면 이 양식을 지우고 티켓 제목에 "Suggestion"을 포함시켜 주세요.
 
-
-### What steps will reproduce the problem?
+### 오류를 재현하려면 어떻게 해야 하나요?
 1.
 2.
 3.
 
 
-### What is the expected output?
+### 어떠한 실행 결과를 예상했나요?
 1.
 2.
 3.
 
 
-### What is your Towny version?
-Do not say "latest".
+### 사용중인 타우니의 버전을 적어주세요.
+"최신 버전"이라고 적지 마세요.
 
 
-### What is your spigot/craftbukkit version?
-Do not say "latest".
+### 사용중인 spigot/craftbukkit의 버전을 적어주세요.
+"최신 버전"이라고 적지 마세요.
 
 
 
-### Please use Pastebin.com to link the following files:
+### 아래의 파일을 붙여넣을 때는 pastebin.com 을 사용해 주세요:
 
-**Skipping these files is not an option. It is the easiest way to diagnose an issue ticket properly. If you do skip this step then your ticket will most likely be deleted and you will be asked to resubmit.**
-1. Your full server startup from the logs\latest.log :
-2. Your Towny config.yml (if using MySQL please remove password,) :
-3. Your townyperms.yml :
-4. Your log's error : 
+**아래의 파일을 꼭 첨부해 주세요. 이슈 티켓을 올바르게 진단하고 처리하기 위해 필요합니다. 첨부되지 않았다면 티켓을 삭제하고 재등록을 요청하겠습니다.
+1. 모든 서버 구동 과정이 포함된 로그 파일(경로: logs\latest.log) :
+2. 사용중인 타우니 config.yml (MySQL을 사용한다면 패스워드를 지워서 보내주세요) :
+3. 사용중인 townyperms.yml :
+4. 서버 로그에 표시되는 오류 : 
 
-(optional) If this is to do with permissions, 
-5. Your permissions file :
+(선택) 펄미션과 관련된 내용이라면, 
+5. 사용중인 펄미션 파일 :
 
-(optional) If this is to do with chat,
-6. Your chatconfig.yml :
-7. Your channels.yml :
+(선택) 채팅과 관련된 내용이라면,
+6. 사용중인 chatconfig.yml :
+7. 사용중인 channels.yml :
+
+Towny Bug Report Teamplate - Korean Translated by Neder.
+번역자는 이 번역 양식에 대한 책임을 지지 않습니다.

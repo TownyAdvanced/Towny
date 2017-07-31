@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny; /* Localized on 2014-05-02 by Neder */
 
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
@@ -84,7 +84,7 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		System.out.println("====================      Towny      ========================");
+		System.out.println("====================      타우니      ========================");
 		
 		/*
 		 * Register Metrics
@@ -111,13 +111,13 @@ public class Towny extends JavaPlugin {
 
 		if (load()) {
 			// Setup bukkit command interfaces
-			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-			getCommand("resident").setExecutor(new ResidentCommand(this));
-			getCommand("towny").setExecutor(new TownyCommand(this));
-			getCommand("town").setExecutor(new TownCommand(this));
-			getCommand("nation").setExecutor(new NationCommand(this));
-			getCommand("plot").setExecutor(new PlotCommand(this));
+			getCommand("타우니관리").setExecutor(new TownyAdminCommand(this));
+			getCommand("타우니월드").setExecutor(new TownyWorldCommand(this));
+			getCommand("주민").setExecutor(new ResidentCommand(this));
+			getCommand("타우니").setExecutor(new TownyCommand(this));
+			getCommand("마을").setExecutor(new TownCommand(this));
+			getCommand("국가").setExecutor(new NationCommand(this));
+			getCommand("토지").setExecutor(new PlotCommand(this));
 
 			TownyWar.onEnable();
 
@@ -132,9 +132,9 @@ public class Towny extends JavaPlugin {
 
 		TownyLogger.log.info("=============================================================");
 		if (isError())
-			TownyLogger.log.info("[WARNING] - ***** SAFE MODE ***** " + version);
+			TownyLogger.log.info("[경고] - ***** 안전 모드 ***** " + version);
 		else
-			TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
+			TownyLogger.log.info("[타우니] 버전: " + version + " - 모드 활성화됨");
 		TownyLogger.log.info("=============================================================");
 
 		if (!isError()) {
@@ -152,10 +152,10 @@ public class Towny extends JavaPlugin {
 	public void SetWorldFlags() {
 
 		for (Town town : TownyUniverse.getDataSource().getTowns()) {
-			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
+			TownyMessaging.sendDebugMsg("[Towny] 다음 설정값을 생성합니다: " + town.getName());
 
 			if (town.getWorld() == null) {
-				TownyLogger.log.warning("[Towny Error] Detected an error with the world files. Attempting to repair");
+				TownyLogger.log.warning("[타우니 오류] 월드 파일에서 오류를 발견했습니다. 복구를 시도합니다");
 				if (town.hasHomeBlock())
 					try {
 						TownyWorld world = town.getHomeBlock().getWorld();
@@ -166,10 +166,10 @@ public class Towny extends JavaPlugin {
 						}
 					} catch (TownyException e) {
 						// Error fetching homeblock
-						TownyLogger.log.warning("[Towny Error] Failed get world data for: " + town.getName());
+						TownyLogger.log.warning("[타우니 오류] 설정값을 읽어오지 못했습니다: " + town.getName());
 					}
 				else
-					TownyLogger.log.warning("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
+					TownyLogger.log.warning("[타우니 오류] 홈블록이 없습니다 - 감지하지 못한 월드: " + town.getName());
 			}
 		}
 
@@ -205,7 +205,7 @@ public class Towny extends JavaPlugin {
 
 		townyUniverse = null;
 
-		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
+		System.out.println("[타우니] 버전: " + version + " - 모드 비활성화됨");
 		System.out.println("=============================================================");
 
 		TownyLogger.shutDown();
@@ -306,8 +306,8 @@ public class Towny extends JavaPlugin {
 			if (TownyEconomyHandler.setupEconomy())
 				using.add(TownyEconomyHandler.getVersion());
 			else {
-				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. Install Vault.jar with any of the supported eco systems.");
-				TownyMessaging.sendErrorMsg("If you do not want an economy to be used, set using_economy: false in your Towny config.yml.");
+				TownyMessaging.sendErrorMsg("호환 가능한 이코노미 플러그인을 찾을 수 없습니다. Vault.jar과 지원되는 이코노미 플러그인을 설치해 주세요.");
+				TownyMessaging.sendErrorMsg("이코노미를 사용하지 않으시려면 config.yml에서 using_economy를 false로 설정해 주세요.");
 			}
 		}
 
@@ -334,7 +334,7 @@ public class Towny extends JavaPlugin {
 				citizens2 = test.getDescription().getVersion().startsWith("2");
 
 		if (using.size() > 0)
-			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+			TownyLogger.log.info("[Towny] 다음과 연동됨: " + StringMgmt.join(using, ", "));
 	}
 
 	private void registerEvents() {
@@ -376,7 +376,7 @@ public class Towny extends JavaPlugin {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
 			TownyLogger.log.info("------------------------------------");
-			TownyLogger.log.info("[Towny] ChangeLog up until v" + getVersion());
+			TownyLogger.log.info("[타우니] v" + getVersion() + "까지의 변경사항");
 			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
@@ -387,7 +387,7 @@ public class Towny extends JavaPlugin {
 			}
 			TownyLogger.log.info("------------------------------------");
 		} catch (IOException e) {
-			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
+			TownyMessaging.sendDebugMsg("ChangeLog.txt 를 읽지 못했습니다.");
 		}
 		TownySettings.setLastRunVersion(getVersion());
 		
@@ -451,7 +451,7 @@ public class Towny extends JavaPlugin {
 	public Essentials getEssentials() throws TownyException {
 
 		if (essentials == null)
-			throw new TownyException("Essentials is not installed, or not enabled!");
+			throw new TownyException("Essentials 이 없거나, 활성화되지 않았습니다!");
 		else
 			return essentials;
 	}
@@ -462,7 +462,7 @@ public class Towny extends JavaPlugin {
 			if (world.getName().equals(name))
 				return world;
 
-		throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
+		throw new NotRegisteredException(String.format("월드 '$%s' 은(는) 등록되지 않았습니다.", name));
 	}
 
 	public boolean hasCache(Player player) {
@@ -476,7 +476,7 @@ public class Towny extends JavaPlugin {
 			getTownyUniverse();
 			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), player));
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
+			TownyMessaging.sendErrorMsg(player, player.getWorld().getName() + "월드의 펄미션 캐쉬를 만들지 못했습니다.");
 		}
 
 	}
@@ -683,12 +683,12 @@ public class Towny extends JavaPlugin {
 
 	public boolean parseOnOff(String s) throws Exception {
 
-		if (s.equalsIgnoreCase("on"))
+		if (s.equalsIgnoreCase("on") || s.equalsIgnoreCase("켜기"))
 			return true;
-		else if (s.equalsIgnoreCase("off"))
+		else if (s.equalsIgnoreCase("off") || s.equalsIgnoreCase("끄기"))
 			return false;
 		else
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
+			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " 켜기/끄기."));
 	}
 
 	

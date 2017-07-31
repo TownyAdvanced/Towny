@@ -8,10 +8,10 @@ import java.util.Map;
  * @author dumptruckman
  */
 public enum TownBlockType {
-	RESIDENTIAL(0, "default", "+") {  // The default Block Type.
+	RESIDENTIAL(0, "기본", "+") {  // The default Block Type. // 기본 마을블록 타입입니다.
 	},
 
-	COMMERCIAL(1, "Shop", "C") {  // Just like residential but has additional tax
+	COMMERCIAL(1, "상점", "C") {  // Just like residential but has additional tax // 기본 마을블록와 같지만, 세금이 더 많이 붙습니다.
 
 		@Override
 		public double getTax(Town town) {
@@ -20,10 +20,10 @@ public enum TownBlockType {
 		}
 	},
 
-	ARENA(2, "Arena", "A") {	//Always PVP enabled.
+	ARENA(2, "전장", "A") {	//Always PVP enabled. // 항상 PvP를 할 수 있습니다.
 	},
 
-	EMBASSY(3, "Embassy", "E") {  // For other towns to own a plot in your town.
+	EMBASSY(3, "대사관", "E") {  // For other towns to own a plot in your town. // 다른 마을에서 이 토지를 소유할 수 있습니다.
 
 		@Override
 		public double getTax(Town town) {
@@ -31,15 +31,15 @@ public enum TownBlockType {
 			return town.getEmbassyPlotTax() + town.getPlotTax();
 		}
 	},
-	WILDS(4, "Wilds", "W") {	//Follows wilderness protection settings, but town owned.
+	WILDS(4, "야생", "W") {	//Follows wilderness protection settings, but town owned. // 마을에 소속되어 있지만, 야생구역의 설정을 따릅니다.
 	},
-	SPLEEF(5, "Spleef", "+") {	//Follows wilderness protection settings, but town owned.
+	SPLEEF(5, "보호구역", "+") {	//Follows wilderness protection settings, but town owned. // 마을에 소속되어 있지만, 야생구역의 설정을 따릅니다.
 	},
-	INN(6, "Inn", "I") {	//Allows use of beds outside your own plot.
+	INN(6, "여관", "I") {	//Allows use of beds outside your own plot. // 자신의 토지가 아닐 경우에도 침대를 사용할 수 있습니다.
 	},
-	JAIL(7, "Jail", "J") {	//Enables setting the jail spawn.		
+	JAIL(7, "감옥", "J") {	//Enables setting the jail spawn.		
 	},
-	FARM(8, "Farm", "F") {	//Follows wilderness protection settings, but town owned.
+	FARM(8, "농장", "F") {	//Follows wilderness protection settings, but town owned.
 	}
 
 	// These are subject to change:

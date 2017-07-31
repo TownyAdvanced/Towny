@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object; /* Localized on 2014-05-05 by Neder */
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -104,8 +104,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				}				
 				this.removeJailSpawn();
 				this.setJailTown(" ");
-				TownyMessaging.sendMsg(player, "You have been freed from jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에서 풀려났습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에서 풀어줬습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -130,8 +130,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				this.setJailed(true);
 				this.setJailSpawn(index);
 				this.setJailTown(town.toString());
-				TownyMessaging.sendMsg(player, "You have been sent to jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에 갇혔습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에 가뒀습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -154,8 +154,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				player.teleport(loc);
 				this.removeJailSpawn();
 				this.setJailTown(" ");
-				TownyMessaging.sendMsg(player, "You have been freed from jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에서 풀려났습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에서 풀어줬습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -168,8 +168,8 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				this.setJailed(true);
 				this.setJailSpawn(index);
 				this.setJailTown(town.toString());
-				TownyMessaging.sendMsg(player, "You have been sent to jail.");
-				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
+				TownyMessaging.sendMsg(player, "감옥에 갇혔습니다.");
+				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " 을(를) " + index + "번 감옥에 가뒀습니다.");
 			} catch (TownyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -292,7 +292,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		if (hasTown())
 			return town;
 		else
-			throw new NotRegisteredException("Resident doesn't belong to any town");
+			throw new NotRegisteredException("어떤 마을에도 속해있지 않습니다.");
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -392,11 +392,11 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<String>();
-		out.add(getTreeDepth(depth) + "Resident (" + getName() + ")");
-		out.add(getTreeDepth(depth + 1) + "Registered: " + getRegistered());
-		out.add(getTreeDepth(depth + 1) + "Last Online: " + getLastOnline());
+		out.add(getTreeDepth(depth) + "주민 (" + getName() + ")");
+		out.add(getTreeDepth(depth + 1) + "가입일: " + getRegistered());
+		out.add(getTreeDepth(depth + 1) + "최근 접속: " + getLastOnline());
 		if (getFriends().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Friends (" + getFriends().size() + "): " + Arrays.toString(getFriends().toArray(new Resident[0])));
+			out.add(getTreeDepth(depth + 1) + "친구 (" + getFriends().size() + "): " + Arrays.toString(getFriends().toArray(new Resident[0])));
 		return out;
 	}
 
@@ -516,7 +516,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		}
 		
 		if (notify)
-			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, ("모드 설정: " + StringMgmt.join(getModes(), ",")));
 	}
 
 	@Override
@@ -526,7 +526,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		this.toggleMode(modes, false);
 		
 		if (notify)
-			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, ("모드 설정: " + StringMgmt.join(getModes(), ",")));
 		
 		
 	}
@@ -537,7 +537,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		this.modes.clear();
 		
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
-			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
+			TownyMessaging.sendErrorMsg("" + getName() + "의 기본 모드를 설정할 수 없습니다.");
 		
 	}
 	
@@ -553,7 +553,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 			this.toggleMode(modes, false);
 		
 		if (notify)
-			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, ("모드 설정: " + StringMgmt.join(getModes(), ",")));
 	}
 	
 	

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.tasks;
+package com.palmergames.bukkit.towny.tasks; /* Localized on 2014-05-05 by Neder */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +58,7 @@ public class PlotClaim extends Thread {
 		int claimed = 0;
 
 		if (player != null)
-			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Plot Claim..." : "Plot unclaim..."));
+			TownyMessaging.sendMsg(player, "진행 중 " + ((claim) ? "토지 점유..." : "토지 점유해제..."));
 
 		if (selection != null) {
 
@@ -96,11 +96,11 @@ public class PlotClaim extends Thread {
 		if (player != null) {
 			if (claim) {
 				if ((selection != null) && (selection.size() > 0) && (claimed > 0))
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "총 마을블록 수: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				else
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_not_claimed_1"));
 			} else if (selection != null)
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? "총 마을블록 수: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			else
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed"));
 		}
