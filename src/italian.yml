@@ -1,5 +1,5 @@
 name: Towny
-version: 0.33
+version: 0.34
 language: italian
 author: Leomixer17
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -559,3 +559,6 @@ msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too fa
 
 # Added in 0.33
 msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
+
+# Added in 0.34
+msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'

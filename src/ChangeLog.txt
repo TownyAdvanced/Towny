@@ -2566,3 +2566,5 @@ v0.91.4.11:
       - Will not remove residents from towns that are already over the maximum. The town will not be able to add new residents until they go below the cap.
     - Bump language files to version 0.34
     - Fix error showing up from Citizens NPCs.
+    - Italian translation courtesy of Leomixer17.
+      - Bumped to 0.34.
