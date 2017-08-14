@@ -2568,3 +2568,4 @@ v0.91.4.11:
     - Fix error showing up from Citizens NPCs.
     - Italian translation courtesy of Leomixer17.
       - Bumped to 0.34.
+    - Russian translation courtesy of Communar
