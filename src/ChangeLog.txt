@@ -2530,7 +2530,7 @@ v0.91.4.9:
     - Fix for servers that do not allow wilderness full build/destroy permissions, where animals could not be killed in the wilderness with arrows.
     - Fix a typo in the CombatUtil, which clarifies which block's destroy permissions we are testing to determine whether animals can be killed.
     - Bump language files to version 0.33   
-    - New Config Optin: town.max_claim_radius_value
+    - New Config Option: town.max_claim_radius_value
       - default: 4
 	  - maximum number used in /town claim/unclaim # commands.
 	  - set to 0 to disable limiting of claim radius value check.
@@ -2560,4 +2560,9 @@ v0.91.4.10:
     - Fix issue with outposts not unclaim their outpostspawns.
 v0.91.4.11:
     - Fix 'Format specifier "%s"' error seen when attempting to add a town to you nation that doesn't have the config's required_number_residents_join_nation.
-    
+    - New Config Option: global_town_settings.max_residents_per_town
+      - default: 0
+      - The maximum number of residents that can be joined to a town. Setting to 0 disables this feature.
+      - Will not remove residents from towns that are already over the maximum. The town will not be able to add new residents until they go below the cap.
+    - Bump language files to version 0.34
+    - Fix error showing up from Citizens NPCs.
