@@ -60,7 +60,7 @@ public class TownyCustomListener implements Listener {
 					player.sendMessage(msg);
 			}
 		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+			// likely Citizens' NPC
 		}
 
 		if (plugin.hasPlayerMode(player, "plotborder")) {

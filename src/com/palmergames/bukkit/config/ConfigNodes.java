@@ -445,6 +445,11 @@ public enum ConfigNodes {
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
 			),
+	GTOWN_MAX_RESIDENTS_PER_TOWN(
+			"global_town_settings.max_residents_per_town",
+			"0",
+			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
+			),
 	PLUGIN(
 			"plugin",
 			"",

@@ -1805,6 +1805,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
 	}
+	
+	public static int getMaxResidentsPerTown() {
+		
+		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
+	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
 
