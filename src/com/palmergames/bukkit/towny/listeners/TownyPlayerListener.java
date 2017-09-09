@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -35,6 +36,7 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -76,6 +78,98 @@ public class TownyPlayerListener implements Listener {
 		plugin = instance;
 	}
 
+	private enum MenuType {
+		Towns, Nations, NationTowns;
+	}
+
+	/**
+	 * 
+	 * @author Wowserman
+	 * @param event
+	 */
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerClickInventory(InventoryClickEvent event) {
+		
+		if (event.getInventory().getName().contains("Town-List Page: ")==false && event.getInventory().getName().contains("Nation-List Page: ")==false && event.getInventory().getName().contains("-Towns-List Page: ")==false)
+			return;
+		
+		MenuType type = MenuType.Towns;
+		
+		if (event.getInventory().getName().contains("Town-List Page: "))
+			type = MenuType.Towns;
+		
+		else if (event.getInventory().getName().contains("Nation-List Page: "))
+			type = MenuType.Nations;
+		
+		else if (event.getInventory().getName().contains("-Towns-List Page: "))
+			type = MenuType.NationTowns;
+		
+		Player player = (Player) event.getWhoClicked();
+		
+		if (event.getCurrentItem() != null) {
+			
+			if (event.getCurrentItem().getType()==Material.BANNER) {
+				
+				if (type==MenuType.Nations) {
+					try {
+						Nation nation = this.plugin.getTownyUniverse().getNation(plugin.getNationOfBanner(event.getCurrentItem()));
+						plugin.openNationTownsList(player, nation, 1);
+					} catch (Exception e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				
+				else {
+				
+					try {
+						TownCommand.townSpawn(player, new String[]{plugin.getTownOfBanner(event.getCurrentItem())}, false);
+					} catch (Exception e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage());
+					}
+				}
+			}
+
+			else if (event.getCurrentItem().hasItemMeta()) {
+				
+				if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eNext Page")) {
+					if (type==MenuType.Towns)
+						plugin.openTownList(player, plugin.getPageOfMenu(event.getInventory()) + 1 );
+					else if (type==MenuType.Nations)
+						plugin.openNationList(player, plugin.getPageOfMenu(event.getInventory()) + 1);
+					else if (type==MenuType.NationTowns)
+						try {
+							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageOfMenu(event.getInventory()) + 1);
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+							e.printStackTrace();
+						}
+				}
+				
+				else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eBack")) {
+					if (type==MenuType.Towns)
+						plugin.openTownList(player, plugin.getPageOfMenu(event.getInventory()) - 1 );
+					else if (type==MenuType.Nations)
+						plugin.openNationList(player, plugin.getPageOfMenu(event.getInventory()) - 1);
+					else if (type==MenuType.NationTowns)
+						try {
+							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageOfMenu(event.getInventory()) - 1);
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+							e.printStackTrace();
+						}
+				}
+				
+				else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eClose")) {
+					player.closeInventory();
+				}
+			}
+		}
+
+		event.setCancelled(true);
+	}
+	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 
@@ -159,6 +253,7 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 
@@ -191,6 +286,7 @@ public class TownyPlayerListener implements Listener {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
@@ -276,6 +372,7 @@ public class TownyPlayerListener implements Listener {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
 
@@ -369,6 +466,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 	}
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
@@ -909,7 +1007,6 @@ public class TownyPlayerListener implements Listener {
 
 		} catch (NotRegisteredException e) {
 			// If not registered, it is most likely an NPC			
-		} catch (TownyException e) {
 		}
 		
 	}

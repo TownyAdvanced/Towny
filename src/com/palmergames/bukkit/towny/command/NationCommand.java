@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.naming.InvalidNameException;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -135,7 +136,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				listNations(player, split);
+				if (TownySettings.getMenuListing())
+					player.openInventory(plugin.getNationMenu(1));
+				
+				else listNations(player, split);
 
 			} else if (split[0].equalsIgnoreCase("new")) {
 				
@@ -694,7 +698,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation = resident.getTown().getNation();
 			
 	        if ((TownySettings.getNumResidentsJoinNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), resident.getTown().getName()));
+	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
 	        	return;
 	        }
 
@@ -712,7 +716,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Town town : invited)
 			try {				
 				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
+		        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation")));
 		        	remove.add(town);
 		        	continue;
 		        }
@@ -1113,6 +1117,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(resident, TownySettings.getLangString("msg_invalid_name"));
 	}
 
+	@SuppressWarnings("deprecation")
 	public void nationSet(Player player, String[] split) throws TownyException, InvalidNameException {
 
 		if (split.length == 0) {
@@ -1121,6 +1126,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "capital [town]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "taxes [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [name]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "banner", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
 		} else {
@@ -1204,6 +1210,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 
+			} else if (split[0].equalsIgnoreCase("banner")) {
+				
+				if (player.getItemInHand() == null || player.getItemInHand().getType() != Material.BANNER) {
+					TownyMessaging.sendErrorMsg(player, "You're not Holding a Banner!");
+					return;
+				}
+				
+				nation.setBanner(BukkitTools.setAmount(player.getItemInHand(), 1));
+				TownyMessaging.sendMsg(player, "Set the Nation's Banner Successfully! Give it a couple Minutes to update on /n list.");
+				TownyUniverse.getDataSource().saveNation(nation);
 			} else if (split[0].equalsIgnoreCase("name")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_NAME.getNode()))

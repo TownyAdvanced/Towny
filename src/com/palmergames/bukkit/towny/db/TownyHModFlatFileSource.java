@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -17,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 
@@ -285,7 +287,40 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 					} catch (NumberFormatException nfe) {
 					} catch (Exception e) {
 					}
+				
+				// Load warp spawns
+				line = kvFile.get("warps");
+				if (line != null) {
+					String[] warps = line.split(";");
+					for (String spawn : warps) {
+						tokens = spawn.split(",");
+						if (tokens.length >= 7)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
 
+								Location loc = new Location(world, x, y, z);
+								
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+								
+								
+								town.forceAddWarp(tokens[6], loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
+				// Load banner
+				line = kvFile.get("banner");
+				if (line != null) {
+										
+					if (BukkitTools.getBannerFromString(line)!=null) 
+						town.setBanner(BukkitTools.getBannerFromString(line));
+				}
 			} catch (Exception e) {
 				System.out.println("[Towny] Loading Error: Exception while reading town file " + town.getName());
 				e.printStackTrace();
@@ -366,7 +401,13 @@ public class TownyHModFlatFileSource extends TownyFlatFileSource {
 						nation.setNeutral(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
-
+				
+				line = kvFile.get("banner");
+				if (line != null) {
+					
+					if (BukkitTools.getBannerFromString(line)!=null) 
+						nation.setBanner(BukkitTools.getBannerFromString(line));
+				}
 			} catch (Exception e) {
 				System.out.println("[Towny] Loading Error: Exception while reading nation file " + nation.getName());
 				e.printStackTrace();

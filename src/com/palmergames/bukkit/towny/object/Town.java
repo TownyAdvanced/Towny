@@ -12,12 +12,17 @@ import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
 
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
@@ -30,7 +35,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private List<Location> jailSpawns = new ArrayList<Location>();
 	private Wall wall = new Wall();
 	private Resident mayor;
-	private int bonusBlocks, purchasedBlocks;
+	private int bonusBlocks, purchasedBlocks, purchasedWarps;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
 			plotPrice, commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
@@ -41,6 +46,52 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	private ItemStack banner = new ItemStack(Material.BANNER, 1);
+	private Hashtable<String, Location> warps = new Hashtable<String, Location>();
+	
+	public void removeWarp(String warpName) {
+		warps.remove(warpName.toLowerCase());
+	}
+	
+	public Hashtable<String, Location> getWarps() {
+		return warps;
+	}
+	
+	public Location getWarp(String warpName) {
+		return warps.get(warpName.toLowerCase());
+	}
+	
+	public int getWarpCount() {
+		return warps.size();
+	}
+	
+	public int getWarpMaxCount() {
+		return purchasedWarps;
+	}
+	
+	public void setWarpMaxCount(int newValue) {
+		purchasedWarps = newValue;
+	}
+	
+	public void setWarp(String warpName, Location location) {
+		warps.put(warpName.toLowerCase(), location);
+	}
+	
+	public boolean hasWarps() {
+		return warps.size() > 0;
+	}
+
+	public void forceAddWarp(String warpName, Location location) {
+		warps.put(warpName, location);
+	}	
+	
+	public ItemStack getBanner() {
+		return banner.clone();
+	}
+	
+	public void setBanner(ItemStack newBanner) {
+		banner = newBanner;
+	}
 	
 	public Town(String name) {
 
@@ -534,7 +585,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 		if (world != null)
 			return world;
-
+		
 		return TownyUniverse.getDataSource().getTownWorld(this.getName());
 	}
 

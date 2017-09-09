@@ -357,10 +357,14 @@ public enum ConfigNodes {
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
 			""),
+	GTOWN_SETTINGS_MENU_LISTING(
+			"global_town_settings.menu_page-inator",
+			"true",
+			"# Should we Show the Fancy Town and Nation Lists (GUI)? Will use default text page-inator if false."),
 	GTOWN_SETTINGS_FRIENDLY_FIRE(
 			"global_town_settings.friendly_fire",
 			"true",
-			"# can residents/Allies harm other residents when in an area with pvp enabled? Other than an Arena plot."),
+			"# Can residents/Allies harm other residents when in an area with pvp enabled? Other than an Arena plot."),
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
 			"",
@@ -444,11 +448,6 @@ public enum ConfigNodes {
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
-			),
-	GTOWN_MAX_RESIDENTS_PER_TOWN(
-			"global_town_settings.max_residents_per_town",
-			"0",
-			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
 			),
 	PLUGIN(
 			"plugin",

@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 

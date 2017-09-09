@@ -1056,6 +1056,11 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_TOWN_BLOCK_SIZE);
 	}
 
+	public static boolean getMenuListing() {
+		
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MENU_LISTING);
+	}
+	
 	public static boolean getFriendlyFire() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_FRIENDLY_FIRE);
@@ -1804,11 +1809,6 @@ public class TownySettings {
 	public static boolean isTownRespawningInOtherWorlds() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
-	}
-	
-	public static int getMaxResidentsPerTown() {
-		
-		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {

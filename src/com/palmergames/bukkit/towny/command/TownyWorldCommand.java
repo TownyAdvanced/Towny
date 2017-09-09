@@ -68,9 +68,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			townyworld_set.add(ChatTools.formatCommand("", "/townyworld set", "wildignore [id] [id] [id]", ""));
 		}
 
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-		}
+		// Unused
+		// if (sender instanceof Player) {
+		//	Player player = (Player) sender;
+		//}
 		parseWorldCommand(sender, args);
 		/*
 		 * } else { // Console for (String line : townyworld_help)

@@ -14,6 +14,7 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DRA
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import com.palmergames.bukkit.towny.object.TownyObservableType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.tasks.TownyInformationTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
@@ -43,6 +45,7 @@ public class TownyTimerHandler{
 		universe = plugin.getTownyUniverse();
 	}
 	
+	private static int townyInformationTask = -1;
 	private static int townyRepeatingTask = -1;
 	private static int dailyTask = -1;
 	private static int mobRemoveTask = -1;
@@ -63,6 +66,18 @@ public class TownyTimerHandler{
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		}
 		universe.setChangedNotify(NEW_DAY);
+	}
+	
+	public static void toggleTownyInformationTask(boolean on) {
+		if (on && !isTownyInformationTaskRunning()) {
+			townyInformationTask = BukkitTools.scheduleAsyncRepeatingTask(new TownyInformationTask(plugin), 0, TimeTools.convertToTicks(1200L));
+			if (townyInformationTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule Towny Information Task.");
+		} else if(!on && isTownyRepeatingTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(townyInformationTask);
+			townyInformationTask = -1;
+		}
+		universe.setChangedNotify(TownyObservableType.TOGGLE_TOWNY_INFORMATION_TASK);
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -168,6 +183,10 @@ public class TownyTimerHandler{
 	public static boolean isHealthRegenRunning() {
 
 		return healthRegenTask != -1;
+	}
+	
+	public static boolean isTownyInformationTaskRunning() {
+		return townyInformationTask != -1;
 	}
 
 	public static boolean isTeleportWarmupRunning() {

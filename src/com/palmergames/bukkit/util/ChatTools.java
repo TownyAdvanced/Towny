@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.ChatColor;
+
 /**
  * Useful function for use with the Minecraft Server chatbox.
  * 
@@ -43,6 +45,117 @@ public class ChatTools {
 		}
 
 		return new ArrayList<String>();
+	}
+	
+	/**
+	 * @author Wowserman
+	 * 
+	 * Format a List of Strings to only have a certain amount of Characters per line.
+	 * 
+	 * Example of formating a List to a max charecter set of 10.
+	 * 
+	 * Input:
+	 * 
+	 * "I'm waking up, I feel it in my bones"
+	 * "Enough to make my systems blow"
+	 * "Welcome to the new age, to the new age"
+	 * "Welcome to the new age, to the new age"
+	 * 
+	 * Output:
+	 * 
+	 * "I'm waking"
+	 * "up, I feel"
+	 * "in my"
+	 * "bones"
+	 * "Enough to"
+	 * "make my"
+	 * "Systems"
+	 * "blow"
+	 * "Welcome to"
+	 * "the new"
+	 * "age, to"
+	 * "the new"
+	 * "age"
+	 * "Welcome to"
+	 * "the new"
+	 * "age, to"
+	 * "the new"
+	 * "age"
+	 * 
+	 * @param text Input
+	 * @param maxChar Maximum Charecters a Line should have.
+	 * @return Output
+	 */
+	public static List<String> formatList(List<String> text, int maxChar) {
+		String s = "";
+		for (String string:text){
+			s = s.length()==0 ? string: s + " " + string;
+		}
+		
+		return formatText(s, maxChar);
+	}
+	
+	/**
+	 * @author Wowserman
+	 * 
+	 * Format a List of Strings to only have a certain amount of Characters per line.
+	 * 
+	 * Example of formating a List to a max charecter set of 10.
+	 * 
+	 * Input:
+	 * 
+	 * "I'm waking up, I feel it in my bones Enough to make my systems blow Welcome to the new age, to the new age Welcome to the new age, to the new age"
+	 * 
+	 * Output:
+	 * 
+	 * "I'm waking"
+	 * "up, I feel"
+	 * "in my"
+	 * "bones"
+	 * "Enough to"
+	 * "make my"
+	 * "Systems"
+	 * "blow"
+	 * "Welcome to"
+	 * "the new"
+	 * "age, to"
+	 * "the new"
+	 * "age"
+	 * "Welcome to"
+	 * "the new"
+	 * "age, to"
+	 * "the new"
+	 * "age"
+	 * 
+	 * @param text Input
+	 * @param maxChar Maximum Charecters a Line should have.
+	 * @return Output
+	 */
+	public static List<String> formatText(String text, int maxChar) {
+		List<String> list = new ArrayList<String>();
+		
+		String[] split = text.split(" ");
+		
+		String currentLine = "";
+		int line = 0;
+		
+		for (String string:split) {
+
+			if (ChatColor.stripColor(string).length() + currentLine.length() <= maxChar) {
+				currentLine = currentLine.length()==0 ? string : currentLine + " " + string;
+			}
+			
+			else {
+				line = list.add(currentLine) ? line + 1:line;
+				currentLine = "";
+			}
+		
+		}
+		
+		if (list.size()==0)
+			list.add(currentLine);
+		
+		return list;
 	}
 
 	public static List<String> wordWrap(String[] tokens) {
@@ -119,7 +232,7 @@ public class ChatTools {
 			out += " " + Colors.LightGray + " : " + help;
 		return out;
 	}
-
+	
 	public static void main(String[] args) {
 
 		String[] players = {
@@ -133,3 +246,4 @@ public class ChatTools {
 			System.out.println(line);
 	}
 }
+

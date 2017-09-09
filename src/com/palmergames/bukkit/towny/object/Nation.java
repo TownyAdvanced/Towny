@@ -9,7 +9,13 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +33,8 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private double taxes;
 	private boolean neutral = false;
 	private String tag;
-
+	private ItemStack banner = new ItemStack(Material.BANNER, 1);
+	
 	public Nation(String name) {
 
 		setName(name);
@@ -52,6 +59,59 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public boolean hasTag() {
 
 		return !tag.isEmpty();
+	}
+	
+	public ItemStack getBanner() {
+		return banner.clone();
+	}
+	
+	public void setBanner(ItemStack newBanner) {
+		banner = newBanner;
+	}
+	
+	/**
+	 * 
+	 * @author Wowserman
+	 * 
+	 * @param loc1
+	 * @param loc2
+	 * @param points
+	 * @return
+	 */
+	public List<Location> getLocationsBetweenPoints(Location loc1, Location loc2, final int pointCount) {
+		
+		double 
+
+		xIncrement = (loc1.getX() - loc2.getX()) / pointCount * -1, 
+		yIncrement = (loc1.getY() - loc2.getY()) / pointCount * -1, 
+		zIncrement = (loc1.getZ() - loc2.getZ()) / pointCount * -1;
+		
+		List<Location> points = new ArrayList<Location>();
+		
+		for (int i = 0; i < pointCount; i++) 
+			points.add(loc1.clone().add(xIncrement * i, yIncrement * i, zIncrement * i));
+		
+		return points;
+	}
+	
+	
+	// TODO: Finish Implementation of DyeColor for Dynmap Towny
+	
+	
+	/**
+	 * 
+	 *
+	 * 
+	 * @return DyeColor representing the Town.
+	 */
+	@SuppressWarnings("deprecation")
+	public DyeColor getNationColor() {
+		BannerMeta meta = (BannerMeta) banner.getItemMeta();
+
+		if (meta.getBaseColor() != null)
+			return meta.getBaseColor();
+		else
+			return DyeColor.getByDyeData(banner.getData().getData());
 	}
 
 	public void addAlly(Nation nation) throws AlreadyRegisteredException {

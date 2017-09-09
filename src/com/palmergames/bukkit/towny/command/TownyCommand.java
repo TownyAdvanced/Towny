@@ -224,7 +224,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyUniverse.isWarTime();
 	}
 
-	@SuppressWarnings("null")
 	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
 
 		List<Town> townsToSort = War.warringTowns;
