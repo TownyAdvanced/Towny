@@ -4,11 +4,13 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
+		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
 		setChangedName(true);
 	}
 
