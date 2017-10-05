@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import org.bukkit.Bukkit;
 
 public class TownBlock {
 
@@ -62,18 +64,25 @@ public class TownBlock {
 	}
 
 	public void setResident(Resident resident) {
+		boolean successful;
 
 		try {
 			if (hasResident())
 				this.resident.removeTownBlock(this);
 		} catch (NotRegisteredException e) {
 		}
-		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
-		} catch (AlreadyRegisteredException e) {
-		} catch (NullPointerException e) {
+			successful = true;
+		} catch (AlreadyRegisteredException | NullPointerException e) {
+			successful = false;
 		}
+
+		if (successful && resident != null){ //Should not cause a NPE, is checkingg if resident is null and
+			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
+			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident));
+		}
+		this.resident = resident;
 	}
 
 	public Resident getResident() throws NotRegisteredException {
