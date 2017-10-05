@@ -2570,4 +2570,4 @@ v0.91.4.11:
       - Bumped to 0.34.
     - Russian translation courtesy of Communar.
 v0.91.4.12:
-    - Norgegian translation courtesy of Nectuz & Walbern.
+    - Norwegian translation courtesy of Nectuz & Walbern.
