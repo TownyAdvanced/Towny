@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -248,6 +249,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// town not registered
 			e.printStackTrace();
 		}
+		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 
 		universe.setChangedNotify(REMOVE_RESIDENT);
 	}
