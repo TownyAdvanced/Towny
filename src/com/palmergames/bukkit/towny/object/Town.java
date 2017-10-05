@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -82,6 +84,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
+		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag));
 		setChangedName(true);
 	}
 
