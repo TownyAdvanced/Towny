@@ -2571,3 +2571,4 @@ v0.91.4.11:
     - Russian translation courtesy of Communar.
 v0.91.4.12:
     - Norwegian translation courtesy of Nectuz & Walbern.
+    - Added DeletePlayerEvent courtesy of Articdive.
