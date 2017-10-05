@@ -10,16 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -185,6 +193,147 @@ public class BukkitTools {
 		return m;
 	}
 	
+	/**
+	 * Get the Version of Bukkit
+	 * 
+	 * @author Wowserman
+	 *
+	 */
+	public static enum BukkitVersion {
+		UNKNOWN(0, "?"),
+		v1_7(0, "v1.7"),
+		v1_8(1, "v1.8"),
+		v1_9(2, "v1.9"),
+		v1_10(3, "v1.10"),
+		v1_11(4, "v1.11"),
+		v1_12(5, "v1.12");
+		
+		private int level;
+		
+		private String name;
+		
+		@Override
+		public String toString() {
+			return name;
+		}
+
+		private BukkitVersion(int level, String name) {
+			this.level = level;
+			this.name = name;
+		}
+		
+		public boolean isOlder(BukkitVersion version) {
+			return this.level > version.level;
+		}
+		
+		public static BukkitVersion getCurrentVersion() {
+			String name = Bukkit.getServer().getClass().getName();
+
+			if (name.contains("1_7"))
+				return BukkitVersion.v1_7;
+			if (name.contains("1_8"))
+				return BukkitVersion.v1_8;
+			if (name.contains("1_9"))
+				return BukkitVersion.v1_9;
+			if (name.contains("1_10"))
+				return BukkitVersion.v1_10;
+			if (name.contains("1_11"))
+				return BukkitVersion.v1_11;
+			if (name.contains("1_12"))
+				return BukkitVersion.v1_12;
+			return BukkitVersion.UNKNOWN;
+		}
+	}
+	
+	
+	/**
+	 * Convert Banner's into String from JSON.
+	 * 
+	 * @author Wowserman
+	 * 
+	 * @param banner
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String getStringOfBanner(ItemStack banner) {
+		JSONObject json = new JSONObject();
+			
+		if (banner == null || banner.getItemMeta() == null || banner.getItemMeta() instanceof BannerMeta != true) 
+			return "";
+		
+		BannerMeta bm = (BannerMeta) banner.getItemMeta();
+		
+		try {
+
+			
+			json.put("base-color", bm.getBaseColor() != null ? bm.getBaseColor().toString():DyeColor.getByDyeData(banner.getData().getData()).toString());
+
+			if (bm.getPatterns()!=null) {
+				JSONArray patternsJSON = new JSONArray();
+				for (int i = 0; i < bm.getPatterns().size(); i++) {
+					JSONObject patternJSON = new JSONObject();
+					patternJSON.put("color", bm.getPattern(i).getColor().toString());
+
+					patternJSON.put("type", bm.getPattern(i).getPattern().toString());
+					patternsJSON.add(patternJSON);
+				}
+				json.put("patterns", patternsJSON);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
+		return json.toJSONString();
+	}
+	
+	/**
+	 * Turn JSON String from a Banner back into a ItemStack
+	 * 
+	 * @author Wowserman
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public static ItemStack getBannerFromString(String string) {
+				
+		ItemStack banner = new ItemStack(Material.BANNER, 1);
+		
+		if (string.length() < 1)
+			return banner;
+		
+		try {
+			JSONObject json = (JSONObject) new JSONParser().parse(string);
+			
+			BannerMeta bm = (BannerMeta) banner.getItemMeta();
+			
+			bm.setBaseColor(DyeColor.valueOf((String) json.get("base-color")));
+			
+			if (json.get("patterns") instanceof JSONArray) {
+				
+				JSONArray patterns = (JSONArray) json.get("patterns");
+				
+				for (int i = 0; i < patterns.size(); i++) {
+					JSONObject patternJSON = (JSONObject) patterns.get(i);
+					
+					Pattern pattern = new Pattern(DyeColor.valueOf((String) patternJSON.get("color")), PatternType.valueOf((String) patternJSON.get("type")));
+					
+					bm.addPattern(pattern);
+				}
+			}
+
+			banner.setItemMeta(bm);
+						
+			return banner;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			
+			return banner;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return banner;
+		}
+		
+	}
 	
 	
 	/*

@@ -7,6 +7,7 @@ import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
+import com.palmergames.bukkit.towny.api.TownyAPI;
 import com.palmergames.bukkit.towny.command.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.BukkitTools.BukkitVersion;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
@@ -66,6 +68,10 @@ public class Towny extends JavaPlugin {
 	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
+	
+	private TownyAPI townyAPI;
+	
+	private BukkitVersion bukkitVersion;
 
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
 
@@ -84,7 +90,11 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		bukkitVersion = BukkitVersion.getCurrentVersion();
+		
 		System.out.println("====================      Towny      ========================");
+		
+		System.out.print("[Towny] Running Bukkit " + bukkitVersion);
 		
 		/*
 		 * Register Metrics
@@ -108,6 +118,7 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
+		townyAPI = new TownyAPI(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -442,6 +453,14 @@ public class Towny extends JavaPlugin {
 	public boolean isCitizens2() {
 
 		return citizens2;
+	}
+	
+	public TownyAPI getTownyAPI() {
+		return townyAPI;
+	}
+	
+	public BukkitVersion getBukkitVersion() {
+		return bukkitVersion;
 	}
 
 	/**

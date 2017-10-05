@@ -12,6 +12,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,8 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private double taxes;
 	private boolean neutral = false;
 	private String tag;
-
+	private String banner = "";
+	
 	public Nation(String name) {
 
 		setName(name);
@@ -55,6 +57,14 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public boolean hasTag() {
 
 		return !tag.isEmpty();
+	}
+	
+	public ItemStack getBanner() {
+		return BukkitTools.getBannerFromString(banner);
+	}
+	
+	public void setBanner(ItemStack newBanner) {
+		banner = BukkitTools.getStringOfBanner(newBanner);
 	}
 
 	public void addAlly(Nation nation) throws AlreadyRegisteredException {

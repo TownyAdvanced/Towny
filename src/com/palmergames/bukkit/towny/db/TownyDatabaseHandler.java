@@ -99,7 +99,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (!hasResident(name)) {
 
 			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-
 		} else if (TownySettings.isFakeResident(name)) {
 
 			Resident resident = new Resident(name);

@@ -18,11 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Location;
@@ -813,6 +815,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 				town.setOpen(rs.getBoolean("open"));
 				town.setPublic(rs.getBoolean("public"));
 				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+				town.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
 
 				town.setPurchasedBlocks(rs.getInt("purchased"));
 
@@ -929,6 +932,41 @@ public class TownySQLSource extends TownyFlatFileSource {
 					}
 				}
 
+				line = rs.getString("warps");
+				if (line != null) {
+					String[] warps = line.split(";");
+					for (String warp : warps) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = warp.split(search);
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
+								
+								/*
+								 * 0 world
+								 * 1 x
+								 * 2 y
+								 * 3 z
+								 * 4 pitch
+								 * 5 yaw
+								 * 6 name
+								 */
+								
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
+								}
+								town.forceAddWarp(tokens[6], loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
 
 				/*
 				 * Attempt these for older databases.
@@ -1022,6 +1060,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 						}
 					}
 				}
+				nation.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
 				nation.setTaxes(rs.getDouble("taxes"));
 				nation.setNeutral(rs.getBoolean("neutral"));
 			}
@@ -1534,6 +1573,19 @@ public class TownySQLSource extends TownyFlatFileSource {
 					jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
 				}				
 			twn_hm.put("jailSpawns", jailArray);
+			// Warp Spawns
+			if (town.hasWarps()) {
+				String warpArray = "";
+				for (Entry<String, Location> warp : new Hashtable<String, Location>(town.getWarps()).entrySet()) {
+					warpArray += (warp.getValue().getWorld().getName() + "," + Double.toString(warp.getValue().getX()) + ","
+							+ Double.toString(warp.getValue().getY()) + "," + Double.toString(warp.getValue().getZ()) + ","
+							+ Float.toString(warp.getValue().getPitch()) + "," + Float.toString(warp.getValue().getYaw())
+							+ "," + warp.getKey() + ";");
+				}
+				twn_hm.put("warps",warpArray);
+			}
+			// Banner
+			twn_hm.put("banner", BukkitTools.getStringOfBanner(town.getBanner()));
 
 			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
 			return true;
@@ -1560,6 +1612,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("neutral", nation.isNeutral());
+			nat_hm.put("banner", BukkitTools.getStringOfBanner(nation.getBanner()));
 
 			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 
