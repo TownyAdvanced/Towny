@@ -1,9 +1,13 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import org.bukkit.Bukkit;
+
+import java.util.UUID;
 
 public class TownBlock {
 
@@ -17,8 +21,8 @@ public class TownBlock {
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
-	private boolean outpost = false;	
-
+	private boolean outpost = false;
+	private UUID plotUUID;
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
 	protected boolean isChanged;
@@ -32,6 +36,7 @@ public class TownBlock {
 		this.type = TownBlockType.RESIDENTIAL;
 		isChanged = false;
 		this.name = "";
+		this.plotUUID = UUID.randomUUID();
 	}
 
 	public void setTown(Town town) {
@@ -62,18 +67,25 @@ public class TownBlock {
 	}
 
 	public void setResident(Resident resident) {
+		boolean successful;
 
 		try {
 			if (hasResident())
 				this.resident.removeTownBlock(this);
 		} catch (NotRegisteredException e) {
 		}
-		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
-		} catch (AlreadyRegisteredException e) {
-		} catch (NullPointerException e) {
+			successful = true;
+		} catch (AlreadyRegisteredException | NullPointerException e) {
+			successful = false;
 		}
+
+		if (successful && resident != null){ //Should not cause a NPE, is checkingg if resident is null and
+			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
+			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident));
+		}
+		this.resident = resident;
 	}
 
 	public Resident getResident() throws NotRegisteredException {
@@ -397,5 +409,9 @@ public class TownBlock {
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;
+	}
+
+	public UUID getPlotUUID() {
+		return plotUUID;
 	}
 }

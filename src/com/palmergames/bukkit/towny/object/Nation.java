@@ -16,6 +16,7 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
 
@@ -29,11 +30,13 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private double taxes;
 	private boolean neutral = false;
 	private String tag;
+	private UUID nationUUID;
 
 	public Nation(String name) {
 
 		setName(name);
 		tag = "";
+		 nationUUID = UUID.randomUUID();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -507,5 +510,9 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return out;
+	}
+
+	public UUID getNationUUID() {
+		return nationUUID;
 	}
 }
