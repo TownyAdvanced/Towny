@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
+import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -187,10 +188,12 @@ public class TownBlock {
 	
 	
 	public void setType(TownBlockType type) {
-
 		if (type != this.type)
 			this.permissions.reset();
-		
+
+		if (type != null){
+			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type));
+		}
 		this.type = type;
 
 		// Custom plot settings here
