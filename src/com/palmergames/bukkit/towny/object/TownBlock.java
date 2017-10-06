@@ -75,7 +75,9 @@ public class TownBlock {
 		try {
 			resident.addTownBlock(this);
 			successful = true;
-		} catch (AlreadyRegisteredException | NullPointerException e) {
+		} catch (AlreadyRegisteredException e) {
+			successful = false;
+		} catch (NullPointerException e) {
 			successful = false;
 		}
 		if (successful && resident != null) { //Should not cause a NPE, is checkingg if resident is null and
