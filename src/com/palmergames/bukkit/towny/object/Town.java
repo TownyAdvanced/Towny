@@ -17,10 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
 
@@ -43,6 +40,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	private UUID townUUID;
 	
 	public Town(String name) {
 
@@ -60,6 +58,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
+		townUUID = UUID.randomUUID();
 	}
 
 	@Override
@@ -1165,6 +1164,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		else 
 			outlaws.remove(resident);			
 	}
-	
-	
+
+	public UUID getTownUUID() {
+		return townUUID;
+	}
 }
