@@ -360,6 +360,13 @@ public class Towny extends JavaPlugin {
 			
 			// Huds
 			pluginManager.registerEvents(HUDManager, this);
+			
+			// EnhancedChat
+			if (pluginManager.isPluginEnabled("EnhancedChat") && TownySettings.isEnhancedChatEnabled()) {
+				pluginManager.registerEvents(new EnhancedChatListener(), this);
+				this.getLogger().info("Using EnhancedChat " + pluginManager.getPlugin("EnhancedChat").getDescription().getVersion());
+			} else if (TownySettings.isEnhancedChatEnabled())
+				this.getLogger().warning("Enhanced Chat Features is enabled, but no EnhancedChat plugin was loaded on the Server.");
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -384,6 +391,8 @@ public class Towny extends JavaPlugin {
 
 	private void update() {
 
+		
+		
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
@@ -876,7 +885,7 @@ public class Towny extends JavaPlugin {
 		this.nationTownsCount = nationTowns;
 	}
 
-	public int getPageOfMenu(Inventory menu) {
+	public int getPageIndexOfMenu(Inventory menu) {
 		try {
 			return Integer.parseInt(menu.getName().split(" ")[2]);
 		} catch (NumberFormatException e) {
@@ -895,7 +904,7 @@ public class Towny extends JavaPlugin {
 										ChatColor.stripColor(banner.getItemMeta().getDisplayName());
 		} catch (Exception e) {
 			return "";
-		}
+		} 
 	}
 	
 	public String getNationOfBanner(ItemStack banner) {
@@ -907,14 +916,17 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public void openTownList(Player player, int page) {
+		player.closeInventory();
 		player.openInventory(this.getTownMenu(page));
 	}
 	
 	public void openNationList(Player player, int page) {
+		player.closeInventory();
 		player.openInventory(this.getNationMenu(page));
 	}
 	
 	public void openNationTownsList(Player player, Nation nation, int page) {
+		player.closeInventory();
 		player.openInventory(this.getNationTownsMenu(nation, page));
 	}
 }

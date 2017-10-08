@@ -2,20 +2,21 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../lib/bpermissions.jar"/>
-	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
-	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
-	<classpathentry kind="lib" path="../lib/Permissions.jar"/>
-	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
-	<classpathentry kind="lib" path="../lib/Questioner.jar"/>
-	<classpathentry kind="lib" path="../lib/Register.jar"/>
-	<classpathentry kind="lib" path="../lib/bukkit.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="../lib/citizensapi-2.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="../lib/Vault.jar"/>
+	<classpathentry kind="lib" path="lib/bpermissions.jar"/>
+	<classpathentry kind="lib" path="lib/citizensapi-2_0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/CraftIRC.jar"/>
+	<classpathentry kind="lib" path="lib/dynmap-api.jar"/>
+	<classpathentry kind="lib" path="lib/Essentials.jar"/>
+	<classpathentry kind="lib" path="lib/EssentialsGroupManager.jar"/>
+	<classpathentry kind="lib" path="lib/HeroicDeath.jar"/>
+	<classpathentry kind="lib" path="lib/iConomy.jar"/>
+	<classpathentry kind="lib" path="lib/Permissions.jar"/>
+	<classpathentry kind="lib" path="lib/PermissionsEx.jar"/>
+	<classpathentry kind="lib" path="lib/Questioner.jar"/>
+	<classpathentry kind="lib" path="lib/Register.jar"/>
+	<classpathentry kind="lib" path="lib/Vault.jar"/>
+	<classpathentry kind="lib" path="/Users/peter/Development/Libraries/spigot-1.12.1.jar"/>
+	<classpathentry kind="lib" path="/Users/peter/Development/Libraries/PlaceholderAPI-2.8.2.jar"/>
+	<classpathentry kind="lib" path="/Users/peter/Desktop/Spigot Test Server/plugins/EnhancedChat.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

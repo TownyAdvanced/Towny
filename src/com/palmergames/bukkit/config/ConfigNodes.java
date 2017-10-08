@@ -621,7 +621,34 @@ public enum ConfigNodes {
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"# Maximum length of titles and surnames."),
-
+	CHAT_ENHANCING(
+			"chat_enhancing",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |               Chat Enhancing                         | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			""),
+	CHAT_ENHANCING_ENABLED(
+			"chat_enhancing.enabled",
+			"true",
+			"# If EnhancedChat is loaded on the Server, Towny will enhance outgoing messages."),
+	CHAT_ENHANCING_KEYWORDS(
+			"chat_enhancing.keywords",
+			"",
+			"# Toggle Keywords to be enhanced."),
+	CHAT_ENHANCING_KEYWORDS_RESIDENT(
+			"chat_enhancing.keywords.resident_names",
+			"true"),
+	CHAT_ENHANCING_KEYWORDS_TOWN(
+			"chat_enhancing.keywords.town_names",
+			"true"),
+	CHAT_ENHANCING_KEYWORDS_NATION(
+			"chat_enhancing.keywords.nation_names",
+			"true"),
 	PROT(
 			"protection",
 			"",

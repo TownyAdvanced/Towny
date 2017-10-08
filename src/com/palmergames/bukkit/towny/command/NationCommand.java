@@ -66,7 +66,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatTitle("/nation"));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "", TownySettings.getLangString("nation_help_1")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "list", TownySettings.getLangString("nation_help_4")));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "list .. (nation)", TownySettings.getLangString("nation_help_4")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
@@ -136,10 +136,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				if (TownySettings.getMenuListing())
+				if (TownySettings.getMenuListing()) {
+					if (split.length > 1) {
+						try {
+							player.openInventory(plugin.getNationTownsMenu(TownyUniverse.getDataSource().getNation(split[1]), 1));
+							
+							return;
+						} catch (Exception e) {
+
+						}
+					}
+					
 					player.openInventory(plugin.getNationMenu(1));
-				
-				else listNations(player, split);
+
+				} else listNations(player, split);
 
 			} else if (split[0].equalsIgnoreCase("new")) {
 				

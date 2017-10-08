@@ -135,12 +135,12 @@ public class TownyPlayerListener implements Listener {
 				
 				if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eNext Page")) {
 					if (type==MenuType.Towns)
-						plugin.openTownList(player, plugin.getPageOfMenu(event.getInventory()) + 1 );
+						plugin.openTownList(player, plugin.getPageIndexOfMenu(event.getInventory()) + 1 );
 					else if (type==MenuType.Nations)
-						plugin.openNationList(player, plugin.getPageOfMenu(event.getInventory()) + 1);
+						plugin.openNationList(player, plugin.getPageIndexOfMenu(event.getInventory()) + 1);
 					else if (type==MenuType.NationTowns)
 						try {
-							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageOfMenu(event.getInventory()) + 1);
+							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageIndexOfMenu(event.getInventory()) + 1);
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 							e.printStackTrace();
@@ -149,12 +149,12 @@ public class TownyPlayerListener implements Listener {
 				
 				else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eBack")) {
 					if (type==MenuType.Towns)
-						plugin.openTownList(player, plugin.getPageOfMenu(event.getInventory()) - 1 );
+						plugin.openTownList(player, plugin.getPageIndexOfMenu(event.getInventory()) - 1 );
 					else if (type==MenuType.Nations)
-						plugin.openNationList(player, plugin.getPageOfMenu(event.getInventory()) - 1);
+						plugin.openNationList(player, plugin.getPageIndexOfMenu(event.getInventory()) - 1);
 					else if (type==MenuType.NationTowns)
 						try {
-							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageOfMenu(event.getInventory()) - 1);
+							plugin.openNationTownsList(player, this.plugin.getTownyUniverse().getNation(event.getInventory().getName().split("-")[0]), plugin.getPageIndexOfMenu(event.getInventory()) - 1);
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 							e.printStackTrace();

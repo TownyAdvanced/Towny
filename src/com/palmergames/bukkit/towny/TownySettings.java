@@ -392,6 +392,7 @@ public class TownySettings {
 		newConfig.load();
 
 		for (ConfigNodes root : ConfigNodes.values()) {
+						
 			if (root.getComments().length > 0)
 				addComment(root.getRoot(), root.getComments());
 
@@ -410,7 +411,7 @@ public class TownySettings {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			} else if (root.getRoot() == ConfigNodes.VERSION_BUKKIT.getRoot()) {
 				setNewProperty(root.getRoot(), ConfigNodes.VERSION_BUKKIT.getDefault());
-			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()) {
+			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()){
 				
 				/*
 				 * Update any Id's to Material names (where required).
@@ -2179,6 +2180,29 @@ public class TownySettings {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);
 	}
+	
+	public static boolean isEnhancedChatEnabled() {
+
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_ENABLED);
+	}
+
+	public static boolean isEnhancedChatResidentNamesEnabled() {
+
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT);
+
+	}
+
+	public static boolean isEnhancedChatTownNamesEnabled() {
+
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN);
+
+	}
+
+	public static boolean isEnhancedChatNationNamesEnabled() {
+
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION);
+
+	}
 
 	public static boolean isUsingCheatProtection() {
 
@@ -2257,6 +2281,8 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
 	}
+	
+	
 	
 	public static int getNumResidentsJoinNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION);

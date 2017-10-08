@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
-//import java.util.Hashtable;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -40,8 +39,8 @@ public class TownyInformationTask extends BukkitRunnable {
 	private int getNationPages() {
 		int pages = 1;
 		int n = towny.getNations();
-		while ((n % 28 == 0) && n != 0) {
-			n /= 28;
+		while (n > 28) {
+			n-=28;
 			pages++;
 		}
 		return pages;
@@ -50,8 +49,8 @@ public class TownyInformationTask extends BukkitRunnable {
 	private int getTownPages() {
 		int pages = 1;
 		int t = towny.getTowns();
-		while ((t % 28 == 0) && t != 0) {
-			t /= 28;
+		while (t > 28) {
+			t-=28;
 			pages++;
 		}
 		return pages;
@@ -61,8 +60,8 @@ public class TownyInformationTask extends BukkitRunnable {
 		int pages = 1;
 		int towns = nation.getTowns().size();
 		int t = towns;
-		while ((t % 28 == 0) && t != 0) {
-			t /= 28;
+		while (t > 28) {
+			t-=28;
 			pages++;
 		}
 		return pages;
@@ -83,11 +82,6 @@ public class TownyInformationTask extends BukkitRunnable {
 			towny.setTowns(towny.getTownyUniverse().getTowns().size());
 
 			towny.setNations(towny.getTownyUniverse().getNations().size());
-			
-			if (TownySettings.getMenuListing()==false) {
-				towny.getLogger().info("Updated Information in " + (System.currentTimeMillis()-start) + "ms. Residents: " + towny.getResidents() + " Towns: " + towny.getTowns() + " Nations: " + towny.getNations());
-				return;
-			}
 			
 			int townPages = this.getTownPages();
 			
@@ -141,7 +135,7 @@ public class TownyInformationTask extends BukkitRunnable {
 			towny.setNationTownsMenus(newNationTownsMenus);
 			towny.setNationTownsCount(newNationTowns);
 			
-			towny.getLogger().info("Updated Information in " + (System.currentTimeMillis()-start) + "ms. Residents: " + towny.getResidents() + " Towns: " + towny.getTowns() + " Nations: " + towny.getNations() + " Town Pages: " + townPages + " Nation Pages: " + nationPages);
+			towny.getLogger().info("Updated Information in " + (System.currentTimeMillis()-start) + "ms. Residents: " + towny.getResidents() + " Towns: " + towny.getTowns() + " Nations: " + towny.getNations() + ". Generating " + townPages + " Town Pages and " + nationPages + " Nation Pages.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -334,7 +328,7 @@ public class TownyInformationTask extends BukkitRunnable {
 				return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
 			}
 		});
-		int startIndex = townsToSort.size() - 28 > 0 ? townsToSort.size() - (page * 28) : 0;
+		int startIndex = (page - 1) * 28; // townsToSort.size() - 28 > 0 ? townsToSort.size() - (page * 28) : 0;
 
 		for (int i = 0; i < 28; i++) {
 			if (townsToSort.size() > startIndex + i) {
@@ -386,7 +380,7 @@ public class TownyInformationTask extends BukkitRunnable {
 				return (((Nation) t2).getNumResidents() > ((Nation) t1).getNumResidents()) ? 1 : -1;
 			}
 		});
-		int startIndex = nationsToSort.size() - 28 > 0 ? nationsToSort.size() - (page * 28) : 0;
+		int startIndex = (page - 1) * 28; // nationsToSort.size() - 28 > 0 ? nationsToSort.size() - (page * 28) : 0;
 
 		for (int i = 0; i < 28; i++) {
 			if (nationsToSort.size() > startIndex + i) {
@@ -522,7 +516,7 @@ public class TownyInformationTask extends BukkitRunnable {
 			}
 		});
 		
-		int startIndex = townsToSort.size() - 28 > 0 ? townsToSort.size() - (page * 28) : 0;
+		int startIndex = (page - 1) * 28; // townsToSort.size() - 28 > 0 ? townsToSort.size() - (page * 28) : 0;
 
 		for (int i = 0; i < 28; i++) {
 			if (townsToSort.size() > startIndex + i) {

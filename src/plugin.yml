@@ -8,7 +8,7 @@ description: >
     protection system. Including a war event.
     Created by Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl. Sweetened by Wowserman.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,MultiWorld]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,MultiWorld,EnhancedChat]
 
 ############################################################
 # +------------------------------------------------------+ #
