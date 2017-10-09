@@ -268,13 +268,7 @@ public class Towny extends JavaPlugin {
 						getTownyUniverse().setPermissionSource(new bPermsSource(this, test));
 						using.add(String.format("%s v%s", "bPermissions", test.getDescription().getVersion()));
 					} else {
-						test = getServer().getPluginManager().getPlugin("Permissions");
-						if (test != null) {
-							// permissions = (Permissions)test;
-							getTownyUniverse().setPermissionSource(new Perms3Source(this, test));
-							using.add(String.format("%s v%s", "Permissions", test.getDescription().getVersion()));
-						} else {
-							// Try Vault
+							// Try Vault NOTE: Permissions 3 Was Removed and moved to Legacy!
 							test = getServer().getPluginManager().getPlugin("Vault");
 							if (test != null) {
 								net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
@@ -293,7 +287,6 @@ public class Towny extends JavaPlugin {
 								using.add("BukkitPermissions");
 							}
 						}
-					}
 				}
 			}
 		} else {
