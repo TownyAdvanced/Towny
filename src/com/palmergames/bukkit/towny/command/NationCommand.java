@@ -42,13 +42,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
-/**
- * Send a list of all nation commands to player Command: /nation ?
- * 
- * @param player
- * 
- *            handles all nation based commands
- */
+
 
 public class NationCommand extends BaseCommand implements CommandExecutor {
 
@@ -283,12 +277,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 
 				} else {
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode())) {
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					}
 
 					try {
 						Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation)) {
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						}
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
 					} catch (NotRegisteredException x) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
