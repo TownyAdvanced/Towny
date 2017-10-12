@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
-import com.palmergames.bukkit.towny.db.TownyHModFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -338,8 +337,7 @@ public class TownyUniverse extends TownyObject {
 
 		if (databaseType.equalsIgnoreCase("flatfile"))
 			setDataSource(new TownyFlatFileSource());
-		else if (databaseType.equalsIgnoreCase("flatfile-hmod"))
-			setDataSource(new TownyHModFlatFileSource());
+		// HMOD has been moved to legacy
 		else if ((databaseType.equalsIgnoreCase("mysql")) || (databaseType.equalsIgnoreCase("sqlite")) || (databaseType.equalsIgnoreCase("h2")))
 			setDataSource(new TownySQLSource(databaseType));
 		else
