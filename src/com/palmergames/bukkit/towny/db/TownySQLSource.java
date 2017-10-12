@@ -1417,11 +1417,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                         } catch (Exception e) {
                         }
                     }
-                    try {
-                        townBlock.setUuid(UUID.fromString(rs.getString("uuid")));
-                    } catch (IllegalArgumentException | NullPointerException ee){
-                        townBlock.setUuid(UUID.randomUUID());
-                    }
 
                 }
 
@@ -1689,11 +1684,6 @@ public class TownySQLSource extends TownyFlatFileSource {
             tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
             tb_hm.put("locked", townBlock.isLocked());
             tb_hm.put("changed", townBlock.isChanged());
-            if (townBlock.hasValidUUID()){
-                tb_hm.put("uuid", townBlock.getUuid());
-            } else {
-                tb_hm.put("uuid", UUID.randomUUID());
-            }
 
             UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 
