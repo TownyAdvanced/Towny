@@ -19,6 +19,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_LEAVE("towny.command.nation.leave"),
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
+	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
 	
 	// Covers all assignable ranks
 	TOWNY_COMMAND_NATION_RANK("towny.command.nation.rank.*"),
@@ -52,6 +53,7 @@ public enum PermissionNodes {
 	 * Town command permissions
 	 */
 	TOWNY_COMMAND_TOWN("towny.command.town.*"),
+		TOWNY_COMMAND_TOWN_OTHERTOWN("towny.command.town.othertown"),
 		TOWNY_COMMAND_TOWN_HERE("towny.command.town.here"),
 		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list"),
 		TOWNY_COMMAND_TOWN_NEW("towny.command.town.new"),
@@ -147,6 +149,7 @@ public enum PermissionNodes {
 	/*
 	 * Resident command permissions
 	 */
+	TOWNY_COMMAND_RESIDENT_OTHERRESIDENT("towny.command.resident.otherresident"),
 	TOWNY_COMMAND_RESIDENT_LIST("towny.command.resident.list"),
 	TOWNY_COMMAND_RESIDENT_TAX("towny.command.resident.tax"),
 	TOWNY_COMMAND_RESIDENT_JAIL("towny.command.resident.jail"),

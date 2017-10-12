@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
+
 public class TownBlock {
 
 	// TODO: Admin only or possibly a group check
@@ -20,7 +22,8 @@ public class TownBlock {
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
-	private boolean outpost = false;	
+	private boolean outpost = false;
+	public UUID uuid;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -410,5 +413,21 @@ public class TownBlock {
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public boolean hasValidUUID() {
+		if (uuid != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
