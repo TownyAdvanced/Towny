@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.command;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.*;
@@ -25,7 +24,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -37,12 +35,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_ADD_RESIDENT;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TOWN_REMOVE_RESIDENT;
@@ -190,10 +183,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				Town town = null;
 				try {
-					if (split.length == 1)
+
+
+					if (split.length == 1) {
 						town = TownyUniverse.getDataSource().getResident(player.getName()).getTown();
-					else
+					} else {
 						town = TownyUniverse.getDataSource().getTown(split[1]);
+					}
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
 					return;
@@ -369,6 +365,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else
 					try {
 						Town town = TownyUniverse.getDataSource().getTown(split[0]);
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && (resident.getTown() != town)) {
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						}
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
 					} catch (NotRegisteredException x) {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
@@ -1461,6 +1461,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		townBlock.setType(townBlock.getType());
 
 		town.setSpawn(spawn);
+		town.setUuid(UUID.randomUUID());
 		// world.addTown(town);
 
 		if (world.isUsingPlotManagementRevert()) {

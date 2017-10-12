@@ -67,6 +67,7 @@ public class SQL_Schema {
                 + "`enemies` mediumtext NOT NULL,"
                 + "`taxes` float NOT NULL,"
                 + "`neutral` bool NOT NULL DEFAULT '0',"
+                + "`uuid` VARCHAR(36) DEFAULT NULL,"
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }
@@ -102,6 +103,7 @@ public class SQL_Schema {
                 + "`outpostSpawns` mediumtext DEFAULT NULL,"
                 + "`jailSpawns` mediumtext DEFAULT NULL,"
                 + "`outlaws` mediumtext DEFAULT NULL,"
+                + "`uuid` VARCHAR(36) DEFAULT NULL,"
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }

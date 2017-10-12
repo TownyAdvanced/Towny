@@ -1,10 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import javax.naming.InvalidNameException;
 
@@ -46,13 +42,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
-/**
- * Send a list of all nation commands to player Command: /nation ?
- * 
- * @param player
- * 
- *            handles all nation based commands
- */
+
 
 public class NationCommand extends BaseCommand implements CommandExecutor {
 
@@ -253,7 +243,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMY.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
+
 					nationEnemy(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("delete")) {
@@ -267,32 +257,38 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ONLINE.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
+
 					parseNationOnlineCommand(player, newSplit);
-				
+
 				} else if (split[0].equalsIgnoreCase("say")) {
-					
+
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
+
 					try {
 						Nation nation = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 						StringBuilder builder = new StringBuilder();
-						for(String s : newSplit) {
-						    builder.append(s + " ");
+						for (String s : newSplit) {
+							builder.append(s + " ");
 						}
 						String message = builder.toString();
 						TownyMessaging.sendPrefixedNationMessage(nation, message);
 					} catch (Exception e) {
-					}					
-					
-				} else
+					}
+
+				} else {
+
 					try {
 						Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation)) {
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						}
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
 					} catch (NotRegisteredException x) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 					}
+				}
 			}
 
 		} catch (Exception x) {
@@ -586,6 +582,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = TownyUniverse.getDataSource().getNation(name);
 		nation.addTown(town);
 		nation.setCapital(town);
+		nation.setUuid(UUID.randomUUID());
 		if (TownySettings.isUsingEconomy()) {
 			//TODO
 			try {

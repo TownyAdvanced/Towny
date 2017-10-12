@@ -20,7 +20,7 @@ public class TownBlock {
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
-	private boolean outpost = false;	
+	private boolean outpost = false;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
