@@ -1,33 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import javax.naming.InvalidNameException;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.scheduler.BukkitTask;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -35,13 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -49,6 +15,16 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
+
+import javax.naming.InvalidNameException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 // TODO: Make sure the lack of a particular value doesn't error out the entire file
 
@@ -945,6 +921,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+				line = kvFile.get("uuid");
+				if (line != null) {
+					try {
+						town.setUuid(UUID.fromString(line));
+					} catch (IllegalArgumentException | NullPointerException ee) {
+						town.setUuid(UUID.randomUUID());
+					}
+				}
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -1041,6 +1026,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setNeutral(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
+
+				line = kvFile.get("uuid");
+				if (line != null) {
+					try {
+						nation.setUuid(UUID.fromString(line));
+					} catch (IllegalArgumentException | NullPointerException ee) {
+						nation.setUuid(UUID.randomUUID());
+					}
+				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1433,7 +1427,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 						TownyWorld world = townBlock.getWorld();
 						world.removeTownBlock(townBlock);	
-					}						
+					}
+					line = kvFile.get("uuid");
+					if (line != null) {
+						try {
+							townBlock.setUuid(UUID.fromString(line));
+						} catch (IllegalArgumentException | NullPointerException ee) {
+							townBlock.setUuid(UUID.randomUUID());
+						}
+					}
 
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
@@ -1685,6 +1687,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		*/
 		// Public
 		list.add("public=" + Boolean.toString(town.isPublic()));
+		if (town.hasValidUUID()){
+			list.add("uuid=" + town.getUuid());
+		} else {
+			list.add("uuid=" + UUID.randomUUID());
+		}
 
 		// Home Block
 		if (town.hasHomeBlock())
@@ -1751,6 +1758,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
 		// Peaceful
 		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
+		if (nation.hasValidUUID()){
+			list.add("uuid=" + nation.getUuid());
+		} else {
+			list.add("uuid=" + UUID.randomUUID());
+		}
 
 		/*
 		 *  Make sure we only save in async
@@ -1944,6 +1956,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + Boolean.toString(townBlock.isChanged()));
 
 		list.add("locked=" + Boolean.toString(townBlock.isLocked()));
+		if (townBlock.hasValidUUID()){
+			list.add("uuid=" + townBlock.getUuid());
+		} else {
+			list.add("uuid=" + UUID.randomUUID());
+		}
 
 		/*
 		 *  Make sure we only save in async

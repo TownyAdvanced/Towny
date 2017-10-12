@@ -137,6 +137,7 @@ permissions:
             towny.command.nation.say: true
             towny.command.nation.add: true
             towny.command.nation.kick: true
+            towny.command.nation.othernation: true
 
     towny.command.nation.set.*:
         description: User can access any of the nation set commands.
@@ -183,6 +184,7 @@ permissions:
             towny.command.town.online: true
             towny.command.town.say: true
             towny.command.town.plots: true
+            towny.command.town.othertown: true
             
     towny.command.town.claim.*:
         description: User can access all town related commands.
@@ -279,6 +281,7 @@ permissions:
             towny.command.resident.set.*: true
             towny.command.resident.toggle.*: true
             towny.command.resident.friend: true
+            towny.command.resident.otherresident: true
 
     towny.command.resident.set.*:
         description: User can access the plot set command.

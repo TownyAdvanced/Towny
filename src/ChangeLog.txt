@@ -2574,3 +2574,6 @@ v0.91.4.12:
     - Added DeletePlayerEvent courtesy of Articdive.
     - TownTagChangeEvent & NationTagChangeEvent courtesy of Articdive.
     - PlotChangeType & PlotChangeOwner Events courtesy of Articdive.
+    - Creation of legacy folder, and migration of old unused files to said folder, courtesy of Articdive.
+    - Updated Ant Compiler to use Java 8 courtesy of Articdive.
+    - Updated SQL_Schema to handle newly added sql columns in a much better way, courtesy of Articdive.

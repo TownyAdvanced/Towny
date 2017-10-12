@@ -196,6 +196,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				residentSpawn(player);
 
 			} else {
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 
 				try {
 					Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
