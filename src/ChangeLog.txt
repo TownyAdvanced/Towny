@@ -2577,3 +2577,14 @@ v0.91.4.12:
     - Creation of legacy folder, and migration of old unused files to said folder, courtesy of Articdive.
     - Updated Ant Compiler to use Java 8 courtesy of Articdive.
     - Updated SQL_Schema to handle newly added sql columns in a much better way, courtesy of Articdive.
+    - New permission nodes thanks to Articdive:
+      - New permission node: towny.command.town.othertown
+        - Used to disallow players from checking towns they do not belong to, using /town {name}
+        - Defaults to true.
+      - New permission node: towny.command.resident.otherresident
+        - Used to disallow players from checking other residents, using /res {name}
+        - Defaults to true.
+      - New permission node: towny.command.nation.othernation
+        - Used to disallow players from checking nations they do not belong to, using /nation {name}
+        - Defaults to true.
+    - Towns and Nations now have UUIDs, courtesy of Articdive
