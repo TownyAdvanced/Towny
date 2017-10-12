@@ -25,6 +25,7 @@ import javax.naming.InvalidNameException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
 
@@ -651,6 +652,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					town.removeAccount();
 				} catch (EconomyException e) {
 				}
+			UUID oldUUID = town.getUuid();
 
 			// Store the nation in case we have to update the capitol
 			if (town.hasNation()) {
@@ -677,7 +679,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (isCapital) {
 				nation.setCapital(town);
 			}
-
+			town.setUuid(oldUUID);
 			if (TownySettings.isUsingEconomy()) {
 				//TODO
 				try {
@@ -759,6 +761,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (EconomyException e) {
 				}
 
+			UUID oldUUID = nation.getUuid();
+
 			//Tidy up old files
 			deleteNation(nation);
 
@@ -779,6 +783,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					e.printStackTrace();
 				}
 			}
+
+			nation.setUuid(oldUUID);
 
 			for (Town town : toSave) {
 				saveTown(town);

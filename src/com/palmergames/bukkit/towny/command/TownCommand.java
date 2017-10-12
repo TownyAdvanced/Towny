@@ -1459,7 +1459,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.setHomeBlock(townBlock);
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
-		townBlock.setUuid(UUID.randomUUID());
 
 		town.setSpawn(spawn);
 		town.setUuid(UUID.randomUUID());

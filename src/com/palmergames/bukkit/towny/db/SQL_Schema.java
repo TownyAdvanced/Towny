@@ -145,7 +145,6 @@ public class SQL_Schema {
                 + "`permissions` mediumtext NOT NULL,"
                 + "`locked` bool NOT NULL DEFAULT '0',"
                 + "`changed` bool NOT NULL DEFAULT '0',"
-                + "`uuid` VARCHAR(36) DEFAULT NULL,"
                 + "PRIMARY KEY (`world`,`x`,`z`)"
                 + ")";
     }
