@@ -364,10 +364,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				} else
 					try {
-						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode())) {
+						Town town = TownyUniverse.getDataSource().getTown(split[0]);
+						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && (resident.getTown() != town)) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						Town town = TownyUniverse.getDataSource().getTown(split[0]);
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
 					} catch (NotRegisteredException x) {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
