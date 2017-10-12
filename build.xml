@@ -32,7 +32,7 @@
 
 	<target name="compile" depends="download">
 		<!-- Compile the java code -->
-		<javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6" debug="true" debuglevel="lines,vars,source">
+		<javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.8" source="1.8" debug="true" debuglevel="lines,vars,source">
 			<classpath>
 				<pathelement location="${env.LIB}/bukkit.jar" />
 				<pathelement location="${env.LIB}/bpermissions.jar" />
