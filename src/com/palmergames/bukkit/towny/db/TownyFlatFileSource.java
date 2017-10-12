@@ -1428,14 +1428,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyWorld world = townBlock.getWorld();
 						world.removeTownBlock(townBlock);	
 					}
-					line = kvFile.get("uuid");
-					if (line != null) {
-						try {
-							townBlock.setUuid(UUID.fromString(line));
-						} catch (IllegalArgumentException | NullPointerException ee) {
-							townBlock.setUuid(UUID.randomUUID());
-						}
-					}
 
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
@@ -1956,11 +1948,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + Boolean.toString(townBlock.isChanged()));
 
 		list.add("locked=" + Boolean.toString(townBlock.isLocked()));
-		if (townBlock.hasValidUUID()){
-			list.add("uuid=" + townBlock.getUuid());
-		} else {
-			list.add("uuid=" + UUID.randomUUID());
-		}
 
 		/*
 		 *  Make sure we only save in async

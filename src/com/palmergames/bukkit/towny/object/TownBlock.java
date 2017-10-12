@@ -8,8 +8,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import org.bukkit.Bukkit;
 
-import java.util.UUID;
-
 public class TownBlock {
 
 	// TODO: Admin only or possibly a group check
