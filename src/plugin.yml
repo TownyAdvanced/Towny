@@ -319,6 +319,7 @@ permissions:
             towny.command.townyadmin.purge: true
             owny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.unclaim: true
+            towny.command.townyadmin.town.spawn: true
     
     towny.command.townyadmin.set.*:
         description: User can access the admin set commands.
