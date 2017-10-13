@@ -2588,3 +2588,4 @@ v0.91.4.12:
         - Used to disallow players from checking nations they do not belong to, using /nation {name}
         - Defaults to true.
     - Towns and Nations now have UUIDs, courtesy of Articdive
+    - Downgrade from Java 8 back to 6.

@@ -925,7 +925,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					try {
 						town.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException | NullPointerException ee) {
+					} catch (IllegalArgumentException ee) {
 						town.setUuid(UUID.randomUUID());
 					}
 				}
@@ -1031,7 +1031,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					try {
 						nation.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException | NullPointerException ee) {
+					} catch (IllegalArgumentException ee) {
 						nation.setUuid(UUID.randomUUID());
 					}
 				}
