@@ -409,7 +409,7 @@ public class SQL_Schema {
      */
 
     private static List<String> getValuesFromDefaultSchema(String s) {
-        List<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<String>();
         if (s.startsWith("CREATE")) {
             String[] parts = s.split(",");
             for (String part : parts) {
