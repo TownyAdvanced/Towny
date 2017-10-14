@@ -1,23 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Material;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -38,6 +20,23 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
 
@@ -1124,6 +1123,11 @@ public class TownySettings {
 	public static boolean getShowTownNotifications() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS);
+	}
+
+	public static boolean getShowTownBoardOnLogin() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN);
 	}
 
 	public static String getUnclaimedZoneName() {

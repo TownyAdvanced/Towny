@@ -450,6 +450,11 @@ public enum ConfigNodes {
 			"0",
 			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
 			),
+	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
+			"global_town_settings.display_board_onlogin",
+			"true",
+			"# If Towny should show players the townboard when they login"
+	),
 	PLUGIN(
 			"plugin",
 			"",
