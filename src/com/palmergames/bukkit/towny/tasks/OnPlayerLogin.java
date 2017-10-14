@@ -3,10 +3,6 @@
  */
 package com.palmergames.bukkit.towny.tasks;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGIN;
-
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -20,6 +16,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.entity.Player;
+
+import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGIN;
 
 
 /**
@@ -100,7 +99,10 @@ public class OnPlayerLogin implements Runnable {
 			
 			
 			try {
-				TownyMessaging.sendTownBoard(player, resident.getTown());
+				if (TownySettings.getShowTownBoardOnLogin()) {
+					TownyMessaging.sendTownBoard(player, resident.getTown());
+				}
+				resident.getTown(); // Exception check, this does not do anything at all!
 			} catch (NotRegisteredException ex) {
 			}
 
