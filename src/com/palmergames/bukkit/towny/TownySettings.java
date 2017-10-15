@@ -2139,7 +2139,7 @@ public class TownySettings {
 		setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
 	}
 
-	public static boolean getOutsidersPreventPVPToggle() { // Since toggle pvp false means do this we negate it!
+	public static boolean getOutsidersPreventPVPToggle() { 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
 
