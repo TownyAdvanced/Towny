@@ -459,7 +459,7 @@ public enum ConfigNodes {
 			"global_town_settings.outsiders_prevent_pvp_toggle",
 			"true",
 			"# If Towny should allow the toggling of pvp, while others ,who are not part of the town, are in the town",
-			"# If this option is set to false, it may cause a small amount of lag"
+			"# If this option is set to false, it may cause a small amount of lag, when /t toggle pvp is run."
 	),
 	PLUGIN(
 			"plugin",
