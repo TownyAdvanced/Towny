@@ -739,7 +739,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				boolean outsiderintown = false;
-				if (!TownySettings.getOutsidersPreventPVPToggle()) {
+				if (TownySettings.getOutsidersPreventPVPToggle()) {
 					for (Player target : Bukkit.getOnlinePlayers()) {
 						Resident targetresident = TownyUniverse.getDataSource().getResident(target.getName());
 						Block block = target.getLocation().getBlock().getRelative(BlockFace.DOWN);
