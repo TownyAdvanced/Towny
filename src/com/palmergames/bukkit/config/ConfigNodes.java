@@ -199,7 +199,7 @@ public enum ConfigNodes {
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
 	TOWN_ALLOW_TOGGLE_PVP_WITH_OUTSIDER(
 			"town.allow_toggle_pvp_with_outsider",
-			"false",
+			"true",
 			"# If Towny should allow the toggling of pvp, while others not part of a town are in the town"),
 	NWS(
 			"new_world_settings",
