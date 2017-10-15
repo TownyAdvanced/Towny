@@ -457,9 +457,9 @@ public enum ConfigNodes {
 	),
 	GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE(
 			"global_town_settings.outsiders_prevent_pvp_toggle",
-			"true",
-			"# If Towny should allow the toggling of pvp, while others ,who are not part of the town, are in the town",
-			"# If this option is set to false, it may cause a small amount of lag, when /t toggle pvp is run."
+			"false",
+			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
+			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
 	),
 	PLUGIN(
 			"plugin",
