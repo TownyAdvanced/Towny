@@ -1,21 +1,8 @@
 package com.palmergames.bukkit.towny.db;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-//import java.util.Hashtable;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-//import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -26,6 +13,20 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.util.FileMgmt;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+//import java.util.Hashtable;
+//import com.palmergames.bukkit.towny.TownySettings;
 
 /*
  * --- : Loading process : ---
@@ -336,11 +337,15 @@ public abstract class TownyDataSource {
 
 	abstract public Town getTown(String name) throws NotRegisteredException;
 
+	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
+
 	abstract public List<Nation> getNations(String[] names);
 
 	abstract public List<Nation> getNations();
 
 	abstract public Nation getNation(String name) throws NotRegisteredException;
+
+	abstract public Nation getNation(UUID uiid) throws NotRegisteredException;
 
 	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
 
