@@ -2139,6 +2139,10 @@ public class TownySettings {
 		setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
 	}
 
+	public static boolean getTogglePvp() { // Since toggle pvp false means do this we negate it!
+		return getBoolean(ConfigNodes.TOWN_ALLOW_TOGGLE_PVP_WITH_OUTSIDER);
+	}
+
 	public static String questionerAccept() {
 
 		return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);

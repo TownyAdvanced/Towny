@@ -736,12 +736,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				// Make sure we are allowed to set these permissions.
 				boolean outsiderintown = false;
-				for (Player target : Bukkit.getOnlinePlayers()){
-					Resident targetresident = TownyUniverse.getDataSource().getResident(target.getName());
-					WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
-					for (TownBlock tb : town.getTownBlocks()) {
-						if (coord.equals(tb.getWorldCoord()) && ((!(targetresident.hasTown())) || (!(targetresident.getTown().equals(town))))) {
-							outsiderintown = true;
+				if (!TownySettings.getTogglePvp()) {
+					for (Player target : Bukkit.getOnlinePlayers()) {
+						Resident targetresident = TownyUniverse.getDataSource().getResident(target.getName());
+						WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
+						for (TownBlock tb : town.getTownBlocks()) {
+							if (coord.equals(tb.getWorldCoord()) && ((!(targetresident.hasTown())) || (!(targetresident.getTown().equals(town))))) {
+								outsiderintown = true;
+							}
 						}
 					}
 				}
