@@ -197,10 +197,6 @@ public enum ConfigNodes {
 			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * 128) in size, with 128 being from bedrock to clouds."),
-	TOWN_ALLOW_TOGGLE_PVP_WITH_OUTSIDER(
-			"town.allow_toggle_pvp_with_outsider",
-			"true",
-			"# If Towny should allow the toggling of pvp, while others not part of a town are in the town"),
 	NWS(
 			"new_world_settings",
 			"",
@@ -458,6 +454,12 @@ public enum ConfigNodes {
 			"global_town_settings.display_board_onlogin",
 			"true",
 			"# If Towny should show players the townboard when they login"
+	),
+	GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE(
+			"global_town_settings.outsiders_prevent_pvp_toggle",
+			"true",
+			"# If Towny should allow the toggling of pvp, while others ,who are not part of the town, are in the town",
+			"# If this option is set to false, it may cause a small amount of lag"
 	),
 	PLUGIN(
 			"plugin",

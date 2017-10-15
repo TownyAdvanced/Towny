@@ -48,6 +48,8 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -735,23 +737,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				// Make sure we are allowed to set these permissions.
+				toggleTest(player, town, StringMgmt.join(split, " "));
 				boolean outsiderintown = false;
-				if (!TownySettings.getTogglePvp()) {
+				if (!TownySettings.getOutsidersPreventPVPToggle()) {
 					for (Player target : Bukkit.getOnlinePlayers()) {
 						Resident targetresident = TownyUniverse.getDataSource().getResident(target.getName());
-						WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
-						for (TownBlock tb : town.getTownBlocks()) {
-							if (coord.equals(tb.getWorldCoord()) && ((!(targetresident.hasTown())) || (!(targetresident.getTown().equals(town))))) {
-								outsiderintown = true;
+						Block block = target.getLocation().getBlock().getRelative(BlockFace.DOWN);
+						if (!TownyUniverse.isWilderness(block)) {
+							WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
+							for (TownBlock tb : town.getTownBlocks()) {
+								if (coord.equals(tb.getWorldCoord()) && ((!(targetresident.hasTown())) || (!(targetresident.getTown().equals(town))))) {
+									outsiderintown = true;
+								}
 							}
 						}
 					}
 				}
 				if (!outsiderintown) {
-					toggleTest(player, town, StringMgmt.join(split, " "));
 					town.setPVP(!town.isPVP());
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? "Enabled" : "Disabled"));
-				} else if (outsiderintown){
+				} else if (outsiderintown) {
 					throw new TownyException("There is an outsider in your town, you can't change your pvp status!");
 				}
 			} else if (split[0].equalsIgnoreCase("explosion")) {
