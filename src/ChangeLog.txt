@@ -2605,4 +2605,7 @@ v0.91.4.12:
       - Give this to make spawning to towns free for the person teleporting.
 v0.91.4.13:
     - FileMgmt.java now like utf-8 more than us-ascii. Language files with special non-english characters will be much happier.
-    - Support for TownyChat 0.49's new {groupprefix} and {groupsuffix} tags.    
+    - Support for TownyChat 0.49's new {groupprefix} and {groupsuffix} tags courtesy of Articdive.
+    - New Config Option: economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier
+      - default: false
+      - If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers.

@@ -1013,8 +1013,7 @@ public enum ConfigNodes {
 	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
 			"economy.banks.town_allow_withdrawls",
 			"true",
-			"# Set to true to allow withdrawls from town banks"),
-	ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawls from town banks"),	ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
@@ -1067,6 +1066,10 @@ public enum ConfigNodes {
 			"false",
 			"# Uses total amount of owned plots to determine upkeep instead of the town level (Number of residents)",
 			"# calculated by (number of claimed plots X price_town_upkeep)."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER(
+			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
+			"false",
+			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),	
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
