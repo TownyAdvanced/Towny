@@ -2589,18 +2589,18 @@ v0.91.4.12:
         - Defaults to true.
     - Towns and Nations now have UUIDs, courtesy of Articdive
     - Downgrade from Java 8 back to 6.
-    - New Config Option: global_town_settings.outsiders_prevent_pvp_toggle
+    - New Config Option: global_town_settings.outsiders_prevent_pvp_toggle - courtesy of Articdive
       - default: false
       - If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.
       - When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online.
-    - New Config Option: global_town_settings.display_board_onlogin
+    - New Config Option: global_town_settings.display_board_onlogin - courtesy of Articdive
       - default: true
       - If Towny should show players the townboard when they login.
     - Improved german translation from Wolf2323.
-    - New permission node: towny.command.townyadmin.town.spawn
+    - New permission node: towny.command.townyadmin.town.spawn - courtesy of Articdive
       - A child node of towny.admin
       - Give this to allow a mod or someone of high rank on the server to be able to teleport to any town's spawn.
-    - New permission node: towny.command.townyadmin.town.spawn.freecharge
+    - New permission node: towny.command.townyadmin.town.spawn.freecharge - courtesy of Articdive
       - A child node of towny.admin
       - Give this to make spawning to towns free for the person teleporting.
-    
+v0.91.4.13:
