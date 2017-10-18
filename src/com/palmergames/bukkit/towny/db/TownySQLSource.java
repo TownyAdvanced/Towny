@@ -913,6 +913,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setUuid(UUID.fromString(rs.getString("uuid")));
                 } catch (IllegalArgumentException ee) {
                     town.setUuid(UUID.randomUUID());
+                }  catch (NullPointerException ee) {
+                    town.setUuid(UUID.randomUUID());
                 }
 
 
@@ -1013,6 +1015,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 try {
                     nation.setUuid(UUID.fromString(rs.getString("uuid")));
                 } catch (IllegalArgumentException ee) {
+                    nation.setUuid(UUID.randomUUID());
+                } catch (NullPointerException ee){
                     nation.setUuid(UUID.randomUUID());
                 }
             }
