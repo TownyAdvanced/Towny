@@ -939,6 +939,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 } catch (SQLException ee){
 
+                } catch (NumberFormatException e){
+                    town.setRegistered(0);
                 }
 
                 s.close();
@@ -1039,7 +1041,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                     nation.setRegistered(0);
                 }
             } catch (SQLException ee){
-
+            } catch (NumberFormatException e) {
+                nation.setRegistered(0);
             }
 
             s.close();
