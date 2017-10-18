@@ -928,6 +928,17 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (SQLException e) {
                 }
 
+                try {
+                    line = rs.getString("registered");
+                    if (line != null){
+                        town.setRegistered(Long.valueOf(line));
+                    } else {
+                        town.setRegistered(0);
+                    }
+                } catch (SQLException ee){
+
+                }
+
                 s.close();
                 return true;
             }
@@ -1015,6 +1026,16 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (IllegalArgumentException ee) {
                     nation.setUuid(UUID.randomUUID());
                 }
+            }
+            try {
+                line = rs.getString("registered");
+                if (line != null){
+                    nation.setRegistered(Long.valueOf(line));
+                } else {
+                    nation.setRegistered(0);
+                }
+            } catch (SQLException ee){
+
             }
 
             s.close();
@@ -1531,6 +1552,12 @@ public class TownySQLSource extends TownyFlatFileSource {
             } else {
                 twn_hm.put("uuid", UUID.randomUUID());
             }
+            Long value = town.getRegistered();
+            if (value != null){
+                twn_hm.put("registered",town.getRegistered());
+            } else {
+                twn_hm.put("regisetered", null);
+            }
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -1561,6 +1588,12 @@ public class TownySQLSource extends TownyFlatFileSource {
                 nat_hm.put("uuid", nation.getUuid());
             } else {
                 nat_hm.put("uuid", UUID.randomUUID());
+            }
+            Long value = nation.getRegistered();
+            if (value != null){
+                nat_hm.put("registered",nation.getRegistered());
+            } else {
+                nat_hm.put("regisetered", null);
             }
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));

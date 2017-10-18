@@ -1,19 +1,8 @@
 package com.palmergames.bukkit.towny.command;
 
-import java.util.*;
-
-import javax.naming.InvalidNameException;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -41,6 +30,19 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import javax.naming.InvalidNameException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 
 
@@ -583,6 +585,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.addTown(town);
 		nation.setCapital(town);
 		nation.setUuid(UUID.randomUUID());
+		town.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			//TODO
 			try {

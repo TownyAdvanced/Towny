@@ -68,6 +68,7 @@ public class SQL_Schema {
                 + "`taxes` float NOT NULL,"
                 + "`neutral` bool NOT NULL DEFAULT '0',"
                 + "`uuid` VARCHAR(36) DEFAULT NULL,"
+                + "`regisetered` BIGINT DEFAULT NULL,"
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }
@@ -104,6 +105,7 @@ public class SQL_Schema {
                 + "`jailSpawns` mediumtext DEFAULT NULL,"
                 + "`outlaws` mediumtext DEFAULT NULL,"
                 + "`uuid` VARCHAR(36) DEFAULT NULL,"
+                + "`registered` BIGINT DEFAULT NULL,"
                 + "PRIMARY KEY (`name`)"
                 + ")";
     }

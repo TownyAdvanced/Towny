@@ -929,6 +929,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setUuid(UUID.randomUUID());
 					}
 				}
+				line = kvFile.get("registered");
+				if (line != null){
+					try {
+						town.setRegistered(Long.valueOf(line));
+					} catch (IllegalArgumentException ee){
+						town.setRegistered(0);
+					}
+				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1033,6 +1041,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setUuid(UUID.fromString(line));
 					} catch (IllegalArgumentException ee) {
 						nation.setUuid(UUID.randomUUID());
+					}
+				}
+				line = kvFile.get("registered");
+				if (line != null){
+					try {
+						nation.setRegistered(Long.valueOf(line));
+					} catch (IllegalArgumentException ee){
+						nation.setRegistered(0);
 					}
 				}
 
@@ -1684,6 +1700,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}
+		Long value = town.getRegistered();
+		if (value != null){
+			list.add("registered=" + town.getRegistered());
+		} else {
+			list.add("registered=" + "undefined");
+		}
 
 		// Home Block
 		if (town.hasHomeBlock())
@@ -1754,6 +1776,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("uuid=" + nation.getUuid());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
+		}
+		Long value = nation.getRegistered();
+		if (value != null){
+			list.add("registered=" + nation.getRegistered());
+		} else {
+			list.add("registered=" + "null");
 		}
 
 		/*
