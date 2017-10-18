@@ -585,7 +585,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.addTown(town);
 		nation.setCapital(town);
 		nation.setUuid(UUID.randomUUID());
-		town.setRegistered(System.currentTimeMillis());
+		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
 			//TODO
 			try {

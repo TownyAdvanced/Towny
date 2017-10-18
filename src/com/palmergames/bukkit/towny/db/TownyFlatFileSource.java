@@ -933,7 +933,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null){
 					try {
 						town.setRegistered(Long.valueOf(line));
-					} catch (IllegalArgumentException ee){
+					} catch (NumberFormatException ee){
 						town.setRegistered(0);
 					}
 				}
@@ -1047,7 +1047,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null){
 					try {
 						nation.setRegistered(Long.valueOf(line));
-					} catch (IllegalArgumentException ee){
+					} catch (NumberFormatException ee){
 						nation.setRegistered(0);
 					}
 				}
@@ -1704,7 +1704,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (value != null){
 			list.add("registered=" + town.getRegistered());
 		} else {
-			list.add("registered=" + "undefined");
+			list.add("registered=" + 0);
 		}
 
 		// Home Block
@@ -1781,7 +1781,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (value != null){
 			list.add("registered=" + nation.getRegistered());
 		} else {
-			list.add("registered=" + "null");
+			list.add("registered=" + 0);
 		}
 
 		/*
