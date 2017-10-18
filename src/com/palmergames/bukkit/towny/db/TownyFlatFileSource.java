@@ -933,7 +933,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null){
 					try {
 						town.setRegistered(Long.valueOf(line));
-					} catch (NumberFormatException ee){
+					} catch (Exception ee){
 						town.setRegistered(0);
 					}
 				}
@@ -1047,7 +1047,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null){
 					try {
 						nation.setRegistered(Long.valueOf(line));
-					} catch (NumberFormatException ee){
+					} catch (Exception ee){
 						nation.setRegistered(0);
 					}
 				}
