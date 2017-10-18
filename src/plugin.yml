@@ -116,6 +116,18 @@ permissions:
     # New command permissions (replaces many of the older permissions)
     #
     
+    # Res/Town/Nation lookup commands.
+    
+    towny.command.resident.otherresident:
+        description: User can look up other residents.
+        default: true
+    towny.command.town.othertown:
+        description: User can look up other towns.
+        default: true
+    towny.command.nation.othernation:
+        description: User can look up other nations.
+        default: true    
+    
     # Nation command permissions
     towny.command.nation.*:
         description: User can access all nation commands.

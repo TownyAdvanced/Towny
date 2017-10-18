@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
+
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
@@ -45,6 +46,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -58,6 +60,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -117,7 +120,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	private void parseTownCommand(Player player, String[] split) {
+	private void parseTownCommand(final Player player, String[] split) {
 
 		try {
 
@@ -392,12 +395,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				} else
 					try {
-						Town town = TownyUniverse.getDataSource().getTown(split[0]);
+						final Town town = TownyUniverse.getDataSource().getTown(split[0]);
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && (resident.getTown() != town)) {
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != town) || (!resident.hasTown()) ) ) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
+						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+							@Override
+						    public void run() {
+								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
+							}
+						});
+						
 					} catch (NotRegisteredException x) {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 					}

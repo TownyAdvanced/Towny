@@ -2609,3 +2609,6 @@ v0.91.4.13:
     - New Config Option: economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier
       - default: false
       - If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers.
+    - Moved /res name, /t name, /n name commands to async tasks.
+      - Should reduce lag on large servers.
+    - Small fixes to new .otherres/town/nation nodes.

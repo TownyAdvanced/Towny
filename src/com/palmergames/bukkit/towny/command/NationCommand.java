@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.naming.InvalidNameException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -102,7 +103,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	public void parseNationCommand(Player player, String[] split) {
+	public void parseNationCommand(final Player player, String[] split) {
 
 		String nationCom = "/nation";
 
@@ -279,12 +280,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} else {
 
 					try {
-						Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+						final Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation)) {
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && ( (resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation) )  || !resident.hasTown() )) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
+						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+							@Override
+						    public void run() {
+								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
+							}
+						});
+						
 					} catch (NotRegisteredException x) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 					}
