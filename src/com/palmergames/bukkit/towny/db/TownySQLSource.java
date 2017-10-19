@@ -1623,7 +1623,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             if (value != null){
                 nat_hm.put("registered",nation.getRegistered());
             } else {
-                nat_hm.put("regisetered", 0);
+                nat_hm.put("registered", 0);
             }
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
