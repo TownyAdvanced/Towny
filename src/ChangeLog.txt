@@ -2613,3 +2613,6 @@ v0.91.4.13:
       - Should reduce lag on large servers.
     - Small fixes to new .otherres/town/nation nodes.
 v0.91.4.14:
+    - Town and Nations now keep a track of when they were founded, courtesy of Articdive.
+      - Towns and Nations created before this feature will show no founded dates in the /town and /nation screens.
+       
