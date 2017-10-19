@@ -1586,7 +1586,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             if (value != null){
                 twn_hm.put("registered",town.getRegistered());
             } else {
-                twn_hm.put("regisetered", 0);
+                twn_hm.put("registered", 0);
             }
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
