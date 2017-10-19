@@ -243,7 +243,7 @@ public class TownyFormatter {
 		// Created Date
 		Long registered= town.getRegistered();
 		if (registered != 0) {
-			out.add(Colors.Green + "Registered: " + Colors.LightGreen + registeredFormat.format(town.getRegistered()));
+			out.add(Colors.Green + "Founded: " + Colors.LightGreen + registeredFormat.format(town.getRegistered()));
 		}
 
 
@@ -358,7 +358,7 @@ public class TownyFormatter {
 		// Created Date
 		Long registered = nation.getRegistered();
 		if (registered != 0) {
-			out.add(Colors.Green + "Registered: " + Colors.Gray + registeredFormat.format(nation.getRegistered()));
+			out.add(Colors.Green + "Founded: " + Colors.Gray + registeredFormat.format(nation.getRegistered()));
 		}
 		// Towns [44]: James City, Carry Grove, Mason Town
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "Towns " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));

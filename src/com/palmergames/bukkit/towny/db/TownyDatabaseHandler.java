@@ -702,7 +702,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (EconomyException e) {
 				}
 			UUID oldUUID = town.getUuid();
-			long oldregisteration = town.getRegistered();
+			long oldregistration = town.getRegistered();
 
 			// Store the nation in case we have to update the capitol
 			if (town.hasNation()) {
@@ -730,7 +730,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				nation.setCapital(town);
 			}
 			town.setUuid(oldUUID);
-			town.setRegistered(oldregisteration);
+			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				//TODO
 				try {
@@ -813,7 +813,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 
 			UUID oldUUID = nation.getUuid();
-			long oldregisteration = nation.getRegistered();
+			long oldregistration = nation.getRegistered();
 
 			//Tidy up old files
 			deleteNation(nation);
@@ -837,7 +837,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			nation.setUuid(oldUUID);
-			nation.setRegistered(oldregisteration);
+			nation.setRegistered(oldregistration);
 
 			for (Town town : toSave) {
 				saveTown(town);
