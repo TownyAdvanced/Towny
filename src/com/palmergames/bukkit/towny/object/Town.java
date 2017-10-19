@@ -5,19 +5,27 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.wallgen.Wall;
 import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
 
@@ -40,7 +48,8 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
-	public UUID uuid;
+	private UUID uuid;
+	private long registered;
 
 	public Town(String name) {
 
@@ -1177,5 +1186,13 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		} else {
 			return false;
 		}
+	}
+
+	public void setRegistered(long registered) {
+		this.registered = registered;
+	}
+
+	public long getRegistered() {
+		return registered;
 	}
 }

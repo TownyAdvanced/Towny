@@ -12,7 +12,12 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -22,9 +27,23 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TownySQLSource extends TownyFlatFileSource {
@@ -930,6 +949,21 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (SQLException e) {
                 }
 
+                try {
+                    line = rs.getString("registered");
+                    if (line != null) {
+                        town.setRegistered(Long.valueOf(line));
+                    } else {
+                        town.setRegistered(0);
+                    }
+                } catch (SQLException ee) {
+
+                } catch (NumberFormatException e) {
+                    town.setRegistered(0);
+                } catch (NullPointerException eee) {
+                    town.setRegistered(0);
+                }
+
                 s.close();
                 return true;
             }
@@ -1019,6 +1053,19 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (NullPointerException ee){
                     nation.setUuid(UUID.randomUUID());
                 }
+            }
+            try {
+                line = rs.getString("registered");
+                if (line != null) {
+                    nation.setRegistered(Long.valueOf(line));
+                } else {
+                    nation.setRegistered(0);
+                }
+            } catch (SQLException ee) {
+            } catch (NumberFormatException e) {
+                nation.setRegistered(0);
+            } catch (NullPointerException eee) {
+                nation.setRegistered(0);
             }
 
             s.close();
@@ -1535,6 +1582,12 @@ public class TownySQLSource extends TownyFlatFileSource {
             } else {
                 twn_hm.put("uuid", UUID.randomUUID());
             }
+            Long value = town.getRegistered();
+            if (value != null){
+                twn_hm.put("registered",town.getRegistered());
+            } else {
+                twn_hm.put("registered", 0);
+            }
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -1565,6 +1618,12 @@ public class TownySQLSource extends TownyFlatFileSource {
                 nat_hm.put("uuid", nation.getUuid());
             } else {
                 nat_hm.put("uuid", UUID.randomUUID());
+            }
+            Long value = nation.getRegistered();
+            if (value != null){
+                nat_hm.put("registered",nation.getRegistered());
+            } else {
+                nat_hm.put("registered", 0);
             }
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));

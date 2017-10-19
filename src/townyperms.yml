@@ -24,7 +24,6 @@ nomad:
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list
-
     - towny.town.resident
     - towny.town.spawn.public
     - towny.chat.general

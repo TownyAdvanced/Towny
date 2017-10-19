@@ -1517,6 +1517,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		town.setSpawn(spawn);
 		town.setUuid(UUID.randomUUID());
+		town.setRegistered(System.currentTimeMillis());
 		// world.addTown(town);
 
 		if (world.isUsingPlotManagementRevert()) {
