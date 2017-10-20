@@ -1387,6 +1387,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
         String line = "";
         Boolean result = false;
+        TownyMessaging.sendDebugMsg("Loading Town Blocks.");
 
         // Load town blocks
         if (!getContext())
@@ -1439,10 +1440,10 @@ public class TownySQLSource extends TownyFlatFileSource {
                         } catch (Exception e) {
                         }
 
-                    line = rs.getString("outpost");
+                    boolean outpost = rs.getBoolean("outpost");
                     if (line != null)
                         try {
-                            townBlock.setOutpost(Boolean.parseBoolean(line));
+                            townBlock.setOutpost(outpost);
                         } catch (Exception e) {
                         }
 

@@ -806,7 +806,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		return Collections.unmodifiableList(outpostSpawns);
 	}
 
-	private void removeOutpostSpawn(Coord coord) {
+	public void removeOutpostSpawn(Coord coord) {
 
 		for (Location spawn : new ArrayList<Location>(outpostSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);

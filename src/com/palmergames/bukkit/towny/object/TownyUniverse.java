@@ -28,9 +28,19 @@ import org.bukkit.entity.Player;
 import javax.naming.InvalidNameException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGOUT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TELEPORT_REQUEST;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_CLEARED;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_END;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_SET;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_START;
 
 public class TownyUniverse extends TownyObject {
 
