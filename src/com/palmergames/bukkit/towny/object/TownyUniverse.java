@@ -26,6 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -320,6 +321,13 @@ public class TownyUniverse extends TownyObject {
 			return false;
 		}
 
+		File f = new File(plugin.getDataFolder(), "outpostschecked.txt");
+		if (!(f.exists())) {
+			for (Town town : getDataSource().getTowns()) {
+				TownySQLSource.validateTownOutposts(town);
+			}
+			plugin.saveResource("outpostschecked.txt", false);
+		}
 		return true;
 	}
 

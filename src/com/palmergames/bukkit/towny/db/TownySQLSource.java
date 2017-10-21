@@ -1875,4 +1875,21 @@ public class TownySQLSource extends TownyFlatFileSource {
         return true;
     }
 
+    /**
+     * @param town - Town to validate outpost spawns of
+     * @author - Articdive | Author note is only for people to know who wrote it and who to ask, not to creditize
+     */
+    public static void validateTownOutposts(Town town) {
+        List<Location> validoutpostspawns = new ArrayList<Location>();
+        if (town != null && town.hasOutpostSpawn()) {
+            for (Location outpostSpawn : town.getAllOutpostSpawns()) {
+                TownBlock outpostSpawnTB = TownyUniverse.getTownBlock(outpostSpawn);
+                if (outpostSpawnTB == null) {
+                } else {
+                    validoutpostspawns.add(outpostSpawn);
+                }
+            }
+            town.setOutpostSpawns(validoutpostspawns);
+        }
+    }
 }
