@@ -1387,6 +1387,7 @@ public class TownySQLSource extends TownyFlatFileSource {
 
         String line = "";
         Boolean result = false;
+        TownyMessaging.sendDebugMsg("Loading Town Blocks.");
 
         // Load town blocks
         if (!getContext())
@@ -1439,10 +1440,10 @@ public class TownySQLSource extends TownyFlatFileSource {
                         } catch (Exception e) {
                         }
 
-                    line = rs.getString("outpost");
+                    boolean outpost = rs.getBoolean("outpost");
                     if (line != null)
                         try {
-                            townBlock.setOutpost(Boolean.parseBoolean(line));
+                            townBlock.setOutpost(outpost);
                         } catch (Exception e) {
                         }
 
@@ -1874,4 +1875,21 @@ public class TownySQLSource extends TownyFlatFileSource {
         return true;
     }
 
+    /**
+     * @param town - Town to validate outpost spawns of
+     * @author - Articdive | Author note is only for people to know who wrote it and who to ask, not to creditize
+     */
+    public static void validateTownOutposts(Town town) {
+        List<Location> validoutpostspawns = new ArrayList<Location>();
+        if (town != null && town.hasOutpostSpawn()) {
+            for (Location outpostSpawn : town.getAllOutpostSpawns()) {
+                TownBlock outpostSpawnTB = TownyUniverse.getTownBlock(outpostSpawn);
+                if (outpostSpawnTB == null) {
+                } else {
+                    validoutpostspawns.add(outpostSpawn);
+                }
+            }
+            town.setOutpostSpawns(validoutpostspawns);
+        }
+    }
 }

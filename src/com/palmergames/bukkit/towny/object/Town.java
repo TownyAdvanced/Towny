@@ -803,10 +803,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	 */
 	public List<Location> getAllOutpostSpawns() {
 
-		return Collections.unmodifiableList(outpostSpawns);
+		return outpostSpawns;
 	}
 
-	private void removeOutpostSpawn(Coord coord) {
+	public void removeOutpostSpawn(Coord coord) {
 
 		for (Location spawn : new ArrayList<Location>(outpostSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
@@ -1194,5 +1194,9 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 
 	public long getRegistered() {
 		return registered;
+	}
+
+	public void setOutpostSpawns(List<Location> outpostSpawns) {
+		this.outpostSpawns = outpostSpawns;
 	}
 }

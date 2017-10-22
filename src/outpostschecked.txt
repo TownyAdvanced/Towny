@@ -1,0 +1,3 @@
+If this file doesn't exist (you delete it), outposts will be checked against towns.
+So pretty much any broken outposts SHOULD be fixed if you delete this file and run Towny.
+If this is not the case then please report the issue on Github or IRC.
