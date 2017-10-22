@@ -2615,4 +2615,8 @@ v0.91.4.13:
 v0.91.4.14:
     - Town and Nations now keep a track of when they were founded, courtesy of Articdive.
       - Towns and Nations created before this feature will show no founded dates in the /town and /nation screens.
-       
+    - Courtesy of Articdive: A fix for mysql database users and erroneous outpostspawns.
+      - Databases will be checked for outposts listed in each town, outpostspawns in townblocks that are not claimed anymore by the town will be removed.
+      - The underlying bug, one where isOutpost was not recording properly, has been fixed.
+      - The check will only run once and then create an outpostschecked.txt file. 
+      - If you feel the need to run the check a second time, delete the outpostschecked.txt and start your server.
