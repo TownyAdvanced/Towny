@@ -769,7 +769,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.setPVP(!town.isPVP());
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? "Enabled" : "Disabled"));
 				} else if (outsiderintown) {
-					throw new TownyException(TownySettings.getLangString("	"));
+					throw new TownyException(TownySettings.getLangString("msg_cant_toggle_pvp_outsider_in_town"));
 				}
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 				// Make sure we are allowed to set these permissions.
