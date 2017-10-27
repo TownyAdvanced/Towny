@@ -46,7 +46,7 @@ public class AreaSelectionUtil {
 						tb.setOutpost(true);
 						out.add(pos);
 					} else {
-						throw new TownyException("You are not unclaiming an outpost, please use /t unclaim");
+						throw new TownyException(TownySettings.getLangString("msg_err_unclaim_not_outpost"));
 						// Lang String required.
 					}
 				}
