@@ -1,9 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.text.Format;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -12,8 +8,12 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AreaSelectionUtil {
 
@@ -38,6 +38,21 @@ public class AreaSelectionUtil {
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) {
 				out = selectWorldCoordAreaRect(owner, pos, args);
+			} else if (args[0].equalsIgnoreCase("outpost")) {
+				TownBlock tb = pos.getTownBlock();
+				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
+					Town town = tb.getTown();
+					if (TownyUniverse.isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
+						tb.setOutpost(true);
+						out.add(pos);
+					} else {
+						throw new TownyException("You are not unclaiming an outpost, please use /t unclaim");
+						// Lang String required.
+					}
+				}
+				if (tb.isOutpost()) { // flatfile skipper
+					out.add(pos);
+				}
 			} else {
 				try {
 					Integer.parseInt(args[0]);
