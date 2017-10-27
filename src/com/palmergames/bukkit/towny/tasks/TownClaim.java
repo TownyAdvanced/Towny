@@ -193,8 +193,14 @@ public class TownClaim extends Thread {
 
 		try {
 			final TownBlock townBlock = worldCoord.getTownBlock();
-			if (town != townBlock.getTown() && !force)
+			if (town != townBlock.getTown() && !force) {
 				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
+			}
+			if (!townBlock.isOutpost() && townBlock.hasTown()) {
+				if (TownyUniverse.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
+					townBlock.setOutpost(true);
+				}
+			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 

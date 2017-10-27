@@ -1223,4 +1223,21 @@ public class TownyUniverse extends TownyObject {
 		return NameValidation.checkAndFilterArray(arr);
 	}
 
+	/**
+	 * @author - Articdive
+	 * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
+	 * @param tb - TownBlock to check if its contained..
+	 * @note - Pretty much this method checks if a townblock is contained within a list of locations.
+	 */
+	public static boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
+		if (minecraftcoordinates != null && tb != null) {
+			for (Location minecraftcoordinate : minecraftcoordinates) {
+				if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
+					return true; // Yes the TownBlock is considered an outpost by the Town
+				}
+			}
+		}
+		return false;
+	}
+
 }
