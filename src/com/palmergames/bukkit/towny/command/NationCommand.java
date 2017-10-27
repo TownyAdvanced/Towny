@@ -113,14 +113,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split.length == 0)
-				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-					Town town = resident.getTown();
-					Nation nation = town.getNation();
-					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
-				} catch (NotRegisteredException x) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-				}
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					@Override
+				    public void run() {
+						try {
+							Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+							Town town = resident.getTown();
+							Nation nation = town.getNation();
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
+						} catch (NotRegisteredException x) {
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+						}
+					}
+				});
+				
 			else if (split[0].equalsIgnoreCase("?"))
 				for (String line : nation_help)
 					player.sendMessage(line);

@@ -2624,3 +2624,4 @@ v0.91.4.14:
       - Default: 0m
       - When set for more than 0m, the amount of time (in minutes) which must have passed between a player's first log in and when they can be invited to a town.
     - Language files bumped to version 0.35
+    - Make /town and /nation base commands return an async result. Should help Gringotts users with lag.

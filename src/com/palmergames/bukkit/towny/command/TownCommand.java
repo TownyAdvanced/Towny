@@ -126,15 +126,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split.length == 0) {
-
-				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-					Town town = resident.getTown();
-					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
-				} catch (NotRegisteredException x) {
-					throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
-				}
-
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					@Override
+				    public void run() {
+						try {
+							Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+							Town town = resident.getTown();
+							
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
+						} catch (NotRegisteredException x) {
+							try {
+								throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
+							} catch (TownyException e) {}
+						}
+					}
+				});
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
 				for (String line : output)
