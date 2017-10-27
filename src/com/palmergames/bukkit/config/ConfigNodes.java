@@ -547,6 +547,11 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_questioner.deny",
 			"deny",
 			"# The command to refuse invitations."),
+	PLUGIN_QUESTIONER_COOLDOWN_TIME(
+			"plugin.interfacing.using_questioner.cooldowntime",
+			"0m",
+			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+			"# a player's first log in and when they can be invited to a town."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",

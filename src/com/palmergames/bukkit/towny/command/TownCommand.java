@@ -46,6 +46,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -766,7 +767,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.setPVP(!town.isPVP());
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? "Enabled" : "Disabled"));
 				} else if (outsiderintown) {
-					throw new TownyException("There is an outsider in your town, you can't change your pvp status!");
+					throw new TownyException(TownySettings.getLangString("	"));
 				}
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 				// Make sure we are allowed to set these permissions.
@@ -1995,6 +1996,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown() ));
 						invited.remove(newMember);					
+					} else if (TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
+						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_resident_doesnt_meet_invite_cooldown"), newMember));
+						invited.remove(newMember);
 					} else {
 						town.addResidentCheck(newMember);
 						townInviteResident(town, newMember);

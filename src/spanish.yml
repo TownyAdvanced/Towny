@@ -1,5 +1,5 @@
 name: Towny
-version: 0.34
+version: 0.35
 language: spanish
 author: Alvarote1998, Beelzebu, Seruhio
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -561,3 +561,7 @@ msg_err_invalid_radius_number: '&cRadio inválido. Usa un %s o menos.'
 
 # Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'
+
+# Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
+msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'

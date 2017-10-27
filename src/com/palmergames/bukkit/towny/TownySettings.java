@@ -20,9 +20,12 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
+
+import sun.security.action.GetLongAction;
 
 import java.io.File;
 import java.io.IOException;
@@ -2163,6 +2166,11 @@ public class TownySettings {
 	public static String questionerDeny() {
 
 		return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
+	}
+	
+	public static long getTownInviteCooldown() {
+		
+		return getSeconds(ConfigNodes.PLUGIN_QUESTIONER_COOLDOWN_TIME);
 	}
 
 	public static boolean isAppendingToLog() {

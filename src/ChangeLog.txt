@@ -2620,3 +2620,7 @@ v0.91.4.14:
       - The underlying bug, one where isOutpost was not recording properly, has been fixed.
       - The check will only run once and then create an outpostschecked.txt file. 
       - If you feel the need to run the check a second time, delete the outpostschecked.txt and start your server.
+    - New Config Option: plugin.interfacing.using_questioner.cooldowntime
+      - Default: 0m
+      - When set for more than 0m, the amount of time (in minutes) which must have passed between a player's first log in and when they can be invited to a town.
+    - Language files bumped to version 0.35
