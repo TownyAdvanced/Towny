@@ -291,6 +291,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
+						player.sendMessage(ChatTools.formatTitle("/... set"));
+						player.sendMessage(ChatTools.formatTitle("/... set [plottype], Ex: Inn,Wilds,Farm,Embassy,Shop,Arena,Jail"));
+						player.sendMessage(ChatTools.formatTitle("/... set reset, Removes plot type."));
+						player.sendMessage(ChatTools.formatTitle("/... set [name]"));
 						player.sendMessage(ChatTools.formatTitle("/... set perm"));
 						player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
 						player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
