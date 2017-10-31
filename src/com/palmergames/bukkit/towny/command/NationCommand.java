@@ -519,27 +519,30 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
 	        return;
 	    }
-	    player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("nation_plu")));
-		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)");
-	 
+
 		Collections.sort(nationsToSort, new Comparator() {
 			@Override
-	        public int compare(Object n1, Object n2) {
+			public int compare(Object n1, Object n2) {
 				if (((Nation) n2).getNumResidents() == ((Nation) n1).getNumResidents()) return 0;
 				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
-	        }
+			}
 		});
-	    int iMax = page * 10;
-	    if ((page * 10) > nationsToSort.size()) {
-	        iMax = nationsToSort.size();
-	    }
-	    for (int i = (page - 1) * 10; i < iMax; i++) {
-	        Nation nation = nationsToSort.get(i);
-	        String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
-	        player.sendMessage(output);
-	    }
-	    TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
-	
+		int iMax = page * 10;
+		if ((page * 10) > nationsToSort.size()) {
+			iMax = nationsToSort.size();
+		}
+		List<String> nationsordered = new ArrayList();
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Nation nation = nationsToSort.get(i);
+			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+			nationsordered.add(output);
+		}
+		player.sendMessage(
+				ChatTools.formatList(TownySettings.getLangString("nation_plu"),
+						Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)",
+						nationsordered, TownySettings.getListPageMsg(page, total)
+				));
+
 	}
 	
 

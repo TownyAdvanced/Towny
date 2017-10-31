@@ -1,13 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -34,6 +26,13 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
@@ -270,19 +269,21 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
 		}
-		
-		player.sendMessage(ChatTools.formatTitle("War Participants"));
-		player.sendMessage(Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names");
 
 		int iMax = page * 10;
 		if ((page * 10) > output.size()) {
 			iMax = output.size();
 		}
+		List<String> warparticipantsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			String line = output.get(i);
 			player.sendMessage(line);			
 		}
-		TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
+		player.sendMessage(ChatTools.formatList("War Participants",
+				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
+				warparticipantsformatted, TownySettings.getListPageMsg(page, total)
+				)
+		);
 		output.clear();
 	}	
 	

@@ -630,8 +630,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
 		}
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("town_plu")));
-		player.sendMessage(Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)");
 
 		Collections.sort(townsToSort, new Comparator() {
 
@@ -647,14 +645,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > townsToSort.size()) {
 			iMax = townsToSort.size();
 		}
+		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = townsToSort.get(i);
 			String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
 			if (town.isOpen())
 				output += Colors.White + " (Open)";
-			player.sendMessage(output);
+			townsformatted.add(output);
 		}
-		TownyMessaging.sendMessage(player, TownySettings.getListPageMsg(page, total));
+		player.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
+				Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)",
+				townsformatted, TownySettings.getListPageMsg(page, total)
+				)
+		);
 	}
 
 	public void townMayor(Player player, String[] split) {
