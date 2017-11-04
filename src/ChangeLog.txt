@@ -2631,3 +2631,7 @@ v0.91.4.14:
     - Add SKULL_ITEM to default item_use_id in the config.
       - Any existing configs will require this to be added manually.
     - Fix /plot set ? screen missing some commands. 
+    - New command: /town outpost list, courtesy of Articdive.
+      - Permission node towny.command.town.outpost.list
+        - Inherited from the towny.town.spawn.town node, no added permission required.
+      - List out a town's outposts, showing #, plot name (if it has one), world and coords.        
