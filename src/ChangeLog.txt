@@ -2635,3 +2635,4 @@ v0.91.4.14:
       - Permission node towny.command.town.outpost.list
         - Inherited from the towny.town.spawn.town node, no added permission required.
       - List out a town's outposts, showing #, plot name (if it has one), world and coords.        
+    - Fix for non-entity deaths not charging death costs.
