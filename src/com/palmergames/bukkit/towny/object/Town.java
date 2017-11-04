@@ -14,8 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.wallgen.Wall;
-import com.palmergames.bukkit.wallgen.WallSection;
-import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownBlockOwner implements Walled, ResidentList {
+public class Town extends TownBlockOwner implements ResidentList {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -871,43 +869,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public double getEmbassyPlotPrice() {
 
 		return embassyPlotPrice;
-	}
-	
-	@Override
-	public Wall getWall() {
-
-		return wall;
-	}
-
-	@Override
-	public List<WallSection> getWallSections() {
-
-		return getWall().getWallSections();
-	}
-
-	@Override
-	public void setWallSections(List<WallSection> wallSections) {
-
-		getWall().setWallSections(wallSections);
-
-	}
-
-	@Override
-	public boolean hasWallSection(WallSection wallSection) {
-
-		return getWall().hasWallSection(wallSection);
-	}
-
-	@Override
-	public void addWallSection(WallSection wallSection) {
-
-		getWall().addWallSection(wallSection);
-	}
-
-	@Override
-	public void removeWallSection(WallSection wallSection) {
-
-		getWall().removeWallSection(wallSection);
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
