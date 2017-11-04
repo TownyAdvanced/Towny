@@ -567,3 +567,4 @@ msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) alre
 msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
 msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
 msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
+outpost_plu: 'Outposts'

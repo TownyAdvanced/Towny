@@ -132,4 +132,21 @@ public class ChatTools {
 		for (String line : ChatTools.color(testLine))
 			System.out.println(line);
 	}
+
+	/**
+	 * @param title   - Title of the list,
+	 * @param subject - Subject of the listing.
+	 * @param list    - Any list that is in an order of ranking.
+	 * @param page    - Already formatted TownySettings.getListPageMsg(page,total) handler.
+	 * @return - Fully formatted output which should be sent to the player.
+	 * @author - Articdive
+	 */
+	public static String[] formatList(String title, String subject, List<String> list, String page) {
+		List<String> output = new ArrayList();
+		output.add(0, formatTitle(title));
+		output.add(1, subject);
+		output.addAll(list);
+		output.add(page);
+		return output.toArray(new String[0]);
+	}
 }

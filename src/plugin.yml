@@ -81,6 +81,12 @@ permissions:
         default: false
         children:
             towny.town.spawn.outpost: true
+
+    towny.town.spawn.outpost:
+        description: User is permitted to use /town outpost & /town outpost list
+        default: false
+        children:
+            towny.command.town.outpost.list: true
         
     towny.wild.*:
         description: User can build/destroy/switch/item_use in the wild.
