@@ -242,14 +242,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(nationLine);
 			for (Town towns : townsToSort) {
 				if (towns.getNation().equals(nations)) {
-					townLine = Colors.Blue +"  -" + towns.getName().toString();
+					townLine = Colors.Blue + "  -" + towns.getName().toString();
 					if (towns.isCapital())
 						townLine += Colors.LightBlue + " (Capital)";
 					output.add(townLine);
 				}
-			}			
+			}
 		}
-		int total = (int) Math.ceil( (output.size()) / (double) 10 );		
+		int total = (int) Math.ceil((output.size()) / (double) 10);
 		if (split.length > 1) {
 			try {
 				page = Integer.parseInt(split[1]);
@@ -277,7 +277,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<String> warparticipantsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			String line = output.get(i);
-			player.sendMessage(line);			
+			warparticipantsformatted.add(line);
 		}
 		player.sendMessage(ChatTools.formatList("War Participants",
 				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",

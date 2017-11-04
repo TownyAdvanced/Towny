@@ -538,9 +538,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationsordered.add(output);
 		}
 		player.sendMessage(
-				ChatTools.formatList(TownySettings.getLangString("nation_plu"),
+				ChatTools.formatList(
+						TownySettings.getLangString("nation_plu"),
 						Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)",
-						nationsordered, TownySettings.getListPageMsg(page, total)
+						nationsordered,
+						TownySettings.getListPageMsg(page, total)
 				));
 
 	}
