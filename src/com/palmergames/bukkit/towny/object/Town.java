@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.wallgen.Wall;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,7 +32,7 @@ public class Town extends TownBlockOwner implements ResidentList {
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	private Wall wall = new Wall();
+	
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
