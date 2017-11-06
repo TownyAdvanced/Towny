@@ -12,8 +12,6 @@ import com.palmergames.bukkit.wallgen.WallSection;
 import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
 
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -54,7 +52,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	}
 	
 	public Hashtable<String, Location> getWarps() {
-		return warps;
+		return new Hashtable<String, Location>(warps);
 	}
 	
 	public Location getWarp(String warpName) {
@@ -762,6 +760,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 				removeOutpostSpawn(townBlock.getCoord());
 			if (townBlock.isJail())
 				removeJailSpawn(townBlock.getCoord());
+			
+			// Clear any warps in this claim.
+			for (EntrySet<String, Location> entry:getWarps().entrySet())
+				
+					
 			
 			// Clear the towns homeblock if this is it.
 			try {
