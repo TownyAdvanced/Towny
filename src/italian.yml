@@ -265,7 +265,7 @@ msg_world_mobs: '&cQuesto mondo ha forzato lo spawn dei mostri abilitato.'
 msg_world_expl: '&cQuesto mondo ha forzato le esplosioni abilitate.'
 msg_world_fire: '&cQuesto mondo ha forzato la propagazione del fuoco abilitata.'
 
-msg_plot_pvp: '&cIl PVP non può essere toggled in un Lotto Arena.'
+msg_plot_pvp: '&cIl PVP non può essere cambiato in un Lotto Arena.'
 msg_plot_regen_wrong_size: '&cLa rigenerazione può essere eseguita solo quando è usata la dimensione dei lotti predefinita (16).'
 
 msg_reloaded: '&2Le impostazioni del Towny sono state ricaricate.'
