@@ -1989,8 +1989,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				if (town.getHoldingBalance() > 0)
 					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
-			} catch (EconomyException e1) {
-				// TODO Auto-generated catch block
+			} catch (EconomyException e1) {				
 				e1.printStackTrace();
 			}
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())

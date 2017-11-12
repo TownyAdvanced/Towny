@@ -372,7 +372,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 			}
 	}
 	
-	private void updatePerms() {
+	public void updatePerms() {
 		townRanks.clear();
 		nationRanks.clear();
 		TownyPerms.assignPermissions(this, null);

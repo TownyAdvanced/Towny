@@ -632,10 +632,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 			nation = town.getNation();
 
-			nation.removeTown(town);
-
+			nation.removeTown(town);			
+			
 			/*
-			 * Remove all resident titles before saving the town itself.
+			 * Remove all resident titles/nationRanks before saving the town itself.
 			 */
 			List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
 
@@ -643,12 +643,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (res.hasTitle() || res.hasSurname()) {
 					res.setTitle("");
 					res.setSurname("");
-					TownyUniverse.getDataSource().saveResident(res);
 				}
+				res.updatePerms(); // Clears the nationRanks.
+				TownyUniverse.getDataSource().saveResident(res);
 			}
-
 			TownyUniverse.getDataSource().saveNation(nation);
 			TownyUniverse.getDataSource().saveNationList();
+			
+			plugin.resetCache();
 
 			TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName())));
 			TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_town_left_nation"), nation.getName())));
@@ -736,14 +738,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		        	continue;
 		        }
 				
-				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = town.getHomeBlock().getCoord();
-				if (nation.getCapital().getHomeBlock().getWorld().getName() != town.getHomeBlock().getWorld().getName()) {
-					remove.add(town);
-					continue;
-				}
-				double distance = 0;
-				if (TownySettings.getNationRequiresProximity() > 0) {					
+				if (TownySettings.getNationRequiresProximity() > 0) {
+					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
+					Coord townCoord = town.getHomeBlock().getCoord();
+					if (nation.getCapital().getHomeBlock().getWorld().getName() != town.getHomeBlock().getWorld().getName()) {
+						remove.add(town);
+						continue;
+					}
+					double distance = 0;
+									
 					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
@@ -854,6 +857,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			else
 				try {
 					nation.removeTown(town);
+					/*
+					 * Remove all resident titles/nationRanks before saving the town itself.
+					 */
+					List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
+
+					for (Resident res : titleRemove) {
+						if (res.hasTitle() || res.hasSurname()) {
+							res.setTitle("");
+							res.setSurname("");
+						}
+						res.updatePerms(); // Clears the nationRanks.
+						TownyUniverse.getDataSource().saveResident(res);
+					}
+
 					TownyUniverse.getDataSource().saveTown(town);
 				} catch (NotRegisteredException e) {
 					remove.add(town);
