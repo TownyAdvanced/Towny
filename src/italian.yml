@@ -30,7 +30,7 @@ default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 
 unclaimed_plot_name: 'Senza proprietario'
-unclaimed_zone_name: 'Selva'
+unclaimed_zone_name: 'Natura'
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -143,7 +143,7 @@ msg_plot_fs: 'Metti questa zona in vendita.'
 ############################################################
 
 msg_buy: '&bComprato %d %s per %s.'
-msg_buy_resident_plot: '&b%s ha comprato il terreno di %s per %s!'
+msg_buy_resident_plot: '&b%s ha comprato il lotto di %s per %s!'
 msg_couldnt_pay_taxes: '&b%s non poteva pagare le tasse ed è stato cacciato da %s.'
 msg_couldnt_pay_plot_taxes: '&b%s non poteva pagare le tasse e ha perso la proprietà di un terreno.'
 msg_payed_town_tax: '&bSono state pagate le tasse della città di '
@@ -424,8 +424,8 @@ msg_err_not_percentage: '&cLe percentuali devono essere inferiori a 100.'
 msg_err_no_economy: '&cL''economia non è stata attivata.'
 msg_err_not_block_type: '&cQuesto non è un tipo di terreno valido!'
 msg_not_allowed_join: '&c%s non è autorizzato a unirsi a una città.'
-msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
-msg_err_warzone_cannot_edit_material: '&cCannot %s %s in warzone.'
+msg_offline_no_join: '&c%s è offline ma utilizza i permessi quindi non può entrare in una città.'
+msg_err_warzone_cannot_edit_material: '&cNon si può %s %s in una zona di guerra.'
 msg_err_warzone_cannot_use_switches: '&cCannot use switches in warzone.'
 msg_err_warzone_cannot_use_item: '&cNon si può usare questo oggetto nelle zone di guerra.'
 msg_err_cannot_perform_action: '&cNon è possibile eseguire questa azione in %s.'
@@ -476,12 +476,12 @@ msg_war_player_cant_be_jailed_plot_fallen: '&6[Guerra]&f Il giocatore non può e
 # Added in 0.31
 msg_err_tax_minimum_not_met: 'Non puoi impostare le tasse della tua città sotto %s.'
 
-msg_unknown_rank_available_ranks: 'Unknown rank %s. Permissible ranks are %s.'
+msg_unknown_rank_available_ranks: 'Rango sconosciuto %s. I ranghi ammessi sono %s.'
 msg_no_permission_to_give_rank: 'Non hai il permesso di assegnare questo rango.'
 msg_you_have_been_given_rank: 'You have been granted the %s rank of %s.'
 msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
 msg_resident_not_your_town: 'Quel residente non è membro di una città!'
-msg_resident_already_has_rank: '%s already holds this %s rank.'
+msg_resident_already_has_rank: '%s già detiene questo %s rango.'
 msg_you_have_had_rank_taken: 'Sei stato retrocesso dal %s rango di %s.'
 msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
 msg_resident_doesnt_have_rank: '%s non detiene questo %s rango.'
