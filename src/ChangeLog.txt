@@ -2639,3 +2639,5 @@ v0.91.4.14:
 v0.91.4.15:
     - Fix adding towns to your nation when the town is in another world, when nation-proximity is set to 0.
     - Fix rank issue for nations.
+v0.91.4.16:
+    - Fix /t outpost functionality.

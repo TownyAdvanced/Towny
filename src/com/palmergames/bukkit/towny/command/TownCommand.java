@@ -340,6 +340,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							townSpawn(player, newSplit, true);
 							return;
 						}
+					} else {
+						townSpawn(player, newSplit, true);
+						return;
 					}
 
 				} else if (split[0].equalsIgnoreCase("delete")) {
