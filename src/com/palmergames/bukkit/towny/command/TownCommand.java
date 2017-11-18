@@ -133,7 +133,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						} catch (NotRegisteredException x) {
 							try {
 								throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
-							} catch (TownyException e) {}
+							} catch (TownyException e) {
+								TownyMessaging.sendErrorMsg(player,e.getMessage()); // Exceptions written from this runnable, are not reached by the catch at the end.
+							}
 						}
 					}
 				});

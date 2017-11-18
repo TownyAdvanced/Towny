@@ -1,7 +1,7 @@
 name: Towny
 version: 0.35
 language: german
-author: 'ElgarL, translated by Wolf2323 & BlocK'
+author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
 description: >
     Language file for all game messages.  Do not alter this file.
@@ -564,7 +564,7 @@ msg_err_invalid_radius_number: '&cRadius zu groß. Verwende %s oder weniger.'
 msg_err_max_residents_per_town_reached: '&cMaximale Anzahl an Bürgern (%s) erreicht.'
 
 # Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
-msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
-msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
+msg_err_resident_doesnt_meet_invite_cooldown: '&cDer Spieler %s ist noch nicht auf dem Server lang genug um eingeladen zu werden, bitte warten Sie.'
+msg_cant_toggle_pvp_outsider_in_town: 'Es gibt einen Außenseiter in deiner Stadt, Sie können nicht den PVP-Status wechseln'
+msg_err_unclaim_not_outpost: 'Dieser Grundstück ist kein Außenposten, daher wurde es nicht entfernt.'
 outpost_plu: 'Außenposten'
