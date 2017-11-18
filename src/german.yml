@@ -570,4 +570,4 @@ msg_err_unclaim_not_outpost: 'Dieser Grundstück ist kein Außenposten, daher wu
 outpost_plu: 'Außenposten'
 
 # Added in 0.36
-msg_err_not_enough_residents: 'Es gibt nicht genugend Spieler um das umzusetzen!'
+msg_err_not_enough_residents: 'Es gibt nicht genugend Spieler in dieser Stadt um dies umzusetzen!'

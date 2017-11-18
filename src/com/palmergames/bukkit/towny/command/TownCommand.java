@@ -2550,7 +2550,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
 				}
 
-				if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() <= TownySettings.getAmountOfResidentsForTown()) {
+				if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
 				}
 
