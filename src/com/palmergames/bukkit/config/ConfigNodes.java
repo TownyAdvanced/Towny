@@ -465,7 +465,7 @@ public enum ConfigNodes {
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
 			"# The amount of residents a town needs to claim an outpost,",
-			"# Setting this value to 0, means a town can claim outposts no matter how many outposts"
+			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
 	PLUGIN(
 			"plugin",
