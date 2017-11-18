@@ -556,3 +556,5 @@ msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on t
 msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
 msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
 outpost_plu: 'Outposts'
+# Added in 0.36
+msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'

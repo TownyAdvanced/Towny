@@ -568,3 +568,6 @@ msg_err_resident_doesnt_meet_invite_cooldown: '&cDer Spieler %s ist noch nicht a
 msg_cant_toggle_pvp_outsider_in_town: 'Es gibt einen Außenseiter in deiser Stadt, Sie können nicht den PVP-Status wechseln'
 msg_err_unclaim_not_outpost: 'Dieser Grundstück ist kein Außenposten, daher wurde es nicht entfernt.'
 outpost_plu: 'Außenposten'
+
+# Added in 0.36
+msg_err_not_enough_residents: 'Es gibt nicht genugend Spieler um das umzusetzen!'

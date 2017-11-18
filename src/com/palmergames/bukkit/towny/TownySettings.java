@@ -2345,5 +2345,9 @@ public class TownySettings {
 	public static boolean isNotificationUsingTitles() {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
 	}
+
+	public static int getAmountOfResidentsForTown() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
+	}
 	
 }

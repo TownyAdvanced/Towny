@@ -2538,15 +2538,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyUniverse.isWarTime())
+				if (TownyUniverse.isWarTime()) {
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+				}
 
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				if (!world.isUsingTowny())
+				if (!world.isUsingTowny()) {
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
+				}
+
+				if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() <= TownySettings.getAmountOfResidentsForTown()) {
+					throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
+				}
 
 				double blockCost = 0;
 				List<WorldCoord> selection;
