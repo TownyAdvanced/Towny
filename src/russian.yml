@@ -478,7 +478,7 @@ msg_err_tax_minimum_not_met: 'Вы не можете установить нал
 
 msg_unknown_rank_available_ranks: 'Неизвестный ранк %s. Допустимые ранки %s.'
 msg_no_permission_to_give_rank: 'У вас нет прав для выдачи данного ранка.'
-msg_you_have_been_given_rank: Вы выдали ранк %s [игроку %s].'
+msg_you_have_been_given_rank: 'Вы выдали ранк %s [игроку %s].'
 msg_you_have_given_rank: 'Вы получили %s ранк от %s к %s.'
 msg_resident_not_your_town: 'Этот горожанин не член вашего города!'
 msg_resident_already_has_rank: '%s уже имеет ранк %s.'
