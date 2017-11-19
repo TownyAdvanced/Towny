@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGOUT;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.TELEPORT_REQUEST;
@@ -209,6 +210,26 @@ public class TownyUniverse extends TownyObject {
 		try {
 			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
 			return worldCoord.getTownBlock().getTown().getName();
+		} catch (NotRegisteredException e) {
+			// No data so return null
+			return null;
+		}
+
+	}
+	/**
+	 * getTownUUID
+	 *
+	 * returns the uuid of the Town this location lies within if no town is
+	 * registered it returns null
+	 *
+	 * @param loc
+	 * @return name of any town at this location, or null for none.
+	 */
+	public static UUID getTownUUID(Location loc) {
+
+		try {
+			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
+			return worldCoord.getTownBlock().getTown().getUuid();
 		} catch (NotRegisteredException e) {
 			// No data so return null
 			return null;
