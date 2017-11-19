@@ -85,8 +85,8 @@ res_6: 'Corrispondenza online'
 res_7: 'Nome esatto'
 
 mode_1: 'Mostra la mappa tra ogni terreno di città'
-mode_2: 'Prova a reclamare quando cammini'
-mode_3: 'Prova ad abbandonare i terreni quando cammini'
+mode_2: 'Prova a reclamare camminando'
+mode_3: 'Prova ad abbandonare i terreni camminando'
 mode_4: 'Canale chat predefinito a città'
 mode_5: 'Canale chat predefinito a nazione'
 mode_6: 'Possibilità di piazzare %s nelle frontiere nemiche per fare zone di guerra.'
@@ -376,7 +376,7 @@ msg_err_town_spawn_nation_forbidden: '&cTown spawn travel to other towns in your
 msg_err_town_spawn_ally_forbidden: '&cTown spawn travel to towns allied with your nation is forbidden.'
 msg_err_public_spawn_forbidden: '&cPublic spawn travel to other towns is forbidden.'
 msg_err_public_spawn_enemy: '&cPublic spawn travel is forbidden for enemies.'
-msg_err_town_spawn_disallowed_from: '&cTown spawn is not allowed from %s.'
+msg_err_town_spawn_disallowed_from: '&cAndare allo spawn della città non è consentito da %s.'
 msg_err_outpost_spawn: '&cNon ci sono spawn di avamposti impostati per questa città.'
 
 msg_err_cant_afford_tp: '&bNon puoi permetterti di teletrasportarti allo spawn della tua città.'
@@ -496,7 +496,7 @@ msg_player_escaped_jail_by_leaving_town: '%s è scappato dalla prigione diventan
 msg_set_jail_spawn: 'Successfully set jail plot''s spawn.'
 msg_killed_attempting_to_escape_jail: '&4%s è stato ucciso cercando di scappare di prigione.'
 msg_err_jailed_players_no_teleport: '&4I giocatori imprigionati non possono essere teletrasportati!'
-msg_player_escaped_jail_into_wilderness: '&4%s has escaped jail by running into the %s'
+msg_player_escaped_jail_into_wilderness: '&4%s è evaso di prigione scappando nella %s'
 
 msg_err_invalid_string_board_not_set: 'Messaggio non valido, Board della città non impostata.'
 
