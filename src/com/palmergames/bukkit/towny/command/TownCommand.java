@@ -133,7 +133,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						} catch (NotRegisteredException x) {
 							try {
 								throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
-							} catch (TownyException e) {}
+							} catch (TownyException e) {
+								TownyMessaging.sendErrorMsg(player,e.getMessage()); // Exceptions written from this runnable, are not reached by the catch at the end.
+							}
 						}
 					}
 				});
@@ -340,6 +342,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							townSpawn(player, newSplit, true);
 							return;
 						}
+					} else {
+						townSpawn(player, newSplit, true);
+						return;
 					}
 
 				} else if (split[0].equalsIgnoreCase("delete")) {
@@ -514,8 +519,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						targetTown = target.getTown();
 					} catch (Exception e1) {
 					}
-					if (targetTown.getMayor().equals(target))
+					// Don't allow a resident to outlaw their own mayor.
+					if (resident.getTown().getMayor().equals(target))
 						return;
+					// Kick outlaws from town if they are residents.
 					if (targetTown != null)
 						if (targetTown == town){
 							townRemoveResident(town, target);
@@ -1989,8 +1996,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				if (town.getHoldingBalance() > 0)
 					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
-			} catch (EconomyException e1) {
-				// TODO Auto-generated catch block
+			} catch (EconomyException e1) {				
 				e1.printStackTrace();
 			}
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
@@ -2534,15 +2540,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyUniverse.isWarTime())
+				if (TownyUniverse.isWarTime()) {
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+				}
 
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				if (!world.isUsingTowny())
+				if (!world.isUsingTowny()) {
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
+				}
+
+				if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
+					throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
+				}
 
 				double blockCost = 0;
 				List<WorldCoord> selection;

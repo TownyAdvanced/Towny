@@ -2636,3 +2636,15 @@ v0.91.4.14:
         - Inherited from the towny.town.spawn.town node, no added permission required.
       - List out a town's outposts, showing #, plot name (if it has one), world and coords.        
     - Fix for non-entity deaths not charging death costs.
+v0.91.4.15:
+    - Fix adding towns to your nation when the town is in another world, when nation-proximity is set to 0.
+    - Fix rank issue for nations.
+v0.91.4.16:
+    - Fix /t outpost functionality.
+    - Language files bumped to 0.36
+    - New Config Option: global_town_settings.minimum_amount_of_residents_in_town_for_outpost - courtesy of Articdive
+      - Default: 0
+      - The amount of residents a town needs to claim an outpost.
+      - Setting this value to 0, means a town can claim outposts no matter how many residents they have.
+    - Fix for recent bug when using /town and not belonging to a town.
+    - Fix for bug involving mayors and adding outlaws.

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.35
+version: 0.36
 language: italian
 author: Leomixer17
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -568,3 +568,6 @@ msg_err_resident_doesnt_meet_invite_cooldown: '&cIl giocatore %s non è stato su
 msg_cant_toggle_pvp_outsider_in_town: 'C''è un estraneo nella tua città, non puoi cambiare lo stato del pvp!'
 msg_err_unclaim_not_outpost: 'Imbossibile da abbandonare, questo lotto non è un avamposto!'
 outpost_plu: 'Avamposti'
+
+# Added in 0.36
+msg_err_not_enough_residents: 'Non ci sono abbastanza residenti in questa città per questo.'
