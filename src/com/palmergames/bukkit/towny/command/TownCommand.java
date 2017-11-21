@@ -519,8 +519,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						targetTown = target.getTown();
 					} catch (Exception e1) {
 					}
-					if (targetTown.getMayor().equals(target))
+					// Don't allow a resident to outlaw their own mayor.
+					if (resident.getTown().getMayor().equals(target))
 						return;
+					// Kick outlaws from town if they are residents.
 					if (targetTown != null)
 						if (targetTown == town){
 							townRemoveResident(town, target);
