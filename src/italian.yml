@@ -476,15 +476,15 @@ msg_war_player_cant_be_jailed_plot_fallen: '&6[Guerra]&f Il giocatore non può e
 # Added in 0.31
 msg_err_tax_minimum_not_met: 'Non puoi impostare le tasse della tua città sotto %s.'
 
-msg_unknown_rank_available_ranks: 'Rango sconosciuto %s. I ranghi ammessi sono %s.'
+msg_unknown_rank_available_ranks: 'Rango %s sconosciuto. I ranghi ammessi sono %s.'
 msg_no_permission_to_give_rank: 'Non hai il permesso di assegnare questo rango.'
-msg_you_have_been_given_rank: 'You have been granted the %s rank of %s.'
-msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
+msg_you_have_been_given_rank: 'Ti è stato concesso il rango %s di %s.'
+msg_you_have_given_rank: 'Hai concesso il rango %s di %s a %s.'
 msg_resident_not_your_town: 'Quel residente non è membro di una città!'
 msg_resident_already_has_rank: '%s già detiene questo %s rango.'
-msg_you_have_had_rank_taken: 'Sei stato retrocesso dal %s rango di %s.'
-msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
-msg_resident_doesnt_have_rank: '%s non detiene questo %s rango.'
+msg_you_have_had_rank_taken: 'Sei stato retrocesso dal rango %s di %s.'
+msg_you_have_taken_rank_from: 'Hai rimosso il rango %s di %s da %s.'
+msg_resident_doesnt_have_rank: '%s non detiene il rango %s.'
 
 msg_town_has_no_jails: 'La città non dispone di prigioni.'
 msg_no_permission_to_jail_your_residents: 'Non hai il permesso di imprigionare i tuoi residenti.'
