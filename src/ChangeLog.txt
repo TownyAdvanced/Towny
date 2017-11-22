@@ -2589,18 +2589,62 @@ v0.91.4.12:
         - Defaults to true.
     - Towns and Nations now have UUIDs, courtesy of Articdive
     - Downgrade from Java 8 back to 6.
-    - New Config Option: global_town_settings.outsiders_prevent_pvp_toggle
+    - New Config Option: global_town_settings.outsiders_prevent_pvp_toggle - courtesy of Articdive
       - default: false
       - If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.
       - When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online.
-    - New Config Option: global_town_settings.display_board_onlogin
+    - New Config Option: global_town_settings.display_board_onlogin - courtesy of Articdive
       - default: true
       - If Towny should show players the townboard when they login.
     - Improved german translation from Wolf2323.
-    - New permission node: towny.command.townyadmin.town.spawn
+    - New permission node: towny.command.townyadmin.town.spawn - courtesy of Articdive
       - A child node of towny.admin
       - Give this to allow a mod or someone of high rank on the server to be able to teleport to any town's spawn.
-    - New permission node: towny.command.townyadmin.town.spawn.freecharge
+    - New permission node: towny.command.townyadmin.town.spawn.freecharge - courtesy of Articdive
       - A child node of towny.admin
       - Give this to make spawning to towns free for the person teleporting.
-    
+v0.91.4.13:
+    - FileMgmt.java now like utf-8 more than us-ascii. Language files with special non-english characters will be much happier.
+    - Support for TownyChat 0.49's new {groupprefix} and {groupsuffix} tags courtesy of Articdive.
+    - New Config Option: economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier
+      - default: false
+      - If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers.
+    - Moved /res name, /t name, /n name commands to async tasks.
+      - Should reduce lag on large servers.
+    - Small fixes to new .otherres/town/nation nodes.
+v0.91.4.14:
+    - Town and Nations now keep a track of when they were founded, courtesy of Articdive.
+      - Towns and Nations created before this feature will show no founded dates in the /town and /nation screens.
+    - Courtesy of Articdive: A fix for mysql database users and erroneous outpostspawns.
+      - Databases will be checked for outposts listed in each town, outpostspawns in townblocks that are not claimed anymore by the town will be removed.
+      - The underlying bug, one where isOutpost was not recording properly, has been fixed.
+      - The check will only run once and then create an outpostschecked.txt file. 
+      - If you feel the need to run the check a second time, delete the outpostschecked.txt and start your server.
+    - New Config Option: plugin.interfacing.using_questioner.cooldowntime
+      - Default: 0m
+      - When set for more than 0m, the amount of time (in minutes) which must have passed between a player's first log in and when they can be invited to a town.
+    - Language files bumped to version 0.35
+    - Make /town and /nation base commands return an async result. Should help Gringotts users with lag.
+    - New Command: /town unclaim outpost, courtesy of Articdive
+      - Used to manually unclaim outposts, will enable a mayor to remove glitched outposts that were not automatically removed (mysql outpost bug)
+    - Fix /town mayor page erroneously showing /town jail as a command.
+    - Add SKULL_ITEM to default item_use_id in the config.
+      - Any existing configs will require this to be added manually.
+    - Fix /plot set ? screen missing some commands. 
+    - New command: /town outpost list, courtesy of Articdive.
+      - Permission node towny.command.town.outpost.list
+        - Inherited from the towny.town.spawn.town node, no added permission required.
+      - List out a town's outposts, showing #, plot name (if it has one), world and coords.        
+    - Fix for non-entity deaths not charging death costs.
+v0.91.4.15:
+    - Fix adding towns to your nation when the town is in another world, when nation-proximity is set to 0.
+    - Fix rank issue for nations.
+v0.91.4.16:
+    - Fix /t outpost functionality.
+    - Language files bumped to 0.36
+    - New Config Option: global_town_settings.minimum_amount_of_residents_in_town_for_outpost - courtesy of Articdive
+      - Default: 0
+      - The amount of residents a town needs to claim an outpost.
+      - Setting this value to 0, means a town can claim outposts no matter how many residents they have.
+    - Fix for recent bug when using /town and not belonging to a town.
+    - Fix for bug involving mayors and adding outlaws.

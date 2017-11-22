@@ -1,5 +1,5 @@
 name: Towny
-version: 0.34
+version: 0.36
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -478,7 +478,7 @@ msg_err_tax_minimum_not_met: 'Вы не можете установить нал
 
 msg_unknown_rank_available_ranks: 'Неизвестный ранк %s. Допустимые ранки %s.'
 msg_no_permission_to_give_rank: 'У вас нет прав для выдачи данного ранка.'
-msg_you_have_been_given_rank: Вы выдали ранк %s [игроку %s].'
+msg_you_have_been_given_rank: 'Вы выдали ранк %s [игроку %s].'
 msg_you_have_given_rank: 'Вы получили %s ранк от %s к %s.'
 msg_resident_not_your_town: 'Этот горожанин не член вашего города!'
 msg_resident_already_has_rank: '%s уже имеет ранк %s.'
@@ -562,3 +562,12 @@ msg_err_invalid_radius_number: '&cНедопустимый радиус. Исп�
 
 # Added in 0.34
 msg_err_max_residents_per_town_reached: '&cМакс кол-во горожан (%s) уже достигнуто.'
+
+# Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
+msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
+msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
+outpost_plu: 'Outposts'
+
+# Added in 0.36
+msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'

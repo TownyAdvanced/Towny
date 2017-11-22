@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -87,7 +88,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	public void parseResidentCommand(Player player, String[] split) {
+	public void parseResidentCommand(final Player player, String[] split) {
 
 		try {
 
@@ -198,11 +199,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			} else {
 
 				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && !(resident.getName().equals(player.getName()))) {
+					final Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					}
-					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
+					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+						@Override
+					    public void run() {
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
+						}
+					});
 				} catch (NotRegisteredException x) {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 				}

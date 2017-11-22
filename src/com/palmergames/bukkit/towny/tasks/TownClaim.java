@@ -1,13 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -24,6 +16,13 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ElgarL
@@ -156,7 +155,7 @@ public class TownClaim extends Thread {
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
 			if (isOutpost) {
-				townBlock.setOutpost(isOutpost);
+				townBlock.setOutpost(true); // set this to true to fineally find our problem!
 				town.addOutpostSpawn(outpostLocation);
 			}
 
@@ -194,8 +193,14 @@ public class TownClaim extends Thread {
 
 		try {
 			final TownBlock townBlock = worldCoord.getTownBlock();
-			if (town != townBlock.getTown() && !force)
+			if (town != townBlock.getTown() && !force) {
 				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
+			}
+			if (!townBlock.isOutpost() && townBlock.hasTown()) {
+				if (TownyUniverse.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
+					townBlock.setOutpost(true);
+				}
+			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 

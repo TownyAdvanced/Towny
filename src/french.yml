@@ -1,5 +1,5 @@
 name: Towny
-version: 0.34
+version: 0.36
 language: french
 author: Noiknez
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -464,11 +464,11 @@ list_page: '&bPage %s de %s'
 list_err_not_enough_pages: '&cOnly %s pages disponibles'
 
 # Added in 0.30
-msg_war_a_player_has_no_town: '&6[Guerre]&f Un des joueurss dans un combat n'a pas de ville et ne peut pas interférer pendant l'évènement de guerre.'
-msg_war_a_player_has_no_nation: '&6[Guerre]&f Un des joueurs dans un combat a une ville sans une nation et ne peut pas interférer pendant l'évènement de guerre.'
-msg_war_a_player_has_a_neutral_nation: '&6[Guerre]&f Un des joueurs dans un combat fait partie d'une nation neutre et ne peut pas interférer pendant l'évènement de guerre.'
-msg_war_a_player_has_been_removed_from_war: '&6[Guerre]&f Un des joueurs dans un combat fait partie d'une ville qui ne peut pas interférer avec l'évènement de guerre.'
-msg_war_a_player_is_an_ally: '&6[Guerre]&f Un des joueurs dans un combat considère l'autre comme un allié.'
+msg_war_a_player_has_no_town: '&6[Guerre]&f Un des joueurss dans un combat n''a pas de ville et ne peut pas interférer pendant l''évènement de guerre.'
+msg_war_a_player_has_no_nation: '&6[Guerre]&f Un des joueurs dans un combat a une ville sans une nation et ne peut pas interférer pendant l''évènement de guerre.'
+msg_war_a_player_has_a_neutral_nation: '&6[Guerre]&f Un des joueurs dans un combat fait partie d''une nation neutre et ne peut pas interférer pendant l''évènement de guerre.'
+msg_war_a_player_has_been_removed_from_war: '&6[Guerre]&f Un des joueurs dans un combat fait partie d''une ville qui ne peut pas interférer avec l''évènement de guerre.'
+msg_war_a_player_is_an_ally: '&6[Guerre]&f Un des joueurs dans un combat considère l''autre comme un allié.'
 
 msg_war_player_cant_be_jailed_plot_fallen: '&6[Guerre]&f Le joueur ne peut pas être mis en prison, le plot prison a 0 points de vie.'
 
@@ -476,26 +476,26 @@ msg_war_player_cant_be_jailed_plot_fallen: '&6[Guerre]&f Le joueur ne peut pas �
 msg_err_tax_minimum_not_met: 'Vous ne pouvez pas mettre votre taxe en dessous de %s.'
 
 msg_unknown_rank_available_ranks: 'Rang inconnu %s. Les rangs permis sont %s.'
-msg_no_permission_to_give_rank: 'Vous n'avez pas la permission de donner ce rang.'
+msg_no_permission_to_give_rank: 'Vous n''avez pas la permission de donner ce rang.'
 msg_you_have_been_given_rank: 'Vous avez été accordé le rang %s de %s.'
 msg_you_have_given_rank: 'Vous avez accordé le rang %s de %s à %s.'
-msg_resident_not_your_town: 'Ce résident n'est pas membre d'une ville!'
+msg_resident_not_your_town: 'Ce résident n''est pas membre d''une ville!'
 msg_resident_already_has_rank: '%s a déjà le rang %s.'
 msg_you_have_had_rank_taken: 'Vous avez été rétrogradé de rang %s à %s.'
 msg_you_have_taken_rank_from: 'Vous avez rétrogradé le rang %s de %s à %s.'
-msg_resident_doesnt_have_rank: '%s n'a pas le rang %s.'
+msg_resident_doesnt_have_rank: '%s n''a pas le rang %s.'
 
-msg_town_has_no_jails: 'La ville n'a aucune prison configuré.'
-msg_no_permission_to_jail_your_residents: 'Vous n'avez pas la permission de mettre en prison vos propres résidents.'
-msg_resident_not_part_of_any_town: 'Ce joueur ne fait partie d'aucune ville.'
-msg_player_not_jailed_in_your_town: 'Ce joueur n'est pas emprisonné dans votre ville.'
+msg_town_has_no_jails: 'La ville n''a aucune prison configuré.'
+msg_no_permission_to_jail_your_residents: 'Vous n''avez pas la permission de mettre en prison vos propres résidents.'
+msg_resident_not_part_of_any_town: 'Ce joueur ne fait partie d''aucune ville.'
+msg_player_not_jailed_in_your_town: 'Ce joueur n''est pas emprisonné dans votre ville.'
 msg_cannot_spawn_while_jailed: 'Vous ne pouvez pas réapparaitre tant que vous êtes emprisonné.'
-msg_cannot_abandon_town_while_jailed: 'Abandonner votre ville n'est pas autorisé quand vous êtes emprisonné.'
-msg_player_escaped_jail_by_leaving_town: '%s s'est échappé de sa prison et est devenu un nomade.'
+msg_cannot_abandon_town_while_jailed: 'Abandonner votre ville n''est pas autorisé quand vous êtes emprisonné.'
+msg_player_escaped_jail_by_leaving_town: '%s s''est échappé de sa prison et est devenu un nomade.'
 msg_set_jail_spawn: 'Le point de réapparition de la prison a été configuré avec succès.'
-msg_killed_attempting_to_escape_jail: '&4%s a été tué en tentant de s'échapper de sa prison.'
+msg_killed_attempting_to_escape_jail: '&4%s a été tué en tentant de s''échapper de sa prison.'
 msg_err_jailed_players_no_teleport: '&4Les joueurs emprisonnées ne peuvent pas être téléportés!'
-msg_player_escaped_jail_into_wilderness: '&4%s s'est échappé de sa prison en courant vers %s'
+msg_player_escaped_jail_into_wilderness: '&4%s s''est échappé de sa prison en courant vers %s'
 
 msg_err_invalid_string_board_not_set: 'Donnée invalide, description de la ville non modifié.'
 
@@ -519,8 +519,8 @@ msg_err_couldnt_take_nation_deathfunds: 'Ne peut pas prendre l''argent des morts
 msg_you_gained_money_for_killing: 'Vous avez gagné %s pour avoir tué %s.'
 
 msg_err_ender_pearls_disabled: '&4Les Ender Pearls sont désactivées!'
-msg_err_no_sleep_in_enemy_inn: '&4Vous ne pouvez pas dormir dans l''auberge d'un ennemie.'
-msg_err_cant_use_bed: '&4Ce terrain ne vous appartient pas, ce lit l'occupe et cette parcelle n'est pas une auberge.'
+msg_err_no_sleep_in_enemy_inn: '&4Vous ne pouvez pas dormir dans l''auberge d''un ennemie.'
+msg_err_cant_use_bed: '&4Ce terrain ne vous appartient pas, ce lit l''occupe et cette parcelle n''est pas une auberge.'
 
 msg_war_seeding_spoils_with: '&6[Guerre]&f Plante les germes de la guerre avec %s'
 msg_war_total_seeding_spoils: '&6[Guerre]&f Germes de la guerre total pour cette guerre: %s'
@@ -529,9 +529,9 @@ msg_war_town_under_attack: 'Votre ville est attaqué!'
 msg_war_nation_under_attack: 'Votre nation est attaqué!'
 msg_war_nations_ally_under_attack: 'Les alliés de votre nation %s, est attaqué!'
 msg_war_homeblock_under_attack: 'L’accueil de votre ville est attaqué!'
-msg_war_nation_member_homeblock_under_attack: 'Le terrain d'accueil de la guilde %s de votre nation est attaqué!'
-msg_war_nation_ally_homeblock_under_attack: 'Le terrain d'acceuil de la guilde %s d'une nation allié est attaqué!'
-msg_war_town_ran_out_of_money: 'Votre ville n'a plus d'argent pour se supporter elle même dans la guerre.'
+msg_war_nation_member_homeblock_under_attack: 'Le terrain d''accueil de la guilde %s de votre nation est attaqué!'
+msg_war_nation_ally_homeblock_under_attack: 'Le terrain d''acceuil de la guilde %s d''une nation allié est attaqué!'
+msg_war_town_ran_out_of_money: 'Votre ville n''a plus d''argent pour se supporter elle même dans la guerre.'
 msg_war_town_lost_money_townblock: 'Votre ville a perdu %s.'
 msg_war_jailbreak: '&6[Guerre]&f Il y a eu une évasion dans %s, libération de(s) prisonnier(s) de %s!'
 msg_war_town_removed_from_war_titlemsg: 'Votre ville a été retiré de la guerre'
@@ -539,8 +539,8 @@ msg_war_nation_removed_from_war_titlemsg: 'Votre nation a été retiré de la gu
 msg_war_append_townblocks_fallen: ' Les blocs de la ville sont tombés)'
 
 msg_town_plots_revenue_disclaimer: '&aLes revenues montrés sont estimés et le fait que le propriétaire du terrain peut payer est un facteur.'
-msg_town_set_perm_syntax_error: 'Combinaison de mots invalides pour cette commande. Utilisez ''/town set perm ?'' pour l'utilisation de la syntaxe.'
-msg_plot_set_perm_syntax_error: 'Combinaison de mots invalides pour cette commande. Utilisez ''/plot set perm ?'' pour l'utilisation de la syntaxe.'
+msg_town_set_perm_syntax_error: 'Combinaison de mots invalides pour cette commande. Utilisez ''/town set perm ?'' pour l''utilisation de la syntaxe.'
+msg_plot_set_perm_syntax_error: 'Combinaison de mots invalides pour cette commande. Utilisez ''/plot set perm ?'' pour l''utilisation de la syntaxe.'
 
 # Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'That resident doesn''t belong to that town.'
@@ -560,4 +560,13 @@ msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too fa
 msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
 
 # Added in 0.34
-msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'
+msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached'
+
+# Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
+msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
+msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
+outpost_plu: 'Outposts'
+
+# Added in 0.36
+msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.34
+version: 0.36
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -562,3 +562,12 @@ msg_err_invalid_radius_number: '&cUgyldig radiusbeløp. Bruk en %s eller mindre.
 
 # Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaksimalt nummer av innbyggere (%s) er allerede nådd.'
+
+# Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
+msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
+msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
+outpost_plu: 'Outposts'
+
+# Added in 0.36
+msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'

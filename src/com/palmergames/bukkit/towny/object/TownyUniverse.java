@@ -26,11 +26,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGOUT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TELEPORT_REQUEST;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_CLEARED;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_END;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_SET;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.WAR_START;
 
 public class TownyUniverse extends TownyObject {
 
@@ -204,6 +216,26 @@ public class TownyUniverse extends TownyObject {
 		}
 
 	}
+	/**
+	 * getTownUUID
+	 *
+	 * returns the uuid of the Town this location lies within if no town is
+	 * registered it returns null
+	 *
+	 * @param loc
+	 * @return name of any town at this location, or null for none.
+	 */
+	public static UUID getTownUUID(Location loc) {
+
+		try {
+			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
+			return worldCoord.getTownBlock().getTown().getUuid();
+		} catch (NotRegisteredException e) {
+			// No data so return null
+			return null;
+		}
+
+	}
 
 	/**
 	 * getTownBlock
@@ -310,6 +342,13 @@ public class TownyUniverse extends TownyObject {
 			return false;
 		}
 
+		File f = new File(plugin.getDataFolder(), "outpostschecked.txt");
+		if (!(f.exists())) {
+			for (Town town : getDataSource().getTowns()) {
+				TownySQLSource.validateTownOutposts(town);
+			}
+			plugin.saveResource("outpostschecked.txt", false);
+		}
 		return true;
 	}
 
@@ -1203,6 +1242,23 @@ public class TownyUniverse extends TownyObject {
 	public String[] checkAndFilterArray(String[] arr) {
 
 		return NameValidation.checkAndFilterArray(arr);
+	}
+
+	/**
+	 * @author - Articdive
+	 * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
+	 * @param tb - TownBlock to check if its contained..
+	 * @note - Pretty much this method checks if a townblock is contained within a list of locations.
+	 */
+	public static boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
+		if (minecraftcoordinates != null && tb != null) {
+			for (Location minecraftcoordinate : minecraftcoordinates) {
+				if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
+					return true; // Yes the TownBlock is considered an outpost by the Town
+				}
+			}
+		}
+		return false;
 	}
 
 }

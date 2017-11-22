@@ -1,14 +1,17 @@
 package com.palmergames.bukkit.towny.permissions;
 
-import java.util.Arrays;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
-
 import ru.tehkode.permissions.PermissionEntity;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
@@ -17,12 +20,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import ru.tehkode.permissions.events.PermissionEntityEvent;
 import ru.tehkode.permissions.events.PermissionSystemEvent;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.util.BukkitTools;
+import java.util.Arrays;
 
 /**
  * @author ElgarL
@@ -69,6 +67,10 @@ public class PEXSource extends TownyPermissionSource {
 			user = pexPM.getUser(player).getOwnPrefix();					
 		} else if (node == "usersuffix") {
 			user = pexPM.getUser(player).getOwnSuffix();					
+		} else if (node == "groupprefix") {
+			group = pexPM.getUser(player).getGroups()[0].getOwnPrefix();
+		} else if (node == "groupsuffix") {
+			group = pexPM.getUser(player).getGroups()[0].getOwnSuffix();
 		}
 		if (group == null)
 			group = "";

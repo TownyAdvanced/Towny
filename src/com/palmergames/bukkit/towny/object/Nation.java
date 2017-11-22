@@ -31,6 +31,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private boolean neutral = false;
 	private String tag;
 	public UUID uuid;
+	private long registered;
 
 	public Nation(String name) {
 
@@ -525,5 +526,13 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		} else {
 			return false;
 		}
+	}
+
+	public long getRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(long registered) {
+		this.registered = registered;
 	}
 }

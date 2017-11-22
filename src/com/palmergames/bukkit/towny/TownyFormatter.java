@@ -1,11 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.entity.Player;
-import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -18,10 +12,16 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.entity.Player;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TownyFormatter {
 
@@ -240,6 +240,12 @@ public class TownyFormatter {
 			out.add(Colors.Green + "Board: " + Colors.LightGreen + town.getTownBoard());
 		} catch (NullPointerException e) {
 		}
+		// Created Date
+		Long registered= town.getRegistered();
+		if (registered != 0) {
+			out.add(Colors.Green + "Founded: " + Colors.LightGreen + registeredFormat.format(town.getRegistered()));
+		}
+
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
@@ -349,6 +355,11 @@ public class TownyFormatter {
 		// Assistants: Mayor Rockefel, Sammy, Ginger
 		if (nation.getAssistants().size() > 0)
 			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), Colors.Green + "Assistants:" + Colors.White + " "));
+		// Created Date
+		Long registered = nation.getRegistered();
+		if (registered != 0) {
+			out.add(Colors.Green + "Founded: " + Colors.Gray + registeredFormat.format(nation.getRegistered()));
+		}
 		// Towns [44]: James City, Carry Grove, Mason Town
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "Towns " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));
 		// Allies [4]: James Nation, Carry Territory, Mason Country

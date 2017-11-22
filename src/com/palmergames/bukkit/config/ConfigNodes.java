@@ -461,6 +461,12 @@ public enum ConfigNodes {
 			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
 			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
 	),
+	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
+			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
+			"0",
+			"# The amount of residents a town needs to claim an outpost,",
+			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
+	),
 	PLUGIN(
 			"plugin",
 			"",
@@ -547,6 +553,11 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_questioner.deny",
 			"deny",
 			"# The command to refuse invitations."),
+	PLUGIN_QUESTIONER_COOLDOWN_TIME(
+			"plugin.interfacing.using_questioner.cooldowntime",
+			"0m",
+			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+			"# a player's first log in and when they can be invited to a town."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",
@@ -647,7 +658,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -1013,8 +1024,7 @@ public enum ConfigNodes {
 	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
 			"economy.banks.town_allow_withdrawls",
 			"true",
-			"# Set to true to allow withdrawls from town banks"),
-	ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawls from town banks"),	ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
@@ -1067,6 +1077,10 @@ public enum ConfigNodes {
 			"false",
 			"# Uses total amount of owned plots to determine upkeep instead of the town level (Number of residents)",
 			"# calculated by (number of claimed plots X price_town_upkeep)."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER(
+			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
+			"false",
+			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),	
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
