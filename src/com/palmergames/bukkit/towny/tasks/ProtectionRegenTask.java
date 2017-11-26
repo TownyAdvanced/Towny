@@ -47,6 +47,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			if (state instanceof Chest) {
 				inven = ((Chest) state).getBlockInventory();
 			} else {
+				// Contents we are respawning.
 				inven = ((InventoryHolder) state).getInventory();
 			}
 
