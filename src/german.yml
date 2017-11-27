@@ -565,7 +565,7 @@ msg_err_max_residents_per_town_reached: '&cMaximale Anzahl an Bürgern (%s) erre
 
 # Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cDer Spieler %s ist noch nicht lang genug auf dem Server um eingeladen zu werden.'
-msg_cant_toggle_pvp_outsider_in_town: 'Es gibt einen Außenseiter in deiser Stadt, du kannst den PVP-Status nicht ändern'
+msg_cant_toggle_pvp_outsider_in_town: 'Es gibt einen Außenseiter in deiner Stadt, du kannst den PVP-Status nicht ändern'
 msg_err_unclaim_not_outpost: 'Dieser Grundstück ist kein Außenposten, daher wurde es nicht entfernt.'
 outpost_plu: 'Außenposten'
 
