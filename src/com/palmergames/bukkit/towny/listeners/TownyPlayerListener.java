@@ -886,16 +886,16 @@ public class TownyPlayerListener implements Listener {
 				try {
 					Town fromTown = from.getTownBlock().getTown();
 					if (!to.getTownBlock().getTown().equals(fromTown)){
-						new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme); // From Town into different Town.
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
 					} else {
 						// Both are the same town, do nothing, no Event should fire here.
 					}
 				} catch (NotRegisteredException e) { // From Wilderness into Town.
-					new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme);
+					Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
 				}
 			} else {
 				if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
-					new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme);
+					Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
 				}
 			}
 		} catch (NotRegisteredException e) {
