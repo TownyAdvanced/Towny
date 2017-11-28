@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.Inventory;
@@ -39,16 +40,21 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		this.state = block.getState();
 		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
-		
-		if (state instanceof InventoryHolder) {
 
-			// Contents we are respawning.
-			Inventory inven = ((InventoryHolder) state).getInventory();
+		if (state instanceof InventoryHolder) {
+			Inventory inven;
+
+			if (state instanceof Chest) {
+				inven = ((Chest) state).getBlockInventory();
+			} else {
+				// Contents we are respawning.
+				inven = ((InventoryHolder) state).getInventory();
+			}
 
 			for (ItemStack item : inven.getContents()) {
 				contents.add((item != null) ? item.clone() : null);
 			}
-			
+
 			inven.clear();
 		}
 		
@@ -128,10 +134,14 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 				block.setTypeId(state.getTypeId(), false);
 
-				// Container to receive the inventory
-				Inventory container = ((InventoryHolder) block.getState()).getInventory();
+				Inventory container;
+				if (state instanceof Chest) {
+					container = ((Chest) block.getState()).getBlockInventory();
+				} else {
+					container = ((InventoryHolder) block.getState()).getInventory();
+				}
 				container.setContents(contents.toArray(new ItemStack[0]));
-				
+
 				block.setData(state.getData().getData(), false);
 
 			} else if (state.getData() instanceof PistonExtensionMaterial) {

@@ -1159,4 +1159,25 @@ public class Town extends TownBlockOwner implements ResidentList {
 	public void setOutpostSpawns(List<Location> outpostSpawns) {
 		this.outpostSpawns = outpostSpawns;
 	}
+
+	public boolean isAlliedWith(Town othertown) {
+		if (this.hasNation() && othertown.hasNation()) {
+			try {
+				if (this.getNation().hasAlly(othertown.getNation())) {
+					return true;
+				} else {
+					if (this.getNation().equals(othertown.getNation())) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			} catch (NotRegisteredException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 }
