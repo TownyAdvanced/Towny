@@ -600,7 +600,7 @@ public class TownyUniverse extends TownyObject {
 	public void requestTeleport(Player player, Location spawnLoc, double cost) {
 
 		try {
-			TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc, cost);
+			TeleportWarmupTimerTask.requestTeleport(getDataSource().getResident(player.getName().toLowerCase()), spawnLoc);
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}

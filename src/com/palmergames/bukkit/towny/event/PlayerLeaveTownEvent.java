@@ -37,7 +37,7 @@ public class PlayerLeaveTownEvent extends Event {
 		return player;
 	}
 
-	public PlayerMoveEvent getPme() {
+	public PlayerMoveEvent getPlayerMoveEvent() {
 		return pme;
 	}
 
