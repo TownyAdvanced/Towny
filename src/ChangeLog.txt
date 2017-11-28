@@ -2648,3 +2648,8 @@ v0.91.4.16:
       - Setting this value to 0, means a town can claim outposts no matter how many residents they have.
     - Fix for recent bug when using /town and not belonging to a town.
     - Fix for bug involving mayors and adding outlaws.
+    - Fix for a bug when mayors jail residents.
+    - German translation improved courtesy of Wolf2323.
+    - Fix bug in reverting double chests.
+    - PlayerEnterTownEvent & PlayerLeaveTownEvent courtesy of Articdive.
+    - New API methods: resident.isAlliedWith(resident), town.isAlliedWith(town), nation.isAlliedWith(nation) courtesy of Articdive.

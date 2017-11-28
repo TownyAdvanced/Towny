@@ -19,13 +19,17 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -613,6 +617,20 @@ public class TownyUniverse extends TownyObject {
 		TeleportWarmupTimerTask.abortTeleportRequest(resident);
 	}
 
+	public static void jailTeleport(final Player player, final Location loc) {
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+
+				player.teleport(loc, TeleportCause.PLUGIN);
+				
+			}
+			
+		}, TownySettings.getTeleportWarmupTime() * 20);
+	}
+	
 	public void addWarZone(WorldCoord worldCoord) {
 
 		try {

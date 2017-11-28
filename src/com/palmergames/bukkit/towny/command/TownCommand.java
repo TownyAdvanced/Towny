@@ -904,7 +904,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if (jailTown != sendertown) {
 									throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
 								} else {
-									jailedresident.setJailed(jailedplayer, index, sendertown);
+									jailedresident.setJailedByMayor(jailedplayer, index, sendertown);
 									return;
 
 								}
@@ -924,8 +924,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
 						return;
 					} catch (NullPointerException e) {
-						player.sendMessage(ChatTools.formatTitle("/town toggle jail"));
-						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+						e.printStackTrace();
 						return;
 					}
 				}

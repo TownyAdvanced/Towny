@@ -1,9 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -13,12 +11,9 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,8 +37,6 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 	private List<String> townRanks = new ArrayList<String>();
 	private List<String> nationRanks = new ArrayList<String>();
-
-	private static Towny plugin;
 
 	public Resident(String name) {
 
@@ -88,44 +81,27 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 			this.setJailed(false);
 			try {
 				Location loc = this.getTown().getSpawn();
-				if (TownyTimerHandler.isTeleportWarmupRunning()) {
-					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-					plugin.getTownyUniverse().requestTeleport(player, loc, 0);
-				} else {
-					// Don't use teleport warmup
-					Chunk chunk = loc.getChunk();
-					if (player.getVehicle() != null)
-						player.getVehicle().eject();
-					if (!chunk.isLoaded())
-						chunk.load();
-					player.teleport(loc, TeleportCause.COMMAND);
-				}
+				
+				// Use teleport warmup
+				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				TownyUniverse.jailTeleport(player, loc);
+
 				this.removeJailSpawn();
 				this.setJailTown(" ");
 				TownyMessaging.sendMsg(player, "You have been freed from jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		} else {
 			try {
 				Location loc = town.getJailSpawn(index);
-				if (TownyTimerHandler.isTeleportWarmupRunning()) {
-					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-					plugin.getTownyUniverse().requestTeleport(player, loc, 0);
-				} else {
-					// Don't use teleport warmup
-					Chunk chunk = loc.getChunk();
-					if (player.getVehicle() != null)
-						player.getVehicle().eject();
-					if (!chunk.isLoaded())
-						chunk.load();
-					player.teleport(loc, TeleportCause.COMMAND);
-				}
+
+				// Use teleport warmup
+				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				TownyUniverse.jailTeleport(player, loc);
+
 				this.setJailed(true);
 				this.setJailSpawn(index);
 				this.setJailTown(town.toString());
