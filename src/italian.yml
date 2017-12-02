@@ -520,8 +520,8 @@ msg_err_couldnt_take_nation_deathfunds: 'Non è stato possibile prendere i fondi
 msg_you_gained_money_for_killing: 'Hai guadagnato %s per aver ucciso %s.'
 
 msg_err_ender_pearls_disabled: '&4Le Perle dell''End sono disabilitate!'
-msg_err_no_sleep_in_enemy_inn: '&4You cannot sleep in an enemy''s Inn.'
-msg_err_cant_use_bed: '&4You do not own the land this bed occupies and it is not an Inn plot.'
+msg_err_no_sleep_in_enemy_inn: '&4Non puoi dormire in una Locanda nemica.'
+msg_err_cant_use_bed: '&4Non possiedi il terreno che questo letto occupa e non è un lotto Locanda.'
 
 msg_war_seeding_spoils_with: '&6[Guerra]&f Distribuendo il bottino di guerra con %s'
 msg_war_total_seeding_spoils: '&6[Guerra]&f Bottino totale in gioco per questa guerra: %s'
