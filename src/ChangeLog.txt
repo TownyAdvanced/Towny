@@ -2655,3 +2655,5 @@ v0.91.4.16:
     - New API methods: resident.isAlliedWith(resident), town.isAlliedWith(town), nation.isAlliedWith(nation) courtesy of Articdive.
 v0.91.4.17:
     - Fix bizarre bug with WildernessExplosionReverting causing cocoa beans to create blocks of dirt.
+    - Partial fix for WildernessExplosionReverting duping items when they're torches/levers/pressureplates/attachables.
+      - Not perfect still but better than it was.
