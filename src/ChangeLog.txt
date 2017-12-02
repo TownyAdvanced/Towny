@@ -2653,3 +2653,5 @@ v0.91.4.16:
     - Fix bug in reverting double chests.
     - PlayerEnterTownEvent & PlayerLeaveTownEvent courtesy of Articdive.
     - New API methods: resident.isAlliedWith(resident), town.isAlliedWith(town), nation.isAlliedWith(nation) courtesy of Articdive.
+v0.91.4.17:
+    - Fix bizarre bug with WildernessExplosionReverting causing cocoa beans to create blocks of dirt.
