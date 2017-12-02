@@ -565,7 +565,7 @@ msg_err_max_residents_per_town_reached: '&cMassimo numero di residenti (%s) già
 
 # Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cIl giocatore %s non è stato sul server abbastanza a lungo per poter essere invitato in una città, aspetta.'
-msg_cant_toggle_pvp_outsider_in_town: 'C''è un estraneo nella tua città, non puoi cambiare lo stato del pvp!'
+msg_cant_toggle_pvp_outsider_in_town: 'C''è un estraneo in questa città, non puoi cambiare lo stato del pvp!'
 msg_err_unclaim_not_outpost: 'Imbossibile da abbandonare, questo lotto non è un avamposto!'
 outpost_plu: 'Avamposti'
 
