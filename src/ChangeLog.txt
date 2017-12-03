@@ -2658,3 +2658,4 @@ v0.91.4.17:
     - Partial fix for WildernessExplosionReverting duping items when they're torches/levers/pressureplates/attachables.
       - Not perfect still but better than it was.
     - Updated italian.yml courtesy of Leomixer17.
+    - Updated french.yml courtesy of TheCalypso.

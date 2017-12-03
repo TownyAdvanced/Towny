@@ -1,7 +1,7 @@
 name: Towny
 version: 0.36
 language: french
-author: Noiknez
+author: Noiknez,TheCalypso
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
 description: >
     Language file for all game messages.  Do not alter this file.
@@ -543,30 +543,30 @@ msg_town_set_perm_syntax_error: 'Combinaison de mots invalides pour cette comman
 msg_plot_set_perm_syntax_error: 'Combinaison de mots invalides pour cette commande. Utilisez ''/plot set perm ?'' pour l''utilisation de la syntaxe.'
 
 # Added in 0.32
-msg_err_townadmintownrank_wrong_town: 'That resident doesn''t belong to that town.'
-msg_err_resident_already_an_outlaw: 'That player is already considered an outlaw by your town.'
-msg_err_not_outlaw_in_your_town: 'You cannot set a town member as an outlaw.'
-msg_you_have_been_declared_outlaw: 'You have been declared an outlaw in %s. Don''t be caught dead in that town.'
-msg_you_have_declared_an_outlaw: '%s has been declared an outlaw in %s.'
-msg_you_have_been_undeclared_outlaw: 'You are no longer an outlaw in %s.'
-msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
-msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
-msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'
-msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
-msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
-msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
+msg_err_townadmintownrank_wrong_town: 'Ce résident n''appartient pas à cette ville.'
+msg_err_resident_already_an_outlaw: 'Ce joueur est déjà considéré comme un hors-la-loi par votre ville.'
+msg_err_not_outlaw_in_your_town: 'Vous ne pouvez pas définir un membre de la ville comme hors la loi.'
+msg_you_have_been_declared_outlaw: 'Vous avez été déclaré hors-la-loi %s. Ne soyez pas pris mort dans cette ville.'
+msg_you_have_declared_an_outlaw: '%s a été déclaré hors la loi dans %s.'
+msg_you_have_been_undeclared_outlaw: 'Vous n''êtes plus un hors-la-loi dans %s.'
+msg_you_have_undeclared_an_outlaw: '%s n''est plus un hors-la-loi dans %s.'
+msg_err_player_not_an_outlaw: 'Ce joueur ne figurait pas sur la liste des hors-la-loi.'
+msg_err_outlaw_in_open_town: 'Vous ne pouvez pas rejoindre une ville qui vous a considéré comme un hors-la-loi.'
+msg_you_are_an_outlaw_in_this_town: '&4Faites attention %s vous considère comme un hors-la-loi, mourir ici pourrait signifier la prison.'
+msg_err_town_not_close_enough_to_nation: 'Le centre ville de %s n''est pas assez proche du quartier général de votre capitale pour rejoindre votre nation.'
+msg_nation_town_moved_their_homeblock_too_far: 'Le centre ville de %s a été déplacé trop loin du centre ville de la capitale de votre nation et a été retiré de votre nation.'
 
 # Added in 0.33
-msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
+msg_err_invalid_radius_number: '&cMontant de rayon invalide. Utilisez un rayon de %s ou moins.'
 
 # Added in 0.34
-msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached'
+msg_err_max_residents_per_town_reached: '&cNombre maximum de résidents (%s) déjà atteint.'
 
 # Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
-msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
-msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
-outpost_plu: 'Outposts'
+msg_err_resident_doesnt_meet_invite_cooldown: '&cLe joueur %s n''a pas été sur le serveur assez longtemps pour être invité à une ville, veuillez patienter.'
+msg_cant_toggle_pvp_outsider_in_town: 'Il y a un étranger dans votre ville, vous ne pouvez pas changer votre statut pvp!'
+msg_err_unclaim_not_outpost: 'Impossible d''unclaim, cette parcelle  n''est pas un avant poste!'
+outpost_plu: 'Avant poste'
 
 # Added in 0.36
-msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'
+msg_err_not_enough_residents: 'Il n''y a pas assez de résidents dans cette ville pour le faire.'
