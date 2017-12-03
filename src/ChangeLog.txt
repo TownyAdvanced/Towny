@@ -2659,5 +2659,6 @@ v0.91.4.17:
       - Not perfect still but better than it was.
     - Updated italian.yml courtesy of Leomixer17.
     - Updated french.yml courtesy of TheCalypso.
-v0.92.0.0:
-	- Bump version number.
+v0.92.0.0 (For MC 1.10.2):
+	- This is a special release!
+	  - Enjoy the latest Towny on your old MC version.

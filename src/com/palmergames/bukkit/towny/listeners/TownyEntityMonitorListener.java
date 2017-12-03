@@ -481,10 +481,7 @@ public class TownyEntityMonitorListener implements Listener {
 							} 
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
 								defenderResident.setJailed(defenderPlayer, index, attackerTown);
-								try {
-									TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-								} catch (TownyException e) {
-								}
+								TownyMessaging.sendMessage(defenderResident, "You have been jailed. Run to the wilderness or wait for a jailbreak.");
 								return;
 							}
 							index++;
@@ -542,10 +539,7 @@ public class TownyEntityMonitorListener implements Listener {
 						} 
 						if (War.isWarZone(jailBlock.getWorldCoord())) {
 							defenderResident.setJailed(defenderPlayer, index, town);
-							try {
-								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-							} catch (TownyException e) {
-							}
+							TownyMessaging.sendMessage(defenderResident, "You have been jailed. Run to the wilderness or wait for a jailbreak.");
 							return;
 						}
 						index++;

@@ -866,7 +866,10 @@ public class TownyPlayerListener implements Listener {
 					}
 				}
 			}
-			if (TownySettings.isNotificationUsingTitles()) {
+/*
+ * Not available pre-1.11
+ * 
+ * 			if (TownySettings.isNotificationUsingTitles()) {
 				if (to.getTownBlock().hasTown()) {
 					try {
 						Town fromTown = from.getTownBlock().getTown();
@@ -880,7 +883,7 @@ public class TownyPlayerListener implements Listener {
 						TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(town).toString());
 					}
 				}
-			}
+			}*/
 			try {
 			if (to.getTownBlock().hasTown()) {
 				try {
