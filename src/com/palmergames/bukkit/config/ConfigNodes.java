@@ -807,11 +807,6 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
-	NOTIFICATION_USING_TITLES(
-			"notification.using_titles", 
-			"false", 
-			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
-			"# Could be seen as intrusive/distracting, so false by default."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",	

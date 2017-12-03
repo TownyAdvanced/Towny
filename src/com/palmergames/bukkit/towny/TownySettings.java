@@ -2341,10 +2341,6 @@ public class TownySettings {
 	public static String[] getWarAPlayerIsAnAllyMsg() {
 		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
 	}
-	
-	public static boolean isNotificationUsingTitles() {
-		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
-	}
 
 	public static int getAmountOfResidentsForTown() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
