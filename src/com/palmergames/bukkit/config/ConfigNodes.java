@@ -437,7 +437,7 @@ public enum ConfigNodes {
 			),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
-			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN,BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER",
+			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
 			),
 	GTOWN_FARM_ANIMALS(
@@ -679,11 +679,11 @@ public enum ConfigNodes {
 			"# 54 - chest ...etc"),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime,Shulker",
+			"Monster,WaterMob,Flying,Slime",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.htmll",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
-			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
+			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"# Husk, Stray",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
