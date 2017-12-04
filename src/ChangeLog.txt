@@ -2663,3 +2663,5 @@ v0.92.0.0:
 	- Bump version number.
 v0.92.0.1:
     - Fix for PlayerLeaveTownEvent not firing.	
+v0.92.0.2:
+    - Fix for german.yml.
