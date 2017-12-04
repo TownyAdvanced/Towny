@@ -12,10 +12,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Animals;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -150,14 +150,14 @@ public class TownyEntityListener implements Listener {
 					return;
 				
 				//Cancel because one of two players has no town and should not be interfering during war.
-				if (!TownyUniverse.getDataSource().getResident(attacker.getName()).hasTown() || !TownyUniverse.getDataSource().getResident(defender.getName()).hasTown()){
+				if (!TownyUniverse.getDataSource().getResident(((Player) attacker).getName()).hasTown() || !TownyUniverse.getDataSource().getResident(((Player) defender).getName()).hasTown()){
 					TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoTownMsg());
 					event.setCancelled(true);
 					return;
 				}
 				try {
-					Town attackerTown = TownyUniverse.getDataSource().getResident(attacker.getName()).getTown();
-					Town defenderTown = TownyUniverse.getDataSource().getResident(defender.getName()).getTown();
+					Town attackerTown = TownyUniverse.getDataSource().getResident(((Player) attacker).getName()).getTown();
+					Town defenderTown = TownyUniverse.getDataSource().getResident(((Player) defender).getName()).getTown();
 	
 					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
@@ -265,7 +265,7 @@ public class TownyEntityListener implements Listener {
 		if (TownyUniverse.isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager == "PRIMED_TNT")
 			event.setCancelled(true);			
 		
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
+		if (entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
 			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER") {
 											
 				try {

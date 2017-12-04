@@ -48,7 +48,6 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -277,7 +276,11 @@ public class TownyPlayerListener implements Listener {
 
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	/*
+	 * Event doesn't exist pre 1.8
+	 * 
+	 * 
+	 * @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
 
 		if (plugin.isError()) {
@@ -304,9 +307,9 @@ public class TownyPlayerListener implements Listener {
 			boolean bBuild = true;
 			int blockID = 0;
 
-			/*
+			
 			 * Protect specific entity interactions.
-			 */
+			 
 			switch (event.getRightClicked().getType()) {
 
 			case ARMOR_STAND:
@@ -330,9 +333,9 @@ public class TownyPlayerListener implements Listener {
 
 				event.setCancelled(true);
 
-				/*
+				
 				 * Fetch the players cache
-				 */
+				 
 				PlayerCache cache = plugin.getCache(player);
 
 				if (cache.hasBlockErrMsg())
@@ -341,14 +344,14 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 
-			/*
+			
 			 * Item_use protection.
-			 */
+			 
 			if (event.getPlayer().getItemInHand() != null) {
 
-				/*
+				
 				 * Info Tool
-				 */
+				 
 				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
 
 					Entity entity = event.getRightClicked();
@@ -369,7 +372,9 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 
-	}
+	}*/
+	
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
