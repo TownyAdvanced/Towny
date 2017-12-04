@@ -2661,3 +2661,5 @@ v0.91.4.17:
     - Updated french.yml courtesy of TheCalypso.
 v0.92.0.0:
 	- Bump version number.
+v0.92.0.1:
+    - Fix for PlayerLeaveTownEvent not firing.	

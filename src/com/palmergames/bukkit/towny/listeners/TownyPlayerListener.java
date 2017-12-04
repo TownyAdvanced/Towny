@@ -882,24 +882,27 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 			try {
-			if (to.getTownBlock().hasTown()) {
-				try {
-					Town fromTown = from.getTownBlock().getTown();
-					if (!to.getTownBlock().getTown().equals(fromTown)){
-						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
-					} else {
-						// Both are the same town, do nothing, no Event should fire here.
+				to.getTownBlock();
+				if (to.getTownBlock().hasTown()) { 
+					try {
+						Town fromTown = from.getTownBlock().getTown();
+						if (!to.getTownBlock().getTown().equals(fromTown)){
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
+						} else {
+							// Both are the same town, do nothing, no Event should fire here.
+						}
+					} catch (NotRegisteredException e) { // From Wilderness into Town.
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
 					}
-				} catch (NotRegisteredException e) { // From Wilderness into Town.
-					Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
+				} else {
+					if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
+					}
 				}
-			} else {
-				if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
-					Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
-				}
+			} catch (NotRegisteredException e) {
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
 			}
-		} catch (NotRegisteredException e) {
-		}
 
 		} catch (NotRegisteredException e) {
 			// If not registered, it is most likely an NPC			
