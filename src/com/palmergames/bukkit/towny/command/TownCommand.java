@@ -2551,10 +2551,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
 				}
 
-				if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
-					throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
-				}
-
 				double blockCost = 0;
 				List<WorldCoord> selection;
 				boolean attachedToEdge = true, outpost = false;
@@ -2564,6 +2560,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
+						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
+					}
 
 					int maxOutposts = TownySettings.getMaxResidentOutposts(resident);
 					if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && maxOutposts != -1 && (maxOutposts <= resident.getTown().getAllOutpostSpawns().size()))
