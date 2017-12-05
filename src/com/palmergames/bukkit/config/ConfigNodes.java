@@ -812,6 +812,7 @@ public enum ConfigNodes {
 			"false", 
 			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
 			"# Could be seen as intrusive/distracting, so false by default."),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title","false","# If the notification.owner option should show name or {title} name.","# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",	

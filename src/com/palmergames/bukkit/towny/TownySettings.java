@@ -1125,6 +1125,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS);
 	}
+	
+	public static boolean isNotificationOwnerShowingNationTitles() {
+		
+		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
+	}
 
 	public static boolean getShowTownBoardOnLogin() {
 

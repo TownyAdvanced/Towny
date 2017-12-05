@@ -2678,3 +2678,6 @@ v0.92.0.2:
     - New Permission Node: towny.command.town.unclaim.all
       - Required to use /town unclaim all
       - Is a child node of towny.command.town.unclaim.* , which is a child node of towny.command.town.* 
+    - New Config Option: notification.owner_shows_nation_title
+      - default: false
+      - If the notification.owner option should show name or {title} name. Titles are the ones granted by nation kings.
