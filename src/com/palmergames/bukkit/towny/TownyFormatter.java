@@ -520,7 +520,7 @@ public class TownyFormatter {
 	
 	public static String getFormattedResidentTitleName(Resident resident) {
 		if (!resident.hasTitle())
-			return resident.getName();
+			return getFormattedName(resident);
 		else 
 			return resident.getTitle() + " " + resident.getName();		
 		
