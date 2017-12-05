@@ -2671,3 +2671,7 @@ v0.92.0.2:
       - Set to 0 to have no cap.
     - Language files bumped to 0.36
     - Friendly fire message now displays.
+    - New Command: /ta tpplot {world} {x} {z}
+      - Requires towny.admin permission node
+      - teleports admin to the Towny chunk coordinates seen in the /towny map command.
+      - be careful with large numbers, you could be teleported farther than you think and end up generating chunks.
