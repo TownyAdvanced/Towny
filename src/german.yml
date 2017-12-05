@@ -1,5 +1,5 @@
 name: Towny
-version: 0.36
+version: 0.37
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -571,3 +571,6 @@ outpost_plu: 'Außenposten'
 
 # Added in 0.36
 msg_err_not_enough_residents: 'Es gibt nicht genugend Spieler in dieser Stadt um dies umzusetzen!'
+
+# Added in 0.37
+msg_err_friendly_fire_disable: 'Friendly fire is disabled!'

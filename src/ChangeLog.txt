@@ -2669,3 +2669,5 @@ v0.92.0.2:
       - default: 0.0
       - A maximum amount paid out by a resident from their personal holdings for percentage deaths.
       - Set to 0 to have no cap.
+    - Language files bumped to 0.36
+    - Friendly fire message now displays.

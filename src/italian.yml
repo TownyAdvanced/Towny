@@ -1,5 +1,5 @@
 name: Towny
-version: 0.36
+version: 0.37
 language: italian
 author: Leomixer17
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -571,3 +571,6 @@ outpost_plu: 'Avamposti'
 
 # Added in 0.36
 msg_err_not_enough_residents: 'Non ci sono abbastanza residenti in questa città per farlo.'
+
+# Added in 0.37
+msg_err_friendly_fire_disable: 'Friendly fire is disabled!'

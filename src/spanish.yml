@@ -1,5 +1,5 @@
 name: Towny
-version: 0.36
+version: 0.37
 language: spanish
 author: Alvarote1998, Beelzebu, Seruhio
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -570,3 +570,6 @@ outpost_plu: 'Outposts'
 
 # Added in 0.36
 msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'
+
+# Added in 0.37
+msg_err_friendly_fire_disable: 'Friendly fire is disabled!'

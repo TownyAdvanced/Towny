@@ -1,5 +1,5 @@
 name: Towny
-version: 0.36
+version: 0.37
 language: french
 author: Noiknez,TheCalypso
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -570,3 +570,6 @@ outpost_plu: 'Avant poste'
 
 # Added in 0.36
 msg_err_not_enough_residents: 'Il n''y a pas assez de résidents dans cette ville pour le faire.'
+
+# Added in 0.37
+msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
