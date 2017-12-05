@@ -1010,6 +1010,7 @@ public enum ConfigNodes {
 
     ECO_DEATH("economy.death", "", ""),			
     ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
+    ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap","0.0","# A maximum amount paid out by a resident from their personal holdings for percentage deaths.", "# Set to 0 to have no cap."),
     ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
 	ECO_PRICE_DEATH("economy.death.price_death", "1.0", ""),
 	ECO_PRICE_DEATH_TOWN("economy.death.price_death_town", "0.0", ""),

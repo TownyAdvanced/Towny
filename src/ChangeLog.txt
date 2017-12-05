@@ -2665,3 +2665,7 @@ v0.92.0.1:
     - Fix for PlayerLeaveTownEvent not firing.	
 v0.92.0.2:
     - Fix for german.yml.
+    - New config option: economy.death.percentage_cap
+      - default: 0.0
+      - A maximum amount paid out by a resident from their personal holdings for percentage deaths.
+      - Set to 0 to have no cap.
