@@ -573,4 +573,4 @@ outpost_plu: 'Außenposten'
 msg_err_not_enough_residents: 'Es gibt nicht genugend Spieler in dieser Stadt um dies umzusetzen!'
 
 # Added in 0.37
-msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+msg_err_friendly_fire_disable: 'Friendly fire ist Deaktiviert!'
