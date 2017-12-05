@@ -2675,3 +2675,6 @@ v0.92.0.2:
       - Requires towny.admin permission node
       - teleports admin to the Towny chunk coordinates seen in the /towny map command.
       - be careful with large numbers, you could be teleported farther than you think and end up generating chunks.
+    - New Permission Node: towny.command.town.unclaim.all
+      - Required to use /town unclaim all
+      - Is a child node of towny.command.town.unclaim.* , which is a child node of towny.command.town.* 

@@ -219,11 +219,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	private void parseAdminTpPlotCommand(String[] split) {
+	private void parseAdminTpPlotCommand(String[] split) throws TownyException {
 
 		if (split.length != 3) {
-			TownyMessaging.sendErrorMsg(sender, "Improper syntax, try: /ta tpplot world x z");
-			return;
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));			
 		}
 		
 		Player player = (Player) sender;
@@ -237,8 +236,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			x = Double.parseDouble(split[1]) * TownySettings.getTownBlockSize();			
 			z = Double.parseDouble(split[2]) * TownySettings.getTownBlockSize();
 		} else {
-			TownyMessaging.sendErrorMsg(sender, "Improper syntax, try: /ta tpplot world x z");
-			return;
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));
 		}		
 		y = (double) Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
 		loc = new Location(world, x, y, z);

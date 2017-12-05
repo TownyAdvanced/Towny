@@ -198,14 +198,21 @@ permissions:
             towny.command.town.add: true
             towny.command.town.kick: true
             towny.command.town.claim.*: true
-            towny.command.town.unclaim: true
+            towny.command.town.unclaim.*: true            
             towny.command.town.online: true
             towny.command.town.say: true
             towny.command.town.plots: true
             towny.command.town.othertown: true
+    
+    towny.command.town.unclaim.*:
+        description: User can access all town unclaim related commands.
+        default: false
+        children:
+            towny.command.town.unclaim: true
+            towny.command.town.unclaim.all: true
             
     towny.command.town.claim.*:
-        description: User can access all town related commands.
+        description: User can access all town claim related commands.
         default: false
         children:
             towny.command.town.claim.town: true

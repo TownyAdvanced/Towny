@@ -109,6 +109,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST("towny.command.town.claim.outpost"),
 		
 		TOWNY_COMMAND_TOWN_UNCLAIM("towny.command.town.unclaim"),
+		TOWNY_COMMAND_TOWN_UNCLAIM_ALL("towny.command.town.unclaim.all"),
 		TOWNY_COMMAND_TOWN_ONLINE("towny.command.town.online"),
 		TOWNY_COMMAND_TOWN_SAY("towny.command.town.say"),
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
