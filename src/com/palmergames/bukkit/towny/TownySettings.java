@@ -1125,6 +1125,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS);
 	}
+	
+	public static boolean isNotificationOwnerShowingNationTitles() {
+		
+		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
+	}
 
 	public static boolean getShowTownBoardOnLogin() {
 
@@ -1533,6 +1538,16 @@ public class TownySettings {
 	public static boolean isDeathPriceType() {
 
 		return getString(ConfigNodes.ECO_PRICE_DEATH_TYPE).equalsIgnoreCase("fixed");
+	}
+	
+	public static double getDeathPricePercentageCap() {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_DEATH_PERCENTAGE_CAP);
+	}
+	
+	public static boolean isDeathPricePercentageCapped() {
+		
+		return (getDeathPricePercentageCap()>0); 
 	}
 
 	public static boolean isDeathPricePVPOnly() {

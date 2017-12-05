@@ -904,7 +904,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if (jailTown != sendertown) {
 									throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
 								} else {
-									jailedresident.setJailed(jailedplayer, index, sendertown);
+									jailedresident.setJailedByMayor(jailedplayer, index, sendertown);
 									return;
 
 								}
@@ -924,8 +924,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
 						return;
 					} catch (NullPointerException e) {
-						player.sendMessage(ChatTools.formatTitle("/town toggle jail"));
-						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+						e.printStackTrace();
 						return;
 					}
 				}
@@ -2649,6 +2648,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					new TownClaim(plugin, player, town, null, false, false, false).start();
 					// townUnclaimAll(town);
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.

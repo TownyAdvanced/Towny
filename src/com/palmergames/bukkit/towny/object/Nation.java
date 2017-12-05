@@ -97,6 +97,11 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		return getAllies().contains(nation);
 	}
 
+	public boolean IsAlliedWith(Nation nation) {
+
+		return getAllies().contains(nation);
+	}
+
 	public void addEnemy(Nation nation) throws AlreadyRegisteredException {
 
 		if (hasEnemy(nation))

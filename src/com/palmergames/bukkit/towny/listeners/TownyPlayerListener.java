@@ -1,7 +1,37 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import java.util.Arrays;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
+import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ChatTools;
+import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -30,36 +60,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerHandler;
-import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
+import java.util.Arrays;
 
 /**
  * Handle events for all Player related events
@@ -594,7 +595,9 @@ public class TownyPlayerListener implements Listener {
 					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_jailed_players_no_teleport")));
 					event.setCancelled(true);
 					return;
-				}					
+				}
+				if (event.getCause() == TeleportCause.PLUGIN) 
+					return;
 				if ((event.getCause() == TeleportCause.ENDER_PEARL) && (TownySettings.JailAllowsEnderPearls())) {
 					
 				} else {
@@ -842,7 +845,8 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
-		
+
+		PlayerMoveEvent pme = event.getMoveEvent();
 		Player player = event.getPlayer();		
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
@@ -862,20 +866,44 @@ public class TownyPlayerListener implements Listener {
 					}
 				}
 			}
-			if (TownySettings.isNotificationUsingTitles())
+			if (TownySettings.isNotificationUsingTitles()) {
 				if (to.getTownBlock().hasTown()) {
 					try {
 						Town fromTown = from.getTownBlock().getTown();
 						if (!to.getTownBlock().getTown().equals(fromTown)) {
 							TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(to.getTownBlock().getTown()).toString());
 							return;
-							}
+						}
 
 					} catch (NotRegisteredException e) {
 						Town town = to.getTownBlock().getTown();
 						TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(town).toString());
 					}
+				}
 			}
+			try {
+				to.getTownBlock();
+				if (to.getTownBlock().hasTown()) { 
+					try {
+						Town fromTown = from.getTownBlock().getTown();
+						if (!to.getTownBlock().getTown().equals(fromTown)){
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
+						} else {
+							// Both are the same town, do nothing, no Event should fire here.
+						}
+					} catch (NotRegisteredException e) { // From Wilderness into Town.
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
+					}
+				} else {
+					if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
+					}
+				}
+			} catch (NotRegisteredException e) {
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
+			}
+
 		} catch (NotRegisteredException e) {
 			// If not registered, it is most likely an NPC			
 		} catch (TownyException e) {

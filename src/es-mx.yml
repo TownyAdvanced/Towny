@@ -1,5 +1,5 @@
 name: Towny
-version: 0.36
+version: 0.37
 language: spanish
 author: VreyaViress
 website: 'http://amicu.enjin.com/'
@@ -558,3 +558,7 @@ msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
 outpost_plu: 'Outposts'
 # Added in 0.36
 msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'
+
+
+# Added in 0.37
+msg_err_friendly_fire_disable: 'Friendly fire is disabled!'

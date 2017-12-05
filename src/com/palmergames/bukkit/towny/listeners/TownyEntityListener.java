@@ -39,6 +39,8 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Attachable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
@@ -822,8 +824,6 @@ public class TownyEntityListener implements Listener {
 						if (townyWorld.isExpl()) {
 							if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 								
-								TownyMessaging.sendDebugMsg("onEntityExplode: Testing entity: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
-								
 								if (townyWorld.isProtectingExplosionEntity(entity)) {
 									if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 										ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
@@ -831,6 +831,14 @@ public class TownyEntityListener implements Listener {
 										TownyRegenAPI.addProtectionRegenTask(task);
 										event.setYield((float) 0.0);
 										block.getDrops().clear();
+										// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
+										if (block.getState().getData() instanceof Attachable || 
+												block.getType().equals(Material.STONE_PLATE) || 
+												block.getType().equals(Material.WOOD_PLATE) || 
+												block.getType().equals(Material.GOLD_PLATE) || 
+												block.getType().equals(Material.IRON_PLATE)) {											
+											block.breakNaturally(new ItemStack(Material.AIR));
+										}
 									}
 								}
 							}

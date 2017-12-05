@@ -517,6 +517,14 @@ public class TownyFormatter {
 
 		return TownySettings.getNationPrefix(nation) + nation.getName().replaceAll("_", " ") + TownySettings.getNationPostfix(nation);
 	}
+	
+	public static String getFormattedResidentTitleName(Resident resident) {
+		if (!resident.hasTitle())
+			return getFormattedName(resident);
+		else 
+			return resident.getTitle() + " " + resident.getName();		
+		
+	}
 
 	public static String[] getFormattedNames(Resident[] residents) {
 

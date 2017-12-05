@@ -24,10 +24,14 @@ import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
@@ -201,6 +205,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * (split[0].equalsIgnoreCase("warseed") &&
 				 * TownySettings.getDebug()) warSeed(player);
 				 */
+				
+			} else if (split[0].equalsIgnoreCase("tpplot")) {
+				
+				parseAdminTpPlotCommand(StringMgmt.remFirstArg(split));
 
 			} else {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_sub"));
@@ -209,6 +217,30 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+
+	private void parseAdminTpPlotCommand(String[] split) throws TownyException {
+
+		if (split.length != 3) {
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));			
+		}
+		
+		Player player = (Player) sender;
+		World world = null;
+		Double x = null;
+		Double y = 1.0;
+		Double z = null;
+		Location loc = null;
+		if (Bukkit.getServer().getWorld(split[0]) != null ) {
+			world =  Bukkit.getServer().getWorld(split[0]);
+			x = Double.parseDouble(split[1]) * TownySettings.getTownBlockSize();			
+			z = Double.parseDouble(split[2]) * TownySettings.getTownBlockSize();
+		} else {
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta tpplot world x z"));
+		}		
+		y = (double) Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
+		loc = new Location(world, x, y, z);
+		player.teleport(loc, TeleportCause.PLUGIN);
 	}
 
 	private void giveBonus(String[] split) throws TownyException {

@@ -4,10 +4,12 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.Inventory;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
+import org.bukkit.material.MaterialData;
 import org.bukkit.material.PistonExtensionMaterial;
 
 import java.util.ArrayList;
@@ -39,16 +42,21 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		this.state = block.getState();
 		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
-		
-		if (state instanceof InventoryHolder) {
 
-			// Contents we are respawning.
-			Inventory inven = ((InventoryHolder) state).getInventory();
+		if (state instanceof InventoryHolder) {
+			Inventory inven;
+
+			if (state instanceof Chest) {
+				inven = ((Chest) state).getBlockInventory();
+			} else {
+				// Contents we are respawning.
+				inven = ((InventoryHolder) state).getInventory();
+			}
 
 			for (ItemStack item : inven.getContents()) {
 				contents.add((item != null) ? item.clone() : null);
 			}
-			
+
 			inven.clear();
 		}
 		
@@ -128,10 +136,14 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 				block.setTypeId(state.getTypeId(), false);
 
-				// Container to receive the inventory
-				Inventory container = ((InventoryHolder) block.getState()).getInventory();
+				Inventory container;
+				if (state instanceof Chest) {
+					container = ((Chest) block.getState()).getBlockInventory();
+				} else {
+					container = ((InventoryHolder) block.getState()).getInventory();
+				}
 				container.setContents(contents.toArray(new ItemStack[0]));
-				
+
 				block.setData(state.getData().getData(), false);
 
 			} else if (state.getData() instanceof PistonExtensionMaterial) {
@@ -143,8 +155,14 @@ public class ProtectionRegenTask extends TownyTimerTask {
 					piston.setTypeIdAndData(altState.getTypeId(), altState.getData().getData(), false);
 				}
 			} else if (state.getData() instanceof Attachable) {
-
-				Block attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
+				
+				Block attachedBlock;
+				if (state.getData().getItemType().equals(Material.COCOA)) {
+					// For whatever reason (probably a bukkit api bug,) cocoa beans don't return the correct block face to which they are attached to.
+					attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace().getOppositeFace());
+				} else {
+					attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
+				}
 				if (attachedBlock.getTypeId() == 0) {
 					attachedBlock.setTypeId(placeholder.getId(), false);
 					TownyRegenAPI.addPlaceholder(attachedBlock);

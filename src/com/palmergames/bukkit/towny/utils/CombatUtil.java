@@ -348,14 +348,16 @@ public class CombatUtil {
 				try {
 					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 					if (!townBlock.getType().equals(TownBlockType.ARENA))
+						attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
 						return true;
 				} catch (TownyException x) {
 					// World or TownBlock failure
 					// But we are configured to prevent friendly fire in the
-					// wilderness too.
+					// wilderness too.					
+					attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
 					return true;
 				}
-			}
+			}		
 		return false;
 	}
 
