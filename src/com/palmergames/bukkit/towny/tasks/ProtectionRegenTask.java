@@ -12,6 +12,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -129,8 +130,12 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 			} else if (state instanceof CreatureSpawner) {
 
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-				((CreatureSpawner) block.getState()).setSpawnedType(((CreatureSpawner) state).getSpawnedType());
+				block.setType(Material.MOB_SPAWNER);
+				BlockState blockState = block.getState();
+				CreatureSpawner spawner = ((CreatureSpawner)blockState);
+				EntityType type = ((CreatureSpawner) state).getSpawnedType();
+				spawner.setSpawnedType(type);
+				blockState.update();
 
 			} else if (state instanceof InventoryHolder) {
 
