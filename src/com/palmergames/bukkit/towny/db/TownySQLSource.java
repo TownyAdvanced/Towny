@@ -546,6 +546,9 @@ public class TownySQLSource extends TownyFlatFileSource {
             while (rs.next()) {
                 try {
                     newTown(rs.getString("name"));
+			
+		    Town town = getTown(rs.getString("name"));
+		    town.setUuid(UUID.fromString(rs.getString("uuid")));
                 } catch (AlreadyRegisteredException e) {
                 }
             }
@@ -572,6 +575,9 @@ public class TownySQLSource extends TownyFlatFileSource {
             while (rs.next()) {
                 try {
                     newNation(rs.getString("name"));
+			
+		    Nation nation = getNation(rs.getString("name"));
+		    nation.setUuid(UUID.fromString(rs.getString("uuid")));
                 } catch (AlreadyRegisteredException e) {
                 }
             }
