@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.google.common.util.concurrent.Service.State;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -102,10 +104,15 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			Block block = state.getBlock();
 
 			if (state.getData() instanceof Door) {
-
+				
 				Door door = (Door) state.getData();
-				Block topHalf;
-				Block bottomHalf;
+								
+				BlockFace face = null;
+                boolean isOpen = false;
+                boolean isHinge = false;
+				Block topHalf = null;
+				Block bottomHalf = null;
+
 				if (door.isTopHalf()) {
 					topHalf = block;
 					bottomHalf = block.getRelative(BlockFace.DOWN);
@@ -113,10 +120,51 @@ public class ProtectionRegenTask extends TownyTimerTask {
 					bottomHalf = block;
 					topHalf = block.getRelative(BlockFace.UP);
 				}
-				door.setTopHalf(true);
-				topHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-				door.setTopHalf(false);
-				bottomHalf.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+
+				if (!door.isTopHalf()) {
+					
+					// Gather old door's material data from lower door block
+					isOpen = door.isOpen(); 					
+					face = door.getFacing();
+					
+					bottomHalf.setType(state.getType(), false);
+					
+					// Placeholder topblock, required or double doors lower blocks will break before the top blocks can be regenerated.
+					topHalf.setType(state.getType(), false);
+					BlockState topHalfState = topHalf.getState();
+					Door topHalfData = (Door) topHalfState.getData();
+					topHalfData.setTopHalf(true);
+					topHalfState.setData(topHalfData);
+					topHalfState.update();
+									
+					// Set lower door block Material Data. 
+					BlockState bottomHalfState = bottomHalf.getState();
+					Door bottomHalfData = (Door) bottomHalfState.getData();
+					bottomHalfData.setOpen(isOpen);
+					bottomHalfData.setFacingDirection(face);
+					bottomHalfState.setData(bottomHalfData);
+					bottomHalfState.update();
+
+				} else {
+					
+					topHalf.setType(state.getType(), false);
+					BlockState topHalfState = topHalf.getState();
+					Door topHalfData = (Door) topHalfState.getData();
+					// Gather last part of the Material Data from upper door block.
+					isHinge = door.getHinge();
+					// Gather previous parts of Material Data from lower door block.
+					Door otherdoor = (Door) topHalf.getRelative(BlockFace.DOWN).getState().getData();
+					isOpen = otherdoor.isOpen();
+					face = otherdoor.getFacing();					
+					// Set top block Material Data.
+					topHalfData.setFacingDirection(face);
+					topHalfData.setOpen(isOpen);
+					topHalfData.setHinge(isHinge);
+					topHalfData.setTopHalf(true);
+					topHalfState.setData(topHalfData);
+					topHalfState.update();
+
+				}
 
 			} else if (state instanceof Sign) {
 

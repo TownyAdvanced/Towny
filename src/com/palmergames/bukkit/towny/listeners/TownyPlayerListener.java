@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -59,6 +60,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Door;
 
 import java.util.Arrays;
 
@@ -236,13 +238,39 @@ public class TownyPlayerListener implements Listener {
 					if (event.getClickedBlock() instanceof Block) {
 
 						block = (Block) event.getClickedBlock();
-
-						TownyMessaging.sendMessage(player, Arrays.asList(
-								ChatTools.formatTitle("Block Info"),
-								ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
-								));
-
+						
+						if (block.getState().getData() instanceof Door) {
+							Door door = (Door) block.getState().getData();
+							BlockFace face = null;
+							boolean isOpen = false;
+							boolean isHinge = false;
+							if (door.isTopHalf()) {
+								isHinge = door.getHinge();
+								Door otherdoor = (Door) block.getRelative(BlockFace.DOWN).getState().getData();
+								isOpen = otherdoor.isOpen();
+								face = otherdoor.getFacing();										
+							} else {
+								isOpen = door.isOpen();
+								face = door.getFacing();
+								Door otherdoor = (Door) block.getRelative(BlockFace.UP).getState().getData();
+								isHinge=otherdoor.getHinge();
+							}
+							
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Door Info"),
+									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "isHingedOnRight", "", String.valueOf(isHinge)),
+									ChatTools.formatCommand("", "isOpen", "", String.valueOf(isOpen)),
+									ChatTools.formatCommand("", "getFacing", "", face.toString()),									
+									ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
+									));							
+						} else {
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Block Info"),
+									ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
+									));
+						}
 						event.setCancelled(true);
 
 					}
