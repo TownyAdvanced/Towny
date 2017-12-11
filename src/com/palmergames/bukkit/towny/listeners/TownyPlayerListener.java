@@ -61,6 +61,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
+import org.bukkit.material.Sign;
 
 import java.util.Arrays;
 
@@ -239,7 +240,18 @@ public class TownyPlayerListener implements Listener {
 
 						block = (Block) event.getClickedBlock();
 						
-						if (block.getState().getData() instanceof Door) {
+						if (block.getState().getData() instanceof Sign) {
+							Sign sign = (Sign) block.getState().getData();
+							BlockFace facing = sign.getFacing();
+							BlockFace attachedFace = sign.getAttachedFace();
+							
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Sign Info"),
+									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "Facing", "", facing.toString()),
+									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
+									));
+						} else if (block.getState().getData() instanceof Door) {
 							Door door = (Door) block.getState().getData();
 							BlockFace face = null;
 							boolean isOpen = false;

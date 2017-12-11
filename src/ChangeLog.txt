@@ -2686,3 +2686,5 @@ v0.92.0.2:
     - Fix for mob spawner blocks not regenerating properly using the wilderness explosion revert.
     - Give the admin info tool awareness of Doors.
     - Fix door regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Give the admin info tool awareness of Signs.
+    - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.

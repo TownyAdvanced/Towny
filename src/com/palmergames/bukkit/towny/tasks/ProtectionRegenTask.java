@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.google.common.util.concurrent.Service.State;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Directional;
 import org.bukkit.material.Door;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.PistonExtensionMaterial;
@@ -168,13 +167,31 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 			} else if (state instanceof Sign) {
 
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-				Sign sign = (Sign) block.getState();
+				org.bukkit.material.Sign oldSign = (org.bukkit.material.Sign) state.getData();
+				Block sign = block;
+				
+				if (state.getType().equals(Material.WALL_SIGN)) {
+					Block attachedBlock = block.getRelative(oldSign.getAttachedFace());
+					if (attachedBlock.getType().equals(Material.AIR)) {
+						attachedBlock.setType(placeholder, false);
+						TownyRegenAPI.addPlaceholder(attachedBlock);
+					}					
+				}
+				sign.setType(state.getType(), false);				
+				BlockState signState = sign.getState();
+				
+				org.bukkit.material.Sign signData = (org.bukkit.material.Sign) signState.getData();					
+
+				BlockFace facing = ((Directional) oldSign).getFacing();				
+				((Directional) signData).setFacingDirection(facing);					
+				signState.setData((MaterialData) signData);
+				signState.update();
+
 				int i = 0;
 				for (String line : ((Sign) state).getLines())
-					sign.setLine(i++, line);
+					((Sign) state).setLine(i++, line);
 
-				sign.update(true);
+				state.update(true);
 
 			} else if (state instanceof CreatureSpawner) {
 
