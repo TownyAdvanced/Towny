@@ -2688,3 +2688,4 @@ v0.92.0.2:
     - Fix door regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
     - Give the admin info tool awareness of Signs.
     - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Fix inventoryholders, piston, attachables, hanging regeneraton in preparation for 1.13's loss of Block IDs.
