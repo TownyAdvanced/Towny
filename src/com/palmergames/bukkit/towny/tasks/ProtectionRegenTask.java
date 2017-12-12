@@ -1,39 +1,30 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.google.common.util.concurrent.Service.State;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
-import org.bukkit.Art;
 import org.bukkit.Material;
-import org.bukkit.Rotation;
-import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Hanging;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Painting;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.Door;
+import org.bukkit.material.Gate;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.material.Stairs;
 import org.bukkit.material.Tree;
-import org.bukkit.material.Wood;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,23 +260,34 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				state.setData(stateData);
 				state.update();
 				
-//			} else if (state.getData() instanceof Tree) {
-//			TODO: Make trees direction work	
-//				block.setType(state.getType());
-//				MaterialData stateData = state.getData();				
-//				BlockFace facing = ((Directional) state.getData()).getFacing();
-//				((Directional) stateData).setFacingDirection(facing);
-//				state.setData(stateData);
-//				state.update();
-//				
-//			} else if (state.getData() instanceof Stairs) {
-//			TODO: Test stairs
-//				block.setType(state.getType());
-//				MaterialData stateData = state.getData();
-//				BlockFace facing = ((Directional) state.getData()).getFacing();
-//				((Directional) stateData).setFacingDirection(facing);
-//				state.setData(stateData);
-//				state.update();
+			} else if (state.getData() instanceof Tree) {
+
+				block.setType(state.getType());
+				Tree stateData = (Tree) state.getData();
+				BlockFace facing = ((Tree) state.getData()).getDirection();
+				stateData.setDirection(facing);
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof Stairs) {
+			
+				block.setType(state.getType());
+				Stairs stateData = (Stairs) state.getData();
+				BlockFace facing = ((Directional) state.getData()).getFacing().getOppositeFace();
+				boolean isInverted = ((Stairs) state.getData()).isInverted();
+				((Directional) stateData).setFacingDirection(facing);
+				stateData.setInverted(isInverted);				
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof Gate) {
+				
+				block.setType(state.getType());
+				Gate stateData = (Gate) state.getData();
+				BlockFace facing = ((Directional) state.getData()).getFacing();				
+				((Directional) stateData).setFacingDirection(facing);
+				state.setData(stateData);
+				state.update();
 
 			} else {
 
