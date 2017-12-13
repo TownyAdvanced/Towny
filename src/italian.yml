@@ -573,4 +573,4 @@ outpost_plu: 'Avamposti'
 msg_err_not_enough_residents: 'Non ci sono abbastanza residenti in questa città per farlo.'
 
 # Added in 0.37
-msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+msg_err_friendly_fire_disable: 'Il fuoco amico è disabilitato!'

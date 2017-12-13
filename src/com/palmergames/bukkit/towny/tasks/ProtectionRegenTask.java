@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.google.common.util.concurrent.Service.State;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,10 +17,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Directional;
 import org.bukkit.material.Door;
+import org.bukkit.material.Gate;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.material.PistonExtensionMaterial;
-
+import org.bukkit.material.Stairs;
+import org.bukkit.material.Tree;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,48 +169,79 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				}
 
 			} else if (state instanceof Sign) {
+				org.bukkit.material.Sign oldSign = (org.bukkit.material.Sign) state.getData();
+				if (state.getType().equals(Material.WALL_SIGN)) {
+					Block attachedBlock = block.getRelative(oldSign.getAttachedFace());
+					if (attachedBlock.getType().equals(Material.AIR)) {
+						attachedBlock.setType(placeholder, false);
+						TownyRegenAPI.addPlaceholder(attachedBlock);
+					}					
+				}
+				block.setType(state.getType(), false);
+				MaterialData signData = state.getData();
+				BlockFace facing = ((Directional) state.getData()).getFacing();
+				((Directional) signData).setFacingDirection(facing);
+				state.setData(signData);
+				state.update();
 
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-				Sign sign = (Sign) block.getState();
 				int i = 0;
 				for (String line : ((Sign) state).getLines())
-					sign.setLine(i++, line);
+					((Sign) state).setLine(i++, line);
 
-				sign.update(true);
+				state.update(true);
 
 			} else if (state instanceof CreatureSpawner) {
 
-				block.setType(Material.MOB_SPAWNER);
-				BlockState blockState = block.getState();
-				CreatureSpawner spawner = ((CreatureSpawner)blockState);
+				block.setType(Material.MOB_SPAWNER);				
+				CreatureSpawner spawner = ((CreatureSpawner)state);
 				EntityType type = ((CreatureSpawner) state).getSpawnedType();
 				spawner.setSpawnedType(type);
-				blockState.update();
+				state.update();
 
-			} else if (state instanceof InventoryHolder) {
-
-				block.setTypeId(state.getTypeId(), false);
-
-				Inventory container;
-				if (state instanceof Chest) {
-					container = ((Chest) block.getState()).getBlockInventory();
-				} else {
-					container = ((InventoryHolder) block.getState()).getInventory();
-				}
-				container.setContents(contents.toArray(new ItemStack[0]));
-
-				block.setData(state.getData().getData(), false);
-
-			} else if (state.getData() instanceof PistonExtensionMaterial) {
-
-				PistonExtensionMaterial extension = (PistonExtensionMaterial) state.getData();
-				Block piston = block.getRelative(extension.getAttachedFace());
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
-				if (altState != null) {
-					piston.setTypeIdAndData(altState.getTypeId(), altState.getData().getData(), false);
-				}
-			} else if (state.getData() instanceof Attachable) {
+			} else if (state instanceof Chest) {
 				
+				block.setType(state.getType(), false);
+				BlockFace facing = ((Directional) state.getData()).getFacing();
+				MaterialData chestData = state.getData(); 
+				((Directional) chestData).setFacingDirection(facing);				
+				Inventory container = ((Chest) block.getState()).getBlockInventory();				
+				container.setContents(contents.toArray(new ItemStack[0]));
+				state.setData(chestData);
+				state.update();	
+				
+			} else if (state instanceof InventoryHolder) {
+				
+				block.setType(state.getType(), false);				
+				BlockFace facing = ((Directional) state.getData()).getFacing();
+				MaterialData holderData = state.getData(); 
+				((Directional) holderData).setFacingDirection(facing);
+				Inventory container = ((InventoryHolder) block.getState()).getInventory();
+				container.setContents(contents.toArray(new ItemStack[0]));
+				state.setData(holderData);
+				state.update();
+
+			} else if (state.getData() instanceof PistonBaseMaterial) {
+				/*
+				 * Sometimes the pistons dont extend when powered, sometimes they do.
+				 * Hopefully the new Data system post 1.13 has better control over this.
+				 * 				
+				 */
+				// TODO: Improve piston protectionregentask code post 1.13/new data system.
+				if (block.getType().equals(Material.AIR)) {					
+					if (state.getType().equals(Material.PISTON_BASE)) {
+						block.setType(Material.PISTON_BASE);
+					} else if (state.getType().equals(Material.PISTON_STICKY_BASE)) {
+						block.setType(Material.PISTON_STICKY_BASE);			
+					}					
+					org.bukkit.material.PistonBaseMaterial baseData = (org.bukkit.material.PistonBaseMaterial) state.getData();					
+					BlockFace facing = ((Directional) state.getData()).getFacing();
+					baseData.setFacingDirection(facing);
+					baseData.setPowered(false);
+					state.setData(baseData);
+					state.update();
+				}
+				
+			} else if (state.getData() instanceof Attachable) {
 				Block attachedBlock;
 				if (state.getData().getItemType().equals(Material.COCOA)) {
 					// For whatever reason (probably a bukkit api bug,) cocoa beans don't return the correct block face to which they are attached to.
@@ -216,26 +249,63 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				} else {
 					attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
 				}
-				if (attachedBlock.getTypeId() == 0) {
-					attachedBlock.setTypeId(placeholder.getId(), false);
+				if (attachedBlock.getType().equals(Material.AIR)) {
+					attachedBlock.setType(placeholder, false);
 					TownyRegenAPI.addPlaceholder(attachedBlock);
 				}
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), false);
+				block.setType(state.getType());
+				BlockFace facing = ((Directional) state.getData()).getFacing();
+				MaterialData stateData = state.getData();				
+				((Directional) stateData).setFacingDirection(facing);
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof Tree) {
+
+				block.setType(state.getType());
+				Tree stateData = (Tree) state.getData();
+				BlockFace facing = ((Tree) state.getData()).getDirection();
+				stateData.setDirection(facing);
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof Stairs) {
+			
+				block.setType(state.getType());
+				Stairs stateData = (Stairs) state.getData();
+				BlockFace facing = ((Directional) state.getData()).getFacing().getOppositeFace();
+				boolean isInverted = ((Stairs) state.getData()).isInverted();
+				((Directional) stateData).setFacingDirection(facing);
+				stateData.setInverted(isInverted);				
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof Gate) {
+				
+				block.setType(state.getType());
+				Gate stateData = (Gate) state.getData();
+				BlockFace facing = ((Directional) state.getData()).getFacing();				
+				((Directional) stateData).setFacingDirection(facing);
+				state.setData(stateData);
+				state.update();
 
 			} else {
 
 				if (NeedsPlaceholder.contains(state.getType())) {
 					Block blockBelow = block.getRelative(BlockFace.DOWN);
-					if (blockBelow.getTypeId() == 0) {
+					if (blockBelow.getType().equals(Material.AIR)) {
 						if (state.getType().equals(Material.CROPS)) {
-							blockBelow.setTypeId(Material.SOIL.getId(), true);
+							blockBelow.setType(Material.SOIL, true);
 						} else {
-							blockBelow.setTypeId(placeholder.getId(), true);
+							blockBelow.setType(placeholder, true);
 						}
 						TownyRegenAPI.addPlaceholder(blockBelow);
 					}
 				}
-				block.setTypeIdAndData(state.getTypeId(), state.getData().getData(), !NeedsPlaceholder.contains(state.getType()));
+				if (!state.getType().equals(Material.AIR)) {					
+					block.setType(state.getType());
+					//state.update();
+				}
 			}
 			TownyRegenAPI.removePlaceholder(block);
 

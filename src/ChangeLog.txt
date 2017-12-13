@@ -2669,7 +2669,7 @@ v0.92.0.2:
       - default: 0.0
       - A maximum amount paid out by a resident from their personal holdings for percentage deaths.
       - Set to 0 to have no cap.
-    - Language files bumped to 0.37
+    - Language files bumped to 0.36
     - Friendly fire message now displays.
     - New Command: /ta tpplot {world} {x} {z}
       - Requires towny.admin permission node
@@ -2686,3 +2686,8 @@ v0.92.0.2:
     - Fix for mob spawner blocks not regenerating properly using the wilderness explosion revert.
     - Give the admin info tool awareness of Doors.
     - Fix door regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Give the admin info tool awareness of Signs.
+    - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Fix inventoryholders, piston, attachables, hanging regeneraton in preparation for 1.13's loss of Block IDs.
+    - Fix trees, staris and gates in regards to regeneration in the wild in prep for 1.13's loss of Block IDs. 
+

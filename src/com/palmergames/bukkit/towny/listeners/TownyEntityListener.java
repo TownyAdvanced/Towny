@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
@@ -39,8 +40,9 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.PressurePlate;
+import org.bukkit.material.Sign;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
@@ -825,21 +827,44 @@ public class TownyEntityListener implements Listener {
 							if (townyWorld.isUsingPlotManagementWildRevert() && (entity != null)) {
 								
 								if (townyWorld.isProtectingExplosionEntity(entity)) {
-									if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-										ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
-										task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-										TownyRegenAPI.addProtectionRegenTask(task);
-										event.setYield((float) 0.0);
-										block.getDrops().clear();
-										// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
-										if (block.getState().getData() instanceof Attachable || 
-												block.getType().equals(Material.STONE_PLATE) || 
-												block.getType().equals(Material.WOOD_PLATE) || 
-												block.getType().equals(Material.GOLD_PLATE) || 
-												block.getType().equals(Material.IRON_PLATE)) {											
-											block.breakNaturally(new ItemStack(Material.AIR));
+									// Piston extensions which are broken by explosions ahead of the base 
+									// block cause baseblocks to drop as items and no base block to be regenerated.
+									if (block.getType().equals(Material.PISTON_EXTENSION)) {
+										BlockState blockState = block.getState();
+										org.bukkit.material.PistonExtensionMaterial blockData = (org.bukkit.material.PistonExtensionMaterial) blockState.getData(); 
+										Block baseBlock = block.getRelative(blockData.getAttachedFace());
+										BlockState baseState = baseBlock.getState();
+										org.bukkit.material.PistonBaseMaterial baseData = (org.bukkit.material.PistonBaseMaterial) baseState.getData();
+										block = baseBlock;
+										
+										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+											TownyRegenAPI.addProtectionRegenTask(task);
+											event.setYield((float) 0.0);
+											block.getDrops().clear();
+										}
+										
+										baseData.setPowered(false);
+										baseState.setData(baseData);
+										baseState.update();
+										
+									} else {
+										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
+											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+											TownyRegenAPI.addProtectionRegenTask(task);
+											event.setYield((float) 0.0);
+											block.getDrops().clear();
+											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
+											if (block.getState().getData() instanceof Attachable || 
+													block.getState().getData() instanceof Sign ||
+													block.getState().getData() instanceof PressurePlate) {
+												block.setType(Material.AIR);
+											}
 										}
 									}
+									
 								}
 							}
 						} else {
@@ -924,7 +949,7 @@ public class TownyEntityListener implements Listener {
 
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
-
+			
 			Object remover = evt.getRemover();
 
 			/*
@@ -957,8 +982,19 @@ public class TownyEntityListener implements Listener {
 			} else {
 
 				// Explosions are blocked in this plot
-				if (!locationCanExplode(townyWorld, hanging.getLocation()))
+				if (!locationCanExplode(townyWorld, hanging.getLocation())) {
 					event.setCancelled(true);
+				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
+				} else {
+					TownBlock tb = TownyUniverse.getTownBlock(hanging.getLocation());
+					if (tb == null) {
+					    // We're in the wilderness because the townblock is null;
+						if (townyWorld.isExpl())
+							if (townyWorld.isUsingPlotManagementWildRevert() && ((Entity)remover != null))							
+								if (townyWorld.isProtectingExplosionEntity((Entity)remover))
+									event.setCancelled(true);						
+					}
+				}
 			}
 
 		} else {
