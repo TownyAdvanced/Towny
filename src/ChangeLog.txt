@@ -2690,4 +2690,4 @@ v0.92.0.2:
     - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
     - Fix inventoryholders, piston, attachables, hanging regeneraton in preparation for 1.13's loss of Block IDs.
     - Fix trees, staris and gates in regards to regeneration in the wild in prep for 1.13's loss of Block IDs. 
-    
+
