@@ -30,20 +30,19 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import javax.naming.InvalidNameException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import javax.naming.InvalidNameException;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 
@@ -786,7 +785,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 			Questioner questioner = (Questioner) test;
-			questioner.loadClasses();
 
 			List<Option> options = new ArrayList<Option>();
 			options.add(new Option(TownySettings.questionerAccept(), new JoinNationTask(townMayor, nation)));
@@ -967,7 +965,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										// We are not set as an enemy so we can set as ally.
 										if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 											Questioner questioner = (Questioner) test;
-											questioner.loadClasses();
 
 											List<Option> options = new ArrayList<Option>();
 											

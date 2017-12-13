@@ -32,7 +32,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-
+import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -62,8 +62,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.Sign;
-
-import java.util.Arrays;
 
 /**
  * Handle events for all Player related events
@@ -95,6 +93,8 @@ public class TownyPlayerListener implements Listener {
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
+                
+                TownyPerms.assignPermissions(null, player);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
