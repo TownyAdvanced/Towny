@@ -3,13 +3,12 @@ package com.palmergames.bukkit.towny;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-
 import com.earth2me.essentials.Essentials;
-import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.command.*;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.*;
 import com.palmergames.bukkit.towny.listeners.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.*;
@@ -24,17 +23,14 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.bukkit.towny.huds.*;
-
+import java.io.IOException;
+import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Towny Plugin for Bukkit
@@ -48,8 +44,6 @@ import java.util.*;
 public class Towny extends JavaPlugin {
 
 	private String version = "2.0.0";
-
-	public static PermissionHandler permissionHandler;
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
@@ -250,45 +244,23 @@ public class Towny extends JavaPlugin {
 		Plugin test;
 
 		if (TownySettings.isUsingPermissions()) {
-			test = getServer().getPluginManager().getPlugin("GroupManager");
-			if (test != null) {
-				// groupManager = (GroupManager)test;
-				this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
-				using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
-			} else {
-				test = getServer().getPluginManager().getPlugin("PermissionsEx");
-				if (test != null) {
-					// permissions = (PermissionsEX)test;
-					getTownyUniverse().setPermissionSource(new PEXSource(this, test));
-					using.add(String.format("%s v%s", "PermissionsEX", test.getDescription().getVersion()));
-				} else {
-					test = getServer().getPluginManager().getPlugin("bPermissions");
-					if (test != null) {
-						// permissions = (Permissions)test;
-						getTownyUniverse().setPermissionSource(new bPermsSource(this, test));
-						using.add(String.format("%s v%s", "bPermissions", test.getDescription().getVersion()));
-					} else {
-							// Try Vault NOTE: Permissions 3 Was Removed and moved to Legacy!
-							test = getServer().getPluginManager().getPlugin("Vault");
-							if (test != null) {
-								net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
-								if (chat == null) {
-									// No Chat implementation
-									test = null;
-									// Fall back to BukkitPermissions below
-								} else {
-									getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
-									using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
-								}
-							}
-
-							if (test == null) {
-								getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
-								using.add("BukkitPermissions");
-							}
-						}
-				}
-			}
+                        test = getServer().getPluginManager().getPlugin("Vault");
+                        if (test != null) {
+                                net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
+                                if (chat == null) {
+                                    // No Chat implementation
+                                    test = null;
+                                    // Fall back to BukkitPermissions below
+                                } else {
+                                    getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
+                                    using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+                                }
+                        }
+                        
+                        if (test == null) {
+                                getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+                                using.add("BukkitPermissions");
+                        }
 		} else {
 			// Not using Permissions
 			getTownyUniverse().setPermissionSource(new NullPermSource(this));
