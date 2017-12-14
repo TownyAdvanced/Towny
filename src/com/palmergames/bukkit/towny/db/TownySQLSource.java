@@ -1741,7 +1741,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             tb_hm.put("z", townBlock.getZ());
             tb_hm.put("name", townBlock.getName());
             tb_hm.put("price", townBlock.getPlotPrice());
-            tb_hm.put("town", (townBlock.hasTown() ? townBlock.getTown().getName() : ""));
+            tb_hm.put("town", townBlock.getTown().getName());
             tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResident().getName() : "");
             tb_hm.put("type", townBlock.getType().getId());
             tb_hm.put("outpost", townBlock.isOutpost());
@@ -1751,12 +1751,15 @@ public class TownySQLSource extends TownyFlatFileSource {
 
             UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 
-        } catch (Exception e) {
+        //Only the townBlock.getTown() can throw a NotRegisteredException.
+        //The Exception on townBlock.getResident() can be ignored, because it is queried
+        } catch (NotRegisteredException e) {
+        	TownyMessaging.sendErrorMsg("SQL: " + e.getMessage()+ " The Town Block was not saved to SQL. This can usually be ignored.");
+		}catch (Exception e) {
             TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
             e.printStackTrace();
         }
         return true;
-    }
 
     @Override
     public void deleteResident(Resident resident) {
