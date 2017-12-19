@@ -576,4 +576,4 @@ msg_err_not_enough_residents: 'There are not enough residents in this town to do
 msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
 
 # Added in 0.38
-msg_claim_error: '&cAnother plugin stopped the claim of (%d)/(%d) town blocks, could not complete the operation.'
+msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
