@@ -37,7 +37,7 @@ public class TownBlock {
 		this.name = "";
 	}
 
-	public void setTown(Town town) {
+	public void setTown(Town town, boolean addBlock){
 
 		try {
 			if (hasTown())
@@ -45,11 +45,19 @@ public class TownBlock {
 		} catch (NotRegisteredException e) {
 		}
 		this.town = town;
-		try {
-			town.addTownBlock(this);
-		} catch (AlreadyRegisteredException e) {
-		} catch (NullPointerException e) {
+
+		if(addBlock) {
+			try {
+				town.addTownBlock(this);
+			} catch (AlreadyRegisteredException e) {
+			} catch (NullPointerException e) {
+			}
 		}
+	}
+
+	public void setTown(Town town) {
+
+		this.setTown(town, true);
 	}
 
 	public Town getTown() throws NotRegisteredException {

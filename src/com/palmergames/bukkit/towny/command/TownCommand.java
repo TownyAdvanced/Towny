@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -2606,6 +2607,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
 				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
+
+				//Check if other plugins have a problem with claiming this area
+				int blockedClaims = 0;
+
+				for(WorldCoord coord : selection){
+					TownyWorld coordWorld;
+					TownPreClaimEvent preClaimEvent;
+					try {
+						coordWorld = coord.getTownyWorld();
+						preClaimEvent = new TownPreClaimEvent(new TownBlock(coord.getX(), coord.getZ(), coordWorld));
+						preClaimEvent.getTownBlock().setTown(town, false); //Just providing a convenience reference to the town
+						BukkitTools.getPluginManager().callEvent(preClaimEvent);
+						if(preClaimEvent.isCancelled())
+							blockedClaims++;
+					}catch(NotRegisteredException e){
+						//Couldn't use the world the coord asks for so we'll use the player's world
+						preClaimEvent = new TownPreClaimEvent(new TownBlock(coord.getX(), coord.getZ(), world));
+						preClaimEvent.getTownBlock().setTown(town, false);
+						BukkitTools.getPluginManager().callEvent(preClaimEvent);
+						if(preClaimEvent.isCancelled())
+							blockedClaims++;
+					}
+				}
+
+				if(blockedClaims > 0){
+					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
+				}
 
 				try {
 					double cost = blockCost * selection.size();
