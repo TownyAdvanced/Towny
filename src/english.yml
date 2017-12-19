@@ -1,5 +1,5 @@
 name: Towny
-version: 0.37
+version: 0.38
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -214,7 +214,6 @@ msg_unable_ally_npc: "&cUnable to request an alliance because the mayor of the t
 
 msg_claimed: '&2Successfully claimed'
 msg_unclaimed: '&2Successfully unclaimed'
-msg_claim_error: '&cAnother plugin stopped the claim of (%d)/(%d) town blocks, could not complete the operation.'
 msg_not_claimable: '&cThis world is not claimable.'
 msg_abandoned_area: '&bAbandoned area %s'
 msg_admin_unclaim_area: '&cForcefully unclaimed area  %s'
@@ -575,3 +574,6 @@ msg_err_not_enough_residents: 'There are not enough residents in this town to do
 
 # Added in 0.37
 msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+
+# Added in 0.38
+msg_claim_error: '&cAnother plugin stopped the claim of (%d)/(%d) town blocks, could not complete the operation.'
