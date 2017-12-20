@@ -2612,23 +2612,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				int blockedClaims = 0;
 
 				for(WorldCoord coord : selection){
-					TownyWorld coordWorld;
-					TownPreClaimEvent preClaimEvent;
-					try {
-						coordWorld = coord.getTownyWorld();
-						preClaimEvent = new TownPreClaimEvent(new TownBlock(coord.getX(), coord.getZ(), coordWorld));
-						preClaimEvent.getTownBlock().setTown(town, false); //Just providing a convenience reference to the town
-						BukkitTools.getPluginManager().callEvent(preClaimEvent);
-						if(preClaimEvent.isCancelled())
-							blockedClaims++;
-					}catch(NotRegisteredException e){
-						//Couldn't use the world the coord asks for so we'll use the player's world
-						preClaimEvent = new TownPreClaimEvent(new TownBlock(coord.getX(), coord.getZ(), world));
-						preClaimEvent.getTownBlock().setTown(town, false);
-						BukkitTools.getPluginManager().callEvent(preClaimEvent);
-						if(preClaimEvent.isCancelled())
-							blockedClaims++;
-					}
+					//Use the user's current world
+					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world));
+					BukkitTools.getPluginManager().callEvent(preClaimEvent);
+					if(preClaimEvent.isCancelled())
+						blockedClaims++;
 				}
 
 				if(blockedClaims > 0){
