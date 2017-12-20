@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -2606,6 +2607,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
 				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
+
+				//Check if other plugins have a problem with claiming this area
+				int blockedClaims = 0;
+
+				for(WorldCoord coord : selection){
+					//Use the user's current world
+					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world));
+					BukkitTools.getPluginManager().callEvent(preClaimEvent);
+					if(preClaimEvent.isCancelled())
+						blockedClaims++;
+				}
+
+				if(blockedClaims > 0){
+					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
+				}
 
 				try {
 					double cost = blockCost * selection.size();
