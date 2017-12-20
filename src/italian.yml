@@ -1,5 +1,5 @@
 name: Towny
-version: 0.37
+version: 0.38
 language: italian
 author: Leomixer17
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -574,3 +574,6 @@ msg_err_not_enough_residents: 'Non ci sono abbastanza residenti in questa città
 
 # Added in 0.37
 msg_err_friendly_fire_disable: 'Il fuoco amico è disabilitato!'
+
+# Added in 0.38
+msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'

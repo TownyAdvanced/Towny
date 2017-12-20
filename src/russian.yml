@@ -1,5 +1,5 @@
 name: Towny
-version: 0.37
+version: 0.38
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -574,3 +574,6 @@ msg_err_not_enough_residents: 'There are not enough residents in this town to do
 
 # Added in 0.37
 msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+
+# Added in 0.38
+msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
