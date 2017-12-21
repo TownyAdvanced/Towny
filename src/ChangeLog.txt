@@ -2695,3 +2695,4 @@ v0.92.0.2:
       - This event can be called by other region plugins, to cancel Towny claims inside of them. 
       - When the event is cancelled, Towny will stop short of charging for the townblock.
     - Language files bumped to 0.38.
+      - Italian.yml updated by Leomixer17.
