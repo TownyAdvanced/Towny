@@ -576,4 +576,4 @@ msg_err_not_enough_residents: 'Non ci sono abbastanza residenti in questa città
 msg_err_friendly_fire_disable: 'Il fuoco amico è disabilitato!'
 
 # Added in 0.38
-msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
+msg_claim_error: '&cUn altro plugin ha interrotto il reclamo di (%s)/(%s) lotti di città, non è stato possibile completare l''operazione.'
