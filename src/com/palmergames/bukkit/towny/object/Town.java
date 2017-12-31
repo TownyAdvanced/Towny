@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Town extends TownBlockOwner implements Walled, ResidentList {
 
@@ -761,9 +762,16 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 			if (townBlock.isJail())
 				removeJailSpawn(townBlock.getCoord());
 			
+			
 			// Clear any warps in this claim.
-			for (EntrySet<String, Location> entry:getWarps().entrySet())
+			List<String> warpList = new ArrayList<String>();
+
+			for (Entry<String, Location> entry:getWarps().entrySet()) {
+				if (townBlock.getCoord().equals(Coord.parseCoord(entry.getValue()))) 
+					warpList.add(entry.getKey());
+			}
 				
+			warpList.forEach((warp) -> {warps.remove(warp);});
 					
 			
 			// Clear the towns homeblock if this is it.

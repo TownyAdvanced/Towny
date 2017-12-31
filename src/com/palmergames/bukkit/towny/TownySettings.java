@@ -2181,6 +2181,8 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);
 	}
 	
+	// Enhanced Chat
+	
 	public static boolean isEnhancedChatEnabled() {
 
 		return getBoolean(ConfigNodes.CHAT_ENHANCING_ENABLED);
@@ -2188,20 +2190,56 @@ public class TownySettings {
 
 	public static boolean isEnhancedChatResidentNamesEnabled() {
 
-		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT);
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_ENABLED);
 
+	}
+	
+	public static List<String> getEnhancedChatResidentDescription() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_DESCRIPTION);
+	}
+	
+	public static List<String> getEnhancedChatResidentCommands() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_COMMANDS);
+	}
+	
+	public static String getEnhancedChatResidentURL() {
+		return getString(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_URL);
 	}
 
 	public static boolean isEnhancedChatTownNamesEnabled() {
 
-		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN);
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN_ENABLED);
 
+	}
+	
+	public static List<String> getEnhancedChatTownDescription() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN_DESCRIPTION);
+	}
+	
+	public static List<String> getEnhancedChatTownCommands() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN_COMMANDS);
+	}
+	
+	public static String getEnhancedChatTownURL() {
+		return getString(ConfigNodes.CHAT_ENHANCING_KEYWORDS_TOWN_URL);
 	}
 
 	public static boolean isEnhancedChatNationNamesEnabled() {
 
-		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION);
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION_ENABLED);
 
+	}
+	
+	public static List<String> getEnhancedChatNationDescription() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION_DESCRIPTION);
+	}
+	
+	public static List<String> getEnhancedChatNationCommands() {
+		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION_COMMANDS);
+	}
+	
+	public static String getEnhancedChatNationURL() {
+		return getString(ConfigNodes.CHAT_ENHANCING_KEYWORDS_NATION_URL);
 	}
 
 	public static boolean isUsingCheatProtection() {

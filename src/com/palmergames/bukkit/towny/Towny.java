@@ -27,6 +27,7 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.huds.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -82,6 +83,14 @@ public class Towny extends JavaPlugin {
 	
 	public static Towny plugin;
 	
+	/*
+	private static boolean _spigot = false;
+	
+	public static boolean isSpigot() {
+		return _spigot;
+	}
+	*/
+	
 	public Towny() {
 		// TODO:
 		plugin = this;
@@ -136,14 +145,25 @@ public class Towny extends JavaPlugin {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
 		}
+		
+		// Checking if the machine is running spigot...
+		/*
+		try {
+			Towny._spigot = Class.forName("org.spigotmc.SpigotConfig") != null;
+		} catch (ClassNotFoundException e) {
+			Towny._spigot =  false;
+		}
+		*/
 
 		registerEvents();
 
 		TownyLogger.log.info("=============================================================");
 		if (isError())
 			TownyLogger.log.info("[WARNING] - ***** SAFE MODE ***** " + version);
-		else
+		else {
 			TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
+			// TownyLogger.log.info("[Towny] Using Spigot: " + _spigot);
+		}
 		TownyLogger.log.info("=============================================================");
 
 		if (!isError()) {
@@ -365,8 +385,11 @@ public class Towny extends JavaPlugin {
 			if (pluginManager.isPluginEnabled("EnhancedChat") && TownySettings.isEnhancedChatEnabled()) {
 				pluginManager.registerEvents(new EnhancedChatListener(), this);
 				this.getLogger().info("Using EnhancedChat " + pluginManager.getPlugin("EnhancedChat").getDescription().getVersion());
-			} else if (TownySettings.isEnhancedChatEnabled())
-				this.getLogger().warning("Enhanced Chat Features is enabled, but no EnhancedChat plugin was loaded on the Server.");
+			} else if (TownySettings.isEnhancedChatEnabled()) {
+				this.getLogger().warning("Enhanced Chat Features are enabled, but EnhancedChat is not loaded on the Server.");
+				if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") == false)
+					this.getLogger().warning("Enhanced Chat Features are enabled, but PlaceholderAPI is not loaded on the Server. Default Enhanced Chat Towny Settings will not work properly.");
+			} else this.getLogger().info("Enhanced Chat isn't enabled, we highly recommend you enable this feature for your enjoyment.");
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);

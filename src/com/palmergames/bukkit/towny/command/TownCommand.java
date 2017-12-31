@@ -3,8 +3,6 @@ package com.palmergames.bukkit.towny.command;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
@@ -26,10 +24,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.bukkit.util.TextComponentUtil;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -102,6 +100,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void parseTownCommand(Player player, String[] split) {
 
 		try {
@@ -2633,9 +2632,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town.getWarpCount()==0)
 			player.sendMessage(ChatColor.AQUA + "  No Warps have been set.");
 		else {
-			player.sendMessage(ChatColor.GRAY + "  Warps:");
-			for (TextComponent component:TextComponentUtil.formatWarps(town, false))
-				TextComponentUtil.send(player, component);
+			player.sendMessage(ChatColor.GRAY + "  Warps: " + String.join(", ", town.getWarps().keySet()));
+			// For when Towny uses spigot...
+			// for (TextComponent component:TextComponentUtil.formatWarps(town, false))
+			//	  TextComponentUtil.send(player, component);
+			
 		}
 		
 		player.sendMessage("" + ChatColor.GRAY + town.getWarps().size() + " in use out of " + town.getWarpMaxCount() + " avalible Warp slots.");

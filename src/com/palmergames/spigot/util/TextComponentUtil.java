@@ -1,5 +1,6 @@
-package com.palmergames.bukkit.util;
+package com.palmergames.spigot.util;
 
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,12 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.TextComponent; 
+*/
 
 public class TextComponentUtil {
+	
+	
 	
 	/**
 	 * Get a formated List of TextComponents for a Town's Warps.
@@ -26,6 +30,7 @@ public class TextComponentUtil {
 	 * @param townSpecific
 	 * @return Output
 	 */
+	/* One of these days :(
 	public static List<TextComponent> formatWarps(Town town, boolean townSpecific) {
 		List<TextComponent> list = new ArrayList<TextComponent>();
 		
@@ -48,7 +53,6 @@ public class TextComponentUtil {
 			info.setColor(ChatColor.GRAY);
 			info.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.SUGGEST_COMMAND, "(" + loc.getBlockX() + ", "  + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + loc.getWorld().getName() + ")"));
 
-			// Still in development
 			command.addExtra(command2);
 			command.addExtra(info);
 			
@@ -69,4 +73,5 @@ public class TextComponentUtil {
 	public static void send(Player player, TextComponent component) {
 		player.spigot().sendMessage(component);
 	}
+	*/
 }

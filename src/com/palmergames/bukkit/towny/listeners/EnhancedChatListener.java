@@ -17,10 +17,14 @@ import com.wowserman.api.KeywordManager;
 import com.wowserman.api.PopulateKeywordEvent;
 import com.wowserman.api.SearchForKeywordEvent;
 
+/**
+ * @author Wowserman
+ *
+ */
 public class EnhancedChatListener implements Listener {
 
 	public EnhancedChatListener() {
-
+		// Wow.
 	}
 
 	public static final long RESIDENT_ID = KeywordManager.createID("towny-resident");
@@ -96,61 +100,21 @@ public class EnhancedChatListener implements Listener {
 			return;
 
 		if (event.equalsID(RESIDENT_ID) && TownySettings.isEnhancedChatResidentNamesEnabled()) {
-			event.getDescription().add(ChatColor.DARK_GREEN + event.getContext());
-			try {
-				final Resident resident = TownyUniverse.getDataSource().getResident(event.getContext());
-				event.getDescription()
-						.add(resident.hasTown()
-								? (ChatColor.DARK_AQUA + resident.getTown().getName()
-										+ (resident.hasNation()
-												? " " + ChatColor.GOLD
-														+ resident.getTown().getNation().getName()
-												: ""))
-								: "");
-				event.getDescription().add(ChatColor.GREEN + "$" + resident.getHoldingFormattedBalance());
-				event.getDescription().add(ChatColor.DARK_GREEN + "[" + resident.getFriends().size() + "] " + ChatColor.GREEN + "Friends");
-				event.getDescription().add("");
-				event.getDescription().add(ChatColor.YELLOW + "Click for Resident Description.");
-
-				event.getCommands().add("/towny:resident " + event.getContext());
-			} catch (NotRegisteredException e) {
-
-			}
+			event.setCommands(TownySettings.getEnhancedChatResidentCommands());
+			event.setDescription(TownySettings.getEnhancedChatResidentDescription());
+			event.setURL(TownySettings.getEnhancedChatResidentURL());
 		}
 
-		if (event.equalsID(TOWN_ID)) {
-			try {
-				final Town town = TownyUniverse.getDataSource().getTown(event.getContext());
-				event.getDescription().add(ChatColor.DARK_AQUA + town.getFormattedName());
-				if (town.hasNation())
-					event.getDescription().add(ChatColor.GOLD + town.getNation().getFormattedName());
-				event.getDescription().add("");
-				event.getDescription().add(ChatColor.GREEN + "" + town.getNumResidents() + " Residents");
-				event.getDescription().add(ChatColor.GREEN + town.getHoldingFormattedBalance());
-				event.getDescription().add("");
-				event.getDescription().add(ChatColor.YELLOW + "Click to Teleport to Town's Spawn.");
-
-				event.getCommands().add("/towny:town spawn " + event.getContext());
-			} catch (NotRegisteredException e) {
-
-			}
+		if (event.equalsID(TOWN_ID) && TownySettings.isEnhancedChatTownNamesEnabled()) {
+			event.setCommands(TownySettings.getEnhancedChatTownCommands());
+			event.setDescription(TownySettings.getEnhancedChatTownDescription());
+			event.setURL(TownySettings.getEnhancedChatTownURL());
 		}
 
 		if (event.equalsID(NATION_ID) && TownySettings.isEnhancedChatNationNamesEnabled()) {
-			try {
-				final Nation nation = TownyUniverse.getDataSource().getNation(event.getContext());
-				event.getDescription().add(ChatColor.GOLD + nation.getFormattedName());
-				event.getDescription().add("");
-				event.getDescription().add(ChatColor.DARK_AQUA + "Capital: " + nation.getCapital().getName());
-				event.getDescription().add(ChatColor.GOLD + "" + nation.getNumTowns() + " Towns");
-				event.getDescription().add(ChatColor.GREEN + nation.getHoldingFormattedBalance());
-				event.getDescription().add("");
-				event.getDescription().add(ChatColor.YELLOW + "Click to Open Nation's Town List.");
-
-				event.getCommands().add("/towny:nation list " + nation.getName());
-			} catch (NotRegisteredException e) {
-
-			}
+			event.setCommands(TownySettings.getEnhancedChatNationCommands());
+			event.setDescription(TownySettings.getEnhancedChatNationDescription());
+			event.setURL(TownySettings.getEnhancedChatNationURL());
 		}
 	}
 }

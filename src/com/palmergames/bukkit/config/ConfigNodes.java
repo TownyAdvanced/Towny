@@ -631,24 +631,86 @@ public enum ConfigNodes {
 			"  # |               Chat Enhancing                         | #",
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
+			"",
+			"# It is recommended to install the PlaceholderAPI expansion for Towny by Wowserman.",
+			"# (Optional if you are running PlaceholderAPI on your server.)",
+			"",
+			"# Wowserman is responsible for this, yell at him if this doesn't work.",
 			""),
 	CHAT_ENHANCING_ENABLED(
 			"chat_enhancing.enabled",
 			"true",
-			"# If EnhancedChat is loaded on the Server, Towny will enhance outgoing messages."),
+			"# If EnhancedChat is loaded on the Server, Towny will enhance outgoing messages if true."),
 	CHAT_ENHANCING_KEYWORDS(
 			"chat_enhancing.keywords",
 			"",
-			"# Toggle Keywords to be enhanced."),
+			"# Change Keywords to be enhanced."),
+	// Resident Section
 	CHAT_ENHANCING_KEYWORDS_RESIDENT(
 			"chat_enhancing.keywords.resident_names",
-			"true"),
+			"",
+			""),
+	CHAT_ENHANCING_KEYWORDS_RESIDENT_ENABLED(
+			"chat_enhancing.keywords.resident_names.enabled",
+			"true",
+			"# Should Resident Names be enhanced?"),
+	// TODO: Have a better way of using lists of strings in here.
+	CHAT_ENHANCING_KEYWORDS_RESIDENT_COMMANDS(
+			"chat_enhancing.keywords.resident_names.commands",
+			"/towny:resident %context%",
+			"# For multiple commands, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_RESIDENT_DESCRIPTION(
+			"chat_enhancing.keywords.resident_names.description",
+			"%context%,%towny_resident_formatted-town-nation_%context%_6_f_3%,&a%towny_resident_friend-count_%context%% Friends,,&7Click to /resident %context%", // These placeholders are from Wowserman's version of TownyExpansion, an expansion of PlaceholderAPI.
+			"# For multiple lores, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_RESIDENT_URL(
+			"chat_enhancing.keywords.resident_names.url",
+			"none",
+			"# Note: Minecraft only allows one URL."),
+	// Town Section
 	CHAT_ENHANCING_KEYWORDS_TOWN(
 			"chat_enhancing.keywords.town_names",
-			"true"),
+			"",
+			""),
+	CHAT_ENHANCING_KEYWORDS_TOWN_ENABLED(
+			"chat_enhancing.keywords.town_names.enabled",
+			"true",
+			"# Should Resident Names be enhanced?"),
+	// TODO: Have a better way of using lists of strings in here.
+	CHAT_ENHANCING_KEYWORDS_TOWN_COMMANDS(
+			"chat_enhancing.keywords.town_names.commands",
+			"/towny:town spawn %context%",
+			"# For multiple commands, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_TOWN_DESCRIPTION(
+			"chat_enhancing.keywords.town_names.description",
+			"&e%towny_town_Name-Formatted_%context%%,,&6Click to Teleport to %context%'s Spawn.",
+			"# For multiple lores, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_TOWN_URL(
+			"chat_enhancing.keywords.town_names.url",
+			"none",
+			"# Note: Minecraft only allows one URL."),
+	// Nation Section
 	CHAT_ENHANCING_KEYWORDS_NATION(
 			"chat_enhancing.keywords.nation_names",
-			"true"),
+			"",
+			""),
+	CHAT_ENHANCING_KEYWORDS_NATION_ENABLED(
+			"chat_enhancing.keywords.nation_names.enabled",
+			"true",
+			"# Should Resident Names be enhanced?"),
+	// TODO: Have a better way of using lists of strings in here.
+	CHAT_ENHANCING_KEYWORDS_NATION_COMMANDS(
+			"chat_enhancing.keywords.nation_names.commands",
+			"/towny:town spawn %towny_nation_capital_%context%%",
+			"# For multiple commands, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_NATION_DESCRIPTION(
+			"chat_enhancing.keywords.nation_names.description",
+			"&e%towny_nation_name-formatted_%context%%,&6Capital: &f%towny_nation_capital_%context%%,,&6Click to Teleport to the Capital's Spawn.",
+			"# For multiple lores, seperate them by a comma."),
+	CHAT_ENHANCING_KEYWORDS_NATION_URL(
+			"chat_enhancing.keywords.nation_names.url",
+			"none",
+			"# Note: Minecraft only allows one URL."),
 	PROT(
 			"protection",
 			"",

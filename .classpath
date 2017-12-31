@@ -15,8 +15,8 @@
 	<classpathentry kind="lib" path="lib/Questioner.jar"/>
 	<classpathentry kind="lib" path="lib/Register.jar"/>
 	<classpathentry kind="lib" path="lib/Vault.jar"/>
-	<classpathentry kind="lib" path="/Users/peter/Development/Libraries/spigot-1.12.1.jar"/>
 	<classpathentry kind="lib" path="/Users/peter/Development/Libraries/PlaceholderAPI-2.8.2.jar"/>
 	<classpathentry kind="lib" path="/Users/peter/Desktop/Spigot Test Server/plugins/EnhancedChat.jar"/>
+	<classpathentry kind="lib" path="/Users/peter/Downloads/craftbukkit-1.12.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

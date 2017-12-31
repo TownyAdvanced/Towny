@@ -317,6 +317,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void giveNationBanner(String[] split) throws TownyException {
 		
 		Town town = null;
