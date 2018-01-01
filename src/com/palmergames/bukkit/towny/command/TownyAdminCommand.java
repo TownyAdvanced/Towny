@@ -285,6 +285,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void giveTownBanner(String[] split) throws TownyException {
 		
 		Resident resident;
