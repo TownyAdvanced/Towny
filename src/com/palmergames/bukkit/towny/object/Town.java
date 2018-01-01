@@ -4,14 +4,17 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.wallgen.Wall;
-import com.palmergames.bukkit.wallgen.WallSection;
-import com.palmergames.bukkit.wallgen.Walled;
 import com.palmergames.util.StringMgmt;
-
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -22,9 +25,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map.Entry;
+=======
+import java.util.UUID;
+>>>>>>> upstream/master
 
-public class Town extends TownBlockOwner implements Walled, ResidentList {
+public class Town extends TownBlockOwner implements ResidentList {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -32,7 +39,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	private Wall wall = new Wall();
+	
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks, purchasedWarps;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
@@ -45,6 +52,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+<<<<<<< HEAD
 	private ItemStack banner = new ItemStack(Material.BANNER, 1);
 	private Hashtable<String, Location> warps = new Hashtable<String, Location>();
 	
@@ -92,6 +100,11 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		banner = newBanner;
 	}
 	
+=======
+	private UUID uuid;
+	private long registered;
+
+>>>>>>> upstream/master
 	public Town(String name) {
 
 		setName(name);
@@ -132,6 +145,7 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
+		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag));
 		setChangedName(true);
 	}
 
@@ -379,7 +393,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	}
 
 	public String getTownBoard() {
-
 		return townBoard;
 	}
 
@@ -856,10 +869,10 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	 */
 	public List<Location> getAllOutpostSpawns() {
 
-		return Collections.unmodifiableList(outpostSpawns);
+		return outpostSpawns;
 	}
 
-	private void removeOutpostSpawn(Coord coord) {
+	public void removeOutpostSpawn(Coord coord) {
 
 		for (Location spawn : new ArrayList<Location>(outpostSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
@@ -924,43 +937,6 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 	public double getEmbassyPlotPrice() {
 
 		return embassyPlotPrice;
-	}
-	
-	@Override
-	public Wall getWall() {
-
-		return wall;
-	}
-
-	@Override
-	public List<WallSection> getWallSections() {
-
-		return getWall().getWallSections();
-	}
-
-	@Override
-	public void setWallSections(List<WallSection> wallSections) {
-
-		getWall().setWallSections(wallSections);
-
-	}
-
-	@Override
-	public boolean hasWallSection(WallSection wallSection) {
-
-		return getWall().hasWallSection(wallSection);
-	}
-
-	@Override
-	public void addWallSection(WallSection wallSection) {
-
-		getWall().addWallSection(wallSection);
-	}
-
-	@Override
-	public void removeWallSection(WallSection wallSection) {
-
-		getWall().removeWallSection(wallSection);
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
@@ -1224,6 +1200,53 @@ public class Town extends TownBlockOwner implements Walled, ResidentList {
 		else 
 			outlaws.remove(resident);			
 	}
-	
-	
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public boolean hasValidUUID() {
+		if (uuid != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void setRegistered(long registered) {
+		this.registered = registered;
+	}
+
+	public long getRegistered() {
+		return registered;
+	}
+
+	public void setOutpostSpawns(List<Location> outpostSpawns) {
+		this.outpostSpawns = outpostSpawns;
+	}
+
+	public boolean isAlliedWith(Town othertown) {
+		if (this.hasNation() && othertown.hasNation()) {
+			try {
+				if (this.getNation().hasAlly(othertown.getNation())) {
+					return true;
+				} else {
+					if (this.getNation().equals(othertown.getNation())) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			} catch (NotRegisteredException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 }

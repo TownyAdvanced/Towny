@@ -19,6 +19,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_LEAVE("towny.command.nation.leave"),
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
+	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
 	
 	// Covers all assignable ranks
 	TOWNY_COMMAND_NATION_RANK("towny.command.nation.rank.*"),
@@ -53,8 +54,10 @@ public enum PermissionNodes {
 	 * Town command permissions
 	 */
 	TOWNY_COMMAND_TOWN("towny.command.town.*"),
+		TOWNY_COMMAND_TOWN_OTHERTOWN("towny.command.town.othertown"),
 		TOWNY_COMMAND_TOWN_HERE("towny.command.town.here"),
 		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list"),
+		TOWNY_COMMAND_TOWN_OUTPOST_LIST("towny.command.town.outpost.list"),
 		TOWNY_COMMAND_TOWN_NEW("towny.command.town.new"),
 		TOWNY_COMMAND_TOWN_LEAVE("towny.command.town.leave"),
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
@@ -114,6 +117,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST("towny.command.town.claim.outpost"),
 		
 		TOWNY_COMMAND_TOWN_UNCLAIM("towny.command.town.unclaim"),
+		TOWNY_COMMAND_TOWN_UNCLAIM_ALL("towny.command.town.unclaim.all"),
 		TOWNY_COMMAND_TOWN_ONLINE("towny.command.town.online"),
 		TOWNY_COMMAND_TOWN_SAY("towny.command.town.say"),
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
@@ -155,6 +159,7 @@ public enum PermissionNodes {
 	/*
 	 * Resident command permissions
 	 */
+	TOWNY_COMMAND_RESIDENT_OTHERRESIDENT("towny.command.resident.otherresident"),
 	TOWNY_COMMAND_RESIDENT_LIST("towny.command.resident.list"),
 	TOWNY_COMMAND_RESIDENT_TAX("towny.command.resident.tax"),
 	TOWNY_COMMAND_RESIDENT_JAIL("towny.command.resident.jail"),
@@ -187,6 +192,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_KICK("towny.command.townyadmin.town.kick"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE("towny.command.townyadmin.town.delete"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME("towny.command.townyadmin.town.rename"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER("towny.command.townyadmin.town.spawn"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_NATION("towny.command.townyadmin.nation.*"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ADD("towny.command.townyadmin.nation.add"),

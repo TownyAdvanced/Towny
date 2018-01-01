@@ -1,23 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Material;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -38,6 +20,24 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
+import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
 
@@ -1131,6 +1131,16 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS);
 	}
+	
+	public static boolean isNotificationOwnerShowingNationTitles() {
+		
+		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
+	}
+
+	public static boolean getShowTownBoardOnLogin() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN);
+	}
 
 	public static String getUnclaimedZoneName() {
 
@@ -1535,6 +1545,16 @@ public class TownySettings {
 
 		return getString(ConfigNodes.ECO_PRICE_DEATH_TYPE).equalsIgnoreCase("fixed");
 	}
+	
+	public static double getDeathPricePercentageCap() {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_DEATH_PERCENTAGE_CAP);
+	}
+	
+	public static boolean isDeathPricePercentageCapped() {
+		
+		return (getDeathPricePercentageCap()>0); 
+	}
 
 	public static boolean isDeathPricePVPOnly() {
 
@@ -1627,34 +1647,40 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_EVENT_REMOVE_ON_MONARCH_DEATH);
 	}
 
-	public static double getTownUpkeepCost(Town town) {
-
-		double multiplier;
-
-		if (town != null) {
-			if (isUpkeepByPlot()) {
-				multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
-			} else {
-				multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
-			}
-		} else
-			multiplier = 1.0;
-
-		if (town.hasNation()) {
-			double nationMultiplier = 1.0;
-			try {
-				nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return (getTownUpkeep() * multiplier) * nationMultiplier ;
-		} else 		
-			return getTownUpkeep() * multiplier ;
-	}
+    public static double getTownUpkeepCost(Town town) {
+    	 
+        double multiplier;
+ 
+        if (town != null) {
+            if (isUpkeepByPlot()) {
+                multiplier = town.getTownBlocks().size(); // town.getTotalBlocks();
+            } else {
+                multiplier = Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+            }
+        } else
+            multiplier = 1.0;
+ 
+        if (town.hasNation()) {
+            double nationMultiplier = 1.0;
+            try {
+                nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (NotRegisteredException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
+                return (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
+            else
+                return (getTownUpkeep() * multiplier) * nationMultiplier ;
+        } else
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
+                return (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
+            else
+                return getTownUpkeep() * multiplier ;
+    }
 
 	public static double getTownUpkeep() {
 
@@ -1664,6 +1690,12 @@ public class TownySettings {
 	public static boolean isUpkeepByPlot() {
 
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED);
+	}
+	
+	public static boolean isTownLevelModifiersAffectingPlotBasedUpkeep() {
+		
+		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER);
+	
 	}
 
 	public static boolean isUpkeepPayingPlots() {
@@ -2136,6 +2168,10 @@ public class TownySettings {
 		setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
 	}
 
+	public static boolean getOutsidersPreventPVPToggle() { 
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
+	}
+
 	public static String questionerAccept() {
 
 		return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
@@ -2144,6 +2180,11 @@ public class TownySettings {
 	public static String questionerDeny() {
 
 		return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
+	}
+	
+	public static long getTownInviteCooldown() {
+		
+		return getSeconds(ConfigNodes.PLUGIN_QUESTIONER_COOLDOWN_TIME);
 	}
 
 	public static boolean isAppendingToLog() {
@@ -2382,6 +2423,10 @@ public class TownySettings {
 	
 	public static boolean isNotificationUsingTitles() {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
+	}
+
+	public static int getAmountOfResidentsForTown() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 	
 }

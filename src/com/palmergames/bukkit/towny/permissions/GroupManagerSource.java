@@ -68,7 +68,17 @@ public class GroupManagerSource extends TownyPermissionSource {
 		} else if (node == "usersuffix") {
 			group = "";
 			user = handler.getUserSuffix(player.getName());					
+		} else if (node == "groupprefix") {
+			group = handler.getGroupPrefix(handler.getPrimaryGroup(player.getName()));
+			user = "";
+		} else if (node == "groupsuffix") {
+			group = handler.getGroupSuffix(handler.getPrimaryGroup(player.getName()));
+			user = "";
 		}
+		if (group == null) //Don't know why this null check wasn't being used, probably has a reason though
+			group = "";
+		if (user == null)
+			user = "";
 
 		if (!group.equals(user))
 			user = group + user;

@@ -4,28 +4,49 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
+import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
-import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
+import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.*;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_WORLD;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN_BLOCK;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_RESIDENT;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_TOWN;
 
 /**
  * @author ElgarL
@@ -144,6 +165,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	public Town getTown(UUID uuid) throws NotRegisteredException {
+		String name = null;
+		for (Town town : this.getTowns()) {
+			if (uuid.equals(town.getUuid())) {
+				name = town.getName();
+			}
+		}
+
+		if (name == null) {
+			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
+		}
+		return universe.getTownsMap().get(name);
+	}
+
+	@Override
 	public List<Nation> getNations(String[] names) {
 
 		List<Nation> matches = new ArrayList<Nation>();
@@ -173,6 +209,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
 
 		return universe.getNationsMap().get(name.toLowerCase());
+	}
+
+	@Override
+	public Nation getNation(UUID uuid) throws NotRegisteredException {
+		String name = null;
+		for (Nation nation : this.getNations()) {
+			if (uuid.equals(nation.getUuid())) {
+				name = nation.getName();
+			}
+		}
+
+		if (name == null) {
+			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
+		}
+		return universe.getNationsMap().get(name);
 	}
 
 	@Override
@@ -247,6 +298,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// town not registered
 			e.printStackTrace();
 		}
+		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 
 		universe.setChangedNotify(REMOVE_RESIDENT);
 	}
@@ -648,6 +700,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					town.removeAccount();
 				} catch (EconomyException e) {
 				}
+			UUID oldUUID = town.getUuid();
+			long oldregistration = town.getRegistered();
 
 			// Store the nation in case we have to update the capitol
 			if (town.hasNation()) {
@@ -674,7 +728,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (isCapital) {
 				nation.setCapital(town);
 			}
-
+			town.setUuid(oldUUID);
+			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
 				//TODO
 				try {
@@ -756,6 +811,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (EconomyException e) {
 				}
 
+			UUID oldUUID = nation.getUuid();
+			long oldregistration = nation.getRegistered();
+
 			//Tidy up old files
 			deleteNation(nation);
 
@@ -776,6 +834,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					e.printStackTrace();
 				}
 			}
+
+			nation.setUuid(oldUUID);
+			nation.setRegistered(oldregistration);
 
 			for (Town town : toSave) {
 				saveTown(town);

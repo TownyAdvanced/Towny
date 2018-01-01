@@ -2557,4 +2557,146 @@ v0.91.4.10:
     - Fix mayors being able to be made into Outlaws.
     - Fix an issue with plotManagementRevertSpeed on mysql databases.
     - Fix issue plaguing Mysql DB's in 0.91.4.9 where the console was spammed endlessly by revert speed default settings.
+<<<<<<< HEAD
     - Fix issue with outposts not unclaim their outpostspawns.
+=======
+    - Fix issue with outposts not unclaim their outpostspawns.
+v0.91.4.11:
+    - Fix 'Format specifier "%s"' error seen when attempting to add a town to you nation that doesn't have the config's required_number_residents_join_nation.
+    - New Config Option: global_town_settings.max_residents_per_town
+      - default: 0
+      - The maximum number of residents that can be joined to a town. Setting to 0 disables this feature.
+      - Will not remove residents from towns that are already over the maximum. The town will not be able to add new residents until they go below the cap.
+    - Bump language files to version 0.34
+    - Fix error showing up from Citizens NPCs.
+    - Italian translation courtesy of Leomixer17.
+      - Bumped to 0.34.
+    - Russian translation courtesy of Communar.
+v0.91.4.12:
+    - Norwegian translation courtesy of Nectuz & Walbern.
+    - Added DeletePlayerEvent courtesy of Articdive.
+    - TownTagChangeEvent & NationTagChangeEvent courtesy of Articdive.
+    - PlotChangeType & PlotChangeOwner Events courtesy of Articdive.
+    - Creation of legacy folder, and migration of old unused files to said folder, courtesy of Articdive.
+    - Updated Ant Compiler to use Java 8 courtesy of Articdive.
+    - Updated SQL_Schema to handle newly added sql columns in a much better way, courtesy of Articdive.
+    - New permission nodes thanks to Articdive:
+      - New permission node: towny.command.town.othertown
+        - Used to disallow players from checking towns they do not belong to, using /town {name}
+        - Defaults to true.
+      - New permission node: towny.command.resident.otherresident
+        - Used to disallow players from checking other residents, using /res {name}
+        - Defaults to true.
+      - New permission node: towny.command.nation.othernation
+        - Used to disallow players from checking nations they do not belong to, using /nation {name}
+        - Defaults to true.
+    - Towns and Nations now have UUIDs, courtesy of Articdive
+    - Downgrade from Java 8 back to 6.
+    - New Config Option: global_town_settings.outsiders_prevent_pvp_toggle - courtesy of Articdive
+      - default: false
+      - If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.
+      - When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online.
+    - New Config Option: global_town_settings.display_board_onlogin - courtesy of Articdive
+      - default: true
+      - If Towny should show players the townboard when they login.
+    - Improved german translation from Wolf2323.
+    - New permission node: towny.command.townyadmin.town.spawn - courtesy of Articdive
+      - A child node of towny.admin
+      - Give this to allow a mod or someone of high rank on the server to be able to teleport to any town's spawn.
+    - New permission node: towny.command.townyadmin.town.spawn.freecharge - courtesy of Articdive
+      - A child node of towny.admin
+      - Give this to make spawning to towns free for the person teleporting.
+v0.91.4.13:
+    - FileMgmt.java now like utf-8 more than us-ascii. Language files with special non-english characters will be much happier.
+    - Support for TownyChat 0.49's new {groupprefix} and {groupsuffix} tags courtesy of Articdive.
+    - New Config Option: economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier
+      - default: false
+      - If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers.
+    - Moved /res name, /t name, /n name commands to async tasks.
+      - Should reduce lag on large servers.
+    - Small fixes to new .otherres/town/nation nodes.
+v0.91.4.14:
+    - Town and Nations now keep a track of when they were founded, courtesy of Articdive.
+      - Towns and Nations created before this feature will show no founded dates in the /town and /nation screens.
+    - Courtesy of Articdive: A fix for mysql database users and erroneous outpostspawns.
+      - Databases will be checked for outposts listed in each town, outpostspawns in townblocks that are not claimed anymore by the town will be removed.
+      - The underlying bug, one where isOutpost was not recording properly, has been fixed.
+      - The check will only run once and then create an outpostschecked.txt file. 
+      - If you feel the need to run the check a second time, delete the outpostschecked.txt and start your server.
+    - New Config Option: plugin.interfacing.using_questioner.cooldowntime
+      - Default: 0m
+      - When set for more than 0m, the amount of time (in minutes) which must have passed between a player's first log in and when they can be invited to a town.
+    - Language files bumped to version 0.35
+    - Make /town and /nation base commands return an async result. Should help Gringotts users with lag.
+    - New Command: /town unclaim outpost, courtesy of Articdive
+      - Used to manually unclaim outposts, will enable a mayor to remove glitched outposts that were not automatically removed (mysql outpost bug)
+    - Fix /town mayor page erroneously showing /town jail as a command.
+    - Add SKULL_ITEM to default item_use_id in the config.
+      - Any existing configs will require this to be added manually.
+    - Fix /plot set ? screen missing some commands. 
+    - New command: /town outpost list, courtesy of Articdive.
+      - Permission node towny.command.town.outpost.list
+        - Inherited from the towny.town.spawn.town node, no added permission required.
+      - List out a town's outposts, showing #, plot name (if it has one), world and coords.        
+    - Fix for non-entity deaths not charging death costs.
+v0.91.4.15:
+    - Fix adding towns to your nation when the town is in another world, when nation-proximity is set to 0.
+    - Fix rank issue for nations.
+v0.91.4.16:
+    - Fix /t outpost functionality.
+    - Language files bumped to 0.36
+    - New Config Option: global_town_settings.minimum_amount_of_residents_in_town_for_outpost - courtesy of Articdive
+      - Default: 0
+      - The amount of residents a town needs to claim an outpost.
+      - Setting this value to 0, means a town can claim outposts no matter how many residents they have.
+    - Fix for recent bug when using /town and not belonging to a town.
+    - Fix for bug involving mayors and adding outlaws.
+    - Fix for a bug when mayors jail residents.
+    - German translation improved courtesy of Wolf2323.
+    - Fix bug in reverting double chests.
+    - PlayerEnterTownEvent & PlayerLeaveTownEvent courtesy of Articdive.
+    - New API methods: resident.isAlliedWith(resident), town.isAlliedWith(town), nation.isAlliedWith(nation) courtesy of Articdive.
+v0.91.4.17:
+    - Fix bizarre bug with WildernessExplosionReverting causing cocoa beans to create blocks of dirt.
+    - Partial fix for WildernessExplosionReverting duping items when they're torches/levers/pressureplates/attachables.
+      - Not perfect still but better than it was.
+    - Updated italian.yml courtesy of Leomixer17.
+    - Updated french.yml courtesy of TheCalypso.
+v0.92.0.0:
+	- Bump version number.
+v0.92.0.1:
+    - Fix for PlayerLeaveTownEvent not firing.	
+v0.92.0.2:
+    - Fix for german.yml.
+    - New config option: economy.death.percentage_cap
+      - default: 0.0
+      - A maximum amount paid out by a resident from their personal holdings for percentage deaths.
+      - Set to 0 to have no cap.
+    - Language files bumped to 0.37
+    - Friendly fire message now displays.
+    - New Command: /ta tpplot {world} {x} {z}
+      - Requires towny.admin permission node
+      - teleports admin to the Towny chunk coordinates seen in the /towny map command.
+      - be careful with large numbers, you could be teleported farther than you think and end up generating chunks.
+    - New Permission Node: towny.command.town.unclaim.all
+      - Required to use /town unclaim all
+      - Is a child node of towny.command.town.unclaim.* , which is a child node of towny.command.town.* 
+    - New Config Option: notification.owner_shows_nation_title
+      - default: false
+      - If the notification.owner option should show name or {title} name. Titles are the ones granted by nation kings.
+    - Fix for the minimum_amount_of_residents_in_town_for_outpost option in the config breaking claiming normal, non-outpost chunks.
+      - Credit goes to Wolf2323 for finding and fixing this bug.
+    - Fix for mob spawner blocks not regenerating properly using the wilderness explosion revert.
+    - Give the admin info tool awareness of Doors.
+    - Fix door regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Give the admin info tool awareness of Signs.
+    - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Fix inventoryholders, piston, attachables, hanging regeneraton in preparation for 1.13's loss of Block IDs.
+    - Fix trees, staris and gates in regards to regeneration in the wild in prep for 1.13's loss of Block IDs. 
+    - Fix bad URL in config at protection.town_mob_removal_entities 
+    - Added TownPreClaimEvent by Abs0rbed. 
+      - This event can be called by other region plugins, to cancel Towny claims inside of them. 
+      - When the event is cancelled, Towny will stop short of charging for the townblock.
+    - Language files bumped to 0.38.
+      - Italian.yml updated by Leomixer17.
+>>>>>>> upstream/master

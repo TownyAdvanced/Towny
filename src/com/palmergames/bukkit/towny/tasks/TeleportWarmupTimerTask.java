@@ -7,12 +7,11 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-
-import org.bukkit.Chunk;
-import org.bukkit.Location;
 
 /**
  * @author dumptruckman
@@ -53,7 +52,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 		}
 	}
 
-	public static void requestTeleport(Resident resident, Location spawnLoc, double cost) {
+	public static void requestTeleport(Resident resident, Location spawnLoc) {
 
 		resident.setTeleportRequestTime();
 		resident.setTeleportDestination(spawnLoc);

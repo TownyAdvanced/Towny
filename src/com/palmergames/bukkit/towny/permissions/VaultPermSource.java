@@ -1,13 +1,11 @@
 package com.palmergames.bukkit.towny.permissions;
 
-import net.milkbowl.vault.chat.Chat;
-
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
+import net.milkbowl.vault.chat.Chat;
+import org.bukkit.entity.Player;
 
 public class VaultPermSource extends TownyPermissionSource {
 
@@ -30,18 +28,32 @@ public class VaultPermSource extends TownyPermissionSource {
 
 			// Pull prefix/suffix for both primary group and player
 			if ("prefix".equalsIgnoreCase(node)) {
-				if (!primaryGroup.isEmpty())
+				if (!primaryGroup.isEmpty()) {
 					groupPrefixSuffix = chat.getGroupPrefix(player.getWorld(), primaryGroup);
+				}
 				playerPrefixSuffix = chat.getPlayerPrefix(player);
-			}
-			else if ("suffix".equalsIgnoreCase(node)) {
-				if (!primaryGroup.isEmpty())
+			} else if ("suffix".equalsIgnoreCase(node)) {
+				if (!primaryGroup.isEmpty()) {
 					groupPrefixSuffix = chat.getGroupSuffix(player.getWorld(), primaryGroup);
+				}
 				playerPrefixSuffix = chat.getPlayerSuffix(player);
 			} else if (node == "userprefix") {
-				playerPrefixSuffix = chat.getPlayerPrefix(player);					
+				playerPrefixSuffix = chat.getPlayerPrefix(player);
 			} else if (node == "usersuffix") {
-				playerPrefixSuffix = chat.getPlayerSuffix(player);					
+				playerPrefixSuffix = chat.getPlayerSuffix(player);
+			} else if (node == "groupprefix") {
+				if (!primaryGroup.isEmpty()) {
+					groupPrefixSuffix = chat.getGroupPrefix(player.getWorld(), primaryGroup);
+				} else {
+					groupPrefixSuffix = "";
+				}
+
+			} else if (node == "groupsuffix") {
+				if (!primaryGroup.isEmpty()) {
+					groupPrefixSuffix = chat.getGroupSuffix(player.getWorld(), primaryGroup);
+				} else {
+					groupPrefixSuffix = "";
+				}
 			}
 
 			// Normalize
@@ -83,7 +95,11 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPlayerGroup(Player player) {
+<<<<<<< HEAD
 		String result = chat.getPrimaryGroup(player.getWorld().getName(), player.getName());
+=======
+		String result = chat.getPrimaryGroup(player.getWorld(), player.getName());
+>>>>>>> upstream/master
 		return result != null ? result : "";
 	}
 

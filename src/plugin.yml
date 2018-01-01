@@ -1,7 +1,12 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
+<<<<<<< HEAD
 version: 0.91.4.10
 authors: [Shade, FuzzeWuzze, ElgarL, LlmDl, Wowserman]
+=======
+version: 0.92.0.2
+author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
+>>>>>>> upstream/master
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
@@ -82,6 +87,12 @@ permissions:
         default: false
         children:
             towny.town.spawn.outpost: true
+
+    towny.town.spawn.outpost:
+        description: User is permitted to use /town outpost & /town outpost list
+        default: false
+        children:
+            towny.command.town.outpost.list: true
         
     towny.wild.*:
         description: User can build/destroy/switch/item_use in the wild.
@@ -117,6 +128,18 @@ permissions:
     # New command permissions (replaces many of the older permissions)
     #
     
+    # Res/Town/Nation lookup commands.
+    
+    towny.command.resident.otherresident:
+        description: User can look up other residents.
+        default: true
+    towny.command.town.othertown:
+        description: User can look up other towns.
+        default: true
+    towny.command.nation.othernation:
+        description: User can look up other nations.
+        default: true    
+    
     # Nation command permissions
     towny.command.nation.*:
         description: User can access all nation commands.
@@ -138,6 +161,7 @@ permissions:
             towny.command.nation.say: true
             towny.command.nation.add: true
             towny.command.nation.kick: true
+            towny.command.nation.othernation: true
 
     towny.command.nation.set.*:
         description: User can access any of the nation set commands.
@@ -181,15 +205,26 @@ permissions:
             towny.command.town.add: true
             towny.command.town.kick: true
             towny.command.town.claim.*: true
-            towny.command.town.unclaim: true
+            towny.command.town.unclaim.*: true            
             towny.command.town.online: true
             towny.command.town.say: true
             towny.command.town.plots: true
+<<<<<<< HEAD
             towny.command.town.evict: true
             towny.command.town.remove.*: true
+=======
+            towny.command.town.othertown: true
+    
+    towny.command.town.unclaim.*:
+        description: User can access all town unclaim related commands.
+        default: false
+        children:
+            towny.command.town.unclaim: true
+            towny.command.town.unclaim.all: true
+>>>>>>> upstream/master
             
     towny.command.town.claim.*:
-        description: User can access all town related commands.
+        description: User can access all town claim related commands.
         default: false
         children:
             towny.command.town.claim.town: true
@@ -292,6 +327,7 @@ permissions:
             towny.command.resident.set.*: true
             towny.command.resident.toggle.*: true
             towny.command.resident.friend: true
+            towny.command.resident.otherresident: true
 
     towny.command.resident.set.*:
         description: User can access the plot set command.
@@ -329,6 +365,15 @@ permissions:
             towny.command.townyadmin.purge: true
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.unclaim: true
+            towny.command.townyadmin.town.spawn: true
+            towny.command.townyadmin.town.spawn.freecharge: true
+
+    towny.command.townyadmin.town.spawn.*:
+        description: User can access town spawns
+        default: false
+        children:
+            towny.command.townyadmin.town.spawn: true
+            towny.command.townyadmin.town.spawn.freecharge: true
     
     towny.command.townyadmin.set.*:
         description: User can access the admin set commands.

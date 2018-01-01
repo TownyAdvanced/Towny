@@ -449,6 +449,31 @@ public enum ConfigNodes {
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
 			),
+<<<<<<< HEAD
+=======
+	GTOWN_MAX_RESIDENTS_PER_TOWN(
+			"global_town_settings.max_residents_per_town",
+			"0",
+			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
+			),
+	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
+			"global_town_settings.display_board_onlogin",
+			"true",
+			"# If Towny should show players the townboard when they login"
+	),
+	GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE(
+			"global_town_settings.outsiders_prevent_pvp_toggle",
+			"false",
+			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
+			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
+	),
+	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
+			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
+			"0",
+			"# The amount of residents a town needs to claim an outpost,",
+			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
+	),
+>>>>>>> upstream/master
 	PLUGIN(
 			"plugin",
 			"",
@@ -535,6 +560,11 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_questioner.deny",
 			"deny",
 			"# The command to refuse invitations."),
+	PLUGIN_QUESTIONER_COOLDOWN_TIME(
+			"plugin.interfacing.using_questioner.cooldowntime",
+			"0m",
+			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+			"# a player's first log in and when they can be invited to a town."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",
@@ -724,7 +754,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -747,7 +777,7 @@ public enum ConfigNodes {
 			"protection.town_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.htmll",
+			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie, Shulker",
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
@@ -878,6 +908,7 @@ public enum ConfigNodes {
 			"false", 
 			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
 			"# Could be seen as intrusive/distracting, so false by default."),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title","false","# If the notification.owner option should show name or {title} name.","# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",	
@@ -1076,6 +1107,7 @@ public enum ConfigNodes {
 
     ECO_DEATH("economy.death", "", ""),			
     ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
+    ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap","0.0","# A maximum amount paid out by a resident from their personal holdings for percentage deaths.", "# Set to 0 to have no cap."),
     ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
 	ECO_PRICE_DEATH("economy.death.price_death", "1.0", ""),
 	ECO_PRICE_DEATH_TOWN("economy.death.price_death_town", "0.0", ""),
@@ -1090,8 +1122,7 @@ public enum ConfigNodes {
 	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
 			"economy.banks.town_allow_withdrawls",
 			"true",
-			"# Set to true to allow withdrawls from town banks"),
-	ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawls from town banks"),	ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
@@ -1144,6 +1175,10 @@ public enum ConfigNodes {
 			"false",
 			"# Uses total amount of owned plots to determine upkeep instead of the town level (Number of residents)",
 			"# calculated by (number of claimed plots X price_town_upkeep)."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER(
+			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
+			"false",
+			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),	
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",

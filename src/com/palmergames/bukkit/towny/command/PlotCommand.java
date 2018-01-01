@@ -1,16 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -39,6 +28,16 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Send a list of all general towny plot help commands to player Command: /plot
@@ -291,7 +290,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-						player.sendMessage(ChatTools.formatTitle("/... set perm"));
+						player.sendMessage(ChatTools.formatTitle("/... set"));
+						player.sendMessage(ChatTools.formatCommand("", "set", "[plottype]", "Ex: Inn, Wilds, Farm, Embassy etc"));
+						player.sendMessage(ChatTools.formatCommand("", "set", "reset", "Removes a plot type"));
+						player.sendMessage(ChatTools.formatCommand("", "set", "[name]", "Names a plot"));
 						player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
 						player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
 						player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));

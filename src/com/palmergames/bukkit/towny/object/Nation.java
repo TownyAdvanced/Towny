@@ -4,15 +4,20 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+<<<<<<< HEAD
 
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+=======
+import org.bukkit.Bukkit;
+>>>>>>> upstream/master
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -20,6 +25,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Nation extends TownyEconomyObject implements ResidentList {
 
@@ -33,8 +39,14 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private double taxes;
 	private boolean neutral = false;
 	private String tag;
+<<<<<<< HEAD
 	private ItemStack banner = new ItemStack(Material.BANNER, 1);
 	
+=======
+	public UUID uuid;
+	private long registered;
+
+>>>>>>> upstream/master
 	public Nation(String name) {
 
 		setName(name);
@@ -48,6 +60,7 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
+		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
 		setChangedName(true);
 	}
 
@@ -147,6 +160,11 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	}
 
 	public boolean hasAlly(Nation nation) {
+
+		return getAllies().contains(nation);
+	}
+
+	public boolean IsAlliedWith(Nation nation) {
 
 		return getAllies().contains(nation);
 	}
@@ -564,5 +582,29 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return out;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public boolean hasValidUUID() {
+		if (uuid != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public long getRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(long registered) {
+		this.registered = registered;
 	}
 }

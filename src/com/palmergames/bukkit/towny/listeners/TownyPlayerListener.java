@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+<<<<<<< HEAD
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
@@ -31,6 +32,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
+=======
+>>>>>>> upstream/master
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -38,6 +41,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
+import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -62,6 +67,38 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Attachable;
+import org.bukkit.material.Door;
+import org.bukkit.material.Sign;
+
+import java.util.Arrays;
 
 /**
  * Handle events for all Player related events
@@ -331,13 +368,50 @@ public class TownyPlayerListener implements Listener {
 					if (event.getClickedBlock() instanceof Block) {
 
 						block = (Block) event.getClickedBlock();
-
-						TownyMessaging.sendMessage(player, Arrays.asList(
-								ChatTools.formatTitle("Block Info"),
-								ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
-								));
-
+						
+						if (block.getState().getData() instanceof Sign) {
+							Sign sign = (Sign) block.getState().getData();
+							BlockFace facing = sign.getFacing();
+							BlockFace attachedFace = sign.getAttachedFace();
+							
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Sign Info"),
+									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "Facing", "", facing.toString()),
+									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
+									));
+						} else if (block.getState().getData() instanceof Door) {
+							Door door = (Door) block.getState().getData();
+							BlockFace face = null;
+							boolean isOpen = false;
+							boolean isHinge = false;
+							if (door.isTopHalf()) {
+								isHinge = door.getHinge();
+								Door otherdoor = (Door) block.getRelative(BlockFace.DOWN).getState().getData();
+								isOpen = otherdoor.isOpen();
+								face = otherdoor.getFacing();										
+							} else {
+								isOpen = door.isOpen();
+								face = door.getFacing();
+								Door otherdoor = (Door) block.getRelative(BlockFace.UP).getState().getData();
+								isHinge=otherdoor.getHinge();
+							}
+							
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Door Info"),
+									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "isHingedOnRight", "", String.valueOf(isHinge)),
+									ChatTools.formatCommand("", "isOpen", "", String.valueOf(isOpen)),
+									ChatTools.formatCommand("", "getFacing", "", face.toString()),									
+									ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
+									));							
+						} else {
+							TownyMessaging.sendMessage(player, Arrays.asList(
+									ChatTools.formatTitle("Block Info"),
+									ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
+									ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
+									));
+						}
 						event.setCancelled(true);
 
 					}
@@ -692,7 +766,9 @@ public class TownyPlayerListener implements Listener {
 					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_jailed_players_no_teleport")));
 					event.setCancelled(true);
 					return;
-				}					
+				}
+				if (event.getCause() == TeleportCause.PLUGIN) 
+					return;
 				if ((event.getCause() == TeleportCause.ENDER_PEARL) && (TownySettings.JailAllowsEnderPearls())) {
 					
 				} else {
@@ -940,7 +1016,8 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
-		
+
+		PlayerMoveEvent pme = event.getMoveEvent();
 		Player player = event.getPlayer();		
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
@@ -960,20 +1037,44 @@ public class TownyPlayerListener implements Listener {
 					}
 				}
 			}
-			if (TownySettings.isNotificationUsingTitles())
+			if (TownySettings.isNotificationUsingTitles()) {
 				if (to.getTownBlock().hasTown()) {
 					try {
 						Town fromTown = from.getTownBlock().getTown();
 						if (!to.getTownBlock().getTown().equals(fromTown)) {
 							TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(to.getTownBlock().getTown()).toString());
 							return;
-							}
+						}
 
 					} catch (NotRegisteredException e) {
 						Town town = to.getTownBlock().getTown();
 						TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(town).toString());
 					}
+				}
 			}
+			try {
+				to.getTownBlock();
+				if (to.getTownBlock().hasTown()) { 
+					try {
+						Town fromTown = from.getTownBlock().getTown();
+						if (!to.getTownBlock().getTown().equals(fromTown)){
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
+							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
+						} else {
+							// Both are the same town, do nothing, no Event should fire here.
+						}
+					} catch (NotRegisteredException e) { // From Wilderness into Town.
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
+					}
+				} else {
+					if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
+					}
+				}
+			} catch (NotRegisteredException e) {
+				Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
+			}
+
 		} catch (NotRegisteredException e) {
 			// If not registered, it is most likely an NPC			
 		} catch (TownyException e) {
