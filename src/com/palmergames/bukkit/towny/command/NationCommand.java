@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,8 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-=======
->>>>>>> upstream/master
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
@@ -49,18 +46,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import javax.naming.InvalidNameException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -131,7 +117,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split.length == 0)
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+				Bukkit.getScheduler().runTaskAsynchronously(NationCommand.plugin, new Runnable() {
 					@Override
 				    public void run() {
 						try {
@@ -325,7 +311,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && ( (resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation) )  || !resident.hasTown() )) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+						Bukkit.getScheduler().runTaskAsynchronously(NationCommand.plugin, new Runnable() {
 							@Override
 						    public void run() {
 								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));

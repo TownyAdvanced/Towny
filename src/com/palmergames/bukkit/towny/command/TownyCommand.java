@@ -273,7 +273,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > output.size()) {
 			iMax = output.size();
 		}
-		List<String> warparticipantsformatted = new ArrayList();
+		List<String> warparticipantsformatted = new ArrayList<String>();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			String line = output.get(i);
 			warparticipantsformatted.add(line);

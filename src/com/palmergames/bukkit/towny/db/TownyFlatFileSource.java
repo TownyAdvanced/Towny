@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -31,8 +30,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
-=======
->>>>>>> upstream/master
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -54,33 +51,8 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.scheduler.BukkitTask;
 
-import javax.naming.InvalidNameException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 // TODO: Make sure the lack of a particular value doesn't error out the entire file
 
@@ -1822,11 +1794,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 		Long value = town.getRegistered();
-		if (value != null){
-			list.add("registered=" + town.getRegistered());
-		} else {
-			list.add("registered=" + 0);
-		}
+		list.add("registered=" + (value != null ? value:0));
+		
 
 		// Home Block
 		if (town.hasHomeBlock())
@@ -1910,23 +1879,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
 		// Peaceful
 		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
-<<<<<<< HEAD
 		
 		// Banner
 		list.add("banner=" + BukkitTools.getStringOfBanner(nation.getBanner()));
-=======
 		if (nation.hasValidUUID()){
 			list.add("uuid=" + nation.getUuid());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 		Long value = nation.getRegistered();
-		if (value != null){
-			list.add("registered=" + nation.getRegistered());
-		} else {
-			list.add("registered=" + 0);
-		}
->>>>>>> upstream/master
+		list.add("registered=" + (value != null ? value:0));
+
+		
 
 		/*
 		 *  Make sure we only save in async

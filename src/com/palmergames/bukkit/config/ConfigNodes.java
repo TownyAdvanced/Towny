@@ -449,8 +449,6 @@ public enum ConfigNodes {
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
 			),
-<<<<<<< HEAD
-=======
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
 			"0",
@@ -473,7 +471,6 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
->>>>>>> upstream/master
 	PLUGIN(
 			"plugin",
 			"",
@@ -685,6 +682,10 @@ public enum ConfigNodes {
 			"true",
 			"# Should Resident Names be enhanced?"),
 	// TODO: Have a better way of using lists of strings in here.
+	CHAT_ENHANCING_KEYWORDS_RESIDENT_NICKNAMES(
+			"chat_enhancing.keywords.resident_names.nicknames",
+			"true",
+			"# Should Resident's nicknames be enhanced too?"),
 	CHAT_ENHANCING_KEYWORDS_RESIDENT_COMMANDS(
 			"chat_enhancing.keywords.resident_names.commands",
 			"/towny:resident %context%",

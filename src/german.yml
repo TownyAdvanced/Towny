@@ -1,9 +1,5 @@
 name: Towny
-<<<<<<< HEAD
-version: 0.33
-=======
 version: 0.38
->>>>>>> upstream/master
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'

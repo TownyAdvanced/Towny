@@ -36,19 +36,25 @@ public class EnhancedChatListener implements Listener {
 		if (TownySettings.isEnhancedChatEnabled() == false)
 			return;
 
-		if (TownySettings.isEnhancedChatResidentNamesEnabled())
+		if (TownySettings.isEnhancedChatResidentNamesEnabled()) {
+			final boolean nicks = TownySettings.isEnhancedChatResidentNicknamesEnabled();
+			
 			for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
-				if (event.containsCustomKeyword(resident.getName()) == false)
-					continue;
-
+				if (event.containsCustomKeyword(resident.getName()) == false) {
+					@SuppressWarnings("deprecation")
+					Player player = Bukkit.getPlayer(resident.getName());
+					if (!nicks || player == null || !event.containsCustomKeyword(player.getDisplayName()))
+						continue;
+					else event.setKeyword(player.getDisplayName());;
+				} else event.setKeyword(resident.getName());
+					
 				event.setID(RESIDENT_ID);
 
 				event.setContext(resident.getName());
 
-				event.setKeyword(resident.getName());
-
 				return;
 			}
+		}
 
 		if (TownySettings.isEnhancedChatResidentNamesEnabled())
 			for (Player player : Bukkit.getOnlinePlayers()) {

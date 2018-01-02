@@ -255,7 +255,7 @@ public class ChatTools {
 	 * @author - Articdive
 	 */
 	public static String[] formatList(String title, String subject, List<String> list, String page) {
-		List<String> output = new ArrayList();
+		List<String> output = new ArrayList<String>();
 		output.add(0, formatTitle(title));
 		output.add(1, subject);
 		output.addAll(list);

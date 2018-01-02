@@ -1,9 +1,6 @@
 name: Towny
-<<<<<<< HEAD
 version: 0.33
-=======
 version: 0.38
->>>>>>> upstream/master
 language: spanish
 author: Alvarote1998, Beelzebu, Seruhio
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -562,8 +559,7 @@ msg_nation_town_moved_their_homeblock_too_far: 'El spawn de %s fue movido demasi
 
 # Added in 0.33
 msg_err_invalid_radius_number: '&cRadio inválido. Usa un %s o menos.'
-<<<<<<< HEAD
-=======
+
 
 # Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'
@@ -582,4 +578,3 @@ msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
 
 # Added in 0.38
 msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
->>>>>>> upstream/master

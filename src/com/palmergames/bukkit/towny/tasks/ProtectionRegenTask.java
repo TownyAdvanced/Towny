@@ -334,6 +334,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 		return state;
 	}
+	
+	public BlockState getAltState() {
+		return altState;
+	}
 
 	/**
 	 * @return the taskId

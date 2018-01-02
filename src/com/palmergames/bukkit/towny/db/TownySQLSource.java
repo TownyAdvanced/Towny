@@ -44,11 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-<<<<<<< HEAD
-import java.util.Map.Entry;
-=======
 import java.util.UUID;
->>>>>>> upstream/master
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TownySQLSource extends TownyFlatFileSource {
@@ -732,210 +729,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 				/*
 				 * Attempt these for older databases.
 				 */
-<<<<<<< HEAD
-				try {
-
-					line = rs.getString("townBlocks");
-					if ((line != null) && (!line.isEmpty()))
-						utilLoadTownBlocks(line, null, resident);
-
-				} catch (SQLException e) {
-				}
-
-				s.close();
-				return true;
-			}
-			return false;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident unknown error");
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean loadTown(Town town) {
-
-		String line;
-		String[] tokens;
-		TownyMessaging.sendDebugMsg("Loading town " + town.getName());
-		if (!getContext())
-			return false;
-
-		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name='" + town.getName() + "'");
-			String search;
-			
-			while (rs.next()) {
-
-				line = rs.getString("residents");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident resident = getResident(token);
-							if (resident != null)
-								town.addResident(resident);
-						}
-					}
-				}
-				
-				town.setMayor(getResident(rs.getString("mayor")));
-				// line = rs.getString("assistants");
-				// if (line != null) {
-				// tokens = line.split(",");
-				// for (String token : tokens) {
-				// if (!token.isEmpty()) {
-				// Resident assistant = getResident(token);
-				// if ((assistant != null) && (town.hasResident(assistant)))
-				// town.addAssistant(assistant);
-				// }
-				// }
-				// }
-				town.setTownBoard(rs.getString("townBoard"));
-				line = rs.getString("tag");
-				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
-				town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-				town.setBonusBlocks(rs.getInt("bonus"));
-				town.setTaxPercentage(rs.getBoolean("taxpercent"));
-				town.setTaxes(rs.getFloat("taxes"));
-				town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
-				town.setPlotPrice(rs.getFloat("plotPrice"));
-				town.setPlotTax(rs.getFloat("plotTax"));
-				town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
-				town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
-				town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
-				town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
-				town.setOpen(rs.getBoolean("open"));
-				town.setPublic(rs.getBoolean("public"));
-				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
-				town.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
-
-				town.setPurchasedBlocks(rs.getInt("purchased"));
-
-				line = rs.getString("homeBlock");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					if (tokens.length == 3)
-						try {
-							TownyWorld world = getWorld(tokens[0]);
-
-							try {
-								int x = Integer.parseInt(tokens[1]);
-								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = world.getTownBlock(x, z);
-								town.forceSetHomeBlock(homeBlock);
-							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-							}
-
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-						}
-				}
-
-				line = rs.getString("spawn");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					if (tokens.length >= 4)
-						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							town.forceSetSpawn(loc);
-						} catch (NumberFormatException e) {
-						} catch (NotRegisteredException e) {
-						} catch (NullPointerException e) {
-					}
-				}
-				// Load outpost spawns
-				line = rs.getString("outpostSpawns");
-				if (line != null) {
-					String[] outposts = line.split(";");
-					for (String spawn : outposts) {
-						search = (line.contains("#")) ? "#" : ",";
-						tokens = spawn.split(search);
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddOutpostSpawn(loc);
-							} catch (NumberFormatException e) {
-							} catch (NotRegisteredException e) {
-							} catch (NullPointerException e) {
-							}
-					}
-				}
-				// Load jail spawns
-				line = rs.getString("jailSpawns");
-				if (line != null) {
-					String[] jails = line.split(";");
-					for (String spawn : jails) {
-						search = (line.contains("#")) ? "#" : ",";
-						tokens = spawn.split(search);
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddJailSpawn(loc);
-							} catch (NumberFormatException e) {
-							} catch (NotRegisteredException e) {
-							} catch (NullPointerException e) {
-							}
-					}
-				}
-				line = rs.getString("outlaws");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident resident = getResident(token);
-							if (resident != null)
-								town.addOutlaw(resident);
-						}
-					}
-				}
-=======
                 try {
 
                     line = rs.getString("townBlocks");
@@ -1022,6 +815,46 @@ public class TownySQLSource extends TownyFlatFileSource {
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+                
+                town.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
+
+				line = rs.getString("warps");
+				if (line != null) {
+					String[] warps = line.split(";");
+					for (String warp : warps) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = warp.split(search);
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
+								
+								/*
+								 * 0 world
+								 * 1 x
+								 * 2 y
+								 * 3 z
+								 * 4 pitch
+								 * 5 yaw
+								 * 6 name
+								 */
+								
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
+								}
+								town.forceAddWarp(tokens[6], loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
+				
+				town.setWarpMaxCount(rs.getInt("warpCount"));
 
                 town.setPurchasedBlocks(rs.getInt("purchased"));
 
@@ -1144,376 +977,11 @@ public class TownySQLSource extends TownyFlatFileSource {
                 }  catch (NullPointerException ee) {
                     town.setUuid(UUID.randomUUID());
                 }
->>>>>>> upstream/master
 
-				line = rs.getString("warps");
-				if (line != null) {
-					String[] warps = line.split(";");
-					for (String warp : warps) {
-						search = (line.contains("#")) ? "#" : ",";
-						tokens = warp.split(search);
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-								
-								/*
-								 * 0 world
-								 * 1 x
-								 * 2 y
-								 * 3 z
-								 * 4 pitch
-								 * 5 yaw
-								 * 6 name
-								 */
-								
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddWarp(tokens[6], loc);
-							} catch (NumberFormatException e) {
-							} catch (NotRegisteredException e) {
-							} catch (NullPointerException e) {
-							}
-					}
-				}
 
 				/*
 				 * Attempt these for older databases.
 				 */
-<<<<<<< HEAD
-				try {
-
-					line = rs.getString("townBlocks");
-					if (line != null)
-						utilLoadTownBlocks(line, town, null);
-
-				} catch (SQLException e) {
-				}
-
-				s.close();
-				return true;
-			}
-			s.close();
-			return false;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town unknown Error - ");
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadNation(Nation nation) {
-
-		String line = "";
-		String[] tokens;
-		TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
-		if (!getContext())
-			return false;
-		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS WHERE name='" + nation.getName() + "'");
-			String search;
-			
-			while (rs.next()) {
-				line = rs.getString("towns");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Town town = getTown(token);
-							if (town != null)
-								nation.addTown(town);
-						}
-					}
-				}
-				nation.setCapital(getTown(rs.getString("capital")));
-				// line = rs.getString("assistants");
-				// if (line != null) {
-				// tokens = line.split(",");
-				// for (String token : tokens) {
-				// if (!token.isEmpty()) {
-				// Resident assistant = getResident(token);
-				// if (assistant != null)
-				// nation.addAssistant(assistant);
-				// }
-				// }
-				// }
-
-				nation.setTag(rs.getString("tag"));
-
-				line = rs.getString("allies");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Nation friend = getNation(token);
-							if (friend != null)
-								nation.addAlly(friend); // ("ally", friend);
-						}
-					}
-				}
-
-				line = rs.getString("enemies");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Nation enemy = getNation(token);
-							if (enemy != null)
-								nation.addEnemy(enemy); // ("enemy", enemy);
-						}
-					}
-				}
-				nation.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
-				nation.setTaxes(rs.getDouble("taxes"));
-				nation.setNeutral(rs.getBoolean("neutral"));
-			}
-
-			s.close();
-			return true;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation unknown error - ");
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public boolean loadWorld(TownyWorld world) {
-
-		String line = "";
-		Boolean result = false;
-		Long resultLong;
-		String[] tokens;
-		TownyMessaging.sendDebugMsg("Loading world " + world.getName());
-		if (!getContext())
-			return false;
-		try {
-			Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS WHERE name='" + world.getName() + "'");
-			String search;
-			
-			while (rs.next()) {
-				line = rs.getString("towns");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Town town = getTown(token);
-							if (town != null) {
-								town.setWorld(world);
-							}
-						}
-					}
-				}
-
-				result = rs.getBoolean("claimable");
-				if (result != null)
-					try {
-						world.setClaimable(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("pvp");
-				if (result != null)
-					try {
-						world.setPVP(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("forcepvp");
-				if (result != null)
-					try {
-						world.setForcePVP(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("forcetownmobs");
-				if (result != null)
-					try {
-						world.setForceTownMobs(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("worldmobs");
-				if (result != null)
-					try {
-						world.setWorldMobs(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("firespread");
-				if (result != null)
-					try {
-						world.setFire(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("forcefirespread");
-				if (result != null)
-					try {
-						world.setForceFire(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("explosions");
-				if (result != null)
-					try {
-						world.setExpl(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("forceexplosions");
-				if (result != null)
-					try {
-						world.setForceExpl(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("endermanprotect");
-				if (result != null)
-					try {
-						world.setEndermanProtect(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("disableplayertrample");
-				if (result != null)
-					try {
-						world.setDisablePlayerTrample(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("disablecreaturetrample");
-				if (result != null)
-					try {
-						world.setDisableCreatureTrample(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("unclaimedZoneBuild");
-				if (result != null)
-					try {
-						world.setUnclaimedZoneBuild(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("unclaimedZoneDestroy");
-				if (result != null)
-					try {
-						world.setUnclaimedZoneDestroy(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("unclaimedZoneSwitch");
-				if (result != null)
-					try {
-						world.setUnclaimedZoneSwitch(result);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("unclaimedZoneItemUse");
-				if (result != null)
-					try {
-						world.setUnclaimedZoneItemUse(result);
-					} catch (Exception e) {
-					}
-
-				line = rs.getString("unclaimedZoneName");
-				if (result != null)
-					try {
-						world.setUnclaimedZoneName(line);
-					} catch (Exception e) {
-					}
-
-				line = rs.getString("unclaimedZoneIgnoreIds");
-				if (line != null)
-					try {
-						List<String> mats = new ArrayList<String>();
-						search = (line.contains("#")) ? "#" : ",";
-						for (String split : line.split(search))
-							if (!split.isEmpty())
-								try {
-									int id = Integer.parseInt(split);
-
-									mats.add(BukkitTools.getMaterial(id).name());
-
-								} catch (NumberFormatException e) {
-									mats.add(split);
-								}
-						world.setUnclaimedZoneIgnore(mats);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("usingPlotManagementDelete");
-				if (result != null)
-					try {
-						world.setUsingPlotManagementDelete(result);
-					} catch (Exception e) {
-					}
-
-				line = rs.getString("plotManagementDeleteIds");
-				if (line != null)
-					try {
-						List<String> mats = new ArrayList<String>();
-						search = (line.contains("#")) ? "#" : ",";
-						for (String split : line.split(search))
-							if (!split.isEmpty())
-								try {
-									int id = Integer.parseInt(split);
-
-									mats.add(BukkitTools.getMaterial(id).name());
-
-								} catch (NumberFormatException e) {
-									mats.add(split);
-								}
-						world.setPlotManagementDeleteIds(mats);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("usingPlotManagementMayorDelete");
-				if (result != null)
-					try {
-						world.setUsingPlotManagementMayorDelete(result);
-					} catch (Exception e) {
-					}
-
-				line = rs.getString("plotManagementMayorDelete");
-				if (line != null)
-					try {
-						List<String> materials = new ArrayList<String>();
-						search = (line.contains("#")) ? "#" : ",";
-						for (String split : line.split(search))
-							if (!split.isEmpty())
-								try {
-									materials.add(split.toUpperCase().trim());
-								} catch (NumberFormatException e) {
-								}
-						world.setPlotManagementMayorDelete(materials);
-					} catch (Exception e) {
-					}
-
-				result = rs.getBoolean("usingPlotManagementRevert");
-				if (result != null)
-					try {
-						world.setUsingPlotManagementRevert(result);
-					} catch (Exception e) {
-					}
-=======
                 try {
 
                     line = rs.getString("townBlocks");
@@ -1579,6 +1047,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
                 nation.setCapital(getTown(rs.getString("capital")));
+                nation.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
                 // line = rs.getString("assistants");
                 // if (line != null) {
                 // tokens = line.split(",");
@@ -1875,7 +1344,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                         world.setUsingPlotManagementRevert(result);
                     } catch (Exception e) {
                     }
->>>>>>> upstream/master
 
 				/*
 				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
@@ -2076,328 +1544,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 	 * Save individual towny objects
 	 */
 
-<<<<<<< HEAD
-	@Override
-	public synchronized boolean saveResident(Resident resident) {
-
-		TownyMessaging.sendDebugMsg("Saving Resident");
-		try {
-			HashMap<String, Object> res_hm = new HashMap<String, Object>();
-			res_hm.put("name", resident.getName());
-			res_hm.put("lastOnline", resident.getLastOnline());
-			res_hm.put("registered", resident.getRegistered());
-			res_hm.put("isNPC", resident.isNPC());
-			res_hm.put("isJailed", resident.isJailed());
-			res_hm.put("JailSpawn", resident.getJailSpawn());
-			res_hm.put("JailTown", resident.getJailTown());
-			res_hm.put("title", resident.getTitle());
-			res_hm.put("surname", resident.getSurname());
-			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
-			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
-			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
-			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
-			//res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
-			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-
-			UpdateDB("RESIDENTS", res_hm, Arrays.asList("name"));
-			return true;
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveTown(Town town) {
-
-		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
-		try {
-			HashMap<String, Object> twn_hm = new HashMap<String, Object>();
-			twn_hm.put("name", town.getName());
-			twn_hm.put("residents", StringMgmt.join(town.getResidents(), "#"));
-			twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
-			twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
-			twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
-			twn_hm.put("assistants", StringMgmt.join(town.getAssistants(), "#"));
-			twn_hm.put("townBoard", town.getTownBoard());
-			twn_hm.put("tag", town.getTag());
-			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
-			twn_hm.put("bonus", town.getBonusBlocks());
-			twn_hm.put("purchased", town.getPurchasedBlocks());
-			twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
-			twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
-			twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());
-			twn_hm.put("embassyPlotTax", town.getEmbassyPlotTax());
-			twn_hm.put("plotPrice", town.getPlotPrice());
-			twn_hm.put("plotTax", town.getPlotTax());
-			twn_hm.put("taxes", town.getTaxes());
-			twn_hm.put("hasUpkeep", town.hasUpkeep());
-			twn_hm.put("taxpercent", town.isTaxPercentage());
-			twn_hm.put("open", town.isOpen());
-			twn_hm.put("public", town.isPublic());
-			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
-
-			//twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
-			twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + Integer.toString(town.getHomeBlock().getX()) + "#" + Integer.toString(town.getHomeBlock().getZ()) : "");
-			twn_hm.put("spawn", town.hasSpawn() ? town.getSpawn().getWorld().getName() + "#" + Double.toString(town.getSpawn().getX()) + "#" + Double.toString(town.getSpawn().getY()) + "#" + Double.toString(town.getSpawn().getZ()) + "#" + Float.toString(town.getSpawn().getPitch()) + "#" + Float.toString(town.getSpawn().getYaw()) : "");
-			// Outpost Spawns
-			String outpostArray = "";
-			if (town.hasOutpostSpawn())
-				for (Location spawn : new ArrayList<Location>(town.getAllOutpostSpawns())) {
-					outpostArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
-				}
-			twn_hm.put("outpostSpawns", outpostArray);			
-			String jailArray = "";
-			if (town.hasJailSpawn()) 		
-				for (Location spawn : new ArrayList<Location>(town.getAllJailSpawns())) {
-					jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
-				}				
-			twn_hm.put("jailSpawns", jailArray);
-			// Warp Spawns
-			if (town.hasWarps()) {
-				String warpArray = "";
-				for (Entry<String, Location> warp : new Hashtable<String, Location>(town.getWarps()).entrySet()) {
-					warpArray += (warp.getValue().getWorld().getName() + "," + Double.toString(warp.getValue().getX()) + ","
-							+ Double.toString(warp.getValue().getY()) + "," + Double.toString(warp.getValue().getZ()) + ","
-							+ Float.toString(warp.getValue().getPitch()) + "," + Float.toString(warp.getValue().getYaw())
-							+ "," + warp.getKey() + ";");
-				}
-				twn_hm.put("warps",warpArray);
-			}
-			// Banner
-			twn_hm.put("banner", BukkitTools.getStringOfBanner(town.getBanner()));
-
-			UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
-			return true;
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveNation(Nation nation) {
-
-		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
-		try {
-			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
-			nat_hm.put("name", nation.getName());
-			nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
-			nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
-			nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
-			nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
-			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
-			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-			nat_hm.put("taxes", nation.getTaxes());
-			nat_hm.put("neutral", nation.isNeutral());
-			nat_hm.put("banner", BukkitTools.getStringOfBanner(nation.getBanner()));
-
-			UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveWorld(TownyWorld world) {
-
-		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
-		try {
-			HashMap<String, Object> nat_hm = new HashMap<String, Object>();
-
-			nat_hm.put("name", world.getName());
-
-			// Towns
-			nat_hm.put("towns", StringMgmt.join(world.getTowns(), "#"));
-			// PvP
-			nat_hm.put("pvp", world.isPVP());
-			// Force PvP
-			nat_hm.put("forcepvp", world.isForcePVP());
-			// Claimable
-			nat_hm.put("claimable", world.isClaimable());
-			// has monster spawns
-			nat_hm.put("worldmobs", world.hasWorldMobs());
-			// force town mob spawns
-			nat_hm.put("forcetownmobs", world.isForceTownMobs());
-			// has firespread enabled
-			nat_hm.put("firespread", world.isFire());
-			nat_hm.put("forcefirespread", world.isForceFire());
-			// has explosions enabled
-			nat_hm.put("explosions", world.isExpl());
-			nat_hm.put("forceexplosions", world.isForceExpl());
-			// Enderman block protection
-			nat_hm.put("endermanprotect", world.isEndermanProtect());
-			// PlayerTrample
-			nat_hm.put("disableplayertrample", world.isDisablePlayerTrample());
-			// CreatureTrample
-			nat_hm.put("disablecreaturetrample", world.isDisableCreatureTrample());
-
-			// Unclaimed Zone Build
-			nat_hm.put("unclaimedZoneBuild", world.getUnclaimedZoneBuild());
-			// Unclaimed Zone Destroy
-			nat_hm.put("unclaimedZoneDestroy", world.getUnclaimedZoneDestroy());
-			// Unclaimed Zone Switch
-			nat_hm.put("unclaimedZoneSwitch", world.getUnclaimedZoneSwitch());
-			// Unclaimed Zone Item Use
-			nat_hm.put("unclaimedZoneItemUse", world.getUnclaimedZoneItemUse());
-			// Unclaimed Zone Name
-			if (world.getUnclaimedZoneName() != null)
-				nat_hm.put("unclaimedZoneName", world.getUnclaimedZoneName());
-
-			// Unclaimed Zone Ignore Ids
-			if (world.getUnclaimedZoneIgnoreMaterials() != null)
-				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), "#"));
-
-			// Using PlotManagement Delete
-			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
-			// Plot Management Delete Ids
-			if (world.getPlotManagementDeleteIds() != null)
-				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), "#"));
-
-			// Using PlotManagement Mayor Delete
-			nat_hm.put("usingPlotManagementMayorDelete", world.isUsingPlotManagementMayorDelete());
-			// Plot Management Mayor Delete
-			if (world.getPlotManagementMayorDelete() != null)
-				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), "#"));
-
-			// Using PlotManagement Revert
-			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
-			// Using PlotManagement Revert Speed
-			nat_hm.put("plotManagementRevertSpeed", world.getPlotManagementRevertSpeed());
-
-			// Plot Management Ignore Ids
-			if (world.getPlotManagementIgnoreIds() != null)
-				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
-
-			// Using PlotManagement Wild Regen
-			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildRevert());
-
-			// Wilderness Explosion Protection entities
-			if (world.getPlotManagementWildRevertEntities() != null)
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
-
-			// Using PlotManagement Wild Regen Delay
-			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
-
-			// Using Towny
-			nat_hm.put("usingTowny", world.isUsingTowny());
-
-			UpdateDB("WORLDS", nat_hm, Arrays.asList("name"));
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save world unknown error (" + world.getName() + ")");
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public synchronized boolean saveTownBlock(TownBlock townBlock) {
-
-		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x" + townBlock.getZ());
-		try {
-			HashMap<String, Object> tb_hm = new HashMap<String, Object>();
-			tb_hm.put("world", townBlock.getWorld().getName());
-			tb_hm.put("x", townBlock.getX());
-			tb_hm.put("z", townBlock.getZ());
-			tb_hm.put("name", townBlock.getName());
-			tb_hm.put("price", townBlock.getPlotPrice());
-			tb_hm.put("town", townBlock.getTown().getName());
-			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResident().getName() : "");
-			tb_hm.put("type", townBlock.getType().getId());
-			tb_hm.put("outpost", townBlock.isOutpost());
-			tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
-			tb_hm.put("locked", townBlock.isLocked());
-			tb_hm.put("changed", townBlock.isChanged());
-
-			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
-
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
-			e.printStackTrace();
-		}
-		return true;
-	}
-
-	@Override
-	public void deleteResident(Resident resident) {
-
-		HashMap<String, Object> res_hm = new HashMap<String, Object>();
-		res_hm.put("name", resident.getName());
-		DeleteDB("RESIDENTS", res_hm);
-	}
-
-	@Override
-	public void deleteTown(Town town) {
-
-		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
-		twn_hm.put("name", town.getName());
-		DeleteDB("TOWNS", twn_hm);
-	}
-
-	@Override
-	public void deleteNation(Nation nation) {
-
-		HashMap<String, Object> nat_hm = new HashMap<String, Object>();
-		nat_hm.put("name", nation.getName());
-		DeleteDB("NATIONS", nat_hm);
-	}
-
-	@Override
-	public void deleteTownBlock(TownBlock townBlock) {
-
-		HashMap<String, Object> twn_hm = new HashMap<String, Object>();
-		twn_hm.put("world", townBlock.getWorld().getName());
-		twn_hm.put("x", townBlock.getX());
-		twn_hm.put("z", townBlock.getZ());
-		DeleteDB("TOWNBLOCKS", twn_hm);
-
-	}
-
-	@Override
-	public synchronized void backup() throws IOException {
-
-		TownyMessaging.sendMsg("Performing backup");
-		TownyMessaging.sendMsg("***** Warning *****");
-		TownyMessaging.sendMsg("***** Only Snapshots and Regen files will be backed up");
-		TownyMessaging.sendMsg("***** Make sure you schedule a backup in MySQL too!!!");
-		String backupType = TownySettings.getFlatFileBackupType();
-		if (!backupType.equalsIgnoreCase("none")) {
-
-			TownyLogger.shutDown();
-
-			long t = System.currentTimeMillis();
-			String newBackupFolder = rootFolder + FileMgmt.fileSeparator() + "backup" + FileMgmt.fileSeparator() + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + Long.toString(t);
-			FileMgmt.checkFolders(new String[] { rootFolder,
-					rootFolder + FileMgmt.fileSeparator() + "backup" });
-			if (backupType.equalsIgnoreCase("folder")) {
-				FileMgmt.checkFolders(new String[] { newBackupFolder });
-				FileMgmt.copyDirectory(new File(rootFolder + dataFolder), new File(newBackupFolder));
-				FileMgmt.copyDirectory(new File(rootFolder + logFolder), new File(newBackupFolder));
-				FileMgmt.copyDirectory(new File(rootFolder + settingsFolder), new File(newBackupFolder));
-			} else if (backupType.equalsIgnoreCase("zip"))
-				FileMgmt.zipDirectories(new File[] {
-						new File(rootFolder + dataFolder),
-						new File(rootFolder + logFolder),
-						new File(rootFolder + settingsFolder) }, new File(newBackupFolder + ".zip"));
-			else {
-				plugin.setupLogger();
-				throw new IOException("[Towny] Unsupported flatfile backup type (" + backupType + ")");
-			}
-			plugin.setupLogger();
-		}
-	}
-
-	@Override
-	public boolean cleanup() {
-=======
     @Override
     public synchronized boolean saveResident(Resident resident) {
 
@@ -2475,17 +1621,23 @@ public class TownySQLSource extends TownyFlatFileSource {
                     jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
                 }
             twn_hm.put("jailSpawns", jailArray);
-            if (town.hasValidUUID()){
-                twn_hm.put("uuid", town.getUuid());
-            } else {
-                twn_hm.put("uuid", UUID.randomUUID());
-            }
-            Long value = town.getRegistered();
-            if (value != null){
-                twn_hm.put("registered",town.getRegistered());
-            } else {
-                twn_hm.put("registered", 0);
-            }
+            twn_hm.put("uuid", town.hasValidUUID() ? town.getUuid():UUID.randomUUID());
+            twn_hm.put("registered", (Long) town.getRegistered() != null ? (Long) town.getRegistered():0);
+            
+			// Warp Spawns
+			if (town.hasWarps()) {
+				String warpArray = "";
+				for (Entry<String, Location> warp : new Hashtable<String, Location>(town.getWarps()).entrySet()) {
+					warpArray += (warp.getValue().getWorld().getName() + "," + Double.toString(warp.getValue().getX()) + ","
+							+ Double.toString(warp.getValue().getY()) + "," + Double.toString(warp.getValue().getZ()) + ","
+							+ Float.toString(warp.getValue().getPitch()) + "," + Float.toString(warp.getValue().getYaw())
+							+ "," + warp.getKey() + ";");
+				}
+				twn_hm.put("warps",warpArray);
+			}
+			twn_hm.put("warpCount", town.getWarpMaxCount());
+			// Banner
+			twn_hm.put("banner", BukkitTools.getStringOfBanner(town.getBanner()));
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -2512,17 +1664,9 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("neutral", nation.isNeutral());
-            if (nation.hasValidUUID()){
-                nat_hm.put("uuid", nation.getUuid());
-            } else {
-                nat_hm.put("uuid", UUID.randomUUID());
-            }
-            Long value = nation.getRegistered();
-            if (value != null){
-                nat_hm.put("registered",nation.getRegistered());
-            } else {
-                nat_hm.put("registered", 0);
-            }
+            nat_hm.put("uuid", nation.hasValidUUID() ? nation.getUuid():UUID.randomUUID());
+            nat_hm.put("registered", (Long) nation.getRegistered() != null ? (Long) nation.getRegistered():0);
+			nat_hm.put("banner", BukkitTools.getStringOfBanner(nation.getBanner()));
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 
@@ -2726,7 +1870,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 
     @Override
     public boolean cleanup() {
->>>>>>> upstream/master
 
 		/*
 		 *  Attempt to get a database connection.

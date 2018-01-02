@@ -25,11 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Map.Entry;
-=======
 import java.util.UUID;
->>>>>>> upstream/master
 
 public class Town extends TownBlockOwner implements ResidentList {
 
@@ -52,7 +49,6 @@ public class Town extends TownBlockOwner implements ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
-<<<<<<< HEAD
 	private ItemStack banner = new ItemStack(Material.BANNER, 1);
 	private Hashtable<String, Location> warps = new Hashtable<String, Location>();
 	
@@ -100,11 +96,9 @@ public class Town extends TownBlockOwner implements ResidentList {
 		banner = newBanner;
 	}
 	
-=======
 	private UUID uuid;
 	private long registered;
 
->>>>>>> upstream/master
 	public Town(String name) {
 
 		setName(name);

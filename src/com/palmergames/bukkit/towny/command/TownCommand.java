@@ -50,12 +50,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-<<<<<<< HEAD
 import org.bukkit.Material;
-=======
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
->>>>>>> upstream/master
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -125,17 +122,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-<<<<<<< HEAD
-	@SuppressWarnings("deprecation")
-	private void parseTownCommand(Player player, String[] split) {
-=======
+
 	private void parseTownCommand(final Player player, String[] split) {
->>>>>>> upstream/master
 
 		try {
 
 			if (split.length == 0) {
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+				Bukkit.getScheduler().runTaskAsynchronously(TownCommand.plugin, new Runnable() {
 					@Override
 				    public void run() {
 						try {
@@ -225,6 +218,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException("Missing a Target's Name.");
 				}
 				
+				@SuppressWarnings("deprecation")
 				Player target = Bukkit.getPlayer(split[1]);
 
 				if (target==null) {
@@ -396,7 +390,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
-								List<String> outputs = new ArrayList();
+								List<String> outputs = new ArrayList<String>();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
 									Location outpost = outposts.get(i);
 									String output;
@@ -555,7 +549,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != town) || (!resident.hasTown()) ) ) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+						Bukkit.getScheduler().runTaskAsynchronously(TownCommand.plugin, new Runnable() {
 							@Override
 						    public void run() {
 								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
@@ -2211,15 +2205,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
 						invited.remove(newMember);
-<<<<<<< HEAD
-=======
 					} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown() ));
 						invited.remove(newMember);
 					} else if (TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_resident_doesnt_meet_invite_cooldown"), newMember));
 						invited.remove(newMember);
->>>>>>> upstream/master
 					} else {
 						town.addResidentCheck(newMember);
 						townInviteResident(town, newMember);

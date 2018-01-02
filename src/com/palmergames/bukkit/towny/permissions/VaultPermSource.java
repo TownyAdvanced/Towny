@@ -95,11 +95,7 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPlayerGroup(Player player) {
-<<<<<<< HEAD
-		String result = chat.getPrimaryGroup(player.getWorld().getName(), player.getName());
-=======
 		String result = chat.getPrimaryGroup(player.getWorld(), player.getName());
->>>>>>> upstream/master
 		return result != null ? result : "";
 	}
 

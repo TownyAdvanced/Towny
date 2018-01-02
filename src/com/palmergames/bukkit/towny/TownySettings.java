@@ -2235,6 +2235,10 @@ public class TownySettings {
 
 	}
 	
+	public static boolean isEnhancedChatResidentNicknamesEnabled() {
+		return getBoolean(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_NICKNAMES);
+	}
+	
 	public static List<String> getEnhancedChatResidentDescription() {
 		return getStrArr(ConfigNodes.CHAT_ENHANCING_KEYWORDS_RESIDENT_DESCRIPTION);
 	}
@@ -2427,6 +2431,10 @@ public class TownySettings {
 
 	public static int getAmountOfResidentsForTown() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
+	}
+
+	public static int getMaxResidentsPerTown() {
+		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 	
 }

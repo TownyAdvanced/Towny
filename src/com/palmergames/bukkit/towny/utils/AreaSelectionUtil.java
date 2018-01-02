@@ -1,11 +1,8 @@
 package com.palmergames.bukkit.towny.utils;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 
-=======
->>>>>>> upstream/master
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -17,9 +14,6 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AreaSelectionUtil {
 

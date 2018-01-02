@@ -10,14 +10,11 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-<<<<<<< HEAD
 
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-=======
 import org.bukkit.Bukkit;
->>>>>>> upstream/master
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -39,14 +36,12 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private double taxes;
 	private boolean neutral = false;
 	private String tag;
-<<<<<<< HEAD
+
 	private ItemStack banner = new ItemStack(Material.BANNER, 1);
 	
-=======
 	public UUID uuid;
 	private long registered;
 
->>>>>>> upstream/master
 	public Nation(String name) {
 
 		setName(name);

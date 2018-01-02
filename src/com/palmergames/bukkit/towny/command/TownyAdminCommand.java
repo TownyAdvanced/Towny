@@ -25,22 +25,16 @@ import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
-<<<<<<< HEAD
 import org.bukkit.Material;
-=======
 import org.bukkit.Location;
 import org.bukkit.World;
->>>>>>> upstream/master
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-<<<<<<< HEAD
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-=======
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
->>>>>>> upstream/master
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
@@ -334,7 +328,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				resident = TownyUniverse.getDataSource().getResident(split[0]);
 				town = resident.getTown();
 			} catch (NotRegisteredException e) {
-
+				throw new TownyException(e.getMessage());
 			}
 			
 			ItemStack banner = town != null ? town.getBanner() : new ItemStack(Material.BANNER, 1);
@@ -366,7 +360,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				town = TownyUniverse.getDataSource().getResident(split[0]).getTown();
 			} catch (NotRegisteredException e) {
-
+				throw new TownyException(e.getMessage());
 			}
 			
 			ItemStack banner = town != null && town.hasNation() ? town.getNation().getBanner() : new ItemStack(Material.BANNER, 1);
@@ -375,6 +369,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			banner.setItemMeta(m);
 			
 			if (Bukkit.getPlayerExact(split[0]) != null) {
+				
 				player = Bukkit.getPlayerExact(split[0]);
 				
 				player.getInventory().addItem(banner);

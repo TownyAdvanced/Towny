@@ -1,12 +1,9 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-<<<<<<< HEAD
 version: 0.91.4.10
 authors: [Shade, FuzzeWuzze, ElgarL, LlmDl, Wowserman]
-=======
 version: 0.92.0.2
-author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
->>>>>>> upstream/master
+author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl. Sneezed on by Wowserman
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
@@ -209,10 +206,8 @@ permissions:
             towny.command.town.online: true
             towny.command.town.say: true
             towny.command.town.plots: true
-<<<<<<< HEAD
             towny.command.town.evict: true
             towny.command.town.remove.*: true
-=======
             towny.command.town.othertown: true
     
     towny.command.town.unclaim.*:
@@ -221,7 +216,6 @@ permissions:
         children:
             towny.command.town.unclaim: true
             towny.command.town.unclaim.all: true
->>>>>>> upstream/master
             
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
