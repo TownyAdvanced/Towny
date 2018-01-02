@@ -1,4 +1,5 @@
 name: Towny
+version: 0.33
 version: 0.38
 language: spanish
 author: Alvarote1998, Beelzebu, Seruhio
@@ -558,6 +559,7 @@ msg_nation_town_moved_their_homeblock_too_far: 'El spawn de %s fue movido demasi
 
 # Added in 0.33
 msg_err_invalid_radius_number: '&cRadio inválido. Usa un %s o menos.'
+
 
 # Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'

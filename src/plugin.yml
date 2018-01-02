@@ -1,13 +1,16 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
+version: 0.91.4.10
+authors: [Shade, FuzzeWuzze, ElgarL, LlmDl, Wowserman]
 version: 0.92.0.2
-author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
+author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl. Sneezed on by Wowserman
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
+    Created by Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl. Sweetened by Wowserman.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,MultiWorld]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,MultiWorld,EnhancedChat]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -168,6 +171,7 @@ permissions:
             towny.command.nation.set.title: true
             towny.command.nation.set.surname: true
             towny.command.nation.set.tag: true
+            towny.command.nation.set.banner: true
             
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -202,6 +206,8 @@ permissions:
             towny.command.town.online: true
             towny.command.town.say: true
             towny.command.town.plots: true
+            towny.command.town.evict: true
+            towny.command.town.remove.*: true
             towny.command.town.othertown: true
     
     towny.command.town.unclaim.*:
@@ -239,6 +245,8 @@ permissions:
             towny.command.town.set.embassyprice: true
             towny.command.town.set.name: true
             towny.command.town.set.tag: true
+            towny.command.town.set.warp: true
+            towny.command.town.set.banner: true
     
     towny.command.town.toggle.*:
         description: User can toggle all town settings.
@@ -252,6 +260,13 @@ permissions:
             towny.command.town.toggle.taxpercent: true
             towny.command.town.toggle.open: true
             towny.command.town.toggle.jail: true
+    
+    towny.command.town.remove.*:
+        description: User can remove all removeable town attributes.
+        default: false
+        children:
+            towny.command.town.remove.banner: true
+            towny.command.town.remove.warp: true
     
     # Plot command permissions
     towny.command.plot.*:
@@ -342,7 +357,7 @@ permissions:
             towny.command.townyadmin.backup: true
             towny.command.townyadmin.newday: true
             towny.command.townyadmin.purge: true
-            owny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.town.spawn: true
             towny.command.townyadmin.town.spawn.freecharge: true

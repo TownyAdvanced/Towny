@@ -2526,11 +2526,11 @@ v0.91.4.8:
     - Possible fix for outpost spawns not being removed from the database when outposts are unclaimed.
     - Add more detail to messages shown in log when Towny enters safe mode. 
 v0.91.4.9:
-    - Remove leading space on the "(PVP)" chunk notification, to match the the no-pvp-message. Thanks for pointing this out Locknlol
+    - Remove leading spaceon the "(PVP)" chunk notification, to match the the no-pvp-message. Thanks for pointing this out Locknlol
     - Fix for servers that do not allow wilderness full build/destroy permissions, where animals could not be killed in the wilderness with arrows.
     - Fix a typo in the CombatUtil, which clarifies which block's destroy permissions we are testing to determine whether animals can be killed.
     - Bump language files to version 0.33   
-    - New Config Option: town.max_claim_radius_value
+    - New Config Optin: town.max_claim_radius_value
       - default: 4
 	  - maximum number used in /town claim/unclaim # commands.
 	  - set to 0 to disable limiting of claim radius value check.
@@ -2557,6 +2557,9 @@ v0.91.4.10:
     - Fix mayors being able to be made into Outlaws.
     - Fix an issue with plotManagementRevertSpeed on mysql databases.
     - Fix issue plaguing Mysql DB's in 0.91.4.9 where the console was spammed endlessly by revert speed default settings.
+<<<<<<< HEAD
+    - Fix issue with outposts not unclaim their outpostspawns.
+=======
     - Fix issue with outposts not unclaim their outpostspawns.
 v0.91.4.11:
     - Fix 'Format specifier "%s"' error seen when attempting to add a town to you nation that doesn't have the config's required_number_residents_join_nation.
@@ -2696,3 +2699,4 @@ v0.92.0.2:
       - When the event is cancelled, Towny will stop short of charging for the townblock.
     - Language files bumped to 0.38.
       - Italian.yml updated by Leomixer17.
+>>>>>>> upstream/master

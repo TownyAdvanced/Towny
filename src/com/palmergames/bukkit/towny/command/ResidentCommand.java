@@ -203,7 +203,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					}
-					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					Bukkit.getScheduler().runTaskAsynchronously(ResidentCommand.plugin, new Runnable() {
 						@Override
 					    public void run() {
 							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));

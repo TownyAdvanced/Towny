@@ -558,6 +558,9 @@ msg_err_town_not_close_enough_to_nation: 'Der Stadtplatz von %s ist nicht nah ge
 msg_nation_town_moved_their_homeblock_too_far: '%s hat seinen Stadtplatz verschoben und dieser ist zu weit weg von der Hauptstadt der Nation, daher wurde die Stadt von der Nation entfernt.'
 
 # Added in 0.33
+<<<<<<< HEAD
+msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
+=======
 msg_err_invalid_radius_number: '&cRadius zu groß. Verwende %s oder weniger.'
 
 # Added in 0.34
@@ -577,3 +580,4 @@ msg_err_friendly_fire_disable: 'Friendly fire ist Deaktiviert!'
 
 # Added in 0.38
 msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
+>>>>>>> upstream/master

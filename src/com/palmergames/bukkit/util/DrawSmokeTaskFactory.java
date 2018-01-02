@@ -1,9 +1,7 @@
 package com.palmergames.bukkit.util;
 
-import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;

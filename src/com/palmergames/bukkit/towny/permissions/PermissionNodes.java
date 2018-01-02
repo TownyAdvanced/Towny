@@ -37,6 +37,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_TITLE("towny.command.nation.set.title"),
 		TOWNY_COMMAND_NATION_SET_SURNAME("towny.command.nation.set.surname"),
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
+		TOWNY_COMMAND_NATION_SET_BANNER("towny.command.nation.set.banner"), //TODO: Finish Implementation
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
 	TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
@@ -62,6 +63,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
+		TOWNY_COMMAND_TOWN_EVICT("towny.command.town.evict"), //TODO: Finish Implementation
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
@@ -82,7 +84,13 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
-		
+			TOWNY_COMMAND_TOWN_SET_WARP("towny.command.town.set.warp"), //TODO: Finish Implementation
+			TOWNY_COMMAND_TOWN_SET_BANNER("towny.command.town.set.banner"), // TODO: Finish Implementation
+			
+		TOWNY_COMMAND_TOWN_REMOVE("towny.command.town.remove.*"), //TODO: Finish Implementation
+			TOWNY_COMMAND_TOWN_REMOVE_WARP("towny.command.town.remove.warp"), //TODO: Finish Implementation
+			TOWNY_COMMAND_TOWN_REMOVE_BANNER("towny.command.town.remove.banner"), //TODO: Finish Implementation
+			
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
 		

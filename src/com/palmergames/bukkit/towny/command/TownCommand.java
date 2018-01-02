@@ -47,8 +47,10 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
@@ -56,6 +58,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
@@ -86,6 +89,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand("", "/town", "list", ""));
 		output.add(ChatTools.formatCommand("", "/town", "online", TownySettings.getLangString("town_help_10")));
 		output.add(ChatTools.formatCommand("", "/town", "leave", ""));
+		output.add(ChatTools.formatCommand("", "/town", "evict", ""));
 		output.add(ChatTools.formatCommand("", "/town", "reslist", ""));
 		output.add(ChatTools.formatCommand("", "/town", "ranklist", ""));
 		output.add(ChatTools.formatCommand("", "/town", "outlawlist", ""));
@@ -118,12 +122,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+
 	private void parseTownCommand(final Player player, String[] split) {
 
 		try {
 
 			if (split.length == 0) {
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+				Bukkit.getScheduler().runTaskAsynchronously(TownCommand.plugin, new Runnable() {
 					@Override
 				    public void run() {
 						try {
@@ -154,10 +159,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-				listTowns(player, split);
+				if (TownySettings.getMenuListing())
+					player.openInventory(plugin.getTownMenu(1));
+				
+				else listTowns(player, split);
 
 			} else if (split[0].equalsIgnoreCase("new")) {
 
@@ -186,6 +194,67 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				townLeave(player);
 
+			} else if (split[0].equalsIgnoreCase("evict")) {
+
+				// TODO:
+				
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_EVICT.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				Resident playersResident = null;
+				Town playersTown = null;
+				
+				try {
+
+					playersResident = TownyUniverse.getDataSource().getResident(player.getName());
+
+					playersTown = playersResident.getTown();
+
+				} catch (NotRegisteredException x) {
+					throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
+				}
+				
+				if (split.length==1) {
+					throw new TownyException("Missing a Target's Name.");
+				}
+				
+				@SuppressWarnings("deprecation")
+				Player target = Bukkit.getPlayer(split[1]);
+
+				if (target==null) {
+					throw new TownyException("Target isn't online!");
+				}
+				
+				TownyWorld world = null;// = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				TownBlock block = null;
+				
+				try {
+					world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+					block = world.getTownBlock(Coord.parseCoord(player));
+				} catch (NotRegisteredException e) {
+					
+				}
+				
+				if (block!=null && block.getTown() != null && block.getTown().getName().equals(playersTown.getName())==false) {
+					new TownyException("You can't Evict a Player thats not in your Town's Claim!");
+				}
+
+				Resident targetsResident = null;
+				Town targetsTown = null;
+				
+				try {
+					targetsResident = TownyUniverse.getDataSource().getResident(target.getName());
+					targetsTown = targetsResident.getTown();
+				} catch (NotRegisteredException x) {
+					throw new TownyException("Resident or Town doesn't Exist!");
+				}
+
+				
+				if (targetsTown.getName().equals(playersTown.getName())) {
+					throw new TownyException("You can't Evict your own Town's Resident!");
+				}
+				
+				target.performCommand("spawn");
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
@@ -251,6 +320,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					 */
 					townSet(player, newSplit);
 
+				} else if (split[0].equalsIgnoreCase("remove")) {
+
+					/*
+					 * perm test performed in method.
+					 */
+					parseTownRemove(player, newSplit);
+
 				} else if (split[0].equalsIgnoreCase("buy")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode()))
@@ -314,7 +390,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
-								List<String> outputs = new ArrayList();
+								List<String> outputs = new ArrayList<String>();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
 									Location outpost = outposts.get(i);
 									String output;
@@ -462,6 +538,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					parseTownOutlawCommand(player, newSplit);
 
+				} else if (split[0].equalsIgnoreCase("warp")) {
+
+					parseTownWarp(player, newSplit);
+
 				} else
 					try {
 						final Town town = TownyUniverse.getDataSource().getTown(split[0]);
@@ -469,7 +549,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != town) || (!resident.hasTown()) ) ) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+						Bukkit.getScheduler().runTaskAsynchronously(TownCommand.plugin, new Runnable() {
 							@Override
 						    public void run() {
 								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
@@ -483,6 +563,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		} catch (Exception x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
+//			x.printStackTrace();
 		}
 
 	}
@@ -1066,6 +1147,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void townSet(Player player, String[] split) throws TownyException {
 
 		if (split.length == 0) {
@@ -1074,6 +1156,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "mayor " + TownySettings.getLangString("town_help_2"), ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "homeblock", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawn/outpost/jail", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "banner", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "warp", "[warp name]"));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "perm ...", "'/town set perm' " + TownySettings.getLangString("res_5")));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxes [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plottax/shoptax/embassytax] [$]", ""));
@@ -1326,6 +1410,63 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						} catch (InvalidNameException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 						}
+
+				} else if (split[0].equalsIgnoreCase("banner")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_BANNER.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					if (player.getItemInHand() == null || player.getItemInHand().getType() != Material.BANNER) {
+						TownyMessaging.sendErrorMsg(player, "You're not Holding a Banner!");
+						return;
+					}
+					
+					town.setBanner(BukkitTools.setAmount(player.getItemInHand(), 1));
+					TownyMessaging.sendMsg(player, "Set the Town's Banner Successfully! Give it a couple Minutes to update on /t list.");
+					
+				} else if (split[0].equalsIgnoreCase("warp")) {
+
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, "Eg: /town set warp PumpkinFarm");
+						return;
+					}
+
+					if (!NameValidation.isBlacklistName(split[1])) {
+						if (town.getWarpCount() >= town.getWarpMaxCount()) 
+							TownyMessaging.sendErrorMsg(player, "The Town doesn't have enough space for more Warps!");
+						
+						else if (town.getWarp(split[1])==null) {
+							town.setWarp(split[1], player.getLocation().getBlock().getLocation().add(0.5, 0.5, 0.5));
+							TownyMessaging.sendMsg(player, "Created /t warp " + split[1]);
+						}
+						
+						else
+							TownyMessaging.sendErrorMsg(player, "There is already a Warp with that name!");
+					}
+					else
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name").replace("names", "warp names"));
+
+				} else if (split[0].equalsIgnoreCase("warp")) {
+
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, "Eg: /town set warp PumpkinFarm");
+						return;
+					}
+
+					if (!NameValidation.isBlacklistName(split[1])) {
+						if (town.getWarpCount() >= town.getWarpMaxCount()) 
+							TownyMessaging.sendErrorMsg(player, "The Town doesn't have enough space for more Warps!");
+						
+						else if (town.getWarp(split[1])==null) {
+							town.setWarp(split[1], player.getLocation().getBlock().getLocation().add(0.5, 0.5, 0.5));
+							TownyMessaging.sendMsg(player, "Created /t warp " + split[1]);
+						}
+						
+						else
+							TownyMessaging.sendErrorMsg(player, "There is already a Warp with that name!");
+					}
+					else
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name").replace("names", "warp names"));
 
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
 
@@ -2636,6 +2777,145 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
+			}
+		}
+	}
+	
+	public static void sendTownWarpStatus(Town town, Player player) {
+		player.sendMessage(ChatTools.formatTitle(town.getName() + "'s Warps"));
+		player.sendMessage(ChatColor.GRAY + "  Commands:");
+		player.sendMessage(ChatTools.formatCommand("", "/town warp", "[warp]", ""));
+		player.sendMessage(ChatTools.formatCommand("", "/town warp", "[town]", ""));
+		player.sendMessage(ChatTools.formatCommand("", "/town warp", "[town] [warp]", ""));
+		player.sendMessage("");
+		if (town.getWarpCount()==0)
+			player.sendMessage(ChatColor.AQUA + "  No Warps have been set.");
+		else {
+			player.sendMessage(ChatColor.GRAY + "  Warps: " + String.join(", ", town.getWarps().keySet()));
+			// For when Towny uses spigot...
+			// for (TextComponent component:TextComponentUtil.formatWarps(town, false))
+			//	  TextComponentUtil.send(player, component);
+			
+		}
+		
+		player.sendMessage("" + ChatColor.GRAY + town.getWarps().size() + " in use out of " + town.getWarpMaxCount() + " avalible Warp slots.");
+	}
+	
+	public static void parseTownWarp(Player player, String[] split) {
+		
+		try {
+
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Town town = resident.getTown();
+
+			// /t warp | /t warp ?
+			if (split.length == 0 || (split.length == 1 && split[0].equalsIgnoreCase("?"))) {
+				TownCommand.sendTownWarpStatus(town, player);
+				return;
+			}
+
+			// /t warp PumpkinFarm
+			if (split.length == 1) {
+			
+				// Town has Warp of that Name.
+				if (town.getWarp(split[0])!=null) {
+					player.teleport(town.getWarp(split[0]), TeleportCause.COMMAND);
+					
+					TownyMessaging.sendMsg(player, "Teleported to " + split[0] + " in " + town.getName() + (town.hasNation() ? ", " + town.getNation().getName() + ".":"."));
+					return;
+				}
+				
+				// Town exists of that name /t warp Berlin
+				if (TownyUniverse.getDataSource().getTown(split[0]) != null) {
+					TownCommand.sendTownWarpStatus(town = TownyUniverse.getDataSource().getTown(split[0]), player);
+					return;
+				}
+				
+				// Town doesn't have a Warp of that name and isn't checking another Town's Warps. 
+				TownyMessaging.sendErrorMsg(player, "Warp of that name doesn't Exist!");
+				TownCommand.sendTownWarpStatus(town, player);
+				
+				return;
+			}
+
+			// /t warp Geneva HikingPaths | /t warp Geneva ? | /t warp (town) (town's Warp)
+			if (split.length == 2) {
+
+				town = TownyUniverse.getDataSource().getTown(split[0]);
+				
+				// Town has Warp of that Name.
+				if (town.getWarp(split[1])!=null) {
+					player.teleport(town.getWarp(split[0]), TeleportCause.COMMAND); // Teleported to PumpkinFarm in Geneva, Switzerland. Teleported to Farmland in HuntingTribe.
+					TownyMessaging.sendMsg(player, "Teleported to " + split[0] + " in " + town.getName() + (town.hasNation() ? ", " + town.getNation().getName() + ".":"."));
+					return;
+				}
+				
+				// Town doesn't have a Warp of that name and isn't checking another Town's Warps. 
+				TownyMessaging.sendErrorMsg(player, "Warp of that name doesn't Exist!");
+				TownCommand.sendTownWarpStatus(town, player);
+				
+				return;
+				
+			}
+		} catch (TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		}
+		
+	}
+	
+	public static void parseTownRemove(Player player, String split[]) {
+		if (split.length != 1 || (split.length > 0 && (split[0].equalsIgnoreCase("?") || (!split[0].equalsIgnoreCase("banner") && !split[0].equalsIgnoreCase("warp"))))) {
+			player.sendMessage(ChatTools.formatTitle("/town remove"));
+			player.sendMessage(ChatTools.formatCommand("", "/town remove", "warp [name]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town remove", "banner", ""));
+		} else {
+			Resident resident;
+			Town town;
+			
+			try {
+				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				town = resident.getTown();
+				
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_REMOVE.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				// /town remove warp 
+				if (split[0].equalsIgnoreCase("warp")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_REMOVE_WARP.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, "Missing Warp Name.");
+						return;
+					}
+					
+					if (town.getWarp(split[1])==null) {
+						TownyMessaging.sendErrorMsg(player, "Warp of that name doesn't Exist!");
+						return;
+					}
+					
+					town.removeWarp(split[1]);
+					TownyMessaging.sendMsg(player, "Removed Warp.");
+					
+					return;
+				}
+				
+				// /town remove banner 
+				if (split[0].equalsIgnoreCase("banner")) {
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_REMOVE_BANNER.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					town.setBanner(new ItemStack(Material.BANNER, 1));
+					TownyMessaging.sendMsg(player, "Removed Banner.");
+					
+					return;
+				}
+				
+				
+			} catch (TownyException x) {
+				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
 		}
 	}

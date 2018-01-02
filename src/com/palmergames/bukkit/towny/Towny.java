@@ -21,20 +21,25 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.BukkitTools.BukkitVersion;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.huds.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Towny Plugin for Bukkit
@@ -66,6 +71,8 @@ public class Towny extends JavaPlugin {
 	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
+	
+	private BukkitVersion bukkitVersion;
 
 	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
 
@@ -76,15 +83,27 @@ public class Towny extends JavaPlugin {
 	
 	public static Towny plugin;
 	
+	/*
+	private static boolean _spigot = false;
+	
+	public static boolean isSpigot() {
+		return _spigot;
+	}
+	*/
+	
 	public Towny() {
-		
+		// TODO:
 		plugin = this;
 	}
 
 	@Override
 	public void onEnable() {
-
+		
+		bukkitVersion = BukkitVersion.getCurrentVersion();
+		
 		System.out.println("====================      Towny      ========================");
+		
+		System.out.print("[Towny] Running Bukkit " + bukkitVersion);
 		
 		/*
 		 * Register Metrics
@@ -108,7 +127,6 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
-
 		if (load()) {
 			// Setup bukkit command interfaces
 			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
@@ -127,14 +145,25 @@ public class Towny extends JavaPlugin {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
 		}
+		
+		// Checking if the machine is running spigot...
+		/*
+		try {
+			Towny._spigot = Class.forName("org.spigotmc.SpigotConfig") != null;
+		} catch (ClassNotFoundException e) {
+			Towny._spigot =  false;
+		}
+		*/
 
 		registerEvents();
 
 		TownyLogger.log.info("=============================================================");
 		if (isError())
 			TownyLogger.log.info("[WARNING] - ***** SAFE MODE ***** " + version);
-		else
+		else {
 			TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
+			// TownyLogger.log.info("[Towny] Using Spigot: " + _spigot);
+		}
 		TownyLogger.log.info("=============================================================");
 
 		if (!isError()) {
@@ -195,7 +224,8 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
-
+		TownyTimerHandler.toggleTownyInformationTask(false);
+		
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
@@ -231,6 +261,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
+		TownyTimerHandler.toggleTownyInformationTask(false);
 
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
@@ -239,6 +270,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
+		TownyTimerHandler.toggleTownyInformationTask(true);
 		resetCache();
 
 		return true;
@@ -341,6 +373,16 @@ public class Towny extends JavaPlugin {
 			
 			// Huds
 			pluginManager.registerEvents(HUDManager, this);
+			
+			// EnhancedChat
+			if (pluginManager.isPluginEnabled("EnhancedChat") && TownySettings.isEnhancedChatEnabled()) {
+				pluginManager.registerEvents(new EnhancedChatListener(), this);
+				this.getLogger().info("Using EnhancedChat " + pluginManager.getPlugin("EnhancedChat").getDescription().getVersion());
+			} else if (TownySettings.isEnhancedChatEnabled()) {
+				this.getLogger().warning("Enhanced Chat Features are enabled, but EnhancedChat is not loaded on the Server.");
+				if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") == false)
+					this.getLogger().warning("Enhanced Chat Features are enabled, but PlaceholderAPI is not loaded on the Server. Default Enhanced Chat Towny Settings will not work properly.");
+			} else this.getLogger().info("Enhanced Chat isn't enabled, we highly recommend you enable this feature for your enjoyment.");
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(entityMonitorListener, this);
@@ -365,6 +407,8 @@ public class Towny extends JavaPlugin {
 
 	private void update() {
 
+		
+		
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
@@ -435,6 +479,10 @@ public class Towny extends JavaPlugin {
 	public boolean isCitizens2() {
 
 		return citizens2;
+	}
+	
+	public BukkitVersion getBukkitVersion() {
+		return bukkitVersion;
 	}
 
 	/**
@@ -780,5 +828,121 @@ public class Towny extends JavaPlugin {
 	public HUDManager getHUDManager() {
 		
 		return HUDManager;
+	}
+	
+	private int residents, towns, nations;
+	
+	private List<Inventory> townMenus = new ArrayList<Inventory>();
+	private List<Inventory> nationMenus = new ArrayList<Inventory>();
+	
+	
+	/**
+	 * Store Pages of Menus for each Nation.
+	 */
+	private Hashtable<Nation, List<Inventory>> nationTownsMenus = new Hashtable<Nation, List<Inventory>>(); 
+	/**
+	 * Store How many Pages each Nation has.
+	 */
+	private Hashtable<Nation, Integer> nationTownsCount = new Hashtable<Nation, Integer>();
+	
+	public int getResidents() {
+		return residents;
+	}
+
+	public int getTowns() {
+		return towns;
+	}
+
+	public int getNations() {
+		return nations;
+	}
+
+	public int getNationTownsPages(Nation nation) {
+		return nationTownsCount.getOrDefault(nation, 0);
+	}
+	
+	public Inventory getTownMenu(int page) {
+		return townMenus.get(page-1);
+	}
+	
+	public Inventory getNationMenu(int page) {
+		return nationMenus.get(page-1);
+	}
+	
+	public Inventory getNationTownsMenu(Nation nation, int page) {
+		return this.nationTownsMenus.get(nation).get(page-1);
+	}
+
+	public void setResidents(int residents) {
+		this.residents = residents;
+	}
+
+	public void setTowns(int towns) {
+		this.towns = towns;
+	}
+
+	public void setNations(int nations) {
+		this.nations = nations;
+	}
+
+	public void setTownMenus(List<Inventory> townMenus) {
+		this.townMenus = townMenus;
+	}
+
+	public void setNationMenus(List<Inventory> nationMenus) {
+		this.nationMenus = nationMenus;
+	}
+
+	public void setNationTownsMenus(Hashtable<Nation, List<Inventory>> nationTownsMenus) {
+		this.nationTownsMenus = nationTownsMenus;
+	}
+
+	public void setNationTownsCount(Hashtable<Nation, Integer> nationTowns) {
+		this.nationTownsCount = nationTowns;
+	}
+
+	public int getPageIndexOfMenu(Inventory menu) {
+		try {
+			return Integer.parseInt(menu.getName().split(" ")[2]);
+		} catch (NumberFormatException e) {
+			return 1;
+		} catch (PatternSyntaxException e) {
+			return 1;
+		} catch (IndexOutOfBoundsException e) {
+			return 1;
+		}
+	}
+	
+	public String getTownOfBanner(ItemStack banner) {
+		try {
+			return ChatColor.stripColor(banner.getItemMeta().getDisplayName()).contains(", ") ? 
+									ChatColor.stripColor(banner.getItemMeta().getDisplayName()).split(", ")[0]:
+										ChatColor.stripColor(banner.getItemMeta().getDisplayName());
+		} catch (Exception e) {
+			return "";
+		} 
+	}
+	
+	public String getNationOfBanner(ItemStack banner) {
+		try {
+			return ChatColor.stripColor(banner.getItemMeta().getDisplayName()).contains(", ") ? ChatColor.stripColor(banner.getItemMeta().getDisplayName()).split(", ")[1]: ChatColor.stripColor(banner.getItemMeta().getDisplayName());
+		} catch (Exception e) {
+			return "";
+		}
+	}
+	
+	public void openTownList(Player player, int page) {
+		player.closeInventory();
+		player.openInventory(this.getTownMenu(page));
+	}
+	
+	public void openNationList(Player player, int page) {
+		player.closeInventory();
+		player.openInventory(this.getNationMenu(page));
+	}
+	
+	public void openNationTownsList(Player player, Nation nation, int page) {
+		player.closeInventory();
+		player.openInventory(this.getNationTownsMenu(nation, page));
 	}
 }

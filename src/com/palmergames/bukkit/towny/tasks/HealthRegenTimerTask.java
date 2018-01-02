@@ -51,6 +51,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		//	System.out.println("[Towny] Debug: Health Regen");
 	}
 
+	@SuppressWarnings("deprecation")
 	public void incHealth(Player player) {
 
 		// Keep saturation above zero while in town.

@@ -227,7 +227,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<String>();
 
 		TownyWorld world = town.getWorld();
-
+		
 		// ___[ Raccoon City (PvP) (Open) ]___
 		String title = getFormattedName(town);
 		title += ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getWorld().isForcePVP())) ? Colors.Red + " (PvP)" : "");

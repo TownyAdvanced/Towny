@@ -533,6 +533,7 @@ public class TownyEntityListener implements Listener {
 
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
+		@SuppressWarnings("deprecation")
 		Entity passenger = entity.getPassenger();
 
 		TownyWorld World = null;

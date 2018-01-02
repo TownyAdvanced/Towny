@@ -16,12 +16,16 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 public class Town extends TownBlockOwner implements ResidentList {
@@ -34,7 +38,7 @@ public class Town extends TownBlockOwner implements ResidentList {
 	private List<Location> jailSpawns = new ArrayList<Location>();
 	
 	private Resident mayor;
-	private int bonusBlocks, purchasedBlocks;
+	private int bonusBlocks, purchasedBlocks, purchasedWarps;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
 			plotPrice, commercialPlotPrice, embassyPlotPrice;
 	private Nation nation;
@@ -45,6 +49,53 @@ public class Town extends TownBlockOwner implements ResidentList {
 	private Location spawn;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	private ItemStack banner = new ItemStack(Material.BANNER, 1);
+	private Hashtable<String, Location> warps = new Hashtable<String, Location>();
+	
+	public void removeWarp(String warpName) {
+		warps.remove(warpName.toLowerCase());
+	}
+	
+	public Hashtable<String, Location> getWarps() {
+		return new Hashtable<String, Location>(warps);
+	}
+	
+	public Location getWarp(String warpName) {
+		return warps.get(warpName.toLowerCase());
+	}
+	
+	public int getWarpCount() {
+		return warps.size();
+	}
+	
+	public int getWarpMaxCount() {
+		return purchasedWarps;
+	}
+	
+	public void setWarpMaxCount(int newValue) {
+		purchasedWarps = newValue;
+	}
+	
+	public void setWarp(String warpName, Location location) {
+		warps.put(warpName.toLowerCase(), location);
+	}
+	
+	public boolean hasWarps() {
+		return warps.size() > 0;
+	}
+
+	public void forceAddWarp(String warpName, Location location) {
+		warps.put(warpName, location);
+	}	
+	
+	public ItemStack getBanner() {
+		return banner.clone();
+	}
+	
+	public void setBanner(ItemStack newBanner) {
+		banner = newBanner;
+	}
+	
 	private UUID uuid;
 	private long registered;
 
@@ -540,7 +591,7 @@ public class Town extends TownBlockOwner implements ResidentList {
 
 		if (world != null)
 			return world;
-
+		
 		return TownyUniverse.getDataSource().getTownWorld(this.getName());
 	}
 
@@ -717,6 +768,18 @@ public class Town extends TownBlockOwner implements ResidentList {
 				removeOutpostSpawn(townBlock.getCoord());
 			if (townBlock.isJail())
 				removeJailSpawn(townBlock.getCoord());
+			
+			
+			// Clear any warps in this claim.
+			List<String> warpList = new ArrayList<String>();
+
+			for (Entry<String, Location> entry:getWarps().entrySet()) {
+				if (townBlock.getCoord().equals(Coord.parseCoord(entry.getValue()))) 
+					warpList.add(entry.getKey());
+			}
+				
+			warpList.forEach((warp) -> {warps.remove(warp);});
+					
 			
 			// Clear the towns homeblock if this is it.
 			try {

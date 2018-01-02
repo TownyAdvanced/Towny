@@ -37,6 +37,11 @@ public class TownBlock {
 		this.name = "";
 	}
 
+	/**
+	 * Toggle claimed by town.
+	 * 
+	 * @param town
+	 */
 	public void setTown(Town town) {
 
 		try {

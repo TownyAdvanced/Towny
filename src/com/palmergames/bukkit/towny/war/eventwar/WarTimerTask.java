@@ -62,7 +62,7 @@ public class WarTimerTask extends TownyTimerTask {
 						//TODO: Cache player coord & townblock
 
 						WorldCoord worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player));
-						if (!warEvent.isWarZone(worldCoord))
+						if (!War.isWarZone(worldCoord))
 							continue;
 						TownyMessaging.sendDebugMsg("[War]   warZone");
 						if (player.getLocation().getBlockY() < TownySettings.getMinWarHeight())
@@ -132,7 +132,7 @@ public class WarTimerTask extends TownyTimerTask {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				boolean sameTown = edgeTownBlock.getTown() == townBlock.getTown();
-				if (!sameTown || (sameTown && !warEvent.isWarZone(edgeTownBlock.getWorldCoord()))) {
+				if (!sameTown || (sameTown && !War.isWarZone(edgeTownBlock.getWorldCoord()))) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {

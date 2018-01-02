@@ -1,5 +1,35 @@
 package com.palmergames.bukkit.towny.db;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.naming.InvalidNameException;
+
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -21,33 +51,8 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.scheduler.BukkitTask;
 
-import javax.naming.InvalidNameException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 // TODO: Make sure the lack of a particular value doesn't error out the entire file
 
@@ -624,12 +629,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			}
 
 			return true;
-		} else
+		} else {
+			
+			TownyMessaging.sendErrorMsg(fileResident.exists() == false ? "Loading Error: Exception while reading resident file because it doesn't Exist for Resident named " + resident.getName():"Loading Error: Exception while reading resident file because the file is not a File for Resident named " + resident.getName());
+			
 			return false;
+		}
 	}
 
 	@Override
@@ -649,7 +659,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
-							Resident resident = getResident(token);
+							Resident resident = null;
+							try {
+								resident = getResident(token);
+							} catch (NotRegisteredException e) {
+								// Resident No Longer Exists.
+								continue;
+							}
+							
 							if (resident != null) {
 								try {
 									town.addResident(resident);
@@ -866,7 +883,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 
 						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world named " + tokens[0] + ".");
 						}
 				}
 
@@ -943,6 +960,49 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 					}
 				}
+				// Load warp spawns
+				line = kvFile.get("warps");
+				if (line != null) {
+					String[] warps = line.split(";");
+					for (String spawn : warps) {
+						tokens = spawn.split(",");
+						if (tokens.length >= 7)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
+
+								Location loc = new Location(world, x, y, z);
+								
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+								
+								
+								town.forceAddWarp(tokens[6], loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
+				
+				// Load warp count
+				line = kvFile.get("warpCount");
+				if (line != null) {			
+					try {
+						town.setWarpMaxCount(Integer.parseInt(line));
+					} catch (NumberFormatException e) {
+					}
+				}
+				
+				// Load banner
+				line = kvFile.get("banner");
+				if (line != null) {
+										
+					if (BukkitTools.getBannerFromString(line)!=null) 
+						town.setBanner(BukkitTools.getBannerFromString(line));
+				}
 
 				line = kvFile.get("uuid");
 				if (line != null) {
@@ -963,6 +1023,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			}
 
@@ -993,6 +1054,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								nation.addTown(town);
 						}
 					}
+					
 				}
 
 				line = kvFile.get("capital");
@@ -1057,6 +1119,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setNeutral(Boolean.parseBoolean(line));
 					} catch (Exception e) {
 					}
+			
+				line = kvFile.get("banner");
+				if (line != null) {
+					
+					if (BukkitTools.getBannerFromString(line)!=null) 
+						nation.setBanner(BukkitTools.getBannerFromString(line));
+				}
 
 				line = kvFile.get("uuid");
 				if (line != null) {
@@ -1077,6 +1146,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
+				e.printStackTrace();
 				return false;
 			}
 
@@ -1724,11 +1794,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 		Long value = town.getRegistered();
-		if (value != null){
-			list.add("registered=" + town.getRegistered());
-		} else {
-			list.add("registered=" + 0);
-		}
+		list.add("registered=" + (value != null ? value:0));
+		
 
 		// Home Block
 		if (town.hasHomeBlock())
@@ -1763,6 +1830,23 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 		
+		// Warp Spawns
+		if (town.hasWarps()) {
+			String warpArray = "warps=";
+			for (Entry<String, Location> warp : new Hashtable<String, Location>(town.getWarps()).entrySet()) {
+				warpArray += (warp.getValue().getWorld().getName() + "," + Double.toString(warp.getValue().getX()) + ","
+						+ Double.toString(warp.getValue().getY()) + "," + Double.toString(warp.getValue().getZ()) + ","
+						+ Float.toString(warp.getValue().getPitch()) + "," + Float.toString(warp.getValue().getYaw())
+						+ "," + warp.getKey() + ";");
+			}
+			list.add(warpArray);
+		}
+		// Warp Count
+		list.add("warpCount=" + town.getWarpMaxCount());
+		
+		// Banner
+		list.add("banner=" + BukkitTools.getStringOfBanner(town.getBanner()));
+		
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1795,17 +1879,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
 		// Peaceful
 		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
+		
+		// Banner
+		list.add("banner=" + BukkitTools.getStringOfBanner(nation.getBanner()));
 		if (nation.hasValidUUID()){
 			list.add("uuid=" + nation.getUuid());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 		Long value = nation.getRegistered();
-		if (value != null){
-			list.add("registered=" + nation.getRegistered());
-		} else {
-			list.add("registered=" + 0);
-		}
+		list.add("registered=" + (value != null ? value:0));
+
+		
 
 		/*
 		 *  Make sure we only save in async

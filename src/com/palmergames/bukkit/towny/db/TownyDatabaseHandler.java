@@ -119,7 +119,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (!hasResident(name)) {
 
 			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
-
 		} else if (TownySettings.isFakeResident(name)) {
 
 			Resident resident = new Resident(name);
@@ -778,6 +777,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.setChangedNotify(RENAME_TOWN);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 

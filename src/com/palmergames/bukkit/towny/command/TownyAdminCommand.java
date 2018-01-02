@@ -25,12 +25,15 @@ import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
@@ -61,6 +64,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "unclaim [radius]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "town/nation", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givebonus [town/player] [num]", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givewarp [town/player] [num]", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givetownbanner [player]", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givenationbanner [player]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle peaceful/war/debug/devmode", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "resident/town/nation", ""));
 
@@ -166,7 +172,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				giveBonus(StringMgmt.remFirstArg(split));
 
-			} else if (split[0].equalsIgnoreCase("reload")) {
+			} else if (split[0].equalsIgnoreCase("givewarp")) {
+
+				giveWarp(StringMgmt.remFirstArg(split));
+
+			} else if (split[0].equalsIgnoreCase("givetownbanner")) {
+
+				giveTownBanner(StringMgmt.remFirstArg(split));
+
+			} else if (split[0].equalsIgnoreCase("givenationbanner")) {
+
+				giveNationBanner(StringMgmt.remFirstArg(split));
+
+			} 	else if (split[0].equalsIgnoreCase("reload")) {
 
 				reloadTowny(false);
 
@@ -244,7 +262,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void giveBonus(String[] split) throws TownyException {
-
+		
 		Town town;
 
 		try {
@@ -269,6 +287,99 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(e.getMessage());
 		}
 
+	}
+	
+	private void giveWarp(String[] split) throws TownyException {
+		
+		Town town;
+
+		try {
+			if (split.length != 2)
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: givewarp [town/player] [n]"));
+			try {
+				town = TownyUniverse.getDataSource().getTown(split[0]);
+			} catch (NotRegisteredException e) {
+				town = TownyUniverse.getDataSource().getResident(split[0]).getTown();
+			}
+			try {
+				town.setWarpMaxCount(town.getWarpMaxCount() + Integer.parseInt(split[1].trim()));
+				TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " Warp(s).");
+//				TownyMessaging.sendTownMessagePrefixed(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which your server admin did not create.");
+//				TownyMessaging.sendTownMessagePrefixed(town, "You should consider changing servers and requesting a refund of your money.");
+			} catch (NumberFormatException nfe) {
+				throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
+			}
+			TownyUniverse.getDataSource().saveTown(town);
+		} catch (TownyException e) {
+			throw new TownyException(e.getMessage());
+		}
+
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void giveTownBanner(String[] split) throws TownyException {
+		
+		Resident resident;
+		Town town = null;
+		try {
+			if (split.length != 1)
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: givetownbanner [town/player]"));
+			try {
+				resident = TownyUniverse.getDataSource().getResident(split[0]);
+				town = resident.getTown();
+			} catch (NotRegisteredException e) {
+				throw new TownyException(e.getMessage());
+			}
+			
+			ItemStack banner = town != null ? town.getBanner() : new ItemStack(Material.BANNER, 1);
+			ItemMeta m = banner.getItemMeta();
+			m.setDisplayName(town != null? Colors.Yellow + town.getName() + "'s Banner" : Colors.Red + "You don't have a Town!");
+			banner.setItemMeta(m);
+			
+			if (Bukkit.getPlayerExact(split[0]) != null) {
+				player = Bukkit.getPlayerExact(split[0]);
+				
+				player.getInventory().addItem(banner);
+				
+				TownyMessaging.sendMsg(player, "You have been given your town's banner.");
+			}
+			
+		} catch (TownyException e) {
+			throw new TownyException(e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void giveNationBanner(String[] split) throws TownyException {
+		
+		Town town = null;
+		
+		try {
+			if (split.length != 1)
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: givenationbanner [town/player]"));
+			try {
+				town = TownyUniverse.getDataSource().getResident(split[0]).getTown();
+			} catch (NotRegisteredException e) {
+				throw new TownyException(e.getMessage());
+			}
+			
+			ItemStack banner = town != null && town.hasNation() ? town.getNation().getBanner() : new ItemStack(Material.BANNER, 1);
+			ItemMeta m = banner.getItemMeta();
+			m.setDisplayName(town != null && town.hasNation() ? Colors.Yellow + town.getNation().getName() + "'s Banner" : Colors.Red + "You don't have a Nation!");
+			banner.setItemMeta(m);
+			
+			if (Bukkit.getPlayerExact(split[0]) != null) {
+				
+				player = Bukkit.getPlayerExact(split[0]);
+				
+				player.getInventory().addItem(banner);
+				
+				TownyMessaging.sendMsg(player, "You have been given your nation's banner.");
+			}
+			
+		} catch (TownyException e) {
+			throw new TownyException(e.getMessage());
+		}
 	}
 
 	private void buildTAPanel() {

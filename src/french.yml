@@ -557,6 +557,7 @@ msg_err_town_not_close_enough_to_nation: 'Le centre ville de %s n''est pas assez
 msg_nation_town_moved_their_homeblock_too_far: 'Le centre ville de %s a été déplacé trop loin du centre ville de la capitale de votre nation et a été retiré de votre nation.'
 
 # Added in 0.33
+msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
 msg_err_invalid_radius_number: '&cMontant de rayon invalide. Utilisez un rayon de %s ou moins.'
 
 # Added in 0.34

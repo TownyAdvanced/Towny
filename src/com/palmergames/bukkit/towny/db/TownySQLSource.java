@@ -38,12 +38,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TownySQLSource extends TownyFlatFileSource {
@@ -813,6 +815,46 @@ public class TownySQLSource extends TownyFlatFileSource {
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+                
+                town.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
+
+				line = rs.getString("warps");
+				if (line != null) {
+					String[] warps = line.split(";");
+					for (String warp : warps) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = warp.split(search);
+						if (tokens.length >= 4)
+							try {
+								World world = plugin.getServerWorld(tokens[0]);
+								double x = Double.parseDouble(tokens[1]);
+								double y = Double.parseDouble(tokens[2]);
+								double z = Double.parseDouble(tokens[3]);
+								
+								/*
+								 * 0 world
+								 * 1 x
+								 * 2 y
+								 * 3 z
+								 * 4 pitch
+								 * 5 yaw
+								 * 6 name
+								 */
+								
+								Location loc = new Location(world, x, y, z);
+								if (tokens.length == 6) {
+									loc.setPitch(Float.parseFloat(tokens[4]));
+									loc.setYaw(Float.parseFloat(tokens[5]));
+								}
+								town.forceAddWarp(tokens[6], loc);
+							} catch (NumberFormatException e) {
+							} catch (NotRegisteredException e) {
+							} catch (NullPointerException e) {
+							}
+					}
+				}
+				
+				town.setWarpMaxCount(rs.getInt("warpCount"));
 
                 town.setPurchasedBlocks(rs.getInt("purchased"));
 
@@ -1005,6 +1047,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
                 nation.setCapital(getTown(rs.getString("capital")));
+                nation.setBanner(BukkitTools.getBannerFromString(rs.getString("banner")));
                 // line = rs.getString("assistants");
                 // if (line != null) {
                 // tokens = line.split(",");
@@ -1578,17 +1621,23 @@ public class TownySQLSource extends TownyFlatFileSource {
                     jailArray += (spawn.getWorld().getName() + "#" + Double.toString(spawn.getX()) + "#" + Double.toString(spawn.getY()) + "#" + Double.toString(spawn.getZ()) + "#" + Float.toString(spawn.getPitch()) + "#" + Float.toString(spawn.getYaw()) + ";");
                 }
             twn_hm.put("jailSpawns", jailArray);
-            if (town.hasValidUUID()){
-                twn_hm.put("uuid", town.getUuid());
-            } else {
-                twn_hm.put("uuid", UUID.randomUUID());
-            }
-            Long value = town.getRegistered();
-            if (value != null){
-                twn_hm.put("registered",town.getRegistered());
-            } else {
-                twn_hm.put("registered", 0);
-            }
+            twn_hm.put("uuid", town.hasValidUUID() ? town.getUuid():UUID.randomUUID());
+            twn_hm.put("registered", (Long) town.getRegistered() != null ? (Long) town.getRegistered():0);
+            
+			// Warp Spawns
+			if (town.hasWarps()) {
+				String warpArray = "";
+				for (Entry<String, Location> warp : new Hashtable<String, Location>(town.getWarps()).entrySet()) {
+					warpArray += (warp.getValue().getWorld().getName() + "," + Double.toString(warp.getValue().getX()) + ","
+							+ Double.toString(warp.getValue().getY()) + "," + Double.toString(warp.getValue().getZ()) + ","
+							+ Float.toString(warp.getValue().getPitch()) + "," + Float.toString(warp.getValue().getYaw())
+							+ "," + warp.getKey() + ";");
+				}
+				twn_hm.put("warps",warpArray);
+			}
+			twn_hm.put("warpCount", town.getWarpMaxCount());
+			// Banner
+			twn_hm.put("banner", BukkitTools.getStringOfBanner(town.getBanner()));
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -1615,17 +1664,9 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("neutral", nation.isNeutral());
-            if (nation.hasValidUUID()){
-                nat_hm.put("uuid", nation.getUuid());
-            } else {
-                nat_hm.put("uuid", UUID.randomUUID());
-            }
-            Long value = nation.getRegistered();
-            if (value != null){
-                nat_hm.put("registered",nation.getRegistered());
-            } else {
-                nat_hm.put("registered", 0);
-            }
+            nat_hm.put("uuid", nation.hasValidUUID() ? nation.getUuid():UUID.randomUUID());
+            nat_hm.put("registered", (Long) nation.getRegistered() != null ? (Long) nation.getRegistered():0);
+			nat_hm.put("banner", BukkitTools.getStringOfBanner(nation.getBanner()));
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 
