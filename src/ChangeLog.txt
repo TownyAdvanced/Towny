@@ -2685,14 +2685,15 @@ v0.92.0.2:
       - Credit goes to Wolf2323 for finding and fixing this bug.
     - Fix for mob spawner blocks not regenerating properly using the wilderness explosion revert.
     - Give the admin info tool awareness of Doors.
-    - Fix door regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
+    - Fix door regeneration in the wilderness, also preparation for 1.13's loss of Block IDs.
     - Give the admin info tool awareness of Signs.
-    - Fix sign regeneration in the wilderness, also preperation for 1.13's loss of Block IDs.
-    - Fix inventoryholders, piston, attachables, hanging regeneraton in preparation for 1.13's loss of Block IDs.
-    - Fix trees, staris and gates in regards to regeneration in the wild in prep for 1.13's loss of Block IDs. 
+    - Fix sign regeneration in the wilderness, also preparation for 1.13's loss of Block IDs.
+    - Fix inventoryholders, piston, attachables, hanging regeneration in preparation for 1.13's loss of Block IDs.
+    - Fix trees, stairs and gates in regards to regeneration in the wild in prep for 1.13's loss of Block IDs. 
     - Fix bad URL in config at protection.town_mob_removal_entities 
     - Added TownPreClaimEvent by Abs0rbed. 
       - This event can be called by other region plugins, to cancel Towny claims inside of them. 
       - When the event is cancelled, Towny will stop short of charging for the townblock.
     - Language files bumped to 0.38.
       - Italian.yml updated by Leomixer17.
+v0.92.0.3:
