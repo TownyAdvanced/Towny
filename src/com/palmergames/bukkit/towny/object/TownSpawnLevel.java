@@ -9,8 +9,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
-import sun.util.logging.PlatformLogger.Level;
-
 public enum TownSpawnLevel {
 	TOWN_RESIDENT(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN,
@@ -72,7 +70,7 @@ public enum TownSpawnLevel {
 
 		if (!(isAllowed(town) && hasPermissionNode(plugin, player, town))) {
 			boolean war = TownyUniverse.isWarTime() || TownyWar.isUnderAttack(town);
-			SpawnLevel level = SpawnLevel.parseSpawnLevel(this.isAllowingConfigNode.getRoot());
+			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
 				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
 			}
@@ -96,7 +94,7 @@ public enum TownSpawnLevel {
 	private boolean isAlllowedTown(Town town)
 	{
 		boolean war = TownyUniverse.isWarTime() || TownyWar.isUnderAttack(town);
-		SpawnLevel level = SpawnLevel.parseSpawnLevel(this.isAllowingConfigNode.getRoot());
+		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE ? true : level == SpawnLevel.FALSE ? false : level == SpawnLevel.WAR ? war : !war;
 	}
 
@@ -110,14 +108,5 @@ public enum TownSpawnLevel {
 		FALSE,
 		WAR,
 		PEACE;
-		
-		public static SpawnLevel parseSpawnLevel(String spawnLevel)
-		{
-			SpawnLevel level = SpawnLevel.valueOf(spawnLevel.toUpperCase());
-			if(level == null) {
-				level = SpawnLevel.TRUE;
-			}
-			return level;
-		}
 	}
 }

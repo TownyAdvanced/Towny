@@ -268,6 +268,15 @@ public class TownySettings {
 
 		return str.replaceAll("&", "\u00A7");
 	}
+	
+	public static SpawnLevel getSpawnLevel(ConfigNodes node)
+	{
+		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
+		if(level == null) {
+			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+		}
+		return level;
+	}
 
 	public static boolean getBoolean(ConfigNodes node) {
 
@@ -1466,12 +1475,12 @@ public class TownySettings {
 
 	public static SpawnLevel isAllowingTownSpawn() {
 
-		return SpawnLevel.parseSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN.getRoot());
+		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN);
 	}
 
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
-		return SpawnLevel.parseSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL.getRoot());
+		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
