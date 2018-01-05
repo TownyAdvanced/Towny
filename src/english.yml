@@ -578,7 +578,7 @@ msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
 # Added in 0.38
 msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
 
-
+# Added in 0.39
 msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
 msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
 msg_err_town_spawn_nation_forbidden_war: '&cTown spawn travel to other towns in your nation is only allowed during war.'

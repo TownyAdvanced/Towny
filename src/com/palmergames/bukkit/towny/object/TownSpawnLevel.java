@@ -83,15 +83,15 @@ public enum TownSpawnLevel {
 
 	public boolean isAllowed(Town town) {
 
-		return this == TownSpawnLevel.ADMIN ? true : isAlllowedTown(town);
+		return this == TownSpawnLevel.ADMIN ? true : isAllowedTown(town);
 	}
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Town town) {
 
-		return this == TownSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, this.permissionNode)) || ((!plugin.isPermissions()) && (isAlllowedTown(town)));
+		return this == TownSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, this.permissionNode)) || ((!plugin.isPermissions()) && (isAllowedTown(town)));
 	}
 	
-	private boolean isAlllowedTown(Town town)
+	private boolean isAllowedTown(Town town)
 	{
 		boolean war = TownyUniverse.isWarTime() || TownyWar.isUnderAttack(town);
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
