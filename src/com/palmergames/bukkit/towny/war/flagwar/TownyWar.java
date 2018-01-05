@@ -72,20 +72,7 @@ public class TownyWar {
 	}
 	
 	public static boolean isUnderAttack(Town town) {
-		for(CellUnderAttack cua : cellsUnderAttack.values()) {
-			
-			try
-			{
-				Town townUnderAttack = TownyUniverse.getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
-				if(townUnderAttack == town) {
-					return true;
-				}
-			}
-			catch(NotRegisteredException e)
-			{
-			}
-		}
-		return false;
+		for(Cell c : cellsUnderAttack.)
 	}
 
 	public static boolean isUnderAttack(Cell cell) {
