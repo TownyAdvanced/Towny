@@ -1756,6 +1756,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             e.printStackTrace();
         }
         return true;
+    }
 
     @Override
     public void deleteResident(Resident resident) {
