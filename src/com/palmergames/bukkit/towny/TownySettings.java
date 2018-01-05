@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
@@ -1463,14 +1464,14 @@ public class TownySettings {
 		return time;
 	}
 
-	public static boolean isAllowingTownSpawn() {
+	public static SpawnLevel isAllowingTownSpawn() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN);
+		return SpawnLevel.parseSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN.getRoot());
 	}
 
-	public static boolean isAllowingPublicTownSpawnTravel() {
+	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+		return SpawnLevel.parseSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL.getRoot());
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {

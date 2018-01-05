@@ -1825,11 +1825,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			TownyMessaging.sendDebugMsg(townSpawnPermission.toString() + " " + townSpawnPermission.isAllowed());
-			townSpawnPermission.checkIfAllowed(plugin, player);
+			TownyMessaging.sendDebugMsg(townSpawnPermission.toString() + " " + townSpawnPermission.isAllowed(town));
+			townSpawnPermission.checkIfAllowed(plugin, player, town);
 
 			// Check the permissions
-			if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic() : townSpawnPermission.hasPermissionNode(plugin, player)))) {
+			if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic() : townSpawnPermission.hasPermissionNode(plugin, player, town)))) {
 
 				throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
 
