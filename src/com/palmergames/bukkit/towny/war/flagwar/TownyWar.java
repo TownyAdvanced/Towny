@@ -70,10 +70,6 @@ public class TownyWar {
 		List<CellUnderAttack> activeFlags = cellsUnderAttackByPlayer.get(playerName);
 		return activeFlags == null ? 0 : activeFlags.size();
 	}
-	
-	public static boolean isUnderAttack(Town town) {
-		for(Cell c : cellsUnderAttack.)
-	}
 
 	public static boolean isUnderAttack(Cell cell) {
 
