@@ -249,7 +249,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				} else {
 					attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
 				}
-				if (attachedBlock.getType().equals(Material.AIR)) {
+				BlockFace attachedfacing = block.getRelative(((Attachable) state.getData()).getAttachedFace().getOppositeFace()).getFace(block);
+				// attachedfacing is used to stop attachables from leaving dirt block placeholders in cases where players 
+				// are breaking blocks manually below an attachable, after an explosion has removed the attachable.
+				if (attachedBlock.getType().equals(Material.AIR) && !attachedfacing.equals(BlockFace.DOWN)) {
 					attachedBlock.setType(placeholder, false);
 					TownyRegenAPI.addPlaceholder(attachedBlock);
 				}

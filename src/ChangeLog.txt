@@ -2697,3 +2697,4 @@ v0.92.0.2:
     - Language files bumped to 0.38.
       - Italian.yml updated by Leomixer17.
 v0.92.0.3:
+    - Fix for scenario where a torch connected to the top of a block will leave a placeholder below it when it is exploded and reverted.
