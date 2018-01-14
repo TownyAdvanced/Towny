@@ -64,7 +64,6 @@ public class TownyUniverse extends TownyObject {
 	protected Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
 
-	// private List<Election> elections;
 	private static TownyDataSource dataSource;
 	private static TownyPermissionSource permissionSource;
 	
