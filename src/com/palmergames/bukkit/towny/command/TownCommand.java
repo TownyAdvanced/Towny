@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.command;
 import ca.xshade.bukkit.questioner.Questioner;
 import ca.xshade.questionmanager.Option;
 import ca.xshade.questionmanager.Question;
-
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
@@ -47,7 +46,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -61,7 +59,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1775,7 +1772,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
 
 		try {
-			boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player,PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
+			boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Location spawnLoc;
 			TownSpawnLevel townSpawnPermission;
@@ -1785,12 +1782,40 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));
 
-				Integer index;
+				Integer index = null;
 				try {
-					index = Integer.parseInt(split[split.length - 1]);
+					if (!split[split.length - 1].contains("name:")) {
+						index = Integer.parseInt(split[split.length - 1]);
+					} else { // So now it say's name:123
+						split[split.length -1] = split[split.length -1].replace("name:", "").replace("_", " ");
+						for (Location loc : town.getAllOutpostSpawns()) {
+							TownBlock tboutpost = TownyUniverse.getTownBlock(loc);
+							if (tboutpost != null) {
+								String name = tboutpost.getName();
+								if (name.startsWith(split[split.length - 1])) {
+									index = 1 + town.getAllOutpostSpawns().indexOf(loc);
+								}
+							}
+						}
+						if (index == null) { // If it persists to be null, so it's not been given a value, set it to the fallback (1).
+							index = 1;
+						}
+					}
 				} catch (NumberFormatException e) {
-					// invalid entry so assume the first outpost
+					// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number now, which means: if you type abc, you get brought to that outpost.
+					// Let's consider the fact however: an outpost name begins with "123" and there are 123 Outposts. Then we put the prefix name:123 and that solves that.
 					index = 1;
+					// Trying to get Outpost  names.
+					split[split.length -1] = split[split.length -1].replace("_", " ");
+					for (Location loc : town.getAllOutpostSpawns()) {
+						TownBlock tboutpost = TownyUniverse.getTownBlock(loc);
+						if (tboutpost != null) {
+							String name = tboutpost.getName();
+							if (name.startsWith(split[split.length - 1])) {
+								index = 1 + town.getAllOutpostSpawns().indexOf(loc);
+							}
+						}
+					}
 				} catch (ArrayIndexOutOfBoundsException i) {
 					// Number not present so assume the first outpost.
 					index = 1;
@@ -2000,7 +2025,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				if (town.getHoldingBalance() > 0)
 					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
-			} catch (EconomyException e1) {				
+			} catch (EconomyException e1) {
 				e1.printStackTrace();
 			}
 			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
@@ -2565,7 +2590,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
+
 					if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
 						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
 					}
@@ -2679,9 +2704,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 
 					// Set the area to unclaim
-					new TownClaim(plugin, player, town, selection, false, false, false).start();					
+					new TownClaim(plugin, player, town, selection, false, false, false).start();
 
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_abandoned_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));					
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_abandoned_area"), Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				}
 
 			} catch (TownyException x) {
