@@ -24,7 +24,10 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.material.Stairs;
+import org.bukkit.material.Step;
 import org.bukkit.material.Tree;
+import org.bukkit.material.WoodenStep;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -289,6 +292,24 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				Gate stateData = (Gate) state.getData();
 				BlockFace facing = ((Directional) state.getData()).getFacing();				
 				((Directional) stateData).setFacingDirection(facing);
+				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof WoodenStep) {
+				
+				block.setType(state.getType());
+				WoodenStep stateData = (WoodenStep) state.getData();
+				boolean inverted = ((WoodenStep) state.getData()).isInverted();	
+				((WoodenStep) stateData).setInverted(inverted);
+				state.setData(stateData);
+				state.update();
+
+			} else if (state.getData() instanceof Step) {
+				
+				block.setType(state.getType());
+				Step stateData = (Step) state.getData();
+				boolean inverted = ((Step) state.getData()).isInverted();	
+				((Step) stateData).setInverted(inverted);
 				state.setData(stateData);
 				state.update();
 
