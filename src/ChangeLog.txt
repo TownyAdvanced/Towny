@@ -2699,3 +2699,10 @@ v0.92.0.2:
 v0.92.0.3:
     - Fix for scenario where a torch connected to the top of a block will leave a placeholder below it when it is exploded and reverted.
     - Fix for slabs and wooden slabs not regenerating properly when exploded.
+v0.92.0.4:
+    - Spanish.yml updated to 0.38 by SeDark.
+    - Updated command: /t outpost {#|name|name:Name}, by ArticDive.
+      - Command now accepts the {name} which would be a plot name set on an outpost.
+      - Names can be seen using the '/t outpost list' command.
+      - In the case that a plot begins with a number you may use the {name:NameHere} option.
+      - If a town has set the same plot name on two outpost they would have to use the outpost number, towny will select the first outpost with the matched name.
