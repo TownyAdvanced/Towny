@@ -2706,3 +2706,4 @@ v0.92.0.4:
       - Names can be seen using the '/t outpost list' command.
       - In the case that a plot begins with a number you may use the {name:NameHere} option.
       - If a town has set the same plot name on two outpost they would have to use the outpost number, towny will select the first outpost with the matched name.
+    - Fix for stained clay, stained glass, stained glass panes, concrete, concrete powder not maintaining their colours after exploding and reverting.
