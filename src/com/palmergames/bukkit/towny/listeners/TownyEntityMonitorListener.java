@@ -28,7 +28,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 //import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -568,39 +567,6 @@ public class TownyEntityMonitorListener implements Listener {
 					TownyMessaging.sendTownMessage(town, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
 					return;
 				}
-			}
-		}
-	}
-
-	/**
-	 * @author - Articdive (Just the small codeblock below)
-	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
-	public void onPlayerDieInTown(PlayerDeathEvent event) {
-		boolean keepInventory = event.getKeepInventory();
-		boolean keepLevel = event.getKeepLevel();
-		Player player = event.getEntity();
-		Location deathloc = player.getLocation();
-		if (TownySettings.getKeepInventoryInTowns()) {
-			if (!keepInventory) { // If you don't keep your inventory via any other plugin or the server
-				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has a town, and we keep inventory in towns, deathloc in a town. Do it!
-						event.setKeepInventory(true);
-					}
-				}
-			}
-		}
-		if (TownySettings.getKeepExperienceInTowns()) {
-			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
-				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
-						event.setKeepLevel(true);
-					}
-				}
-
 			}
 		}
 	}
