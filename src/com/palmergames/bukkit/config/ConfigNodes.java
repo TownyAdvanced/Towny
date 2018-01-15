@@ -530,12 +530,10 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_economy",
 			"true",
 			"",
-			"# This will attempt to use Register (if present)",
-			"# Then it will attempt to access iConomy 5.01 directly",
-			"# Enable if you have either iConomy 5.01, or Register.jar to",
-			"# support: iConomy5, iConomy6, EssentialsEco, BOSEconomy.",
-			"# https://github.com/iConomy/Register/tree/master/dist"),
-
+			"# This enables/disables all the economy functions of Towny.",
+			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
+			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",			
+			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
 	PLUGIN_USING_QUESTIONER_HEADER(
 			"plugin.interfacing.using_questioner",
 			"",
