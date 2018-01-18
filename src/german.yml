@@ -61,6 +61,7 @@ mayor_help_5: 'Beanspruche den maximalen Radius'
 mayor_help_6: 'Aufgeben des Anspruchs auf diesen Block'
 mayor_help_7: 'Versucht die Beanspruchung um dich herum aufzugeben.'
 mayor_help_8: 'Versucht die Beanspruchung aller Stadt-Blöcke aufzugeben.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Status deiner Nation'
 nation_help_2: '[Nation]'

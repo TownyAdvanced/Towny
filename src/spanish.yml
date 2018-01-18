@@ -60,6 +60,7 @@ mayor_help_5: 'Claimear el máximo radio posible'
 mayor_help_6: 'Unclaimear esta tierra'
 mayor_help_7: 'Unclaimear a tu alrededor'
 mayor_help_8: 'Unclaimear todas las tierras'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Estado de tu país'
 nation_help_2: '[pais]'

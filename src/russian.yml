@@ -61,6 +61,7 @@ mayor_help_5: 'Забрать максимальный радиус'
 mayor_help_6: 'Забрать участок обратно'
 mayor_help_7: 'Попытка забрать вокруг.'
 mayor_help_8: 'Попытка забрать все участки города.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Статус нации'
 nation_help_2: '[Нация]'

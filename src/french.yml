@@ -59,6 +59,7 @@ mayor_help_5: 'Annexe au rayon maximal'
 mayor_help_6: 'Désannexe ce chunk de ville'
 mayor_help_7: 'Tente de désannexer autour de vous.'
 mayor_help_8: 'Tente désannexer tout les chunk de ville.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Statut de votre nation'
 nation_help_2: '[nation]'

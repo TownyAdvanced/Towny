@@ -59,6 +59,7 @@ mayor_help_5: 'Reclamar al radio m�ximo.'
 mayor_help_6: 'Abandonar este terreno de la ciudad.'
 mayor_help_7: 'Intentar abandonar alrededor de ti.'
 mayor_help_8: 'Intentar abandonar todos los terrenos de tu ciudad.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'El estado de tu naci�n'
 nation_help_2: '[naci�n]'

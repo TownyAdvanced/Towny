@@ -61,6 +61,7 @@ mayor_help_5: 'Claim to the maximum radius'
 mayor_help_6: 'Unclaim this town block'
 mayor_help_7: 'Attempt to unclaim around you.'
 mayor_help_8: 'Attempt to unclaim all townblocks.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Your nations status'
 nation_help_2: '[nation]'

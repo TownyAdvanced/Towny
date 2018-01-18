@@ -61,6 +61,7 @@ mayor_help_5: 'Gjør krav på maksimal radius'
 mayor_help_6: 'Unclaim denne byblokken'
 mayor_help_7: 'Prøv å unclaim rundt deg.'
 mayor_help_8: 'Prøv å unclaim alle byblokker.'
+mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Din nasjons status'
 nation_help_2: '[Nasjon]'
