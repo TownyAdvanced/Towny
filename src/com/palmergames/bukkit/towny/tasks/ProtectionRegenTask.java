@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
@@ -213,6 +214,15 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				container.setContents(contents.toArray(new ItemStack[0]));
 				state.setData(chestData);
 				state.update();	
+			
+			} else if (state instanceof ShulkerBox) {
+				
+				block.setType(state.getType());
+				MaterialData shulkerData = state.getData(); 
+				Inventory container = ((ShulkerBox) block.getState()).getInventory();
+				container.setContents(contents.toArray(new ItemStack[0]));
+				state.setData(shulkerData);
+				state.update();				
 				
 			} else if (state instanceof InventoryHolder) {
 				
