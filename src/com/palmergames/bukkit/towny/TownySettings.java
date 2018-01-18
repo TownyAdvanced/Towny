@@ -44,12 +44,12 @@ public class TownySettings {
 	// Town Level
 	public enum TownLevel {
 		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER
-	};
+	}
 
 	// Nation Level
 	public enum NationLevel {
 		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER
-	};
+	}
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage;

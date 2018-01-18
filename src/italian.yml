@@ -61,7 +61,6 @@ mayor_help_5: 'Reclama per il raggio massimo'
 mayor_help_6: 'Abbandona questo lotto'
 mayor_help_7: 'Tenta di abbandonare la zona intorno a te.'
 mayor_help_8: 'Tenta di abbandonare tutti i lotti.'
-mayor_help_9: 'Attempt to unclaim an outpost'
 
 nation_help_1: 'Stato della tua nazione'
 nation_help_2: '[nazione]'
@@ -588,3 +587,6 @@ msg_err_town_spawn_ally_forbidden_war: '&cTown spawn travel to towns allied with
 msg_err_town_spawn_ally_forbidden_false: '&cTown spawn travel to towns allied with your nation is forbidden during war.'
 msg_err_public_spawn_forbidden_war: '&cPublic spawn travel to other towns is only allowed during war.'
 msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is forbidden during war.'
+
+# Added in 0.40
+mayor_help_9: 'Attempt to unclaim an outpost'

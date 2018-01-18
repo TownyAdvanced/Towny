@@ -52,7 +52,6 @@ public class BlockWorker implements Runnable {
 					} catch (Exception e) {
 						skipped++;
 					}
-					;
 					blocks++;
 				}
 
@@ -64,7 +63,6 @@ public class BlockWorker implements Runnable {
 			}
 		} catch (InterruptedException e) {
 		}
-		;
 
 		System.out.println("[Blocker] BlockQueue Thread stopped.");
 		blockQueue = null;
