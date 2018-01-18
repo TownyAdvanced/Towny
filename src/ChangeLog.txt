@@ -2727,4 +2727,5 @@ v0.92.0.4:
       - Default: false
       - When set to true players should keep their experience level upon death in any town.
       - Not guaranteed to work on servers that already use a keep experience plugin.
-     
+v0.92.0.5:
+    - German.yml updated to 0.39 by Wolf2323.
