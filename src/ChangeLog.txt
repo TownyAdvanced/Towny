@@ -2708,3 +2708,14 @@ v0.92.0.4:
       - If a town has set the same plot name on two outpost they would have to use the outpost number, towny will select the first outpost with the matched name.
     - Fix for stained clay, stained glass, stained glass panes, concrete, concrete powder not maintaining their colours after exploding and reverting.
     - Fix for shulker boxes reverting.
+    - Changed config option: expanded town spawn options, courtesy of Wolf2323
+      - The following settings:
+        - global_town_settings.allow_town_spawn
+        - global_town_settings.allow_town_spawn_travel
+        - global_town_settings.allow_town_spawn_travel_nation
+        - global_town_settings.allow_town_spawn_travel_ally
+      - Used to support the values True and False,
+      - Now support True, False, War, Peace.
+        - This would allow players to only use /town spawn when there is a war or when there is not.
+      - No change is required to be made in your config, simply change the true/false value to war/peace if you would like to use this feature.
+    - Language files bumped to 0.39.

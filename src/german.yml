@@ -1,5 +1,5 @@
 name: Towny
-version: 0.38
+version: 0.39
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -577,3 +577,13 @@ msg_err_friendly_fire_disable: 'Friendly fire ist Deaktiviert!'
 
 # Added in 0.38
 msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
+
+# Added in 0.39
+msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
+msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
+msg_err_town_spawn_nation_forbidden_war: '&cTown spawn travel to other towns in your nation is only allowed during war.'
+msg_err_town_spawn_nation_forbidden_peace: '&cTown spawn travel to other towns in your nation is forbidden during war.'
+msg_err_town_spawn_ally_forbidden_war: '&cTown spawn travel to towns allied with your nation is only allowed during war.'
+msg_err_town_spawn_ally_forbidden_false: '&cTown spawn travel to towns allied with your nation is forbidden during war.'
+msg_err_public_spawn_forbidden_war: '&cPublic spawn travel to other towns is only allowed during war.'
+msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is forbidden during war.'
