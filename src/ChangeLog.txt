@@ -2729,3 +2729,5 @@ v0.92.0.4:
       - Not guaranteed to work on servers that already use a keep experience plugin.
 v0.92.0.5:
     - German.yml updated to 0.39 by Wolf2323.
+    - Required Config addition:
+      - add ",BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE" to the protection.item_use_ids if you would like boats to be prevented using the Item_Use protection.

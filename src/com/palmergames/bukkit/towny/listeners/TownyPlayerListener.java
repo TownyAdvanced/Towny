@@ -290,8 +290,8 @@ public class TownyPlayerListener implements Listener {
 				}
 
 			}
-
 			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
+				TownyMessaging.sendDebugMsg("ItemUse Material found: " + event.getItem().getType().name());
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
 		}
