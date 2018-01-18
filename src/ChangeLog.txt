@@ -2697,3 +2697,34 @@ v0.92.0.2:
     - Language files bumped to 0.38.
       - Italian.yml updated by Leomixer17.
 v0.92.0.3:
+    - Fix for scenario where a torch connected to the top of a block will leave a placeholder below it when it is exploded and reverted.
+    - Fix for slabs and wooden slabs not regenerating properly when exploded.
+v0.92.0.4:
+    - Spanish.yml updated to 0.38 by SeDark.
+    - Updated command: /t outpost {#|name|name:Name}, by ArticDive.
+      - Command now accepts the {name} which would be a plot name set on an outpost.
+      - Names can be seen using the '/t outpost list' command.
+      - In the case that a plot begins with a number you may use the {name:NameHere} option.
+      - If a town has set the same plot name on two outpost they would have to use the outpost number, towny will select the first outpost with the matched name.
+    - Fix for stained clay, stained glass, stained glass panes, concrete, concrete powder not maintaining their colours after exploding and reverting.
+    - Fix for shulker boxes reverting.
+    - Changed Config Option: expanded town spawn options, courtesy of Wolf2323
+      - The following settings:
+        - global_town_settings.allow_town_spawn
+        - global_town_settings.allow_town_spawn_travel
+        - global_town_settings.allow_town_spawn_travel_nation
+        - global_town_settings.allow_town_spawn_travel_ally
+      - Used to support the values True and False,
+      - Now support True, False, War, Peace.
+        - This would allow players to only use /town spawn when there is a war or when there is not.
+      - No change is required to be made in your config, simply change the true/false value to war/peace if you would like to use this feature.
+    - Language files bumped to 0.39.
+    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of ArticDive
+      - Default: false
+      - When set to true players should keep their inventories upon death in any town.
+      - Not guaranteed to work on servers that already use a keep inventory plugin.
+    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of ArticDive
+      - Default: false
+      - When set to true players should keep their experience level upon death in any town.
+      - Not guaranteed to work on servers that already use a keep experience plugin.
+     

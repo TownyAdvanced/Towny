@@ -351,8 +351,9 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(worldListener, this);
 
 			// Only register a physics listener if we need to.
-			if (TownySettings.getRegenDelay() > 0)
+			if (TownySettings.getRegenDelay() > 0) {
 				pluginManager.registerEvents(physicsListener, this);
+			}
 
 		}
 

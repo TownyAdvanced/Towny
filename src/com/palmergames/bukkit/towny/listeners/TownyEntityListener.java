@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
@@ -859,7 +860,8 @@ public class TownyEntityListener implements Listener {
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
 													block.getState().getData() instanceof Sign ||
-													block.getState().getData() instanceof PressurePlate) {
+													block.getState().getData() instanceof PressurePlate || 
+													block.getState() instanceof ShulkerBox) {
 												block.setType(Material.AIR);
 											}
 										}

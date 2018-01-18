@@ -376,19 +376,31 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
 			"global_town_settings.allow_town_spawn",
 			"true",
-			"# Allow the use of /town spawn"),
+			"# Allow the use of /town spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL(
 			"global_town_settings.allow_town_spawn_travel",
 			"true",
-			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public)."),
+			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_NATION(
 			"global_town_settings.allow_town_spawn_travel_nation",
 			"true",
-			"# Allow regular residents to use /town spawn [town] to other towns in your nation."),
+			"# Allow regular residents to use /town spawn [town] to other towns in your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_ALLY(
 			"global_town_settings.allow_town_spawn_travel_ally",
 			"true",
-			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation."),
+			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",
@@ -467,6 +479,19 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
+
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_town",
+			"false",
+			"# If People should keep their inventories on death in a town",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_town",
+			"false",
+			"# If People should keep their experience on death in a town",
+			"# Is not guaranteed to work with other keep experience plugins!"
+	),
 	PLUGIN(
 			"plugin",
 			"",
@@ -530,12 +555,10 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_economy",
 			"true",
 			"",
-			"# This will attempt to use Register (if present)",
-			"# Then it will attempt to access iConomy 5.01 directly",
-			"# Enable if you have either iConomy 5.01, or Register.jar to",
-			"# support: iConomy5, iConomy6, EssentialsEco, BOSEconomy.",
-			"# https://github.com/iConomy/Register/tree/master/dist"),
-
+			"# This enables/disables all the economy functions of Towny.",
+			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
+			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",			
+			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
 	PLUGIN_USING_QUESTIONER_HEADER(
 			"plugin.interfacing.using_questioner",
 			"",

@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
@@ -20,7 +21,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -266,6 +266,15 @@ public class TownySettings {
 	public static String parseSingleLineString(String str) {
 
 		return str.replaceAll("&", "\u00A7");
+	}
+	
+	public static SpawnLevel getSpawnLevel(ConfigNodes node)
+	{
+		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
+		if(level == null) {
+			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+		}
+		return level;
 	}
 
 	public static boolean getBoolean(ConfigNodes node) {
@@ -1463,14 +1472,14 @@ public class TownySettings {
 		return time;
 	}
 
-	public static boolean isAllowingTownSpawn() {
+	public static SpawnLevel isAllowingTownSpawn() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN);
+		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN);
 	}
 
-	public static boolean isAllowingPublicTownSpawnTravel() {
+	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
@@ -2321,6 +2330,14 @@ public class TownySettings {
 	
 	public static List<String> getFarmAnimals() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
+	}
+
+	public static boolean getKeepInventoryInTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN);
+	}
+
+	public static boolean getKeepExperienceInTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN);
 	}
 	
 	public static String getListPageMsg(int page, int total) {

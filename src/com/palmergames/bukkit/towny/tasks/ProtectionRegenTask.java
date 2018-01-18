@@ -5,18 +5,21 @@ import com.palmergames.bukkit.towny.regen.NeedsPlaceholder;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Colorable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.Door;
 import org.bukkit.material.Gate;
@@ -24,7 +27,10 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.material.Stairs;
+import org.bukkit.material.Step;
 import org.bukkit.material.Tree;
+import org.bukkit.material.WoodenStep;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,6 +214,15 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				container.setContents(contents.toArray(new ItemStack[0]));
 				state.setData(chestData);
 				state.update();	
+			
+			} else if (state instanceof ShulkerBox) {
+				
+				block.setType(state.getType());
+				MaterialData shulkerData = state.getData(); 
+				Inventory container = ((ShulkerBox) block.getState()).getInventory();
+				container.setContents(contents.toArray(new ItemStack[0]));
+				state.setData(shulkerData);
+				state.update();				
 				
 			} else if (state instanceof InventoryHolder) {
 				
@@ -249,7 +264,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				} else {
 					attachedBlock = block.getRelative(((Attachable) state.getData()).getAttachedFace());
 				}
-				if (attachedBlock.getType().equals(Material.AIR)) {
+				BlockFace attachedfacing = block.getRelative(((Attachable) state.getData()).getAttachedFace().getOppositeFace()).getFace(block);
+				// attachedfacing is used to stop attachables from leaving dirt block placeholders in cases where players 
+				// are breaking blocks manually below an attachable, after an explosion has removed the attachable.
+				if (attachedBlock.getType().equals(Material.AIR) && !attachedfacing.equals(BlockFace.DOWN)) {
 					attachedBlock.setType(placeholder, false);
 					TownyRegenAPI.addPlaceholder(attachedBlock);
 				}
@@ -287,6 +305,42 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				BlockFace facing = ((Directional) state.getData()).getFacing();				
 				((Directional) stateData).setFacingDirection(facing);
 				state.setData(stateData);
+				state.update();
+				
+			} else if (state.getData() instanceof WoodenStep) {
+				
+				block.setType(state.getType());
+				WoodenStep stateData = (WoodenStep) state.getData();
+				boolean inverted = ((WoodenStep) state.getData()).isInverted();	
+				((WoodenStep) stateData).setInverted(inverted);
+				state.setData(stateData);
+				state.update();
+
+			} else if (state.getData() instanceof Step) {
+				
+				block.setType(state.getType());
+				Step stateData = (Step) state.getData();
+				boolean inverted = ((Step) state.getData()).isInverted();	
+				((Step) stateData).setInverted(inverted);
+				state.setData(stateData);
+				state.update();
+			
+			} else if (state.getData() instanceof Colorable) {
+				
+				block.setType(state.getType());
+				Colorable stateData = (Colorable) state.getData();
+				DyeColor colour = ((Colorable) state.getData()).getColor();
+				((Colorable) stateData).setColor(colour);
+				state.setData((MaterialData) stateData);
+				state.update();
+			
+			} else if (state.getType().equals(Material.CONCRETE) || state.getType().equals(Material.CONCRETE_POWDER) 
+					|| state.getType().equals(Material.STAINED_CLAY) || state.getType().equals(Material.STAINED_GLASS)
+					|| state.getType().equals(Material.STAINED_GLASS_PANE) ) {
+				// TODO Make this not use bytes for colour after the new api is out in 1.13
+				block.setType(state.getType());
+				Byte b = state.getRawData();
+				state.setRawData(b);
 				state.update();
 
 			} else {
