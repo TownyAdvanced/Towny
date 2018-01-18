@@ -15,6 +15,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -41,6 +42,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.PressurePlate;
 import org.bukkit.material.Sign;
@@ -934,7 +936,7 @@ public class TownyEntityListener implements Listener {
 
 		TownyWorld townyWorld = null;
 		String worldName = null;
-		Entity hanging = event.getEntity();
+		Entity hanging = event.getEntity();		
 
 		try {
 			worldName = hanging.getWorld().getName();
@@ -946,9 +948,15 @@ public class TownyEntityListener implements Listener {
 		} catch (NotRegisteredException e1) {
 			// Not a known Towny world.
 			// event.setCancelled(true);
-			return;
+			return;		
 		}
 
+		if (event.getCause().equals(RemoveCause.PHYSICS)) {
+			// More than likely a boat entity which can break an item frame.
+			event.setCancelled(true);
+			return;
+		}
+		
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 			
