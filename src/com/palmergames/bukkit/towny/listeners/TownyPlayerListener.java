@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -45,6 +44,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -67,6 +67,7 @@ import java.util.Arrays;
 
 /**
  * Handle events for all Player related events
+ * Players deaths are handled both here and in the TownyEntityMonitorListener
  * 
  * @author Shade/ElgarL
  * 
@@ -979,6 +980,40 @@ public class TownyPlayerListener implements Listener {
 			// If not registered, it is most likely an NPC			
 		} catch (TownyException e) {
 		}
-		
+
+	}
+
+
+	/**
+	 * @author - Articdive (Just the small codeblock below)
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
+	public void onPlayerDieInTown(PlayerDeathEvent event) {
+		boolean keepInventory = event.getKeepInventory();
+		boolean keepLevel = event.getKeepLevel();
+		Player player = event.getEntity();
+		Location deathloc = player.getLocation();
+		if (TownySettings.getKeepInventoryInTowns()) {
+			if (!keepInventory) { // If you don't keep your inventory via any other plugin or the server
+				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
+				if (tb != null) { // So a valid TownBlock appears, how wonderful
+					if (tb.hasTown()) { // So the townblock has a town, and we keep inventory in towns, deathloc in a town. Do it!
+						event.setKeepInventory(true);
+					}
+				}
+			}
+		}
+		if (TownySettings.getKeepExperienceInTowns()) {
+			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
+				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
+				if (tb != null) { // So a valid TownBlock appears, how wonderful
+					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
+						event.setKeepLevel(true);
+					}
+				}
+
+			}
+		}
 	}
 }
