@@ -545,28 +545,28 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
 			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",			
 			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
-	PLUGIN_USING_QUESTIONER_HEADER(
-			"plugin.interfacing.using_questioner",
-			"",
-			"",
-			"# Enable using_questioner if you are using questioner to send/receive invites to towns/nations.",
-			"# See http://code.google.com/a/eclipselabs.org/p/towny/wiki/Questioner for more info."),
-	PLUGIN_USING_QUESTIONER_ENABLE(
-			"plugin.interfacing.using_questioner.enable",
-			"true"),
-	PLUGIN_QUESTIONER_ACCEPT(
-			"plugin.interfacing.using_questioner.accept",
-			"accept",
-			"# The command to accept invitations."),
-	PLUGIN_QUESTIONER_DENY(
-			"plugin.interfacing.using_questioner.deny",
-			"deny",
-			"# The command to refuse invitations."),
-	PLUGIN_QUESTIONER_COOLDOWN_TIME(
-			"plugin.interfacing.using_questioner.cooldowntime",
-			"0m",
-			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
-			"# a player's first log in and when they can be invited to a town."),
+	//PLUGIN_USING_QUESTIONER_HEADER( As of the new invite-system Questioner support has been scrapped.
+	//		"plugin.interfacing.using_questioner",
+	//		"",
+	//		"",
+	//		"# Enable using_questioner if you are using questioner to send/receive invites to towns/nations.",
+	//		"# See http://code.google.com/a/eclipselabs.org/p/towny/wiki/Questioner for more info."),
+	//PLUGIN_USING_QUESTIONER_ENABLE(
+	//		"plugin.interfacing.using_questioner.enable",
+	//		"true"),
+	//PLUGIN_QUESTIONER_ACCEPT(
+	//		"plugin.interfacing.using_questioner.accept",
+	//		"accept",
+	//		"# The command to accept invitations."),
+	//PLUGIN_QUESTIONER_DENY(
+	//		"plugin.interfacing.using_questioner.deny",
+	//		"deny",
+	//		"# The command to refuse invitations."),
+	//PLUGIN_QUESTIONER_COOLDOWN_TIME(
+	//		"plugin.interfacing.using_questioner.cooldowntime",
+	//		"0m",
+	//		"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+	//		"# a player's first log in and when they can be invited to a town."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",
@@ -1374,7 +1374,39 @@ public enum ConfigNodes {
 			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true."), ;
+			"# Only under affect when explosions_break_blocks is true."),
+	INVITE_SYSTEM(
+			"invite_system",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Towny Invite System                  | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			""),
+	INVITE_SYSTEM_CONFIRM_COMMAND(
+			"invite_system.confirm_command",
+			"confirm",
+			"# Command used to confirm some towny actions/tasks)",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_CANCEL_COMMAND(
+			"invite_system.cancel_command",
+			"cancel",
+			"# Command used to cancel some towny actions/tasks",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_ACCEPT_COMMAND(
+			"invite_system.accept_command",
+			"accept",
+			"# Command used to accept towny invites)",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_DENY_COMMAND(
+			"invite_system.deny_command",
+			"deny",
+			"# Command used to deny towny invites",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	;
 
 	private final String Root;
 	private final String Default;
