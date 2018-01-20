@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -29,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -403,7 +406,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					parseTownJoin(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("add")) {
+				} else if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("invite")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ADD.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -1380,7 +1383,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					try {
 						town.addJailSpawn(player.getLocation());
-						// TODO: add msg_set_jail_spawn						
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_jail_spawn"));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2077,6 +2079,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * } return invited; }
 	 */
 	public static void townAddResidents(Object sender, Town town, List<Resident> invited) {
+		String name;
+		if (sender instanceof Player) {
+			name = ((Player) sender).getName();
+		} else {
+			name = null;
+		}
 
 		for (Resident newMember : new ArrayList<Resident>(invited)) {
 			try {
@@ -2097,13 +2105,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						invited.remove(newMember);
 					} else {
 						town.addResidentCheck(newMember);
-						townInviteResident(town, newMember);
+						townInviteResident(name,town, newMember);
 					}
 				} else {
 					town.addResidentCheck(newMember);
-					townInviteResident(town, newMember);
+					townInviteResident(name,town, newMember);
 				}
-			} catch (AlreadyRegisteredException e) {
+			} catch (TownyException e) {
 				invited.remove(newMember);
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
@@ -2117,17 +2125,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (invited.size() > 0) {
 			String msg = "";
+			if (name == null){
+				name = "Console";
+			}
 			for (Resident newMember : invited)
 				msg += newMember.getName() + ", ";
 
 			msg = msg.substring(0, msg.length() - 2);
 
-			String name;
-
-			if (sender instanceof Player) {
-				name = ((Player) sender).getName();
-			} else
-				name = "Console";
 
 			msg = String.format(TownySettings.getLangString("msg_invited_join_town"), name, msg);
 			TownyMessaging.sendTownMessage(town, ChatTools.color(msg));
@@ -2146,10 +2151,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		plugin.getTownyUniverse().setChangedNotify(TOWN_ADD_RESIDENT);
 	}
 
-	private static void townInviteResident(Town town, Resident newMember) throws AlreadyRegisteredException {
+	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
 
-		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender,town,newMember);
+		try {
+			InviteHandler.addInviteToList(invite);
+			newMember.newReceivedInvite(invite);
+			town.newSentInvite(invite);
+		} catch (TooManyInvitesException e){
+			newMember.deleteReceivedInvite(invite);
+			town.deleteSentInvite(invite);
+			throw new TownyException(TownySettings.getLangString("msg_err_player_has_too_many_invites"));
+		}
 
+//		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 //		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 //			Questioner questioner = (Questioner) test;
 //			questioner.loadClasses();
@@ -2171,10 +2186,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 //				System.out.println(e.getMessage());
 //			}
 //		} else
-			try {
-				townAddResident(town, newMember);
-			} catch (AlreadyRegisteredException e) {
-			}
+//			try {
+//				townAddResident(town, newMember);
+//			} catch (AlreadyRegisteredException e) {
+//			}
 	}
 
 	public static void townRemoveResident(Town town, Resident resident) throws EmptyTownException, NotRegisteredException {

@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.command.commandobjects;
 
+import com.palmergames.bukkit.towny.command.InviteCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.entity.Player;
 
 public class AcceptCommand extends BukkitCommand {
 	public AcceptCommand(String name) {
@@ -12,6 +14,11 @@ public class AcceptCommand extends BukkitCommand {
 
 	@Override
 	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		return false;
+		if (commandSender instanceof Player){
+			InviteCommand.parseAccept((Player) commandSender, strings);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

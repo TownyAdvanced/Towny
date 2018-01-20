@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -16,6 +17,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -646,8 +648,13 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	@Override
-	public void newReceivedInvite(Invite invite) {
-
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= 9) { // We only want 10 Invites, for residents, later we can make this number configurable
+			// We use 9 because if it is = 9 it adds the tenth
+			receivedinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException();
+		}
 	}
 
 	@Override

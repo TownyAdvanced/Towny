@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.invites;
 
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
 public interface TownyInviteReceiver {
 	List<Invite> getReceivedInvites();
 
-	void newReceivedInvite(Invite invite);
+	void newReceivedInvite(Invite invite) throws TooManyInvitesException;
 
 	void deleteReceivedInvite(Invite invite);
 }

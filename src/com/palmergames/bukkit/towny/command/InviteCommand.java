@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -100,7 +101,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void parseDeny(Player player, String[] args) {
+	public static void parseDeny(Player player, String[] args) {
 		Resident resident;
 		Town town = null;
 		try {
@@ -119,7 +120,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// We cut the first argument out of it so /invite *accept* args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
 			try {
-				town = TownyUniverse.getDataSource().getTown(args[1]);
+				town = TownyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;
@@ -134,10 +135,13 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		ListMultimap<Town, Resident> town2residents = InviteHandler.getTowntoresidentinvites();
 		if (town2residents.containsKey(town)) {
+			Bukkit.broadcastMessage("passed!");
 			if (town2residents.get(town).contains(resident)) {
+				Bukkit.broadcastMessage("passed!!");
 				for (Invite invite : resident.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {
+							Bukkit.broadcastMessage("passed!!!");
 							InviteHandler.declineInvite(invite);
 							return;
 						} catch (TownyException e) {
@@ -154,7 +158,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void parseAccept(Player player, String[] args) {
+	public static void parseAccept(Player player, String[] args) {
 		Resident resident;
 		Town town = null;
 		try {
@@ -170,7 +174,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (args.length >= 1) {
 			try {
-				town = TownyUniverse.getDataSource().getTown(args[1]);
+				town = TownyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;

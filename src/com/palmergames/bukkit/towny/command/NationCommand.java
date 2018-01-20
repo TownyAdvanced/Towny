@@ -11,11 +11,14 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -28,7 +31,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
 import java.util.ArrayList;
@@ -771,8 +773,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 	}
 
-	private static void nationInviteTown(Player player, Nation nation, Town town) throws AlreadyRegisteredException {
-//		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
+	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
+
+		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(),nation,town);
+		try {
+			InviteHandler.addInviteToList(invite);
+			town.newReceivedInvite(invite);
+			nation.newSentInvite(invite);
+		} catch (TooManyInvitesException e){
+			town.deleteReceivedInvite(invite);
+			nation.deleteSentInvite(invite);
+			throw new TownyException(TownySettings.getLangString("msg_err_town_has_too_many_invites"));
+		}
+		//}
+		//		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
 //
 //		Resident townMayor = town.getMayor();
 //
@@ -797,11 +811,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 //				System.out.println(e.getMessage());
 // 			}
 // 			} else {
-
-		nation.addTown(town);
-		plugin.resetCache();
-		TownyUniverse.getDataSource().saveTown(town);
-		//}
 	}
 
 	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
@@ -949,7 +958,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (add && !nation.getAllies().contains(targetNation)) {
 					if (!targetNation.hasEnemy(nation)) {
 						if (TownySettings.isDisallowOneWayAlliance()) {
-							Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+//							Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 							
 							Player targetPlayer = BukkitTools.getPlayer(targetNation.getCapital().getMayor().getName());
 

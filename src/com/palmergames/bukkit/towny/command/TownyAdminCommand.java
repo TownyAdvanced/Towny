@@ -36,7 +36,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -795,7 +794,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 
 		// Use questioner to confirm.
-		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
+//		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
 //		if (this.sender instanceof Player && TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 //			Questioner questioner = (Questioner) test;

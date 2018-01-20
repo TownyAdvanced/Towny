@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -215,7 +216,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				if (!resident.getTown().equals(this))
 					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
@@ -1189,8 +1189,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	@Override
-	public void newReceivedInvite(Invite invite) {
-
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= 9) { // We only want 10 Invites, for towns, later we can make this number configurable
+			receivedinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException();
+		}
 	}
 
 	@Override
@@ -1204,8 +1208,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	@Override
-	public void newSentInvite(Invite invite) {
-
+	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
+		if (sentinvites.size() <= 34) { // We only want 35 Invites, for towns, later we can make this number configurable
+			sentinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException();
+		}
 	}
 
 	@Override

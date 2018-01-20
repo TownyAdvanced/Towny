@@ -3,13 +3,18 @@ package com.palmergames.bukkit.towny.invites;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
+import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
+import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
+import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
@@ -20,7 +25,6 @@ import java.util.List;
  */
 public class InviteHandler {
 	private static Towny plugin;
-	private static TownyUniverse universe;
 	private static ListMultimap<Town, Resident> towntoresidentinvites = ArrayListMultimap.create();
 	private static ListMultimap<Nation, Town> nationtotowninvites = ArrayListMultimap.create();
 	private static ListMultimap<Nation, Nation> nationtonationinvites = ArrayListMultimap.create();
@@ -28,7 +32,6 @@ public class InviteHandler {
 	public static void initialize(Towny plugin) {
 
 		InviteHandler.plugin = plugin;
-		universe = plugin.getTownyUniverse();
 	}
 
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
@@ -40,15 +43,23 @@ public class InviteHandler {
 				Resident resident = (Resident) invite.getReceiver();
 				Town town = (Town) invite.getSender();
 				TownCommand.townAddResident(town, resident);
+				TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+				resident.deleteReceivedInvite(invite);
+				town.deleteSentInvite(invite);
+				return;
 			}
 		}
 		if (receiver instanceof Town) {
 			if (sender instanceof Nation) { // Has to be true!
 				Town town = (Town) invite.getReceiver();
-				List<Town> towns = new ArrayList();
+				List<Town> towns = new ArrayList<Town>();
 				towns.add(town);
 				Nation nation = (Nation) invite.getSender();
 				NationCommand.nationAdd(nation, towns);
+				// Message handled in nationAdd()
+				town.deleteReceivedInvite(invite);
+				nation.deleteSentInvite(invite);
+				return;
 			}
 			// Nation invited Town
 		}
@@ -58,6 +69,11 @@ public class InviteHandler {
 				Nation sendernation = (Nation) invite.getSender();
 				receivernation.addAlly(sendernation);
 				sendernation.addAlly(receivernation);
+				TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
+				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
+				receivernation.deleteReceivedInvite(invite);
+				sendernation.deleteSentInvite(invite);
+				return;
 			}
 			// Nation invited other Nation to ally
 		}
@@ -75,6 +91,8 @@ public class InviteHandler {
 				Town town = (Town) invite.getSender();
 				resident.deleteReceivedInvite(invite);
 				town.deleteSentInvite(invite);
+				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
+				return;
 			}
 		}
 		if (receiver instanceof Town) {
@@ -83,7 +101,8 @@ public class InviteHandler {
 				Nation nation = (Nation) invite.getSender();
 				town.deleteReceivedInvite(invite);
 				nation.deleteSentInvite(invite);
-
+				TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
+				return;
 			}
 			// Nation invited Town
 		}
@@ -93,6 +112,8 @@ public class InviteHandler {
 				Nation sendernation = (Nation) invite.getSender();
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentInvite(invite);
+				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+				return;
 			}
 			// Nation invited other Nation to ally
 		}
@@ -110,5 +131,17 @@ public class InviteHandler {
 
 	public static ListMultimap<Town, Resident> getTowntoresidentinvites() {
 		return towntoresidentinvites;
+	}
+
+	public static void addInviteToList(PlayerJoinTownInvite invite) {
+		towntoresidentinvites.put((Town) invite.getSender(), (Resident) invite.getReceiver());
+	}
+
+	public static void addInviteToList(TownJoinNationInvite invite) {
+		nationtotowninvites.put((Nation) invite.getSender(), (Town) invite.getReceiver());
+	}
+
+	public static void addInviteToList(NationAllyNationInvite invite) {
+		nationtonationinvites.put((Nation) invite.getSender(), (Nation) invite.getReceiver());
 	}
 }
