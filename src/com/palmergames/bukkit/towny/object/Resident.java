@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes {
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
 	private List<Resident> friends = new ArrayList<Resident>();
 	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
@@ -638,4 +640,20 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		}
 	}
 
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) {
+
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	List<Invite> receivedinvites = new ArrayList();
 }

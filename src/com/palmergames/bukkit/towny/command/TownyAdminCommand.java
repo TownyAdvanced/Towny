@@ -1,18 +1,23 @@
 package com.palmergames.bukkit.towny.command;
 
-import ca.xshade.bukkit.questioner.Questioner;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
-
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyLogger;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.questioner.PurgeQuestionTask;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
@@ -23,7 +28,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -788,38 +792,37 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
-		
-		
+
+
 		// Use questioner to confirm.
 		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
-		if (this.sender instanceof Player && TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-			Questioner questioner = (Questioner) test;
-			questioner.loadClasses();
+//		if (this.sender instanceof Player && TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+//			Questioner questioner = (Questioner) test;
+//			questioner.loadClasses();
+//
+//			List<Option> options = new ArrayList<Option>();
+//			options.add(new Option(TownySettings.questionerAccept(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d"))));
+//			options.add(new Option(TownySettings.questionerDeny(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d")) {
+//
+//				@Override
+//				public void run() {
+//
+//					TownyMessaging.sendMessage(getSender(), "Purge Aborted!");
+//				}
+//			}));
+//
+//			Question question = new Question(this.sender.getName(), "Do you really want to perform this purge", options);
+//
+//			try {
+//				plugin.appendQuestion(questioner, question);
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+//			}
+//		} else
 
-			List<Option> options = new ArrayList<Option>();
-			options.add(new Option(TownySettings.questionerAccept(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d"))));
-			options.add(new Option(TownySettings.questionerDeny(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d")) {
-
-				@Override
-				public void run() {
-
-					TownyMessaging.sendMessage(getSender(), "Purge Aborted!");
-				}
-			}));
-			
-			Question question = new Question(this.sender.getName(), "Do you really want to perform this purge", options);
-			
-			try {
-				plugin.appendQuestion(questioner, question);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-
-			// Run a purge in it's own thread
-			new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
-		}
+		// Run a purge in it's own thread
+		new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
 
 	}
 

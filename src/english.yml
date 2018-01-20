@@ -1,5 +1,5 @@
 name: Towny
-version: 0.40
+version: 0.41
 language: english
 author: ElgarL
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -590,3 +590,11 @@ msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is f
 
 # Added in 0.40
 mayor_help_9: 'Attempt to unclaim an outpost'
+
+# Added in 0.41 (Invite-Update)
+invite_plu: 'Invites'
+invite_help_1: 'Accept an invite to join a town'
+invite_help_2: 'Decline an invite to join a town'
+invite_help_3: 'List all of your invites'
+msg_err_player_no_invites: 'You do not have any invites!'
+msg_err_player_has_multiple_invites: 'You have multiple invites please specify'

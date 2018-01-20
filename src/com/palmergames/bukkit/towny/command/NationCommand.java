@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import ca.xshade.bukkit.questioner.Questioner;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -21,10 +18,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.questioner.AllyQuestionTask;
-import com.palmergames.bukkit.towny.questioner.JoinNationTask;
-import com.palmergames.bukkit.towny.questioner.NationAllyTask;
-import com.palmergames.bukkit.towny.questioner.ResidentNationQuestionTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -779,37 +772,36 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws AlreadyRegisteredException {
+//		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
+//
+//		Resident townMayor = town.getMayor();
+//
+//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+//			Questioner questioner = (Questioner) test;
+//			questioner.loadClasses();
+//
+//			List<Option> options = new ArrayList<Option>();
+//			options.add(new Option(TownySettings.questionerAccept(), new JoinNationTask(townMayor, nation)));
+//			options.add(new Option(TownySettings.questionerDeny(), new ResidentNationQuestionTask(townMayor, nation) {
+//
+//				@Override
+//				public void run() {
+//
+//					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
+//				}
+//			}));
+//			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("nation_sing") + ": " + nation.getName()), options);
+//			try {
+//				plugin.appendQuestion(questioner, question);
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+// 			}
+// 			} else {
 
-		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
-
-		Resident townMayor = town.getMayor();
-
-		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-			Questioner questioner = (Questioner) test;
-			questioner.loadClasses();
-
-			List<Option> options = new ArrayList<Option>();
-			options.add(new Option(TownySettings.questionerAccept(), new JoinNationTask(townMayor, nation)));
-			options.add(new Option(TownySettings.questionerDeny(), new ResidentNationQuestionTask(townMayor, nation) {
-
-				@Override
-				public void run() {
-
-					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
-				}
-			}));
-			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("nation_sing") + ": " + nation.getName()), options);
-			try {
-				plugin.appendQuestion(questioner, question);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-
-			nation.addTown(town);
-			plugin.resetCache();
-			TownyUniverse.getDataSource().saveTown(town);
-		}
+		nation.addTown(town);
+		plugin.resetCache();
+		TownyUniverse.getDataSource().saveTown(town);
+		//}
 	}
 
 	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
@@ -960,42 +952,42 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 							
 							Player targetPlayer = BukkitTools.getPlayer(targetNation.getCapital().getMayor().getName());
-							
+
 							try {
 								if (!targetNation.getCapital().getMayor().isNPC()) {
 									if (targetPlayer.isOnline()) {
 										// We are not set as an enemy so we can set as ally.
-										if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-											Questioner questioner = (Questioner) test;
-											questioner.loadClasses();
-
-											List<Option> options = new ArrayList<Option>();
-											
-											options.add(new Option(TownySettings.questionerAccept(), new NationAllyTask(resident, targetNation)));
-											options.add(new Option(TownySettings.questionerDeny(), new AllyQuestionTask(resident, targetNation) {
-
-												@Override
-												public void run() {
-
-													try {
-														TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + resident.getTown().getNation().getName()));
-													} catch (NotRegisteredException e) {
-														e.printStackTrace();
-													}
-												}
-											}));
-											Question question = new Question(targetNation.getCapital().getMayor().getName(), String.format(TownySettings.getLangString("msg_ally_request"), TownySettings.getLangString("nation_sing") + ": " +  nation.getName()), options);
-											try {
-												plugin.appendQuestion(questioner, question);
-											} catch (Exception e) {
-												System.out.println(e.getMessage());
-											}
-										} else
-											try {
-												nation.addAlly(targetNation);
-												targetNation.addAlly(nation);
-											} catch (AlreadyRegisteredException e) {
-											}
+//										if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+//											Questioner questioner = (Questioner) test;
+//											questioner.loadClasses();
+//
+//											List<Option> options = new ArrayList<Option>();
+//
+//											options.add(new Option(TownySettings.questionerAccept(), new NationAllyTask(resident, targetNation)));
+//											options.add(new Option(TownySettings.questionerDeny(), new AllyQuestionTask(resident, targetNation) {
+//
+//												@Override
+//												public void run() {
+//
+//													try {
+//														TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + resident.getTown().getNation().getName()));
+//													} catch (NotRegisteredException e) {
+//														e.printStackTrace();
+//													}
+//												}
+//											}));
+//											Question question = new Question(targetNation.getCapital().getMayor().getName(), String.format(TownySettings.getLangString("msg_ally_request"), TownySettings.getLangString("nation_sing") + ": " +  nation.getName()), options);
+//											try {
+//												plugin.appendQuestion(questioner, question);
+//											} catch (Exception e) {
+//												System.out.println(e.getMessage());
+//											}
+//										} else
+										try {
+											nation.addAlly(targetNation);
+											targetNation.addAlly(nation);
+										} catch (AlreadyRegisteredException e) {
+										}
 									}
 								if (TownySettings.isDisallowOneWayAlliance() && add)
 									for (Nation newAlly : allies)

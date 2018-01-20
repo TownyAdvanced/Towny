@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import ca.xshade.bukkit.questioner.Questioner;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
@@ -34,9 +31,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.questioner.JoinTownTask;
-import com.palmergames.bukkit.towny.questioner.ResidentTownQuestionTask;
-import com.palmergames.bukkit.towny.questioner.TownQuestionTask;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
@@ -2001,50 +1995,49 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Use questioner to confirm.
 		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
-		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-			Questioner questioner = (Questioner) test;
-			questioner.loadClasses();
+//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+//			Questioner questioner = (Questioner) test;
+//			questioner.loadClasses();
+//
+//			List<Option> options = new ArrayList<Option>();
+//			options.add(new Option(TownySettings.questionerAccept(), new TownQuestionTask(player, town) {
+//
+//				@Override
+//				public void run() {
+//
+//					TownyUniverse.getDataSource().removeTown(town);
+//					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+//				}
+//
+//			}));
+//			options.add(new Option(TownySettings.questionerDeny(), new TownQuestionTask(player, town) {
+//
+//				@Override
+//				public void run() {
+//
+//					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
+//				}
+//			}));
+//			String output = "Do you really want to delete this town?";
+//			try {
+//				if (town.getHoldingBalance() > 0)
+//					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
+//			} catch (EconomyException e1) {
+//				e1.printStackTrace();
+//			}
+//			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
+//				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting this town will revert all townblocks to their pre-claimed state.");
+//			Question question = new Question(player.getName(), output, options);
+//
+//			try {
+//				plugin.appendQuestion(questioner, question);
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+//			}
+//		} else {
+		TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+		TownyUniverse.getDataSource().removeTown(town);
 
-			List<Option> options = new ArrayList<Option>();
-			options.add(new Option(TownySettings.questionerAccept(), new TownQuestionTask(player, town) {
-
-				@Override
-				public void run() {
-
-					TownyUniverse.getDataSource().removeTown(town);
-					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-				}
-
-			}));
-			options.add(new Option(TownySettings.questionerDeny(), new TownQuestionTask(player, town) {
-
-				@Override
-				public void run() {
-
-					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
-				}
-			}));
-			String output = "Do you really want to delete this town?";
-			try {
-				if (town.getHoldingBalance() > 0)
-					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
-			} catch (EconomyException e1) {
-				e1.printStackTrace();
-			}
-			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
-				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting this town will revert all townblocks to their pre-claimed state.");
-			Question question = new Question(player.getName(), output, options);
-
-			try {
-				plugin.appendQuestion(questioner, question);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-			TownyUniverse.getDataSource().removeTown(town);
-
-		}
 	}
 
 	/**
@@ -2157,27 +2150,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 
-		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-			Questioner questioner = (Questioner) test;
-			questioner.loadClasses();
-
-			List<Option> options = new ArrayList<Option>();
-			options.add(new Option(TownySettings.questionerAccept(), new JoinTownTask(newMember, town)));
-			options.add(new Option(TownySettings.questionerDeny(), new ResidentTownQuestionTask(newMember, town) {
-
-				@Override
-				public void run() {
-
-					TownyMessaging.sendTownMessage(getTown(), String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
-				}
-			}));
-			Question question = new Question(newMember.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("town_sing") + ": " + town.getName()), options);
-			try {
-				plugin.appendQuestion(questioner, question);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		} else
+//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
+//			Questioner questioner = (Questioner) test;
+//			questioner.loadClasses();
+//
+//			List<Option> options = new ArrayList<Option>();
+//			options.add(new Option(TownySettings.questionerAccept(), new JoinTownTask(newMember, town)));
+//			options.add(new Option(TownySettings.questionerDeny(), new ResidentTownQuestionTask(newMember, town) {
+//
+//				@Override
+//				public void run() {
+//
+//					TownyMessaging.sendTownMessage(getTown(), String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
+//				}
+//			}));
+//			Question question = new Question(newMember.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("town_sing") + ": " + town.getName()), options);
+//			try {
+//				plugin.appendQuestion(questioner, question);
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+//			}
+//		} else
 			try {
 				townAddResident(town, newMember);
 			} catch (AlreadyRegisteredException e) {

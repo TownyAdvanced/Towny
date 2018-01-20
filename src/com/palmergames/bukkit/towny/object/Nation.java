@@ -6,6 +6,9 @@ import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -18,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyEconomyObject implements ResidentList {
+public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -540,4 +543,37 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public void setRegistered(long registered) {
 		this.registered = registered;
 	}
+
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) {
+
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentInvites() {
+		return sentinvites;
+	}
+
+	@Override
+	public void newSentInvite(Invite invite) {
+
+	}
+
+	@Override
+	public void deleteSentInvite(Invite invite) {
+		sentinvites.remove(invite);
+	}
+
+	List<Invite> receivedinvites = new ArrayList();
+	List<Invite> sentinvites = new ArrayList();
 }

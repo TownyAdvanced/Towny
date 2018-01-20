@@ -1401,6 +1401,11 @@ public enum ConfigNodes {
 			"accept",
 			"# Command used to accept towny invites)",
 			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_COOLDOWN_TIME(
+			"invite_system.cooldowntime",
+			"0m",
+			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+			"# a player's first log in and when they can be invited to a town."),
 	INVITE_SYSTEM_DENY_COMMAND(
 			"invite_system.deny_command",
 			"deny",

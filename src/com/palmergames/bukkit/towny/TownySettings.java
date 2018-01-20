@@ -2183,33 +2183,40 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_LOGGING);
 	}
 
-	public static boolean isUsingQuestioner() {
+	//public static boolean isUsingQuestioner() {
+	//
+	//	return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
+	//}
 
-		return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
+	public static String getAcceptCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}
 
-	public static void setUsingQuestioner(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
+	public static String getDenyCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND);
 	}
+	//public static void setUsingQuestioner(boolean newSetting) {
+	//
+	//	setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
+	//}
 
 	public static boolean getOutsidersPreventPVPToggle() { 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
 
-	public static String questionerAccept() {
+	//public static String questionerAccept() {
+	//
+	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
+	//}
 
-		return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
-	}
-
-	public static String questionerDeny() {
-
-		return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
-	}
+	//public static String questionerDeny() {
+	//
+	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
+	//}
 	
 	public static long getTownInviteCooldown() {
-		
-		return getSeconds(ConfigNodes.PLUGIN_QUESTIONER_COOLDOWN_TIME);
+
+		return getSeconds(ConfigNodes.INVITE_SYSTEM_COOLDOWN_TIME);
 	}
 
 	public static boolean isAppendingToLog() {
