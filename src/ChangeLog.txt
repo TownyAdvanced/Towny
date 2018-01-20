@@ -2733,3 +2733,5 @@ v0.92.0.5:
       - add ",BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE" to the protection.item_use_ids if you would like boats to be prevented using the Item_Use protection.
     - Fix for edge-case item frame protection.
     - Language files bumped to 0.40.
+    - Fix for min_distance_from_town_plots in config not being checked during initial claiming of new town.
+    - Fix for towny-server account losing money when closed economy is enabled in the config and a town or nation changes its name.

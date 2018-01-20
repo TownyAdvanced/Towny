@@ -1555,6 +1555,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (world.hasTownBlock(key))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
+			
+			if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
+				throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 			if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 				throw new TownyException(TownySettings.getLangString("msg_too_close"));

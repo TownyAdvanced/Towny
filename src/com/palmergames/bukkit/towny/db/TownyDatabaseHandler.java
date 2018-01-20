@@ -697,8 +697,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownySettings.isUsingEconomy())
 				try {
-					townBalance = town.getHoldingBalance();
+					townBalance = town.getHoldingBalance();					
+					if (TownySettings.isEcoClosedEconomyEnabled()){
+						town.pay(townBalance, "Town Rename");
+					} 
 					town.removeAccount();
+					
 				} catch (EconomyException e) {
 				}
 			UUID oldUUID = town.getUuid();
@@ -808,7 +812,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownySettings.isUsingEconomy())
 				try {
 					nationBalance = nation.getHoldingBalance();
+					if (TownySettings.isEcoClosedEconomyEnabled()){
+						nation.pay(nationBalance, "Nation Rename");
+					}
 					nation.removeAccount();
+					
 				} catch (EconomyException e) {
 				}
 
