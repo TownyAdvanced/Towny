@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import ca.xshade.bukkit.questioner.Questioner;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
@@ -43,7 +40,6 @@ import com.palmergames.bukkit.towny.permissions.PEXSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.permissions.bPermsSource;
-import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -700,14 +696,7 @@ public class Towny extends JavaPlugin {
 
 		TownyLogger.setup(getTownyUniverse().getRootFolder(), TownySettings.isAppendingToLog());
 	}
-
-	public void appendQuestion(Questioner questioner, Question question) throws Exception {
-
-		for (Option option : question.getOptions())
-			if (option.getReaction() instanceof TownyQuestionTask)
-				((TownyQuestionTask) option.getReaction()).setTowny(this);
-		questioner.appendQuestion(question);
-	}
+	
 
 	public boolean parseOnOff(String s) throws Exception {
 
