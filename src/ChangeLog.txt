@@ -2732,3 +2732,4 @@ v0.92.0.5:
     - Required Config addition:
       - add ",BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE" to the protection.item_use_ids if you would like boats to be prevented using the Item_Use protection.
     - Fix for edge-case item frame protection.
+    - Language files bumped to 0.40.
