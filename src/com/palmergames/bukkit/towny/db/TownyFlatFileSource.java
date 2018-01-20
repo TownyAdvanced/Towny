@@ -73,7 +73,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				return novalue;
 			}
 		}
-	};
+	}
 
 	@Override
 	public void initialize(Towny plugin, TownyUniverse universe) {

@@ -107,6 +107,6 @@ public enum TownSpawnLevel {
 		TRUE,
 		FALSE,
 		WAR,
-		PEACE;
+		PEACE
 	}
 }

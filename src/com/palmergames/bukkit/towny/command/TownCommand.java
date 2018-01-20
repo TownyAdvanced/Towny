@@ -2677,8 +2677,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "[circle/rect] [radius]", TownySettings.getLangString("mayor_help_7")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "all", TownySettings.getLangString("mayor_help_8")));
 			player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town unclaim", "outpost", TownySettings.getLangString("mayor_help_9")));
-			// THIS IS HIGHLY IMPORTANT ( LANG STRING: " MAYOR HELP 9 " ) DOES NOT EXIST! THIS SHOULD BE ADDED, YET I HAVE NO IDEA HOW TO ADD LANG STRINGS xD PLEASE REMOVE THIS COMMENT AFTERWARDS.
-			// Lang String required
 		} else {
 			Resident resident;
 			Town town;
