@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.command.TownyWorldCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -808,16 +810,18 @@ public class Towny extends JavaPlugin {
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	public void registerSpecialCommands() {
-		Command ac = new AcceptCommand(TownySettings.getAcceptCommand());
-		Command dc = new DenyCommand(TownySettings.getDenyCommand());
-
+		List<Command> commands = new ArrayList<Command>();
+		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
+		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
+		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
+		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
 		try {
 			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
 			bukkitCommandMap.setAccessible(true);
 			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-			commandMap.register(TownySettings.getAcceptCommand(), ac);
-			commandMap.register(TownySettings.getDenyCommand(), dc);
+
+			commandMap.registerAll("towny", commands);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

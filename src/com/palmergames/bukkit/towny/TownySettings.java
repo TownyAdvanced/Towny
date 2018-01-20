@@ -2195,6 +2195,14 @@ public class TownySettings {
 	public static String getDenyCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND);
 	}
+
+	public static String getConfirmCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND);
+	}
+
+	public static String getCancelCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND);
+	}
 	//public static void setUsingQuestioner(boolean newSetting) {
 	//
 	//	setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
