@@ -1,5 +1,5 @@
 name: Towny
-version: 0.39
+version: 0.40
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -586,3 +586,6 @@ msg_err_town_spawn_ally_forbidden_war: '&cViajar al spawn de ciudades aliadas co
 msg_err_town_spawn_ally_forbidden_false: '&cViajar al spawn de ciudades aliadas con tu nación está prohibido durante la guerra.'
 msg_err_public_spawn_forbidden_war: '&cViajar al spawn público de otras ciudades sólo está permitido durante la guerra.'
 msg_err_public_spawn_forbidden_peace: '&cViajar al spawn público de otras ciudades está prohibido durante la guerra.'
+
+# Added in 0.40
+mayor_help_9: 'Unclaimear Outpost'

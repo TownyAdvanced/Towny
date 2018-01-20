@@ -1,5 +1,5 @@
 name: Towny
-version: 0.39
+version: 0.40
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -587,3 +587,6 @@ msg_err_town_spawn_ally_forbidden_war: '&cStadt-Spawn Reisen zu anderen Städten
 msg_err_town_spawn_ally_forbidden_false: '&cStadt-Spawn Reisen zu anderen Städten in verbündeten Nationen sind während des Krieges verboten.'
 msg_err_public_spawn_forbidden_war: '&cÖffentliche Spawn-Reisen zu anderen Städeten sind nur erlaubt während des Krieges.'
 msg_err_public_spawn_forbidden_peace: '&cÖffentliche Spawn-Reisen zu anderen Städeten sind während des Krieges verboten.'
+
+# Added in 0.40
+mayor_help_9: 'Attempt to unclaim an outpost'
