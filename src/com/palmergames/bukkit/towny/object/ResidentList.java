@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ResidentList {
 
-	public List<Resident> getResidents();
+	List<Resident> getResidents();
 
-	public boolean hasResident(String name);
+	boolean hasResident(String name);
 
 	List<Resident> getOutlaws();
 }

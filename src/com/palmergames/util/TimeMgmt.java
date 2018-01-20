@@ -21,8 +21,6 @@ public class TimeMgmt {
 		return getCountdownDelays(start, defaultCountdownDelays);
 	}
 
-	// TODO: Throw specific exception
-	// TODO: Faster loop, check if next warning is belong the delay index
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
 		List<Long> out = new ArrayList<Long>();

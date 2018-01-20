@@ -1,11 +1,10 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.HashMap;
-
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import java.util.HashMap;
 
 public class PlayerCache {
 
@@ -200,7 +199,7 @@ public class PlayerCache {
 		TOWN_RESIDENT,
 		TOWN_ALLY,
 		ENEMY
-	};
+	}
 
 	private TownBlockStatus townBlockStatus = TownBlockStatus.UNKOWN;
 
