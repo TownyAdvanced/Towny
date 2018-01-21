@@ -593,9 +593,16 @@ mayor_help_9: 'Attempt to unclaim an outpost'
 
 # Added in 0.41 (Invite-Update)
 invite_plu: 'Invites'
+invite_sent_by: 'Invite Sent By'
 invite_help_1: 'Accept an invite to join a town'
 invite_help_2: 'Decline an invite to join a town'
 invite_help_3: 'List all of your invites'
+town_invite_help_1: 'Invite a player to your town.'
+town_invite_help_2: 'Revoke an invite, that was sent to a player'
+town_invite_help_3: 'Lists all of your sent invites'
+town_invite_help_4: 'Lists all of the invites you''ve received'
+town_invite_help_5: 'Accept a request to join a nation'
+town_invite_help_6: 'Deny a request to join a nation'
 msg_err_player_no_invites: 'You do not have any invites!'
 msg_err_player_has_multiple_invites: 'You have multiple invites please specify'
 msg_err_player_has_too_many_invites: "%s has too many invites, ask them to decline some, before inviting again."
@@ -605,3 +612,8 @@ msg_err_town_no_invites: 'Town does not have any invites!'
 msg_err_town_has_too_many_invites: "Town %s has too many invites, ask them to decline some, before inviting again."
 msg_err_town_already_invited: "You have already invited %s to join your nation!"
 nation_revoke_invite: "Nation %s, revoked your invite to join them"
+player_received_invites: "You have recieved %a/%m invites."
+town_received_invites: "Town has recieved %a/%m invites."
+town_sent_invites: "Town has sent %a/%m invites."
+nation_received_invites: "Nation has recieved %a/%m invites."
+nation_rsent_invites: "Nation has sent %a/%m invites."

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
+import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -498,26 +499,157 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 	}
+	private static final List<String> invite = new ArrayList<String>();
+
+	static {
+		invite.add(ChatTools.formatTitle("/town invite"));
+		invite.add(ChatTools.formatCommand("", "/town", "invite [player]", TownySettings.getLangString("town_invite_help_1")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite -[player]", TownySettings.getLangString("town_invite_help_2")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite sent", TownySettings.getLangString("town_invite_help_3")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite received", TownySettings.getLangString("town_invite_help_4")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", TownySettings.getLangString("town_invite_help_5")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", TownySettings.getLangString("town_invite_help_5")));
+	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
 		// We know he has the main permission to manage this stuff. So Let's continue:
 
+		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
 		if (newSplit.length == 0) { // (/town invite)
-			// Show status Message
+			String[] msgs;
+			List<String> messages = new ArrayList<String>();
+
+			String received = TownySettings.getLangString("town_received_invites")
+					.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
+					)
+					.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
+			String sent = TownySettings.getLangString("town_sent_invites")
+					.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown()))
+					)
+					.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
+
+
+			for (String msg : invite) {
+				messages.add(Colors.strip(msg));
+			}
+			messages.add(received);
+			messages.add(sent);
+			msgs = messages.toArray(new String[0]);
+			player.sendMessage(msgs);
 
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
-			if (newSplit[0].equalsIgnoreCase("sent")) { // /town invite sent
-
+			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
+				for (String msg : invite) {
+					player.sendMessage(Colors.strip(msg));
+				}
+			}
+			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
+				List<Invite> sentinvites = resident.getTown().getSentInvites();
+				int page = 1;
+				if (newSplit.length >= 2) {
+					try {
+						page = Integer.parseInt(newSplit[1]);
+					} catch (NumberFormatException e) {
+						page = 1;
+					}
+				}
+				InviteCommand.sendInviteList(player, sentinvites, page, true);
+				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("received")) { // /town invite received
-
+				List<Invite> receivedinvites = resident.getTown().getReceivedInvites();
+				int page = 1;
+				if (newSplit.length >= 2) {
+					try {
+						page = Integer.parseInt(newSplit[1]);
+					} catch (NumberFormatException e) {
+						page = 1;
+					}
+				}
+				InviteCommand.sendInviteList(player, receivedinvites, page, true);
+				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("accept")) { // /town invite accept
+				Town town = resident.getTown();
+				Nation nation;
+				List<Invite> invites = town.getReceivedInvites();
 
+				if (invites.size() == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_no_invites"));
+					return;
+				}
+				if (newSplit.length >= 2) { // /invite deny args[1]
+					try {
+						nation = TownyUniverse.getDataSource().getNation(newSplit[1]);
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+						return;
+					}
+				} else {
+					if (invites.size() == 1) { // Only 1 Invite.
+						nation = (Nation) invites.get(0).getSender();
+					} else {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_has_multiple_invites"));
+						return;
+					}
+				}
+				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
+				if (nation2residents.containsKey(town)) {
+					if (nation2residents.get(nation).contains(town)) {
+						for (Invite invite : town.getReceivedInvites()) {
+							if (invite.getSender().equals(nation)) {
+								try {
+									InviteHandler.acceptInvite(invite);
+									return;
+								} catch (InvalidObjectException e) {
+									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+								}
+							}
+						}
+					}
+				}
 			}
 			if (newSplit[0].equalsIgnoreCase("deny")) { // /town invite deny
+				Town town = resident.getTown();
+				Nation nation;
+				List<Invite> invites = town.getReceivedInvites();
 
+				if (invites.size() == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_no_invites"));
+					return;
+				}
+				if (newSplit.length >= 2) { // /invite deny args[1]
+					try {
+						nation = TownyUniverse.getDataSource().getNation(newSplit[1]);
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+						return;
+					}
+				} else {
+					if (invites.size() == 1) { // Only 1 Invite.
+						nation = (Nation) invites.get(0).getSender();
+					} else {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_has_multiple_invites"));
+						return;
+					}
+				}
+				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
+				if (nation2residents.containsKey(town)) {
+					if (nation2residents.get(nation).contains(town)) {
+						for (Invite invite : town.getReceivedInvites()) {
+							if (invite.getSender().equals(nation)) {
+								try {
+									InviteHandler.declineInvite(invite, false);
+									return;
+								} catch (InvalidObjectException e) {
+									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+								}
+							}
+						}
+					}
+				}
 			} else { // He
 				townAdd(player, null, newSplit);
 				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.

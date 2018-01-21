@@ -155,13 +155,35 @@ public class InviteHandler {
 		nationtonationinvites.put((Nation) invite.getSender(), (Nation) invite.getReceiver());
 	}
 
-	public int getReceivedInvitesAmount(TownyInviteReceiver receiver){
+	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver){
 		List<Invite> invites = receiver.getReceivedInvites();
 		return invites.size();
 	}
 
-	public int getSentInvitesAmount(TownyInviteSender sender){
+	public static int getSentInvitesAmount(TownyInviteSender sender){
 		List<Invite> invites = sender.getSentInvites();
 		return invites.size();
 	}
+	public static int getReceivedInvitesMaxAmount(TownyInviteSender receiver){
+		if (receiver instanceof Resident){
+			return 10;
+		}
+		if (receiver instanceof Town){
+			return 10;
+		}
+		if (receiver instanceof Nation){
+			return 10;
+		}
+		return 0;
+	}
+	public static int getSentInvitesMaxAmount(TownyInviteSender sender){
+		if (sender instanceof Town){
+			return 35;
+		}
+		if (sender instanceof Nation){
+			return 35;
+		}
+		return 0;
+	}
+
 }
