@@ -775,12 +775,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
-		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(),nation,town);
+		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(), nation, town);
 		try {
-			InviteHandler.addInviteToList(invite);
-			town.newReceivedInvite(invite);
-			nation.newSentInvite(invite);
-		} catch (TooManyInvitesException e){
+			if (!InviteHandler.getNationtotowninvites().containsEntry(nation, town)) {
+				InviteHandler.addInviteToList(invite);
+				town.newReceivedInvite(invite);
+				nation.newSentInvite(invite);
+			} else {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_already_invited"), town.getName()));
+			}
+		} catch (TooManyInvitesException e) {
 			town.deleteReceivedInvite(invite);
 			nation.deleteSentInvite(invite);
 			throw new TownyException(TownySettings.getLangString("msg_err_town_has_too_many_invites"));

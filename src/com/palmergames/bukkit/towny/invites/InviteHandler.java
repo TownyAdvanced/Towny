@@ -44,6 +44,7 @@ public class InviteHandler {
 				Town town = (Town) invite.getSender();
 				TownCommand.townAddResident(town, resident);
 				TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+				getTowntoresidentinvites().remove(town,resident);
 				resident.deleteReceivedInvite(invite);
 				town.deleteSentInvite(invite);
 				return;
@@ -57,6 +58,7 @@ public class InviteHandler {
 				Nation nation = (Nation) invite.getSender();
 				NationCommand.nationAdd(nation, towns);
 				// Message handled in nationAdd()
+				getNationtotowninvites().remove(nation,town);
 				town.deleteReceivedInvite(invite);
 				nation.deleteSentInvite(invite);
 				return;
@@ -71,6 +73,7 @@ public class InviteHandler {
 				sendernation.addAlly(receivernation);
 				TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
 				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
+				getNationtonationinvites().remove(sendernation,receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentInvite(invite);
 				return;
@@ -89,6 +92,7 @@ public class InviteHandler {
 			if (sender instanceof Town) { // Has to be true!
 				Resident resident = (Resident) invite.getReceiver();
 				Town town = (Town) invite.getSender();
+				getTowntoresidentinvites().remove(town,resident);
 				resident.deleteReceivedInvite(invite);
 				town.deleteSentInvite(invite);
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
@@ -99,6 +103,7 @@ public class InviteHandler {
 			if (sender instanceof Nation) { // Has to be true!
 				Town town = (Town) invite.getReceiver();
 				Nation nation = (Nation) invite.getSender();
+				getNationtotowninvites().remove(nation,town);
 				town.deleteReceivedInvite(invite);
 				nation.deleteSentInvite(invite);
 				TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
@@ -110,6 +115,7 @@ public class InviteHandler {
 			if (sender instanceof Nation) { // Has to be true!
 				Nation receivernation = (Nation) invite.getReceiver();
 				Nation sendernation = (Nation) invite.getSender();
+				getNationtonationinvites().remove(sendernation,receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentInvite(invite);
 				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));

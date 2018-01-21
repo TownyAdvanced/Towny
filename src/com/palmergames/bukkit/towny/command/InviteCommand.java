@@ -187,18 +187,16 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		// At this point I consider having a valid Town & a valid Player so a final check is ran:
 		ListMultimap<Town, Resident> town2residents = InviteHandler.getTowntoresidentinvites();
-		if (town2residents.containsKey(town)) {
-			if (town2residents.get(town).contains(resident)) {
-				for (Invite invite : resident.getReceivedInvites()) {
-					if (invite.getSender().equals(town)) {
-						try {
-							InviteHandler.acceptInvite(invite);
-							return;
-						} catch (TownyException e) {
-							e.printStackTrace();
-						} catch (InvalidObjectException e) {
-							e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-						}
+		if (town2residents.containsEntry(town, resident)) {
+			for (Invite invite : resident.getReceivedInvites()) {
+				if (invite.getSender().equals(town)) {
+					try {
+						InviteHandler.acceptInvite(invite);
+						return;
+					} catch (TownyException e) {
+						e.printStackTrace();
+					} catch (InvalidObjectException e) {
+						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
 				}
 			}

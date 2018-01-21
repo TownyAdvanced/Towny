@@ -2155,9 +2155,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender,town,newMember);
 		try {
-			InviteHandler.addInviteToList(invite);
-			newMember.newReceivedInvite(invite);
-			town.newSentInvite(invite);
+			if (!InviteHandler.getTowntoresidentinvites().containsEntry(town, newMember)) {
+				InviteHandler.addInviteToList(invite);
+				newMember.newReceivedInvite(invite);
+				town.newSentInvite(invite);
+			} else {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
+			}
 		} catch (TooManyInvitesException e){
 			newMember.deleteReceivedInvite(invite);
 			town.deleteSentInvite(invite);

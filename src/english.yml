@@ -599,4 +599,6 @@ invite_help_3: 'List all of your invites'
 msg_err_player_no_invites: 'You do not have any invites!'
 msg_err_player_has_multiple_invites: 'You have multiple invites please specify'
 msg_err_player_has_too_many_invites: "%s has too many invites, ask them to decline some, before inviting again."
+msg_err_player_already_invited: "You have already invited %s to join your town!"
 msg_err_town_has_too_many_invites: "Town %s has too many invites, ask them to decline some, before inviting again."
+msg_err_town_already_invited: "You have already invited %s to join your nation!"
