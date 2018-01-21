@@ -408,12 +408,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					parseTownJoin(player, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("invite")) {
+				} else if (split[0].equalsIgnoreCase("add")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ADD.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					townAdd(player, null, newSplit);
+
+				} else if (split[0].equalsIgnoreCase("invite")) {
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_MANAGE.getNode())) {
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ADD.getNode())) {
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						} else { // He does have permission to invite/uninvite people, but he doesn't have perms to use other stuff
+							townAdd(player, null, newSplit);
+						}
+					} else { // He does have permission to manage Real invite Permissions. (Mayor or even assisstant)
+						parseInviteCommand(player, newSplit);
+					}
+
 
 				} else if (split[0].equalsIgnoreCase("kick")) {
 
@@ -485,6 +497,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
+	}
+
+	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
+		// We know he has the main permission to manage this stuff. So Let's continue:
+
+		if (newSplit.length == 0) { // (/town invite)
+			// Show status Message
+
+		}
+		if (newSplit.length >= 1) { // /town invite [something]
+			if (newSplit[0].equalsIgnoreCase("sent")) { // /town invite sent
+
+			}
+			if (newSplit[0].equalsIgnoreCase("received")) { // /town invite received
+
+			}
+			if (newSplit[0].equalsIgnoreCase("accept")) { // /town invite accept
+
+			}
+			if (newSplit[0].equalsIgnoreCase("deny")) { // /town invite deny
+
+			} else { // He
+				townAdd(player, null, newSplit);
+				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.
+				// If it is invalid it is handled in townAdd() so, I'm good
+			}
+		}
 	}
 
 	private void parseTownOutlawCommand(Player player, String[] split) throws TownyException {

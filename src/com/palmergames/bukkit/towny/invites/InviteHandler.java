@@ -154,4 +154,14 @@ public class InviteHandler {
 	public static void addInviteToList(NationAllyNationInvite invite) {
 		nationtonationinvites.put((Nation) invite.getSender(), (Nation) invite.getReceiver());
 	}
+
+	public int getReceivedInvitesAmount(TownyInviteReceiver receiver){
+		List<Invite> invites = receiver.getReceivedInvites();
+		return invites.size();
+	}
+
+	public int getSentInvitesAmount(TownyInviteSender sender){
+		List<Invite> invites = sender.getSentInvites();
+		return invites.size();
+	}
 }
