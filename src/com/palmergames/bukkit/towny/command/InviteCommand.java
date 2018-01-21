@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,7 +48,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			if (command.getName().equalsIgnoreCase("invite")) {
 				if (label.equalsIgnoreCase("invites") && args.length == 0) {
-					parseList(player);
+					parseInviteList(player);
 				} else {
 					parseInviteCommand(player, command, args);
 				}
@@ -71,7 +70,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(line);
 			}
 		} else if (split[0].equalsIgnoreCase("list")) {
-			parseList(player);
+			parseInviteList(player);
 		} else if (split[0].equalsIgnoreCase(TownySettings.getAcceptCommand())) {
 			parseAccept(player, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase(TownySettings.getDenyCommand())) {
@@ -80,7 +79,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void parseList(Player player) {
+	private static void parseInviteList(Player player) {
 		// Now we check the size of the player invites, if there is more than 10 invites (not possible), We only displayed the first 10.
 		Resident resident;
 		try {
@@ -130,18 +129,16 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				town = (Town) invites.get(0).getSender();
 			} else {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_has_multiple_invites"));
+				parseInviteList(player);
 				return;
 			}
 		}
 		ListMultimap<Town, Resident> town2residents = InviteHandler.getTowntoresidentinvites();
 		if (town2residents.containsKey(town)) {
-			Bukkit.broadcastMessage("passed!");
 			if (town2residents.get(town).contains(resident)) {
-				Bukkit.broadcastMessage("passed!!");
 				for (Invite invite : resident.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {
-							Bukkit.broadcastMessage("passed!!!");
 							InviteHandler.declineInvite(invite);
 							return;
 						} catch (TownyException e) {
@@ -183,7 +180,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (invites.size() == 1) {
 				town = (Town) invites.get(0).getSender();
 			} else {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_player_has_multiple_invites"));
+				parseInviteList(player);
 				return;
 			}
 		}
@@ -210,7 +208,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void sendInviteList(Player player, List<Invite> list) {
+	private static void sendInviteList(Player player, List<Invite> list) {
 		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
 		List<String> invitesformatted = new ArrayList();
 		for (int i = 0; i < list.size(); i++) {
