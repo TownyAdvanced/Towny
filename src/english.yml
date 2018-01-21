@@ -601,5 +601,7 @@ msg_err_player_has_multiple_invites: 'You have multiple invites please specify'
 msg_err_player_has_too_many_invites: "%s has too many invites, ask them to decline some, before inviting again."
 msg_err_player_already_invited: "You have already invited %s to join your town!"
 town_revoke_invite: "Town %s, revoked your invite to join them"
+msg_err_town_no_invites: 'Town does not have any invites!'
 msg_err_town_has_too_many_invites: "Town %s has too many invites, ask them to decline some, before inviting again."
 msg_err_town_already_invited: "You have already invited %s to join your nation!"
+nation_revoke_invite: "Nation %s, revoked your invite to join them"

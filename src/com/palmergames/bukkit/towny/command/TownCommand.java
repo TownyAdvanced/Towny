@@ -482,7 +482,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} catch (Exception x) {
-			x.printStackTrace();
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
@@ -2172,16 +2171,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 	private static void townRevokeInviteResident(Town town, List<Resident> residents) {
-		Bukkit.broadcastMessage("Final Reach statement");
 
 		for (Resident invited: residents) {
-			Bukkit.broadcastMessage(invited.getName());
 			if (InviteHandler.getTowntoresidentinvites().containsEntry(town, invited)) {
 				InviteHandler.getTowntoresidentinvites().remove(town, invited);
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
+							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
 						}
