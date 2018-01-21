@@ -516,18 +516,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
+		String received = TownySettings.getLangString("town_received_invites")
+				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
+				)
+				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
+		String sent = TownySettings.getLangString("town_sent_invites")
+				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown()))
+				)
+				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
+
+
+
 		if (newSplit.length == 0) { // (/town invite)
 			String[] msgs;
 			List<String> messages = new ArrayList<String>();
-
-			String received = TownySettings.getLangString("town_received_invites")
-					.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
-					)
-					.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
-			String sent = TownySettings.getLangString("town_sent_invites")
-					.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown()))
-					)
-					.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
 
 
 			for (String msg : invite) {
@@ -556,6 +558,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, sentinvites, page, true);
+				player.sendMessage(sent);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("received")) { // /town invite received
@@ -568,10 +571,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						page = 1;
 					}
 				}
-				InviteCommand.sendInviteList(player, receivedinvites, page, true);
+				InviteCommand.sendInviteList(player, receivedinvites, page, false);
+				player.sendMessage(received);
 				return;
 			}
-			if (newSplit[0].equalsIgnoreCase("accept")) { // /town invite accept
+			if (newSplit[0].equalsIgnoreCase("accept")) {
+				// /town (gone)
+				// invite (gone)
+				// args[0] = accept = length = 1
+				// args[1] = [Nation] = length = 2
 				Town town = resident.getTown();
 				Nation nation;
 				List<Invite> invites = town.getReceivedInvites();
@@ -588,15 +596,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 				} else {
-					if (invites.size() == 1) { // Only 1 Invite.
-						nation = (Nation) invites.get(0).getSender();
-					} else {
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_has_multiple_invites"));
-						return;
-					}
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_specify_invite"));
+					InviteCommand.sendInviteList(player, invites,1,false);
+					return;
 				}
 				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
-				if (nation2residents.containsKey(town)) {
+				if (nation2residents.containsKey(nation)) {
 					if (nation2residents.get(nation).contains(town)) {
 						for (Invite invite : town.getReceivedInvites()) {
 							if (invite.getSender().equals(nation)) {
@@ -628,15 +633,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 				} else {
-					if (invites.size() == 1) { // Only 1 Invite.
-						nation = (Nation) invites.get(0).getSender();
-					} else {
-						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_has_multiple_invites"));
-						return;
-					}
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_town_specify_invite"));
+					InviteCommand.sendInviteList(player, invites, 1, false);
+					return;
 				}
 				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
-				if (nation2residents.containsKey(town)) {
+				if (nation2residents.containsKey(nation)) {
 					if (nation2residents.get(nation).contains(town)) {
 						for (Invite invite : town.getReceivedInvites()) {
 							if (invite.getSender().equals(nation)) {
