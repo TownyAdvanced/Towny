@@ -47,11 +47,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			if (command.getName().equalsIgnoreCase("invite")) {
-				if (label.equalsIgnoreCase("invites") && args.length == 0) {
-					parseInviteList(player);
-				} else {
-					parseInviteCommand(player, command, args);
-				}
+				parseInviteCommand(player, command, args);
 			}
 		} else
 			// Console
@@ -69,12 +65,16 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			for (String line : invite_help) {
 				player.sendMessage(line);
 			}
+			return;
 		} else if (split[0].equalsIgnoreCase("list")) {
 			parseInviteList(player);
+			return;
 		} else if (split[0].equalsIgnoreCase(TownySettings.getAcceptCommand())) {
 			parseAccept(player, StringMgmt.remFirstArg(split));
+			return;
 		} else if (split[0].equalsIgnoreCase(TownySettings.getDenyCommand())) {
 			parseDeny(player, StringMgmt.remFirstArg(split));
+			return;
 		}
 
 	}
@@ -139,10 +139,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				for (Invite invite : resident.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {
-							InviteHandler.declineInvite(invite);
+							InviteHandler.declineInvite(invite, false);
 							return;
-						} catch (TownyException e) {
-							e.printStackTrace();
 						} catch (InvalidObjectException e) {
 							e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 						}
@@ -207,7 +205,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void sendInviteList(Player player, List<Invite> list) {
-		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
+		// int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
 		List<String> invitesformatted = new ArrayList();
 		for (int i = 0; i < list.size(); i++) {
 			Invite invite = list.get(i);
@@ -223,11 +221,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 			String output = Colors.Blue + ((Town) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
 			invitesformatted.add(output);
-			player.sendMessage(ChatTools.formatList(TownySettings.getLangString("invite_plu"),
-					Colors.Blue + "Town" + Colors.Gray + " - " + Colors.LightBlue + "Inviter",
-					invitesformatted, null
-					)
-			);
 		}
+		player.sendMessage(ChatTools.formatList(TownySettings.getLangString("invite_plu"),
+				Colors.Blue + "Town" + Colors.Gray + " - " + Colors.LightBlue + "Inviter",
+				invitesformatted, null
+		));
 	}
 }

@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -56,6 +57,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -480,6 +482,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} catch (Exception x) {
+			x.printStackTrace();
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
@@ -2153,7 +2156,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
 
-		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender,town,newMember);
+		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, town, newMember);
 		try {
 			if (!InviteHandler.getTowntoresidentinvites().containsEntry(town, newMember)) {
 				InviteHandler.addInviteToList(invite);
@@ -2162,12 +2165,31 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
 			}
-		} catch (TooManyInvitesException e){
+		} catch (TooManyInvitesException e) {
 			newMember.deleteReceivedInvite(invite);
 			town.deleteSentInvite(invite);
 			throw new TownyException(TownySettings.getLangString("msg_err_player_has_too_many_invites"));
 		}
+	}
+	private static void townRevokeInviteResident(Town town, List<Resident> residents) {
+		Bukkit.broadcastMessage("Final Reach statement");
 
+		for (Resident invited: residents) {
+			Bukkit.broadcastMessage(invited.getName());
+			if (InviteHandler.getTowntoresidentinvites().containsEntry(town, invited)) {
+				InviteHandler.getTowntoresidentinvites().remove(town, invited);
+				for (Invite invite : invited.getReceivedInvites()) {
+					if (invite.getSender().equals(town)) {
+						try {
+							InviteHandler.declineInvite(invite, true);
+						} catch (InvalidObjectException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+	}
 //		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
 //		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
 //			Questioner questioner = (Questioner) test;
@@ -2194,7 +2216,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 //				townAddResident(town, newMember);
 //			} catch (AlreadyRegisteredException e) {
 //			}
-	}
 
 	public static void townRemoveResident(Town town, Resident resident) throws EmptyTownException, NotRegisteredException {
 
@@ -2367,6 +2388,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	public static void townAdd(Object sender, Town specifiedTown, String[] names) {
+		String[] namestouninvite = new String[]{};
 
 		String name;
 		if (sender instanceof Player) {
@@ -2391,8 +2413,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+		List<String> reslist = new ArrayList<String>(Arrays.asList(names));
+		// Our Arraylist is above
+		List<String> newreslist = new ArrayList<String>();
+		// The list of valid invites is above, there are currently none
+		List<String> removeinvites = new ArrayList<String>(Arrays.asList(namestouninvite));
+		// List of invites to be removed;
+		for (String resname : reslist) {
+			if (resname.startsWith("-")) {
+				removeinvites.add(resname.substring(1));
+				// Add to removing them, remove the "-"
+			} else {
+				newreslist.add(resname);
+				// add to adding them,
+			}
+		}
+		names = newreslist.toArray(new String[0]);
+		namestouninvite = removeinvites.toArray(new String[0]);
+		if (namestouninvite.length != 0) {
+			townRevokeInviteResident(town,TownyUniverse.getValidatedResidents(sender, namestouninvite));
+		}
 
-		townAddResidents(sender, town, TownyUniverse.getValidatedResidents(sender, names));
+		if (names.length != 0) {
+			townAddResidents(sender, town, TownyUniverse.getValidatedResidents(sender, names));
+		}
 
 		// Reset this players cached permissions
 		if (!name.equalsIgnoreCase("Console"))
