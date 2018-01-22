@@ -20,6 +20,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
 	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
+	TOWNY_COMMAND_NATION_INVITE_MANAGE("towny.command.nation.invite.manage"),
 	
 	// Covers all assignable ranks
 	TOWNY_COMMAND_NATION_RANK("towny.command.nation.rank.*"),

@@ -90,6 +90,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
+		String received = TownySettings.getLangString("player_received_invites")
+				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident))
+				)
+				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
 		try {
 			if (resident.getReceivedInvites().size() > 0) {
 				int page = 1;
@@ -103,6 +107,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				sendInviteList(player, resident.getReceivedInvites(), page, false);
+				player.sendMessage(received);
+
 			} else {
 				throw new TownyException(TownySettings.getLangString("msg_err_player_no_invites"));
 			}

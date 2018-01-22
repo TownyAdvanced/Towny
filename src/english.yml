@@ -603,18 +603,26 @@ town_invite_help_3: 'Lists all of your sent invites'
 town_invite_help_4: 'Lists all of the invites you''ve received'
 town_invite_help_5: 'Accept a request to join a nation'
 town_invite_help_6: 'Deny a request to join a nation'
+nation_invite_help_1: 'Invite a town to your town.'
+nation_invite_help_2: 'Revoke an invite, that was sent to a ptown'
+nation_invite_help_3: 'Lists all of your sent town invites'
+nation_invite_help_4: 'Lists all of the ally-requests you''ve received'
+nation_invite_help_5: 'Accept a request to ally a nation'
+nation_invite_help_6: 'Deny a request to ally a nation'
+nation_invite_help_7: 'Lists all of your sent ally requests'
 msg_err_player_no_invites: 'You do not have any invites!'
 msg_err_player_has_multiple_invites: 'You have multiple invites, please specify'
 msg_err_player_has_too_many_invites: "%s has too many invites, ask them to decline some, before inviting again."
 msg_err_player_already_invited: "You have already invited %s to join your town!"
 town_revoke_invite: "Town %s, revoked your invite to join them"
+nation_revoke_invinte: "Nation %s, revoked your invite to join them"
 msg_err_town_no_invites: 'Town does not have any invites!'
 msg_err_town_specify_invite: 'Please specify the invite!'
 msg_err_town_has_too_many_invites: "Town %s has too many invites, ask them to decline some, before inviting again."
 msg_err_town_already_invited: "You have already invited %s to join your nation!"
 nation_revoke_invite: "Nation %s, revoked your invite to join them"
-player_received_invites: "You have recieved %a/%m invites."
-town_received_invites: "Town has recieved %a/%m invites."
-town_sent_invites: "Town has sent %a/%m invites."
-nation_received_invites: "Nation has recieved %a/%m invites."
-nation_rsent_invites: "Nation has sent %a/%m invites."
+player_received_invites: "&bYou have recieved %a/%m invites."
+town_received_invites: "&bTown has recieved %a/%m invites."
+town_sent_invites: "&bTown has sent %a/%m invites."
+nation_received_invites: "&bNation has recieved %a/%m invites."
+nation_sent_invites: "&bNation has sent %a/%m invites."

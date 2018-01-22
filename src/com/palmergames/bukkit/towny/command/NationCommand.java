@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -33,6 +34,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -216,6 +218,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					nationAdd(player, newSplit);
 
+				} else if (split[0].equalsIgnoreCase("invite")) {
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_MANAGE.getNode())) {
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ADD.getNode())) {
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						} else {
+							nationAdd(player, newSplit);
+						}
+					} else { // He does have permission to manage Real invite Permissions. (Mayor or even assisstant)
+						parseInviteCommand(player, newSplit);
+					}
+
 				} else if (split[0].equalsIgnoreCase("kick")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_KICK.getNode()))
@@ -306,6 +319,62 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
+
+	}
+	private static final List<String> invite = new ArrayList<String>();
+	static {
+		invite.add(ChatTools.formatTitle("/town invite"));
+		invite.add(ChatTools.formatCommand("", "/nation", "invite [town]", TownySettings.getLangString("nation_invite_help_1")));
+		invite.add(ChatTools.formatCommand("", "/nation", "invite -[town]", TownySettings.getLangString("nation_invite_help_2")));
+		invite.add(ChatTools.formatCommand("", "/nation", "invite sent", TownySettings.getLangString("nation_invite_help_3")));
+	}
+
+	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
+		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+		String sent = TownySettings.getLangString("nation_sent_invites")
+				.replace("%a", Integer.toString(InviteHandler.getSentInvitesAmount(resident.getTown().getNation()))
+				)
+				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown().getNation())));
+
+		if (newSplit.length == 0) { // (/town invite)
+			String[] msgs;
+			List<String> messages = new ArrayList<String>();
+
+
+			for (String msg : invite) {
+				messages.add(Colors.strip(msg));
+			}
+			messages.add(sent);
+			msgs = messages.toArray(new String[0]);
+			player.sendMessage(msgs);
+			return;
+		}
+		if (newSplit.length >= 1) { // /town invite [something]
+			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
+				for (String msg : invite) {
+					player.sendMessage(Colors.strip(msg));
+				}
+				return;
+			}
+			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
+				List<Invite> sentinvites = resident.getTown().getNation().getSentInvites();
+				int page = 1;
+				if (newSplit.length >= 2) {
+					try {
+						page = Integer.parseInt(newSplit[1]);
+					} catch (NumberFormatException e) {
+						page = 1;
+					}
+				}
+				InviteCommand.sendInviteList(player, sentinvites, page, true);
+				player.sendMessage(sent);
+				return;
+			} else {
+				nationAdd(player, newSplit);
+				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.
+				// If it is invalid it is handled in townAdd() so, I'm good
+			}
+		}
 	}
 
 	private void parseNationOnlineCommand(Player player, String[] split) throws TownyException {
@@ -696,7 +765,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(line);
 	}
 
-	public void nationAdd(Player player, String[] names) {
+	public void nationAdd(Player player, String[] names) throws TownyException{
 
 		if (names.length < 1) {
 			TownyMessaging.sendErrorMsg(player, "Eg: /nation add [names]");
@@ -718,11 +787,53 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
+		List<String> reslist = new ArrayList<String>(Arrays.asList(names));
+		// Our Arraylist is above
+		List<String> newreslist = new ArrayList<String>();
+		// The list of valid invites is above, there are currently none
+		List<String> removeinvites = new ArrayList<String>();
+		// List of invites to be removed;
+		for (String townname : reslist) {
+			if (townname.startsWith("-")) {
+				removeinvites.add(townname.substring(1));
+				// Add to removing them, remove the "-"
+			} else {
+				newreslist.add(townname);
+				// add to adding them,
+			}
+		}
+		names = newreslist.toArray(new String[0]);
+		String[] namestoremove = removeinvites.toArray(new String[0]);
+		if (namestoremove.length != 0) {
+			nationRevokeInviteTown(nation,TownyUniverse.getDataSource().getTowns(namestoremove));
+		}
 
-		nationAdd(player, nation, TownyUniverse.getDataSource().getTowns(names));
+		if (names.length != 0) {
+			nationAdd(player, nation, TownyUniverse.getDataSource().getTowns(names));
+		}
+
+
+	}
+	private static void nationRevokeInviteTown(Nation nation, List<Town> towns) {
+
+		for (Town town : towns) {
+			if (InviteHandler.getNationtotowninvites().containsEntry(nation, town)) {
+				InviteHandler.getNationtotowninvites().remove(nation, town);
+				for (Invite invite : town.getReceivedInvites()) {
+					if (invite.getSender().equals(nation)) {
+						try {
+							InviteHandler.declineInvite(invite, true);
+							break;
+						} catch (InvalidObjectException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 
-	public static void nationAdd(Player player, Nation nation, List<Town> invited) {
+	public static void nationAdd(Player player, Nation nation, List<Town> invited) throws TownyException {
 
 		ArrayList<Town> remove = new ArrayList<Town>();
 		for (Town town : invited)
@@ -753,8 +864,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nationInviteTown(player, nation, town);
 			} catch (AlreadyRegisteredException e) {
 				remove.add(town);
-			} catch (TownyException e) {
-				e.printStackTrace();
 			}
 		for (Town town : remove)
 			invited.remove(town);
@@ -778,9 +887,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(), nation, town);
 		try {
 			if (!InviteHandler.getNationtotowninvites().containsEntry(nation, town)) {
-				InviteHandler.addInviteToList(invite);
 				town.newReceivedInvite(invite);
 				nation.newSentInvite(invite);
+				InviteHandler.addInviteToList(invite);
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_already_invited"), town.getName()));
 			}

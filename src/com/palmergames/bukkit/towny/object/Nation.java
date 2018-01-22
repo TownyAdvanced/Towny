@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.TownyAllySender;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
@@ -26,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver {
+public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -555,7 +556,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	@Override
-	public void newReceivedInvite(Invite invite)  throws TooManyInvitesException {
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
 		if (receivedinvites.size() <= 9) { // We only want 10 Invites, for towns, later we can make this number configurable
 			receivedinvites.add(invite);
 		} else {
@@ -574,7 +575,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	@Override
-	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
+	public void newSentInvite(Invite invite) throws TooManyInvitesException {
 		if (sentinvites.size() <= 34) { // We only want 35 Invites, for towns, later we can make this number configurable
 			sentinvites.add(invite);
 		} else {
@@ -587,6 +588,27 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		sentinvites.remove(invite);
 	}
 
-	List<Invite> receivedinvites = new ArrayList();
-	List<Invite> sentinvites = new ArrayList();
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+	private List<Invite> sentinvites = new ArrayList<Invite>();
+	private List<Invite> sentallyinvites = new ArrayList<Invite>();
+
+
+	@Override
+	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
+		if (sentinvites.size() <= 34) { // We only want 35 ally-requests for the nation to send;
+			sentinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException();
+		}
+	}
+
+	@Override
+	public void deleteSentAllyInvite(Invite invite) {
+		sentallyinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentAllyInvites(Invite invite) {
+		return sentallyinvites;
+	}
 }

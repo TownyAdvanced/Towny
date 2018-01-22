@@ -508,7 +508,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		invite.add(ChatTools.formatCommand("", "/town", "invite sent", TownySettings.getLangString("town_invite_help_3")));
 		invite.add(ChatTools.formatCommand("", "/town", "invite received", TownySettings.getLangString("town_invite_help_4")));
 		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", TownySettings.getLangString("town_invite_help_5")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", TownySettings.getLangString("town_invite_help_5")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", TownySettings.getLangString("town_invite_help_6")));
 	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
@@ -539,13 +539,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			messages.add(sent);
 			msgs = messages.toArray(new String[0]);
 			player.sendMessage(msgs);
-
+			return;
 		}
 		if (newSplit.length >= 1) { // /town invite [something]
 			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
 				for (String msg : invite) {
 					player.sendMessage(Colors.strip(msg));
 				}
+				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
 				List<Invite> sentinvites = resident.getTown().getSentInvites();
@@ -652,7 +653,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 					}
 				}
-			} else { // He
+			} else {
 				townAdd(player, null, newSplit);
 				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.
 				// If it is invalid it is handled in townAdd() so, I'm good
@@ -2331,9 +2332,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, town, newMember);
 		try {
 			if (!InviteHandler.getTowntoresidentinvites().containsEntry(town, newMember)) {
-				InviteHandler.addInviteToList(invite);
 				newMember.newReceivedInvite(invite);
 				town.newSentInvite(invite);
+				InviteHandler.addInviteToList(invite);
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
 			}
@@ -2559,7 +2560,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	public static void townAdd(Object sender, Town specifiedTown, String[] names) {
-		String[] namestouninvite = new String[]{};
 
 		String name;
 		if (sender instanceof Player) {
@@ -2584,25 +2584,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+
 		List<String> reslist = new ArrayList<String>(Arrays.asList(names));
 		// Our Arraylist is above
 		List<String> newreslist = new ArrayList<String>();
 		// The list of valid invites is above, there are currently none
-		List<String> removeinvites = new ArrayList<String>(Arrays.asList(namestouninvite));
+		List<String> removeinvites = new ArrayList<String>();
 		// List of invites to be removed;
-		for (String resname : reslist) {
-			if (resname.startsWith("-")) {
-				removeinvites.add(resname.substring(1));
+		for (String townname : reslist) {
+			if (townname.startsWith("-")) {
+				removeinvites.add(townname.substring(1));
 				// Add to removing them, remove the "-"
 			} else {
-				newreslist.add(resname);
+				newreslist.add(townname);
 				// add to adding them,
 			}
 		}
 		names = newreslist.toArray(new String[0]);
-		namestouninvite = removeinvites.toArray(new String[0]);
-		if (namestouninvite.length != 0) {
-			townRevokeInviteResident(town,TownyUniverse.getValidatedResidents(sender, namestouninvite));
+		String[] namestoremove = removeinvites.toArray(new String[0]);
+		if (namestoremove.length != 0) {
+			townRevokeInviteResident(town,TownyUniverse.getValidatedResidents(sender, namestoremove));
 		}
 
 		if (names.length != 0) {

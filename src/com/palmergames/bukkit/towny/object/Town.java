@@ -1221,6 +1221,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		sentinvites.remove(invite);
 	}
 
-	List<Invite> receivedinvites = new ArrayList();
-	List<Invite> sentinvites = new ArrayList();
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+	private List<Invite> sentinvites = new ArrayList<Invite>();
 }
