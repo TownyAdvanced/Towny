@@ -601,9 +601,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites,1,false);
 					return;
 				}
-				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
-				if (nation2residents.containsKey(nation)) {
-					if (nation2residents.get(nation).contains(town)) {
+				ListMultimap<Nation, Town> nation2towns = InviteHandler.getNationtotowninvites();
+				if (nation2towns.containsKey(nation)) {
+					if (nation2towns.get(nation).contains(town)) {
 						for (Invite invite : town.getReceivedInvites()) {
 							if (invite.getSender().equals(nation)) {
 								try {
@@ -638,9 +638,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites, 1, false);
 					return;
 				}
-				ListMultimap<Nation, Town> nation2residents = InviteHandler.getNationtotowninvites();
-				if (nation2residents.containsKey(nation)) {
-					if (nation2residents.get(nation).contains(town)) {
+				ListMultimap<Nation, Town> nation2towns = InviteHandler.getNationtotowninvites();
+				if (nation2towns.containsKey(nation)) {
+					if (nation2towns.get(nation).contains(town)) {
 						for (Invite invite : town.getReceivedInvites()) {
 							if (invite.getSender().equals(nation)) {
 								try {

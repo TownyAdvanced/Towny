@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -1016,7 +1017,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 	}
+
 	private static final List<String> alliesstring = new ArrayList<String>();
+
 	static {
 		alliesstring.add(ChatTools.formatTitle("/town invite"));
 		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add [nation]", TownySettings.getLangString("nation_ally_help_1")));
@@ -1024,6 +1027,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.isDisallowOneWayAlliance()) {
 			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally sent", TownySettings.getLangString("nation_ally_help_3")));
 			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally received", TownySettings.getLangString("nation_ally_help_4")));
+			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally accept [nation]", TownySettings.getLangString("nation_ally_help_5")));
+			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally deny [nation]", TownySettings.getLangString("nation_ally_help_6")));
 		}
 	}
 
@@ -1091,8 +1096,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			if (!remlist.isEmpty()) {
 				nationRemoveAllyRequest(nation, remlist);
-				return;
 			}
+			return;
 		}
 		if (split[0].equalsIgnoreCase("remove")) {
 			for (String name : names) {
@@ -1110,12 +1115,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!list.isEmpty()) {
 				if (TownySettings.isDisallowOneWayAlliance()) {
 					nationAlly(resident,nation,list,false);
-					return;
 				} else {
 					nationlegacyAlly(resident, nation, list, false);
-					return;
 				}
 			}
+			return;
 		} else {
 			if (!TownySettings.isDisallowOneWayAlliance()){
 				TownyMessaging.sendMessage(player, alliesstring);
@@ -1159,6 +1163,84 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(received);
 				return;
 
+			}
+			if (split[0].equalsIgnoreCase("accept")) {
+				// /town (gone)
+				// invite (gone)
+				// args[0] = accept = length = 1
+				// args[1] = [Nation] = length = 2
+				// Note that nation = receivernation so, that's why sendernation has to be the key!
+				Nation sendernation;
+				List<Invite> invites = nation.getReceivedInvites();
+
+				if (invites.size() == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_nation_no_requests"));
+					return;
+				}
+				if (split.length >= 2) { // /invite deny args[1]
+					try {
+						sendernation = TownyUniverse.getDataSource().getNation(split[1]);
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_nation_specify_invite"));
+					InviteCommand.sendInviteList(player, invites,1,false);
+					return;
+				}
+				ListMultimap<Nation, Nation> nation2nations = InviteHandler.getNationtonationinvites();
+				if (nation2nations.containsKey(sendernation)) {
+					if (nation2nations.get(sendernation).contains(nation)) {
+						for (Invite invite : nation.getReceivedInvites()) {
+							if (invite.getSender().equals(sendernation)) {
+								try {
+									InviteHandler.acceptInvite(invite);
+									return;
+								} catch (InvalidObjectException e) {
+									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+								}
+							}
+						}
+					}
+				}
+
+			}
+			if (split[0].equalsIgnoreCase("deny")) {
+				Nation sendernation;
+				List<Invite> invites = nation.getReceivedInvites();
+
+				if (invites.size() == 0) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_nation_no_requests"));
+					return;
+				}
+				if (split.length >= 2) { // /invite deny args[1]
+					try {
+						sendernation = TownyUniverse.getDataSource().getNation(split[1]);
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_nation_specify_invite"));
+					InviteCommand.sendInviteList(player, invites, 1, false);
+					return;
+				}
+				ListMultimap<Nation, Nation> nation2nations = InviteHandler.getNationtonationinvites();
+				if (nation2nations.containsKey(sendernation)) {
+					if (nation2nations.get(sendernation).contains(nation)) {
+						for (Invite invite : nation.getReceivedInvites()) {
+							if (invite.getSender().equals(sendernation)) {
+								try {
+									InviteHandler.declineInvite(invite, false);
+									return;
+								} catch (InvalidObjectException e) {
+									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+								}
+							}
+						}
+					}
+				}
 			} else {
 				TownyMessaging.sendMessage(player, alliesstring);
 				return;
