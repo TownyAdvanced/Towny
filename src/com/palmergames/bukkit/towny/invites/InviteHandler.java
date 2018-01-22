@@ -126,7 +126,12 @@ public class InviteHandler {
 				getNationtonationinvites().remove(sendernation, receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentAllyInvite(invite);
-				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+				if (!fromSender){
+					TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+				} else {
+					TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
+				}
+
 				return;
 			}
 			// Nation invited other Nation to ally
@@ -167,6 +172,13 @@ public class InviteHandler {
 	public static int getSentInvitesAmount(TownyInviteSender sender){
 		List<Invite> invites = sender.getSentInvites();
 		return invites.size();
+	}
+	public static int getSentAllyRequestsAmount(TownyAllySender sender){
+		List<Invite> invites = sender.getSentAllyInvites();
+		return invites.size();
+	}
+	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender){
+		return 35;
 	}
 	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver){
 		if (receiver instanceof Resident){

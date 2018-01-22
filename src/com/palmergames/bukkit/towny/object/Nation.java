@@ -608,7 +608,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	@Override
-	public List<Invite> getSentAllyInvites(Invite invite) {
+	public List<Invite> getSentAllyInvites() {
 		return sentallyinvites;
 	}
 }

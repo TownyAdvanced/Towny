@@ -7,5 +7,5 @@ import java.util.List;
 public interface TownyAllySender {
 	void newSentAllyInvite(Invite invite) throws TooManyInvitesException ;
 	void deleteSentAllyInvite(Invite invite);
-	List<Invite> getSentAllyInvites(Invite invite);
+	List<Invite> getSentAllyInvites();
 }
