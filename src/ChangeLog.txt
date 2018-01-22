@@ -2736,3 +2736,4 @@ v0.92.0.5:
     - Fix for min_distance_from_town_plots in config not being checked during initial claiming of new town.
     - Fix for towny-server account losing money when closed economy is enabled in the config and a town or nation changes its name.
     - Spanish.yml updated to 0.40 by SeDark.
+    - Fix for mayors who aren't allowed perms in resident-owned plots.
