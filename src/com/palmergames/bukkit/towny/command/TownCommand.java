@@ -55,7 +55,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.plugin.Plugin;
 
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
@@ -2169,50 +2168,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-
-		// Use questioner to confirm.
-		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
-
-//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-//			Questioner questioner = (Questioner) test;
-//			questioner.loadClasses();
-//
-//			List<Option> options = new ArrayList<Option>();
-//			options.add(new Option(TownySettings.questionerAccept(), new TownQuestionTask(player, town) {
-//
-//				@Override
-//				public void run() {
-//
-//					TownyUniverse.getDataSource().removeTown(town);
-//					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-//				}
-//
-//			}));
-//			options.add(new Option(TownySettings.questionerDeny(), new TownQuestionTask(player, town) {
-//
-//				@Override
-//				public void run() {
-//
-//					TownyMessaging.sendMessage(getSender(), "Delete Aborted!");
-//				}
-//			}));
-//			String output = "Do you really want to delete this town?";
-//			try {
-//				if (town.getHoldingBalance() > 0)
-//					TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting your town will cause any money currently in the Town's bank to be lost.");
-//			} catch (EconomyException e1) {
-//				e1.printStackTrace();
-//			}
-//			if (TownyUniverse.getDataSource().getTownWorld(town.getName()).isUsingPlotManagementRevert())
-//				TownyMessaging.sendMessage(player, TownySettings.getLangString("default_towny_prefix") + Colors.Red + "Warning: Deleting this town will revert all townblocks to their pre-claimed state.");
-//			Question question = new Question(player.getName(), output, options);
-//
-//			try {
-//				plugin.appendQuestion(questioner, question);
-//			} catch (Exception e) {
-//				System.out.println(e.getMessage());
-//			}
-//		} else {
 		TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 		TownyUniverse.getDataSource().removeTown(town);
 
@@ -2362,32 +2317,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 	}
-//		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
-//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-//			Questioner questioner = (Questioner) test;
-//			questioner.loadClasses();
-//
-//			List<Option> options = new ArrayList<Option>();
-//			options.add(new Option(TownySettings.questionerAccept(), new JoinTownTask(newMember, town)));
-//			options.add(new Option(TownySettings.questionerDeny(), new ResidentTownQuestionTask(newMember, town) {
-//
-//				@Override
-//				public void run() {
-//
-//					TownyMessaging.sendTownMessage(getTown(), String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
-//				}
-//			}));
-//			Question question = new Question(newMember.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("town_sing") + ": " + town.getName()), options);
-//			try {
-//				plugin.appendQuestion(questioner, question);
-//			} catch (Exception e) {
-//				System.out.println(e.getMessage());
-//			}
-//		} else
-//			try {
-//				townAddResident(town, newMember);
-//			} catch (AlreadyRegisteredException e) {
-//			}
 
 	public static void townRemoveResident(Town town, Resident resident) throws EmptyTownException, NotRegisteredException {
 

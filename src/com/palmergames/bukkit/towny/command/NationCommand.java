@@ -900,32 +900,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.deleteSentInvite(invite);
 			throw new TownyException(TownySettings.getLangString("msg_err_town_has_too_many_invites"));
 		}
-		//}
-		//		Plugin test = plugin.getServer().getPluginManager().getPlugin("Questioner");
-//
-//		Resident townMayor = town.getMayor();
-//
-//		if (TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-//			Questioner questioner = (Questioner) test;
-//			questioner.loadClasses();
-//
-//			List<Option> options = new ArrayList<Option>();
-//			options.add(new Option(TownySettings.questionerAccept(), new JoinNationTask(townMayor, nation)));
-//			options.add(new Option(TownySettings.questionerDeny(), new ResidentNationQuestionTask(townMayor, nation) {
-//
-//				@Override
-//				public void run() {
-//
-//					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), getResident().getName()));
-//				}
-//			}));
-//			Question question = new Question(townMayor.getName(), String.format(TownySettings.getLangString("msg_invited"), TownySettings.getLangString("nation_sing") + ": " + nation.getName()), options);
-//			try {
-//				plugin.appendQuestion(questioner, question);
-//			} catch (Exception e) {
-//				System.out.println(e.getMessage());
-// 			}
-// 			} else {
 	}
 
 	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
