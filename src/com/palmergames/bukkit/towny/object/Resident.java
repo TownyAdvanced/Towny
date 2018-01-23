@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -38,6 +39,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private double teleportCost;
 	private String chatFormattedName;
 	private List<String> modes = new ArrayList<String>();
+	private ConfirmationType confirmationType;
 
 	private List<String> townRanks = new ArrayList<String>();
 	private List<String> nationRanks = new ArrayList<String>();
@@ -662,5 +664,15 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		receivedinvites.remove(invite);
 	}
 
-	List<Invite> receivedinvites = new ArrayList();
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+
+	public void setConfirmationType(ConfirmationType confirmationType) {
+		this.confirmationType = confirmationType;
+	}
+
+	public ConfirmationType getConfirmationType() {
+		return confirmationType;
+	}
+
 }
+

@@ -3,11 +3,14 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -66,7 +69,6 @@ public class TownClaim extends Thread {
 		List<TownyWorld> worlds = new ArrayList<TownyWorld>();
 		List<Town> towns = new ArrayList<Town>();
 		TownyWorld world;
-
 		if (player != null)
 			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Town Claim..." : "Town unclaim..."));
 
@@ -109,8 +111,24 @@ public class TownClaim extends Thread {
 				TownyMessaging.sendMsg(player, "Nothing to unclaim!");
 				return;
 			}
-			
-			townUnclaimAll(town);
+
+			Resident resident = null;
+			try {
+				resident = TownyUniverse.getDataSource().getResident(player.getName());
+			} catch (TownyException e){
+				// Yeah the resident has to exist!
+			}
+			if (resident == null){
+				return;
+			}
+			// Send confirmation message,
+			try {
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL);
+				TownyMessaging.sendConfirmationMessage(player, null, null, null,null);
+			} catch (TownyException e){
+				e.printStackTrace();
+				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
+			}
 		}
 
 		if (!towns.isEmpty())
@@ -221,7 +239,7 @@ public class TownClaim extends Thread {
 		}
 	}
 
-	private void townUnclaimAll(final Town town) {
+	public static void townUnclaimAll(Towny plugin, final Town town) {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 

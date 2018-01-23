@@ -1,10 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -15,6 +10,11 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Towny message handling class
@@ -534,5 +534,23 @@ public class TownyMessaging {
 	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
 		for (Player player : TownyUniverse.getOnlinePlayers(nation))
 			player.sendTitle(title, subtitle, 10, 70, 10);
+	}
+
+	public static void sendConfirmationMessage(Player player, String firstline, String confirmline, String cancelline, String lastline) {
+		if (firstline == null){
+			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "Are you sure you want to continue?";
+		}
+		if (confirmline == null) {
+			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
+		}
+		if (cancelline == null) {
+			cancelline = ChatColor.GREEN + "          /" + TownySettings.getCancelCommand();
+		}
+		if (lastline == null){
+			lastline = ChatColor.BLUE + "This will auto-expire in 20 seconds";
+		}
+		String[] message = new String[]{firstline,confirmline,cancelline,lastline};
+		player.sendMessage(message);
+
 	}
 }

@@ -18,7 +18,7 @@ public class DenyCommand extends BukkitCommand {
 			InviteCommand.parseDeny((Player) commandSender, strings);
 			return true;
 		} else {
-			return false;
+			return true;
 		}
 	}
 }

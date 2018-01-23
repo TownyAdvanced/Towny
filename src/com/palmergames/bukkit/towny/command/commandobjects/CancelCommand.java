@@ -12,6 +12,6 @@ public class CancelCommand extends BukkitCommand {
 
 	@Override
 	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		return false;
+		return true;
 	}
 }
