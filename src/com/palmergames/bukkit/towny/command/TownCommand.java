@@ -9,6 +9,8 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
@@ -2148,16 +2150,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town town = null;
 
-		if (split.length == 0)
+		if (split.length == 0) {
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-				town = resident.getTown();
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-		else
+		} else {
 			try {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete_town"));
@@ -2168,8 +2171,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
-		TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-		TownyUniverse.getDataSource().removeTown(town);
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+			TownyUniverse.getDataSource().removeTown(town);
+		}
 
 	}
 

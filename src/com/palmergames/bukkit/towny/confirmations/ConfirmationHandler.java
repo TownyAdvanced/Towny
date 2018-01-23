@@ -1,16 +1,20 @@
 package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
+import com.palmergames.util.TimeTools;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ConfirmationHandler {
 	private static Towny plugin;
@@ -22,9 +26,10 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Town> towndeleteconfirmations = new HashMap<Resident, Town>();
 	private static HashMap<Resident, Town> townunclaimallconfirmations = new HashMap<Resident, Town>();
 	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<Resident, Nation>();
-	private static List<Resident> townypurgeconfirmations = new ArrayList<Resident>();
+	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<Resident, Integer>();
 
-	public static void addConfirmation(final Resident r, final ConfirmationType type) throws TownyException {
+	public static void addConfirmation(final Resident r, final ConfirmationType type, Object extra) throws TownyException {
+		// We use "extra" in certain instances like the number of days for something e.t.c
 		if (type == ConfirmationType.TOWNDELETE) {
 			r.setConfirmationType(type);
 			towndeleteconfirmations.put(r, r.getTown()); // The good thing is, using the "put" option we override the past one!
@@ -41,35 +46,18 @@ public class ConfirmationHandler {
 			}.runTaskLater(plugin, 400);
 		}
 		if (type == ConfirmationType.PURGE) {
-			if (!townypurgeconfirmations.contains(r)) {
-				r.setConfirmationType(type);
-				townypurgeconfirmations.add(r); // However an add option doesn't overridee so, we need to check if it exists first.
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						try {
-							removeConfirmation(r, type);
-						} catch (TownyException e) {
-							// Shouldn't be possible since we added it in the first place!
-						}
+			r.setConfirmationType(type);
+			townypurgeconfirmations.put(r, (Integer) extra); // However an add option doesn't overridee so, we need to check if it exists first.
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						removeConfirmation(r, type);
+					} catch (TownyException e) {
+						// Shouldn't be possible since we added it in the first place!
 					}
-				}.runTaskLater(plugin, 400);
-			} else {
-				townypurgeconfirmations.remove(r); // Remove the old one,
-				townypurgeconfirmations.add(r); // Add the new one.
-				r.setConfirmationType(type);
-
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						try {
-							removeConfirmation(r, type);
-						} catch (TownyException e) {
-							// Shouldn't be possible since we added it in the first place!
-						}
-					}
-				}.runTaskLater(plugin, 400);
-			}
+				}
+			}.runTaskLater(plugin, 400);
 		}
 		if (type == ConfirmationType.UNCLAIMALL) {
 
@@ -126,19 +114,42 @@ public class ConfirmationHandler {
 
 	public static void handleConfirmation(Resident r, ConfirmationType type) throws TownyException {
 		if (type == ConfirmationType.TOWNDELETE) {
-
+			if (towndeleteconfirmations.containsKey(r)) {
+				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
+					TownyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
+					return;
+				}
+			}
 		}
 		if (type == ConfirmationType.PURGE) {
+			if (townypurgeconfirmations.containsKey(r)) {
+				if (!TownyUniverse.getPermissionSource().testPermission(TownyUniverse.getPlayer(r), PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
+				}
+				int days = townypurgeconfirmations.get(r);
+
+				new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
+
+			}
 		}
 		if (type == ConfirmationType.UNCLAIMALL) {
 			if (townunclaimallconfirmations.containsKey(r)) {
 				if (townunclaimallconfirmations.get(r).equals(r.getTown())) {
-					TownClaim.townUnclaimAll(plugin, r.getTown());
+					TownClaim.townUnclaimAll(plugin, townunclaimallconfirmations.get(r));
 					removeConfirmation(r, type);
+					return;
 				}
 			}
 		}
 		if (type == ConfirmationType.NATIONDELETE) {
+			if (nationdeleteconfirmations.containsKey(r)) {
+				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
+					TownyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
+					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
+					return;
+				}
+			}
 		}
 	}
 

@@ -123,7 +123,7 @@ public class TownClaim extends Thread {
 			}
 			// Send confirmation message,
 			try {
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL);
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL, null);
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException e) {
 				e.printStackTrace();

@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -18,7 +20,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -27,7 +28,6 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -782,7 +782,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			return;
 		}
-
+		Resident resident = null;
+		try {
+			resident = TownyUniverse.getDataSource().getResident(player.getName());
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+		}
 		int days = 1;
 
 		try {
@@ -791,38 +796,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
+		if (resident != null) {
+			try {
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.PURGE, days); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
-
-		// Use questioner to confirm.
-//		Plugin test = BukkitTools.getServer().getPluginManager().getPlugin("Questioner");
-
-//		if (this.sender instanceof Player && TownySettings.isUsingQuestioner() && test != null && test instanceof Questioner && test.isEnabled()) {
-//			Questioner questioner = (Questioner) test;
-//			questioner.loadClasses();
-//
-//			List<Option> options = new ArrayList<Option>();
-//			options.add(new Option(TownySettings.questionerAccept(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d"))));
-//			options.add(new Option(TownySettings.questionerDeny(), new PurgeQuestionTask(plugin, this.sender, TimeTools.getMillis(days + "d")) {
-//
-//				@Override
-//				public void run() {
-//
-//					TownyMessaging.sendMessage(getSender(), "Purge Aborted!");
-//				}
-//			}));
-//
-//			Question question = new Question(this.sender.getName(), "Do you really want to perform this purge", options);
-//
-//			try {
-//				plugin.appendQuestion(questioner, question);
-//			} catch (Exception e) {
-//				System.out.println(e.getMessage());
-//			}
-//		} else
-
-		// Run a purge in it's own thread
-		new ResidentPurge(plugin, this.sender, TimeTools.getMillis(days + "d")).start();
-
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage());
+			}
+		}
 	}
 
 	/**

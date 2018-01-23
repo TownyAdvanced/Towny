@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -737,11 +739,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
-				Nation nation = town.getNation();
-
-				TownyUniverse.getDataSource().removeNation(nation);
-				TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATIONDELETE, null); // It takes the resident's town & nation, done finished
+				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
