@@ -29,20 +29,18 @@ public class ConfirmCommand extends BukkitCommand {
 			}
 			if (resident != null) {
 				if (resident.getConfirmationType() != null) {
-					// So it's not null, AMAZING!
 					try {
 						ConfirmationHandler.handleConfirmation(resident, resident.getConfirmationType());
+						return true;
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
+						return true;
 					}
 				} else {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("no_confirmations_open"));
 					return true;
 				}
 			}
-			return true;
-		} else {
-
 		}
 		return true;
 	}

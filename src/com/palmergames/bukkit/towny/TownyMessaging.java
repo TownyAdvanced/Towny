@@ -537,7 +537,7 @@ public class TownyMessaging {
 	}
 
 	public static void sendConfirmationMessage(Player player, String firstline, String confirmline, String cancelline, String lastline) {
-		if (firstline == null){
+		if (firstline == null) {
 			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "Are you sure you want to continue?";
 		}
 		if (confirmline == null) {
@@ -546,10 +546,10 @@ public class TownyMessaging {
 		if (cancelline == null) {
 			cancelline = ChatColor.GREEN + "          /" + TownySettings.getCancelCommand();
 		}
-		if (lastline == null){
+		if (lastline == null) {
 			lastline = ChatColor.BLUE + "This will auto-expire in 20 seconds";
 		}
-		String[] message = new String[]{firstline,confirmline,cancelline,lastline};
+		String[] message = new String[]{firstline, confirmline, cancelline, lastline};
 		player.sendMessage(message);
 
 	}
