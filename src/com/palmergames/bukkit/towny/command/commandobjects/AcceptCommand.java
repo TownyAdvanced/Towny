@@ -14,7 +14,7 @@ public class AcceptCommand extends BukkitCommand {
 
 	@Override
 	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		if (commandSender instanceof Player){
+		if (commandSender instanceof Player) {
 			InviteCommand.parseAccept((Player) commandSender, strings);
 			return true;
 		} else {

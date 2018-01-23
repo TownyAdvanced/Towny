@@ -242,7 +242,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			iMax = list.size();
 		}
 		String object = null;
-		for (int i = (page -1) * 10; i < iMax ; i++) {
+		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
 			String name = invite.getDirectSender();
 			if (name == null) {
@@ -291,7 +291,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 		player.sendMessage(ChatTools.formatList(TownySettings.getLangString("invite_plu"),
 				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("invite_sent_by"),
-				invitesformatted, TownySettings.getListPageMsg(page,total)
+				invitesformatted, TownySettings.getListPageMsg(page, total)
 		));
 	}
 }

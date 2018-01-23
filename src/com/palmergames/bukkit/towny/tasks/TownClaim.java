@@ -115,17 +115,17 @@ public class TownClaim extends Thread {
 			Resident resident = null;
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
-			} catch (TownyException e){
+			} catch (TownyException e) {
 				// Yeah the resident has to exist!
 			}
-			if (resident == null){
+			if (resident == null) {
 				return;
 			}
 			// Send confirmation message,
 			try {
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL);
-				TownyMessaging.sendConfirmationMessage(player, null, null, null,null);
-			} catch (TownyException e){
+				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+			} catch (TownyException e) {
 				e.printStackTrace();
 				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
 			}

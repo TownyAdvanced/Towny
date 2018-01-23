@@ -19,20 +19,20 @@ public class ConfirmCommand extends BukkitCommand {
 
 	@Override
 	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		if (commandSender instanceof Player){
+		if (commandSender instanceof Player) {
 			Player player = (Player) commandSender;
 			Resident resident;
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
-			} catch (TownyException e){
+			} catch (TownyException e) {
 				return true;
 			}
-			if (resident != null){
+			if (resident != null) {
 				if (resident.getConfirmationType() != null) {
 					// So it's not null, AMAZING!
 					try {
-						ConfirmationHandler.handleConfirmation(resident,resident.getConfirmationType());
-					} catch (TownyException e){
+						ConfirmationHandler.handleConfirmation(resident, resident.getConfirmationType());
+					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 					}
 				} else {

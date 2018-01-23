@@ -126,7 +126,7 @@ public class InviteHandler {
 				getNationtonationinvites().remove(sendernation, receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentAllyInvite(invite);
-				if (!fromSender){
+				if (!fromSender) {
 					TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
 				} else {
 					TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
@@ -164,39 +164,43 @@ public class InviteHandler {
 		nationtonationinvites.put((Nation) invite.getSender(), (Nation) invite.getReceiver());
 	}
 
-	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver){
+	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver) {
 		List<Invite> invites = receiver.getReceivedInvites();
 		return invites.size();
 	}
 
-	public static int getSentInvitesAmount(TownyInviteSender sender){
+	public static int getSentInvitesAmount(TownyInviteSender sender) {
 		List<Invite> invites = sender.getSentInvites();
 		return invites.size();
 	}
-	public static int getSentAllyRequestsAmount(TownyAllySender sender){
+
+	public static int getSentAllyRequestsAmount(TownyAllySender sender) {
 		List<Invite> invites = sender.getSentAllyInvites();
 		return invites.size();
 	}
-	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender){
+
+	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender) {
 		return 35;
 	}
-	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver){
-		if (receiver instanceof Resident){
+
+	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver) {
+		if (receiver instanceof Resident) {
 			return 10;
 		}
-		if (receiver instanceof Town){
+		if (receiver instanceof Town) {
 			return 10;
 		}
-		if (receiver instanceof Nation){
+		if (receiver instanceof Nation) {
 			return 10;
 		}
 		return 0;
 	}
-	public static int getSentInvitesMaxAmount(TownyInviteSender sender){
-		if (sender instanceof Town){
+
+	public static int getSentInvitesMaxAmount(TownyInviteSender sender) {
+		if (sender instanceof Town) {
 			return 35;
 		}
-		if (sender instanceof Nation){
+		if (sender instanceof Nation) {
 			return 35;
 		}
 		return 0;

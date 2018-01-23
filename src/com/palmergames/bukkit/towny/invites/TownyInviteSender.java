@@ -10,7 +10,7 @@ import java.util.List;
 public interface TownyInviteSender {
 	List<Invite> getSentInvites();
 
-	void newSentInvite(Invite invite)  throws TooManyInvitesException;
+	void newSentInvite(Invite invite) throws TooManyInvitesException;
 
 	void deleteSentInvite(Invite invite);
 }
