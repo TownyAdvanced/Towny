@@ -180,28 +180,31 @@ public class InviteHandler {
 	}
 
 	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender) {
-		return 35;
+		if (sender instanceof Nation) {
+			return TownySettings.getMaximumRequestsSentNation();
+		}
+		return 0;
 	}
 
 	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver) {
 		if (receiver instanceof Resident) {
-			return 10;
+			return TownySettings.getMaximumInvitesReceivedResident();
 		}
 		if (receiver instanceof Town) {
-			return 10;
+			return TownySettings.getMaximumInvitesReceivedTown();
 		}
 		if (receiver instanceof Nation) {
-			return 10;
+			return TownySettings.getMaximumRequestsReceivedNation();
 		}
 		return 0;
 	}
 
 	public static int getSentInvitesMaxAmount(TownyInviteSender sender) {
 		if (sender instanceof Town) {
-			return 35;
+			return TownySettings.getMaximumInvitesSentTown();
 		}
 		if (sender instanceof Nation) {
-			return 35;
+			return TownySettings.getMaximumInvitesSentNation();
 		}
 		return 0;
 	}

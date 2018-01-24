@@ -2413,6 +2413,26 @@ public class TownySettings {
 	public static int getAmountOfResidentsForTown() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
+
+	public static int getMaximumInvitesSentTown() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN);
+	}
+	public static int getMaximumInvitesSentNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_NATION);
+	}
+	public static int getMaximumRequestsSentNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_REQUESTS_SENT_NATION);
+	}
+
+	public static int getMaximumInvitesReceivedResident() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER);
+	}
+	public static int getMaximumInvitesReceivedTown() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_TOWN);
+	}
+	public static int getMaximumRequestsReceivedNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_REQUESTS_RECEIVED_NATION);
+	}
 	
 	public static boolean getNationZonesEnabled() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_ENABLE);

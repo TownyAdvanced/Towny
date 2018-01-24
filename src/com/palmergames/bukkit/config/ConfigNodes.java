@@ -84,10 +84,10 @@ public enum ConfigNodes {
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
 			"false",
-			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),	
+			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
 	TOWN_DEF_TAXES_MINIMUMTAX(
 			"town.default_taxes.minimumtax",
-			"0.0",			
+			"0.0",
 			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
 			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
 	TOWN_MAX_PURCHASED_BLOCKS(
@@ -371,40 +371,40 @@ public enum ConfigNodes {
 			"0",
 			"# The required number of residents in a town to join a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to join a nation"
-			),
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION(
 			"global_town_settings.required_number_residents_create_nation",
 			"0",
 			"# The required number of residents in a town to create a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to create a nation"
-			),
+	),
 	GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS(
 			"global_town_settings.refund_disband_low_residents",
 			"true",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
-			),
+	),
 	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
 			"global_town_settings.nation_requires_proximity",
 			"0.0",
 			"# The maximum number of townblocks a town can be away from a nation capital,",
 			"# Automatically precludes towns from one world joining a nation in another world.",
 			"# If the number is 0, towns will not a proximity to a nation."
-			),
+	),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
 			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,BEETROOT_BLOCK,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN,BEETROOT_BLOCK,CHORUS_PLANT,CHORUS_FLOWER",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
-			),
+	),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
-			),
+	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
 			"0",
 			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
-			),
+	),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
@@ -543,7 +543,7 @@ public enum ConfigNodes {
 			"",
 			"# This enables/disables all the economy functions of Towny.",
 			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
-			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",			
+			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",
 			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
 	//PLUGIN_USING_QUESTIONER_HEADER( As of the new invite-system Questioner support has been scrapped.
 	//		"plugin.interfacing.using_questioner",
@@ -639,7 +639,7 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
-			"^[a-zA-Z0-9\\s._\\[\\]-]*$"),		
+			"^[a-zA-Z0-9\\s._\\[\\]-]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
 			"[^a-zA-Z0-9._\\[\\]-]"),
@@ -817,14 +817,14 @@ public enum ConfigNodes {
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_USING_TITLES(
-			"notification.using_titles", 
-			"false", 
+			"notification.using_titles",
+			"false",
 			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
 			"# Could be seen as intrusive/distracting, so false by default."),
-	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title","false","# If the notification.owner option should show name or {title} name.","# Titles are the ones granted by nation kings."),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", "false", "# If the notification.owner option should show name or {title} name.", "# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
-			"",	
+			"",
 			"",
 			"",
 			"",
@@ -1018,10 +1018,10 @@ public enum ConfigNodes {
 			"1.0",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
 
-    ECO_DEATH("economy.death", "", ""),			
-    ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
-    ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap","0.0","# A maximum amount paid out by a resident from their personal holdings for percentage deaths.", "# Set to 0 to have no cap."),
-    ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
+	ECO_DEATH("economy.death", "", ""),
+	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
+	ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap", "0.0", "# A maximum amount paid out by a resident from their personal holdings for percentage deaths.", "# Set to 0 to have no cap."),
+	ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
 	ECO_PRICE_DEATH("economy.death.price_death", "1.0", ""),
 	ECO_PRICE_DEATH_TOWN("economy.death.price_death_town", "0.0", ""),
 	ECO_PRICE_DEATH_NATION("economy.death.price_death_nation", "0.0", ""),
@@ -1035,7 +1035,7 @@ public enum ConfigNodes {
 	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
 			"economy.banks.town_allow_withdrawls",
 			"true",
-			"# Set to true to allow withdrawls from town banks"),	ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawls from town banks"), ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
@@ -1091,7 +1091,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER(
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
-			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),	
+			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
@@ -1108,7 +1108,7 @@ public enum ConfigNodes {
 			"  # |                 Jail Plot settings                   | #",
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
-			""),	
+			""),
 	JAIL_IS_JAILING_ATTACKING_ENEMIES(
 			"jail.is_jailing_attacking_enemies",
 			"false",
@@ -1126,16 +1126,16 @@ public enum ConfigNodes {
 	JAIL_JAIL_DENIES_TOWN_LEAVE(
 			"jail.jail_denies_town_leave",
 			"false",
-			"#If false jailed players can use /town leave, and escape a jail."),		
+			"#If false jailed players can use /town leave, and escape a jail."),
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",
 			"false",
-			"#If true players can pay a bail amount to be unjailed."),	
+			"#If true players can pay a bail amount to be unjailed."),
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),	
+			"#Amount that bail costs."),
 	WAR(
 			"war",
 			"",
@@ -1155,7 +1155,7 @@ public enum ConfigNodes {
 			"war.disallow_one_way_alliance",
 			"false",
 			"#By setting this to true, nations will receive a questioner prompt for alliances and alliances will show on both nations."
-			),
+	),
 	WAR_ECONOMY(
 			"war.economy",
 			"",
@@ -1225,7 +1225,7 @@ public enum ConfigNodes {
 			"# If true, nation members and allies can regen health on plots during war."),
 	WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED(
 			"war.event.plots.firework_on_attacked",
-			"true",				
+			"true",
 			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
@@ -1236,7 +1236,7 @@ public enum ConfigNodes {
 			"war.event.allow_block_griefing",
 			"false",
 			"# If enabled players will be able to break/place any blocks in enemy plots during a war.",
-			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.", 
+			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.",
 			"# The editable_materials list in the Warzone Block Permission section should be used instead."),
 	WAR_EVENT_BLOCK_HP_HEADER(
 			"war.event.block_hp",
@@ -1367,7 +1367,7 @@ public enum ConfigNodes {
 			"true"),
 	WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS(
 			"war.warzone.explosions_regen_blocks",
-			"true",			
+			"true",
 			"# Only under affect when explosions_break_blocks is true."),
 	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
 			"war.warzone.explosions_ignore_list",
@@ -1400,7 +1400,7 @@ public enum ConfigNodes {
 			"invite_system.accept_command",
 			"accept",
 			"# Command used to accept towny invites)",
-			"#e.g Purging database or removing a large amount of townblocks"),
+			"#e.g Player join town invite."),
 	INVITE_SYSTEM_COOLDOWN_TIME(
 			"invite_system.cooldowntime",
 			"0m",
@@ -1410,8 +1410,31 @@ public enum ConfigNodes {
 			"invite_system.deny_command",
 			"deny",
 			"# Command used to deny towny invites",
-			"#e.g Purging database or removing a large amount of townblocks"),
-	;
+			"#e.g Player join town invite."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
+			"invite_system.maximum_invites_sent",
+			"# Max invites for Town & Nations, which they can send."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN(
+			"invite_system.maximum_invites_sent.town_toplayer",
+			"35"),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT_NATION(
+			"invite_system.maximum_invites_sent.nation_totown",
+			"35"),
+	INVITE_SYSTEM_MAXIMUM_REQUESTS_SENT_NATION(
+			"invite_system.maximum_invites_sent.nation_tonation",
+			"35"),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED(
+			"invite_system.maximum_invites_received",
+			"# Max invites for Players, Towns & nations, which they can receive"),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER(
+			"invite_system.maximum_invites_received.player",
+			"10"),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_TOWN(
+			"invite_system.maximum_invites_received.town",
+			"10"),
+	INVITE_SYSTEM_MAXIMUM_REQUESTS_RECEIVED_NATION(
+			"invite_system.maximum_invites_received.nation",
+			"10");
 
 	private final String Root;
 	private final String Default;
@@ -1426,7 +1449,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the root for a config option
-	 * 
+	 *
 	 * @return The root for a config option
 	 */
 	public String getRoot() {
@@ -1436,7 +1459,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the default value for a config path
-	 * 
+	 *
 	 * @return The default value for a config path
 	 */
 	public String getDefault() {
@@ -1446,7 +1469,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the comment for a config path
-	 * 
+	 *
 	 * @return The comments for a config path
 	 */
 	public String[] getComments() {
