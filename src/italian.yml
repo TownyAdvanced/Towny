@@ -579,14 +579,14 @@ msg_err_friendly_fire_disable: 'Il fuoco amico è disabilitato!'
 msg_claim_error: '&cUn altro plugin ha interrotto il reclamo di (%s)/(%s) lotti di città, non è stato possibile completare l''operazione.'
 
 # Added in 0.39
-msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
-msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
-msg_err_town_spawn_nation_forbidden_war: '&cTown spawn travel to other towns in your nation is only allowed during war.'
-msg_err_town_spawn_nation_forbidden_peace: '&cTown spawn travel to other towns in your nation is forbidden during war.'
-msg_err_town_spawn_ally_forbidden_war: '&cTown spawn travel to towns allied with your nation is only allowed during war.'
-msg_err_town_spawn_ally_forbidden_false: '&cTown spawn travel to towns allied with your nation is forbidden during war.'
-msg_err_public_spawn_forbidden_war: '&cPublic spawn travel to other towns is only allowed during war.'
-msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is forbidden during war.'
+msg_err_town_spawn_forbidden_war: '&cPuoi andare allo Spawn cittadino solo durante una Guerra'
+msg_err_town_spawn_forbidden_peace: '&cNon puoi andare allo Spawn cittadino durante una Guerra.'
+msg_err_town_spawn_nation_forbidden_war: '&cPuoi andare allo Spawn cittadino di altre Città della tua Nazione solo durante una Guerra.'
+msg_err_town_spawn_nation_forbidden_peace: '&cNon puoi andare allo Spawn cittadino di altre Città della tua Nazione durante una Guerra.'
+msg_err_town_spawn_ally_forbidden_war: '&cPuoi andare allo Spawn cittadino di altre Città alleate con la tua Nazione solo durante una Guerra.'
+msg_err_town_spawn_ally_forbidden_false: '&cNon puoi andare allo Spawn cittadino di altre Città alleate con la tua Nazione durante una Guerra.'
+msg_err_public_spawn_forbidden_war: '&cPuoi andare allo Spawn pubblico delle altre Città solo durante una Guerra.'
+msg_err_public_spawn_forbidden_peace: '&cNon puoi andare allo Spawn pubblico delle altre Città durante una Guerra.'
 
 # Added in 0.40
-mayor_help_9: 'Attempt to unclaim an outpost'
+mayor_help_9: 'Tentativo di unclaim di un accampamento'
