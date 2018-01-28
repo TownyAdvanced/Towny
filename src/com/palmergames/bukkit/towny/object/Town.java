@@ -1193,6 +1193,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
 		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
 			receivedinvites.add(invite);
+
 		} else {
 			throw new TooManyInvitesException();
 		}

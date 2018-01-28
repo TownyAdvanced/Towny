@@ -94,21 +94,37 @@ public class ConfirmationHandler {
 	}
 
 	public static void removeConfirmation(Resident r, ConfirmationType type) throws TownyException {
+		boolean sendmessage = false;
 		if (type == ConfirmationType.TOWNDELETE) {
+			if (towndeleteconfirmations.containsKey(r)) {
+				sendmessage = true;
+			}
 			towndeleteconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.PURGE) {
+			if (townypurgeconfirmations.containsKey(r)) {
+				sendmessage = true;
+			}
 			townypurgeconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.UNCLAIMALL) {
+			if (townunclaimallconfirmations.containsKey(r)) {
+				sendmessage = true;
+			}
 			townunclaimallconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.NATIONDELETE) {
+			if (nationdeleteconfirmations.containsKey(r)) {
+				sendmessage = true;
+			}
 			nationdeleteconfirmations.remove(r);
 			r.setConfirmationType(null);
+		}
+		if (sendmessage) {
+			TownyMessaging.sendMessage(r, TownySettings.getLangString("successful_deny"));
 		}
 	}
 

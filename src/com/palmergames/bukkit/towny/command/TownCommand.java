@@ -417,7 +417,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					townAdd(player, null, newSplit);
 
-				} else if (split[0].equalsIgnoreCase("invite")) {
+				} else if (split[0].equalsIgnoreCase("invite") || split[0].equalsIgnoreCase("invites")) {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_MANAGE.getNode())) {
 						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_ADD.getNode())) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -2294,6 +2294,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				newMember.newReceivedInvite(invite);
 				town.newSentInvite(invite);
 				InviteHandler.addInviteToList(invite);
+				TownyMessaging.sendRequestMessage(newMember,invite);
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
 			}
@@ -2303,15 +2304,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(TownySettings.getLangString("msg_err_player_has_too_many_invites"));
 		}
 	}
-	private static void townRevokeInviteResident(Town town, List<Resident> residents) {
 
-		for (Resident invited: residents) {
+	private static void townRevokeInviteResident(Object sender, Town town, List<Resident> residents) {
+
+		for (Resident invited : residents) {
 			if (InviteHandler.getTowntoresidentinvites().containsEntry(town, invited)) {
 				InviteHandler.getTowntoresidentinvites().remove(town, invited);
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
+							TownyMessaging.sendMessage(sender, TownySettings.getLangString("nation_revoke_ally_successful"));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -2536,7 +2539,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		names = newreslist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length != 0) {
-			townRevokeInviteResident(town,TownyUniverse.getValidatedResidents(sender, namestoremove));
+			townRevokeInviteResident(sender,town,TownyUniverse.getValidatedResidents(sender, namestoremove));
 		}
 
 		if (names.length != 0) {

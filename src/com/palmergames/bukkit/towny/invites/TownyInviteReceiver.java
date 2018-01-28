@@ -8,6 +8,9 @@ import java.util.List;
  * @author Articdive
  */
 public interface TownyInviteReceiver {
+
+	String getName();
+
 	List<Invite> getReceivedInvites();
 
 	void newReceivedInvite(Invite invite) throws TooManyInvitesException;

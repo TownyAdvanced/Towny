@@ -233,7 +233,6 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
 		if (page > total) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
 		}
 		List<String> invitesformatted = new ArrayList<String>();

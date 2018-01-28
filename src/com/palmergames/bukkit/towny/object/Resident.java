@@ -655,6 +655,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
 			// We use 9 because if it is = 9 it adds the tenth
 			receivedinvites.add(invite);
+
 		} else {
 			throw new TooManyInvitesException();
 		}
