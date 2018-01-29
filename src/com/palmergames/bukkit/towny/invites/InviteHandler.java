@@ -97,6 +97,7 @@ public class InviteHandler {
 				town.deleteSentInvite(invite);
 				if (!fromSender) {
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
+					TownyMessaging.sendMessage(invite.getReceiver(), TownySettings.getLangString("successful_deny"));
 				} else {
 					TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
 				}

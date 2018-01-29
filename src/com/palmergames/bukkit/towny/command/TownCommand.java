@@ -646,6 +646,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if (invite.getSender().equals(nation)) {
 								try {
 									InviteHandler.declineInvite(invite, false);
+									TownyMessaging.sendMessage(player, TownySettings.getLangString("successful_deny"));
 									return;
 								} catch (InvalidObjectException e) {
 									e.printStackTrace(); // Shouldn't happen, however like i said a fallback

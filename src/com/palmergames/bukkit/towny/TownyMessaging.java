@@ -556,13 +556,13 @@ public class TownyMessaging {
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
-			sendMessage(player,message);
+			sendMessage(player, message);
 			return;
 		}
 		if (lastline == null) {
 			lastline = ChatColor.BLUE + "This will auto-expire in 20 seconds";
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			sendMessage(player,message);
+			sendMessage(player, message);
 			return;
 		}
 		String[] message = new String[]{firstline, confirmline, cancelline};
@@ -584,8 +584,8 @@ public class TownyMessaging {
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
 				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "You have been requested to ally " + invite.getSender().getName();
-				String secondline = ChatColor.GREEN + "          /N ally accept " + invite.getSender().getName();
-				String thirdline = ChatColor.GREEN + "          /N ally deny " + invite.getSender().getName();
+				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
+				String thirdline = ChatColor.GREEN + "          /n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 		}

@@ -29,13 +29,8 @@ public class CancelCommand extends BukkitCommand {
 			}
 			if (resident != null) {
 				if (resident.getConfirmationType() != null) {
-					try {
-						ConfirmationHandler.removeConfirmation(resident, resident.getConfirmationType());
-						return true;
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-						return true;
-					}
+					ConfirmationHandler.removeConfirmation(resident, resident.getConfirmationType());
+					return true;
 				} else {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("no_confirmations_open"));
 					return true;

@@ -37,11 +37,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					try {
-						removeConfirmation(r, type);
-					} catch (TownyException e) {
-						// Shouldn't be possible since we added it in the first place!
-					}
+					removeConfirmation(r, type);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -51,11 +47,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					try {
-						removeConfirmation(r, type);
-					} catch (TownyException e) {
-						// Shouldn't be possible since we added it in the first place!
-					}
+					removeConfirmation(r, type);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -67,11 +59,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					try {
-						removeConfirmation(r, type);
-					} catch (TownyException e) {
-						// Shouldn't be possible since we added it in the first place!
-					}
+					removeConfirmation(r, type);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -83,17 +71,13 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					try {
-						removeConfirmation(r, type);
-					} catch (TownyException e) {
-						// Shouldn't be possible since we added it in the first place!
-					}
+					removeConfirmation(r, type);
 				}
 			}.runTaskLater(plugin, 400);
 		}
 	}
 
-	public static void removeConfirmation(Resident r, ConfirmationType type) throws TownyException {
+	public static void removeConfirmation(Resident r, ConfirmationType type) {
 		boolean sendmessage = false;
 		if (type == ConfirmationType.TOWNDELETE) {
 			if (towndeleteconfirmations.containsKey(r)) {
@@ -124,7 +108,7 @@ public class ConfirmationHandler {
 			r.setConfirmationType(null);
 		}
 		if (sendmessage) {
-			TownyMessaging.sendMessage(r, TownySettings.getLangString("successful_deny"));
+			TownyMessaging.sendErrorMsg(r, TownySettings.getLangString("successful_cancel"));
 		}
 	}
 
@@ -134,6 +118,7 @@ public class ConfirmationHandler {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
 					TownyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
+					removeConfirmation(r,type);
 					return;
 				}
 			}
@@ -146,6 +131,7 @@ public class ConfirmationHandler {
 				int days = townypurgeconfirmations.get(r);
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
+				removeConfirmation(r,type);
 
 			}
 		}
@@ -163,6 +149,7 @@ public class ConfirmationHandler {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
 					TownyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
+					removeConfirmation(r,type);
 					return;
 				}
 			}
