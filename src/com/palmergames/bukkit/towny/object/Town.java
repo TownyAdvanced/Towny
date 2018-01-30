@@ -1195,7 +1195,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			receivedinvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
 		}
 	}
 
@@ -1214,7 +1214,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
 			sentinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
 		}
 	}
 

@@ -900,7 +900,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (TooManyInvitesException e) {
 			town.deleteReceivedInvite(invite);
 			nation.deleteSentInvite(invite);
-			throw new TownyException(TownySettings.getLangString("msg_err_town_has_too_many_invites"));
+			throw new TownyException(e.getMessage());
 		}
 	}
 
@@ -997,7 +997,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> alliesstring = new ArrayList<String>();
 
 	static {
-		alliesstring.add(ChatTools.formatTitle("/town invite"));
+		alliesstring.add(ChatTools.formatTitle("/nation invite"));
 		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add [nation]", TownySettings.getLangString("nation_ally_help_1")));
 		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally remove [nation]", TownySettings.getLangString("nation_ally_help_2")));
 		if (TownySettings.isDisallowOneWayAlliance()) {
@@ -1103,7 +1103,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		if (TownySettings.isDisallowOneWayAlliance()) {
-			String received = TownySettings.getLangString("nation_received_invites")
+			String received = TownySettings.getLangString("nation_received_requests")
 					.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown().getNation()))
 					)
 					.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown().getNation())));
@@ -1141,11 +1141,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
 			if (split[0].equalsIgnoreCase("accept")) {
-				// /town (gone)
-				// invite (gone)
-				// args[0] = accept = length = 1
-				// args[1] = [Nation] = length = 2
-				// Note that nation = receivernation so, that's why sendernation has to be the key!
 				Nation sendernation;
 				List<Invite> invites = nation.getReceivedInvites();
 
@@ -1250,7 +1245,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 			if (!InviteHandler.getNationtonationinvites().containsEntry(nation, receiver)) {
 				receiver.newReceivedInvite(invite);
-				nation.newSentInvite(invite);
+				nation.newSentAllyInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(receiver.getCapital().getMayor(),invite);
 			} else {
@@ -1259,7 +1254,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (TooManyInvitesException e) {
 			receiver.deleteReceivedInvite(invite);
 			nation.deleteSentInvite(invite);
-			throw new TownyException(TownySettings.getLangString("msg_err_player_has_too_many_invites"));
+			throw new TownyException(TownySettings.getLangString(e.getMessage()));
 		}
 	}
 
@@ -1325,8 +1320,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!targetNation.hasEnemy(nation)) {
 					if (!targetNation.getCapital().getMayor().isNPC()) {
 						for (Nation newAlly : allies) {
-							TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName())));
 							nationCreateAllyRequest(player.getName(), nation, targetNation);
+							TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName())));
 						}
 					} else {
 						if (TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode())) {

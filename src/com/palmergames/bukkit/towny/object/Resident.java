@@ -657,7 +657,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			receivedinvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
 		}
 	}
 

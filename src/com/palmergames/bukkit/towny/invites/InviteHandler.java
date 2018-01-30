@@ -181,33 +181,61 @@ public class InviteHandler {
 	}
 
 	public static int getSentAllyRequestsMaxAmount(TownyAllySender sender) {
+		int amount = 0;
 		if (sender instanceof Nation) {
-			return TownySettings.getMaximumRequestsSentNation();
+			if (TownySettings.getMaximumRequestsSentNation() == 0){
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumRequestsSentNation();
+			}
 		}
-		return 0;
+		return amount;
 	}
 
 	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver) {
+
+		int amount = 0;
 		if (receiver instanceof Resident) {
-			return TownySettings.getMaximumInvitesReceivedResident();
+			if (TownySettings.getMaximumInvitesReceivedResident() == 0) {
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumInvitesReceivedResident();
+			}
 		}
 		if (receiver instanceof Town) {
-			return TownySettings.getMaximumInvitesReceivedTown();
+			if (TownySettings.getMaximumInvitesReceivedTown() == 0) {
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumInvitesReceivedTown();
+			}
 		}
 		if (receiver instanceof Nation) {
-			return TownySettings.getMaximumRequestsReceivedNation();
+			if (TownySettings.getMaximumRequestsReceivedNation() == 0) {
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumRequestsReceivedNation();
+			}
 		}
-		return 0;
+		return amount;
 	}
 
 	public static int getSentInvitesMaxAmount(TownyInviteSender sender) {
+		int amount = 0;
 		if (sender instanceof Town) {
-			return TownySettings.getMaximumInvitesSentTown();
+			if (TownySettings.getMaximumInvitesSentTown() == 0) {
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumInvitesSentTown();
+			}
 		}
 		if (sender instanceof Nation) {
-			return TownySettings.getMaximumInvitesSentNation();
+			if (TownySettings.getMaximumInvitesSentNation() == 0) {
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumInvitesSentNation();
+			}
 		}
-		return 0;
+		return amount;
 	}
 
 }

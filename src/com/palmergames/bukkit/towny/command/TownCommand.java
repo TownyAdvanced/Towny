@@ -536,8 +536,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			for (String msg : invite) {
 				messages.add(Colors.strip(msg));
 			}
-			messages.add(received);
 			messages.add(sent);
+			messages.add(received);
 			msgs = messages.toArray(new String[0]);
 			player.sendMessage(msgs);
 			return;
@@ -2302,7 +2302,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} catch (TooManyInvitesException e) {
 			newMember.deleteReceivedInvite(invite);
 			town.deleteSentInvite(invite);
-			throw new TownyException(TownySettings.getLangString("msg_err_player_has_too_many_invites"));
+			throw new TownyException(TownySettings.getLangString(e.getMessage()));
 		}
 	}
 

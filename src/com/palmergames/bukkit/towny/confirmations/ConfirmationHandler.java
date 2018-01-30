@@ -37,7 +37,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					removeConfirmation(r, type);
+					removeConfirmation(r, type, false);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -47,7 +47,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					removeConfirmation(r, type);
+					removeConfirmation(r, type, false);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -59,7 +59,7 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					removeConfirmation(r, type);
+					removeConfirmation(r, type, false);
 				}
 			}.runTaskLater(plugin, 400);
 		}
@@ -71,44 +71,44 @@ public class ConfirmationHandler {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					removeConfirmation(r, type);
+					removeConfirmation(r, type, false);
 				}
 			}.runTaskLater(plugin, 400);
 		}
 	}
 
-	public static void removeConfirmation(Resident r, ConfirmationType type) {
+	public static void removeConfirmation(Resident r, ConfirmationType type, boolean successful) {
 		boolean sendmessage = false;
 		if (type == ConfirmationType.TOWNDELETE) {
-			if (towndeleteconfirmations.containsKey(r)) {
+			if (towndeleteconfirmations.containsKey(r) && !successful) {
 				sendmessage = true;
 			}
 			towndeleteconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.PURGE) {
-			if (townypurgeconfirmations.containsKey(r)) {
+			if (townypurgeconfirmations.containsKey(r) && !successful) {
 				sendmessage = true;
 			}
 			townypurgeconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.UNCLAIMALL) {
-			if (townunclaimallconfirmations.containsKey(r)) {
+			if (townunclaimallconfirmations.containsKey(r) && !successful) {
 				sendmessage = true;
 			}
 			townunclaimallconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (type == ConfirmationType.NATIONDELETE) {
-			if (nationdeleteconfirmations.containsKey(r)) {
+			if (nationdeleteconfirmations.containsKey(r) && !successful) {
 				sendmessage = true;
 			}
 			nationdeleteconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (sendmessage) {
-			TownyMessaging.sendErrorMsg(r, TownySettings.getLangString("successful_cancel"));
+			TownyMessaging.sendMsg(r, TownySettings.getLangString("successful_cancel"));
 		}
 	}
 
@@ -118,7 +118,7 @@ public class ConfirmationHandler {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
 					TownyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
-					removeConfirmation(r,type);
+					removeConfirmation(r,type, true);
 					return;
 				}
 			}
@@ -131,7 +131,7 @@ public class ConfirmationHandler {
 				int days = townypurgeconfirmations.get(r);
 
 				new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
-				removeConfirmation(r,type);
+				removeConfirmation(r,type, true);
 
 			}
 		}
@@ -139,7 +139,7 @@ public class ConfirmationHandler {
 			if (townunclaimallconfirmations.containsKey(r)) {
 				if (townunclaimallconfirmations.get(r).equals(r.getTown())) {
 					TownClaim.townUnclaimAll(plugin, townunclaimallconfirmations.get(r));
-					removeConfirmation(r, type);
+					removeConfirmation(r, type, true);
 					return;
 				}
 			}
@@ -149,7 +149,7 @@ public class ConfirmationHandler {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
 					TownyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
-					removeConfirmation(r,type);
+					removeConfirmation(r,type, true);
 					return;
 				}
 			}

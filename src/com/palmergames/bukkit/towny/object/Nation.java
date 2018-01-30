@@ -558,10 +558,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	@Override
 	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
-		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
+		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
 			receivedinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
 		}
 	}
 
@@ -577,10 +577,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	@Override
 	public void newSentInvite(Invite invite) throws TooManyInvitesException {
-		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
+		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
 			sentinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_invites"));
 		}
 	}
 
@@ -596,10 +596,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	@Override
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
-		if (sentinvites.size() <= 34) { // We only want 35 ally-requests for the nation to send;
+		if (sentinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
 			sentinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException();
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
 		}
 	}
 
