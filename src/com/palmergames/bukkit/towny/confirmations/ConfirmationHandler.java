@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.util.TimeTools;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -129,8 +130,8 @@ public class ConfirmationHandler {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				}
 				int days = townypurgeconfirmations.get(r);
-
-				new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
+				Player player = TownyUniverse.getPlayer(r);
+				new ResidentPurge(plugin, player, TimeTools.getMillis(days + "d")).start();
 				removeConfirmation(r,type, true);
 
 			}

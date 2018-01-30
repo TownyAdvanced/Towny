@@ -999,6 +999,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	static {
 		alliesstring.add(ChatTools.formatTitle("/nation invite"));
 		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add [nation]", TownySettings.getLangString("nation_ally_help_1")));
+		if (TownySettings.isDisallowOneWayAlliance()) {
+			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally add -[nation]", TownySettings.getLangString("nation_ally_help_7")));
+		}
 		alliesstring.add(ChatTools.formatCommand("", "/nation", "ally remove [nation]", TownySettings.getLangString("nation_ally_help_2")));
 		if (TownySettings.isDisallowOneWayAlliance()) {
 			alliesstring.add(ChatTools.formatCommand("", "/nation", "ally sent", TownySettings.getLangString("nation_ally_help_3")));
@@ -1009,7 +1012,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 
-	public void nationAlly(Player player, String[] split) throws TownyException {
+	private void nationAlly(Player player, String[] split) throws TownyException {
 		if (split.length <= 0) {
 			TownyMessaging.sendMessage(player, alliesstring);
 			return;
@@ -1253,8 +1256,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		} catch (TooManyInvitesException e) {
 			receiver.deleteReceivedInvite(invite);
-			nation.deleteSentInvite(invite);
-			throw new TownyException(TownySettings.getLangString(e.getMessage()));
+			nation.deleteSentAllyInvite(invite);
+			throw new TownyException(e.getMessage());
 		}
 	}
 

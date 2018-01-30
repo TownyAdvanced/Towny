@@ -596,8 +596,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	@Override
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
-		if (sentinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
-			sentinvites.add(invite);
+		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
+			sentallyinvites.add(invite);
 		} else {
 			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
 		}
