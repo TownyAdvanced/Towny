@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -38,6 +39,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.management.openmbean.InvalidOpenTypeException;
 
 public class TownySettings {
 
@@ -129,19 +132,25 @@ public class TownySettings {
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (Map<?, ?> level : levels) {
 
-			newNationLevel(
-					(Integer) level.get("numResidents"),
-					(String) level.get("namePrefix"),
-					(String) level.get("namePostfix"),
-					(String) level.get("capitalPrefix"),
-					(String) level.get("capitalPostfix"),
-					(String) level.get("kingPrefix"),
-					(String) level.get("kingPostfix"),
-					(level.containsKey("townBlockLimitBonus") ? (Integer) level.get("townBlockLimitBonus") : 0),
-					(Double) level.get("upkeepModifier"),
-					(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0),
-					(Integer) level.get("nationZonesSize")
-					);
+			try {
+				newNationLevel(
+						(Integer) level.get("numResidents"),
+						(String) level.get("namePrefix"),
+						(String) level.get("namePostfix"),
+						(String) level.get("capitalPrefix"),
+						(String) level.get("capitalPostfix"),
+						(String) level.get("kingPrefix"),
+						(String) level.get("kingPostfix"),
+						(level.containsKey("townBlockLimitBonus") ? (Integer) level.get("townBlockLimitBonus") : 0),
+						(Double) level.get("upkeepModifier"),
+						(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0),
+						(Integer) level.get("nationZonesSize")
+						);
+			} catch (Exception e) {				
+				TownyMessaging.sendErrorMsg("Your Towny config.yml's Nation_Levels section is out of date.");
+				TownyMessaging.sendErrorMsg("This can be fixed automatically by deleting the Nation_Level section and letting Towny remake it on the next startup.");
+				throw new IOException("Config.yml nation_levels incomplete.");
+			}
 
 		}
 	}
