@@ -48,7 +48,7 @@ public class TownySettings {
 
 	// Nation Level
 	public enum NationLevel {
-		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER
+		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER, NATIONZONES_SIZE
 	}
 
 	// private static Pattern namePattern = null;
@@ -69,7 +69,7 @@ public class TownySettings {
 		configTownLevel.put(numResidents, m);
 	}
 
-	public static void newNationLevel(int numResidents, String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double nationUpkeepMultiplier, double nationTownUpkeepMultiplier) {
+	public static void newNationLevel(int numResidents, String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double nationUpkeepMultiplier, double nationTownUpkeepMultiplier, int nationZonesSize) {
 
 		ConcurrentHashMap<TownySettings.NationLevel, Object> m = new ConcurrentHashMap<TownySettings.NationLevel, Object>();
 		m.put(TownySettings.NationLevel.NAME_PREFIX, namePrefix);
@@ -81,6 +81,7 @@ public class TownySettings {
 		m.put(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS, townBlockLimitBonus);
 		m.put(TownySettings.NationLevel.UPKEEP_MULTIPLIER, nationUpkeepMultiplier);
 		m.put(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER, nationTownUpkeepMultiplier);
+		m.put(TownySettings.NationLevel.NATIONZONES_SIZE, nationZonesSize);
 		configNationLevel.put(numResidents, m);
 	}
 
@@ -138,7 +139,8 @@ public class TownySettings {
 					(String) level.get("kingPostfix"),
 					(level.containsKey("townBlockLimitBonus") ? (Integer) level.get("townBlockLimitBonus") : 0),
 					(Double) level.get("upkeepModifier"),
-					(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0)
+					(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0),
+					(Integer) level.get("nationZonesSize")
 					);
 
 		}
@@ -617,6 +619,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 10);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 1);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -629,6 +632,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 20);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 1);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -641,6 +645,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 40);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 1);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 30);
@@ -653,6 +658,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 60);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 2);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 40);
@@ -665,6 +671,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 100);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 2);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			level.put("numResidents", 60);
@@ -677,6 +684,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 140);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("nationZonesSize", 3);
 			levels.add(new HashMap<String, Object>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
@@ -2382,4 +2390,15 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 	
+	public static boolean getNationZonesEnabled() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_ENABLE);
+	}
+	
+	public static boolean getNationZonesCapitalsOnly() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_ONLY_CAPITALS);
+	}
+	
+	public static boolean getNationZonesWarDisables() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_WAR_DISABLES);
+	}
 }

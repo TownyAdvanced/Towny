@@ -718,6 +718,55 @@ public class TownyWorld extends TownyObject {
 
 		return (int) Math.ceil(min);
 	}
+	
+	/**
+	 * Returns the closes town from a given coord (key).
+	 * 
+	 * @param key - Coord.
+	 * @param nearestTown - Closest town to given coord.
+	 */
+	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
+		
+		double min = Integer.MAX_VALUE;
+		for (Town town : getTowns()) {
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+				
+				Coord townCoord = b.getCoord();
+				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
+				if (dist < min) {
+					min = dist;
+					nearestTown = town;
+				}						
+			}		
+		}		
+		return (nearestTown);		
+	}
+	
+	/**
+	 * Returns the closes town from a given coord (key).
+	 * 
+	 * @param key - Coord.
+	 * @param nearestTown - Closest town to given coord.
+	 */
+	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
+		
+		double min = Integer.MAX_VALUE;
+		for (Town town : getTowns()) {
+			if (!town.hasNation()) continue;
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+				
+				Coord townCoord = b.getCoord();
+				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
+				if (dist < min) {
+					min = dist;
+					nearestTown = town;
+				}						
+			}		
+		}		
+		return (nearestTown);		
+	}
 
 	public void addWarZone(Coord coord) {
 
