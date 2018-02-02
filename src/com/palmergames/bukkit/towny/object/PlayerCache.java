@@ -189,6 +189,7 @@ public class PlayerCache {
 		UNKOWN, NOT_REGISTERED, OFF_WORLD, // In a world untouched by towny.
 		ADMIN,
 		UNCLAIMED_ZONE,
+		NATION_ZONE,
 		LOCKED,
 		WARZONE,
 		OUTSIDER,

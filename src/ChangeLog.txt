@@ -2737,3 +2737,8 @@ v0.92.0.5:
     - Fix for towny-server account losing money when closed economy is enabled in the config and a town or nation changes its name.
     - Spanish.yml updated to 0.40 by SeDark.
     - Fix for mayors who aren't allowed perms in resident-owned plots.
+    - Add new API options:
+      - TownyWorld.getClosestTownFromCoord(Coord key, Town nearestTown) 
+      - TownyWorld.getClosestTownWithNationFromCoord(Coord key, Town nearestTown)
+      - Both return the nearest town.      
+    - Start of new NATION_ZONE coding process, currently not active. 
