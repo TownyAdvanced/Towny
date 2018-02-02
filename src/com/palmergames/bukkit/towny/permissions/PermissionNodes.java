@@ -48,7 +48,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_KICK("towny.command.nation.kick"),
 	// Invite System (Piece of hard work)
 	TOWNY_COMMAND_NATION_INVITE_SEE_HOME("towny.command.nation.invite"),
-	TOWNY_COMMAND_NATION_INVITE_ADD("towny.command.nation.invite.add"),
+	TOWNY_COMMAND_NATION_INVITE_ADD("towny.command.nation.add"),
 	TOWNY_COMMAND_NATION_INVITE_LIST_SENT("towny.command.nation.invite.sent"),
 
 	TOWNY_COMMAND_NATION_ALLY_SEE_HOME("towny.command.nation.ally"),
@@ -60,7 +60,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED("towny.command.ally.received"),
 
 	TOWNY_COMMAND_TOWN_INVITE_SEE_HOME("towny.command.town.invite"),
-	TOWNY_COMMAND_TOWN_INVITE_ADD("towny.command.town.invite.add"),
+	TOWNY_COMMAND_TOWN_INVITE_ADD("towny.command.town.add"),
 	TOWNY_COMMAND_TOWN_INVITE_LIST_SENT("towny.command.town.invite.sent"),
 
 	TOWNY_COMMAND_TOWN_INVITE_LIST_RECEIVED("towny.command.town.invite.received"),

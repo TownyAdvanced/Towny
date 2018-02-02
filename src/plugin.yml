@@ -170,6 +170,32 @@ permissions:
             towny.command.nation.set.title: true
             towny.command.nation.set.surname: true
             towny.command.nation.set.tag: true
+
+    towny.command.nation.invite.*:
+        desciprtion: User can access all invite related commands.
+        default: false
+        children:
+            towny.command.nation.add: true
+            towny.command.nation.invite: true
+            towny.command.nation.invite.sent: true
+
+    towny.command.nation.ally.*:
+        description: User can access all ally related commands.
+        default: false
+        children:
+            towny.command.nation.ally.manage.*: true
+            towny.command.nation.ally: true
+            towny.command.nation.ally.sent: true
+            towny.command.nation.ally.received: true
+
+    towny.command.nation.ally.manage.*:
+        description: User can manage all ally related commands.
+        default: false
+              children:
+                  towny.command.nation.ally.add: true
+                  towny.command.nation.ally.remove: true
+                  towny.command.nation.ally.accept: true
+                  towny.command.nation.ally.deny: true
             
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -205,6 +231,7 @@ permissions:
             towny.command.town.say: true
             towny.command.town.plots: true
             towny.command.town.othertown: true
+            towny.command.town.invite.*: true
     
     towny.command.town.unclaim.*:
         description: User can access all town unclaim related commands.
@@ -220,6 +247,35 @@ permissions:
             towny.command.town.claim.town: true
             towny.command.town.claim.outpost: true
             towny.command.town.claim.town.multiple: false
+
+    towny.command.town.invite.*:
+        desciprtion: User can access all invite related commands.
+        default: false
+        children:
+            towny.command.town.invite.manage.*: true
+            towny.command.town.invite.sent: true
+            towny.command.town.invite.received: true
+            towny.command.town.invite: true
+
+    towny.command.town.manage.*:
+        description: User can manage all invite related commands
+        default: false
+        children:
+            towny.command.town.add: true
+            towny.command.town.invite.accept: true
+            towny.command.town.invite.deny: true
+
+    towny.command.town.invite.sent:
+          description: User can see sent invites from their town.
+          default: true
+
+    towny.command.town.invite.received:
+          description: User can see received invites for their town.
+          default: true
+
+    towny.command.town.invite:
+          description: User can see invite help page.
+          default: true
 
     towny.command.town.set.*:
         description: User can access all town set commands.
@@ -435,3 +491,4 @@ permissions:
             towny.command.townyworld.toggle.worldmobs: true
             towny.command.townyworld.toggle.revertunclaim: true
             towny.command.townyworld.toggle.revertexpl: true
+
