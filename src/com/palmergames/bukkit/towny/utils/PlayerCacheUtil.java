@@ -314,20 +314,36 @@ public class PlayerCacheUtil {
 			}
 
 		} catch (NotRegisteredException e) {
-			
-			// Has to be wilderness.
-//			Town nearestTown = null;
-//			int distance = 0;
-//			try {
-//				nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
-//				distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
-//			} catch (NotRegisteredException e1) {
-//			}
-//			if (distance <= 3) {
-//			//if (nearestNation.getSomethingFromTheNationLevels <= distance) {
-//				return TownBlockStatus.NATION_ZONE;
-//			}
+			// Has to be wilderness because townblock = null;
 
+			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
+			if (TownySettings.getNationZonesEnabled()) {
+				// This nation zone system can be disabled during wartime.
+				if (TownySettings.getNationZonesWarDisables() && !TownyUniverse.isWarTime()) {
+					Town nearestTown = null;
+					int distance = 0;
+					try {
+						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
+						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+					} catch (NotRegisteredException e1) {
+						// There will almost always be a town in any world where towny is enabled. 
+						// If there isn't then we fall back on normal unclaimed zone status.
+						return TownBlockStatus.UNCLAIMED_ZONE;
+					}
+					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
+					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
+						return TownBlockStatus.UNCLAIMED_ZONE;
+					}					
+					try {
+						if (distance <= Integer.valueOf(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())) {
+							return TownBlockStatus.NATION_ZONE;
+						}
+					} catch (NumberFormatException e1) {
+					} catch (NotRegisteredException e1) {
+					}
+				}				
+			}
+	
 			// Otherwise treat as normal wilderness. 
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
@@ -467,33 +483,35 @@ public class PlayerCacheUtil {
 						return false;
 					}
 				}
-				// Nation_Zone wilderness type Permissions 
-				if (status == TownBlockStatus.NATION_ZONE) {
-					Nation playersNation = null;
-					Town nearestTown = null; 
-					nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
-					Nation nearestNation = nearestTown.getNation();
-
-					try {
-						playersNation = playersTown.getNation();
-					} catch (Exception e1) {
-						//cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
-						cacheBlockErrMsg(player, String.format("This wildernessname is under the protection of %s", nearestNation.getName()));
-						return false;
-					}
-					if (playersNation.equals(nearestNation)){
-						if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
-							return true;
-						} else {
-							// Don't have permission to build/destroy/switch/item_use here
-							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+				if (TownySettings.getNationZonesEnabled()) {
+					// Nation_Zone wilderness type Permissions 
+					if (status == TownBlockStatus.NATION_ZONE) {
+						Nation playersNation = null;
+						Town nearestTown = null; 
+						nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
+						Nation nearestNation = nearestTown.getNation();
+		
+						try {
+							playersNation = playersTown.getNation();
+						} catch (Exception e1) {
+							//cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
 							return false;
 						}
-					} else {
-						cacheBlockErrMsg(player, String.format("This wildernessname is under the protection of %s", nearestNation.getName()));
-						return false;
+						if (playersNation.equals(nearestNation)){
+							if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
+								return true;
+							} else {
+								// Don't have permission to build/destroy/switch/item_use here
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+								return false;
+							}
+						} else {
+							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
+							return false;
+						}
+						
 					}
-					
 				}
 			} catch (NotRegisteredException e2) {
 				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
