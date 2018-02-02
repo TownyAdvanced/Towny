@@ -589,4 +589,4 @@ msg_err_public_spawn_forbidden_war: '&cÖffentliche Spawn-Reisen zu anderen Stä
 msg_err_public_spawn_forbidden_peace: '&cÖffentliche Spawn-Reisen zu anderen Städeten sind während des Krieges verboten.'
 
 # Added in 0.40
-mayor_help_9: 'Attempt to unclaim an outpost'
+mayor_help_9: 'Versucht einen Außenposten aufzugeben'
