@@ -217,21 +217,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("add")) {
 
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ADD.getNode()))
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					nationAdd(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("invite") || split[0].equalsIgnoreCase("invites")) {
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_MANAGE.getNode())) {
-						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ADD.getNode())) {
-							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-						} else {
-							nationAdd(player, newSplit);
-						}
-					} else { // He does have permission to manage Real invite Permissions. (Mayor or even assisstant)
 						parseInviteCommand(player, newSplit);
-					}
 
 				} else if (split[0].equalsIgnoreCase("kick")) {
 
@@ -255,9 +247,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nationToggle(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("ally")) {
-
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					nationAlly(player, newSplit);
 
@@ -340,7 +329,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown().getNation())));
 
-		if (newSplit.length == 0) { // (/town invite)
+		if (newSplit.length == 0) { // (/nation invite)
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_SEE_HOME.getNode())) {
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			}
 			String[] msgs;
 			List<String> messages = new ArrayList<String>();
 
@@ -361,6 +353,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_LIST_SENT.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 				List<Invite> sentinvites = resident.getTown().getNation().getSentInvites();
 				int page = 1;
 				if (newSplit.length >= 2) {
@@ -374,7 +369,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				player.sendMessage(sent);
 				return;
 			} else {
-				nationAdd(player, newSplit);
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				} else {
+					nationAdd(player, newSplit);
+				}
 				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.
 				// If it is invalid it is handled in townAdd() so, I'm good
 			}
@@ -1035,6 +1034,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		String[] names = StringMgmt.remFirstArg(split);
 		if (split[0].equalsIgnoreCase("add")) {
+
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ADD.getNode())) {
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			}
 			for (String name : names) {
 				try {
 					ally = TownyUniverse.getDataSource().getNation(name);
@@ -1079,6 +1082,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		if (split[0].equalsIgnoreCase("remove")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_REMOVE.getNode())) {
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			}
 			for (String name : names) {
 				try {
 					ally = TownyUniverse.getDataSource().getNation(name);
@@ -1115,6 +1121,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					)
 					.replace("%m", Integer.toString(InviteHandler.getSentAllyRequestsMaxAmount(resident.getTown().getNation())));
 			if (split[0].equalsIgnoreCase("sent")) {
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_SENT.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 				List<Invite> sentinvites = resident.getTown().getNation().getSentAllyInvites();
 				int page = 1;
 				if (split.length >= 2) {
@@ -1129,6 +1138,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			if (split[0].equalsIgnoreCase("received")) {
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 				List<Invite> receivedinvites = resident.getTown().getNation().getReceivedInvites();
 				int page = 1;
 				if (split.length >= 2) {
@@ -1144,6 +1156,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
 			if (split[0].equalsIgnoreCase("accept")) {
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 				Nation sendernation;
 				List<Invite> invites = nation.getReceivedInvites();
 
@@ -1181,6 +1196,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			}
 			if (split[0].equalsIgnoreCase("deny")) {
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_DENY.getNode())) {
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				}
 				Nation sendernation;
 				List<Invite> invites = nation.getReceivedInvites();
 

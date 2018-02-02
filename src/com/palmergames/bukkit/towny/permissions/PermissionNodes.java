@@ -20,7 +20,6 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
 	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
-	TOWNY_COMMAND_NATION_INVITE_MANAGE("towny.command.nation.invite.manage"),
 	
 	// Covers all assignable ranks
 	TOWNY_COMMAND_NATION_RANK("towny.command.nation.rank.*"),
@@ -41,14 +40,34 @@ public enum PermissionNodes {
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
 	TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
-	
-	TOWNY_COMMAND_NATION_ALLY("towny.command.nation.ally"),
+
 	TOWNY_COMMAND_NATION_ENEMY("towny.command.nation.enemy"),
 	TOWNY_COMMAND_NATION_DELETE("towny.command.nation.delete"),
 	TOWNY_COMMAND_NATION_ONLINE("towny.command.nation.online"),
 	TOWNY_COMMAND_NATION_SAY("towny.command.nation.say"),
-	TOWNY_COMMAND_NATION_ADD("towny.command.nation.add"),
 	TOWNY_COMMAND_NATION_KICK("towny.command.nation.kick"),
+	// Invite System (Piece of hard work)
+	TOWNY_COMMAND_NATION_INVITE_SEE_HOME("towny.command.nation.invite"),
+	TOWNY_COMMAND_NATION_INVITE_ADD("towny.command.nation.invite.add"),
+	TOWNY_COMMAND_NATION_INVITE_LIST_SENT("towny.command.nation.invite.sent"),
+
+	TOWNY_COMMAND_NATION_ALLY_SEE_HOME("towny.command.nation.ally"),
+	TOWNY_COMMAND_NATION_ALLY_ACCEPT("towny.command.nation.ally.accept"),
+	TOWNY_COMMAND_NATION_ALLY_DENY("towny.command.nation.ally.deny"),
+	TOWNY_COMMAND_NATION_ALLY_ADD("towny.command.nation.ally.add"),
+	TOWNY_COMMAND_NATION_ALLY_REMOVE("towny.command.nation.ally.remove"),
+	TOWNY_COMMAND_NATION_ALLY_LIST_SENT("towny.command.ally.sent"),
+	TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED("towny.command.ally.received"),
+
+	TOWNY_COMMAND_TOWN_INVITE_SEE_HOME("towny.command.town.invite"),
+	TOWNY_COMMAND_TOWN_INVITE_ADD("towny.command.town.invite.add"),
+	TOWNY_COMMAND_TOWN_INVITE_LIST_SENT("towny.command.town.invite.sent"),
+
+	TOWNY_COMMAND_TOWN_INVITE_LIST_RECEIVED("towny.command.town.invite.received"),
+	TOWNY_COMMAND_TOWN_INVITE_ACCEPT("towny.command.town.invite.accept"),
+	TOWNY_COMMAND_TOWN_INVITE_DENY("towny.command.town.invite.deny"),
+
+
 	
 	/*
 	 * Town command permissions
@@ -63,7 +82,6 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
-		TOWNY_COMMAND_TOWN_INVITE_MANAGE("towny.command.town.invite.manage"), // Add (invite) already exists!
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
@@ -102,7 +120,6 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_MAYOR("towny.command.town.mayor"),
 		TOWNY_COMMAND_TOWN_DELETE("towny.command.town.delete"),
 		TOWNY_COMMAND_TOWN_JOIN("towny.command.town.join"),
-		TOWNY_COMMAND_TOWN_ADD("towny.command.town.add"),
 		TOWNY_COMMAND_TOWN_KICK("towny.command.town.kick"),
 		
 		TOWNY_COMMAND_TOWN_CLAIM("towny.command.town.claim.*"),
@@ -309,7 +326,7 @@ public enum PermissionNodes {
 	 * 
 	 * @param permission
 	 */
-	private PermissionNodes(String permission) {
+	PermissionNodes(String permission) {
 
 		this.value = permission;
 	}
