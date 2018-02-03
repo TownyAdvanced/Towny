@@ -499,7 +499,7 @@ public class PlayerCacheUtil {
 							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
 							return false;
 						}
-						if (playersNation.equals(nearestNation)){
+						if (playersNation.equals(nearestNation) || TownyUniverse.getPermissionSource().isTownyAdmin(player)){
 							if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
 								return true;
 							} else {
