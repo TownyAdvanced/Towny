@@ -495,8 +495,7 @@ public class PlayerCacheUtil {
 						try {
 							playersNation = playersTown.getNation();
 						} catch (Exception e1) {
-							//cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
-							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
+							cacheBlockErrMsg(player, String.format("This part of the %s is under the protection of %s", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 							return false;
 						}
 						if (playersNation.equals(nearestNation) || TownyUniverse.getPermissionSource().isTownyAdmin(player)){
@@ -508,7 +507,7 @@ public class PlayerCacheUtil {
 								return false;
 							}
 						} else {
-							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
+							cacheBlockErrMsg(player, String.format("This part of the %s is under the protection of %s", pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 							return false;
 						}
 						
