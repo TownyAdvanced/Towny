@@ -177,7 +177,7 @@ permissions:
         desciprtion: User can access all invite related commands.
         default: false
         children:
-            towny.command.nation.add: true
+            towny.command.nation.invite.add: true
             towny.command.nation.invite: true
             towny.command.nation.invite.sent: true
 
@@ -283,7 +283,7 @@ permissions:
         description: User can manage all invite related commands
         default: false
         children:
-            towny.command.town.add: true
+            towny.command.town.invite.add: true
             towny.command.town.invite.accept: true
             towny.command.town.invite.deny: true
 
