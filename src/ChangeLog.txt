@@ -2746,6 +2746,7 @@ v0.92.0.5:
       - When it is enabled players who are members of the nation can use the wilderness surrounding the town like normal.
       - Players who are not part of that nation will find themselves unable to break/build/switch/itemuse in this part of the wilderness.
       - The amount of townblocks used for the zone is determined by the size of the nation and configured in the nation levels.
+      - Capital towns can have an extra amount of padding added to their zone. 
       - Because these zones are still wilderness anyone can claim these townblocks.
       - It is recommended that whatever size you choose, these numbers should be less than the min_plot_distance_from_town_plot otherwise
         someone might not be able to build/destroy in the wilderness outside their town.
