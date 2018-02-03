@@ -193,11 +193,31 @@ permissions:
     towny.command.nation.ally.manage.*:
         description: User can manage all ally related commands.
         default: false
-              children:
-                  towny.command.nation.ally.add: true
-                  towny.command.nation.ally.remove: true
-                  towny.command.nation.ally.accept: true
-                  towny.command.nation.ally.deny: true
+        children:
+            towny.command.nation.ally.add: true
+            towny.command.nation.ally.remove: true
+            towny.command.nation.ally.accept: true
+            towny.command.nation.ally.deny: true
+
+    towny.command.nation.invite.sent:
+              description: User can see sent invites from their nation.
+              default: true
+
+    towny.command.nation.invite:
+              description: User can see invite help page.
+              default: true
+
+    towny.command.nation.ally:
+              description: User can see ally help page.
+              default: true
+
+    towny.command.nation.ally.sent:
+              description: User can see ally requests sent from their nation.
+              default: true
+
+    towny.command.nation.ally.received:
+              description: User can see received ally requests from their nation.
+              default: true
             
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -259,7 +279,7 @@ permissions:
             towny.command.town.invite.received: true
             towny.command.town.invite: true
 
-    towny.command.town.manage.*:
+    towny.command.town.invite.manage.*:
         description: User can manage all invite related commands
         default: false
         children:

@@ -410,7 +410,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("delete")) {
 
 				TownyUniverse.getDataSource().removeTown(town);
-				TownyMessaging.sendMessage(sender, town + " deleted.");
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("town_deleted_by_admin"), town.getName()));
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
@@ -544,8 +544,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				NationCommand.nationAdd(nation, TownyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-
 				TownyUniverse.getDataSource().removeNation(nation);
+				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("nation_deleted_by_admin"), nation.getName()));
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
