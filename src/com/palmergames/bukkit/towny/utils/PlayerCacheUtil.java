@@ -330,6 +330,7 @@ public class PlayerCacheUtil {
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
 					}
+					distance = distance + TownySettings.getNationZonesCapitalBonusSIze();
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;

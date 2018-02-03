@@ -468,6 +468,11 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When set to true, only the capital town of a nation will be surrounded by a nation zone type of wilderness."),
+	GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE(
+			"global_nation_settings.nationzone.capital_bonus_size",
+			"0",
+			"",
+			"# Amount of buffer added to nation zone width surrounding capitals only. Creates a larger buffer around nation capitals."),
 	GNATION_SETTINGS_NATIONZONE_WAR_DISABLES(
 			"global_nation_settings.nationzone.war_disables",
 			"true",

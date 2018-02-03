@@ -2762,5 +2762,8 @@ v0.92.0.5:
       - When set to true, only the capital town of a nation will be surrounded by a nation zone type of wilderness.
     - New Config Option: global_nation_settings.nationzone.war_disables
       - default: true
-      - When set to true, nation zones are disabled during the the Towny war types.			
+      - When set to true, nation zones are disabled during the the Towny war types.
+    - New Config Option: global_nation_settings.nationzone.capital_bonus_size
+	  - default: 0
+      - Amount of buffer added to nation zone width surrounding capitals only. Creates a larger buffer around nation capitals.		
  

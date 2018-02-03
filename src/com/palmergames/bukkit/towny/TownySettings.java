@@ -2410,4 +2410,8 @@ public class TownySettings {
 	public static boolean getNationZonesWarDisables() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_WAR_DISABLES);
 	}
+	
+	public static int getNationZonesCapitalBonusSIze() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
+	}
 }
