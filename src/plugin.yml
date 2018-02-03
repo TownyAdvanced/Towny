@@ -158,6 +158,8 @@ permissions:
             towny.command.nation.add: true
             towny.command.nation.kick: true
             towny.command.nation.othernation: true
+            towny.command.nation.invite.*: true
+            towny.command.nation.ally.*: true
 
     towny.command.nation.set.*:
         description: User can access any of the nation set commands.
