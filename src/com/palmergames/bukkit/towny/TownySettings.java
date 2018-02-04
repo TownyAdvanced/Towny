@@ -21,7 +21,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -39,8 +38,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.management.openmbean.InvalidOpenTypeException;
 
 public class TownySettings {
 
@@ -1685,10 +1682,8 @@ public class TownySettings {
             try {
                 nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
             } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (NotRegisteredException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())

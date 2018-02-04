@@ -378,7 +378,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				try {
 					nation = town.getNation();
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 

@@ -270,7 +270,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			try {
 				town = resident.getTown();
 			} catch (NotRegisteredException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -469,7 +468,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					toCheck.removeFriend(resident);
 					toSave.add(toCheck);
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -522,7 +520,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			removeNation(e.getNation());
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -572,7 +569,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 					toSaveNation.add(toCheck);
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -736,7 +732,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setUuid(oldUUID);
 			town.setRegistered(oldregistration);
 			if (TownySettings.isUsingEconomy()) {
-				//TODO
 				try {
 					town.setBalance(townBalance, "Rename Town - Transfer to new account");
 				} catch (EconomyException e) {
@@ -836,7 +831,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
 
 			if (TownyEconomyHandler.isActive()) {
-				//TODO
 				try {
 					nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
 				} catch (EconomyException e) {
@@ -868,7 +862,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 							toCheck.addEnemy(nation);
 						}
 					} catch (NotRegisteredException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else
@@ -948,7 +941,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			//add everything back to the resident
 			if (transferBalance && TownySettings.isUsingEconomy()) {
-				//TODO
 				try {
 					resident.setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {
@@ -994,7 +986,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						toCheck.removeFriend(oldResident);
 						toCheck.addFriend(resident);
 					} catch (NotRegisteredException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -1009,7 +1000,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						toCheckTown.removeOutlaw(resident);
 						toCheckTown.addOutlaw(resident);
 					} catch (NotRegisteredException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}					
 				}

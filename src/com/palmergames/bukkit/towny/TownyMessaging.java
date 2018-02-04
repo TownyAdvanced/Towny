@@ -302,7 +302,6 @@ public class TownyMessaging {
 					if (TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
 						player.sendMessage(line);
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
