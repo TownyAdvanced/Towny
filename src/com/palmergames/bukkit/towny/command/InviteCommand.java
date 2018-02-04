@@ -258,30 +258,30 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (fromSender) {
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
 					output = Colors.Blue + ((Resident) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = "Player";
+					object = TownySettings.getLangString("player_sing");
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
 						output = Colors.Blue + ((Town) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-						object = "Town";
+						object = TownySettings.getLangString("town_sing");
 					}
 					if (invite.getReceiver() instanceof Nation) {
 						output = Colors.Blue + ((Nation) invite.getReceiver()).getName() + Colors.Gray + " - " + Colors.Green + name;
-						object = "Nation";
+						object = TownySettings.getLangString("nation_sing");
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
 				if (invite.getReceiver() instanceof Resident) {
 					output = Colors.Blue + ((Town) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = "Town";
+					object = TownySettings.getLangString("town_sing");
 				}
 				if (invite.getReceiver() instanceof Town) {
 					output = Colors.Blue + ((Nation) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = "Nation";
+					object = TownySettings.getLangString("nation_sing");
 				}
 				if (invite.getReceiver() instanceof Nation) {
 					output = Colors.Blue + ((Nation) invite.getSender()).getName() + Colors.Gray + " - " + Colors.Green + name;
-					object = "Nation";
+					object = TownySettings.getLangString("nation_sing");
 				}
 
 			}
