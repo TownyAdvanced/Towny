@@ -408,9 +408,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, TownyUniverse.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-
-				TownyUniverse.getDataSource().removeTown(town);
+				
 				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("town_deleted_by_admin"), town.getName()));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
+				TownyUniverse.getDataSource().removeTown(town);
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
@@ -543,9 +544,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 */
 				NationCommand.nationAdd(nation, TownyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
 
-			} else if (split[1].equalsIgnoreCase("delete")) {
-				TownyUniverse.getDataSource().removeNation(nation);
+			} else if (split[1].equalsIgnoreCase("delete")) {				
 				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("nation_deleted_by_admin"), nation.getName()));
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
+				TownyUniverse.getDataSource().removeNation(nation);
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
