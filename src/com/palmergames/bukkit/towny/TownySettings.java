@@ -346,10 +346,10 @@ public class TownySettings {
 		String[] strArray = getString(node.getRoot(), node.getDefault()).split(",");
 		List<Integer> list = new ArrayList<Integer>();
 		if (strArray != null) {
-			for (int ctr = 0; ctr < strArray.length; ctr++)
-				if (strArray[ctr] != null) {
+			for (String aStrArray : strArray)
+				if (aStrArray != null) {
 					try {
-						list.add(Integer.parseInt(strArray[ctr].trim()));
+						list.add(Integer.parseInt(aStrArray.trim()));
 					} catch (NumberFormatException e) {
 						sendError(node.getRoot().toLowerCase() + " from config.yml");
 					}
@@ -363,9 +363,9 @@ public class TownySettings {
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
 		List<String> list = new ArrayList<String>();
 		if (strArray != null) {
-			for (int ctr = 0; ctr < strArray.length; ctr++)
-				if (strArray[ctr] != null)
-					list.add(strArray[ctr].trim());
+			for (String aStrArray : strArray)
+				if (aStrArray != null)
+					list.add(aStrArray.trim());
 		}
 		return list;
 	}

@@ -15,7 +15,7 @@ public class TownyLogFormatter extends SimpleFormatter {
 	@Override
 	public synchronized String format(LogRecord record) {
 
-		StringBuffer buf = new StringBuffer(180);
+		StringBuilder buf = new StringBuilder(180);
 		if (dateFormat == null)
 			dateFormat = DateFormat.getDateTimeInstance();
 
