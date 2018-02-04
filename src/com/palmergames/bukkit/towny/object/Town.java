@@ -11,6 +11,11 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -24,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownBlockOwner implements ResidentList {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -212,7 +217,6 @@ public class Town extends TownBlockOwner implements ResidentList {
 				if (!resident.getTown().equals(this))
 					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
@@ -1180,4 +1184,45 @@ public class Town extends TownBlockOwner implements ResidentList {
 		}
 	}
 
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
+			receivedinvites.add(invite);
+
+		} else {
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
+		}
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentInvites() {
+		return sentinvites;
+	}
+
+	@Override
+	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
+		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
+			sentinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
+		}
+	}
+
+	@Override
+	public void deleteSentInvite(Invite invite) {
+		sentinvites.remove(invite);
+	}
+
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+	private List<Invite> sentinvites = new ArrayList<Invite>();
 }

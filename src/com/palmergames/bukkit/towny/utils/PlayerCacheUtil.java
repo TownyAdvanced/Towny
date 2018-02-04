@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -297,8 +298,8 @@ public class PlayerCacheUtil {
 		}
 
 		//TownyUniverse universe = plugin.getTownyUniverse();
-		TownBlock townBlock;
-		Town town;
+		TownBlock townBlock = null;
+		Town town = null;
 		try {
 			townBlock = worldCoord.getTownBlock();
 			town = townBlock.getTown();
@@ -313,7 +314,38 @@ public class PlayerCacheUtil {
 			}
 
 		} catch (NotRegisteredException e) {
-			// Unclaimed Zone switch rights
+			// Has to be wilderness because townblock = null;
+
+			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
+			if (TownySettings.getNationZonesEnabled()) {
+				// This nation zone system can be disabled during wartime.
+				if (TownySettings.getNationZonesWarDisables() && !TownyUniverse.isWarTime()) {
+					Town nearestTown = null;
+					int distance = 0;
+					try {
+						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
+						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
+					} catch (NotRegisteredException e1) {
+						// There will almost always be a town in any world where towny is enabled. 
+						// If there isn't then we fall back on normal unclaimed zone status.
+						return TownBlockStatus.UNCLAIMED_ZONE;
+					}
+					distance = distance + TownySettings.getNationZonesCapitalBonusSIze();
+					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
+					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
+						return TownBlockStatus.UNCLAIMED_ZONE;
+					}					
+					try {
+						if (distance <= Integer.valueOf(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())) {
+							return TownBlockStatus.NATION_ZONE;
+						}
+					} catch (NumberFormatException e1) {
+					} catch (NotRegisteredException e1) {
+					}
+				}				
+			}
+	
+			// Otherwise treat as normal wilderness. 
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
 
@@ -450,6 +482,35 @@ public class PlayerCacheUtil {
 						// Don't have permission to build/destroy/switch/item_use here
 						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
 						return false;
+					}
+				}
+				if (TownySettings.getNationZonesEnabled()) {
+					// Nation_Zone wilderness type Permissions 
+					if (status == TownBlockStatus.NATION_ZONE) {
+						Nation playersNation = null;
+						Town nearestTown = null; 
+						nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
+						Nation nearestNation = nearestTown.getNation();
+		
+						try {
+							playersNation = playersTown.getNation();
+						} catch (Exception e1) {
+							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+							return false;
+						}
+						if (playersNation.equals(nearestNation) || TownyUniverse.getPermissionSource().isTownyAdmin(player)){
+							if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
+								return true;
+							} else {
+								// Don't have permission to build/destroy/switch/item_use here
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+								return false;
+							}
+						} else {
+							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+							return false;
+						}
+						
 					}
 				}
 			} catch (NotRegisteredException e2) {
