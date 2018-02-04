@@ -28,13 +28,16 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;
@@ -670,7 +673,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
 		lock.lock();
-
+		
 		String oldName;
 
 		try {
@@ -780,7 +783,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
 
 		universe.setChangedNotify(RENAME_TOWN);
+
 	}
+		
 
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {

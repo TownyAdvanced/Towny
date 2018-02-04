@@ -2789,3 +2789,7 @@ v0.92.0.5:
         - Nations deny alliance requests using /n ally deny {nationname}
       - New Confirmation's are sent to player unclaiming all of their plots, deleting their town or nation and to admins who are using the /ta resident purge command.
         - Towny Admins do not have to confirm deleting a town or nation, so be careful!
+v0.92.0.6:
+    - Fix /town buy bonus command not being at all helpful when not enabled fully through the config.
+    - Add LOG_2,VINE,NETHER_WARTS,COCOA to config's default unclaimed.unclaimed_zone_ignore list.
+    - Italian.yml updated to 0.41 by Dracarys.
