@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -83,8 +82,6 @@ import java.util.Map;
 public class Towny extends JavaPlugin {
 
 	private String version = "2.0.0";
-
-	public static PermissionHandler permissionHandler;
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
