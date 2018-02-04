@@ -512,7 +512,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_withdraw_disabled"));
 
 			if (amount < 0)
-				throw new TownyException(TownySettings.getLangString("msg_err_negative_money")); // TODO
+				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
@@ -673,7 +673,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setUuid(UUID.randomUUID());
 		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
-			//TODO
 			try {
 				nation.setBalance(0, "Deleting Nation");
 			} catch (EconomyException e) {
