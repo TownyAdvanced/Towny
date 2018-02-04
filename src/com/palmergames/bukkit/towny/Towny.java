@@ -351,6 +351,12 @@ public class Towny extends JavaPlugin {
 			this.essentials = (Essentials) test;
 			using.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
 		}
+		
+		test = getServer().getPluginManager().getPlugin("Questioner");	
+		if (test != null) {
+			TownyMessaging.sendErrorMsg("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations.");
+			TownyMessaging.sendErrorMsg("You may safely remove Questioner.jar from your plugins folder.");
+		}
 
 		/*
 		 * Test for Citizens2 so we can avoid removing their NPC's
