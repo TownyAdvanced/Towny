@@ -12,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,8 +58,8 @@ public class FileMgmt {
 					targetLocation.mkdir();
 	
 				String[] children = sourceLocation.list();
-				for (int i = 0; i < children.length; i++)
-					copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
+				for (String aChildren : children)
+					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
 				OutputStream out = new FileOutputStream(targetLocation);
 				try {
@@ -259,12 +258,10 @@ public class FileMgmt {
 			File file = new File(targetLocation);
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 
-			Iterator<String> itr = source.iterator();
-			
-			while (itr.hasNext()) {
-				
-				out.write(itr.next() + System.getProperty("line.separator"));
-				
+			for (String aSource : source) {
+
+				out.write(aSource + System.getProperty("line.separator"));
+
 			}
 
 			out.close();
@@ -320,8 +317,8 @@ public class FileMgmt {
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
 			int bytesIn = 0;
-			for (int i = 0; i < dirList.length; i++) {
-				File f = new File(sourceFolder, dirList[i]);
+			for (String aDirList : dirList) {
+				File f = new File(sourceFolder, aDirList);
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
 					continue;

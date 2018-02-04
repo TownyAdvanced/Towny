@@ -16,7 +16,7 @@ public class TownyMoneyLogFormatter extends SimpleFormatter {
 	@Override
 	public synchronized String format(LogRecord record) {
 
-		StringBuffer buf = new StringBuffer(180);
+		StringBuilder buf = new StringBuilder(180);
 		if (dateFormat == null)
 			dateFormat = new SimpleDateFormat("MMM dd '-' HH:mm:ss");
 
