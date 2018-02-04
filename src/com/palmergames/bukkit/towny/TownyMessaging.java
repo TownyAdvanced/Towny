@@ -546,7 +546,7 @@ public class TownyMessaging {
 
 	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
 		if (firstline == null) {
-			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "Are you sure you want to continue?";
+			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
@@ -560,32 +560,31 @@ public class TownyMessaging {
 			return;
 		}
 		if (lastline == null) {
-			lastline = ChatColor.BLUE + "This will auto-expire in 20 seconds";
+			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
 			sendMessage(player, message);
 			return;
-		}
-		String[] message = new String[]{firstline, confirmline, cancelline};
+		}		
 	}
 
 	public static void sendRequestMessage(Object player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "You have been invited to join " + invite.getSender().getName();
+			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("you_have_been_invited_to_join") + invite.getSender().getName();
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
-			String thirdline = ChatColor.GREEN + "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
+			String thirdline = ChatColor.GREEN +  "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "You have been invited to join " + invite.getSender().getName();
+				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("you_have_been_invited_to_join") + invite.getSender().getName();
 				String secondline = ChatColor.GREEN + "          /t invite accept " + invite.getSender().getName();
-				String thirdline = ChatColor.GREEN + "          /t invite deny " + invite.getSender().getName();
+				String thirdline = ChatColor.GREEN +  "          /t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + "You have been requested to ally " + invite.getSender().getName();
+				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("you_have_been_requested_to_ally") + invite.getSender().getName();
 				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
-				String thirdline = ChatColor.GREEN + "          /n ally deny " + invite.getSender().getName();
+				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 		}
