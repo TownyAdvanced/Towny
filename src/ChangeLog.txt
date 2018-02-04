@@ -2791,3 +2791,4 @@ v0.92.0.5:
         - Towny Admins do not have to confirm deleting a town or nation, so be careful!
 v0.92.0.6:
     - Fix /town buy bonus command not being at all helpful when not enabled fully through the config.
+    - Add LOG_2,VINE,NETHER_WARTS,COCOA to config's default unclaimed.unclaimed_zone_ignore list.
