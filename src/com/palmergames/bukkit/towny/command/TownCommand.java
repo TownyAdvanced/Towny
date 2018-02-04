@@ -2323,7 +2323,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (invite.getSender().equals(town)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, TownySettings.getLangString("nation_revoke_ally_successful"));
+							TownyMessaging.sendMessage(sender, TownySettings.getLangString("town_revoke_invite_successful"));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
