@@ -1,19 +1,48 @@
 package com.palmergames.bukkit.towny;
 
-import ca.xshade.bukkit.questioner.Questioner;
-import ca.xshade.questionmanager.Option;
-import ca.xshade.questionmanager.Question;
-
 import com.earth2me.essentials.Essentials;
 import com.nijiko.permissions.PermissionHandler;
 import com.palmergames.bukkit.metrics.Metrics;
-import com.palmergames.bukkit.towny.command.*;
+import com.palmergames.bukkit.towny.command.InviteCommand;
+import com.palmergames.bukkit.towny.command.NationCommand;
+import com.palmergames.bukkit.towny.command.PlotCommand;
+import com.palmergames.bukkit.towny.command.ResidentCommand;
+import com.palmergames.bukkit.towny.command.TownCommand;
+import com.palmergames.bukkit.towny.command.TownyAdminCommand;
+import com.palmergames.bukkit.towny.command.TownyCommand;
+import com.palmergames.bukkit.towny.command.TownyWorldCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.listeners.*;
-import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.permissions.*;
-import com.palmergames.bukkit.towny.questioner.TownyQuestionTask;
+import com.palmergames.bukkit.towny.huds.HUDManager;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
+import com.palmergames.bukkit.towny.listeners.TownyBlockPhysicsListener;
+import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
+import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
+import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
+import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
+import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
+import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
+import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
+import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
+import com.palmergames.bukkit.towny.permissions.NullPermSource;
+import com.palmergames.bukkit.towny.permissions.PEXSource;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.permissions.VaultPermSource;
+import com.palmergames.bukkit.towny.permissions.bPermsSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -24,17 +53,23 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-import com.palmergames.bukkit.towny.huds.*;
-
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Towny Plugin for Bukkit
@@ -108,9 +143,12 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.initialize(this);
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
+		InviteHandler.initialize(this);
+		ConfirmationHandler.initialize(this);
 
 		if (load()) {
 			// Setup bukkit command interfaces
+			registerSpecialCommands();
 			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
 			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
 			getCommand("resident").setExecutor(new ResidentCommand(this));
@@ -118,11 +156,13 @@ public class Towny extends JavaPlugin {
 			getCommand("town").setExecutor(new TownCommand(this));
 			getCommand("nation").setExecutor(new NationCommand(this));
 			getCommand("plot").setExecutor(new PlotCommand(this));
+			getCommand("invite").setExecutor(new InviteCommand(this));
 
 			TownyWar.onEnable();
 
-			if (TownySettings.isTownyUpdating(getVersion()))
+			if (TownySettings.isTownyUpdating(getVersion())) {
 				update();
+			}
 
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
@@ -311,12 +351,6 @@ public class Towny extends JavaPlugin {
 			this.essentials = (Essentials) test;
 			using.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
 		}
-
-		test = getServer().getPluginManager().getPlugin("Questioner");
-		if (test == null)
-			TownySettings.setUsingQuestioner(false);
-		else if (TownySettings.isUsingQuestioner())
-			using.add(String.format("%s v%s", "Questioner", test.getDescription().getVersion()));
 
 		/*
 		 * Test for Citizens2 so we can avoid removing their NPC's
@@ -666,14 +700,7 @@ public class Towny extends JavaPlugin {
 
 		TownyLogger.setup(getTownyUniverse().getRootFolder(), TownySettings.isAppendingToLog());
 	}
-
-	public void appendQuestion(Questioner questioner, Question question) throws Exception {
-
-		for (Option option : question.getOptions())
-			if (option.getReaction() instanceof TownyQuestionTask)
-				((TownyQuestionTask) option.getReaction()).setTowny(this);
-		questioner.appendQuestion(question);
-	}
+	
 
 	public boolean parseOnOff(String s) throws Exception {
 
@@ -782,4 +809,26 @@ public class Towny extends JavaPlugin {
 		
 		return HUDManager;
 	}
+
+	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
+	public void registerSpecialCommands() {
+		List<Command> commands = new ArrayList<Command>();
+		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
+		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
+		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
+		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+		try {
+			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+
+			bukkitCommandMap.setAccessible(true);
+			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+
+			commandMap.registerAll("towny", commands);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
