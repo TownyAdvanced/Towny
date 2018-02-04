@@ -61,7 +61,7 @@ towns:
         assistant:
             - towny.tax_exempt
             - towny.command.town.claim.*
-            - towny.command.town.add
+            - towny.command.town.invite.add
             - towny.command.plot.*
             - towny.command.town.toggle.public
             - towny.claimed.owntown.switch.*
@@ -96,8 +96,8 @@ nations:
     ranks:
         assistant:
             - towny.command.nation.rank.helper
-            - towny.command.nation.add
-            - towny.command.nation.ally
+            - towny.command.nation.invite.add
+            - towny.command.nation.ally.*
             - towny.command.nation enemy
         helper:
             - towny.command.nation.add

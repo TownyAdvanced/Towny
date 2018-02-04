@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -38,6 +39,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.management.openmbean.InvalidOpenTypeException;
 
 public class TownySettings {
 
@@ -129,19 +132,25 @@ public class TownySettings {
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (Map<?, ?> level : levels) {
 
-			newNationLevel(
-					(Integer) level.get("numResidents"),
-					(String) level.get("namePrefix"),
-					(String) level.get("namePostfix"),
-					(String) level.get("capitalPrefix"),
-					(String) level.get("capitalPostfix"),
-					(String) level.get("kingPrefix"),
-					(String) level.get("kingPostfix"),
-					(level.containsKey("townBlockLimitBonus") ? (Integer) level.get("townBlockLimitBonus") : 0),
-					(Double) level.get("upkeepModifier"),
-					(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0),
-					(Integer) level.get("nationZonesSize")
-					);
+			try {
+				newNationLevel(
+						(Integer) level.get("numResidents"),
+						(String) level.get("namePrefix"),
+						(String) level.get("namePostfix"),
+						(String) level.get("capitalPrefix"),
+						(String) level.get("capitalPostfix"),
+						(String) level.get("kingPrefix"),
+						(String) level.get("kingPostfix"),
+						(level.containsKey("townBlockLimitBonus") ? (Integer) level.get("townBlockLimitBonus") : 0),
+						(Double) level.get("upkeepModifier"),
+						(level.containsKey("nationTownUpkeepModifier") ? (Double) level.get("nationTownUpkeepModifier") : 1.0),
+						(Integer) level.get("nationZonesSize")
+						);
+			} catch (Exception e) {				
+				TownyMessaging.sendErrorMsg("Your Towny config.yml's Nation_Levels section is out of date.");
+				TownyMessaging.sendErrorMsg("This can be fixed automatically by deleting the Nation_Level section and letting Towny remake it on the next startup.");
+				throw new IOException("Config.yml nation_levels incomplete.");
+			}
 
 		}
 	}
@@ -2174,33 +2183,48 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_LOGGING);
 	}
 
-	public static boolean isUsingQuestioner() {
+	//public static boolean isUsingQuestioner() {
+	//
+	//	return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
+	//}
 
-		return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
+	public static String getAcceptCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}
 
-	public static void setUsingQuestioner(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
+	public static String getDenyCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND);
 	}
+
+	public static String getConfirmCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND);
+	}
+
+	public static String getCancelCommand(){
+		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND);
+	}
+	//public static void setUsingQuestioner(boolean newSetting) {
+	//
+	//	setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
+	//}
 
 	public static boolean getOutsidersPreventPVPToggle() { 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
 
-	public static String questionerAccept() {
+	//public static String questionerAccept() {
+	//
+	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
+	//}
 
-		return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
-	}
-
-	public static String questionerDeny() {
-
-		return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
-	}
+	//public static String questionerDeny() {
+	//
+	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
+	//}
 	
 	public static long getTownInviteCooldown() {
-		
-		return getSeconds(ConfigNodes.PLUGIN_QUESTIONER_COOLDOWN_TIME);
+
+		return getSeconds(ConfigNodes.INVITE_SYSTEM_COOLDOWN_TIME);
 	}
 
 	public static boolean isAppendingToLog() {
@@ -2389,6 +2413,26 @@ public class TownySettings {
 	public static int getAmountOfResidentsForTown() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
+
+	public static int getMaximumInvitesSentTown() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN);
+	}
+	public static int getMaximumInvitesSentNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_SENT_NATION);
+	}
+	public static int getMaximumRequestsSentNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_REQUESTS_SENT_NATION);
+	}
+
+	public static int getMaximumInvitesReceivedResident() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER);
+	}
+	public static int getMaximumInvitesReceivedTown() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_TOWN);
+	}
+	public static int getMaximumRequestsReceivedNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_REQUESTS_RECEIVED_NATION);
+	}
 	
 	public static boolean getNationZonesEnabled() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_ENABLE);
@@ -2400,5 +2444,9 @@ public class TownySettings {
 	
 	public static boolean getNationZonesWarDisables() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_WAR_DISABLES);
+	}
+	
+	public static int getNationZonesCapitalBonusSIze() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
 	}
 }

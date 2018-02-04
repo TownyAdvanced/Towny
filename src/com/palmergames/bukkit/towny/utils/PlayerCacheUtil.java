@@ -330,6 +330,7 @@ public class PlayerCacheUtil {
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
 					}
+					distance = distance + TownySettings.getNationZonesCapitalBonusSIze();
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;
@@ -494,11 +495,10 @@ public class PlayerCacheUtil {
 						try {
 							playersNation = playersTown.getNation();
 						} catch (Exception e1) {
-							//cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
-							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
+							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 							return false;
 						}
-						if (playersNation.equals(nearestNation)){
+						if (playersNation.equals(nearestNation) || TownyUniverse.getPermissionSource().isTownyAdmin(player)){
 							if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
 								return true;
 							} else {
@@ -507,7 +507,7 @@ public class PlayerCacheUtil {
 								return false;
 							}
 						} else {
-							cacheBlockErrMsg(player, String.format("This part of the wilderness is under the protection of %s", nearestNation.getName()));
+							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 							return false;
 						}
 						

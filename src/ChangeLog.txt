@@ -2740,19 +2740,20 @@ v0.92.0.5:
     - Add new API options:    
       - TownyWorld.getClosestTownFromCoord(Coord key, Town nearestTown) 
       - TownyWorld.getClosestTownWithNationFromCoord(Coord key, Town nearestTown)
-      - Both return the nearest town.      
-    - Start of new NATION_ZONE coding process, currently not active.
+      - Both return the nearest town.
     - New Feature: Nation Zones.
       - Nation Zones are a special type of wilderness surrounding Capitals of Nations or Nation Capitals and their Towns.
       - When it is enabled players who are members of the nation can use the wilderness surrounding the town like normal.
       - Players who are not part of that nation will find themselves unable to break/build/switch/itemuse in this part of the wilderness.
       - The amount of townblocks used for the zone is determined by the size of the nation and configured in the nation levels.
+      - Capital towns can have an extra amount of padding added to their zone. 
       - Because these zones are still wilderness anyone can claim these townblocks.
       - It is recommended that whatever size you choose, these numbers should be less than the min_plot_distance_from_town_plot otherwise
         someone might not be able to build/destroy in the wilderness outside their town.
     - REQUIRED CONFIG CHANGE:
       - a new entry to all of your nation_levels in the config must be added, otherwise Towny will not start up properly.
-      - add 'nationZonesSize: 3' to each nation_level.
+      - add 'nationZonesSize: #' to each nation_level.
+      - default settings are between 1 and 3.
       - If you do not want to do this you can delete the nation_level section of your config and Towny will re-create it with the missing lines and new default settings.
     - New Config Option: global_nation_settings.nationzone.enable
 	  - default: false
@@ -2762,5 +2763,29 @@ v0.92.0.5:
       - When set to true, only the capital town of a nation will be surrounded by a nation zone type of wilderness.
     - New Config Option: global_nation_settings.nationzone.war_disables
       - default: true
-      - When set to true, nation zones are disabled during the the Towny war types.			
- 
+      - When set to true, nation zones are disabled during the the Towny war types.
+    - New Config Option: global_nation_settings.nationzone.capital_bonus_size
+	  - default: 0
+      - Amount of buffer added to nation zone width surrounding capitals only. Creates a larger buffer around nation capitals.		
+    - New Feature: Vastly-improved Invite/Requests/Confirmations System! by Articdive.
+      - Question.jar no longer required! After serving it's purpose for 7 years and requiring only 6 version changes, Questioner is finally retiring.
+      - Towny's system of Invites, Ally requests and important Confirmations are now handled in-house by Towny.jar.
+      - New config section: Invites System.
+        - You can set the commands used for accept, deny, confirm, cancel.
+        - You can set limits on how many invites and requests can be sent and received independently.
+        - You can set how long in minutes a player has to have been on the server before they can receive invites from Towns.
+        - Greater detail/information is found in the new config section's comments.
+      - REQUIRED CONFIG CHANGE: You must reset your Invite Cooldown Time, if you were using it.
+      - REQUIRED TOWNYPERMS CHANGE: You must change the nation.assistant permission towny.command.nation.ally to towny.command.nation.ally.*
+      - The new system can handle multiple invites sent to players, towns and ally-requests between nations (when one-way nation relationships are disallowed.)
+        - Invites do not persist across server restarts.
+        - Invites can be sent using the old /t add {name} and /n add {name} commands.
+        - Alternatively you can use the new /t invite and /n invite commands for much more information.
+        - Single invites can be accepted/denied by players using the /accept or /deny commands.
+          - Multiple invites can be seen using /invites, and you can use /accept {town} or /deny {town}
+        - Towns accept nation invitations using /t invite accept {nationname}
+        - Towns deny nation invitations using /t invite deny {nationname}
+        - Nations accept alliance requests using /n ally accept {nationname}
+        - Nations deny alliance requests using /n ally deny {nationname}
+      - New Confirmation's are sent to player unclaiming all of their plots, deleting their town or nation and to admins who are using the /ta resident purge command.
+        - Towny Admins do not have to confirm deleting a town or nation, so be careful!

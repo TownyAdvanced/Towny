@@ -120,19 +120,6 @@ public class ChatTools {
 		return out;
 	}
 
-	public static void main(String[] args) {
-
-		String[] players = {
-				"dude", "bowie", "blarg", "sonbitch", "songoku", "pacman",
-				"link", "stacker", "hacker", "newb" };
-		for (String line : ChatTools.listArr(players))
-			System.out.println(line);
-
-		String testLine = "Loren Ipsum blarg voila tssssssh, boom wakka wakka \u00A7apacman on a boat bitch. From the boat union. Beata lingiushtically \u00A71nootchie lolk erness.";
-		for (String line : ChatTools.color(testLine))
-			System.out.println(line);
-	}
-
 	/**
 	 * @param title   - Title of the list,
 	 * @param subject - Subject of the listing.
