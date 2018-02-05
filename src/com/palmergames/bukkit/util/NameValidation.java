@@ -88,7 +88,7 @@ public class NameValidation {
 		  used in '/town spawn')
 		 */
 		ArrayList<String> bannedNames = new ArrayList<String>();
-		bannedNames.addAll(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost","ranklist"));
+		bannedNames.addAll(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy"));
 		// Banned names
 		if (bannedNames.contains(name.toLowerCase()))
 			return true;
