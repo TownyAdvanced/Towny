@@ -1612,6 +1612,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public void townBuy(Player player, String[] split) {
 
+		if (!TownySettings.isSellingBonusBlocks()) {
+			TownyMessaging.sendErrorMsg(player, "Config.yml max_purchased_blocks: '0' ");
+		}
+			
 		Resident resident;
 		Town town;
 		try {
@@ -1624,14 +1628,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/town buy"));
-			if (TownySettings.isSellingBonusBlocks()) {
-				String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-				player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
-				player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
-			} else {
-				// Temp placeholder.
-				player.sendMessage("Nothing for sale right now.");
-			}
+			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
+			player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
+			player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 		} else {
 			try {
 				if (split[0].equalsIgnoreCase("bonus")) {
@@ -1642,7 +1641,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));
 						}
 					} else {
-						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus"));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_must_specify_amnt"), "/town buy bonus #"));
 					}
 				}
 
