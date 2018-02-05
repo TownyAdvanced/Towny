@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;

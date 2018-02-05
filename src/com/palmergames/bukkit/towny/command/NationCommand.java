@@ -558,7 +558,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Send a list of all nations in the universe to player Command: /nation
 	 * list
 	 * 
-	 * @param player
+	 * @param player - Player to send the list to.
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -618,7 +618,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Create a new nation. Command: /nation new [nation] *[capital]
 	 * 
-	 * @param player
+	 * @param player - Player creating the new nation.
 	 */
 
 	public void newNation(Player player, String name, String capitalName) {

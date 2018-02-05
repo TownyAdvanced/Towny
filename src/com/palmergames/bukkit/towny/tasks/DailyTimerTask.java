@@ -1,15 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_NATION_TAX;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_TONW_TAX;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_NATION;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_TOWN;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -26,6 +16,16 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_NATION_TAX;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_TONW_TAX;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_NATION;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_TOWN;
 
 public class DailyTimerTask extends TownyTimerTask {
 
@@ -98,7 +98,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect taxes for all nations due from their member towns
 	 * 
-	 * @throws EconomyException
+	 * @throws EconomyException - EconomyException
 	 */
 	public void collectNationTaxes() throws EconomyException {
 
@@ -121,8 +121,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect taxes due to the nation from it's member towns.
 	 * 
-	 * @param nation
-	 * @throws EconomyException
+	 * @param nation - Nation to collect taxes from.
+	 * @throws EconomyException - EconomyException
 	 */
 	protected void collectNationTaxes(Nation nation) throws EconomyException {
 
@@ -164,7 +164,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect taxes for all towns due from their residents.
 	 * 
-	 * @throws EconomyException
+	 * @throws EconomyException - EconomyException
 	 */
 	public void collectTownTaxes() throws EconomyException {
 
@@ -188,8 +188,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect taxes due to the town from it's residents.
 	 * 
-	 * @param nation
-	 * @throws EconomyException
+	 * @param town - Town to collect taxes from
+	 * @throws EconomyException - EconomyException
 	 */
 	protected void collectTownTaxes(Town town) throws EconomyException {
 

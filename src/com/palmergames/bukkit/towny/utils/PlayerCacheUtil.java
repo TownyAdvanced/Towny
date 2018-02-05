@@ -436,12 +436,12 @@ public class PlayerCacheUtil {
 	 * Test if the player has permission to perform a certain action at this
 	 * WorldCoord.
 	 * 
-	 * @param player
-	 * @param status
-	 * @param pos
-	 * @param id
-	 * @param data
-	 * @param action
+	 * @param player - Player object
+	 * @param status - TownBlock's Status (Type)
+	 * @param pos - Worldcoord
+	 * @param blockId - Block's ID (Type)
+	 * @param data - BlockData (byte)
+	 * @param action - What is the player doing: Destroy, Switch, Build e.t.c
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Integer blockId, byte data, TownyPermission.ActionType action) {

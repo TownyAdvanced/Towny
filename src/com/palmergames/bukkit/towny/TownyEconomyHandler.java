@@ -136,10 +136,10 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * Returns the relevant players economy account
+	 * Returns the relevant player's economy account
 	 * 
-	 * @param player
-	 * @return
+	 * @param accountName - Name of the player's account (usually playername)
+	 * @return - The relevant player's economy account
 	 */
 	private static Object getEconomyAccount(String accountName) {
 

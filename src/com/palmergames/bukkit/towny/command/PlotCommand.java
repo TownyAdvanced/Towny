@@ -378,8 +378,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (townBlock != null) {
 
-						/**
-						 * Only allow mayors or plot owners to use this command.
+						/*
+						  Only allow mayors or plot owners to use this command.
 						 */
 						if (townBlock.hasResident()) {
 							if (!townBlock.isOwner(resident)) {

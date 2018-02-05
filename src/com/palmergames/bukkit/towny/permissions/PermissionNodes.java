@@ -324,7 +324,7 @@ public enum PermissionNodes {
 	/**
 	 * Constructor
 	 * 
-	 * @param permission
+	 * @param permission - Permission.
 	 */
 	PermissionNodes(String permission) {
 

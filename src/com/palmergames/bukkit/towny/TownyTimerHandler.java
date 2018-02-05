@@ -1,18 +1,4 @@
-/**
- * 
- */
 package com.palmergames.bukkit.towny;
-
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_DAY;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_REPEATING_TIMER;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DAILY_TIMER;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEALTH_REGEN;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DRAW_SMOKE_TIMER;
-
-import java.util.Calendar;
-import java.util.TimeZone;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
@@ -24,6 +10,17 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
+
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_DAY;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DAILY_TIMER;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DRAW_SMOKE_TIMER;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEALTH_REGEN;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_REPEATING_TIMER;
+import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
 
 
 /**

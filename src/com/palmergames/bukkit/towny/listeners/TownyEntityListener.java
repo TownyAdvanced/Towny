@@ -689,9 +689,9 @@ public class TownyEntityListener implements Listener {
 
 		TownyWorld townyWorld;
 
-		/**
-		 * Perform this test outside the block loop so we only get the world
-		 * once per explosion.
+		/*
+		  Perform this test outside the block loop so we only get the world
+		  once per explosion.
 		 */
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());			
