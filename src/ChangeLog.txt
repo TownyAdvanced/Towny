@@ -2796,3 +2796,4 @@ v0.92.0.6:
     - German.yml updated to 0.42 by Wolf2323.
 v0.92.0.7:
     - Fix NPE when nation zones are used and there's no nations.
+v0.92.0.8:
