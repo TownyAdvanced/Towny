@@ -21,7 +21,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -39,8 +38,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.management.openmbean.InvalidOpenTypeException;
 
 public class TownySettings {
 
@@ -349,10 +346,10 @@ public class TownySettings {
 		String[] strArray = getString(node.getRoot(), node.getDefault()).split(",");
 		List<Integer> list = new ArrayList<Integer>();
 		if (strArray != null) {
-			for (int ctr = 0; ctr < strArray.length; ctr++)
-				if (strArray[ctr] != null) {
+			for (String aStrArray : strArray)
+				if (aStrArray != null) {
 					try {
-						list.add(Integer.parseInt(strArray[ctr].trim()));
+						list.add(Integer.parseInt(aStrArray.trim()));
 					} catch (NumberFormatException e) {
 						sendError(node.getRoot().toLowerCase() + " from config.yml");
 					}
@@ -366,9 +363,9 @@ public class TownySettings {
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
 		List<String> list = new ArrayList<String>();
 		if (strArray != null) {
-			for (int ctr = 0; ctr < strArray.length; ctr++)
-				if (strArray[ctr] != null)
-					list.add(strArray[ctr].trim());
+			for (String aStrArray : strArray)
+				if (aStrArray != null)
+					list.add(aStrArray.trim());
 		}
 		return list;
 	}
@@ -1685,10 +1682,8 @@ public class TownySettings {
             try {
                 nationMultiplier = Double.valueOf(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
             } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (NotRegisteredException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())

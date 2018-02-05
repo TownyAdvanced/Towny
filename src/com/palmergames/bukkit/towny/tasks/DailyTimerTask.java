@@ -416,7 +416,6 @@ public class DailyTimerTask extends TownyTimerTask {
 							try {
 								nation.setNeutral(false);
 							} catch (TownyException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							TownyUniverse.getDataSource().saveNation(nation);

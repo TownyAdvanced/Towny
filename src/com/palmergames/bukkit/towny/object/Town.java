@@ -582,7 +582,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				try {
 					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
@@ -1123,7 +1122,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				if (resident.getTown().equals(this))
 					throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}

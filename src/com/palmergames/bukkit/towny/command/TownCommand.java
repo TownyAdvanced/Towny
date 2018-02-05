@@ -723,7 +723,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_err_resident_already_an_outlaw"));
 					return;
 				} catch (EmptyTownException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -1795,7 +1794,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
-			// TODO
 			try {
 				town.setBalance(0, "Deleting Town");
 			} catch (EconomyException e) {
@@ -1866,7 +1864,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_player_escaped_jail_by_leaving_town"), resident.getName()));
 				}
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

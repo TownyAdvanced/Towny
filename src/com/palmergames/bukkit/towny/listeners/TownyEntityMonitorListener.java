@@ -489,7 +489,6 @@ public class TownyEntityMonitorListener implements Listener {
 							try {
 								jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 							} catch (TownyException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
@@ -516,7 +515,6 @@ public class TownyEntityMonitorListener implements Listener {
 				try {					
 					town = attackerResident.getTown();
 				} catch (NotRegisteredException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}			
 			
@@ -535,7 +533,6 @@ public class TownyEntityMonitorListener implements Listener {
 					if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
 						return;
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}								
 				if (!town.hasJailSpawn()) 
@@ -550,7 +547,6 @@ public class TownyEntityMonitorListener implements Listener {
 						try {
 							jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 						} catch (TownyException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} 
 						if (War.isWarZone(jailBlock.getWorldCoord())) {

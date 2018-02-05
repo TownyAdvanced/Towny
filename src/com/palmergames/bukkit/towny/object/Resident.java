@@ -115,7 +115,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				TownyMessaging.sendMsg(player, "You have been sent to jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -139,7 +138,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				TownyMessaging.sendMsg(player, "You have been freed from jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -153,7 +151,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				TownyMessaging.sendMsg(player, "You have been sent to jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
