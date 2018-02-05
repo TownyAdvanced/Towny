@@ -138,7 +138,7 @@ public class WorldCoord extends Coord {
 	 * Shortcut for getTownyWorld().getTownBlock(getCoord())
 	 * 
 	 * @return the relevant TownBlock instance.
-	 * @throws NotRegisteredException
+	 * @throws NotRegisteredException - If there is no TownBlock @ WorldCoord, then this exception.
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
 

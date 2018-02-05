@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Random;
-
-import com.palmergames.bukkit.towny.TownyFormatter;
 
 public abstract class TownyObject extends Observable {
 
@@ -90,7 +90,7 @@ public abstract class TownyObject extends Observable {
 	 * A function to set the objects UID.
 	 * This should never be used unless duplicating an object.
 	 * 
-	 * @param uID
+	 * @param uID - new Object's UID
 	 */
 	public void setUID(Integer uID) {
 

@@ -477,7 +477,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * @return Essentials object
-	 * @throws TownyException
+	 * @throws TownyException - If Towny can't find Essentials.
 	 */
 	public Essentials getEssentials() throws TownyException {
 
@@ -526,7 +526,7 @@ public class Towny extends JavaPlugin {
 	 * Fetch the current players cache
 	 * Creates a new one, if one doesn't exist.
 	 * 
-	 * @param player
+	 * @param player - Player to get the current cache from.
 	 * @return the current (or new) cache for this player.
 	 */
 	public PlayerCache getCache(Player player) {
@@ -584,7 +584,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Resets a specific players cache if their location has changed
 	 * 
-	 * @param player
+	 * @param player - Player, whose cache is to be updated.
 	 */
 	public void updateCache(Player player) {
 
@@ -598,7 +598,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Resets a specific players cache
 	 * 
-	 * @param player
+	 * @param player - Player, whose cache is to be reset.
 	 */
 	public void resetCache(Player player) {
 
@@ -622,7 +622,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Remove ALL current modes (and set the defaults)
 	 * 
-	 * @param player
+	 * @param player - player, whose modes are to be reset (all removed).
 	 */
 	public void removePlayerMode(Player player) {
 
@@ -639,7 +639,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Fetch a list of all the players current modes.
 	 * 
-	 * @param player
+	 * @param player - player, whose modes are to be listed, taken.
 	 * @return list of modes
 	 */
 	public List<String> getPlayerMode(Player player) {
@@ -662,8 +662,8 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Check if the player has a specific mode.
 	 * 
-	 * @param player
-	 * @param mode
+	 * @param player - Player to be checked
+	 * @param mode - Mode to be checked for within player.
 	 * @return true if the mode is present.
 	 */
 	public boolean hasPlayerMode(Player player, String mode) {

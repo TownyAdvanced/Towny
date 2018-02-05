@@ -1,17 +1,16 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.bukkit.entity.Entity;
-
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import org.bukkit.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
 
 public class TownyWorld extends TownyObject {
 
@@ -507,7 +506,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
 	 * 
-	 * @return
+	 * @return - List of blocked materials.
 	 */
 	@Deprecated
 	public List<String> getUnclaimedZoneIgnoreIds() {
@@ -519,9 +518,9 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial()}
+	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(String mat)}
 	 * 
-	 * @return
+	 * @return - true, if it is an ignored material
 	 */
 	@Deprecated
 	public boolean isUnclaimedZoneIgnoreId(String id) {
@@ -642,7 +641,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTowns(Coord key) {
@@ -654,7 +653,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from a another town's homeblock.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns homeblock.
 	 */
@@ -682,8 +681,8 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest town block.
 	 * 
-	 * @param key
-	 * @return the distance to nearest towns townblock.
+	 * @param key - Coord to check from.
+	 * @return the distance to nearest town's townblock.
 	 */
 	public int getMinDistanceFromOtherTownsPlots(Coord key) {
 
@@ -693,7 +692,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from a another town's plots.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns nearest plot.
 	 */
