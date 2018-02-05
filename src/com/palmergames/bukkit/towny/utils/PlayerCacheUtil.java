@@ -324,13 +324,16 @@ public class PlayerCacheUtil {
 					int distance = 0;
 					try {
 						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
+						if (nearestTown == null) {
+							return TownBlockStatus.UNCLAIMED_ZONE;
+						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
 					} catch (NotRegisteredException e1) {
 						// There will almost always be a town in any world where towny is enabled. 
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-					distance = distance + TownySettings.getNationZonesCapitalBonusSIze();
+					}					
+					distance = distance + TownySettings.getNationZonesCapitalBonusSize();
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;

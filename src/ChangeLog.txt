@@ -2795,3 +2795,4 @@ v0.92.0.6:
     - Italian.yml updated to 0.41 by Dracarys.
     - German.yml updated to 0.42 by Wolf2323.
 v0.92.0.7:
+    - Fix NPE when nation zones are used and there's no nations.
