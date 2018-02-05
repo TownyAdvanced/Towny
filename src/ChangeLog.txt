@@ -2793,3 +2793,4 @@ v0.92.0.6:
     - Fix /town buy bonus command not being at all helpful when not enabled fully through the config.
     - Add LOG_2,VINE,NETHER_WARTS,COCOA to config's default unclaimed.unclaimed_zone_ignore list.
     - Italian.yml updated to 0.41 by Dracarys.
+    - German.yml updated to 0.42 by Wolf2323.
