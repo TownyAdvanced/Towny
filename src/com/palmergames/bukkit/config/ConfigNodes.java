@@ -291,7 +291,7 @@ public enum ConfigNodes {
 	NWS_PLOT_MANAGEMENT_DROP_INV_ITEMS_ON_REVERT(
 			"new_world_settings.plot_management.drop_inventory_items_on_revert",
 			"true",
-			"# Enabled the dropping of items from chests, on plot unclaim/clear"
+			"# Enabled the dropping of items from inventories, on plot unclaim/clear"
 	),
 
 	GTOWN_SETTINGS(
