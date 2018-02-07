@@ -1,22 +1,5 @@
 package com.palmergames.bukkit.towny.regen;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -33,15 +16,32 @@ import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.towny.regen.block.BlockSign;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author ElgarL
- * 
+ *
  */
 public class TownyRegenAPI {
 
 	//private static Towny plugin = null;
-	
+
 	public static void initialize(Towny plugin) {
 
 		//TownyRegenAPI.plugin = plugin;
@@ -55,16 +55,16 @@ public class TownyRegenAPI {
 
 	// A list of worldCoords which are needing snapshots
 	private static List<WorldCoord> worldCoords = new ArrayList<WorldCoord>();
-	
+
 	// A holder for each protection regen task
 	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
-	
+
 	// List of protection blocks placed to prevent blockPhysics.
 	private static  Set<Block> protectionPlaceholders = new HashSet<Block>();
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
-	 * 
+	 *
 	 * @param worldCoord
 	 */
 	public static void addWorldCoord(WorldCoord worldCoord) {
@@ -83,7 +83,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Check if this WorldCoord is waiting for a snapshot to be taken.
-	 * 
+	 *
 	 * @param worldCoord
 	 * @return true if it's in the queue.
 	 */
@@ -131,7 +131,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Removes a Plot Chunk from the regeneration Hashtable
-	 * 
+	 *
 	 * @param plotChunk
 	 */
 	public static void deletePlotChunk(PlotBlockData plotChunk) {
@@ -144,7 +144,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
-	 * 
+	 *
 	 * @param plotChunk
 	 * @param save
 	 */
@@ -160,7 +160,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Saves a Plot Chunk snapshot to the datasource
-	 * 
+	 *
 	 * @param plotChunk
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
@@ -172,7 +172,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Deletes a Plot Chunk snapshot from the datasource
-	 * 
+	 *
 	 * @param plotChunk
 	 */
 	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
@@ -182,7 +182,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Loads a Plot Chunk snapshot from the datasource
-	 * 
+	 *
 	 * @param townBlock
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
@@ -192,7 +192,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Gets a Plot Chunk from the regeneration Hashtable
-	 * 
+	 *
 	 * @param townBlock
 	 */
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
@@ -215,55 +215,55 @@ public class TownyRegenAPI {
 
 	/**
 	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-	 * 
+	 *
 	 * @param player
 	 */
 	public static void regenChunk(Player player) {
-		
+
 		try {
 			Coord coord = Coord.parseCoord(player);
 			World world = player.getWorld();
 			Chunk chunk = world.getChunkAt(player.getLocation());
 			int maxHeight = world.getMaxHeight();
-			
+
 			Object[][][] snapshot = new Object[16][maxHeight][16];
-			
+
 			for (int x = 0; x < 16; x++) {
 				for (int z = 0; z < 16; z++) {
 					for (int y = 0; y < maxHeight; y++) {
-						
+
 						//Current block to save
 						BlockState state = chunk.getBlock(x, y, z).getState();
-						
+
 						if (state instanceof org.bukkit.block.Sign) {
-							
+
 							BlockSign sign = new BlockSign(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((org.bukkit.block.Sign) state).getLines());
 							sign.setLocation(state.getLocation());
 							snapshot[x][y][z] = sign;
-							
+
 						} else if (state instanceof CreatureSpawner) {
-							
+
 							BlockMobSpawner spawner = new BlockMobSpawner(((CreatureSpawner) state).getSpawnedType());
 							spawner.setLocation(state.getLocation());
 							spawner.setDelay(((CreatureSpawner) state).getDelay());
 							snapshot[x][y][z] = spawner;
-							
+
 						} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
-							
+
 							BlockInventoryHolder holder = new BlockInventoryHolder(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((InventoryHolder) state).getInventory().getContents());
 							holder.setLocation(state.getLocation());
 							snapshot[x][y][z] = holder;
-							
+
 						} else {
-						
+
 							snapshot[x][y][z] = new BlockObject(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), state.getLocation());
-									
+
 						}
-						
+
 					}
 				}
 			}
-			
+
 			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
 
 			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
@@ -271,14 +271,14 @@ public class TownyRegenAPI {
 		} catch (NotRegisteredException e) {
 			// Failed to get resident
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Restore the relevant chunk using the snapshot data stored in the resident
 	 * object.
-	 * 
+	 *
 	 * @param snapshot
 	 * @param resident
 	 */
@@ -287,59 +287,59 @@ public class TownyRegenAPI {
 		BlockObject key = ((BlockObject) snapshot[0][0][0]);
 		World world = key.getLocation().getWorld();
 		Chunk chunk = key.getLocation().getChunk();
-		
+
 		int maxHeight = world.getMaxHeight();
-		
+
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < maxHeight; y++) {
-					
+
 					// Snapshot data we need to update the world.
 					Object state = snapshot[x][y][z];
-					
+
 					// The block we will be updating
 					Block block = chunk.getBlock(x, y, z);
-					
+
 					if (state instanceof BlockSign) {
 
 						BlockSign signData = (BlockSign)state;
 						BukkitTools.setTypeIdAndData(block, signData.getTypeId(), signData.getData(), false);
-						
+
 						Sign sign = (Sign) block.getState();
 						int i = 0;
 						for (String line : signData.getLines())
 							sign.setLine(i++, line);
-						
+
 						sign.update(true);
-						
+
 					} else if (state instanceof BlockMobSpawner) {
-						
+
 						BlockMobSpawner spawnerData = (BlockMobSpawner) state;
-						
+
 						BukkitTools.setTypeIdAndData(block, spawnerData.getTypeId(), spawnerData.getData(), false);
 						((CreatureSpawner) block.getState()).setSpawnedType(spawnerData.getSpawnedType());
 						((CreatureSpawner) block.getState()).setDelay(spawnerData.getDelay());
-						
+
 					} else if ((state instanceof BlockInventoryHolder) && !(state instanceof Player)) {
-						
+
 						BlockInventoryHolder containerData = (BlockInventoryHolder) state;
 						BukkitTools.setTypeIdAndData(block, containerData.getTypeId(), containerData.getData(), false);
-						
+
 						// Container to receive the inventory
 						InventoryHolder container = (InventoryHolder) block.getState();
-						
+
 						// Contents we are respawning.						
 						if (containerData.getItems().length > 0)
 							container.getInventory().setContents(containerData.getItems());
-						
+
 					} else {
-						
-						BlockObject blockData = (BlockObject) state;	
+
+						BlockObject blockData = (BlockObject) state;
 						BukkitTools.setTypeIdAndData(block, blockData.getTypeId(), blockData.getData(), false);
 					}
-					
-					
-					
+
+
+
 
 				}
 			}
@@ -383,8 +383,8 @@ public class TownyRegenAPI {
 
 	/**
 	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @param worldCoord
+	 *
+	 * @param worldCoord - WorldCoordinate to delete blocks from.
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 
@@ -412,6 +412,11 @@ public class TownyRegenAPI {
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
 						try {
 							if (worldCoord.getTownyWorld().isPlotManagementDeleteIds(block.getType().name())) {
+								if (block.getState() instanceof InventoryHolder && !TownySettings.isPlotManagementDropInventoryItemsEnabled()) {
+									// We negate the boolean(TownySettings.isPlot...) since we want it to be cleared if it's disabled.
+									Inventory inven = ((InventoryHolder) block.getState()).getInventory();
+									inven.clear();
+								}
 								block.setType(Material.AIR);
 							}
 						} catch (NotRegisteredException e) {
@@ -425,9 +430,9 @@ public class TownyRegenAPI {
 
 	/**
 	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @param townBlock
-	 * @param material
+	 *
+	 * @param townBlock - TownBlock
+	 * @param material - Material to check and delete for.
 	 */
 	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
 
@@ -453,6 +458,10 @@ public class TownyRegenAPI {
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
 						if (block.getType() == material) {
+							if (block.getState() instanceof InventoryHolder && !TownySettings.isPlotManagementDropInventoryItemsEnabled()) {
+								Inventory inven = ((InventoryHolder) block.getState()).getInventory();
+								inven.clear();
+							}
 							block.setType(Material.AIR);
 						}
 						block = null;
@@ -463,11 +472,11 @@ public class TownyRegenAPI {
 	/*
 	 * Protection Regen follows
 	 */
-	
+
 	/**
 	 * Does a task for this block already exist?
-	 * 
-	 * @param blockLocation
+	 *
+	 * @param blockLocation - BlockLocation
 	 * @return true if a task exists
 	 */
 	public static boolean hasProtectionRegenTask(BlockLocation blockLocation) {
@@ -478,7 +487,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Fetch the relevant regen task for this block
-	 * 
+	 *
 	 * @param blockLocation
 	 * @return the stored task, or null if there is none.
 	 */
@@ -492,7 +501,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Add this task to the protection regen queue.
-	 * 
+	 *
 	 * @param task
 	 */
 	public static void addProtectionRegenTask(ProtectionRegenTask task) {
@@ -502,7 +511,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Remove this task form the protection regen queue
-	 * 
+	 *
 	 * @param task
 	 */
 	public static void removeProtectionRegenTask(ProtectionRegenTask task) {
@@ -527,7 +536,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Is this a placholder block?
-	 * 
+	 *
 	 * @param block
 	 * @return true if it is a placeholder
 	 */
@@ -538,7 +547,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Add this block as a placeholder (will be replaced when it's regeneration task occurs)
-	 * 
+	 *
 	 * @param block
 	 */
 	public static void addPlaceholder(Block block) {
@@ -548,7 +557,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * Remove this block from being tracked as a placeholder.
-	 * 
+	 *
 	 * @param block
 	 */
 	public static void removePlaceholder(Block block) {

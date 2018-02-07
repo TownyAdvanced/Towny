@@ -288,6 +288,11 @@ public enum ConfigNodes {
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
+	NWS_PLOT_MANAGEMENT_DROP_INV_ITEMS_ON_REVERT(
+			"new_world_settings.plot_management.drop_inventory_items_on_revert",
+			"true",
+			"# Enabled the dropping of items from inventories, on plot unclaim/clear"
+	),
 
 	GTOWN_SETTINGS(
 			"global_town_settings",
