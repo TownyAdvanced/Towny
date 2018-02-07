@@ -56,6 +56,7 @@ permissions:
             towny.wild.*: true
             towny.claimed.*: true
             towny.cheat.bypass: true
+            towny.admin.nation_zone: true
 
     towny.cheat.bypass:
         description: Disables the anti cheat code for players with this node.

@@ -2797,3 +2797,6 @@ v0.92.0.6:
 v0.92.0.7:
     - Fix NPE when nation zones are used and there's no nations.
 v0.92.0.8:
+    - New permission node: towny.admin.nation_zone
+      - Child node of towny.admin
+      - Made so that mods who dont have towny.admin can bypass the nation zone protection.
