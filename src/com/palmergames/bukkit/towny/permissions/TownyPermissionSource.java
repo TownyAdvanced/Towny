@@ -27,7 +27,6 @@ public abstract class TownyPermissionSource {
 	protected Towny plugin;
 
 	protected GroupManager groupManager = null;
-	protected com.nijikokun.bukkit.Permissions.Permissions permissions = null;
 	protected PermissionsEx pex = null;
 
 	abstract public String getPrefixSuffix(Resident resident, String node);
