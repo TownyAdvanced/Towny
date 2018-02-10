@@ -22,7 +22,6 @@
 		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Permissions.jar" dest="${env.LIB}/Permissions.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/Register.jar" dest="${env.LIB}/Register.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Questioner.jar" dest="${env.LIB}/Questioner.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
@@ -41,7 +40,6 @@
 				<pathelement location="${env.LIB}/Permissions.jar" />
 				<pathelement location="${env.LIB}/PermissionsEx.jar" />
 				<pathelement location="${env.LIB}/PermissionsBukkit.jar" />
-				<pathelement location="${env.LIB}/Register.jar" />
 				<pathelement location="${env.LIB}/iConomy.jar" />
 				<pathelement location="${env.LIB}/Questioner.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />
