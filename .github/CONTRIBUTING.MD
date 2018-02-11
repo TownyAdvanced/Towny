@@ -23,7 +23,9 @@ Please make sure to read our [License](https://github.com/LlmDl/Towny#licensing)
 5. Do not use NMS (Net Minecraft Server), Spigot or Craftbukkit code. Towny uses the Bukkit API only.
 6. Reflection should be a last resort.   
 7. No Packet-Handling (Netty or ProtcolLib)   
-8. Do not add any libaries into Towny, without asking first.   
+8. Do not add any libaries into Towny, without asking first.
+9. Do not remove the ANT build system used by Towny.
+   - Towny uses ANT and not maven or gradle.
 
 ## Updating Language Files
 The language files are stored in the root-package of the project src/com/palmergames/"language".yml    
@@ -33,4 +35,13 @@ e.g "German Translation v0.42"
 If you are creating a new language file, feel-free to use either the english translation e.g "norwegian.yml" or the global placeholder e.g "es-mx"    
 If you are editing a language which contains the '(apostrophe) character such as French, please make sure you run it all through a YAML Parser,    
 You have to double up the '' when you want one ' to appear.    
-You can ask for any information/help on your translation in the [Towny IRC](http://webchat.esper.net/?channels=towny). 
+You
+## Updating Language Files
+The language files are stored in the root-package of the project src/com/palmergames/"language".yml    
+To update / change an existing language file, fork this repo and then edit the "language".yml in your fork.    
+Pull-Request your updated version. Please try to keep the title simple and include the version number:    
+e.g "German Translation v0.42"    
+If you are creating a new language file, feel-free to use either the english translation e.g "norwegian.yml" or the global placeholder e.g "es-mx"    
+If you are editing a language which contains the '(apostrophe) character such as French, please make sure you run it all through a YAML Parser,    
+You have to double up the '' when you want one ' to appear.    
+You can ask for any information/help on your translation in the [Towny IRC](http://webchat.esper.net/?channels=towny).  can ask for any information/help on your translation in the [Towny IRC](http://webchat.esper.net/?channels=towny). 
