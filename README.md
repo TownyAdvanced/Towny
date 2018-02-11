@@ -21,6 +21,8 @@ If you need help, join us in our [IRC channel #towny](http://webchat.esper.net/?
 If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public,
 join us in our [Discord server]( https://discord.gg/gnpVs5m )
 
+#### Contributing
+If you'd like to contribute to the Towny code, see the [Contributing.md](https://github.com/LlmDl/Towny/blob/master/.github/CONTRIBUTING.MD).
 
 #### Licensing
 
