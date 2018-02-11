@@ -11,7 +11,7 @@ You have to double up the '' when you want one ' to appear.
 You can ask for any information/help on your translation in the [Towny IRC](http://webchat.esper.net/?channels=towny).    
     
 ## Contributing Code    
-If you would like to contributing code, we also do this via pull-requesting.   
+If you would like to contribute code, we also do this via pull-requesting.   
 You must fork the Towny repository (this) and then open it via your IDE.   
 You can ask for any information/help on your idea/contribution in the [Towny IRC](http://webchat.esper.net/?channels=towny).    
 Our [Pull & Code Requirements](#Pull-&-Code-Requirements)    
