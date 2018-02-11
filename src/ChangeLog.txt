@@ -2801,3 +2801,5 @@ v0.92.0.8:
       - Child node of towny.admin
       - Made so that mods who dont have towny.admin can bypass the nation zone protection.
     - Italian.yml updated to 0.42 by Leomixer17.
+v0.92.0.9:
+    - Spanish.yml updated to 0.42 by SeDark.
