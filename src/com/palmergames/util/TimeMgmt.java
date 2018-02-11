@@ -63,10 +63,4 @@ public class TimeMgmt {
 			out += (out.length() > 0 ? ", " : "") + l + " seconds";
 		return out;
 	}
-
-	public static void main(String[] args) {
-
-		for (Long l : getCountdownDelays(36000000, defaultCountdownDelays))
-			System.out.println(l + " " + formatCountdownTime(l));
-	}
 }
