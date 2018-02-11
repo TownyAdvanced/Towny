@@ -4,24 +4,24 @@ language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
 description: >
-    Language file for all game messages.  Do not alter this file.
-    If you wish to change any of the entries, make a copy named something else.
-    Alternate language files can be enabled by altering the
-    [language] entry in config.yml
+    Archivo con todos los mensajes del juego, no modificar.
+    Si aun asi deseas modificarlo, haz una copia de seguridad antes.
+    También puedes crear un archivo de lenguaje habilitando la entrada de
+    [language] en el archivo config.yml
 #
 #
-#         You MUST retain spacing in the texts.
-#  If a text begins or ends with a space, it must remain that way.
+#         DEBES mantener los espacios en los textos.
+#  Si un texto empieza o termina con un espacio, debe permanecer así.
 #
 #
-#       %s = data to be supplied by the plugin.
+#       %s = datos suministrador por el plugin.
 
-# Text colouring
+# Colores de texto
 # --------------
-# Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-# Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-# DarkPurple = &9, LightGreen = &a, LightBlue = &b
-# Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+# Negro = &0, Azul Marino = &1, Verde = &2, Azul = &3, Rojo = &4
+# Morado = &5, Dorado = &6, Gris Claro = &7, Gris = &8
+# Morado Oscuro = &9, Verde Claro = &a, Azul Claro = &b
+# Rojo Claro = &c, Rosa = &d, Amarillo = &e, Blanco = &f
 
 
 default_towny_prefix: '&6[Towny] &b'
@@ -477,12 +477,12 @@ msg_err_tax_minimum_not_met: 'Los impuestos de tu ciudad no pueden ser inferiore
 
 msg_unknown_rank_available_ranks: 'No existe el rango %s. Rangos permitidos %s.'
 msg_no_permission_to_give_rank: 'No tienes permisos para asignar este rango.'
-msg_you_have_been_given_rank: 'Te han asignado el rango %s en %s.'
-msg_you_have_given_rank: 'Has asignado el rango %s de %s a %s.'
+msg_you_have_been_given_rank: 'Te han asignado el rango %2$2s.'
+msg_you_have_given_rank: 'Has asignado el rango %2$2s a %3$2s.'
 msg_resident_not_your_town: 'Este residente no es parte de ninguna ciudad!'
-msg_resident_already_has_rank: '%s ya tenía este cargo en %s.'
-msg_you_have_had_rank_taken: 'Has sido destituido del cargo %s en %s.'
-msg_you_have_taken_rank_from: 'Destituiste del rango %s a %s de %s.'
+msg_resident_already_has_rank: '%s ya tenía este rango.'
+msg_you_have_had_rank_taken: 'Has sido destituido del rango %2$2s.'
+msg_you_have_taken_rank_from: 'Destituiste a %3$2s de %2$2s.'
 msg_resident_doesnt_have_rank: '%s no tiene el rango %s.'
 
 msg_town_has_no_jails: 'La ciudad aún no tiene ninguna cárcel establecida.'
@@ -591,67 +591,67 @@ msg_err_public_spawn_forbidden_peace: '&cViajar al spawn público de otras ciuda
 mayor_help_9: 'Unclaimear Outpost'
 
 # Added in 0.41 (Invite-Update)
-invite_plu: 'Invites'
-invite_sent_by: 'Invite Sent By'
-invite_help_1: 'Accept an invite to join a town'
-invite_help_2: 'Decline an invite to join a town'
-invite_help_3: 'List all of your invites'
-town_invite_help_1: 'Invite a player to your town.'
-town_invite_help_2: 'Revoke an invite, that was sent to a player'
-town_invite_help_3: 'Lists all of your sent invites'
-town_invite_help_4: 'Lists all of the invites you''ve received'
-town_invite_help_5: 'Accept a request to join a nation'
-town_invite_help_6: 'Deny a request to join a nation'
-nation_invite_help_1: 'Invite a town to your town.'
-nation_invite_help_2: 'Revoke an invite, that was sent to a ptown'
-nation_invite_help_3: 'List all of the invites sent to towns.'
-nation_ally_help_1: 'Try to add an ally to your nation'
-nation_ally_help_2: 'Try to remove an ally of your nation'
-nation_ally_help_3: 'Lists all of the ally-requests you''ve sent'
-nation_ally_help_4: 'Lists all of the ally-requests you''ve received'
-nation_ally_help_5: 'Accept a request to ally a nation'
-nation_ally_help_6: 'Deny a request to ally a nation'
-nation_ally_help_7: 'Revoke an ally request'
-msg_err_player_no_invites: '&cYou do not have any invites!'
-msg_err_player_has_multiple_invites: '&cYou have multiple invites, please specify'
-msg_err_player_has_too_many_invites: '%s has too many invites, ask them to decline some, before inviting again.'
-msg_err_player_already_invited: '&bYou have already invited %s to join your town!'
-msg_err_town_no_invites: '&bTown does not have any invites!'
-msg_err_town_specify_invite: '&cPlease specify the invite!'
-msg_err_town_has_too_many_invites: '&bTown %s has too many invites, ask them to decline some, before inviting again.'
-msg_err_town_sent_too_many_invites: '&bTown has sent too many invites, revoke some before trying again!'
-msg_err_town_already_invited: '&bYou have already invited %s to join your nation!'
-msg_err_nation_specify_invite: '&cPlease specify the request!'
-msg_err_nation_no_requests: '&bNation does not have any ally requests!'
-msg_err_nation_sent_too_many_invites: '&bNation has sent too many invites, revoke some before trying again!'
-msg_err_nation_sent_too_many_requests: '&bNation has sent too many requests, revoke some before trying again!'
-msg_err_nation_has_too_many_requests: '&bNation %s has too many requests, ask them to decline some, before inviting again.'
-player_received_invites: '&bYou have received %a/%m invites.'
-town_revoke_invite: '&bTown %s, revoked your invite to join them'
-town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town.'
-town_received_invites: '&bTown has received %a/%m invites.'
-town_sent_invites: '&bTown has sent %a/%m invites.'
-nation_revoke_invite: '&bNation %s, revoked your invite to join them.'
-nation_revoke_invite_successful: '&bYou have successfully revoked an invite to join your nation.'
-nation_revoke_ally: '&bNation %s, revoked their ally request.'
-nation_revoke_ally_successful: '&bYou have successfully revoked an ally request'
-nation_received_requests: '&bNation has received %a/%m ally requests.'
-nation_sent_invites: '&bNation has sent %a/%m invites.'
-nation_sent_ally_requests: '&bNation has sent %a/%m ally requests.'
-no_confirmations_open: '&cYou have nothing to confirm!'
-successful_cancel: '&cAction has been cancelled or has timed out!'
-successful_deny: '&bInvite has been denied successfully.'
-successful_deny_request: '&bAlly request has been denied successfully.'
-msg_ally_removed_successfully: '&bAlly has been removed successfully.'
-town_deleted_by_admin: '&bTown %s deleted successfully'
-nation_deleted_by_admin: '&bNation %s deleted successfully'
-are_you_sure_you_want_to_continue: 'Are you sure you want to continue?'
-you_have_been_invited_to_join: 'You have been invited to join '
-you_have_been_requested_to_ally: 'You have been requested to ally '
-this_message_will_expire: 'This will auto-expire in 20 seconds'
-player_sing: 'Player'
-nation_zone_this_area_under_protection_of: 'This part of the %s is under the protection of %s'
+invite_plu: 'Invitaciones'
+invite_sent_by: 'Invitación enviada por'
+invite_help_1: 'Aceptar invitación para unirte a una ciudad'
+invite_help_2: 'Rechazar invitación para unirte a una ciudad'
+invite_help_3: 'Lista de todas tus invitaciones'
+town_invite_help_1: 'Invita a un jugador a tu ciudad.'
+town_invite_help_2: 'Eliminar una invitación enviada a un jugador'
+town_invite_help_3: 'Muestra todas las invitaciones que has enviado'
+town_invite_help_4: 'Muestra todas las invitaciones que has recibido'
+town_invite_help_5: 'Aceptar invitación para unirte a una nación'
+town_invite_help_6: 'Rechazar invitación para unirte a una nación'
+nation_invite_help_1: 'Invita a un pueblo a tu ciudad.'
+nation_invite_help_2: 'Elimina una invitación enviada a un pueblo'
+nation_invite_help_3: 'Mostrar todas las invitaciones enviadas a ciudades.'
+nation_ally_help_1: 'Agregar un aliado a tu nación'
+nation_ally_help_2: 'Eliminar a un aliado de tu nación'
+nation_ally_help_3: 'Muestra todas las solicitudes para aliados enviadas'
+nation_ally_help_4: 'Muestra todas las solicitudes de aliados recibidas'
+nation_ally_help_5: 'Aceptar solicitud para aliarte con una nación'
+nation_ally_help_6: 'Rechazar una solicitud para aliarte con una nación'
+nation_ally_help_7: 'Eliminar una solicitud de aliado'
+msg_err_player_no_invites: '&c¡No tienes invitaciones!'
+msg_err_player_has_multiple_invites: '&cTienes varias invitaciones, por favor, especifica una'
+msg_err_player_has_too_many_invites: '%s tiene demasiadas invitaciones, pidele que elimine alguna antes de volver a intentarlo.'
+msg_err_player_already_invited: '&b¡Has invitado a %s a unirse a tu ciudad!'
+msg_err_town_no_invites: '&bLa ciudad no tiene invitaciones!'
+msg_err_town_specify_invite: '&c¡Por favor, especifica tu invitación!'
+msg_err_town_has_too_many_invites: '&b%s tiene demasiadas invitaciones, pide que eliminen alguna, antes de volver a intentarlo.'
+msg_err_town_sent_too_many_invites: '&bLa ciudad ha enviado demasiadas invitaciones, elimina algunas antes de volver a intentarlo!'
+msg_err_town_already_invited: '&b¡Has invitado a %s a unirse a tu país!'
+msg_err_nation_specify_invite: '&c¡Por favor, especifica tu solicitud!'
+msg_err_nation_no_requests: '&bLa nación no tiene ninguna solicitud de aliado!'
+msg_err_nation_sent_too_many_invites: '&bLa nación ha enviado demasiadas invitaciones, elimina algunas antes de volver a intentarlo!'
+msg_err_nation_sent_too_many_requests: '&bLa nación ha enviado demasiadas solicitudes, elimina algunas antes de volver a intentarlo!'
+msg_err_nation_has_too_many_requests: '&bLa nación %s tiene demasiadas solicitudes, pide que rechacen algunas, antes de volver a intentarlo.'
+player_received_invites: '&bHas recibido %a/%m invitaciones.'
+town_revoke_invite: '&b%s, rechazó tu invitación de unión.'
+town_revoke_invite_successful: '&bHas rechazado una invitación de unión a tu ciudad.'
+town_received_invites: '&bLa ciudad ha recibido %a/%m invitaciones.'
+town_sent_invites: '&bLa ciudad ha enviado %a/%m invitaciones.'
+nation_revoke_invite: '&bLa nación %s, rechazó tu invitación de unión.'
+nation_revoke_invite_successful: '&bHas rechazado una invitación de unión a tu país.'
+nation_revoke_ally: '&bLa nación %s, rechazó su solicitud de aliado.'
+nation_revoke_ally_successful: '&bHas rechazado una solicitud de aliado.'
+nation_received_requests: '&bLa nación ha recibido %a/%m solicitudes de aliados.'
+nation_sent_invites: '&bLa nación ha enviado %a/%m invitaciones.'
+nation_sent_ally_requests: '&bLa nación ha enviado %a/%m solicitudes de aliados.'
+no_confirmations_open: '&c¡No tienes nada que confirmar!'
+successful_cancel: '&cLa acción ha sido cancelada o ha expirado!'
+successful_deny: '&bInvitación rechazada con éxito.'
+successful_deny_request: '&bSolicitud aliada rechazada con éxito.'
+msg_ally_removed_successfully: '&bAliado eliminado correctamente.'
+town_deleted_by_admin: '&bLa ciudad %s se ha eliminado'
+nation_deleted_by_admin: '&bLa nación %s se ha eliminado'
+are_you_sure_you_want_to_continue: '¿Estás seguro de que quieres continuar?'
+you_have_been_invited_to_join: 'Has sido invitados a unirte'
+you_have_been_requested_to_ally: 'Te han pedido una alianza'
+this_message_will_expire: 'Este mensaje caducará automáticamente en 20 segundos'
+player_sing: 'Jugador'
+nation_zone_this_area_under_protection_of: 'Esta parte de %s está bajo la protección de %s'
 
 # Added in 0.42
-you_have_been_invited_to_join2: 'You have been invited to join %s'
-you_have_been_requested_to_ally2: 'You have been requested to ally %s'
+you_have_been_invited_to_join2: 'Has sido invitado a unirte a %s'
+you_have_been_requested_to_ally2: 'Te han invitado a formar alianza con %s'
