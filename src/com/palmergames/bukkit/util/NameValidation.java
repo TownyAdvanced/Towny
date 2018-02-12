@@ -3,8 +3,10 @@ package com.palmergames.bukkit.util;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import javax.naming.InvalidNameException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -130,5 +132,4 @@ public class NameValidation {
 
 		return input.replaceAll(TownySettings.getNameFilterRegex(), "_").replaceAll(TownySettings.getNameRemoveRegex(), "");
 	}
-
 }

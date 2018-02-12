@@ -466,7 +466,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(x.getMessage());
 		}
 
-		String rank = split[2].toLowerCase();
+		String rank = split[2];
 		/*
 		 * Is this a known rank?
 		 */
