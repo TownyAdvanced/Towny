@@ -1033,6 +1033,11 @@ public enum ConfigNodes {
 			"10.0",
 			"# Cost to use /town spawn [town]",
 			"# This is paid to the town you goto."),
+	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
+			"economy.spawn_travel.town_spawn_cost_paid_to_town",
+			"true",
+			"# When set to true, any cost paid by a player to use any variant of '/town spawn' will be paid to the town bank.",
+			"# When false the amount will be paid to the server account whose name is set in the closed economy setting below.."),
 	ECO_PRICE_NATION_NEUTRALITY(
 			"economy.price_nation_neutrality",
 			"100.0",

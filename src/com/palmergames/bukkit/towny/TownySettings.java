@@ -1379,6 +1379,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE);
 	}
+	
+	public static boolean isTownSpawnPaidToTown() {
+		
+		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN);
+	}
 
 	public static double getNationNeutralityCost() {
 

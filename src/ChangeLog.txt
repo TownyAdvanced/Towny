@@ -2809,3 +2809,7 @@ v0.92.0.9:
     - Players who are in towns now receive a permission node, towny.town.{townname}. 
       - This can be useful for server operators who want to test if a player has a permission node to make sure they are part of a town.
       - Examples could include an NPC that required a specific permission node to interact with.
+    - New Config Option: economy.spawn_travel.town_spawn_cost_paid_to_town
+	  - default: true
+	  - When set to true, any cost paid by a player to use any variant of '/town spawn' will be paid to the town bank.
+	  - When false the amount will be paid to the server account whose name is set in the closed economy setting.

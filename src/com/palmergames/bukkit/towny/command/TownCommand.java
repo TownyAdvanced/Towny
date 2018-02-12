@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
+import com.palmergames.bukkit.towny.object.TownyEconomyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -47,6 +48,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -59,6 +61,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2075,8 +2078,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			double travelCost = townSpawnPermission.getCost();
 
 			// Check if need/can pay
-			if ((!(TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()))) &&
-					(travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)))
+			if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&
+					(travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)) )
 				throw new TownyException(notAffordMSG);
 
 			// Used later to make sure the chunk we teleport to is loaded.
@@ -2111,12 +2114,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			// Show message if we are using iConomy and are charging for spawn
-			// travel.
-			if ((!(TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())))) {
-				if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Town Spawn (%s)", townSpawnPermission))) {
-					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
-					// TownyEconomyObject.getEconomyCurrency()));
+			
+			// Show message if we are using Vault and are charging for spawn travel.
+			if ( !TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) ) {
+				TownyEconomyObject payee = town;
+				if (!TownySettings.isTownSpawnPaidToTown())					
+					payee = TownyEconomyObject.SERVER_ACCOUNT;
+				if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, payee, String.format("Town Spawn (%s)", townSpawnPermission))) {
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost)));
 				}
 			}
 
