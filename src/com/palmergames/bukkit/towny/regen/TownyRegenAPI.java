@@ -392,7 +392,7 @@ public class TownyRegenAPI {
 		World world = null;
 		int plotSize = TownySettings.getTownBlockSize();
 
-		TownyMessaging.sendDebugMsg("Processing deleteTownBlockIds");
+		//TownyMessaging.sendDebugMsg("Processing deleteTownBlockIds");
 
 		world = worldCoord.getBukkitWorld();
 

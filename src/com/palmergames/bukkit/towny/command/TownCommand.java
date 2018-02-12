@@ -389,8 +389,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("outlawlist")) {
 
-					//					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAWLIST.getNode()))
-					//						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					Town town = null;
 					try {
 						if (split.length == 1)
@@ -460,6 +458,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendPrefixedTownMessage(town, message);
 					} catch (Exception e) {
 					}
+					
 				} else if (split[0].equalsIgnoreCase("outlaw")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode()))
@@ -467,7 +466,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					parseTownOutlawCommand(player, newSplit);
 
-				} else
+				} else {
 					try {
 						final Town town = TownyUniverse.getDataSource().getTown(split[0]);
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -484,6 +483,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} catch (NotRegisteredException x) {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 					}
+				}
 			}
 
 		} catch (Exception x) {
@@ -2824,7 +2824,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if(blockedClaims > 0){
 					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
 				}
-
 				try {
 					double cost = blockCost * selection.size();
 					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
@@ -2832,9 +2831,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
-
 				new TownClaim(plugin, player, town, selection, outpost, true, false).start();
-
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -2899,22 +2896,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord) {
 
-		if (TownySettings.getDebug())
-			System.out.print("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = ");
-
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				if (edgeTownBlock.isOwner(owner)) {
-					if (TownySettings.getDebug())
-						System.out.println("true");
+					//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
 					return true;
 				}
 			} catch (NotRegisteredException e) {
 			}
-		if (TownySettings.getDebug())
-			System.out.println("false");
+		//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
 		return false;
 	}
 
@@ -2923,8 +2915,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (force)
 			return;
 		Town town = (Town) owner;
-
-		// System.out.print("isEdgeBlock: "+ isEdgeBlock(owner, selection));
 
 		if (attachedToEdge && !isEdgeBlock(owner, selection) && !town.getTownBlocks().isEmpty()) {
 			if (selection.size() == 0)
