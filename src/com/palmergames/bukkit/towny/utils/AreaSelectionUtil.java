@@ -163,17 +163,17 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Returns a list containing only townblocks that can be claimed.
-	 * Filters out townblocks too close or too far from other towns as set in the config.
+	 * Filters out townblocks too close to other towns as set in the config.
 	 * 
 	 * @param selection
 	 * @return List of townblocks
 	 */
-	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection) {
+	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
 
 		List<WorldCoord> out = new ArrayList<WorldCoord>();		
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
+				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
 					out.add(worldCoord);
 				} else {
 					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );					

@@ -2805,7 +2805,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
-				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection);
+				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
 				
 				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				checkIfSelectionIsValid(town, selection, attachedToEdge, blockCost, false);
