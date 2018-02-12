@@ -2806,3 +2806,6 @@ v0.92.0.9:
     - Fix an NPE that could occur in the wilderness from explosions.
     - Made it so that town and nation ranks can contain capitol letters. Rank permissions remain lowercased.
     - Fix area claiming not respecting the min_plot_distance_from_town_plot setting in the config.
+    - Players who are in towns now receive a permission node, towny.town.{townname}. 
+      - This can be useful for server operators who want to test if a player has a permission node to make sure they are part of a town.
+      - Examples could include an NPC that required a specific permission node to interact with.
