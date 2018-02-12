@@ -82,7 +82,7 @@ public class TownClaim extends Thread {
 						worlds.add(world);
 
 					if (claim) {
-						// Claim
+						// Claim						
 						townClaim(town, worldCoord, outpost);
 						// Reset so we only flag the first plot as an outpost.
 						outpost = false;

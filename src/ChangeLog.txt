@@ -2805,3 +2805,4 @@ v0.92.0.9:
     - Spanish.yml updated to 0.42 by SeDark.
     - Fix an NPE that could occur in the wilderness from explosions.
     - Made it so that town and nation ranks can contain capitol letters. Rank permissions remain lowercased.
+    - Fix area claiming not respecting the min_plot_distance_from_town_plot setting in the config.
