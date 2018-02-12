@@ -248,7 +248,11 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			permList.addAll(getTownDefault());
+			try {
+				permList.addAll(getTownDefault(resident.getTown()));
+			} catch (NotRegisteredException e) {
+				// Not Possible!
+			}
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
 				
@@ -355,10 +359,17 @@ public class TownyPerms {
 	 * 
 	 * @return a list of permissions
 	 */
-	public static List<String> getTownDefault() {
-		
+	public static List<String> getTownDefault(Town town) {
+
 		List<String> permsList = getList("towns.default");
-		return (permsList == null)? new ArrayList<String>() : permsList;
+		if ((permsList == null)) {
+			List<String> emptyPermsList = new ArrayList<String>();
+			emptyPermsList.add("towny.town." + town.getName().toLowerCase());
+			return emptyPermsList;
+		} else {
+			permsList.add("towny.town." + town.getName().toLowerCase());
+			return permsList;
+		}
 	}
 
 	/**
