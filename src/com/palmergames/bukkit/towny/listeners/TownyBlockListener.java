@@ -462,14 +462,17 @@ public class TownyBlockListener implements Listener {
 		boolean isNeutral = false;
 		try {
 			townBlock = world.getTownBlock(coord);
-			if (TownyUniverse.isWilderness(target.getBlock())) {
-				isNeutral = !world.isExpl();
-				if (!world.isExpl() && !TownyUniverse.isWarTime())
-					return false;
-			} else if (townBlock.hasTown())
+			if (townBlock.hasTown())
 				if (!War.isWarZone(townBlock.getWorldCoord()))
 					isNeutral = true;
 		} catch (NotRegisteredException e1) {
+			if (TownyUniverse.isWilderness(target.getBlock())) {
+				isNeutral = !world.isExpl();
+				if (!world.isExpl() && !TownyUniverse.isWarTime())
+					return false;				
+				if (world.isExpl() && !TownyUniverse.isWarTime())
+					return true;	
+			}
 		}
 		
 		try {			

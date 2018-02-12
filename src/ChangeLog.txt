@@ -2803,3 +2803,4 @@ v0.92.0.8:
     - Italian.yml updated to 0.42 by Leomixer17.
 v0.92.0.9:
     - Spanish.yml updated to 0.42 by SeDark.
+    - Fix an NPE that could occur in the wilderness from explosions.
