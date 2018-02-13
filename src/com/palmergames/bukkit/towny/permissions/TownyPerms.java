@@ -391,7 +391,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRank(String rank) {
 
-		List<String> permsList = getList("towns.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("towns.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
@@ -439,7 +439,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationRank(String rank) {
 
-		List<String> permsList = getList("nations.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("nations.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 	
