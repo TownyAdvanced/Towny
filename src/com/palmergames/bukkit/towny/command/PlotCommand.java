@@ -244,9 +244,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						for (WorldCoord worldCoord : selection) {
-							if (selection.size() > 1)
-								plotPrice = worldCoord.getTownBlock().getTown().getPlotTypePrice(worldCoord.getTownBlock().getType());
-
 							setPlotForSale(resident, worldCoord, plotPrice);
 						}
 					} else {

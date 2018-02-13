@@ -2813,3 +2813,4 @@ v0.92.0.9:
 	  - default: true
 	  - When set to true, any cost paid by a player to use any variant of '/town spawn' will be paid to the town bank.
 	  - When false the amount will be paid to the server account whose name is set in the closed economy setting.
+	- Fix cost not being used when the '/plot forsale {cost} within {radius}' command is ussed. 
