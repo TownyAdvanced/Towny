@@ -38,6 +38,7 @@
 				<pathelement location="${env.LIB}/PermissionsEx.jar" />
 				<pathelement location="${env.LIB}/PermissionsBukkit.jar" />
 				<pathelement location="${env.LIB}/iConomy.jar" />
+				<pathelement location="${env.LIB}/Reserve.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />
 				<pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" />
 			</classpath>
