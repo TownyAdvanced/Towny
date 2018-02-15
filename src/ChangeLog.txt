@@ -2815,3 +2815,6 @@ v0.92.0.9:
 	  - When false the amount will be paid to the server account whose name is set in the closed economy setting.
 	- Fix cost not being used when the '/plot forsale {cost} within {radius}' command is ussed. 
 	- Fix mayors not being able to work on blocks inside of their own personal plots when they do not have the towny.claimed.owntown.* node.
+v0.92.0.10:
+    - Add support for Reserve courtesy of creatorfromhell.
+      - Reserve is an optional Vault-replacement available at https://www.spigotmc.org/resources/reserve.50739/
