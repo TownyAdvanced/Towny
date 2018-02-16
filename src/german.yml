@@ -656,3 +656,6 @@ nation_zone_this_area_under_protection_of: 'Dieser teil der %s steht unter dem S
 # Added in 0.42
 you_have_been_invited_to_join2: 'Du wurdest eingeladen, %s beizutreten'
 you_have_been_requested_to_ally2: 'Du wurdest angefragt, dich mit %s zu verbünden'
+
+# Added in 0.43 
+town_help_11: 'Create a new town. Use _''s and not spaces.'

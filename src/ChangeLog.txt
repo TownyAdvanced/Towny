@@ -2818,3 +2818,6 @@ v0.92.0.9:
 v0.92.0.10:
     - Add support for Reserve courtesy of creatorfromhell.
       - Reserve is an optional Vault-replacement available at https://www.spigotmc.org/resources/reserve.50739/
+    - Add /town new to the /town ? help, don't know how this one was missed.
+    - Added /town create as an alias of sorts to /town new.
+    - Added /ta giveplots as an alias of sorts to /ta givebonus.
