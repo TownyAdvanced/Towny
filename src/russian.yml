@@ -1,5 +1,5 @@
 name: Towny
-version: 0.42
+version: 0.43
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
@@ -659,3 +659,5 @@ you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
 # Added in 0.43 
 town_help_11: 'Create a new town. Use _''s and not spaces.'
+changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
+not_standing_in_plot: 'You are not standing inside of a valid plot!'
