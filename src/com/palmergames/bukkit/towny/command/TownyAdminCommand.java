@@ -735,18 +735,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("plot")) {
 			TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
+			if (split.length < 2) {
+				sender.sendMessage(ChatTools.formatTitle("/townyadmin set plot"));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", ""));
+				return;
+			}
 			if (tb != null) {
-				if (split.length < 2) {
-					sender.sendMessage(ChatTools.formatTitle("/townyadmin set plot"));
-					sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", ""));
-				}
 				try {
 					Town newTown = TownyUniverse.getDataSource().getTown(split[1]);
 					if (newTown != null) {
-						tb.setType(TownBlockType.RESIDENTIAL);
 						tb.setResident(null);
-						tb.setName("");
 						tb.setTown(newTown);
+						tb.setType(TownBlockType.RESIDENTIAL);
+						tb.setName("");
 						TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("changed_plot_town"), newTown.getName()));
 					}
 				} catch (TownyException e) {
@@ -754,6 +755,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 			} else {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("not_standing_in_plot"));
+				return;
 			}
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), String.format(TownySettings.getLangString("msg_err_invalid_property"), "administrative"));
