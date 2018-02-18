@@ -638,12 +638,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setSpawn(Location spawn) throws TownyException {
 
 		if (!hasHomeBlock())
-			throw new TownyException("Home Block has not been set");
+			throw new TownyException(TownySettings.getLangString("msg_err_homeblock_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ()) {
 			this.spawn = spawn;
 		} else
-			throw new TownyException("Spawn is not within the homeBlock.");
+			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_homeblock"));
 	}
 	
 	/**

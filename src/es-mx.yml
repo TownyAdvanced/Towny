@@ -1,5 +1,5 @@
 name: Towny
-version: 0.42
+version: 0.43
 language: spanish
 author: VreyaViress
 website: 'http://amicu.enjin.com/'
@@ -644,3 +644,10 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 # Added in 0.42
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
+
+# Added in 0.43 
+town_help_11: 'Create a new town. Use _''s and not spaces.'
+changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
+not_standing_in_plot: 'You are not standing inside of a valid plot!'
+msg_err_homeblock_has_not_been_set: 'Home Block has not been set, use ''/town set homeblock'' first.'
+msg_err_spawn_not_within_homeblock: 'Spawn is not within the homeBlock, use ''/town set homeblock'' first.'

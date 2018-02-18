@@ -537,6 +537,18 @@ public class PlayerCacheUtil {
 		// Plot Permissions
 
 		if (townBlock.hasResident()) {
+			
+			/*
+			 * Because a server can technically not have their mayors owning the towny.claimed.owntown.* node, 
+			 * we must grant mayors the ability to be considered PLOT_OWNERs of their own plots. 
+			 */
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				if (resident.isMayor())			
+					if (townBlock.getResident().equals(resident))
+						return true;
+			} catch (NotRegisteredException e1) {
+			}
 
 			/*
 			 * Check town overrides before testing plot permissions

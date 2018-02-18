@@ -14,5 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="../lib/citizensapi-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="../lib/Vault.jar"/>
+	<classpathentry kind="lib" path="../lib/Reserve.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
