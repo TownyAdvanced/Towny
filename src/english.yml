@@ -657,7 +657,9 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
-# Added in 0.43 
+# Added in 0.43
+changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
+not_standing_in_plot: 'You are not standing inside of a valid plot!'
 town_help_11: 'Create a new town. Use _''s and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
