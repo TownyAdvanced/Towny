@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -30,6 +31,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -41,6 +43,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -751,7 +754,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
 			if (split.length < 2) {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set plot"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", ""));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", TownySettings.getLangString("msg_admin_set_plot_help_1")));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} {radius}", TownySettings.getLangString("msg_admin_set_plot_help_2")));
+				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} auto", TownySettings.getLangString("msg_admin_set_plot_help_2")));
 				return;
 			}
 			if (tb != null) {
@@ -768,8 +773,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 			} else {
-				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("not_standing_in_plot"));
-				return;
+				Town town = TownyUniverse.getDataSource().getTown(split[1]);
+				TownyWorld world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());				
+				List<WorldCoord> selection;
+				if (split.length == 2)
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
+				else  {
+					String[] newSplit = StringMgmt.remFirstArg(split);
+					newSplit = StringMgmt.remFirstArg(newSplit);
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), newSplit);
+				}
+				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
+				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);				
+				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));				
+				
+				new TownClaim(plugin, player, town, selection, false, true, false).start();				
+//				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("not_standing_in_plot"));
+//				return;
 			}
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), String.format(TownySettings.getLangString("msg_err_invalid_property"), "administrative"));

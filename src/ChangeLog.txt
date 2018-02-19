@@ -2824,7 +2824,16 @@ v0.92.0.10:
     - Added /ta giveplots as an alias of sorts to /ta givebonus.
     - Language files bumped to 0.44.
     - New Command: '/ta set plot {town}' courtesy of Articdive.
-      - Admin command to change a plot from one town to another.
+      - When in a town only a single plot can be transfered at one time.
+        - Admin command to change a plot from one town to another.
+        - Does not require a town to have available townblocks to claim.
+      - When in the wilderness two types of sub commands can be used to do area claims:
+        - Admin command to change wilderness into a claim for a town.
+        - Does require a town to have available townblocks to claim.
+        - Does obey proximity rules for claims between towns/homeblocks.
+        - /ta set plot {town} {rect|circle} {radius}
+        - /ta set plot {town} {rect|circle} auto
+      - Does not charge town for the townblock.
       - Requires towny.command.townyadmin.set.plot permission node.
     - New Permission node: towny.command.townyadmin.set.plot
       - Default: false
