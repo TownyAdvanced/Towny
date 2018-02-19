@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -256,7 +257,17 @@ public class TownyFormatter {
 		if (TownySettings.isAllowingOutposts()) {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				if (town.hasOutpostSpawn())
-					out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit());
+					if (!town.hasNation())
+						out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit());
+					else {
+						int nationBonus = 0;
+						try {
+							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+						} catch (NotRegisteredException e1) {
+						}
+						out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit() + ((nationBonus > 0) ? Colors.LightBlue + " [NationBonus: " + nationBonus + "]" : ""));
+						}
+					
 				else 
 					out.add(Colors.Green + "Outposts: " + Colors.LightGreen + "0" + " / " + town.getOutpostLimit());
 			} else if (town.hasOutpostSpawn()) {
