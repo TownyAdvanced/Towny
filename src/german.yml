@@ -658,8 +658,8 @@ you_have_been_invited_to_join2: 'Du wurdest eingeladen, %s beizutreten'
 you_have_been_requested_to_ally2: 'Du wurdest angefragt, dich mit %s zu verbünden'
 
 # Added in 0.43 
-town_help_11: 'Create a new town. Use _''s and not spaces.'
-changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
-not_standing_in_plot: 'You are not standing inside of a valid plot!'
-msg_err_homeblock_has_not_been_set: 'Home Block has not been set, use ''/town set homeblock'' first.'
-msg_err_spawn_not_within_homeblock: 'Spawn is not within the homeBlock, use ''/town set homeblock'' first.'
+town_help_11: 'Erstellt eine neue Stadt. Verwende _ statt Leerzeichen.'
+changed_plot_town: '&bDu hast das Grundstück erfolgreich der Stadt %s zugewiesen!'
+not_standing_in_plot: 'Du stehst nicht innerhalb eines gültigen Grundstücks!'
+msg_err_homeblock_has_not_been_set: 'Stadtplatz wurde nicht gesetzt, benutze zuerst ''/town set homeblock''.'
+msg_err_spawn_not_within_homeblock: 'Spawn liegt nicht im Stadtplatz, benutze zuerst ''/town set homeblock''.'
