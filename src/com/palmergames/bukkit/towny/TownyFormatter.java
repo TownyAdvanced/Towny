@@ -56,7 +56,7 @@ public class TownyFormatter {
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 		return out;
 
@@ -68,7 +68,7 @@ public class TownyFormatter {
 
 		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
 
-		out.addAll(ChatTools.listArr(residents, Colors.Green + "Outlaws: " + Colors.White + " "));
+		out.addAll(ChatTools.listArr(residents, Colors.Green + TownySettings.getLangString("outlaws") + ": " + Colors.White + " "));
 
 		return out;
 
@@ -112,7 +112,10 @@ public class TownyFormatter {
 
 			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? Colors.LightGreen + " (Online)" : "")));
 			out.add(Colors.Green + " Perm: " + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString() : townBlock.getPermissions().getColourString().replace("f", "r")));
-			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			out.add(Colors.Green + "PvP: " + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+					Colors.Green + "  Explosions: " + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+					Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+					Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
@@ -141,7 +144,10 @@ public class TownyFormatter {
 		// if (resident.getTownBlocks().size() > 0) {
 		out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
 		out.add(Colors.Green + "    Perm: " + resident.getPermissions().getColourString());
-		out.add(Colors.Green + "PVP: " + ((resident.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((resident.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((resident.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((resident.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		out.add(Colors.Green + "PVP: " + ((resident.getPermissions().pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Explosions: " + ((resident.getPermissions().explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Firespread: " + ((resident.getPermissions().fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Mob Spawns: " + ((resident.getPermissions().mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 		// }
 
 		// Bank: 534 coins
@@ -277,7 +283,9 @@ public class TownyFormatter {
 
 		// Permissions: B=rao D=--- S=ra-
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r"));
-		out.add(Colors.Green + "Explosions: " + ((town.isBANG() || world.isForceExpl()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		out.add(Colors.Green + "Explosions: " + ((town.isBANG() || world.isForceExpl()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Firespread: " + ((town.isFire() || world.isForceFire()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Mob Spawns: " + ((town.hasMobs() || world.isForceTownMobs()) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 		// | Bank: 534 coins
 		String bankString = "";
@@ -333,6 +341,13 @@ public class TownyFormatter {
 			residents[35] = "and more...";
 		}
 		out.addAll(ChatTools.listArr(residents, Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
+		
+		System.out.println("Lines: " + out.size());
+		int lineNumber= 0;
+		for (String lines : out) {			
+			System.out.println("# " + lineNumber + ": " + lines.length());
+			lineNumber++;
+		}
 		return out;
 	}
 
@@ -409,7 +424,6 @@ public class TownyFormatter {
 		} else {
 			// ForcePvP: No | Fire: Off
 			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-
 			out.add(Colors.Green + "Explosions: " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
 			out.add(Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
 			// Using Default Settings: Yes
