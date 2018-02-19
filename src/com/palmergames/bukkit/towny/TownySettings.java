@@ -1944,11 +1944,15 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
+	
+	public static int getMinDistanceForOutpostsFromPlot() {
+		
+		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT);
+	}
 
 	public static int getMinDistanceFromTownPlotblocks() {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
-
 	}
 
 	public static int getMaxDistanceBetweenHomeblocks() {

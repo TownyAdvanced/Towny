@@ -121,6 +121,13 @@ public enum ConfigNodes {
 			"",
 			"# Minimum number of plots any towns home plot must be from the next town.",
 			"# This will prevent someone founding a town right on your doorstep"),
+    TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
+    		"town.min_distance_for_outpost_from_plot",
+    		"5",
+    		"",
+    		"# Minimum number of plots an outpost must be from any other town's plots.",
+    		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
+    		"# near to each other, but want to keep outposts away from towns."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",

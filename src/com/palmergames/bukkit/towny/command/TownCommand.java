@@ -2796,6 +2796,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
+						
+						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot()))
+							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
 						blockCost = TownySettings.getOutpostCost();
