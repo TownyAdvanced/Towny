@@ -327,6 +327,11 @@ public enum ConfigNodes {
 			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
 			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
 			"# be over their limit if they leave the nation."),
+	GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT(
+			"global_townSettings.over_outpost_limits_stops_teleports",
+			"false",
+			"# When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost",
+			"# limit will not be able to use their /town outpost teleports until they have dropped below their limit."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
 			"global_town_settings.allow_town_spawn",
 			"true",

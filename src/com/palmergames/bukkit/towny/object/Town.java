@@ -1228,4 +1228,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public int getOutpostLimit() {
 		return TownySettings.getMaxOutposts(this);
 	}
+
+	public boolean isOverOutpostLimit() {
+		
+		return (getMaxOutpostSpawn() > getOutpostLimit());
+
+	}
 }

@@ -1431,6 +1431,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS);
 	}
+	
+	public static boolean isOutpostLimitStoppingTeleports() {
+		
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT);
+	}
 
 	public static double getOutpostCost() {
 

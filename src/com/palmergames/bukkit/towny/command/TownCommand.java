@@ -1963,6 +1963,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownSpawnLevel townSpawnPermission;
 
 			if (outpost) {
+				
+				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels() && town.isOverOutpostLimit())
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_over_outposts_limit"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));

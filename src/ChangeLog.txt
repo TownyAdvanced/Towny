@@ -2851,7 +2851,7 @@ v0.92.0.10:
     - New Feature: Limiting Outposts by Town and Nation Levels!
       - See below.
     - New Config Option: global_town_settings.limit_outposts_using_town_and_nation_levels
-      - default: "false",
+      - default: false
       - When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and
         the nationBonusOutpostLimit value in the Nation Levels. 
       - In this way nations can be made to be the only way of receiving outposts, or as an incentive to receive more outposts.
@@ -2860,6 +2860,10 @@ v0.92.0.10:
       - They will not be able to start new outposts until they have unclaimed outposts to become under their limit. 
       - Likewise, towns that join a nation and receive bonus outposts will be over their limit if they leave the nation.
       - When the feature is enabled, the limits are shown in the /town status screen.
+    - New Config Option: global_townSettings.over_outpost_limits_stops_teleports
+      - default: false
+      - When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost
+        limit will not be able to use their /town outpost teleports until they have dropped below their limit.
     - REQUIRED CONFIG CHANGE:
       - a new entry to all of your nation_levels in the config must be added, otherwise Towny will not start up properly.
       - add 'nationBonusOutpostLimit: #' to each nation_level.
