@@ -1964,9 +1964,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (outpost) {
 				
-				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels() && town.isOverOutpostLimit())
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_over_outposts_limit"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
-
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));
 
@@ -2008,6 +2005,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// Number not present so assume the first outpost.
 					index = 1;
 				}
+				
+				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels() && town.isOverOutpostLimit() && (Math.max(1, index) > town.getOutpostLimit())) {					
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_over_outposts_limit"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+				}
+				
 				spawnLoc = town.getOutpostSpawn(Math.max(1, index));
 			} else
 				spawnLoc = town.getSpawn();

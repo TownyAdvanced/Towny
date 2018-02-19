@@ -2863,7 +2863,9 @@ v0.92.0.10:
     - New Config Option: global_townSettings.over_outpost_limits_stops_teleports
       - default: false
       - When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost
-        limit will not be able to use their /town outpost teleports until they have dropped below their limit.
+        limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit, 
+        until they have dropped below their limit.
+      - eg: If their limit is 3 then they cannot use /t outpost 4 
     - REQUIRED CONFIG CHANGE:
       - a new entry to all of your nation_levels in the config must be added, otherwise Towny will not start up properly.
       - add 'nationBonusOutpostLimit: #' to each nation_level.
