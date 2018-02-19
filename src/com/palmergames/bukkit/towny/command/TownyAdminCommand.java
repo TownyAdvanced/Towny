@@ -653,6 +653,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 		} else if (split[0].equalsIgnoreCase("capital")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_CAPITAL.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if (split.length < 2) {
 
@@ -685,6 +687,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			}
 		} else if (split[0].equalsIgnoreCase("title")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			Resident resident = null;
 			// Give the resident a title
 			if (split.length < 2)
@@ -711,6 +716,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("surname")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			Resident resident = null;
 			// Give the resident a surname
 			if (split.length < 2)

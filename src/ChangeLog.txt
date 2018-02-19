@@ -2828,5 +2828,14 @@ v0.92.0.10:
       - Requires towny.command.townyadmin.set.plot permission node.
     - New Permission node: towny.command.townyadmin.set.plot
       - Default: false
-      - Child node of towny.admin
+      - Child node of towny.admin and towny.command.townyadmin.set.*
       - For mods who don't have the full towny.admin permission node but are able to change plots to other towns.
+    - New Permission node: towny.command.townyadmin.set.capital
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+    - New Permission node: towny.command.townyadmin.set.title
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+    - New Permission node: towny.command.townyadmin.set.surname
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
