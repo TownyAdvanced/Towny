@@ -587,6 +587,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		if (split[0].equalsIgnoreCase("mayor")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			if (split.length < 3) {
 
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set mayor"));
@@ -734,6 +737,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("plot")) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode(split[0].toLowerCase())))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+			
 			TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
 			if (split.length < 2) {
 				sender.sendMessage(ChatTools.formatTitle("/townyadmin set plot"));
