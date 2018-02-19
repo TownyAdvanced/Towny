@@ -2768,6 +2768,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+
 
 					if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
 						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));

@@ -698,3 +698,4 @@ tc_err_unable_to_talk_you_are_spamming: 'Unable to talk...You are spamming!'
 
 msg_admin_set_plot_help_1: 'When in a town.'
 msg_admin_set_plot_help_2: 'When in the wilderness.'
+msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to claim %s/%s'

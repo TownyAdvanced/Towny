@@ -316,6 +316,17 @@ public enum ConfigNodes {
 			"global_town_settings.allow_outposts",
 			"true",
 			"# Allow towns to claim outposts (a townblock not connected to town)."),
+	GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS(
+			"global_town_settings.limit_outposts_using_town_and_nation_levels",
+			"false",
+			"# When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and",
+			"# the nationBonusOutpostLimit value in the Nation Levels. In this way nations can be made to be",
+			"# the only way of receiving outposts, or as an incentive to receive more outposts. Towns which are",
+			"# larger can have more outposts.",
+			"# When activated, this setting will not cause towns who already have higher than their limit",
+			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
+			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
+			"# be over their limit if they leave the nation."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
 			"global_town_settings.allow_town_spawn",
 			"true",

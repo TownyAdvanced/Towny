@@ -253,8 +253,16 @@ public class TownyFormatter {
 		} catch (TownyException e) {
 		}
 
-		if (town.hasOutpostSpawn())
-			out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
+		if (TownySettings.isAllowingOutposts()) {
+			if (TownySettings.isOutpostsLimitedByLevels()) {
+				if (town.hasOutpostSpawn())
+					out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit());
+				else 
+					out.add(Colors.Green + "Outposts: " + Colors.LightGreen + "0" + " / " + town.getOutpostLimit());
+			} else if (town.hasOutpostSpawn()) {
+				out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
+			}
+		}
 
 		// Permissions: B=rao D=--- S=ra-
 		out.add(Colors.Green + "Permissions: " + town.getPermissions().getColourString().replace("f", "r"));

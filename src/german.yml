@@ -696,3 +696,8 @@ tc_you_joined_channel: '[TownyChat] You joined &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'You are already talking in the default channel. To switch to another channel use that channel''s command.'
 tc_err_unable_to_talk_essentials_mute: 'Unable to talk...You are currently muted!'
 tc_err_unable_to_talk_you_are_spamming: 'Unable to talk...You are spamming!'
+
+
+msg_admin_set_plot_help_1: 'When in a town.'
+msg_admin_set_plot_help_2: 'When in the wilderness.'
+msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to claim %s/%s'
