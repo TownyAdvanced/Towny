@@ -86,8 +86,8 @@ public class Coord {
 	/**
 	 * Convert regular grid coordinates to their grid cell's counterparts.
 	 * 
-	 * @param x
-	 * @param z
+	 * @param x - X int (Coordinates)
+	 * @param z - Z int (Coordinates)
 	 * @return a new instance of Coord.
 	 * 
 	 */

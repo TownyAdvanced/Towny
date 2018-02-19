@@ -1,36 +1,8 @@
 package com.palmergames.util;
 
 import java.util.Comparator;
-import java.util.Hashtable;
-
-import com.palmergames.util.KeyValue;
-import com.palmergames.util.KeyValueTable;
 
 public class Sorting {
-
-	public static void main(String[] args) {
-
-		Hashtable<Object, Object> table = new Hashtable<Object, Object>();
-		table.put(1, 4);
-		table.put(0, 3);
-		table.put(3, 0);
-		table.put(2, 2);
-		table.put(4, 1);
-
-		KeyValueTable<Object, Object> kvTable = new KeyValueTable<Object, Object>(table);
-		print(kvTable);
-		kvTable.sortByKey();
-		print(kvTable);
-		kvTable.sortByValue();
-		print(kvTable);
-	}
-
-	public static void print(KeyValueTable<?, ?> table) {
-
-		for (KeyValue<?, ?> index : table.getKeyValues())
-			System.out.print("[" + index.key + " : " + index.value + "]\n");
-		System.out.print("\n");
-	}
 
 	static class ValueSort implements Comparator<Object> {
 

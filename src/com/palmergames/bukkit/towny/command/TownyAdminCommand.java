@@ -165,7 +165,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if ((!isConsole) && (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode(split[0].toLowerCase()))))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if (split[0].equalsIgnoreCase("givebonus")) {
+			if (split[0].equalsIgnoreCase("givebonus") || split[0].equalsIgnoreCase("giveplots")) {
 
 				giveBonus(StringMgmt.remFirstArg(split));
 
@@ -466,7 +466,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(x.getMessage());
 		}
 
-		String rank = split[2].toLowerCase();
+		String rank = split[2];
 		/*
 		 * Is this a known rank?
 		 */

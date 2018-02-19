@@ -1,7 +1,20 @@
-/**
- * 
- */
 package com.palmergames.bukkit.towny.permissions;
+
+import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.FileMgmt;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,23 +28,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.bukkit.configuration.MemorySection;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionDefault;
-
-import com.palmergames.bukkit.config.CommentedConfiguration;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.FileMgmt;
 
 /**
  * @author ElgarL
@@ -252,7 +248,11 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			permList.addAll(getTownDefault());
+			try {
+				permList.addAll(getTownDefault(resident.getTown()));
+			} catch (NotRegisteredException e) {
+				// Not Possible!
+			}
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
 				
@@ -359,10 +359,17 @@ public class TownyPerms {
 	 * 
 	 * @return a list of permissions
 	 */
-	public static List<String> getTownDefault() {
-		
+	public static List<String> getTownDefault(Town town) {
+
 		List<String> permsList = getList("towns.default");
-		return (permsList == null)? new ArrayList<String>() : permsList;
+		if ((permsList == null)) {
+			List<String> emptyPermsList = new ArrayList<String>();
+			emptyPermsList.add("towny.town." + town.getName().toLowerCase());
+			return emptyPermsList;
+		} else {
+			permsList.add("towny.town." + town.getName().toLowerCase());
+			return permsList;
+		}
 	}
 
 	/**
@@ -384,7 +391,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRank(String rank) {
 
-		List<String> permsList = getList("towns.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("towns.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 
@@ -432,7 +439,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getNationRank(String rank) {
 
-		List<String> permsList = getList("nations.ranks." + rank.toLowerCase());
+		List<String> permsList = getList("nations.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
 	}
 	

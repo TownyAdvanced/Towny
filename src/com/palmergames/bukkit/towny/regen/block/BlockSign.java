@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.palmergames.bukkit.towny.regen.block;
 
 /**

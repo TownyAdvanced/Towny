@@ -19,8 +19,8 @@ public class PlotChangeTypeEvent extends Event {
     }
 
     /**
-     * @param oldowner - Old Owner
-     * @param newowner - New Owner
+     * @param oldType- Old Type
+     * @param newType - New Type
      */
     public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType) {
         this.newType = newType;

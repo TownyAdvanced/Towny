@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -34,8 +31,8 @@ public class OnPlayerLogin implements Runnable {
 	/**
 	 * Constructor
 	 * 
-	 * @param plugin
-	 * @param player
+	 * @param plugin - Towny plugin,
+	 * @param player - Player to run login code on.
 	 */
 	public OnPlayerLogin(Towny plugin, Player player) {
 		
@@ -123,7 +120,7 @@ public class OnPlayerLogin implements Runnable {
 	/**
 	 * Send a warning message if the town or nation is due to be deleted.
 	 * 
-	 * @param resident
+	 * @param resident - Resident to send the warning to.
 	 */
 	private void warningMessage(Resident resident) {
 

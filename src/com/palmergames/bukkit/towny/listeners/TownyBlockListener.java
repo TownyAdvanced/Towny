@@ -1,23 +1,5 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -40,6 +22,23 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+
+import java.util.List;
 
 public class TownyBlockListener implements Listener {
 
@@ -105,7 +104,6 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -416,7 +414,6 @@ public class TownyBlockListener implements Listener {
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (Block block : blocks) {
@@ -465,14 +462,17 @@ public class TownyBlockListener implements Listener {
 		boolean isNeutral = false;
 		try {
 			townBlock = world.getTownBlock(coord);
-			if (TownyUniverse.isWilderness(target.getBlock())) {
-				isNeutral = !world.isExpl();
-				if (!world.isExpl() && !TownyUniverse.isWarTime())
-					return false;
-			} else if (townBlock.hasTown())
+			if (townBlock.hasTown())
 				if (!War.isWarZone(townBlock.getWorldCoord()))
 					isNeutral = true;
 		} catch (NotRegisteredException e1) {
+			if (TownyUniverse.isWilderness(target.getBlock())) {
+				isNeutral = !world.isExpl();
+				if (!world.isExpl() && !TownyUniverse.isWarTime())
+					return false;				
+				if (world.isExpl() && !TownyUniverse.isWarTime())
+					return true;	
+			}
 		}
 		
 		try {			

@@ -244,9 +244,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						for (WorldCoord worldCoord : selection) {
-							if (selection.size() > 1)
-								plotPrice = worldCoord.getTownBlock().getTown().getPlotTypePrice(worldCoord.getTownBlock().getType());
-
 							setPlotForSale(resident, worldCoord, plotPrice);
 						}
 					} else {
@@ -378,8 +375,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (townBlock != null) {
 
-						/**
-						 * Only allow mayors or plot owners to use this command.
+						/*
+						  Only allow mayors or plot owners to use this command.
 						 */
 						if (townBlock.hasResident()) {
 							if (!townBlock.isOwner(resident)) {

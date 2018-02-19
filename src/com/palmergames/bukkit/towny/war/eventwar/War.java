@@ -1,20 +1,5 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Location;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -40,6 +25,20 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 //TODO: Extend a new class called TownyEvent
 public class War {
@@ -213,7 +212,6 @@ public class War {
 					add(nation);
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 				} catch (TownyException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

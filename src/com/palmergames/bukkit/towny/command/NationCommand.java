@@ -443,7 +443,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			rank = split[2].toLowerCase();
+			rank = split[2];
 			/*
 			 * Is this a known rank?
 			 */
@@ -455,7 +455,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Only allow the player to assign ranks if they have the grant perm
 			 * for it.
 			 */
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank))) {
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase()))) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_permission_to_give_rank"));
 				return;
 			}
@@ -512,7 +512,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_withdraw_disabled"));
 
 			if (amount < 0)
-				throw new TownyException(TownySettings.getLangString("msg_err_negative_money")); // TODO
+				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
@@ -558,7 +558,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Send a list of all nations in the universe to player Command: /nation
 	 * list
 	 * 
-	 * @param player
+	 * @param player - Player to send the list to.
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -618,7 +618,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Create a new nation. Command: /nation new [nation] *[capital]
 	 * 
-	 * @param player
+	 * @param player - Player creating the new nation.
 	 */
 
 	public void newNation(Player player, String name, String capitalName) {
@@ -673,7 +673,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setUuid(UUID.randomUUID());
 		nation.setRegistered(System.currentTimeMillis());
 		if (TownySettings.isUsingEconomy()) {
-			//TODO
 			try {
 				nation.setBalance(0, "Deleting Nation");
 			} catch (EconomyException e) {

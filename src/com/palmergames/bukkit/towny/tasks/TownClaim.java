@@ -82,7 +82,7 @@ public class TownClaim extends Thread {
 						worlds.add(world);
 
 					if (claim) {
-						// Claim
+						// Claim						
 						townClaim(town, worldCoord, outpost);
 						// Reset so we only flag the first plot as an outpost.
 						outpost = false;
@@ -183,19 +183,11 @@ public class TownClaim extends Thread {
 					TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
 					townBlock.setLocked(false);
 				} else {
-					//plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
-					//plotChunk.initialize();
 
-					// Push the TownBlock location to the queue for a snapshot.
 					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
 					townBlock.setLocked(true);
-
-					//TownyUniverse.getDataSource().saveTownBlock(townBlock);
 				}
-				//if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null))
-				//	TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
-
-				plotChunk = null;
+				plotChunk = null;				
 			}
 
 			TownyUniverse.getDataSource().saveTownBlock(townBlock);

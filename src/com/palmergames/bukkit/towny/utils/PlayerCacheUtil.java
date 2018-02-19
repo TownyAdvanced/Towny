@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -324,13 +325,16 @@ public class PlayerCacheUtil {
 					int distance = 0;
 					try {
 						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
+						if (nearestTown == null) {
+							return TownBlockStatus.UNCLAIMED_ZONE;
+						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
 					} catch (NotRegisteredException e1) {
 						// There will almost always be a town in any world where towny is enabled. 
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-					distance = distance + TownySettings.getNationZonesCapitalBonusSIze();
+					}					
+					distance = distance + TownySettings.getNationZonesCapitalBonusSize();
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;
@@ -436,12 +440,12 @@ public class PlayerCacheUtil {
 	 * Test if the player has permission to perform a certain action at this
 	 * WorldCoord.
 	 * 
-	 * @param player
-	 * @param status
-	 * @param pos
-	 * @param id
-	 * @param data
-	 * @param action
+	 * @param player - Player object
+	 * @param status - TownBlock's Status (Type)
+	 * @param pos - Worldcoord
+	 * @param blockId - Block's ID (Type)
+	 * @param data - BlockData (byte)
+	 * @param action - What is the player doing: Destroy, Switch, Build e.t.c
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Integer blockId, byte data, TownyPermission.ActionType action) {
@@ -487,30 +491,35 @@ public class PlayerCacheUtil {
 				if (TownySettings.getNationZonesEnabled()) {
 					// Nation_Zone wilderness type Permissions 
 					if (status == TownBlockStatus.NATION_ZONE) {
-						Nation playersNation = null;
-						Town nearestTown = null; 
-						nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
-						Nation nearestNation = nearestTown.getNation();
-		
-						try {
-							playersNation = playersTown.getNation();
-						} catch (Exception e1) {
-							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
-							return false;
-						}
-						if (playersNation.equals(nearestNation) || TownyUniverse.getPermissionSource().isTownyAdmin(player)){
-							if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
-								return true;
-							} else {
-								// Don't have permission to build/destroy/switch/item_use here
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+						// Admins that also have wilderness permission can bypass the nation zone.
+						if (TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
+							return true;
+						} else {
+						
+							Nation playersNation = null;
+							Town nearestTown = null; 
+							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
+							Nation nearestNation = nearestTown.getNation();
+			
+							try {
+								playersNation = playersTown.getNation();
+							} catch (Exception e1) {							
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
 								return false;
 							}
-						} else {
-							cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
-							return false;
+							if (playersNation.equals(nearestNation)){
+								if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, blockId, data, action)) {
+									return true;
+								} else {
+									// Don't have permission to build/destroy/switch/item_use here
+									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+									return false;
+								}
+							} else {
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								return false;
+							}
 						}
-						
 					}
 				}
 			} catch (NotRegisteredException e2) {
@@ -528,6 +537,18 @@ public class PlayerCacheUtil {
 		// Plot Permissions
 
 		if (townBlock.hasResident()) {
+			
+			/*
+			 * Because a server can technically not have their mayors owning the towny.claimed.owntown.* node, 
+			 * we must grant mayors the ability to be considered PLOT_OWNERs of their own plots. 
+			 */
+			try {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				if (resident.isMayor())			
+					if (townBlock.getResident().equals(resident))
+						return true;
+			} catch (NotRegisteredException e1) {
+			}
 
 			/*
 			 * Check town overrides before testing plot permissions

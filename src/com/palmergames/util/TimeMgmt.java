@@ -24,8 +24,8 @@ public class TimeMgmt {
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
 		List<Long> out = new ArrayList<Long>();
-		for (int d = 0; d < delays.length; d++)
-			if (delays[d].length != 2)
+		for (long[] delay : delays)
+			if (delay.length != 2)
 				return null;
 
 		Integer lastDelayIndex = null;
@@ -36,7 +36,7 @@ public class TimeMgmt {
 					if (lastDelayIndex == null || t <= nextWarningAt || d < lastDelayIndex) {
 						lastDelayIndex = d;
 						nextWarningAt = t - delays[d][1];
-						out.add(new Long(t));
+						out.add(t);
 						break;
 					}
 				}
@@ -62,11 +62,5 @@ public class TimeMgmt {
 		if (out.length() == 0 || l > 0)
 			out += (out.length() > 0 ? ", " : "") + l + " seconds";
 		return out;
-	}
-
-	public static void main(String[] args) {
-
-		for (Long l : getCountdownDelays(36000000, defaultCountdownDelays))
-			System.out.println(l + " " + formatCountdownTime(l));
 	}
 }
