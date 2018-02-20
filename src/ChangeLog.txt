@@ -2804,7 +2804,7 @@ v0.92.0.8:
 v0.92.0.9:
     - Spanish.yml updated to 0.42 by SeDark.
     - Fix an NPE that could occur in the wilderness from explosions.
-    - Made it so that town and nation ranks can contain capitol letters. Rank permissions remain lowercased.
+    - Made it so that town and nation ranks can contain capital letters. Rank permissions remain lowercased.
     - Fix area claiming not respecting the min_plot_distance_from_town_plot setting in the config.
     - Players who are in towns now receive a permission node, towny.town.{townname}. 
       - This can be useful for server operators who want to test if a player has a permission node to make sure they are part of a town.
@@ -2822,3 +2822,62 @@ v0.92.0.10:
     - Added /town create as an alias of sorts to /town new.
     - Improve error seen when a player tries to use /t set spawn when not in the homeblock or when the homeblock isn't set.
     - Added /ta giveplots as an alias of sorts to /ta givebonus.
+    - Language files bumped to 0.44.
+    - New Command: '/ta set plot {town}' courtesy of Articdive.
+      - When in a town only a single plot can be transfered at one time.
+        - Admin command to change a plot from one town to another.
+        - Does not require a town to have available townblocks to claim.
+      - When in the wilderness two types of sub commands can be used to do area claims:
+        - Admin command to change wilderness into a claim for a town.
+        - Does require a town to have available townblocks to claim.
+        - Does obey proximity rules for claims between towns/homeblocks.
+        - /ta set plot {town} {rect|circle} {radius}
+        - /ta set plot {town} {rect|circle} auto
+      - Does not charge town for the townblock.
+      - Requires towny.command.townyadmin.set.plot permission node.
+    - New Permission node: towny.command.townyadmin.set.plot
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+      - For mods who don't have the full towny.admin permission node but are able to change plots to other towns.
+    - New Permission node: towny.command.townyadmin.set.capital
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+    - New Permission node: towny.command.townyadmin.set.title
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+    - New Permission node: towny.command.townyadmin.set.surname
+      - Default: false
+      - Child node of towny.admin and towny.command.townyadmin.set.*
+    - New Feature: Limiting Outposts by Town and Nation Levels!
+      - See below.
+    - New Config Option: global_town_settings.limit_outposts_using_town_and_nation_levels
+      - default: false
+      - When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and
+        the nationBonusOutpostLimit value in the Nation Levels. 
+      - In this way nations can be made to be the only way of receiving outposts, or as an incentive to receive more outposts.
+      - Towns which are larger can have more outposts.
+      - When activated, this setting will not cause towns who already have higher than their limit to lose outposts. 
+      - They will not be able to start new outposts until they have unclaimed outposts to become under their limit. 
+      - Likewise, towns that join a nation and receive bonus outposts will be over their limit if they leave the nation.
+      - When the feature is enabled, the limits are shown in the /town status screen.
+    - New Config Option: global_townSettings.over_outpost_limits_stops_teleports
+      - default: false
+      - When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost
+        limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit, 
+        until they have dropped below their limit.
+      - eg: If their limit is 3 then they cannot use /t outpost 4 
+    - REQUIRED CONFIG CHANGE:
+      - a new entry to all of your nation_levels in the config must be added, otherwise Towny will not start up properly.
+      - add 'nationBonusOutpostLimit: #' to each nation_level.
+      - default settings are between 0 and 3.
+      - If you do not want to do this you can delete the nation_level section of your config and Towny will re-create it with the missing lines and new default settings.
+    - REQUIRED CONFIG CHANGE:
+      - a new entry to all of your town_levels in the config must be added, otherwise Towny will not start up properly.
+      - add 'townOutpostLimit: #' to each town_level.
+      - default settings are between 0 and 4.
+      - If you do not want to do this you can delete the town_level section of your config and Towny will re-create it with the missing lines and new default settings.
+    - New Config Option: town.min_distance_for_outpost_from_plot
+      - default: 5
+      - Minimum number of plots an outpost must be from any other town's plots.
+      - Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims 
+        near to each other, but want to keep outposts away from towns. 

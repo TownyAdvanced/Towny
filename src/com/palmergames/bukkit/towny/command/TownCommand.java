@@ -1963,7 +1963,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownSpawnLevel townSpawnPermission;
 
 			if (outpost) {
-
+				
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));
 
@@ -2005,6 +2005,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// Number not present so assume the first outpost.
 					index = 1;
 				}
+				
+				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels() && town.isOverOutpostLimit() && (Math.max(1, index) > town.getOutpostLimit())) {					
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_over_outposts_limit"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+				}
+				
 				spawnLoc = town.getOutpostSpawn(Math.max(1, index));
 			} else
 				spawnLoc = town.getSpawn();
@@ -2768,6 +2773,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					
+					if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+
 
 					if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
 						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
@@ -2786,6 +2795,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
+							throw new TownyException(TownySettings.getLangString("msg_too_close"));
+						
+						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot()))
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
