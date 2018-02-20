@@ -395,6 +395,11 @@ public class TownyFormatter {
 		// ___[ Azur Empire ]___
 		out.add(ChatTools.formatTitle(getFormattedName(nation)));
 
+		// Created Date
+		Long registered = nation.getRegistered();
+		if (registered != 0) {
+			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
+		}
 		// Bank: 534 coins
 		String line = "";
 		if (TownySettings.isUsingEconomy())
@@ -423,11 +428,6 @@ public class TownyFormatter {
 		// Assistants: Mayor Rockefel, Sammy, Ginger
 		if (nation.getAssistants().size() > 0)
 			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), TownySettings.getLangString("status_nation_assistants")));
-		// Created Date
-		Long registered = nation.getRegistered();
-		if (registered != 0) {
-			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
-		}
 		// Towns [44]: James City, Carry Grove, Mason Town
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));		
 		// Allies [4]: James Nation, Carry Territory, Mason Country
