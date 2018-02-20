@@ -703,6 +703,9 @@ msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to cla
 msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over your limit %s/%s'
 
 # Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+# These are translated because we may (or may not) be handling longer words in a smart way.
+# If you are a translator feel free to skip over this section, as it may or may not appear very nice
+# in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
 online: '&a(Online)' 
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
