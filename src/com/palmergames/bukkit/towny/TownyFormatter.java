@@ -286,7 +286,12 @@ public class TownyFormatter {
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		try {
-			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : "") + (town.isPublic() ? Colors.LightGray + " [Home: " + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : "None") + "]" : ""));
+			out.add(String.format(TownySettings.getLangString("status_town_size_part_1"), town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +  
+		            (TownySettings.isSellingBonusBlocks() ? String.format(TownySettings.getLangString("status_town_size_part_2"), town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks()) : "") + 
+		            (town.getBonusBlocks() > 0 ? String.format(TownySettings.getLangString("status_town_size_part_3"), town.getBonusBlocks()) : "") + 
+		            (TownySettings.getNationBonusBlocks(town) > 0 ? String.format(TownySettings.getLangString("status_town_size_part_4"), TownySettings.getNationBonusBlocks(town)) : "") + 
+		            (town.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : TownySettings.getLangString("status_no_town")) + "]" : "")
+		           );
 		} catch (TownyException e) {
 		}
 
@@ -294,20 +299,22 @@ public class TownyFormatter {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				if (town.hasOutpostSpawn())
 					if (!town.hasNation())
-						out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit());
+						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = 0;
 						try {
 							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 						} catch (NotRegisteredException e1) {
 						}
-						out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn() + " / " + town.getOutpostLimit() + ((nationBonus > 0) ? Colors.LightBlue + " [NationBonus: " + nationBonus + "]" : ""));
+						out.add(String.format(TownySettings.getLangString("status_town_outposts"), town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+								(nationBonus > 0 ? String.format(TownySettings.getLangString("status_town_outposts2"), nationBonus) : "")
+							   );
 						}
 					
 				else 
-					out.add(Colors.Green + "Outposts: " + Colors.LightGreen + "0" + " / " + town.getOutpostLimit());
+					out.add(String.format(TownySettings.getLangString("status_town_outposts3"), town.getOutpostLimit()));
 			} else if (town.hasOutpostSpawn()) {
-				out.add(Colors.Green + "Outposts: " + Colors.LightGreen + town.getMaxOutpostSpawn());
+				out.add(String.format(TownySettings.getLangString("status_town_outposts4"), town.getMaxOutpostSpawn()));
 			}
 		}
 
@@ -321,16 +328,16 @@ public class TownyFormatter {
 		String bankString = "";
 		if (TownySettings.isUsingEconomy()) {
 			if (TownyEconomyHandler.isActive()) {
-				bankString = Colors.Green + "Bank: " + Colors.LightGreen + town.getHoldingFormattedBalance();
+				bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
 				if (town.hasUpkeep())
-					bankString += Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getTownUpkeepCost(town);
-				bankString += Colors.Gray + " | " + Colors.Green + "Tax: " + Colors.Red + town.getTaxes() + (town.isTaxPercentage() ? "%" : "");
+					bankString += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getTownUpkeepCost(town));
+				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(Colors.Green + "Mayor: " + Colors.LightGreen + getFormattedName(town.getMayor()));
+		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
 
 		// Assistants [2]: Sammy, Ginger
 		// if (town.getAssistants().size() > 0)
@@ -357,7 +364,7 @@ public class TownyFormatter {
 
 		// Nation: Azur Empire
 		try {
-			out.add(Colors.Green + "Nation: " + Colors.LightGreen + getFormattedName(town.getNation()));
+			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())));
 		} catch (TownyException e) {
 		}
 
@@ -368,9 +375,9 @@ public class TownyFormatter {
 			String[] entire = residents;
 			residents = new String[36];
 			System.arraycopy(entire, 0, residents, 0, 35);
-			residents[35] = "and more...";
+			residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(residents, Colors.Green + "Residents " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));		
+		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
 
 		out = formatStatusScreens(out);
 		return out;
@@ -392,17 +399,17 @@ public class TownyFormatter {
 		String line = "";
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.isActive()) {
-				line = Colors.Green + "Bank: " + Colors.LightGreen + nation.getHoldingFormattedBalance();
+				line = String.format(TownySettings.getLangString("status_bank"), nation.getHoldingFormattedBalance());
 
 				if (TownySettings.getNationUpkeepCost(nation) > 0)
-					line += (Colors.Gray + " | " + Colors.Green + "Daily upkeep: " + Colors.Red + TownySettings.getNationUpkeepCost(nation));
+					line += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getNationUpkeepCost(nation));
 
 			}
 
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += Colors.LightGray + "Peaceful";
+			line += TownySettings.getLangString("status_nation_peaceful");
 		}
 		// Bank: 534 coins | Peaceful
 		if (line.length() > 0)
@@ -410,21 +417,23 @@ public class TownyFormatter {
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor())
-			out.add(Colors.Green + "King: " + Colors.LightGreen + getFormattedName(nation.getCapital().getMayor()) + Colors.Green + "  NationTax: " + Colors.Red + nation.getTaxes());
+			out.add(String.format(TownySettings.getLangString("status_nation_king"), getFormattedName(nation.getCapital().getMayor())) + 
+					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
+				   );
 		// Assistants: Mayor Rockefel, Sammy, Ginger
 		if (nation.getAssistants().size() > 0)
-			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), Colors.Green + "Assistants:" + Colors.White + " "));
+			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), TownySettings.getLangString("status_nation_assistants")));
 		// Created Date
 		Long registered = nation.getRegistered();
 		if (registered != 0) {
 			out.add(String.format(TownySettings.getLangString("status_founded"),  registeredFormat.format(nation.getRegistered())));
 		}
 		// Towns [44]: James City, Carry Grove, Mason Town
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), Colors.Green + "Towns " + Colors.LightGreen + "[" + nation.getNumTowns() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));		
 		// Allies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), Colors.Green + "Allies " + Colors.LightGreen + "[" + nation.getAllies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), Colors.Green + "Enemies " + Colors.LightGreen + "[" + nation.getEnemies().size() + "]" + Colors.Green + ":" + Colors.White + " "));
+		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
 		out = formatStatusScreens(out);
 		return out;
@@ -441,29 +450,37 @@ public class TownyFormatter {
 
 		// ___[ World (PvP) ]___
 		String title = getFormattedName(world);
-		title += ((world.isPVP() || world.isForcePVP()) ? Colors.Red + " (PvP)" : "");
-		title += (world.isClaimable() ? Colors.LightGreen + " Claimable" : Colors.Rose + " NoClaims");
+		title += ((world.isPVP() || world.isForcePVP()) ? TownySettings.getLangString("status_title_pvp") : "");
+		title += (world.isClaimable() ? TownySettings.getLangString("status_world_claimable") : TownySettings.getLangString("status_world_noclaims"));
 		out.add(ChatTools.formatTitle(title));
 
 		if (!world.isUsingTowny()) {
 			out.add(TownySettings.getLangString("msg_set_use_towny_off"));
 		} else {
 			// ForcePvP: No | Fire: Off
-			out.add(Colors.Green + "ForcePvP: " + (world.isForcePVP() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Fire: " + (world.isFire() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force Fire: " + (world.isForceFire() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-			out.add(Colors.Green + TownySettings.getLangString("explosions2") + ": " + (world.isExpl() ? Colors.Rose + "On:" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + " Force explosion: " + (world.isForceExpl() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
-			out.add(Colors.Green + "World Mobs: " + (world.hasWorldMobs() ? Colors.Rose + "On" : Colors.LightGreen + "Off") + Colors.Gray + " | " + Colors.Green + "Force TownMobs: " + (world.isForceTownMobs() ? Colors.Rose + "Forced" : Colors.LightGreen + "Adjustable"));
+			out.add(TownySettings.getLangString("status_world_forcepvp") + (world.isForcePVP() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
+					TownySettings.getLangString("status_world_fire") + (world.isFire() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
+					TownySettings.getLangString("status_world_forcefire") + (world.isForceFire() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+				   );
+			out.add(TownySettings.getLangString("explosions2") + ": " + (world.isExpl() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
+				    TownySettings.getLangString("status_world_forceexplosion") + (world.isForceExpl() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+				   );
+			out.add(TownySettings.getLangString("status_world_worldmobs") + (world.hasWorldMobs() ? TownySettings.getLangString("status_on") : TownySettings.getLangString("status_off")) + Colors.Gray + " | " + 
+				    TownySettings.getLangString("status_world_forcetownmobs") + (world.isForceTownMobs() ? TownySettings.getLangString("status_forced") : TownySettings.getLangString("status_adjustable"))
+				   );
 			// Using Default Settings: Yes
 			// out.add(Colors.Green + "Using Default Settings: " +
 			// (world.isUsingDefault() ? Colors.LightGreen + "Yes" : Colors.Rose
 			// + "No"));
 
-			out.add(Colors.Green + "Unclaim Revert: " + (world.isUsingPlotManagementRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off") + Colors.Gray + " | " + Colors.Green + "Explosion Revert: " + (world.isUsingPlotManagementWildRevert() ? Colors.LightGreen + "On" : Colors.Rose + "off"));
+			out.add(TownySettings.getLangString("status_world_unclaimrevert") + (world.isUsingPlotManagementRevert() ? TownySettings.getLangString("status_on_good") : TownySettings.getLangString("status_off_bad")) + Colors.Gray + " | " + 
+			        TownySettings.getLangString("status_world_explrevert") + (world.isUsingPlotManagementWildRevert() ? TownySettings.getLangString("status_on_good") : TownySettings.getLangString("status_off_bad")));
 			// Wilderness:
 			// Build, Destroy, Switch
 			// Ignored Blocks: 34, 45, 64
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
-			out.add("    " + Colors.Green + "Ignored Blocks:" + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+			out.add("    " + TownySettings.getLangString("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
 		}
 		
 		out = formatStatusScreens(out);
