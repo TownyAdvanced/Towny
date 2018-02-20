@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -1223,4 +1224,14 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	private List<Invite> receivedinvites = new ArrayList<Invite>();
 	private List<Invite> sentinvites = new ArrayList<Invite>();
+
+	public int getOutpostLimit() {
+		return TownySettings.getMaxOutposts(this);
+	}
+
+	public boolean isOverOutpostLimit() {
+		
+		return (getMaxOutpostSpawn() > getOutpostLimit());
+
+	}
 }
