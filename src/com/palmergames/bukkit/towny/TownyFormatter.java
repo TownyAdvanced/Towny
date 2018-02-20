@@ -505,15 +505,15 @@ public class TownyFormatter {
 		if (resident.hasTown()) {
 			try {
 				town = resident.getTown();
-				out.add(Colors.Green + "Owner of: " + Colors.LightGreen + resident.getTownBlocks().size() + " plots");
+				out.add(String.format(TownySettings.getLangString("owner_of_x_plots"),resident.getTownBlocks().size()));
 
 				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
-					out.add(Colors.Green + "Staff are exempt from paying town taxes.");
+					out.add(TownySettings.getLangString("status_res_taxexempt"));
 				} else {
 					if (town.isTaxPercentage()) {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + (resident.getHoldingBalance() * town.getTaxes() / 100));
+						out.add(String.format(TownySettings.getLangString("status_res_tax"), resident.getHoldingBalance() * town.getTaxes() / 100));
 					} else {
-						out.add(Colors.Green + "Town Tax: " + Colors.LightGreen + town.getTaxes());
+						out.add(String.format(TownySettings.getLangString("status_res_tax"), town.getTaxes()));
 
 						if ((resident.getTownBlocks().size() > 0)) {
 
@@ -521,9 +521,9 @@ public class TownyFormatter {
 								plotTax += townBlock.getType().getTax(townBlock.getTown());
 							}
 
-							out.add(Colors.Green + "Total Plot Taxes: " + Colors.LightGreen + plotTax);
+							out.add(TownySettings.getLangString("status_res_plottax") + plotTax);
 						}
-						out.add(Colors.Green + "Total Tax to pay: " + Colors.LightGreen + (town.getTaxes() + plotTax));
+						out.add(TownySettings.getLangString("status_res_totaltax") + (town.getTaxes() + plotTax));
 					}
 				}
 
