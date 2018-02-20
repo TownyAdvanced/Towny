@@ -701,4 +701,31 @@ msg_admin_set_plot_help_1: 'When in a town.'
 msg_admin_set_plot_help_2: 'When in the wilderness.'
 msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to claim %s/%s'
 msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over your limit %s/%s'
-outlaws: 'Outlaws'
+
+# Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
+online: '&a(Online)' 
+registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
+status_perm: '&2Perm: '                     # Used on /plot perm, /res
+status_permissions: '&2Permissions: '       # Used on /town
+status_on: '&4ON'
+status_off: '&aOFF'
+status_pvp: '&2PVP: '
+explosions: '  &2Explosions: '              # Used on /plot perm, /res
+explosions2: '&2Explosions: '               # Used on /town and /tw 
+firespread: '  &2Firespread: '
+mobspawns: '  &2Mob Spawns: '
+owner_of_x_plots: '&2Owner of &a%s plots'
+status_bank: '&2Bank: &a%s'
+status_town: '&2Town: &a'
+status_no_town: 'None'
+status_town_ranks: '&2Town Ranks: &a'
+status_nation_ranks: '&2Nation Ranks: &a' 
+jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
+status_friends: 'Friends'
+rank_list_title: ' &3Rank List'
+rank_list_mayor: '&2Mayor: &a%s'
+status_title_pvp: ' &4(PVP)'
+status_title_open: ' &b(Open)'
+status_town_board: '&2Board: &a%s'
+status_founded: '&2Founded: &7%s'
