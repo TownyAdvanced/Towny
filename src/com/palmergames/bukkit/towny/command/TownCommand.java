@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -2340,6 +2341,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town.newSentInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(newMember,invite);
+				Bukkit.getPluginManager().callEvent(new TownInvitePlayerEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
 			}

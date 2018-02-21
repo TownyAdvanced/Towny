@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
+import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -31,7 +33,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,7 +40,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
-
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -925,6 +925,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nation.newSentInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(town.getMayor(),invite);
+				Bukkit.getPluginManager().callEvent(new NationInviteTownEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_already_invited"), town.getName()));
 			}
@@ -1301,6 +1302,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nation.newSentAllyInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(receiver.getCapital().getMayor(),invite);
+				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), receiver.getName()));
 			}
