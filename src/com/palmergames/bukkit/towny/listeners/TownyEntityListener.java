@@ -114,7 +114,7 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * Cases where Event War is active
 		 */
-		} else {			
+		} else {
 			try {
 				
 				/*
