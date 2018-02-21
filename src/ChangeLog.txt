@@ -2890,3 +2890,6 @@ v0.92.0.10:
       - Requires the worldname to be supplied after 'tw'
       - Eg: 'tw world_nether toggle forcepvp'
       - /tw regen and /tw undo are not usable from the console because they require a player standing in a plot.
+    - New Feature: /town, /res and /nation can be run from the console!
+      - Commands are limited but generally /{command} list and /{command} {name} work.
+      - Previously the console would just show the help page for the /{command} no matter what sub command was used. 
