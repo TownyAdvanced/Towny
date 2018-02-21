@@ -441,13 +441,16 @@ public enum ConfigNodes {
 			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
 			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
 	),
+	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
+			"global_town_settings.homeblocks_prevent_forcepvp",
+			"false",
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
-
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
