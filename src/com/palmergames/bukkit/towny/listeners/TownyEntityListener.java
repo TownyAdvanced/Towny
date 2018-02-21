@@ -313,6 +313,20 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 				}
 			}
+			if (event.getDamager() instanceof Player) {
+				Player player = (Player) event.getDamager();
+				boolean bDestroy = false;
+				if (entity instanceof EnderCrystal) {
+					// Test if a player can break a grass block here.
+					bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 2, (byte) 0, TownyPermission.ActionType.DESTROY);
+					// If destroying is allowed then return before we cancel.
+					if (bDestroy)
+						return;
+					// Not able to destroy grass so we cancel event.
+					event.setCancelled(true);
+					
+				}
+			}
 		}
 	}
 
