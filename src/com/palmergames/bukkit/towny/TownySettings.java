@@ -2257,6 +2257,10 @@ public class TownySettings {
 	public static boolean getOutsidersPreventPVPToggle() { 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
+	
+	public static boolean isForcePvpNotAffectingHomeblocks() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
+	}
 
 	//public static String questionerAccept() {
 	//

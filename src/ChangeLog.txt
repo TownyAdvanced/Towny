@@ -2881,3 +2881,8 @@ v0.92.0.10:
       - Minimum number of plots an outpost must be from any other town's plots.
       - Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims 
         near to each other, but want to keep outposts away from towns. 
+    - 65+ new languages strings are now translateabl. 
+      - These strings are mainly found in the /plot perm, /res, /town, /nation and /townyworld status screens.
+    - New Config Option: global_town_settings.homeblocks_prevent_forcepvp
+      - default: false
+      - If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.
