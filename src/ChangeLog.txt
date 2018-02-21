@@ -2886,3 +2886,7 @@ v0.92.0.10:
     - New Config Option: global_town_settings.homeblocks_prevent_forcepvp
       - default: false
       - If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.
+    - New Feature: /townyworld commands can be run from console!
+      - Requires the worldname to be supplied after 'tw'
+      - Eg: 'tw world_nether toggle forcepvp'
+      - /tw regen and /tw undo are not usable from the console because they require a player standing in a plot.
