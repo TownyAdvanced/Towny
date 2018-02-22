@@ -33,7 +33,7 @@ import java.util.zip.GZIPOutputStream;
  *
  * Check out https://bStats.org/ to learn more about bStats!
  */
-public class Metrics {
+public class  Metrics {
 
     static {
         // You can use the property to disable the check in your test environment
@@ -65,7 +65,7 @@ public class Metrics {
     private final JavaPlugin plugin;
 
     // A list with all custom charts
-    private final List<CustomChart> charts = new ArrayList<>();
+    private final List<CustomChart> charts = new ArrayList();
 
     /**
      * Class constructor.
@@ -255,7 +255,11 @@ public class Metrics {
                 for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
                     try {
                         pluginData.add(provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
-                    } catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) { }
+                    } catch (NullPointerException npe) {                    	
+                	} catch (NoSuchMethodException nsme) {                		
+            		} catch (IllegalAccessException iae) {            			
+        			} catch (InvocationTargetException ite){
+        			}
                 }
             } catch (NoSuchFieldException ignored) { }
         }
