@@ -269,7 +269,8 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);			
 		
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {			
-			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER" || damager == "FIREWORK") {
+			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || 
+			    damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER" || damager == "FIREWORK") {
 											
 				try {
 					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
@@ -324,7 +325,6 @@ public class TownyEntityListener implements Listener {
 						return;
 					// Not able to destroy grass so we cancel event.
 					event.setCancelled(true);
-					
 				}
 			}
 		}
@@ -536,6 +536,12 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
+	/**
+	 * Handles crop trampling as well as pressure plates (switch use)
+	 * 
+	 * @param event
+	 * @throws NotRegisteredException
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
 
@@ -615,6 +621,11 @@ public class TownyEntityListener implements Listener {
 
 	}
 
+	/**
+	 * Handles Wither Explosions and Enderman Thieving block protections
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 
@@ -693,6 +704,12 @@ public class TownyEntityListener implements Listener {
 		return true;
 	}
 
+	/**
+	 * Handles explosion regeneration in War (inside towns,)
+	 * and from regular non-war causes (outside towns.)  
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 
@@ -936,6 +953,11 @@ public class TownyEntityListener implements Listener {
 
 	}
 
+	/**
+	 * Handles protection of item frames and other Hanging types.
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
 
@@ -1035,7 +1057,12 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	
+
+	/**
+	 * Placing of hanging objects like Item Frames.
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingPlace(HangingPlaceEvent event) {
 
@@ -1044,7 +1071,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 
 		Player player = event.getPlayer();
 		Entity hanging = event.getEntity();
@@ -1078,7 +1105,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
+		//TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
 
 }
