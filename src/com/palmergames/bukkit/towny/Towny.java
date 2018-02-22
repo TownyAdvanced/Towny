@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.palmergames.bukkit.bstats.Metrics;
 import com.palmergames.bukkit.metrics.McStats;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -120,12 +119,7 @@ public class Towny extends JavaPlugin {
 		System.out.println("====================      Towny      ========================");
 		
 		/*
-		 * Register Metrics
-		 */
-		Metrics metrics = new Metrics(this);
-		
-		/*
-		 * Register Metrics
+		 * Register MCStats Metrics
 		 */
 		try {
 		    McStats mcstats = new McStats(this);
