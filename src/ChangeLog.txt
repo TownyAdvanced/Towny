@@ -2896,3 +2896,4 @@ v0.92.0.10:
     - REQUIRED CONFIG CHANGE: add END_CRYSTAL to the protection.item_use_ids list.
       - Stops end crystals being placed in towns where they shouldn't be able to place items. 
     - Fix protection of End Crystals in town.
+    - Fix protection of Armour Stands and other entities from the explosions caused by Fireworks.
