@@ -2902,3 +2902,4 @@ v0.92.0.10:
       - NationRequestAllyNationEvent
       - TownInvitePlayerEvent
     - Added bStats metrics. 
+    - Towny now builds using Java 8, thanks for that gentle nudge github.
