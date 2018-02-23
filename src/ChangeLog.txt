@@ -2903,3 +2903,4 @@ v0.92.0.10:
       - TownInvitePlayerEvent
     - Added bStats metrics. 
     - Towny now builds using Java 8, thanks for that gentle nudge github.
+    - Italian.yml updated to 0.44 by Leomixer17.
