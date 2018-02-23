@@ -2901,4 +2901,4 @@ v0.92.0.10:
       - NationInviteTownEvent
       - NationRequestAllyNationEvent
       - TownInvitePlayerEvent
-    - Added bStats metrics. 
+    - Added bStats metrics.
