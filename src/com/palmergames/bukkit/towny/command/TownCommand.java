@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -117,10 +118,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			parseTownCommand(player, args);
 		} else
-			// Console
-			for (String line : output)
-				sender.sendMessage(Colors.strip(line));
+			try {
+				parseTownCommandForConsole(sender, args);
+			} catch (TownyException e) {
+			}
+
 		return true;
+	}
+
+	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
+
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+					
+				for (String line : output)
+					sender.sendMessage(line);
+				
+		} else if (split[0].equalsIgnoreCase("list")) {
+
+			listTowns(sender, split);
+
+		} else {
+			try {
+				final Town town = TownyUniverse.getDataSource().getTown(split[0]);
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					@Override
+				    public void run() {
+						TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town));
+					}
+				});
+			} catch (NotRegisteredException x) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+			}
+		}
+
 	}
 
 	@SuppressWarnings("static-access")
@@ -857,11 +887,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send a list of all towns in the universe to player Command: /town list
 	 *
-	 * @param player
+	 * @param sender
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void listTowns(Player player, String[] split) {
+	public void listTowns(CommandSender sender, String[] split) {
 
 		List<Town> townsToSort = TownyUniverse.getDataSource().getTowns();
 		int page = 1;
@@ -870,19 +900,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				page = Integer.parseInt(split[1]);
 				if (page < 0) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
 					return;
 				} else if (page == 0) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
 					return;
 				}
 			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
 				return;
 			}
 		}
 		if (page > total) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
 		}
 
@@ -908,7 +938,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				output += Colors.White + " (Open)";
 			townsformatted.add(output);
 		}
-		player.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
+		sender.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
 				Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)",
 				townsformatted, TownySettings.getListPageMsg(page, total)
 				)
@@ -2311,6 +2341,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town.newSentInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(newMember,invite);
+				Bukkit.getPluginManager().callEvent(new TownInvitePlayerEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), newMember.getName()));
 			}

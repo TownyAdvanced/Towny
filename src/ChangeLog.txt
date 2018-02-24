@@ -2886,3 +2886,21 @@ v0.92.0.10:
     - New Config Option: global_town_settings.homeblocks_prevent_forcepvp
       - default: false
       - If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.
+    - New Feature: /townyworld commands can be run from console!
+      - Requires the worldname to be supplied after 'tw'
+      - Eg: 'tw world_nether toggle forcepvp'
+      - /tw regen and /tw undo are not usable from the console because they require a player standing in a plot.
+    - New Feature: /town, /res and /nation can be run from the console!
+      - Commands are limited but generally /{command} list and /{command} {name} work.
+      - Previously the console would just show the help page for the /{command} no matter what sub command was used. 
+    - REQUIRED CONFIG CHANGE: add END_CRYSTAL to the protection.item_use_ids list.
+      - Stops end crystals being placed in towns where they shouldn't be able to place items. 
+    - Fix protection of End Crystals in town.
+    - Fix protection of Armour Stands and other entities from the explosions caused by Fireworks.
+    - Added API events, courtesy of Articdive
+      - NationInviteTownEvent
+      - NationRequestAllyNationEvent
+      - TownInvitePlayerEvent
+    - Added bStats metrics. 
+    - Towny now builds using Java 8, thanks for that gentle nudge github.
+    - Italian.yml updated to 0.44 by Leomixer17.
