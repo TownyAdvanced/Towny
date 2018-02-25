@@ -2,7 +2,7 @@ name: Towny
 version: 0.44
 language: italian
 author: Leomixer17
-website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+website: 'http://towny.palmergames.com/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
