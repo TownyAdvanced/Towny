@@ -186,7 +186,7 @@ public class TownyFormatter {
 		
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
-		out.addAll(getFormattedResidents(TownySettings.getLangString("friends"), friends));
+		out.addAll(getFormattedResidents(TownySettings.getLangString("status_friends"), friends));
 		
 		out = formatStatusScreens(out);
 		return out;

@@ -2,7 +2,7 @@ name: Towny
 version: 0.44
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
-website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+website: 'http://towny.palmergames.com/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -658,7 +658,7 @@ you_have_been_invited_to_join2: 'Du wurdest eingeladen, %s beizutreten'
 you_have_been_requested_to_ally2: 'Du wurdest angefragt, dich mit %s zu verbünden'
 
 # Added in 0.43 
-town_help_11: 'Erstellt eine neue Stadt. Verwende _ statt Leerzeichen.'
+town_help_11: 'Erstellt eine neue Stadt. Verwende ''_'' statt Leerzeichen.'
 changed_plot_town: '&bDu hast das Grundstück erfolgreich der Stadt %s zugewiesen!'
 not_standing_in_plot: 'Du stehst nicht innerhalb eines gültigen Grundstücks!'
 msg_err_homeblock_has_not_been_set: 'Stadtplatz wurde nicht gesetzt, benutze zuerst ''/town set homeblock''.'
@@ -738,7 +738,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Offen)'
 status_town_board: '&2Schwarzes Brett: &a%s'
 status_founded: '&2Gegründet: &7%s'
-status_town_size_part_1: '&2Stadt größe: &a%s / %s)'
+status_town_size_part_1: '&2Stadt größe: &a%s / %s'
 status_town_size_part_2: ' &b[Gekauft: %s/%s]'
 status_town_size_part_3: ' &b[Bonus: %s]'
 status_town_size_part_4: ' &b[NationsBonus: %s]'

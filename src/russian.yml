@@ -2,7 +2,7 @@ name: Towny
 version: 0.44
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
-website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+website: 'http://towny.palmergames.com/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -658,7 +658,7 @@ you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
 # Added in 0.43 
-town_help_11: 'Create a new town. Use _''s and not spaces.'
+town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
 msg_err_homeblock_has_not_been_set: 'Home Block has not been set, use ''/town set homeblock'' first.'
@@ -684,7 +684,7 @@ tc_err_you_cant_mute_chat_mod: 'You can''t mute a chat moderator.'
 tc_player_already_muted_in_channel: '[TownyChat] Player is already muted in &f%s'
 tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2is now muted in &f%s'
 tc_player_is_not_muted_in_channel: '[TownyChat] Player is not muted in &f%s'
-tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2is now muted in &f%s'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2is now unmuted in &f%s'
 tc_err_you_are_currently_muted_in_channel: 'You are currently muted in &f%s&c!'
 tc_err_you_cannot_leave_channel: 'You cannot leave &f%s'
 tc_you_already_left_channel: '[TownyChat] You already left &f%s'
@@ -737,7 +737,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Open)'
 status_town_board: '&2Board: &a%s'
 status_founded: '&2Founded: &7%s'
-status_town_size_part_1: '&2Town Size: &a%s / %s)'
+status_town_size_part_1: '&2Town Size: &a%s / %s'
 status_town_size_part_2: ' &b[Bought: %s/%s]'
 status_town_size_part_3: ' &b[Bonus: %s]'
 status_town_size_part_4: ' &b[NationBonus: %s]'

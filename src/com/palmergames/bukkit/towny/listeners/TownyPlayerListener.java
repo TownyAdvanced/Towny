@@ -409,8 +409,8 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
-
 	}
+	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
@@ -443,52 +443,52 @@ public class TownyPlayerListener implements Listener {
 			 */
 			switch (event.getRightClicked().getType()) {
 			
-			case ITEM_FRAME:
-				
-				TownyMessaging.sendDebugMsg("ItemFrame Right Clicked");
-				blockID = 389;
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
-				break;
-
-			case PAINTING:
-
-				blockID = 321;
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
-				break;
-
-			case MINECART:
-
-				if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
-
-					blockID = 342;
-
-				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
-
-					blockID = 328;
-
-				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-
-					blockID = 343;
-
-				} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
-
-					blockID = 408;
-
-				} else {
-
+				case ITEM_FRAME:
+					
+					TownyMessaging.sendDebugMsg("ItemFrame Right Clicked");
+					blockID = 389;
+					// Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+					break;
+	
+				case PAINTING:
+	
 					blockID = 321;
-				}
-
-				if ((blockID != 0) && (!TownySettings.isSwitchMaterial(BukkitTools.getMaterial(blockID).name())))
-					return;
-
-				// Get permissions (updates if none exist)
-				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.SWITCH);
-				break;
-			default:
-				break;
+					// Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+					break;
+	
+				case MINECART:
+	
+					if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
+	
+						blockID = 342;
+	
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
+	
+						blockID = 328;
+	
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
+	
+						blockID = 343;
+	
+					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
+	
+						blockID = 408;
+	
+					} else {
+	
+						blockID = 321;
+					}
+	
+					if ((blockID != 0) && (!TownySettings.isSwitchMaterial(BukkitTools.getMaterial(blockID).name())))
+						return;
+	
+					// Get permissions (updates if none exist)
+					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.SWITCH);
+					break;
+				default:
+					break;
 
 			}
 
@@ -538,7 +538,6 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -977,8 +976,7 @@ public class TownyPlayerListener implements Listener {
 			}
 
 		} catch (NotRegisteredException e) {
-			// If not registered, it is most likely an NPC			
-		} catch (TownyException e) {
+			// If not registered, it is most likely an NPC
 		}
 
 	}
