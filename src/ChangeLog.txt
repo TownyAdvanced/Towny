@@ -2906,3 +2906,4 @@ v0.92.0.10:
     - Italian.yml updated to 0.44 by Leomixer17.
 v0.92.0.11:
     - Fix players that are jailed in a town which has just deleted itself. 
+    - French.yml updated to 0.44 by TheCalypso
