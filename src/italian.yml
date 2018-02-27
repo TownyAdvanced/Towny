@@ -1,8 +1,8 @@
 name: Towny
-version: 0.42
+version: 0.44
 language: italian
 author: Leomixer17
-website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+website: 'http://towny.palmergames.com/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -125,7 +125,7 @@ ta_panel_7: 'Conti Bancari: '
 ta_panel_8: 'Server'
 ta_panel_9: 'Memoria: '
 ta_panel_10: 'Processi: '
-ta_panel_11: 'Tempo: '
+ta_panel_11: 'Orario: '
 
 admin_panel_1: 'Pannello admin'
 admin_panel_2: 'ricarica il Towny'
@@ -656,3 +656,120 @@ nation_zone_this_area_under_protection_of: 'Questa parte di %s è sotto la prote
 # Added in 0.42
 you_have_been_invited_to_join2: 'Sei stato invitato ad entrare in %s'
 you_have_been_requested_to_ally2: 'Hai ricevuto una richiesta di alleanza da %s'
+
+# Added in 0.43 
+town_help_11: 'Crea una nuova città. Usa ''_'' al posto degli spazi.'
+changed_plot_town: '&bHai cambiato con successo la città del lotto a %s!'
+not_standing_in_plot: 'Non stai all''interno di un lotto valido!'
+msg_err_homeblock_has_not_been_set: 'Il Lotto Base non è stato impostato, usa ''/town set homeblock'' prima.'
+msg_err_spawn_not_within_homeblock: 'Lo spawn non è all''interno del lotto base, usa ''/town set homeblock'' prima.'
+
+# Added in 0.44
+# TownyChat language strings
+tc_err_invalid_command: 'Errore: Comando non valido!'
+tc_settings_reloaded: '[TownyChat] Impostazioni ricaricate!'
+tc_err_unrecognized_command_format: 'Errore: formato comando non riconosciuto!'
+tc_channel_list_status: '(Stato)'
+tc_channel_list_in: 'Attivo'
+tc_channel_list_out: 'Inattivo'
+tc_err_you_dont_have_perm_mute_list: 'Non hai i permessi di vedere la lista di mute'
+tc_err_you_dont_have_unmute_perm: 'Non hai i permessi per smutare'
+tc_err_no_channel_called_channel: 'Non c'è nessun canale chiamato &f%s'
+tc_err_no_muted_players_in_channel_players: 'Non ci sono giocatori mutati in &f%s'
+tc_players_muted_in_channel: '[TownyChat] &f%n &2giocatori mutati in &f%s&2: &f%s'
+tc_err_no_online_players_with_name: 'Non ci sono giocatori online con il nome &f%s'
+tc_err_you_dont_have_mute_perms: 'Non hai i permessi per mutare'
+tc_err_you_cant_mute_admin: 'Non puoi mutare un amministratore del Towny.'
+tc_err_you_cant_mute_chat_mod: 'Non puoi mutare un moderatore della chat.'
+tc_player_already_muted_in_channel: '[TownyChat] Il giocatore è già mutato nel canale &f%s'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2è ora mutato nel canale &f%s'
+tc_player_is_not_muted_in_channel: '[TownyChat] Il giocatore non è mutato nel canale &f%s'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2è ora smutato nel canale &f%s'
+tc_err_you_are_currently_muted_in_channel: 'Sei mutato nel canale &f%s&c!'
+tc_err_you_cannot_leave_channel: 'Non puoi uscire dal canale &f%s'
+tc_you_already_left_channel: '[TownyChat] Sei già uscito dal canale &f%s'
+tc_you_left_channel: '[TownyChat] Sei uscito dal canale &f%s'
+tc_you_are_now_talking_in_channel: '[TownyChat] Stai ora parlando nel canale &f%s'
+tc_err_you_cannot_join_channel: 'Non puoi entrare nel canale &f%s'
+tc_you_are_already_in_channel: '[TownyChat] Sei già nel canale &f%s'
+tc_you_joined_channel: '[TownyChat] Sei entrato nel canale &f%s'
+tc_err_you_are_already_talking_in_default_channel_help: 'Stai già parlando nel canale predefinito. Per passare a un altro canale usa il comando di quel canale.'
+tc_err_unable_to_talk_essentials_mute: 'Non puoi parlare...Sei mutato!'
+tc_err_unable_to_talk_you_are_spamming: 'Non puoi parlare...Stai spammando!'
+
+msg_admin_set_plot_help_1: 'In una città.'
+msg_admin_set_plot_help_2: 'Nella natura.'
+msg_err_not_enough_outposts_free_to_claim: 'Non ci sono abbastanza avamposti disponibili per claimare %s/%s'
+msg_err_over_outposts_limit: 'Non puoi teletrasportarti nel tuo avamposto, sei sopra il tuo limite %s/%s'
+
+
+# Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+# These are translated because we may (or may not) be handling longer words in a smart way.
+# If you are a translator feel free to skip over this section, as it may or may not appear very nice
+# in game. It would be best to see what the changes look like in game before you PR it to github.
+outlaws: '&2Fuorilegge: &f'                    # Used on /t outlawlist
+online: '&a(Online)' 
+registered_last_online: '&2Registrato il: &a%s &8| &2Ultimo Accesso: &a%s'
+status_perm: '&2Perm: '                     # Used on /plot perm, /res
+status_permissions: '&2Permessi: '       # Used on /town
+status_on: '&4ON'
+status_off: '&aOFF'
+status_on_good: '&aON'
+status_off_bad: '&4OFF'
+status_forced: '&cForzato'
+status_adjustable: '&aRegolabile'
+status_pvp: '&2PVP: '
+explosions: '  &2Esplosioni: '              # Used on /plot perm, /res
+explosions2: '&2Esplosioni: '               # Used on /town and /tw 
+firespread: '  &2Propagazione Fuoco: '
+mobspawns: '  &2Spawn Mob: '
+owner_of_x_plots: '&2Proprietario di &a%s lotti'
+status_bank: '&2Banca: &a%s'
+status_town: '&2Città: &a'
+status_no_town: 'Nessuna'
+status_town_ranks: '&2Ranghi Città: &a'
+status_nation_ranks: '&2Ranghi Nazione: &a' 
+jailed_in_town: '&2Incarcerato: &aSi &2nella Città: &a%s'
+status_friends: 'Amici'
+rank_list_title: ' &3Lista Ranghi'
+rank_list_mayor: '&2Sindaco: &a%s'
+status_title_pvp: ' &4(PVP)'
+status_title_open: ' &b(Aperta)'
+status_town_board: '&2Bacheca: &a%s'
+status_founded: '&2Fondata il: &7%s'
+status_town_size_part_1: '&2Dimensione Città: &a%s / %s'
+status_town_size_part_2: ' &b[Comprati: %s/%s]'
+status_town_size_part_3: ' &b[Bonus: %s]'
+status_town_size_part_4: ' &b[BonusNazione: %s]'
+status_town_size_part_5: ' &7[Base: '
+status_town_outposts: '&2Avamposti: &a%s / %s'
+status_town_outposts2: ' &b[BonusNazione: %s]'
+status_town_outposts3: '&2Avamposti: &a0 / %s'
+status_town_outposts4: '&2Avamposti: &a%s'
+status_bank_town2: ' &7| &2Manutenzione giornaliera: &4%s'
+status_bank_town3: ' &7| &2Tassa: &4%s'
+status_town_nation: '&2Nazione: &a%s'
+status_town_reslist_overlength: 'e altri...'
+status_town_reslist: '&2Residenti &a[%s]&2: &f'
+status_nation_peaceful: '&7Pacifica'
+status_nation_king: '&2Re: &a%s'
+status_nation_tax: '  &2TasseNazione: &4%s'
+status_nation_assistants: '&2Assistenti: &f'
+status_nation_towns: '&2Città &a[%s]&2: &f'
+status_nation_allies: '&2Alleati &a[%s]&2: &f'
+status_nation_enemies: '&2Nemici &a[%s]&2: &f'
+status_world_claimable: ' &aClaimabile'
+status_world_noclaims: ' &cNessunClaim'
+status_world_forcepvp: '&2PVPForzato: '
+status_world_fire: '&2Fuoco: '
+status_world_forcefire: '&2Fuoco Forzato: '
+status_world_forceexplosion: '&2Esplosioni Forzate: '
+status_world_worldmobs: '&2Mob Mondo: '
+status_world_forcetownmobs: '&2MobCittà Forzati: '
+status_world_unclaimrevert: '&2Ripristino Unclaim: '
+status_world_explrevert: '&2Ripristino Esplosioni: '
+status_world_ignoredblocks: '&2Blocchi Ignorati:'
+status_res_taxexempt: '&2Lo staff è esonerato dal pagare le tasse della città.'
+status_res_tax: '&2Tassa Città: &a'
+status_res_plottax: '&2Totale Tasse Lotti: &a'
+status_res_totaltax: '&2Totale Tasse da pagare: &a'

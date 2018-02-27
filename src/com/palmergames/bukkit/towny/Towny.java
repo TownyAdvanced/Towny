@@ -1,7 +1,8 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.palmergames.bukkit.metrics.Metrics;
+import com.palmergames.bukkit.metrics.MCStats;
+import com.palmergames.bukkit.metrics.BStats;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
@@ -52,6 +53,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -119,14 +121,22 @@ public class Towny extends JavaPlugin {
 		System.out.println("====================      Towny      ========================");
 		
 		/*
-		 * Register Metrics
+		 * Register bStats Metrics
+		 *  
+		 */
+		@SuppressWarnings("unused")
+		BStats bStatsMetrics = new BStats(this);
+		
+		/*
+		 * Register MCStats Metrics
 		 */
 		try {
-		    Metrics metrics = new Metrics(this);
-		    metrics.start();
+		    MCStats mcStatsMetrics = new MCStats(this);
+		    mcStatsMetrics.start();
 		} catch (IOException e) {
-			System.err.println("[Towny] Error setting up metrics");
+			System.err.println("[Towny] Error setting up MCStats metrics");
 		}
+
 
 		version = this.getDescription().getVersion();
 

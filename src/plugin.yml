@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.92.0.9
+version: 0.92.0.11
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >
@@ -461,7 +461,11 @@ permissions:
         description: User can access the admin set commands.
         default: false
         children:
+            towny.command.townyadmin.set.capital: true
             towny.command.townyadmin.set.mayor: true
+            towny.command.townyadmin.set.plot: true
+            towny.command.townyadmin.set.surname: true
+            towny.command.townyadmin.set.title: true
 
     towny.command.townyadmin.town.*:
         description: User can access the admin town commands.

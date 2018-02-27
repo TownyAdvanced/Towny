@@ -121,6 +121,13 @@ public enum ConfigNodes {
 			"",
 			"# Minimum number of plots any towns home plot must be from the next town.",
 			"# This will prevent someone founding a town right on your doorstep"),
+    TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
+    		"town.min_distance_for_outpost_from_plot",
+    		"5",
+    		"",
+    		"# Minimum number of plots an outpost must be from any other town's plots.",
+    		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
+    		"# near to each other, but want to keep outposts away from towns."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",
@@ -316,6 +323,24 @@ public enum ConfigNodes {
 			"global_town_settings.allow_outposts",
 			"true",
 			"# Allow towns to claim outposts (a townblock not connected to town)."),
+	GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS(
+			"global_town_settings.limit_outposts_using_town_and_nation_levels",
+			"false",
+			"# When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and",
+			"# the nationBonusOutpostLimit value in the Nation Levels. In this way nations can be made to be",
+			"# the only way of receiving outposts, or as an incentive to receive more outposts. Towns which are",
+			"# larger can have more outposts.",
+			"# When activated, this setting will not cause towns who already have higher than their limit",
+			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
+			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
+			"# be over their limit if they leave the nation."),
+	GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT(
+			"global_town_settings.over_outpost_limits_stops_teleports",
+			"false",
+			"# When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost",
+			"# limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit,",
+			"# until they have dropped below their limit.",
+			"# eg: If their limit is 3 then they cannot use /t outpost 4"),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
 			"global_town_settings.allow_town_spawn",
 			"true",
@@ -416,13 +441,16 @@ public enum ConfigNodes {
 			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
 			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
 	),
+	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
+			"global_town_settings.homeblocks_prevent_forcepvp",
+			"false",
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
-
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
@@ -645,7 +673,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE,END_CRYSTAL",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",

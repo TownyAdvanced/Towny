@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
+import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -101,10 +103,41 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else
-			// Console
-			for (String line : nation_help)
-				sender.sendMessage(Colors.strip(line));
+			try {
+				parseNationCommandForConsole(sender, args);
+			} catch (TownyException e) {
+			}
+		
 		return true;
+	}
+
+	private void parseNationCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
+
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			
+			for (String line : nation_help)
+				sender.sendMessage(line);
+			
+		} else if (split[0].equalsIgnoreCase("list")) {
+	
+			listNations(sender, split);
+	
+		} else {
+			try {
+				final Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					@Override
+				    public void run() {
+						TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(nation));
+					}
+				});
+
+			} catch (NotRegisteredException x) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+			}
+		}
+
+		
 	}
 
 	public void parseNationCommand(final Player player, String[] split) {
@@ -558,11 +591,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Send a list of all nations in the universe to player Command: /nation
 	 * list
 	 * 
-	 * @param player - Player to send the list to.
+	 * @param sender - Player to send the list to.
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void listNations(Player player, String[] split) {
+	public void listNations(CommandSender sender, String[] split) {
 		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();
 		
 		int page = 1;
@@ -571,19 +604,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        try {
 	            page = Integer.parseInt(split[1]);
 	            if (page < 0) {
-	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative"));
+	                TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
 	                return;
 	            } else if (page == 0) {
-	                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	                TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
 	                return;
 	            }
 	        } catch (NumberFormatException e) {
-	            TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+	            TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
 	            return;
 	        }
 	    }
 	    if (page > total) {
-	        TownyMessaging.sendErrorMsg(player, TownySettings.getListNotEnoughPagesMsg(total));
+	        TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
 	        return;
 	    }
 
@@ -604,7 +637,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
 			nationsordered.add(output);
 		}
-		player.sendMessage(
+		sender.sendMessage(
 				ChatTools.formatList(
 						TownySettings.getLangString("nation_plu"),
 						Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)",
@@ -892,6 +925,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nation.newSentInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(town.getMayor(),invite);
+				Bukkit.getPluginManager().callEvent(new NationInviteTownEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_already_invited"), town.getName()));
 			}
@@ -1268,6 +1302,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nation.newSentAllyInvite(invite);
 				InviteHandler.addInviteToList(invite);
 				TownyMessaging.sendRequestMessage(receiver.getCapital().getMayor(),invite);
+				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_player_already_invited"), receiver.getName()));
 			}

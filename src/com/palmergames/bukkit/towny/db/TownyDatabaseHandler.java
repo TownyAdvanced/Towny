@@ -530,6 +530,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			removeResident(resident);
 			saveResident(resident);
 		}
+		
+		// Look for residents inside of this town's jail and free them
+		// TODO: Perhaps in the future a new object JailedResidents can be used to make this searching much quicker.
+		for (Resident jailedRes : getResidents()) {
+			if (jailedRes.hasJailTown(town.getName())) {
+                jailedRes.setJailed(BukkitTools.getPlayer(jailedRes.getName()), 0, town);
+                saveResident(jailedRes);
+            }
+		}
 
 		if (TownyEconomyHandler.isActive())
 			try {

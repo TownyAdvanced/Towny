@@ -23,6 +23,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -81,10 +82,40 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else
-			// Console
-			for (String line : output)
-				sender.sendMessage(Colors.strip(line));
+			try {
+				parseResidentCommandForConsole(sender, args);
+			} catch (TownyException e) {
+			}
+
 		return true;
+	}
+
+	private void parseResidentCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
+
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			
+			for (String line : output)
+				sender.sendMessage(line);
+			
+		} else if (split[0].equalsIgnoreCase("list")) {
+
+			listResidents(sender);
+
+		} else {
+			try {
+				final Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+					@Override
+				    public void run() {
+						Player player = null;
+						TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resident, player));
+					}
+				});
+			} catch (NotRegisteredException x) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+			}
+		}
+		
 	}
 
 	public void parseResidentCommand(final Player player, String[] split) {
@@ -451,6 +482,24 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 		for (String line : ChatTools.list(formatedList))
 			player.sendMessage(line);
+	}
+	
+	public void listResidents(CommandSender sender) {
+
+		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
+		String colour;
+		ArrayList<String> formatedList = new ArrayList<String>();
+		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
+			if (resident.isKing())
+				colour = Colors.Gold;
+			else if (resident.isMayor())
+				colour = Colors.LightBlue;
+			else
+				colour = Colors.White;
+			formatedList.add(colour + resident.getName() + Colors.White);
+		}
+		for (String line : ChatTools.list(formatedList))
+			sender.sendMessage(line);
 	}
 
 	/**
