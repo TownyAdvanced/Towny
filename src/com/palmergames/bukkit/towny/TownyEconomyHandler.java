@@ -6,6 +6,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
+import net.tnemc.core.economy.ExtendedEconomyAPI;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -152,7 +153,9 @@ public class TownyEconomyHandler {
 			return iConomy.getAccount(accountName);
 
 		case RESERVE:
-			return reserveEconomy.getAccount(accountName);
+			if(reserveEconomy instanceof ExtendedEconomyAPI)
+				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
+			break;
 		
 		default:
 			break;
@@ -245,7 +248,7 @@ public class TownyEconomyHandler {
 			if (!reserveEconomy.hasAccount(accountName))
 				reserveEconomy.createAccount(accountName);
 
-			return reserveEconomy.getAccount(accountName).getHoldings(world.getName()).doubleValue();
+			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -298,7 +301,7 @@ public class TownyEconomyHandler {
 		case RESERVE:
 			if (!reserveEconomy.hasAccount(accountName))
 				reserveEconomy.createAccount(accountName);
-			return reserveEconomy.getAccount(accountName).removeHoldings(new BigDecimal(amount), world.getName());
+			return reserveEconomy.removeHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -338,7 +341,7 @@ public class TownyEconomyHandler {
 			if (!reserveEconomy.hasAccount(accountName))
 				reserveEconomy.createAccount(accountName);
 
-			return reserveEconomy.getAccount(accountName).addHoldings(new BigDecimal(amount), world.getName());
+			return reserveEconomy.addHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -369,7 +372,7 @@ public class TownyEconomyHandler {
 		case RESERVE:
 			if (!reserveEconomy.hasAccount(accountName))
 				reserveEconomy.createAccount(accountName);
-			return reserveEconomy.getAccount(accountName).setHoldings(new BigDecimal(amount), world.getName());
+			return reserveEconomy.setHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
