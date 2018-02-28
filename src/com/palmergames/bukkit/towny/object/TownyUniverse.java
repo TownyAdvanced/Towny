@@ -59,10 +59,10 @@ public class TownyUniverse extends TownyObject {
 	
 	private static Towny plugin;
 
-	protected Hashtable<String, Resident> residents = new Hashtable<String, Resident>();
-	protected Hashtable<String, Town> towns = new Hashtable<String, Town>();
-	protected Hashtable<String, Nation> nations = new Hashtable<String, Nation>();
-	protected Hashtable<String, TownyWorld> worlds = new Hashtable<String, TownyWorld>();
+	protected Hashtable<String, Resident> residents = new Hashtable<>();
+	protected Hashtable<String, Town> towns = new Hashtable<>();
+	protected Hashtable<String, Nation> nations = new Hashtable<>();
+	protected Hashtable<String, TownyWorld> worlds = new Hashtable<>();
 
 	private static TownyDataSource dataSource;
 	private static TownyPermissionSource permissionSource;
