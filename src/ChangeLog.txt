@@ -2909,3 +2909,7 @@ v0.92.0.11:
     - French.yml updated to 0.44 by TheCalypso.
     - German.yml updated to 0.44 by Wolf2323.
     - Reserve support updated by CreatorFromHell.
+    - Database code overhaul by ArticDive.
+      - Easier new additions can be made to the database.
+      - May have better performance/loading.
+       
