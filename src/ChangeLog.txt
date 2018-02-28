@@ -2897,7 +2897,7 @@ v0.92.0.10:
       - Stops end crystals being placed in towns where they shouldn't be able to place items. 
     - Fix protection of End Crystals in town.
     - Fix protection of Armour Stands and other entities from the explosions caused by Fireworks.
-    - Added API events, courtesy of Articdive
+    - Added API events, courtesy of Articdive:
       - NationInviteTownEvent
       - NationRequestAllyNationEvent
       - TownInvitePlayerEvent
@@ -2906,4 +2906,6 @@ v0.92.0.10:
     - Italian.yml updated to 0.44 by Leomixer17.
 v0.92.0.11:
     - Fix players that are jailed in a town which has just deleted itself. 
-    - French.yml updated to 0.44 by TheCalypso
+    - French.yml updated to 0.44 by TheCalypso.
+    - German.yml updated to 0.44 by Wolf2323.
+    - Reserve support updated by CreatorFromHell.
