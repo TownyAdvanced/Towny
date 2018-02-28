@@ -108,7 +108,7 @@ public class Towny extends JavaPlugin {
 
 	private boolean error = false;
 	
-	public static Towny plugin;
+	private static Towny plugin;
 	
 	public Towny() {
 		
@@ -725,7 +725,13 @@ public class Towny extends JavaPlugin {
 			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 	}
 
-	
+	/**
+	 * @return the Towny instance
+	 */
+	public static Towny getPlugin() {
+		return plugin;
+	}
+
 	/**
 	 * @return the playerListener
 	 */
