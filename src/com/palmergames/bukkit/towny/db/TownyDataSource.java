@@ -224,9 +224,9 @@ public abstract class TownyDataSource {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		List<Resident> toRemove = new ArrayList<Resident>();
+		List<Resident> toRemove = new ArrayList<>();
 
-		for (Resident resident : new ArrayList<Resident>(getResidents()))
+		for (Resident resident : new ArrayList<>(getResidents()))
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				toRemove.add(resident);

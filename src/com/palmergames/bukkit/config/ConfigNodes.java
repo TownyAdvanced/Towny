@@ -32,7 +32,7 @@ public enum ConfigNodes {
 			"  #  Possible permission nodes",
 			"  #",
 			"  #    for a full list of permission nodes visit: ",
-			"  #    http://palmergames.com/towny/towny-permission-nodes/ "),			
+			"  #    http://palmergames.com/towny/towny-permission-nodes/ "),
 	LEVELS(
 			"levels",
 			"",

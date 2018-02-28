@@ -293,7 +293,7 @@ public class Towny extends JavaPlugin {
 
 	private void checkPlugins() {
 
-		List<String> using = new ArrayList<String>();
+		List<String> using = new ArrayList<>();
 		Plugin test;
 
 		if (TownySettings.isUsingPermissions()) {
@@ -831,7 +831,7 @@ public class Towny extends JavaPlugin {
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	public void registerSpecialCommands() {
-		List<Command> commands = new ArrayList<Command>();
+		List<Command> commands = new ArrayList<>();
 		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
