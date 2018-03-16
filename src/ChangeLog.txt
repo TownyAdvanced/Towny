@@ -2912,4 +2912,5 @@ v0.92.0.11:
     - Database code overhaul by ArticDive.
       - Easier new additions can be made to the database.
       - May have better performance/loading.
-       
+    - Added confirmation message to /ta rename.
+    - Stop Towny's name formatting altering player names. Where we used to replace the "_" with a " ", we are no longer doing this for players.
