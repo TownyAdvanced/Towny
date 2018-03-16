@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -35,7 +36,7 @@ public class AreaSelectionUtil {
 				} else if (args[0].equalsIgnoreCase("circle")) {
 					out = selectWorldCoordAreaCircle(owner, pos, StringMgmt.remFirstArg(args));
 				} else {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), StringMgmt.join(args, " ")));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_invalid_property"), StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) {
 				out = selectWorldCoordAreaRect(owner, pos, args);
@@ -60,7 +61,7 @@ public class AreaSelectionUtil {
 					// Treat as rect to serve for backwards capability.
 					out = selectWorldCoordAreaRect(owner, pos, args);
 				} catch (NumberFormatException e) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), args[0]));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_invalid_property"), args[0]));
 				}
 			}
 		}
@@ -98,7 +99,7 @@ public class AreaSelectionUtil {
 					}
 				}
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
 				}
 					
 				if (r > 1000)
@@ -144,7 +145,7 @@ public class AreaSelectionUtil {
 				}
 				
 				if (r > TownySettings.getMaxClaimRadiusValue() && TownySettings.getMaxClaimRadiusValue() > 0) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_invalid_radius_number"),TownySettings.getMaxClaimRadiusValue()));
 				}
 				
 				if (r > 1000)

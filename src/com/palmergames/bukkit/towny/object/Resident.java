@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
@@ -90,7 +91,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				Location loc = this.getTown().getSpawn();
 				
 				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				player.sendMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 				TownyUniverse.jailTeleport(player, loc);
 
 				this.removeJailSpawn();
@@ -106,7 +107,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				Location loc = town.getJailSpawn(index);
 
 				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+				player.sendMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 				TownyUniverse.jailTeleport(player, loc);
 
 				this.setJailed(true);
@@ -654,7 +655,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			receivedinvites.add(invite);
 
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
+			throw new TooManyInvitesException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
 		}
 	}
 

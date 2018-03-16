@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.invites;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -43,7 +44,7 @@ public class InviteHandler {
 				Resident resident = (Resident) invite.getReceiver();
 				Town town = (Town) invite.getSender();
 				TownCommand.townAddResident(town, resident);
-				TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+				TownyMessaging.sendTownMessage(town, ChatTools.color(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_join_town"), resident.getName())));
 				getTowntoresidentinvites().remove(town, resident);
 				resident.deleteReceivedInvite(invite);
 				town.deleteSentInvite(invite);
@@ -71,8 +72,8 @@ public class InviteHandler {
 				Nation sendernation = (Nation) invite.getSender();
 				receivernation.addAlly(sendernation);
 				sendernation.addAlly(receivernation);
-				TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
-				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
+				TownyMessaging.sendNationMessage(receivernation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
+				TownyMessaging.sendNationMessage(sendernation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
 				getNationtonationinvites().remove(sendernation, receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentAllyInvite(invite);
@@ -96,10 +97,10 @@ public class InviteHandler {
 				resident.deleteReceivedInvite(invite);
 				town.deleteSentInvite(invite);
 				if (!fromSender) {
-					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
+					TownyMessaging.sendTownMessage(town, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
 					TownyMessaging.sendMessage(invite.getReceiver(), TownySettings.getLangString("successful_deny"));
 				} else {
-					TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
+					TownyMessaging.sendMessage(resident, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("town_revoke_invite"), town.getName()));
 				}
 				return;
 			}
@@ -112,9 +113,9 @@ public class InviteHandler {
 				town.deleteReceivedInvite(invite);
 				nation.deleteSentInvite(invite);
 				if (!fromSender) {
-					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
+					TownyMessaging.sendNationMessage(nation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_deny_invite"), town.getName()));
 				} else {
-					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
+					TownyMessaging.sendTownMessage(town, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
 				}
 				return;
 			}
@@ -128,9 +129,9 @@ public class InviteHandler {
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentAllyInvite(invite);
 				if (!fromSender) {
-					TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+					TownyMessaging.sendNationMessage(sendernation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
 				} else {
-					TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
+					TownyMessaging.sendNationMessage(receivernation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
 				}
 
 				return;

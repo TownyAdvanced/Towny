@@ -112,7 +112,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					}
 				});
 			} catch (NotRegisteredException x) {
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+				throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
 		}
 		
@@ -240,7 +240,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						}
 					});
 				} catch (NotRegisteredException x) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 				}
 
 			}
@@ -302,14 +302,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					if (inTown == null && disallowedZones.contains("unclaimed"))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "the Wilderness"));
+						throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "the Wilderness"));
 					if (inTown != null && resident.hasNation() && TownyUniverse.getDataSource().getTown(inTown).hasNation()) {
 						Nation inNation = TownyUniverse.getDataSource().getTown(inTown).getNation();
 						Nation playerNation = resident.getTown().getNation();
 						if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
-							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Enemy areas"));
+							throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Enemy areas"));
 						if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation) && disallowedZones.contains("neutral"))
-							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Neutral towns"));
+							throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Neutral towns"));
 					}
 				}
 			}
@@ -349,7 +349,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			// Show message if we are using iConomy and are charging for spawn
 			// travel.
 			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Resident Spawn (%s)", townSpawnPermission))) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
+				TownyMessaging.sendMsg(player, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
 																																									// TownyEconomyObject.getEconomyCurrency()));
 			}
 
@@ -366,7 +366,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (!UsingESS) {
 				if (TownyTimerHandler.isTeleportWarmupRunning()) {
 					// Use teleport warmup
-					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					player.sendMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 					plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);
 				} else {
 					// Don't use teleport warmup
@@ -401,7 +401,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} catch (NotRegisteredException e) {
 			// unknown resident
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
+			throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_not_registered"), player.getName()));
 		}
 
 		if (newSplit.length == 0) {
@@ -543,7 +543,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				setMode(player, newSplit);
 			} else {
 
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "town"));
+				TownyMessaging.sendErrorMsg(player, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_invalid_property"), "town"));
 				return;
 
 			}
@@ -566,7 +566,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			// null ? "flag" :
 			// TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
 			// player.sendMessage(ChatTools.formatCommand("Mode", "warflag", "",
-			// String.format(TownySettings.getLangString("mode_6"),
+			// TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("mode_6"),
 			// warFlagMaterial)));
 			player.sendMessage(ChatTools.formatCommand("Eg", "/resident set mode", "map townclaim town nation general", ""));
 
@@ -663,7 +663,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				if (p != null) {
 
-					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_add"), player.getName()));
+					TownyMessaging.sendMsg(p, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_friend_add"), player.getName()));
 
 				}
 
@@ -706,7 +706,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				msg += member.getName() + ", ";
 				p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
-					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
+					TownyMessaging.sendMsg(p, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_friend_remove"), player.getName()));
 			}
 			msg = msg.substring(0, msg.length() - 2);
 			msg += TownySettings.getLangString("msg_from_list");

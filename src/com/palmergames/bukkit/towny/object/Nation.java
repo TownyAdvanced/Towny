@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
@@ -442,7 +443,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getHoldingBalance() > bankcap) {
-					TownyMessaging.sendNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendNationMessage(this, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
@@ -561,7 +562,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
 			receivedinvites.add(invite);
 		} else {
-			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
+			throw new TooManyInvitesException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
 		}
 	}
 

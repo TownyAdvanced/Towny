@@ -27,7 +27,7 @@ public class JoinNationTask extends ResidentNationQuestionTask {
 			TownyUniverse.getDataSource().saveTown(resident.getTown());
 			TownyUniverse.getDataSource().saveNation(nation);
 
-			TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_join_nation"), resident.getTown().getName())));
+			TownyMessaging.sendNationMessage(nation, ChatTools.color(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_join_nation"), resident.getTown().getName())));
 		} catch (AlreadyRegisteredException e) {
 			try {
 				TownyMessaging.sendResidentMessage(resident, e.getMessage());

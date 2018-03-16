@@ -719,73 +719,73 @@ public class TownySettings {
 
 	public static String[] getRegistrationMsg(String name) {
 
-		return parseString(String.format(getLangString("MSG_REGISTRATION"), name));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_REGISTRATION"), name));
 	}
 
 	public static String[] getNewTownMsg(String who, String town) {
 
-		return parseString(String.format(getLangString("MSG_NEW_TOWN"), who, town));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_NEW_TOWN"), who, town));
 	}
 
 	public static String[] getNewNationMsg(String who, String nation) {
 
-		return parseString(String.format(getLangString("MSG_NEW_NATION"), who, nation));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_NEW_NATION"), who, nation));
 	}
 
 	public static String[] getJoinTownMsg(String who) {
 
-		return parseString(String.format(getLangString("MSG_JOIN_TOWN"), who));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_JOIN_TOWN"), who));
 	}
 
 	public static String[] getJoinNationMsg(String who) {
 
-		return parseString(String.format(getLangString("MSG_JOIN_NATION"), who));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_JOIN_NATION"), who));
 	}
 
 	public static String[] getNewMayorMsg(String who) {
 
-		return parseString(String.format(getLangString("MSG_NEW_MAYOR"), who));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_NEW_MAYOR"), who));
 	}
 
 	public static String[] getNewKingMsg(String who, String nation) {
 
-		return parseString(String.format(getLangString("MSG_NEW_KING"), who, nation));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_NEW_KING"), who, nation));
 	}
 
 	public static String[] getJoinWarMsg(TownyObject obj) {
 
-		return parseString(String.format(getLangString("MSG_WAR_JOIN"), obj.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_JOIN"), obj.getName()));
 	}
 
 	public static String[] getWarTimeEliminatedMsg(String who) {
 
-		return parseString(String.format(getLangString("MSG_WAR_ELIMINATED"), who));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_ELIMINATED"), who));
 	}
 
 	public static String[] getWarTimeForfeitMsg(String who) {
 
-		return parseString(String.format(getLangString("MSG_WAR_FORFEITED"), who));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_FORFEITED"), who));
 	}
 
 	public static String[] getWarTimeLoseTownBlockMsg(WorldCoord worldCoord, String town) {
 
-		return parseString(String.format(getLangString("MSG_WAR_LOSE_BLOCK"), worldCoord.toString(), town));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_LOSE_BLOCK"), worldCoord.toString(), town));
 	}
 
 	public static String[] getWarTimeScoreMsg(Town town, int n) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE"), town.getName(), n));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE"), town.getName(), n));
 	}
 	
 	//Need other languages Methods
 	public static String[] getWarTimeScoreNationEliminatedMsg(Town town, int n, Nation fallenNation) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE_NATION_ELIM"), town.getName(), n, fallenNation.getName()));
 	}
 	
 	public static String[] getWarTimeScoreTownEliminatedMsg(Town town, int n, Town fallenTown, int fallenTownBlocks) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWN_ELIM"), town.getName(), n, fallenTown.getName(), fallenTownBlocks));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE_TOWN_ELIM"), town.getName(), n, fallenTown.getName(), fallenTownBlocks));
 	}
 	
 	public static String[] getWarTimeScoreTownBlockEliminatedMsg(Town town, int n, TownBlock fallenTownBlock) {
@@ -797,43 +797,43 @@ public class TownySettings {
 		} catch (NotRegisteredException e) {
 			townBlockName = "(" + ((TownBlock)fallenTownBlock).getCoord().toString() + ")";
 		}
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE_TOWNBLOCK_ELIM"), town.getName(), n, townBlockName));
 	}
 	        
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, int n, Town attackingTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL"), attacker.getName(), dead.getName(), n, attackingTown.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE_PLAYER_KILL"), attacker.getName(), dead.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeScorePlayerKillMsg(Player attacker, Player dead, Player defender, int n, Town attackingTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING"), attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING"), attacker.getName(), dead.getName(), defender.getName(), n, attackingTown.getName()));
 	}
 	
 	public static String[] getWarTimeKingKilled(Nation kingsNation) {
 
-		return parseString(String.format(getLangString("MSG_WAR_KING_KILLED"), kingsNation.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_KING_KILLED"), kingsNation.getName()));
 	}
 	
 	public static String[] getWarTimeMayorKilled(Town mayorsTown) {
 
-		return parseString(String.format(getLangString("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_MAYOR_KILLED"), mayorsTown.getName()));
 	}
 	
 	public static String[] getWarTimeWinningNationSpoilsMsg(Nation winningNation, String money)
 	{
-		return parseString(String.format(getLangString("MSG_WAR_WINNING_NATION_SPOILS"), winningNation.getName(), money));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_WINNING_NATION_SPOILS"), winningNation.getName(), money));
 	}
 	
 	public static String[] getWarTimeWinningTownSpoilsMsg(Town winningTown, String money, int score)
 	{
-		return parseString(String.format(getLangString("MSG_WAR_WINNING_TOWN_SPOILS"), winningTown.getName(), money, score));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_WAR_WINNING_TOWN_SPOILS"), winningTown.getName(), money, score));
 	}
 	//Score Methods
 
 	public static String[] getCouldntPayTaxesMsg(TownyObject obj, String type) {
 
-		return parseString(String.format(getLangString("MSG_COULDNT_PAY_TAXES"), obj.getName(), type));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_COULDNT_PAY_TAXES"), obj.getName(), type));
 	}
 
 	public static String getPayedTownTaxMsg() {
@@ -853,27 +853,27 @@ public class TownySettings {
 
 	public static String[] getDelResidentMsg(Resident resident) {
 
-		return parseString(String.format(getLangString("MSG_DEL_RESIDENT"), resident.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_DEL_RESIDENT"), resident.getName()));
 	}
 
 	public static String[] getDelTownMsg(Town town) {
 
-		return parseString(String.format(getLangString("MSG_DEL_TOWN"), town.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_DEL_TOWN"), town.getName()));
 	}
 
 	public static String[] getDelNationMsg(Nation nation) {
 
-		return parseString(String.format(getLangString("MSG_DEL_NATION"), nation.getName()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_DEL_NATION"), nation.getName()));
 	}
 
 	public static String[] getBuyResidentPlotMsg(String who, String owner, Double price) {
 
-		return parseString(String.format(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner, price));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_BUY_RESIDENT_PLOT"), who, owner, price));
 	}
 
 	public static String[] getPlotForSaleMsg(String who, WorldCoord worldCoord) {
 
-		return parseString(String.format(getLangString("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("MSG_PLOT_FOR_SALE"), who, worldCoord.toString()));
 	}
 
 	public static String getMayorAbondonMsg() {
@@ -2424,36 +2424,36 @@ public class TownySettings {
 	
 	public static String getListPageMsg(int page, int total) {
 		 
-	    return parseString(String.format(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
+	    return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("LIST_PAGE"), String.valueOf(page), String.valueOf(total)))[0];
 	}
 	 
 	public static String getListNotEnoughPagesMsg(int max) {
 	 
-	    return parseString(String.format(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
+	    return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("LIST_ERR_NOT_ENOUGH_PAGES"), String.valueOf(max)))[0];
 	}
 	
 	public static String[] getWarAPlayerHasNoTownMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_no_town"))); 
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_a_player_has_no_town")));
 	}
 	
 	public static String[] getWarAPlayerHasNoNationMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_no_nation"))); 
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_a_player_has_no_nation")));
 	}
 	
 	public static String[] getWarAPlayerHasANeutralNationMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_a_neutral_nation"))); 
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_a_player_has_a_neutral_nation")));
 	}
 	
 	public static String[] getWarAPlayerHasBeenRemovedFromWarMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_has_been_removed_from_war")));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_a_player_has_been_removed_from_war")));
 	}
 	
 	public static String[] getWarPlayerCannotBeJailedPlotFallenMsg() {
-		return parseString(String.format(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_player_cant_be_jailed_plot_fallen")));
 	}
 	
 	public static String[] getWarAPlayerIsAnAllyMsg() {
-		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
+		return parseString(TownyFormatter.replaceMessagePlaceholder(getLangString("msg_war_a_player_is_an_ally")));
 	}
 	
 	public static boolean isNotificationUsingTitles() {

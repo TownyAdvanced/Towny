@@ -25,8 +25,8 @@ public class NationAllyTask extends AllyQuestionTask {
 			e.printStackTrace();
 		}
 		
-		TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_added_ally"), requestingNation.getName()));
-		TownyMessaging.sendNationMessage(requestingNation, String.format(TownySettings.getLangString("msg_accept_ally"), targetNation.getName()));
+		TownyMessaging.sendNationMessage(targetNation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_added_ally"), requestingNation.getName()));
+		TownyMessaging.sendNationMessage(requestingNation, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_accept_ally"), targetNation.getName()));
 		
 		TownyUniverse.getDataSource().saveNations();
 		

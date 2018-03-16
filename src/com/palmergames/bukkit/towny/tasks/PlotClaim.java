@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -130,7 +131,7 @@ public class PlotClaim extends Thread {
 
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
-							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
+							throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
 						TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
 						townBlock.setPlotPrice(-1);
@@ -165,7 +166,7 @@ public class PlotClaim extends Thread {
 						return true;
 					} else {
 						//Should never reach here.
-						throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), owner.getName()));
+						throw new AlreadyRegisteredException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_already_claimed"), owner.getName()));
 					}
 
 				} catch (NotRegisteredException e) {
@@ -177,7 +178,7 @@ public class PlotClaim extends Thread {
 					double bankcap = TownySettings.getTownBankCap();
 					if (bankcap > 0) {
 						if (townBlock.getPlotPrice() + town.getHoldingBalance() > bankcap)
-							throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+							throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					}
 
 					if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotPrice(), town, "Plot - Buy From Town"))

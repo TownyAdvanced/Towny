@@ -45,14 +45,14 @@ public class TownyWar {
 
 		// Check if area is already under attack.
 		if (currentData != null)
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_enemy_war_cell_already_under_attack"), currentData.getNameOfFlagOwner()));
+			throw new Exception(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_cell_already_under_attack"), currentData.getNameOfFlagOwner()));
 
 		String playerName = cell.getNameOfFlagOwner();
 
 		// Check that the user is under his limit of active warflags.
 		int futureActiveFlagCount = getNumActiveFlags(playerName) + 1;
 		if (futureActiveFlagCount > TownyWarConfig.getMaxActiveFlagsPerPerson())
-			throw new Exception(String.format(TownySettings.getLangString("msg_err_enemy_war_reached_max_active_flags"), TownyWarConfig.getMaxActiveFlagsPerPerson()));
+			throw new Exception(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_reached_max_active_flags"), TownyWarConfig.getMaxActiveFlagsPerPerson()));
 
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
@@ -214,9 +214,9 @@ public class TownyWar {
 
 		// Check Peace
 		if (landOwnerNation.isNeutral())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
+			throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
 		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
+			throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online
 		checkIfTownHasMinOnlineForWar(landOwnerTown);
@@ -237,7 +237,7 @@ public class TownyWar {
 
 				// Check that the user can pay for the warflag.
 				if (balance < costToPlaceWarFlag)
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_insuficient_funds_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
+					throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_insuficient_funds_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 
 				// Check that the user can pay the fines from losing/winning all future warflags.
 				int activeFlagCount = getNumActiveFlags(attackingResident.getName());
@@ -276,7 +276,7 @@ public class TownyWar {
 
 					// Check if player can pay in worst case scenario.
 					if (balance < requiredAmount)
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_insuficient_funds_future"), TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
+						throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_insuficient_funds_future"), TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
 				}
 			} catch (EconomyException e) {
 				throw new TownyException(e.getError());
@@ -302,7 +302,7 @@ public class TownyWar {
 			if (costToPlaceWarFlag > 0) {
 				try {
 					attackingResident.pay(costToPlaceWarFlag, "War - WarFlag Cost");
-					TownyMessaging.sendResidentMessage(attackingResident, String.format(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
+					TownyMessaging.sendResidentMessage(attackingResident, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_enemy_war_purchased_warflag"), TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 				} catch (EconomyException e) {
 					e.printStackTrace();
 				}
@@ -320,7 +320,7 @@ public class TownyWar {
 		universe.addWarZone(worldCoord);
 		plugin.updateCache(worldCoord);
 
-		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
+		TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
 		return true;
 	}
 
@@ -329,7 +329,7 @@ public class TownyWar {
 		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInTownForWar();
 		int onlinePlayerCount = TownyUniverse.getOnlinePlayers(town).size();
 		if (onlinePlayerCount < requiredOnline)
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, town.getFormattedName()));
+			throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, town.getFormattedName()));
 	}
 
 	public static void checkIfNationHasMinOnlineForWar(Nation nation) throws TownyException {
@@ -337,7 +337,7 @@ public class TownyWar {
 		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInNationForWar();
 		int onlinePlayerCount = TownyUniverse.getOnlinePlayers(nation).size();
 		if (onlinePlayerCount < requiredOnline)
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, nation.getFormattedName()));
+			throw new TownyException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, nation.getFormattedName()));
 	}
 
 	public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {

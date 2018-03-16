@@ -194,9 +194,9 @@ public class War {
 		// Seed spoils of war		
 		try {
 			warSpoils.collect(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_seeding_spoils_with"), TownySettings.getBaseSpoilsOfWar()));			
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_total_seeding_spoils"), warSpoils.getHoldingBalance()));
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_activate_war_hud_tip")));
+			TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_seeding_spoils_with"), TownySettings.getBaseSpoilsOfWar()));
+			TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_total_seeding_spoils"), warSpoils.getHoldingBalance()));
+			TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_activate_war_hud_tip")));
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
 		}
@@ -205,12 +205,12 @@ public class War {
 		for (Nation nation : TownyUniverse.getDataSource().getNations()) {
 			if (!nation.isNeutral()) {
 				add(nation);
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
+				TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
 			} else if (!TownySettings.isDeclaringNeutral()) {
 				try {
 					nation.setNeutral(false);
 					add(nation);
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
+					TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 				} catch (TownyException e) {
 					e.printStackTrace();
 				}
@@ -436,7 +436,7 @@ public class War {
 							TownyMessaging.sendMessageToMode(town, Colors.Gray + TownySettings.getLangString("msg_war_nation_under_attack") + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 					for (Nation nation: townBlock.getTown().getNation().getAllies())
 						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendMessageToMode(nation , Colors.Gray + String.format(TownySettings.getLangString("msg_war_nations_ally_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_nations_ally_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 				}
 				else
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
@@ -448,10 +448,10 @@ public class War {
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
 					for (Town town: townBlock.getTown().getNation().getTowns())
 						if (town != townBlock.getTown())
-							TownyMessaging.sendMessageToMode(town, Colors.Gray + String.format(TownySettings.getLangString("msg_war_nation_member_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(town, Colors.Gray + TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_nation_member_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 					for (Nation nation: townBlock.getTown().getNation().getAllies())
 						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendMessageToMode(nation , Colors.Gray + String.format(TownySettings.getLangString("msg_war_nation_ally_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
+							TownyMessaging.sendMessageToMode(nation , Colors.Gray + TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_nation_ally_homeblock_under_attack"), townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef, "");
 				}
 				else
 					launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
@@ -535,7 +535,7 @@ public class War {
 				TownyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
-				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
+				TownyMessaging.sendTownMessage(townBlock.getTown(), TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		} catch (EconomyException e) {}
 		
 		// Check to see if this is a special TownBlock
@@ -563,7 +563,7 @@ public class War {
 					}
 				}
 				if (count>0)
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), town, count));
+					TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_war_jailbreak"), town, count));
 			}				
 		}
 		TownyUniverse.getDataSource().saveTown(townBlock.getTown());
