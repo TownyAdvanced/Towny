@@ -2916,3 +2916,13 @@ v0.92.0.11:
     - Stop Towny's name formatting altering player names. Where we used to replace the "_" with a " ", we are no longer doing this for players.
     - Prevent Towny from adding Towns which have no townblocks claimed to the war event.
     - Prevent towns with no townblocks from attacking other towns in the Flag War.
+    - Language files bumped to 0.45.
+    - Towny now prevents the log in of players which are using the names of various Towny server accounts.
+      - This includes NPC mayors, the towny-war-chest, and towny-server-account.
+      - This also includes the town and nation bank accounts. 
+      - This is being done because Essentials' economy changes the safe "town-TownNameHere" account to an unsafe "town_TownNameHere" account.
+        - Because the _ is used players can log into the server and steal the money.
+      - We are now including a warning message at startup to let server admins know that Essentials Economy has been resetting town and nation accounts.
+      - This resetting accounts issue has been a problem ever since MC 1.8, and does not appear to be something the maintainers of Essentials will fix.
+        - Please discontinue using Essentials.
+      
