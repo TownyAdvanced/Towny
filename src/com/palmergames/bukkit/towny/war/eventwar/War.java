@@ -282,7 +282,8 @@ public class War {
 	private void add(Nation nation) {
 
 		for (Town town : nation.getTowns())
-			add(town);
+			if (town.getTownBlocks().size() > 0)
+				add(town);
 		warringNations.add(nation);
 	}
 

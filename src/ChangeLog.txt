@@ -2914,3 +2914,4 @@ v0.92.0.11:
       - May have better performance/loading.
     - Added confirmation message to /ta rename.
     - Stop Towny's name formatting altering player names. Where we used to replace the "_" with a " ", we are no longer doing this for players.
+    - Prevent Towny from adding Towns which have no townblocks claimed to the war event.
