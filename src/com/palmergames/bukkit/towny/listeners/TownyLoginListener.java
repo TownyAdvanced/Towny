@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 
+
 public class TownyLoginListener implements Listener {
 	
 	@SuppressWarnings("unused")
@@ -25,43 +27,45 @@ public class TownyLoginListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR) 
+	@EventHandler(priority = EventPriority.NORMAL) 
     public void onPlayerLogin(PlayerLoginEvent event) throws NotRegisteredException {
-		String NPCPrefix = TownySettings.getNPCPrefix();
+		String npcPrefix = TownySettings.getNPCPrefix();
 		String warChest = "towny-war-chest";
-	    String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
-		Player player = event.getPlayer();
+	    String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);		
 		Boolean disallowed = false;
+		Player player = event.getPlayer();
 		
-		if (player.getName().startsWith(NPCPrefix)) {
+		if (player.getName().startsWith(npcPrefix)) {
 			if (TownyUniverse.getDataSource().hasResident(player.getName()))
 			    if (TownyUniverse.getDataSource().getResident(player.getName()).isMayor()){
 			    	// Deny because this is an NPC account which is a mayor of a town.
-			    	event.disallow(null, "Towny is preventing you from logging in using this account name");
+			    	event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			    	disallowed = true;
 			    }
 				
-		} else if (player.getName() == warChest || player.getName() == warChest.replace("-", "_")){
+		} else if (player.getName().equals(warChest) || player.getName().equals(warChest.replace("-", "_"))){
 			// Deny because this is the warChest account.
-			event.disallow(null, "Towny is preventing you from logging in using this account name");
+			event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
-		} else if (player.getName() == serverAccount || player.getName() == serverAccount.replace("-", "_")){
+		} else if (player.getName().equals(serverAccount) || player.getName().equals(serverAccount.replace("-", "_"))){
 			// Deny because this is the warChest account.
-			event.disallow(null, "Towny is preventing you from logging in using this account name");
+			event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		} else if (player.getName().startsWith(TownySettings.getTownAccountPrefix()) || 
 				   player.getName().startsWith(TownySettings.getTownAccountPrefix().replace("-","_")) ||
 				   player.getName().startsWith(TownySettings.getNationAccountPrefix()) || 
 				   player.getName().startsWith(TownySettings.getNationAccountPrefix().replace("-","_")) ) {
-			event.disallow(null, "Towny is preventing you from logging in using this account name");
+			event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		}
 		
 		if (disallowed) {
-			String msg = "A player using the IP address " + event.getAddress() + " tried to log in using account which could damage your server's economy, but was prevent by Towny. Consider banning this IP address!";
+			String ip = event.getAddress().toString();
+			ip = ip.substring(1);
+			String msg = "A player using the IP address " + Color.RED + ip + Color.GREEN + " tried to log in using am accountname which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
 			TownyMessaging.sendMsg(msg);
-			for (Player ops : Bukkit.getOnlinePlayers()) {      	 
-        		if (ops.isOp() || ops.hasPermission("monitordeniedjoins.announce"))
+			for (Player ops : Bukkit.getOnlinePlayers()) {     	 
+        		if (ops.isOp() || ops.hasPermission("towny.admin"))
         			TownyMessaging.sendMsg(ops, msg);        		
         	}
 		}
