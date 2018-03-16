@@ -22,7 +22,7 @@ public class JoinTownTask extends ResidentTownQuestionTask {
 		try {
             TownCommand.townAddResident(town, resident);
 
-			TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+			TownyMessaging.sendTownMessage(town, ChatTools.color(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_join_town"), resident.getName())));
 
 		} catch (AlreadyRegisteredException e) {
 			try {

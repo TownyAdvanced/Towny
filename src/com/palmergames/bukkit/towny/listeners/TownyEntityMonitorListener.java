@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -209,7 +206,7 @@ public class TownyEntityMonitorListener implements Listener {
 				
 				total = total + price;
 				
-				TownyMessaging.sendMsg(defenderPlayer, String.format(TownySettings.getLangString("msg_you_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+				TownyMessaging.sendMsg(defenderPlayer, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_you_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 			}
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_could_not_take_deathfunds"));
@@ -235,7 +232,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 				total = total + price;
 
-				TownyMessaging.sendTownMessagePrefixed(defenderResident.getTown(), String.format(TownySettings.getLangString("msg_your_town_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+				TownyMessaging.sendTownMessagePrefixed(defenderResident.getTown(), TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_your_town_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 			}
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_deathfunds"));
@@ -261,7 +258,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 				total = total + price;
 
-				TownyMessaging.sendNationMessagePrefixed(defenderResident.getTown().getNation(), String.format(TownySettings.getLangString("msg_your_nation_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+				TownyMessaging.sendNationMessagePrefixed(defenderResident.getTown().getNation(), TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_your_nation_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 			}
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_deathfunds"));
@@ -288,11 +285,11 @@ public class TownyEntityMonitorListener implements Listener {
 				if (price > 0) {
 					if (!TownySettings.isEcoClosedEconomyEnabled()){
 						defenderResident.payTo(price, attackerResident, "Death Payment (War)");
-						TownyMessaging.sendMsg(attackerPlayer, String.format(TownySettings.getLangString("msg_you_robbed_player"), defenderResident.getName(), TownyEconomyHandler.getFormattedBalance(price)));
-						TownyMessaging.sendMsg(defenderPlayer, String.format(TownySettings.getLangString("msg_player_robbed_you"), attackerResident.getName(), TownyEconomyHandler.getFormattedBalance(price)));
+						TownyMessaging.sendMsg(attackerPlayer, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_you_robbed_player"), defenderResident.getName(), TownyEconomyHandler.getFormattedBalance(price)));
+						TownyMessaging.sendMsg(defenderPlayer, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_player_robbed_you"), attackerResident.getName(), TownyEconomyHandler.getFormattedBalance(price)));
 					} else {
 						defenderResident.pay(price, "Death Payment (War)");
-						TownyMessaging.sendMsg(defenderPlayer, String.format(TownySettings.getLangString("msg_you_lost_money"), TownyEconomyHandler.getFormattedBalance(price)));
+						TownyMessaging.sendMsg(defenderPlayer, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_you_lost_money"), TownyEconomyHandler.getFormattedBalance(price)));
 					}
 				}
 
@@ -308,10 +305,10 @@ public class TownyEntityMonitorListener implements Listener {
 							plugin.getTownyUniverse().getWarEvent().remove(town);
 						}
 					} else if (!TownySettings.isEcoClosedEconomyEnabled()){
-						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_player_couldnt_pay_player_town_bank_paying_instead"), defenderResident.getName(), attackerResident.getName(), townPrice));
+						TownyMessaging.sendTownMessage(town, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_player_couldnt_pay_player_town_bank_paying_instead"), defenderResident.getName(), attackerResident.getName(), townPrice));
 						town.payTo(townPrice, attackerResident, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
 					} else {
-						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_player_couldnt_pay_player_town_bank_paying_instead"), defenderResident.getName(), attackerResident.getName(), townPrice));
+						TownyMessaging.sendTownMessage(town, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_player_couldnt_pay_player_town_bank_paying_instead"), defenderResident.getName(), attackerResident.getName(), townPrice));
 						town.pay(townPrice, String.format("Death Payment (War) (%s couldn't pay)", defenderResident.getName()));
 					}
 				}
@@ -358,7 +355,7 @@ public class TownyEntityMonitorListener implements Listener {
 					}
 					total = total + price;
 
-					TownyMessaging.sendMsg(defenderPlayer, String.format(TownySettings.getLangString("msg_you_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+					TownyMessaging.sendMsg(defenderPlayer, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_you_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 				}
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_could_not_take_deathfunds"));
@@ -389,7 +386,7 @@ public class TownyEntityMonitorListener implements Listener {
 					}
 					total = total + price;
 
-					TownyMessaging.sendTownMessagePrefixed(defenderResident.getTown(), String.format(TownySettings.getLangString("msg_your_town_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+					TownyMessaging.sendTownMessagePrefixed(defenderResident.getTown(), TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_your_town_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 				}
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_deathfunds"));
@@ -421,7 +418,7 @@ public class TownyEntityMonitorListener implements Listener {
 					}
 					total = total + price;
 
-					TownyMessaging.sendNationMessagePrefixed(defenderResident.getTown().getNation(), String.format(TownySettings.getLangString("msg_your_nation_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
+					TownyMessaging.sendNationMessagePrefixed(defenderResident.getTown().getNation(), TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_your_nation_lost_money_dying"), TownyEconomyHandler.getFormattedBalance(price)));
 				}
 			} catch (EconomyException e) {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_couldnt_take_deathfunds"));
@@ -430,7 +427,7 @@ public class TownyEntityMonitorListener implements Listener {
 			}
 
 			if (attackerResident != null && !TownySettings.isEcoClosedEconomyEnabled()) {
-				TownyMessaging.sendMsg(attackerResident, String.format(TownySettings.getLangString("msg_you_gained_money_for_killing"),TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
+				TownyMessaging.sendMsg(attackerResident, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_you_gained_money_for_killing"),TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
 
 			}
 		}
@@ -447,7 +444,7 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 			if (defenderResident.isJailed()) {
 				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.JAIL) {
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_killed_attempting_to_escape_jail"), defenderPlayer.getName()));
+					TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_killed_attempting_to_escape_jail"), defenderPlayer.getName()));
 					return;
 				}							
 				return;			

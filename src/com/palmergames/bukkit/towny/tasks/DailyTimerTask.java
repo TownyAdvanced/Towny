@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -43,7 +40,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Collect taxes
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_day_tax")));
+			TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_new_day_tax")));
 			try {
 				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
 				collectTownTaxes();
@@ -59,7 +56,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_new_day")));
+			TownyMessaging.sendGlobalMessage(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_new_day")));
 
 		// Automatically delete old residents
 		if (TownySettings.isDeletingOldResidents()) {
@@ -288,7 +285,7 @@ public class DailyTimerTask extends TownyTimerTask {
 									continue;
 							
 						if (!resident.payTo(townBlock.getType().getTax(town), town, String.format("Plot Tax (%s)", townBlock.getType()))) {
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
+							TownyMessaging.sendTownMessage(town, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_couldnt_pay_plot_taxes"), resident));
 
 							townBlock.setResident(null);
 							townBlock.setPlotPrice(-1);
@@ -317,7 +314,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * townPlots.get(resident); double totalCost =
 			 * townTaxes.get(resident);
 			 * TownyMessaging.sendResidentMessage(resident,
-			 * String.format(TownySettings.getLangString("msg_payed_plot_cost"),
+			 * TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_payed_plot_cost"),
 			 * totalCost, numPlots, town.getName())); } catch (TownyException e)
 			 * { // Player is not online } }
 			 */

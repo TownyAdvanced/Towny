@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
@@ -143,11 +144,11 @@ public class TownClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_annexed_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if (town.getWorld().isUsingPlotManagementRevert())
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			} else if (forced) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				TownyMessaging.sendMsg(player, TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_admin_unclaim_area"), (selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 				if ((town != null) &&(town.getWorld().isUsingPlotManagementRevert()))
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			}
@@ -160,7 +161,7 @@ public class TownClaim extends Thread {
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			try {
-				throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_already_claimed"), townBlock.getTown().getName()));
+				throw new AlreadyRegisteredException(TownyFormatter.replaceMessagePlaceholder(TownySettings.getLangString("msg_already_claimed"), townBlock.getTown().getName()));
 			} catch (NotRegisteredException e) {
 				throw new AlreadyRegisteredException(TownySettings.getLangString("msg_already_claimed_2"));
 			}

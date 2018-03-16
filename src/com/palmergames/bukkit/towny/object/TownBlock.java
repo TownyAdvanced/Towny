@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
@@ -55,7 +56,7 @@ public class TownBlock {
 	public Town getTown() throws NotRegisteredException {
 
 		if (!hasTown())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
+			throw new NotRegisteredException(TownyFormatter.replaceMessagePlaceholder("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
 		return town;
 	}
 
@@ -90,7 +91,7 @@ public class TownBlock {
 	public Resident getResident() throws NotRegisteredException {
 
 		if (!hasResident())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
+			throw new NotRegisteredException(TownyFormatter.replaceMessagePlaceholder("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
 		return resident;
 	}
 
