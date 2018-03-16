@@ -1,5 +1,5 @@
 name: Towny
-version: 0.44
+version: 0.45
 language: italian
 author: Leomixer17
 website: 'http://towny.palmergames.com/'
@@ -773,3 +773,6 @@ status_res_taxexempt: '&2Lo staff è esonerato dal pagare le tasse della città.
 status_res_tax: '&2Tassa Città: &a'
 status_res_plottax: '&2Totale Tasse Lotti: &a'
 status_res_totaltax: '&2Totale Tasse da pagare: &a'
+
+# Added in 0.45
+msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'

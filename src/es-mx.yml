@@ -1,5 +1,5 @@
 name: Towny
-version: 0.44
+version: 0.45
 language: spanish
 author: VreyaViress
 website: 'http://amicu.enjin.com/'
@@ -761,3 +761,6 @@ status_res_taxexempt: '&2Staff are exempt from paying town taxes.'
 status_res_tax: '&2Town Tax: &a'
 status_res_plottax: '&2Total Plot Taxes: &a'
 status_res_totaltax: '&2Total Tax to pay: &a'
+
+# Added in 0.45
+msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'

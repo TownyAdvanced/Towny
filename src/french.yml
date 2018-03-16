@@ -1,5 +1,5 @@
 name: Towny
-version: 0.44
+version: 0.45
 language: french
 author: Noiknez,TheCalypso
 website: 'http://towny.palmergames.com/'
@@ -771,3 +771,6 @@ status_res_taxexempt: '&2Le staff des villes ne pay pas les taxes.'
 status_res_tax: '&2Town Tax: &a'
 status_res_plottax: '&2Total Plot Taxes: &a'
 status_res_totaltax: '&2Total Tax to pay: &a'
+
+# Added in 0.45
+msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'

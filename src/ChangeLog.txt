@@ -2915,3 +2915,4 @@ v0.92.0.11:
     - Added confirmation message to /ta rename.
     - Stop Towny's name formatting altering player names. Where we used to replace the "_" with a " ", we are no longer doing this for players.
     - Prevent Towny from adding Towns which have no townblocks claimed to the war event.
+    - Prevent towns with no townblocks from attacking other towns in the Flag War.
