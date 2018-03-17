@@ -49,6 +49,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -226,6 +227,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (TownySettings.isBankActionDisallowedOutsideTown()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
+					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+					Town town = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();					
+					if (!TownyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
+				}
 
 				if (split.length == 2)
 					try {
@@ -240,6 +250,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (TownySettings.isBankActionDisallowedOutsideTown()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
+					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+					Town town = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();					
+					if (!TownyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
+				}
 
 				if (split.length == 2)
 					try {

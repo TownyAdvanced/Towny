@@ -201,6 +201,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (TownySettings.isBankActionDisallowedOutsideTown()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));					
+					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+					Town town = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					if (!town.isCapital())
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
+					Nation nation = town.getNation(); 
+					if (!TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().equals(nation))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
+				}
 
 				if (split.length == 2)
 					try {
@@ -221,6 +233,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (TownySettings.isBankActionDisallowedOutsideTown()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));					
+					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+					Town town = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					if (!town.isCapital())
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
+					Nation nation = town.getNation(); 
+					if (!TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().equals(nation))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));
+				}
 
 				if (split.length == 2)
 					try {

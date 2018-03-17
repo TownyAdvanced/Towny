@@ -2925,4 +2925,8 @@ v0.92.0.11:
       - We are now including a warning message at startup to let server admins know that Essentials Economy has been resetting town and nation accounts.
       - This resetting accounts issue has been a problem ever since MC 1.8, and does not appear to be something the maintainers of Essentials will fix.
         - Please discontinue using Essentials.
+    - New Config Option: economy.banks.disallow_bank_actions_outside_town
+      - default: false
+      - When set to true, players can only use their town withdraw/deposit commands while inside of their own town.
+      - Likewise, nation banks can only be withdrawn/deposited to while in the capital city.
       
