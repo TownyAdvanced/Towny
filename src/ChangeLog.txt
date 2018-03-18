@@ -2931,3 +2931,4 @@ v0.92.0.11:
       - Likewise, nation banks can only be withdrawn/deposited to while in the capital city.
     - Made /towny time translatable. 
     - Fix NPE with /plot perm hud when changing worlds.
+    - Add TownyChat version number to /towny universe.
