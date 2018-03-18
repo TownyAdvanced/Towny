@@ -2929,4 +2929,4 @@ v0.92.0.11:
       - default: false
       - When set to true, players can only use their town withdraw/deposit commands while inside of their own town.
       - Likewise, nation banks can only be withdrawn/deposited to while in the capital city.
-      
+    - Made /towny time translatable. 

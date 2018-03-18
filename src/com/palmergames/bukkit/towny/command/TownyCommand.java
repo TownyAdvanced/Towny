@@ -91,7 +91,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("tree"))
 				plugin.getTownyUniverse().sendUniverseTree(sender);
 			else if (args[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(TownySettings.getLangString("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
 				sender.sendMessage(Colors.strip(towny_version));
 			else if (args[0].equalsIgnoreCase("war")) {
