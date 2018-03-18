@@ -160,7 +160,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("tree")) {
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg(player, "Time until a New Day: " + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (split[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats())
 					player.sendMessage(line);
