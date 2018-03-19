@@ -99,6 +99,10 @@ public class OnPlayerLogin implements Runnable {
 				if (TownySettings.getShowTownBoardOnLogin()) {
 					TownyMessaging.sendTownBoard(player, resident.getTown());
 				}
+				if (TownySettings.getShowNationBoardOnLogin()) {
+					if (resident.getTown().hasNation())
+						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+				}
 				resident.getTown(); // Exception check, this does not do anything at all!
 			} catch (NotRegisteredException ex) {
 			}

@@ -80,6 +80,7 @@ public class SQL_Schema {
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
+		columns.add("`nationBoard` mediumtext DEFAULT NULL");
 		return columns;
 	}
 

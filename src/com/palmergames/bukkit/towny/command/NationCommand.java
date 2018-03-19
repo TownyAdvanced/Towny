@@ -33,6 +33,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,6 +41,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
+
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1556,6 +1558,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
 		} else {
 			Resident resident;
 			Nation nation;
@@ -1741,6 +1744,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
 
+				
+			} else if (split[0].equalsIgnoreCase("board")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_BOARD.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (split.length < 2) {
+					TownyMessaging.sendErrorMsg(player, "Eg: /nation set board " + TownySettings.getLangString("town_help_9"));
+					return;
+				} else {
+					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
+					if (!NameValidation.isValidString(line)) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_invalid_string_nationboard_not_set"));
+						return;
+					}
+
+					nation.setNationBoard(line);
+					TownyMessaging.sendNationBoard(player, nation);
+				} 
 			} else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 				return;

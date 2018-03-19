@@ -994,6 +994,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//					}
 				//				}
 
+				nation.setNationBoard(kvFile.get("nationBoard"));
+				
 				line = kvFile.get("tag");
 				if (line != null)
 					try {
@@ -1764,6 +1766,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
+		
+		list.add("nationBoard=" + nation.getNationBoard());
 
 		if (nation.hasTag())
 			list.add("tag=" + nation.getTag());

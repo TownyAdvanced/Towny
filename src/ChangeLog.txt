@@ -2932,3 +2932,13 @@ v0.92.0.11:
     - Made /towny time translatable. 
     - Fix NPE with /plot perm hud when changing worlds.
     - Add TownyChat version number to /towny universe.
+    - New Feature: nation board messages
+      - just like town's board messages but for nations.
+    - New command: /nation set board {message}
+      - Permission node: towny.command.nation.set.board
+        - child node of towny.command.nation.set.*
+        - no change required to existing townyperms.yml files.
+      - Set the nation's board message.
+    - New Config Option: global_nation_settings.display_board_onlogin
+      - default: true
+      - If Towny should show players the nationboard when they login.

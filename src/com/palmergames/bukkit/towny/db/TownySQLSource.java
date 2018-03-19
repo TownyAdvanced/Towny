@@ -996,6 +996,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 // }
                 // }
                 // }
+                
+                nation.setNationBoard(rs.getString("nationBoard"));
 
                 nation.setTag(rs.getString("tag"));
 
@@ -1585,6 +1587,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("name", nation.getName());
             nat_hm.put("towns", StringMgmt.join(nation.getTowns(), "#"));
             nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getName() : "");
+            nat_hm.put("nationBoard", nation.getNationBoard());
             nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));

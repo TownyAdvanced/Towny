@@ -229,6 +229,7 @@ permissions:
         description: User can access any of the nation set commands.
         default: false
         children:
+            towny.command.nation.set.board: true
             towny.command.nation.set.capitol: true
             towny.command.nation.set.king: true
             towny.command.nation.set.name: true

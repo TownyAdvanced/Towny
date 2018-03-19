@@ -1190,6 +1190,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN);
 	}
+	
+	public static boolean getShowNationBoardOnLogin() {
+		
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN);
+	}
 
 	public static String getUnclaimedZoneName() {
 

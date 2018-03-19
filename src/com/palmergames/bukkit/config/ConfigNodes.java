@@ -505,7 +505,12 @@ public enum ConfigNodes {
 			"global_nation_settings.nationzone.war_disables",
 			"true",
 			"",
-			"# When set to true, nation zones are disabled during the the Towny war types."),			
+			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
+			"global_nation_settings.display_board_onlogin",
+			"true",
+			"# If Towny should show players the nationboard when they login."
+			),
 	PLUGIN(
 			"plugin",
 			"",
