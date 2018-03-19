@@ -2942,3 +2942,4 @@ v0.92.0.11:
     - New Config Option: global_nation_settings.display_board_onlogin
       - default: true
       - If Towny should show players the nationboard when they login.
+    - Spanish.yml updated to 0.45 by SeDark.
