@@ -2943,3 +2943,4 @@ v0.92.0.11:
       - default: true
       - If Towny should show players the nationboard when they login.
     - Spanish.yml updated to 0.45 by SeDark.
+    - German.yml updated to 0.45 by Wolf2323.
