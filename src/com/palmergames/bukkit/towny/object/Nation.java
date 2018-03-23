@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -39,7 +40,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private Town capital;
 	private double taxes;
 	private boolean neutral = false;
-	private String tag;
+	private String nationBoard = "/nation set board [msg]", tag;
 	public UUID uuid;
 	private long registered;
 
@@ -611,5 +612,14 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	@Override
 	public List<Invite> getSentAllyInvites() {
 		return sentallyinvites;
+	}
+	
+	public void setNationBoard(String nationBoard) {
+
+		this.nationBoard = nationBoard;
+	}
+
+	public String getNationBoard() {
+		return nationBoard;
 	}
 }

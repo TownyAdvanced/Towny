@@ -54,9 +54,9 @@ import java.util.List;
 public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> ta_help = new ArrayList<String>();
-	private static final List<String> ta_panel = new ArrayList<String>();
-	private static final List<String> ta_unclaim = new ArrayList<String>();
+	private static final List<String> ta_help = new ArrayList<>();
+	private static final List<String> ta_panel = new ArrayList<>();
+	private static final List<String> ta_unclaim = new ArrayList<>();
 
 	private boolean isConsole;
 	private Player player;
@@ -425,8 +425,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (!NameValidation.isBlacklistName(split[2])) {
 					TownyUniverse.getDataSource().renameTown(town, split[2]);
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
-				} else
+					TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
+				} else {
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
+				}
 				
 			} else if (split[1].equalsIgnoreCase("spawn")) {
 

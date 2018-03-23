@@ -53,7 +53,7 @@ public class PermHUD {
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}
-			plotName = townBlock.getName() == null ? "" : (PLOTNAME_TITLE + townBlock.getName());
+			plotName = townBlock.getName() == null ? " " : (PLOTNAME_TITLE + townBlock.getName());
 		} catch (NotRegisteredException e) {
 			clearPerms(p);
 			return;

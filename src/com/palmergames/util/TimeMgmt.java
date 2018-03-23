@@ -3,6 +3,8 @@ package com.palmergames.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 public class TimeMgmt {
 
 	public final static long[][] defaultCountdownDelays = new long[][] {
@@ -51,16 +53,16 @@ public class TimeMgmt {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) Math.floor(l / 3600);
-			out = h + " hours";
+			out = h + TownySettings.getLangString("msg_hours");
 			l -= h * 3600;
 		}
 		if (l >= 60) {
 			int m = (int) Math.floor(l / 60);
-			out += (out.length() > 0 ? ", " : "") + m + " minutes";
+			out += (out.length() > 0 ? ", " : "") + m + TownySettings.getLangString("msg_minutes");
 			l -= m * 60;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + " seconds";
+			out += (out.length() > 0 ? ", " : "") + l + TownySettings.getLangString("msg_seconds");
 		return out;
 	}
 }

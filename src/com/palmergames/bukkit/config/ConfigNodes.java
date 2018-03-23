@@ -32,7 +32,7 @@ public enum ConfigNodes {
 			"  #  Possible permission nodes",
 			"  #",
 			"  #    for a full list of permission nodes visit: ",
-			"  #    http://palmergames.com/towny/towny-permission-nodes/ "),			
+			"  #    http://palmergames.com/towny/towny-permission-nodes/ "),
 	LEVELS(
 			"levels",
 			"",
@@ -505,7 +505,12 @@ public enum ConfigNodes {
 			"global_nation_settings.nationzone.war_disables",
 			"true",
 			"",
-			"# When set to true, nation zones are disabled during the the Towny war types."),			
+			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
+			"global_nation_settings.display_board_onlogin",
+			"true",
+			"# If Towny should show players the nationboard when they login."
+			),
 	PLUGIN(
 			"plugin",
 			"",
@@ -1124,6 +1129,11 @@ public enum ConfigNodes {
 			"economy.banks.nation_allow_withdrawls",
 			"true",
 			"# Set to true to allow withdrawls from nation banks"),
+	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
+			"economy.banks.disallow_bank_actions_outside_town",
+			"false",
+			"# When set to true, players can only use their town withdraw/deposit commands while inside of their own town.",
+			"# Likewise, nation banks can only be withdrawn/deposited to while in the capital city."),
 
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
 			"economy.closed_economy.server_account",

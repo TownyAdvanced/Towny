@@ -2897,10 +2897,50 @@ v0.92.0.10:
       - Stops end crystals being placed in towns where they shouldn't be able to place items. 
     - Fix protection of End Crystals in town.
     - Fix protection of Armour Stands and other entities from the explosions caused by Fireworks.
-    - Added API events, courtesy of Articdive
+    - Added API events, courtesy of Articdive:
       - NationInviteTownEvent
       - NationRequestAllyNationEvent
       - TownInvitePlayerEvent
     - Added bStats metrics. 
     - Towny now builds using Java 8, thanks for that gentle nudge github.
     - Italian.yml updated to 0.44 by Leomixer17.
+v0.92.0.11:
+    - Fix players that are jailed in a town which has just deleted itself. 
+    - French.yml updated to 0.44 by TheCalypso.
+    - German.yml updated to 0.44 by Wolf2323.
+    - Reserve support updated by CreatorFromHell.
+    - Database code overhaul by ArticDive.
+      - Easier new additions can be made to the database.
+      - May have better performance/loading.
+    - Added confirmation message to /ta rename.
+    - Stop Towny's name formatting altering player names. Where we used to replace the "_" with a " ", we are no longer doing this for players.
+    - Prevent Towny from adding Towns which have no townblocks claimed to the war event.
+    - Prevent towns with no townblocks from attacking other towns in the Flag War.
+    - Language files bumped to 0.45.
+    - Towny now prevents the log in of players which are using the names of various Towny server accounts.
+      - This includes NPC mayors, the towny-war-chest, and towny-server-account.
+      - This also includes the town and nation bank accounts. 
+      - This is being done because Essentials' economy changes the safe "town-TownNameHere" account to an unsafe "town_TownNameHere" account.
+        - Because the _ is used players can log into the server and steal the money.
+      - We are now including a warning message at startup to let server admins know that Essentials Economy has been resetting town and nation accounts.
+      - This resetting accounts issue has been a problem ever since MC 1.8, and does not appear to be something the maintainers of Essentials will fix.
+        - Please discontinue using Essentials.
+    - New Config Option: economy.banks.disallow_bank_actions_outside_town
+      - default: false
+      - When set to true, players can only use their town withdraw/deposit commands while inside of their own town.
+      - Likewise, nation banks can only be withdrawn/deposited to while in the capital city.
+    - Made /towny time translatable. 
+    - Fix NPE with /plot perm hud when changing worlds.
+    - Add TownyChat version number to /towny universe.
+    - New Feature: nation board messages
+      - just like town's board messages but for nations.
+    - New command: /nation set board {message}
+      - Permission node: towny.command.nation.set.board
+        - child node of towny.command.nation.set.*
+        - no change required to existing townyperms.yml files.
+      - Set the nation's board message.
+    - New Config Option: global_nation_settings.display_board_onlogin
+      - default: true
+      - If Towny should show players the nationboard when they login.
+    - Spanish.yml updated to 0.45 by SeDark.
+    - German.yml updated to 0.45 by Wolf2323.

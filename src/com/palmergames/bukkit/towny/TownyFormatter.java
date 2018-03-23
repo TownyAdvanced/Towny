@@ -578,10 +578,10 @@ public class TownyFormatter {
 		if (resident == null)
 			return "null";
 		if (resident.isKing())
-			return TownySettings.getKingPrefix(resident) + resident.getName().replaceAll("_", " ") + TownySettings.getKingPostfix(resident);
+			return TownySettings.getKingPrefix(resident) + resident.getName() + TownySettings.getKingPostfix(resident);
 		else if (resident.isMayor())
-			return TownySettings.getMayorPrefix(resident) + resident.getName().replaceAll("_", " ") + TownySettings.getMayorPostfix(resident);
-		return resident.getName().replaceAll("_", " ");
+			return TownySettings.getMayorPrefix(resident) + resident.getName() + TownySettings.getMayorPostfix(resident);
+		return resident.getName();
 	}
 
 	public static String getFormattedTownName(Town town) {

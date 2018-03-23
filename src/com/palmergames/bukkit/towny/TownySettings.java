@@ -1190,6 +1190,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN);
 	}
+	
+	public static boolean getShowNationBoardOnLogin() {
+		
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN);
+	}
 
 	public static String getUnclaimedZoneName() {
 
@@ -2360,6 +2365,11 @@ public class TownySettings {
 	public static boolean geNationBankAllowWithdrawls() {
 
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS);
+	}
+	
+	public static boolean isBankActionDisallowedOutsideTown() {
+		
+		return getBoolean(ConfigNodes.ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN);
 	}
 
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {

@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.listeners.TownyBlockPhysicsListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
+import com.palmergames.bukkit.towny.listeners.TownyLoginListener;
 import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
@@ -97,6 +98,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
+	private final TownyLoginListener loginListener = new TownyLoginListener(this);
 	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
@@ -108,7 +110,7 @@ public class Towny extends JavaPlugin {
 
 	private boolean error = false;
 	
-	public static Towny plugin;
+	private static Towny plugin;
 	
 	public Towny() {
 		
@@ -293,7 +295,7 @@ public class Towny extends JavaPlugin {
 
 	private void checkPlugins() {
 
-		List<String> using = new ArrayList<String>();
+		List<String> using = new ArrayList<>();
 		Plugin test;
 
 		if (TownySettings.isUsingPermissions()) {
@@ -375,6 +377,18 @@ public class Towny extends JavaPlugin {
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+		
+		if (TownySettings.isUsingEssentials()){
+			TownyLogger.log.warning("Essentials detected: The Towny authors would like to make you");
+			TownyLogger.log.warning("aware that Essentials has been causing town and nation bank");
+			TownyLogger.log.warning("accounts to reset. Furthermore their handling of bank accounts");
+			TownyLogger.log.warning("has left vital town, nation, warchest and server accounts");
+			TownyLogger.log.warning("vulnerable to exploitation. Towny has made changes to stop");
+			TownyLogger.log.warning("these exploits from occuring but we cannot stop Essentials");
+			TownyLogger.log.warning("Economy from reseting bank accounts. Please change to another");
+			TownyLogger.log.warning("Essentials-type plugin as soon as you are able.");
+		}
+			
 	}
 
 	private void registerEvents() {
@@ -396,6 +410,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(townyWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
+			pluginManager.registerEvents(loginListener, this);
 
 			// Only register a physics listener if we need to.
 			if (TownySettings.getRegenDelay() > 0) {
@@ -725,7 +740,13 @@ public class Towny extends JavaPlugin {
 			throw new Exception(String.format(TownySettings.getLangString("msg_err_invalid_input"), " on/off."));
 	}
 
-	
+	/**
+	 * @return the Towny instance
+	 */
+	public static Towny getPlugin() {
+		return plugin;
+	}
+
 	/**
 	 * @return the playerListener
 	 */
@@ -825,7 +846,7 @@ public class Towny extends JavaPlugin {
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	public void registerSpecialCommands() {
-		List<Command> commands = new ArrayList<Command>();
+		List<Command> commands = new ArrayList<>();
 		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));

@@ -465,6 +465,18 @@ public class TownyMessaging {
 	}
 	
 	/**
+	 * Send the nation board to a player (in yellow)
+	 * 
+	 * @param player
+	 * @param town
+	 */
+	public static void sendNationBoard(Player player, Nation nation) {
+
+		for (String line : ChatTools.color(Colors.Gold + "[" + nation.getName() + "] " + Colors.Yellow + nation.getNationBoard()))
+			player.sendMessage(line);
+	}
+	
+	/**
 	 * Send a message to all residents in the list with the required mode
 	 * 
 	 * @param residents

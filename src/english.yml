@@ -1,8 +1,8 @@
 name: Towny
-version: 0.44
+version: 0.45
 language: english
 author: ElgarL
-website: 'http://code.google.com/a/eclipselabs.org/p/towny/'
+website: 'http://towny.palmergames.com/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -658,7 +658,7 @@ you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
 # Added in 0.43 
-town_help_11: 'Create a new town. Use _''s and not spaces.'
+town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
 msg_err_homeblock_has_not_been_set: 'Home Block has not been set, use ''/town set homeblock'' first.'
@@ -736,7 +736,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Open)'
 status_town_board: '&2Board: &a%s'
 status_founded: '&2Founded: &7%s'
-status_town_size_part_1: '&2Town Size: &a%s / %s)'
+status_town_size_part_1: '&2Town Size: &a%s / %s'
 status_town_size_part_2: ' &b[Bought: %s/%s]'
 status_town_size_part_3: ' &b[Bonus: %s]'
 status_town_size_part_4: ' &b[NationBonus: %s]'
@@ -772,3 +772,13 @@ status_res_taxexempt: '&2Staff are exempt from paying town taxes.'
 status_res_tax: '&2Town Tax: &a'
 status_res_plottax: '&2Total Plot Taxes: &a'
 status_res_totaltax: '&2Total Tax to pay: &a'
+
+# Added in 0.45
+msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'
+msg_err_unable_to_use_bank_outside_nation_capital: 'You cannot make use of your nation bank outside of the nation capital.'
+msg_err_unable_to_use_bank_outside_your_town: 'You cannot make use of your town bank outside of your town.'
+msg_time_until_a_new_day: 'Time until a New Day: '
+msg_hours: ' hours'
+msg_minutes: ' minutes'
+msg_seconds: ' seconds'
+msg_err_invalid_string_nationboard_not_set: 'Invalid string, Nation Board not set.'

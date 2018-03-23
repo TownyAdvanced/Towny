@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.92.0.10
+version: 0.92.0.11
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >
@@ -229,6 +229,7 @@ permissions:
         description: User can access any of the nation set commands.
         default: false
         children:
+            towny.command.nation.set.board: true
             towny.command.nation.set.capitol: true
             towny.command.nation.set.king: true
             towny.command.nation.set.name: true
