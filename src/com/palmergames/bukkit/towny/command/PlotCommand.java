@@ -153,6 +153,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
+						int extraPlots = TownySettings.getMaxResidentPlotsExtra(resident);
+						
+						maxPlots = maxPlots + extraPlots;
+						
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
