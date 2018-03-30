@@ -160,7 +160,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							maxPlots = maxPlots + extraPlots;
 						}
 						
-						if(player.hasPermission(PermissionNodes.TOWNY_ONE_MORE_PLOT.getNode()) {
+						if(player.hasPermission(PermissionNodes.TOWNY_ONE_MORE_PLOT.getNode())) {
 							maxPlots += 1;
 						}
 						
