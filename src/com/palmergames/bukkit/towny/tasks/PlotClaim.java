@@ -137,7 +137,7 @@ public class PlotClaim extends Thread {
 						}
 						
 						if(player.hasPermission(PermissionNodes.TOWNY_ONE_MORE_PLOT.getNode()) {
-							maxplots += 1;
+							maxPlots += 1;
 						}
 						
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
