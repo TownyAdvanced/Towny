@@ -136,7 +136,7 @@ public class PlotClaim extends Thread {
 							maxPlots = maxPlots + extraPlots;
 						}
 						
-						if(player.hasPermission(PermissionNodes.TOWNY_ONE_MORE_PLOT.getNode()) {
+						if(player.hasPermission(PermissionNodes.TOWNY_ONE_MORE_PLOT.getNode())) {
 							maxPlots += 1;
 						}
 						
