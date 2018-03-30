@@ -319,8 +319,9 @@ public enum PermissionNodes {
 	// Info nodes
 
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
-	TOWNY_MAX_PLOTS("towny_maxplots"), 
-	TOWNY_EXTRA_PLOTS("towny_extraplots"), 
+	TOWNY_MAX_PLOTS("towny_maxplots"),
+	TOWNY_ONE_MORE_PLOT("towny.canclaimonemore"),
+	TOWNY_EXTRA_PLOTS("towny_extraplots"),
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
 	
 
