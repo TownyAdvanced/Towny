@@ -32,6 +32,8 @@ public abstract class TownyPermissionSource {
 	abstract public String getPrefixSuffix(Resident resident, String node);
 
 	abstract public int getGroupPermissionIntNode(String playerName, String node);
+	
+	abstract public int getPlayerPermissionIntNode(String playerName, String node);
 
 	//abstract public boolean hasPermission(Player player, String node);
 
