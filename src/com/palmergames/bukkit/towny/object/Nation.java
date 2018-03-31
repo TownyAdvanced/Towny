@@ -22,6 +22,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private String nationBoard = "/nation set board [msg]", tag;
 	public UUID uuid;
 	private long registered;
+	private Location nationSpawn;
 
 	public Nation(String name) {
 
@@ -232,6 +234,44 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public Town getCapital() {
 
 		return capital;
+	}
+
+	public Location getNationSpawn() throws TownyException {
+		if(nationSpawn != null){
+			throw new TownyException("Nation has not set a spawn location.");
+		}
+
+		return nationSpawn;
+	}
+
+	public boolean hasNationSpawn(){
+		return (nationSpawn != null);
+	}
+
+	public void setNationSpawn(Location spawn) throws TownyException {
+		if (!hasNationSpawn())
+			throw new TownyException(TownySettings.getLangString("msg_err_nationspawn_has_not_been_set"));
+		Coord spawnBlock = Coord.parseCoord(spawn);
+
+		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+		if(!townBlock.hasTown()){
+			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+		}
+
+		if(!towns.contains(townBlock.getTown())){
+			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+		}
+
+		this.nationSpawn = spawn;
+	}
+
+	/**
+	 * Only to be called from the Loading methods.
+	 *
+	 * @param nationSpawn
+	 */
+	public void forceSetNationSpawn(Location nationSpawn){
+		this.nationSpawn = nationSpawn;
 	}
 
 	//TODO: Remove

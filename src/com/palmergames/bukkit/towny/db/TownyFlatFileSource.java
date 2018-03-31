@@ -1060,6 +1060,26 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+				line = kvFile.get("nationSpawn");
+				if (line != null) {
+					tokens = line.split(",");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							nation.forceSetNationSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+						}
+				}
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 				return false;

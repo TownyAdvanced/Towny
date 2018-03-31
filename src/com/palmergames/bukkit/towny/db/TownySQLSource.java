@@ -1033,6 +1033,27 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (IllegalArgumentException | NullPointerException ee) {
                     nation.setUuid(UUID.randomUUID());
                 }
+
+                line = rs.getString("nationSpawn");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    if (tokens.length >= 4)
+                        try {
+                            World world = plugin.getServerWorld(tokens[0]);
+                            double x = Double.parseDouble(tokens[1]);
+                            double y = Double.parseDouble(tokens[2]);
+                            double z = Double.parseDouble(tokens[3]);
+
+                            Location loc = new Location(world, x, y, z);
+                            if (tokens.length == 6) {
+                                loc.setPitch(Float.parseFloat(tokens[4]));
+                                loc.setYaw(Float.parseFloat(tokens[5]));
+                            }
+                            nation.forceSetNationSpawn(loc);
+                        } catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+                        }
+                }
             }
             try {
                 line = rs.getString("registered");
