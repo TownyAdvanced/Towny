@@ -172,6 +172,35 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
+				} else if (split[0].equalsIgnoreCase("eviction")) {
+
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICTION.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+					if (TownyUniverse.isWarTime())
+						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+
+					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+					// selection = TownyUtil.filterUnownedPlots(selection);
+
+					if (selection.size() > 0) {
+
+						// Start the claim task
+						PlotClaim evict = new PlotClaim(plugin, player, resident, selection, false);
+						evict.start();
+						try {
+							evict.join();
+						} catch (InterruptedException e) {}
+						
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
+
+						for (WorldCoord worldCoord : selection) {
+							setPlotForSale(resident, worldCoord, -1);
+						}
+
+					} else {
+						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+					}
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
