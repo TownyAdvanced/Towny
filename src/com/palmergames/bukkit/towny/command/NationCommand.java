@@ -1,11 +1,9 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.User;
 import com.google.common.collect.ListMultimap;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
@@ -19,11 +17,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -35,10 +29,13 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import javax.naming.InvalidNameException;
 
@@ -66,6 +63,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "list", TownySettings.getLangString("nation_help_4")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", TownySettings.getLangString("nation_help_10")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
@@ -231,7 +229,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				nationLeave(player);
 			
-			} else if (split[0].equalsIgnoreCase("deposit")) {
+			} else if(split[0].equalsIgnoreCase("spawn")){
+			    /*
+			        Parse standard nation spawn command.
+			     */
+				nationSpawn(player, split);
+            }
+			else if (split[0].equalsIgnoreCase("deposit")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -257,7 +261,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			} else {
+			}  else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
 				if (split[0].equalsIgnoreCase("rank")) {
@@ -1455,8 +1459,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-
-
 	public void nationEnemy(Player player, String[] split) {
 
 		Resident resident;
@@ -1559,6 +1561,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawn", ""));
 		} else {
 			Resident resident;
 			Nation nation;
@@ -1618,7 +1621,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 
-			} else if (split[0].equalsIgnoreCase("taxes")) {
+			} else if (split[0].equalsIgnoreCase("spawn")){
+				try{
+					nation.setNationSpawn(player.getLocation());
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_nation_spawn"));
+				} catch (TownyException e){
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
+			}
+			else if (split[0].equalsIgnoreCase("taxes")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXES.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -1846,5 +1857,207 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+
+    /**
+     * Wrapper for the nationSpawn() method. All calls should be through here
+     * unless bypassing for admins.
+     *
+     * @param player
+     * @param split
+     * @throws TownyException
+     */
+    public static void nationSpawn(Player player, String[] split) throws TownyException {
+
+        try {
+
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            Nation nation;
+            String notAffordMSG;
+
+            // Set target nation and affiliated messages.
+            if ((split.length == 0) || ((split.length > 0))) {
+
+                if (!resident.hasTown()) {
+                    TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+                    return;
+                }
+
+                nation = resident.getTown().getNation();
+                notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
+
+                nationSpawn(player, split, nation, notAffordMSG);
+
+            } else {
+                // split.length > 1
+                nation = TownyUniverse.getDataSource().getNation(split[0]);
+                notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_nation"), nation.getName());
+
+                nationSpawn(player, split, nation, notAffordMSG);
+
+            }
+        } catch (NotRegisteredException e) {
+
+            throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+
+        }
+
+    }
+
+    /**
+     * Core nation spawn function to allow admin use.
+     *
+     * @param player
+     * @param split
+     * @param nation
+     * @param notAffordMSG
+     */
+    public static void nationSpawn(Player player, String[] split, Nation nation, String notAffordMSG) {
+
+        try {
+            boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SPAWN_OTHER.getNode());
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            Location spawnLoc;
+            TownSpawnLevel nationSpawnPermission;
+
+            spawnLoc = nation.getNationSpawn();
+
+            // Determine conditions
+            if (isTownyAdmin) {
+                nationSpawnPermission = TownSpawnLevel.ADMIN;
+            } else if ((split.length == 0)) {
+				nationSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+            } else {
+                // split.length > 1
+                if (!resident.hasTown()) {
+                    nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                }
+                else if (resident.hasNation()) {
+                    Nation playerNation = resident.getTown().getNation();
+                    Nation targetNation = nation;
+
+                    if (playerNation == targetNation) {
+                        nationSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+                    } else if (targetNation.hasEnemy(playerNation)) {
+                        // Prevent enemies from using spawn travel.
+                        throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
+                    } else if (targetNation.hasAlly(playerNation)) {
+                        nationSpawnPermission = TownSpawnLevel.NATION_ALLY;
+                    } else {
+                        nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                    }
+                } else {
+                    nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                }
+            }
+
+            nationSpawnPermission.checkIfAllowed(plugin, player, resident.getTown());
+
+            if (!isTownyAdmin) {
+                // Prevent spawn travel while in disallowed zones (if
+                // configured)
+                List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
+
+                if (!disallowedZones.isEmpty()) {
+                    String inTown = null;
+                    try {
+                        Location loc = plugin.getCache(player).getLastLocation();
+                        inTown = TownyUniverse.getTownName(loc);
+                    } catch (NullPointerException e) {
+                        inTown = TownyUniverse.getTownName(player.getLocation());
+                    }
+
+                    if (inTown == null && disallowedZones.contains("unclaimed"))
+                        throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_spawn_disallowed_from"), "the Wilderness"));
+                    if (inTown != null && resident.hasNation() && TownyUniverse.getDataSource().getTown(inTown).hasNation()) {
+                        Nation inNation = TownyUniverse.getDataSource().getTown(inTown).getNation();
+                        Nation playerNation = resident.getTown().getNation();
+                        if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
+                            throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_spawn_disallowed_from"), "Enemy areas"));
+                        if (!inNation.hasAlly(playerNation) && !inNation.hasEnemy(playerNation) && disallowedZones.contains("neutral"))
+                            throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_spawn_disallowed_from"), "Neutral towns"));
+                    }
+                }
+            }
+
+            double travelCost = nationSpawnPermission.getCost();
+
+            // Check if need/can pay
+            if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&
+                    (travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)) )
+                throw new TownyException(notAffordMSG);
+
+            // Used later to make sure the chunk we teleport to is loaded.
+            Chunk chunk = spawnLoc.getChunk();
+
+            // isJailed test
+            if (resident.isJailed()) {
+                TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
+                return;
+            }
+
+            // Essentials tests
+            boolean UsingESS = plugin.isEssentials();
+
+            if (UsingESS && !isTownyAdmin) {
+                try {
+                    User user = plugin.getEssentials().getUser(player);
+
+                    if (!user.isJailed() && !resident.isJailed()) {
+
+                        Teleport teleport = user.getTeleport();
+                        if (!chunk.isLoaded())
+                            chunk.load();
+                        // Cause an essentials exception if in cooldown.
+                        teleport.cooldown(true);
+                        teleport.teleport(spawnLoc, null);
+                    }
+                } catch (Exception e) {
+                    TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
+                    // cooldown?
+                    return;
+                }
+            }
+
+
+            // Show message if we are using Vault and are charging for spawn travel.
+            if ( !TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) ) {
+                TownyEconomyObject payee = nation;
+                if (!TownySettings.isTownSpawnPaidToTown())
+                    payee = TownyEconomyObject.SERVER_ACCOUNT;
+                if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, payee, String.format("Nation Spawn (%s)", nationSpawnPermission))) {
+                    TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost)));
+                }
+            }
+
+            // If an Admin or Essentials teleport isn't being used, use our own.
+            if (isTownyAdmin) {
+                if (player.getVehicle() != null)
+                    player.getVehicle().eject();
+                if (!chunk.isLoaded())
+                    chunk.load();
+                player.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                return;
+            }
+
+            if (!UsingESS) {
+                if (TownyTimerHandler.isTeleportWarmupRunning()) {
+                    // Use teleport warmup
+                    player.sendMessage(String.format(TownySettings.getLangString("msg_nation_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+                    plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);
+                } else {
+                    // Don't use teleport warmup
+                    if (player.getVehicle() != null)
+                        player.getVehicle().eject();
+                    if (!chunk.isLoaded())
+                        chunk.load();
+                    player.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                }
+            }
+        } catch (TownyException e) {
+            TownyMessaging.sendErrorMsg(player, e.getMessage());
+        } catch (EconomyException e) {
+            TownyMessaging.sendErrorMsg(player, e.getMessage());
+        }
+    }
 
 }

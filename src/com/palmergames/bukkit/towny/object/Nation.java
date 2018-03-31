@@ -237,7 +237,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public Location getNationSpawn() throws TownyException {
-		if(nationSpawn != null){
+		if(nationSpawn == null){
 			throw new TownyException("Nation has not set a spawn location.");
 		}
 
@@ -249,8 +249,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public void setNationSpawn(Location spawn) throws TownyException {
-		if (!hasNationSpawn())
-			throw new TownyException(TownySettings.getLangString("msg_err_nationspawn_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
 		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
