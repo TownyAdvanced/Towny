@@ -1615,6 +1615,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("neutral", nation.isNeutral());
+            nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + Double.toString(nation.getNationSpawn().getX()) + "#" + Double.toString(nation.getNationSpawn().getY()) + "#" + Double.toString(nation.getNationSpawn().getZ()) + "#" + Float.toString(nation.getNationSpawn().getPitch()) + "#" + Float.toString(nation.getNationSpawn().getYaw()) : "");
             if (nation.hasValidUUID()){
                 nat_hm.put("uuid", nation.getUuid());
             } else {

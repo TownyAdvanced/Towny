@@ -1814,6 +1814,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("registered=" + 0);
 		}
 
+		// Spawn
+		if (nation.hasNationSpawn())
+			try {
+				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + Double.toString(nation.getNationSpawn().getX()) + "," + Double.toString(nation.getNationSpawn().getY()) + "," + Double.toString(nation.getNationSpawn().getZ()) + "," + Float.toString(nation.getNationSpawn().getPitch()) + "," + Float.toString(nation.getNationSpawn().getYaw()));
+			} catch (TownyException e) {
+			}
+
 		/*
 		 *  Make sure we only save in async
 		 */
