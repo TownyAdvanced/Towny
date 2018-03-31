@@ -191,8 +191,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						try {
 							evict.join();
 						} catch (InterruptedException e) {}
-						
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
 
 						for (WorldCoord worldCoord : selection) {
 							setPlotForSale(resident, worldCoord, -1);
