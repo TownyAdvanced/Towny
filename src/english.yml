@@ -71,6 +71,7 @@ nation_help_6: 'Create a new nation'
 nation_help_7: 'List the king commands'
 nation_help_8: 'Create a new nation'
 nation_help_9: 'List all online residents in nation'
+nation_help_10: 'Teleport to the nations spawn.'
 
 king_help_1: 'Nation King Help'
 king_help_2: 'Set your alliance.'
