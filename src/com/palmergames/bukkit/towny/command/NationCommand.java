@@ -233,7 +233,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			    /*
 			        Parse standard nation spawn command.
 			     */
-				nationSpawn(player, split);
+				String[] newSplit = StringMgmt.remFirstArg(split);
+				nationSpawn(player, newSplit);
             }
 			else if (split[0].equalsIgnoreCase("deposit")) {
 
@@ -1875,12 +1876,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             String notAffordMSG;
 
             // Set target nation and affiliated messages.
-            if ((split.length == 0) || ((split.length > 0))) {
+            if (split.length == 0) {
 
                 if (!resident.hasTown()) {
                     TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
                     return;
                 }
+
+                if(!resident.getTown().hasNation()){
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+					return;
+				}
 
                 nation = resident.getTown().getNation();
                 notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
