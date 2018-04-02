@@ -180,25 +180,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (TownyUniverse.isWarTime())
 						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-					// selection = TownyUtil.filterUnownedPlots(selection);
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					Resident owner = townBlock.getResident();
 
-					if (selection.size() > 0) {
+					townBlock.setResident(null);
+					townBlock.setPlotPrice(-1);
 
-						// Start the claim task
-						PlotClaim evict = new PlotClaim(plugin, player, resident, selection, false);
-						evict.start();
-						try {
-							evict.join();
-						} catch (InterruptedException e) {}
+					// Set the plot permissions to mirror the towns.
+					townBlock.setType(townBlock.getType());
 
-						for (WorldCoord worldCoord : selection) {
-							setPlotForSale(resident, worldCoord, -1);
-						}
-
-					} else {
-						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
-					}
+					TownyUniverse.getDataSource().saveResident(owner);
+					// Update the townBlock data file so it's no longer using custom settings.
+					TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
