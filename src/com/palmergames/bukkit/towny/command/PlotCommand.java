@@ -172,9 +172,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
-				} else if (split[0].equalsIgnoreCase("eviction")) {
+				} else if (split[0].equalsIgnoreCase("evict")) {
 
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICTION.getNode()))
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					if (TownyUniverse.isWarTime())
