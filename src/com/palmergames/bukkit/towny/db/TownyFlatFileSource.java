@@ -1080,6 +1080,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 				}
 
+				line = kvFile.get("isPublic");
+				if (line != null)
+					try {
+						nation.setPublic(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 				return false;
@@ -1815,11 +1822,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		// Spawn
-		if (nation.hasNationSpawn())
+		if (nation.hasNationSpawn()) {
 			try {
 				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + Double.toString(nation.getNationSpawn().getX()) + "," + Double.toString(nation.getNationSpawn().getY()) + "," + Double.toString(nation.getNationSpawn().getZ()) + "," + Float.toString(nation.getNationSpawn().getPitch()) + "," + Float.toString(nation.getNationSpawn().getYaw()));
-			} catch (TownyException e) {
-			}
+			} catch (TownyException e) { }
+		}
+
+		list.add("isPublic=" + Boolean.toString(nation.isPublic()));
 
 		/*
 		 *  Make sure we only save in async

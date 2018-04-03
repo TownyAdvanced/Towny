@@ -46,11 +46,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public UUID uuid;
 	private long registered;
 	private Location nationSpawn;
+	private boolean isPublic;
 
 	public Nation(String name) {
 
 		setName(name);
 		tag = "";
+        isPublic = TownySettings.getNationDefaultPublic();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -673,4 +675,14 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public String getNationBoard() {
 		return nationBoard;
 	}
+
+    public void setPublic(boolean isPublic) {
+
+        this.isPublic = isPublic;
+    }
+
+    public boolean isPublic() {
+
+        return isPublic;
+    }
 }

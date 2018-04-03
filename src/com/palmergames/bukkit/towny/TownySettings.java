@@ -1787,6 +1787,11 @@ public class TownySettings {
 		return getNationUpkeep() * multiplier;
 	}
 
+	public static boolean getNationDefaultPublic(){
+
+		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+	}
+
 	public static String getFlatFileBackupType() {
 
 		return getString(ConfigNodes.PLUGIN_FLATFILE_BACKUP);

@@ -1054,6 +1054,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                         } catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
                         }
                 }
+
+                nation.setPublic(rs.getBoolean("isPublic"));
             }
             try {
                 line = rs.getString("registered");
@@ -1627,6 +1629,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             } else {
                 nat_hm.put("registered", 0);
             }
+            nat_hm.put("isPublic", nation.isPublic());
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 
