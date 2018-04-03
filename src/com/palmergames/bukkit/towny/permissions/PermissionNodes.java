@@ -37,6 +37,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_SURNAME("towny.command.nation.set.surname"),
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
 		TOWNY_COMMAND_NATION_SET_BOARD("towny.command.nation.set.board"),
+		TOWNY_COMMAND_NATION_SET_SPAWN("towny.command.nation.set.spawn"),
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
 	TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),

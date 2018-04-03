@@ -1623,6 +1623,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split[0].equalsIgnoreCase("spawn")){
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWN.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
 				try{
 					nation.setNationSpawn(player.getLocation());
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_nation_spawn"));
@@ -1883,10 +1887,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     return;
                 }
 
-                if(!resident.getTown().hasNation()){
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
-					return;
-				}
+                if (!resident.getTown().hasNation()) {
+                    TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_nation"));
+                    return;
+                }
 
                 nation = resident.getTown().getNation();
                 notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
