@@ -1794,7 +1794,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful public", ""));
 		} else {
 			Resident resident;
 			Nation nation;
@@ -1842,7 +1842,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
-			} else {
+			} else if(split[0].equalsIgnoreCase("public")){
+                if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode()))
+                    throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+                nation.setPublic(!nation.isPublic());
+                TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_nation_toggle_public"));
+            }
+			else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));
 				return;
 			}
@@ -1961,6 +1968,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             }
 
             nationSpawnPermission.checkIfAllowed(plugin, player, resident.getTown());
+
+			// Check the permissions (Inspired by the town command but rewritten. (So we can actually read it :3 ))
+            if(!isTownyAdmin) {
+                if (nationSpawnPermission == TownSpawnLevel.UNAFFILIATED) {
+                    if (!nation.isPublic()) {
+                        throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
+                    }
+                }
+            }
 
             if (!isTownyAdmin) {
                 // Prevent spawn travel while in disallowed zones (if
