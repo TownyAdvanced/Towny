@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
@@ -252,12 +253,24 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
 		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
-		if(!townBlock.hasTown()){
-			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
-		}
+		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
+			if(this.capital == null){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(townBlock.getTown() != this.getCapital()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+		} else {
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
 
-		if(!towns.contains(townBlock.getTown())){
-			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			if(!towns.contains(townBlock.getTown())){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
 		}
 
 		this.nationSpawn = spawn;
