@@ -784,3 +784,5 @@ msg_hours: ' Stunden'
 msg_minutes: ' Minuten'
 msg_seconds: ' Sekunden'
 msg_err_invalid_string_nationboard_not_set: 'Ungültige Eingabe, Nation Board nicht gesetzt.'
+
+msg_plot_evict: 'Plot successfully evicted.'
