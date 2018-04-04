@@ -782,3 +782,5 @@ msg_hours: ' horas'
 msg_minutes: ' minutos'
 msg_seconds: ' segundos'
 msg_err_invalid_string_nationboard_not_set: 'Texto inválido, Tablón de la nación no establecido.'
+
+msg_plot_evict: 'Plot desahuciada con éxito.'
