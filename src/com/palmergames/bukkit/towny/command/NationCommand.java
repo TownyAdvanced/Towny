@@ -1967,12 +1967,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 }
             }
 
-            nationSpawnPermission.checkIfAllowed(plugin, player, resident.getTown());
-
 			// Check the permissions (Inspired by the town command but rewritten. (So we can actually read it :3 ))
             if(!isTownyAdmin) {
                 if (nationSpawnPermission == TownSpawnLevel.UNAFFILIATED) {
-                    if (!nation.isPublic()) {
+					boolean war = TownyUniverse.isWarTime();
+					if(war){
+						throw new TownyException(TownySettings.getLangString("msg_err_nation_spawn_war"));
+					}
+
+					if (!nation.isPublic()) {
                         throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
                     }
                 }
