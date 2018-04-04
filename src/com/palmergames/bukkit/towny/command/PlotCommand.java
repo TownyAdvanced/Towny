@@ -192,6 +192,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyUniverse.getDataSource().saveResident(owner);
 					// Update the townBlock data file so it's no longer using custom settings.
 					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+					
+					player.sendMessage(TownySettings.getLangString("msg_plot_evict"));
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
