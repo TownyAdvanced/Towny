@@ -2951,3 +2951,4 @@ v0.92.0.11:
     - New Permission Node: towny.command.plot.evict
       - Required to use the /plot evict command.
       - Child node of towny.command.plot.*
+    - Change contributing.md to match our java 8 status.
