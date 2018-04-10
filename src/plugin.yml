@@ -366,6 +366,7 @@ permissions:
             towny.command.plot.asmayor: true
             towny.command.plot.claim: true
             towny.command.plot.clear: true
+            towny.command.plot.evict: true
             towny.command.plot.forsale: true
             towny.command.plot.notforsale: true
             towny.command.plot.perm: true

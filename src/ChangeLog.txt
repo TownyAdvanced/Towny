@@ -2945,3 +2945,9 @@ v0.92.0.11:
     - Spanish.yml updated to 0.45 by SeDark.
     - German.yml updated to 0.45 by Wolf2323.
     - Fix using /towny spy moving a player from other chat channels and removing other modes.
+    - New Command: '/plot evict' courtesy of SeDark
+      - Allows the removal of a player from a personally owned plot.
+      - Requires the towny.command.plot.evict and towny.command.plot.asmayor permission nodes.
+    - New Permission Node: towny.command.plot.evict
+      - Required to use the /plot evict command.
+      - Child node of towny.command.plot.*
