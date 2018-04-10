@@ -75,6 +75,25 @@ public class bPermsSource extends TownyPermissionSource {
 		return iReturn;
 
 	}
+	
+	@Override
+	public int getPlayerPermissionIntNode(String playerName, String node) {
+		
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
+
+		String result = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, getPlayerGroup(player), node);
+
+		try {
+			iReturn = Integer.parseInt(result);
+		} catch (NumberFormatException e) {}
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
+	}
 
 	/**
 	 * 

@@ -153,6 +153,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
+						int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
+						
+						//Infinite plots
+						if (maxPlots != -1) {
+							maxPlots = maxPlots + extraPlots;
+						}
+						
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
@@ -165,6 +172,28 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
+				} else if (split[0].equalsIgnoreCase("evict")) {
+
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+					if (TownyUniverse.isWarTime())
+						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					Resident owner = townBlock.getResident();
+
+					townBlock.setResident(null);
+					townBlock.setPlotPrice(-1);
+
+					// Set the plot permissions to mirror the towns.
+					townBlock.setType(townBlock.getType());
+
+					TownyUniverse.getDataSource().saveResident(owner);
+					// Update the townBlock data file so it's no longer using custom settings.
+					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+					
+					player.sendMessage(TownySettings.getLangString("msg_plot_evict"));
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 

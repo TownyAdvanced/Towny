@@ -1972,6 +1972,14 @@ public class TownySettings {
 			maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
 		return maxPlots;
 	}
+	
+	public static int getMaxResidentExtraPlots(Resident resident) {
+
+		int extraPlots = TownyUniverse.getPermissionSource().getPlayerPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_EXTRA_PLOTS.getNode());
+		if (extraPlots == -1)
+			extraPlots = 0;
+		return extraPlots;
+	}
 
 	public static int getMaxResidentOutposts(Resident resident) {
 
