@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -28,6 +29,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -153,6 +155,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
+						int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
+						
+						//Infinite plots
+						if (maxPlots != -1) {
+							maxPlots = maxPlots + extraPlots;
+						}
+						
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
@@ -164,6 +173,44 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
+					}
+				} else if (split[0].equalsIgnoreCase("evict")) {
+
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+					if (TownyUniverse.isWarTime())
+						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+					
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));					
+
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					Town town = townBlock.getTown();										
+					
+					if (townBlock.getResident() == null) {
+						
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_no_one_to_evict"));						
+					} else {
+						
+						Resident owner = townBlock.getResident();
+						if (!town.equals(resident.getTown())){ 
+							
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_part_town"));
+							return false;							
+						}
+
+						townBlock.setResident(null);
+						townBlock.setPlotPrice(-1);
+
+						// Set the plot permissions to mirror the towns.
+						townBlock.setType(townBlock.getType());
+
+						TownyUniverse.getDataSource().saveResident(owner);
+						// Update the townBlock data file so it's no longer using custom settings.
+						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						
+						player.sendMessage(TownySettings.getLangString("msg_plot_evict"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {

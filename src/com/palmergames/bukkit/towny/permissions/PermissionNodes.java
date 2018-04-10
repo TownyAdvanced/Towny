@@ -144,6 +144,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_PLOT("towny.command.plot.*"),
 		TOWNY_COMMAND_PLOT_ASMAYOR("towny.command.plot.asmayor"),
 		TOWNY_COMMAND_PLOT_CLAIM("towny.command.plot.claim"),
+		TOWNY_COMMAND_PLOT_EVICT("towny.command.plot.evict"),
 		TOWNY_COMMAND_PLOT_UNCLAIM("towny.command.plot.unclaim"),
 		TOWNY_COMMAND_PLOT_NOTFORSALE("towny.command.plot.notforsale"),
 		TOWNY_COMMAND_PLOT_FORSALE("towny.command.plot.forsale"),
@@ -323,7 +324,8 @@ public enum PermissionNodes {
 	// Info nodes
 
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
-	TOWNY_MAX_PLOTS("towny_maxplots"), 
+	TOWNY_MAX_PLOTS("towny_maxplots"),
+	TOWNY_EXTRA_PLOTS("towny_extraplots"),
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
 	
 

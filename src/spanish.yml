@@ -783,6 +783,8 @@ msg_minutes: ' minutos'
 msg_seconds: ' segundos'
 msg_err_invalid_string_nationboard_not_set: 'Texto inválido, Tablón de la nación no establecido.'
 
+msg_plot_evict: 'Plot desahuciada con éxito.'
+msg_no_one_to_evict: 'No one to evict from this plot.'
 # Added nation spawns
 nation_help_10: 'Teleport to the nations spawn.'
 msg_nation_spawn_warmup: '&bWaiting to teleport...'

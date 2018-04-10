@@ -44,6 +44,12 @@ public class BukkitPermSource extends TownyPermissionSource {
 
 		return getEffectivePermIntNode(playerName, node);
 	}
+	
+	@Override
+	public int getPlayerPermissionIntNode(String playerName, String node) {
+		
+		return getEffectivePermIntNode(playerName, node);
+	}
 
 	/**
 	 * 

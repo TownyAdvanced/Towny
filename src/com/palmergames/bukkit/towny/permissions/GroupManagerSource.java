@@ -110,6 +110,22 @@ public class GroupManagerSource extends TownyPermissionSource {
 		return iReturn;
 
 	}
+	
+	@Override
+	public int getPlayerPermissionIntNode(String playerName, String node) {
+		
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
+
+		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
+		iReturn  = handler.getPermissionInteger(playerName, node);
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
+	}
 
 	/**
 	 * 
