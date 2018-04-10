@@ -180,10 +180,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("spy")) {
 
 				if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-					if (plugin.hasPlayerMode(player, "spy"))
-						plugin.removePlayerMode(player);
-					else
-						plugin.setPlayerMode(player, split, true);
+					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					resident.toggleMode(split, true);
 				} else
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 

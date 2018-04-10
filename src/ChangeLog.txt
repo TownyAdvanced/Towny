@@ -2944,3 +2944,4 @@ v0.92.0.11:
       - If Towny should show players the nationboard when they login.
     - Spanish.yml updated to 0.45 by SeDark.
     - German.yml updated to 0.45 by Wolf2323.
+    - Fix using /towny spy moving a player from other chat channels and removing other modes.

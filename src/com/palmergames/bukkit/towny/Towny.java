@@ -68,6 +68,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -636,7 +637,7 @@ public class Towny extends JavaPlugin {
 			return;
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());			 
 			resident.setModes(modes, notify);
 
 		} catch (NotRegisteredException e) {
