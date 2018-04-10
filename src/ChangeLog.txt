@@ -2948,7 +2948,12 @@ v0.92.0.11:
     - New Command: '/plot evict' courtesy of SeDark
       - Allows the removal of a player from a personally owned plot.
       - Requires the towny.command.plot.evict and towny.command.plot.asmayor permission nodes.
-    - New Permission Node: towny.command.plot.evict
+    - New Permission Node: 'towny.command.plot.evict' courtesy of SeDark
       - Required to use the /plot evict command.
       - Child node of towny.command.plot.*
+    - New Permission/Info Node: 'towny_extraplots' courtesy of SeDark
+      - Used like the towny_maxplots node, ie: in GM's info node section where prefix and suffix's are set.
+      - ex: towny_extraplots: 1
+      - Used to give players who have the town_maplots permission node, but who are also a mayor or assistant.
+      - Giving these extra plots, allows them to claim their maxplot amount plus the extra plot amount.
     - Change contributing.md to match our java 8 status.
