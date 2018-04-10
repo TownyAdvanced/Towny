@@ -15,7 +15,7 @@ Please make sure to read our [License](https://github.com/LlmDl/Towny/blob/maste
 
 ## Code Requirements    
 1. You must use Tabs (Size 4 Spaces).    
-2. Keep your environment in Java 6,   
+2. Keep your environment in Java 8,   
 3. Avoid using Wildcard imports (It's not preferred, but it's allowed.)   
 4. Don't run IDE Formatters over entire class files, unless it's a new class-file you're implementing.   
    - This is done to avoid us changing the lines everytime, each IDE is different so we don't have a constant here and there.
