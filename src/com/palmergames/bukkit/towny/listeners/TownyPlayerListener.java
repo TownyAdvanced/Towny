@@ -459,38 +459,44 @@ public class TownyPlayerListener implements Listener {
 					break;
 	
 				case MINECART:
-	
-					if (event.getRightClicked() instanceof org.bukkit.entity.minecart.StorageMinecart) {
-	
-						blockID = 342;
-	
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.RideableMinecart) {
-	
-						blockID = 328;
-	
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-	
-						blockID = 343;
-	
-					} else if (event.getRightClicked() instanceof org.bukkit.entity.minecart.HopperMinecart) {
-	
-						blockID = 408;
-	
-					} else {
-	
-						blockID = 321;
-					}
-	
-					if ((blockID != 0) && (!TownySettings.isSwitchMaterial(BukkitTools.getMaterial(blockID).name())))
-						return;
+					
+					blockID = 328;
+					break;
+				
+				case MINECART_CHEST:
+					
+					blockID = 342;
+					break;
+				
+				case MINECART_FURNACE:
+					
+					blockID = 343;
+					break;
+				
+				case MINECART_COMMAND:
+					
+					blockID = 422;
+					break;
+				
+				case MINECART_HOPPER:
+					
+					blockID = 408;
+					break;
+					
+				case MINECART_TNT:
+					
+					blockID = 407;
+					break;
+					
+				default:
+					break;
+			}
+					
+				if ((blockID != 0) && (!TownySettings.isSwitchMaterial(BukkitTools.getMaterial(blockID).name())))
+					return;
 	
 					// Get permissions (updates if none exist)
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.SWITCH);
-					break;
-				default:
-					break;
-
-			}
 
 			if (blockID != 0) {
 

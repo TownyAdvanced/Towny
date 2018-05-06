@@ -2957,3 +2957,6 @@ v0.92.0.11:
       - Used to give players who have the town_maplots permission node, but who are also a mayor or assistant.
       - Giving these extra plots, allows them to claim their maxplot amount plus the extra plot amount.
     - Change contributing.md to match our java 8 status.
+    - Fix switch and destroy permissions for minecarts.
+    - REQUIRED CONFIG ADDITION:
+      - existing installs need to add ",POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART" to the end of the item_use_ids.

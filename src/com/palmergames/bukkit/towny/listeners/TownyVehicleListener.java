@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,38 +49,39 @@ public class TownyVehicleListener implements Listener {
 			switch (event.getVehicle().getType()) {
 
 			case MINECART:
-
-				if (event.getVehicle() instanceof org.bukkit.entity.minecart.StorageMinecart) {
-
-					blockID = 342;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.RideableMinecart) {
-
-					blockID = 328;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-
-					blockID = 343;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.HopperMinecart) {
-
-					blockID = 408;
-
-				} else {
-
-					blockID = 321;
-				}
-
-				if ((blockID != 0) && (!TownySettings.isItemUseMaterial(BukkitTools.getMaterial(blockID).name())))
-					return;
-
-				// Get permissions (updates if none exist)
-				bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.ITEM_USE);
+				blockID = 328;
 				break;
+			
+			case MINECART_FURNACE:
+				blockID = 343;
+				break;
+			
+			case MINECART_HOPPER:
+				blockID = 408;
+				break;
+				
+			case MINECART_CHEST:
+				blockID = 342;
+				break;
+			
+			case MINECART_COMMAND:
+				blockID = 422;
+				break;
+			
+			case MINECART_TNT:
+				blockID = 407;
+				break;
+				
 			default:
 				break;
 
 			}
+			
+			if ((blockID != 0) && (!TownySettings.isItemUseMaterial(BukkitTools.getMaterial(blockID).name())))
+				return;
+
+			// Get permissions (updates if none exist)
+			bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.ITEM_USE);
 
 			if (blockID != 0) {
 

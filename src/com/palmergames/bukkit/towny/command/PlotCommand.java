@@ -303,13 +303,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-					if (split.length > 1 && split[1].equalsIgnoreCase("hud"))
-						if (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode())) {
-							plugin.getHUDManager().togglePermHuD(player);
-						} else {
-							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
-						}
-					else {
+					if (split.length > 1 && split[1].equalsIgnoreCase("hud")) {
+						
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode()))
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						
+						plugin.getHUDManager().togglePermHuD(player);
+						
+					} else {
 						TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
 					}
