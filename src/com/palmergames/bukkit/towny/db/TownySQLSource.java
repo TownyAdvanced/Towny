@@ -1033,6 +1033,29 @@ public class TownySQLSource extends TownyFlatFileSource {
                 } catch (IllegalArgumentException | NullPointerException ee) {
                     nation.setUuid(UUID.randomUUID());
                 }
+
+                line = rs.getString("nationSpawn");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    if (tokens.length >= 4)
+                        try {
+                            World world = plugin.getServerWorld(tokens[0]);
+                            double x = Double.parseDouble(tokens[1]);
+                            double y = Double.parseDouble(tokens[2]);
+                            double z = Double.parseDouble(tokens[3]);
+
+                            Location loc = new Location(world, x, y, z);
+                            if (tokens.length == 6) {
+                                loc.setPitch(Float.parseFloat(tokens[4]));
+                                loc.setYaw(Float.parseFloat(tokens[5]));
+                            }
+                            nation.forceSetNationSpawn(loc);
+                        } catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+                        }
+                }
+
+                nation.setPublic(rs.getBoolean("isPublic"));
             }
             try {
                 line = rs.getString("registered");
@@ -1594,6 +1617,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("neutral", nation.isNeutral());
+            nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + Double.toString(nation.getNationSpawn().getX()) + "#" + Double.toString(nation.getNationSpawn().getY()) + "#" + Double.toString(nation.getNationSpawn().getZ()) + "#" + Float.toString(nation.getNationSpawn().getPitch()) + "#" + Float.toString(nation.getNationSpawn().getYaw()) : "");
             if (nation.hasValidUUID()){
                 nat_hm.put("uuid", nation.getUuid());
             } else {
@@ -1605,6 +1629,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             } else {
                 nat_hm.put("registered", 0);
             }
+            nat_hm.put("isPublic", nation.isPublic());
 
             UpdateDB("NATIONS", nat_hm, Arrays.asList("name"));
 

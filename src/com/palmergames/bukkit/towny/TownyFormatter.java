@@ -433,7 +433,9 @@ public class TownyFormatter {
 		// Allies [4]: James Nation, Carry Territory, Mason Country
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+        out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+
+		out.add(TownySettings.getLangString("status_public") + (nation.isPublic() ? TownySettings.getLangString("status_yes") : TownySettings.getLangString("status_no")));
 
 		out = formatStatusScreens(out);
 		return out;

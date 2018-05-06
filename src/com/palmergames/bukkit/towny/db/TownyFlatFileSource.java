@@ -1060,6 +1060,33 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+				line = kvFile.get("nationSpawn");
+				if (line != null) {
+					tokens = line.split(",");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							nation.forceSetNationSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+						}
+				}
+
+				line = kvFile.get("isPublic");
+				if (line != null)
+					try {
+						nation.setPublic(Boolean.parseBoolean(line));
+					} catch (Exception e) {
+					}
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 				return false;
@@ -1793,6 +1820,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		} else {
 			list.add("registered=" + 0);
 		}
+
+		// Spawn
+		if (nation.hasNationSpawn()) {
+			try {
+				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + Double.toString(nation.getNationSpawn().getX()) + "," + Double.toString(nation.getNationSpawn().getY()) + "," + Double.toString(nation.getNationSpawn().getZ()) + "," + Float.toString(nation.getNationSpawn().getPitch()) + "," + Float.toString(nation.getNationSpawn().getYaw()));
+			} catch (TownyException e) { }
+		}
+
+		list.add("isPublic=" + Boolean.toString(nation.isPublic()));
 
 		/*
 		 *  Make sure we only save in async

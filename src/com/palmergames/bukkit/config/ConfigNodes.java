@@ -511,6 +511,16 @@ public enum ConfigNodes {
 			"true",
 			"# If Towny should show players the nationboard when they login."
 			),
+	GNATION_SETTINGS_CAPITAL_SPAWN(
+			"global_nation_settings.capital_spawn",
+			"true",
+			"# If enabled, only allow the nation spawn to be set in the capital city."
+	),
+    GNATION_DEF_PUBLIC(
+            "global_nation_settings.def.public",
+            "true",
+            "# Default setting for the public variable."
+    ),
 	PLUGIN(
 			"plugin",
 			"",
