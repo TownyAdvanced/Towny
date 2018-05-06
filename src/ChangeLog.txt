@@ -2960,3 +2960,19 @@ v0.92.0.11:
     - Fix switch and destroy permissions for minecarts.
     - REQUIRED CONFIG ADDITION:
       - existing installs need to add ",POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART" to the end of the item_use_ids.
+0.92.0.12:
+    - New Feature: Nation spawn points! courtesy of MartenM
+      - Nation's can now set a spawn and whether their spawn is public, nearly exactly like town's and their spawn abilities.
+      - Enemy's can be prevented from spawning to public nations' spawns using the already existing config "prevent_town_spawn_in:" list.
+        - You can also prevent spawning from unclaimed or neutral areas using this config entry.
+      - Any cost for spawning to a Nation is paid to the nation being spawned to.
+      - Cost is the same as the cost for spawning to a Town.
+    - New Config Option: global_nation_settings.capital_spawn
+      - default: true
+      - If enabled, only allow the nation spawn to be set in the capital city.
+    - New Config Option: global_nation_settings.default.public
+      - default: false
+      - If set to true, any newly made nation will have their spawn set to public.
+    - REQUIRED TOWNYPERMS.YML CHANGE:
+      - Add towny.command.nation.spawn to your nations.default rank/group.
+    - Bump language files to version 0.46.

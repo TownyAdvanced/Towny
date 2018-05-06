@@ -86,6 +86,7 @@ nations:
         # All nation members get these permissions.
         - towny.command.nation.online
         - towny.command.nation.deposit
+        - towny.command.nation.spawn
         - towny.town.spawn.nation
         - towny.town.spawn.ally
         - towny.chat.nation

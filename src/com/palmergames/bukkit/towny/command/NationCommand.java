@@ -233,6 +233,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			    /*
 			        Parse standard nation spawn command.
 			     */
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SPAWN.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				nationSpawn(player, newSplit);
             }

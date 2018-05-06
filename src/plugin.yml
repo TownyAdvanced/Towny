@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.92.0.11
+version: 0.92.0.12
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >
@@ -158,6 +158,7 @@ permissions:
             towny.command.nation.rank.*: true
             towny.command.nation.say: true
             towny.command.nation.set.*: true
+            towny.command.nation.spawn: true
             towny.command.nation.toggle.*: true
 
     towny.command.nation.ally.*:
@@ -233,6 +234,7 @@ permissions:
             towny.command.nation.set.capitol: true
             towny.command.nation.set.king: true
             towny.command.nation.set.name: true
+            towny.command.nation.set.spawn: true
             towny.command.nation.set.surname: true
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
@@ -243,6 +245,7 @@ permissions:
         default: false
         children:
             towny.command.nation.toggle.neutral: true
+            towny.command.nation.toggle.public: true
 
     # Town command permissions
     towny.command.town.*:

@@ -517,9 +517,9 @@ public enum ConfigNodes {
 			"# If enabled, only allow the nation spawn to be set in the capital city."
 	),
     GNATION_DEF_PUBLIC(
-            "global_nation_settings.def.public",
-            "true",
-            "# Default setting for the public variable."
+            "global_nation_settings.default.public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."
     ),
 	PLUGIN(
 			"plugin",

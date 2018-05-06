@@ -42,6 +42,8 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
     TOWNY_COMMAND_NATION_TOGGLE_PUBLIC("towny.command.nation.toggle.public"),
+    
+    TOWNY_COMMAND_NATION_SPAWN("towny.command.nation.spawn"),
 
 
 	TOWNY_COMMAND_NATION_ENEMY("towny.command.nation.enemy"),

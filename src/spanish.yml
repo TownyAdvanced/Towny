@@ -1,5 +1,5 @@
 name: Towny
-version: 0.45
+version: 0.46
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://towny.palmergames.com/'
@@ -785,7 +785,8 @@ msg_err_invalid_string_nationboard_not_set: 'Texto inválido, Tablón de la naci
 
 msg_plot_evict: 'Plot desahuciada con éxito.'
 msg_no_one_to_evict: 'No one to evict from this plot.'
-# Added nation spawns
+
+# Added in 0.46
 nation_help_10: 'Teleport to the nations spawn.'
 msg_nation_spawn_warmup: '&bWaiting to teleport...'
 msg_set_nation_spawn: '&bSuccessfully changed nation''s spawn.'
