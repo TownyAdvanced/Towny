@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -172,7 +173,8 @@ public class  BStats {
      *
      * @return The plugin specific data.
      */
-    public JSONObject getPluginData() {
+    @SuppressWarnings("unchecked")
+	public JSONObject getPluginData() {
         JSONObject data = new JSONObject();
 
         String pluginName = plugin.getDescription().getName();
@@ -199,7 +201,8 @@ public class  BStats {
      *
      * @return The server specific data.
      */
-    private JSONObject getServerData() {
+    @SuppressWarnings("unchecked")
+	private JSONObject getServerData() {
         // Minecraft specific data
         int playerAmount;
         try {
@@ -243,7 +246,8 @@ public class  BStats {
     /**
      * Collects the data and sends it afterwards.
      */
-    private void submitData() {
+    @SuppressWarnings("unchecked")
+	private void submitData() {
         final JSONObject data = getServerData();
 
         JSONArray pluginData = new JSONArray();
@@ -354,7 +358,8 @@ public class  BStats {
             this.chartId = chartId;
         }
 
-        private JSONObject getRequestJsonObject() {
+        @SuppressWarnings("unchecked")
+		private JSONObject getRequestJsonObject() {
             JSONObject chart = new JSONObject();
             chart.put("chartId", chartId);
             try {
@@ -395,7 +400,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             String value = callable.call();
@@ -426,7 +432,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             JSONObject values = new JSONObject();
@@ -470,7 +477,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             JSONObject values = new JSONObject();
@@ -519,7 +527,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             int value = callable.call();
@@ -551,7 +560,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             JSONObject values = new JSONObject();
@@ -596,7 +606,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             JSONObject values = new JSONObject();
@@ -634,7 +645,8 @@ public class  BStats {
             this.callable = callable;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         protected JSONObject getChartData() throws Exception {
             JSONObject data = new JSONObject();
             JSONObject values = new JSONObject();
