@@ -246,7 +246,7 @@ public class TownyEntityListener implements Listener {
 	
 	/**
 	 * Prevent explosions from hurting non-living entities in towns.
-	 * Includes: Armorstands, itemframes, animals, endercrystals
+	 * Includes: Armorstands, itemframes, animals, endercrystals, minecarts
 	 * 
 	 * Prevent explosions from hurting players if Event War is active and
 	 * WarzoneBlockPermissions' explosions tag is set to true.
@@ -268,8 +268,11 @@ public class TownyEntityListener implements Listener {
 		if (TownyUniverse.isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager == "PRIMED_TNT")
 			event.setCancelled(true);			
 		
+		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
+		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
+		
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {			
-			if (damager == "PRIMED_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || 
+			if (damager == "PRIMED_TNT" || damager == "MINECART_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" || 
 			    damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER" || damager == "FIREWORK") {
 											
 				try {
@@ -305,7 +308,8 @@ public class TownyEntityListener implements Listener {
 						return;
 					}			
 					// Get destroy permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
+					//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.ARMOR_STAND, TownyPermission.ActionType.DESTROY);
 
 					// Allow the removal if we are permitted
 					if (bDestroy)
@@ -844,10 +848,11 @@ public class TownyEntityListener implements Listener {
 					// and the towns has no nation
 					if (townyWorld.isUsingTowny() && !townyWorld.isForceExpl()) {
 						if ((!townBlock.getPermissions().explosion) || (TownyUniverse.isWarTime() && TownySettings.isAllowWarBlockGriefing() && !townBlock.getTown().hasNation() && !townBlock.getTown().isBANG())) {
-							if (event.getEntity() != null)
+							if (event.getEntity() != null){
 								TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding within " + coord.toString() + ".");
-							event.setCancelled(true);
-							return;
+								event.setCancelled(true); 
+								return;
+							}
 						}
 					}
 				} catch (TownyException x) {
@@ -1005,7 +1010,8 @@ public class TownyEntityListener implements Listener {
 				Player player = (Player) remover;
 
 				// Get destroy permissions (updates if none exist)
-				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.DESTROY);
+				//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.DESTROY);
+				boolean bDestroy = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.DESTROY);
 
 				// Allow the removal if we are permitted
 				if (bDestroy)
@@ -1083,7 +1089,8 @@ public class TownyEntityListener implements Listener {
 				return;
 
 			// Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.BUILD);
+			//boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.BUILD);
 
 			// Allow placing if we are permitted
 			if (bBuild)

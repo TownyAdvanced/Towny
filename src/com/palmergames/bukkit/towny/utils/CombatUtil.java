@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -192,7 +193,7 @@ public class CombatUtil {
 						 * and have destroy permissions (dirt) in the defending
 						 * TownBlock
 						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, (byte) 0, ActionType.DESTROY))
+						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT, ActionType.DESTROY))
 							return true;
 					}
 				}
@@ -204,51 +205,45 @@ public class CombatUtil {
 				/*
 				 * Protect specific entity interactions (faked with block ID's).
 				 */
-				int blockID = 0;
+				Material block = null;
 
 				switch (defendingEntity.getType()) {
-
-				case ITEM_FRAME:
-
-					blockID = 389;
-					break;
-
-				case PAINTING:
-
-					blockID = 321;
-
-					break;
-
-				case MINECART:
-
-					if (defendingEntity instanceof org.bukkit.entity.minecart.StorageMinecart) {
-
-						blockID = 342;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.RideableMinecart) {
-
-						blockID = 328;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-
-						blockID = 343;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.HopperMinecart) {
-
-						blockID = 408;
-
-					} else {
-
-						blockID = 321;
-					}
-				default:
-					break;
-
+	
+					case ITEM_FRAME:
+						block = Material.ITEM_FRAME;
+						break;
+	
+					case PAINTING:
+						block = Material.PAINTING;
+						break;
+	
+					case MINECART:
+						block = Material.MINECART;
+						break;
+						
+					case MINECART_CHEST:
+						block = Material.STORAGE_MINECART;
+						break;
+					
+					case MINECART_FURNACE:
+						block = Material.POWERED_MINECART;
+						break;
+	
+					case MINECART_COMMAND:
+						block = Material.COMMAND_MINECART;
+						break;
+	
+					case MINECART_HOPPER:
+						block = Material.HOPPER_MINECART;
+						break;
+					
+					default:
+						break;
 				}
 
-				if (blockID != 0) {
+				if (block != null) {
 					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
 
 					if (!bDestroy) {
 

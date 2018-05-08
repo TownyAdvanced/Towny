@@ -2977,3 +2977,6 @@ v0.92.0.11:
       - Add towny.command.nation.spawn to your nations.default rank/group.
     - Bump language files to version 0.46.
     - German.yml updated to 0.44 by Wolf2323.
+    - Overhaul cache/permissions system to use material instead of blockid:data values. 
+      - Old API still in place but deprecated. 
+      - Plugin authors are advised to begin using new Material options when querying the Towny cache/utils.  
