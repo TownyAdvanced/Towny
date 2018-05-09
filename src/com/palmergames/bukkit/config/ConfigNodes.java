@@ -1034,6 +1034,10 @@ public enum ConfigNodes {
 			"resident_settings.deny_bed_use",
 			"false",
 			"# If true, players can only use beds in plots they personally own."),
+	RES_SETTING_IS_SHOWING_WELCOME_MESSAGE(
+			"resident_settings.is_showing_welcome_message",
+			"true",
+			"# If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide."),
 	ECO(
 			"economy",
 			"",

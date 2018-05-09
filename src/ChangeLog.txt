@@ -2986,3 +2986,6 @@ v0.92.0.11:
     - Fix placing an embassy plot for sale not showing the for sale message under certain conditions.
     - Fix a missing denial message when using /plot nfs on an area where the user does own the land.
     - Fix /towny spy not working when a player has towny.chat.spy but not towny.command.towny.spy  
+    - New Config Option: resident_settings.is_showing_welcome_message
+      - default: true
+      - If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide.
