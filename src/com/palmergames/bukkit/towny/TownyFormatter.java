@@ -340,10 +340,6 @@ public class TownyFormatter {
 		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
 
 		// Assistants [2]: Sammy, Ginger
-		// if (town.getAssistants().size() > 0)
-		// out.addAll(getFormattedResidents("Assistants",
-		// town.getAssistants()));
-
 		List<String> ranklist = new ArrayList<String>();
 		List<Resident> residentss = town.getResidents();
 		List<String> townranks = TownyPerms.getTownRanks();
@@ -388,7 +384,6 @@ public class TownyFormatter {
 	 * @param nation
 	 * @return a string list containing the results.
 	 */
-	@SuppressWarnings("null")
 	public static List<String> getStatus(Nation nation) {
 
 		List<String> out = new ArrayList<String>();
@@ -421,7 +416,7 @@ public class TownyFormatter {
 		if (nation.isPublic()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += TownySettings.getLangString("status_public") + TownySettings.getLangString("status_yes");
+			line += TownySettings.getLangString("status_public");
 		}		
 		// Bank: 534 coins | Peaceful | Public: Yes
 		
@@ -434,13 +429,9 @@ public class TownyFormatter {
 					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
 				   );
 		// Assistants [2]: Sammy, Ginger
-		// if (town.getAssistants().size() > 0)
-		// out.addAll(getFormattedResidents("Assistants",
-		// town.getAssistants()));
-
 		List<String> ranklist = new ArrayList<String>();
 		List<Town> towns = nation.getTowns();
-		List<Resident> residents = null;
+		List<Resident> residents = new ArrayList<Resident>();
 		
 		for (Town town: towns) {
 			 residents.addAll(town.getResidents());
