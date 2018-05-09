@@ -49,7 +49,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -127,6 +126,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+	@SuppressWarnings("static-access")
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -369,6 +369,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
 									Location outpost = outposts.get(i);

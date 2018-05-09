@@ -2984,4 +2984,5 @@ v0.92.0.11:
     - Add /plot evict to /plot ?.
     - Fix Embassy plots not being able to be removed from sale under certain conditions.
     - Fix placing an embassy plot for sale not showing the for sale message under certain conditions.
-    - Fix a missing denial message when using /plot nfs on an area where the user does own the land.  
+    - Fix a missing denial message when using /plot nfs on an area where the user does own the land.
+    - Fix /towny spy not working when a player has towny.chat.spy but not towny.command.towny.spy  
