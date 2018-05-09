@@ -2980,3 +2980,4 @@ v0.92.0.11:
     - Overhaul cache/permissions system to use material instead of blockid:data values. 
       - Old API still in place but deprecated. 
       - Plugin authors are advised to begin using new Material options when querying the Towny cache/utils.  
+    - Fix /nation not showing the nation ranks. 
