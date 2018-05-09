@@ -2982,3 +2982,6 @@ v0.92.0.11:
       - Plugin authors are advised to begin using new Material options when querying the Towny cache/utils.  
     - Fix /nation not showing the nation ranks. 
     - Add /plot evict to /plot ?.
+    - Fix Embassy plots not being able to be removed from sale under certain conditions.
+    - Fix placing an embassy plot for sale not showing the for sale message under certain conditions.
+    - Fix a missing denial message when using /plot nfs on an area where the user does own the land.  

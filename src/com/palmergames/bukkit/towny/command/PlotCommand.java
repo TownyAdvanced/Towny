@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -246,10 +245,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
-					selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					if (!townBlock.getType().equals(TownBlockType.EMBASSY)) 
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
+					else
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
 
 					for (WorldCoord worldCoord : selection) {
 						setPlotForSale(resident, worldCoord, -1);
+					}
+					
+					if (selection.isEmpty()){
+						throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
@@ -698,9 +705,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					townBlock.setPlotPrice(forSale);
 
-					if (forSale != -1)
+					if (forSale != -1) {
 						TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
-					else
+						if (townBlock.getTown() != resident.getTown())
+							TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+					} else
 						TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 
 					// Save this townblock so the for sale status is remembered.
@@ -835,7 +844,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (townBlock.hasResident()) {
 			
-			Resident owner = townBlock.getResident();		
+			Resident owner = townBlock.getResident();
 			if ((!owner.hasTown() 
 					&& (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
 					&& (townBlock.getTown() == resident.getTown()))				
