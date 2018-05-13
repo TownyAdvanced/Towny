@@ -825,7 +825,7 @@ public class TownyPlayerListener implements Listener {
 				
 				// Allow item_use for Event War if isAllowingItemUseInWarZone is true,
 				boolean playerNeutral = false;
-				if (TownyUniverse.isWarTime()) {			
+				if (TownyUniverse.isWarTime()) {
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						if (resident.isJailed())
