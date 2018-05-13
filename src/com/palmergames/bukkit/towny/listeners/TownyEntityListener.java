@@ -323,7 +323,7 @@ public class TownyEntityListener implements Listener {
 				boolean bDestroy = false;
 				if (entity instanceof EnderCrystal) {
 					// Test if a player can break a grass block here.
-					bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 2, (byte) 0, TownyPermission.ActionType.DESTROY);
+					bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
 					// If destroying is allowed then return before we cancel.
 					if (bDestroy)
 						return;
