@@ -5,7 +5,14 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache;	
+import com.palmergames.bukkit.towny.object.Town;	
+import com.palmergames.bukkit.towny.object.TownBlock;	
+import com.palmergames.bukkit.towny.object.TownBlockType;	
+import com.palmergames.bukkit.towny.object.TownyPermission;	
+import com.palmergames.bukkit.towny.object.TownyUniverse;	
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -15,7 +22,9 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ArraySort;
+
 import net.citizensnpcs.api.CitizensAPI;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,7 +47,17 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;	
+import org.bukkit.event.entity.EntityCombustByEntityEvent;	
+import org.bukkit.event.entity.EntityDamageByEntityEvent;	
+import org.bukkit.event.entity.EntityDeathEvent;	
+import org.bukkit.event.entity.EntityExplodeEvent;	
+import org.bukkit.event.entity.EntityInteractEvent;	
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.LingeringPotionSplashEvent;	
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
@@ -240,7 +259,7 @@ public class TownyEntityListener implements Listener {
 
 			Player target = (Player)event.getTarget();
 			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY)) {
+				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.DIRT, TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 				}
 			}
