@@ -268,15 +268,15 @@ public class TownyEntityListener implements Listener {
 		Entity entity = event.getEntity();		
 		String damager = event.getDamager().getType().name();
 		// Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.  
-		if (TownyUniverse.isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager == "PRIMED_TNT")
+		if (TownyUniverse.isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
 			event.setCancelled(true);			
 		
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
 		
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
-			if (damager == "PRIMED_TNT" || damager == "MINECART_TNT" || damager == "WITHER_SKULL" || damager == "FIREBALL" || damager == "SMALL_FIREBALL" ||
-			    damager == "LARGE_FIREBALL" || damager == "WITHER" || damager == "CREEPER" || damager == "FIREWORK") {
+		  if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
+          damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
 											
 				try {
 					townyWorld = TownyUniverse.getDataSource().getWorld(entity.getWorld().getName());
