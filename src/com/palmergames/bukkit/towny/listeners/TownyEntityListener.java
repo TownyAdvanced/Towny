@@ -240,7 +240,7 @@ public class TownyEntityListener implements Listener {
 
 			Player target = (Player)event.getTarget();
 			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), target.getInventory().getItemInMainHand().getType(), TownyPermission.ActionType.ITEM_USE)) {
+				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 				}
 			}
