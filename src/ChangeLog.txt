@@ -2999,3 +2999,4 @@ v0.92.0.11:
       - default: false
       - If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.
       - Home plots will also allow deposit and withdraw commands.
+    - French.yml updated by TheCalypso.
