@@ -802,3 +802,4 @@ msg_nation_toggle_public: '&aDie Öffentlichkeints Einstellung der Nation wurde 
 status_yes: '&aJa'
 status_no: '&cNein'
 status_public: '&2Öffentlich: '
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot.'

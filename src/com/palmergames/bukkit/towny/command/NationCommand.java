@@ -202,6 +202,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				
+				if (TownySettings.isBankActionLimitedToBankPlots()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
+					Nation tbNation = tb.getTown().getNation();					
+					Nation pNation= TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					boolean goodPlot = false;
+					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
+						goodPlot = true;
+					if (!goodPlot)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));						
+				}
+				
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_nation_capital"));					
@@ -243,6 +258,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (TownySettings.isBankActionLimitedToBankPlots()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
+					Nation tbNation = tb.getTown().getNation();
+					Nation pNation= TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					boolean goodPlot = false;
+					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
+						goodPlot = true;
+					if (!goodPlot)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));						
+				}
 				
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))

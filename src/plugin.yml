@@ -395,6 +395,7 @@ permissions:
             towny.command.plot.set.perm: true
             towny.command.plot.set.reset: true
             towny.command.plot.set.arena: true
+            towny.command.plot.set.bank: true
             towny.command.plot.set.embassy: true
             towny.command.plot.set.farm: true
             towny.command.plot.set.inn: true

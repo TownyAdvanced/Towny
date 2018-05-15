@@ -2380,6 +2380,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN);
 	}
+	
+	public static boolean isBankActionLimitedToBankPlots() {
+		
+		return getBoolean(ConfigNodes.BANK_IS_LIMTED_TO_BANK_PLOTS);
+	}
 
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 

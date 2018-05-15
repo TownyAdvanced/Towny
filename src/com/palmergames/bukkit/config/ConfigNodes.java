@@ -1240,6 +1240,23 @@ public enum ConfigNodes {
 			"jail.bail.bail_amount",
 			"10",
 			"#Amount that bail costs."),
+	BANK(
+			"bank",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Bank Plot settings                   | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			"  # Bank plots may be used by other economy plugins using the Towny API.",			
+			""),
+	BANK_IS_LIMTED_TO_BANK_PLOTS(
+			"bank.is_banking_limited_to_bank_plots",
+			"false",
+			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
+			"# Home plots will also allow deposit and withdraw commands."),			
 	WAR(
 			"war",
 			"",

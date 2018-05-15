@@ -2992,3 +2992,10 @@ v0.92.0.11:
     - New: Animals can no longer be tempted with food by players who would not also be able to butcher them, courtesy of creatorfromhell.
     - Fix /plot perm hud causing NPEs when a player teleports to a non-Towny world.
     - Town and Nation level calculations are now more efficient thanks to creatorfromhell.
+    - New Plot Type: Bank
+      - If the config option is set to true, players will only be able to use withdraw and deposit commands while in their home block or bank plots.
+      - Probably useful for various economy plugins.
+    - New Config Option: bank.is_banking_limited_to_bank_plots 
+      - default: false
+      - If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.
+      - Home plots will also allow deposit and withdraw commands.
