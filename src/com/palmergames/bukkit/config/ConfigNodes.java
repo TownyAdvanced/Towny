@@ -514,10 +514,6 @@ public enum ConfigNodes {
 			"global_nation_settings.capital_spawn",
 			"true",
 			"# If enabled, only allow the nation spawn to be set in the capital city."),
-    GNATION_DEF_PUBLIC(
-            "global_nation_settings.default.public",
-            "false",
-            "# If set to true, any newly made nation will have their spawn set to public."),
     GNATION_SETTINGS_ALLOW_NATION_SPAWN(
 			"global_nation_settings.allow_nation_spawn",
 			"true",
@@ -539,6 +535,10 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nations,",
 			"# when there is a war or peace."),
+    GNATION_DEF_PUBLIC(
+            "global_nation_settings.default.public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
 	PLUGIN(
 			"plugin",
 			"",

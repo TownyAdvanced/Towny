@@ -1,4 +1,4 @@
-- towny.command.nation.depositname: Towny
+name: Towny
 main: com.palmergames.bukkit.towny.Towny
 version: 0.92.0.12
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
