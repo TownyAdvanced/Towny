@@ -287,6 +287,12 @@ public enum PermissionNodes {
 	TOWNY_SPAWN_NATION("towny.town.spawn.nation"),
 	TOWNY_SPAWN_ALLY("towny.town.spawn.ally"),
 	TOWNY_SPAWN_PUBLIC("towny.town.spawn.public"),
+	
+	TOWNY_NATION_SPAWN_ALL("towny.nation.spawn.*"),
+	
+	TOWNY_NATION_SPAWN_NATION("towny.nation.spawn.nation"),
+	TOWNY_NATION_SPAWN_ALLY("towny.nation.spawn.ally"),
+	TOWNY_NATION_SPAWN_PUBLIC("towny.nation.spawn.public"),
 
 	TOWNY_WILD_ALL("towny.wild.*"),
 

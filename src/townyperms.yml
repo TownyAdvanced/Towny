@@ -87,8 +87,8 @@ nations:
         - towny.command.nation.online
         - towny.command.nation.deposit
         - towny.command.nation.spawn
-        - towny.town.spawn.nation
-        - towny.town.spawn.ally
+        - towny.nation.spawn.nation
+        - towny.nation.spawn.ally
         - towny.chat.nation
     king:
         # Kings get these permissions in addition to the default set.

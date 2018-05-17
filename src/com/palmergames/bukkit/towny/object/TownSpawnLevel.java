@@ -90,14 +90,14 @@ public enum TownSpawnLevel {
 
 		return this == TownSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, this.permissionNode)) || ((!plugin.isPermissions()) && (isAllowedTown(town)));
 	}
-	
+
 	private boolean isAllowedTown(Town town)
 	{
 		boolean war = TownyUniverse.isWarTime() || TownyWar.isUnderAttack(town);
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE ? true : level == SpawnLevel.FALSE ? false : level == SpawnLevel.WAR ? war : !war;
 	}
-
+	
 	public double getCost() {
 
 		return this == TownSpawnLevel.ADMIN ? 0 : TownySettings.getDouble(ecoPriceConfigNode);

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
+import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
@@ -281,6 +282,15 @@ public class TownySettings {
 		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
 		if(level == null) {
 			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+		}
+		return level;
+	}
+	
+	public static NSpawnLevel getNSpawnLevel(ConfigNodes node)
+	{
+		NSpawnLevel level = NSpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
+		if(level == null) {
+			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
 		return level;
 	}
@@ -1542,6 +1552,16 @@ public class TownySettings {
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
 		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+	}
+	
+	public static NSpawnLevel isAllowingNationSpawn() {
+
+		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN);
+	}
+
+	public static NSpawnLevel isAllowingPublicNationSpawnTravel() {
+
+		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {

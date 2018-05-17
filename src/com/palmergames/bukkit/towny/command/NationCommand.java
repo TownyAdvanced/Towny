@@ -1967,52 +1967,59 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SPAWN_OTHER.getNode());
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
             Location spawnLoc;
-            TownSpawnLevel nationSpawnPermission;
+            NationSpawnLevel nationSpawnPermission;
 
             spawnLoc = nation.getNationSpawn();
 
             // Determine conditions
             if (isTownyAdmin) {
-                nationSpawnPermission = TownSpawnLevel.ADMIN;
+                nationSpawnPermission = NationSpawnLevel.ADMIN;
             } else if ((split.length == 0)) {
-				nationSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+				nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
             } else {
                 // split.length > 1
                 if (!resident.hasTown()) {
-                    nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                    nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
                 }
                 else if (resident.hasNation()) {
                     Nation playerNation = resident.getTown().getNation();
                     Nation targetNation = nation;
 
                     if (playerNation == targetNation) {
-                        nationSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+                        nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
                     } else if (targetNation.hasEnemy(playerNation)) {
                         // Prevent enemies from using spawn travel.
                         throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
                     } else if (targetNation.hasAlly(playerNation)) {
-                        nationSpawnPermission = TownSpawnLevel.NATION_ALLY;
+                        nationSpawnPermission = NationSpawnLevel.NATION_ALLY;
                     } else {
-                        nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                        nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
                     }
                 } else {
-                    nationSpawnPermission = TownSpawnLevel.UNAFFILIATED;
+                    nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
                 }
             }
 
-			// Check the permissions (Inspired by the town command but rewritten. (So we can actually read it :3 ))
-            if(!isTownyAdmin) {
-                if (nationSpawnPermission == TownSpawnLevel.UNAFFILIATED) {
-					boolean war = TownyUniverse.isWarTime();
-					if(war){
-						throw new TownyException(TownySettings.getLangString("msg_err_nation_spawn_war"));
-					}
+            // Check the permissions
+        	if (!(isTownyAdmin || ((nationSpawnPermission == NationSpawnLevel.UNAFFILIATED) ? nation.isPublic() : nationSpawnPermission.hasPermissionNode(plugin, player, nation)))) {
 
-					if (!nation.isPublic()) {
-                        throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
-                    }
-                }
-            }
+         		throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
+   			}
+
+            
+//			// Check the permissions (Inspired by the town command but rewritten. (So we can actually read it :3 ))
+//            if(!isTownyAdmin) {
+//                if (nationSpawnPermission == TownSpawnLevel.UNAFFILIATED) {
+//					boolean war = TownyUniverse.isWarTime();
+//					if(war){
+//						throw new TownyException(TownySettings.getLangString("msg_err_nation_spawn_war"));
+//					}
+//
+//					if (!nation.isPublic()) {
+//                        throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
+//                    }
+//                }
+//            }
 
             if (!isTownyAdmin) {
                 // Prevent spawn travel while in disallowed zones (if

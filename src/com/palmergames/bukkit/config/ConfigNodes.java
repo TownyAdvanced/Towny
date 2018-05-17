@@ -509,18 +509,36 @@ public enum ConfigNodes {
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
-			"# If Towny should show players the nationboard when they login."
-			),
+			"# If Towny should show players the nationboard when they login."),
 	GNATION_SETTINGS_CAPITAL_SPAWN(
 			"global_nation_settings.capital_spawn",
 			"true",
-			"# If enabled, only allow the nation spawn to be set in the capital city."
-	),
+			"# If enabled, only allow the nation spawn to be set in the capital city."),
     GNATION_DEF_PUBLIC(
             "global_nation_settings.default.public",
             "false",
-            "# If set to true, any newly made nation will have their spawn set to public."
-    ),
+            "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_SETTINGS_ALLOW_NATION_SPAWN(
+			"global_nation_settings.allow_nation_spawn",
+			"true",
+			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL(
+			"global_nation_settings.allow_nation_spawn_travel",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL_ALLY(
+			"global_nation_settings.allow_nation_spawn_travel_ally",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nations,",
+			"# when there is a war or peace."),
 	PLUGIN(
 			"plugin",
 			"",

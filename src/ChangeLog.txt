@@ -2975,6 +2975,8 @@ v0.92.0.11:
       - If set to true, any newly made nation will have their spawn set to public.
     - REQUIRED TOWNYPERMS.YML CHANGE:
       - Add towny.command.nation.spawn to your nations.default rank/group.
+      - Add towny.nation.spawn.nation to your nations.default rank/group.
+      - Add towny.nation.spawn.ally to your nations.default rank/group.
     - Bump language files to version 0.46.
     - German.yml updated to 0.46 by Wolf2323.
     - Overhaul cache/permissions system to use material instead of blockid:data values. 
@@ -3000,3 +3002,26 @@ v0.92.0.11:
       - If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.
       - Home plots will also allow deposit and withdraw commands.
     - French.yml updated by TheCalypso.
+    - New Config Option: global_nation_settings.allow_nation_spawn
+      - default: true
+      - Allow the use of /nation spawn.
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation when there is a war or peace.
+    - New Config Option: global_nation_settings.allow_nation_spawn_travel
+      - default: true
+      - Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation when there is a war or peace.
+    - New Config Option: global_nation_settings.allow_nation_spawn_travel_ally
+      - default: true
+      - Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation, when there is a war or peace.
+    - New Permission Nodes: towny.nation.spawn.*:
+      - description: Grants all Nation Spawn travel nodes
+      - default: false
+      - children:
+        - towny.nation.spawn.nation: true
+        - towny.nation.spawn.ally: true
+        - towny.nation.spawn.public: true
+    

@@ -1,4 +1,4 @@
-name: Towny
+- towny.command.nation.depositname: Towny
 main: com.palmergames.bukkit.towny.Towny
 version: 0.92.0.12
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
@@ -90,6 +90,14 @@ permissions:
         default: false
         children:
             towny.command.town.outpost.list: true
+            
+    towny.nation.spawn.*:
+        description: Grants all Nation Spawn travel nodes
+        default: false
+        children:
+            towny.nation.spawn.nation: true
+            towny.nation.spawn.ally: true
+            towny.nation.spawn.public: true
 
     towny.wild.*:
         description: User can build/destroy/switch/item_use in the wild.
