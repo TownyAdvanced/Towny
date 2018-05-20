@@ -3024,4 +3024,10 @@ v0.92.0.11:
         - towny.nation.spawn.nation: true
         - towny.nation.spawn.ally: true
         - towny.nation.spawn.public: true
-    
+    - New Command: /ta checkperm {name} {node}
+      - Test if a player has a permission node.
+    - New TownyPerms feature: town/nation placeholder nodes
+      - You can now add placeholder permission nodes into Townyperms.
+      - Will not work for nomads with no town.
+      - For example: adding stargate.network.{townname} to the default Town section in the townyperms.yml will assign the permission node stargate.network.england, to all the online members of the town England.
+      - use {townname} for towns, and {nationname} in your nation section.
