@@ -2547,4 +2547,8 @@ public class TownySettings {
 	public static boolean isShowingRegistrationMessage() {
 		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_WELCOME_MESSAGE);
 	}
+	
+	public static double getSpawnTravelCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL);
+	}
 }

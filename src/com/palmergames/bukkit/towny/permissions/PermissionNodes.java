@@ -38,6 +38,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
 		TOWNY_COMMAND_NATION_SET_BOARD("towny.command.nation.set.board"),
 		TOWNY_COMMAND_NATION_SET_SPAWN("towny.command.nation.set.spawn"),
+		TOWNY_COMMAND_NATION_SET_SPAWNCOST("towny.command.nation.set.spawncost"),
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
@@ -103,6 +104,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_PLOTTAX("towny.command.town.set.plottax"),
 			TOWNY_COMMAND_TOWN_SET_SHOPTAX("towny.command.town.set.shoptax"),
 			TOWNY_COMMAND_TOWN_SET_EMBASSYTAX("towny.command.town.set.embassytax"),
+			TOWNY_COMMAND_TOWN_SET_SPAWNCOST("towny.command.town.set.spawncost"),
 			TOWNY_COMMAND_TOWN_SET_PLOTPRICE("towny.command.town.set.plotprice"),
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),

@@ -800,6 +800,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
                 town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
                 town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
+                town.setSpawnCost(rs.getFloat("spawnCost"));
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
@@ -1027,6 +1028,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
                 nation.setTaxes(rs.getDouble("taxes"));
+                nation.setSpawnCost(rs.getFloat("spawnCost"));
                 nation.setNeutral(rs.getBoolean("neutral"));
                 try {
                     nation.setUuid(UUID.fromString(rs.getString("uuid")));
@@ -1554,6 +1556,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
             twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());
             twn_hm.put("embassyPlotTax", town.getEmbassyPlotTax());
+            twn_hm.put("spawnCost", town.getSpawnCost());
             twn_hm.put("plotPrice", town.getPlotPrice());
             twn_hm.put("plotTax", town.getPlotTax());
             twn_hm.put("taxes", town.getTaxes());
@@ -1616,6 +1619,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
+            nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
             nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + Double.toString(nation.getNationSpawn().getX()) + "#" + Double.toString(nation.getNationSpawn().getY()) + "#" + Double.toString(nation.getNationSpawn().getZ()) + "#" + Float.toString(nation.getNationSpawn().getPitch()) + "#" + Float.toString(nation.getNationSpawn().getYaw()) : "");
             if (nation.hasValidUUID()){

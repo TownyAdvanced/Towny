@@ -1596,6 +1596,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawn", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawncost [$]", ""));
 		} else {
 			Resident resident;
 			Nation nation;
@@ -1686,6 +1687,32 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_town_set_nation_tax"), player.getName(), split[1]));
 					} catch (NumberFormatException e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
+					}
+				}
+				
+			} else if (split[0].equalsIgnoreCase("spawncost")) {
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWNCOST.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				if (split.length < 2)
+					TownyMessaging.sendErrorMsg(player, "Eg: /nation set spawncost 70");
+				else {
+					try {
+						Double amount = Double.parseDouble(split[1]);
+						if (amount < 0) {
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
+							return;
+						}
+						if (TownySettings.getSpawnTravelCost() < amount) {
+							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_set_spawn_cost_more_than"), TownySettings.getSpawnTravelCost()));
+							return;
+						}
+						nation.setSpawnCost(amount);
+						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_spawn_cost_set_to"), player.getName(), TownySettings.getLangString("nation_sing"), split[1]));
+					} catch (NumberFormatException e) {
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
+						return;
 					}
 				}
 

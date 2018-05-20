@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -21,11 +22,13 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.naming.InvalidNameException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -784,6 +787,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setEmbassyPlotTax(0);
 					}
+				
+				line = kvFile.get("spawnCost");
+				if (line != null)
+					try {
+						town.setSpawnCost(Double.parseDouble(line));
+					} catch (Exception e) {
+						town.setSpawnCost(TownySettings.getSpawnTravelCost());
+					}
 
 				line = kvFile.get("adminDisabledPvP");
 				if (line != null)
@@ -1034,6 +1045,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setTaxes(Double.parseDouble(line));
 					} catch (Exception e) {
 						nation.setTaxes(0.0);
+					}
+
+				line = kvFile.get("spawnCost");
+				if (line != null)
+					try {
+						nation.setSpawnCost(Double.parseDouble(line));
+					} catch (Exception e) {
+						nation.setSpawnCost(TownySettings.getSpawnTravelCost());
 					}
 
 				line = kvFile.get("neutral");
@@ -1719,6 +1738,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("embassyPlotPrice=" + Double.toString(town.getEmbassyPlotPrice()));
 		// Embassy Tax
 		list.add("embassyPlotTax=" + Double.toString(town.getEmbassyPlotTax()));
+		// Town Spawn Cost
+		list.add("spawnCost=" + Double.toString(town.getSpawnCost()));
 		// Upkeep
 		list.add("hasUpkeep=" + Boolean.toString(town.hasUpkeep()));
 		// Open
@@ -1807,6 +1828,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Taxes
 		list.add("taxes=" + Double.toString(nation.getTaxes()));
+		// Nation Spawn Cost
+		list.add("spawnCost=" + Double.toString(nation.getSpawnCost()));
 		// Peaceful
 		list.add("neutral=" + Boolean.toString(nation.isNeutral()));
 		if (nation.hasValidUUID()){

@@ -77,6 +77,7 @@ public class SQL_Schema {
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`taxes` float NOT NULL");
+		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
@@ -124,6 +125,7 @@ public class SQL_Schema {
 		columns.add("`outlaws` mediumtext DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
+		columns.add("`spawnCost` float NOT NULL");
 		return columns;
 	}
 

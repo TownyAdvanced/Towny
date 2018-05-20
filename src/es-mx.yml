@@ -799,3 +799,5 @@ msg_err_nation_spawn_nation_forbidden_peace: '&Nation spawn travel to other alli
 msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations is forbidden.'
 msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
 msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
+msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
+msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'

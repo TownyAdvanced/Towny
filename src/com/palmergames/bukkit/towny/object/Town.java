@@ -42,7 +42,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
-			plotPrice, commercialPlotPrice, embassyPlotPrice;
+			plotPrice, commercialPlotPrice, embassyPlotPrice, spawnCost;
 	private Nation nation;
 	private boolean hasUpkeep, isPublic, isTaxPercentage, isOpen;
 	private String townBoard = "/town set board [msg]", tag;
@@ -872,6 +872,16 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public double getEmbassyPlotPrice() {
 
 		return embassyPlotPrice;
+	}
+	
+	public void setSpawnCost(double spawnCost) {
+
+		this.spawnCost = spawnCost;
+	}
+
+	public double getSpawnCost() {
+
+		return spawnCost;
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {

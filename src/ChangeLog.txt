@@ -3031,3 +3031,9 @@ v0.92.0.11:
       - Will not work for nomads with no town.
       - For example: adding stargate.network.{townname} to the default Town section in the townyperms.yml will assign the permission node stargate.network.england, to all the online members of the town England.
       - use {townname} for towns, and {nationname} in your nation section.
+    - New Command: /t set spawncost {amount}
+      - Enables mayors to set their town's spawn cost to anything equal to or lesser than the spawn cost set in the config.
+      - Requires towny.command.town.set.spawncost permission node to use. 
+    - New Command: /n set spawncost {amount}
+      - Enables kings to set their nation's spawn cost to anything equal to or lesser than the spawn cost set in the config.
+      - Requires towny.command.nation.set.spawncost permission node to use.
