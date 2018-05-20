@@ -3037,3 +3037,4 @@ v0.92.0.11:
     - New Command: /n set spawncost {amount}
       - Enables kings to set their nation's spawn cost to anything equal to or lesser than the spawn cost set in the config.
       - Requires towny.command.nation.set.spawncost permission node to use.
+    - When using NotificationsUsingTitles, players will now be shown the wilderness title when entering the wilderness. 
