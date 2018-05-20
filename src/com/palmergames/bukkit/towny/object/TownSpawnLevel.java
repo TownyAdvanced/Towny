@@ -103,6 +103,11 @@ public enum TownSpawnLevel {
 		return this == TownSpawnLevel.ADMIN ? 0 : TownySettings.getDouble(ecoPriceConfigNode);
 	}
 	
+	public double getCost(Town town) {
+
+		return this == TownSpawnLevel.ADMIN ? 0 : town.getSpawnCost();
+	}
+	
 	public enum SpawnLevel {
 		TRUE,
 		FALSE,

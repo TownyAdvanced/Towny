@@ -83,10 +83,14 @@ public enum NationSpawnLevel {
 		return level == NSpawnLevel.TRUE ? true : level == NSpawnLevel.FALSE ? false : level == NSpawnLevel.WAR ? war : !war;
 	}
 
-
 	public double getCost() {
 
 		return this == NationSpawnLevel.ADMIN ? 0 : TownySettings.getDouble(ecoPriceConfigNode);
+	}
+
+	public double getCost(Nation nation) {
+
+		return this == NationSpawnLevel.ADMIN ? 0 : nation.getSpawnCost();
 	}
 	
 	public enum NSpawnLevel {

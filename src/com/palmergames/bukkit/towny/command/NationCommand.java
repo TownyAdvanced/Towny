@@ -2075,7 +2075,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 }
             }
 
-            double travelCost = nationSpawnPermission.getCost();
+            double travelCost = nationSpawnPermission.getCost(nation);
 
             // Check if need/can pay
             if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&

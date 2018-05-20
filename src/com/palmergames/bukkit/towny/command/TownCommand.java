@@ -2187,7 +2187,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			double travelCost = townSpawnPermission.getCost();
+			double travelCost = townSpawnPermission.getCost(town);
 
 			// Check if need/can pay
 			if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&
