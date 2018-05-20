@@ -2136,12 +2136,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Nation targetNation = town.getNation();
 
 					if (playerNation == targetNation) {
-						townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_ally_isnt_public"), town));
+						else 
+							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
 					} else if (targetNation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel.
 						throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
-						townSpawnPermission = TownSpawnLevel.NATION_ALLY;
+						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_ally_isnt_public"), town));
+						else 
+							townSpawnPermission = TownSpawnLevel.NATION_ALLY;
 					} else {
 						townSpawnPermission = TownSpawnLevel.UNAFFILIATED;
 					}

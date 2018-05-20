@@ -3038,3 +3038,6 @@ v0.92.0.11:
       - Enables kings to set their nation's spawn cost to anything equal to or lesser than the spawn cost set in the config.
       - Requires towny.command.nation.set.spawncost permission node to use.
     - When using NotificationsUsingTitles, players will now be shown the wilderness title when entering the wilderness. 
+    - New Config Option: global_town_settings.is_nation_ally_spawning_requiring_public_status
+      - default: false
+      - When set to true both nation and ally spawn travel will also require the target town to have their status set to public.

@@ -369,6 +369,10 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the town,",
 			"# when there is a war or peace."),
+	GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS(
+			"global_town_settings.is_nation_ally_spawning_requiring_public_status",
+			"false",
+			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",

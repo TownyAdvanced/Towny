@@ -2551,4 +2551,9 @@ public class TownySettings {
 	public static double getSpawnTravelCost() {
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL);
 	}
+	
+	public static boolean isAllySpawningRequiringPublicStatus() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
+	}
 }
+
