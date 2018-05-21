@@ -1907,9 +1907,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
                 nation.setPublic(!nation.isPublic());
-                TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_nation_toggle_public"));
-            }
-			else {
+                TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_changed_public"), nation.isPublic() ? "Enabled" : "Disabled"));
+                
+            } else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));
 				return;
 			}
