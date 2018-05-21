@@ -3046,3 +3046,4 @@ v0.92.0.11:
       - This makes the title messages seen when entering towns configurable.
       - This also adds the ability to show a similar message announcing the wilderness as well.
       - {townname} is supported in the town message, {wilderness} is supported in the wilderness message. Colour codes can be used too, ex: &f, &c.
+    - Undo changes to town and nation level calculation. Sorry creatorfromhell, we'll try again.

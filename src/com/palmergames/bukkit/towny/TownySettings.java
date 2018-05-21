@@ -22,6 +22,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -55,9 +57,13 @@ public class TownySettings {
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage;
 
-	private static final NavigableMap<Integer, Map<TownLevel, Object>> configTownLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
-	private static final NavigableMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
+//  Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//	private static final NavigableMap<Integer, Map<TownLevel, Object>> configTownLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
+//	private static final NavigableMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
 
+	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
+	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
+	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
@@ -178,18 +184,28 @@ public class TownySettings {
 	}
 
 	public static int calcTownLevel(Town town) {
-
-		Integer level = configTownLevel.floorKey(town.getNumResidents());
-
-		if (level != null) return level;
+//Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//		Integer level = configTownLevel.floorKey(town.getNumResidents());
+//
+//		if (level != null) return level;
+//		return 0;
+		int n = town.getNumResidents();
+		for (Integer level : configTownLevel.keySet())
+			if (n >= level)
+				return level;
 		return 0;
 	}
 
 	public static int calcNationLevel(Nation nation) {
-
-		Integer level = configNationLevel.floorKey(nation.getNumResidents());
-
-		if (level != null) return level;
+//Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//		Integer level = configNationLevel.floorKey(nation.getNumResidents());
+//
+//		if (level != null) return level;
+//		return 0;
+		int n = nation.getNumResidents();
+		for (Integer level : configNationLevel.keySet())
+			if (n >= level)
+				return level;
 		return 0;
 	}
 
