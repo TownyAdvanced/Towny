@@ -3041,3 +3041,8 @@ v0.92.0.11:
     - New Config Option: global_town_settings.is_nation_ally_spawning_requiring_public_status
       - default: false
       - When set to true both nation and ally spawn travel will also require the target town to have their status set to public.
+    - New Config Section: notifications.titles
+      - Requires the notification.using_titles setting to be true.
+      - This makes the title messages seen when entering towns configurable.
+      - This also adds the ability to show a similar message announcing the wilderness as well.
+      - {townname} is supported in the town message, {wilderness} is supported in the wilderness message. Colour codes can be used too, ex: &f, &c.

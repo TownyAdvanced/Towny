@@ -813,3 +813,4 @@ msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other natio
 msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
 msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
 msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
+msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'

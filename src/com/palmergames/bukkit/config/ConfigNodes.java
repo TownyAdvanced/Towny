@@ -864,7 +864,33 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
 			"# Could be seen as intrusive/distracting, so false by default."),
-	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", "false", "# If the notification.owner option should show name or {title} name.", "# Titles are the ones granted by nation kings."),
+	NOTIFICATION_TITLES(
+			"notification.titles",
+			"",
+			"",
+			"# Requires the above using_titles to be set to true.",
+			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
+			"# You may use colour codes &f, &c and so on."),	
+	NOTIFICATION_TITLES_TOWN_TITLE(
+			"notification.titles.town_title",
+			"",
+			"# Entering Town Upper Title Line"),
+	NOTIFICATION_TITLES_TOWN_SUBTITLE(
+			"notification.titles.town_subtitle",
+			"&b{townname}",
+			"# Entering Town Lower Subtitle line."),
+	NOTIFICATION_TITLES_WILDERNESS_TITLE(
+			"notification.titles.wilderness_title",
+			"",
+			"# Entering Wilderness Upper Title Line"),
+	NOTIFICATION_TITLES_WILDERNESS_SUBTITLE(
+			"notification.titles.wilderness_subtitle",
+			"&2{wilderness}",
+			"# Entering Wilderness Lower Subtitle line."),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", 
+			"false", 
+			"# If the notification.owner option should show name or {title} name.", 
+			"# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",

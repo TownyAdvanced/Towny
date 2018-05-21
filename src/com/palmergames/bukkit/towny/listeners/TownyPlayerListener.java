@@ -34,6 +34,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -1054,13 +1055,24 @@ public class TownyPlayerListener implements Listener {
 	 * Currently used for:
 	 *   - showing NotificationsUsingTitles upon entering a town.
 	 */
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerEnterTown(PlayerEnterTownEvent event) throws TownyException {
 		
 		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
 		if (TownySettings.isNotificationUsingTitles()) {
 			
-			TownyMessaging.sendTitleMessageToResident(resident, "", TownyFormatter.getFormattedTownName(to.getTownBlock().getTown()).toString());
+			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
+			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
+			if (title.contains("{townname}")) {
+				String replacement = title.replace("{townname}", to.getTownBlock().getTown().getName());
+				title = replacement;
+			}
+			if (subtitle.contains("{townname}")) {
+				String replacement = subtitle.replace("{townname}", to.getTownBlock().getTown().getName());
+				subtitle = replacement;
+			}
+			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 		}
 	}
 	
@@ -1070,6 +1082,7 @@ public class TownyPlayerListener implements Listener {
 	 *   - showing NotificationsUsingTitles upon entering the wilderness.
 	 *   - unjailing residents
 	 */
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) throws TownyException {
 		
 		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
@@ -1079,11 +1092,20 @@ public class TownyPlayerListener implements Listener {
 				@SuppressWarnings("unused")
 				Town toTown = to.getTownBlock().getTown();
 			} catch (NotRegisteredException e) { // No town being entered so this is a move into the wilderness.
-				
-				TownyMessaging.sendTitleMessageToResident(resident, "", TownyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
-			}
-			
+				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle().toString());
+				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
+				if (title.contains("{wilderness}")) {
+					String replacement = title.replace("{wilderness}", TownyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					title = replacement;
+				}
+				if (subtitle.contains("{wilderness}")) {
+					String replacement = subtitle.replace("{wilderness}", TownyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
+					subtitle = replacement;
+				}
+				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
+			}			
 		}
+
 		Player player = event.getPlayer();
 		if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed()) {								
 			resident.setJailed(false);

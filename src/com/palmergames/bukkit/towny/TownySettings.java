@@ -2555,5 +2555,22 @@ public class TownySettings {
 	public static boolean isAllySpawningRequiringPublicStatus() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
 	}
+	
+	public static String getNotificationTitlesTownTitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_TITLE);
+	}
+	
+	public static String getNotificationTitlesTownSubtitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_SUBTITLE);
+	}
+	
+	public static String getNotificationTitlesWildTitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_TITLE);
+	}
+	
+	public static String getNotificationTitlesWildSubtitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
+	}
+	
 }
 
