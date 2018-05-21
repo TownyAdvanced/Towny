@@ -2549,7 +2549,7 @@ public class TownySettings {
 	}
 	
 	public static double getSpawnTravelCost() {
-		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL);
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC);
 	}
 	
 	public static boolean isAllySpawningRequiringPublicStatus() {
