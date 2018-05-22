@@ -418,7 +418,7 @@ public class TownyFormatter {
 				line += Colors.Gray + " | ";
 			line += TownySettings.getLangString("status_public");
 		}		
-		// Bank: 534 coins | Peaceful | Public: Yes
+		// Bank: 534 coins | Peaceful | Public
 		
 		if (line.length() > 0)
 			out.add(line);
