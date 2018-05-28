@@ -167,6 +167,8 @@ public class CombatUtil {
 				}
 
 			} else {
+				
+				// TODO: Add something here for when the attacker is a tamed wolf and the defender is a player in a non-pvp area in which they cannot fight back because of the code above.
 
 				/*
 				 * Remove animal killing prevention start

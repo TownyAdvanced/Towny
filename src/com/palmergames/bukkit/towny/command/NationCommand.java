@@ -2030,7 +2030,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             // Check the permissions
         	if (!(isTownyAdmin || ((nationSpawnPermission == NationSpawnLevel.UNAFFILIATED) ? nation.isPublic() : nationSpawnPermission.hasPermissionNode(plugin, player, nation)))) {
 
-         		throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
+         		throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
    			}
 
             
