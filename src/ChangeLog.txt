@@ -2944,3 +2944,108 @@ v0.92.0.11:
       - If Towny should show players the nationboard when they login.
     - Spanish.yml updated to 0.45 by SeDark.
     - German.yml updated to 0.45 by Wolf2323.
+    - Fix using /towny spy moving a player from other chat channels and removing other modes.
+    - New Command: '/plot evict' courtesy of SeDark
+      - Allows the removal of a player from a personally owned plot.
+      - Requires the towny.command.plot.evict and towny.command.plot.asmayor permission nodes.
+    - New Permission Node: 'towny.command.plot.evict' courtesy of SeDark
+      - Required to use the /plot evict command.
+      - Child node of towny.command.plot.*
+    - New Permission/Info Node: 'towny_extraplots' courtesy of SeDark
+      - Used like the towny_maxplots node, ie: in GM's info node section where prefix and suffix's are set.
+      - ex: towny_extraplots: 1
+      - Used to give players who have the town_maplots permission node, but who are also a mayor or assistant.
+      - Giving these extra plots, allows them to claim their maxplot amount plus the extra plot amount.
+    - Change contributing.md to match our java 8 status.
+    - Fix switch and destroy permissions for minecarts.
+    - REQUIRED CONFIG ADDITION:
+      - existing installs need to add ",POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART" to the end of the item_use_ids.
+0.92.0.12:
+    - New Feature: Nation spawn points! courtesy of MartenM
+      - Nation's can now set a spawn and whether their spawn is public, nearly exactly like town's and their spawn abilities.
+      - Enemy's can be prevented from spawning to public nations' spawns using the already existing config "prevent_town_spawn_in:" list.
+        - You can also prevent spawning from unclaimed or neutral areas using this config entry.
+      - Any cost for spawning to a Nation is paid to the nation being spawned to.
+      - Cost is the same as the cost for spawning to a Town.
+    - New Config Option: global_nation_settings.capital_spawn
+      - default: true
+      - If enabled, only allow the nation spawn to be set in the capital city.
+    - New Config Option: global_nation_settings.default.public
+      - default: false
+      - If set to true, any newly made nation will have their spawn set to public.
+    - REQUIRED TOWNYPERMS.YML CHANGE:
+      - Add towny.command.nation.spawn to your nations.default rank/group.
+      - Add towny.nation.spawn.nation to your nations.default rank/group.
+      - Add towny.nation.spawn.ally to your nations.default rank/group.
+    - Bump language files to version 0.46.
+    - German.yml updated to 0.46 by Wolf2323.
+    - Overhaul cache/permissions system to use material instead of blockid:data values. 
+      - Old API still in place but deprecated. 
+      - Plugin authors are advised to begin using new Material options when querying the Towny cache/utils.  
+    - Fix /nation not showing the nation ranks. 
+    - Add /plot evict to /plot ?.
+    - Fix Embassy plots not being able to be removed from sale under certain conditions.
+    - Fix placing an embassy plot for sale not showing the for sale message under certain conditions.
+    - Fix a missing denial message when using /plot nfs on an area where the user does own the land.
+    - Fix /towny spy not working when a player has towny.chat.spy but not towny.command.towny.spy  
+    - New Config Option: resident_settings.is_showing_welcome_message
+      - default: true
+      - If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide.
+    - New: Animals can no longer be tempted with food by players who would not also be able to butcher them, courtesy of creatorfromhell.
+    - Fix /plot perm hud causing NPEs when a player teleports to a non-Towny world.
+    - Town and Nation level calculations are now more efficient thanks to creatorfromhell.
+    - New Plot Type: Bank
+      - If the config option is set to true, players will only be able to use withdraw and deposit commands while in their home block or bank plots.
+      - Probably useful for various economy plugins.
+    - New Config Option: bank.is_banking_limited_to_bank_plots 
+      - default: false
+      - If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.
+      - Home plots will also allow deposit and withdraw commands.
+    - French.yml updated by TheCalypso.
+    - New Config Option: global_nation_settings.allow_nation_spawn
+      - default: true
+      - Allow the use of /nation spawn.
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation when there is a war or peace.
+    - New Config Option: global_nation_settings.allow_nation_spawn_travel
+      - default: true
+      - Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation when there is a war or peace.
+    - New Config Option: global_nation_settings.allow_nation_spawn_travel_ally
+      - default: true
+      - Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.
+      - Valid values are: true, false, war, peace
+      - When war or peace is set, it is only possible to teleport to the nation, when there is a war or peace.
+    - New Permission Nodes: towny.nation.spawn.*:
+      - description: Grants all Nation Spawn travel nodes
+      - default: false
+      - children:
+        - towny.nation.spawn.nation: true
+        - towny.nation.spawn.ally: true
+        - towny.nation.spawn.public: true
+    - New Command: /ta checkperm {name} {node}
+      - Test if a player has a permission node.
+    - New TownyPerms feature: town/nation placeholder nodes
+      - You can now add placeholder permission nodes into Townyperms.
+      - Will not work for nomads with no town.
+      - For example: adding stargate.network.{townname} to the default Town section in the townyperms.yml will assign the permission node stargate.network.england, to all the online members of the town England.
+      - use {townname} for towns, and {nationname} in your nation section.
+    - New Command: /t set spawncost {amount}
+      - Enables mayors to set their town's spawn cost to anything equal to or lesser than the public spawn cost set in the config.
+      - Requires towny.command.town.set.spawncost permission node to use. 
+    - New Command: /n set spawncost {amount}
+      - Enables kings to set their nation's spawn cost to anything equal to or lesser than the public spawn cost set in the config.
+      - Requires towny.command.nation.set.spawncost permission node to use.
+    - When using NotificationsUsingTitles, players will now be shown the wilderness title when entering the wilderness. 
+    - New Config Option: global_town_settings.is_nation_ally_spawning_requiring_public_status
+      - default: false
+      - When set to true both nation and ally spawn travel will also require the target town to have their status set to public.
+    - New Config Section: notifications.titles
+      - Requires the notification.using_titles setting to be true.
+      - This makes the title messages seen when entering towns configurable.
+      - This also adds the ability to show a similar message announcing the wilderness as well.
+      - {townname} is supported in the town message, {wilderness} is supported in the wilderness message. Colour codes can be used too, ex: &f, &c.
+    - Undo changes to town and nation level calculation. Sorry creatorfromhell, we'll try again.
+    - Minor Fix for display of public status on the /n screen.
+    - Fix /towny universe for servers that don't use TownyChat.

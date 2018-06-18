@@ -636,7 +636,7 @@ public class Towny extends JavaPlugin {
 			return;
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());			 
 			resident.setModes(modes, notify);
 
 		} catch (NotRegisteredException e) {

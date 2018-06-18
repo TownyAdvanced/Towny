@@ -340,10 +340,6 @@ public class TownyFormatter {
 		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
 
 		// Assistants [2]: Sammy, Ginger
-		// if (town.getAssistants().size() > 0)
-		// out.addAll(getFormattedResidents("Assistants",
-		// town.getAssistants()));
-
 		List<String> ranklist = new ArrayList<String>();
 		List<Resident> residentss = town.getResidents();
 		List<String> townranks = TownyPerms.getTownRanks();
@@ -416,7 +412,14 @@ public class TownyFormatter {
 				line += Colors.Gray + " | ";
 			line += TownySettings.getLangString("status_nation_peaceful");
 		}
-		// Bank: 534 coins | Peaceful
+		
+		if (nation.isPublic()) {
+			if (line.length() > 0)
+				line += Colors.Gray + " | ";
+			line += TownySettings.getLangString("status_public");
+		}		
+		// Bank: 534 coins | Peaceful | Public
+		
 		if (line.length() > 0)
 			out.add(line);
 
@@ -425,15 +428,36 @@ public class TownyFormatter {
 			out.add(String.format(TownySettings.getLangString("status_nation_king"), getFormattedName(nation.getCapital().getMayor())) + 
 					String.format(TownySettings.getLangString("status_nation_tax"), nation.getTaxes())
 				   );
-		// Assistants: Mayor Rockefel, Sammy, Ginger
-		if (nation.getAssistants().size() > 0)
-			out.addAll(ChatTools.listArr(getFormattedNames(nation.getAssistants().toArray(new Resident[0])), TownySettings.getLangString("status_nation_assistants")));
+		// Assistants [2]: Sammy, Ginger
+		List<String> ranklist = new ArrayList<String>();
+		List<Town> towns = nation.getTowns();
+		List<Resident> residents = new ArrayList<Resident>();
+		
+		for (Town town: towns) {
+			 residents.addAll(town.getResidents());
+		}
+		
+		List<String> nationranks = TownyPerms.getNationRanks();
+		List<Resident> residentwithrank = new ArrayList<Resident>();
+
+		for (String rank : nationranks) {
+			for (Resident r : residents) {
+				if ((r.getNationRanks() != null) && (r.getNationRanks().contains(rank))) {
+					residentwithrank.add(r);
+				}
+			}
+			ranklist.addAll(getFormattedResidents(rank, residentwithrank));
+			residentwithrank.clear();
+		}
+		if (ranklist != null)
+			out.addAll(ranklist);
+		
 		// Towns [44]: James City, Carry Grove, Mason Town
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));		
 		// Allies [4]: James Nation, Carry Territory, Mason Country
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+        out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
 		out = formatStatusScreens(out);
 		return out;

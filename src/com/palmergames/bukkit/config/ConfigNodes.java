@@ -369,6 +369,10 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the town,",
 			"# when there is a war or peace."),
+	GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS(
+			"global_town_settings.is_nation_ally_spawning_requiring_public_status",
+			"false",
+			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",
@@ -509,8 +513,36 @@ public enum ConfigNodes {
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
-			"# If Towny should show players the nationboard when they login."
-			),
+			"# If Towny should show players the nationboard when they login."),
+	GNATION_SETTINGS_CAPITAL_SPAWN(
+			"global_nation_settings.capital_spawn",
+			"true",
+			"# If enabled, only allow the nation spawn to be set in the capital city."),
+    GNATION_SETTINGS_ALLOW_NATION_SPAWN(
+			"global_nation_settings.allow_nation_spawn",
+			"true",
+			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL(
+			"global_nation_settings.allow_nation_spawn_travel",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL_ALLY(
+			"global_nation_settings.allow_nation_spawn_travel_ally",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nations,",
+			"# when there is a war or peace."),
+    GNATION_DEF_PUBLIC(
+            "global_nation_settings.default.public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -678,7 +710,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE,END_CRYSTAL",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -832,7 +864,33 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true MC's Title and Subtitle feature will be used when crossing into a town.",
 			"# Could be seen as intrusive/distracting, so false by default."),
-	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", "false", "# If the notification.owner option should show name or {title} name.", "# Titles are the ones granted by nation kings."),
+	NOTIFICATION_TITLES(
+			"notification.titles",
+			"",
+			"",
+			"# Requires the above using_titles to be set to true.",
+			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
+			"# You may use colour codes &f, &c and so on."),	
+	NOTIFICATION_TITLES_TOWN_TITLE(
+			"notification.titles.town_title",
+			"",
+			"# Entering Town Upper Title Line"),
+	NOTIFICATION_TITLES_TOWN_SUBTITLE(
+			"notification.titles.town_subtitle",
+			"&b{townname}",
+			"# Entering Town Lower Subtitle line."),
+	NOTIFICATION_TITLES_WILDERNESS_TITLE(
+			"notification.titles.wilderness_title",
+			"",
+			"# Entering Wilderness Upper Title Line"),
+	NOTIFICATION_TITLES_WILDERNESS_SUBTITLE(
+			"notification.titles.wilderness_subtitle",
+			"&2{wilderness}",
+			"# Entering Wilderness Lower Subtitle line."),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", 
+			"false", 
+			"# If the notification.owner option should show name or {title} name.", 
+			"# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
 			"",
@@ -1024,6 +1082,10 @@ public enum ConfigNodes {
 			"resident_settings.deny_bed_use",
 			"false",
 			"# If true, players can only use beds in plots they personally own."),
+	RES_SETTING_IS_SHOWING_WELCOME_MESSAGE(
+			"resident_settings.is_showing_welcome_message",
+			"true",
+			"# If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide."),
 	ECO(
 			"economy",
 			"",
@@ -1226,6 +1288,23 @@ public enum ConfigNodes {
 			"jail.bail.bail_amount",
 			"10",
 			"#Amount that bail costs."),
+	BANK(
+			"bank",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Bank Plot settings                   | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			"  # Bank plots may be used by other economy plugins using the Towny API.",			
+			""),
+	BANK_IS_LIMTED_TO_BANK_PLOTS(
+			"bank.is_banking_limited_to_bank_plots",
+			"false",
+			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
+			"# Home plots will also allow deposit and withdraw commands."),			
 	WAR(
 			"war",
 			"",

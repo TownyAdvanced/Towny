@@ -1,5 +1,5 @@
 name: Towny
-version: 0.45
+version: 0.46
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://towny.palmergames.com/'
@@ -784,3 +784,36 @@ msg_hours: ' Stunden'
 msg_minutes: ' Minuten'
 msg_seconds: ' Sekunden'
 msg_err_invalid_string_nationboard_not_set: 'Ungültige Eingabe, Nation Board nicht gesetzt.'
+
+msg_plot_evict: 'Grundstück wurde erfolgreich geräumt.'
+msg_no_one_to_evict: 'Es gibt niemanden, der von diesem Grundstück geschmissen werden kann.'
+
+# Added in 0.46
+nation_help_10: 'Zum Nations-Spawn teleportiert.'
+msg_nation_spawn_warmup: '&bWarte auf die Teleportation......'
+msg_set_nation_spawn: '&bDer Nations-Spawn wurde erfolgreich geändert.'
+msg_err_cant_afford_tp_nation: '&cDu kannst es dir nicht leisten dich zu %s zu teleportieren.'
+msg_err_nationspawn_has_not_been_set: '&cNations-Spawn wurde nicht gesetzt.'
+msg_err_spawn_not_within_nationtowns: '&cDer Nations-Spawn muss in einer Stadt sein, die in der Nation ist.'
+msg_err_spawn_not_within_capital: '&cDer Nations-Spawn muss in der Hauptstadt der Nation sein.'
+msg_err_nation_spawn_war: '&cDu kannst dich während eines Krieges nicht zum Nations-Spawn teleportieren.'
+msg_err_nation_not_public: '&cDiese Nation ist nicht öffentlich.'
+msg_nation_toggle_public: '&aDie Öffentlichkeints Einstellung der Nation wurde erfolgreich umgeschaltet.'
+status_yes: '&aJa'
+status_no: '&cNein'
+status_public: '&2Öffentlich: '
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot.'
+msg_err_nation_spawn_forbidden: '&cNation spawn travel is forbidden.'
+msg_err_nation_spawn_forbidden_war: '&cNation spawn travel is only allowed during war.'
+msg_err_nation_spawn_forbidden_peace: '&cNation spawn travel is forbidden during war.'
+msg_err_nation_spawn_ally_forbidden: '&cNation spawn travel to allied nations is forbidden.'
+msg_err_nation_spawn_nation_forbidden_war: '&cNation spawn travel to other allied nations is only allowed during war.'
+msg_err_nation_spawn_nation_forbidden_peace: '&Nation spawn travel to other allied nations is forbidden during war.'
+msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations is forbidden.'
+msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
+msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
+msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
+msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
+msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
+msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
+status_public2: '&2Public'

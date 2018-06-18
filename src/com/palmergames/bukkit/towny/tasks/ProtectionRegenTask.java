@@ -38,6 +38,7 @@ import java.util.List;
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
+	@SuppressWarnings("unused")
 	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;

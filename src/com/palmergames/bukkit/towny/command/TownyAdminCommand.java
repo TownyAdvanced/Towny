@@ -71,11 +71,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "givebonus [town/player] [num]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "toggle peaceful/war/debug/devmode", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "resident/town/nation", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "tpplot {world} {x} {z}", ""));
 
 		// TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin",
 		// "npc rename [old name] [new name]", ""));
 		// TODO: ta_help.add(ChatTools.formatCommand("", "/townyadmin",
 		// "npc list", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "checkperm {name} {node}", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reload", TownySettings.getLangString("admin_panel_2")));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reset", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "backup", ""));
@@ -214,6 +216,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * TownySettings.getDebug()) warSeed(player);
 				 */
 				
+			} else if (split[0].equalsIgnoreCase("checkperm")) {
+				
+				parseAdminCheckPermCommand(StringMgmt.remFirstArg(split));
+				
 			} else if (split[0].equalsIgnoreCase("tpplot")) {
 				
 				parseAdminTpPlotCommand(StringMgmt.remFirstArg(split));
@@ -225,6 +231,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+	
+	private void parseAdminCheckPermCommand(String[] split) throws TownyException {
+		
+		if (split.length !=2 ) {
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: /ta checkperm {name} {node}"));
+		}
+		Player player = TownyUniverse.getPlayer(TownyUniverse.getDataSource().getResident(split[0]));
+		String node = split[1];
+		if (player.hasPermission(node))
+			TownyMessaging.sendMessage(sender, "Permission true");
+		else 
+			TownyMessaging.sendErrorMsg(sender, "Permission false");
 	}
 
 	private void parseAdminTpPlotCommand(String[] split) throws TownyException {

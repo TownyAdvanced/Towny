@@ -113,6 +113,28 @@ public class PEXSource extends TownyPermissionSource {
 		return iReturn;
 
 	}
+	
+	@Override
+	public int getPlayerPermissionIntNode(String playerName, String node) {
+		
+		int iReturn = -1;
+		
+		Player player = BukkitTools.getPlayer(playerName);
+		String worldName = player.getWorld().getName();
+
+		PermissionManager pexPM = PermissionsEx.getPermissionManager();
+
+		String result = pexPM.getUser(player).getOption(node, worldName);
+
+		try {
+			iReturn =  Integer.parseInt(result);
+		} catch (NumberFormatException e) {}
+		
+		if (iReturn == -1)
+			iReturn = getEffectivePermIntNode(playerName, node);
+		
+		return iReturn;
+	}
 
 	/**
 	 * 

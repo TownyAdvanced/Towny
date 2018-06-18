@@ -1,6 +1,6 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.92.0.11
+version: 0.92.0.12
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >
@@ -90,6 +90,14 @@ permissions:
         default: false
         children:
             towny.command.town.outpost.list: true
+            
+    towny.nation.spawn.*:
+        description: Grants all Nation Spawn travel nodes
+        default: false
+        children:
+            towny.nation.spawn.nation: true
+            towny.nation.spawn.ally: true
+            towny.nation.spawn.public: true
 
     towny.wild.*:
         description: User can build/destroy/switch/item_use in the wild.
@@ -158,6 +166,7 @@ permissions:
             towny.command.nation.rank.*: true
             towny.command.nation.say: true
             towny.command.nation.set.*: true
+            towny.command.nation.spawn: true
             towny.command.nation.toggle.*: true
 
     towny.command.nation.ally.*:
@@ -233,6 +242,8 @@ permissions:
             towny.command.nation.set.capitol: true
             towny.command.nation.set.king: true
             towny.command.nation.set.name: true
+            towny.command.nation.set.spawn: true
+            towny.command.nation.set.spawncost: true
             towny.command.nation.set.surname: true
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
@@ -243,6 +254,7 @@ permissions:
         default: false
         children:
             towny.command.nation.toggle.neutral: true
+            towny.command.nation.toggle.public: true
 
     # Town command permissions
     towny.command.town.*:
@@ -332,6 +344,7 @@ permissions:
             towny.command.town.set.shopprice: true
             towny.command.town.set.embassyprice: true
             towny.command.town.set.spawn: true
+            towny.command.town.set.spawncost: true
             towny.command.town.set.tag: true
             towny.command.town.set.taxes: true
             towny.command.town.set.plottax: true
@@ -366,6 +379,7 @@ permissions:
             towny.command.plot.asmayor: true
             towny.command.plot.claim: true
             towny.command.plot.clear: true
+            towny.command.plot.evict: true
             towny.command.plot.forsale: true
             towny.command.plot.notforsale: true
             towny.command.plot.perm: true
@@ -391,6 +405,7 @@ permissions:
             towny.command.plot.set.perm: true
             towny.command.plot.set.reset: true
             towny.command.plot.set.arena: true
+            towny.command.plot.set.bank: true
             towny.command.plot.set.embassy: true
             towny.command.plot.set.farm: true
             towny.command.plot.set.inn: true
@@ -437,6 +452,7 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.backup: true
+            towny.command.townyadmin.checkperm: true
             towny.command.townyadmin.givebonus: true
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true

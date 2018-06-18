@@ -110,6 +110,17 @@ public class TownyUniverse extends TownyObject {
 		}
 	}
 
+	public Location getNationSpawnLocation(Player player) throws TownyException {
+
+		try {
+			Resident resident = getDataSource().getResident(player.getName());
+			Nation nation = resident.getTown().getNation();
+			return nation.getNationSpawn();
+		} catch (TownyException x) {
+			throw new TownyException("Unable to get nation spawn location");
+		}
+	}
+
 	/**
 	 * Find a matching online player for this resident.
 	 * 

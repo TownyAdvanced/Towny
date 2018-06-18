@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
@@ -22,6 +23,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -38,16 +40,19 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
 	private Town capital;
-	private double taxes;
+	private double taxes, spawnCost;
 	private boolean neutral = false;
 	private String nationBoard = "/nation set board [msg]", tag;
 	public UUID uuid;
 	private long registered;
+	private Location nationSpawn;
+	private boolean isPublic;
 
 	public Nation(String name) {
 
 		setName(name);
 		tag = "";
+        isPublic = TownySettings.getNationDefaultPublic();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -232,6 +237,54 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public Town getCapital() {
 
 		return capital;
+	}
+
+	public Location getNationSpawn() throws TownyException {
+		if(nationSpawn == null){
+			throw new TownyException("Nation has not set a spawn location.");
+		}
+
+		return nationSpawn;
+	}
+
+	public boolean hasNationSpawn(){
+		return (nationSpawn != null);
+	}
+
+	public void setNationSpawn(Location spawn) throws TownyException {
+		Coord spawnBlock = Coord.parseCoord(spawn);
+
+		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
+			if(this.capital == null){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(townBlock.getTown() != this.getCapital()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+		} else {
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
+
+			if(!towns.contains(townBlock.getTown())){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
+		}
+
+		this.nationSpawn = spawn;
+	}
+
+	/**
+	 * Only to be called from the Loading methods.
+	 *
+	 * @param nationSpawn
+	 */
+	public void forceSetNationSpawn(Location nationSpawn){
+		this.nationSpawn = nationSpawn;
 	}
 
 	//TODO: Remove
@@ -621,5 +674,25 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public String getNationBoard() {
 		return nationBoard;
+	}
+
+    public void setPublic(boolean isPublic) {
+
+        this.isPublic = isPublic;
+    }
+
+    public boolean isPublic() {
+
+        return isPublic;
+    }
+    
+	public void setSpawnCost(double spawnCost) {
+
+		this.spawnCost = spawnCost;
+	}
+
+	public double getSpawnCost() {
+
+		return spawnCost;
 	}
 }

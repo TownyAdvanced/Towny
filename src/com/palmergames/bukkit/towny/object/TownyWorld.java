@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
@@ -541,7 +543,7 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
-	public boolean isUnclaimedZoneIgnoreMaterial(String mat) {
+	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
 		return getUnclaimedZoneIgnoreMaterials().contains(mat);
 	}

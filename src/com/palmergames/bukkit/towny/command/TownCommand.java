@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.google.common.collect.ListMultimap;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -49,7 +50,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -127,6 +127,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+	@SuppressWarnings("static-access")
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -228,6 +229,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				
+				if (TownySettings.isBankActionLimitedToBankPlots()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
+					Town tbTown = tb.getTown(); 
+					Town pTown = TownyUniverse.getDataSource().getResident(player.getName()).getTown();
+					if (tbTown != pTown)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					boolean goodPlot = false;
+					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
+						goodPlot = true;
+					if (!goodPlot)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));						
+				}
+				
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
@@ -249,7 +265,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disabl e"));
+				
+				if (TownySettings.isBankActionLimitedToBankPlots()) {
+					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
+					Town tbTown = tb.getTown(); 
+					Town pTown = TownyUniverse.getDataSource().getResident(player.getName()).getTown();
+					if (tbTown != pTown)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+					boolean goodPlot = false;
+					if (tb.getType().equals(TownBlockType.BANK) || tb.isHomeBlock())
+						goodPlot = true;
+					if (!goodPlot)
+						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
+				}
 				
 				if (TownySettings.isBankActionDisallowedOutsideTown()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
@@ -369,6 +400,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if ((page * 10) > outposts.size()) {
 									iMax = outposts.size();
 								}
+								@SuppressWarnings({ "unchecked", "rawtypes" })
 								List<String> outputs = new ArrayList();
 								for (int i = (page - 1) * 10; i < iMax; i++) {
 									Location outpost = outposts.get(i);
@@ -1314,6 +1346,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxes [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plottax/shoptax/embassytax] [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plotprice/shopprice/embassyprice] [$]", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawncost [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
 		} else {
@@ -1524,6 +1557,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							}
 							town.setEmbassyPlotPrice(amount);
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "embassy", split[1]));
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
+							return;
+						}
+					}
+
+				} else if (split[0].equalsIgnoreCase("spawncost")) {
+
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, "Eg: /town set spawncost 50");
+						return;
+					} else {
+						try {
+							Double amount = Double.parseDouble(split[1]);
+							if (amount < 0) {
+								TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_negative_money"));
+								return;
+							}
+							if (TownySettings.getSpawnTravelCost() < amount) {
+								TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_cannot_set_spawn_cost_more_than"), TownySettings.getSpawnTravelCost()));
+								return;
+							}
+							town.setSpawnCost(amount);
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_spawn_cost_set_to"), player.getName(), TownySettings.getLangString("town_sing"), split[1]));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -2079,12 +2136,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Nation targetNation = town.getNation();
 
 					if (playerNation == targetNation) {
-						townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
+						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_ally_isnt_public"), town));
+						else 
+							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
 					} else if (targetNation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel.
 						throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
-						townSpawnPermission = TownSpawnLevel.NATION_ALLY;
+						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_ally_isnt_public"), town));
+						else 
+							townSpawnPermission = TownSpawnLevel.NATION_ALLY;
 					} else {
 						townSpawnPermission = TownSpawnLevel.UNAFFILIATED;
 					}
@@ -2129,8 +2192,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			}
-
-			double travelCost = townSpawnPermission.getCost();
+			
+			double travelCost = 0;
+			
+			if (townSpawnPermission == TownSpawnLevel.UNAFFILIATED)
+				travelCost = townSpawnPermission.getCost(town);
+			else
+				travelCost = townSpawnPermission.getCost();
 
 			// Check if need/can pay
 			if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&

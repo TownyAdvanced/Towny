@@ -86,8 +86,9 @@ nations:
         # All nation members get these permissions.
         - towny.command.nation.online
         - towny.command.nation.deposit
-        - towny.town.spawn.nation
-        - towny.town.spawn.ally
+        - towny.command.nation.spawn
+        - towny.nation.spawn.nation
+        - towny.nation.spawn.ally
         - towny.chat.nation
     king:
         # Kings get these permissions in addition to the default set.

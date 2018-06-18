@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
+import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -34,6 +36,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -54,9 +57,13 @@ public class TownySettings {
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage;
 
+//  Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//	private static final NavigableMap<Integer, Map<TownLevel, Object>> configTownLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
+//	private static final NavigableMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
+
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
-
+	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
@@ -176,9 +183,12 @@ public class TownySettings {
 		return getNationLevel(calcNationLevel(nation));
 	}
 
-	// TODO: more efficient way
 	public static int calcTownLevel(Town town) {
-
+//Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//		Integer level = configTownLevel.floorKey(town.getNumResidents());
+//
+//		if (level != null) return level;
+//		return 0;
 		int n = town.getNumResidents();
 		for (Integer level : configTownLevel.keySet())
 			if (n >= level)
@@ -186,9 +196,12 @@ public class TownySettings {
 		return 0;
 	}
 
-	// TODO: more efficient way
 	public static int calcNationLevel(Nation nation) {
-
+//Creatorfromhell's PR for replacing SortedMap town and nation levels.
+//		Integer level = configNationLevel.floorKey(nation.getNumResidents());
+//
+//		if (level != null) return level;
+//		return 0;
 		int n = nation.getNumResidents();
 		for (Integer level : configNationLevel.keySet())
 			if (n >= level)
@@ -285,6 +298,15 @@ public class TownySettings {
 		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
 		if(level == null) {
 			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+		}
+		return level;
+	}
+	
+	public static NSpawnLevel getNSpawnLevel(ConfigNodes node)
+	{
+		NSpawnLevel level = NSpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
+		if(level == null) {
+			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
 		return level;
 	}
@@ -1547,6 +1569,16 @@ public class TownySettings {
 
 		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
+	
+	public static NSpawnLevel isAllowingNationSpawn() {
+
+		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN);
+	}
+
+	public static NSpawnLevel isAllowingPublicNationSpawnTravel() {
+
+		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
+	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
 
@@ -1787,6 +1819,11 @@ public class TownySettings {
 		return getNationUpkeep() * multiplier;
 	}
 
+	public static boolean getNationDefaultPublic(){
+
+		return getBoolean(ConfigNodes.GNATION_DEF_PUBLIC);
+	}
+
 	public static String getFlatFileBackupType() {
 
 		return getString(ConfigNodes.PLUGIN_FLATFILE_BACKUP);
@@ -1971,6 +2008,14 @@ public class TownySettings {
 		if (maxPlots == -1)
 			maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
 		return maxPlots;
+	}
+	
+	public static int getMaxResidentExtraPlots(Resident resident) {
+
+		int extraPlots = TownyUniverse.getPermissionSource().getPlayerPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_EXTRA_PLOTS.getNode());
+		if (extraPlots == -1)
+			extraPlots = 0;
+		return extraPlots;
 	}
 
 	public static int getMaxResidentOutposts(Resident resident) {
@@ -2371,6 +2416,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN);
 	}
+	
+	public static boolean isBankActionLimitedToBankPlots() {
+		
+		return getBoolean(ConfigNodes.BANK_IS_LIMTED_TO_BANK_PLOTS);
+	}
 
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
@@ -2509,4 +2559,34 @@ public class TownySettings {
 	public static int getNationZonesCapitalBonusSize() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
 	}
+
+	public static boolean isShowingRegistrationMessage() {
+		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_WELCOME_MESSAGE);
+	}
+	
+	public static double getSpawnTravelCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC);
+	}
+	
+	public static boolean isAllySpawningRequiringPublicStatus() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
+	}
+	
+	public static String getNotificationTitlesTownTitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_TITLE);
+	}
+	
+	public static String getNotificationTitlesTownSubtitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_SUBTITLE);
+	}
+	
+	public static String getNotificationTitlesWildTitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_TITLE);
+	}
+	
+	public static String getNotificationTitlesWildSubtitle() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
+	}
+	
 }
+
