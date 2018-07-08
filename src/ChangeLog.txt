@@ -3050,3 +3050,4 @@ v0.92.0.11:
     - Minor Fix for display of public status on the /n screen.
     - Fix /towny universe for servers that don't use TownyChat.
     - Minor typo in config comments fixed by frambinni.
+    - German.yml updated to 0.46 by Wolf2323.
