@@ -3056,3 +3056,5 @@ v0.92.0.11:
     - Bump language files to 0.47.
     - Add plot type to /plot perm screen.
     - Add alias /plot info alias to /plot perm.
+    - Make /ta set plot {town} command's behaviour ignore plots that are usually too close to other towns.
+      - Command can now be used to claim land for a town in between towns!  

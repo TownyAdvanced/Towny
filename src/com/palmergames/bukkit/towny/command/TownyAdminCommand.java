@@ -809,7 +809,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
-				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);				
 				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));				
 				
 				new TownClaim(plugin, player, town, selection, false, true, false).start();				
