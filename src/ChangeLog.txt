@@ -3049,3 +3049,4 @@ v0.92.0.11:
     - Undo changes to town and nation level calculation. Sorry creatorfromhell, we'll try again.
     - Minor Fix for display of public status on the /n screen.
     - Fix /towny universe for servers that don't use TownyChat.
+    - Minor typo in config comments fixed by frambinni.
