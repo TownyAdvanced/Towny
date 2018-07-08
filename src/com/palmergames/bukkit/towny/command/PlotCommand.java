@@ -307,7 +307,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						setPlotForSale(resident, pos, plotPrice);
 					}
 
-				} else if (split[0].equalsIgnoreCase("perm")) {
+				} else if (split[0].equalsIgnoreCase("perm") || split[0].equalsIgnoreCase("info")) {
 
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));

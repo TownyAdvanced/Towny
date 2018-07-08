@@ -1,5 +1,5 @@
 name: Towny
-version: 0.46
+version: 0.47
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323 & BlocK'
 website: 'http://towny.palmergames.com/'
@@ -817,3 +817,6 @@ msg_err_cannot_set_spawn_cost_more_than: '&cDu kannst die Spawnkosten nicht höh
 msg_err_ally_isnt_public: '&cEure Alliierten, %s, haben Öffentliche Spawnreisen nicht aktiviert. Teleport verboten.'
 msg_nation_changed_public: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
 status_public2: '&2Öffentlich'
+
+# Added in 0.47:
+status_plot_type: '&2Plot Type: &a'

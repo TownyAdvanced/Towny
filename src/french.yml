@@ -1,5 +1,5 @@
 name: Towny
-version: 0.46
+version: 0.47
 language: french
 author: Noiknez,TheCalypso
 website: 'http://towny.palmergames.com/'
@@ -816,3 +816,6 @@ msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher
 msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
 msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
 status_public2: '&2Public'
+
+# Added in 0.47:
+status_plot_type: '&2Plot Type: &a'

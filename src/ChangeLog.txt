@@ -3053,3 +3053,6 @@ v0.92.0.11:
     - German.yml updated to 0.46 by Wolf2323.
 0.92.0.13:
     - Purposefully reset the Towny Cache when someone's ranks are changed.
+    - Bump language files to 0.47.
+    - Add plot type to /plot perm screen.
+    - Add alias /plot info alias to /plot perm.

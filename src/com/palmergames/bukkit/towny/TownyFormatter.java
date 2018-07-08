@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -109,8 +110,12 @@ public class TownyFormatter {
 			} else {
 				owner = townBlock.getTown();
 			}
+			
+			
 
 			out.add(ChatTools.formatTitle(TownyFormatter.getFormattedName(owner) + ((BukkitTools.isOnline(owner.getName())) ? TownySettings.getLangString("online") : "")));
+			if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
+				out.add(TownySettings.getLangString("status_plot_type") + townBlock.getType().toString());							
 			out.add(TownySettings.getLangString("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString() : townBlock.getPermissions().getColourString().replace("f", "r")));
 			out.add(TownySettings.getLangString("status_pvp") + ((town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")) + 
