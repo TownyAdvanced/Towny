@@ -562,7 +562,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (target.addNationRank(rank)) {
 						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Nation", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Nation", rank, target.getName()));
-						plugin.resetCache(TownyUniverse.getPlayer(target));
+						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					} else {
 						// Not in a nation or Rank doesn't exist
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_resident_not_part_of_any_town"));
@@ -579,7 +579,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (target.removeNationRank(rank)) {
 						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Nation", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Nation", rank, target.getName()));
-						plugin.resetCache(TownyUniverse.getPlayer(target));
+						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank
