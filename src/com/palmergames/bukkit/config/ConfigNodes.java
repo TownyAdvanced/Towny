@@ -132,7 +132,7 @@ public enum ConfigNodes {
 			"town.max_distance_between_homeblocks",
 			"0",
 			"",
-			"# Maximum distance between homblocks.",
+			"# Maximum distance between homeblocks.",
 			"# This will force players to build close together."),
 	TOWN_TOWN_BLOCK_RATIO(
 			"town.town_block_ratio",
