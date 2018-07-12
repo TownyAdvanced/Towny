@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
@@ -41,6 +40,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -51,6 +51,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -941,6 +942,25 @@ public class TownyPlayerListener implements Listener {
 		}
 
 	}
+	
+	/*
+	 * PlayerFishEvent
+	 * 
+	 * Prevents players from fishing for entities in protected regions.
+	 * - Armorstands, animals, any entity affected by rods.
+	 */
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerFishEvent(PlayerFishEvent event) {
+		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
+			Player player = event.getPlayer();
+			Entity caught = event.getCaught();				
+			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
+			if (!bDestroy) {
+				event.setCancelled(true);
+				event.getHook().remove();
+			}
+		}	
+	}
 
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
@@ -1115,4 +1135,5 @@ public class TownyPlayerListener implements Listener {
 			TownyUniverse.getDataSource().saveResident(resident);
 		}		
 	}
+
 }
