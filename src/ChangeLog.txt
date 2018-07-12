@@ -3058,3 +3058,4 @@ v0.92.0.11:
     - Add alias /plot info alias to /plot perm.
     - Make /ta set plot {town} command's behaviour ignore plots that are usually too close to other towns.
       - Command can now be used to claim land for a town in between towns!  
+    - Fix townRanks being lost when a town leaves a nation.

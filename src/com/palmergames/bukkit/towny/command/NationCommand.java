@@ -809,7 +809,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					res.setTitle("");
 					res.setSurname("");
 				}
-				res.updatePerms(); // Clears the nationRanks.
+				res.updatePermsForNationRemoval(); // Clears the nationRanks.
 				TownyUniverse.getDataSource().saveResident(res);
 			}
 			TownyUniverse.getDataSource().saveNation(nation);
@@ -1057,7 +1057,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							res.setTitle("");
 							res.setSurname("");
 						}
-						res.updatePerms(); // Clears the nationRanks.
+						res.updatePermsForNationRemoval(); // Clears the nationRanks.
 						TownyUniverse.getDataSource().saveResident(res);
 					}
 

@@ -356,6 +356,11 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		nationRanks.clear();
 		TownyPerms.assignPermissions(this, null);
 	}
+	
+	public void updatePermsForNationRemoval() {
+		nationRanks.clear();
+		TownyPerms.assignPermissions(this, null);
+	}
 
 	public void setRegistered(long registered) {
 
