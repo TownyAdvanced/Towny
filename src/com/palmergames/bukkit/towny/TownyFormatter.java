@@ -21,6 +21,8 @@ import com.palmergames.util.StringMgmt;
 
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -335,7 +337,7 @@ public class TownyFormatter {
 			if (TownyEconomyHandler.isActive()) {
 				bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
 				if (town.hasUpkeep())
-					bankString += String.format(TownySettings.getLangString("status_bank_town2"), TownySettings.getTownUpkeepCost(town));
+					bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);

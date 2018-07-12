@@ -348,7 +348,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
-
+				
 					if (upkeep > 0) {
 						// Town is paying upkeep
 						if (!town.pay(upkeep, "Town Upkeep")) {

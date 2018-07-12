@@ -3059,3 +3059,4 @@ v0.92.0.11:
     - Make /ta set plot {town} command's behaviour ignore plots that are usually too close to other towns.
       - Command can now be used to claim land for a town in between towns!  
     - Fix townRanks being lost when a town leaves a nation.
+    - Fix purely visual town upkeep bug when town_plotbased_upkeep and town_plotbased_upkeep_affected_by_town_level_modifier were used together. 
