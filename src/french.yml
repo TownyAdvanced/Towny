@@ -819,3 +819,4 @@ status_public2: '&2Public'
 
 # Added in 0.47:
 status_plot_type: '&2Plot Type: &a'
+msg_no_self_jailing: 'You cannot jail yourself.'
