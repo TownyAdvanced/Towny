@@ -40,7 +40,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
 	private Town capital;
-	private double taxes;
+	private double taxes, spawnCost;
 	private boolean neutral = false;
 	private String nationBoard = "/nation set board [msg]", tag;
 	public UUID uuid;
@@ -685,4 +685,14 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
         return isPublic;
     }
+    
+	public void setSpawnCost(double spawnCost) {
+
+		this.spawnCost = spawnCost;
+	}
+
+	public double getSpawnCost() {
+
+		return spawnCost;
+	}
 }

@@ -68,7 +68,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +103,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<String, PlayerCache>());
+	private Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -199,7 +198,7 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
-	public void SetWorldFlags() {
+	public void setWorldFlags() {
 
 		for (Town town : TownyUniverse.getDataSource().getTowns()) {
 			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
@@ -272,7 +271,7 @@ public class Towny extends JavaPlugin {
 
 		checkPlugins();
 
-		SetWorldFlags();
+		setWorldFlags();
 
 		// make sure the timers are stopped for a reset
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
@@ -846,7 +845,7 @@ public class Towny extends JavaPlugin {
 	}
 
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
-	public void registerSpecialCommands() {
+	private void registerSpecialCommands() {
 		List<Command> commands = new ArrayList<>();
 		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
@@ -859,9 +858,7 @@ public class Towny extends JavaPlugin {
 			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
 			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}

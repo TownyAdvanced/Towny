@@ -38,10 +38,13 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
 		TOWNY_COMMAND_NATION_SET_BOARD("towny.command.nation.set.board"),
 		TOWNY_COMMAND_NATION_SET_SPAWN("towny.command.nation.set.spawn"),
+		TOWNY_COMMAND_NATION_SET_SPAWNCOST("towny.command.nation.set.spawncost"),
 
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
     TOWNY_COMMAND_NATION_TOGGLE_PUBLIC("towny.command.nation.toggle.public"),
+    
+    TOWNY_COMMAND_NATION_SPAWN("towny.command.nation.spawn"),
 
 
 	TOWNY_COMMAND_NATION_ENEMY("towny.command.nation.enemy"),
@@ -101,6 +104,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_PLOTTAX("towny.command.town.set.plottax"),
 			TOWNY_COMMAND_TOWN_SET_SHOPTAX("towny.command.town.set.shoptax"),
 			TOWNY_COMMAND_TOWN_SET_EMBASSYTAX("towny.command.town.set.embassytax"),
+			TOWNY_COMMAND_TOWN_SET_SPAWNCOST("towny.command.town.set.spawncost"),
 			TOWNY_COMMAND_TOWN_SET_PLOTPRICE("towny.command.town.set.plotprice"),
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
@@ -234,6 +238,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_BACKUP("towny.command.townyadmin.backup"),
 	TOWNY_COMMAND_TOWNYADMIN_NEWDAY("towny.command.townyadmin.newday"),
 	TOWNY_COMMAND_TOWNYADMIN_PURGE("towny.command.townyadmin.purge"),
+	TOWNY_COMMAND_TOWNYADMIN_CHECKPERM("towny.command.townyadmin.checkperm"),
 	TOWNY_COMMAND_TOWNYADMIN_UNCLAIM("towny.command.townyadmin.unclaim"),
 	TOWNY_COMMAND_TOWNYADMIN_RESIDNET_DELETE("towny.command.townyadmin.resident.delete"),
 	
@@ -285,6 +290,12 @@ public enum PermissionNodes {
 	TOWNY_SPAWN_NATION("towny.town.spawn.nation"),
 	TOWNY_SPAWN_ALLY("towny.town.spawn.ally"),
 	TOWNY_SPAWN_PUBLIC("towny.town.spawn.public"),
+	
+	TOWNY_NATION_SPAWN_ALL("towny.nation.spawn.*"),
+	
+	TOWNY_NATION_SPAWN_NATION("towny.nation.spawn.nation"),
+	TOWNY_NATION_SPAWN_ALLY("towny.nation.spawn.ally"),
+	TOWNY_NATION_SPAWN_PUBLIC("towny.nation.spawn.public"),
 
 	TOWNY_WILD_ALL("towny.wild.*"),
 
