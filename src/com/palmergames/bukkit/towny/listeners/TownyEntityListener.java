@@ -51,6 +51,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;	
 import org.bukkit.event.entity.EntityCombustByEntityEvent;	
 import org.bukkit.event.entity.EntityDamageByEntityEvent;	
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;	
 import org.bukkit.event.entity.EntityExplodeEvent;	
 import org.bukkit.event.entity.EntityInteractEvent;	
@@ -61,6 +63,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
+import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.PressurePlate;
@@ -980,6 +983,7 @@ public class TownyEntityListener implements Listener {
 
 	}
 
+	
 	/**
 	 * Handles protection of item frames and other Hanging types.
 	 * 
@@ -1010,17 +1014,19 @@ public class TownyEntityListener implements Listener {
 			return;		
 		}
 
-		if (event.getCause().equals(RemoveCause.PHYSICS)) {
-			// More than likely a boat entity which can break an item frame.
-			event.setCancelled(true);
-			return;
-		}
+		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
+		// Can't do this cause it makes hanging objects stay in the air after their block is destroyed.
+//		if (event.getCause().equals(RemoveCause.PHYSICS)) {
+//			event.setCancelled(true);
+//			return;
+//		}
+
 		
 		if (event instanceof HangingBreakByEntityEvent) {
 			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
 			
 			Object remover = evt.getRemover();
-
+			
 			/*
 			 * Check if this has a shooter.
 			 */

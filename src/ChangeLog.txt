@@ -3062,3 +3062,4 @@ v0.92.0.11:
     - Fix purely visual town upkeep bug when town_plotbased_upkeep and town_plotbased_upkeep_affected_by_town_level_modifier were used together.
     - Fix fishing rods being able to grab a hold of armour stands and entities when the player using it does not have destroy permissions in the plot. 
     - Switch links in config from old bukkit javadocs to new spigot javadocs.
+    - Fix itemframes being invincible to physics.
