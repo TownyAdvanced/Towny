@@ -1596,6 +1596,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
+                    if(TownySettings.getTownRenameCost() > 0) {
+                        try {
+                            if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", split[1])))
+                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
+                        } catch (EconomyException e) {
+                            throw new TownyException("Economy Error");
+                        }
+                    }
+
 					if (!NameValidation.isBlacklistName(split[1]))
 						townRename(player, town, split[1]);
 					else
