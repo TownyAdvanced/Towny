@@ -3063,3 +3063,4 @@ v0.92.0.11:
     - Fix fishing rods being able to grab a hold of armour stands and entities when the player using it does not have destroy permissions in the plot. 
     - Switch links in config from old bukkit javadocs to new spigot javadocs.
     - Fix itemframes being invincible to physics.
+    - Fix for players being able to jail themselves, courtesy of creatorfromhell.
