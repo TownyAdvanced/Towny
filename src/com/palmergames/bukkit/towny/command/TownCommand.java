@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.command;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.google.common.collect.ListMultimap;
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -50,7 +49,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -63,7 +61,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
-
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1168,6 +1165,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 							Player jailedplayer = TownyUniverse.getPlayer(jailedresident);
 							Town sendertown = resident.getTown();
+							if (jailedplayer.getUniqueId().equals(player.getUniqueId()))
+								throw new TownyException(TownySettings.getLangString("msg_no_self_jailing"));
+
 							if (jailedresident.isJailed()) {
 								Town jailTown = TownyUniverse.getDataSource().getTown(jailedresident.getJailTown());
 								if (jailTown != sendertown) {
