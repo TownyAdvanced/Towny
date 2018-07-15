@@ -1723,6 +1723,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");
 				else {
 
+				    if(TownySettings.getNationRenameCost() > 0) {
+                        try {
+                            if (TownySettings.isUsingEconomy() && !nation.pay(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", split[1])))
+                                throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_money"), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
+                        } catch (EconomyException e) {
+                            throw new TownyException("Economy Error");
+                        }
+                    }
+
 					if (!NameValidation.isBlacklistName(split[1]))
 						nationRename(player, nation, split[1]);
 					else
