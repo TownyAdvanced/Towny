@@ -94,7 +94,7 @@ public class TownyUniverse extends TownyObject {
 			Resident resident = getDataSource().getResident(player.getName());
 			resident.setLastOnline(System.currentTimeMillis());
 			getDataSource().saveResident(resident);
-		} catch (NotRegisteredException e) {
+		} catch (NotRegisteredException ignored) {
 		}
 		setChangedNotify(PLAYER_LOGOUT);
 	}
@@ -145,7 +145,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static List<Player> getOnlinePlayers(ResidentList residents) {
 
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> players = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				if (residents.hasResident(player.getName()))
@@ -161,7 +161,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static List<Player> getOnlinePlayers(Town town) {
 
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> players = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
 				if (town.hasResident(player.getName()))
@@ -177,7 +177,7 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static List<Player> getOnlinePlayers(Nation nation) {
 
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> players = new ArrayList<>();
 		for (Town town : nation.getTowns())
 			players.addAll(getOnlinePlayers(town));
 		return players;
@@ -275,7 +275,7 @@ public class TownyUniverse extends TownyObject {
 
 	public List<Resident> getActiveResidents() {
 
-		List<Resident> activeResidents = new ArrayList<Resident>();
+		List<Resident> activeResidents = new ArrayList<>();
 		for (Resident resident : getDataSource().getResidents())
 			if (isActiveResident(resident))
 				activeResidents.add(resident);
@@ -290,18 +290,10 @@ public class TownyUniverse extends TownyObject {
 	public boolean loadSettings() {
 
 		try {
-			FileMgmt.checkFolders(new String[] {
-					getRootFolder(),
-					getRootFolder() + FileMgmt.fileSeparator() + "settings",
-					getRootFolder() + FileMgmt.fileSeparator() + "logs" }); // Setup the logs folder here as the logger will not yet be enabled.
-
 			TownySettings.loadConfig(getRootFolder() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml", plugin.getVersion());
 			TownySettings.loadLanguage(getRootFolder() + FileMgmt.fileSeparator() + "settings", "english.yml");
 			TownyPerms.loadPerms(getRootFolder() + FileMgmt.fileSeparator() + "settings", "townyperms.yml");
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -329,6 +321,7 @@ public class TownyUniverse extends TownyObject {
 			// Set the new class for saving.
 			setDataSource(save);
 			getDataSource().initialize(plugin, this);
+			FileMgmt.checkFolders(new String[] {getRootFolder() + FileMgmt.fileSeparator() + "logs" }); // Setup the logs folder here as the logger will not yet be enabled.
 			try {
 				getDataSource().backup();
 				
@@ -496,7 +489,7 @@ public class TownyUniverse extends TownyObject {
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "Universe (" + getName() + ")");
 		if (plugin != null) {
 			out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
@@ -526,7 +519,7 @@ public class TownyUniverse extends TownyObject {
 
 	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
 
-		List<Resident> invited = new ArrayList<Resident>();
+		List<Resident> invited = new ArrayList<>();
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
@@ -558,7 +551,7 @@ public class TownyUniverse extends TownyObject {
 
 	public static List<Resident> getOnlineResidents(Player player, String[] names) {
 
-		List<Resident> invited = new ArrayList<Resident>();
+		List<Resident> invited = new ArrayList<>();
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
@@ -579,7 +572,7 @@ public class TownyUniverse extends TownyObject {
 
 	public static List<Resident> getOnlineResidents(ResidentList residentList) {
 
-		List<Resident> onlineResidents = new ArrayList<Resident>();
+		List<Resident> onlineResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				for (Resident resident : residentList.getResidents()) {
@@ -593,7 +586,7 @@ public class TownyUniverse extends TownyObject {
 	
 	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
 
-		List<Resident> onlineResidents = new ArrayList<Resident>();
+		List<Resident> onlineResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
 				/*
@@ -629,16 +622,8 @@ public class TownyUniverse extends TownyObject {
 
 	public static void jailTeleport(final Player player, final Location loc) {
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-			@Override
-			public void run() {
-
-				player.teleport(loc, TeleportCause.PLUGIN);
-				
-			}
-			
-		}, TownySettings.getTeleportWarmupTime() * 20);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.teleport(loc, TeleportCause.PLUGIN),
+				TownySettings.getTeleportWarmupTime() * 20);
 	}
 	
 	public void addWarZone(WorldCoord worldCoord) {
