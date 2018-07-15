@@ -80,10 +80,11 @@ public class FileMgmt {
 		}
 	}
 
-	public static File CheckYMLExists(File file) {
+	public static File checkYMLExists(File file) {
 
 		if (!file.exists()) {
 			try {
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();

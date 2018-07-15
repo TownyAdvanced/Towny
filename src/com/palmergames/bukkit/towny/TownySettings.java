@@ -193,7 +193,7 @@ public class TownySettings {
 
 	public static void loadConfig(String filepath, String version) throws IOException {
 
-		File file = FileMgmt.CheckYMLExists(new File(filepath));
+		File file = FileMgmt.checkYMLExists(new File(filepath));
 		if (file != null) {
 
 			// read the config.yml into memory
@@ -352,7 +352,7 @@ public class TownySettings {
 	public static List<Integer> getIntArr(ConfigNodes node) {
 
 		String[] strArray = getString(node.getRoot(), node.getDefault()).split(",");
-		List<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<>();
 		if (strArray != null) {
 			for (String aStrArray : strArray)
 				if (aStrArray != null) {
@@ -369,7 +369,7 @@ public class TownySettings {
 	public static List<String> getStrArr(ConfigNodes node) {
 
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		if (strArray != null) {
 			for (String aStrArray : strArray)
 				if (aStrArray != null)
@@ -482,7 +482,7 @@ public class TownySettings {
 	private static String convertIds(List<String> list) {
 		
 		int value;
-		List<String> newValues = new ArrayList<String>();
+		List<String> newValues = new ArrayList<>();
 		
 		for (String id : list) {
 				
@@ -525,8 +525,8 @@ public class TownySettings {
 
 			// if (townLevels == null || townLevels.isEmpty() ||
 			// townLevels.size() == 0) {
-			List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
-			Map<String, Object> level = new HashMap<String, Object>();
+			List<Map<String, Object>> levels = new ArrayList<>();
+			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
 			level.put("namePrefix", "");
 			level.put("namePostfix", " Ruins");
@@ -535,7 +535,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 1);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 1);
 			level.put("namePrefix", "");
@@ -545,7 +545,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 16);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 2);
 			level.put("namePrefix", "");
@@ -555,7 +555,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 32);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 6);
 			level.put("namePrefix", "");
@@ -565,7 +565,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 96);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
 			level.put("namePrefix", "");
@@ -575,7 +575,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 160);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 14);
 			level.put("namePrefix", "");
@@ -585,7 +585,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 224);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
 			level.put("namePrefix", "");
@@ -595,7 +595,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 24);
 			level.put("namePrefix", "");
@@ -605,7 +605,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 384);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 28);
 			level.put("namePrefix", "");
@@ -615,7 +615,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 448);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 4);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
 		} else {
@@ -630,8 +630,8 @@ public class TownySettings {
 
 			// if (nationLevels == null || nationLevels.isEmpty() ||
 			// nationLevels.size() == 0) {
-			List<Map<String, Object>> levels = new ArrayList<Map<String, Object>>();
-			Map<String, Object> level = new HashMap<String, Object>();
+			List<Map<String, Object>> levels = new ArrayList<>();
+			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
 			level.put("namePrefix", "Land of ");
 			level.put("namePostfix", " (Nation)");
@@ -644,7 +644,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
 			level.put("namePrefix", "Federation of ");
@@ -658,7 +658,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
 			level.put("namePrefix", "Dominion of ");
@@ -672,7 +672,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 30);
 			level.put("namePrefix", "Kingdom of ");
@@ -686,7 +686,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 40);
 			level.put("namePrefix", "The ");
@@ -700,7 +700,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 60);
 			level.put("namePrefix", "The ");
@@ -714,7 +714,7 @@ public class TownySettings {
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
-			levels.add(new HashMap<String, Object>(level));
+			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
 		} else
