@@ -3064,3 +3064,10 @@ v0.92.0.11:
     - Switch links in config from old bukkit javadocs to new spigot javadocs.
     - Fix itemframes being invincible to physics.
     - Fix for players being able to jail themselves, courtesy of creatorfromhell.
+    - New Config Node: economy.town_rename_cost courtesy of MartenM
+      - Default: 0
+      - The cost to rename a town.
+    - New Config Node: economy.nation_rename_cost courtesy of MartenM
+      - Default: 0
+      - The cost to rename a nation.
+            

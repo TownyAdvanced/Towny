@@ -1110,14 +1110,14 @@ public enum ConfigNodes {
 			"economy.nation_prefix",
 			"nation-",
 			"# Prefix to apply to all nation economy accounts."),
-    ECO_TOWN_RENAME_COST(
-            "economy.town_rename_cost",
-            "0",
-            "# The cost of renaming a town."),
-    ECO_NATION_RENAME_COST(
-            "economy.nation_rename_cost",
-            "0",
-            "# The cost of renaming a nation."),
+	ECO_TOWN_RENAME_COST(
+			"economy.town_rename_cost",
+			"0",
+			"# The cost of renaming a town."),
+	ECO_NATION_RENAME_COST(
+			"economy.nation_rename_cost",
+			"0",
+			"# The cost of renaming a nation."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
