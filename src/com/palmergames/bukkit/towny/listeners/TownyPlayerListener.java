@@ -40,7 +40,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -114,7 +113,7 @@ public class TownyPlayerListener implements Listener {
 		try {
 			if (TownyTimerHandler.isTeleportWarmupRunning())
 				plugin.getTownyUniverse().abortTeleportRequest(TownyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
-		} catch (NotRegisteredException e) {
+		} catch (NotRegisteredException ignored) {
 		}
 
 		plugin.deleteCache(event.getPlayer());
@@ -144,8 +143,7 @@ public class TownyPlayerListener implements Listener {
 //				resident.setJailed(false);
 				event.setRespawnLocation(respawn);
 //				resident.setJailed(true);
-				return;
-			} else {				
+			} else {
 				respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
 				// Check if only respawning in the same world as the town's spawn.
 				if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
@@ -326,7 +324,6 @@ public class TownyPlayerListener implements Listener {
 
 			if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 				onPlayerSwitchEvent(event, null, World);
-				return;
 			}
 		}
 
@@ -427,7 +424,6 @@ public class TownyPlayerListener implements Listener {
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
-					return;
 				}
 			}
 		}
@@ -593,7 +589,6 @@ public class TownyPlayerListener implements Listener {
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
-					return;
 				}
 			}
 		}
@@ -663,12 +658,11 @@ public class TownyPlayerListener implements Listener {
 			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
 			if (!fromCoord.equals(toCoord))
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
-			else {
-				// plugin.sendDebugMsg("    From: " + fromCoord);
+				//  else : plugin.sendDebugMsg("    From: " + fromCoord);
 				// plugin.sendDebugMsg("    To:   " + toCoord);
 				// plugin.sendDebugMsg("        " + from.toString());
 				// plugin.sendDebugMsg("        " + to.toString());
-			}
+
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
@@ -697,12 +691,10 @@ public class TownyPlayerListener implements Listener {
 				}
 				if (event.getCause() == TeleportCause.PLUGIN) 
 					return;
-				if ((event.getCause() == TeleportCause.ENDER_PEARL) && (TownySettings.JailAllowsEnderPearls())) {
-					
-				} else {
+				if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
 					TownyMessaging.sendErrorMsg(event.getPlayer(), String.format(TownySettings.getLangString("msg_err_jailed_players_no_teleport")));
-					event.setCancelled(true);					
-				}				
+					event.setCancelled(true);
+				}
 			}
 		} catch (NotRegisteredException e) {
 			// Not a valid resident, probably an NPC from Citizens.
@@ -837,7 +829,7 @@ public class TownyPlayerListener implements Listener {
 							if (!War.isWarringTown(resident.getTown())) {
 								playerNeutral = true;
 							}
-					} catch (NotRegisteredException e) {
+					} catch (NotRegisteredException ignored) {
 					}			
 				}
 
@@ -919,7 +911,7 @@ public class TownyPlayerListener implements Listener {
 					if (!War.isWarringTown(resident.getTown())) {
 						playerNeutral = true;
 					}
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}			
 		}
 
@@ -996,9 +988,8 @@ public class TownyPlayerListener implements Listener {
 						if (!to.getTownBlock().getTown().equals(fromTown)){
 							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
 							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
-						} else {
-							// Both are the same town, do nothing, no Event should fire here.
 						}
+						// Both are the same town, do nothing, no Event should fire here.
 					} catch (NotRegisteredException e) { // From Wilderness into Town.
 						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
 					}
@@ -1135,5 +1126,4 @@ public class TownyPlayerListener implements Listener {
 			TownyUniverse.getDataSource().saveResident(resident);
 		}		
 	}
-
 }

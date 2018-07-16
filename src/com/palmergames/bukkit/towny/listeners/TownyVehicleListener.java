@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +13,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * Handle events for all Vehicle related events
@@ -101,13 +99,10 @@ public class TownyVehicleListener implements Listener {
 				 */
 				PlayerCache cache = plugin.getCache(player);
 
-				if (cache.hasBlockErrMsg())
+				if (cache.hasBlockErrMsg()) {
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-				return;
+				}
 			}
 		}
-
 	}
-
 }

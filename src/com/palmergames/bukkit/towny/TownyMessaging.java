@@ -468,7 +468,7 @@ public class TownyMessaging {
 	 * Send the nation board to a player (in yellow)
 	 * 
 	 * @param player
-	 * @param town
+	 * @param nation
 	 */
 	public static void sendNationBoard(Player player, Nation nation) {
 
@@ -574,8 +574,7 @@ public class TownyMessaging {
 			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
 			sendMessage(player, message);
-			return;
-		}		
+		}
 	}
 
 	public static void sendRequestMessage(Object player, Invite invite) {

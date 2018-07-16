@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import javax.naming.InvalidNameException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

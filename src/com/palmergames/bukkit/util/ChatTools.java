@@ -42,12 +42,12 @@ public class ChatTools {
 			return color(prefix + line);
 		}
 
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	public static List<String> wordWrap(String[] tokens) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add("");
 
 		for (String s : tokens) {
@@ -72,7 +72,7 @@ public class ChatTools {
 				try {
 					if (out.get(i).substring(index, index + 1).equalsIgnoreCase("\u00A7"))
 						c = out.get(i).substring(index + 1, index + 2);
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 		}
 
@@ -129,7 +129,7 @@ public class ChatTools {
 	 * @author - Articdive
 	 */
 	public static String[] formatList(String title, String subject, List<String> list, String page) {
-		List<String> output = new ArrayList();
+		List<String> output = new ArrayList<>();
 		output.add(0, formatTitle(title));
 		output.add(1, subject);
 		output.addAll(list);
