@@ -113,7 +113,7 @@ public class TownyPlayerListener implements Listener {
 		try {
 			if (TownyTimerHandler.isTeleportWarmupRunning())
 				plugin.getTownyUniverse().abortTeleportRequest(TownyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
 		}
 
 		plugin.deleteCache(event.getPlayer());
@@ -829,7 +829,7 @@ public class TownyPlayerListener implements Listener {
 							if (!War.isWarringTown(resident.getTown())) {
 								playerNeutral = true;
 							}
-					} catch (NotRegisteredException ignored) {
+					} catch (NotRegisteredException e) {
 					}			
 				}
 
@@ -911,7 +911,7 @@ public class TownyPlayerListener implements Listener {
 					if (!War.isWarringTown(resident.getTown())) {
 						playerNeutral = true;
 					}
-			} catch (NotRegisteredException ignored) {
+			} catch (NotRegisteredException e) {
 			}			
 		}
 

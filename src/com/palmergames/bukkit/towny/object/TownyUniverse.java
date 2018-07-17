@@ -93,7 +93,7 @@ public class TownyUniverse extends TownyObject {
 			Resident resident = getDataSource().getResident(player.getName());
 			resident.setLastOnline(System.currentTimeMillis());
 			getDataSource().saveResident(resident);
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
 		}
 		setChangedNotify(PLAYER_LOGOUT);
 	}

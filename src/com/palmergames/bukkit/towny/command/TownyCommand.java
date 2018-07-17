@@ -153,7 +153,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						town = resident.getTown();
-					} catch (NotRegisteredException ignored) {
+					} catch (NotRegisteredException e) {
 					}
 
 				for (String line : getTownyPrices(town))
@@ -218,7 +218,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("participants")) {
 				try {
 					parseWarParticipants(p, args);
-				} catch (NotRegisteredException ignored) {
+				} catch (NotRegisteredException e) {
 				}
 				return true;
 			}

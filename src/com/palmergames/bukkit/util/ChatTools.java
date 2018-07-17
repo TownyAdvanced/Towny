@@ -72,7 +72,7 @@ public class ChatTools {
 				try {
 					if (out.get(i).substring(index, index + 1).equalsIgnoreCase("\u00A7"))
 						c = out.get(i).substring(index + 1, index + 2);
-				} catch (Exception ignored) {
+				} catch (Exception e) {
 				}
 		}
 

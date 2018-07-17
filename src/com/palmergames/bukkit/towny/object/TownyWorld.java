@@ -168,12 +168,12 @@ public class TownyWorld extends TownyObject {
 		try {
 			if (townBlock.hasResident())
 				townBlock.getResident().removeTownBlock(townBlock);
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
 		}
 		try {
 			if (townBlock.hasTown())
 				townBlock.getTown().removeTownBlock(townBlock);
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
 		}
 
 		removeTownBlock(townBlock.getCoord());
@@ -714,7 +714,7 @@ public class TownyWorld extends TownyObject {
 					if (dist < min)
 						min = dist;
 				}
-			} catch (TownyException ignored) {
+			} catch (TownyException e) {
 			}
 
 		return (int) Math.ceil(min);
