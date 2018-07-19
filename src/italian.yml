@@ -8,7 +8,7 @@ description: >
     If you wish to change any of the entries, make a copy named something else.
     Alternate language files can be enabled by altering the
     [language] entry in config.yml
-    
+
 #
 #
 #         You MUST retain spacing in the texts.
@@ -674,7 +674,7 @@ tc_channel_list_in: 'Attivo'
 tc_channel_list_out: 'Inattivo'
 tc_err_you_dont_have_perm_mute_list: 'Non hai i permessi di vedere la lista di mute'
 tc_err_you_dont_have_unmute_perm: 'Non hai i permessi per smutare'
-tc_err_no_channel_called_channel: 'Non c'è nessun canale chiamato &f%s'
+tc_err_no_channel_called_channel: 'Non c''è nessun canale chiamato &f%s'
 tc_err_no_muted_players_in_channel_players: 'Non ci sono giocatori mutati in &f%s'
 tc_players_muted_in_channel: '[TownyChat] &f%n &2giocatori mutati in &f%s&2: &f%s'
 tc_err_no_online_players_with_name: 'Non ci sono giocatori online con il nome &f%s'
