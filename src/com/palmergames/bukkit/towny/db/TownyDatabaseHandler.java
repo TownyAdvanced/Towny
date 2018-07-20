@@ -1010,7 +1010,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Town toCheckTown : toSaveTown) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					try {
-						toCheckTown.removeOutlaw(resident);
+						toCheckTown.removeOutlaw(oldResident);
 						toCheckTown.addOutlaw(resident);
 					} catch (NotRegisteredException e) {
 						e.printStackTrace();
