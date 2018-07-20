@@ -820,3 +820,4 @@ status_public2: '&2Public'
 status_plot_type: '&2Plot Type: &a'
 
 msg_no_self_jailing: 'You cannot jail yourself.'
+online2: ' &a(Online)'

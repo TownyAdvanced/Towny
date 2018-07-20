@@ -821,3 +821,4 @@ status_public2: '&2Pubblico'
 # Added in 0.47:
 status_plot_type: '&2Tipo Lotto: &a'
 msg_no_self_jailing: 'Non puoi imprigionare te stesso.'
+online2: ' &a(Online)'
