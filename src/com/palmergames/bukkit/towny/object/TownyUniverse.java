@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import javax.naming.InvalidNameException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +93,7 @@ public class TownyUniverse extends TownyObject {
 			Resident resident = getDataSource().getResident(player.getName());
 			resident.setLastOnline(System.currentTimeMillis());
 			getDataSource().saveResident(resident);
-		} catch (NotRegisteredException ignored) {
+		} catch (NotRegisteredException e) {
 		}
 		setChangedNotify(PLAYER_LOGOUT);
 	}

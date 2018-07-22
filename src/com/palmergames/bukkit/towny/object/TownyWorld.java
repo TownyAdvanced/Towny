@@ -33,8 +33,8 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
-	private List<Coord> warZones = new ArrayList<Coord>();
+	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<>();
+	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
@@ -136,7 +136,7 @@ public class TownyWorld extends TownyObject {
 
 	public List<TownBlock> getTownBlocks(Town town) {
 
-		List<TownBlock> out = new ArrayList<TownBlock>();
+		List<TownBlock> out = new ArrayList<>();
 		for (TownBlock townBlock : town.getTownBlocks())
 			if (townBlock.getWorld() == this)
 				out.add(townBlock);
@@ -181,7 +181,7 @@ public class TownyWorld extends TownyObject {
 
 	public void removeTownBlocks(List<TownBlock> townBlocks) {
 
-		for (TownBlock townBlock : new ArrayList<TownBlock>(townBlocks))
+		for (TownBlock townBlock : new ArrayList<>(townBlocks))
 			removeTownBlock(townBlock);
 	}
 
@@ -193,7 +193,7 @@ public class TownyWorld extends TownyObject {
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "World (" + getName() + ")");
 		out.add(getTreeDepth(depth + 1) + "TownBlocks (" + getTownBlocks().size() + "): " /*
 																						 * +
@@ -479,7 +479,7 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 
-		entityExplosionProtection = new ArrayList<String>();
+		entityExplosionProtection = new ArrayList<>();
 
 		for (String mob : entities)
 			if (!mob.equals("")) {
@@ -520,7 +520,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(String mat)}
+	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(Material mat)}
 	 * 
 	 * @return - true, if it is an ignored material
 	 */
@@ -784,5 +784,4 @@ public class TownyWorld extends TownyObject {
 
 		return warZones.contains(coord);
 	}
-
 }

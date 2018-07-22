@@ -43,10 +43,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
 
-	private static final List<String> towny_general_help = new ArrayList<String>();
-	private static final List<String> towny_help = new ArrayList<String>();
-	private static final List<String> towny_top = new ArrayList<String>();
-	private static final List<String> towny_war = new ArrayList<String>();
+	private static final List<String> towny_general_help = new ArrayList<>();
+	private static final List<String> towny_help = new ArrayList<>();
+	private static final List<String> towny_top = new ArrayList<>();
+	private static final List<String> towny_war = new ArrayList<>();
 	private static String towny_version;
 
 	static {
@@ -153,7 +153,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						town = resident.getTown();
-					} catch (NotRegisteredException x) {
+					} catch (NotRegisteredException e) {
 					}
 
 				for (String line : getTownyPrices(town))
@@ -242,7 +242,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<Town> townsToSort = War.warringTowns;
 		List<Nation> nationsToSort = War.warringNations;
 		int page = 1;
-		List<String> output = new ArrayList<String>();
+		List<String> output = new ArrayList<>();
 		String nationLine = null;
 		String townLine = null;
 		for (Nation nations : nationsToSort) {
@@ -287,7 +287,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > output.size()) {
 			iMax = output.size();
 		}
-		List<String> warparticipantsformatted = new ArrayList();
+		List<String> warparticipantsformatted = new ArrayList<>();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			String line = output.get(i);
 			warparticipantsformatted.add(line);
@@ -308,30 +308,30 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns());
+				List<ResidentList> list = new ArrayList<>(TownyUniverse.getDataSource().getTowns());
 				list.addAll(TownyUniverse.getDataSource().getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
 				towny_top.addAll(getMostResidents(list, 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-				towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(TownyUniverse.getDataSource().getTowns()), 10));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
-				towny_top.addAll(getMostResidents(new ArrayList<ResidentList>(TownyUniverse.getDataSource().getNations()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(TownyUniverse.getDataSource().getNations()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("land"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<TownBlockOwner> list = new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents());
+				List<TownBlockOwner> list = new ArrayList<>(TownyUniverse.getDataSource().getResidents());
 				list.addAll(TownyUniverse.getDataSource().getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
 				towny_top.addAll(getMostLand(list, 10));
 			} else if (args[1].equalsIgnoreCase("resident")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-				towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getResidents()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(TownyUniverse.getDataSource().getResidents()), 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				towny_top.addAll(getMostLand(new ArrayList<TownBlockOwner>(TownyUniverse.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(TownyUniverse.getDataSource().getTowns()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else
@@ -346,7 +346,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public List<String> getUniverseStats() {
 
-		List<String> output = new ArrayList<String>();
+		List<String> output = new ArrayList<>();
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
@@ -387,7 +387,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	// TODO: Proceduralize and make parse function for /towny prices [town]
 	public List<String> getTownyPrices(Town town) {
 
-		List<String> output = new ArrayList<String>();
+		List<String> output = new ArrayList<>();
 		Nation nation = null;
 
 		if (town != null)
@@ -424,8 +424,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public List<String> getTopBankBalance(List<TownyEconomyObject> list, int maxListing) throws EconomyException {
 
-		List<String> output = new ArrayList<String>();
-		KeyValueTable<TownyEconomyObject, Double> kvTable = new KeyValueTable<TownyEconomyObject, Double>();
+		List<String> output = new ArrayList<>();
+		KeyValueTable<TownyEconomyObject, Double> kvTable = new KeyValueTable<>();
 		for (TownyEconomyObject obj : list) {
 			kvTable.put(obj, obj.getHoldingBalance());
 		}
@@ -436,16 +436,16 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownyEconomyObject town = (TownyEconomyObject) kv.key;
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", TownyFormatter.getFormattedName(town), TownyEconomyHandler.getFormattedBalance((Double) kv.value)));
+			TownyEconomyObject town = kv.key;
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", TownyFormatter.getFormattedName(town), TownyEconomyHandler.getFormattedBalance(kv.value)));
 		}
 		return output;
 	}
 
 	public List<String> getMostResidents(List<ResidentList> list, int maxListing) {
 
-		List<String> output = new ArrayList<String>();
-		KeyValueTable<ResidentList, Integer> kvTable = new KeyValueTable<ResidentList, Integer>();
+		List<String> output = new ArrayList<>();
+		KeyValueTable<ResidentList, Integer> kvTable = new KeyValueTable<>();
 		for (ResidentList obj : list)
 			kvTable.put(obj, obj.getResidents().size());
 		kvTable.sortByValue();
@@ -455,16 +455,16 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			ResidentList residentList = (ResidentList) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName((TownyObject) residentList), (Integer) kv.value));
+			ResidentList residentList = kv.key;
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName((TownyObject) residentList), kv.value));
 		}
 		return output;
 	}
 
 	public List<String> getMostLand(List<TownBlockOwner> list, int maxListing) {
 
-		List<String> output = new ArrayList<String>();
-		KeyValueTable<TownBlockOwner, Integer> kvTable = new KeyValueTable<TownBlockOwner, Integer>();
+		List<String> output = new ArrayList<>();
+		KeyValueTable<TownBlockOwner, Integer> kvTable = new KeyValueTable<>();
 		for (TownBlockOwner obj : list)
 			kvTable.put(obj, obj.getTownBlocks().size());
 		kvTable.sortByValue();
@@ -474,8 +474,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			TownBlockOwner town = (TownBlockOwner) kv.key;
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName(town), (Integer) kv.value));
+			TownBlockOwner town = kv.key;
+			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", TownyFormatter.getFormattedName(town), kv.value));
 		}
 		return output;
 	}

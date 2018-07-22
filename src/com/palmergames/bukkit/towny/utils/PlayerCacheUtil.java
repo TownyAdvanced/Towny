@@ -277,8 +277,7 @@ public class PlayerCacheUtil {
 						if (distance <= Integer.valueOf(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())) {
 							return TownBlockStatus.NATION_ZONE;
 						}
-					} catch (NumberFormatException e1) {
-					} catch (NotRegisteredException e1) {
+					} catch (NumberFormatException | NotRegisteredException x) {
 					}
 				}				
 			}
@@ -333,8 +332,7 @@ public class PlayerCacheUtil {
 				else
 					// Exit out and use town permissions
 					throw new TownyException();
-			} catch (NotRegisteredException x) {
-			} catch (TownyException x) {
+			} catch (TownyException e) {
 			}
 
 			// Resident with no town.
@@ -402,7 +400,7 @@ public class PlayerCacheUtil {
 
 		try {
 			playersTown = TownyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (NotRegisteredException e1) {
+		} catch (NotRegisteredException e) {
 		}
 
 		try {
@@ -834,7 +832,7 @@ public class PlayerCacheUtil {
 	 * @param player
 	 * @param status
 	 * @param pos
-	 * @param id
+	 * @param blockId
 	 * @param data
 	 * @param action
 	 * @return true if allowed.
@@ -861,7 +859,7 @@ public class PlayerCacheUtil {
 
 		try {
 			playersTown = TownyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (NotRegisteredException e1) {
+		} catch (NotRegisteredException e) {
 		}
 
 		try {

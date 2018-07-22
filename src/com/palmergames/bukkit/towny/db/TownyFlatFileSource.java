@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -22,13 +21,11 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.naming.InvalidNameException;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -2168,7 +2165,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 						//if present set the plot price
 						if (tokens.length >= 3) {
-							if (tokens[2] == "true")
+							if (tokens[2].equals("true"))
 								townblock.setPlotPrice(town.getPlotPrice());
 							else
 								townblock.setPlotPrice(Double.parseDouble(tokens[2]));
@@ -2178,7 +2175,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 			} catch (NotRegisteredException e) {
-				continue;
+				// Continue; No longer necessary it's last statement!
 			}
 		}
 	}
@@ -2412,10 +2409,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	private boolean isFile(String fileName) {
 
 		File file = new File(fileName);
-		if (file.exists() && file.isFile())
-			return true;
+		return file.exists() && file.isFile();
 
-		return false;
 	}
 
 	@Override
@@ -2482,5 +2477,4 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (file.exists())
 			file.delete();
 	}
-
 }
