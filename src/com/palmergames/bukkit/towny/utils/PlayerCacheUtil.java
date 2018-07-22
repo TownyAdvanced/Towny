@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -417,6 +419,40 @@ public class PlayerCacheUtil {
 						// Don't have permission to build/destroy/switch/item_use here
 						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
 						return false;
+					}
+				}
+				if (TownySettings.getNationZonesEnabled()) {
+					// Nation_Zone wilderness type Permissions 
+					if (status == TownBlockStatus.NATION_ZONE) {
+						// Admins that also have wilderness permission can bypass the nation zone.
+						if (TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
+							return true;
+						} else {
+						
+							Nation playersNation = null;
+							Town nearestTown = null; 
+							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
+							Nation nearestNation = nearestTown.getNation();
+			
+							try {
+								playersNation = playersTown.getNation();
+							} catch (Exception e1) {							
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								return false;
+							}
+							if (playersNation.equals(nearestNation)){
+								if (TownyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
+									return true;
+								} else {
+									// Don't have permission to build/destroy/switch/item_use here
+									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+									return false;
+								}
+							} else {
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
+								return false;
+							}
+						}
 					}
 				}
 			} catch (NotRegisteredException e2) {

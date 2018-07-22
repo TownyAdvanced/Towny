@@ -3073,3 +3073,4 @@ v0.92.0.11:
     - Fix bug where renaming residents not properly removing old outlaw names, thanks to jackstrosahl for picking up on this.
     - Fix missing space between residentname and (Online) in the /res status page.
     - Italian.yml updated to 0.47 by Leomixer17.
+    - Fix NationZones, which I broke back in a commit that did the badtouch to the playercacheutil.
