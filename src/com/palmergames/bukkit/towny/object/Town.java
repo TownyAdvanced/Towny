@@ -281,7 +281,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		// Admin has enabled PvP for this town.
 		if (isAdminEnabledPVP()) 
-			return false;
+			return true;
 				
 		// Admin has disabled PvP for this town.
 		if (isAdminDisabledPVP()) 

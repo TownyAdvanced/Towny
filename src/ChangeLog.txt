@@ -3074,3 +3074,4 @@ v0.92.0.11:
     - Fix missing space between residentname and (Online) in the /res status page.
     - Italian.yml updated to 0.47 by Leomixer17.
     - Fix NationZones, which I broke back in a commit that did the badtouch to the playercacheutil.
+    - Fix seeecret town setting AdminEnabledPVP not actually working like it ought to.
