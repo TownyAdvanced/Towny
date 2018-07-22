@@ -112,24 +112,24 @@ public class CombatUtil {
 		if (!world.isUsingTowny())
 			return false;
 
+		Coord coord = Coord.parseCoord(defendingEntity);
+		TownBlock defenderTB = null;
+		TownBlock attackerTB = null;
+
+		try {
+			attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
+		} catch (NotRegisteredException ex) {
+		}
+
+		try {
+			defenderTB = world.getTownBlock(coord);
+		} catch (NotRegisteredException ex) {
+		}
+		
 		/*
 		 * We have an attacking player
 		 */
 		if (attackingPlayer != null) {
-
-			Coord coord = Coord.parseCoord(defendingEntity);
-			TownBlock defenderTB = null;
-			TownBlock attackerTB = null;
-
-			try {
-				attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-			} catch (NotRegisteredException ex) {
-			}
-
-			try {
-				defenderTB = world.getTownBlock(coord);
-			} catch (NotRegisteredException ex) {
-			}
 
 			/*
 			 * If another player is the target
@@ -167,13 +167,11 @@ public class CombatUtil {
 				}
 
 			} else {
-				
-				// TODO: Add something here for when the attacker is a tamed wolf and the defender is a player in a non-pvp area in which they cannot fight back because of the code above.
-
 				/*
 				 * Remove animal killing prevention start
 				 */
-
+				
+				
 				/*
 				 * Defender is not a player so check for PvM
 				 */
@@ -205,7 +203,7 @@ public class CombatUtil {
 				 */
 
 				/*
-				 * Protect specific entity interactions (faked with block ID's).
+				 * Protect specific entity interactions (faked with Materials).
 				 */
 				Material block = null;
 
@@ -264,6 +262,19 @@ public class CombatUtil {
 
 			}
 		}
+		
+		/*
+		 * If attackingEntity is a tamed Wolf and...
+		 * Defender is a player and...
+		 * Either player or wolf is in a non-PVP area
+		 * 
+		 * Prevent pvp and remove Wolf targeting.
+		 */
+		if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && defendingPlayer != null && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
+			((Wolf) attackingEntity).setTarget(null);
+			return true;
+		}
+		
 
 		return false;
 	}
