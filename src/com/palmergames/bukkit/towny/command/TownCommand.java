@@ -49,6 +49,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -61,7 +62,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
+
 import java.io.InvalidObjectException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1868,7 +1871,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
 			if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town"), (resident.getName().equals(player.getName()) ? "You" : resident.getName())));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
 			newTown(world, name, resident, key, player.getLocation());
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
@@ -2973,8 +2976,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				try {
 					double cost = blockCost * selection.size();
+					double missingAmount = cost - town.getHoldingBalance();
 					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
+						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim2"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
@@ -3081,8 +3085,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 			double cost = blockCost * selection.size();
+			double missingAmount = cost - town.getHoldingBalance();
 			if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks2"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 		} catch (EconomyException e1) {
 			throw new TownyException("Economy Error");
 		}

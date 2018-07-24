@@ -733,7 +733,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
 			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
-				throw new TownyException(TownySettings.getLangString("msg_no_funds_new_nation"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
 			newNation(universe, name, town);
 			/*

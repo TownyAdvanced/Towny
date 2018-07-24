@@ -3079,3 +3079,4 @@ v0.92.0.11:
     - Made build/destroy/switch/item_use parts of denial messages translatable.
     - Made /towny map translatable.
     - Made feedback from /plot|town|nation|townyworld|townyadmin toggle commands translatable, ex: enabled, disabled, forced, adjustable. 
+    - Made error feedback from lack for funds for /t new, /n new and /t claim much clearer.
