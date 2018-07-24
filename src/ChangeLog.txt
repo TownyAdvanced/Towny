@@ -3078,3 +3078,4 @@ v0.92.0.11:
     - Solve tamed wolves being able to attack players who cannot defend themselves inside of plots with PVP off. 
     - Made build/destroy/switch/item_use parts of denial messages translatable.
     - Made /towny map translatable.
+    - Made feedback from /plot|town|nation|townyworld|townyadmin toggle commands translatable, ex: enabled, disabled, forced, adjustable. 

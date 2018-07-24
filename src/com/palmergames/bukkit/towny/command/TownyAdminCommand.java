@@ -966,7 +966,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.isDeclaringNeutral();
 				TownySettings.setDeclaringNeutral(choice);
-				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_nation_allow_peaceful"), choice ? "Enabled" : "Disabled"));
+				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_nation_allow_peaceful"), choice ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
@@ -977,7 +977,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.isDevMode();
 				TownySettings.setDevMode(choice);
-				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 			}
@@ -985,7 +985,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.getDebug();
 				TownySettings.setDebug(choice);
-				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 			}
@@ -993,7 +993,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.getTownBankAllowWithdrawls();
 				TownySettings.SetTownBankAllowWithdrawls(choice);
-				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 			}
@@ -1001,7 +1001,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.geNationBankAllowWithdrawls();
 				TownySettings.SetNationBankAllowWithdrawls(choice);
-				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (choice ? Colors.Green + "Enabled" : Colors.Red + "Disabled"));
+				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 			}
