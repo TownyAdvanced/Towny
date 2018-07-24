@@ -415,7 +415,7 @@ public class PlayerCacheUtil {
 						return true;
 					} else {
 						// Don't have permission to build/destroy/switch/item_use here
-						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
 						return false;
 					}
 				}
@@ -443,7 +443,7 @@ public class PlayerCacheUtil {
 									return true;
 								} else {
 									// Don't have permission to build/destroy/switch/item_use here
-									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), action.toString()));
+									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
 									return false;
 								}
 							} else {
@@ -500,7 +500,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", action.toString()));
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", TownySettings.getLangString(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_ALLY) {
@@ -525,7 +525,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", action.toString()));
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", TownySettings.getLangString(action.toString())));
 				return false;
 
 			} else {
@@ -551,7 +551,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", action.toString()));
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", TownySettings.getLangString(action.toString())));
 				return false;
 
 			}
@@ -590,7 +590,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), action.toString()));
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), TownySettings.getLangString(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.TOWN_ALLY) {
@@ -625,7 +625,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), action.toString()));
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), TownySettings.getLangString(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
@@ -656,7 +656,7 @@ public class PlayerCacheUtil {
 				}
 
 			}
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), action.toString()));
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), TownySettings.getLangString(action.toString())));
 			return false;
 		}
 

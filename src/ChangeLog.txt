@@ -3076,3 +3076,5 @@ v0.92.0.11:
     - Fix NationZones, which I broke back in a commit that did the badtouch to the playercacheutil.
     - Fix seeecret town setting AdminEnabledPVP not actually working like it ought to.
     - Solve tamed wolves being able to attack players who cannot defend themselves inside of plots with PVP off. 
+    - Made build/destroy/switch/item_use parts of denial messages translatable.
+    - Made /towny map translatable.
