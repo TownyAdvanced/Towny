@@ -398,6 +398,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin town", "[town] rename [newname]", ""));
@@ -411,6 +412,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 			
+			if (split[0].equalsIgnoreCase("new")) {
+				/*
+				 * Moved from TownCommand as of 0.92.0.13
+				 */
+				if (split.length != 3)
+					throw new TownyException(TownySettings.getLangString("msg_err_not_enough_variables") + "/ta town new [name] [mayor]");					
+
+				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				TownCommand.newTown(player, split[1], split[2], true);
+				return;
+			}
+			
 			Town town = TownyUniverse.getDataSource().getTown(split[0]);
 			
 			if (split.length == 1) {
@@ -420,7 +435,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode(split[1].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
+			
 			if (split[1].equalsIgnoreCase("add")) {
 				/*
 				 * if (isConsole) { sender.sendMessage(

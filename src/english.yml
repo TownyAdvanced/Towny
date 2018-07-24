@@ -842,3 +842,4 @@ msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which cos
 msg_no_funds_new_nation2: '&cThe town can''t afford to start a new nation, which costs %s.'
 msg_no_funds_claim2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
 msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_not_enough_variables: '&cNot enough variables: '

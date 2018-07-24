@@ -205,16 +205,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (split.length == 1) {
 					throw new TownyException(TownySettings.getLangString("msg_specify_name"));
 				} else if (split.length == 2) {
-					newTown(player, split[1], player.getName());
+					newTown(player, split[1], player.getName(), true);
 				} else {
-
 					/*
-					 * Admin only
-					 */
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-					newTown(player, split[1], split[2]);
+					 * old admin ability code moved to TownyAdmin command.
+					 */					
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {
@@ -1821,9 +1816,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * Create a new town. Command: /town new [town] *[mayor]
 	 *
 	 * @param player
+	 * @param name of town
+	 * @param name of mayor
+	 * @param charging for creation - /ta town new NAME MAYOR has no charge.
 	 */
 
-	public void newTown(Player player, String name, String mayorName) {
+	public static void newTown(Player player, String name, String mayorName, boolean noCharge) {
 
 		try {
 			if (TownyUniverse.isWarTime())
@@ -1870,7 +1868,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
-			if (TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
+			if (!noCharge && TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
 			newTown(world, name, resident, key, player.getLocation());
@@ -1883,7 +1881,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
+	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn) throws TownyException {
 
 		world.newTownBlock(key);
 		TownyUniverse.getDataSource().newTown(name);
