@@ -204,12 +204,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length == 1) {
 					throw new TownyException(TownySettings.getLangString("msg_specify_name"));
-				} else if (split.length == 2) {
-					newTown(player, split[1], player.getName(), true);
-				} else {
-					/*
-					 * old admin ability code moved to TownyAdmin command.
-					 */					
+				} else if (split.length >= 2) {
+					String[] newSplit = StringMgmt.remFirstArg(split);
+					String townName = String.join("_", newSplit);					
+					newTown(player, townName, player.getName(), true);			
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {

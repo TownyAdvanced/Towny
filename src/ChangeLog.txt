@@ -3084,3 +3084,6 @@ v0.92.0.11:
       - This used to be usable only by admins and caused lots of confusion when players would try to make towns with spaces in the name.
     - New Command: /ta town new [name] [mayor]
       - Creates a town for the mayor where the command sender is standing.
+    - New Command behaviour: /t new name with spaces
+      - Use of the /t new command no longer requires the use of _'s where spaces would be.
+      - If a user enters spaces then they will be parsed into _'s and the town will be created.
