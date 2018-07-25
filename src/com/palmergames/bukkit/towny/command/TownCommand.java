@@ -1811,12 +1811,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Create a new town. Command: /town new [town] *[mayor]
+	 * Create a new town. Command: /town new [town]
 	 *
 	 * @param player
-	 * @param name of town
-	 * @param name of mayor
-	 * @param charging for creation - /ta town new NAME MAYOR has no charge.
+	 * @param name - name of town
+	 * @param mayorName - name of mayor
+	 * @param noCharge - charging for creation - /ta town new NAME MAYOR has no charge.
 	 */
 
 	public static void newTown(Player player, String name, String mayorName, boolean noCharge) {
