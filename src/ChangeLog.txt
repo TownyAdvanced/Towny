@@ -3087,3 +3087,7 @@ v0.92.0.11:
     - New Command behaviour: /t new name with spaces
       - Use of the /t new command no longer requires the use of _'s where spaces would be.
       - If a user enters spaces then they will be parsed into _'s and the town will be created.
+    - New Event: PreDeleteTownEvent
+      - Passes either the Townname or Town object.
+      - Useful for plugins developers who are storing town objects in their plugins and need to monitor deleted towns.
+        - The normal DeleteTownEvent does not take town objects because by the time the event fires there is no town left.
