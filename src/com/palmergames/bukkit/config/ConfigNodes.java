@@ -731,7 +731,7 @@ public enum ConfigNodes {
 			"# 54 - chest ...etc"),
 	PROT_MOB_REMOVE_TOWN(
 			"protection.town_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
+			"Monster,Guardian,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
@@ -753,7 +753,7 @@ public enum ConfigNodes {
 
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime",
+			"Monster,Guardian,Flying,Slime",
 			"",
 			"# Globally remove living entities in all worlds that have their flag set."),
 
