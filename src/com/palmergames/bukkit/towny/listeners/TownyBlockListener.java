@@ -257,15 +257,15 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		List<Block> blocks = event.getBlocks();
-		if (testBlockMove(event.getBlock(), event.getDirection()))
+		if (testBlockMove(event.getBlock(), event.getDirection(), true))
 			event.setCancelled(true);
 
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				if (testBlockMove(block, event.getDirection(), false))
 					event.setCancelled(true);
 			}
 		}
@@ -279,7 +279,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (testBlockMove(event.getBlock(), event.getDirection()))
+		if (testBlockMove(event.getBlock(), event.getDirection(), false))
 			event.setCancelled(true);
 		
 		List<Block> blocks = event.getBlocks();
@@ -287,26 +287,38 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				if (testBlockMove(block, event.getDirection(), false))
 					event.setCancelled(true);
 			}
 		}
 	}
 
-	private boolean testBlockMove(Block block, BlockFace direction) {
+	/**
+	 * testBlockMove
+	 * 
+	 * @param block - block that is being moved, or if pistonBlock is true the piston itself
+	 * @param direction - direction the blocks are going
+	 * @param pistonBlock - test is slightly different when the piston block itself is being checked.	 * 
+	 */
+	private boolean testBlockMove(Block block, BlockFace direction, boolean pistonBlock) {
 
-		Block blockTo = block.getRelative(direction);
+		Block blockTo = null;
+		if (!pistonBlock)
+			blockTo = block.getRelative(direction);
+		else {
+			blockTo = block.getRelative(direction.getOppositeFace());
+		}
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
 		Coord coord = Coord.parseCoord(loc);
 		Coord coordTo = Coord.parseCoord(locTo);
 
 		TownyWorld townyWorld = null;
-		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
+		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
-			CurrentTownBlock = townyWorld.getTownBlock(coord);
+			currentTownBlock = townyWorld.getTownBlock(coord);
 		} catch (NotRegisteredException e) {
 		}
 
@@ -315,21 +327,22 @@ public class TownyBlockListener implements Listener {
 		} catch (NotRegisteredException e1) {
 		}
 
-		if (CurrentTownBlock != destinationTownBlock) {
-
+		if (currentTownBlock != destinationTownBlock) {
+			
 			// Cancel if either is not null, but other is (wild to town).
-			if (((CurrentTownBlock == null) && (destinationTownBlock != null)) || ((CurrentTownBlock != null) && (destinationTownBlock == null))) {
+			if (((currentTownBlock == null) && (destinationTownBlock != null)) || ((currentTownBlock != null) && (destinationTownBlock == null))) {
 				return true;
 			}
 
 			// If both blocks are owned by the town.
-			if (!CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+			if (!currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) {
 				return false;
+			}
 
 			try {
-				if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
+				if ((!currentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (currentTownBlock.getResident() != destinationTownBlock.getResident())
 
-				|| (CurrentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
+				|| (currentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {

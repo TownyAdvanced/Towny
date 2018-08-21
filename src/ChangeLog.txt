@@ -3096,3 +3096,4 @@ v0.92.0.11:
         - Find protection.town_mob_removal_entities and change WaterMob to Guardian.
         - Find protection.world_mob_removal_entities and change WaterMob to Guardian.
       - Pull Request made courtesy of TheFlagCourier.
+    - Fix for literal edge case scenario with pistons failing to retract.
