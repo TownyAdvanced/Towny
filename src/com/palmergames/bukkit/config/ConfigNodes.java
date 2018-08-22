@@ -467,7 +467,12 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in a town",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
-	
+	GTOWN_MAX_PLOT_PRICE_COST(
+			"global_town_settings.maximum_plot_price_cost",
+			"1000000.0",
+			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
+			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
+	),	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",

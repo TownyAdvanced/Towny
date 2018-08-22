@@ -1578,6 +1578,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TAX);
 	}
+	
+	public static double getMaxPlotPrice() {
+		
+		return getDouble(ConfigNodes.GTOWN_MAX_PLOT_PRICE_COST);
+	}
 
 	public static double getMaxTaxPercent() {
 

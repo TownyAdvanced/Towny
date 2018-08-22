@@ -3097,3 +3097,7 @@ v0.92.0.11:
         - Find protection.world_mob_removal_entities and change WaterMob to Guardian.
       - Pull Request made courtesy of TheFlagCourier.
     - Fix for literal edge case scenario with pistons failing to retract.
+    - New Config Option: global_town_settings.maximum_plot_price_cost
+      - default: 1000000.0
+      - Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.
+      - Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation.

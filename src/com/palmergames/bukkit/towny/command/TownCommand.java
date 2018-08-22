@@ -1436,7 +1436,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setTaxes(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax"), player.getName(), split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_tax"), player.getName(), town.getTaxes()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1456,7 +1456,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setPlotTax(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_plottax"), player.getName(), split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_plottax"), player.getName(), town.getPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1475,7 +1475,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setCommercialPlotTax(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "shop", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "shop", town.getCommercialPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1495,7 +1495,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setEmbassyPlotTax(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "embassy", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_alttax"), player.getName(), "embassy", town.getEmbassyPlotTax()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1515,7 +1515,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setPlotPrice(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_plotprice"), player.getName(), split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_plotprice"), player.getName(), town.getPlotPrice()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1535,7 +1535,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setCommercialPlotPrice(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "shop", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "shop", town.getCommercialPlotPrice()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;
@@ -1554,7 +1554,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							town.setEmbassyPlotPrice(amount);
-							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "embassy", split[1]));
+							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_altprice"), player.getName(), "embassy", town.getEmbassyPlotPrice()));
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_num"));
 							return;

@@ -821,7 +821,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void setPlotPrice(double plotPrice) {
 
-		this.plotPrice = plotPrice;
+		if (plotPrice > TownySettings.getMaxPlotPrice())
+			this.plotPrice = TownySettings.getMaxPlotPrice();
+		else 
+			this.plotPrice = plotPrice;
 	}
 
 	public double getPlotPrice() {
@@ -855,8 +858,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
-
-		this.commercialPlotPrice = commercialPlotPrice;
+		
+		if (commercialPlotPrice > TownySettings.getMaxPlotPrice())
+			this.commercialPlotPrice = TownySettings.getMaxPlotPrice();
+		else
+			this.commercialPlotPrice = commercialPlotPrice;
 	}
 
 	public double getCommercialPlotPrice() {
@@ -866,7 +872,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
 
-		this.embassyPlotPrice = embassyPlotPrice;
+		if (embassyPlotPrice > TownySettings.getMaxPlotPrice())
+			this.embassyPlotPrice = TownySettings.getMaxPlotPrice();
+		else
+			this.embassyPlotPrice = embassyPlotPrice;
 	}
 
 	public double getEmbassyPlotPrice() {
