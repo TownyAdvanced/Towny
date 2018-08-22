@@ -700,22 +700,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				plotTestOwner(resident, townBlock); // ignore the return as we
 				// are only checking for an
 				// exception
-				if (forSale > 1000000 ) {
-					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_plot_price_too_expensive"));
-
-				} else {
+				if (forSale > TownySettings.getMaxPlotPrice() ) 
+					townBlock.setPlotPrice(TownySettings.getMaxPlotPrice());
+				else
 					townBlock.setPlotPrice(forSale);
 
-					if (forSale != -1) {
-						TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
-						if (townBlock.getTown() != resident.getTown())
-							TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
-					} else
-						TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
+				if (forSale != -1) {
+					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+					if (townBlock.getTown() != resident.getTown())
+						TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+				} else
+					TownyUniverse.getPlayer(resident).sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
 
-					// Save this townblock so the for sale status is remembered.
-					TownyUniverse.getDataSource().saveTownBlock(townBlock);
-				}
+				// Save this townblock so the for sale status is remembered.
+				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 
 			} catch (NotRegisteredException e) {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
