@@ -180,6 +180,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (name == null) {
 			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
 		}
+		
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException e) {
+		}
+
 		return universe.getTownsMap().get(name);
 	}
 
@@ -227,6 +233,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (name == null) {
 			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
 		}
+		
+		try {
+			name = NameValidation.checkAndFilterName(name).toLowerCase();
+		} catch (InvalidNameException e) {
+		}
+		
 		return universe.getNationsMap().get(name);
 	}
 
