@@ -347,6 +347,15 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				((LongGrass) stateData).setSpecies(species);
 				state.setData((MaterialData) stateData);
 				state.update();
+
+			} else if (state.getData() instanceof LongGrass) {
+				
+				block.setType(state.getType());
+				LongGrass stateData = (LongGrass) state.getData();
+				GrassSpecies species =  ((LongGrass) state.getData()).getSpecies();
+				((LongGrass) stateData).setSpecies(species);
+				state.setData((MaterialData) stateData);
+				state.update();
 				
 			} else if (state.getType().equals(Material.CONCRETE) || state.getType().equals(Material.CONCRETE_POWDER) 
 					|| state.getType().equals(Material.STAINED_CLAY) || state.getType().equals(Material.STAINED_GLASS)
