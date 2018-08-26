@@ -3104,3 +3104,4 @@ v0.92.0.11:
     - The previous hard cap of 1000000.00 on the /plot fs command has now been changed to use the maximum_plot_price_cost setting in the config.  
     - Fix long_grass regeneration. 
     - Fix getTown(Uuid) and getNation(Uuid) API calls failing on Towns/Nations with uppercased letters.
+    - Fix issue with buckets being empty-able where they ought not be.

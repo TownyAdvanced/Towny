@@ -171,10 +171,10 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		// Test against the item in hand as we need to test the bucket contents
 		// we are trying to empty.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getItemInHand()));
+		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event.getPlayer().getItemInHand()));
 
 		// Test on the resulting empty bucket to see if we have permission to
 		// empty a bucket.
