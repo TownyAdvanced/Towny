@@ -3105,3 +3105,4 @@ v0.92.0.11:
     - Fix long_grass regeneration. 
     - Fix getTown(Uuid) and getNation(Uuid) API calls failing on Towns/Nations with uppercased letters.
     - Fix issue with buckets being empty-able where they ought not be.
+    - Make /res status screen show year for LastOnline when the year they were last online is not the current year.

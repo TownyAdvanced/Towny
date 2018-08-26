@@ -23,8 +23,10 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TownyFormatter {
@@ -32,6 +34,7 @@ public class TownyFormatter {
 	// private static Towny plugin = null;
 
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
+	public static final SimpleDateFormat lastOnlineFormatIncludeYear = new SimpleDateFormat("MMMMM dd yyyy");
 	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
 
 	/**
@@ -143,8 +146,18 @@ public class TownyFormatter {
 		// ___[ King Harlus ]___
 		out.add(ChatTools.formatTitle(getFormattedName(resident) + ((BukkitTools.isOnline(resident.getName()) && (player != null) && (player.canSee(BukkitTools.getPlayer(resident.getName())))) ? TownySettings.getLangString("online2") : "")));
 
+		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
-		out.add(String.format(TownySettings.getLangString("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+		// Registered: Sept 3 2009 | Last Online: March 7 2009
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(resident.getLastOnline());
+		int currentYear = cal.get(Calendar.YEAR);
+		cal.setTimeInMillis(System.currentTimeMillis());
+		int lastOnlineYear = cal.get(Calendar.YEAR);
+		if (currentYear == lastOnlineYear)
+			out.add(String.format(TownySettings.getLangString("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormat.format(resident.getLastOnline())));
+		else 
+			out.add(String.format(TownySettings.getLangString("registered_last_online"), registeredFormat.format(resident.getRegistered()), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
 
 		// Owner of: 4 plots
 		// Perm: Build = f-- Destroy = fa- Switch = fao Item = ---
