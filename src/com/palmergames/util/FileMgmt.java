@@ -214,15 +214,6 @@ public class FileMgmt {
 	public static void stringToFile(String source, File file) {
 
 		try {
-
-			/*
-			 * Due to a Bukkit Bug with the Configuration
-			 * we just need to remove any extra comments at the start of a file.
-			 */
-			while (source.startsWith(" " + System.getProperty("line.separator"))) {
-				source = source.replaceFirst(" " + System.getProperty("line.separator"), "");
-			}
-
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 
 			out.write(source);

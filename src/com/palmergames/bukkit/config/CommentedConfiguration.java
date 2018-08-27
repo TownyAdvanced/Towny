@@ -3,6 +3,11 @@ package com.palmergames.bukkit.config;
 import com.palmergames.util.FileMgmt;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +19,10 @@ import java.util.HashMap;
 public class CommentedConfiguration extends YamlConfiguration {
 	private HashMap<String, String> comments;
 	private File file;
+
+	private final DumperOptions yamlOptions = new DumperOptions();
+	private final Representer yamlRepresenter = new YamlRepresenter();
+	private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions);
 
 	public CommentedConfiguration(File file) {
 
@@ -154,6 +163,14 @@ public class CommentedConfiguration extends YamlConfiguration {
 					newContents.append(line);
 				}
 			}
+
+			/*
+			 * Due to a Bukkit Bug with the Configuration
+			 * we just need to remove any extra comments at the start of a file.
+			 */
+			while (newContents.toString().startsWith(" " + System.getProperty("line.separator"))) {
+				newContents = new StringBuilder(newContents.toString().replaceFirst(" " + System.getProperty("line.separator"), ""));
+			}
 			FileMgmt.stringToFile(newContents.toString(), file);
 		}
 	}
@@ -186,5 +203,23 @@ public class CommentedConfiguration extends YamlConfiguration {
 			commentstring.append(line);
 		}
 		comments.put(path, commentstring.toString());
+	}
+
+	@Override
+	public String saveToString() {
+		yamlOptions.setIndent(options().indent());
+		yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		yamlOptions.setWidth(10000);
+		yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+
+		String dump = yaml.dump(getValues(false));
+
+
+		if (dump.equals(BLANK_CONFIG)) {
+			dump = "";
+		}
+
+		return dump;
 	}
 }
