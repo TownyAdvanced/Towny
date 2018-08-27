@@ -1562,7 +1562,7 @@ public enum ConfigNodes {
 	private final String Default;
 	private String[] comments;
 
-	private ConfigNodes(String root, String def, String... comments) {
+	ConfigNodes(String root, String def, String... comments) {
 
 		this.Root = root;
 		this.Default = def;
