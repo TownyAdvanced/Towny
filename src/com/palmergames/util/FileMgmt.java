@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,7 +29,7 @@ public class FileMgmt {
 			if (!(f.exists() && f.isDirectory())) {
 				f.getParentFile().mkdirs();
 				f.mkdir();
-				
+
 			}
 		}
 	}
@@ -52,11 +53,11 @@ public class FileMgmt {
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
 
-		synchronized(sourceLocation) {
+		synchronized (sourceLocation) {
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
 					targetLocation.mkdir();
-	
+
 				String[] children = sourceLocation.list();
 				for (String aChildren : children)
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
@@ -109,7 +110,7 @@ public class FileMgmt {
 		 * so refresh just in case.
 		 */
 		try {
-			checkFiles(new String[] { filePath });
+			checkFiles(new String[]{filePath});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -165,20 +166,19 @@ public class FileMgmt {
 
 	/**
 	 * Pass a file and it will return it's contents as a string.
-	 * 
+	 *
 	 * @param file File to read.
+	 *
 	 * @return Contents of file. String will be empty in case of any errors.
 	 */
 	public static String convertFileToString(File file) {
 
 		if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
 			Writer writer = new StringWriter();
-			InputStream is = null;
 
 			char[] buffer = new char[1024];
-			try {
-				is = new FileInputStream(file);
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			try (InputStream is = new FileInputStream(file)) {
+				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -186,13 +186,6 @@ public class FileMgmt {
 				reader.close();
 			} catch (IOException e) {
 				System.out.println("Exception ");
-			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException ignore) {
-					}
-				}
 			}
 			return writer.toString();
 		} else {
@@ -201,63 +194,54 @@ public class FileMgmt {
 	}
 
 	//writes a string to a file making all newline codes platform specific
-	public static boolean stringToFile(String source, String FileName) {
+	public static void stringToFile(String source, String FileName) {
 
 		if (source != null) {
 			// Save the string to file (*.yml)
-			try {
-				return stringToFile(source, new File(FileName));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			stringToFile(source, new File(FileName));
 		}
-
-		return false;
 
 	}
 
 	/**
 	 * Writes the contents of a string to a file.
-	 * 
+	 *
 	 * @param source String to write.
-	 * @param file File to write to.
+	 * @param file   File to write to.
+	 *
 	 * @return True on success.
-	 * @throws IOException
 	 */
-	public static boolean stringToFile(String source, File file) throws IOException {
+	public static void stringToFile(String source, File file) {
 
 		try {
 
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			/*
+			 * Due to a Bukkit Bug with the Configuration
+			 * we just need to remove any extra comments at the start of a file.
+			 */
+			while (source.startsWith(" " + System.getProperty("line.separator"))) {
+				source = source.replaceFirst(" " + System.getProperty("line.separator"), "");
+			}
 
-			//BufferedWriter out = new BufferedWriter(new FileWriter(FileName));
-
-			source = source.replaceAll("\n", System.getProperty("line.separator"));
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 
 			out.write(source);
 			out.close();
-			return true;
 
 		} catch (IOException e) {
 			System.out.println("Exception ");
-			return false;
 		}
 	}
-	
+
 	/**
 	 * Write a list to a file, terminating each line with a system specific new line.
-	 * 
-	 * @param source
-	 * @param targetLocation
-	 * @return
-	 * @throws IOException
 	 */
-	public static boolean listToFile(List<String> source, String targetLocation) throws IOException {
+	public static boolean listToFile(List<String> source, String targetLocation) {
 
 		try {
 
 			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 
 			for (String aSource : source) {
 
@@ -275,9 +259,9 @@ public class FileMgmt {
 	}
 
 	// move a file to a sub directory
-	public static void moveFile(File sourceFile, String targetLocation) throws IOException {
+	public static void moveFile(File sourceFile, String targetLocation) {
 
-		synchronized(sourceFile) {
+		synchronized (sourceFile) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation + fileSeparator() + sourceFile.getName()));
@@ -294,7 +278,7 @@ public class FileMgmt {
 
 	public static void zipDirectory(File sourceFolder, File destination) throws IOException {
 
-		synchronized(sourceFolder) {
+		synchronized (sourceFolder) {
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
 			recursiveZipDirectory(sourceFolder, output);
 			output.close();
@@ -303,7 +287,7 @@ public class FileMgmt {
 
 	public static void zipDirectories(File[] sourceFolders, File destination) throws IOException {
 
-		synchronized(sourceFolders) {
+		synchronized (sourceFolders) {
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
 			for (File sourceFolder : sourceFolders)
 				recursiveZipDirectory(sourceFolder, output);
@@ -313,8 +297,8 @@ public class FileMgmt {
 
 	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
 
-		synchronized(sourceFolder) {
-			
+		synchronized (sourceFolder) {
+
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
 			int bytesIn = 0;
@@ -340,9 +324,9 @@ public class FileMgmt {
 	 * delete it's contents beforehand.
 	 */
 	public static void deleteFile(File file) {
-		
-		synchronized(file) {
-			
+
+		synchronized (file) {
+
 			if (file.isDirectory()) {
 				File[] children = file.listFiles();
 				if (children != null) {
@@ -367,8 +351,8 @@ public class FileMgmt {
 	 */
 	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
 
-		synchronized(backupsDir) {
-			
+		synchronized (backupsDir) {
+
 			TreeSet<Long> deleted = new TreeSet<Long>();
 			if (backupsDir.isDirectory()) {
 				File[] children = backupsDir.listFiles();
@@ -383,7 +367,7 @@ public class FileMgmt {
 							String[] tokens = filename.split(" ");
 							String lastToken = tokens[tokens.length - 1];
 							long timeMade = Long.parseLong(lastToken);
-	
+
 							if (timeMade >= 0) {
 								long age = System.currentTimeMillis() - timeMade;
 								if (age >= deleteAfter) {
@@ -406,10 +390,10 @@ public class FileMgmt {
 
 	public synchronized static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
 
-		synchronized(residentDir) {
-			
+		synchronized (residentDir) {
+
 			int count = 0;
-	
+
 			if (residentDir.isDirectory()) {
 				File[] children = residentDir.listFiles();
 				if (children != null) {
@@ -419,19 +403,19 @@ public class FileMgmt {
 							if (child.isFile()) {
 								if (filename.contains(".txt"))
 									filename = filename.split("\\.txt")[0];
-	
+
 								// Delete the file if there is no matching resident.
 								if (!fileNames.contains(filename.toLowerCase())) {
 									deleteFile(child);
 									count++;
 								}
 							}
-	
+
 						} catch (Exception e) {
 							// Ignore file
 						}
 					}
-	
+
 					if (count > 0) {
 						System.out.println(String.format("[Towny] Deleted %d old files.", count));
 					}
