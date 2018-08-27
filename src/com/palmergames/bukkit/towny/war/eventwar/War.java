@@ -370,7 +370,7 @@ public class War {
 	}
 
 	/**
-	 * Heals a plot. Only occurs when the plot has no attackers.s
+	 * Heals a plot. Only occurs when the plot has no attackers.
 	 * @param townBlock
 	 * @param wzd
 	 * @throws NotRegisteredException
