@@ -2977,6 +2977,7 @@ v0.92.0.11:
       - Add towny.command.nation.spawn to your nations.default rank/group.
       - Add towny.nation.spawn.nation to your nations.default rank/group.
       - Add towny.nation.spawn.ally to your nations.default rank/group.
+      - Add towny.town.spawn.nation to your nations.default rank/group.
     - Bump language files to version 0.46.
     - German.yml updated to 0.46 by Wolf2323.
     - Overhaul cache/permissions system to use material instead of blockid:data values. 
@@ -3107,3 +3108,4 @@ v0.92.0.11:
     - Fix issue with buckets being empty-able where they ought not be.
     - Make /res status screen show year for LastOnline when the year they were last online is not the current year.
 0.92.0.14:
+    - Change made to config code. Should fix the extra newlines seen on some servers.
