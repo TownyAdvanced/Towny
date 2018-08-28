@@ -3,11 +3,18 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -21,7 +28,16 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
@@ -38,10 +54,6 @@ public class TownySettings {
 
 	// private static Pattern namePattern = null;
 	private static CommentedConfiguration config, newConfig, language, newLanguage;
-
-//  Creatorfromhell's PR for replacing SortedMap town and nation levels.
-//	private static final NavigableMap<Integer, Map<TownLevel, Object>> configTownLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
-//	private static final NavigableMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedNavigableMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -518,7 +530,7 @@ public class TownySettings {
 
 	private static void setDefaultLevels() {
 
-		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "", "# default Town levels.");
+		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "# default Town levels.");
 		if (!config.contains(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) {
 			// List<Map<String, Object>> townLevels =
 			// config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
@@ -622,7 +634,7 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()));
 		}
 
-		addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "", "# default Nation levels.");
+		addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "# default Nation levels.");
 
 		if (!config.contains(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
 			// List<Map<String, Object>> nationLevels =
