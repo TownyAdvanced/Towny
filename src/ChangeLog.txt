@@ -3109,3 +3109,4 @@ v0.92.0.11:
     - Make /res status screen show year for LastOnline when the year they were last online is not the current year.
 0.92.0.14:
     - Change made to config code. Should fix the extra newlines seen on some servers.
+    - Fix stupid boolean that made charges not apply for creating a town.

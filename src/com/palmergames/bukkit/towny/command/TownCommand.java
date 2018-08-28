@@ -207,7 +207,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split.length >= 2) {
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String townName = String.join("_", newSplit);					
-					newTown(player, townName, player.getName(), true);			
+					newTown(player, townName, player.getName(), false);			
 				}
 
 			} else if (split[0].equalsIgnoreCase("leave")) {
