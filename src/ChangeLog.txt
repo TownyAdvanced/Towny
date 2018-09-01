@@ -3110,3 +3110,5 @@ v0.92.0.11:
 0.92.0.14:
     - Change made to config code. Should fix the extra newlines seen on some servers.
     - Fix stupid boolean that made charges not apply for creating a town.
+    - Make it so that players vanished by the plugin Essentials do not have the LastOnline value updated.
+      - Note: This means that a player could be deleted by the old-resident-deletion feature.

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -84,7 +85,15 @@ public class OnPlayerLogin implements Runnable {
 			 */
 			try {
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
-				resident.setLastOnline(System.currentTimeMillis());
+				if (TownySettings.isUsingEssentials()) {
+					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+					/*
+					 * Don't update last online for a player who is vanished.
+					 */
+					if (!ess.getUser(player).isVanished())
+						resident.setLastOnline(System.currentTimeMillis());
+				} else
+					resident.setLastOnline(System.currentTimeMillis());
 
 				TownyUniverse.getDataSource().saveResident(resident);
 				
