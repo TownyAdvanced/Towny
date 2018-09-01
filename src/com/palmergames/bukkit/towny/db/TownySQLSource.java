@@ -986,19 +986,12 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
                 nation.setCapital(getTown(rs.getString("capital")));
-                // line = rs.getString("assistants");
-                // if (line != null) {
-                // tokens = line.split(",");
-                // for (String token : tokens) {
-                // if (!token.isEmpty()) {
-                // Resident assistant = getResident(token);
-                // if (assistant != null)
-                // nation.addAssistant(assistant);
-                // }
-                // }
-                // }
                 
-                nation.setNationBoard(rs.getString("nationBoard"));
+                line = rs.getString("nationBoard");
+                if (line != null)
+                    nation.setNationBoard(rs.getString("nationBoard"));
+                else 
+                	nation.setNationBoard("");
 
                 nation.setTag(rs.getString("tag"));
 
