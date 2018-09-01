@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.palmergames.bukkit.metrics.MCStats;
 import com.palmergames.bukkit.metrics.BStats;
+import com.palmergames.bukkit.metrics.MCStats;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
@@ -54,7 +54,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -229,14 +228,18 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("==============================================================");
 
-		if (TownyUniverse.getDataSource() != null && error == false)
+		if (TownyUniverse.getDataSource() != null && !error) {
 			TownyUniverse.getDataSource().saveQueues();
+			TownyUniverse.getDataSource().saveAll();
+		}
 
-		if (error == false)
+		if (!error) {
 			TownyWar.onDisable();
+		}
 
-		if (TownyUniverse.isWarTime())
+		if (TownyUniverse.isWarTime()) {
 			getTownyUniverse().getWarEvent().toggleEnd();
+		}
 
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
@@ -248,7 +251,7 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
-		
+
 		// Shut down our saving task.
 		TownyUniverse.getDataSource().cancelTask();
 
