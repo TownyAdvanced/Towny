@@ -998,7 +998,14 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//					}
 				//				}
 
-				nation.setNationBoard(kvFile.get("nationBoard"));
+				line = kvFile.get("nationBoard");
+				if (line != null)
+					try {
+						nation.setNationBoard(line);
+					} catch (Exception e) {
+						nation.setNationBoard("");
+					}
+				
 
 				line = kvFile.get("tag");
 				if (line != null)
