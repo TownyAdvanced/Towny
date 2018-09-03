@@ -527,7 +527,7 @@ public class War {
 			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
-				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
+				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), ""));
 				if (townBlock.getTown().isCapital())
 					remove(attacker, townBlock.getTown().getNation());
 				else
@@ -597,7 +597,7 @@ public class War {
 
 		warringNations.remove(nation);
 		sendEliminateMessage(nation.getFormattedName());
-		TownyMessaging.sendTitleMessageToNation(nation, TownySettings.getLangString("msg_war_nation_removed_from_war_titlemsg"), "");
+		TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_nation_removed_from_war_titlemsg"), ""));
 		for (Town town : nation.getTowns())
 			remove(town);
 		checkEnd();

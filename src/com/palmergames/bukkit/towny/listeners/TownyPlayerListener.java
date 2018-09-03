@@ -979,16 +979,29 @@ public class TownyPlayerListener implements Listener {
 		try {
 			@SuppressWarnings("unused")
 			// Required so we don't fire events on NPCs from plugins like citizens.
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());			
-			try {
-				to.getTownBlock();
-				if (to.getTownBlock().hasTown()) { 
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed()) {								
+				if (from.getTownBlock().hasTown()) {
 					try {
-						Town fromTown = from.getTownBlock().getTown();
-						if (!to.getTownBlock().getTown().equals(fromTown)){
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
-						}
+						to.getTownBlock();
+					} catch (NotRegisteredException e) {
+						resident.setJailed(false);
+						resident.setJailSpawn(0);
+						resident.setJailTown("");
+						TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));								
+						TownyUniverse.getDataSource().saveResident(resident);
+						
+					}
+				}
+			}
+
+			try {
+			if (to.getTownBlock().hasTown()) {
+				try {
+					Town fromTown = from.getTownBlock().getTown();
+					if (!to.getTownBlock().getTown().equals(fromTown)){
+						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
+					} else {
 						// Both are the same town, do nothing, no Event should fire here.
 					} catch (NotRegisteredException e) { // From Wilderness into Town.
 						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));

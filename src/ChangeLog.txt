@@ -3113,5 +3113,6 @@ v0.92.0.11:
     - Make it so that players vanished by the plugin Essentials do not have the LastOnline value updated.
       - Note: This means that a player could be deleted by the old-resident-deletion feature.
     - Fix for nations that lack nationBoards causing issues when upgrading from older versions of Towny.
-0.93.0.0:
-    - Bump version number for release build.
+0.93.0.0 (For MC 1.10.2):
+	- This is a special release!
+	  - Enjoy the latest Towny on your old MC version.
