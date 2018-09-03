@@ -517,37 +517,33 @@ public class TownyMessaging {
 			if (BukkitTools.isOnline(resident.getName()))
 				sendMessage(resident,msg);
 	}
-/*	
- * 
- * Not available in 1.10.2
- * 
- * 
-	*//**
+	
+	/**
 	 * Send a Title and Subtitle to a resident
 	 * 
 	 * @param resident
 	 * @param title
 	 * @param subtitle
 	 * @throws TownyException
-	 *//*
+	 */
 	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) throws TownyException {
 		Player player = TownyUniverse.getPlayer(resident);
 		player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 	
-	*//**
+	/**
 	 * Send a Title and Subtitle to a town
 	 * 
 	 * @param town
 	 * @param title
 	 * @param subtitle
-	 *//*
+	 */
 	public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
 		for (Player player : TownyUniverse.getOnlinePlayers(town))
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	*//**
+	/**
 	 * Send a Title and Subtitle to a nation
 	 *
 	 * @param nation   - Nation object
@@ -604,4 +600,3 @@ public class TownyMessaging {
 		}
 	}
 }
-
