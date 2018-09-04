@@ -7,7 +7,14 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -26,9 +33,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
  * @author Shade & ElgarL
- * 
+ *
  *         This class handles Player deaths and associated costs.
- * 
+ *
  */
 public class TownyEntityMonitorListener implements Listener {
 
@@ -100,7 +107,7 @@ public class TownyEntityMonitorListener implements Listener {
 				/*
 				 * If attackerPlayer or attackerResident are null at this point
 				 * it was a natural death, not PvP.
-				 */
+				 */				
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				if (attackerPlayer instanceof Player) {
 					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
@@ -187,6 +194,9 @@ public class TownyEntityMonitorListener implements Listener {
 
 				if (!TownySettings.isDeathPriceType()) {
 					price = defenderResident.getHoldingBalance() * price;
+					if (TownySettings.isDeathPricePercentageCapped())
+						if (price > TownySettings.getDeathPricePercentageCap())
+							price = TownySettings.getDeathPricePercentageCap();
 				}
 
 				if (!defenderResident.canPayFromHoldings(price))
@@ -310,7 +320,7 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(attackerPlayer, TownySettings.getLangString("msg_err_wartime_could_not_take_deathfunds"));
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_wartime_could_not_take_deathfunds"));
 			}			
-		} else if (TownySettings.isChargingDeath() && ((TownySettings.isDeathPricePVPOnly() && attackerPlayer != null) || (!TownySettings.isDeathPricePVPOnly() && attackerPlayer == null))  ) {
+		} else if (TownySettings.isChargingDeath() && attackerPlayer != null) {
 			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) != null) {
 				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
 					return;				
@@ -322,11 +332,14 @@ public class TownyEntityMonitorListener implements Listener {
 
 			try {
 				if (TownySettings.getDeathPrice() > 0) {
-
 					double price = TownySettings.getDeathPrice();
 
 					if (!TownySettings.isDeathPriceType()) {
 						price = defenderResident.getHoldingBalance() * price;
+						System.out.println("percentage death");
+						if (TownySettings.isDeathPricePercentageCapped())
+							if (price > TownySettings.getDeathPricePercentageCap())
+								price = TownySettings.getDeathPricePercentageCap();
 					}
 
 					if (!defenderResident.canPayFromHoldings(price))
@@ -476,12 +489,14 @@ public class TownyEntityMonitorListener implements Listener {
 							try {
 								jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 							} catch (TownyException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
 							if (War.isWarZone(jailBlock.getWorldCoord())) {
 								defenderResident.setJailed(defenderPlayer, index, attackerTown);
-								TownyMessaging.sendMessage(defenderResident, "You have been jailed. Run to the wilderness or wait for a jailbreak.");
+								try {
+									TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+								} catch (TownyException e) {
+								}
 								return;
 							}
 							index++;
@@ -500,7 +515,6 @@ public class TownyEntityMonitorListener implements Listener {
 				try {					
 					town = attackerResident.getTown();
 				} catch (NotRegisteredException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}			
 			
@@ -519,7 +533,6 @@ public class TownyEntityMonitorListener implements Listener {
 					if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
 						return;
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}								
 				if (!town.hasJailSpawn()) 
@@ -534,12 +547,14 @@ public class TownyEntityMonitorListener implements Listener {
 						try {
 							jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 						} catch (TownyException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} 
 						if (War.isWarZone(jailBlock.getWorldCoord())) {
 							defenderResident.setJailed(defenderPlayer, index, town);
-							TownyMessaging.sendMessage(defenderResident, "You have been jailed. Run to the wilderness or wait for a jailbreak.");
+							try {
+								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+							} catch (TownyException e) {
+							}
 							return;
 						}
 						index++;

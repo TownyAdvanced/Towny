@@ -3,6 +3,8 @@ package com.palmergames.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 public class TimeMgmt {
 
 	public final static long[][] defaultCountdownDelays = new long[][] {
@@ -21,13 +23,11 @@ public class TimeMgmt {
 		return getCountdownDelays(start, defaultCountdownDelays);
 	}
 
-	// TODO: Throw specific exception
-	// TODO: Faster loop, check if next warning is belong the delay index
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
 		List<Long> out = new ArrayList<Long>();
-		for (int d = 0; d < delays.length; d++)
-			if (delays[d].length != 2)
+		for (long[] delay : delays)
+			if (delay.length != 2)
 				return null;
 
 		Integer lastDelayIndex = null;
@@ -38,7 +38,7 @@ public class TimeMgmt {
 					if (lastDelayIndex == null || t <= nextWarningAt || d < lastDelayIndex) {
 						lastDelayIndex = d;
 						nextWarningAt = t - delays[d][1];
-						out.add(new Long(t));
+						out.add(t);
 						break;
 					}
 				}
@@ -53,22 +53,16 @@ public class TimeMgmt {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) Math.floor(l / 3600);
-			out = h + " hours";
+			out = h + TownySettings.getLangString("msg_hours");
 			l -= h * 3600;
 		}
 		if (l >= 60) {
 			int m = (int) Math.floor(l / 60);
-			out += (out.length() > 0 ? ", " : "") + m + " minutes";
+			out += (out.length() > 0 ? ", " : "") + m + TownySettings.getLangString("msg_minutes");
 			l -= m * 60;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + " seconds";
+			out += (out.length() > 0 ? ", " : "") + l + TownySettings.getLangString("msg_seconds");
 		return out;
-	}
-
-	public static void main(String[] args) {
-
-		for (Long l : getCountdownDelays(36000000, defaultCountdownDelays))
-			System.out.println(l + " " + formatCountdownTime(l));
 	}
 }

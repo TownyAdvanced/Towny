@@ -9,15 +9,15 @@ import java.util.List;
  */
 public interface ResidentModes {
 
-	public List<String> getModes();
+	List<String> getModes();
 	
-	public boolean hasMode(String mode);
+	boolean hasMode(String mode);
 	
-	public void toggleMode(String newModes[], boolean notify);
+	void toggleMode(String newModes[], boolean notify);
 	
-	public void setModes(String modes[], boolean notify);
+	void setModes(String modes[], boolean notify);
 	
-	public void clearModes();
+	void clearModes();
 	
 
 }

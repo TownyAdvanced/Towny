@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,7 +13,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * Handle events for all Vehicle related events
@@ -43,45 +43,50 @@ public class TownyVehicleListener implements Listener {
 			
 			Player player = (Player) event.getAttacker();
 			boolean bBreak = true;
-			int blockID = 0;
+			Material vehicle = null;
 
 			switch (event.getVehicle().getType()) {
 
 			case MINECART:
-
-				if (event.getVehicle() instanceof org.bukkit.entity.minecart.StorageMinecart) {
-
-					blockID = 342;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.RideableMinecart) {
-
-					blockID = 328;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-
-					blockID = 343;
-
-				} else if (event.getVehicle() instanceof org.bukkit.entity.minecart.HopperMinecart) {
-
-					blockID = 408;
-
-				} else {
-
-					blockID = 321;
-				}
-
-				if ((blockID != 0) && (!TownySettings.isItemUseMaterial(BukkitTools.getMaterial(blockID).name())))
-					return;
-
-				// Get permissions (updates if none exist)
-				bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), blockID, (byte) 0, TownyPermission.ActionType.ITEM_USE);
+				vehicle = Material.MINECART;
 				break;
+			
+			case MINECART_FURNACE:
+				vehicle = Material.POWERED_MINECART;
+				break;
+			
+			case MINECART_HOPPER:
+				vehicle = Material.HOPPER_MINECART;
+				break;
+				
+			case MINECART_CHEST:
+				vehicle = Material.STORAGE_MINECART;
+				break;
+				
+			case MINECART_MOB_SPAWNER:
+				vehicle = Material.MINECART;
+				break;
+			
+			case MINECART_COMMAND:
+				vehicle = Material.COMMAND_MINECART;
+				break;
+			
+			case MINECART_TNT:
+				vehicle = Material.EXPLOSIVE_MINECART;
+				break;
+				
 			default:
 				break;
 
 			}
+			
+			if ((vehicle != null) && (!TownySettings.isItemUseMaterial(vehicle.toString())))
+				return;
 
-			if (blockID != 0) {
+			// Get permissions (updates if none exist)
+			bBreak = PlayerCacheUtil.getCachePermission(player, event.getVehicle().getLocation(), vehicle, TownyPermission.ActionType.ITEM_USE);
+
+			if (vehicle != null) {
 
 				// Allow the removal if we are permitted
 				if (bBreak)
@@ -94,13 +99,10 @@ public class TownyVehicleListener implements Listener {
 				 */
 				PlayerCache cache = plugin.getCache(player);
 
-				if (cache.hasBlockErrMsg())
+				if (cache.hasBlockErrMsg()) {
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-				return;
+				}
 			}
 		}
-
 	}
-
 }

@@ -32,8 +32,8 @@ public class TownyBlockPhysicsListener implements Listener {
 			return;
 		}
 
-		/**
-		 * Exit if the regen timer is zero.
+		/*
+		  Exit if the regen timer is zero.
 		 */
 		if (TownySettings.getRegenDelay() <= 0)
 			return;

@@ -89,7 +89,10 @@ public class HUDManager implements Listener{
 			WarHUD.updateAttackable(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
 			WarHUD.updateHealth(p, event.getTo(), plugin.getTownyUniverse().getWarEvent());
 		} else if (permUsers.contains(p)) {
-			PermHUD.updatePerms(p, event.getTo());
+			if (event.getTo().getTownyWorld().isUsingTowny())
+				PermHUD.updatePerms(p, event.getTo());
+			else
+				toggleOff(p);
 		}
 	}
 

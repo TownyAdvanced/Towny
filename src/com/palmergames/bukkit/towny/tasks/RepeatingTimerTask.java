@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import java.util.ArrayList;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -10,6 +8,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+
+import java.util.ArrayList;
 
 public class RepeatingTimerTask extends TownyTimerTask {
 
@@ -37,8 +37,8 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			}
 		}
 
-		/**
-		 * The following actions should be performed every second.
+		/*
+		  The following actions should be performed every second.
 		 */
 		// Take a snapshot of the next townBlock and save.
 		if (TownyRegenAPI.hasWorldCoords()) {

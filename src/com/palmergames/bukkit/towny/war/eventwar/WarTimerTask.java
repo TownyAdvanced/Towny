@@ -27,6 +27,7 @@ public class WarTimerTask extends TownyTimerTask {
 		this.warEvent = warEvent;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
 
@@ -125,6 +126,7 @@ public class WarTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}	
 
+	@SuppressWarnings("static-access")
 	public static boolean isOnEdgeOfTown(TownBlock townBlock, WorldCoord worldCoord, War warEvent) {
 
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -111,24 +112,24 @@ public class CombatUtil {
 		if (!world.isUsingTowny())
 			return false;
 
+		Coord coord = Coord.parseCoord(defendingEntity);
+		TownBlock defenderTB = null;
+		TownBlock attackerTB = null;
+
+		try {
+			attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
+		} catch (NotRegisteredException ex) {
+		}
+
+		try {
+			defenderTB = world.getTownBlock(coord);
+		} catch (NotRegisteredException ex) {
+		}
+		
 		/*
 		 * We have an attacking player
 		 */
 		if (attackingPlayer != null) {
-
-			Coord coord = Coord.parseCoord(defendingEntity);
-			TownBlock defenderTB = null;
-			TownBlock attackerTB = null;
-
-			try {
-				attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-			} catch (NotRegisteredException ex) {
-			}
-
-			try {
-				defenderTB = world.getTownBlock(coord);
-			} catch (NotRegisteredException ex) {
-			}
 
 			/*
 			 * If another player is the target
@@ -166,11 +167,11 @@ public class CombatUtil {
 				}
 
 			} else {
-
 				/*
 				 * Remove animal killing prevention start
 				 */
-
+				
+				
 				/*
 				 * Defender is not a player so check for PvM
 				 */
@@ -192,7 +193,7 @@ public class CombatUtil {
 						 * and have destroy permissions (dirt) in the defending
 						 * TownBlock
 						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), 3, (byte) 0, ActionType.DESTROY))
+						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT, ActionType.DESTROY))
 							return true;
 					}
 				}
@@ -202,53 +203,47 @@ public class CombatUtil {
 				 */
 
 				/*
-				 * Protect specific entity interactions (faked with block ID's).
+				 * Protect specific entity interactions (faked with Materials).
 				 */
-				int blockID = 0;
+				Material block = null;
 
 				switch (defendingEntity.getType()) {
-
-				case ITEM_FRAME:
-
-					blockID = 389;
-					break;
-
-				case PAINTING:
-
-					blockID = 321;
-
-					break;
-
-				case MINECART:
-
-					if (defendingEntity instanceof org.bukkit.entity.minecart.StorageMinecart) {
-
-						blockID = 342;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.RideableMinecart) {
-
-						blockID = 328;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.PoweredMinecart) {
-
-						blockID = 343;
-
-					} else if (defendingEntity instanceof org.bukkit.entity.minecart.HopperMinecart) {
-
-						blockID = 408;
-
-					} else {
-
-						blockID = 321;
-					}
-				default:
-					break;
-
+	
+					case ITEM_FRAME:
+						block = Material.ITEM_FRAME;
+						break;
+	
+					case PAINTING:
+						block = Material.PAINTING;
+						break;
+	
+					case MINECART:
+						block = Material.MINECART;
+						break;
+						
+					case MINECART_CHEST:
+						block = Material.STORAGE_MINECART;
+						break;
+					
+					case MINECART_FURNACE:
+						block = Material.POWERED_MINECART;
+						break;
+	
+					case MINECART_COMMAND:
+						block = Material.COMMAND_MINECART;
+						break;
+	
+					case MINECART_HOPPER:
+						block = Material.HOPPER_MINECART;
+						break;
+					
+					default:
+						break;
 				}
 
-				if (blockID != 0) {
+				if (block != null) {
 					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), blockID, (byte) 0, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
 
 					if (!bDestroy) {
 
@@ -267,6 +262,19 @@ public class CombatUtil {
 
 			}
 		}
+		
+		/*
+		 * If attackingEntity is a tamed Wolf and...
+		 * Defender is a player and...
+		 * Either player or wolf is in a non-PVP area
+		 * 
+		 * Prevent pvp and remove Wolf targeting.
+		 */
+		if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && defendingPlayer != null && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
+			((Wolf) attackingEntity).setTarget(null);
+			return true;
+		}
+		
 
 		return false;
 	}
@@ -291,6 +299,9 @@ public class CombatUtil {
 					return true;
 
 				if (!townBlock.getTown().isPVP() && !townBlock.getPermissions().pvp && !world.isForcePVP())
+					return true;
+				
+				if (townBlock.isHomeBlock() && world.isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
 					return true;
 
 			} catch (NotRegisteredException ex) {
@@ -348,14 +359,16 @@ public class CombatUtil {
 				try {
 					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 					if (!townBlock.getType().equals(TownBlockType.ARENA))
+						attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
 						return true;
 				} catch (TownyException x) {
 					// World or TownBlock failure
 					// But we are configured to prevent friendly fire in the
-					// wilderness too.
+					// wilderness too.					
+					attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
 					return true;
 				}
-			}
+			}		
 		return false;
 	}
 

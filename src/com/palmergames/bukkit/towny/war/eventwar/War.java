@@ -1,20 +1,5 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Location;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -40,6 +25,20 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 //TODO: Extend a new class called TownyEvent
 public class War {
@@ -213,7 +212,6 @@ public class War {
 					add(nation);
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 				} catch (TownyException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -284,7 +282,8 @@ public class War {
 	private void add(Nation nation) {
 
 		for (Town town : nation.getTowns())
-			add(town);
+			if (town.getTownBlocks().size() > 0)
+				add(town);
 		warringNations.add(nation);
 	}
 
@@ -371,7 +370,7 @@ public class War {
 	}
 
 	/**
-	 * Heals a plot. Only occurs when the plot has no attackers.s
+	 * Heals a plot. Only occurs when the plot has no attackers.
 	 * @param townBlock
 	 * @param wzd
 	 * @throws NotRegisteredException
@@ -528,7 +527,7 @@ public class War {
 			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
 				TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
-				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), ""));
+				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
 				if (townBlock.getTown().isCapital())
 					remove(attacker, townBlock.getTown().getNation());
 				else
@@ -598,7 +597,7 @@ public class War {
 
 		warringNations.remove(nation);
 		sendEliminateMessage(nation.getFormattedName());
-		TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_nation_removed_from_war_titlemsg"), ""));
+		TownyMessaging.sendTitleMessageToNation(nation, TownySettings.getLangString("msg_war_nation_removed_from_war_titlemsg"), "");
 		for (Town town : nation.getTowns())
 			remove(town);
 		checkEnd();
