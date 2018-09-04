@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
 	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
 	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
-	<classpathentry kind="lib" path="../lib/bukkit.jar" sourcepath="../lib/bukkit.jar">
+	<classpathentry kind="lib" path="../lib/bukkit1.11.2.jar" sourcepath="../lib/bukkit1.11.2.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit"/>
 		</attributes>
