@@ -16,7 +16,7 @@
 
 	<target name="download" depends="init">
 
-		<get src="http://palmergames.com/file-repo/libs/bukkit1.11.2.jar" dest="${env.LIB}/bukkit1.11.2.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/bukkit1_11_2.jar" dest="${env.LIB}/bukkit1.11.2.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
