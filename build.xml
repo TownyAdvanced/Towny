@@ -42,6 +42,7 @@
 				<pathelement location="${env.LIB}/Reserve.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />
 				<pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" />
+				<pathelement location="${env.LIB}/IDConverter.jar" />
 			</classpath>
 		</javac>
 	</target>

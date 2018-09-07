@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
 	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
 	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
-	<classpathentry kind="lib" path="../lib/bukkit.jar" sourcepath="../lib/bukkit.jar">
+	<classpathentry kind="lib" path="../lib/bukkit.jar" sourcepath="/lib/bukkit.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit"/>
 		</attributes>
@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="../lib/citizensapi-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="../lib/Vault.jar"/>
 	<classpathentry kind="lib" path="../lib/Reserve.jar"/>
+	<classpathentry kind="lib" path="../lib/IDConverter.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
