@@ -71,9 +71,11 @@ public class PlotBlockData {
 						list.add(BukkitTools.getTypeId(block));
 						list.add((int) BukkitTools.getData(block));
 						break;
-
+					case 3:
+						//TODO: Whole new regen system required. 
+						//Probably tied to using TownBlockSize of 16 (matching up to MC chunks which we can clone.
 					default:
-						list.add(BukkitTools.getTypeId(block));
+						list.add(block.getType().getId());
 					}
 
 				}

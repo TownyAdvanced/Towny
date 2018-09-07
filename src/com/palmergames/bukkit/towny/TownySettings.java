@@ -445,8 +445,6 @@ public class TownySettings {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot() == ConfigNodes.LAST_RUN_VERSION.getRoot()) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
-			} else if (root.getRoot() == ConfigNodes.VERSION_BUKKIT.getRoot()) {
-				setNewProperty(root.getRoot(), ConfigNodes.VERSION_BUKKIT.getDefault());
 			} else if (root.getRoot() == ConfigNodes.PROT_ITEM_USE_MAT.getRoot()) {
 				
 				/*
@@ -1960,11 +1958,6 @@ public class TownySettings {
 			return true; // Assume
 	}
 
-	public static int getMinBukkitVersion() {
-
-		return getInt(ConfigNodes.VERSION_BUKKIT);
-	}
-
 	public static boolean isTownyUpToDate(String currentVersion) {
 
 		return currentVersion.equals(getLastRunVersion(currentVersion));
@@ -2364,11 +2357,6 @@ public class TownySettings {
 	public static boolean isUsingCheatProtection() {
 
 		return getBoolean(ConfigNodes.PROT_CHEAT);
-	}
-
-	public static long getRegenDelay() {
-
-		return getSeconds(ConfigNodes.PROT_REGEN_DELAY);
 	}
 
 	public static int getTeleportWarmupTime() {

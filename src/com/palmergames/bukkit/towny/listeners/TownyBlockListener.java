@@ -109,24 +109,8 @@ public class TownyBlockListener implements Listener {
 			e.printStackTrace();
 		}
 
-		/*
-		 * Queue a protectionRegenTask if we have delayed regeneration set
-		 */
-		long delay = TownySettings.getRegenDelay();
-		if (delay > 0) {
-			if (!TownyRegenAPI.isPlaceholder(block)) {
-				if (!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
-					ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, true);
-					task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 20 * delay));
-					TownyRegenAPI.addProtectionRegenTask(task);
-				}
-			} else {
-				TownyRegenAPI.removePlaceholder(block);
-				BukkitTools.setTypeId(block, 0, false);
-			}
-		} else {
-			event.setCancelled(true);
-		}
+		event.setCancelled(true);
+		
 
 		/* 
 		 * display any error recorded for this plot
@@ -446,7 +430,7 @@ public class TownyBlockListener implements Listener {
 						if (townyWorld.isUsingPlotManagementWildRevert()) {
 							//TownyMessaging.sendDebugMsg("onCreateExplosion: Testing block: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
 							if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 								TownyRegenAPI.addProtectionRegenTask(task);
 								event.setYield((float) 0.0);

@@ -1,6 +1,7 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
-version: 0.93.0.0
+version: 0.93.0.1-1.13-R1
+api-version: 1.13
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >

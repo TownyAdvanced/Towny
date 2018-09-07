@@ -19,7 +19,7 @@ public class BlockMobSpawner extends BlockObject {
 	 */
 	public BlockMobSpawner(EntityType type) {
 
-		super(BukkitTools.getMaterialId(Material.MOB_SPAWNER));
+		super(BukkitTools.getMaterialId(Material.SPAWNER));
 		this.mobType = type;
 	}
 

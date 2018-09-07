@@ -52,7 +52,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 	private static final Material placeholder = Material.DIRT;
 
-	public ProtectionRegenTask(Towny plugin, Block block, boolean update) {
+	public ProtectionRegenTask(Towny plugin, Block block) {
 
 		super(plugin);
 		this.state = block.getState();
@@ -75,32 +75,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 			inven.clear();
 		}
-		
-		if (update)
-			if (state.getData() instanceof Door) {
-				Door door = (Door) state.getData();
-				Block topHalf;
-				Block bottomHalf;
-				if (door.isTopHalf()) {
-					topHalf = block;
-					bottomHalf = block.getRelative(BlockFace.DOWN);
-				} else {
-					bottomHalf = block;
-					topHalf = block.getRelative(BlockFace.UP);
-				}
-				bottomHalf.setTypeId(0);
-				topHalf.setTypeId(0);
-			} else if (state.getData() instanceof PistonExtensionMaterial) {
-				PistonExtensionMaterial extension = (PistonExtensionMaterial) state.getData();
-				Block piston = block.getRelative(extension.getAttachedFace());
-				if (piston.getTypeId() != 0) {
-					this.altState = piston.getState();
-					piston.setTypeId(0, false);
-				}
-				block.setTypeId(0, false);
-			} else {
-				block.setTypeId(0, false);
-			}
 	}
 
 	@Override
@@ -203,7 +177,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 			} else if (state instanceof CreatureSpawner) {
 
-				block.setType(Material.MOB_SPAWNER);				
+				block.setType(Material.SPAWNER);				
 				CreatureSpawner spawner = ((CreatureSpawner)state);
 				EntityType type = ((CreatureSpawner) state).getSpawnedType();
 				spawner.setSpawnedType(type);
@@ -248,10 +222,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				 */
 				// TODO: Improve piston protectionregentask code post 1.13/new data system.
 				if (block.getType().equals(Material.AIR)) {					
-					if (state.getType().equals(Material.PISTON_BASE)) {
-						block.setType(Material.PISTON_BASE);
-					} else if (state.getType().equals(Material.PISTON_STICKY_BASE)) {
-						block.setType(Material.PISTON_STICKY_BASE);			
+					if (state.getType().equals(Material.PISTON)) {
+						block.setType(Material.PISTON);
+					} else if (state.getType().equals(Material.STICKY_PISTON)) {
+						block.setType(Material.STICKY_PISTON);			
 					}					
 					org.bukkit.material.PistonBaseMaterial baseData = (org.bukkit.material.PistonBaseMaterial) state.getData();					
 					BlockFace facing = ((Directional) state.getData()).getFacing();
@@ -347,10 +321,10 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				((LongGrass) stateData).setSpecies(species);
 				state.setData((MaterialData) stateData);
 				state.update();
-				
-			} else if (state.getType().equals(Material.CONCRETE) || state.getType().equals(Material.CONCRETE_POWDER) 
-					|| state.getType().equals(Material.STAINED_CLAY) || state.getType().equals(Material.STAINED_GLASS)
-					|| state.getType().equals(Material.STAINED_GLASS_PANE) ) {
+			
+			} else if (state.getType().equals(Material.LEGACY_CONCRETE) || state.getType().equals(Material.LEGACY_CONCRETE_POWDER) 
+					|| state.getType().equals(Material.LEGACY_STAINED_CLAY) || state.getType().equals(Material.LEGACY_STAINED_GLASS)
+					|| state.getType().equals(Material.LEGACY_STAINED_GLASS_PANE) ) {
 				// TODO Make this not use bytes for colour after the new api is out in 1.13
 				block.setType(state.getType());
 				Byte b = state.getRawData();
@@ -362,8 +336,8 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				if (NeedsPlaceholder.contains(state.getType())) {
 					Block blockBelow = block.getRelative(BlockFace.DOWN);
 					if (blockBelow.getType().equals(Material.AIR)) {
-						if (state.getType().equals(Material.CROPS)) {
-							blockBelow.setType(Material.SOIL, true);
+						if (state.getType().equals(Material.WHEAT)) {
+							blockBelow.setType(Material.FARMLAND, true);
 						} else {
 							blockBelow.setType(placeholder, true);
 						}

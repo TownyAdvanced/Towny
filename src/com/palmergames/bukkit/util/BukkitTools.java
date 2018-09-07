@@ -24,6 +24,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 
+import de.themoep.idconverter.IdMappings;
+
 /**
  * A class of functions related to Bukkit in general.
  * 
@@ -185,7 +187,7 @@ public class BukkitTools {
 	
 	@Deprecated
 	public static int getTypeId(Block block) {
-		return block.getTypeId();
+		return block.getType().getId();
 	}
 	
 	@Deprecated
@@ -193,21 +195,21 @@ public class BukkitTools {
 		return block.getData();
 	}
 	
-	@Deprecated
 	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
-		block.setTypeIdAndData(type, data, applyPhysics);
+		Material mat = Material.getMaterial(IdMappings.getById(String.format("%s:%s", type, data)).getFlatteningType());
+		block.setType(mat, applyPhysics);		
 	}
 	
-	@Deprecated
 	public static void setTypeId(Block block, int type, boolean applyPhysics) {
-		block.setTypeId(type, applyPhysics);
+		Material mat = Material.getMaterial(IdMappings.getById(String.valueOf(type)).getFlatteningType());
+		block.setType(mat, applyPhysics);
 	}
 	
-	@Deprecated
-	public static void setData(Block block, byte data, boolean applyPhysics) {
-		block.setData(data, applyPhysics);
-	}
-	
+//	@Deprecated
+//	public static void setData(Block block, byte data, boolean applyPhysics) {
+//		block.setData(data, applyPhysics);
+//	}
+//	
 	
 	/*
 	 * BlockState Methods
@@ -219,10 +221,10 @@ public class BukkitTools {
 		return state.getType();
 	}
 	
-	public static int getTypeId(BlockState state) {
-		
-		return state.getTypeId();
-	}
+//	public static int getTypeId(BlockState state) {
+//		
+//		return state.getTypeId();
+//	}
 	
 	
 	public static MaterialData getData(BlockState state) {
@@ -241,10 +243,10 @@ public class BukkitTools {
 	 */
 	
 	
-	public static int getTypeId(ItemStack stack) {
-		
-		return stack.getTypeId();
-	}
+//	public static int getTypeId(ItemStack stack) {
+//		
+//		return stack.getTypeId();
+//	}
 	
 	public static MaterialData getData(ItemStack stack) {
 		
@@ -265,13 +267,14 @@ public class BukkitTools {
 	
 	/**
 	 * Find a Material from an Id.
+	 * Helpfully using Phoenix616's useful IdConverter.jar
+	 * https://www.spigotmc.org/resources/id-converter.52099/
 	 * 
 	 * @param id
 	 * @return
 	 */
 	public static Material getMaterial(int id) {
-		
-		return Material.getMaterial(id);
+		return Material.matchMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
 	}
 	
 	/**

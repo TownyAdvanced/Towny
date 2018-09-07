@@ -231,7 +231,7 @@ public class TownyPlayerListener implements Listener {
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
-			if ((block.getType() == Material.SOIL))				
+			if ((block.getType() == Material.FARMLAND))				
 				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 					return;
@@ -283,14 +283,14 @@ public class TownyPlayerListener implements Listener {
 									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
 									ChatTools.formatCommand("", "isHingedOnRight", "", String.valueOf(isHinge)),
 									ChatTools.formatCommand("", "isOpen", "", String.valueOf(isOpen)),
-									ChatTools.formatCommand("", "getFacing", "", face.toString()),									
-									ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
+									ChatTools.formatCommand("", "getFacing", "", face.toString())									
+									//ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
 									));							
 						} else {
 							TownyMessaging.sendMessage(player, Arrays.asList(
 									ChatTools.formatTitle("Block Info"),
 									ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
-									ChatTools.formatCommand("", "MaterialData", "", block.getType().getData().toString())
+									ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
 									));
 						}
 						event.setCancelled(true);
@@ -306,22 +306,6 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		if (event.getClickedBlock() != null) {
-			// Towny regen feature, added via PR by one-time contributor, no longer supported.
-			// Feature doesn't work very well, broken chests drop items. 
-			// Should probably be removed.
-			// TODO: remove this feature from config/code.
-			if (TownySettings.getRegenDelay() > 0) {
-				if (event.getClickedBlock().getState().getData() instanceof Attachable) {
-					Attachable attachable = (Attachable) event.getClickedBlock().getState().getData();
-					BlockLocation attachedToBlock = new BlockLocation(event.getClickedBlock().getRelative(attachable.getAttachedFace()).getLocation());
-					// Prevent attached blocks from falling off when interacting
-					if (TownyRegenAPI.hasProtectionRegenTask(attachedToBlock)) {
-						event.setCancelled(true);
-						return;
-					}
-				}
-			}
-
 			if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 				onPlayerSwitchEvent(event, null, World);
 			}
@@ -491,7 +475,7 @@ public class TownyPlayerListener implements Listener {
 					break;
 				
 				case MINECART_CHEST:					      
-					block = Material.STORAGE_MINECART;
+					block = Material.CHEST_MINECART;
 					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
 						return;
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
@@ -499,7 +483,7 @@ public class TownyPlayerListener implements Listener {
 				
 				case MINECART_FURNACE:
 					
-					block = Material.POWERED_MINECART;
+					block = Material.FURNACE_MINECART;
 					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
 						return;
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
@@ -507,7 +491,7 @@ public class TownyPlayerListener implements Listener {
 				
 				case MINECART_COMMAND:
 					
-					block = Material.COMMAND_MINECART;
+					block = Material.COMMAND_BLOCK_MINECART;
 					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
 						return;
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
@@ -523,7 +507,7 @@ public class TownyPlayerListener implements Listener {
 					
 				case MINECART_TNT:
 					
-					block = Material.EXPLOSIVE_MINECART;
+					block = Material.TNT_MINECART;
 					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
 						return;
 					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);

@@ -196,45 +196,47 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				worldToggle(player, sender, StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("regen")) {
-				if (isConsole)
-					throw new TownyException("Command cannot be run from console.");
-
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_REGEN.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-				if (TownyUniverse.isWarTime()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
-					return;
-				}
-
-				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
-					return;
-				}
-
-				if (TownySettings.getTownBlockSize() != 16) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
-					return;
-				}
-
-				// Regen this chunk
-				if (player != null) {
-					TownyRegenAPI.regenChunk(player);
-				}
-
-			} else if (split[0].equalsIgnoreCase("undo")) {
-				if (isConsole)
-					throw new TownyException("Command cannot be run from console.");
-
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_UNDO.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-				if (player != null)
-					try {
-						TownyUniverse.getDataSource().getResident(player.getName()).regenUndo();
-					} catch (NotRegisteredException e) {
-						// Failed to get resident
-					}
+				
+				TownyMessaging.sendErrorMsg(player, "This command has been removed for 1.13 compatibility, look for its return in the future.");
+//				if (isConsole)
+//					throw new TownyException("Command cannot be run from console.");
+//
+//				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_REGEN.getNode()))
+//					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+//
+//				if (TownyUniverse.isWarTime()) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
+//					return;
+//				}
+//
+//				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+//					return;
+//				}
+//
+//				if (TownySettings.getTownBlockSize() != 16) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
+//					return;
+//				}
+//
+//				// Regen this chunk
+//				if (player != null) {
+//					TownyRegenAPI.regenChunk(player);
+//				}
+//
+//			} else if (split[0].equalsIgnoreCase("undo")) {
+//				if (isConsole)
+//					throw new TownyException("Command cannot be run from console.");
+//
+//				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_UNDO.getNode()))
+//					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+//
+//				if (player != null)
+//					try {
+//						TownyUniverse.getDataSource().getResident(player.getName()).regenUndo();
+//					} catch (NotRegisteredException e) {
+//						// Failed to get resident
+//					}
 
 			} else {
 				/*

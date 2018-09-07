@@ -599,7 +599,7 @@ public class TownyEntityListener implements Listener {
 
 				// Prevent creatures trampling crops
 				if (townyWorld.isDisableCreatureTrample()) {
-					if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS)) {
+					if ((block.getType() == Material.FARMLAND) || (block.getType() == Material.WHEAT)) {
 						if (entity instanceof Creature) {
 							event.setCancelled(true);
 							return;
@@ -630,7 +630,7 @@ public class TownyEntityListener implements Listener {
 
 				// Prevent creatures triggering stone pressure plates
 				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
-					if (block.getType() == Material.STONE_PLATE) {
+					if (block.getType() == Material.STONE_PRESSURE_PLATE) {
 						if (entity instanceof Creature) {
 							event.setCancelled(true);
 							return;
@@ -802,7 +802,7 @@ public class TownyEntityListener implements Listener {
 							}
 							if (TownyWarConfig.regenBlocksAfterExplosionInWarZone()) {
 								if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 									TownyRegenAPI.addProtectionRegenTask(task);
 									event.setYield((float) 0.0);
@@ -831,7 +831,7 @@ public class TownyEntityListener implements Listener {
 										//TownyMessaging.sendDebugMsg("onEntityExplode: Testing entity: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");										
 										if (townyWorld.isProtectingExplosionEntity(entity)) {
 											if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-												ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+												ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 												task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 												TownyRegenAPI.addProtectionRegenTask(task);
 												event.setYield((float) 0.0);
@@ -885,7 +885,7 @@ public class TownyEntityListener implements Listener {
 								if (townyWorld.isProtectingExplosionEntity(entity)) {
 									// Piston extensions which are broken by explosions ahead of the base 
 									// block cause baseblocks to drop as items and no base block to be regenerated.
-									if (block.getType().equals(Material.PISTON_EXTENSION)) {
+									if (block.getType().equals(Material.PISTON_HEAD)) {
 										BlockState blockState = block.getState();
 										org.bukkit.material.PistonExtensionMaterial blockData = (org.bukkit.material.PistonExtensionMaterial) blockState.getData(); 
 										Block baseBlock = block.getRelative(blockData.getAttachedFace());
@@ -894,7 +894,7 @@ public class TownyEntityListener implements Listener {
 										block = baseBlock;
 										
 										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 											TownyRegenAPI.addProtectionRegenTask(task);
 											event.setYield((float) 0.0);
@@ -907,7 +907,7 @@ public class TownyEntityListener implements Listener {
 										
 									} else {
 										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
+											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 											TownyRegenAPI.addProtectionRegenTask(task);
 											event.setYield((float) 0.0);

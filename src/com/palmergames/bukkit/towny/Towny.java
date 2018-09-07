@@ -21,7 +21,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
-import com.palmergames.bukkit.towny.listeners.TownyBlockPhysicsListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
@@ -89,7 +88,6 @@ public class Towny extends JavaPlugin {
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
 	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
 	private final TownyBlockListener blockListener = new TownyBlockListener(this);
-	private final TownyBlockPhysicsListener physicsListener = new TownyBlockPhysicsListener(this);
 	private final TownyCustomListener customListener = new TownyCustomListener(this);
 	private final TownyEntityListener entityListener = new TownyEntityListener(this);
 	private final TownyWeatherListener weatherListener = new TownyWeatherListener(this);
@@ -414,12 +412,6 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
-
-			// Only register a physics listener if we need to.
-			if (TownySettings.getRegenDelay() > 0) {
-				pluginManager.registerEvents(physicsListener, this);
-			}
-
 		}
 
 		// Always register these events.
@@ -765,15 +757,6 @@ public class Towny extends JavaPlugin {
 	public TownyVehicleListener getVehicleListener() {
 	
 		return vehicleListener;
-	}
-
-	
-	/**
-	 * @return the physicsListener
-	 */
-	public TownyBlockPhysicsListener getPhysicsListener() {
-	
-		return physicsListener;
 	}
 
 	

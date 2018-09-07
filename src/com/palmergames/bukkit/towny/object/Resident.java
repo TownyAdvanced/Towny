@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -441,28 +442,30 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		setChangedName(false);
 	}
 
-	/**
-	 * Push a snapshot to the Undo queue
-	 *
-	 * @param snapshot
-	 */
-	public void addUndo(Object[][][] snapshot) {
-
-		if (regenUndo.size() == 5)
-			regenUndo.remove(0);
-		regenUndo.add(snapshot);
-	}
-
-	public void regenUndo() {
-
-		if (regenUndo.size() > 0) {
-			Object[][][] snapshot = regenUndo.get(regenUndo.size() - 1);
-			regenUndo.remove(snapshot);
-
-			TownyRegenAPI.regenUndo(snapshot, this);
-
-		}
-	}
+	//TODO: Restore /tw regen and /tw regen undo functionality.
+//	/**
+//	 * Push a snapshot to the Undo queue
+//	 *
+//	 * Old version pre 1.13
+//	 * @param snapshot
+//	 */
+//	public void addUndo(Object[][][] snapshot) {
+//
+//		if (regenUndo.size() == 5)
+//			regenUndo.remove(0);
+//		regenUndo.add(snapshot);
+//	}
+//
+//	public void regenUndo() {
+//
+//		if (regenUndo.size() > 0) {
+//			Object[][][] snapshot = regenUndo.get(regenUndo.size() - 1);
+//			regenUndo.remove(snapshot);
+//
+//			TownyRegenAPI.regenUndo(snapshot, this);
+//
+//		}
+//	}	
 
 	@Override
 	public List<String> getModes() {

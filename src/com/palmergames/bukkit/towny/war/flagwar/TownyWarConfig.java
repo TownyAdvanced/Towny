@@ -14,7 +14,7 @@ public class TownyWarConfig {
 
 	public static final DyeColor[] woolColors = new DyeColor[] {
 			DyeColor.LIME, DyeColor.GREEN, DyeColor.BLUE, DyeColor.CYAN,
-			DyeColor.LIGHT_BLUE, DyeColor.SILVER, DyeColor.WHITE,
+			DyeColor.LIGHT_BLUE, DyeColor.GRAY, DyeColor.WHITE,
 			DyeColor.PINK, DyeColor.ORANGE, DyeColor.RED };
 
 	private static Material flagBaseMaterial = null;
@@ -25,7 +25,7 @@ public class TownyWarConfig {
 
 	public static boolean isAffectedMaterial(Material material) {
 
-		return material == Material.WOOL || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
+		return material == Material.LEGACY_WOOL || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
 	}
 
 	public static DyeColor[] getWoolColors() {
