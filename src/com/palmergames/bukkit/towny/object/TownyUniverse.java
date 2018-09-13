@@ -261,8 +261,6 @@ public class TownyUniverse extends TownyObject {
 	 */
 	public static TownBlock getTownBlock(Location loc) {
 
-		TownyMessaging.sendDebugMsg("Fetching TownBlock");
-
 		try {
 			WorldCoord worldCoord = new WorldCoord(getDataSource().getWorld(loc.getWorld().getName()).getName(), Coord.parseCoord(loc));
 			return worldCoord.getTownBlock();

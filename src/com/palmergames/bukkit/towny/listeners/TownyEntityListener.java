@@ -1052,7 +1052,6 @@ public class TownyEntityListener implements Listener {
 					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
 
 			} else {
-
 				// Explosions are blocked in this plot
 				if (!locationCanExplode(townyWorld, hanging.getLocation())) {
 					event.setCancelled(true);
@@ -1064,7 +1063,7 @@ public class TownyEntityListener implements Listener {
 						if (townyWorld.isExpl())
 							if (townyWorld.isUsingPlotManagementWildRevert() && ((Entity)remover != null))							
 								if (townyWorld.isProtectingExplosionEntity((Entity)remover))
-									event.setCancelled(true);						
+									event.setCancelled(true);
 					}
 				}
 			}
