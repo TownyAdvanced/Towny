@@ -22,7 +22,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import de.themoep.idconverter.IdMappings;
@@ -165,12 +164,9 @@ public class BukkitTools {
 	}
 	
 	
-	
 	/*
 	 * Block handling Methods.
 	 */
-
-	
 	
 	/**
 	 * Find a block at a specific offset.
@@ -185,55 +181,39 @@ public class BukkitTools {
 
 		return block.getWorld().getBlockAt(block.getX() + xOffset, block.getY() + yOffset, block.getZ() + zOffset);
 	}
-	
+
+	// Will be removed completely when the new plotsnapshot system is made.
 	@Deprecated
 	public static int getTypeId(Block block) {
 		return block.getType().getId();
-	}
-	
+	}	
+	// Will be removed completely when the new plotsnapshot system is made.
 	@Deprecated
 	public static byte getData(Block block) {
 		return block.getData();
 	}
-	
+	// No Longer Used, used to be used in PlotBlockData's restorenextblock.
+	@Deprecated
 	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - block " + block);
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - type " + type);
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - data " + data);
 		Material mat = Material.getMaterial(IdMappings.getById(String.format("%s:%s", type, data)).getFlatteningType());
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - mat " + mat);
 		block.setType(mat, applyPhysics);		
 	}
-	
+	// No Longer Used, used to be used in PlotBlockData's restorenextblock.
+	@Deprecated
 	public static void setTypeId(Block block, int type, boolean applyPhysics) {
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - block " + block);
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - type " + type);		
 		Material mat = Material.getMaterial(IdMappings.getById(String.valueOf(type)).getFlatteningType());
-		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - mat " + mat);
 		block.setType(mat, applyPhysics);
 	}
-	
-//	@Deprecated
-//	public static void setData(Block block, byte data, boolean applyPhysics) {
-//		block.setData(data, applyPhysics);
-//	}
-//	
+		
 	
 	/*
 	 * BlockState Methods
 	 */
-	
-	
+
 	public static Material getType(BlockState state) {
 		
 		return state.getType();
 	}
-	
-//	public static int getTypeId(BlockState state) {
-//		
-//		return state.getTypeId();
-//	}
-	
 	
 	public static MaterialData getData(BlockState state) {
 		
@@ -250,12 +230,6 @@ public class BukkitTools {
 	 * Item Handling Methods
 	 */
 	
-	
-//	public static int getTypeId(ItemStack stack) {
-//		
-//		return stack.getTypeId();
-//	}
-	
 	public static MaterialData getData(ItemStack stack) {
 		
 		return stack.getData();
@@ -270,8 +244,6 @@ public class BukkitTools {
 	/*
 	 * Material handling Methods.
 	 */
-	
-	
 	
 	/**
 	 * Find a Material from an Id.
@@ -302,6 +274,7 @@ public class BukkitTools {
 	 * @param material
 	 * @return
 	 */
+	@Deprecated
 	public static int getMaterialId(Material material) {
 		
 		return material.getId();

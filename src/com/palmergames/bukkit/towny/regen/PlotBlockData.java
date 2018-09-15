@@ -167,20 +167,17 @@ public class PlotBlockData {
 						case 2:
 							block.setType(mat, false);
 							//BukkitTools.setTypeIdAndData(block, storedData.getTypeId(), storedData.getData(), false);
-
 							break;
 						default:
-							BukkitTools.setTypeId(block, storedData.getTypeId(), false);
+							block.setType(mat, false);
 						}
 						
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java - BlockID found in legacy plotsnapshot which could not be resolved to a Material. ");
 					}
 
-				} else {
-					
-					BukkitTools.setTypeId(block, 0, false);
-					
+				} else {					
+					block.setType(Material.AIR);					
 				}
 
 				return true;
