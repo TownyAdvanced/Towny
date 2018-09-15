@@ -96,26 +96,26 @@ public class PlotBlockData {
 	public boolean restoreNextBlock() {
 
 		Block block = null;
-		int x, y, z, blockId, reverse, scale;
+		int x, y, z, reverse, scale;
 		int worldx = getX() * size, worldz = getZ() * size;
-		Material blockMat;
+		Material blockMat, mat;
 		BlockObject storedData;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
 		
-		TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Version " + version); 	
+		TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Version " + version);
 		//Scale for the number of elements
 		switch (version) {
 
-		case 1:
-		case 2:
-			scale = 2;
-			break;
-
-		default:
-			scale = 1;
+			case 1:
+			case 2:
+				scale = 2;
+				break;
+	
+			default:
+				scale = 1;
 		}
 
 		reverse = (blockList.size() - blockListRestored) / scale;
@@ -129,15 +129,13 @@ public class PlotBlockData {
 
 			block = world.getBlockAt(worldx + x, y, worldz + z);
 			blockMat = block.getType();
-			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
-			Material mat;
+			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);			
 
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getData() " + storedData.getData());
 			if (storedData.getData() == 0) {
 				TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
-				TownyMessaging.sendDebugMsg("IDmappings Legacy - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getLegacyType(),true));
 				mat = BukkitTools.getMaterial(storedData.getTypeId());
 			} else {
 				try {
@@ -154,10 +152,10 @@ public class PlotBlockData {
 			// If this block isn't correct, replace
 			// and return as done.
 			if (mat == null) {
-				TownyMessaging.sendErrorMsg("PlotBlockData: Material Null, skipping block.");
+				TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
 			} else if (blockMat != mat) {
 				TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
-				if ( (mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
+				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
 
 					try {
 						//restore based upon version
