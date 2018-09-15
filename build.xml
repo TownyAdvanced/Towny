@@ -25,8 +25,6 @@
 		<get src="http://palmergames.com/file-repo/libs/Reserve.jar" dest="${env.LIB}/Reserve.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/citizensapi-2_0-SNAPSHOT.jar" dest="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/IDConverter.jar" dest="${env.LIB}/IDConverter.jar" skipexisting="true" />
-
 	</target>
 
 	<target name="compile" depends="download">
@@ -43,7 +41,6 @@
 				<pathelement location="${env.LIB}/Reserve.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />
 				<pathelement location="${env.LIB}/citizensapi-2.0-SNAPSHOT.jar" />
-				<pathelement location="${env.LIB}/IDConverter.jar" />
 			</classpath>
 		</javac>
 	</target>

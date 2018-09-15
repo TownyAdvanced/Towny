@@ -3132,3 +3132,4 @@ v0.92.0.11:
 0.93.0.2:
     - Simplified the ProtectionRegenTask, using BlockData.
 0.93.0.3:
+    - Beginning phase of making old plotsnapshots used in the Revert on Unclaim feature regenerate on 1.13.

@@ -22,6 +22,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import de.themoep.idconverter.IdMappings;
@@ -196,12 +197,19 @@ public class BukkitTools {
 	}
 	
 	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - block " + block);
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - type " + type);
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - data " + data);
 		Material mat = Material.getMaterial(IdMappings.getById(String.format("%s:%s", type, data)).getFlatteningType());
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeIdAndData - mat " + mat);
 		block.setType(mat, applyPhysics);		
 	}
 	
 	public static void setTypeId(Block block, int type, boolean applyPhysics) {
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - block " + block);
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - type " + type);		
 		Material mat = Material.getMaterial(IdMappings.getById(String.valueOf(type)).getFlatteningType());
+		TownyMessaging.sendDebugMsg("BukkitTools:setTypeId - mat " + mat);
 		block.setType(mat, applyPhysics);
 	}
 	
@@ -274,7 +282,7 @@ public class BukkitTools {
 	 * @return
 	 */
 	public static Material getMaterial(int id) {
-		return Material.matchMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
+		return Material.getMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
 	}
 	
 	/**
