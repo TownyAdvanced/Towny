@@ -12,6 +12,8 @@ import de.themoep.idconverter.IdMappings.IdType;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Directional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +149,7 @@ public class PlotBlockData {
 			}
 			// Increment based upon number of elements
 			blockListRestored += scale;
-
+				
 
 			// If this block isn't correct, replace
 			// and return as done.
@@ -164,7 +166,7 @@ public class PlotBlockData {
 						case 1:
 						case 2:
 							block.setType(mat, false);
-							//BukkitTools.setTypeIdAndData(block, storedData.getTypeId(), storedData.getData(), false);
+
 							break;
 						default:
 							block.setType(mat, false);
