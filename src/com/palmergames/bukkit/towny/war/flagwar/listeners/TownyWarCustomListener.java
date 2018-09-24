@@ -35,6 +35,9 @@ public class TownyWarCustomListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellAttackEvent(CellAttackEvent event) {
 
+		if(event.isCancelled())
+			return;
+
 		try {
 			CellUnderAttack cell = event.getData();
 			TownyWar.registerAttack(cell);
@@ -46,6 +49,9 @@ public class TownyWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellDefendedEvent(CellDefendedEvent event) {
+
+		if(event.isCancelled())
+			return;
 
 		Player player = event.getPlayer();
 		CellUnderAttack cell = event.getCell().getAttackData();
@@ -113,6 +119,9 @@ public class TownyWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellWonEvent(CellWonEvent event) {
+
+		if(event.isCancelled())
+			return;
 
 		CellUnderAttack cell = event.getCellAttackData();
 
@@ -203,6 +212,9 @@ public class TownyWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellAttackCanceledEvent(CellAttackCanceledEvent event) {
+
+		if(event.isCancelled())
+			return;
 
 		CellUnderAttack cell = event.getCell();
 
