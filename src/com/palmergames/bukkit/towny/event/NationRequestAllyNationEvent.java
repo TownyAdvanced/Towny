@@ -1,14 +1,16 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
-public class NationRequestAllyNationEvent extends Event {
+public class NationRequestAllyNationEvent extends Event implements Cancellable{
 
 	private static final HandlerList handlers = new HandlerList();
 	private NationAllyNationInvite invite;
+	public boolean cancelled = false;
 
 	@Override
 	public HandlerList getHandlers() {
@@ -32,4 +34,13 @@ public class NationRequestAllyNationEvent extends Event {
 		return invite;
 	}
 
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	@Override
+	public void setCancelled(boolean b) {
+		this.cancelled = b;
+	}
 }

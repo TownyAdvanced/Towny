@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,10 +12,10 @@ import org.bukkit.event.HandlerList;
  *
  * Fired after a resident has been removed from a town.
  */
-public class TownRemoveResidentEvent extends Event {
+public class TownRemoveResidentEvent extends Event implements Cancellable{
 
     private static final HandlerList handlers = new HandlerList();
-    
+    private boolean cancelled = false;
     private Resident resident;
     private Town town;
 
@@ -50,4 +51,13 @@ public class TownRemoveResidentEvent extends Event {
         return town;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean b) {
+        this.cancelled = b;
+    }
 }

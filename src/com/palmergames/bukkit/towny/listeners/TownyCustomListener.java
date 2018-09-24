@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,10 +24,10 @@ import org.bukkit.event.Listener;
  * Author: Chris H (Zren / Shade)
  * Date: 4/15/12
  */
-public class TownyCustomListener implements Listener {
+public class TownyCustomListener implements Listener, Cancellable{
 
 	private final Towny plugin;
-
+	public boolean cancellable = false;
 	public TownyCustomListener(Towny instance) {
 
 		plugin = instance;
@@ -67,5 +68,15 @@ public class TownyCustomListener implements Listener {
 			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
 			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 		}
+	}
+
+	@Override
+	public boolean isCancelled() {
+		return cancellable;
+	}
+
+	@Override
+	public void setCancelled(boolean b) {
+		this.cancellable = b;
 	}
 }

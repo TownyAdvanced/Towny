@@ -1,13 +1,15 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlotChangeOwnerEvent extends Event {
+public class PlotChangeOwnerEvent extends Event implements Cancellable{
     public static final HandlerList handlers = new HandlerList();
     private Resident oldowner;
     private Resident newowner;
+    public boolean cancelled = false;
 
     @Override
     public HandlerList getHandlers() {
@@ -36,5 +38,15 @@ public class PlotChangeOwnerEvent extends Event {
             return "undefined";
         }
         return oldowner.getName();
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean b) {
+        this.cancelled = b;
     }
 }
