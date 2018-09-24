@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityEvent;
 public class MobRemovalEvent extends EntityEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	boolean cancelled = false;
+	private boolean cancelled = false;
 	
 	public MobRemovalEvent(Entity what) {
 		super(what);
