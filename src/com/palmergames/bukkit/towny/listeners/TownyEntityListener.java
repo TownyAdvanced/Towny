@@ -30,14 +30,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LingeringPotion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -56,7 +54,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;	
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.LingeringPotionSplashEvent;	
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -247,24 +244,8 @@ public class TownyEntityListener implements Listener {
 		
 	}
 
+	// TODO: Rework CreatorFromHell's Anti-Tempt Mechanisim (Removed since Bukkit 1.8.x doesn't implement TEMPT target reason.)
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
-		if (plugin.isError()) {
-			return;
-		}
-
-		if (event.getTarget() instanceof Player) {
-
-			Player target = (Player)event.getTarget();
-			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.DIRT, TownyPermission.ActionType.DESTROY)) {
-					event.setCancelled(true);
-				}
-			}
-		}
-	}
-	
 	/**
 	 * Prevent explosions from hurting non-living entities in towns.
 	 * Includes: Armorstands, itemframes, animals, endercrystals, minecarts
@@ -355,12 +336,16 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	
-	/**
+/*	
+ * 
+ * 
+ * Lingering potions are not available pre 1.9
+ * 
+	*//**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
 	 *  @param event
-	 */
+	 *//*
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
 
@@ -389,16 +374,16 @@ public class TownyEntityListener implements Listener {
 		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
 		boolean detrimental = false;
 
-		/*
+		
 		 * List of potion effects blocked from PvP.
-		 */
+		 
 		List<String> prots = TownySettings.getPotionTypes();
 				
 		for (PotionEffect effect : effects) {
 
-			/*
+			
 			 * Check to see if any of the potion effects are protected.
-			 */
+			 
 			if (prots.contains(effect.getType().getName())) {
 				detrimental = true;
 			}
@@ -429,7 +414,7 @@ public class TownyEntityListener implements Listener {
 					}				
 			}			
 		}	
-	}	
+	}*/	
 	
 	/**
 	 * Prevent splash potion damage on players in non PVP areas
@@ -915,8 +900,7 @@ public class TownyEntityListener implements Listener {
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
 													block.getState().getData() instanceof Sign ||
-													block.getState().getData() instanceof PressurePlate || 
-													block.getState() instanceof ShulkerBox) {
+													block.getState().getData() instanceof PressurePlate) {
 												block.setType(Material.AIR);
 											}
 										}

@@ -13,7 +13,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerFishEvent.State;
@@ -32,7 +31,6 @@ import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.material.Stairs;
 import org.bukkit.material.Step;
 import org.bukkit.material.Tree;
-import org.bukkit.material.Wood;
 import org.bukkit.material.WoodenStep;
 
 import java.util.ArrayList;
@@ -122,7 +120,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 								
 				BlockFace face = null;
                 boolean isOpen = false;
-                boolean isHinge = false;
+                // TODO: REDO HINGES 1/3; "boolean isHinge = false;"
 				Block topHalf = null;
 				Block bottomHalf = null;
 
@@ -164,7 +162,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 					BlockState topHalfState = topHalf.getState();
 					Door topHalfData = (Door) topHalfState.getData();
 					// Gather last part of the Material Data from upper door block.
-					isHinge = door.getHinge();
+					// TODO: REDO HINGES 2/3
 					// Gather previous parts of Material Data from lower door block.
 					Door otherdoor = (Door) topHalf.getRelative(BlockFace.DOWN).getState().getData();
 					isOpen = otherdoor.isOpen();
@@ -172,7 +170,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 					// Set top block Material Data.
 					topHalfData.setFacingDirection(face);
 					topHalfData.setOpen(isOpen);
-					topHalfData.setHinge(isHinge);
+					// TODO: REDO HINGES 3/3
 					topHalfData.setTopHalf(true);
 					topHalfState.setData(topHalfData);
 					topHalfState.update();
@@ -220,15 +218,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				state.setData(chestData);
 				state.update();	
 			
-			} else if (state instanceof ShulkerBox) {
-				
-				block.setType(state.getType());
-				MaterialData shulkerData = state.getData(); 
-				Inventory container = ((ShulkerBox) block.getState()).getInventory();
-				container.setContents(contents.toArray(new ItemStack[0]));
-				state.setData(shulkerData);
-				state.update();				
-				
 			} else if (state instanceof InventoryHolder) {
 				
 				block.setType(state.getType(), false);				
@@ -348,8 +337,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 				state.setData((MaterialData) stateData);
 				state.update();
 				
-			} else if (state.getType().equals(Material.CONCRETE) || state.getType().equals(Material.CONCRETE_POWDER) 
-					|| state.getType().equals(Material.STAINED_CLAY) || state.getType().equals(Material.STAINED_GLASS)
+			} else if (state.getType().equals(Material.STAINED_CLAY) || state.getType().equals(Material.STAINED_GLASS)
 					|| state.getType().equals(Material.STAINED_GLASS_PANE) ) {
 				// TODO Make this not use bytes for colour after the new api is out in 1.13
 				block.setType(state.getType());
