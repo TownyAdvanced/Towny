@@ -6,10 +6,10 @@
 	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
 	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
+	<classpathentry kind="lib" path="../lib/Permissions.jar"/>
 	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
 	<classpathentry kind="lib" path="../lib/Register.jar"/>
 	<classpathentry kind="lib" path="../lib/bukkit1.8.5.jar">
-	<classpathentry kind="lib" path="../lib/Questioner.jar"/>
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit"/>
 		</attributes>
