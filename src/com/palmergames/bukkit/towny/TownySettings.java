@@ -2514,10 +2514,11 @@ public class TownySettings {
 	public static String[] getWarAPlayerIsAnAllyMsg() {
 		return parseString(String.format(getLangString("msg_war_a_player_is_an_ally"))); 
 	}
-	
+
+	/* TODO: REWORK TITLES
 	public static boolean isNotificationUsingTitles() {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
-	}
+	}*/
 
 	public static int getAmountOfResidentsForTown() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
@@ -2571,21 +2572,22 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
 	}
 	
+	/* TODO: REWORK TITLES pt 2
 	public static String getNotificationTitlesTownTitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_TITLE);
 	}
-	
+
 	public static String getNotificationTitlesTownSubtitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_SUBTITLE);
 	}
-	
+
 	public static String getNotificationTitlesWildTitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_TITLE);
 	}
-	
+
 	public static String getNotificationTitlesWildSubtitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
-	}
+	}*/
 
 	public static double getTownRenameCost() {
 		return getDouble(ConfigNodes.ECO_TOWN_RENAME_COST);

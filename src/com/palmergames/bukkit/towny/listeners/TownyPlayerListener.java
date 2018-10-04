@@ -1087,7 +1087,7 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
+		/*if (TownySettings.isNotificationUsingTitles()) {
 			
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
@@ -1100,7 +1100,7 @@ public class TownyPlayerListener implements Listener {
 				subtitle = replacement;
 			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
-		}
+		}*/
 	}
 	
 	/*
@@ -1114,7 +1114,7 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
+		/*if (TownySettings.isNotificationUsingTitles()) {
 			try {
 				@SuppressWarnings("unused")
 				Town toTown = to.getTownBlock().getTown();
@@ -1131,7 +1131,7 @@ public class TownyPlayerListener implements Listener {
 				}
 				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 			}			
-		}
+		}*/
 
 		Player player = event.getPlayer();
 		if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed()) {								

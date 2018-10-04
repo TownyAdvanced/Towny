@@ -526,10 +526,10 @@ public class TownyMessaging {
 	 * @param subtitle
 	 * @throws TownyException
 	 */
-	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) throws TownyException {
-		Player player = TownyUniverse.getPlayer(resident);
-		player.sendTitle(title, subtitle, 10, 70, 10);
-	}
+	//public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) throws TownyException {
+	//	Player player = TownyUniverse.getPlayer(resident);
+	//	player.sendTitle(title, subtitle, 10, 70, 10);
+	//}
 	
 	/**
 	 * Send a Title and Subtitle to a town
@@ -538,22 +538,22 @@ public class TownyMessaging {
 	 * @param title
 	 * @param subtitle
 	 */
-	public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
-		for (Player player : TownyUniverse.getOnlinePlayers(town))
-			player.sendTitle(title, subtitle, 10, 70, 10);
-	}
+	//public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
+	//	for (Player player : TownyUniverse.getOnlinePlayers(town))
+	//		player.sendTitle(title, subtitle, 10, 70, 10);
+	//}
 
 	/**
 	 * Send a Title and Subtitle to a nation
 	 *
-	 * @param nation   - Nation object
-	 * @param title    - Title
-	 * @param subtitle - Subtitle
+	 * [@]param nation   - Nation object
+	 * [@]param title    - Title
+	 * [@]param subtitle - Subtitle
 	 */
-	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
-		for (Player player : TownyUniverse.getOnlinePlayers(nation))
-			player.sendTitle(title, subtitle, 10, 70, 10);
-	}
+	//public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
+	//	for (Player player : TownyUniverse.getOnlinePlayers(nation))
+	//		player.sendTitle(title, subtitle, 10, 70, 10);
+	//}
 
 	public static void sendConfirmationMessage(Object player, String firstline, String confirmline, String cancelline, String lastline) {
 		if (firstline == null) {
