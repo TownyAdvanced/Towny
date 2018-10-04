@@ -1,7 +1,0 @@
-If this file doesn't exist (you delete it), outposts will be checked (again) for validity.
-Towny will automatically fix any outpostspawns that exist in townblocks not claimed by any town.
-There may be other outpostspawns in a town, which cannot be removed automatically. 
-This is because they are still claimed by a town but are not recorded properly as outposts. 
-This is done per town and meant to fix a long-running bug that is limited to MySQL databases only.
-Because you're reading this now, the check has already been completed once.
-If this is not the case then please report the issue on Github or IRC.
