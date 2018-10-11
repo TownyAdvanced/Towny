@@ -236,7 +236,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,DAYLIGHT_DETECTOR_INVERTED,DAYLIGHT_DETECTOR",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -290,7 +290,7 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart"),
+			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull"),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
 			"20s"),
@@ -471,7 +471,7 @@ public enum ConfigNodes {
 			"1000000.0",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
-	),	
+	),
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -714,7 +714,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -728,7 +728,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"DISPENSER,NOTE_BLOCK,CHEST,FURNACE,BURNING_FURNACE,WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,STONE_BUTTON,TRAP_DOOR,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,SPRUCE_FENCE_GATE,BIRCH_FENCE_GATE,JUNGLE_FENCE_GATE,DARK_OAK_FENCE_GATE,ACACIA_FENCE_GATE,TRAPPED_CHEST,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON,HOPPER,DROPPER,MINECART,STORAGE_MINECART,POWERED_MINECART,CARROT_STICK,EXPLOSIVE_MINECART,HOPPER_MINECART,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX",
+			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,REDSTONE_COMPARATOR,DIODE_BLOCK,STONE_PLATE,GOLD_PLATE,IRON_PLATE,STONE_BUTTON,WOOD_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,IRON_TRAPDOOR,TRAP_DOOR,MINECART,COMMAND_MINECART,STORAGE_MINECART,POWERED_MINECART,HOPPER_MINECART,EXPLOSIVE_MINECART,CARROT_STICK",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
@@ -738,9 +738,11 @@ public enum ConfigNodes {
 			"Monster,Guardian,Flying,Slime",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.html",
-			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
-			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
-			"# Husk, Stray",
+			"# Ageable, Ambient, Animals, ArmorStand, Bat, Blaze, CaveSpider, Chicken, ComplexLivingEntity,",
+			"# Cow, Creature, Creeper, EnderDragon, Enderman, Endermite, Flying, Ghast, Giant, Golem, ",
+			"# Guardian, Horse, HumanEntity, IronGolem, MagmaCube, Monster, MushroomCow, NPC, Ocelot, ",
+			"# Pig, PigZombie, Player, Rabbit, Sheep, Silverfish, Skeleton, Slime, Snowman, Spider, Squid,",
+			"# Villager, WaterMob, Witch, Wither, Wolf, Zombie",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
 
@@ -759,7 +761,8 @@ public enum ConfigNodes {
 			"protection.world_mob_removal_entities",
 			"Monster,Guardian,Flying,Slime",
 			"",
-			"# Globally remove living entities in all worlds that have their flag set."),
+			"# Globally remove living entities in all worlds that have their flag set.",
+			"# (See town_mob_removal_entities for valid options.)"),
 
 	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
 			"protection.world_prevent_villager_breeding",
@@ -789,7 +792,7 @@ public enum ConfigNodes {
 			"",
 			"# permitted Potion Types https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionType.html",
 			"# ABSORPTION, BLINDNESS, CONFUSION, DAMAGE_RESISTANCE, FAST_DIGGING, FIRE_RESISTANCE, HARM, HEAL, HEALTH_BOOST, HUNGER, ",
-			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW , SLOW_DIGGING, ",
+			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW, SLOW_DIGGING, ",
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
@@ -822,7 +825,7 @@ public enum ConfigNodes {
 	UNCLAIMED_ZONE_ITEM_USE("unclaimed.unclaimed_zone_item_use", "false"),
 	UNCLAIMED_ZONE_IGNORE(
 			"unclaimed.unclaimed_zone_ignore",
-			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE,LOG_2,VINE,NETHER_WARTS,COCOA"),
+			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LOG_2,LEAVES,LEAVES_2,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,ACTIVATOR_RAIL,POWERED_RAIL,DETECTOR_RAIL,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE,VINE,NETHER_WARTS,COCOA"),
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch", "false"),
 
 	NOTIFICATION(
@@ -874,7 +877,7 @@ public enum ConfigNodes {
 			"",
 			"# Requires the above using_titles to be set to true.",
 			"# Title and Subtitle shown when entering a town or the wilderness. By default 1st line is blank, the 2nd line shows {townname} or {wilderness}.",
-			"# You may use colour codes &f, &c and so on."),	
+			"# You may use colour codes &f, &c and so on."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
 			"",
@@ -891,9 +894,9 @@ public enum ConfigNodes {
 			"notification.titles.wilderness_subtitle",
 			"&2{wilderness}",
 			"# Entering Wilderness Lower Subtitle line."),
-	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", 
-			"false", 
-			"# If the notification.owner option should show name or {title} name.", 
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title",
+			"false",
+			"# If the notification.owner option should show name or {title} name.",
 			"# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
@@ -1310,13 +1313,13 @@ public enum ConfigNodes {
 			"  # |                 Bank Plot settings                   | #",
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
-			"  # Bank plots may be used by other economy plugins using the Towny API.",			
+			"  # Bank plots may be used by other economy plugins using the Towny API.",
 			""),
 	BANK_IS_LIMTED_TO_BANK_PLOTS(
 			"bank.is_banking_limited_to_bank_plots",
 			"false",
 			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
-			"# Home plots will also allow deposit and withdraw commands."),			
+			"# Home plots will also allow deposit and withdraw commands."),
 	WAR(
 			"war",
 			"",
@@ -1552,7 +1555,7 @@ public enum ConfigNodes {
 			"# Only under affect when explosions_break_blocks is true."),
 	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
 			"war.warzone.explosions_ignore_list",
-			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
+			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,IRON_PLATE,STONE_PLATE,GOLD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
 			"# Only under affect when explosions_break_blocks is true.");
