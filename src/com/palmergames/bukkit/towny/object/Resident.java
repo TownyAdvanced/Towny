@@ -2,10 +2,15 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -14,11 +19,12 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes {
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
 	private List<Resident> friends = new ArrayList<Resident>();
 	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
@@ -34,6 +40,7 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 	private double teleportCost;
 	private String chatFormattedName;
 	private List<String> modes = new ArrayList<String>();
+	private ConfirmationType confirmationType;
 
 	private List<String> townRanks = new ArrayList<String>();
 	private List<String> nationRanks = new ArrayList<String>();
@@ -108,7 +115,6 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				TownyMessaging.sendMsg(player, "You have been sent to jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -132,7 +138,6 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				TownyMessaging.sendMsg(player, "You have been freed from jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been freed from jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -146,7 +151,6 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 				TownyMessaging.sendMsg(player, "You have been sent to jail.");
 				TownyMessaging.sendTownMessagePrefixed(town, player.getName() + " has been sent to jail number " + index);
 			} catch (TownyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -349,6 +353,11 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 
 	public void updatePerms() {
 		townRanks.clear();
+		nationRanks.clear();
+		TownyPerms.assignPermissions(this, null);
+	}
+	
+	public void updatePermsForNationRemoval() {
 		nationRanks.clear();
 		TownyPerms.assignPermissions(this, null);
 	}
@@ -638,4 +647,36 @@ public class Resident extends TownBlockOwner implements ResidentModes {
 		}
 	}
 
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for residents, later we can make this number configurable
+			// We use 9 because if it is = 9 it adds the tenth
+			receivedinvites.add(invite);
+
+		} else {
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_player_has_too_many_invites"),this.getName()));
+		}
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+
+	public void setConfirmationType(ConfirmationType confirmationType) {
+		this.confirmationType = confirmationType;
+	}
+
+	public ConfirmationType getConfirmationType() {
+		return confirmationType;
+	}
+
 }
+

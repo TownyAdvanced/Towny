@@ -33,7 +33,7 @@ public class ChunkNotification {
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
-	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";
+	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
 
 	/**
 	 * Called on Config load.
@@ -185,7 +185,11 @@ public class ChunkNotification {
 				&& !toWild) {
 			
 			if (toResident != null)
-				return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
+				if (TownySettings.isNotificationOwnerShowingNationTitles()) {
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedResidentTitleName(toResident) : toTownBlock.getName());
+				} else {
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
+				}
 			else
 				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownySettings.getUnclaimedPlotName() : toTownBlock.getName());
 

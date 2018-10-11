@@ -62,7 +62,7 @@ public class TimeTools {
 	/**
 	 * Converts Seconds to Ticks
 	 * 
-	 * @param t
+	 * @param t - Unix time
 	 * @return ticks
 	 */
 	public static long convertToTicks(long t) {

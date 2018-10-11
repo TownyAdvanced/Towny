@@ -129,6 +129,13 @@ public class PlotClaim extends Thread {
 							throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
 
 						int maxPlots = TownySettings.getMaxResidentPlots(resident);
+						int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
+						
+						//Infinite plots
+						if (maxPlots != -1) {
+							maxPlots = maxPlots + extraPlots;
+						}
+						
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 

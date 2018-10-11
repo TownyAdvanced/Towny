@@ -70,6 +70,23 @@ public class TownyWar {
 		List<CellUnderAttack> activeFlags = cellsUnderAttackByPlayer.get(playerName);
 		return activeFlags == null ? 0 : activeFlags.size();
 	}
+	
+	public static boolean isUnderAttack(Town town) {
+		for(CellUnderAttack cua : cellsUnderAttack.values()) {
+			
+			try
+			{
+				Town townUnderAttack = TownyUniverse.getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
+				if(townUnderAttack == town) {
+					return true;
+				}
+			}
+			catch(NotRegisteredException e)
+			{
+			}
+		}
+		return false;
+	}
 
 	public static boolean isUnderAttack(Cell cell) {
 
@@ -186,6 +203,9 @@ public class TownyWar {
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_nation"));
 		}
+		
+		if (attackingTown.getTownBlocks().size() < 1)
+			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_your_town_has_no_claims"));
 
 		try {
 			landOwnerTown = worldCoord.getTownBlock().getTown();

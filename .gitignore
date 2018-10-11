@@ -1,2 +1,4 @@
-/bin/
-.idea/
+/bin
+/.idea
+*.iml
+/out/
