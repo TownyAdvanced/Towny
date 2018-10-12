@@ -36,6 +36,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LingeringPotion;
 import org.bukkit.entity.LivingEntity;
@@ -43,6 +44,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Trident;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -108,7 +110,7 @@ public class TownyEntityListener implements Listener {
 			if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
 				// Remove the projectile here so no
 				// other events can fire to cause damage
-				if (attacker instanceof Projectile)
+				if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
 					attacker.remove();
 
 				event.setCancelled(true);
