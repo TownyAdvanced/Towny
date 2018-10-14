@@ -3135,3 +3135,5 @@ v0.92.0.11:
     - Beginning phase of making old plotsnapshots used in the Revert on Unclaim feature regenerate on 1.13.
 0.93.0.4:
     - Fix for Tridents being removed from existence when fired into non-PVP enabled areas.
+0.93.0.5:
+    - Add TownyUniverse.getPlayerUUID(Resident) for getting the UUID of an online resident.

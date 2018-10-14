@@ -135,6 +135,22 @@ public class TownyUniverse extends TownyObject {
 					return player;
 		throw new TownyException(String.format("%s is not online", resident.getName()));
 	}
+	
+	/**
+	 * Find a matching online player for this resident.
+	 * 
+	 * @param resident
+	 * @return an online player UUID
+	 * @throws TownyException
+	 */
+	public static UUID getPlayerUUID(Resident resident) throws TownyException {
+
+		for (Player player : BukkitTools.getOnlinePlayers())
+			if (player != null)
+				if (player.getName().equals(resident.getName()))
+					return player.getUniqueId();
+		throw new TownyException(String.format("%s is not online", resident.getName()));
+	}
 
 	/**
 	 * Get a list of all online players matching the residents supplied.
