@@ -231,7 +231,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
+		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		TownyWorld World = null;
 
 		try {
@@ -248,8 +248,8 @@ public class TownyPlayerListener implements Listener {
 		// prevent players trampling crops
 
 		if ((event.getAction() == Action.PHYSICAL)) {
-			if ((block.getType() == Material.SOIL))				
-				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY)) {
+			if ((block.getType() == Material.SOIL) || (block.getType() == Material.CROPS))			
+				if (World.isDisablePlayerTrample() || !PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 					return;
 				}
@@ -718,15 +718,17 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 
-		/*
+/*		
+ * Chorus Fruit not available pre 1.9
+ * 
 		 * Test to see if CHORUS_FRUIT is in the item_use list.
-		 */
+		 
 		if (event.getCause() == TeleportCause.CHORUS_FRUIT)
 			if (TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name()))
 				if (onPlayerInteract(event.getPlayer(), event.getTo().getBlock(), new ItemStack(Material.CHORUS_FRUIT))) {
 					event.setCancelled(true);					
 					return;
-				}	
+				}	*/
 			
 		/*
 		 * Test to see if Ender pearls are disabled.

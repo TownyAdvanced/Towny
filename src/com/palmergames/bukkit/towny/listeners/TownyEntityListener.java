@@ -36,7 +36,6 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LingeringPotion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -47,15 +46,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;	
-import org.bukkit.event.entity.EntityCombustByEntityEvent;	
-import org.bukkit.event.entity.EntityDamageByEntityEvent;	
-import org.bukkit.event.entity.EntityDeathEvent;	
-import org.bukkit.event.entity.EntityExplodeEvent;	
-import org.bukkit.event.entity.EntityInteractEvent;	
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.LingeringPotionSplashEvent;	
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -336,12 +332,16 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	
-	/**
+/*	
+ * 
+ * 
+ * Lingering potions are not available pre 1.9
+ * 
+	*//**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
 	 *  @param event
-	 */
+	 *//*
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
 
@@ -370,16 +370,16 @@ public class TownyEntityListener implements Listener {
 		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
 		boolean detrimental = false;
 
-		/*
+		
 		 * List of potion effects blocked from PvP.
-		 */
+		 
 		List<String> prots = TownySettings.getPotionTypes();
 				
 		for (PotionEffect effect : effects) {
 
-			/*
+			
 			 * Check to see if any of the potion effects are protected.
-			 */
+			 
 			if (prots.contains(effect.getType().getName())) {
 				detrimental = true;
 			}
@@ -410,7 +410,7 @@ public class TownyEntityListener implements Listener {
 					}				
 			}			
 		}	
-	}	
+	}*/	
 	
 	/**
 	 * Prevent splash potion damage on players in non PVP areas
