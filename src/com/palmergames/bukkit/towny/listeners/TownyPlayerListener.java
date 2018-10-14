@@ -266,56 +266,20 @@ public class TownyPlayerListener implements Listener {
 					if (event.getClickedBlock() instanceof Block) {
 
 						block = (Block) event.getClickedBlock();
-						
-						if (block.getState().getData() instanceof Sign) {
-							Sign sign = (Sign) block.getState().getData();
-							BlockFace facing = sign.getFacing();
-							BlockFace attachedFace = sign.getAttachedFace();
-							
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Sign Info"),
-									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "Facing", "", facing.toString()),
-									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
-									));
-						} else if (block.getState().getData() instanceof Door) {
-							Door door = (Door) block.getState().getData();
-							BlockFace face = null;
-							boolean isOpen = false;
-							boolean isHinge = false;
-							if (door.isTopHalf()) {
-								isHinge = door.getHinge();
-								Door otherdoor = (Door) block.getRelative(BlockFace.DOWN).getState().getData();
-								isOpen = otherdoor.isOpen();
-								face = otherdoor.getFacing();										
-							} else {
-								isOpen = door.isOpen();
-								face = door.getFacing();
-								Door otherdoor = (Door) block.getRelative(BlockFace.UP).getState().getData();
-								isHinge=otherdoor.getHinge();
-							}
-							
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Door Info"),
-									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "isHingedOnRight", "", String.valueOf(isHinge)),
-									ChatTools.formatCommand("", "isOpen", "", String.valueOf(isOpen)),
-									ChatTools.formatCommand("", "getFacing", "", face.toString()),									
-									ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
-									));							
-						} else {
-							TownyMessaging.sendMessage(player, Arrays.asList(
-									ChatTools.formatTitle("Block Info"),
-									ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
-									ChatTools.formatCommand("", "MaterialData", "", block.getType().getData().toString())
-									));
-						}
+
+						TownyMessaging.sendMessage(player, Arrays.asList(
+								ChatTools.formatTitle("Block Info"),
+								ChatTools.formatCommand("", "Block Type", "", block.getType().name()),
+								ChatTools.formatCommand("", "Data value", "", Byte.toString(BukkitTools.getData(block)))
+								));
+
 						event.setCancelled(true);
 
 					}
 				}
 
 			}
+			
 			if (TownySettings.isItemUseMaterial(event.getItem().getType().name())) {
 				TownyMessaging.sendDebugMsg("ItemUse Material found: " + event.getItem().getType().name());
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
