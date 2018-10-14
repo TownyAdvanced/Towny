@@ -1,17 +1,18 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.bukkit.entity.Entity;
-
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
 
 public class TownyWorld extends TownyObject {
 
@@ -32,8 +33,8 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<Coord, TownBlock>();
-	private List<Coord> warZones = new ArrayList<Coord>();
+	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<>();
+	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
@@ -135,7 +136,7 @@ public class TownyWorld extends TownyObject {
 
 	public List<TownBlock> getTownBlocks(Town town) {
 
-		List<TownBlock> out = new ArrayList<TownBlock>();
+		List<TownBlock> out = new ArrayList<>();
 		for (TownBlock townBlock : town.getTownBlocks())
 			if (townBlock.getWorld() == this)
 				out.add(townBlock);
@@ -180,7 +181,7 @@ public class TownyWorld extends TownyObject {
 
 	public void removeTownBlocks(List<TownBlock> townBlocks) {
 
-		for (TownBlock townBlock : new ArrayList<TownBlock>(townBlocks))
+		for (TownBlock townBlock : new ArrayList<>(townBlocks))
 			removeTownBlock(townBlock);
 	}
 
@@ -192,7 +193,7 @@ public class TownyWorld extends TownyObject {
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "World (" + getName() + ")");
 		out.add(getTreeDepth(depth + 1) + "TownBlocks (" + getTownBlocks().size() + "): " /*
 																						 * +
@@ -478,7 +479,7 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 
-		entityExplosionProtection = new ArrayList<String>();
+		entityExplosionProtection = new ArrayList<>();
 
 		for (String mob : entities)
 			if (!mob.equals("")) {
@@ -507,7 +508,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
 	 * 
-	 * @return
+	 * @return - List of blocked materials.
 	 */
 	@Deprecated
 	public List<String> getUnclaimedZoneIgnoreIds() {
@@ -519,9 +520,9 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial()}
+	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(Material mat)}
 	 * 
-	 * @return
+	 * @return - true, if it is an ignored material
 	 */
 	@Deprecated
 	public boolean isUnclaimedZoneIgnoreId(String id) {
@@ -542,7 +543,7 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
-	public boolean isUnclaimedZoneIgnoreMaterial(String mat) {
+	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
 		return getUnclaimedZoneIgnoreMaterials().contains(mat);
 	}
@@ -642,7 +643,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTowns(Coord key) {
@@ -654,7 +655,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from a another town's homeblock.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns homeblock.
 	 */
@@ -682,8 +683,8 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest town block.
 	 * 
-	 * @param key
-	 * @return the distance to nearest towns townblock.
+	 * @param key - Coord to check from.
+	 * @return the distance to nearest town's townblock.
 	 */
 	public int getMinDistanceFromOtherTownsPlots(Coord key) {
 
@@ -693,7 +694,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from a another town's plots.
 	 * 
-	 * @param key
+	 * @param key - Coord to check from.
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns nearest plot.
 	 */
@@ -718,6 +719,55 @@ public class TownyWorld extends TownyObject {
 
 		return (int) Math.ceil(min);
 	}
+	
+	/**
+	 * Returns the closes town from a given coord (key).
+	 * 
+	 * @param key - Coord.
+	 * @param nearestTown - Closest town to given coord.
+	 */
+	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
+		
+		double min = Integer.MAX_VALUE;
+		for (Town town : getTowns()) {
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+				
+				Coord townCoord = b.getCoord();
+				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
+				if (dist < min) {
+					min = dist;
+					nearestTown = town;
+				}						
+			}		
+		}		
+		return (nearestTown);		
+	}
+	
+	/**
+	 * Returns the closes town from a given coord (key).
+	 * 
+	 * @param key - Coord.
+	 * @param nearestTown - Closest town to given coord.
+	 */
+	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
+		
+		double min = Integer.MAX_VALUE;
+		for (Town town : getTowns()) {
+			if (!town.hasNation()) continue;
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+				
+				Coord townCoord = b.getCoord();
+				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
+				if (dist < min) {
+					min = dist;
+					nearestTown = town;
+				}						
+			}		
+		}		
+		return (nearestTown);		
+	}
 
 	public void addWarZone(Coord coord) {
 
@@ -734,5 +784,4 @@ public class TownyWorld extends TownyObject {
 
 		return warZones.contains(coord);
 	}
-
 }

@@ -137,7 +137,7 @@ public class TownyPermission {
 
 			return super.toString().toLowerCase();
 		}
-	};
+	}
 
 	public enum PermLevel {
 		RESIDENT, ALLY, OUTSIDER;
@@ -147,7 +147,7 @@ public class TownyPermission {
 
 			return super.toString().toLowerCase();
 		}
-	};
+	}
 
 	public boolean getResidentPerm(ActionType type) {
 
