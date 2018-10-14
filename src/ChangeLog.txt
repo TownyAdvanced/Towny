@@ -3115,3 +3115,4 @@ v0.92.0.11:
     - Fix for nations that lack nationBoards causing issues when upgrading from older versions of Towny.
 0.93.0.0:
     - Bump version number for release build.
+    - Fix for ranks on offline players.
