@@ -1076,38 +1076,10 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 	}
-
-
-	/*
-	 * PlayerEnterTownEvent
-	 * Currently used for:
-	 *   - showing NotificationsUsingTitles upon entering a town.
-	 */
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerEnterTown(PlayerEnterTownEvent event) throws TownyException {
-		
-		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
-		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
-			
-			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
-			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
-			if (title.contains("{townname}")) {
-				String replacement = title.replace("{townname}", to.getTownBlock().getTown().getName());
-				title = replacement;
-			}
-			if (subtitle.contains("{townname}")) {
-				String replacement = subtitle.replace("{townname}", to.getTownBlock().getTown().getName());
-				subtitle = replacement;
-			}
-			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
-		}
-	}
 	
 	/*
 	 * PlayerLeaveTownEvent
 	 * Currently used for:
-	 *   - showing NotificationsUsingTitles upon entering the wilderness.
 	 *   - unjailing residents
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -1115,24 +1087,6 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident resident = TownyUniverse.getDataSource().getResident(event.getPlayer().getName());
 		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
-			try {
-				@SuppressWarnings("unused")
-				Town toTown = to.getTownBlock().getTown();
-			} catch (NotRegisteredException e) { // No town being entered so this is a move into the wilderness.
-				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle().toString());
-				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
-				if (title.contains("{wilderness}")) {
-					String replacement = title.replace("{wilderness}", TownyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
-					title = replacement;
-				}
-				if (subtitle.contains("{wilderness}")) {
-					String replacement = subtitle.replace("{wilderness}", TownyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName());
-					subtitle = replacement;
-				}
-				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
-			}			
-		}
 
 		Player player = event.getPlayer();
 		if (TownyUniverse.getDataSource().getResident(player.getName()).isJailed()) {								
