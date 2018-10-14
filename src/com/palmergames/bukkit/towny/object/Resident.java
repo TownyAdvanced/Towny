@@ -548,7 +548,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				throw new AlreadyRegisteredException();
 
 			townRanks.add(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
@@ -571,13 +572,14 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
 		throw new NotRegisteredException();
 	}
-
+	
 	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
 
 		if (this.hasNation() && TownyPerms.getNationRanks().contains(rank)) {
@@ -585,7 +587,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				throw new AlreadyRegisteredException();
 
 			nationRanks.add(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
@@ -608,7 +611,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (nationRanks.contains(rank)) {
 			nationRanks.remove(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
