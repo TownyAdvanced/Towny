@@ -1118,5 +1118,3 @@ public class TownyEntityListener implements Listener {
 
 		//TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
-
-}

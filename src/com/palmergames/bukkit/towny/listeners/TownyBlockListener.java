@@ -1,5 +1,22 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import java.util.List;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -258,16 +275,20 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		List<Block> blocks = event.getBlocks();
-		if (testBlockMove(event.getBlock(), event.getDirection(), true))
-			event.setCancelled(true);
+		//fetch the piston base
+		Block block = event.getBlock();
 
-		if (!blocks.isEmpty()) {
-			//check each block to see if it's going to pass a plot boundary
-			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection(), false))
-					event.setCancelled(true);
-			}
+		if (block.getType() != Material.PISTON_STICKY_BASE)
+			return;
+
+		//Get the block attached to the PISTON_EXTENSION of the PISTON_STICKY_BASE
+		block = block.getRelative(event.getDirection()).getRelative(event.getDirection());
+
+		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
+
+			//check the block to see if it's going to pass a plot boundary
+			if (testBlockMove(block, event.getDirection().getOppositeFace()))
+				event.setCancelled(true);
 		}
 	}
 
@@ -278,11 +299,8 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
-		if (testBlockMove(event.getBlock(), event.getDirection(), false))
-			event.setCancelled(true);
-		
-		List<Block> blocks = event.getBlocks();
+
+    List<Block> blocks = event.getBlocks();
 
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
@@ -416,7 +434,11 @@ public class TownyBlockListener implements Listener {
 		return false;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	/*
+	 * 
+	 * Event doesn't exist pre-1.8
+	 * 
+	 * @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreateExplosion(BlockExplodeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -458,7 +480,7 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 		
-	}
+	}*/
 	
 	/**
 	 * Test if this location has explosions enabled.
