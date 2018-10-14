@@ -552,10 +552,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addNationRank(rank)) {
-						if (Bukkit.getPlayer(target.getName()).isOnline())
+						if (BukkitTools.isOnline(target.getName())) {
 							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Nation", rank));
+							plugin.deleteCache(TownyUniverse.getPlayer(target));
+						}
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Nation", rank, target.getName()));
-						plugin.deleteCache(TownyUniverse.getPlayer(target));
+						
 					} else {
 						// Not in a nation or Rank doesn't exist
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_resident_not_part_of_any_town"));
@@ -570,10 +572,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeNationRank(rank)) {
-						if (Bukkit.getPlayer(target.getName()).isOnline())
+						if (BukkitTools.isOnline(target.getName())) {
 							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Nation", rank));
+							plugin.deleteCache(TownyUniverse.getPlayer(target));
+						}
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Nation", rank, target.getName()));
-						plugin.deleteCache(TownyUniverse.getPlayer(target));
+						
 					}
 				} catch (NotRegisteredException e) {
 					// Must already have this rank

@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
@@ -550,7 +551,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				throw new AlreadyRegisteredException();
 
 			townRanks.add(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
@@ -573,7 +575,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
-			if (Bukkit.getPlayer(this.getName()).isOnline())
+			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
@@ -588,7 +590,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				throw new AlreadyRegisteredException();
 
 			nationRanks.add(rank);
-			TownyPerms.assignPermissions(this, null);
+			if (BukkitTools.isOnline(this.getName()))
+				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
@@ -611,7 +614,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (nationRanks.contains(rank)) {
 			nationRanks.remove(rank);
-			if (Bukkit.getPlayer(this.getName()).isOnline())
+			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
