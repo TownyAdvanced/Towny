@@ -8,5 +8,5 @@ import org.bukkit.Location;
  */
 public interface LocationRunnable {
 
-	public void run(Location loc);
+	void run(Location loc);
 }

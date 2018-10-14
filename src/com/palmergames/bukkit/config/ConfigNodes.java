@@ -5,100 +5,42 @@ public enum ConfigNodes {
 	VERSION(
 			"version.version",
 			"",
-			"  # This is the current version of Towny.  Please do not edit."),
+			"# This is the current version of Towny.  Please do not edit."),
 	LAST_RUN_VERSION(
 			"version.last_run_version",
 			"",
-			"  # This is for showing the changelog on updates.  Please do not edit."),
+			"# This is for showing the changelog on updates.  Please do not edit."),
 	VERSION_BUKKIT(
 			"version.bukkit_version",
 			"2918",
-			"  # Minimum required version of CraftBukkit.  Please do not edit."),
+			"# Minimum required version of CraftBukkit.  Please do not edit."),
 	LANGUAGE(
 			"language",
 			"english.yml",
-			"",
-			"  # The language file you wish to use"),
+			"# The language file you wish to use"),
 	PERMS(
 			"permissions",
 			"",
 			"",
-			"  ############################################################",
-			"  # +------------------------------------------------------+ #",
-			"  # |                   Permission nodes                   | #",
-			"  # +------------------------------------------------------+ #",
-			"  ############################################################",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                   Permission nodes                   | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
 			"",
-			"  #  Possible permission nodes",
-			"  #",
-			"  #    towny.admin: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.",
-			"  #    towny.cheat.bypass : User is able to use any fly mods and double block jump (disables towny cheat protection for this user).",
-			"  #    towny.top : User can access the command towny top",
-			"  #    towny.town.* : User has access to all town permission nodes.",
-			"  #        towny.town.new :User is able to create a town",
-			"  #        towny.town.delete :User is able to delete their town",
-			"  #        towny.town.claim : User is able to expand his town with /town claim",
-			"  #        towny.town.plot : User is able to use the /plot commands",
-			"  #        towny.town.resident : User is able to join towns upon invite.",
-			"  #    towny.town.toggle.*: User can access all town toggle commands (if a mayor or assistant).",
-			"  #        towny.town.toggle.pvp",
-			"  #        towny.town.toggle.public",
-			"  #        towny.town.toggle.explosions",
-			"  #        towny.town.toggle.fire",
-			"  #        towny.town.toggle.mobs",
-			"  #    towny.nation.* : User has access to all town permission nodes.",
-			"  #        towny.nation.new :User is able to create a nation",
-			"  #        towny.nation.delete :User is able to delete their nation (if king)",
-			"  #        towny.nation.rename :User is able to rename their nation (if king/assistant)",
-			"  #        towny.nation.grant-titles :User is able to grant titles/surnames to the nation residents (if King)",
-			"  #    towny.wild.*: User is able to build/destroy in wild regardless.",
-			"  #        towny.wild.build",
-			"  #        towny.wild.destroy",
-			"  #        towny.wild.switch",
-			"  #        towny.wild.item_use",
-			"  #    towny.wild.block.[block id].* : User is able to edit [block id] in the wild.",
-			"  #        towny.wild.build.[block id]",
-			"  #        towny.wild.destroy.[block id]",
-			"  #        towny.wild.switch.[block id]",
-			"  #        towny.wild.item_use.[block id]",
-			"  #",
-			"  #    towny.claimed.* : User can build/destroy/switch/item_use in all towns.",
-			"  #        towny.claimed.build : User can build in all towns.",
-			"  #        towny.claimed.destroy : User can destroy in all towns.",
-			"  #        towny.claimed.switch : User can switch in all towns.",
-			"  #        towny.claimed.item_use : User can use use items in all towns. ",
-			"  #    towny.claimed.alltown.* : User is able to edit specified/all block types in all towns.",
-			"  #        towny.claimed.alltown.build.[block id]",
-			"  #        towny.claimed.alltown.destroy.[block id]",
-			"  #        towny.claimed.alltown.switch.[block id] : User can switch specified/all block types in all towns.",
-			"  #        towny.claimed.alltown.item_use.[block id]",
-			"  #    towny.claimed.owntown.* : User is able to edit specified/all block types in their own town (ALL plots, including resident owned).",
-			"  #        towny.claimed.owntown.build.[block id]",
-			"  #        towny.claimed.owntown.destroy.[block id] : (handy to allow clearing of snow '78')",
-			"  #        towny.claimed.owntown.switch.[block id]",
-			"  #        towny.claimed.owntown.item_use.[block id]",
-			"  #    towny.claimed.townowned.* : User is able to edit specified/all block types in their towns owned plots (Town only, not resident owned).",
-			"  #        towny.claimed.townowned.build.[block id]",
-			"  #        towny.claimed.townowned.destroy.[block id] : (handy to allow clearing of snow '78' on town owned roads/plots)",
-			"  #        towny.claimed.townowned.switch.[block id]",
-			"  #        towny.claimed.townowned.item_use.[block id]",
-			"  #",
-			"  #    towny.town.spawn.*: Grants all Spawn travel nodes",
-			"  #        towny.town.spawn.town : Ability to spawn to your own town.",
-			"  #        towny.town.spawn.nation : Ability to spawn to other towns in your nation.",
-			"  #        towny.town.spawn.ally : Ability to spawn to towns in nations allied with yours.",
-			"  #        towny.town.spawn.public : Ability to spawn to unaffilated public towns.",
-			"  #",
-			"  # these will be moved to permissions nodes at a later date"),
+			"#  Possible permission nodes",
+			"#",
+			"#    for a full list of permission nodes visit: ",
+			"#    http://palmergames.com/towny/towny-permission-nodes/ "),
 	LEVELS(
 			"levels",
 			"",
 			"",
-			"  ############################################################",
-			"  # +------------------------------------------------------+ #",
-			"  # |                Town and Nation levels                | #",
-			"  # +------------------------------------------------------+ #",
-			"  ############################################################",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                Town and Nation levels                | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
 			""),
 	LEVELS_TOWN_LEVEL("levels.town_level", ""),
 	LEVELS_NATION_LEVEL("levels.nation_level", ""),
@@ -106,11 +48,11 @@ public enum ConfigNodes {
 			"town",
 			"",
 			"",
-			"  ############################################################",
-			"  # +------------------------------------------------------+ #",
-			"  # |               Town Claim/new defaults                | #",
-			"  # +------------------------------------------------------+ #",
-			"  ############################################################",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |               Town Claim/new defaults                | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
 			""),
 	TOWN_DEF_PUBLIC(
 			"town.default_public",
@@ -141,10 +83,10 @@ public enum ConfigNodes {
 	TOWN_DEF_TAXES_TAXPERCENTAGE(
 			"town.default_taxes.taxpercentage",
 			"false",
-			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),	
+			"# Default status of new town's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
 	TOWN_DEF_TAXES_MINIMUMTAX(
 			"town.default_taxes.minimumtax",
-			"0.0",			
+			"0.0",
 			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
 			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
 	TOWN_MAX_PURCHASED_BLOCKS(
@@ -178,11 +120,18 @@ public enum ConfigNodes {
 			"",
 			"# Minimum number of plots any towns home plot must be from the next town.",
 			"# This will prevent someone founding a town right on your doorstep"),
+    TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
+    		"town.min_distance_for_outpost_from_plot",
+    		"5",
+    		"",
+    		"# Minimum number of plots an outpost must be from any other town's plots.",
+    		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
+    		"# near to each other, but want to keep outposts away from towns."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",
 			"",
-			"# Maximum distance between homblocks.",
+			"# Maximum distance between homeblocks.",
 			"# This will force players to build close together."),
 	TOWN_TOWN_BLOCK_RATIO(
 			"town.town_block_ratio",
@@ -373,22 +322,56 @@ public enum ConfigNodes {
 			"global_town_settings.allow_outposts",
 			"true",
 			"# Allow towns to claim outposts (a townblock not connected to town)."),
+	GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS(
+			"global_town_settings.limit_outposts_using_town_and_nation_levels",
+			"false",
+			"# When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and",
+			"# the nationBonusOutpostLimit value in the Nation Levels. In this way nations can be made to be",
+			"# the only way of receiving outposts, or as an incentive to receive more outposts. Towns which are",
+			"# larger can have more outposts.",
+			"# When activated, this setting will not cause towns who already have higher than their limit",
+			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
+			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
+			"# be over their limit if they leave the nation."),
+	GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT(
+			"global_town_settings.over_outpost_limits_stops_teleports",
+			"false",
+			"# When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost",
+			"# limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit,",
+			"# until they have dropped below their limit.",
+			"# eg: If their limit is 3 then they cannot use /t outpost 4"),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
 			"global_town_settings.allow_town_spawn",
 			"true",
-			"# Allow the use of /town spawn"),
+			"# Allow the use of /town spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL(
 			"global_town_settings.allow_town_spawn_travel",
 			"true",
-			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public)."),
+			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_NATION(
 			"global_town_settings.allow_town_spawn_travel_nation",
 			"true",
-			"# Allow regular residents to use /town spawn [town] to other towns in your nation."),
+			"# Allow regular residents to use /town spawn [town] to other towns in your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
 	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_ALLY(
 			"global_town_settings.allow_town_spawn_travel_ally",
 			"true",
-			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation."),
+			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
+	GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS(
+			"global_town_settings.is_nation_ally_spawning_requiring_public_status",
+			"false",
+			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",
@@ -416,40 +399,40 @@ public enum ConfigNodes {
 			"0",
 			"# The required number of residents in a town to join a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to join a nation"
-			),
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION(
 			"global_town_settings.required_number_residents_create_nation",
 			"0",
 			"# The required number of residents in a town to create a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to create a nation"
-			),
+	),
 	GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS(
 			"global_town_settings.refund_disband_low_residents",
 			"true",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
-			),
+	),
 	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
 			"global_town_settings.nation_requires_proximity",
 			"0.0",
 			"# The maximum number of townblocks a town can be away from a nation capital,",
 			"# Automatically precludes towns from one world joining a nation in another world.",
 			"# If the number is 0, towns will not a proximity to a nation."
-			),
+	),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
 			"LONG_GRASS,DOUBLE_PLANT,YELLOW_FLOWER,RED_ROSE,PUMPKIN_STEM,MELON_STEM,CARROT,POTATO,CROPS,MELON_BLOCK,PUMPKIN",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line."
-			),
+	),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"# List of animals which can be kiled on farm plots by town residents."
-			),
+	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
 			"0",
 			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
-			),
+	),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
@@ -461,12 +444,109 @@ public enum ConfigNodes {
 			"# If set to true, Towny will prevent a town from toggling PVP while an outsider is within the town's boundaries.",
 			"# When active this feature can cause a bit of lag when the /t toggle pvp command is used, depending on how many players are online."
 	),
+	GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP(
+			"global_town_settings.homeblocks_prevent_forcepvp",
+			"false",
+			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off."),
 	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
 			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
 			"0",
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
+	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
+			"global_town_settings.keep_inventory_on_death_in_town",
+			"false",
+			"# If People should keep their inventories on death in a town",
+			"# Is not guaranteed to work with other keep inventory plugins!"
+	),
+	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
+			"global_town_settings.keep_experience_on_death_in_town",
+			"false",
+			"# If People should keep their experience on death in a town",
+			"# Is not guaranteed to work with other keep experience plugins!"
+	),
+	GTOWN_MAX_PLOT_PRICE_COST(
+			"global_town_settings.maximum_plot_price_cost",
+			"1000000.0",
+			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
+			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
+	),	
+	GNATION_SETTINGS(
+			"global_nation_settings",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |              Global nation settings                  | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			""),
+	GNATION_SETTINGS_NATIONZONE(
+			"global_nation_settings.nationzone",
+			"",
+			"",
+			"# Nation Zones are a special type of wilderness surrounding Capitals of Nations or Nation Capitals and their Towns.",
+			"# When it is enabled players who are members of the nation can use the wilderness surrounding the town like normal.",
+			"# Players who are not part of that nation will find themselves unable to break/build/switch/itemuse in this part of the wilderness.",
+			"# The amount of townblocks used for the zone is determined by the size of the nation and configured in the nation levels.",
+			"# Because these zones are still wilderness anyone can claim these townblocks.",
+			"# It is recommended that whatever size you choose, these numbers should be less than the min_plot_distance_from_town_plot otherwise",
+			"# someone might not be able to build/destroy in the wilderness outside their town."),
+	GNATION_SETTINGS_NATIONZONE_ENABLE(
+			"global_nation_settings.nationzone.enable",
+			"false",
+			"",
+			"# Nation zone feature is disabled by default. This is because it can cause a higher server load for servers with a large player count."),
+	GNATION_SETTINGS_NATIONZONE_ONLY_CAPITALS(
+			"global_nation_settings.nationzone.only_capitals",
+			"true",
+			"",
+			"# When set to true, only the capital town of a nation will be surrounded by a nation zone type of wilderness."),
+	GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE(
+			"global_nation_settings.nationzone.capital_bonus_size",
+			"0",
+			"",
+			"# Amount of buffer added to nation zone width surrounding capitals only. Creates a larger buffer around nation capitals."),
+	GNATION_SETTINGS_NATIONZONE_WAR_DISABLES(
+			"global_nation_settings.nationzone.war_disables",
+			"true",
+			"",
+			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
+			"global_nation_settings.display_board_onlogin",
+			"true",
+			"# If Towny should show players the nationboard when they login."),
+	GNATION_SETTINGS_CAPITAL_SPAWN(
+			"global_nation_settings.capital_spawn",
+			"true",
+			"# If enabled, only allow the nation spawn to be set in the capital city."),
+    GNATION_SETTINGS_ALLOW_NATION_SPAWN(
+			"global_nation_settings.allow_nation_spawn",
+			"true",
+			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL(
+			"global_nation_settings.allow_nation_spawn_travel",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL_ALLY(
+			"global_nation_settings.allow_nation_spawn_travel_ally",
+			"true",
+			"# Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nations,",
+			"# when there is a war or peace."),
+    GNATION_DEF_PUBLIC(
+            "global_nation_settings.default.public",
+            "false",
+            "# If set to true, any newly made nation will have their spawn set to public."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -530,34 +610,10 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_economy",
 			"true",
 			"",
-			"# This will attempt to use Register (if present)",
-			"# Then it will attempt to access iConomy 5.01 directly",
-			"# Enable if you have either iConomy 5.01, or Register.jar to",
-			"# support: iConomy5, iConomy6, EssentialsEco, BOSEconomy.",
-			"# https://github.com/iConomy/Register/tree/master/dist"),
-
-	PLUGIN_USING_QUESTIONER_HEADER(
-			"plugin.interfacing.using_questioner",
-			"",
-			"",
-			"# Enable using_questioner if you are using questioner to send/receive invites to towns/nations.",
-			"# See http://code.google.com/a/eclipselabs.org/p/towny/wiki/Questioner for more info."),
-	PLUGIN_USING_QUESTIONER_ENABLE(
-			"plugin.interfacing.using_questioner.enable",
-			"true"),
-	PLUGIN_QUESTIONER_ACCEPT(
-			"plugin.interfacing.using_questioner.accept",
-			"accept",
-			"# The command to accept invitations."),
-	PLUGIN_QUESTIONER_DENY(
-			"plugin.interfacing.using_questioner.deny",
-			"deny",
-			"# The command to refuse invitations."),
-	PLUGIN_QUESTIONER_COOLDOWN_TIME(
-			"plugin.interfacing.using_questioner.cooldowntime",
-			"0m",
-			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
-			"# a player's first log in and when they can be invited to a town."),
+			"# This enables/disables all the economy functions of Towny.",
+			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
+			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",
+			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",
@@ -630,7 +686,7 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
-			"^[a-zA-Z0-9\\s._\\[\\]-]*$"),		
+			"^[a-zA-Z0-9\\s._\\[\\]-]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
 			"[^a-zA-Z0-9._\\[\\]-]"),
@@ -658,7 +714,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -681,7 +737,7 @@ public enum ConfigNodes {
 			"protection.town_mob_removal_entities",
 			"Monster,WaterMob,Flying,Slime",
 			"",
-			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.htmll",
+			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/LivingEntity.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"# Husk, Stray",
@@ -701,7 +757,7 @@ public enum ConfigNodes {
 
 	PROT_MOB_REMOVE_WORLD(
 			"protection.world_mob_removal_entities",
-			"Monster,WaterMob,Flying,Slime",
+			"Monster,Guardian,Flying,Slime",
 			"",
 			"# Globally remove living entities in all worlds that have their flag set."),
 
@@ -722,7 +778,7 @@ public enum ConfigNodes {
 			"protection.mob_types",
 			"Animals,NPC,Snowman,ArmorStand",
 			"",
-			"# permitted entities http://jd.bukkit.org/apidocs/org/bukkit/entity/package-summary.html",
+			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
@@ -731,7 +787,7 @@ public enum ConfigNodes {
 			"protection.potion_types",
 			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER",
 			"",
-			"# permitted Potion Types http://jd.bukkit.org/apidocs/org/bukkit/potion/PotionType.html",
+			"# permitted Potion Types https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionType.html",
 			"# ABSORPTION, BLINDNESS, CONFUSION, DAMAGE_RESISTANCE, FAST_DIGGING, FIRE_RESISTANCE, HARM, HEAL, HEALTH_BOOST, HUNGER, ",
 			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW , SLOW_DIGGING, ",
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
@@ -766,7 +822,7 @@ public enum ConfigNodes {
 	UNCLAIMED_ZONE_ITEM_USE("unclaimed.unclaimed_zone_item_use", "false"),
 	UNCLAIMED_ZONE_IGNORE(
 			"unclaimed.unclaimed_zone_ignore",
-			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE"),
+			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE,LOG_2,VINE,NETHER_WARTS,COCOA"),
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch", "false"),
 
 	NOTIFICATION(
@@ -807,9 +863,13 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
+	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", 
+			"false", 
+			"# If the notification.owner option should show name or {title} name.", 
+			"# Titles are the ones granted by nation kings."),
 	FLAGS_DEFAULT(
 			"default_perm_flags",
-			"",	
+			"",
 			"",
 			"",
 			"",
@@ -892,6 +952,75 @@ public enum ConfigNodes {
 	FLAGS_TOWN_OUTSIDER_SWITCH(
 			"default_perm_flags.town.outsider.switch",
 			"false"),
+	INVITE_SYSTEM(
+			"invite_system",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Towny Invite System                  | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			""),
+	INVITE_SYSTEM_ACCEPT_COMMAND(
+			"invite_system.accept_command",
+			"accept",
+			"# Command used to accept towny invites)",
+			"#e.g Player join town invite."),
+	INVITE_SYSTEM_DENY_COMMAND(
+			"invite_system.deny_command",
+			"deny",
+			"# Command used to deny towny invites",
+			"#e.g Player join town invite."),
+	INVITE_SYSTEM_CONFIRM_COMMAND(
+			"invite_system.confirm_command",
+			"confirm",
+			"# Command used to confirm some towny actions/tasks)",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_CANCEL_COMMAND(
+			"invite_system.cancel_command",
+			"cancel",
+			"# Command used to cancel some towny actions/tasks",
+			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_COOLDOWN_TIME(
+			"invite_system.cooldowntime",
+			"0m",
+			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
+			"# a player's first log in and when they can be invited to a town."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
+			"invite_system.maximum_invites_sent",
+			"# Max invites for Town & Nations, which they can send. Invites are capped to decrease load on large servers.",
+			"# You can increase these limits but it is not recommended. Invites/requests are not saved between server reloads/stops."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT_TOWN(
+			"invite_system.maximum_invites_sent.town_toplayer",
+			"35",
+			"# How many invites a town can send out to players, to join the town."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_SENT_NATION(
+			"invite_system.maximum_invites_sent.nation_totown",
+			"35",
+			"# How many invites a nation can send out to towns, to join the nation."),
+	INVITE_SYSTEM_MAXIMUM_REQUESTS_SENT_NATION(
+			"invite_system.maximum_invites_sent.nation_tonation",
+			"35",
+			"# How many requests a nation can send out to other nations, to ally with the nation.",
+			"# Only used when war.disallow_one_way_alliance is set to true."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED(
+			"invite_system.maximum_invites_received",
+			"# Max invites for Players, Towns & nations, which they can receive. Invites are capped to decrease load on large servers.",
+			"# You can increase these limits but it is not recommended. Invites/requests are not saved between server reloads/stops."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER(
+			"invite_system.maximum_invites_received.player",
+			"10",
+			"# How many invites can one player have from towns."),
+	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_TOWN(
+			"invite_system.maximum_invites_received.town",
+			"10",
+			"# How many invites can one town have from nations."),
+	INVITE_SYSTEM_MAXIMUM_REQUESTS_RECEIVED_NATION(
+			"invite_system.maximum_invites_received.nation",
+			"10",
+			"# How many requests can one nation have from other nations for an alliance."),
 	RES_SETTING(
 			"resident_settings",
 			"",
@@ -929,6 +1058,10 @@ public enum ConfigNodes {
 			"resident_settings.deny_bed_use",
 			"false",
 			"# If true, players can only use beds in plots they personally own."),
+	RES_SETTING_IS_SHOWING_WELCOME_MESSAGE(
+			"resident_settings.is_showing_welcome_message",
+			"true",
+			"# If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide."),
 	ECO(
 			"economy",
 			"",
@@ -953,6 +1086,14 @@ public enum ConfigNodes {
 			"economy.nation_prefix",
 			"nation-",
 			"# Prefix to apply to all nation economy accounts."),
+	ECO_TOWN_RENAME_COST(
+			"economy.town_rename_cost",
+			"0",
+			"# The cost of renaming a town."),
+	ECO_NATION_RENAME_COST(
+			"economy.nation_rename_cost",
+			"0",
+			"# The cost of renaming a nation."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
@@ -971,6 +1112,11 @@ public enum ConfigNodes {
 			"10.0",
 			"# Cost to use /town spawn [town]",
 			"# This is paid to the town you goto."),
+	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
+			"economy.spawn_travel.town_spawn_cost_paid_to_town",
+			"true",
+			"# When set to true, any cost paid by a player to use any variant of '/town spawn' will be paid to the town bank.",
+			"# When false the amount will be paid to the server account whose name is set in the closed economy setting below.."),
 	ECO_PRICE_NATION_NEUTRALITY(
 			"economy.price_nation_neutrality",
 			"100.0",
@@ -1003,9 +1149,10 @@ public enum ConfigNodes {
 			"1.0",
 			"# How much every extra bonus block costs more. Set to 1 to deactivate this. 1.2 means +20% to every bonus claim block cost."),
 
-    ECO_DEATH("economy.death", "", ""),			
-    ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
-    ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
+	ECO_DEATH("economy.death", "", ""),
+	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", "fixed", "# Either fixed or percentage.", "# For percentage 1.0 would be 100%. 0.01 would be 1%."),
+	ECO_PRICE_DEATH_PERCENTAGE_CAP("economy.death.percentage_cap", "0.0", "# A maximum amount paid out by a resident from their personal holdings for percentage deaths.", "# Set to 0 to have no cap."),
+	ECO_PRICE_DEATH_PVP_ONLY("economy.death.price_death_pvp_only", "false", "# If True, only charge death prices for pvp kills. Not monsters/environmental deaths."),
 	ECO_PRICE_DEATH("economy.death.price_death", "1.0", ""),
 	ECO_PRICE_DEATH_TOWN("economy.death.price_death_town", "0.0", ""),
 	ECO_PRICE_DEATH_NATION("economy.death.price_death_nation", "0.0", ""),
@@ -1019,7 +1166,7 @@ public enum ConfigNodes {
 	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
 			"economy.banks.town_allow_withdrawls",
 			"true",
-			"# Set to true to allow withdrawls from town banks"),	ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawls from town banks"), ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
@@ -1028,6 +1175,11 @@ public enum ConfigNodes {
 			"economy.banks.nation_allow_withdrawls",
 			"true",
 			"# Set to true to allow withdrawls from nation banks"),
+	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
+			"economy.banks.disallow_bank_actions_outside_town",
+			"false",
+			"# When set to true, players can only use their town withdraw/deposit commands while inside of their own town.",
+			"# Likewise, nation banks can only be withdrawn/deposited to while in the capital city."),
 
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
 			"economy.closed_economy.server_account",
@@ -1075,7 +1227,7 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER(
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
-			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),	
+			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
@@ -1092,7 +1244,7 @@ public enum ConfigNodes {
 			"  # |                 Jail Plot settings                   | #",
 			"  # +------------------------------------------------------+ #",
 			"  ############################################################",
-			""),	
+			""),
 	JAIL_IS_JAILING_ATTACKING_ENEMIES(
 			"jail.is_jailing_attacking_enemies",
 			"false",
@@ -1110,16 +1262,33 @@ public enum ConfigNodes {
 	JAIL_JAIL_DENIES_TOWN_LEAVE(
 			"jail.jail_denies_town_leave",
 			"false",
-			"#If false jailed players can use /town leave, and escape a jail."),		
+			"#If false jailed players can use /town leave, and escape a jail."),
 	JAIL_BAIL("jail.bail", "", ""),
 	JAIL_BAIL_IS_ALLOWING_BAIL(
 			"jail.bail.is_allowing_bail",
 			"false",
-			"#If true players can pay a bail amount to be unjailed."),	
+			"#If true players can pay a bail amount to be unjailed."),
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),	
+			"#Amount that bail costs."),
+	BANK(
+			"bank",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 Bank Plot settings                   | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			"  # Bank plots may be used by other economy plugins using the Towny API.",			
+			""),
+	BANK_IS_LIMTED_TO_BANK_PLOTS(
+			"bank.is_banking_limited_to_bank_plots",
+			"false",
+			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
+			"# Home plots will also allow deposit and withdraw commands."),			
 	WAR(
 			"war",
 			"",
@@ -1138,8 +1307,8 @@ public enum ConfigNodes {
 	WAR_DISALLOW_ONE_WAY_ALLIANCE(
 			"war.disallow_one_way_alliance",
 			"false",
-			"#By setting this to true, nations will receive a questioner prompt for alliances and alliances will show on both nations."
-			),
+			"#By setting this to true, nations will receive a prompt for alliances and alliances will show on both nations."
+	),
 	WAR_ECONOMY(
 			"war.economy",
 			"",
@@ -1209,7 +1378,7 @@ public enum ConfigNodes {
 			"# If true, nation members and allies can regen health on plots during war."),
 	WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED(
 			"war.event.plots.firework_on_attacked",
-			"true",				
+			"true",
 			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
 	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
 			"war.event.remove_on_monarch_death",
@@ -1220,7 +1389,7 @@ public enum ConfigNodes {
 			"war.event.allow_block_griefing",
 			"false",
 			"# If enabled players will be able to break/place any blocks in enemy plots during a war.",
-			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.", 
+			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.",
 			"# The editable_materials list in the Warzone Block Permission section should be used instead."),
 	WAR_EVENT_BLOCK_HP_HEADER(
 			"war.event.block_hp",
@@ -1351,20 +1520,21 @@ public enum ConfigNodes {
 			"true"),
 	WAR_WARZONE_EXPLOSIONS_REGEN_BLOCKS(
 			"war.warzone.explosions_regen_blocks",
-			"true",			
+			"true",
 			"# Only under affect when explosions_break_blocks is true."),
 	WAR_WARZONE_EXPLOSIONS_IGNORE_LIST(
 			"war.warzone.explosions_ignore_list",
 			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true."), ;
+			"# Only under affect when explosions_break_blocks is true.");
+
 
 	private final String Root;
 	private final String Default;
 	private String[] comments;
 
-	private ConfigNodes(String root, String def, String... comments) {
+	ConfigNodes(String root, String def, String... comments) {
 
 		this.Root = root;
 		this.Default = def;
@@ -1373,7 +1543,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the root for a config option
-	 * 
+	 *
 	 * @return The root for a config option
 	 */
 	public String getRoot() {
@@ -1383,7 +1553,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the default value for a config path
-	 * 
+	 *
 	 * @return The default value for a config path
 	 */
 	public String getDefault() {
@@ -1393,7 +1563,7 @@ public enum ConfigNodes {
 
 	/**
 	 * Retrieves the comment for a config path
-	 * 
+	 *
 	 * @return The comments for a config path
 	 */
 	public String[] getComments() {

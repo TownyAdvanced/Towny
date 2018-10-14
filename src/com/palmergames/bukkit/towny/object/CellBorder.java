@@ -15,7 +15,7 @@ public class CellBorder extends WorldCoord {
 				Type.WALL), SW(Type.CORNER), W(Type.WALL), NW(Type.CORNER);
 
 		public enum Type {
-			WALL, CORNER;
+			WALL, CORNER
 		}
 
 		private Type type;
@@ -34,7 +34,7 @@ public class CellBorder extends WorldCoord {
 
 			return values().length;
 		}
-	};
+	}
 
 	public CellBorder(WorldCoord worldCoord, boolean[] border) {
 
