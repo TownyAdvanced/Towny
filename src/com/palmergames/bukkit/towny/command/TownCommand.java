@@ -1290,7 +1290,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addTownRank(split[2])) {
-						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Town", rank));
+						if (Bukkit.getPlayer(target.getName()).isOnline())
+							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Town", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Town", rank, target.getName()));
 						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					} else {
@@ -1307,7 +1308,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeTownRank(split[2])) {
-						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Town", rank));
+						if (Bukkit.getPlayer(target.getName()).isOnline())
+							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Town", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Town", rank, target.getName()));
 						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					}

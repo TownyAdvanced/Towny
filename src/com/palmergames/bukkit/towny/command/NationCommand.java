@@ -552,7 +552,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
 					if (target.addNationRank(rank)) {
-						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Nation", rank));
+						if (Bukkit.getPlayer(target.getName()).isOnline())
+							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Nation", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_given_rank"), "Nation", rank, target.getName()));
 						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					} else {
@@ -569,7 +570,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					if (target.removeNationRank(rank)) {
-						TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Nation", rank));
+						if (Bukkit.getPlayer(target.getName()).isOnline())
+							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Nation", rank));
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_have_taken_rank_from"), "Nation", rank, target.getName()));
 						plugin.deleteCache(TownyUniverse.getPlayer(target));
 					}

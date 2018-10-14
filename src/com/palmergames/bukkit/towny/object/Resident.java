@@ -573,8 +573,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
-			if (Bukkit.getPlayer(this.getName()).isOnline())
-				TownyPerms.assignPermissions(this, null);
+			TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
@@ -611,8 +610,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (nationRanks.contains(rank)) {
 			nationRanks.remove(rank);
-			if (Bukkit.getPlayer(this.getName()).isOnline())
-				TownyPerms.assignPermissions(this, null);
+			TownyPerms.assignPermissions(this, null);
 			return true;
 		}
 
