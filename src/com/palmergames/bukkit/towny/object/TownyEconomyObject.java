@@ -25,7 +25,7 @@ public class TownyEconomyObject extends TownyObject {
 		}
 	}
 
-	private static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
+	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 
 	/**
 	 * Tries to pay from the players holdings

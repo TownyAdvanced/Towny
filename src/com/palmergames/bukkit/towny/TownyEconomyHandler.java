@@ -1,16 +1,17 @@
 package com.palmergames.bukkit.towny;
 
+import com.iConomy.iConomy;
+import com.iConomy.system.Account;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
+import net.tnemc.core.Reserve;
+import net.tnemc.core.economy.EconomyAPI;
+import net.tnemc.core.economy.ExtendedEconomyAPI;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.iConomy.iConomy;
-import com.iConomy.system.Account;
-import com.nijikokun.register.payment.Methods;
-import com.nijikokun.register.payment.Method.MethodAccount;
+import java.math.BigDecimal;
 
 /**
  * Economy handler to interface with Register, Vault or iConomy 5.01 directly.
@@ -24,12 +25,14 @@ public class TownyEconomyHandler {
 	
 	private static Economy vaultEconomy = null;
 
+	private static EconomyAPI reserveEconomy = null;
+
 	private static EcoType Type = EcoType.NONE;
 
 	private static String version = "";
 
 	public enum EcoType {
-		NONE, ICO5, REGISTER, VAULT
+		NONE, ICO5, VAULT, RESERVE
 	}
 
 	public static void initialize(Towny plugin) {
@@ -98,19 +101,6 @@ public class TownyEconomyHandler {
 			}
 		}
 
-		/*
-		 * Attempt to hook Register
-		 */
-		economyProvider = plugin.getServer().getPluginManager().getPlugin("Register");
-
-		if (economyProvider != null) {
-			/*
-			 * Flag as using Register hooks
-			 */
-			setVersion(String.format("%s v%s", "Register", economyProvider.getDescription().getVersion()));
-			Type = EcoType.REGISTER;
-			return true;
-		}
 
 		/*
 		 * Attempt to find Vault for Economy handling
@@ -130,16 +120,30 @@ public class TownyEconomyHandler {
 		}
 
 		/*
+		 * Attempt to find Reserve for Economy handling
+		 */
+		economyProvider = plugin.getServer().getPluginManager().getPlugin("Reserve");
+		if(economyProvider != null && ((Reserve)economyProvider).economyProvided()) {
+			/*
+			 * Flat as using Reserve Hooks.
+			 */
+			reserveEconomy = ((Reserve) economyProvider).economy();
+			setVersion(String.format("%s %s", reserveEconomy.name(), "via Reserve" ));
+			Type = EcoType.RESERVE;
+			return true;
+		}
+
+		/*
 		 * No compatible Economy system found.
 		 */
 		return false;
 	}
 
 	/**
-	 * Returns the relevant players economy account
+	 * Returns the relevant player's economy account
 	 * 
-	 * @param player
-	 * @return
+	 * @param accountName - Name of the player's account (usually playername)
+	 * @return - The relevant player's economy account
 	 */
 	private static Object getEconomyAccount(String accountName) {
 
@@ -148,12 +152,11 @@ public class TownyEconomyHandler {
 		case ICO5:
 			return iConomy.getAccount(accountName);
 
-		case REGISTER:
-			if (!Methods.getMethod().hasAccount(accountName))
-				Methods.getMethod().createAccount(accountName);
-
-			return Methods.getMethod().getAccount(accountName);
-			
+		case RESERVE:
+			if(reserveEconomy instanceof ExtendedEconomyAPI)
+				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
+			break;
+		
 		default:
 			break;
 
@@ -175,8 +178,8 @@ public class TownyEconomyHandler {
 		case ICO5:
 			return iConomy.hasAccount(accountName);
 
-		case REGISTER:
-			return Methods.getMethod().hasAccount(accountName);
+		case RESERVE:
+		  return reserveEconomy.hasAccount(accountName);
 			
 		case VAULT:
 			return vaultEconomy.hasAccount(accountName);
@@ -201,9 +204,8 @@ public class TownyEconomyHandler {
 				iConomy.getAccount(accountName).remove();
 				break;
 
-			case REGISTER:
-				MethodAccount account = (MethodAccount) getEconomyAccount(accountName);
-				account.remove();
+			case RESERVE:
+				reserveEconomy.deleteAccount(accountName);
 				break;
 				
 			case VAULT: // Attempt to zero the account as Vault provides no delete method.
@@ -242,12 +244,11 @@ public class TownyEconomyHandler {
 				return icoAccount.getHoldings().balance();
 			break;
 
-		case REGISTER:
-			MethodAccount registerAccount = (MethodAccount) getEconomyAccount(accountName);
-			if (registerAccount != null)
-				return registerAccount.balance(world);
+		case RESERVE:
+			if (!reserveEconomy.hasAccount(accountName))
+				reserveEconomy.createAccount(accountName);
 
-			break;
+			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -297,11 +298,10 @@ public class TownyEconomyHandler {
 			}
 			break;
 
-		case REGISTER:
-			MethodAccount registerAccount = (MethodAccount) getEconomyAccount(accountName);
-			if (registerAccount != null)
-				return registerAccount.subtract(amount, world);
-			break;
+		case RESERVE:
+			if (!reserveEconomy.hasAccount(accountName))
+				reserveEconomy.createAccount(accountName);
+			return reserveEconomy.removeHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -337,11 +337,11 @@ public class TownyEconomyHandler {
 			}
 			break;
 
-		case REGISTER:
-			MethodAccount registerAccount = (MethodAccount) getEconomyAccount(accountName);
-			if (registerAccount != null)
-				return registerAccount.add(amount, world);
-			break;
+		case RESERVE:
+			if (!reserveEconomy.hasAccount(accountName))
+				reserveEconomy.createAccount(accountName);
+
+			return reserveEconomy.addHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -369,11 +369,10 @@ public class TownyEconomyHandler {
 			}
 			break;
 
-		case REGISTER:
-			MethodAccount registerAccount = (MethodAccount) getEconomyAccount(accountName);
-			if (registerAccount != null)
-				return registerAccount.set(amount, world);
-			break;
+		case RESERVE:
+			if (!reserveEconomy.hasAccount(accountName))
+				reserveEconomy.createAccount(accountName);
+			return reserveEconomy.setHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
 			if (!vaultEconomy.hasAccount(accountName))
@@ -403,8 +402,8 @@ public class TownyEconomyHandler {
 			case ICO5:
 				return iConomy.format(balance);
 
-			case REGISTER:
-				return Methods.getMethod().format(balance);
+			case RESERVE:
+				return reserveEconomy.format(new BigDecimal(balance));
 
 			case VAULT:
 				return vaultEconomy.format(balance);

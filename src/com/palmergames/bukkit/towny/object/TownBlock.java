@@ -271,7 +271,17 @@ public class TownBlock {
 			}
 			
 			break;
+		
+		case BANK:
+			
+			if (this.hasResident()) {
+				setPermissions(this.resident.permissions.toString());
+			} else {
+				setPermissions(this.town.permissions.toString());
+			}
+			break;
 		}
+			
 		
 		// Set the changed status.
 		this.setChanged(false);
