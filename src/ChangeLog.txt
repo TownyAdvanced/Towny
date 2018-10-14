@@ -3121,6 +3121,7 @@ v0.92.0.11:
     - Fix for russian.yml not loading.
     - Fix for global_town_settings.keep_experience_on_death_in_town setting not appearing in configs.
     - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
+    - Fix for rank changes of offline players.
 0.93.1.0 (For MC 1.9.4):
     - This is a special release!
       - Enjoy the latest Towny on your old MC version.
