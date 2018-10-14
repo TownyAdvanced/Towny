@@ -246,24 +246,6 @@ public class TownyEntityListener implements Listener {
 		
 	}
 
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
-		if (plugin.isError()) {
-			return;
-		}
-
-		if (event.getTarget() instanceof Player) {
-
-			Player target = (Player)event.getTarget();
-			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.DIRT, TownyPermission.ActionType.DESTROY)) {
-					event.setCancelled(true);
-				}
-			}
-		}
-	}
-	
 	/**
 	 * Prevent explosions from hurting non-living entities in towns.
 	 * Includes: Armorstands, itemframes, animals, endercrystals, minecarts
