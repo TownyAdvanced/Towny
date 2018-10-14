@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -160,6 +161,28 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
+	/**
+	 * Returns a list containing only townblocks that can be claimed.
+	 * Filters out townblocks too close to other towns as set in the config.
+	 * 
+	 * @param selection
+	 * @return List of townblocks
+	 */
+	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
+
+		List<WorldCoord> out = new ArrayList<WorldCoord>();		
+		for (WorldCoord worldCoord : selection)
+			try {
+				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
+					out.add(worldCoord);
+				} else {
+					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );					
+				}
+			} catch (NotRegisteredException e) {				
+			}
+		return out;
+	}
+	
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 

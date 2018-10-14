@@ -11,9 +11,15 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -24,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Town extends TownBlockOwner implements ResidentList {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -36,7 +42,7 @@ public class Town extends TownBlockOwner implements ResidentList {
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
 	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
-			plotPrice, commercialPlotPrice, embassyPlotPrice;
+			plotPrice, commercialPlotPrice, embassyPlotPrice, spawnCost;
 	private Nation nation;
 	private boolean hasUpkeep, isPublic, isTaxPercentage, isOpen;
 	private String townBoard = "/town set board [msg]", tag;
@@ -212,7 +218,6 @@ public class Town extends TownBlockOwner implements ResidentList {
 				if (!resident.getTown().equals(this))
 					throw new AlreadyRegisteredException(String.format(TownySettings.getLangString("msg_err_already_in_town"), resident.getName(), resident.getTown().getFormattedName()));
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
@@ -276,7 +281,7 @@ public class Town extends TownBlockOwner implements ResidentList {
 
 		// Admin has enabled PvP for this town.
 		if (isAdminEnabledPVP()) 
-			return false;
+			return true;
 				
 		// Admin has disabled PvP for this town.
 		if (isAdminDisabledPVP()) 
@@ -578,7 +583,6 @@ public class Town extends TownBlockOwner implements ResidentList {
 				try {
 					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
 				} catch (NotRegisteredException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
@@ -635,12 +639,12 @@ public class Town extends TownBlockOwner implements ResidentList {
 	public void setSpawn(Location spawn) throws TownyException {
 
 		if (!hasHomeBlock())
-			throw new TownyException("Home Block has not been set");
+			throw new TownyException(TownySettings.getLangString("msg_err_homeblock_has_not_been_set"));
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ()) {
 			this.spawn = spawn;
 		} else
-			throw new TownyException("Spawn is not within the homeBlock.");
+			throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_homeblock"));
 	}
 	
 	/**
@@ -817,7 +821,10 @@ public class Town extends TownBlockOwner implements ResidentList {
 
 	public void setPlotPrice(double plotPrice) {
 
-		this.plotPrice = plotPrice;
+		if (plotPrice > TownySettings.getMaxPlotPrice())
+			this.plotPrice = TownySettings.getMaxPlotPrice();
+		else 
+			this.plotPrice = plotPrice;
 	}
 
 	public double getPlotPrice() {
@@ -851,8 +858,11 @@ public class Town extends TownBlockOwner implements ResidentList {
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
-
-		this.commercialPlotPrice = commercialPlotPrice;
+		
+		if (commercialPlotPrice > TownySettings.getMaxPlotPrice())
+			this.commercialPlotPrice = TownySettings.getMaxPlotPrice();
+		else
+			this.commercialPlotPrice = commercialPlotPrice;
 	}
 
 	public double getCommercialPlotPrice() {
@@ -862,12 +872,25 @@ public class Town extends TownBlockOwner implements ResidentList {
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
 
-		this.embassyPlotPrice = embassyPlotPrice;
+		if (embassyPlotPrice > TownySettings.getMaxPlotPrice())
+			this.embassyPlotPrice = TownySettings.getMaxPlotPrice();
+		else
+			this.embassyPlotPrice = embassyPlotPrice;
 	}
 
 	public double getEmbassyPlotPrice() {
 
 		return embassyPlotPrice;
+	}
+	
+	public void setSpawnCost(double spawnCost) {
+
+		this.spawnCost = spawnCost;
+	}
+
+	public double getSpawnCost() {
+
+		return spawnCost;
 	}
 
 	public boolean isHomeBlock(TownBlock townBlock) {
@@ -1119,7 +1142,6 @@ public class Town extends TownBlockOwner implements ResidentList {
 				if (resident.getTown().equals(this))
 					throw new AlreadyRegisteredException(TownySettings.getLangString("msg_err_not_outlaw_in_your_town"));
 			} catch (NotRegisteredException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
@@ -1180,4 +1202,55 @@ public class Town extends TownBlockOwner implements ResidentList {
 		}
 	}
 
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) { // We only want 10 Invites, for towns, later we can make this number configurable
+			receivedinvites.add(invite);
+
+		} else {
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_town_has_too_many_invites"),this.getName()));
+		}
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentInvites() {
+		return sentinvites;
+	}
+
+	@Override
+	public void newSentInvite(Invite invite)  throws TooManyInvitesException {
+		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
+			sentinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_town_sent_too_many_invites"));
+		}
+	}
+
+	@Override
+	public void deleteSentInvite(Invite invite) {
+		sentinvites.remove(invite);
+	}
+
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+	private List<Invite> sentinvites = new ArrayList<Invite>();
+
+	public int getOutpostLimit() {
+		return TownySettings.getMaxOutposts(this);
+	}
+
+	public boolean isOverOutpostLimit() {
+		
+		return (getMaxOutpostSpawn() > getOutpostLimit());
+
+	}
 }

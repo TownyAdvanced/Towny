@@ -1,16 +1,29 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.TownyAllySender;
+import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
+import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -18,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyEconomyObject implements ResidentList {
+public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -27,16 +40,19 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
 	private Town capital;
-	private double taxes;
+	private double taxes, spawnCost;
 	private boolean neutral = false;
-	private String tag;
+	private String nationBoard = "/nation set board [msg]", tag;
 	public UUID uuid;
 	private long registered;
+	private Location nationSpawn;
+	private boolean isPublic;
 
 	public Nation(String name) {
 
 		setName(name);
 		tag = "";
+        isPublic = TownySettings.getNationDefaultPublic();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -221,6 +237,54 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 	public Town getCapital() {
 
 		return capital;
+	}
+
+	public Location getNationSpawn() throws TownyException {
+		if(nationSpawn == null){
+			throw new TownyException("Nation has not set a spawn location.");
+		}
+
+		return nationSpawn;
+	}
+
+	public boolean hasNationSpawn(){
+		return (nationSpawn != null);
+	}
+
+	public void setNationSpawn(Location spawn) throws TownyException {
+		Coord spawnBlock = Coord.parseCoord(spawn);
+
+		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
+			if(this.capital == null){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+			if(townBlock.getTown() != this.getCapital()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
+			}
+		} else {
+			if(!townBlock.hasTown()){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
+
+			if(!towns.contains(townBlock.getTown())){
+				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_nationtowns"));
+			}
+		}
+
+		this.nationSpawn = spawn;
+	}
+
+	/**
+	 * Only to be called from the Loading methods.
+	 *
+	 * @param nationSpawn
+	 */
+	public void forceSetNationSpawn(Location nationSpawn){
+		this.nationSpawn = nationSpawn;
 	}
 
 	//TODO: Remove
@@ -539,5 +603,96 @@ public class Nation extends TownyEconomyObject implements ResidentList {
 
 	public void setRegistered(long registered) {
 		this.registered = registered;
+	}
+
+	@Override
+	public List<Invite> getReceivedInvites() {
+		return receivedinvites;
+	}
+
+	@Override
+	public void newReceivedInvite(Invite invite) throws TooManyInvitesException {
+		if (receivedinvites.size() <= (InviteHandler.getReceivedInvitesMaxAmount(this) -1)) {
+			receivedinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(String.format(TownySettings.getLangString("msg_err_nation_has_too_many_requests"),this.getName()));
+		}
+	}
+
+	@Override
+	public void deleteReceivedInvite(Invite invite) {
+		receivedinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentInvites() {
+		return sentinvites;
+	}
+
+	@Override
+	public void newSentInvite(Invite invite) throws TooManyInvitesException {
+		if (sentinvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
+			sentinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_invites"));
+		}
+	}
+
+	@Override
+	public void deleteSentInvite(Invite invite) {
+		sentinvites.remove(invite);
+	}
+
+	private List<Invite> receivedinvites = new ArrayList<Invite>();
+	private List<Invite> sentinvites = new ArrayList<Invite>();
+	private List<Invite> sentallyinvites = new ArrayList<Invite>();
+
+
+	@Override
+	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {
+		if (sentallyinvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) -1) {
+			sentallyinvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(TownySettings.getLangString("msg_err_nation_sent_too_many_requests"));
+		}
+	}
+
+	@Override
+	public void deleteSentAllyInvite(Invite invite) {
+		sentallyinvites.remove(invite);
+	}
+
+	@Override
+	public List<Invite> getSentAllyInvites() {
+		return sentallyinvites;
+	}
+	
+	public void setNationBoard(String nationBoard) {
+
+		this.nationBoard = nationBoard;
+	}
+
+	public String getNationBoard() {
+		return nationBoard;
+	}
+
+    public void setPublic(boolean isPublic) {
+
+        this.isPublic = isPublic;
+    }
+
+    public boolean isPublic() {
+
+        return isPublic;
+    }
+    
+	public void setSpawnCost(double spawnCost) {
+
+		this.spawnCost = spawnCost;
+	}
+
+	public double getSpawnCost() {
+
+		return spawnCost;
 	}
 }

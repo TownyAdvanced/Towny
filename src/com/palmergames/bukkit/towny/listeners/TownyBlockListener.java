@@ -40,6 +40,24 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+
+import java.util.List;
+
 public class TownyBlockListener implements Listener {
 
 	private final Towny plugin;
@@ -61,7 +79,8 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();
 
 		//Get build permissions (updates cache if none exist)
-		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY);
+		//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY);
+		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.DESTROY);
 		
 		// Allow destroy if we are permitted
 		if (bDestroy)
@@ -104,7 +123,6 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -152,7 +170,8 @@ public class TownyBlockListener implements Listener {
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.BUILD);
+			//boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.BUILD);
+			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.BUILD);
 
 			// Allow build if we are permitted
 			if (bBuild)
@@ -281,31 +300,43 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		List<Block> blocks = event.getBlocks();
+    List<Block> blocks = event.getBlocks();
 
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				if (testBlockMove(block, event.getDirection(), false))
 					event.setCancelled(true);
 			}
 		}
 	}
 
-	private boolean testBlockMove(Block block, BlockFace direction) {
+	/**
+	 * testBlockMove
+	 * 
+	 * @param block - block that is being moved, or if pistonBlock is true the piston itself
+	 * @param direction - direction the blocks are going
+	 * @param pistonBlock - test is slightly different when the piston block itself is being checked.	 * 
+	 */
+	private boolean testBlockMove(Block block, BlockFace direction, boolean pistonBlock) {
 
-		Block blockTo = block.getRelative(direction);
+		Block blockTo = null;
+		if (!pistonBlock)
+			blockTo = block.getRelative(direction);
+		else {
+			blockTo = block.getRelative(direction.getOppositeFace());
+		}
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
 		Coord coord = Coord.parseCoord(loc);
 		Coord coordTo = Coord.parseCoord(locTo);
 
 		TownyWorld townyWorld = null;
-		TownBlock CurrentTownBlock = null, destinationTownBlock = null;
+		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
-			CurrentTownBlock = townyWorld.getTownBlock(coord);
+			currentTownBlock = townyWorld.getTownBlock(coord);
 		} catch (NotRegisteredException e) {
 		}
 
@@ -314,21 +345,22 @@ public class TownyBlockListener implements Listener {
 		} catch (NotRegisteredException e1) {
 		}
 
-		if (CurrentTownBlock != destinationTownBlock) {
-
+		if (currentTownBlock != destinationTownBlock) {
+			
 			// Cancel if either is not null, but other is (wild to town).
-			if (((CurrentTownBlock == null) && (destinationTownBlock != null)) || ((CurrentTownBlock != null) && (destinationTownBlock == null))) {
+			if (((currentTownBlock == null) && (destinationTownBlock != null)) || ((currentTownBlock != null) && (destinationTownBlock == null))) {
 				return true;
 			}
 
 			// If both blocks are owned by the town.
-			if (!CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+			if (!currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) {
 				return false;
+			}
 
 			try {
-				if ((!CurrentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (CurrentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (CurrentTownBlock.getResident() != destinationTownBlock.getResident())
+				if ((!currentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (currentTownBlock.getResident() != destinationTownBlock.getResident())
 
-				|| (CurrentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
+				|| (currentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
 					return true;
 				}
 			} catch (NotRegisteredException e) {
@@ -420,7 +452,6 @@ public class TownyBlockListener implements Listener {
 		try {
 			townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (Block block : blocks) {
@@ -469,14 +500,17 @@ public class TownyBlockListener implements Listener {
 		boolean isNeutral = false;
 		try {
 			townBlock = world.getTownBlock(coord);
-			if (TownyUniverse.isWilderness(target.getBlock())) {
-				isNeutral = !world.isExpl();
-				if (!world.isExpl() && !TownyUniverse.isWarTime())
-					return false;
-			} else if (townBlock.hasTown())
+			if (townBlock.hasTown())
 				if (!War.isWarZone(townBlock.getWorldCoord()))
 					isNeutral = true;
 		} catch (NotRegisteredException e1) {
+			if (TownyUniverse.isWilderness(target.getBlock())) {
+				isNeutral = !world.isExpl();
+				if (!world.isExpl() && !TownyUniverse.isWarTime())
+					return false;				
+				if (world.isExpl() && !TownyUniverse.isWarTime())
+					return true;	
+			}
 		}
 		
 		try {			
