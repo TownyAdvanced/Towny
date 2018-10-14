@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -25,7 +24,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
