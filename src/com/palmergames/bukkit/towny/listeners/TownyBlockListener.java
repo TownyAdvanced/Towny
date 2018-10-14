@@ -50,7 +50,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -287,7 +286,7 @@ public class TownyBlockListener implements Listener {
 		if ((block.getType() != Material.AIR) && (!block.isLiquid())) {
 
 			//check the block to see if it's going to pass a plot boundary
-			if (testBlockMove(block, event.getDirection().getOppositeFace()))
+			if (testBlockMove(block, event.getDirection().getOppositeFace(), true))
 				event.setCancelled(true);
 		}
 	}

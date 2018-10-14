@@ -909,25 +909,6 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	/*
-	 * PlayerFishEvent
-	 * 
-	 * Prevents players from fishing for entities in protected regions.
-	 * - Armorstands, animals, any entity affected by rods.
-	 */
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerFishEvent(PlayerFishEvent event) {
-		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
-			Player player = event.getPlayer();
-			Entity caught = event.getCaught();				
-			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
-			if (!bDestroy) {
-				event.setCancelled(true);
-				event.getHook().remove();
-			}
-		}	
-	}
-
-	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
 	*/
 	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc, PlayerMoveEvent moveEvent) {
@@ -993,44 +974,6 @@ public class TownyPlayerListener implements Listener {
 
 		if (to.getTownBlock().getTown().hasOutlaw(resident))
 			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_are_an_outlaw_in_this_town"),to.getTownBlock().getTown()));
-	}
-
-
-	/**
-	 * @author - Articdive (Just the small codeblock below)
-	 */
-	/*
-	 * onPlayerDieInTown
-	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
-	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
-	public void onPlayerDieInTown(PlayerDeathEvent event) {
-		boolean keepInventory = event.getKeepInventory();
-		boolean keepLevel = event.getKeepLevel();
-		Player player = event.getEntity();
-		Location deathloc = player.getLocation();
-		if (TownySettings.getKeepInventoryInTowns()) {
-			if (!keepInventory) { // If you don't keep your inventory via any other plugin or the server
-				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has a town, and we keep inventory in towns, deathloc in a town. Do it!
-						event.setKeepInventory(true);
-					}
-				}
-			}
-		}
-		if (TownySettings.getKeepExperienceInTowns()) {
-			if (!keepLevel) { // If you don't keep your levels via any other plugin or the server, other events fire first, we just ignore it if they do save thier invs.
-				TownBlock tb = TownyUniverse.getTownBlock(deathloc);
-				if (tb != null) { // So a valid TownBlock appears, how wonderful
-					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
-						event.setKeepLevel(true);
-					}
-				}
-
-			}
-		}
 	}
 	
 	/*

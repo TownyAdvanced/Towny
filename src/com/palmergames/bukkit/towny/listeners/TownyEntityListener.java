@@ -31,7 +31,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Animals;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -152,14 +151,14 @@ public class TownyEntityListener implements Listener {
 					return;
 				
 				//Cancel because one of two players has no town and should not be interfering during war.
-				if (!TownyUniverse.getDataSource().getResident(attacker.getName()).hasTown() || !TownyUniverse.getDataSource().getResident(defender.getName()).hasTown()){
+				if (!TownyUniverse.getDataSource().getResident(((Player) attacker).getName()).hasTown() || !TownyUniverse.getDataSource().getResident(((Player)defender).getName()).hasTown()){
 					TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoTownMsg());
 					event.setCancelled(true);
 					return;
 				}
 				try {
-					Town attackerTown = TownyUniverse.getDataSource().getResident(attacker.getName()).getTown();
-					Town defenderTown = TownyUniverse.getDataSource().getResident(defender.getName()).getTown();
+					Town attackerTown = TownyUniverse.getDataSource().getResident(((Player) attacker).getName()).getTown();
+					Town defenderTown = TownyUniverse.getDataSource().getResident(((Player) defender).getName()).getTown();
 	
 					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
@@ -269,7 +268,7 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
 		
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
+		if (entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
 		  if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
           damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
 											
@@ -307,7 +306,7 @@ public class TownyEntityListener implements Listener {
 					}			
 					// Get destroy permissions (updates if none exist)
 					//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), 416, (byte) 0, TownyPermission.ActionType.DESTROY);
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.ARMOR_STAND, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(player, entity.getLocation(), Material.DIRT, TownyPermission.ActionType.DESTROY);
 
 					// Allow the removal if we are permitted
 					if (bDestroy)
@@ -1118,3 +1117,4 @@ public class TownyEntityListener implements Listener {
 
 		//TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
 	}
+}

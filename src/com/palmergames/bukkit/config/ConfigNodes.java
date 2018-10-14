@@ -454,18 +454,6 @@ public enum ConfigNodes {
 			"# The amount of residents a town needs to claim an outpost,",
 			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
 	),
-	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
-			"global_town_settings.keep_inventory_on_death_in_town",
-			"false",
-			"# If People should keep their inventories on death in a town",
-			"# Is not guaranteed to work with other keep inventory plugins!"
-	),
-	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
-			"global_town_settings.keep_experience_on_death_in_town",
-			"false",
-			"# If People should keep their experience on death in a town",
-			"# Is not guaranteed to work with other keep experience plugins!"
-	),
 	GTOWN_MAX_PLOT_PRICE_COST(
 			"global_town_settings.maximum_plot_price_cost",
 			"1000000.0",
@@ -714,7 +702,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BOAT,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
+			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,SKULL_ITEM,BOAT,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -776,7 +764,7 @@ public enum ConfigNodes {
 			"# NEVER set below 1."),
 	PROT_MOB_TYPES(
 			"protection.mob_types",
-			"Animals,NPC,Snowman,ArmorStand",
+			"Animals,NPC,Snowman",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
