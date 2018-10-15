@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -552,6 +554,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 			townRanks.add(rank);
 			TownyPerms.assignPermissions(this, null);
+			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
 		}
 
@@ -575,6 +578,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
 			TownyPerms.assignPermissions(this, null);
+			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
 
