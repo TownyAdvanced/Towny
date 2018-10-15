@@ -1,8 +1,9 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.palmergames.bukkit.metrics.MCStats;
 import com.palmergames.bukkit.metrics.BStats;
+import com.palmergames.bukkit.metrics.MCStats;
+import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.PlotCommand;
@@ -54,7 +55,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -377,6 +377,11 @@ public class Towny extends JavaPlugin {
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+
+		//Add our chat handler to TheNewChat via the API.
+		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
+			TNCRegister.initialize();
+		}
 		
 		/*
 		 * Leaving this out for the time being, at the request of the authors of EssentialsX
