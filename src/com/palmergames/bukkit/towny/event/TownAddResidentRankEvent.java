@@ -16,7 +16,7 @@ public class TownAddResidentRankEvent extends Event
     private String rank;
     private Town town;
     
-     public TownAddResidentRankEvent(Resident resident, String rank, Town town)
+    public TownAddResidentRankEvent(Resident resident, String rank, Town town)
     {
         this.resident = resident;
         this.rank = rank;
