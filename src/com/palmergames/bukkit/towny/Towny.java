@@ -184,11 +184,6 @@ public class Towny extends JavaPlugin {
 			TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
 		TownyLogger.log.info("=============================================================");
 
-		//Add our chat handler to TheNewChat via the API.
-		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
-			TNCRegister.initialize();
-		}
-
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
@@ -380,6 +375,12 @@ public class Towny extends JavaPlugin {
 
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+
+
+		//Add our chat handler to TheNewChat via the API.
+		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
+			TNCRegister.initialize();
+		}
 		
 		/*
 		 * Leaving this out for the time being, at the request of the authors of EssentialsX
