@@ -1,3 +1,7 @@
+# Ant
 /bin
+
+# IntelliJ
 /.idea
 *.iml
+/out
