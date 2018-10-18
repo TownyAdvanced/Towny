@@ -3123,3 +3123,4 @@ v0.92.0.11:
     - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
     - Fix for ranks not being removed from offline players.
     - Add The New Chat support, courtesy of creatorfromhell.
+    - Fix plot perm line not being set properly on plots owned by someone who leaves town.
