@@ -258,7 +258,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disabl e"));
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				
 				if (TownySettings.isBankActionLimitedToBankPlots()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
