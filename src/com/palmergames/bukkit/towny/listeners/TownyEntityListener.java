@@ -585,7 +585,7 @@ public class TownyEntityListener implements Listener {
 		 * TODO: Make this conditional, if bukkit version < 1.11.2 - use the old code.
 		 */
 		// Entity passenger = entity.getPassenger();
-		List<Entity> passenger = entity.getPassengers(); // This seems to be a new addition to Bukkit with 1.13.x
+		List<Entity> passenger = entity.getPassengers();
 
 		TownyWorld World = null;
 
