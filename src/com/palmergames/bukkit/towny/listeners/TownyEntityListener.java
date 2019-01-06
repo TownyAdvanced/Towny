@@ -579,7 +579,13 @@ public class TownyEntityListener implements Listener {
 
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
-		Entity passenger = entity.getPassenger();
+		/*
+		 * Legacy Code, Deprecated in Bukkit Commit a17b015899f (1.11.2)
+		 * Commit: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/a17b015899fd9a82d63b61c5a37a52ecbfb89b9e#src/main/java/org/bukkit/entity/Entity.java
+		 * TODO: Make this conditional, if bukkit version < 1.11.2 - use the old code.
+		 */
+		// Entity passenger = entity.getPassenger();
+		List<Entity> passenger = entity.getPassengers(); // This seems to be a new addition to Bukkit with 1.13.x
 
 		TownyWorld World = null;
 
