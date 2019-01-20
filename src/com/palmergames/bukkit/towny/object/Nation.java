@@ -473,6 +473,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 					double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
+						town.setNation(null);
 						it.remove();
 						continue;
 					}
