@@ -1660,6 +1660,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					try {
 						town.setSpawn(player.getLocation());
+						if(town.isCapital()) {
+							nation.recheckTownDistance();
+						}
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_town_spawn"));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
