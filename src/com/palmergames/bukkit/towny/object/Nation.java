@@ -451,7 +451,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		removeAllEnemies();
 		removeAllTowns();
 		capital = null;
-		//assistants.clear();
 	}
 
 	/**
