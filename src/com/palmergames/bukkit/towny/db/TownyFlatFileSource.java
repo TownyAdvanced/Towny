@@ -652,15 +652,23 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+
 				line = kvFile.get("outlaws");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
-							Resident outlaw = getResident(token);
-							if (outlaw != null)
-								town.addOutlaw(outlaw);
+							try
+							{
+								Resident outlaw = getResident(token);
+								if (outlaw != null)
+									town.addOutlaw(outlaw);
+							}
+							catch(NotRegisteredException e)
+							{
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
+							}
 						}
 					}
 				}
