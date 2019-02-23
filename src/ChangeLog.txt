@@ -3115,4 +3115,12 @@ v0.92.0.11:
     - Fix for nations that lack nationBoards causing issues when upgrading from older versions of Towny.
 0.93.0.0:
     - Bump version number for release build.
-    - Fix for ranks on offline players.
+0.93.1.0:
+    - Fix for nationZones affecting nation-less towns when the only_capitals setting is false.
+    - Fix for servers using CMI that cannot have jailed players sent to jail on respawn.
+    - Fix for russian.yml not loading.
+    - Fix for global_town_settings.keep_experience_on_death_in_town setting not appearing in configs.
+    - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
+    - Fix for ranks not being removed from offline players.
+    - Add The New Chat support, courtesy of creatorfromhell.
+    - Fix plot perm line not being set properly on plots owned by someone who leaves town.

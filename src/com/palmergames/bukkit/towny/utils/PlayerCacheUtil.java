@@ -258,8 +258,11 @@ public class PlayerCacheUtil {
 					Town nearestTown = null;
 					int distance = 0;
 					try {
-						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
+						nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
 						if (nearestTown == null) {
+							return TownBlockStatus.UNCLAIMED_ZONE;
+						}
+						if (!nearestTown.hasNation()) {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());

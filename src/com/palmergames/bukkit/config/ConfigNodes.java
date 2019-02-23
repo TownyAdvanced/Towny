@@ -461,7 +461,7 @@ public enum ConfigNodes {
 			"# Is not guaranteed to work with other keep inventory plugins!"
 	),
 	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_TOWN(
-			"global_town_settings.keep_inventory_on_death_in_town",
+			"global_town_settings.keep_experience_on_death_in_town",
 			"false",
 			"# If People should keep their experience on death in a town",
 			"# Is not guaranteed to work with other keep experience plugins!"
