@@ -378,11 +378,12 @@ public class Towny extends JavaPlugin {
 		if (using.size() > 0)
 			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
 
+
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
-		
+
 		/*
 		 * Leaving this out for the time being, at the request of the authors of EssentialsX
 		 */
