@@ -585,6 +585,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
+				
+				// Set the plot permissions to mirror the towns.
+				townBlock.setType(townBlock.getType());
 				TownyUniverse.getDataSource().saveTownBlock(townBlock);
 			}
 		}

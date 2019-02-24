@@ -3121,8 +3121,6 @@ v0.92.0.11:
     - Fix for russian.yml not loading.
     - Fix for global_town_settings.keep_experience_on_death_in_town setting not appearing in configs.
     - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
-    - Fix for ranks on offline players.
-    - Add The New Chat support, courtesy of creatorfromhell. 
-0.93.1.0 (For MC 1.10.2):
-    - This is a special release!
-      - Enjoy the latest Towny on your old MC version.
+    - Fix for ranks not being removed from offline players.
+    - Add The New Chat support, courtesy of creatorfromhell.
+    - Fix plot perm line not being set properly on plots owned by someone who leaves town.

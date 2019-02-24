@@ -16,7 +16,7 @@
 
 	<target name="download" depends="init">
 
-		<get src="http://palmergames.com/file-repo/libs/bukkit1_10_2.jar" dest="${env.LIB}/bukkit1.10.2.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/bukkit1_12_2.jar" dest="${env.LIB}/bukkit1.12.2.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
@@ -33,7 +33,7 @@
 		<!-- Compile the java code -->
 		<javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.8" source="1.8" debug="true" debuglevel="lines,vars,source">
 			<classpath>
-				<pathelement location="${env.LIB}/bukkit1.10.2.jar" />
+				<pathelement location="${env.LIB}/bukkit1.12.2.jar" />
 				<pathelement location="${env.LIB}/bpermissions.jar" />
 				<pathelement location="${env.LIB}/Essentials.jar" />
 				<pathelement location="${env.LIB}/EssentialsGroupManager.jar" />
