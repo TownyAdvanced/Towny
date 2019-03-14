@@ -56,6 +56,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> nation_help = new ArrayList<>();
 	private static final List<String> king_help = new ArrayList<>();
 
+	private static final Comparator<Nation> BY_NUM_RESIDENTS = (n1, n2) -> n2.getNumResidents() - n1.getNumResidents();
+	private static final Comparator<Nation> BY_NAME = (n1, n2) -> n1.getName().compareTo(n2.getName());
+	private static final Comparator<Nation> BY_BANK_BALANCE = (n1, n2) -> {
+		try {
+			return Double.compare(n2.getHoldingBalance(), n1.getHoldingBalance());
+		} catch (EconomyException e) {
+			throw new RuntimeException("Failed to get balance. Aborting.");
+		}
+	};
+	private static final Comparator<Nation> BY_NUM_TOWNS = (n1, n2) -> n2.getTowns().size() - n1.getTowns().size();
+	
+
 	static {
 
 		nation_help.add(ChatTools.formatTitle("/nation"));
@@ -657,34 +669,67 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		List<Nation> nationsToSort = TownyUniverse.getDataSource().getNations();
 
 		int page = 1;
-	    int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
-	    if (split.length > 1) {
-	        try {
-	            page = Integer.parseInt(split[1]);
-	            if (page < 0) {
-	                TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
-	                return;
-	            } else if (page == 0) {
-	                TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
-	                return;
-	            }
-	        } catch (NumberFormatException e) {
-	            TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
-	            return;
-	        }
-	    }
+		boolean pageSet = false;
+		boolean comparatorSet = false;
+		Comparator<Nation> comparator = BY_NUM_RESIDENTS;
+		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
+		for (int i = 1; i < split.length; i++) {
+			if (split[i].equalsIgnoreCase("by")) {
+				if (comparatorSet) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_multiple_comparators"));
+					return;
+				}
+				i++;
+				if (i < split.length) {
+					comparatorSet = true;
+					if (split[i].equalsIgnoreCase("residents")) {
+						comparator = BY_NUM_RESIDENTS;
+					} else if (split[i].equalsIgnoreCase("balance")) {
+						comparator = BY_BANK_BALANCE;
+					} else if (split[i].equalsIgnoreCase("towns")) {
+						comparator = BY_NUM_TOWNS;
+					} else {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_missing_comparator"));
+					return;
+				}
+				comparatorSet = true;
+			} else {
+				if (pageSet) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_too_many_pages"));
+					return;
+				}
+				try {
+					page = Integer.parseInt(split[1]);
+					if (page < 0) {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
+						return;
+					} else if (page == 0) {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
+						return;
+					}
+					pageSet = true;
+				} catch (NumberFormatException e) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
+					return;
+				}
+			}
+		}
+
 	    if (page > total) {
 	        TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
 	        return;
 	    }
 
-		Collections.sort(nationsToSort, new Comparator() {
-			@Override
-			public int compare(Object n1, Object n2) {
-				if (((Nation) n2).getNumResidents() == ((Nation) n1).getNumResidents()) return 0;
-				return (((Nation) n2).getNumResidents() > ((Nation) n1).getNumResidents()) ? 1 : -1;
-			}
-		});
+		try {
+			Collections.sort(nationsToSort, comparator);
+		} catch (RuntimeException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
+			return;
+		}
 		int iMax = page * 10;
 		if ((page * 10) > nationsToSort.size()) {
 			iMax = nationsToSort.size();
