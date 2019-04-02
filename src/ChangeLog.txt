@@ -3145,3 +3145,8 @@ v0.92.0.11:
       - protection.world_mob_removal_entities should be changed to:
         - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
     - Towny events now support more helpful values for API users, courtesy of ArticDive.
+    - Fix players being able to join open towns over their pop cap, courtesy of KarlOfDuty.
+    - Fix typo, courtesy of KarlOfDuty.
+    - New Command: /ta nation {nationname} recheck, courtesy of KarlOfDuty.
+      - used to manually recheck if a nation's towns are too far in cases where the nation capital has moved.
+    - Added TheNewChat support, courtesy of creatorfromhell.
