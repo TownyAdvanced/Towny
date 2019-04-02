@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -94,7 +93,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
-		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag));
+		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag, this));
 		setChangedName(true);
 	}
 

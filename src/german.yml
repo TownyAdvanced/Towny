@@ -1,5 +1,5 @@
 name: Towny
-version: 0.47
+version: 0.48
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -838,8 +838,13 @@ enabled: 'Enabled'
 disabled: 'Disabled'
 forced: 'Forced'
 adjustable: 'Einstellbar'
-msg_no_funds_new_town2: '&c%s hat zu wenig Geld um für %s eine Stadt zu gründen.'
-msg_no_funds_new_nation2: '&cDie Stadt hat zu wenig Geld um für %s eine Nation zu gründen.'
-msg_no_funds_claim2: '&cDie Stadt hat zu wenig Geld um %s Stadtblöcke zu beanspruchen. Diese kosten %s. Du kannst der Stadtbank mit /t deposit %s %s hinzufügen.'
-msg_err_cant_afford_blocks2: '&cDie Stadt hat zu wenig Geld um %s Stadtblöcke zu beanspruchen. Diese kosten %s. Du kannst der Stadtbank mit /t deposit %s %s hinzufügen.'
-msg_err_not_enough_variables: '&cNicht genug Variablen: '
+adjustable: 'Adjustable'
+
+Added in 0.48:
+msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which costs %s.'
+msg_no_funds_new_nation2: '&cThe town can''t afford to start a new nation, which costs %s.'
+msg_no_funds_claim2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_not_enough_variables: '&cNot enough variables: '
+nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
+

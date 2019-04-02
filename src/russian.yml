@@ -1,5 +1,5 @@
 name: Towny
-version: 0.47
+version: 0.48
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://towny.palmergames.com/'
@@ -837,3 +837,11 @@ enabled: 'Enabled'
 disabled: 'Disabled'
 forced: 'Forced'
 adjustable: 'Adjustable'
+
+Added in 0.48:
+msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which costs %s.'
+msg_no_funds_new_nation2: '&cThe town can''t afford to start a new nation, which costs %s.'
+msg_no_funds_claim2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_not_enough_variables: '&cNot enough variables: '
+nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'

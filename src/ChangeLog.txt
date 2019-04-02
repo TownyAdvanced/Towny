@@ -3137,3 +3137,17 @@ v0.92.0.11:
     - Fix for Tridents being removed from existence when fired into non-PVP enabled areas.
 0.93.0.5:
     - Add TownyUniverse.getPlayerUUID(Resident) for getting the UUID of an online resident.
+    - REQUIRED CONFIG CHANGE:
+      - Add CHORUS_FRUIT to default item_use_ids.
+      - Add DAYLIGHT_DETECTOR & SHULKER_BOX to default switch_ids.
+      - protection.town_mob_removal_entities should be changed to:
+        - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
+      - protection.world_mob_removal_entities should be changed to:
+        - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
+    - Towny events now support more helpful values for API users, courtesy of ArticDive.
+    - Fix players being able to join open towns over their pop cap, courtesy of KarlOfDuty.
+    - Fix typo, courtesy of KarlOfDuty.
+    - New Command: /ta nation {nationname} recheck, courtesy of KarlOfDuty.
+      - used to manually recheck if a nation's towns are too far in cases where the nation capital has moved.
+    - Added TheNewChat support, courtesy of creatorfromhell.
+    - Language files bumped to 0.48.
