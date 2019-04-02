@@ -72,16 +72,21 @@ public class PermHUD {
 
 	private static void clearPerms (Player p) {
 		Scoreboard board = p.getScoreboard();
-		board.getTeam("plot").setSuffix(" ");
-		board.getTeam("build").setSuffix(" ");
-		board.getTeam("destroy").setSuffix(" ");
-		board.getTeam("switching").setSuffix(" ");
-		board.getTeam("item").setSuffix(" ");
-		board.getTeam("pvp").setSuffix(" ");
-		board.getTeam("explosions").setSuffix(" ");
-		board.getTeam("firespread").setSuffix(" ");
-		board.getTeam("mobspawn").setSuffix(" ");
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+		try {
+			board.getTeam("plot").setSuffix(" ");
+			board.getTeam("build").setSuffix(" ");
+			board.getTeam("destroy").setSuffix(" ");
+			board.getTeam("switching").setSuffix(" ");
+			board.getTeam("item").setSuffix(" ");
+			board.getTeam("pvp").setSuffix(" ");
+			board.getTeam("explosions").setSuffix(" ");
+			board.getTeam("firespread").setSuffix(" ");
+			board.getTeam("mobspawn").setSuffix(" ");
+			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+		} catch (NullPointerException e) {
+			toggleOn(p);			
+			return;
+		}
 	}
 	
 	private static String getFormattedWildernessName(World w) {

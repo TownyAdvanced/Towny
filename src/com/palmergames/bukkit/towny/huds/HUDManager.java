@@ -43,7 +43,7 @@ public class HUDManager implements Listener{
 			toggleAllOff(p);
 	}
 
-	public void togglePermHuD (Player p) {
+	public void togglePermHUD (Player p) {
 		if (!permUsers.contains(p)) {
 			toggleAllOff(p);
 			permUsers.add(p);

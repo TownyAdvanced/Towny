@@ -3137,3 +3137,6 @@ v0.92.0.11:
     - Fix for Tridents being removed from existence when fired into non-PVP enabled areas.
 0.93.0.5:
     - Add TownyUniverse.getPlayerUUID(Resident) for getting the UUID of an online resident.
+    - REQUIRED CONFIG CHANGE:
+      - Add CHORUS_FRUIT to default item_use_ids.
+      - Add DAYLIGHT_DETECTOR & SHULKER_BOX to default switch_ids.
