@@ -3151,3 +3151,4 @@ v0.92.0.11:
       - used to manually recheck if a nation's towns are too far in cases where the nation capital has moved.
     - Added TheNewChat support, courtesy of creatorfromhell.
     - Language files bumped to 0.48.
+    - German.yml updated by Yasu-San & Sprungente.
