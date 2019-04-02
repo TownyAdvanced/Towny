@@ -21,13 +21,13 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -451,7 +451,34 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		removeAllEnemies();
 		removeAllTowns();
 		capital = null;
-		//assistants.clear();
+	}
+
+	/**
+	 * Method for rechecking town distances to a new nation capital/moved nation capital homeblock.
+	 * @throws TownyException
+	 */
+	public void recheckTownDistance() throws TownyException {
+		if(capital != null) {
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				Iterator it = towns.iterator();
+				while(it.hasNext()) {
+					Town town = (Town) it.next();
+					Coord townCoord = town.getHomeBlock().getCoord();
+					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
+						it.remove();
+						continue;
+					}
+
+					double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					if (distance > TownySettings.getNationRequiresProximity()) {
+						town.setNation(null);
+						it.remove();
+						continue;
+					}
+				}
+			}
+		}
 	}
 
 	public void setNeutral(boolean neutral) throws TownyException {

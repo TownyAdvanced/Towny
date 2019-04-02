@@ -258,7 +258,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("deposit")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disabl e"));
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 				
 				if (TownySettings.isBankActionLimitedToBankPlots()) {
 					if (TownyUniverse.isWilderness(player.getLocation().getBlock()))
@@ -1660,6 +1660,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					try {
 						town.setSpawn(player.getLocation());
+						if(town.isCapital()) {
+							nation.recheckTownDistance();
+						}
 						TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_town_spawn"));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -2612,7 +2615,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Check if town is town is free to join.
 				if (!town.isOpen())
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_not_open"), town.getFormattedName()));
-
+				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown())
+					throw new Exception(String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown()));
 				if (town.hasOutlaw(resident))
 					throw new Exception(TownySettings.getLangString("msg_err_outlaw_in_open_town"));
 			}
