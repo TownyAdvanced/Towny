@@ -3140,3 +3140,8 @@ v0.92.0.11:
     - REQUIRED CONFIG CHANGE:
       - Add CHORUS_FRUIT to default item_use_ids.
       - Add DAYLIGHT_DETECTOR & SHULKER_BOX to default switch_ids.
+      - protection.town_mob_removal_entities should be changed to:
+        - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
+      - protection.world_mob_removal_entities should be changed to:
+        - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
+    - Towny events now support more helpful values for API users, courtesy of ArticDive.
