@@ -652,7 +652,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-
 				line = kvFile.get("outlaws");
 				if (line != null) {
 					tokens = line.split(",");
