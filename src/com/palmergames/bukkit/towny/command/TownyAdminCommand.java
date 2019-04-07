@@ -358,8 +358,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void parseAdminResidentCommand(String[] split) throws TownyException {
-		if (split.length == 0 || split[0].equalsIgnoreCase("?")){
+	public void parseAdminResidentCommand(String[] split) throws TownyException
+	{
+		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
+		{
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin resident"));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin resident", "[resident]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin resident", "[resident] rename [newname]", ""));
@@ -367,10 +369,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		try {
+		try
+		{
 			Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
 
-			if (split.length == 1){
+			if (split.length == 1)
+			{
 				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
 				return;
 			}
@@ -378,11 +382,46 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode(split[1].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			if(split[1].equalsIgnoreCase("rename")){	
-				if (!NameValidation.isBlacklistName(split[2])) {
+			if(split[1].equalsIgnoreCase("rename"))
+			{
+				if (!NameValidation.isBlacklistName(split[2]))
+				{
 					TownyUniverse.getDataSource().renamePlayer(resident, split[2]);
-				} else
+				}
+				else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
+			}
+			else if(split[1].equalsIgnoreCase("unjail"))
+			{
+				Player jailedPlayer = TownyUniverse.getPlayer(resident);
+
+				if(resident.isJailed())
+				{
+					resident.setJailed(false);
+					final String town = resident.getJailTown();
+					final int index = resident.getJailSpawn();
+					try
+					{
+						final Location loc = Bukkit.getWorld(TownyUniverse.getDataSource().getTownWorld(town).getName()).getSpawnLocation();
+
+						// Use teleport warmup
+						jailedPlayer.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+						TownyUniverse.jailTeleport(jailedPlayer, loc);
+
+						resident.removeJailSpawn();
+						resident.setJailTown(" ");
+						TownyMessaging.sendMsg(player, "You have been freed from jail.");
+						TownyMessaging.sendTownMessagePrefixed(TownyUniverse.getDataSource().getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
+					}
+					catch (TownyException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+					throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
+				}
 			}
 
 		} catch (NotRegisteredException e) {
