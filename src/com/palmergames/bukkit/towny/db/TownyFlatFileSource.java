@@ -658,14 +658,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
-							try
-							{
+							try {
 								Resident outlaw = getResident(token);
 								if (outlaw != null)
 									town.addOutlaw(outlaw);
 							}
-							catch(NotRegisteredException e)
-							{
+							catch(NotRegisteredException e) {
 								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
 							}
 						}
