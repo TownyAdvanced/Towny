@@ -3152,3 +3152,6 @@ v0.92.0.11:
     - Added TheNewChat support, courtesy of creatorfromhell.
     - Language files bumped to 0.48.
     - German.yml updated by Yasu-San & Sprungente.
+0.93.0.6:
+    - New Command: /ta resident {resident} unjail, courtesy of KarlOfDuty
+      - Admin command to unjail a resident
