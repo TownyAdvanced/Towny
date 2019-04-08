@@ -2953,6 +2953,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
 					throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
+				if(!town.hasHomeBlock() && world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
+					throw new TownyException(TownySettings.getLangString("msg_too_close"));
+
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);
 				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
