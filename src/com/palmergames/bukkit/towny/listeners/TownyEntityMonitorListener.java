@@ -452,6 +452,8 @@ public class TownyEntityMonitorListener implements Listener {
 				}							
 				return;			
 			}
+			if (!attackerResident.hasTown()) 
+				return;
 
 			// Try outlaw jailing first.
 			if (TownySettings.isJailingAttackingOutlaws()) {
@@ -507,63 +509,61 @@ public class TownyEntityMonitorListener implements Listener {
 					}
 				}
 			}
-			// Try enemy jailing second
-			if (!attackerResident.hasTown()) { 
-				return;
-			} else {
-				Town town = null;
-				try {					
-					town = attackerResident.getTown();
-				} catch (NotRegisteredException e1) {
-					e1.printStackTrace();
-				}			
 			
-				if (TownyUniverse.getTownBlock(loc) == null)
-					return;
-					
-				try {
-					if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
-						return;
-				} catch (NotRegisteredException e1) {
-					e1.printStackTrace();
-				}
-				if (!attackerResident.hasNation() || !defenderResident.hasNation()) 
-					return;
-				try {
-					if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
-						return;
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}								
-				if (!town.hasJailSpawn()) 
-					return;
+			// Try enemy jailing second
+			Town town = null;
+			try {					
+				town = attackerResident.getTown();
+			} catch (NotRegisteredException e1) {
+				e1.printStackTrace();
+			}			
+		
+			if (TownyUniverse.getTownBlock(loc) == null)
+				return;
 				
-				if (!TownyUniverse.isWarTime()) {
-					defenderResident.setJailed(defenderPlayer, 1, town);
-				} else {
-					TownBlock jailBlock = null;
-					Integer index = 1;
-					for (Location jailSpawn : town.getAllJailSpawns()) {
-						try {
-							jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
-						} catch (TownyException e) {
-							e.printStackTrace();
-						} 
-						if (War.isWarZone(jailBlock.getWorldCoord())) {
-							defenderResident.setJailed(defenderPlayer, index, town);
-							try {
-								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-							} catch (TownyException e) {
-							}
-							return;
-						}
-						index++;
-						TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
-					}
-					TownyMessaging.sendTownMessage(town, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+			try {
+				if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
 					return;
-				}
+			} catch (NotRegisteredException e1) {
+				e1.printStackTrace();
 			}
+			if (!attackerResident.hasNation() || !defenderResident.hasNation()) 
+				return;
+			try {
+				if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
+					return;
+			} catch (NotRegisteredException e) {
+				e.printStackTrace();
+			}								
+			if (!town.hasJailSpawn()) 
+				return;
+			
+			if (!TownyUniverse.isWarTime()) {
+				defenderResident.setJailed(defenderPlayer, 1, town);
+			} else {
+				TownBlock jailBlock = null;
+				Integer index = 1;
+				for (Location jailSpawn : town.getAllJailSpawns()) {
+					try {
+						jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
+					} catch (TownyException e) {
+						e.printStackTrace();
+					} 
+					if (War.isWarZone(jailBlock.getWorldCoord())) {
+						defenderResident.setJailed(defenderPlayer, index, town);
+						try {
+							TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+						} catch (TownyException e) {
+						}
+						return;
+					}
+					index++;
+					TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
+				}
+				TownyMessaging.sendTownMessage(town, TownySettings.getWarPlayerCannotBeJailedPlotFallenMsg());
+				return;
+			}
+
 		}
 	}
 }

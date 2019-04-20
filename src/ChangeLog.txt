@@ -3157,4 +3157,4 @@ v0.92.0.11:
       - Admin command to unjail a resident.
     - Fixed an exploit where towns with no plots circumvented minimum claim distance settings, courtesy of KarlOfDuty.
     - Fix for safe mode when reading outdated outlaw list in towns, courtesy of KarlOfDuty.
-    
+    - Fix for NPE where Towny would try to jail a player for being killed by a townless player.
