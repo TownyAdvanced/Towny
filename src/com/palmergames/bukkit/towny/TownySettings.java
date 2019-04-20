@@ -2551,6 +2551,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_WELCOME_MESSAGE);
 	}
 	
+	public static int getMaxTownsPerNation() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_TOWNS_PER_NATION);
+	}
+	
 	public static double getSpawnTravelCost() {
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC);
 	}

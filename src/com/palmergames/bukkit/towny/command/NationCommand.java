@@ -872,6 +872,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), resident.getTown().getName()));
 	        	return;
 	        }
+	        
+	        if (TownySettings.getMaxTownsPerNation() > 0) {
+	        	if (nation.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
+	        	TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
+	        	return;
+	        	}	
+	        }
 
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());

@@ -539,6 +539,11 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nations,",
 			"# when there is a war or peace."),
+	GNATION_SETTINGS_MAX_TOWNS_PER_NATION(
+			"global_nation_settings.max_towns_per_nation",
+			"0",
+			"# If higher than 0, it will limit how many towns can be joined into a nation.",
+			"# Does not affect existing nations that are already over the limit."),
     GNATION_DEF_PUBLIC(
             "global_nation_settings.default.public",
             "false",

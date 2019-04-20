@@ -3158,3 +3158,7 @@ v0.92.0.11:
     - Fixed an exploit where towns with no plots circumvented minimum claim distance settings, courtesy of KarlOfDuty.
     - Fix for safe mode when reading outdated outlaw list in towns, courtesy of KarlOfDuty.
     - Fix for NPE where Towny would try to jail a player for being killed by a townless player.
+    - New Config Option: global_nation_settings.max_towns_per_nation
+      - default: 0
+      - If higher than 0, it will limit how many towns can be joined into a nation.
+      - Does not affect existing nations that are already over the limit.

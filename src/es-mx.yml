@@ -833,3 +833,4 @@ msg_no_funds_claim2: '&cTown cannot afford to claim %s town blocks costing %s. A
 msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
 msg_err_not_enough_variables: '&cNot enough variables: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
+msg_err_nation_over_town_limit: '&cYour nation has reached the maximum number of allowed towns-per-nation: %s.'
