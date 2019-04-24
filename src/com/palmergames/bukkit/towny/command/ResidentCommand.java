@@ -273,6 +273,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 			notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
+			if (resident.isJailed())
+			{
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
+				return;
+			}
+
 			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null) {
 
 				spawnLoc = player.getBedSpawnLocation();
@@ -328,11 +334,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			if (UsingESS && !isTownyAdmin) {
 				try {
-					User user = plugin.getEssentials().getUser(player);
+					User essentialsUser = plugin.getEssentials().getUser(player);
 
-					if (!user.isJailed()) {
+					// This jail check is specifically for essentials jails, not towny ones.
+					if (!essentialsUser.isJailed()) {
 
-						Teleport teleport = user.getTeleport();
+						Teleport teleport = essentialsUser.getTeleport();
 						if (!chunk.isLoaded())
 							chunk.load();
 						// Cause an essentials exception if in cooldown.
