@@ -1551,8 +1551,55 @@ public enum ConfigNodes {
 			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true.");
+			"# Only under affect when explosions_break_blocks is true."),
 
+	WAR_SIEGE(
+			"war.siege",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                   Siege-War settings                 | #",
+			"# |                                                      | #",
+			"# |               Separate from other war modes          | #",
+			"# |                                                      | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	WAR_SIEGE_ENABLED(
+			"war.siege.enabled",
+			"false",
+			"# If true, the siegewar feature is enabled.",
+			"# if false, the siegewar feature is disabled."),
+
+	WAR_SIEGE_BEGIN_SIEGES(
+			"war.siege.begin.sieges",
+			"true",
+			"# If true, sieges can be started."),
+	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
+			"war.siege.max.siege.duration.hours",
+			"72",
+			"# Maximum siege duration.",
+			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
+			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
+	WAR_SIEGE_POST_SIEGE_PAUSE_MODIFIER(
+			"war.siege.post.siege.pause.modifier",
+			"3",
+			"# After a siege ends, this value determines the 'pause' until another siege is allowed.",
+			"# The duration will be  TOTAL_DURATION_OF_LAST_SIEGE * MODIFIER"),
+	WAR_SIEGE_BEGIN_REVOLTS(
+			"war.siege.begin.revolts",
+			"true",
+			"# If true, revolts can be started."),
+	WAR_SIEGE_MAX_REVOLT_DURATION_HOURS(
+			"war.siege.max.revolt.duration.hours",
+			"72",
+			"# Maximum revolt duration."),
+	WAR_SIEGE_POST_REVOLT_PAUSE_HOURS(
+			"war.siege.post.revolt.pause.hours",
+			"240",
+			"# After a revolt ends, this value determines the 'pause' until another revolt is allowed.",
+			"# If the value is too high, occupied towns may be unsatisfied that they cannot revolt often enough.",
+			"# If the value is too low, empire builders may be unsatisfied due to constant revolts of occupied towns.",
 
 	private final String Root;
 	private final String Default;
