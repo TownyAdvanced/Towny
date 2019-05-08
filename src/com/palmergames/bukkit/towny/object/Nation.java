@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -39,6 +40,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private List<Town> towns = new ArrayList<Town>();
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
+	private List<Siege> sieges = new ArrayList<Siege>();
 	private Town capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;

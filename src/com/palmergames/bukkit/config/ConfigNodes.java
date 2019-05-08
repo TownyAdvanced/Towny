@@ -1570,36 +1570,82 @@ public enum ConfigNodes {
 			"false",
 			"# If true, the siegewar feature is enabled.",
 			"# if false, the siegewar feature is disabled."),
-
-	WAR_SIEGE_BEGIN_SIEGES(
-			"war.siege.begin.sieges",
+	WAR_SIEGE_ALLOW_ASSAULT_SIEGES(
+			"war.siege.allow.assault.sieges",
 			"true",
-			"# If true, sieges can be started."),
+			"# If true, assault sieges are allowed."),
+	WAR_SIEGE_ALLOW_REVOLT_SIEGES(
+			"war.siege.allow.revolt.sieges",
+			"true",
+			"# If true, revolt sieges are allowed."),
+
+	WAR_SIEGE_ATTACKER_COST_UPFRONT(
+			"war.siege.attacker.cost.upfront",
+			"10000",
+			"#..."),
+	WAR_SIEGE_ATTACKER_COST_UPKEEP_PER_HOUR(
+			"war.siege.attacker.cost.upkeep.per.hour",
+			"500",
+			"#..."),
+	WAR_SIEGE_ATTACKER_COST_PER_CASUALTY(
+			"war.siege.attacker.cost.per.casualty",
+			"1000",
+			"#..."),
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
 			"war.siege.max.siege.duration.hours",
 			"72",
 			"# Maximum siege duration.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
-	WAR_SIEGE_POST_SIEGE_PAUSE_MODIFIER(
-			"war.siege.post.siege.pause.modifier",
+
+	WAR_SIEGE_WARZONE_RADIUS(
+			"war.siege.warzone.radius",
+			"50",
+			"# This value determines the size of the 'warzone'.",
+			"# The distance is measured in blocks starting from the homeblock.",
+			"# The distance applies diagonally too. thus the warzone is in the shape of a rectangle."),
+	WAR_SIEGE_ACTION_ATTACK_MAX_DURATION_SECONDS(
+			"war.siege.action.attack.max.duration.seconds",
+			"300",
+			"#..."),
+	WAR_SIEGE_ACTION_ATTACK_POINTS_PER_PLAYER(
+			"war.siege.action.attack.points.per.player",
+			"100",
+			"# This setting determines the number of siege points awarded if an attack action succeeds.",
+			"# The award is calculated based on the number of attacking players standing in the warzone.",
+			"# The award is calculated at the exact time that the action duration expires"),
+	WAR_SIEGE_ACTION_DEFENCE_MAX_DURATION_SECONDS(
+			"war.siege.action.attack.max.duration.seconds",
+			"300",
+			"#..."),
+	WAR_SIEGE_ACTION_DEFENCE_POINTS_PER_PLAYER(
+			"war.siege.action.defence.points.per.player",
+			"100",
+			"# This setting determines the number of siege points awarded if a defence action succeeds.",
+			"# The award is calculated based on the number of defending players standing in the warzone.",
+			"# The award is calculated at the exact time that the action duration expires"),
+
+	WAR_SIEGE_OBJECTIVE_PLUNDER_AMOUNT(
+			"war.siege.objective.plunder.amount",
+			"50000",
+			"#..."),
+	WAR_SIEGE_OBJECTIVE_DISRUPT_DURATION_HOURS(
+			"war.siege.objective.disrupt.duration.hours",
+			"24",
+			"#..."),
+	WAR_SIEGE_OBJECTIVE_POISON_DURATION_HOURS(
+			"war.siege.objective.poison.duration.hours",
+			"24",
+			"#..."),
+
+	WAR_SIEGE_ASSAULT_COOLDOWN_DURATION_MODIFER(
+			"war.siege.attack.cooldown.duration.modifier",
 			"3",
-			"# After a siege ends, this value determines the 'pause' until another siege is allowed.",
-			"# The duration will be  TOTAL_DURATION_OF_LAST_SIEGE * MODIFIER"),
-	WAR_SIEGE_BEGIN_REVOLTS(
-			"war.siege.begin.revolts",
-			"true",
-			"# If true, revolts can be started."),
-	WAR_SIEGE_MAX_REVOLT_DURATION_HOURS(
-			"war.siege.max.revolt.duration.hours",
-			"72",
-			"# Maximum revolt duration."),
-	WAR_SIEGE_POST_REVOLT_PAUSE_HOURS(
-			"war.siege.post.revolt.pause.hours",
+			"#..."),
+	WAR_SIEGE_REVOLT_COOLDOWN_DURATION_HOURS(
+			"war.siege.revolt.cooldown.duration",
 			"240",
-			"# After a revolt ends, this value determines the 'pause' until another revolt is allowed.",
-			"# If the value is too high, occupied towns may be unsatisfied that they cannot revolt often enough.",
-			"# If the value is too low, empire builders may be unsatisfied due to constant revolts of occupied towns.",
+			"#...");
 
 	private final String Root;
 	private final String Default;
