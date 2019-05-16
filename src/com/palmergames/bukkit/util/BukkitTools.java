@@ -1,14 +1,8 @@
 package com.palmergames.bukkit.util;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import de.themoep.idconverter.IdMappings;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -21,10 +15,14 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-
-import de.themoep.idconverter.IdMappings;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -186,7 +184,11 @@ public class BukkitTools {
 	@Deprecated
 	public static int getTypeId(Block block) {
 		return block.getType().getId();
-	}	
+	}
+
+	public static String getTypeKey(Block block) {
+		return block.getType().getKey().toString();
+	}
 	// Will be removed completely when the new plotsnapshot system is made.
 	@Deprecated
 	public static byte getData(Block block) {

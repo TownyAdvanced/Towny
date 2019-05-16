@@ -5,28 +5,23 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
-
 import de.themoep.idconverter.IdMappings;
-import de.themoep.idconverter.IdMappings.IdType;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.data.Directional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlotBlockData {
 
-	private int defaultVersion = 2;
+	private int defaultVersion = 3;
 
 	private String worldName;
 	private TownBlock townBlock;
 	private int x, z, size, height, version;
 
-	private List<Integer> blockList = new ArrayList<Integer>(); // Stores the original plot blocks
+	private List<String> blockList = new ArrayList<>(); // Stores the original plot blocks
 	private int blockListRestored; // counter for the next block to test
 
 	public PlotBlockData(TownBlock townBlock) {
@@ -43,7 +38,7 @@ public class PlotBlockData {
 
 	public void initialize() {
 
-		List<Integer> blocks = getBlockArr();
+		List<String> blocks = getBlockArr();
 		if (blocks != null) {
 			setBlockList(blocks); //fill array
 			resetBlockListRestored();
@@ -55,9 +50,9 @@ public class PlotBlockData {
 	 * 
 	 * @return
 	 */
-	private List<Integer> getBlockArr() {
+	private List<String> getBlockArr() {
 
-		List<Integer> list = new ArrayList<Integer>();
+		List<String> list = new ArrayList<>();
 		Block block = null;
 
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
@@ -75,14 +70,14 @@ public class PlotBlockData {
 
 					case 1:
 					case 2:
-						list.add(BukkitTools.getTypeId(block));
-						list.add((int) BukkitTools.getData(block));
+						list.add(BukkitTools.getTypeKey(block));
+						list.add(((int) BukkitTools.getData(block)) + "");
 						break;
 					case 3:
 						//TODO: Whole new regen system required. 
 						//Probably tied to using TownBlockSize of 16 (matching up to MC chunks which we can clone.
 					default:
-						list.add(block.getType().getId());
+						list.add(block.getType().getKey().toString());
 					}
 
 				}
@@ -113,6 +108,7 @@ public class PlotBlockData {
 
 			case 1:
 			case 2:
+			case 3:
 				scale = 2;
 				break;
 	
@@ -135,17 +131,22 @@ public class PlotBlockData {
 
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
+			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getKey() " + storedData.getKey());
 			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getData() " + storedData.getData());
-			if (storedData.getData() == 0) {
-				TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
-				mat = BukkitTools.getMaterial(storedData.getTypeId());
-			} else {
-				try {
-					mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId()+ ":" + storedData.getData() )).getFlatteningType());					
-				} catch (NullPointerException e) {
-					// Sometimes blocks facing causes null lookups, we fall back to the base material.
-					mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
+			if(storedData.usesID()) {
+				if(storedData.getData() == 0) {
+					TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
+					mat = BukkitTools.getMaterial(storedData.getTypeId());
+				} else {
+					try {
+						mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId() + ":" + storedData.getData())).getFlatteningType());
+					} catch(NullPointerException e) {
+						// Sometimes blocks facing causes null lookups, we fall back to the base material.
+						mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
+					}
 				}
+			} else {
+				mat = Material.matchMaterial(storedData.getKey());
 			}
 			// Increment based upon number of elements
 			blockListRestored += scale;
@@ -197,7 +198,8 @@ public class PlotBlockData {
 
 		case 1:
 		case 2:
-			return new BlockObject(blockList.get(index - 1), (byte) (blockList.get(index) & 0xff));
+		case 3:
+			return new BlockObject(blockList.get(index - 1), (byte) (Integer.valueOf(blockList.get(index)) & 0xff));
 
 		default:
 			return new BlockObject(blockList.get(index), (byte) 0);
@@ -269,7 +271,7 @@ public class PlotBlockData {
 	/**
 	 * @return the blockList
 	 */
-	public List<Integer> getBlockList() {
+	public List<String> getBlockList() {
 
 		return blockList;
 	}
@@ -279,7 +281,7 @@ public class PlotBlockData {
 	 * 
 	 * @param blockList
 	 */
-	public void setBlockList(List<Integer> blockList) {
+	public void setBlockList(List<String> blockList) {
 
 		this.blockList = blockList;
 	}
