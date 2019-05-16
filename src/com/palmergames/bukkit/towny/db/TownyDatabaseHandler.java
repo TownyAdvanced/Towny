@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
@@ -1039,7 +1040,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();			
 		}
 		
-		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
+		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident, !Bukkit.getServer().isPrimaryThread()));
 		
 		universe.setChangedNotify(RENAME_RESIDENT);
 		

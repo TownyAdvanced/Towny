@@ -24,7 +24,8 @@ public class PlotChangeTypeEvent extends Event {
      * @param oldType- Old Type
      * @param newType - New Type
      */
-    public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock) {
+    public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock, boolean async) {
+        super(async);
         this.newType = newType;
         this.oldType = oldType;
         this.townBlock = townBlock;
