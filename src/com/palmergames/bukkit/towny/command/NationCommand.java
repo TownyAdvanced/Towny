@@ -1655,7 +1655,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, "Eg: /nation set capital {town name}");
 					else
 							nation.setCapital(newCapital);
-							nation.recheckTownDistance();
 							plugin.resetCache();
 							TownyMessaging.sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
 				} catch (TownyException e) {

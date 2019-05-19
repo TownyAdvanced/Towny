@@ -228,6 +228,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		this.capital = capital;
 		try {
+			recheckTownDistance();
 			TownyPerms.assignPermissions(capital.getMayor(), null);
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
@@ -461,6 +462,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if(capital != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+
 				Iterator it = towns.iterator();
 				while(it.hasNext()) {
 					Town town = (Town) it.next();
@@ -470,7 +472,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 						continue;
 					}
 
-					double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						town.setNation(null);
 						it.remove();
