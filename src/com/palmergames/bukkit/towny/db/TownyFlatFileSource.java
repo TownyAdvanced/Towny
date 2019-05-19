@@ -16,6 +16,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -205,6 +207,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public String getNationFilename(Nation nation) {
 
 		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations" + FileMgmt.fileSeparator() + nation.getName() + ".txt";
+	}
+
+	public String getSiegeFilename(Siege siege) {
+
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + siege.getAttackingNation().getName() + "_" + siege.getDefendingTown().getName() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
@@ -397,6 +404,56 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Error Loading Nation List at " + line + ", in towny\\data\\nations.txt");
+			e.printStackTrace();
+			return false;
+
+		} finally {
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean loadSiegeList() {
+
+		TownyMessaging.sendDebugMsg("Loading Siege List");
+		String line = null;
+		BufferedReader fin = null;
+		String[] participants;
+		String attackingNationName;
+		String defendingTownName;
+		Nation attackingNation;
+		Town defendingTown;
+
+		try {
+			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			while ((line = fin.readLine()) != null) {
+				if (!line.equals("")) {
+					participants = line.split(",");
+					attackingNationName = participants[0];
+					defendingTownName = participants[1];
+					attackingNation = universe.getNationsMap().get(attackingNationName);
+					defendingTown = universe.getTownsMap().get(defendingTownName);
+					newSiege(attackingNation, defendingTown);
+				}
+			}
+			return true;
+
+		} catch (AlreadyRegisteredException e) {
+			e.printStackTrace();
+			return false;
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Siege List at " + line + ", in towny\\data\\sieges.txt");
 			e.printStackTrace();
 			return false;
 
@@ -1121,6 +1178,101 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 	}
 
+
+	@Override
+	public boolean loadSiege(Siege siege) {
+
+		String line = "";
+		String path = getSiegeFilename(siege);
+		File fileResident = new File(path);
+		if (fileResident.exists() && fileResident.isFile()) {
+			try {
+				KeyValueFile kvFile = new KeyValueFile(path);
+
+				line = kvFile.get("siegeType");
+				if(line.equals("ASSAULT")) {
+					siege.setSiegeType(SiegeType.ASSAULT);
+				} else if(line.equals("REVOLT")) {
+					siege.setSiegeType(SiegeType.REVOLT);
+				} else {
+					siege.setSiegeType(SiegeType.ASSAULT);
+				}
+
+				try {
+				line = kvFile.get("totalSiegePointsAttacker");
+				siege.setTotalSiegePointsAttacker(Integer.parseInt(line));
+				} catch (Exception e) {
+					siege.setTotalSiegePointsAttacker(0);
+				}
+
+				try {
+					line = kvFile.get("totalSiegePointsDefender");
+					siege.setTotalSiegePointsDefender(Integer.parseInt(line));
+				} catch (Exception e) {
+					siege.setTotalSiegePointsDefender(0);
+				}
+
+				try {
+					line = kvFile.get("actualStartTime");
+					siege.setActualStartTime(Long.parseLong(line));
+				} catch (Exception e) {
+					siege.setActualStartTime(0);
+				}
+
+				try {
+					line = kvFile.get("scheduledEndTime");
+					siege.setScheduledEndTime(Long.parseLong(line));
+				} catch (Exception e) {
+					siege.setScheduledEndTime(0);
+				}
+
+				try {
+					line = kvFile.get("actualEndTime");
+					siege.setActualEndTime(Long.parseLong(line));
+				} catch (Exception e) {
+					siege.setActualEndTime(0);
+				}
+
+				try {
+					line = kvFile.get("totalAttackersKilled");
+					siege.setTotalAttackersKilled(Integer.parseInt(line));
+				} catch (Exception e) {
+					siege.setTotalAttackersKilled(0);
+				}
+
+				try {
+					line = kvFile.get("totalDefendersKilled");
+					siege.setTotalDefendersKilled(Integer.parseInt(line));
+				} catch (Exception e) {
+					siege.setTotalDefendersKilled(0);
+				}
+
+				try {
+					line = kvFile.get("totalCostToAttacker");
+					siege.setTotalCostToAttacker(Double.parseDouble(line));
+				} catch (Exception e) {
+					siege.setTotalCostToAttacker(0);
+				}
+
+				try {
+					line = kvFile.get("lastUpkeepTime");
+					siege.setLastUpkeepTime(Long.parseLong(line));
+				} catch (Exception e) {
+					siege.setLastUpkeepTime(0);
+				}
+
+			} catch (Exception e) {
+
+				String filename = getSiegeFilename(siege);
+				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading siege file at line: " + line + ", in file: " + filename);
+				return false;
+			}
+
+			return true;
+		} else
+			return false;
+	}
+
 	@Override
 	public boolean loadWorld(TownyWorld world) {
 
@@ -1623,6 +1775,24 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
+	public boolean saveSiegeList() {
+
+		List<String> list = new ArrayList<>();
+
+		for (Siege siege : getSieges()) {
+			list.add(siege.getAttackingNation().getName() + "," + siege.getDefendingTown().getName());
+		}
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges.txt"));
+
+		return true;
+
+	}
+
+	@Override
 	public boolean saveWorldList() {
 
 		List<String> list = new ArrayList<>();
@@ -1865,6 +2035,31 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 
+	}
+
+	@Override
+	public boolean saveSiege(Siege siege) {
+		List<String> list = new ArrayList<>();
+
+		list.add("siegeType=" + siege.getSiegeType().toString());
+		list.add("attackingNation=" + siege.getAttackingNation().getName());
+		list.add("defendingTown=" + siege.getDefendingTown().getName());
+		list.add("totalSiegePointsAttacker=" + Integer.toString(siege.getTotalSiegePointsAttacker()));
+		list.add("totalSiegePointsAttacker=" + Integer.toString(siege.getTotalSiegePointsDefender()));
+		list.add("actualStartTime=" + Long.toString(siege.getActualStartTime()));
+		list.add("scheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
+		list.add("actualEndTime=" + Long.toString(siege.getActualEndTime()));
+		list.add("totalAttackersKilled=" + Integer.toString(siege.getTotalAttackersKilled()));
+		list.add("totalDefendersKilled=" + Integer.toString(siege.getTotalDefendersKilled()));
+		list.add("totalCostToAttacker=" + Double.toString(siege.getTotalCostToAttacker()));
+		list.add("lastUpkeepTime=" + Long.toString(siege.getLastUpkeepTime()));
+
+		/*
+		 *  Make sure we only save in async
+		 */
+		this.queryQueue.add(new FlatFile_Task(list, getSiegeFilename(siege)));
+
+		return true;
 	}
 
 	@Override

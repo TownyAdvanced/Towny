@@ -22,6 +22,9 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -81,7 +84,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "enemy [add/remove] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_3")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "delete", ""));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "say", "[message]"));
-
 	}
 
 	public NationCommand(Towny instance) {
@@ -167,10 +169,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-		        if ((TownySettings.getNumResidentsCreateNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-		          TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_new_nation")));
-		          return;
-		        }
+				if ((TownySettings.getNumResidentsCreateNation() > 0) && (resident.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
+					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_new_nation")));
+					return;
+				}
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode()))
 					throw new TownyException(TownySettings.getNotPermToNewNationLine());
@@ -199,7 +201,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
 					Nation tbNation = tb.getTown().getNation();
-					Nation pNation= TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					Nation pNation = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -236,7 +238,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				nationLeave(player);
 
-			} else if(split[0].equalsIgnoreCase("spawn")){
+			} else if (split[0].equalsIgnoreCase("spawn")) {
 			    /*
 			        Parse standard nation spawn command.
 			     */
@@ -245,8 +247,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				nationSpawn(player, newSplit);
-            }
-			else if (split[0].equalsIgnoreCase("deposit")) {
+			} else if (split[0].equalsIgnoreCase("deposit")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
@@ -256,7 +257,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					TownBlock tb = TownyUniverse.getTownBlock(player.getLocation());
 					Nation tbNation = tb.getTown().getNation();
-					Nation pNation= TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					Nation pNation = TownyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 					if ((tbNation != pNation) || (!tb.getTown().isCapital()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -284,10 +285,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					} catch (NumberFormatException e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_must_be_int"));
 					}
+
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			}  else {
+			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("begin")) {
+
+				String[] siegeObjectives = StringMgmt.remArgs(split, 2);
+				attemptToStartAssaultSiege(player, siegeObjectives);
+
+			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 
 				if (split[0].equalsIgnoreCase("rank")) {
@@ -312,7 +319,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nationAdd(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("invite") || split[0].equalsIgnoreCase("invites")) {
-						parseInviteCommand(player, newSplit);
+					parseInviteCommand(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("kick")) {
 
@@ -381,12 +388,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					try {
 						final Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && ( (resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation) )  || !resident.hasTown() )) {
+						if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && ((resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation)) || !resident.hasTown())) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
 						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
 							@Override
-						    public void run() {
+							public void run() {
 								TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation));
 							}
 						});
@@ -403,7 +410,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 
 	}
+
 	private static final List<String> invite = new ArrayList<String>();
+
 	static {
 		invite.add(ChatTools.formatTitle("/town invite"));
 		invite.add(ChatTools.formatCommand("", "/nation", "invite [town]", TownySettings.getLangString("nation_invite_help_1")));
@@ -475,10 +484,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
 				List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, nation);
-				if (onlineResidents.size() > 0 ) {
+				if (onlineResidents.size() > 0) {
 					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
-					TownyMessaging.sendMessage(player, ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation)));
+					TownyMessaging.sendMessage(player, ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.White + "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation)));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -537,7 +546,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Is this a known rank?
 			 */
 			if (!TownyPerms.getNationRanks().contains(rank)) {
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getNationRanks(), ",") ));
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getNationRanks(), ",")));
 				return;
 			}
 			/*
@@ -615,6 +624,87 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} catch (EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
+	}
+
+	private void attemptToStartAssaultSiege(Player player, String[] siegeObjectives) {
+
+		try {
+			if (!TownySettings.getWarSiegeEnabled())
+				throw new TownyException("Siege war disabled");  //todo - replace w lang string
+
+			if (!TownySettings.getWarSiegeAllowAssaultSieges())
+				throw new TownyException("Siege war assault sieges not allowed");
+
+			//TODO - test. Try this if player is not in a nation. See if it is already coered
+
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
+				throw new TownyException("You don't have permission by rank to start a siege");
+
+			Town defendingTown = TownyUniverse.getTownWherePlayerIsLocated(player);
+			if (defendingTown == null)
+				throw new TownyException("You must be standing in a town to start a siege");
+
+			if (!SiegeWarUtil.isPlayerWithinWarzone(player, defendingTown))
+				throw new TownyException("You must be near to the town homeblock to start a siege");
+
+			if (player.isFlying())
+				throw new TownyException("You cannot be flying to start a siege");
+
+			Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
+			Nation nationOfDefendingTown = defendingTown.getNation();
+			if (defendingTown.hasNation() && !nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
+				throw new TownyException("If target town has a nation AND is not an enemy of your town, you cannot attack");
+
+			//Ensure we are not already queuing to attack, actually attacking, or have recently attacked
+			if (nationOfAttackingPlayer.areAnySiegesTargetingGivenTown(defendingTown))
+				throw new TownyException("You are already attacking or queing to attack the town, or you have recently attacked." +
+						"If you have recently attacked, you must wait until after the next siege cooldown");
+
+			double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
+			if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
+				throw new TownyException("You cannot affort to start an assault siege");
+
+			//All checks are passed and we are ready to start the siege
+
+			//Deduct upfront cost
+			nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege");
+
+			//Setup Siege
+			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown, siegeObjectives);
+
+		} catch (TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		} catch (EconomyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		}
+	}
+
+	private Siege newSiege(SiegeType siegeType,
+						   Nation attackingNation,
+						   Town defendingTown,
+						   String[] objectives) throws TownyException {
+		//Setup the siege
+		TownyUniverse.getDataSource().newSiege(attackingNation, defendingTown);
+		Siege siege = TownyUniverse.getDataSource().getSiege(attackingNation, defendingTown);
+		siege.setSiegeType(siegeType);
+		siege.setObjectives(objectives);
+
+		//Add siege to nation
+		attackingNation.addSiege(siege);
+
+		//Add siege to town
+		defendingTown.addSiege(siege);
+
+		//Save the siege to DB
+		TownyUniverse.getDataSource().saveNation(attackingNation);
+		TownyUniverse.getDataSource().saveTown(defendingTown);
+		TownyUniverse.getDataSource().saveSiege(siege);
+		TownyUniverse.getDataSource().saveSiegeList();
+
+		//BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
+		//TODO - Do we announce a new siege event like this???
+
+		return siege;
 	}
 
 	private void nationDeposit(Player player, int amount) {

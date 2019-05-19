@@ -112,6 +112,27 @@ public class TownyUniverse extends TownyObject {
 		}
 	}
 
+	public static Town getTownWherePlayerIsLocated(Player player) throws TownyException {
+		try {
+			TownyWorld world = getDataSource().getWorld(player.getWorld().getName());
+			Coord coord = Coord.parseCoord(player);
+			if (world.hasTownBlock(coord))
+				return world.getTownBlock(coord).getTown();
+			else {
+				return null;
+			}
+		} catch (NotRegisteredException x) {
+			return null;
+		}
+
+	}
+
+	public static Nation getNationOfPlayer(Player player) throws NotRegisteredException{
+		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+		Nation nationOfPlayer = resident.getTown().getNation();
+		return nationOfPlayer;
+	}
+
 	public Location getNationSpawnLocation(Player player) throws TownyException {
 
 		try {
@@ -1291,4 +1312,7 @@ public class TownyUniverse extends TownyObject {
 		return false;
 	}
 
+	public List<Siege> getSieges() {
+		return sieges;
+	}
 }

@@ -38,7 +38,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	private List<Siege> sieges = new ArrayList<Siege>();
+	private List<Siege> siegesQueue = new ArrayList<Siege>();
+	private List<Siege> recentSieges = new ArrayList<Siege>();
 
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
@@ -54,6 +55,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
+	private Siege activeSiege;
 
 	public Town(String name) {
 
@@ -1253,5 +1255,25 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		
 		return (getMaxOutpostSpawn() > getOutpostLimit());
 
+	}
+
+	public List<Siege> getSiegesQueue() {
+		return siegesQueue;
+	}
+
+	public Siege getActiveSiege() {
+		return activeSiege;
+	}
+
+	public List<Siege> getRecentSieges() {
+		return recentSieges;
+	}
+
+	public void addSiege(Siege siege) {
+		if(activeSiege == null) {
+			activeSiege = siege;
+		} else {
+			siegesQueue.add(siege);
+		}
 	}
 }

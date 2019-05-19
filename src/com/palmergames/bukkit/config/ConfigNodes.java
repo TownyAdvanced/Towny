@@ -1581,15 +1581,15 @@ public enum ConfigNodes {
 
 	WAR_SIEGE_ATTACKER_COST_UPFRONT(
 			"war.siege.attacker.cost.upfront",
-			"10000",
+			"10000.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_UPKEEP_PER_HOUR(
 			"war.siege.attacker.cost.upkeep.per.hour",
-			"500",
+			"500.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_PER_CASUALTY(
 			"war.siege.attacker.cost.per.casualty",
-			"1000",
+			"1000.0",
 			"#..."),
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
 			"war.siege.max.siege.duration.hours",

@@ -27,6 +27,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 
@@ -208,6 +210,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	public List<Siege> getSieges() {
+		return universe.getSieges();
+	}
+
+	@Override
 	public Nation getNation(String name) throws NotRegisteredException {
 
 		try {
@@ -240,6 +247,48 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		
 		return universe.getNationsMap().get(name);
+	}
+
+	@Override
+	public void newSiege(Nation attackingNation, Town defendingTown) throws AlreadyRegisteredException {
+
+		lock.lock();
+
+		try {
+			if(isSiegeAlreadyRegistered(attackingNation,defendingTown))
+				throw new AlreadyRegisteredException("Siege is already registered");
+
+			Siege siege = new Siege(attackingNation, defendingTown);
+
+			getSieges().add(siege);
+
+		} finally {
+			lock.unlock();
+		}
+		//universe.setChangedNotify(NEW_SIEGE);  //Todo - what is this - should I add it?
+	}
+
+	@Override
+	public Siege getSiege(Nation attackingNation, Town defendingTown) throws TownyException {
+		for(Siege siege: getSieges()) {
+			if(siege.getDefendingTown() == defendingTown
+					&& siege.getAttackingNation() == attackingNation) {
+				return siege;
+			}
+		}
+
+		throw new TownyException("Siege not found");
+	}
+
+	private boolean isSiegeAlreadyRegistered(Nation attackingNation, Town defendingTown) {
+		for(Siege siege: getSieges()) {
+			if(siege.getDefendingTown() == defendingTown
+					&& siege.getAttackingNation() == attackingNation) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override

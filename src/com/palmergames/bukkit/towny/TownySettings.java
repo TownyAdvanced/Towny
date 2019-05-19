@@ -2586,5 +2586,21 @@ public class TownySettings {
 	public static double getNationRenameCost() {
 		return getDouble(ConfigNodes.ECO_NATION_RENAME_COST);
 	}
+
+	public static boolean getWarSiegeEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
+	}
+
+	public static boolean getWarSiegeAllowAssaultSieges() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_ASSAULT_SIEGES);
+	}
+
+	public static int getWarSiegeWarzoneRadius() {
+		return getInt(ConfigNodes.WAR_SIEGE_WARZONE_RADIUS);
+	}
+
+	public static double getWarSiegeAttackerCostUpfront() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT);
+	}
 }
 

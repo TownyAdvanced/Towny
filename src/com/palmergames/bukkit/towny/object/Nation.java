@@ -25,6 +25,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -723,5 +724,18 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public double getSpawnCost() {
 
 		return spawnCost;
+	}
+
+	public boolean areAnySiegesTargetingGivenTown(Town town) {
+		for(Siege siege: sieges) {
+			if(siege.getDefendingTown() == town) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void addSiege(Siege siege) {
+		sieges.add(siege);
 	}
 }
