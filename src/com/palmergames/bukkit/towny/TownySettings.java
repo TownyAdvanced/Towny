@@ -2602,5 +2602,9 @@ public class TownySettings {
 	public static double getWarSiegeAttackerCostUpfront() {
 		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT);
 	}
+
+	public static long getWarSiegeTimerIntervalSeconds() {
+		return getInt(ConfigNodes.WAR_SIEGE_TIMER_INTERVAL_SECONDS);
+	}
 }
 

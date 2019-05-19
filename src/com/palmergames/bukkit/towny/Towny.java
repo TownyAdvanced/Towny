@@ -238,6 +238,7 @@ public class Towny extends JavaPlugin {
 
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleSiegeWarTimer(false);
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
@@ -274,6 +275,7 @@ public class Towny extends JavaPlugin {
 		// make sure the timers are stopped for a reset
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
+		TownyTimerHandler.toggleSiegeWarTimer(false);
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
@@ -282,6 +284,7 @@ public class Towny extends JavaPlugin {
 		// Start timers
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
 		TownyTimerHandler.toggleDailyTimer(true);
+		TownyTimerHandler.toggleSiegeWarTimer(true);
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);

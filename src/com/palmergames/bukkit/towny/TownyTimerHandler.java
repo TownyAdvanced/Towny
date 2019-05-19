@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
@@ -42,6 +43,7 @@ public class TownyTimerHandler{
 	
 	private static int townyRepeatingTask = -1;
 	private static int dailyTask = -1;
+	private static int siegeWarTask = -1;
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
@@ -108,6 +110,27 @@ public class TownyTimerHandler{
 		universe.setChangedNotify(TOGGLE_DAILY_TIMER);
 	}
 
+	public static void toggleSiegeWarTimer(boolean on) {
+
+		if(!TownySettings.getWarSiegeEnabled()) {
+			TownyMessaging.sendDebugMsg("Siege War is disabled in settings. Siege war timer not changed");
+			return;
+		}
+
+		if (on && !isSiegeWarTimerRunning()) {
+			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), 0, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
+
+			if (siegeWarTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule siege war timer.");
+
+		} else if (!on && isDailyTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(siegeWarTask);
+			siegeWarTask = -1;
+		}
+		TownyMessaging.sendDebugMsg("Siege War Timer set to " + on);
+		//universe.setChangedNotify(TOGGLE_DAILY_TIMER); //todo will we do something here
+	}
+
 	public static void toggleHealthRegen(boolean on) {
 
 		if (on && !isHealthRegenRunning()) {
@@ -158,6 +181,11 @@ public class TownyTimerHandler{
 	}
 
 	public static boolean isDailyTimerRunning() {
+
+		return dailyTask != -1;
+	}
+
+	public static boolean isSiegeWarTimerRunning() {
 
 		return dailyTask != -1;
 	}

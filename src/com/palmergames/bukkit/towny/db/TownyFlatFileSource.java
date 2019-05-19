@@ -422,7 +422,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		TownyMessaging.sendDebugMsg("Loading Siege List");
 		String line = null;
-		BufferedReader fin = null;
+		BufferedReader fin;
 		String[] participants;
 		String attackingNationName;
 		String defendingTownName;
