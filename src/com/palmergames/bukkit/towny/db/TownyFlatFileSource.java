@@ -1199,8 +1199,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 				try {
-				line = kvFile.get("totalSiegePointsAttacker");
-				siege.setTotalSiegePointsAttacker(Integer.parseInt(line));
+					line = kvFile.get("totalSiegePointsAttacker");
+					siege.setTotalSiegePointsAttacker(Integer.parseInt(line));
 				} catch (Exception e) {
 					siege.setTotalSiegePointsAttacker(0);
 				}
@@ -1259,6 +1259,20 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					siege.setLastUpkeepTime(Long.parseLong(line));
 				} catch (Exception e) {
 					siege.setLastUpkeepTime(0);
+				}
+
+				try {
+					line = kvFile.get("active");
+					siege.setActive(Boolean.parseBoolean(line));
+				} catch (Exception e) {
+					siege.setActive(false);
+				}
+
+				try {
+					line = kvFile.get("active");
+					siege.setActive(Boolean.parseBoolean(line));
+				} catch (Exception e) {
+					siege.setActive(false);
 				}
 
 			} catch (Exception e) {
@@ -2053,6 +2067,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("totalDefendersKilled=" + Integer.toString(siege.getTotalDefendersKilled()));
 		list.add("totalCostToAttacker=" + Double.toString(siege.getTotalCostToAttacker()));
 		list.add("lastUpkeepTime=" + Long.toString(siege.getLastUpkeepTime()));
+		list.add("active=" + Boolean.toString(siege.isActive()));
+
 
 		/*
 		 *  Make sure we only save in async

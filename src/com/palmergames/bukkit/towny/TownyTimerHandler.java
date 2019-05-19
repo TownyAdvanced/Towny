@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
@@ -118,7 +119,7 @@ public class TownyTimerHandler{
 		}
 
 		if (on && !isSiegeWarTimerRunning()) {
-			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), 0, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
+			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new SiegeWarTimerTask(plugin), 0, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
 
 			if (siegeWarTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule siege war timer.");

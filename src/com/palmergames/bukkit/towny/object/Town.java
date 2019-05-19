@@ -38,7 +38,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	private List<Siege> siegesQueue = new ArrayList<Siege>();
+	private List<Siege> siegeQueue = new ArrayList<Siege>();
 	private List<Siege> recentSieges = new ArrayList<Siege>();
 
 	private Resident mayor;
@@ -1257,8 +1257,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	}
 
-	public List<Siege> getSiegesQueue() {
-		return siegesQueue;
+	public List<Siege> getSiegeQueue() {
+		return siegeQueue;
 	}
 
 	public Siege getActiveSiege() {
@@ -1269,11 +1269,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return recentSieges;
 	}
 
-	public void addSiege(Siege siege) {
-		if(activeSiege == null) {
-			activeSiege = siege;
-		} else {
-			siegesQueue.add(siege);
-		}
+	public void addSiegeToQueue(Siege siege) {
+		siegeQueue.add(siege);
+	}
+
+	public void setActiveSiege(Siege activeSiege) {
+		this.activeSiege = activeSiege;
+	}
+
+	public void removeFromSiegeQueue(Siege siege) {
+		this.siegeQueue.remove(siege);
 	}
 }

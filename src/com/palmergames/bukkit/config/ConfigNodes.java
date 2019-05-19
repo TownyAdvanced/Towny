@@ -1580,7 +1580,7 @@ public enum ConfigNodes {
 			"# If true, revolt sieges are allowed."),
 	WAR_SIEGE_TIMER_INTERVAL_SECONDS(
 			"war.siege.timer.interval.seconds",
-			"true",
+			"5",
 			"# The time in seconds for each siegewar timer tick."),
 
 	WAR_SIEGE_ATTACKER_COST_UPFRONT(

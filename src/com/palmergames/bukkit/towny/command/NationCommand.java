@@ -692,8 +692,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		//Add siege to nation
 		attackingNation.addSiege(siege);
 
-		//Add siege to town
-		defendingTown.addSiege(siege);
+		//Add siege to town queue
+		defendingTown.addSiegeToQueue(siege);
 
 		//Save the siege to DB
 		TownyUniverse.getDataSource().saveNation(attackingNation);

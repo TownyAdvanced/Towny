@@ -1160,6 +1160,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siege.setTotalCostToAttacker(rs.getInt("totalCostToAttacker"));
 
                 siege.setLastUpkeepTime(rs.getLong("lastUpkeepTime"));
+
+                siege.setActive(rs.getBoolean("active"));
             }
 
             return true;
@@ -1764,6 +1766,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("totalDefendersKilled", Integer.toString(siege.getTotalDefendersKilled()));
             nat_hm.put("totalCostToAttacker", Double.toString(siege.getTotalCostToAttacker()));
             nat_hm.put("lastUpkeepTime", Long.toString(siege.getLastUpkeepTime()));
+            nat_hm.put("active", Boolean.toString(siege.isActive()));
+
 
             UpdateDB("SIEGES", nat_hm, Arrays.asList("attackingNation", "defendingTown"));
 
