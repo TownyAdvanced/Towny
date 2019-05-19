@@ -581,6 +581,49 @@ public class TownySQLSource extends TownyFlatFileSource {
     }
 
     @Override
+    public boolean loadSiegeList() {
+
+        Nation attackingNation;
+        Town defendingTown;
+        Statement s = null;
+        ResultSet rs= null;
+
+        TownyMessaging.sendDebugMsg("Loading Siege List");
+        if (!getContext())
+            return false;
+        try {
+            s = cntx.createStatement();
+            rs = s.executeQuery("SELECT attackingNationName, defendingTownName FROM " + tb_prefix + "SIEGES");
+            while (rs.next()) {
+                try {
+                    attackingNation = universe.getNationsMap().get(rs.getString("attackingNationName"));
+                    defendingTown = universe.getTownsMap().get("defendingTownName");
+                    newSiege(attackingNation, defendingTown);
+                } catch (AlreadyRegisteredException e) {
+                    e.printStackTrace();
+                }
+            }
+            s.close();
+            return true;
+        } catch (SQLException e) {
+            TownyMessaging.sendErrorMsg("SQL: siege list sql error : " + e.getMessage());
+        } catch (Exception e) {
+            TownyMessaging.sendErrorMsg("SQL: siege list unknown error : ");
+            e.printStackTrace();
+        } finally {
+            try {rs.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try { s.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean loadWorldList() {
 
         TownyMessaging.sendDebugMsg("Loading World List");
@@ -1080,21 +1123,21 @@ public class TownySQLSource extends TownyFlatFileSource {
     @Override
     public boolean loadSiege(Siege siege) {
 
-        Statement statement = null;
-        ResultSet resultSet = null;
+        Statement s = null;
+        ResultSet rs = null;
         String lineString;
         TownyMessaging.sendDebugMsg("Loading siege " + siege.getAttackingNation().getName() + " vs " + siege.getDefendingTown().getName());
 
         if (!getContext())
             return false;
         try {
-            statement = cntx.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES " +
+            s = cntx.createStatement();
+            rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES " +
                                              "WHERE attackingNation='" + siege.getAttackingNation().getName() + "'" +
                                              "AND defendingTown='" + siege.getDefendingTown().getName() + "'");
-            while (resultSet.next()) {
+            while (rs.next()) {
 
-                lineString = resultSet.getString("towns");
+                lineString = rs.getString("towns");
                 if (lineString == null) {
                     siege.setSiegeType(SiegeType.ASSAULT);
                 } else if (lineString.equals("ASSAULT")) {
@@ -1105,18 +1148,18 @@ public class TownySQLSource extends TownyFlatFileSource {
                     siege.setSiegeType(SiegeType.ASSAULT);
                 }
 
-                siege.setTotalSiegePointsAttacker(resultSet.getInt("totalSiegePointsAttacker"));
-                siege.setTotalSiegePointsDefender(resultSet.getInt("totalSiegePointsDefender"));
+                siege.setTotalSiegePointsAttacker(rs.getInt("totalSiegePointsAttacker"));
+                siege.setTotalSiegePointsDefender(rs.getInt("totalSiegePointsDefender"));
 
-                siege.setActualStartTime(resultSet.getLong("actualStartTime"));
-                siege.setScheduledEndTime(resultSet.getLong("scheduledEndTime"));
-                siege.setActualEndTime(resultSet.getLong("actualEndTime"));
+                siege.setActualStartTime(rs.getLong("actualStartTime"));
+                siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
+                siege.setActualEndTime(rs.getLong("actualEndTime"));
 
-                siege.setTotalAttackersKilled(resultSet.getInt("totalAttackersKilled"));
-                siege.setTotalDefendersKilled(resultSet.getInt("totalDefendersKilled"));
-                siege.setTotalCostToAttacker(resultSet.getInt("totalCostToAttacker"));
+                siege.setTotalAttackersKilled(rs.getInt("totalAttackersKilled"));
+                siege.setTotalDefendersKilled(rs.getInt("totalDefendersKilled"));
+                siege.setTotalCostToAttacker(rs.getInt("totalCostToAttacker"));
 
-                siege.setLastUpkeepTime(resultSet.getLong("lastUpkeepTime"));
+                siege.setLastUpkeepTime(rs.getLong("lastUpkeepTime"));
             }
 
             return true;
@@ -1127,15 +1170,13 @@ public class TownySQLSource extends TownyFlatFileSource {
             TownyMessaging.sendErrorMsg("SQL: Load Nation unknown error - ");
             e.printStackTrace();
         } finally {
-            //Close sql
-            try {
-                resultSet.close();
+            try {rs.close();
             } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            try {
-                statement.close();
+            try { s.close();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return false;
@@ -1966,6 +2007,11 @@ public class TownySQLSource extends TownyFlatFileSource {
         return true;
     }
 
+    @Override
+    public boolean saveSiegeList() {
+
+        return true;
+    }
     @Override
     public boolean saveWorldList() {
 
