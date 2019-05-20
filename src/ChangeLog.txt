@@ -3171,3 +3171,4 @@ v0.92.0.11:
     - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
     - Fix for claims still being charged despite using_economy: false.
     - Fix for ranks not being removed from offline players.
+    - Added TownAddResidentRankEvent and TownRemoveResidentRankEvent events, courtesy of Artuto. 
