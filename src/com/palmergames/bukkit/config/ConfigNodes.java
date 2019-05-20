@@ -1567,87 +1567,87 @@ public enum ConfigNodes {
 			""),
 	WAR_SIEGE_ENABLED(
 			"war.siege.enabled",
-			"false",
+			"true",
 			"# If true, the siegewar feature is enabled.",
 			"# if false, the siegewar feature is disabled."),
 	WAR_SIEGE_ALLOW_ASSAULT_SIEGES(
-			"war.siege.allow.assault.sieges",
+			"war.siege.allow_assault_sieges",
 			"true",
 			"# If true, assault sieges are allowed."),
 	WAR_SIEGE_ALLOW_REVOLT_SIEGES(
-			"war.siege.allow.revolt.sieges",
+			"war.siege.allow_revolt_sieges",
 			"true",
 			"# If true, revolt sieges are allowed."),
 	WAR_SIEGE_TIMER_INTERVAL_SECONDS(
-			"war.siege.timer.interval.seconds",
+			"war.siege.timer_interval_seconds",
 			"5",
 			"# The time in seconds for each siegewar timer tick."),
 
 	WAR_SIEGE_ATTACKER_COST_UPFRONT(
-			"war.siege.attacker.cost.upfront",
+			"war.siege.attacker_cost_upfront",
 			"10000.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_UPKEEP_PER_HOUR(
-			"war.siege.attacker.cost.upkeep.per.hour",
+			"war.siege.attacker_cost_upkeep_per_hour",
 			"500.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_PER_CASUALTY(
-			"war.siege.attacker.cost.per.casualty",
+			"war.siege.attacker_cost_per_casualty",
 			"1000.0",
 			"#..."),
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
-			"war.siege.max.siege.duration.hours",
+			"war.siege.max_siege_duration_hours",
 			"72",
 			"# Maximum siege duration.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
 
 	WAR_SIEGE_WARZONE_RADIUS(
-			"war.siege.warzone.radius",
+			"war.siege.warzone_radius",
 			"50",
 			"# This value determines the size of the 'warzone'.",
 			"# The distance is measured in blocks starting from the homeblock.",
 			"# The distance applies diagonally too. thus the warzone is in the shape of a rectangle."),
 	WAR_SIEGE_ACTION_ATTACK_MAX_DURATION_SECONDS(
-			"war.siege.action.attack.max.duration.seconds",
+			"war.siege.action_attack_max_duration_seconds",
 			"300",
 			"#..."),
 	WAR_SIEGE_ACTION_ATTACK_POINTS_PER_PLAYER(
-			"war.siege.action.attack.points.per.player",
+			"war.siege.action_attack_points_per_player",
 			"100",
 			"# This setting determines the number of siege points awarded if an attack action succeeds.",
 			"# The award is calculated based on the number of attacking players standing in the warzone.",
 			"# The award is calculated at the exact time that the action duration expires"),
 	WAR_SIEGE_ACTION_DEFENCE_MAX_DURATION_SECONDS(
-			"war.siege.action.attack.max.duration.seconds",
+			"war.siege.action_attack_max_duration_seconds",
 			"300",
 			"#..."),
 	WAR_SIEGE_ACTION_DEFENCE_POINTS_PER_PLAYER(
-			"war.siege.action.defence.points.per.player",
+			"war.siege.action_defence_points_per_player",
 			"100",
 			"# This setting determines the number of siege points awarded if a defence action succeeds.",
 			"# The award is calculated based on the number of defending players standing in the warzone.",
 			"# The award is calculated at the exact time that the action duration expires"),
 
 	WAR_SIEGE_OBJECTIVE_PLUNDER_AMOUNT(
-			"war.siege.objective.plunder.amount",
+			"war.siege.objective.plunder_amount",
 			"50000",
 			"#..."),
 	WAR_SIEGE_OBJECTIVE_DISRUPT_DURATION_HOURS(
-			"war.siege.objective.disrupt.duration.hours",
+			"war.siege.objective.disrupt_duration_hours",
 			"24",
 			"#..."),
 	WAR_SIEGE_OBJECTIVE_POISON_DURATION_HOURS(
-			"war.siege.objective.poison.duration.hours",
+			"war.siege.objective.poison_duration_hours",
 			"24",
 			"#..."),
 
-	WAR_SIEGE_ASSAULT_COOLDOWN_DURATION_MODIFER(
-			"war.siege.attack.cooldown.duration.modifier",
+	WAR_SIEGE_COOLDOWN_POST_ATTACK_DURATION_MODIFER(
+			"war.siege.cooldown.post_attack_duration_modifier",
 			"3",
 			"#..."),
-	WAR_SIEGE_REVOLT_COOLDOWN_DURATION_HOURS(
-			"war.siege.revolt.cooldown.duration",
+	WAR_SIEGE_COOLDOWN_POST_REVOLT_DURATION_HOURS(
+			"war.siege.cooldown.post_revolt_duration_hours",
 			"240",
 			"#...");
 
