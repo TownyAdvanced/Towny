@@ -3166,3 +3166,6 @@ v0.92.0.11:
 0.93.1.0:
     - Fix for nationZones affecting nation-less towns when the only_capitals setting is false.
     - Fix for servers using CMI that cannot have jailed players sent to jail on respawn.
+    - Fix for nationZones.
+    - Fix for global_town_settings.keep_experience_on_death_in_town setting not appearing in configs.
+    - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
