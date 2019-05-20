@@ -640,11 +640,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			Town defendingTown = TownyUniverse.getTownWherePlayerIsLocated(player);
-			if (defendingTown == null)
+			TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
+			if (townBlockWherePlayerIsLocated == null)
 				throw new TownyException("You must be standing in a town to start a siege");
 
-			if (!SiegeWarUtil.isPlayerWithinWarzone(player, defendingTown))
+			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
+			if (!SiegeWarUtil.isPlayerWithinWarzone(townBlockWherePlayerIsLocated, defendingTown))
 				throw new TownyException("You must be near to the town homeblock to start a siege");
 
 			if (player.isFlying())
@@ -659,18 +660,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("You are already attacking or queing to attack the town, or you have recently attacked." +
 						"If you have recently attacked, you must wait until after the next siege cooldown");
 
-			double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
+			if (!TownySettings.isUsingEconomy()) {
+				double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
 
-			if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
-				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
-
-			if (!TownySettings.isUsingEconomy())
-				throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
-
-			//All checks are passed and we are ready to start the siege
-
-			//Deduct upfront cost
-			nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege");
+				if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
+					//Deduct upfront cost
+					nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege");
+				else {
+					throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+				}
+			}
 
 			//Setup Siege
 			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown, siegeObjectives);

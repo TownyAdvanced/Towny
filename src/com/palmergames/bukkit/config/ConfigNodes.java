@@ -1602,12 +1602,12 @@ public enum ConfigNodes {
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
 
-	WAR_SIEGE_WARZONE_RADIUS(
-			"war.siege.warzone_radius",
-			"50",
+	WAR_SIEGE_WARZONE_RADIUS_TOWN_BLOCKS(
+			"war.siege.warzone_radius_town_blocks",
+			"3",
 			"# This value determines the size of the 'warzone'.",
-			"# The distance is measured in blocks starting from the homeblock.",
-			"# The distance applies diagonally too. thus the warzone is in the shape of a rectangle."),
+			"# The distance is measured in town blocks starting from the homeblock.",
+			"# The distance applies diagonally too. thus the warzone is in the shape of a square, centred on the homeblock"),
 	WAR_SIEGE_ACTION_ATTACK_MAX_DURATION_SECONDS(
 			"war.siege.action_attack_max_duration_seconds",
 			"300",

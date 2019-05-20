@@ -112,12 +112,12 @@ public class TownyUniverse extends TownyObject {
 		}
 	}
 
-	public static Town getTownWherePlayerIsLocated(Player player) throws TownyException {
+	public static TownBlock getTownBlockWherePlayerIsLocated(Player player) throws TownyException {
 		try {
 			TownyWorld world = getDataSource().getWorld(player.getWorld().getName());
 			Coord coord = Coord.parseCoord(player);
 			if (world.hasTownBlock(coord))
-				return world.getTownBlock(coord).getTown();
+				return world.getTownBlock(coord);
 			else {
 				return null;
 			}

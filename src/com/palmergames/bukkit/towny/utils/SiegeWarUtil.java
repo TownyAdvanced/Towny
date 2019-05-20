@@ -1,8 +1,12 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.entity.Player;
 
 /**
@@ -10,32 +14,37 @@ import org.bukkit.entity.Player;
  */
 public class SiegeWarUtil {
 
-    public static boolean isPlayerWithinWarzone(Player player, Town town) {
-        if(!town.hasHomeBlock())
+    public static boolean isPlayerWithinWarzone(TownBlock townBlockWherePlayerIs,
+                                                Town town) {
+        TownBlock homeBlock = null;
+
+        if(!town.hasHomeBlock()) {
             return true; //If town has no homeblock, all town is the warzone
-
-        int warZoneRadius = TownySettings.getWarSiegeWarzoneRadius();
-
-        try {
-            //Player is too far north
-            if (player.getLocation().getBlockZ() < town.getHomeBlock().getZ() - warZoneRadius)
-                return false;
-
-            //Player is too far south
-            if (player.getLocation().getBlockZ() > town.getHomeBlock().getZ() + warZoneRadius)
-                return false;
-
-            //Player is too far east
-            if (player.getLocation().getBlockX() > town.getHomeBlock().getX() + warZoneRadius)
-                return false;
-
-            //Player is too far west
-            if (player.getLocation().getBlockX() < town.getHomeBlock().getX() - warZoneRadius)
-                return false;
-
-        } catch (TownyException x) {
-            //We won't get here because we have checked for the homeblock earlier
+        } else {
+            try {
+                homeBlock = town.getHomeBlock();
+            } catch (Exception e) {
+                //We won't get here because we already checked for the homenblock
+            }
         }
+
+        int warZoneRadiusTownBlocks = TownySettings.getWarSiegeWarzoneRadiusTownBlocks();
+
+        //Player is too far north
+        if (townBlockWherePlayerIs.getZ() < homeBlock.getZ() - warZoneRadiusTownBlocks)
+            return false;
+
+        //Player is too far south
+        if (townBlockWherePlayerIs.getZ() > homeBlock.getZ() + warZoneRadiusTownBlocks)
+            return false;
+
+        //Player is too far east
+        if (townBlockWherePlayerIs.getX() > homeBlock.getX() + warZoneRadiusTownBlocks)
+            return false;
+
+        //Player is too far west
+        if (townBlockWherePlayerIs.getX() < homeBlock.getX() - warZoneRadiusTownBlocks)
+            return false;
 
         return true; //Player is in the warzone
     }
