@@ -3163,3 +3163,5 @@ v0.92.0.11:
       - If higher than 0, it will limit how many towns can be joined into a nation.
       - Does not affect existing nations that are already over the limit.
     - Fix for /res spawn getting players out of jail, courtesy of KarlOfDuty.
+0.93.1.0:
+    - Fix for nationZones affecting nation-less towns when the only_capitals setting is false.

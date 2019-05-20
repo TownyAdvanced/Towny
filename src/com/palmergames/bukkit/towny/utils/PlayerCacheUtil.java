@@ -259,7 +259,7 @@ public class PlayerCacheUtil {
 					int distance = 0;
 					try {
 						nearestTown = worldCoord.getTownyWorld().getClosestTownWithNationFromCoord(worldCoord.getCoord(), nearestTown);
-						if (nearestTown == null) {
+						if (nearestTown == null || !nearestTown.hasNation()) {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
