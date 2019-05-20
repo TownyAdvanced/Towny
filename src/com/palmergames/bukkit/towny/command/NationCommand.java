@@ -638,7 +638,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			//TODO - test. Try this if player is not in a nation. See if it is already coered
 
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
-				throw new TownyException("You don't have permission by rank to start a siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			Town defendingTown = TownyUniverse.getTownWherePlayerIsLocated(player);
 			if (defendingTown == null)
@@ -655,14 +655,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (defendingTown.hasNation() && !nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
 				throw new TownyException("If target town has a nation AND is not an enemy of your town, you cannot attack");
 
-			//Ensure we are not already queuing to attack, actually attacking, or have recently attacked
 			if (nationOfAttackingPlayer.areAnySiegesTargetingGivenTown(defendingTown))
 				throw new TownyException("You are already attacking or queing to attack the town, or you have recently attacked." +
 						"If you have recently attacked, you must wait until after the next siege cooldown");
 
 			double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
+
 			if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
-				throw new TownyException("You cannot affort to start an assault siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
+
+			if (!TownySettings.isUsingEconomy())
+				throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
 
 			//All checks are passed and we are ready to start the siege
 
