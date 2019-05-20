@@ -3172,3 +3172,4 @@ v0.92.0.11:
     - Fix for claims still being charged despite using_economy: false.
     - Fix for ranks not being removed from offline players.
     - Added TownAddResidentRankEvent and TownRemoveResidentRankEvent events, courtesy of Artuto. 
+    - Fix plot perm line not being set properly on plots owned by someone who leaves town.
