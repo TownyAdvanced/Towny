@@ -265,7 +265,6 @@ public class PlayerCacheUtil {
 						if (!nearestTown.hasNation()) {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
-						}
 						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
 					} catch (NotRegisteredException e1) {
 						// There will almost always be a town in any world where towny is enabled. 
