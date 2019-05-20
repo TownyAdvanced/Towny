@@ -24,7 +24,7 @@ public class SiegeWarUtil {
             try {
                 homeBlock = town.getHomeBlock();
             } catch (Exception e) {
-                //We won't get here because we already checked for the homenblock
+                //We won't get here because we already checked for the homeblock
             }
         }
 
