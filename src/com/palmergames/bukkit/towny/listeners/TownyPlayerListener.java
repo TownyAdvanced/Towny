@@ -134,36 +134,49 @@ public class TownyPlayerListener implements Listener {
 
 		try {
 			Location respawn = null;			
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-			// If player is jailed send them to their jailspawn.
-			if (resident.isJailed()) {
-				Town respawnTown = TownyUniverse.getDataSource().getTown(resident.getJailTown()); 
-				respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
-//				resident.setJailed(false);
-				event.setRespawnLocation(respawn);
-//				resident.setJailed(true);
-			} else {
-				respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
-				// Check if only respawning in the same world as the town's spawn.
-				if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
-					return;
-		
-				// Bed spawn or town.
-				if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {		
-					event.setRespawnLocation(player.getBedSpawnLocation());
-		
-				} else {		
-					event.setRespawnLocation(respawn);
-		
-				}
-			}
+			respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
+			// Check if only respawning in the same world as the town's spawn.
+			if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
+				return;
+	
+			// Bed spawn or town.
+			if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {		
+				event.setRespawnLocation(player.getBedSpawnLocation());	
+			} else {		
+				event.setRespawnLocation(respawn);	
+			}	
 
 		} catch (TownyException e) {
 			// Town has not set respawn location. Using default.
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerJailRespawn(PlayerRespawnEvent event) {
 
+		if (plugin.isError()) {
+			return;
+		}
+
+		Player player = event.getPlayer();
+
+		if (!TownySettings.isTownRespawning())
+			return;
+	
+		try {
+			Location respawn = null;			
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			// If player is jailed send them to their jailspawn.
+			if (resident.isJailed()) {
+				Town respawnTown = TownyUniverse.getDataSource().getTown(resident.getJailTown()); 
+				respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
+				event.setRespawnLocation(respawn);
+			}
+		} catch (TownyException e) {
+			// Town has not set respawn location. Using default.
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 
