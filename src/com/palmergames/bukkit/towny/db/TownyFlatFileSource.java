@@ -94,6 +94,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations" + FileMgmt.fileSeparator() + "deleted",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data",
@@ -103,6 +105,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
