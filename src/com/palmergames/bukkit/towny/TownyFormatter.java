@@ -396,9 +396,9 @@ public class TownyFormatter {
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
 
 		// Sieges [3]:  Prussia (Besieging Now), Britain (Queued), Russia (Queued)
-		List<Nation> townAttackers = town.getActiveAndQueuedSiegeNations();
-		String[] townAttackerNames = getFormattedNamesOfTownAttackers(townAttackers.toArray(new Nation[0]));
-		out.addAll(ChatTools.listArr(townAttackerNames, "Sieges [" + townAttackerNames.length + "]"));
+		List<Nation> attackers = town.getActiveAndQueuedSiegeNations();
+		String[] attackerNames = getFormattedNamesOfTownAttackers(attackers.toArray(new Nation[0]));
+		out.addAll(ChatTools.listArr(attackerNames, String.format(TownySettings.getLangString("status_town_siegelist"), attackerNames.length )));
 
 		out = formatStatusScreens(out);
 		return out;
