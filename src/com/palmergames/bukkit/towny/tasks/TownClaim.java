@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -192,10 +193,11 @@ public class TownClaim extends Thread {
 
 			TownyUniverse.getDataSource().saveTownBlock(townBlock);
 			TownyUniverse.getDataSource().saveTownBlockList();
-			
-			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
-				
+
+			//HACK TO WORKAROUND ISSUE 3231
+			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> {
+				BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
+			});
 		}
 	}
 
