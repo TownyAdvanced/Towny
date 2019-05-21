@@ -1017,7 +1017,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                         TownyMessaging.sendErrorMsg("Loading Error: Exception while reading active siege of town file " + town.getName() + ".txt. The siege " + line + " does not exist, skipping...");
                     }
                 }
-                
+
                 s.close();
                 return true;
             }

@@ -669,7 +669,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (nationOfAttackingPlayer.hasNationAttackedTownRecently(defendingTown))
 				throw new TownyException("You have recently attacked this town, you must wait until after the next siege cooldown before attacking again");
 
-			if (!TownySettings.isUsingEconomy()) {
+			if (TownySettings.isUsingEconomy()) {
 				double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
 
 				if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))

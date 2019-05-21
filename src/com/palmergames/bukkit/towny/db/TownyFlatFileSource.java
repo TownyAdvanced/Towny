@@ -2317,8 +2317,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getTownBlockFilename(townBlock)));
 
-		TownyMessaging.sendMsg("Saved Town Block");
-
 		return true;
 
 	}
