@@ -426,4 +426,7 @@ public abstract class TownyDataSource {
 	abstract public void newSiege(Nation attackingNation, Town defendingTown) throws AlreadyRegisteredException;
 
     abstract public Siege getSiege(Nation attackingNation, Town defendingTown) throws TownyException;
+	abstract public Siege getSiege(Nation attackingNation, String defendingTownName) throws TownyException;
+	abstract public Siege getSiege(String attackingNationName, Town defendingTown) throws TownyException;
+
 }

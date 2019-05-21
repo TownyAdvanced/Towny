@@ -738,4 +738,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void addSiege(Siege siege) {
 		sieges.add(siege);
 	}
+
+	public List<String> getSiegedTownNames() {
+		List<String> result = new ArrayList<String>();
+		for(Siege siege: sieges) {
+			result.add(siege.getDefendingTown().getName());
+		}
+		return result;
+	}
 }

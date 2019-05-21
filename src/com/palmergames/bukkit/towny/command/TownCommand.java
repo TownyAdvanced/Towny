@@ -1915,6 +1915,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
 		}
+
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
 			try {
@@ -1923,7 +1924,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-
 		TownyUniverse.getDataSource().saveResident(resident);
 		TownyUniverse.getDataSource().saveTownBlock(townBlock);
 		TownyUniverse.getDataSource().saveTown(town);

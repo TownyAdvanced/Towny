@@ -73,6 +73,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
+		activeSiege = null;
 	}
 
 	@Override
@@ -1257,10 +1258,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	}
 
+	public List<String> getSiegeQueueNationNames() {
+		List<String> result = new ArrayList<>();
+		for(Siege siege: siegeQueue) {
+			result.add(siege.getAttackingNation().getName());
+		}
+		return result;
+	}
+
 	public List<Siege> getSiegeQueue() {
 		return siegeQueue;
 	}
-
 	public Siege getActiveSiege() {
 		return activeSiege;
 	}
@@ -1269,7 +1277,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return recentSieges;
 	}
 
-	public void addSiegeToQueue(Siege siege) {
+	public List<String> getRecentSiegesNationNames() {
+		List<String> result = new ArrayList<>();
+		for(Siege siege: recentSieges) {
+			result.add(siege.getAttackingNation().getName());
+		}
+		return result;
+	}
+
+	public void addSiegeToSiegeQueue(Siege siege) {
 		siegeQueue.add(siege);
 	}
 
@@ -1279,5 +1295,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void removeFromSiegeQueue(Siege siege) {
 		this.siegeQueue.remove(siege);
+	}
+
+	public void addSiegeToRecentSieges(Siege siege) {
+		recentSieges.add(siege);
 	}
 }

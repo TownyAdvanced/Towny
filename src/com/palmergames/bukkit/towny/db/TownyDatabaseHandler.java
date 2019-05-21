@@ -277,13 +277,37 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		throw new TownyException("Siege not found");
+		throw new NotRegisteredException("Siege not found");
+	}
+
+	@Override
+	public Siege getSiege(Nation attackingNation, String defendingTownName) throws TownyException {
+		for(Siege siege: getSieges()) {
+			if(siege.getDefendingTown().getName().equals(defendingTownName)
+					&& siege.getAttackingNation() == attackingNation) {
+				return siege;
+			}
+		}
+
+		throw new NotRegisteredException("Siege not found");
+	}
+
+	@Override
+	public Siege getSiege(String attackingNationName, Town defendingTown) throws TownyException {
+		for(Siege siege: getSieges()) {
+			if(siege.getDefendingTown() == defendingTown
+					&& siege.getAttackingNation().getName().equals(attackingNationName)) {
+				return siege;
+			}
+		}
+
+		throw new NotRegisteredException("Siege not found");
 	}
 
 	private boolean isSiegeAlreadyRegistered(Nation attackingNation, Town defendingTown) {
 		for(Siege siege: getSieges()) {
-			if(siege.getDefendingTown() == defendingTown
-					&& siege.getAttackingNation() == attackingNation) {
+			if(defendingTown == siege.getDefendingTown()
+					&& attackingNation == siege.getAttackingNation()) {
 				return true;
 			}
 		}

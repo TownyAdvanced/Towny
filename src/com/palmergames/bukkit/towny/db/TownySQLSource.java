@@ -990,6 +990,50 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setRegistered(0);
                 }
 
+                line = rs.getString("siegeQueue");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    for (String token : tokens) {
+                        if (!token.isEmpty()) {
+                            try {
+                                Siege siege = getSiege(token, town);
+                                if (siege != null)
+                                    town.addSiegeToSiegeQueue(siege);
+                            } catch (NotRegisteredException x) {
+                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a queued siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
+                            }
+                        }
+                    }
+                }
+
+                line = rs.getString("recentSieges");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    for (String token : tokens) {
+                        if (!token.isEmpty()) {
+                            try {
+                                Siege siege = getSiege(token, town);
+                                if (siege != null)
+                                    town.addSiegeToRecentSieges(siege);
+                            } catch (NotRegisteredException x) {
+                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a recent siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
+                            }
+                        }
+                    }
+                }
+
+                line = rs.getString("activeSiege");
+                if (line != null)
+                    try {
+                        Siege siege = getSiege(line, town);
+                        if (siege != null)
+                            town.setActiveSiege(siege);
+                    } catch (NotRegisteredException x) {
+                        TownyMessaging.sendErrorMsg("Loading Error: Exception while reading active siege of town file " + town.getName() + ".txt. The siege " + line + " does not exist, skipping...");
+                    }
+
                 s.close();
                 return true;
             }
@@ -1065,6 +1109,20 @@ public class TownySQLSource extends TownyFlatFileSource {
                         }
                     }
                 }
+
+                line = rs.getString("sieges");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    for (String token : tokens) {
+                        if (!token.isEmpty()) {
+                            Siege siege = getSiege(nation, token);
+                            if (siege != null)
+                                nation.addSiege(siege);
+                        }
+                    }
+                }
+
                 nation.setTaxes(rs.getDouble("taxes"));
                 nation.setSpawnCost(rs.getFloat("spawnCost"));
                 nation.setNeutral(rs.getBoolean("neutral"));
@@ -1696,6 +1754,10 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
+            twn_hm.put("siegeQueue", StringMgmt.join(town.getSiegeQueueNationNames(), "#"));
+            twn_hm.put("recentSieges", StringMgmt.join(town.getRecentSiegesNationNames(), "#"));
+            twn_hm.put("activeSiege", town.getActiveSiege().getAttackingNation().getName());
+
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
 
@@ -1720,6 +1782,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
+            nat_hm.put("sieges", StringMgmt.join(nation.getSiegedTownNames(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
