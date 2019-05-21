@@ -15,25 +15,40 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		TownyMessaging.sendDebugMsg("Now evaluating siege war timer task");
+		TownyMessaging.sendMsg("Now evaluating siege war timer task");
 		//Cycle through all sieges
 
 		for (Siege siege : universe.getSieges()) {
 			if (siege.isActive()) {
+				//Siege is active
 
 				TownyMessaging.sendDebugMsg("Now evaluating active siege between " +
 						siege.getAttackingNation().getName() + " and " + siege.getDefendingTown().getName());
 
 				//evaluate active siege
 				//Here we check if the timer has elapsed
+				//And win/lose etc as required
 			} else {
-				//if siege is next in the queue AND the active slot is empty, activate the siege.
-				if (siege.getDefendingTown().getActiveSiege() == null) {
+				//Siege is not active
 
-					List<Siege> siegeQueue = siege.getDefendingTown().getSieges();
+				if(siege.isComplete()) {
+					//Siege is complete, do nothing
+				} else {
+					//Siege is queued up.
 
-					if (siegeQueue.size() == 1 || siegeQueue.indexOf(siege) == 0) {
-						activateSiege(siege);
+					if (siege.getDefendingTown().getActiveSiege() == null) {
+						//The town is ready for the next queued siege to start
+						List<Siege> sieges = siege.getDefendingTown().getSieges();
+						int siegeIndex = sieges.indexOf(siege);
+
+						if(siegeIndex ==0){
+							//This is the first siege in the list, activate it.
+							activateSiege(siege);
+
+						} else if (sieges.get(siegeIndex-1).isComplete()){
+							//The previous siege in the list is complete, activate this one.
+							activateSiege(siege);
+						}
 					}
 				}
 			}
@@ -41,7 +56,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	}
 
 	private void activateSiege(Siege siege) {
-		TownyMessaging.sendDebugMsg("Now activating siege between " +
+		TownyMessaging.sendMsg("Now activating siege between " +
 				siege.getAttackingNation().getName() + " and " + siege.getDefendingTown().getName());
 
 		siege.setActive(true);
