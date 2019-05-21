@@ -735,6 +735,33 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return false;
 	}
 
+	public boolean isNationQueuingToAttackTown(Town town) {
+		for(Siege siege: sieges) {
+			if(!siege.isActive() && !siege.isComplete() && siege.getDefendingTown() == town) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasNationAttackedTownRecently(Town town) {
+		for(Siege siege: sieges) {
+			if(!siege.isActive() && siege.isComplete() && siege.getDefendingTown() == town) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isNationAttackingTownNow(Town town) {
+		for(Siege siege: sieges) {
+			if(siege.isActive() && siege.getDefendingTown() == town) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void addSiege(Siege siege) {
 		sieges.add(siege);
 	}
