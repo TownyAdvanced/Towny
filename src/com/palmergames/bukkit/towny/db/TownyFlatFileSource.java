@@ -2029,8 +2029,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Siege Queue
 		list.add("sieges=" + StringMgmt.join(town.getSiegeNationNames(), ","));
 		// Active Siege
-		list.add("activeSiege=" + town.getActiveSiege().getAttackingNation().getName());
-			/*
+		if(town.getActiveSiege() != null) {
+			list.add("activeSiege=" + town.getActiveSiege().getAttackingNation().getName());
+		}
+
+		/*
 		 *  Make sure we only save in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
