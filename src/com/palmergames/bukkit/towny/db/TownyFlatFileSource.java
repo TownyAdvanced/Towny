@@ -2027,7 +2027,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Siege Queue
-		list.add("sieges=" + StringMgmt.join(town.getSiegeNationNames(), ","));
+		list.add("sieges=" + StringMgmt.join(town.getSiegeNames(), ","));
 		// Active Siege
 		if(town.getActiveSiege() != null) {
 			list.add("activeSiege=" + town.getActiveSiege().getAttackingNation().getName());

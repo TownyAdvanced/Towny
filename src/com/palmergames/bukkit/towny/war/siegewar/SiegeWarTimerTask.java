@@ -16,13 +16,14 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		TownyMessaging.sendMsg("Now evaluating siege war timer task");
-		//Cycle through all sieges
 
-		for (Siege siege : universe.getSieges()) {
+		//Cycle through all sieges
+		for (Siege siege : universe.getSieges())
+		{
 			if (siege.isActive()) {
 				//Siege is active
 
-				TownyMessaging.sendDebugMsg("Now evaluating active siege between " +
+				TownyMessaging.sendMsg("Now evaluating active siege between " +
 						siege.getAttackingNation().getName() + " and " + siege.getDefendingTown().getName());
 
 				//evaluate active siege

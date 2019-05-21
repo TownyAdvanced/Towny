@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -23,7 +24,6 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -395,6 +395,11 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
 
+		// Sieges [3]:  Prussia (Besieging Now), Britain (Queued), Russia (Queued)
+		List<Nation> townAttackers = town.getActiveAndQueuedSiegeNations();
+		String[] townAttackerNames = getFormattedNamesOfTownAttackers(townAttackers.toArray(new Nation[0]));
+		out.addAll(ChatTools.listArr(townAttackerNames, "Sieges [" + townAttackerNames.length + "]"));
+
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -655,6 +660,19 @@ public class TownyFormatter {
 			names.add(getFormattedName(resident));
 		return names.toArray(new String[0]);
 	}
+
+	public static String[] getFormattedNamesOfTownAttackers(Nation[] nations) {
+		List<String> names = new ArrayList<String>();
+		for (int i =0; i < nations.length; i++) {
+			if (i == 0) {
+				names.add(getFormattedName(nations[i]) + " (Besieging Now) ");
+			} else {
+				names.add(getFormattedName(nations[i]) + " (Queued) ");
+			}
+		}
+		return names.toArray(new String[0]);
+	}
+
 
 	public static String[] getFormattedNames(Town[] towns) {
 

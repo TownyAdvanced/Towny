@@ -1739,7 +1739,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
-            twn_hm.put("sieges", StringMgmt.join(town.getSiegeNationNames(), "#"));
+            twn_hm.put("sieges", StringMgmt.join(town.getSiegeNames(), "#"));
             twn_hm.put("activeSiege", town.getActiveSiege() != null ? town.getActiveSiege().getAttackingNation().getName() : "");
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
