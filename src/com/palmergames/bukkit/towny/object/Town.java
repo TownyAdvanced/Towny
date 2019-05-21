@@ -38,8 +38,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	private List<Siege> siegeQueue = new ArrayList<Siege>();
-	private List<Siege> recentSieges = new ArrayList<Siege>();
+	//All sieges of the town, whether queued, active, or recently completed
+	private List<Siege> sieges = new ArrayList<Siege>();
 
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
@@ -1258,46 +1258,27 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	}
 
-	public List<String> getSiegeQueueNationNames() {
+	public List<String> getSiegeNationNames() {
 		List<String> result = new ArrayList<>();
-		for(Siege siege: siegeQueue) {
+		for(Siege siege: sieges) {
 			result.add(siege.getAttackingNation().getName());
 		}
 		return result;
 	}
 
-	public List<Siege> getSiegeQueue() {
-		return siegeQueue;
+	public List<Siege> getSieges() {
+		return sieges;
 	}
 	public Siege getActiveSiege() {
 		return activeSiege;
 	}
 
-	public List<Siege> getRecentSieges() {
-		return recentSieges;
-	}
-
-	public List<String> getRecentSiegesNationNames() {
-		List<String> result = new ArrayList<>();
-		for(Siege siege: recentSieges) {
-			result.add(siege.getAttackingNation().getName());
-		}
-		return result;
-	}
-
-	public void addSiegeToSiegeQueue(Siege siege) {
-		siegeQueue.add(siege);
+	public void addSiege(Siege siege) {
+		sieges.add(siege);
 	}
 
 	public void setActiveSiege(Siege activeSiege) {
 		this.activeSiege = activeSiege;
 	}
 
-	public void removeFromSiegeQueue(Siege siege) {
-		this.siegeQueue.remove(siege);
-	}
-
-	public void addSiegeToRecentSieges(Siege siege) {
-		recentSieges.add(siege);
-	}
 }

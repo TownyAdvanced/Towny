@@ -21,6 +21,7 @@ public class Siege {
     private double totalCostToAttacker;  //For report
     private long lastUpkeepTime;      //Siege upkeep occurs 1/hour
     private boolean active;
+    private boolean complete;
 
     public Siege(Nation attackingNation,
                  Town defendingTown) {
@@ -37,6 +38,7 @@ public class Siege {
         this.totalCostToAttacker = 0;
         this.lastUpkeepTime = 0;
         this.active = false;
+        this.complete = false;
     }
 
     public Town getDefendingTown() {
@@ -135,7 +137,15 @@ public class Siege {
         return active;
     }
 
+    public boolean isComplete() {
+        return complete;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

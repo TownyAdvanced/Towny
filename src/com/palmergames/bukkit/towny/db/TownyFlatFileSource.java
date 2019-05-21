@@ -1013,7 +1013,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = kvFile.get("siegeQueue");
+				line = kvFile.get("sieges");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
@@ -1021,27 +1021,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 							try {
 								Siege siege = getSiege(token, town);
 								if (siege != null) {
-									town.addSiegeToSiegeQueue(siege);
+									town.addSiege(siege);
 								}
 							} catch (NotRegisteredException x) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a queued siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
-							}
-						}
-					}
-				}
-
-				line = kvFile.get("recentSieges");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							try {
-								Siege siege = getSiege(token, town);
-								if (siege != null) {
-									town.addSiegeToRecentSieges(siege);
-								}
-							} catch (NotRegisteredException x) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a recent siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
 							}
 						}
 					}
@@ -1327,10 +1310,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 				try {
-					line = kvFile.get("active");
-					siege.setActive(Boolean.parseBoolean(line));
+					line = kvFile.get("complete");
+					siege.setComplete(Boolean.parseBoolean(line));
 				} catch (Exception e) {
-					siege.setActive(false);
+					siege.setComplete(true);
 				}
 
 			} catch (Exception e) {
@@ -2044,9 +2027,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Siege Queue
-		list.add("siegeQueue=" + StringMgmt.join(town.getSiegeQueueNationNames(), ","));
-		// RecentSieges
-		list.add("recentSieges=" + StringMgmt.join(town.getRecentSiegesNationNames(), ","));
+		list.add("sieges=" + StringMgmt.join(town.getSiegeNationNames(), ","));
 		// Active Siege
 		list.add("activeSiege=" + town.getActiveSiege().getAttackingNation().getName());
 			/*
@@ -2134,7 +2115,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("totalCostToAttacker=" + Double.toString(siege.getTotalCostToAttacker()));
 		list.add("lastUpkeepTime=" + Long.toString(siege.getLastUpkeepTime()));
 		list.add("active=" + Boolean.toString(siege.isActive()));
-
+		list.add("complete=" + Boolean.toString(siege.isComplete()));
 
 		/*
 		 *  Make sure we only save in async

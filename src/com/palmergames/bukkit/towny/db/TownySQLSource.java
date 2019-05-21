@@ -990,7 +990,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setRegistered(0);
                 }
 
-                line = rs.getString("siegeQueue");
+                line = rs.getString("sieges");
                 if (line != null) {
                     search = (line.contains("#")) ? "#" : ",";
                     tokens = line.split(search);
@@ -999,26 +999,9 @@ public class TownySQLSource extends TownyFlatFileSource {
                             try {
                                 Siege siege = getSiege(token, town);
                                 if (siege != null)
-                                    town.addSiegeToSiegeQueue(siege);
+                                    town.addSiege(siege);
                             } catch (NotRegisteredException x) {
-                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a queued siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
-                            }
-                        }
-                    }
-                }
-
-                line = rs.getString("recentSieges");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            try {
-                                Siege siege = getSiege(token, town);
-                                if (siege != null)
-                                    town.addSiegeToRecentSieges(siege);
-                            } catch (NotRegisteredException x) {
-                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a recent siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
+                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
                             }
                         }
                     }
@@ -1220,6 +1203,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siege.setLastUpkeepTime(rs.getLong("lastUpkeepTime"));
 
                 siege.setActive(rs.getBoolean("active"));
+                siege.setComplete(rs.getBoolean("complete"));
             }
 
             return true;
@@ -1754,8 +1738,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
-            twn_hm.put("siegeQueue", StringMgmt.join(town.getSiegeQueueNationNames(), "#"));
-            twn_hm.put("recentSieges", StringMgmt.join(town.getRecentSiegesNationNames(), "#"));
+            twn_hm.put("sieges", StringMgmt.join(town.getSiegeNationNames(), "#"));
             twn_hm.put("activeSiege", town.getActiveSiege().getAttackingNation().getName());
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
@@ -1830,7 +1813,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("totalCostToAttacker", Double.toString(siege.getTotalCostToAttacker()));
             nat_hm.put("lastUpkeepTime", Long.toString(siege.getLastUpkeepTime()));
             nat_hm.put("active", Boolean.toString(siege.isActive()));
-
+            nat_hm.put("complete", Boolean.toString(siege.isComplete()));
 
             UpdateDB("SIEGES", nat_hm, Arrays.asList("attackingNation", "defendingTown"));
 

@@ -2,12 +2,7 @@ package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
-import com.palmergames.bukkit.util.BukkitTools;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -35,7 +30,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				//if siege is next in the queue AND the active slot is empty, activate the siege.
 				if (siege.getDefendingTown().getActiveSiege() == null) {
 
-					List<Siege> siegeQueue = siege.getDefendingTown().getSiegeQueue();
+					List<Siege> siegeQueue = siege.getDefendingTown().getSieges();
 
 					if (siegeQueue.size() == 1 || siegeQueue.indexOf(siege) == 0) {
 						activateSiege(siege);
@@ -50,7 +45,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				siege.getAttackingNation().getName() + " and " + siege.getDefendingTown().getName());
 
 		siege.setActive(true);
-		siege.getDefendingTown().removeFromSiegeQueue(siege);
 		siege.getDefendingTown().setActiveSiege(siege);
 
 		//Set actual start
