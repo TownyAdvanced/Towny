@@ -394,9 +394,9 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
-		// Sieges [3]:  Prussia (Besieging Now), Britain (Queued), Russia (Queued)
+		// Sieges [3]:  Prussia, Britain, Russia
 		List<Nation> attackers = town.getNationNamesFromActiveSieges();
-		String[] attackerNames = getFormattedNamesOfTownAttackers(attackers.toArray(new Nation[0]));
+		String[] attackerNames = getFormattedNames(attackers.toArray(new Nation[0]));
 
 		TownyMessaging.sendMsg("Lang string is " + String.format(TownySettings.getLangString("status_town_siegelist"),attackerNames.length));
 
@@ -662,19 +662,6 @@ public class TownyFormatter {
 			names.add(getFormattedName(resident));
 		return names.toArray(new String[0]);
 	}
-
-	public static String[] getFormattedNamesOfTownAttackers(Nation[] nations) {
-		List<String> names = new ArrayList<String>();
-		for (int i =0; i < nations.length; i++) {
-			if (i == 0) {
-				names.add(getFormattedName(nations[i]) + " *Besieging Now* ");
-			} else {
-				names.add(getFormattedName(nations[i]) + " *Queued* ");
-			}
-		}
-		return names.toArray(new String[0]);
-	}
-
 
 	public static String[] getFormattedNames(Town[] towns) {
 
