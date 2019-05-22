@@ -3186,5 +3186,8 @@ v0.92.0.11:
     - Courtesy of TheFlagCourier:
       - Fix a missing teleportcause.
       - Switch Towny over to using getItemInMainHand. 
-    Courtesy of BarnabyD:
+    - Courtesy of BarnabyD:
       - Fix mobremovaltimer task from being as laggy.
+    - REQUIRED CONFIG CHANGE: in global_town_settings.farm_plot_allow_blocks
+      - Change MELON_BLOCK to MELON
+      - Add SWEET_BERRY_BUSH,SEAGRASS,TALL_SEAGRASS
