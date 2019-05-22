@@ -3175,7 +3175,6 @@ v0.92.0.11:
     - Fix plot perm line not being set properly on plots owned by someone who leaves town.
     - Courtesy of creatorfromhell:
       - Fix revert-on-unclaim system to work with 1.13 and newer blockstates.
-      - Fix mobremovaltimer task from being as laggy.
       - Fix async change required for 1.14
         - Fixes claiming and plotchangetypes.
       - Fix boats being misnamed in item_use_ids
@@ -3184,3 +3183,8 @@ v0.92.0.11:
       - Added new blocks to switch_ids
         - REQUIRED CONFIG CHANGE: in protection.switch_ids
           - Add ",STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL" to the list.
+    - Courtesy of TheFlagCourier:
+      - Fix a missing teleportcause.
+      - Switch Towny over to using getItemInMainHand. 
+    Courtesy of BarnabyD:
+      - Fix mobremovaltimer task from being as laggy.
