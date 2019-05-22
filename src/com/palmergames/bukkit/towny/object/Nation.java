@@ -409,11 +409,24 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
+	private void remove(Siege siege) {
+		sieges.remove(siege);
+		//Todo - do we need this???
+		//BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
+	}
+
 	private void removeAllTowns() {
 
 		for (Town town : new ArrayList<Town>(towns))
 			remove(town);
 	}
+
+	private void removeAllSieges() {
+
+		for (Siege siege : new ArrayList<Siege>(sieges))
+			remove(siege);
+	}
+
 
 //	public boolean hasAssistantIn(Town town) {
 //
@@ -453,6 +466,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		removeAllAllies();
 		removeAllEnemies();
 		removeAllTowns();
+		removeAllSieges();
 		capital = null;
 	}
 
@@ -763,5 +777,19 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			result.add(siege.getDefendingTown().getName());
 		}
 		return result;
+	}
+
+	public List<Town> getTownsUnderSiege() {
+		List<Town> result = new ArrayList<Town>();
+		for(Siege siege: sieges) {
+			if(!siege.isComplete()) {
+				result.add(siege.getDefendingTown());
+			}
+		}
+		return result;
+	}
+
+	public List<Siege> getSieges() {
+		return sieges;
 	}
 }

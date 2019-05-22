@@ -1271,7 +1271,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		sieges.add(siege);
 	}
 
-	public List<Nation> getNationNamesFromActiveSieges() {
+	public List<Nation> getBesiegingNations() {
 		List<Nation> result = new ArrayList<>();
 		for(Siege siege: sieges) {
 			if(!siege.isComplete()) {

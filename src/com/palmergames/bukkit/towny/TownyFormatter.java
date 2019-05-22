@@ -394,13 +394,10 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
-		// Sieges [3]:  Prussia, Britain, Russia
-		List<Nation> attackers = town.getNationNamesFromActiveSieges();
-		String[] attackerNames = getFormattedNames(attackers.toArray(new Nation[0]));
-
-		TownyMessaging.sendMsg("Lang string is " + String.format(TownySettings.getLangString("status_town_siegelist"),attackerNames.length));
-
-		out.addAll(ChatTools.listArr(attackerNames, String.format(TownySettings.getLangString("status_town_siegelist"), attackerNames.length )));
+		// Sieges [3]: Prussia, Britain, Russia
+		List<Nation> besiegingNations = town.getBesiegingNations();
+		String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
+		out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siegelist"), namesOfBesiegingNations.length )));
 
 		out = formatStatusScreens(out);
 		return out;
@@ -485,6 +482,10 @@ public class TownyFormatter {
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
         out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+		// Sieges [3]: Prussia, Britain, Russia
+		List<Town> townsUnderSiege = nation.getTownsUnderSiege();
+		String[] namesOfTownsUnderSiege = getFormattedNames(townsUnderSiege.toArray(new Town[0]));
+		out.addAll(ChatTools.listArr(namesOfTownsUnderSiege, String.format(TownySettings.getLangString("status_nation_sieges"), townsUnderSiege.size())));
 
 		out = formatStatusScreens(out);
 		return out;

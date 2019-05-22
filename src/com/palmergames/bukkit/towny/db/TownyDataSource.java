@@ -193,6 +193,8 @@ public abstract class TownyDataSource {
 
 	abstract public void deleteNation(Nation nation);
 
+	abstract public void deleteSiege(Siege siege);
+
 	abstract public void deleteWorld(TownyWorld world);
 
 	abstract public void deleteTownBlock(TownBlock townBlock);

@@ -1960,6 +1960,15 @@ public class TownySQLSource extends TownyFlatFileSource {
     }
 
     @Override
+    public void deleteSiege(Siege siege) {
+
+        HashMap<String, Object> siege_hm = new HashMap<>();
+        siege_hm.put("attackNation", siege.getAttackingNation().getName());
+        siege_hm.put("defendTown", siege.getDefendingTown().getName());
+        DeleteDB("SIEGES", siege_hm);
+    }
+
+    @Override
     public void deleteTownBlock(TownBlock townBlock) {
 
         HashMap<String, Object> twn_hm = new HashMap<>();

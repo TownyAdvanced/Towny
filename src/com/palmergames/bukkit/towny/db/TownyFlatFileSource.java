@@ -214,7 +214,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getSiegeFilename(Siege siege) {
 
-		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + siege.getAttackingNation().getName() + "_" + siege.getDefendingTown().getName() + ".txt";
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + siege.getAttackingNation().getName() + "_vs_" + siege.getDefendingTown().getName() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
@@ -2698,6 +2698,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public void deleteNation(Nation nation) {
 
 		File file = new File(getNationFilename(nation));
+		if (file.exists()) {
+			FileMgmt.moveFile(file, ("deleted"));
+		}
+	}
+
+	@Override
+	public void deleteSiege(Siege siege) {
+
+		File file = new File(getSiegeFilename(siege));
 		if (file.exists()) {
 			FileMgmt.moveFile(file, ("deleted"));
 		}

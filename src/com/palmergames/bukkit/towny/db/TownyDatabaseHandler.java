@@ -683,8 +683,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception e) {
 			}
 
+		//Delete all the nation's sieges
+		List<Siege> siegesToDelete = new ArrayList<>(nation.getSieges());
+		for(Siege siege: siegesToDelete) {
+			universe.getSieges().remove(siege); //Remove siege from universe
+			siege.getDefendingTown().getSieges().remove(siege); // Remove siege from defending town
+			deleteSiege(siege);  //Delete siege from data source
+			saveTown(siege.getDefendingTown());  //Save defending town in data source
+		}
+		saveSiegeList();
+
 		//Delete nation and save towns
 		deleteNation(nation);
+
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
 		nation.clear();
 
@@ -900,7 +911,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// TODO: Delete/rename any invites.
 
-			List<Town> toSave = new ArrayList<>(nation.getTowns());
+			List<Town> townsToSave = new ArrayList<>(nation.getTowns());
 			Double nationBalance = 0.0;
 
 			// Save the nations bank balance to set in the new account.
@@ -921,6 +932,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//Tidy up old files
 			deleteNation(nation);
+			for (Siege siege : nation.getSieges()) {
+				deleteSiege(siege);
+			}
 
 			/*
 			 * Remove the old nation from the nationsMap
@@ -942,10 +956,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			nation.setUuid(oldUUID);
 			nation.setRegistered(oldregistration);
 
-			for (Town town : toSave) {
+			List<Siege> siegesToSave = new ArrayList<>();
+			for (Siege siege : nation.getSieges()) {
+				siegesToSave.add(siege);  //Save each siege
+				townsToSave.add(siege.getDefendingTown());	//Save each affected town also
+			}
+
+			for (Siege siege : siegesToSave) {
+				saveSiege(siege);
+			}
+
+			for (Town town : townsToSave) {
 				saveTown(town);
 			}
 
+			saveSiegeList();
 			saveNation(nation);
 			saveNationList();
 
@@ -966,7 +991,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						e.printStackTrace();
 					}
 				} else
-					toSave.remove(toCheck);
+					townsToSave.remove(toCheck);
 
 			for (Nation toCheck : toSaveNation)
 				saveNation(toCheck);
