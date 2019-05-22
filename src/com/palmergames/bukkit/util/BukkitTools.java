@@ -182,6 +182,10 @@ public class BukkitTools {
 		return block.getWorld().getBlockAt(block.getX() + xOffset, block.getY() + yOffset, block.getZ() + zOffset);
 	}
 
+	public static String getTypeKey(Block block) {
+		return block.getType().getKey().toString();
+	}
+	
 	// Will be removed completely when the new plotsnapshot system is made.
 	@Deprecated
 	public static int getTypeId(Block block) {

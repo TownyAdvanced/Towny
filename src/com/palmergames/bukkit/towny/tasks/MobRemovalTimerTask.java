@@ -71,7 +71,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			//
 			for (LivingEntity livingEntity : world.getLivingEntities()) {
 				Location livingEntityLoc = livingEntity.getLocation();
-				if (!livingEntityLoc.getChunk().isLoaded())
+				if (!world.isChunkLoaded(livingEntityLoc.getBlockX() >> 4, livingEntityLoc.getBlockZ() >> 4))
 					continue;
 
 				Coord coord = Coord.parseCoord(livingEntityLoc);

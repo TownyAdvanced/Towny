@@ -3173,3 +3173,14 @@ v0.92.0.11:
     - Fix for ranks not being removed from offline players.
     - Added TownAddResidentRankEvent and TownRemoveResidentRankEvent events, courtesy of Artuto. 
     - Fix plot perm line not being set properly on plots owned by someone who leaves town.
+    - Courtesy of creatorfromhell:
+      - Fix revert-on-unclaim system to work with 1.13 and newer blockstates.
+      - Fix mobremovaltimer task from being as laggy.
+      - Fix async change required for 1.14
+        - Fixes claiming and plotchangetypes.
+      - Fix boats being misnamed in item_use_ids
+        - REQUIRED CONFIG CHANGE: in protection.item_use_ids
+          - Change BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE to BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT
+      - Added new blocks to switch_ids
+        - REQUIRED CONFIG CHANGE: in protection.switch_ids
+          - Add ",STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL" to the list.

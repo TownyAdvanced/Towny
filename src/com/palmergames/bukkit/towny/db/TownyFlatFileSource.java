@@ -2251,6 +2251,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			case 1:
 			case 2:
+			case 3:
 				/*
 				 * New system requires pushing
 				 * version data first
@@ -2266,8 +2267,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			// Push the plot height, then the plot block data types.
 			fout.writeInt(plotChunk.getHeight());
-			for (int block : new ArrayList<>(plotChunk.getBlockList())) {
-				fout.writeInt(block);
+			for (String block : new ArrayList<>(plotChunk.getBlockList())) {
+				fout.writeUTF(block);
 			}
 
 		} catch (Exception e) {
@@ -2320,11 +2321,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		String fileName = getPlotFilename(townBlock);
 
-		int value;
+		String value;
 
 		if (isFile(fileName)) {
 			PlotBlockData plotBlockData = new PlotBlockData(townBlock);
-			List<Integer> IntArr = new ArrayList<>();
+			List<String> blockArr = new ArrayList<>();
 			int version = 0;
 
 			DataInputStream fin = null;
@@ -2333,6 +2334,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				fin = new DataInputStream(new FileInputStream(fileName));
 
 				//read the first 3 characters to test for version info
+				fin.mark(3);
 				byte[] key = new byte[3];
 				fin.read(key, 0, 3);
 				String test = new String(key);
@@ -2355,9 +2357,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					 */
 					plotBlockData.setVersion(version);
 					// First entry is the plot height
-					plotBlockData.setHeight(key[0]);
-					IntArr.add((int) key[1]);
-					IntArr.add((int) key[2]);
+					fin.reset();
+					plotBlockData.setHeight(fin.readInt());
+					blockArr.add(fin.readUTF());
+					blockArr.add(fin.readUTF());
 				}
 
 				/*
@@ -2369,8 +2372,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				case 1:
 
 					// load remainder of file
-					while ((value = fin.read()) >= 0) {
-						IntArr.add(value);
+					while ((value = fin.readUTF()) != null) {
+						blockArr.add(value);
 					}
 
 					break;
@@ -2378,9 +2381,19 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				case 2:
 
 					// load remainder of file
-					while ((value = fin.readInt()) >= 0) {
-						IntArr.add(value);
+					int temp = 0;
+					while ((temp = fin.readInt()) >= 0) {
+						blockArr.add(temp + "");
 					}
+
+					break;
+					
+				case 3:
+
+					// load remainder of file
+					while ((value = fin.readUTF()) != null) {
+						blockArr.add(value);
+						}
 
 					break;
 
@@ -2399,7 +2412,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 			}
 
-			plotBlockData.setBlockList(IntArr);
+			plotBlockData.setBlockList(blockArr);
 			plotBlockData.resetBlockListRestored();
 			return plotBlockData;
 		}
