@@ -38,8 +38,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
 	private List<Location> jailSpawns = new ArrayList<Location>();
-	//All sieges of the town, whether queued, active, or recently completed
-	private List<Siege> sieges = new ArrayList<Siege>();
+	private List<Siege> sieges = new ArrayList<Siege>();  	//All sieges, both  active & recently completed
 
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
@@ -55,7 +54,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
-	private Siege activeSiege;
 
 	public Town(String name) {
 
@@ -73,7 +71,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
-		activeSiege = null;
 	}
 
 	@Override
@@ -1269,19 +1266,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public List<Siege> getSieges() {
 		return sieges;
 	}
-	public Siege getActiveSiege() {
-		return activeSiege;
-	}
 
 	public void addSiege(Siege siege) {
 		sieges.add(siege);
 	}
 
-	public void setActiveSiege(Siege activeSiege) {
-		this.activeSiege = activeSiege;
-	}
-
-	public List<Nation> getActiveAndQueuedSiegeNations() {
+	public List<Nation> getNationNamesFromActiveSieges() {
 		List<Nation> result = new ArrayList<>();
 		for(Siege siege: sieges) {
 			if(!siege.isComplete()) {

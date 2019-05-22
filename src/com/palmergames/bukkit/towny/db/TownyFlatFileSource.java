@@ -1030,15 +1030,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = kvFile.get("activeSiege");
-				if (line != null){
-					try {
-						town.setActiveSiege(getSiege(line, town));
-					} catch (Exception ee){
-						town.setActiveSiege(null);
-					}
-				}
-
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -2028,10 +2019,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Siege Queue
 		list.add("sieges=" + StringMgmt.join(town.getSiegeNames(), ","));
-		// Active Siege
-		if(town.getActiveSiege() != null) {
-			list.add("activeSiege=" + town.getActiveSiege().getAttackingNation().getName());
-		}
 
 		/*
 		 *  Make sure we only save in async

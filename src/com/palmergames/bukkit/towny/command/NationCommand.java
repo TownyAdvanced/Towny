@@ -663,9 +663,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (nationOfAttackingPlayer.isNationAttackingTownNow(defendingTown))
 				throw new TownyException("You nation is already attacking this town.");
 
-			if (nationOfAttackingPlayer.isNationQueuingToAttackTown(defendingTown))
-				throw new TownyException("You are already queuing to attack this town");
-
 			if (nationOfAttackingPlayer.hasNationAttackedTownRecently(defendingTown))
 				throw new TownyException("You have recently attacked this town, you must wait until after the next siege cooldown before attacking again");
 
@@ -703,8 +700,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		//Add siege to nation
 		attackingNation.addSiege(siege);
 
-		//Add siege to town queue
+		//Add siege to town
 		defendingTown.addSiege(siege);
+
+		TownyMessaging.sendGlobalMessage(
+					TownyFormatter.getFormattedNationName(siege.getAttackingNation()) +
+							" has started a siege on " +
+						TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
 
 		//Save the siege to DB
 		TownyUniverse.getDataSource().saveNation(attackingNation);

@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -393,11 +392,14 @@ public class TownyFormatter {
 			System.arraycopy(entire, 0, residents, 0, 35);
 			residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
 		}
-		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
+		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
 		// Sieges [3]:  Prussia (Besieging Now), Britain (Queued), Russia (Queued)
-		List<Nation> attackers = town.getActiveAndQueuedSiegeNations();
+		List<Nation> attackers = town.getNationNamesFromActiveSieges();
 		String[] attackerNames = getFormattedNamesOfTownAttackers(attackers.toArray(new Nation[0]));
+
+		TownyMessaging.sendMsg("Lang string is " + String.format(TownySettings.getLangString("status_town_siegelist"),attackerNames.length));
+
 		out.addAll(ChatTools.listArr(attackerNames, String.format(TownySettings.getLangString("status_town_siegelist"), attackerNames.length )));
 
 		out = formatStatusScreens(out);
@@ -665,9 +667,9 @@ public class TownyFormatter {
 		List<String> names = new ArrayList<String>();
 		for (int i =0; i < nations.length; i++) {
 			if (i == 0) {
-				names.add(getFormattedName(nations[i]) + " (Besieging Now) ");
+				names.add(getFormattedName(nations[i]) + " *Besieging Now* ");
 			} else {
-				names.add(getFormattedName(nations[i]) + " (Queued) ");
+				names.add(getFormattedName(nations[i]) + " *Queued* ");
 			}
 		}
 		return names.toArray(new String[0]);

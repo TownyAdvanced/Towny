@@ -1007,17 +1007,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
 
-                line = rs.getString("activeSiege");
-                if (line != null && line.length() != 0) {
-                    try {
-                        Siege siege = getSiege(line, town);
-                        if (siege != null)
-                            town.setActiveSiege(siege);
-                    } catch (NotRegisteredException x) {
-                        TownyMessaging.sendErrorMsg("Loading Error: Exception while reading active siege of town file " + town.getName() + ".txt. The siege " + line + " does not exist, skipping...");
-                    }
-                }
-
                 s.close();
                 return true;
             }
@@ -1740,7 +1729,6 @@ public class TownySQLSource extends TownyFlatFileSource {
             }
 
             twn_hm.put("sieges", StringMgmt.join(town.getSiegeNames(), "#"));
-            twn_hm.put("activeSiege", town.getActiveSiege() != null ? town.getActiveSiege().getAttackingNation().getName() : "");
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
