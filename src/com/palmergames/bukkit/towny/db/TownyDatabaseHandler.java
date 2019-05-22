@@ -1,16 +1,10 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.event.DeleteNationEvent;
-import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
-import com.palmergames.bukkit.towny.event.DeleteTownEvent;
-import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
-import com.palmergames.bukkit.towny.event.RenameNationEvent;
-import com.palmergames.bukkit.towny.event.RenameResidentEvent;
-import com.palmergames.bukkit.towny.event.RenameTownEvent;
-import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -32,6 +26,7 @@ import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
@@ -591,7 +586,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		removeTownBlocks(town);
 
-		List<Resident> toSave = new ArrayList<>(town.getResidents());
+		//Remove any sieges on the town
+		for(Siege siege: new ArrayList<>(town.getSieges())) {
+			universe.getSieges().remove(siege); //Delete siege from universe
+			siege.getAttackingNation().getSieges().remove(siege);  //Delete siege from attacking nation
+			deleteSiege(siege); //Delete siege in data souce
+			saveNation(siege.getAttackingNation()); //save attacking nation in data source
+		}
+		saveSiegeList();
+
+		List<Resident> residentsToSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
 
 		try {
@@ -613,7 +617,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			e.printStackTrace();
 		}
 
-		for (Resident resident : toSave) {
+		for (Resident resident : residentsToSave) {
 			resident.clearModes();
 			removeResident(resident);
 			saveResident(resident);
@@ -640,6 +644,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 
 		deleteTown(town);
+
 		saveTownList();
 		try {
 			townyWorld.removeTown(town);
@@ -648,7 +653,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		saveWorld(townyWorld);
 
-		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+		//HACK TO WORKAROUND ISSUE 3231
+		Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> {
+			BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+		});
 
 		universe.setChangedNotify(REMOVE_TOWN);
 	}
@@ -826,6 +834,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * and the file move command may fail.
 			 */
 			deleteTown(town);
+			for(Siege siege: town.getSieges()) {
+				deleteSiege(siege);
+			}
 
 			/*
 			 * Remove the old town from the townsMap
@@ -870,8 +881,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTownBlock(townBlock);
 			}
 
+			//Save Sieges
+			for(Siege siege: town.getSieges()) {
+				saveSiege(siege);  //Save siege
+				saveNation(siege.getAttackingNation());  //Save the nation involved in the siege
+			}
+
 			saveTown(town);
 			saveTownList();
+			saveSiegeList();
 			saveWorld(town.getWorld());
 
 			if (nation != null) {

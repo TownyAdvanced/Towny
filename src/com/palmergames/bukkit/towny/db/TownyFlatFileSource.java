@@ -2683,12 +2683,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		File file = new File(getResidentFilename(resident));
 		if (file.exists())
 			file.delete();
+			file.delete();
 	}
 
 	@Override
 	public void deleteTown(Town town) {
-
 		File file = new File(getTownFilename(town));
+
 		if (file.exists()) {
 			FileMgmt.moveFile(file, ("deleted"));
 		}

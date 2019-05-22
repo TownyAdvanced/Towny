@@ -691,6 +691,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		homeBlock = null;
 		outpostSpawns.clear();
 		jailSpawns.clear();
+		sieges.clear();
 
 		try {
 			if (hasWorld()) {
