@@ -149,4 +149,7 @@ public class Siege {
         this.complete = complete;
     }
 
+    public String getName() {
+        return getAttackingNation().getName() + "_vs_" + getDefendingTown().getName();
+    }
 }

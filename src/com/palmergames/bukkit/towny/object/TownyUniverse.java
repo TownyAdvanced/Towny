@@ -62,8 +62,8 @@ public class TownyUniverse extends TownyObject {
 	protected Hashtable<String, Resident> residents = new Hashtable<>();
 	protected Hashtable<String, Town> towns = new Hashtable<>();
 	protected Hashtable<String, Nation> nations = new Hashtable<>();
+	protected Hashtable<String, Siege> sieges = new Hashtable<>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<>();
-	protected List<Siege> sieges = new ArrayList<Siege>();
 
 
 	private static TownyDataSource dataSource;
@@ -471,6 +471,14 @@ public class TownyUniverse extends TownyObject {
 	public Hashtable<String, Nation> getNationsMap() {
 
 		return this.nations;
+	}
+
+	/**
+	 * @return Hashtable of all sieges
+	 */
+	public Hashtable<String, Siege> getSiegesMap() {
+
+		return this.sieges;
 	}
 
 	/**
@@ -1311,9 +1319,5 @@ public class TownyUniverse extends TownyObject {
 			}
 		}
 		return false;
-	}
-
-	public List<Siege> getSieges() {
-		return sieges;
 	}
 }

@@ -219,7 +219,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getSiegeFilename(Siege siege) {
 
-		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + siege.getAttackingNation().getName() + "_vs_" + siege.getDefendingTown().getName() + ".txt";
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + siege.getName() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
@@ -2023,7 +2023,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Siege Queue
-		list.add("sieges=" + StringMgmt.join(town.getSiegeNames(), ","));
+		list.add("sieges=" + StringMgmt.join(town.getBesiegingNationNames(), ","));
 
 		/*
 		 *  Make sure we only save in async

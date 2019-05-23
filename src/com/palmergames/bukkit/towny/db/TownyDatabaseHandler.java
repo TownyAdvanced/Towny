@@ -203,7 +203,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<Siege> getSieges() {
-		return universe.getSieges();
+		return new ArrayList<>(universe.getSiegesMap().values());
 	}
 
 	@Override
@@ -252,6 +252,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			Siege siege = new Siege(attackingNation, defendingTown);
 
+			universe.getSiegesMap().put(siege.getName().toLowerCase(), siege);
+
 			getSieges().add(siege);
 
 		} finally {
@@ -262,38 +264,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Siege getSiege(Nation attackingNation, Town defendingTown) throws TownyException {
-		for(Siege siege: getSieges()) {
-			if(siege.getDefendingTown() == defendingTown
-					&& siege.getAttackingNation() == attackingNation) {
-				return siege;
-			}
-		}
-
-		throw new NotRegisteredException("Siege not found");
+		String name = attackingNation.getName() + "_vs_" + defendingTown.getName();
+		return universe.getSiegesMap().get(name.toLowerCase());
 	}
 
 	@Override
 	public Siege getSiege(Nation attackingNation, String defendingTownName) throws TownyException {
-		for(Siege siege: getSieges()) {
-			if(siege.getDefendingTown().getName().equals(defendingTownName)
-					&& siege.getAttackingNation() == attackingNation) {
-				return siege;
-			}
-		}
-
-		throw new NotRegisteredException("Siege not found");
+		String name = attackingNation.getName() + "_vs_" + defendingTownName;
+		return universe.getSiegesMap().get(name.toLowerCase());
 	}
 
 	@Override
 	public Siege getSiege(String attackingNationName, Town defendingTown) throws TownyException {
-		for(Siege siege: getSieges()) {
-			if(siege.getDefendingTown() == defendingTown
-					&& siege.getAttackingNation().getName().equals(attackingNationName)) {
-				return siege;
-			}
-		}
-
-		throw new NotRegisteredException("Siege not found");
+		String name =attackingNationName + "_vs_" + defendingTown.getName();
+		return universe.getSiegesMap().get(name.toLowerCase());
 	}
 
 	private boolean isSiegeAlreadyRegistered(Nation attackingNation, Town defendingTown) {
@@ -585,7 +569,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		//Remove any sieges on the town
 		for(Siege siege: new ArrayList<>(town.getSieges())) {
-			universe.getSieges().remove(siege); //Delete siege from universe
+			universe.getSiegesMap().remove(siege.getName().toLowerCase()); //Delete siege from universe
 			siege.getAttackingNation().getSieges().remove(siege);  //Delete siege from attacking nation
 			deleteSiege(siege); //Delete siege in data souce
 			saveNation(siege.getAttackingNation()); //save attacking nation in data source
@@ -688,7 +672,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//Delete all the nation's sieges
 		List<Siege> siegesToDelete = new ArrayList<>(nation.getSieges());
 		for(Siege siege: siegesToDelete) {
-			universe.getSieges().remove(siege); //Remove siege from universe
+			universe.getSiegesMap().remove(siege.getName().toLowerCase()); //Delete siege from universe
 			siege.getDefendingTown().getSieges().remove(siege); // Remove siege from defending town
 			deleteSiege(siege);  //Delete siege from data source
 			saveTown(siege.getDefendingTown());  //Save defending town in data source
@@ -756,11 +740,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public Set<String> getSiegesKeys() {
-		Set<String> result =new HashSet<>();
-		for(Siege siege: universe.getSieges()) {
-			result.add(siege.getAttackingNation().getName() + "_vs_" + siege.getDefendingTown().getName());
-		}
-		return result;
+
+		return universe.getNationsMap().keySet();
 	}
 
 	@Override

@@ -1157,7 +1157,7 @@ public class TownySQLSource extends TownyFlatFileSource {
         Statement s = null;
         ResultSet rs = null;
         String lineString;
-        TownyMessaging.sendDebugMsg("Loading siege " + siege.getAttackingNation().getName() + " vs " + siege.getDefendingTown().getName());
+        TownyMessaging.sendDebugMsg("Loading siege " + siege.getName());
 
         if (!getContext())
             return false;
@@ -1728,7 +1728,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
-            twn_hm.put("sieges", StringMgmt.join(town.getSiegeNames(), "#"));
+            twn_hm.put("sieges", StringMgmt.join(town.getBesiegingNationNames(), "#"));
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -1785,7 +1785,7 @@ public class TownySQLSource extends TownyFlatFileSource {
     public synchronized boolean saveSiege(Siege siege) {
 
         TownyMessaging.sendDebugMsg(
-                "Saving siege " + siege.getAttackingNation().getName() + " vs " + siege.getDefendingTown().getName());
+                "Saving siege " + siege.getName());
 
         try {
             HashMap<String, Object> nat_hm = new HashMap<>();

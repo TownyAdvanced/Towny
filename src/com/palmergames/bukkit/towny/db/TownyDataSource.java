@@ -282,7 +282,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Sieges");
 		for (Siege siege : getSieges())
 			if (!loadSiege(siege)) {
-				System.out.println("[Towny] Loading Error: Could not read siege data '" + siege.getAttackingNation().getName() + " vs. " + siege.getDefendingTown().getName() + "'.");
+				System.out.println("[Towny] Loading Error: Could not read siege data '" + siege.getName() + "'.");
 				return false;
 			}
 		return true;

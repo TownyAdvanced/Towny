@@ -1259,14 +1259,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	}
 
-	public List<String> getSiegeNames() {
-		List<String> result = new ArrayList<>();
-		for(Siege siege: sieges) {
-			result.add(siege.getAttackingNation().getName());
-		}
-		return result;
-	}
-
 	public List<Siege> getSieges() {
 		return sieges;
 	}
@@ -1281,6 +1273,14 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			if(!siege.isComplete()) {
 				result.add(siege.getAttackingNation());
 			}
+		}
+		return result;
+	}
+
+	public List<String> getBesiegingNationNames() {
+		List<String> result = new ArrayList<>();
+		for(Siege siege: sieges) {
+			result.add(siege.getAttackingNation().getName());
 		}
 		return result;
 	}
