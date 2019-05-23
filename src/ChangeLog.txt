@@ -3163,3 +3163,33 @@ v0.92.0.11:
       - If higher than 0, it will limit how many towns can be joined into a nation.
       - Does not affect existing nations that are already over the limit.
     - Fix for /res spawn getting players out of jail, courtesy of KarlOfDuty.
+0.93.1.0:
+    - Fix for nationZones affecting nation-less towns when the only_capitals setting is false.
+    - Fix for servers using CMI that cannot have jailed players sent to jail on respawn.
+    - Fix for nationZones.
+    - Fix for global_town_settings.keep_experience_on_death_in_town setting not appearing in configs.
+    - Flagwar events are now cancellable via the API. Courtesy of Dave5080.
+    - Fix for claims still being charged despite using_economy: false.
+    - Fix for ranks not being removed from offline players.
+    - Added TownAddResidentRankEvent and TownRemoveResidentRankEvent events, courtesy of Artuto. 
+    - Fix plot perm line not being set properly on plots owned by someone who leaves town.
+    - Courtesy of creatorfromhell:
+      - Fix revert-on-unclaim system to work with 1.13 and newer blockstates.
+      - Fix async change required for 1.14
+        - Fixes claiming and plotchangetypes.
+      - Fix boats being misnamed in item_use_ids
+        - REQUIRED CONFIG CHANGE: in protection.item_use_ids
+          - Change BOAT_BIRCH,BOAT_ACACIA,BOAT_DARK_OAK,BOAT_JUNGLE,BOAT,BOAT_SPRUCE to BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT
+      - Added new blocks to switch_ids
+        - REQUIRED CONFIG CHANGE: in protection.switch_ids
+          - Add ",STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL" to the list.
+    - Courtesy of TheFlagCourier:
+      - Fix a missing teleportcause.
+      - Switch Towny over to using getItemInMainHand. 
+    - Courtesy of BarnabyD:
+      - Fix mobremovaltimer task from being as laggy.
+    - REQUIRED CONFIG CHANGE: in global_town_settings.farm_plot_allow_blocks
+      - New configs will generate the new default list.
+      - Many things have changed. It is recommended you replace the entire list with this:
+        - BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE
+      - Not included in the default list: DIRT,GRASS_BLOCK,FARMLAND 

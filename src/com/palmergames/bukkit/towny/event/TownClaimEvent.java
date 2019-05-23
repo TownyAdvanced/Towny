@@ -25,6 +25,7 @@ public class TownClaimEvent extends Event  {
 	}
 
     public TownClaimEvent(TownBlock townBlock) {
+    	super(true);
         this.townBlock = townBlock;
     }
 

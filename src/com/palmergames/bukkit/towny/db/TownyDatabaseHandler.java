@@ -1155,7 +1155,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();			
 		}
 		
-		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
+		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident, !Bukkit.getServer().isPrimaryThread()));
 		
 		universe.setChangedNotify(RENAME_RESIDENT);
 		

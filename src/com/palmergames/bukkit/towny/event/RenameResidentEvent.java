@@ -23,7 +23,7 @@ public class RenameResidentEvent extends Event{
 		return handlers;
 	}
 
-	public RenameResidentEvent(String oldName, Resident resident) {
+	public RenameResidentEvent(String oldName, Resident resident, boolean async) {
 		this.oldName = oldName;
 		this.resident = resident;
 	}

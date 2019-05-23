@@ -82,7 +82,7 @@ public class TownBlock {
 		}
 		if (successful && resident != null) { //Should not cause a NPE, is checkingg if resident is null and
 			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
-			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
+			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this, !Bukkit.getServer().isPrimaryThread()));
 		}
 		this.resident = resident;
 	}
@@ -195,11 +195,7 @@ public class TownBlock {
 
 
 		if (type != null){
-
-			//HACK TO WORKAROUND ISSUE 3231
-			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> {
-				BukkitTools.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this) );
-			});
+			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this, !Bukkit.getServer().isPrimaryThread()));
 		}
 		this.type = type;
 

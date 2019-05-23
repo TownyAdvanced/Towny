@@ -29,7 +29,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 	private Towny plugin;
 	private Player player;
 	private Block flagBaseBlock;
-	private boolean cancel = false;
+	private boolean cancelled = false;
 	private String reason = null;
 
 	public CellAttackEvent(Towny plugin, Player player, Block flagBaseBlock) {
@@ -58,13 +58,13 @@ public class CellAttackEvent extends Event implements Cancellable {
 	@Override
 	public boolean isCancelled() {
 
-		return cancel;
+		return cancelled;
 	}
 
 	@Override
-	public void setCancelled(boolean cancel) {
+	public void setCancelled(boolean cancelled) {
 
-		this.cancel = cancel;
+		this.cancelled = cancelled;
 	}
 
 	public String getReason() {
