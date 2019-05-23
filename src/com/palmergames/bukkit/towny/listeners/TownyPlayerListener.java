@@ -40,6 +40,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -950,7 +951,9 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerFishEvent(PlayerFishEvent event) {
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
 			Player player = event.getPlayer();
-			Entity caught = event.getCaught();				
+			Entity caught = event.getCaught();
+			if (caught.getType().equals(EntityType.PLAYER))
+				return;
 			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
 			if (!bDestroy) {
 				event.setCancelled(true);
