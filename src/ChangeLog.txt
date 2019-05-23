@@ -3201,3 +3201,4 @@ v0.92.0.11:
       - Add ITEM_FRAME
       - Fixes players being able to spin items in item frames. 
     - Added ignoreplots and constant plots to /res set mode ?
+    - Fix edge-case scenario where using /ta set mayor can cause an NPC town to pay upkeep.

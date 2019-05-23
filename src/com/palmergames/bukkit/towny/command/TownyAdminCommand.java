@@ -688,9 +688,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 					} else {
 						newMayor = TownyUniverse.getDataSource().getResident(split[2]);
-
-						// set upkeep again
-						town.setHasUpkeep(true);
 					}
 
 					if (!town.hasResident(newMayor))
@@ -704,9 +701,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						try {
 							town.removeResident(oldMayor);
 							TownyUniverse.getDataSource().removeResident(oldMayor);
-
 							TownyUniverse.getDataSource().removeResidentList(oldMayor);
-
+							// set upkeep again
+							town.setHasUpkeep(true);
 						} catch (EmptyTownException e) {
 							// Should never reach here as we are setting a new
 							// mayor before removing the old one.
