@@ -415,6 +415,8 @@ public abstract class TownyDataSource {
 
 	abstract public Set<String> getNationsKeys();
 
+	abstract public Set<String> getSiegesKeys();
+
 	abstract public List<Town> getTownsWithoutNation();
 
 	abstract public List<Resident> getResidentsWithoutTown();

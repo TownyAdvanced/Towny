@@ -597,7 +597,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             while (rs.next()) {
                 try {
                     attackingNation = universe.getNationsMap().get(rs.getString("attackingNationName"));
-                    defendingTown = universe.getTownsMap().get("defendingTownName");
+                    defendingTown = universe.getTownsMap().get(rs.getString("defendingTownName"));
                     newSiege(attackingNation, defendingTown);
                 } catch (AlreadyRegisteredException e) {
                     e.printStackTrace();

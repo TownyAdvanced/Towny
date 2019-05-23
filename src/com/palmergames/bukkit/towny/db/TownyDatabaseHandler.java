@@ -31,10 +31,7 @@ import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
 import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;
@@ -653,10 +650,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		saveWorld(townyWorld);
 
-		//HACK TO WORKAROUND ISSUE 3231
-		Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> {
-			BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
-		});
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 
 		universe.setChangedNotify(REMOVE_TOWN);
 	}
@@ -758,6 +752,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public Set<String> getNationsKeys() {
 
 		return universe.getNationsMap().keySet();
+	}
+
+	@Override
+	public Set<String> getSiegesKeys() {
+		Set<String> result =new HashSet<>();
+		for(Siege siege: universe.getSieges()) {
+			result.add(siege.getName());
+		}
+		return result;
 	}
 
 	@Override

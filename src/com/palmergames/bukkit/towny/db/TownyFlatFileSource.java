@@ -195,6 +195,11 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		names = getNationsKeys();
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
+
+		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges";
+		names = getSiegesKeys();
+
+		FileMgmt.deleteUnusedFiles(new File(path), names);
 	}
 
 	public String getResidentFilename(Resident resident) {
@@ -426,7 +431,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading Siege List");
 		String line = null;
 		BufferedReader fin;
-		String[] participants;
+		String[] participantNames;
 		String attackingNationName;
 		String defendingTownName;
 		Nation attackingNation;
@@ -441,9 +446,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
-					participants = line.split(",");
-					attackingNationName = participants[0];
-					defendingTownName = participants[1];
+					participantNames = line.split(Siege.getNameSplitter());
+					attackingNationName = participantNames[0];
+					defendingTownName = participantNames[1];
 					attackingNation = universe.getNationsMap().get(attackingNationName);
 					defendingTown = universe.getTownsMap().get(defendingTownName);
 					newSiege(attackingNation, defendingTown);
@@ -1826,7 +1831,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 
 		for (Siege siege : getSieges()) {
-			list.add(siege.getAttackingNation().getName() + "," + siege.getDefendingTown().getName());
+			list.add(siege.getName());
 		}
 
 		/*

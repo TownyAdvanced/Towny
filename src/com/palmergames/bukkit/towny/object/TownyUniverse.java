@@ -346,6 +346,7 @@ public class TownyUniverse extends TownyObject {
 		worlds.clear();
 		nations.clear();
 		towns.clear();
+		sieges.clear();
 		residents.clear();
 
 		if (!loadDatabase(load)) {
