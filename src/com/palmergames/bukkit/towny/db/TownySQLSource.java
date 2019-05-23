@@ -596,8 +596,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             rs = s.executeQuery("SELECT attackingNationName, defendingTownName FROM " + tb_prefix + "SIEGES");
             while (rs.next()) {
                 try {
-                    attackingNation = universe.getNationsMap().get(rs.getString("attackingNationName"));
-                    defendingTown = universe.getTownsMap().get(rs.getString("defendingTownName"));
+                    attackingNation = universe.getNationsMap().get(rs.getString("attackingNationName").toLowerCase());
+                    defendingTown = universe.getTownsMap().get(rs.getString("defendingTownName").toLowerCase());
                     newSiege(attackingNation, defendingTown);
                 } catch (AlreadyRegisteredException e) {
                     e.printStackTrace();

@@ -656,13 +656,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("You cannot be flying to start a siege.");
 
 			Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
-			Nation nationOfDefendingTown = defendingTown.getNation();
 
-			if(nationOfAttackingPlayer == nationOfDefendingTown)
-				throw new TownyException("You cannot attack a town in your own nation.");
+			if (defendingTown.hasNation()) {
+				Nation nationOfDefendingTown = defendingTown.getNation();
 
-			if (defendingTown.hasNation() && !nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-				throw new TownyException("If target town has a nation AND is not an enemy of your town, you cannot attack.");
+				if(nationOfAttackingPlayer == nationOfDefendingTown)
+					throw new TownyException("You cannot attack a town in your own nation.");
+
+				if (defendingTown.hasNation() && !nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
+					throw new TownyException("If target town has a nation AND is not an enemy of your town, you cannot attack.");
+			}
 
 			if (nationOfAttackingPlayer.isNationAttackingTownNow(defendingTown))
 				throw new TownyException("Your nation is already attacking this town.");
