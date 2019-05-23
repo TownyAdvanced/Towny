@@ -3200,3 +3200,4 @@ v0.92.0.11:
     - REQUIRED CONFIG CHANGE: in protections.switch_ids
       - Add ITEM_FRAME
       - Fixes players being able to spin items in item frames. 
+    - Added ignoreplots and constant plots to /res set mode ?

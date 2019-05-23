@@ -569,6 +569,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "constantplots", "", ""));
 			// String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() ==
 			// null ? "flag" :
 			// TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
