@@ -194,10 +194,7 @@ public class TownClaim extends Thread {
 			TownyUniverse.getDataSource().saveTownBlock(townBlock);
 			TownyUniverse.getDataSource().saveTownBlockList();
 
-			//HACK TO WORKAROUND ISSUE 3231
-			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> {
-				BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
-			});
+			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
 		}
 	}
 

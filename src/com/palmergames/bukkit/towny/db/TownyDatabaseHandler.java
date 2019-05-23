@@ -758,7 +758,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public Set<String> getSiegesKeys() {
 		Set<String> result =new HashSet<>();
 		for(Siege siege: universe.getSieges()) {
-			result.add(siege.getName());
+			result.add(siege.getAttackingNation().getName() + "," + siege.getDefendingTown().getName());
 		}
 		return result;
 	}

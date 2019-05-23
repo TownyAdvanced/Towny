@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.object.Town;
  * Created by Goosius on 07/05/2019.
  */
 public class Siege {
-    private static final String NAME_SPLITTER = "_vs_";
     private Nation attackingNation;
     private Town defendingTown;
     private SiegeType siegeType;
@@ -150,11 +149,4 @@ public class Siege {
         this.complete = complete;
     }
 
-    public String getName() {
-        return attackingNation.getName() + getNameSplitter() + defendingTown.getName();
-    }
-
-    public static String getNameSplitter() {
-        return NAME_SPLITTER;
-    }
 }

@@ -446,7 +446,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
-					participantNames = line.split(Siege.getNameSplitter());
+					participantNames = line.split(",");
 					attackingNationName = participantNames[0];
 					defendingTownName = participantNames[1];
 					attackingNation = universe.getNationsMap().get(attackingNationName);
@@ -1131,6 +1131,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
+
+							TownyMessaging.sendMsg("Siege name");
 							Siege siege = getSiege(nation, token);
 							if (siege != null)
 								nation.addSiege(siege);
@@ -1207,6 +1209,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
+				TownyMessaging.sendErrorMsg(e.getMessage());
 				return false;
 			}
 
@@ -1831,7 +1834,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 
 		for (Siege siege : getSieges()) {
-			list.add(siege.getName());
+			list.add(siege.getAttackingNation().getName() + "," + siege.getDefendingTown().getName());
 		}
 
 		/*
