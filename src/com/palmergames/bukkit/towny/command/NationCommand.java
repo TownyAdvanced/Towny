@@ -289,7 +289,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("start")) {
+			} else if (split[0].equalsIgnoreCase("start") && split[1].equals("siege")) {
 
 				String[] siegeObjectives = StringMgmt.remArgs(split, 2);
 				attemptToStartAssaultSiege(player, siegeObjectives);

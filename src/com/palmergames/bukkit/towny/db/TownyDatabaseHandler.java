@@ -741,7 +741,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public Set<String> getSiegesKeys() {
 
-		return universe.getNationsMap().keySet();
+		return universe.getSiegesMap().keySet();
 	}
 
 	@Override
