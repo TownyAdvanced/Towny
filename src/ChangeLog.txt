@@ -3197,3 +3197,6 @@ v0.92.0.11:
       - Add DRAGON_EGG
       - Fixes players being able to rightclick on dragon eggs and causing them to teleport.
     - Fix typo in townyperms.yml
+    - REQUIRED CONFIG CHANGE: in protections.switch_ids
+      - Add ITEM_FRAME
+      - Fixes players being able to spin items in item frames. 

@@ -373,6 +373,14 @@ public class TownyPlayerListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
 				break;
+
+			case ITEM_FRAME:
+				
+				TownyMessaging.sendDebugMsg("Item_Frame Right Clicked");
+				block = Material.ITEM_FRAME;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
+				break;
 			
 			default:
 				break;
