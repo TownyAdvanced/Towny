@@ -2595,8 +2595,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_ASSAULT_SIEGES);
 	}
 
-	public static int getWarSiegeWarzoneRadiusTownBlocks() {
-		return getInt(ConfigNodes.WAR_SIEGE_WARZONE_RADIUS_TOWN_BLOCKS);
+	public static int getWarSiegeMaxWarzoneDistanceFromHomeblock() {
+		return getInt(ConfigNodes.WAR_SIEGE_MAX_WARZONE_DISTANCE_FROM_HOMEBLOCK);
 	}
 
 	public static double getWarSiegeAttackerCostUpfront() {
@@ -2604,7 +2604,7 @@ public class TownySettings {
 	}
 
 	public static long getWarSiegeTimerIntervalSeconds() {
-		return getInt(ConfigNodes.WAR_SIEGE_TIMER_INTERVAL_SECONDS);
+		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 }
 

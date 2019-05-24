@@ -1,13 +1,8 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import org.bukkit.entity.Player;
 
 /**
  * Created by Anonymoose on 19/05/2019.
@@ -28,7 +23,7 @@ public class SiegeWarUtil {
             }
         }
 
-        int warZoneRadiusTownBlocks = TownySettings.getWarSiegeWarzoneRadiusTownBlocks();
+        int warZoneRadiusTownBlocks = TownySettings.getWarSiegeMaxWarzoneDistanceFromHomeblock();
 
         //Player is too far north
         if (townBlockWherePlayerIs.getZ() < homeBlock.getZ() - warZoneRadiusTownBlocks)

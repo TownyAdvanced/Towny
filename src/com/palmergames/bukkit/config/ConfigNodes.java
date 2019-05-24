@@ -1579,7 +1579,7 @@ public enum ConfigNodes {
 			"war.siege.allow_revolt_sieges",
 			"true",
 			"# If true, revolt sieges are allowed."),
-	WAR_SIEGE_TIMER_INTERVAL_SECONDS(
+	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.timer_interval_seconds",
 			"5",
 			"# The time in seconds for each siegewar timer tick."),
@@ -1603,32 +1603,23 @@ public enum ConfigNodes {
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
 
-	WAR_SIEGE_WARZONE_RADIUS_TOWN_BLOCKS(
-			"war.siege.warzone_radius_town_blocks",
-			"3",
-			"# This value determines the size of the 'warzone'.",
-			"# The distance is measured in town blocks starting from the homeblock.",
-			"# The distance applies diagonally too. thus the warzone is in the shape of a square, centred on the homeblock"),
-	WAR_SIEGE_ACTION_ATTACK_MAX_DURATION_SECONDS(
-			"war.siege.action_attack_max_duration_seconds",
-			"300",
-			"#..."),
-	WAR_SIEGE_ACTION_ATTACK_POINTS_PER_PLAYER(
-			"war.siege.action_attack_points_per_player",
+	WAR_SIEGE_MAX_WARZONE_DISTANCE_FROM_HOMEBLOCK(
+			"war.siege.max_warzone_distance_from_homeblock",
+			"50",
+			"# This value is measured in town blocks.",
+			"# This value determines which town blocks are considered to be in the 'warzone'.",
+			"# Any town blocks which are within the given distance AND on the town border, are considered to be in the 'warzone'."),
+	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
+			"war.siege.points_per_attacking_player",
 			"100",
-			"# This setting determines the number of siege points awarded if an attack action succeeds.",
-			"# The award is calculated based on the number of attacking players standing in the warzone.",
-			"# The award is calculated at the exact time that the action duration expires"),
-	WAR_SIEGE_ACTION_DEFENCE_MAX_DURATION_SECONDS(
-			"war.siege.action_attack_max_duration_seconds",
-			"300",
-			"#..."),
-	WAR_SIEGE_ACTION_DEFENCE_POINTS_PER_PLAYER(
-			"war.siege.action_defence_points_per_player",
+			"# This setting determines the number of siege points awarded per attacking player.",
+			"# The award given each tick that an attacking player is in the warzone"),
+	WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER(
+			"war.siege.points_per_defending_player",
 			"100",
-			"# This setting determines the number of siege points awarded if a defence action succeeds.",
-			"# The award is calculated based on the number of defending players standing in the warzone.",
-			"# The award is calculated at the exact time that the action duration expires"),
+			"# This setting determines the number of siege points awarded per defending player.",
+			"# The award given each tick that an attacking player is in the warzone",
+			"# It is only given IF there are no defending players in the warzone"),
 
 	WAR_SIEGE_PLUNDER_AMOUNT(
 			"war.siege.objective.plunder_amount",
