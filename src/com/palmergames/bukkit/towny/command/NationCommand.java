@@ -648,11 +648,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("You must be standing in a town to start a siege.");
 
 			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-			if (!SiegeWarUtil.isPlayerWithinWarzone(townBlockWherePlayerIsLocated, defendingTown))
-				throw new TownyException("You must be near to the town homeblock to start a siege.");
+			if(defendingTown.hasHomeBlock()) {
+				if (!SiegeWarUtil.isPlayerWithinMaxWarZoneDistanceFromHomeBlock(townBlockWherePlayerIsLocated, defendingTown))
+					throw new TownyException("You must be near to the town homeblock to start a siege.");
+			}
 
-			if (player.isFlying())
-				throw new TownyException("You cannot be flying to start a siege.");
+			if(!SiegeWarUtil.isGivenTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated))
+				throw new TownyException("You must be in a town border block to start a siege.");
 
 			Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
 
@@ -682,6 +684,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_no_money."));
 				}
 			}
+
+			if (player.isFlying())
+				throw new TownyException("You cannot be flying to start a siege.");
+
+			if (SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player))
+				throw new TownyException("The god(s) favour wars on the land surface. You must have only sky above you to start a siege.");
 
 			//Setup Siege
 			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown);
