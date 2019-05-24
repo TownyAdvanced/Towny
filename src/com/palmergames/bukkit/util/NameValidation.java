@@ -96,7 +96,13 @@ public class NameValidation {
 
 		return !isValidName(name);
 	}
-
+	
+	/**
+	 * Is this a valid name via getNameCheckRegex
+	 *
+	 * @param name
+	 * @return true if this name is valid.
+	 */
 	public static boolean isValidName(String name) {
 	
 		try {
@@ -109,12 +115,6 @@ public class NameValidation {
 		}
 		
 	}
-	/**
-	 * Is this a valid name via getNameCheckRegex
-	 * 
-	 * @param name
-	 * @return true if this name is valid.
-	 */
 	public static boolean isValidString(String name) {
 
 		try {
