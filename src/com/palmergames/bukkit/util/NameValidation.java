@@ -82,17 +82,18 @@ public class NameValidation {
 	public static boolean isBlacklistName(String name) {
 
 		// Max name length
-		if (name.length() > TownySettings.getMaxNameLength())
-			return true;
+		if (name.length() > TownySettings.getMaxNameLength()) {
+            return true;
+        }
 		/*
 		  A list of all banned names (notably all sub commands like 'spawn'
 		  used in '/town spawn')
 		 */
-		ArrayList<String> bannedNames = new ArrayList<String>();
-		bannedNames.addAll(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
+        ArrayList<String> bannedNames = new ArrayList<>(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
 		// Banned names
-		if (bannedNames.contains(name.toLowerCase()))
-			return true;
+		if (bannedNames.contains(name.toLowerCase())) {
+            return true;
+        }
 
 		return !isValidName(name);
 	}
@@ -102,7 +103,7 @@ public class NameValidation {
 		try {
 			if (namePattern == null)
 				namePattern = Pattern.compile(TownySettings.getNameCheckRegex());
-			return namePattern.matcher(name).find();
+			return namePattern.matcher(name).matches();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
 			return false;
