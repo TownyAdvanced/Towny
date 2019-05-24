@@ -664,8 +664,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if(nationOfAttackingPlayer == nationOfDefendingTown)
 					throw new TownyException("You cannot attack a town in your own nation.");
 
-				if (defendingTown.hasNation() && !nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-					throw new TownyException("If target town has a nation AND is not an enemy of your town, you cannot attack.");
+				if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
+					throw new TownyException("You cannot attack unless the nation of the target town is an enemy of your nation.");
 			}
 
 			if (nationOfAttackingPlayer.isNationAttackingTownNow(defendingTown))

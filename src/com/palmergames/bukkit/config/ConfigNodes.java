@@ -1605,7 +1605,7 @@ public enum ConfigNodes {
 
 	WAR_SIEGE_MAX_WARZONE_DISTANCE_FROM_HOMEBLOCK(
 			"war.siege.max_warzone_distance_from_homeblock",
-			"50",
+			"30",
 			"# This value is measured in town blocks.",
 			"# This value determines which town blocks are considered to be in the 'warzone'.",
 			"# Any town blocks which are within the given distance AND on the town border, are considered to be in the 'warzone'."),
@@ -1622,7 +1622,7 @@ public enum ConfigNodes {
 			"# It is only given IF there are no defending players in the warzone"),
 
 	WAR_SIEGE_PLUNDER_AMOUNT(
-			"war.siege.objective.plunder_amount",
+			"war.siege.plunder_amount",
 			"50000",
 			"#...TODO---- make this vary by town size"),
 
