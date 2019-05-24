@@ -650,7 +650,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
 			if(defendingTown.hasHomeBlock()) {
 				if (!SiegeWarUtil.isPlayerWithinMaxWarZoneDistanceFromHomeBlock(townBlockWherePlayerIsLocated, defendingTown))
-					throw new TownyException("You must be near to the town homeblock to start a siege.");
+					throw new TownyException("You must be nearer to the town homeblock to start a siege.");
 			}
 
 			if(!SiegeWarUtil.isGivenTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated))
