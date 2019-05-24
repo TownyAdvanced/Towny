@@ -15,7 +15,6 @@ public class Siege {
     private long actualStartTime;   //System time millis
     private long scheduledEndTime;
     private long actualEndTime;
-    private String[] objectives;
     private int totalAttackersKilled;  //For report
     private int totalDefendersKilled;  //For report
     private double totalCostToAttacker;  //For report
@@ -47,10 +46,6 @@ public class Siege {
 
     public void setSiegeType(SiegeType siegeType) {
         this.siegeType = siegeType;
-    }
-
-    public void setObjectives(String[] objectives) {
-        this.objectives = objectives;
     }
 
     public Nation getAttackingNation() {

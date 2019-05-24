@@ -289,10 +289,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			} else if (split[0].equalsIgnoreCase("start") && split[1].equals("siege")) {
+			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("start")) {
 
-				String[] siegeObjectives = StringMgmt.remArgs(split, 2);
-				attemptToStartAssaultSiege(player, siegeObjectives);
+				attemptToStartAssaultSiege(player);
 
 			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
@@ -630,7 +629,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void attemptToStartAssaultSiege(Player player, String[] siegeObjectives) {
+	private void attemptToStartAssaultSiege(Player player) {
 
 		try {
 			if (!TownySettings.getWarSiegeEnabled())
@@ -685,7 +684,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			//Setup Siege
-			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown, siegeObjectives);
+			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown);
 
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -696,13 +695,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private Siege newSiege(SiegeType siegeType,
 						   Nation attackingNation,
-						   Town defendingTown,
-						   String[] objectives) throws TownyException {
+						   Town defendingTown) throws TownyException {
 		//Setup the siege
 		TownyUniverse.getDataSource().newSiege(attackingNation, defendingTown);
 		Siege siege = TownyUniverse.getDataSource().getSiege(attackingNation, defendingTown);
 		siege.setSiegeType(siegeType);
-		siege.setObjectives(objectives);
 
 		//Add siege to nation
 		attackingNation.addSiege(siege);

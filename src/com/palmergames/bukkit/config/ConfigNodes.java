@@ -1630,18 +1630,10 @@ public enum ConfigNodes {
 			"# The award is calculated based on the number of defending players standing in the warzone.",
 			"# The award is calculated at the exact time that the action duration expires"),
 
-	WAR_SIEGE_OBJECTIVE_PLUNDER_AMOUNT(
+	WAR_SIEGE_PLUNDER_AMOUNT(
 			"war.siege.objective.plunder_amount",
 			"50000",
-			"#..."),
-	WAR_SIEGE_OBJECTIVE_DISRUPT_DURATION_HOURS(
-			"war.siege.objective.disrupt_duration_hours",
-			"24",
-			"#..."),
-	WAR_SIEGE_OBJECTIVE_POISON_DURATION_HOURS(
-			"war.siege.objective.poison_duration_hours",
-			"24",
-			"#..."),
+			"#...TODO---- make this vary by town size"),
 
 	WAR_SIEGE_COOLDOWN_POST_ATTACK_DURATION_MODIFER(
 			"war.siege.cooldown.post_attack_duration_modifier",
