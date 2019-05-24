@@ -61,6 +61,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
@@ -581,6 +582,8 @@ public class TownyPlayerListener implements Listener {
 				 * Info Tool
 				 */
 				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+					if (event.getHand() != EquipmentSlot.HAND)
+						return;
 
 					Entity entity = event.getRightClicked();
 
@@ -590,7 +593,6 @@ public class TownyPlayerListener implements Listener {
 							));
 
 					event.setCancelled(true);
-
 				}
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
