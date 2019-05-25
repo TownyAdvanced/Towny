@@ -407,6 +407,8 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTown(Town town);
 
+	public abstract void removeSiege(Siege siege);
+
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	abstract public Set<String> getResidentKeys();
@@ -432,5 +434,4 @@ public abstract class TownyDataSource {
     abstract public Siege getSiege(Nation attackingNation, Town defendingTown) throws TownyException;
 	abstract public Siege getSiege(Nation attackingNation, String defendingTownName) throws TownyException;
 	abstract public Siege getSiege(String attackingNationName, Town defendingTown) throws TownyException;
-
 }

@@ -2600,7 +2600,15 @@ public class TownySettings {
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ASSAULT_COST_UPFRONT_PER_PLOT);
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT);
+	}
+
+	public static double getWarSiegeAttackerCostPerHour() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_HOUR);
+	}
+
+	public static double getWarSiegeAttackerCostPerSiegeZoneCasualty() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY);
 	}
 
 	public static long getWarSiegeTimerIntervalSeconds() {

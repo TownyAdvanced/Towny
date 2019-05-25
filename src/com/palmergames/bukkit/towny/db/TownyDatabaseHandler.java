@@ -640,6 +640,35 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	public void removeSiege(Siege siege) {
+
+		//todo ????????? do we need this?
+		//BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
+
+		//Remove siege from universe
+		universe.getSiegesMap().remove(siege.getName().toLowerCase());
+
+		//Remove siege from nation
+		siege.getAttackingNation().getSieges().remove(siege);
+
+		//Remove siege from town
+		siege.getDefendingTown().getSieges().remove(siege);
+
+		//Save changes to DB
+		deleteSiege(siege);
+		saveNation(siege.getAttackingNation());
+		saveTown(siege.getDefendingTown());
+		saveSiegeList();
+
+		//Todo - do we need something like this?
+		//BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
+
+		//Todo - do we need something like this?
+		//universe.setChangedNotify(REMOVE_TOWN);
+	}
+
+
+	@Override
 	public void removeNation(Nation nation) {
 
 		//search and remove from all ally/enemy lists

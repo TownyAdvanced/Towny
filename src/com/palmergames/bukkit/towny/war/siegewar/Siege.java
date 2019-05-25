@@ -1,7 +1,13 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 /**
  * Created by Goosius on 07/05/2019.
@@ -146,5 +152,23 @@ public class Siege {
 
     public String getName() {
         return getAttackingNation().getName() + "_vs_" + getDefendingTown().getName();
+    }
+
+    void applyUpkeepCost(double upkeepCost) {
+        try {
+            if (attackingNation.canPayFromHoldings(upkeepCost))
+                //Deduct cost
+                attackingNation.pay(upkeepCost, "Cost of maintaining siege.");
+            else {
+                //Abandon siege
+                //Maybe global message about it
+                TownyMessaging.sendGlobalMessage(attackingNation.getName() +
+                        " cannot afford to continue the siege on " + defendingTown.getName() + "." +
+                        "The siege has been automatically abandoned.");
+                TownyUniverse.getDataSource().removeSiege(this);
+            }
+        } catch (EconomyException x) {
+            TownyMessaging.sendErrorMsg(x.getMessage());
+        }
     }
 }
