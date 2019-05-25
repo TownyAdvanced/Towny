@@ -51,7 +51,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		Entity defenderEntity = event.getEntity();
 
-		TownyWorld World = null;
+		TownyWorld World;
 
 		try {
 			World = TownyUniverse.getDataSource().getWorld(defenderEntity.getLocation().getWorld().getName());
@@ -111,7 +111,6 @@ public class TownyEntityMonitorListener implements Listener {
 				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderEntity.getLastDamageCause();
 
 				Entity attackerEntity = damageEvent.getDamager();
-				defenderPlayer = (Player) defenderEntity;
 				Player attackerPlayer = null;
 				Resident attackerResident = null;
 
@@ -154,14 +153,6 @@ public class TownyEntityMonitorListener implements Listener {
 			 */
 			} else {
 				if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-					defenderPlayer = (Player) defenderEntity;
-					defenderResident = null;
-
-					try {
-						defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
-					} catch (NotRegisteredException e) {
-						return;
-					}
 					deathPayment(defenderPlayer, defenderResident);
 				}
 			}
