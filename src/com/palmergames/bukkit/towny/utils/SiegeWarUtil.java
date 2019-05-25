@@ -7,8 +7,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,35 +16,35 @@ import org.bukkit.entity.Player;
  */
 public class SiegeWarUtil {
 
-    public static boolean isPlayerWithinMaxWarZoneDistanceFromHomeBlock(TownBlock townBlockWherePlayerIs,
-                                                                        Town town) throws TownyException {
+    public static boolean isTownBlockWithinSiegeZone(TownBlock townBlock,
+                                                     Town town) throws TownyException {
         if(!town.hasHomeBlock())
             return false;
 
         TownBlock homeBlock = town.getHomeBlock();
 
-        int warZoneRadiusTownBlocks = TownySettings.getWarSiegeMaxWarzoneDistanceFromHomeblock();
+        int siegeZoneRadiusInTownBlocks = TownySettings.getWarSiegeZoneRadius();
 
         //Player is too far north
-        if (townBlockWherePlayerIs.getZ() < homeBlock.getZ() - warZoneRadiusTownBlocks)
+        if (townBlock.getZ() < homeBlock.getZ() - siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far south
-        if (townBlockWherePlayerIs.getZ() > homeBlock.getZ() + warZoneRadiusTownBlocks)
+        if (townBlock.getZ() > homeBlock.getZ() + siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far east
-        if (townBlockWherePlayerIs.getX() > homeBlock.getX() + warZoneRadiusTownBlocks)
+        if (townBlock.getX() > homeBlock.getX() + siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far west
-        if (townBlockWherePlayerIs.getX() < homeBlock.getX() - warZoneRadiusTownBlocks)
+        if (townBlock.getX() < homeBlock.getX() - siegeZoneRadiusInTownBlocks)
             return false;
 
         return true; //Player is in the warzone
     }
 
-    public static boolean isGivenTownBlockOnTheTownBorder(TownBlock townBlock) {
+    public static boolean isTownBlockOnTheTownBorder(TownBlock townBlock) {
         WorldCoord worldCoord = townBlock.getWorldCoord();
 
         int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };

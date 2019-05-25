@@ -1603,12 +1603,12 @@ public enum ConfigNodes {
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
 
-	WAR_SIEGE_MAX_WARZONE_DISTANCE_FROM_HOMEBLOCK(
-			"war.siege.max_warzone_distance_from_homeblock",
+	WAR_SIEGE_ZONE_RADIUS(
+			"war.siege.zone_radius",
 			"30",
 			"# This value is measured in town blocks.",
-			"# This value determines which town blocks are considered to be in the 'warzone'.",
-			"# Any town blocks which are within the given distance AND on the town border, are considered to be in the 'warzone'."),
+			"# This value determines the size 'siege zone'.",
+			"# The centre point of the zoze is the homeblock"),
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
 			"war.siege.points_per_attacking_player",
 			"100",
