@@ -3203,3 +3203,9 @@ v0.92.0.11:
     - Added ignoreplots and constant plots to /res set mode ?
     - Fix edge-case scenario where using /ta set mayor can cause an NPC town to pay upkeep.
     - Handle playerfishevent bug where players were being fished.
+    - Fix for long board messages losing their colouring, courtesy of Articdive.
+    - Fix for regex not working, courtesy of Articdive.
+    - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.string_check_regex
+      - Must be changed to: ^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$
+    - 
+     
