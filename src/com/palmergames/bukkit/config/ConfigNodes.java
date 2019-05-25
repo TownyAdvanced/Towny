@@ -1595,7 +1595,15 @@ public enum ConfigNodes {
 	WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY(
 			"war.siege.attacker_cost.per_siege_zone_casualty",
 			"5.0",
-			"#..."),
+			"# If a player from a besieging nation dies in the siegezone",
+		 	"# then a money cost (usually small) is applied to the besieging nation.",
+			"# This applies regardless of the cause of death.",
+			"",
+			"# Reason 1: This prevents the besieging nation from gaining advantage by",
+			"# 'Spamming' a town with quick-respawning players with no items.",
+			"",
+			"# Reason 2: This allows nomads and non-nation towns to better assist",
+		 	"# their friends in a town under siege."),
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
 			"war.siege.max_siege_duration_hours",
 			"72",

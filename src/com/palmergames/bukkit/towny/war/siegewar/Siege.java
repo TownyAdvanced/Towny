@@ -160,8 +160,6 @@ public class Siege {
                 //Deduct cost
                 attackingNation.pay(upkeepCost, "Cost of maintaining siege.");
             else {
-                //Abandon siege
-                //Maybe global message about it
                 TownyMessaging.sendGlobalMessage(attackingNation.getName() +
                         " cannot afford to continue the siege on " + defendingTown.getName() + "." +
                         "The siege has been automatically abandoned.");

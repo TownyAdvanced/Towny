@@ -16,32 +16,50 @@ import org.bukkit.entity.Player;
  */
 public class SiegeWarUtil {
 
+    public static boolean isPlayerWithinSiegeZone(Player player,
+                                                  Town town) {
+        return isWorldCoordWithinSiegeZone(WorldCoord.parseWorldCoord(player), town);
+    }
+
+
     public static boolean isTownBlockWithinSiegeZone(TownBlock townBlock,
-                                                     Town town) throws TownyException {
+                                                     Town town) {
+
+        return isWorldCoordWithinSiegeZone(townBlock.getWorldCoord(), town);
+    }
+
+
+    public static boolean isWorldCoordWithinSiegeZone(WorldCoord worldCoord,
+                                                     Town town)  {
         if(!town.hasHomeBlock())
             return false;
 
-        TownBlock homeBlock = town.getHomeBlock();
+        TownBlock homeBlock = null;
+        try {
+            homeBlock = town.getHomeBlock();
+        } catch (TownyException x) {
+            //We won't get here as we returned earlier if there was no homeblock.
+        }
 
         int siegeZoneRadiusInTownBlocks = TownySettings.getWarSiegeZoneRadius();
 
         //Player is too far north
-        if (townBlock.getZ() < homeBlock.getZ() - siegeZoneRadiusInTownBlocks)
+        if (worldCoord.getZ() < homeBlock.getZ() - siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far south
-        if (townBlock.getZ() > homeBlock.getZ() + siegeZoneRadiusInTownBlocks)
+        if (worldCoord.getZ() > homeBlock.getZ() + siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far east
-        if (townBlock.getX() > homeBlock.getX() + siegeZoneRadiusInTownBlocks)
+        if (worldCoord.getX() > homeBlock.getX() + siegeZoneRadiusInTownBlocks)
             return false;
 
         //Player is too far west
-        if (townBlock.getX() < homeBlock.getX() - siegeZoneRadiusInTownBlocks)
+        if (worldCoord.getX() < homeBlock.getX() - siegeZoneRadiusInTownBlocks)
             return false;
 
-        return true; //Player is in the warzone
+        return true; //Co-ordinate is within the siegezone
     }
 
     public static boolean isTownBlockOnTheTownBorder(TownBlock townBlock) {
@@ -73,4 +91,5 @@ public class SiegeWarUtil {
         }
         return false;  //There is nothing but air above them
     }
+
 }

@@ -1,9 +1,7 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -17,8 +15,10 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -66,22 +66,54 @@ public class TownyEntityMonitorListener implements Listener {
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
 
+			Player defenderPlayer = (Player) defenderEntity;
+			Resident defenderResident;
+			try {
+				defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
+			} catch (NotRegisteredException e) {
+				return;
+			}
+
+			//Killed while besieging a town ?
+			if (TownySettings.getWarSiegeEnabled()
+					&& TownySettings.isUsingEconomy()
+					&& defenderResident.hasTown()
+					&& defenderResident.getTown().hasNation()) {
+
+				for(Siege siege: defenderResident.getTown().getNation().getSieges()) {
+
+					if(!siege.isComplete() && SiegeWarUtil.isPlayerWithinSiegeZone(defenderPlayer, siege.getDefendingTown())) {
+						try {
+							double cost = TownySettings.getWarSiegeAttackerCostPerSiegeZoneCasualty();
+							Nation nation = defenderResident.getTown().getNation();
+							if(nation.canPayFromHoldings(cost)) {
+								nation.pay(cost,"Player from besieging nation died in the siegezone of: " + TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
+							} else {
+								//Cancel siege
+								TownyMessaging.sendGlobalMessage(
+										TownyFormatter.getFormattedNationName(nation) +
+												" cannot afford to continue the siege on " +
+												TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
+												"The siege has been automatically abandoned.");
+								TownyUniverse.getDataSource().removeSiege(siege);
+							}
+
+						} catch (EconomyException x) {
+							TownyMessaging.sendErrorMsg(x.getMessage());
+						}
+					}
+				}
+			}
+
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
 				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderEntity.getLastDamageCause();
 
 				Entity attackerEntity = damageEvent.getDamager();
-				Player defenderPlayer = (Player) defenderEntity;
+				defenderPlayer = (Player) defenderEntity;
 				Player attackerPlayer = null;
 				Resident attackerResident = null;
-				Resident defenderResident = null;
-
-				try {
-					defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
-				} catch (NotRegisteredException e) {
-					return;
-				}
 
 				// Was this a missile?
 				if (attackerEntity instanceof Projectile) {
@@ -108,10 +140,10 @@ public class TownyEntityMonitorListener implements Listener {
 				 * If attackerPlayer or attackerResident are null at this point
 				 * it was a natural death, not PvP.
 				 */				
-				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
+				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
+
 				if (attackerPlayer instanceof Player) {
 					isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-					
 				}
 
 				if (TownyUniverse.isWarTime())
@@ -122,8 +154,8 @@ public class TownyEntityMonitorListener implements Listener {
 			 */
 			} else {
 				if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-					Player defenderPlayer = (Player) defenderEntity;
-					Resident defenderResident = null;
+					defenderPlayer = (Player) defenderEntity;
+					defenderResident = null;
 
 					try {
 						defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
@@ -435,9 +467,28 @@ public class TownyEntityMonitorListener implements Listener {
 			}
 		}
 	}
-	
+
+
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
+
 		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
+
+			/*
+			SIEGE WAR: If the dead player was besieging the killer's town,
+			           the killer cannot jail them.
+			 */
+			if(TownySettings.getWarSiegeEnabled()
+					&& attackerResident.hasTown()
+					&& defenderResident.hasTown()
+					&& defenderResident.getTown().hasNation()) {
+				for(Town townUnderSiege: defenderResident.getTown().getNation().getTownsUnderSiege()) {
+					if(defenderResident.getTown() == townUnderSiege) {
+						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
+						return;
+					}
+				}
+			}
+
 			Location loc = defenderPlayer.getLocation();
 			if (!TownyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
 				return;
