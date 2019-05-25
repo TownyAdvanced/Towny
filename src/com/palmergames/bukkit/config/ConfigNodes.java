@@ -1584,17 +1584,13 @@ public enum ConfigNodes {
 			"5",
 			"# The time in seconds for each siegewar timer tick."),
 
-	WAR_SIEGE_ATTACKER_COST_UPFRONT(
-			"war.siege.attacker_cost_upfront",
-			"10000.0",
-			"#..."),
-	WAR_SIEGE_ATTACKER_COST_UPKEEP_PER_HOUR(
-			"war.siege.attacker_cost_upkeep_per_hour",
-			"500.0",
+	WAR_SIEGE_ASSAULT_COST_UPFRONT_PER_PLOT(
+			"war.siege.assault_cost.upfront_per_plot",
+			"10.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_PER_CASUALTY(
-			"war.siege.attacker_cost_per_casualty",
-			"1000.0",
+			"war.siege.assault_cost.per_casualty",
+			"20.0",
 			"#..."),
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
 			"war.siege.max_siege_duration_hours",

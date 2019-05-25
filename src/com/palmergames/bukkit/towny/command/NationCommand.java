@@ -638,8 +638,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!TownySettings.getWarSiegeAllowAssaultSieges())
 				throw new TownyException("Siege war assault sieges not allowed");
 
-			//TODO - test. Try this if player is not in a nation. See if it is already coered
-
 			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
@@ -675,7 +673,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("Your nation has recently attacked this town, you must wait until after the next siege cooldown before attacking again");
 
 			if (TownySettings.isUsingEconomy()) {
-				double initialSiegeCost = TownySettings.getWarSiegeAttackerCostUpfront();
+				double initialSiegeCost =
+						TownySettings.getWarSiegeAttackerCostUpFrontPerPlot()
+						* defendingTown.getTownBlocks().size();
 
 				if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
 					//Deduct upfront cost

@@ -2599,8 +2599,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_RADIUS);
 	}
 
-	public static double getWarSiegeAttackerCostUpfront() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT);
+	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ASSAULT_COST_UPFRONT_PER_PLOT);
 	}
 
 	public static long getWarSiegeTimerIntervalSeconds() {
