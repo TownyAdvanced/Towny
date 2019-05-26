@@ -8,6 +8,10 @@
 		<delete dir="${build}" />
 	</target>
 
+	<target name="full-clean" depends="clean">
+		<delete dir="${env.LIB}" />
+	</target>
+
 	<target name="init" depends="clean">
 		<mkdir dir="${build}" />
 		<mkdir dir="${env.LIB}" />
