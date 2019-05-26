@@ -614,8 +614,8 @@ public enum ConfigNodes {
 			"",
 			"# This enables/disables all the economy functions of Towny.",
 			"# This will first attempt to use Vault to bridge your economy plugin with Towny.",
-			"# If Vault is not present it will attempt to find the old iConomy 5.01 plugin.",
-			"# If neither Vault or iConomy 5.01 are present it will not be possible to create towns or do any operations that require money."),
+			"# If Vault is not present it will attempt to find a supported economy plugin.",
+			"# If neither Vault or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	PLUGIN_USING_PERMISSIONS(
 			"plugin.interfacing.using_permissions",
 			"true",

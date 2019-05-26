@@ -1899,7 +1899,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					nation.setNeutral(choice);
 
-					// send message depending on if using IConomy and charging
+					// send message depending on if using an economy and charging
 					// for peaceful
 					if (TownySettings.isUsingEconomy() && cost > 0)
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you_paid"), TownyEconomyHandler.getFormattedBalance(cost)));
