@@ -5,7 +5,6 @@
 	<classpathentry kind="lib" path="../lib/bpermissions.jar"/>
 	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
 	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
 	<classpathentry kind="lib" path="../lib/bukkit.jar" sourcepath="/lib/bukkit.jar">
 		<attributes>

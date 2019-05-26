@@ -21,7 +21,6 @@
 		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Reserve.jar" dest="${env.LIB}/Reserve.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/TheNewChat.jar" dest="${env.LIB}/TheNewChat.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
@@ -38,7 +37,6 @@
 				<pathelement location="${env.LIB}/EssentialsGroupManager.jar" />
 				<pathelement location="${env.LIB}/PermissionsEx.jar" />
 				<pathelement location="${env.LIB}/PermissionsBukkit.jar" />
-				<pathelement location="${env.LIB}/iConomy.jar" />
 				<pathelement location="${env.LIB}/Reserve.jar" />
 				<pathelement location="${env.LIB}/TheNewChat.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />
