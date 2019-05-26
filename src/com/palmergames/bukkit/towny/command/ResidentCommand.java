@@ -353,7 +353,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			// Show message if we are using iConomy and are charging for spawn
+			// Show message if we are using an Economy and are charging for spawn
 			// travel.
 			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Resident Spawn (%s)", townSpawnPermission))) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
