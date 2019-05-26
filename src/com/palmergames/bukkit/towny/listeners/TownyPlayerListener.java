@@ -582,7 +582,7 @@ public class TownyPlayerListener implements Listener {
 				 * Info Tool
 				 */
 				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
-					if (event.getHand() != EquipmentSlot.HAND)
+					if (event.getHand().equals(EquipmentSlot.OFF_HAND))
 						return;
 
 					Entity entity = event.getRightClicked();
