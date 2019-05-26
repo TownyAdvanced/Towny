@@ -903,9 +903,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
-			player.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
+			sender.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
 
 			return;
 		}

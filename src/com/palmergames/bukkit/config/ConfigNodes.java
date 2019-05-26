@@ -621,7 +621,7 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# True to attempt to use GroupManager, LuckPerms, or other compliant Permission Manager",
-			"# False to disable permission checks and rely on Towny settings."),
+			"# False to disable permission checks and rely on Towny settings (This should almost never be set to false on a modern server.)"),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(

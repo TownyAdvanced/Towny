@@ -3207,5 +3207,5 @@ v0.92.0.11:
     - Fix for regex not working, courtesy of Articdive.
     - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.string_check_regex
       - Must be changed to: ^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$
-    - 
-     
+    - Removal of bPerms from the codebase. If you are still using bPerms I sure hope that it's completely Vault compliant now. 
+      - Shout out to dumptruckman for making many great plugins, of which bPerms is one.
