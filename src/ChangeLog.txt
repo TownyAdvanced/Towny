@@ -3209,3 +3209,5 @@ v0.92.0.11:
       - Must be changed to: ^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$
     - Removal of bPerms from the codebase. If you are still using bPerms I sure hope that it's completely Vault compliant now. 
       - Shout out to dumptruckman for making many great plugins, of which bPerms is one.
+    - Removal of native iConomy 5.01 support. 
+      - iConomy 5.01 is no longer developed by the Towny team. There are new versions (Currently at 5.08) which use Vault to connect with Towny and other plugins.
