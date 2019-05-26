@@ -2595,8 +2595,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_ASSAULT_SIEGES);
 	}
 
-	public static int getWarSiegeZoneRadius() {
-		return getInt(ConfigNodes.WAR_SIEGE_ZONE_RADIUS);
+	public static int getWarSiegeZoneDistanceFromTown() {
+		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DISTANCE_FROM_TOWN);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {

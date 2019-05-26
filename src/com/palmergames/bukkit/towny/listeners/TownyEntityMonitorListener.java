@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -28,6 +27,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+
+import java.util.List;
 
 //import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -78,31 +79,10 @@ public class TownyEntityMonitorListener implements Listener {
 			if (TownySettings.getWarSiegeEnabled()
 					&& TownySettings.isUsingEconomy()
 					&& defenderResident.hasTown()
-					&& defenderResident.getTown().hasNation()) {
+					&& defenderResident.getTown().hasNation()
+					&& defenderResident.getTown().getNation().getSieges().size() != 0) {
 
-				for(Siege siege: defenderResident.getTown().getNation().getSieges()) {
-
-					if(!siege.isComplete() && SiegeWarUtil.isPlayerWithinSiegeZone(defenderPlayer, siege.getDefendingTown())) {
-						try {
-							double cost = TownySettings.getWarSiegeAttackerCostPerSiegeZoneCasualty();
-							Nation nation = defenderResident.getTown().getNation();
-							if(nation.canPayFromHoldings(cost)) {
-								nation.pay(cost,"Player from besieging nation died in the siegezone of: " + TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
-							} else {
-								//Cancel siege
-								TownyMessaging.sendGlobalMessage(
-										TownyFormatter.getFormattedNationName(nation) +
-												" cannot afford to continue the siege on " +
-												TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
-												"The siege has been automatically abandoned.");
-								TownyUniverse.getDataSource().removeSiege(siege);
-							}
-
-						} catch (EconomyException x) {
-							TownyMessaging.sendErrorMsg(x.getMessage());
-						}
-					}
-				}
+				checkForSiegeDeathCosts(defenderPlayer, defenderResident);
 			}
 
 			// Killed by another entity?			
@@ -459,6 +439,64 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 	}
 
+	/*
+	If the player died close to any town(s) they were besieging, the attacking nation incurs a small cost.
+	 */
+	private void checkForSiegeDeathCosts(Player killedPlayer, Resident killedResident) {
+		Coord playerCoord = Coord.parseCoord(killedPlayer);
+		List<Siege> nationSieges = null;
+		Coord townBlockCoord;
+		double trueDistance;
+		int roundedDistance;
+		try {
+			nationSieges = killedResident.getTown().getNation().getSieges();
+		} catch (NotRegisteredException x) {
+		}
+
+		//Check if the player died in one of their nation's active siegezones
+		for (Siege siege : nationSieges) {
+			if(!siege.isComplete()) {
+				for (TownBlock townBlock : siege.getDefendingTown().getTownBlocks()) {
+
+					if (!townBlock.getWorld().equals(killedPlayer.getWorld()))
+						continue;
+
+					townBlockCoord = townBlock.getCoord();
+					trueDistance = Math.sqrt(Math.pow(townBlockCoord.getX() - playerCoord.getX(), 2) + Math.pow(townBlockCoord.getZ() - playerCoord.getZ(), 2));
+					roundedDistance = (int) Math.ceil(trueDistance);
+
+					if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
+						applySiegeDeathCost(killedResident, siege);
+					}
+				}
+			}
+		}
+	}
+
+	private void applySiegeDeathCost(Resident killedResident, Siege siege) {
+		try {
+			double cost = TownySettings.getWarSiegeAttackerCostPerSiegeZoneCasualty();
+			Nation nation = siege.getAttackingNation();
+			if(nation.canPayFromHoldings(cost)) {
+				nation.pay(cost,
+						TownyFormatter.getFormattedResidentName(killedResident)
+						+ " + died in the siegezone of: " +
+						TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
+			} else {
+				//Cancel siege
+				TownyMessaging.sendGlobalMessage(
+						TownyFormatter.getFormattedNationName(nation) +
+								" cannot afford to continue the siege on " +
+								TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
+								"The siege has been automatically abandoned.");
+				TownyUniverse.getDataSource().removeSiege(siege);
+			}
+
+		} catch (EconomyException x) {
+			TownyMessaging.sendErrorMsg(x.getMessage());
+		}
+
+	}
 
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 

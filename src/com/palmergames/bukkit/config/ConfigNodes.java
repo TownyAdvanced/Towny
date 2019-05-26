@@ -1584,6 +1584,19 @@ public enum ConfigNodes {
 			"5",
 			"# The time in seconds for each siegewar timer tick."),
 
+	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
+			"war.siege.max_siege_duration_hours",
+			"72",
+			"# Maximum siege duration.",
+			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
+			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
+	WAR_SIEGE_ZONE_DISTANCE_FROM_TOWN(
+			"war.siege.zone_distance_from_town",
+			"3",
+			"# The 'siege zone' includes the entire town, and also any nearby blocks.",
+			"# This value determines how far the siege zone extends from each town block",
+			"# This value is measured in town blocks"),
+
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.attacker_cost.upfront_per_plot",
 			"10.0",
@@ -1595,7 +1608,7 @@ public enum ConfigNodes {
 	WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY(
 			"war.siege.attacker_cost.per_siege_zone_casualty",
 			"5.0",
-			"# If a player from a besieging nation dies in the siegezone",
+			"# If a player from a besieging nation dies in the siege zone",
 		 	"# then a money cost (usually small) is applied to the besieging nation.",
 			"# This applies regardless of the cause of death.",
 			"",
@@ -1604,44 +1617,38 @@ public enum ConfigNodes {
 			"",
 			"# Reason 2: This allows nomads and non-nation towns to better assist",
 		 	"# their friends in a town under siege."),
-	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
-			"war.siege.max_siege_duration_hours",
-			"72",
-			"# Maximum siege duration.",
-			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
-			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
 
-	WAR_SIEGE_ZONE_RADIUS(
-			"war.siege.zone_radius",
-			"30",
-			"# This value is measured in town blocks.",
-			"# This value determines the size 'siege zone'.",
-			"# The centre point of the zoze is the homeblock"),
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
 			"war.siege.points_per_attacking_player",
 			"100",
 			"# This setting determines the number of siege points awarded per attacking player.",
-			"# The award given each tick that an attacking player is in the warzone"),
+			"# The award given each tick that an attacking player is in a town border block"),
 	WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER(
 			"war.siege.points_per_defending_player",
 			"100",
 			"# This setting determines the number of siege points awarded per defending player.",
-			"# The award given each tick that an attacking player is in the warzone",
-			"# It is only given IF there are no defending players in the warzone"),
+			"# The award given each tick that a defending player is in the town",
+			"# It is only given IF there are no attacking players in the town"),
 
 	WAR_SIEGE_PLUNDER_AMOUNT(
 			"war.siege.plunder_amount",
 			"50000",
 			"#...TODO---- make this vary by town size"),
 
-	WAR_SIEGE_COOLDOWN_POST_ATTACK_DURATION_MODIFER(
-			"war.siege.cooldown.post_attack_duration_modifier",
+	WAR_SIEGE_COOLDOWN_FOR_ASSAULT_SIEGES_MODIFER(
+			"war.siege.cooldown.for_assault_sieges_modifer",
 			"3",
-			"#..."),
-	WAR_SIEGE_COOLDOWN_POST_REVOLT_DURATION_HOURS(
-			"war.siege.cooldown.post_revolt_duration_hours",
+			"# After a set of sieges on a town is completed",
+			"# this value determines how long the town is safe from assault sieges, before it can be attacked again.",
+			"# The actual duration is the sum of the durations of all the recent sieges, multiplied by the modifier.",
+			"# This setting is important to prevent towns being constantly-under-siege by enemies."),
+	WAR_SIEGE_COOLDOWN_FOR_REVOLTS_HOURS(
+			"war.siege.cooldown.for_revolts_hours",
 			"240",
-			"#...");
+			"# After a siege is won by the attacking nation,",
+			"# this value determines how long the defending town must wait before it can 'revolt' against the occupier.",
+            "# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
+			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts.");
 
 	private final String Root;
 	private final String Default;

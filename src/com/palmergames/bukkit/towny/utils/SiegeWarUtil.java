@@ -41,7 +41,7 @@ public class SiegeWarUtil {
             //We won't get here as we returned earlier if there was no homeblock.
         }
 
-        int siegeZoneRadiusInTownBlocks = TownySettings.getWarSiegeZoneRadius();
+        int siegeZoneRadiusInTownBlocks = TownySettings.getWarSiegeZoneDistanceFromTown();
 
         //Player is too far north
         if (worldCoord.getZ() < homeBlock.getZ() - siegeZoneRadiusInTownBlocks)
