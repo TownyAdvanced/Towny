@@ -413,22 +413,6 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (event.getPlayer().getInventory().getItemInMainHand() != null) {
 
-				/*
-				 * Info Tool
-				 */
-				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
-
-					Entity entity = event.getRightClicked();
-
-					TownyMessaging.sendMessage(player, Arrays.asList(
-							ChatTools.formatTitle("Entity Info"),
-							ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
-							));
-
-					event.setCancelled(true);
-
-				}
-
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
 				}
