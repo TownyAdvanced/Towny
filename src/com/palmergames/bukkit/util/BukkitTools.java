@@ -1,14 +1,9 @@
 package com.palmergames.bukkit.util;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import de.themoep.idconverter.IdMappings;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -21,10 +16,14 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-
-import de.themoep.idconverter.IdMappings;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -55,7 +54,28 @@ public class BukkitTools {
 	}
 	
 	public static List<Player> matchPlayer(String name) {
-		return getServer().matchPlayer(name);
+		List<Player> matchedPlayers = new ArrayList<>();
+		
+		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
+			String iterPlayerName = iterPlayer.getName();
+			if (plugin.isCitizens2()) {
+				if (CitizensAPI.getNPCRegistry().isNPC(iterPlayer)) {
+					continue;
+				}
+			}
+			if (name.equalsIgnoreCase(iterPlayerName)) {
+				// Exact match
+				matchedPlayers.clear();
+				matchedPlayers.add(iterPlayer);
+				break;
+			}
+			if (iterPlayerName.toLowerCase(java.util.Locale.ENGLISH).contains(name.toLowerCase(java.util.Locale.ENGLISH))) {
+				// Partial match
+				matchedPlayers.add(iterPlayer);
+			}
+		}
+		
+		return matchedPlayers;
 	}
 	
 	public static Player getPlayerExact(String name) {

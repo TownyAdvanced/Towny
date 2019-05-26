@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -29,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -537,10 +535,10 @@ public class TownyUniverse extends TownyObject {
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
-				String line = "Multiple players selected";
+				StringBuilder line = new StringBuilder("Multiple players selected: ");
 				for (Player p : matches)
-					line += ", " + p.getName();
-				TownyMessaging.sendErrorMsg(sender, line);
+					line.append(", ").append(p.getName());
+				TownyMessaging.sendErrorMsg(sender, line.toString());
 			} else if (matches.size() == 1) {
 				// Match found online
 				try {
