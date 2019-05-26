@@ -3211,3 +3211,5 @@ v0.92.0.11:
       - Shout out to dumptruckman for making many great plugins, of which bPerms is one.
     - Removal of native iConomy 5.01 support. 
       - iConomy 5.01 is no longer developed by the Towny team. There are new versions (Currently at 5.08) which use Vault to connect with Towny and other plugins.
+    - Fix Entity Info Tool displaying 4 outputs.
+    - Fixed Citizens NPCs being able to be invited. Courtesy of Articdive.
