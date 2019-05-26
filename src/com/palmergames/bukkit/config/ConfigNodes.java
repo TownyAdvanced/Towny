@@ -620,7 +620,7 @@ public enum ConfigNodes {
 			"plugin.interfacing.using_permissions",
 			"true",
 			"",
-			"# True to attempt to use GroupManager, PEX, bPermissions, Permissions2/3 or BukkitPerms",
+			"# True to attempt to use GroupManager, LuckPerms, or other compliant Permission Manager",
 			"# False to disable permission checks and rely on Towny settings."),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
