@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.palmergames.bukkit.towny</groupId>
+    <artifactId>Towny</artifactId>
+    <version>0.93.1.0</version>
+
+    <licenses>
+        <license>
+            <name>CC BY-NC-ND 3.0</name>
+            <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+            <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>TownyAdvanced</name>
+        <url>https://github.com/TownyAdvanced</url>
+    </organization>
+
+    <properties>
+        <project.bukkitAPI>1.13</project.bukkitAPI>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>creatorfromhell-repo</id>
+            <url>https://dl.bintray.com/theneweconomy/java/</url>
+        </repository>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+        </repository>
+        <repository>
+            <id>ess-repo</id>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>flagpole-repo</id>
+            <url>http://144.202.78.77:8081/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>citizens-repo</id>
+            <url>http://repo.citizensnpcs.co/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+            <!-- NOTE: Make sure this version works with project.bukkitAPI set above! -->
+        </dependency>
+        <dependency>
+            <groupId>net.tnemc</groupId>
+            <artifactId>Reserve</artifactId>
+            <version>0.1.0.12</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tnemc.tnc</groupId>
+            <artifactId>TheNewChat</artifactId>
+            <version>1.5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>2.16.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <!-- TODO: GroupManager(GM++) [needs repo] -->
+            <groupId>org.anjocaido.groupmanager</groupId>
+            <artifactId>GroupManager</artifactId>
+            <version>v0.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.25-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.txt</include>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>
