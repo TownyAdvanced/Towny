@@ -3218,3 +3218,4 @@ v0.92.0.11:
       - Users who continue to use PermissionsEX may do so at their own risk. 
       - Some functionality may still work through the Vault fallback methods.
     - Fix for lack of feedback for admins when using /ta town {townname} kick {residents}
+    - Make Netherrack ignitable in towns where firespread is turned off.
