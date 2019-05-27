@@ -2522,7 +2522,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			msg = String.format(TownySettings.getLangString("msg_kicked"), (player != null) ? player.getName() : "CONSOLE", msg);
 			TownyMessaging.sendTownMessage(town, ChatTools.color(msg));
 			try {
-				if (!TownyUniverse.getDataSource().getResident(player.getName()).hasTown() || !TownyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
+				if (!(sender instanceof Player) || !TownyUniverse.getDataSource().getResident(player.getName()).hasTown() || !TownyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
 					// For when the an admin uses /ta town {name} kick {residents}
 					TownyMessaging.sendMessage(sender, ChatTools.color(msg));
 			} catch (NotRegisteredException e) {
