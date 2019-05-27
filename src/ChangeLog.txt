@@ -3213,3 +3213,8 @@ v0.92.0.11:
       - iConomy 5.01 is no longer developed by the Towny team. There are new versions (Currently at 5.08) which use Vault to connect with Towny and other plugins.
     - Fix Entity Info Tool displaying 4 outputs.
     - Fixed Citizens NPCs being able to be invited. Courtesy of Articdive.
+    - Removal of PermissionsEX from the codebase.
+      - The plugin has been discontinued.
+      - Users who continue to use PermissionsEX may do so at their own risk. 
+      - Some functionality may still work through the Vault fallback methods.
+    - Fix for lack of feedback for admins when using /ta town {townname} kick {residents}
