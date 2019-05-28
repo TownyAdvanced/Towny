@@ -3219,3 +3219,4 @@ v0.92.0.11:
       - Some functionality may still work through the Vault fallback methods.
     - Fix for lack of feedback for admins when using /ta town {townname} kick {residents}
     - Make Netherrack ignitable in towns where firespread is turned off.
+    - Fixed Smoke border particles appearing to be on the wrong. Courtesy of ArticDive.
