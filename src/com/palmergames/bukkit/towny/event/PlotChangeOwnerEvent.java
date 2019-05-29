@@ -25,6 +25,7 @@ public class PlotChangeOwnerEvent extends Event {
      * @param newowner - New Owner
      */
     public PlotChangeOwnerEvent(Resident oldowner, Resident newowner, TownBlock townBlock, boolean async) {
+        super(async);
         this.newowner = newowner;
         this.oldowner = oldowner;
         this.townBlock = townBlock;
