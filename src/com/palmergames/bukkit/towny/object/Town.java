@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -33,8 +34,6 @@ import java.util.UUID;
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
-	private final static long ONE_MINUTE_IN_MILLIS = 60000;
-	private final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
 	private List<Resident> residents = new ArrayList<Resident>();
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
@@ -55,8 +54,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
-	private long assaultSiegeCooldownEndTime;
-	private long revoltSiegeCooldownEndTime;
+	private long siegeCooldownEndTime;
+	private long revoltCooldownEndTime;
+	private boolean revoltSiegeCooldownActive;
 
 	public Town(String name) {
 
@@ -74,9 +74,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
-		assaultSiegeCooldownEndTime = System.currentTimeMillis()
-				+ TownySettings.getWarSiegeCooldownForAssaultSiegesNewTownHours()
-				* ONE_HOUR_IN_MILLIS;
+		siegeCooldownEndTime = System.currentTimeMillis()
+				+ TownySettings.getWarSiegeCooldownModifierForNewTownsHours()
+				* SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 	}
 
 	@Override
@@ -1291,8 +1291,16 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return result;
 	}
 
-	public boolean isAssaultSiegeCooldownActive() {
-		if(System.currentTimeMillis() < assaultSiegeCooldownEndTime) {
+	public boolean isSiegeCooldownActive() {
+		if(System.currentTimeMillis() < siegeCooldownEndTime) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isRevoltCooldownActive() {
+		if(System.currentTimeMillis() < revoltCooldownEndTime) {
 			return true;
 		} else {
 			return false;
@@ -1300,9 +1308,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public int getAssaultSiegeCooldownRemainingMinutes() {
-		double resultDouble = (assaultSiegeCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
+		double resultDouble = (siegeCooldownEndTime -System.currentTimeMillis()) / SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
 		return (int) (resultDouble + 0.5);
 	}
+
+	public int getRevoltSiegeCooldownRemainingMinutes() {
+		double resultDouble = (revoltCooldownEndTime -System.currentTimeMillis()) / SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
+		return (int) (resultDouble + 0.5);
+	}
+
 
 	public boolean areAllSiegesComplete() {
 		for(Siege siege: sieges) {
@@ -1313,8 +1327,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return true;
 	}
 
-	public void setAssaultSiegeCooldownEndTime(long endTimeMillis) {
-		this.assaultSiegeCooldownEndTime = endTimeMillis;
+	public void setSiegeCooldownEndTime(long endTimeMillis) {
+		this.siegeCooldownEndTime = endTimeMillis;
 	}
 
 	public long getTotalDurationOfRecentSiegesMillis() {
@@ -1331,7 +1345,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return latestEndTime - earliestStartTime;
 	}
 
-	public void setRevoltSiegeCooldownEndTime(long timeMillis) {
-		this.revoltSiegeCooldownEndTime = timeMillis;
+	public void setRevoltCooldownEndTime(long timeMillis) {
+		this.revoltCooldownEndTime = timeMillis;
 	}
+
+
 }

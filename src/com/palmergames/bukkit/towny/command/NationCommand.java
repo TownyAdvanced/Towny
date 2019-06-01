@@ -291,7 +291,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("start")) {
 
-				attemptToStartAssaultSiege(player);
+				SiegeWarUtil.attemptToStartSiege(player);
 
 			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
@@ -629,133 +629,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void attemptToStartAssaultSiege(Player player) {
-
-		try {
-			if (!TownySettings.getWarSiegeEnabled())
-				throw new TownyException("Siege war disabled");  //todo - replace w lang string
-
-			if (!TownySettings.getWarSiegeAllowAssaultSieges())
-				throw new TownyException("Siege war assault sieges not allowed");
-
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-			TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-			if (townBlockWherePlayerIsLocated == null)
-				throw new TownyException("You must be standing in a town to start a siege.");
-
-			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-			if(defendingTown.hasHomeBlock()) {
-				if (!SiegeWarUtil.isTownBlockWithinSiegeZone(townBlockWherePlayerIsLocated, defendingTown))
-					throw new TownyException("You must be nearer to the town homeblock to start a siege.");
-			}
-
-			if(!SiegeWarUtil.isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated))
-				throw new TownyException("You must be in a town border block to start a siege.");
-
-			Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
-
-			if (defendingTown.hasNation()) {
-				Nation nationOfDefendingTown = defendingTown.getNation();
-
-				if(nationOfAttackingPlayer == nationOfDefendingTown)
-					throw new TownyException("You cannot attack a town in your own nation.");
-
-				if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-					throw new TownyException("You cannot attack unless the nation of the target town is an enemy of your nation.");
-			}
-
-			if (nationOfAttackingPlayer.isNationAttackingTownNow(defendingTown))
-				throw new TownyException("Your nation is already attacking this town.");
-
-			if (nationOfAttackingPlayer.hasNationAttackedTownRecently(defendingTown))
-				throw new TownyException("Your nation has recently attacked this town, you must wait until after the next siege cooldown before attacking again");
-
-			if (defendingTown.isAssaultSiegeCooldownActive()) {
-				throw new TownyException(
-						"This town is in an assault siege cooldown period. " +
-						"It cannot be attack for " +
-						defendingTown.getAssaultSiegeCooldownRemainingMinutes() + " minutes");
-			}
-
-			if (TownySettings.isUsingEconomy()) {
-				double initialSiegeCost =
-						TownySettings.getWarSiegeAttackerCostUpFrontPerPlot()
-						* defendingTown.getTownBlocks().size();
-
-				if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
-					//Deduct upfront cost
-					nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege.");
-				else {
-					throw new TownyException(TownySettings.getLangString("msg_err_no_money."));
-				}
-			}
-
-			if (player.isFlying())
-				throw new TownyException("You cannot be flying to start a siege.");
-
-			if (SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player))
-				throw new TownyException("The god(s) favour wars on the land surface. You must have only sky above you to start a siege.");
-
-			if (TownySettings.getNationRequiresProximity() > 0) {
-				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = defendingTown.getHomeBlock().getCoord();
-				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-					throw new TownyException("This town cannot join your nation because the capital ofyour your nation is in a different world.");
-				}
-				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
-				if (distance > TownySettings.getNationRequiresProximity()) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
-				}
-			}
-
-			if (TownySettings.getMaxTownsPerNation() > 0) {
-				if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
-				}
-			}
-
-			//Setup Siege
-			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown);
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		} catch (EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-
-	private Siege newSiege(SiegeType siegeType,
-						   Nation attackingNation,
-						   Town defendingTown) throws TownyException {
-		//Setup the siege
-		TownyUniverse.getDataSource().newSiege(attackingNation, defendingTown);
-		Siege siege = TownyUniverse.getDataSource().getSiege(attackingNation, defendingTown);
-		siege.setSiegeType(siegeType);
-
-		//Add siege to nation
-		attackingNation.addSiege(siege);
-
-		//Add siege to town
-		defendingTown.addSiege(siege);
-
-		TownyMessaging.sendGlobalMessage(
-					TownyFormatter.getFormattedNationName(siege.getAttackingNation()) +
-							" has started a siege on " +
-						TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
-
-		//Save the siege to DB
-		TownyUniverse.getDataSource().saveNation(attackingNation);
-		TownyUniverse.getDataSource().saveTown(defendingTown);
-		TownyUniverse.getDataSource().saveSiege(siege);
-		TownyUniverse.getDataSource().saveSiegeList();
-
-		//BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
-		//TODO - Do we announce a new siege event like this???
-
-		return siege;
-	}
 
 	private void nationDeposit(Player player, int amount) {
 

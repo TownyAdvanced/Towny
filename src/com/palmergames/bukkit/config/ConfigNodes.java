@@ -1566,24 +1566,25 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+
+	//Basics
 	WAR_SIEGE_ENABLED(
 			"war.siege.enabled",
 			"true",
-			"# If true, the siegewar feature is enabled.",
-			"# if false, the siegewar feature is disabled."),
-	WAR_SIEGE_ALLOW_ASSAULT_SIEGES(
-			"war.siege.allow_assault_sieges",
+			"# If true, the Siege-War feature is enabled.",
+			"# if false, the Siege-War feature is disabled."),
+	WAR_SIEGE_ALLOW_SIEGES(
+			"war.siege.allow_sieges",
 			"true",
-			"# If true, assault sieges are allowed."),
-	WAR_SIEGE_ALLOW_REVOLT_SIEGES(
-			"war.siege.allow_revolt_sieges",
+			"# If true, sieges are allowed."),
+	WAR_SIEGE_ALLOW_REVOLTS(
+			"war.siege.allow_revolts",
 			"true",
-			"# If true, revolt sieges are allowed."),
+			"# If true, revolts are allowed."),
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.timer_interval_seconds",
 			"5",
 			"# The time in seconds for each siegewar timer tick."),
-
 	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
 			"war.siege.max_siege_duration_hours",
 			"72",
@@ -1597,6 +1598,7 @@ public enum ConfigNodes {
 			"# This value determines how far the siege zone extends from each town block",
 			"# This value is measured in town blocks"),
 
+	//Costs and profits
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.attacker_cost.upfront_per_plot",
 			"10.0",
@@ -1625,6 +1627,7 @@ public enum ConfigNodes {
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",
 			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture"),
 
+	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
 			"war.siege.points_per_attacking_player",
 			"20",
@@ -1637,21 +1640,22 @@ public enum ConfigNodes {
 			"# The award given each tick that a defending player is in the town",
 			"# It is only given IF there are no attacking players in the town"),
 
-	WAR_SIEGE_COOLDOWN_FOR_ASSAULT_SIEGES_NEW_TOWN_HOURS(
-			"war.siege.cooldown.for_assault_sieges_new_town_hours",
+	//Cooldowns
+	WAR_SIEGE_SIEGE_COOLDOWN_FOR_NEW_TOWNS_HOURS(
+			"war.siege.siege_cooldown_for_new_towns_hours",
 			"72",
-			"# This value determines how long a new town is safe from assault sieges."),
-	WAR_SIEGE_COOLDOWN_FOR_ASSAULT_SIEGES_MODIFER(
-			"war.siege.cooldown.for_assault_sieges_modifer",
+			"# This value determines how long a new town is safe from sieges, after being founded."),
+	WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER(
+			"war.siege.siege_cooldown_modifer",
 			"3",
-			"# This value determines how long a town is safe from assault sieges after the current set of sieges on the town finish.",
-			"# The actual duration is the sum of the durations of all recent sieges, multiplied by the modifier.",
+			"# This value determines how long a town is safe from sieges, after the current set of sieges on the town finish.",
+			"# The actual duration is the sum of the durations of all recent sieges, multiplied by the given value.",
 			"# A high setting makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
 			"# A low setting makes sieges more frequent. Suitable for highly aggressive servers."),
-	WAR_SIEGE_COOLDOWN_FOR_REVOLTS_HOURS(
-			"war.siege.cooldown.for_revolts_hours",
-			"336",
-			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the current revolt finishes",
+	WAR_SIEGE_REVOLT_COOLDOWN_HOURS(
+			"war.siege.revolt_cooldown_hours",
+			"240",
+			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
             "# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts.");
 

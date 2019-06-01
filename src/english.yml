@@ -363,8 +363,9 @@ msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more th
 msg_siege_war_neutral_town_captured: '&6[War]&b The town of %s has been captured by the nation of %s!'
 msg_siege_war_nation_town_captured: '&6[War]&b The town of %s, belonging to the nation of %s, has been captured by the nation of %s!'
 msg_siege_war_nation_defeated: '&6[War]&b The nation of %s has been defeated!'
-
 msg_siege_war_defender_win: '&6[War]&b The defenders of the town of %s have successfully driven off the attackers from the nation of %s. The siege has failed!'
+msg_siege_war_revolt: '&6[War]&b The people of the town of %s, led by %s, have revolted against the occupying nation of %s, and declared themselves free to choose their own destiny!'
+msg_siege_war_post_revolt_siege_cooldown_reset: '&6[War]&b Because of the recent revolt, the siege cooldown for your town (if any) has been reset to off.'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'

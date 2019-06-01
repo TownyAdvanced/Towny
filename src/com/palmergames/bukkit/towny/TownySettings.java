@@ -2591,8 +2591,12 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
 	}
 
-	public static boolean getWarSiegeAllowAssaultSieges() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_ASSAULT_SIEGES);
+	public static boolean getWarSiegeAllowSieges() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_SIEGES);
+	}
+
+	public static boolean getWarSiegeAllowRevolts() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_REVOLTS);
 	}
 
 	public static int getWarSiegeZoneDistanceFromTown() {
@@ -2615,16 +2619,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 
-	public static int getWarSiegeCooldownForAssaultSiegesNewTownHours() {
-		return getInt(ConfigNodes.WAR_SIEGE_COOLDOWN_FOR_ASSAULT_SIEGES_NEW_TOWN_HOURS);
+	public static int getWarSiegeCooldownModifierForNewTownsHours() {
+		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_FOR_NEW_TOWNS_HOURS);
 	}
 
-	public static int getWarSiegeCooldownForAssaultSiegesModifier() {
-		return getInt(ConfigNodes.WAR_SIEGE_COOLDOWN_FOR_ASSAULT_SIEGES_MODIFER);
+	public static int getWarSiegeSiegeCooldownModifier() {
+		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER);
 	}
 
-	public static int getWarSiegeCooldownForRevoltsHours() {
-		return getInt(ConfigNodes.WAR_SIEGE_COOLDOWN_FOR_REVOLTS_HOURS);
+	public static int getWarSiegeRevoltCooldownHours() {
+		return getInt(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
 	}
 
 	public static int getWarSiegeAttackerPlunderAmountPerPlot() {

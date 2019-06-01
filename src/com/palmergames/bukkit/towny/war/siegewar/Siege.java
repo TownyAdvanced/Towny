@@ -154,19 +154,4 @@ public class Siege {
         return getAttackingNation().getName() + "_vs_" + getDefendingTown().getName();
     }
 
-    void applyUpkeepCost(double upkeepCost) {
-        try {
-            if (attackingNation.canPayFromHoldings(upkeepCost))
-                //Deduct cost
-                attackingNation.pay(upkeepCost, "Cost of maintaining siege.");
-            else {
-                TownyMessaging.sendGlobalMessage(attackingNation.getName() +
-                        " cannot afford to continue the siege on " + defendingTown.getName() + "." +
-                        "The siege has been automatically abandoned.");
-                TownyUniverse.getDataSource().removeSiege(this);
-            }
-        } catch (EconomyException x) {
-            TownyMessaging.sendErrorMsg(x.getMessage());
-        }
-    }
 }
