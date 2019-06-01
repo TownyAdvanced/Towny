@@ -3222,3 +3222,4 @@ v0.92.0.11:
     - Fixed Smoke border particles appearing to be on the wrong. Courtesy of ArticDive.
     - Make FARM plottypes follow plot perms to determine who can slaughter animals in them. Previously it only allowed town members to kill the animals.
     - Fix for two more async/1.14 tasks. Solves plot claiming exception. 
+    - Fix permissions HUD from throwing an exception, courtesy of ArticDive.
