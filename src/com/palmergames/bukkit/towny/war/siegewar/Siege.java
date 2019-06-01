@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class Siege {
     private Nation attackingNation;
     private Town defendingTown;
-    private SiegeType siegeType;
     private int totalSiegePointsAttacker;
     private int totalSiegePointsDefender;
     private long actualStartTime;   //System time millis
@@ -32,7 +31,6 @@ public class Siege {
                  Town defendingTown) {
         this.attackingNation = attackingNation;
         this.defendingTown = defendingTown;
-        this.siegeType = null;
         this.totalSiegePointsAttacker = 0;
         this.totalSiegePointsDefender = 0;
         this.actualStartTime = 0;
@@ -50,16 +48,8 @@ public class Siege {
         return defendingTown;
     }
 
-    public void setSiegeType(SiegeType siegeType) {
-        this.siegeType = siegeType;
-    }
-
     public Nation getAttackingNation() {
         return attackingNation;
-    }
-
-    public SiegeType getSiegeType() {
-        return siegeType;
     }
 
     public int getTotalSiegePointsAttacker() {

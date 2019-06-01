@@ -74,8 +74,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					}
 
 					//If siege is now complete, check if all recent sieges of the town are complete
-					if(siege.isComplete())
+					if(siege.isComplete()) {
+						siege.setActualEndTime(System.currentTimeMillis());
 						SiegeWarUtil.checkForCompletionOfAllRecentTownSieges(siege);
+					}
 				}
 			}
 

@@ -112,7 +112,7 @@ public class SiegeWarUtil {
             }
 
             //Setup Siege
-            newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown);
+            newSiege(nationOfAttackingPlayer, defendingTown);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -121,13 +121,11 @@ public class SiegeWarUtil {
         }
     }
 
-    private static Siege newSiege(SiegeType siegeType,
-                           Nation attackingNation,
+    private static Siege newSiege(Nation attackingNation,
                            Town defendingTown) throws TownyException {
         //Setup the siege
         TownyUniverse.getDataSource().newSiege(attackingNation, defendingTown);
         Siege siege = TownyUniverse.getDataSource().getSiege(attackingNation, defendingTown);
-        siege.setSiegeType(siegeType);
 
         //Add siege to nation
         attackingNation.addSiege(siege);

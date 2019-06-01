@@ -1226,15 +1226,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				KeyValueFile kvFile = new KeyValueFile(path);
 
-				line = kvFile.get("siegeType");
-				if(line.equals("ASSAULT")) {
-					siege.setSiegeType(SiegeType.ASSAULT);
-				} else if(line.equals("REVOLT")) {
-					siege.setSiegeType(SiegeType.REVOLT);
-				} else {
-					siege.setSiegeType(SiegeType.ASSAULT);
-				}
-
 				try {
 					line = kvFile.get("totalSiegePointsAttacker");
 					siege.setTotalSiegePointsAttacker(Integer.parseInt(line));
@@ -2097,7 +2088,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveSiege(Siege siege) {
 		List<String> list = new ArrayList<>();
 
-		list.add("siegeType=" + siege.getSiegeType().toString());
 		list.add("attackingNation=" + siege.getAttackingNation().getName());
 		list.add("defendingTown=" + siege.getDefendingTown().getName());
 		list.add("totalSiegePointsAttacker=" + Integer.toString(siege.getTotalSiegePointsAttacker()));

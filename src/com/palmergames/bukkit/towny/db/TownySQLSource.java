@@ -1168,17 +1168,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                                              "AND defendingTown='" + siege.getDefendingTown().getName() + "'");
             while (rs.next()) {
 
-                lineString = rs.getString("towns");
-                if (lineString == null) {
-                    siege.setSiegeType(SiegeType.ASSAULT);
-                } else if (lineString.equals("ASSAULT")) {
-                    siege.setSiegeType(SiegeType.ASSAULT);
-                } else if (lineString.equals("REVOLT")) {
-                    siege.setSiegeType(SiegeType.REVOLT);
-                } else {
-                    siege.setSiegeType(SiegeType.ASSAULT);
-                }
-
                 siege.setTotalSiegePointsAttacker(rs.getInt("totalSiegePointsAttacker"));
                 siege.setTotalSiegePointsDefender(rs.getInt("totalSiegePointsDefender"));
 
@@ -1791,7 +1780,6 @@ public class TownySQLSource extends TownyFlatFileSource {
             HashMap<String, Object> nat_hm = new HashMap<>();
             nat_hm.put("attackingNation", siege.getAttackingNation().getName());
             nat_hm.put("defendingTown", siege.getDefendingTown().getName());
-            nat_hm.put("siegeType",siege.getSiegeType().toString());
             nat_hm.put("totalSiegePointsAttacker", Integer.toString(siege.getTotalSiegePointsAttacker()));
             nat_hm.put("totalSiegePointsAttacker", Integer.toString(siege.getTotalSiegePointsDefender()));
             nat_hm.put("actualStartTime", Long.toString(siege.getActualStartTime()));
