@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -30,6 +29,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
@@ -76,7 +78,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		permissions.loadDefault(this);
 		siegeCooldownEndTime = System.currentTimeMillis()
 				+ TownySettings.getWarSiegeCooldownModifierForNewTownsHours()
-				* SiegeWarUtil.ONE_HOUR_IN_MILLIS;
+				* ONE_HOUR_IN_MILLIS;
 	}
 
 	@Override
@@ -1308,12 +1310,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public int getAssaultSiegeCooldownRemainingMinutes() {
-		double resultDouble = (siegeCooldownEndTime -System.currentTimeMillis()) / SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
+		double resultDouble = (siegeCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
 		return (int) (resultDouble + 0.5);
 	}
 
 	public int getRevoltSiegeCooldownRemainingMinutes() {
-		double resultDouble = (revoltCooldownEndTime -System.currentTimeMillis()) / SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
+		double resultDouble = (revoltCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
 		return (int) (resultDouble + 0.5);
 	}
 

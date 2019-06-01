@@ -9,10 +9,11 @@ import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 
 import java.util.ArrayList;
 
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
+
 public class SiegeWarTimerTask extends TownyTimerTask {
 
-	private final static long ONE_MINUTE_IN_MILLIS = 60000;
-	private final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
 
 	private static boolean timeForUpkeep;
 	private static long nextTimeForUpkeep;

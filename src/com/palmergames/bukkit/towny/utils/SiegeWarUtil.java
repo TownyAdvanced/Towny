@@ -211,7 +211,7 @@ public class SiegeWarUtil {
             TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_siege_war_post_revolt_siege_cooldown_reset"));
 
             //Turn ON revolt cooldown
-            long revoltCooldownDurationMillis = TownySettings.getWarSiegeRevoltCooldownHours() * SiegeWarUtil.ONE_HOUR_IN_MILLIS;
+            long revoltCooldownDurationMillis = TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS;
             long revoltCooldownEndTime= System.currentTimeMillis() + revoltCooldownDurationMillis;
             town.setRevoltCooldownEndTime(revoltCooldownEndTime);
 
@@ -432,9 +432,9 @@ public class SiegeWarUtil {
 
 
     public static void attackerWin(Towny plugin, Siege siege) {
-        SiegeWarUtil.captureTown(plugin, siege);
+        captureTown(plugin, siege);
         if (TownySettings.isUsingEconomy()) {
-            SiegeWarUtil.plunderTown(siege);
+            plunderTown(siege);
         }
     }
 
