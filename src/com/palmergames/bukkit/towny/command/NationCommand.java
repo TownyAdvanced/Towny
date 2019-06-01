@@ -672,6 +672,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (nationOfAttackingPlayer.hasNationAttackedTownRecently(defendingTown))
 				throw new TownyException("Your nation has recently attacked this town, you must wait until after the next siege cooldown before attacking again");
 
+			if (defendingTown.isAssaultSiegeCooldownActive()) {
+				throw new TownyException(
+						"This town is in an assault siege cooldown period. " +
+						"It cannot be attack for " +
+						defendingTown.getAssaultSiegeCooldownRemainingMinutes() + " minutes");
+			}
+
 			if (TownySettings.isUsingEconomy()) {
 				double initialSiegeCost =
 						TownySettings.getWarSiegeAttackerCostUpFrontPerPlot()
@@ -690,6 +697,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player))
 				throw new TownyException("The god(s) favour wars on the land surface. You must have only sky above you to start a siege.");
+
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = defendingTown.getHomeBlock().getCoord();
+				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
+					throw new TownyException("This town cannot join your nation because the capital ofyour your nation is in a different world.");
+				}
+				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				if (distance > TownySettings.getNationRequiresProximity()) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
+				}
+			}
+
+			if (TownySettings.getMaxTownsPerNation() > 0) {
+				if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
+				}
+			}
 
 			//Setup Siege
 			newSiege(SiegeType.ASSAULT, nationOfAttackingPlayer, defendingTown);
@@ -903,7 +928,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = town.getNation();
-
 			nation.removeTown(town);
 
 			/*

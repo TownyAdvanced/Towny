@@ -33,7 +33,8 @@ import java.util.UUID;
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
-
+	private final static long ONE_MINUTE_IN_MILLIS = 60000;
+	private final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
 	private List<Resident> residents = new ArrayList<Resident>();
 	private List<Resident> outlaws = new ArrayList<Resident>();
 	private List<Location> outpostSpawns = new ArrayList<Location>();
@@ -54,6 +55,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
+	private long assaultSiegeCooldownEndTime;
+	private long revoltSiegeCooldownEndTime;
 
 	public Town(String name) {
 
@@ -71,6 +74,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
+		assaultSiegeCooldownEndTime = System.currentTimeMillis()
+				+ TownySettings.getWarSiegeCooldownForAssaultSiegesNewTownHours()
+				* ONE_HOUR_IN_MILLIS;
 	}
 
 	@Override
@@ -1283,5 +1289,49 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			result.add(siege.getAttackingNation().getName());
 		}
 		return result;
+	}
+
+	public boolean isAssaultSiegeCooldownActive() {
+		if(System.currentTimeMillis() < assaultSiegeCooldownEndTime) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public int getAssaultSiegeCooldownRemainingMinutes() {
+		double resultDouble = (assaultSiegeCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
+		return (int) (resultDouble + 0.5);
+	}
+
+	public boolean areAllSiegesComplete() {
+		for(Siege siege: sieges) {
+			if(!siege.isComplete()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void setAssaultSiegeCooldownEndTime(long endTimeMillis) {
+		this.assaultSiegeCooldownEndTime = endTimeMillis;
+	}
+
+	public long getTotalDurationOfRecentSiegesMillis() {
+		//earliest start time - should be from the 1st siege
+		long earliestStartTime = sieges.get(0).getActualStartTime();
+
+		//latest end time - check all entries
+		long latestEndTime = 0;
+		for(Siege siege: sieges) {
+			if(siege.getScheduledEndTime() > latestEndTime)
+				latestEndTime = siege.getScheduledEndTime();
+		}
+
+		return latestEndTime - earliestStartTime;
+	}
+
+	public void setRevoltSiegeCooldownEndTime(long timeMillis) {
+		this.revoltSiegeCooldownEndTime = timeMillis;
 	}
 }

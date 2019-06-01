@@ -360,6 +360,12 @@ msg_err_enemy_war_not_on_edge_of_town: '&6[War]&c Only allowed to attack the bor
 msg_err_enemy_war_cell_already_under_attack: '&6[War]&c This area is already under attack by %s.'
 msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more than %d areas at once.'
 
+msg_siege_war_neutral_town_captured: '&6[War]&b The town of %s has been captured by the nation of %s!'
+msg_siege_war_nation_town_captured: '&6[War]&b The town of %s, belonging to the nation of %s, has been captured by the nation of %s!'
+msg_siege_war_nation_defeated: '&6[War]&b The nation of %s has been defeated!'
+
+msg_siege_war_defender_win: '&6[War]&b The defenders of the town of %s have successfully driven off the attackers from the nation of %s. The siege has failed!'
+
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
 msg_cache_block_error_plot: '&cOwner doesn''t allow %s to %s here.'
