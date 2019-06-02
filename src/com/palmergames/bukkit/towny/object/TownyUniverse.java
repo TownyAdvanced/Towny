@@ -1139,7 +1139,7 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	/**
-	 * Deprecated - use TownyUniverse.getDataSource().getDefendingTown()
+	 * Deprecated - use TownyUniverse.getDataSource().getTown()
 	 * 
 	 * @param name
 	 * @return Town with this name

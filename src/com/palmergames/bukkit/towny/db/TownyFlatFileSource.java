@@ -1708,7 +1708,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//						if (townBlock.hasResident()) {
 				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
 				//						} else {
-				//							townBlock.setPermissions(townBlock.getDefendingTown().getPermissions().toString());
+				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
 				//						}
 				//					} catch (NotRegisteredException e) {
 				//						// Will never reach here
