@@ -25,7 +25,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -410,7 +409,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
-	private void remove(Siege siege) {
+	public void removeSiege(Siege siege) {
 		sieges.remove(siege);
 		//Todo - do we need this???
 		//BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
@@ -425,7 +424,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private void removeAllSieges() {
 
 		for (Siege siege : new ArrayList<Siege>(sieges))
-			remove(siege);
+			sieges.remove(siege);
 	}
 
 
@@ -741,33 +740,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return spawnCost;
 	}
 
-	public boolean areAnySiegesTargetingGivenTown(Town town) {
-		for(Siege siege: sieges) {
-			if(siege.getDefendingTown() == town) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean hasNationAttackedTownRecently(Town town) {
-		for(Siege siege: sieges) {
-			if(siege.isComplete() && siege.getDefendingTown() == town) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isNationAttackingTownNow(Town town) {
-		for(Siege siege: sieges) {
-			if(!siege.isComplete() && siege.getDefendingTown() == town) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public void addSiege(Siege siege) {
 		sieges.add(siege);
 	}
@@ -780,14 +752,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return result;
 	}
 
-	public List<Town> getTownsUnderSiege() {
-		List<Town> result = new ArrayList<Town>();
-		for(Siege siege: sieges) {
-			if(!siege.isComplete()) {
-				result.add(siege.getDefendingTown());
-			}
-		}
-		return result;
+	public boolean isNationAttackingTown(Town town) {
+		return town.hasSiege()
+				&& town.getSiege().isActive()
+				&& town.getSiege().getSiegeStatsAttackers().containsKey(this);
 	}
 
 	public List<Siege> getSieges() {

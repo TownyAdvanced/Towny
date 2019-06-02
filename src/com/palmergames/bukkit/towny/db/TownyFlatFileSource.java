@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -1709,7 +1708,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				//						if (townBlock.hasResident()) {
 				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
 				//						} else {
-				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+				//							townBlock.setPermissions(townBlock.getDefendingTown().getPermissions().toString());
 				//						}
 				//					} catch (NotRegisteredException e) {
 				//						// Will never reach here

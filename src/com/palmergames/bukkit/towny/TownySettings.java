@@ -2619,8 +2619,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 
-	public static int getWarSiegeCooldownModifierForNewTownsHours() {
-		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_FOR_NEW_TOWNS_HOURS);
+	public static int getWarSiegeSiegeCooldownHours() {
+		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_HOURS);
 	}
 
 	public static int getWarSiegeSiegeCooldownModifier() {
@@ -2634,5 +2634,10 @@ public class TownySettings {
 	public static int getWarSiegeAttackerPlunderAmountPerPlot() {
 		return getInt(ConfigNodes.WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT);
 	}
+
+	public static int getWarSiegeMaxHoldoutTimeHours() {
+		return getInt(ConfigNodes.WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS);
+	}
+
 }
 

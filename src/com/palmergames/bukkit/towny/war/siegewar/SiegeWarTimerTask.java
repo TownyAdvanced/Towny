@@ -3,6 +3,9 @@ package com.palmergames.bukkit.towny.war.siegewar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
@@ -17,12 +20,12 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	private static boolean timeForUpkeep;
 	private static long nextTimeForUpkeep;
-	private static boolean timeToSavePointsToDB;
+	private static boolean timeToSaveSiegeToDB;
 	private static long nextTimeToSavePointsToDB;
 
 	static
 	{
-		timeToSavePointsToDB = false;
+		timeToSaveSiegeToDB = false;
 		nextTimeToSavePointsToDB = System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS;
 		timeForUpkeep = false;
 		nextTimeForUpkeep = System.currentTimeMillis() + ONE_HOUR_IN_MILLIS;
@@ -42,22 +45,17 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 
 			if(System.currentTimeMillis() > nextTimeToSavePointsToDB) {
-				timeToSavePointsToDB = true;
+				timeToSaveSiegeToDB = true;
 			}
 
 			//Cycle through all sieges
 			for (Siege siege : new ArrayList<>(TownyUniverse.getDataSource().getSieges())) {
-				if (!siege.isComplete()) {
-					TownyMessaging.sendMsg("Now evaluating active siege between " +
-							siege.getAttackingNation().getName() + " and " + siege.getDefendingTown().getName());
+				if (siege.isActive()) {
+					TownyMessaging.sendMsg("Now evaluating active siege on " + siege.getDefendingTown().getName());
 
 					//Upkeep
 					if (TownySettings.isUsingEconomy() && timeForUpkeep)
-						SiegeWarUtil.applyUpkeepCost(siege, TownySettings.getWarSiegeAttackerCostPerHour());
-
-					//Caching
-					if(timeToSavePointsToDB)
-						TownyUniverse.getDataSource().saveSiege(siege);
+						SiegeWarUtil.applyUpkeepCost(siege);
 
 					//Adjust points
 					//Here we need to cycle through all residents in the world....
@@ -66,25 +64,35 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 					//Check if scheduled end time has arrived
 					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {
-						siege.setComplete(true);
-						if(siege.getTotalSiegePointsAttacker() > siege.getTotalSiegePointsDefender()) {
-							SiegeWarUtil.attackerWin(plugin, siege);
+						siege.setActive(false);
+
+						//Find out who won
+						TownyObject winner = SiegeWarUtil.calculateSiegeWinner(siege);
+
+						if(winner instanceof Town) {
+							SiegeWarUtil.defenderWin((Town)winner);
 						} else{
-							SiegeWarUtil.defenderWin(siege);
+							SiegeWarUtil.attackerWin(plugin, siege, (Nation)winner);
 						}
 					}
 
-					//If siege is now complete, check if all recent sieges of the town are complete
-					if(siege.isComplete()) {
-						siege.setActualEndTime(System.currentTimeMillis());
-						SiegeWarUtil.checkForCompletionOfAllRecentTownSieges(siege);
-					}
+					//Caching
+					if(timeToSaveSiegeToDB)
+						TownyUniverse.getDataSource().saveSiege(siege);
+
+				} else {
+					//The siege is inactive/completed
+
+					//This sieges stay in all lists for for 24 hours or until cooldown has expired,
+					//whichever is sooner
+
+					//TODO
 				}
 			}
 
 		} finally {
-			if(timeToSavePointsToDB) {
-				timeToSavePointsToDB = false;
+			if(timeToSaveSiegeToDB) {
+				timeToSaveSiegeToDB = false;
 				nextTimeToSavePointsToDB = System.currentTimeMillis()+ ONE_MINUTE_IN_MILLIS;
 			}
 			if(timeForUpkeep) {

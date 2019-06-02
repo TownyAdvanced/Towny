@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
@@ -510,8 +509,8 @@ public class TownyEntityMonitorListener implements Listener {
 					&& attackerResident.hasTown()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()) {
-				for(Town townUnderSiege: defenderResident.getTown().getNation().getTownsUnderSiege()) {
-					if(defenderResident.getTown() == townUnderSiege) {
+				for(Siege siege: defenderResident.getTown().getNation().getSieges()) {
+					if(defenderResident.getTown() == siege.getDefendingTown()) {
 						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
 						return;
 					}

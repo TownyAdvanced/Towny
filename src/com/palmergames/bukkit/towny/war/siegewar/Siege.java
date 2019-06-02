@@ -1,57 +1,50 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+
+import java.util.HashMap;
+import java.util.Set;
+import java.util.UUID;
+
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 
 /**
  * Created by Goosius on 07/05/2019.
  */
 public class Siege {
-    private Nation attackingNation;
+    private UUID id;
     private Town defendingTown;
-    private int totalSiegePointsAttacker;
-    private int totalSiegePointsDefender;
-    private long actualStartTime;   //System time millis
-    private long scheduledEndTime;
-    private long actualEndTime;
-    private int totalAttackersKilled;  //For report
-    private int totalDefendersKilled;  //For report
-    private double totalCostToAttacker;  //For report
-    private long lastUpkeepTime;      //Siege upkeep occurs 1/hour
-    private boolean active;
-    private boolean complete;
+    private boolean siegeActive;
+    private long siegeScheduledEndTime;
+    private long siegeActualEndTime;
+    private SiegeStats siegeStatsDefenders;
+    private HashMap<Nation, SiegeStats> siegeStatsAttackers;
 
-    public Siege(Nation attackingNation,
-                 Town defendingTown) {
-        this.attackingNation = attackingNation;
+    public Siege(Town defendingTown) {
+        id = UUID.randomUUID();
         this.defendingTown = defendingTown;
-        this.totalSiegePointsAttacker = 0;
-        this.totalSiegePointsDefender = 0;
-        this.actualStartTime = 0;
-        this.scheduledEndTime = 0;
-        this.actualEndTime = 0;
-        this.totalAttackersKilled = 0;
-        this.totalDefendersKilled = 0;
-        this.totalCostToAttacker = 0;
-        this.lastUpkeepTime = 0;
-        this.active = false;
-        this.complete = false;
+        this.siegeActive = true;
+        this.siegeScheduledEndTime =
+                (System.currentTimeMillis() + TownySettings.getWarSiegeMaxHoldoutTimeHours())
+                * ONE_HOUR_IN_MILLIS;
+        this.siegeActualEndTime = 0;
+        this.siegeStatsDefenders = new SiegeStats();
+        this.siegeStatsAttackers = new HashMap<Nation, SiegeStats>();
     }
 
     public Town getDefendingTown() {
         return defendingTown;
     }
 
-    public Nation getAttackingNation() {
-        return attackingNation;
+    public HashMap<Nation, SiegeStats> getSiegeStatsAttackers() {
+        return siegeStatsAttackers;
     }
 
+    public SiegeStats getSiegeStatsDefenders() {
+        return siegeStatsDefenders;
+    }
     public int getTotalSiegePointsAttacker() {
         return totalSiegePointsAttacker;
     }
@@ -144,4 +137,12 @@ public class Siege {
         return getAttackingNation().getName() + "_vs_" + getDefendingTown().getName();
     }
 
+    public void addAttacker(Nation attackingNation) {
+        SiegeStats stats = new SiegeStats();
+        siegeStatsAttackers.put(attackingNation, stats);
+    }
+
+    public Set<Nation> getAttackingNations() {
+        return siegeStatsAttackers.keySet();
+    }
 }

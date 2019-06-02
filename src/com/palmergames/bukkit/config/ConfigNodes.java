@@ -1581,22 +1581,6 @@ public enum ConfigNodes {
 			"war.siege.allow_revolts",
 			"true",
 			"# If true, revolts are allowed."),
-	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
-			"war.siege.timer_interval_seconds",
-			"5",
-			"# The time in seconds for each siegewar timer tick."),
-	WAR_SIEGE_MAX_SIEGE_DURATION_HOURS(
-			"war.siege.max_siege_duration_hours",
-			"72",
-			"# Maximum siege duration.",
-			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
-			"# If the value is too low, casual players may be unsatisfied that they cannot get to defend their towns."),
-	WAR_SIEGE_ZONE_DISTANCE_FROM_TOWN(
-			"war.siege.zone_distance_from_town",
-			"3",
-			"# The 'siege zone' includes the entire town, and also any nearby blocks.",
-			"# This value determines how far the siege zone extends from each town block",
-			"# This value is measured in town blocks"),
 
 	//Costs and profits
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -1611,14 +1595,14 @@ public enum ConfigNodes {
 			"war.siege.attacker_cost.per_siege_zone_casualty",
 			"15.0",
 			"# If a player from a besieging nation dies in the siege zone",
-		 	"# then a money cost (usually small) is applied to the besieging nation.",
+			"# then a money cost (usually small) is applied to the besieging nation.",
 			"# This applies regardless of the cause of death.",
 			"",
 			"# Reason 1: This prevents the besieging nation from gaining advantage by",
 			"# 'Spamming' a town with quick-respawning players with no items.",
 			"",
 			"# Reason 2: This allows nomads and non-nation towns to better assist",
-		 	"# their friends in a town under siege."),
+			"# their friends in a town under siege."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.attacker_plunder_amount_per_plot",
 			"12",
@@ -1626,6 +1610,38 @@ public enum ConfigNodes {
 			"# If this value is lower than the upfront cost, then sieges will not be profitable",
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",
 			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture"),
+
+	//Distances
+	WAR_SIEGE_ZONE_DISTANCE_FROM_TOWN(
+			"war.siege.zone_distance_from_town",
+			"3",
+			"# The 'siege zone' includes the entire town, and also any nearby blocks.",
+			"# This value determines how far the siege zone extends from each town block",
+			"# This value is measured in town blocks"),
+
+	//Timings
+	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
+			"war.siege.timer_interval_seconds",
+			"5",
+			"# The time in seconds for each siegewar timer tick."),
+	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
+			"war.siege.max_holdout_time_hours",
+			"72",
+			"# The maximum duration a town can hold out against a siege.",
+			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
+			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
+	WAR_SIEGE_SIEGE_COOLDOWN_HOURS(
+			"war.siege.siege_cooldown_hours",
+			"120",
+			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
+			"# A high setting makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
+			"# A low setting makes sieges more frequent. Suitable for highly aggressive servers."),
+	WAR_SIEGE_REVOLT_COOLDOWN_HOURS(
+			"war.siege.revolt_cooldown_hours",
+			"240",
+			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
+			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
+			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
 
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
@@ -1638,26 +1654,7 @@ public enum ConfigNodes {
 			"10",
 			"# This setting determines the number of siege points awarded per defending player.",
 			"# The award given each tick that a defending player is in the town",
-			"# It is only given IF there are no attacking players in the town"),
-
-	//Cooldowns
-	WAR_SIEGE_SIEGE_COOLDOWN_FOR_NEW_TOWNS_HOURS(
-			"war.siege.siege_cooldown_for_new_towns_hours",
-			"72",
-			"# This value determines how long a new town is safe from sieges, after being founded."),
-	WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER(
-			"war.siege.siege_cooldown_modifer",
-			"3",
-			"# This value determines how long a town is safe from sieges, after the current set of sieges on the town finish.",
-			"# The actual duration is the sum of the durations of all recent sieges, multiplied by the given value.",
-			"# A high setting makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
-			"# A low setting makes sieges more frequent. Suitable for highly aggressive servers."),
-	WAR_SIEGE_REVOLT_COOLDOWN_HOURS(
-			"war.siege.revolt_cooldown_hours",
-			"240",
-			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
-            "# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
-			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts.");
+			"# It is only given IF there are no attacking players in the town");
 
 	private final String Root;
 	private final String Default;

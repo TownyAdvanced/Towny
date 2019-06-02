@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -1605,7 +1604,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 //						if (townBlock.hasResident()) {
                 //							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
                 //						} else {
-                //							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
+                //							townBlock.setPermissions(townBlock.getDefendingTown().getPermissions().toString());
                 //						}
                 //					} catch (NotRegisteredException e) {
                 //						// Will never reach here

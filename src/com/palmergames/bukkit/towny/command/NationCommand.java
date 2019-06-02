@@ -23,8 +23,6 @@ import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -289,9 +287,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("start")) {
+			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("attack")) {
 
-				SiegeWarUtil.attemptToStartSiege(player);
+				SiegeWarUtil.attemptToAttackTown(player);
 
 			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);

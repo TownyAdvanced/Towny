@@ -318,7 +318,7 @@ public class PlayerCacheUtil {
 
 			// Town Owner Override
 			try {
-				if (townBlock.getTown().isMayor(resident)) // || townBlock.getTown().hasAssistant(resident))
+				if (townBlock.getTown().isMayor(resident)) // || townBlock.getDefendingTown().hasAssistant(resident))
 					return TownBlockStatus.TOWN_OWNER;
 			} catch (NotRegisteredException e) {
 			}
@@ -361,7 +361,7 @@ public class PlayerCacheUtil {
 						return TownBlockStatus.ENEMY;
 				} else
 					return TownBlockStatus.OUTSIDER;
-			} else if (resident.isMayor()) // || resident.getTown().hasAssistant(resident))
+			} else if (resident.isMayor()) // || resident.getDefendingTown().hasAssistant(resident))
 				return TownBlockStatus.TOWN_OWNER;
 			else
 				return TownBlockStatus.TOWN_RESIDENT;
