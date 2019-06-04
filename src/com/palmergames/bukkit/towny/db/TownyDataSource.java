@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeType;
 import com.palmergames.util.FileMgmt;
 
 import org.bukkit.entity.Player;
