@@ -3193,3 +3193,33 @@ v0.92.0.11:
       - Many things have changed. It is recommended you replace the entire list with this:
         - BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE
       - Not included in the default list: DIRT,GRASS_BLOCK,FARMLAND 
+    - REQUIRED CONFIG CHANGE: in protections.switch_ids
+      - Add DRAGON_EGG
+      - Fixes players being able to rightclick on dragon eggs and causing them to teleport.
+    - Fix typo in townyperms.yml
+    - REQUIRED CONFIG CHANGE: in protections.switch_ids
+      - Add ITEM_FRAME
+      - Fixes players being able to spin items in item frames. 
+    - Added ignoreplots and constant plots to /res set mode ?
+    - Fix edge-case scenario where using /ta set mayor can cause an NPC town to pay upkeep.
+    - Handle playerfishevent bug where players were being fished.
+    - Fix for long board messages losing their colouring, courtesy of Articdive.
+    - Fix for regex not working, courtesy of Articdive.
+    - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.string_check_regex
+      - Must be changed to: ^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$
+    - Removal of bPerms from the codebase. If you are still using bPerms I sure hope that it's completely Vault compliant now. 
+      - Shout out to dumptruckman for making many great plugins, of which bPerms is one.
+    - Removal of native iConomy 5.01 support. 
+      - iConomy 5.01 is no longer developed by the Towny team. There are new versions (Currently at 5.08) which use Vault to connect with Towny and other plugins.
+    - Fix Entity Info Tool displaying 4 outputs.
+    - Fixed Citizens NPCs being able to be invited. Courtesy of Articdive.
+    - Removal of PermissionsEX from the codebase.
+      - The plugin has been discontinued.
+      - Users who continue to use PermissionsEX may do so at their own risk. 
+      - Some functionality may still work through the Vault fallback methods.
+    - Fix for lack of feedback for admins when using /ta town {townname} kick {residents}
+    - Make Netherrack ignitable in towns where firespread is turned off.
+    - Fixed Smoke border particles appearing to be on the wrong. Courtesy of ArticDive.
+    - Make FARM plottypes follow plot perms to determine who can slaughter animals in them. Previously it only allowed town members to kill the animals.
+    - Fix for two more async/1.14 tasks. Solves plot claiming exception. 
+    - Fix permissions HUD from throwing an exception, courtesy of ArticDive.

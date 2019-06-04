@@ -17,11 +17,8 @@
 	<target name="download" depends="init">
 
 		<get src="http://palmergames.com/file-repo/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/bpermissions.jar" dest="${env.LIB}/bpermissions.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/EssentialsGroupManager.jar" dest="${env.LIB}/EssentialsGroupManager.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/PermissionsEx.jar" dest="${env.LIB}/PermissionsEx.jar" skipexisting="true" />
-		<get src="http://palmergames.com/file-repo/libs/iConomy.jar" dest="${env.LIB}/iConomy.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Reserve.jar" dest="${env.LIB}/Reserve.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/TheNewChat.jar" dest="${env.LIB}/TheNewChat.jar" skipexisting="true" />
 		<get src="http://palmergames.com/file-repo/libs/Vault.jar" dest="${env.LIB}/Vault.jar" skipexisting="true" />
@@ -33,12 +30,9 @@
 		<javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.8" source="1.8" debug="true" debuglevel="lines,vars,source">
 			<classpath>
 				<pathelement location="${env.LIB}/bukkit.jar" />
-				<pathelement location="${env.LIB}/bpermissions.jar" />
 				<pathelement location="${env.LIB}/Essentials.jar" />
 				<pathelement location="${env.LIB}/EssentialsGroupManager.jar" />
-				<pathelement location="${env.LIB}/PermissionsEx.jar" />
 				<pathelement location="${env.LIB}/PermissionsBukkit.jar" />
-				<pathelement location="${env.LIB}/iConomy.jar" />
 				<pathelement location="${env.LIB}/Reserve.jar" />
 				<pathelement location="${env.LIB}/TheNewChat.jar" />
 				<pathelement location="${env.LIB}/Vault.jar" />

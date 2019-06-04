@@ -688,9 +688,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 					} else {
 						newMayor = TownyUniverse.getDataSource().getResident(split[2]);
-
-						// set upkeep again
-						town.setHasUpkeep(true);
 					}
 
 					if (!town.hasResident(newMayor))
@@ -704,9 +701,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						try {
 							town.removeResident(oldMayor);
 							TownyUniverse.getDataSource().removeResident(oldMayor);
-
 							TownyUniverse.getDataSource().removeResidentList(oldMayor);
-
+							// set upkeep again
+							town.setHasUpkeep(true);
 						} catch (EmptyTownException e) {
 							// Should never reach here as we are setting a new
 							// mayor before removing the old one.
@@ -906,9 +903,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
-			player.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
+			sender.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
 
 			return;
 		}

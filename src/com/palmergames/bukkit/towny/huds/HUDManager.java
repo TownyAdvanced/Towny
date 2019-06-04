@@ -1,13 +1,5 @@
 package com.palmergames.bukkit.towny.huds;
 
-import java.util.ArrayList;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -19,6 +11,13 @@ import com.palmergames.bukkit.towny.war.eventwar.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.TownScoredEvent;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.ArrayList;
 
 public class HUDManager implements Listener{
 
@@ -29,8 +28,8 @@ public class HUDManager implements Listener{
 	
 	public HUDManager (Towny plugin) {
 		this.plugin = plugin;
-		warUsers = new ArrayList<Player>();
-		permUsers = new ArrayList<Player>();
+		warUsers = new ArrayList<>();
+		permUsers = new ArrayList<>();
 	}
 
 	//**TOGGLES**//

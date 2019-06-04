@@ -40,6 +40,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -60,6 +61,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
@@ -373,6 +375,14 @@ public class TownyPlayerListener implements Listener {
 				// Get permissions (updates if none exist)
 				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
 				break;
+
+			case ITEM_FRAME:
+				
+				TownyMessaging.sendDebugMsg("Item_Frame Right Clicked");
+				block = Material.ITEM_FRAME;
+				// Get permissions (updates if none exist)
+				bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
+				break;
 			
 			default:
 				break;
@@ -402,22 +412,6 @@ public class TownyPlayerListener implements Listener {
 			 * Item_use protection.
 			 */
 			if (event.getPlayer().getInventory().getItemInMainHand() != null) {
-
-				/*
-				 * Info Tool
-				 */
-				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
-
-					Entity entity = event.getRightClicked();
-
-					TownyMessaging.sendMessage(player, Arrays.asList(
-							ChatTools.formatTitle("Entity Info"),
-							ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
-							));
-
-					event.setCancelled(true);
-
-				}
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
 					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getInventory().getItemInMainHand()));
@@ -572,6 +566,8 @@ public class TownyPlayerListener implements Listener {
 				 * Info Tool
 				 */
 				if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+					if (event.getHand().equals(EquipmentSlot.OFF_HAND))
+						return;
 
 					Entity entity = event.getRightClicked();
 
@@ -581,7 +577,6 @@ public class TownyPlayerListener implements Listener {
 							));
 
 					event.setCancelled(true);
-
 				}
 
 				if (TownySettings.isItemUseMaterial(event.getPlayer().getInventory().getItemInMainHand().getType().name())) {
@@ -942,7 +937,9 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerFishEvent(PlayerFishEvent event) {
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
 			Player player = event.getPlayer();
-			Entity caught = event.getCaught();				
+			Entity caught = event.getCaught();
+			if (caught.getType().equals(EntityType.PLAYER))
+				return;
 			boolean bDestroy = PlayerCacheUtil.getCachePermission(player, caught.getLocation(), Material.GRASS, TownyPermission.ActionType.DESTROY);
 			if (!bDestroy) {
 				event.setCancelled(true);

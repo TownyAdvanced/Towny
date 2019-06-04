@@ -176,12 +176,10 @@ public class CombatUtil {
 				 * Defender is not a player so check for PvM
 				 */
 				if (defenderTB != null) {
-					Resident AttackingResident = null;
 					if(defenderTB.getType() == TownBlockType.FARM) {
-						AttackingResident = TownyUniverse.getDataSource().getResident(attackingPlayer.getName());
-						if (!AttackingResident.hasTown())
+						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.COBBLESTONE, ActionType.DESTROY))
 							return true;
-						if (TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()) && (defenderTB.getTown() == AttackingResident.getTown()))
+						if (TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
 							return false;
 					}
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
