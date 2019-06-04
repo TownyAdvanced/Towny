@@ -1632,7 +1632,7 @@ public enum ConfigNodes {
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
 	WAR_SIEGE_SIEGE_COOLDOWN_HOURS(
 			"war.siege.siege_cooldown_hours",
-			"120",
+			"0",
 			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
 			"# A high setting makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
 			"# A low setting makes sieges more frequent. Suitable for highly aggressive servers."),

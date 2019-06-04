@@ -995,6 +995,9 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setSiege(null);
                 }
 
+                town.setSiegeCooldownEndTime(rs.getLong("siegeCooldownEndTime"));
+                town.setRevoltCooldownEndTime(rs.getLong("revoltCooldownEndTime"));
+
                 s.close();
                 return true;
             }
@@ -1696,6 +1699,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             }
 
             twn_hm.put("siege", Boolean.toString(town.hasSiege()));
+            twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeCooldownEndTime()));
+            twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltCooldownEndTime()));
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;

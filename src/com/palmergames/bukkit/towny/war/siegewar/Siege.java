@@ -102,7 +102,7 @@ public class Siege {
         this.siegeStatsAttackers = siegeStatsAttackers;
     }
 
-    public String getSiegeHoursUntilCompletionString() {
+    public String getHoursUntilCompletionString() {
         double hoursRemainingMillis = scheduledEndTime - System.currentTimeMillis();
         double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
         NumberFormat numberFormat = NumberFormat.getInstance();

@@ -408,7 +408,7 @@ public class TownyFormatter {
 				String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
 				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers_list"), namesOfBesiegingNations.length )));
 
-				out.add(String.format(TownySettings.getLangString("status_town_siege_completion_timer"), siege.getSiegeHoursUntilCompletionString()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_completion_timer"), siege.getHoursUntilCompletionString()));
 			}
 		}
 

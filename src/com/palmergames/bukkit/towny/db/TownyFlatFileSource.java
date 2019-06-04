@@ -712,8 +712,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								Resident outlaw = getResident(token);
 								if (outlaw != null)
 									town.addOutlaw(outlaw);
-							}
-							catch(NotRegisteredException e) {
+							} catch (NotRegisteredException e) {
 								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
 							}
 						}
@@ -995,10 +994,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				line = kvFile.get("registered");
-				if (line != null){
+				if (line != null) {
 					try {
 						town.setRegistered(Long.valueOf(line));
-					} catch (Exception ee){
+					} catch (Exception ee) {
 						town.setRegistered(0);
 					}
 				}
@@ -1006,7 +1005,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("siege");
 				if (line != null) {
 					try {
-						if(Boolean.parseBoolean(line)) {
+						if (Boolean.parseBoolean(line)) {
 							town.setSiege(getSiege(line));
 						} else {
 							town.setSiege(null);
@@ -1015,6 +1014,26 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setSiege(null);
 					}
 				}
+
+				line = kvFile.get("siegeCooldownEndTime");
+				if (line != null) {
+					try {
+						town.setSiegeCooldownEndTime(Long.parseLong(line));
+					} catch (Exception e) {
+						town.setSiegeCooldownEndTime(0);
+					}
+				}
+
+				line = kvFile.get("revoltCooldownEndTime");
+				if (line != null) {
+					try {
+						town.setRevoltCooldownEndTime(Long.parseLong(line));
+					} catch (Exception e) {
+						town.setRevoltCooldownEndTime(0);
+					}
+				}
+
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -1959,8 +1978,10 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
-		// Siege
+		// Sieges & Revolts
 		list.add("siege=" + Boolean.toString(town.hasSiege()));
+		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeCooldownEndTime()));
+		list.add("revoltCoolownEndTime=" + Long.toString(town.getRevoltCooldownEndTime()));
 
 		/*
 		 *  Make sure we only save in async

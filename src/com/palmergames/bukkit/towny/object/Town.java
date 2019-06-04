@@ -24,6 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.*;
 
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
@@ -1287,9 +1289,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 
-	public int getSiegeCooldownRemainingMinutes() {
-		double resultDouble = (siegeCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
-		return (int) (resultDouble + 0.5);
+	public String getHoursUntilSiegeCooldownEndsString() {
+		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
+		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(1);
+		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+		return numberFormat.format(hoursRemaining);
 	}
 
 	public int getRevoltCooldownRemainingMinutes() {
@@ -1308,5 +1314,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public boolean hasSiege() {
 		return siege != null;
+	}
+
+	public long getSiegeCooldownEndTime() {
+		return siegeCooldownEndTime;
+	}
+
+	public long getRevoltCooldownEndTime() {
+		return revoltCooldownEndTime;
 	}
 }
