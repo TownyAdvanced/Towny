@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.war.siegewar;
 import com.palmergames.bukkit.towny.object.Nation;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -10,21 +11,19 @@ import java.util.UUID;
  */
 public class SiegeStats {
 
-    private UUID id;
     boolean active;
     int siegePointsTotal;
     int siegePointsPrincipal;
-    HashMap<Nation, Integer> siegePointsAllies;
+    Map<Nation, Integer> siegePointsAllies;
 
     public SiegeStats() {
-        id = UUID.randomUUID();
-        active = true;
+        active = false;
         siegePointsTotal = 0;
         siegePointsPrincipal = 0;
         siegePointsAllies = new HashMap<Nation, Integer>();
     }
 
-    public int getSiegePointsTotal() {
+    public Integer getSiegePointsTotal() {
         return siegePointsTotal;
     }
 
@@ -35,5 +34,25 @@ public class SiegeStats {
 
     public boolean isActive() {
         return active;
+    }
+
+    public Integer getSiegePointsPrincipal() {
+        return siegePointsPrincipal;
+    }
+
+    public Map<Nation, Integer> getSiegePointsAllies() {
+        return siegePointsAllies;
+    }
+
+    public void setSiegePointsTotal(int siegePointsTotal) {
+        this.siegePointsTotal = siegePointsTotal;
+    }
+
+    public void setSiegePointsPrincipal(int siegePointsPrincipal) {
+        this.siegePointsPrincipal = siegePointsPrincipal;
+    }
+
+    public void setSiegePointsAllies(Map<Nation, Integer> siegePointsAllies) {
+        this.siegePointsAllies = siegePointsAllies;
     }
 }

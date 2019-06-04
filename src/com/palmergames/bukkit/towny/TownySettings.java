@@ -2623,10 +2623,6 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_HOURS);
 	}
 
-	public static int getWarSiegeSiegeCooldownModifier() {
-		return getInt(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER);
-	}
-
 	public static int getWarSiegeRevoltCooldownHours() {
 		return getInt(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
 	}

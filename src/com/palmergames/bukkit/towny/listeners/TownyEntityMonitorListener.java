@@ -443,18 +443,19 @@ public class TownyEntityMonitorListener implements Listener {
 	 */
 	private void checkForSiegeDeathCosts(Player killedPlayer, Resident killedResident) {
 		Coord playerCoord = Coord.parseCoord(killedPlayer);
-		List<Siege> nationSieges = null;
+		Nation nation = null;
 		Coord townBlockCoord;
 		double trueDistance;
 		int roundedDistance;
 		try {
-			nationSieges = killedResident.getTown().getNation().getSieges();
+			nation =killedResident.getTown().getNation();
 		} catch (NotRegisteredException x) {
+			//We already checked for player being in a town + nation
 		}
 
 		//Check if the player died in one of their nation's active siegezones
-		for (Siege siege : nationSieges) {
-			if(!siege.isComplete()) {
+		for (Siege siege : nation.getSieges()) {
+			if(siege.isActive()) {
 				for (TownBlock townBlock : siege.getDefendingTown().getTownBlocks()) {
 
 					if (!townBlock.getWorld().equals(killedPlayer.getWorld()))
@@ -465,17 +466,16 @@ public class TownyEntityMonitorListener implements Listener {
 					roundedDistance = (int) Math.ceil(trueDistance);
 
 					if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
-						applySiegeDeathCost(killedResident, siege);
+						applySiegeDeathCost(killedResident, nation, siege);
 					}
 				}
 			}
 		}
 	}
 
-	private void applySiegeDeathCost(Resident killedResident, Siege siege) {
+	private void applySiegeDeathCost(Resident killedResident, Nation nation, Siege siege) {
 		try {
 			double cost = TownySettings.getWarSiegeAttackerCostPerSiegeZoneCasualty();
-			Nation nation = siege.getAttackingNation();
 			if(nation.canPayFromHoldings(cost)) {
 				nation.pay(cost,
 						TownyFormatter.getFormattedResidentName(killedResident)

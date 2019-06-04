@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 public class TownyFormatter {
 
@@ -394,10 +396,23 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
-		// Sieges [3]: Prussia, Britain, Russia
-		List<Nation> besiegingNations = town.getBesiegingNations();
-		String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
-		out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siegelist"), namesOfBesiegingNations.length )));
+		if(town.hasSiege()) {
+			Siege siege =town.getSiege();
+
+			if(siege.isActive()) {
+				// Siege Status: Active
+				// Siege Attackers: vile_nation, darkland, empire
+				// Siege Timer: 25.8 hours
+				out.add(TownySettings.getLangString("status_town_siege_status_active"));
+
+				Set<Nation> besiegingNations = siege.getSiegeStatsAttackers().keySet();
+				String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
+				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers_list"), namesOfBesiegingNations.length )));
+
+				out.add(String.format(TownySettings.getLangString("status_town_siege_completion_timer"), siege.getSiegeHoursUntilCompletionString()));
+			}
+		}
+
 
 		out = formatStatusScreens(out);
 		return out;
@@ -482,10 +497,12 @@ public class TownyFormatter {
 		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
         out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
-		// Sieges [3]: Prussia, Britain, Russia
-		List<Town> townsUnderSiege = nation.getTownsUnderSiege();
-		String[] namesOfTownsUnderSiege = getFormattedNames(townsUnderSiege.toArray(new Town[0]));
-		out.addAll(ChatTools.listArr(namesOfTownsUnderSiege, String.format(TownySettings.getLangString("status_nation_sieges"), townsUnderSiege.size())));
+		// Siege Attacks [3]: TownX, TownY, TownZ
+		List<Town> siegeAttacks = nation.getTownsUnderSiegeAttack();
+		String[] formattedSiegeAttacks = getFormattedNames(siegeAttacks.toArray(new Town[0]));
+		out.addAll(ChatTools.listArr(formattedSiegeAttacks, String.format(TownySettings.getLangString("status_nation_siege_attacks"), siegeAttacks.size())));
+
+		//TODO - siege defences
 
 		out = formatStatusScreens(out);
 		return out;

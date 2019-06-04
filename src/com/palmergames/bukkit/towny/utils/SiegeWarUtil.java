@@ -122,43 +122,58 @@ public class SiegeWarUtil {
                                     Town defendingTown) throws TownyException {
 
         Siege siege;
-        boolean attackerJoinedSiege = false;
+        boolean attackerJoinedSiege;
 
-        //Register attack with town
         if(!defendingTown.hasSiege()) {
-            TownyUniverse.getDataSource().newSiege(defendingTown);
-            siege = TownyUniverse.getDataSource().getSiege(defendingTown);
+            attackerJoinedSiege =false;
+            TownyUniverse.getDataSource().newSiege(defendingTown.getName());
+            siege = TownyUniverse.getDataSource().getSiege(defendingTown.getName());
+
+            //Setup siege values
+            siege.setActive(true);
+            siege.setScheduledEndTime(
+                    (System.currentTimeMillis() + TownySettings.getWarSiegeMaxHoldoutTimeHours())
+                            * ONE_HOUR_IN_MILLIS);
+            siege.setActualEndTime(0);
+            siege.setSiegeStatsDefenders(new SiegeStats());
+            siege.setSiegeStatsAttackers(new HashMap<Nation, SiegeStats>());
+            siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
+            siege.getSiegeStatsAttackers().put(attackingNation, new SiegeStats());
+            siege.getSiegeStatsAttackers().get(attackingNation).setActive(true);
+
+            //Link siege to town
             defendingTown.setSiege(siege);
-            TownyUniverse.getDataSource().saveSiegeList();
-            attackerJoinedSiege = true;
         } else {
+            attackerJoinedSiege = true;
             siege = defendingTown.getSiege();
-            //The below exception is unlikely to occur, but I include it just in case
             if(!siege.isActive())
                 throw new TownyException("The town is in a siege cooldown period.");
-            attackerJoinedSiege = false;
+            //Add new siege attack
+            siege.getSiegeStatsAttackers().put(attackingNation,new SiegeStats());
+            siege.getSiegeStatsAttackers().get(attackingNation).setActive(true);
         }
 
-        //Register attack with nation
+        //Link siege to nation
         attackingNation.addSiege(siege);
-
-        //Add new attack to siege object
-        siege.addAttacker(attackingNation);
 
         //Save siege, nation, and town
         TownyUniverse.getDataSource().saveSiege(siege);
         TownyUniverse.getDataSource().saveNation(attackingNation);
         TownyUniverse.getDataSource().saveTown(defendingTown);
 
+        //Save siege list if required
+        if(!attackerJoinedSiege)
+            TownyUniverse.getDataSource().saveSiegeList();
+
         //Send global message;
         if(attackerJoinedSiege) {
             TownyMessaging.sendGlobalMessage(
                     "The nation of " + attackingNation.getName() +
-                            " has joined the siege on the town of" + defendingTown.getName());
+                            " has joined the siege on the town of " + defendingTown.getName());
         } else {
             TownyMessaging.sendGlobalMessage(
                     "The nation of " + attackingNation.getName() +
-                            " has initiated a siege on the town of" + defendingTown.getName());
+                            " has initiated a siege on the town of " + defendingTown.getName());
         }
 
 
@@ -437,7 +452,7 @@ public class SiegeWarUtil {
         double upkeepCost = TownySettings.getWarSiegeAttackerCostPerHour();
 
         //Each attacking nation who is involved must pay upkeep
-        for(Nation nation: siege.getAttackingNations()) {
+        for(Nation nation: siege.getSiegeStatsAttackers().keySet()) {
             try {
                 if (nation.canPayFromHoldings(upkeepCost))
                     nation.pay(upkeepCost, "Cost of maintaining siege.");
@@ -451,21 +466,6 @@ public class SiegeWarUtil {
                 TownyMessaging.sendErrorMsg(x.getMessage());
             }
         }
-
-        //Check if the siege is abandoned
-        boolean abandoned = true;
-        for(SiegeStats siegeStats: siege.getSiegeStatsAttackers().values()) {
-            if(siegeStats.isActive()) {
-                abandoned = false;
-            }
-        }
-
-        if(abandoned) {
-            siege.setActive(false);
-            TownyMessaging.sendGlobalMessage("The siege on  " + siege.getDefendingTown().getName() +
-                    " has been abandoned due to lack of funds.");
-        }
-
     }
 
 
@@ -488,7 +488,7 @@ public class SiegeWarUtil {
         TownyObject winner = siege.getDefendingTown();
         int winningPoints = siege.getSiegeStatsDefenders().getSiegePointsTotal();
 
-        for(Nation attackingNation: siege.getAttackingNations()) {
+        for(Nation attackingNation: siege.getSiegeStatsAttackers().keySet()) {
             SiegeStats stats = siege.getSiegeStatsAttackers().get(attackingNation);
             if(stats.getSiegePointsTotal() > winningPoints) {
                 winner = attackingNation;

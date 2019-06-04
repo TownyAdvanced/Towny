@@ -282,7 +282,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Sieges");
 		for (Siege siege : getSieges())
 			if (!loadSiege(siege)) {
-				System.out.println("[Towny] Loading Error: Could not read siege data '" + siege.getName() + "'.");
+				System.out.println("[Towny] Loading Error: Could not read siege data '" + siege.getDefendingTown().getName() + "'.");
 				return false;
 			}
 		return true;
@@ -429,6 +429,6 @@ public abstract class TownyDataSource {
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void newSiege(Town defendingTown) throws AlreadyRegisteredException;
-    abstract public Siege getSiege(Town defendingTown) throws TownyException;
+	abstract public void newSiege(String townName) throws AlreadyRegisteredException;
+    abstract public Siege getSiege(String townName) throws TownyException;
 }

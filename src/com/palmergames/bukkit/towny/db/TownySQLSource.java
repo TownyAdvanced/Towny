@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -582,8 +583,7 @@ public class TownySQLSource extends TownyFlatFileSource {
     @Override
     public boolean loadSiegeList() {
 
-        Nation attackingNation;
-        Town defendingTown;
+        String townName;
         Statement s = null;
         ResultSet rs= null;
 
@@ -592,12 +592,11 @@ public class TownySQLSource extends TownyFlatFileSource {
             return false;
         try {
             s = cntx.createStatement();
-            rs = s.executeQuery("SELECT attackingNationName, defendingTownName FROM " + tb_prefix + "SIEGES");
+            rs = s.executeQuery("SELECT defendingTownName FROM " + tb_prefix + "SIEGES");
             while (rs.next()) {
                 try {
-                    attackingNation = universe.getNationsMap().get(rs.getString("attackingNationName").toLowerCase());
-                    defendingTown = universe.getTownsMap().get(rs.getString("defendingTownName").toLowerCase());
-                    newSiege(attackingNation, defendingTown);
+                    townName = rs.getString("defendingTownName").toLowerCase();
+                    newSiege(townName);
                 } catch (AlreadyRegisteredException e) {
                     e.printStackTrace();
                 }
@@ -989,21 +988,11 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setRegistered(0);
                 }
 
-                line = rs.getString("sieges");
-                if (line != null) {
-                    search = (line.contains("#")) ? "#" : ",";
-                    tokens = line.split(search);
-                    for (String token : tokens) {
-                        if (!token.isEmpty()) {
-                            try {
-                                Siege siege = getSiege(token, town);
-                                if (siege != null)
-                                    town.addSiege(siege);
-                            } catch (NotRegisteredException x) {
-                                TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a siege of town file " + town.getName() + ".txt. The siege " + token + " does not exist, skipping...");
-                            }
-                        }
-                    }
+                line = rs.getString("siege");
+                if(line != null && Boolean.parseBoolean(line)) {
+                    town.setSiege(getSiege(line));
+                } else {
+                    town.setSiege(null);
                 }
 
                 s.close();
@@ -1088,7 +1077,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     tokens = line.split(search);
                     for (String token : tokens) {
                         if (!token.isEmpty()) {
-                            Siege siege = getSiege(nation, token);
+                            Siege siege = getSiege(token);
                             if (siege != null)
                                 nation.addSiege(siege);
                         }
@@ -1156,32 +1145,22 @@ public class TownySQLSource extends TownyFlatFileSource {
         Statement s = null;
         ResultSet rs = null;
         String lineString;
-        TownyMessaging.sendDebugMsg("Loading siege " + siege.getName());
+        TownyMessaging.sendDebugMsg("Loading siege " + siege.getDefendingTown().getName());
 
         if (!getContext())
             return false;
         try {
             s = cntx.createStatement();
             rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES " +
-                                             "WHERE attackingNation='" + siege.getAttackingNation().getName() + "'" +
-                                             "AND defendingTown='" + siege.getDefendingTown().getName() + "'");
+                                             "WHERE defendingTown='" + siege.getDefendingTown().getName() + "'");
             while (rs.next()) {
-
-                siege.setTotalSiegePointsAttacker(rs.getInt("totalSiegePointsAttacker"));
-                siege.setTotalSiegePointsDefender(rs.getInt("totalSiegePointsDefender"));
-
+                siege.setActive(rs.getBoolean("active"));
                 siege.setActualStartTime(rs.getLong("actualStartTime"));
                 siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
                 siege.setActualEndTime(rs.getLong("actualEndTime"));
-
-                siege.setTotalAttackersKilled(rs.getInt("totalAttackersKilled"));
-                siege.setTotalDefendersKilled(rs.getInt("totalDefendersKilled"));
-                siege.setTotalCostToAttacker(rs.getInt("totalCostToAttacker"));
-
-                siege.setLastUpkeepTime(rs.getLong("lastUpkeepTime"));
-
-                siege.setActive(rs.getBoolean("active"));
-                siege.setComplete(rs.getBoolean("complete"));
+                siege.setNextUpkeepTime(rs.getLong("actualEndTime"));
+                siege.setSiegeStatsDefenders(SiegeWarDataUtil.unpackSiegeStatsBlob("siegeStatsDefenders"));
+                siege.setSiegeStatsAttackers(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob("siegeStatsAttackers"));
             }
 
             return true;
@@ -1716,7 +1695,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
-            twn_hm.put("sieges", StringMgmt.join(town.getBesiegingNationNames(), "#"));
+            twn_hm.put("siege", Boolean.toString(town.hasSiege()));
 
             UpdateDB("TOWNS", twn_hm, Arrays.asList("name"));
             return true;
@@ -1742,7 +1721,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-            nat_hm.put("sieges", StringMgmt.join(nation.getSiegedTownNames(), "#"));
+            nat_hm.put("sieges", StringMgmt.join(nation.getTownsUnderSiegeAttack(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
@@ -1773,25 +1752,21 @@ public class TownySQLSource extends TownyFlatFileSource {
     public synchronized boolean saveSiege(Siege siege) {
 
         TownyMessaging.sendDebugMsg(
-                "Saving siege " + siege.getName());
+                "Saving siege on " + siege.getDefendingTown().getName());
 
         try {
             HashMap<String, Object> nat_hm = new HashMap<>();
-            nat_hm.put("attackingNation", siege.getAttackingNation().getName());
-            nat_hm.put("defendingTown", siege.getDefendingTown().getName());
-            nat_hm.put("totalSiegePointsAttacker", Integer.toString(siege.getTotalSiegePointsAttacker()));
-            nat_hm.put("totalSiegePointsAttacker", Integer.toString(siege.getTotalSiegePointsDefender()));
-            nat_hm.put("actualStartTime", Long.toString(siege.getActualStartTime()));
-            nat_hm.put("scheduledEndTime", Long.toString(siege.getScheduledEndTime()));
-            nat_hm.put("actualEndTime", Long.toString(siege.getActualEndTime()));
-            nat_hm.put("totalAttackersKilled", Integer.toString(siege.getTotalAttackersKilled()));
-            nat_hm.put("totalDefendersKilled", Integer.toString(siege.getTotalDefendersKilled()));
-            nat_hm.put("totalCostToAttacker", Double.toString(siege.getTotalCostToAttacker()));
-            nat_hm.put("lastUpkeepTime", Long.toString(siege.getLastUpkeepTime()));
-            nat_hm.put("active", Boolean.toString(siege.isActive()));
-            nat_hm.put("complete", Boolean.toString(siege.isComplete()));
 
-            UpdateDB("SIEGES", nat_hm, Arrays.asList("attackingNation", "defendingTown"));
+            nat_hm.put("defendingTown", siege.getDefendingTown().getName());
+            nat_hm.put("active", siege.isActive());
+            nat_hm.put("actualStartTime", siege.getActualStartTime());
+            nat_hm.put("scheduledEndTime", siege.getScheduledEndTime());
+            nat_hm.put("actualEndTime", siege.getActualEndTime());
+            nat_hm.put("nextUpkeepTime", siege.getNextUpkeepTime());
+            nat_hm.put("siegeStatsDefenders", SiegeWarDataUtil.generateSiegeStatsBlob(siege.getSiegeStatsDefenders()));
+            nat_hm.put("siegeStatsAttackers", SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getSiegeStatsAttackers()));
+
+            UpdateDB("SIEGES", nat_hm, Arrays.asList("defendingTown"));
 
         } catch (Exception e) {
             TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -1950,7 +1925,6 @@ public class TownySQLSource extends TownyFlatFileSource {
     public void deleteSiege(Siege siege) {
 
         HashMap<String, Object> siege_hm = new HashMap<>();
-        siege_hm.put("attackNation", siege.getAttackingNation().getName());
         siege_hm.put("defendTown", siege.getDefendingTown().getName());
         DeleteDB("SIEGES", siege_hm);
     }
