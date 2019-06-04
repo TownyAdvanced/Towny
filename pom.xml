@@ -26,6 +26,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- For use with GitHub Package Registry -->
+    <!-- Requires repo write access, and proper local maven configuration -->
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub TownyAdvanced Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/TownyAdvanced</url>
+        </repository>
+    </distributionManagement>
+    <scm>
+        <connection>scm:git:https://github.com/TownyAdvanced/Towny.git</connection>
+        <developerConnection>scm:git:https://github.com/TownyAdvanced/Towny.git</developerConnection>
+        <url>https://github.com/TownyAdvanced/Towny</url>
+    </scm>
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
