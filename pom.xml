@@ -60,8 +60,9 @@
             <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
         <repository>
-            <id>flagpole-repo</id>
-            <url>http://144.202.78.77:8081/repository/maven-releases/</url>
+            <id>groupmanager-repo</id>
+            <url>https://raw.githubusercontent.com/GroupManager/GroupManager/maven/</url>
+            <!-- Not browsable from this URL (HTTP 400) - Works fine as Repo, though. For Ver. # - see https://github.com/GroupManager/GroupManager/ -->
         </repository>
         <repository>
             <id>citizens-repo</id>
@@ -102,10 +103,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- TODO: GroupManager(GM++) [needs repo] -->
-            <groupId>org.anjocaido.groupmanager</groupId>
+            <groupId>Xadzkon</groupId>
             <artifactId>GroupManager</artifactId>
-            <version>v0.2.0</version>
+            <version>0.2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
