@@ -3223,3 +3223,7 @@ v0.92.0.11:
     - Make FARM plottypes follow plot perms to determine who can slaughter animals in them. Previously it only allowed town members to kill the animals.
     - Fix for two more async/1.14 tasks. Solves plot claiming exception. 
     - Fix permissions HUD from throwing an exception, courtesy of ArticDive.
+    - Bump language files to 0.49
+    - More strings have been made translatable, courtesy of TheFlagCourier
+      - 'Total TownBlocks: '
+      - 'Processing Plot (Un)Claim...' 

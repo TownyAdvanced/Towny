@@ -1,5 +1,5 @@
 name: Towny
-version: 0.48
+version: 0.49
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
 website: 'http://towny.palmergames.com/'
@@ -845,3 +845,9 @@ msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costi
 msg_err_not_enough_variables: '&cNot enough variables: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
 msg_err_nation_over_town_limit: '&cYour nation has reached the maximum number of allowed towns-per-nation: %s.'
+
+
+# Added in 0.49
+msg_process_claim: 'Processing Plot Claim...'
+msg_process_unclaim: 'Processing Plot Unclaim...'
+msg_total_townblocks: 'Total TownBlocks: '
