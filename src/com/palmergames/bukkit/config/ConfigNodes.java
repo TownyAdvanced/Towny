@@ -1630,12 +1630,19 @@ public enum ConfigNodes {
 			"# The maximum duration a town can hold out against a siege.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
-	WAR_SIEGE_SIEGE_COOLDOWN_HOURS(
-			"war.siege.siege_cooldown_hours",
-			"0",
+	WAR_SIEGE_SIEGE_COOLDOWN_NEW_TOWNS_HOURS(
+			"war.siege.siege_cooldown_new_towns_hours",
+			"48",
+			"# This value determines how long a town is safe from sieges, after the town is founded.",
+			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
+			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
+	WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER(
+			"war.siege.siege_cooldown_modifier",
+			"2.5",
 			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
-			"# A high setting makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
-			"# A low setting makes sieges more frequent. Suitable for highly aggressive servers."),
+			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
+			"# A high value makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
+			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_COOLDOWN_HOURS(
 			"war.siege.revolt_cooldown_hours",
 			"240",

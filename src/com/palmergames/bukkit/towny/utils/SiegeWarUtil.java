@@ -244,7 +244,7 @@ public class SiegeWarUtil {
                             TownyFormatter.getFormattedNationName(town.getNation())));
 
             //Turn OFF siege cooldown
-            town.setSiegeCooldownEndTime(System.currentTimeMillis());
+            town.setSiegeCooldownEndTime(0);
 
             //Tell town that siege cooldown has been reset to off
             TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_siege_war_post_revolt_siege_cooldown_reset"));

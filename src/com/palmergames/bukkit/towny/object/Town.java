@@ -29,7 +29,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 
-import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_DAY_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
 
@@ -76,8 +75,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
 		siege = null;
+
+
 		siegeCooldownEndTime = System.currentTimeMillis()
-				+ TownySettings.getWarSiegeSiegeCooldownHours()
+				+ TownySettings.getWarSiegeSiegeCooldownNewTownsHours()
 				* ONE_HOUR_IN_MILLIS;
 		revoltCooldownEndTime = System.currentTimeMillis()
 				+ TownySettings.getWarSiegeRevoltCooldownHours()
