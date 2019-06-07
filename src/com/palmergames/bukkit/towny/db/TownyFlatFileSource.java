@@ -2002,7 +2002,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Sieges & Revolts
 		list.add("siege=" + Boolean.toString(town.hasSiege()));
 		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeCooldownEndTime()));
-		list.add("revoltCoolownEndTime=" + Long.toString(town.getRevoltCooldownEndTime()));
+		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltCooldownEndTime()));
 
 		/*
 		 *  Make sure we only save in async

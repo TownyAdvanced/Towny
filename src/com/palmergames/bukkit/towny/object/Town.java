@@ -1289,7 +1289,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public boolean isRevoltCooldownActive() {
-		return (System.currentTimeMillis() < revoltCooldownEndTime);
+		return System.currentTimeMillis() < revoltCooldownEndTime;
 	}
 
 	public void setSiegeCooldownEndTime(long endTimeMillis) {

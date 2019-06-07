@@ -378,23 +378,20 @@ public class TownyFormatter {
 
 		out.addAll(ranklist);
 
-		// Nation: Azur Empire (Revolt Cooldown Timer: 71.8 hours)
+		// Nation: Azur Empire
 		try {
-			String nationString = String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation()));
-
-			if(TownySettings.getWarSiegeEnabled()
-			   && TownySettings.getWarSiegeAllowRevolts()
-		       && town.isRevoltCooldownActive()) {
-
-				nationString += String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds());
-			}
-
-			out.add(nationString);
+			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())));
 		} catch (TownyException e) {
 		}
 
-		// Residents [12]: James, Carry, Mason
+		//Revolt Cooldown Timer: 71.8 hours
+		if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegeAllowRevolts()
+		   		&& town.isRevoltCooldownActive()) {
+			out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
+		}
 
+		// Residents [12]: James, Carry, Mason
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 		if (residents.length > 34) {
 			String[] entire = residents;
