@@ -97,16 +97,6 @@ public class Siege {
         return numberFormat.format(getDaysUntilCompletion());
     }
 
-    public int getNumberOfActiveAttackers() {
-        int count = 0;
-        for (Nation nation : siegeStatsAttackers.keySet()) {
-            if (siegeStatsAttackers.get(nation).active) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     public List<Nation> getActiveAttackers() {
         List<Nation> result = new ArrayList<>();
         for (Nation nation : new ArrayList<Nation>(siegeStatsAttackers.keySet())) {
