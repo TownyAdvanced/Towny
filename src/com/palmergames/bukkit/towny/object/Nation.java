@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -762,7 +763,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public boolean isNationAttackingTown(Town town) {
 		return town.hasSiege()
-				&& town.getSiege().isActive()
+				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
 				&& town.getSiege().getSiegeStatsAttackers().containsKey(this);
 	}
 

@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -455,7 +456,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		//Check if the player died in one of their nation's active siegezones
 		for (Siege siege : nation.getSieges()) {
-			if(siege.isActive()) {
+			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 				for (TownBlock townBlock : siege.getDefendingTown().getTownBlocks()) {
 
 					if (!townBlock.getWorld().equals(killedPlayer.getWorld()))

@@ -248,7 +248,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if(universe.getSiegesMap().containsKey(defendingTownName.toLowerCase()))
 				throw new AlreadyRegisteredException("Siege is already registered");
 
-			Town town = universe.getTownsMap().get(defendingTownName);
+			Town town = universe.getTownsMap().get(defendingTownName.toLowerCase());
 			Siege siege = new Siege(town);
 
 			universe.getSiegesMap().put(defendingTownName.toLowerCase(), siege);

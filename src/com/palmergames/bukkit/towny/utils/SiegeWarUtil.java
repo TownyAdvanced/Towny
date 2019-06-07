@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Location;
@@ -25,6 +26,8 @@ public class SiegeWarUtil {
 
     public final static long ONE_MINUTE_IN_MILLIS = 60000;
     public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
+    public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
+
 
 
     //////////////////// PROCESS ATTACK REQUESTS //////////////////////////////////////
@@ -130,14 +133,19 @@ public class SiegeWarUtil {
             siege = TownyUniverse.getDataSource().getSiege(defendingTown.getName());
 
             //Setup siege values
-            siege.setActive(true);
+            siege.setStatus(SiegeStatus.IN_PROGRESS);
+            siege.setTownPlundered(false);
+            siege.setAttackerWinner(null);
             siege.setScheduledEndTime(
-                    (System.currentTimeMillis() + TownySettings.getWarSiegeMaxHoldoutTimeHours())
-                            * ONE_HOUR_IN_MILLIS);
+                    (System.currentTimeMillis() +
+                    (TownySettings.getWarSiegeMaxHoldoutTimeHours()) * ONE_HOUR_IN_MILLIS));
             siege.setActualEndTime(0);
-            siege.setSiegeStatsDefenders(new SiegeStats());
-            siege.setSiegeStatsAttackers(new HashMap<Nation, SiegeStats>());
             siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
+
+            siege.setSiegeStatsDefenders(new SiegeStats());
+            siege.getSiegeStatsDefenders().setActive(true);
+
+            siege.setSiegeStatsAttackers(new HashMap<Nation, SiegeStats>());
             siege.getSiegeStatsAttackers().put(attackingNation, new SiegeStats());
             siege.getSiegeStatsAttackers().get(attackingNation).setActive(true);
 
@@ -146,7 +154,7 @@ public class SiegeWarUtil {
         } else {
             attackerJoinedSiege = true;
             siege = defendingTown.getSiege();
-            if(!siege.isActive())
+            if(!(siege.getStatus() == SiegeStatus.IN_PROGRESS))
                 throw new TownyException("The town is in a siege cooldown period.");
             //Add new siege attack
             siege.getSiegeStatsAttackers().put(attackingNation,new SiegeStats());
@@ -470,6 +478,7 @@ public class SiegeWarUtil {
 
 
     public static void attackerWin(Towny plugin, Siege siege, Nation winnerNation) {
+        siege.setStatus(SiegeStatus.ATTACKER_WIN);
         captureTown(plugin, siege, winnerNation);
         if (TownySettings.isUsingEconomy()) {
             plunderTown(siege, winnerNation);
@@ -477,7 +486,8 @@ public class SiegeWarUtil {
     }
 
 
-    public static void defenderWin(Town winnerTown) {
+    public static void defenderWin(Siege siege, Town winnerTown) {
+        siege.setStatus(SiegeStatus.DEFENDER_WIN);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
                 TownyFormatter.getFormattedTownName(winnerTown))

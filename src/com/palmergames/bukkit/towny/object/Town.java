@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
@@ -28,6 +29,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_DAY_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
 
@@ -1323,4 +1325,25 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public long getRevoltCooldownEndTime() {
 		return revoltCooldownEndTime;
 	}
+
+	private double getPlunderValue() {
+		return TownySettings.getWarSiegeAttackerPlunderAmountPerPlot() * townBlocks.size();
+	}
+
+	public String getFormattedPlunderValue() {
+		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
+	}
+
+	public String getFormattedDaysUntilSiegeCooldownEnds() {
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(1);
+		return numberFormat.format(getDaysUntilSiegeCooldownEnds());
+	}
+
+	public double getDaysUntilSiegeCooldownEnds() {
+		double timeRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
+		double timeRemainingDays = timeRemainingMillis / ONE_DAY_IN_MILLIS;
+		return timeRemainingDays;
+	}
+
 }

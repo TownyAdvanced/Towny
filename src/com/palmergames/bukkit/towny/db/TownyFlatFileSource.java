@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -1006,7 +1007,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					try {
 						if (Boolean.parseBoolean(line)) {
-							town.setSiege(getSiege(line));
+							town.setSiege(getSiege(town.getName()));
 						} else {
 							town.setSiege(null);
 						}
@@ -1022,6 +1023,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setSiegeCooldownEndTime(0);
 					}
+				} else {
+					town.setSiegeCooldownEndTime(0);
 				}
 
 				line = kvFile.get("revoltCooldownEndTime");
@@ -1031,8 +1034,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setRevoltCooldownEndTime(0);
 					}
+				} else {
+					town.setRevoltCooldownEndTime(0);
 				}
-
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1226,12 +1230,29 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				KeyValueFile kvFile = new KeyValueFile(path);
 
 				try {
-					line = kvFile.get("active");
-					siege.setActive(Boolean.parseBoolean(line));
+					line = kvFile.get("status");
+					siege.setStatus(SiegeStatus.parseString(line));
 				} catch (Exception e) {
-					siege.setActive(false);
+					siege.setStatus(SiegeStatus.UNKNOWN);
 				}
 
+				try {
+					line = kvFile.get("townPlundered");
+					siege.setTownPlundered(Boolean.parseBoolean(line));
+				} catch (Exception e) {
+					siege.setTownPlundered(false);
+				}
+
+				try {
+					line = kvFile.get("attackerWinner");
+					if(line != null) {
+						siege.setAttackerWinner(getNation(line));
+					} else {
+						siege.setAttackerWinner(null);
+					}
+				} catch (Exception e) {
+					siege.setAttackerWinner(null);
+				}
 				try {
 					line = kvFile.get("actualStartTime");
 					siege.setActualStartTime(Long.parseLong(line));
@@ -1265,7 +1286,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					siege.setSiegeStatsAttackers(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
 
 				} catch (Exception e) {
-					siege.setActive(false);
+					siege.setSiegeStatsAttackers(new HashMap<Nation,SiegeStats>());
 				}
 
 			} catch (Exception e) {
@@ -2055,8 +2076,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveSiege(Siege siege) {
 		List<String> list = new ArrayList<>();
 
-		list.add("active=" + Boolean.toString(siege.isActive()));
 		list.add("defendingTown=" + siege.getDefendingTown().getName());
+		list.add("status=" + siege.getStatus().toString());
+		list.add("townPlundered=" + Boolean.toString(siege.isTownPlundered()));
+		if(siege.hasAttackerWinner()) {
+			list.add("attackerWinner=" + siege.getAttackerWinner().getName());
+		}
 		list.add("actualStartTime=" + Long.toString(siege.getActualStartTime()));
 		list.add("scheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 		list.add("actualEndTime=" + Long.toString(siege.getActualEndTime()));

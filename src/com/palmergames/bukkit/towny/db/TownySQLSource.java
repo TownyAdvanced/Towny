@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -1147,7 +1148,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 
         Statement s = null;
         ResultSet rs = null;
-        String lineString;
         TownyMessaging.sendDebugMsg("Loading siege " + siege.getDefendingTown().getName());
 
         if (!getContext())
@@ -1157,7 +1157,14 @@ public class TownySQLSource extends TownyFlatFileSource {
             rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGES " +
                                              "WHERE defendingTown='" + siege.getDefendingTown().getName() + "'");
             while (rs.next()) {
-                siege.setActive(rs.getBoolean("active"));
+                siege.setStatus(SiegeStatus.parseString(rs.getString("status")));
+                siege.setTownPlundered(rs.getBoolean("townPlundered"));
+                String attackerWinner = rs.getString("attackerWinner");
+                if(attackerWinner != null) {
+                    siege.setAttackerWinner(getNation(attackerWinner));
+                } else {
+                    siege.setAttackerWinner(null);
+                }
                 siege.setActualStartTime(rs.getLong("actualStartTime"));
                 siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
                 siege.setActualEndTime(rs.getLong("actualEndTime"));
@@ -1763,7 +1770,11 @@ public class TownySQLSource extends TownyFlatFileSource {
             HashMap<String, Object> nat_hm = new HashMap<>();
 
             nat_hm.put("defendingTown", siege.getDefendingTown().getName());
-            nat_hm.put("active", siege.isActive());
+            nat_hm.put("status", siege.getStatus());
+            nat_hm.put("townPlundered", siege.isTownPlundered());
+            if(siege.hasAttackerWinner()) {
+                nat_hm.put("attackerWinner", siege.getAttackerWinner().getName());
+            }
             nat_hm.put("actualStartTime", siege.getActualStartTime());
             nat_hm.put("scheduledEndTime", siege.getScheduledEndTime());
             nat_hm.put("actualEndTime", siege.getActualEndTime());

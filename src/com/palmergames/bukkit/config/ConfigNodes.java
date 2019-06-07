@@ -1582,7 +1582,7 @@ public enum ConfigNodes {
 			"true",
 			"# If true, revolts are allowed."),
 
-	//Costs and profits
+	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.attacker_cost.upfront_per_plot",
 			"10.0",

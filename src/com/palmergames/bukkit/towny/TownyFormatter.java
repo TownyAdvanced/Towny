@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -395,20 +397,26 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
+		if(TownySettings.getWarSiegeEnabled() && TownySettings.isUsingEconomy()) {
+			out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
+		}
+
 		if(town.hasSiege()) {
 			Siege siege =town.getSiege();
 
-			if(siege.isActive()) {
-				// Siege Status: Active
-				// Siege Attackers: vile_nation, darkland, empire
-				// Siege Timer: 25.8 hours
-				out.add(TownySettings.getLangString("status_town_siege_status_active"));
-
-				Set<Nation> besiegingNations = siege.getSiegeStatsAttackers().keySet();
+			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+				//Siege Attackers [2]: Thug Nation, Ruffians
+				//Siege Victory Timer: 0.3 days
+				List<Nation> besiegingNations = siege.getActiveAttackers();
 				String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
-				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers_list"), namesOfBesiegingNations.length )));
+				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers"), namesOfBesiegingNations.length )));
 
-				out.add(String.format(TownySettings.getLangString("status_town_siege_completion_timer"), siege.getHoursUntilCompletionString()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedDaysUntilCompletion()));
+			} else {
+				//Siege Status: Town captured by Ruffians
+				//Siege Cooldown Timer: 2.4 days
+				out.add(String.format(TownySettings.getLangString("status_town_siege_recent_result"), siege.getResultString()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedDaysUntilSiegeCooldownEnds()));
 			}
 		}
 
