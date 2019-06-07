@@ -71,7 +71,7 @@ public class SiegeWarUtil {
             if (defendingTown.isSiegeCooldownActive()) {
                 throw new TownyException(
                         "This town is in a siege cooldown period. It cannot be attacked for " +
-                                defendingTown.getHoursUntilSiegeCooldownEndsString() + " hours");
+                                defendingTown.getHoursUntilSiegeCooldownEnds() + " hours");
             }
 
             if (TownySettings.isUsingEconomy()) {

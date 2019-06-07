@@ -1283,26 +1283,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 
-	public boolean isRevoltCooldownActive() {
-		if(System.currentTimeMillis() < revoltCooldownEndTime) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public String getHoursUntilSiegeCooldownEndsString() {
-		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
-		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
-		NumberFormat numberFormat = NumberFormat.getInstance();
-		numberFormat.setMaximumFractionDigits(1);
-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-		return numberFormat.format(hoursRemaining);
-	}
-
 	public int getRevoltCooldownRemainingMinutes() {
 		double resultDouble = (revoltCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
 		return (int) (resultDouble + 0.5);
+	}
+
+	public boolean isRevoltCooldownActive() {
+		return (System.currentTimeMillis() < revoltCooldownEndTime);
 	}
 
 	public void setSiegeCooldownEndTime(long endTimeMillis) {
@@ -1326,6 +1313,19 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return revoltCooldownEndTime;
 	}
 
+	public double getHoursUntilRevoltCooldownEnds() {
+		double hoursRemainingMillis = revoltCooldownEndTime - System.currentTimeMillis();
+		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
+		return hoursRemaining;
+	}
+
+	public String getFormattedHoursUntilRevoltCooldownEnds() {
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(1);
+		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+		return numberFormat.format(getHoursUntilRevoltCooldownEnds());
+	}
+
 	private double getPlunderValue() {
 		return TownySettings.getWarSiegeAttackerPlunderAmountPerPlot() * townBlocks.size();
 	}
@@ -1334,16 +1334,19 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
 	}
 
-	public String getFormattedDaysUntilSiegeCooldownEnds() {
-		NumberFormat numberFormat = NumberFormat.getInstance();
-		numberFormat.setMaximumFractionDigits(1);
-		return numberFormat.format(getDaysUntilSiegeCooldownEnds());
+
+	public double getHoursUntilSiegeCooldownEnds() {
+		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
+		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
+		return hoursRemaining;
 	}
 
-	public double getDaysUntilSiegeCooldownEnds() {
-		double timeRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
-		double timeRemainingDays = timeRemainingMillis / ONE_DAY_IN_MILLIS;
-		return timeRemainingDays;
+	public String getFormattedHoursUntilSiegeCooldownEnds() {
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(1);
+		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+		return numberFormat.format(getHoursUntilSiegeCooldownEnds());
 	}
+
 
 }

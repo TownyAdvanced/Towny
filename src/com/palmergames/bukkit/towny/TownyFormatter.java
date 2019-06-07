@@ -24,12 +24,10 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 public class TownyFormatter {
 
@@ -380,9 +378,18 @@ public class TownyFormatter {
 
 		out.addAll(ranklist);
 
-		// Nation: Azur Empire
+		// Nation: Azur Empire (Revolt Cooldown Timer: 71.8 hours)
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())));
+			String nationString = String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation()));
+
+			if(TownySettings.getWarSiegeEnabled()
+			   && TownySettings.getWarSiegeAllowRevolts()
+		       && town.isRevoltCooldownActive()) {
+
+				nationString += String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds());
+			}
+
+			out.add(nationString);
 		} catch (TownyException e) {
 		}
 
@@ -406,17 +413,17 @@ public class TownyFormatter {
 
 			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 				//Siege Attackers [2]: Thug Nation, Ruffians
-				//Siege Victory Timer: 0.3 days
+				//Siege Victory Timer: 5.3 hours
 				List<Nation> besiegingNations = siege.getActiveAttackers();
 				String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
 				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers"), namesOfBesiegingNations.length )));
 
-				out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedDaysUntilCompletion()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
 			} else {
 				//Siege Status: Town captured by Ruffians
-				//Siege Cooldown Timer: 2.4 days
+				//Siege Cooldown Timer: 52.7 hours
 				out.add(String.format(TownySettings.getLangString("status_town_siege_recent_result"), siege.getResultString()));
-				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedDaysUntilSiegeCooldownEnds()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
 			}
 		}
 
