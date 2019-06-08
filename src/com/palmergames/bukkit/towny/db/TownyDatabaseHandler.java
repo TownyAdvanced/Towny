@@ -268,7 +268,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public Siege getSiege(String townName) throws NotRegisteredException  {
 
-		if(!universe.getSiegesMap().containsKey(townName)) {
+		if(!universe.getSiegesMap().containsKey(townName.toLowerCase())) {
 			throw new NotRegisteredException("Siege not found");
 		}
 		return universe.getSiegesMap().get(townName.toLowerCase());

@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 public class TownyFormatter {
 
@@ -568,6 +569,77 @@ public class TownyFormatter {
 
 		//Victory Timer: 26.4 hours
 		out.add(String.format(TownySettings.getLangString("status_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
+
+		//TODO - combatant stances & siege points
+		/*
+		Defender   (Siege Points)
+		Deathlands (Nation) (3,500)
+		Attacker   (Siege Points)
+		Fearland (Nation) (5,600)
+		Killers (Realm) (1,250)
+        House_Death (Nation) (500);
+
+		Siege Points:
+		* ATTACK: Fearland (Nation) - 5,600
+		* DEFENCE: Deathlands (Nation) - 3,500
+		* ATTACK: House_Death (Nation) - 2,500
+		* ATTACK: Killers (Nation) - 500
+
+
+		Siege Points:
+		--- Defence ---
+		  * Deathlands (Nation) - 3500
+		--- Attack ---
+		  * Fearland (Nation) - 5,600
+	      * House_Death (Nation) - 2,500
+		  * Killers (Nation) - 500
+
+
+		Siege Points:
+		| Defence
+		  * Deathlands (Nation) - 3500
+		| Attack
+		  * Fearland (Nation) - 5,600
+	      * House_Death (Nation) - 2,500
+		  * Killers (Nation) - 500
+          * ... &more ...
+
+		Siege Points:
+		> Defence
+		  * Deathlands (Nation) - 3500
+		> Attack
+		  * Fearland (Nation) - 5,600
+	      * House_Death (Nation) - 2,500
+		  * Killers (Nation) - 500
+          * ... &more ...    //If there are over 10
+		*/
+		out.add(TownySettings.getLangString("status_siege_siege_points_tag"));
+		out.add(TownySettings.getLangString("status_siege_defence_tag"));
+
+		String defenderName = "?";
+		if(siege.getDefendingTown().hasNation()) {
+			try {
+				defenderName = siege.getDefendingTown().getNation().getName();
+			} catch (NotRegisteredException e) {
+			}
+		} else {
+			defenderName = siege.getDefendingTown().getName();
+		}
+		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")");
+
+		out.add(TownySettings.getLangString("status_siege_attack_tag"));
+
+		List<Nation> attackerNations = siege.getActiveAttackers();
+		Nation attackerNation;
+		int index;
+		for(index=0; index < 10; index++ ) {
+			attackerNation = attackerNations.get(index);
+			out.add("  " + Colors.Gold + attackerNation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsAttackers().get(attackerNation).getSiegePointsTotal() + ")");
+		}
+		if(index == 9) {
+			out.add("  " + Colors.Gold + " ... & more");
+		}
+
 
 		out = formatStatusScreens(out);
 		return out;

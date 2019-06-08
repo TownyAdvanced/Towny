@@ -306,9 +306,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			town = siege.getDefendingTown();
 
 			if(TownySettings.isUsingEconomy()) {
-				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getFormattedPlunderValue() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")";
+				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getFormattedPlunderValue() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getActiveAttackers().size() + ")";
 			} else {
-				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")";
+				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")"  + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getActiveAttackers().size() + ")";
 			}
 
 			siegesOrdered.add(output);
@@ -316,9 +316,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 		String headerLine;
 		if(TownySettings.isUsingEconomy()) {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("plunder_value") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")";
+			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("plunder_value") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("number_of_attackers");
 		} else {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")";
+			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("number_of_attackers");
 		}
 
 		sender.sendMessage(
