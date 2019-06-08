@@ -140,7 +140,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 					});
 
 				} catch (NotRegisteredException x) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered")));
 				}
 			}
 
