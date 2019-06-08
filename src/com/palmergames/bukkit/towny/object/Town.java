@@ -1327,7 +1327,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return numberFormat.format(getHoursUntilRevoltCooldownEnds());
 	}
 
-	private double getPlunderValue() {
+	public double getPlunderValue() {
 		return TownySettings.getWarSiegeAttackerPlunderAmountPerPlot() * townBlocks.size();
 	}
 

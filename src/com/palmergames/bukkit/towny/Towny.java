@@ -4,14 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.metrics.BStats;
 import com.palmergames.bukkit.metrics.MCStats;
 import com.palmergames.bukkit.towny.chat.TNCRegister;
-import com.palmergames.bukkit.towny.command.InviteCommand;
-import com.palmergames.bukkit.towny.command.NationCommand;
-import com.palmergames.bukkit.towny.command.PlotCommand;
-import com.palmergames.bukkit.towny.command.ResidentCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.TownyAdminCommand;
-import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.command.TownyWorldCommand;
+import com.palmergames.bukkit.towny.command.*;
 import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
@@ -160,6 +153,7 @@ public class Towny extends JavaPlugin {
 			getCommand("towny").setExecutor(new TownyCommand(this));
 			getCommand("town").setExecutor(new TownCommand(this));
 			getCommand("nation").setExecutor(new NationCommand(this));
+			getCommand("siege").setExecutor(new SiegeCommand(this));
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
 

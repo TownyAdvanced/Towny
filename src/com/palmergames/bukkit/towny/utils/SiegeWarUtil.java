@@ -28,100 +28,7 @@ public class SiegeWarUtil {
     public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
     public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
-
-
-    //////////////////// PROCESS ATTACK REQUESTS //////////////////////////////////////
-
-
-    public static void attemptToAttackTown(Player player) {
-
-        try {
-            if (!TownySettings.getWarSiegeEnabled())
-                throw new TownyException("Siege war feature disabled");  //todo - replace w lang string
-
-            if (!TownySettings.getWarSiegeAllowSieges())
-                throw new TownyException("Sieges not allowed");
-
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ASSAULT_START.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-            if (townBlockWherePlayerIsLocated == null)
-                throw new TownyException("You must be standing in a town to attack the town.");
-
-            if(!isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated))
-                throw new TownyException("You must be in a town border block to attack the town.");
-
-            Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-            Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
-
-            if (defendingTown.hasNation()) {
-                Nation nationOfDefendingTown = defendingTown.getNation();
-
-                if(nationOfAttackingPlayer == nationOfDefendingTown)
-                    throw new TownyException("You cannot attack a town in your own nation.");
-
-                if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-                    throw new TownyException("You cannot attack a town unless the nation of that town is an enemy of your nation.");
-            }
-
-            if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
-                throw new TownyException("Your nation is already attacking this town.");
-
-            if (defendingTown.isSiegeCooldownActive()) {
-                throw new TownyException(
-                        "This town is in a siege cooldown period. It cannot be attacked for " +
-                                defendingTown.getHoursUntilSiegeCooldownEnds() + " hours");
-            }
-
-            if (TownySettings.isUsingEconomy()) {
-                double initialSiegeCost =
-                        TownySettings.getWarSiegeAttackerCostUpFrontPerPlot()
-                                * defendingTown.getTownBlocks().size();
-
-                if (nationOfAttackingPlayer.canPayFromHoldings(initialSiegeCost))
-                    //Deduct upfront cost
-                    nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege.");
-                else {
-                    throw new TownyException(TownySettings.getLangString("msg_err_no_money."));
-                }
-            }
-
-            if (player.isFlying())
-                throw new TownyException("You cannot be flying to start a siege.");
-
-            if (doesPlayerHaveANonAirBlockAboveThem(player))
-                throw new TownyException("The god(s) favour wars on the land surface. You must have only sky above you to start a siege.");
-
-            if (TownySettings.getNationRequiresProximity() > 0) {
-                Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
-                Coord townCoord = defendingTown.getHomeBlock().getCoord();
-                if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-                    throw new TownyException("This town cannot join your nation because the capital of your your nation is in a different world.");
-                }
-                double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
-                if (distance > TownySettings.getNationRequiresProximity()) {
-                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
-                }
-            }
-
-            if (TownySettings.getMaxTownsPerNation() > 0) {
-                if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
-                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
-                }
-            }
-
-            //Setup attack
-            attackTown(nationOfAttackingPlayer, defendingTown);
-
-        } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        } catch (EconomyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
-    }
-
-    private static void attackTown(Nation attackingNation,
+    public static void attackTown(Nation attackingNation,
                                     Town defendingTown) throws TownyException {
 
         Siege siege;
@@ -189,49 +96,7 @@ public class SiegeWarUtil {
         //TODO - Do we announce a new siege event like this???
     }
 
-    /////////////////////PROCESS REVOLT REQUESTS ///////////////////////////////////
-
-    public static void attemptToRevolt(Towny plugin, Player player) {
-
-        try {
-            if (!TownySettings.getWarSiegeEnabled())
-                throw new TownyException("Siege war disabled");  //todo - replace w lang string
-
-            if (!TownySettings.getWarSiegeAllowRevolts())
-                throw new TownyException("Siege war revolts are not allowed");
-
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_REVOLT_START.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-            if (townBlockWherePlayerIsLocated == null)
-                throw new TownyException("You must be standing in your town to start a revolt.");
-
-            Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-            if(!(defendingTown == resident.getTown())) {
-                throw new TownyException("You cannot start a revolt in a town other than your own.");
-            }
-
-            if(!defendingTown.hasNation()) {
-                throw new TownyException("Your town is not ruled by any nation. You have nobody to revolt against.");
-            }
-
-            if (defendingTown.isRevoltCooldownActive()) {
-                throw new TownyException(
-                        "This town is in a revolt cooldown period. " +
-                                "It cannot revolt for " +
-                                defendingTown.getRevoltCooldownRemainingMinutes() + " minutes");
-            }
-
-            revolt(plugin, resident, defendingTown);
-
-        } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
-        }
-    }
-
-    private static void revolt(Towny plugin, Resident resident, Town town) {
+    public static void revolt(Towny plugin, Resident resident, Town town) {
         try {
             Nation nation = town.getNation();
             removeTownFromNation(plugin, town, nation);

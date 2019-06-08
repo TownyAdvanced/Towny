@@ -519,6 +519,33 @@ public class TownyFormatter {
 		return out;
 	}
 
+
+	/**
+	 *
+	 * @param siege
+	 * @return a string list containing the results.
+	 */
+	public static List<String> getStatus(Siege siege) {
+
+		List<String> out = new ArrayList<String>();
+
+		// ___[ Siege on BeelzebubVille ]___
+		String siegeName = String.format(TownySettings.getLangString("status_siege_name"), getFormattedName(siege.getDefendingTown()));
+		out.add(ChatTools.formatTitle(siegeName));
+
+		//Town Plunder Value: $55,000
+		if(TownySettings.isUsingEconomy()) {
+			out.add(String.format(TownySettings.getLangString("status_siege_plunder_value"), siege.getDefendingTown().getFormattedPlunderValue()));
+		}
+
+		//Victory Timer: 26.4 hours
+		out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
+
+		out = formatStatusScreens(out);
+		return out;
+	}
+
+
 	/**
 	 * 
 	 * @param world
