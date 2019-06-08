@@ -287,10 +287,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_must_specify_amnt"), nationCom + " deposit"));
 
-			} else if (split[0].equalsIgnoreCase("siege") && split[1].equals("attack")) {
-
-				SiegeWarUtil.attemptToAttackTown(player);
-
 			} else {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 

@@ -92,11 +92,15 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 						Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
 
-						if(resident.hasTown())
+						if(!resident.hasTown()) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
+							return;
+						}
 
-						if(!town.hasSiege())
+						if(!town.hasSiege()) {
 							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_no_siege_on_your_town"));
+							return;
+						}
 
 						Siege siege = town.getSiege();
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(siege));
