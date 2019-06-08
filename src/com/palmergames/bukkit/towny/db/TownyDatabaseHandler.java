@@ -66,6 +66,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
+	public boolean hasSiege(String name) {
+
+		return universe.getSiegesMap().containsKey(name.toLowerCase());
+	}
+
+	@Override
 	public boolean hasNation(String name) {
 
 		return universe.getNationsMap().containsKey(name.toLowerCase());
@@ -260,7 +266,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public Siege getSiege(String townName) throws TownyException {
+	public Siege getSiege(String townName) throws NotRegisteredException  {
+
+		if(!universe.getSiegesMap().containsKey(townName)) {
+			throw new NotRegisteredException("Siege not found");
+		}
 		return universe.getSiegesMap().get(townName.toLowerCase());
 	}
 

@@ -121,6 +121,12 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 			} else {
 				try {
+					if(!TownyUniverse.getDataSource().hasTown(split[0]))
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
+
+					if(!TownyUniverse.getDataSource().hasSiege(split[0]))
+						throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), split[0]));
+
 					final Siege siege = TownyUniverse.getDataSource().getSiege(split[0]);
 					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != siege.getDefendingTown()) || (!resident.hasTown()) ) ) {
@@ -134,7 +140,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 					});
 
 				} catch (NotRegisteredException x) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), split[0]));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered"));
 				}
 			}
 
