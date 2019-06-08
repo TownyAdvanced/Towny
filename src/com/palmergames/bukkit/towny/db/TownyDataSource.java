@@ -429,5 +429,5 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newSiege(String townName) throws AlreadyRegisteredException;
-    abstract public Siege getSiege(String townName) throws TownyException;
+    abstract public Siege getSiege(String townName) throws NotRegisteredException;
 }

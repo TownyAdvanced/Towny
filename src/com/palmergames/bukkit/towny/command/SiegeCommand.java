@@ -118,6 +118,24 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("attack")) {
 				processAttackRequest(player);
+
+			} else {
+				try {
+					final Siege siege = TownyUniverse.getDataSource().getSiege(split[0]);
+					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != siege.getDefendingTown()) || (!resident.hasTown()) ) ) {
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+					}
+					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+						@Override
+						public void run() {
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(siege));
+						}
+					});
+
+				} catch (NotRegisteredException x) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), split[0]));
+				}
 			}
 
 		} catch (Exception x) {
@@ -260,9 +278,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 				if(s1PlunderValue == s2PlunderValue) {
 					return 0;
 				} else if (s1PlunderValue > s2PlunderValue) {
-					return 1;
-				} else {
 					return -1;
+				} else {
+					return 0;
 				}
 			}
 		});
@@ -282,9 +300,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			town = siege.getDefendingTown();
 
 			if(TownySettings.isUsingEconomy()) {
-				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")";
-			} else {
 				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getFormattedPlunderValue() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")";
+			} else {
+				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")";
 			}
 
 			siegesOrdered.add(output);

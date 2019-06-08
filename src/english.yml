@@ -381,6 +381,7 @@ msg_siege_war_defender_win: '&6[War]&b The defenders of the town of %s have succ
 msg_siege_war_revolt: '&6[War]&b The people of the town of %s, led by %s, have revolted against the occupying nation of %s, and declared themselves free to choose their own destiny!'
 msg_siege_war_post_revolt_siege_cooldown_reset: '&6[War]&b Because of the recent revolt, the siege cooldown for your town (if any) has been reset to off.'
 msg_err_siege_war_no_siege_on_your_town: '&6[War]&c There is no siege on your town'
+msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
