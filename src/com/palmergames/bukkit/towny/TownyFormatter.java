@@ -516,7 +516,7 @@ public class TownyFormatter {
 
 		// Siege Attacks [3]: TownX, TownY, TownZ
 		List<Town> siegeDefences = nation.getTownsUnderSiegeDefence();
-		String[] formattedSiegeDefences = getFormattedNames(siegeAttacks.toArray(new Town[0]));
+		String[] formattedSiegeDefences = getFormattedNames(siegeDefences.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeDefences, String.format(TownySettings.getLangString("status_nation_siege_defences"), siegeDefences.size())));
 
 		//TODO - siege defences
