@@ -101,7 +101,7 @@ public class Siege {
 
     public String getResultString() {
         if (status == null) {
-            return "In Progress. No result yet";
+            return "In Progress";
 
         } else if (status == SiegeStatus.ATTACKER_WIN || status == SiegeStatus.DEFENDER_SURRENDER) {
             if (townPlundered) {

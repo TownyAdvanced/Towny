@@ -761,6 +761,16 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return result;
 	}
 
+	public List<Town> getTownsUnderSiegeDefence() {
+		List<Town> result = new ArrayList<Town>();
+		for(Town town: towns) {
+			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+				result.add(town);
+			}
+		}
+		return result;
+	}
+
 	public boolean isNationAttackingTown(Town town) {
 		return town.hasSiege()
 				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
