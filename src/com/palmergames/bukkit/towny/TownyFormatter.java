@@ -25,10 +25,7 @@ import org.bukkit.entity.Player;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TownyFormatter {
 
@@ -541,26 +538,7 @@ public class TownyFormatter {
 		out.add(ChatTools.formatTitle(siegeName));
 
 		//Status: In Progress
-		String siegeStatus;
-		switch(siege.getStatus()) {
-			case IN_PROGRESS:
-				out.add(TownySettings.getLangString("status_siege_in_progress"));
-			break;
-			case ATTACKER_WIN:
-			case DEFENDER_SURRENDER:
-				if(siege.isTownPlundered()) {
-					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win"), getFormattedName(siege.getAttackerWinner())));
-				} else {
-					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
-				}
-			break;
-			case DEFENDER_WIN:
-				out.add(TownySettings.getLangString("status_siege_defender_win"));
-			break;
-			case ATTACKER_ABANDON:
-				out.add(TownySettings.getLangString("status_siege_attacker_abandon"));
-			break;
-		}
+		addSiegeStatusSummary(siege, out);
 
 		//Town Plunder Value: $55,000
 		if(TownySettings.isUsingEconomy()) {
@@ -570,52 +548,26 @@ public class TownyFormatter {
 		//Victory Timer: 26.4 hours
 		out.add(String.format(TownySettings.getLangString("status_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
 
-		//TODO - combatant stances & siege points
-		/*
-		Defender   (Siege Points)
-		Deathlands (Nation) (3,500)
-		Attacker   (Siege Points)
-		Fearland (Nation) (5,600)
-		Killers (Realm) (1,250)
-        House_Death (Nation) (500);
-
-		Siege Points:
-		* ATTACK: Fearland (Nation) - 5,600
-		* DEFENCE: Deathlands (Nation) - 3,500
-		* ATTACK: House_Death (Nation) - 2,500
-		* ATTACK: Killers (Nation) - 500
-
-
-		Siege Points:
-		--- Defence ---
-		  * Deathlands (Nation) - 3500
-		--- Attack ---
-		  * Fearland (Nation) - 5,600
-	      * House_Death (Nation) - 2,500
-		  * Killers (Nation) - 500
-
-
-		Siege Points:
-		| Defence
-		  * Deathlands (Nation) - 3500
-		| Attack
-		  * Fearland (Nation) - 5,600
-	      * House_Death (Nation) - 2,500
-		  * Killers (Nation) - 500
-          * ... &more ...
-
-		Siege Points:
-		> Defence
-		  * Deathlands (Nation) - 3500
-		> Attack
-		  * Fearland (Nation) - 5,600
-	      * House_Death (Nation) - 2,500
-		  * Killers (Nation) - 500
-          * ... &more ...    //If there are over 10
-		*/
+		//Siege Points
+		//> Defence
+		//  TownA - (500)
 		out.add(TownySettings.getLangString("status_siege_siege_points_tag"));
 		out.add(TownySettings.getLangString("status_siege_defence_tag"));
+		addSiegeStatusDefender(siege, out);
 
+ 		//> Attack
+		//  NationX - (4000)
+		//  NationY - (3000)
+		//  NationZ - (2000)
+		out.add(TownySettings.getLangString("status_siege_attack_tag"));
+		addSiegeStatusAttackers(siege, out);
+
+		out = formatStatusScreens(out);
+		return out;
+	}
+
+
+	private static void addSiegeStatusDefender(Siege siege, List<String> out) {
 		String defenderName = "?";
 		if(siege.getDefendingTown().hasNation()) {
 			try {
@@ -626,25 +578,56 @@ public class TownyFormatter {
 			defenderName = siege.getDefendingTown().getName();
 		}
 		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")");
+	}
 
-		out.add(TownySettings.getLangString("status_siege_attack_tag"));
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static void addSiegeStatusAttackers(Siege siege, List<String> out) {
 
 		List<Nation> attackerNations = siege.getActiveAttackers();
+		Collections.sort(attackerNations, new Comparator() {
+			@Override
+			public int compare(Object n1, Object n2) {
+				int nation1SiegePoints = siege.getSiegeStatsAttackers().get((Nation)n1).getSiegePointsTotal();
+				int nation2SiegePoints = siege.getSiegeStatsAttackers().get((Nation)n2).getSiegePointsTotal();
+
+				if(nation1SiegePoints == nation2SiegePoints) {return 0;}
+				return nation1SiegePoints < nation2SiegePoints ? 1 : -1;
+			}
+		});
+
 		Nation attackerNation;
+		final int maxIndex = 9;  //This limits the displayed entries to 10
 		int index;
-		for(index=0; index < 10; index++ ) {
+		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
 			attackerNation = attackerNations.get(index);
 			out.add("  " + Colors.Gold + attackerNation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsAttackers().get(attackerNation).getSiegePointsTotal() + ")");
 		}
-		if(index == 9) {
+		if(index == maxIndex) {
 			out.add("  " + Colors.Gold + " ... & more");
 		}
-
-
-		out = formatStatusScreens(out);
-		return out;
 	}
 
+	private static void addSiegeStatusSummary(Siege siege, List<String> out) {
+		switch(siege.getStatus()) {
+			case IN_PROGRESS:
+				out.add(TownySettings.getLangString("status_siege_in_progress"));
+				break;
+			case ATTACKER_WIN:
+			case DEFENDER_SURRENDER:
+				if(siege.isTownPlundered()) {
+					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+				} else {
+					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
+				}
+				break;
+			case DEFENDER_WIN:
+				out.add(TownySettings.getLangString("status_siege_defender_win"));
+				break;
+			case ATTACKER_ABANDON:
+				out.add(TownySettings.getLangString("status_siege_attacker_abandon"));
+				break;
+		}
+	}
 
 	/**
 	 * 

@@ -191,7 +191,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			if (defendingTown.isSiegeCooldownActive()) {
 				throw new TownyException(
 						"This town is in a siege cooldown period. It cannot be attacked for " +
-								defendingTown.getHoursUntilSiegeCooldownEnds() + " hours");
+								defendingTown.getFormattedHoursUntilSiegeCooldownEnds() + " hours");
 			}
 
 			if (TownySettings.isUsingEconomy()) {
