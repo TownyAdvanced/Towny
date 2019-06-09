@@ -228,15 +228,15 @@ public class SiegeWarUtil {
 
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                     TownySettings.getLangString("msg_siege_war_nation_town_captured"),
-                    TownyFormatter.getFormattedTownName(siege.getDefendingTown()),
-                    TownyFormatter.getFormattedNationName(nationOfCapturedTown),
-                    TownyFormatter.getFormattedNationName(winnerNation)
+                    siege.getDefendingTown().getName(),
+                    nationOfCapturedTown.getName(),
+                    winnerNation.getName()
             )));
 
             if(nationOfCapturedTown.getTowns().size() == 0) {
                 TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                         TownySettings.getLangString("msg_siege_war_nation_defeated"),
-                        TownyFormatter.getFormattedNationName(nationOfCapturedTown)
+                        nationOfCapturedTown.getName()
                 )));
             }
         } else {
@@ -244,8 +244,8 @@ public class SiegeWarUtil {
 
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
-                    TownyFormatter.getFormattedTownName(siege.getDefendingTown()),
-                    TownyFormatter.getFormattedNationName(winnerNation)
+                    siege.getDefendingTown().getName(),
+                    winnerNation.getName()
             )));
         }
     }

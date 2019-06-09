@@ -1334,7 +1334,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedPlunderValue() {
 		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
 	}
-	
+
 	public double getHoursUntilSiegeCooldownEnds() {
 		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
 		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
