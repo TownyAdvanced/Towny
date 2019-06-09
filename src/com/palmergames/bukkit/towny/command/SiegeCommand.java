@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
@@ -279,7 +280,12 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void listSieges(CommandSender sender, String[] split) {
-		List<Siege> siegesToSort = TownyUniverse.getDataSource().getSieges();
+		List<Siege> allSieges = new ArrayList<>(TownyUniverse.getDataSource().getSieges());
+		List<Siege> siegesToSort = new ArrayList<>();
+		for(Siege siege: allSieges) {
+			if(siege.getStatus() == SiegeStatus.IN_PROGRESS)
+				siegesToSort.add(siege);
+		}
 
 		int page = 1;
 	    int total = (int) Math.ceil(((double) siegesToSort.size()) / ((double) 10));

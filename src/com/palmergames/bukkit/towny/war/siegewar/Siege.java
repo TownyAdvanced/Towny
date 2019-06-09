@@ -136,7 +136,7 @@ public class Siege {
     public String getFormattedHoursUntilCompletion() {
         NumberFormat numberFormat = NumberFormat.getInstance();
         numberFormat.setMaximumFractionDigits(1);
-        numberFormat.setRoundingMode(RoundingMode.UP);
-        return numberFormat.format(getHoursUntilCompletion());
+        double hoursRoundedUp = Math.ceil(getHoursUntilCompletion() * 10) / 10;
+        return numberFormat.format(hoursRoundedUp);
     }
 }

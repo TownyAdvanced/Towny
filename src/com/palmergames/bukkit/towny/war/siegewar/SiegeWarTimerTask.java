@@ -49,6 +49,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 
 			//Cycle through all sieges
+			TownyObject winner;
 			for (Siege siege : new ArrayList<>(TownyUniverse.getDataSource().getSieges())) {
 				if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 					TownyMessaging.sendMsg("Now evaluating siege on " + siege.getDefendingTown().getName());
@@ -62,21 +63,22 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 					//Check if scheduled end time has arrived
 					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {
-
 						siege.setActualEndTime(System.currentTimeMillis());
+						winner = SiegeWarUtil.calculateSiegeWinner(siege);
 
-						TownyObject winner = SiegeWarUtil.calculateSiegeWinner(siege);
 						if(winner instanceof Town) {
 							SiegeWarUtil.defenderWin(siege, (Town)winner);
 						} else{
 							SiegeWarUtil.attackerWin(plugin, siege, (Nation)winner);
 						}
-					}
 
-					//Caching
-					if(timeToSaveSiegeToDB)
+	       				//Save changes to db
 						TownyUniverse.getDataSource().saveSiege(siege);
-
+					} else {
+						//Caching
+						if(timeToSaveSiegeToDB)
+							TownyUniverse.getDataSource().saveSiege(siege);
+					}
 				} else {
 					//The siege is inactive/completed
 

@@ -1323,8 +1323,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedHoursUntilRevoltCooldownEnds() {
 		NumberFormat numberFormat = NumberFormat.getInstance();
 		numberFormat.setMaximumFractionDigits(1);
-		numberFormat.setRoundingMode(RoundingMode.UP);
-		return numberFormat.format(getHoursUntilRevoltCooldownEnds());
+		double hoursRoundedUp = Math.ceil(getHoursUntilRevoltCooldownEnds() * 10) / 10;
+		return numberFormat.format(hoursRoundedUp);
 	}
 
 	public double getPlunderValue() {
@@ -1334,8 +1334,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedPlunderValue() {
 		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
 	}
-
-
+	
 	public double getHoursUntilSiegeCooldownEnds() {
 		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
 		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
@@ -1345,9 +1344,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedHoursUntilSiegeCooldownEnds() {
 		NumberFormat numberFormat = NumberFormat.getInstance();
 		numberFormat.setMaximumFractionDigits(1);
-		numberFormat.setRoundingMode(RoundingMode.UP);
-		return numberFormat.format(getHoursUntilSiegeCooldownEnds());
+		double hoursRoundedUp = Math.ceil(getHoursUntilSiegeCooldownEnds() * 10) / 10;
+		return numberFormat.format(hoursRoundedUp);
 	}
-
-
 }

@@ -1626,7 +1626,7 @@ public enum ConfigNodes {
 			"# The time in seconds for each siegewar timer tick."),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.max_holdout_time_hours",
-			"72",
+			"0.1",
 			"# The maximum duration a town can hold out against a siege.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),

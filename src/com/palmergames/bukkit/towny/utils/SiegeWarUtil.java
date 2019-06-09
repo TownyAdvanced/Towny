@@ -43,9 +43,9 @@ public class SiegeWarUtil {
             siege.setStatus(SiegeStatus.IN_PROGRESS);
             siege.setTownPlundered(false);
             siege.setAttackerWinner(null);
-            siege.setScheduledEndTime(
-                    (System.currentTimeMillis() +
-                    (TownySettings.getWarSiegeMaxHoldoutTimeHours()) * ONE_HOUR_IN_MILLIS));
+            siege.setActualStartTime(System.currentTimeMillis());
+            siege.setScheduledEndTime((System.currentTimeMillis() +
+                    ((long)(TownySettings.getWarSiegeMaxHoldoutTimeHours() * ONE_HOUR_IN_MILLIS))));
             siege.setActualEndTime(0);
             siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
 
@@ -345,6 +345,7 @@ public class SiegeWarUtil {
 
     public static void attackerWin(Towny plugin, Siege siege, Nation winnerNation) {
         siege.setStatus(SiegeStatus.ATTACKER_WIN);
+        siege.setAttackerWinner(winnerNation);
         captureTown(plugin, siege, winnerNation);
         activateSiegeCooldown(siege);
         activateRevoltCooldown(siege);

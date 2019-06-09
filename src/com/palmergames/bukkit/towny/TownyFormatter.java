@@ -417,7 +417,7 @@ public class TownyFormatter {
 			} else {
 				//Siege Status: Town captured by Ruffians
 				//Siege Cooldown Timer: 52.7 hours
-				out.add(String.format(TownySettings.getLangString("status_town_siege_recent_result"), getSiegeStatusSummaryForTownStatusView(siege)));
+				out.add(TownySettings.getLangString("status_town_siege_summary_prefix") + getSiegeStatusSummary(siege));
 				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
 			}
 		}
@@ -508,12 +508,12 @@ public class TownyFormatter {
         out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
         // Siege Attacks [3]: TownA, TownB, TownC
-		List<Town> siegeAttacks = nation.getTownsUnderSiegeAttack();
+		List<Town> siegeAttacks = nation.getTownsUnderActiveSiegeAttack();
 		String[] formattedSiegeAttacks = getFormattedNames(siegeAttacks.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeAttacks, String.format(TownySettings.getLangString("status_nation_siege_attacks"), siegeAttacks.size())));
 
-		// Siege Attacks [3]: TownX, TownY, TownZ
-		List<Town> siegeDefences = nation.getTownsUnderSiegeDefence();
+		// Siege Defences [3]: TownX, TownY, TownZ
+		List<Town> siegeDefences = nation.getTownsUnderActiveSiegeDefence();
 		String[] formattedSiegeDefences = getFormattedNames(siegeDefences.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeDefences, String.format(TownySettings.getLangString("status_nation_siege_defences"), siegeDefences.size())));
 
@@ -538,7 +538,7 @@ public class TownyFormatter {
 		out.add(ChatTools.formatTitle(siegeName));
 
 		//Status: In Progress
-		out.add(getSiegeStatusSummary(siege));
+		out.add(TownySettings.getLangString("status_siege_summary_prefix") + getSiegeStatusSummary(siege));
 
 		//Town Plunder Value: $55,000
 		if(TownySettings.isUsingEconomy()) {
@@ -546,7 +546,9 @@ public class TownyFormatter {
 		}
 
 		//Victory Timer: 26.4 hours
-		out.add(String.format(TownySettings.getLangString("status_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
+		if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+			out.add(String.format(TownySettings.getLangString("status_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
+		}
 
 		//Siege Points
 		//> Defence
@@ -607,25 +609,21 @@ public class TownyFormatter {
 		}
 	}
 
-	private static String getSiegeStatusSummaryForTownStatusView(Siege siege) {
-		return TownySettings.getLangString("siege_sing") + " " + getSiegeStatusSummary(siege);
-	}
-
 	private static String getSiegeStatusSummary(Siege siege) {
 		switch(siege.getStatus()) {
 			case IN_PROGRESS:
-				return (TownySettings.getLangString("status_siege_in_progress"));
+				return (TownySettings.getLangString("status_siege_summary_in_progress"));
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
 				if(siege.isTownPlundered()) {
-					return (String.format(TownySettings.getLangString("status_siege_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
+					return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
 				} else {
-					return (String.format(TownySettings.getLangString("status_siege_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+					return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win"), getFormattedName(siege.getAttackerWinner())));
 				}
 			case DEFENDER_WIN:
-				return (TownySettings.getLangString("status_siege_defender_win"));
+				return (TownySettings.getLangString("status_siege_summary_defender_win"));
 			case ATTACKER_ABANDON:
-				return (TownySettings.getLangString("status_siege_attacker_abandon"));
+				return (TownySettings.getLangString("status_siege_summary_attacker_abandon"));
 			default:
 				return "???";
 		}

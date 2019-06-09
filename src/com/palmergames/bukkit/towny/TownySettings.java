@@ -2634,8 +2634,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT);
 	}
 
-	public static int getWarSiegeMaxHoldoutTimeHours() {
-		return getInt(ConfigNodes.WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS);
+	public static double getWarSiegeMaxHoldoutTimeHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS);
 	}
 
 }
