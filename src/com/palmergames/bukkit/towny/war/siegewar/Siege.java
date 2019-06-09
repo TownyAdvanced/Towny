@@ -99,29 +99,6 @@ public class Siege {
         return result;
     }
 
-    public String getResultString() {
-        if (status == null) {
-            return "In Progress";
-
-        } else if (status == SiegeStatus.ATTACKER_WIN || status == SiegeStatus.DEFENDER_SURRENDER) {
-            if (townPlundered) {
-                return "Town captured & plundered by " + TownyFormatter.getFormattedNationName(attackerWinner);
-            } else {
-                return "Town captured by " + TownyFormatter.getFormattedNationName(attackerWinner);
-            }
-
-        } else if (status == SiegeStatus.DEFENDER_WIN) {
-            return "Attackers driven away";
-
-        } else if (status == SiegeStatus.ATTACKER_ABANDON) {
-            return "Attack abandoned.";
-
-        } else {
-            TownyMessaging.sendErrorMsg("Unknown siege result");
-            return "???";
-        }
-    }
-
     public void setStatus(SiegeStatus status) {
         this.status = status;
     }

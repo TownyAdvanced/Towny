@@ -417,7 +417,7 @@ public class TownyFormatter {
 			} else {
 				//Siege Status: Town captured by Ruffians
 				//Siege Cooldown Timer: 52.7 hours
-				out.add(String.format(TownySettings.getLangString("status_town_siege_recent_result"), siege.getResultString()));
+				out.add(String.format(TownySettings.getLangString("status_town_siege_recent_result"), getSiegeStatusSummaryForTownStatusView(siege)));
 				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
 			}
 		}
@@ -538,7 +538,7 @@ public class TownyFormatter {
 		out.add(ChatTools.formatTitle(siegeName));
 
 		//Status: In Progress
-		addSiegeStatusSummary(siege, out);
+		out.add(getSiegeStatusSummary(siege));
 
 		//Town Plunder Value: $55,000
 		if(TownySettings.isUsingEconomy()) {
@@ -607,25 +607,27 @@ public class TownyFormatter {
 		}
 	}
 
-	private static void addSiegeStatusSummary(Siege siege, List<String> out) {
+	private static String getSiegeStatusSummaryForTownStatusView(Siege siege) {
+		return TownySettings.getLangString("siege_sing") + " " + getSiegeStatusSummary(siege);
+	}
+
+	private static String getSiegeStatusSummary(Siege siege) {
 		switch(siege.getStatus()) {
 			case IN_PROGRESS:
-				out.add(TownySettings.getLangString("status_siege_in_progress"));
-				break;
+				return (TownySettings.getLangString("status_siege_in_progress"));
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
 				if(siege.isTownPlundered()) {
-					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+					return (String.format(TownySettings.getLangString("status_siege_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
 				} else {
-					out.add(String.format(TownySettings.getLangString("status_siege_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
+					return (String.format(TownySettings.getLangString("status_siege_attacker_win"), getFormattedName(siege.getAttackerWinner())));
 				}
-				break;
 			case DEFENDER_WIN:
-				out.add(TownySettings.getLangString("status_siege_defender_win"));
-				break;
+				return (TownySettings.getLangString("status_siege_defender_win"));
 			case ATTACKER_ABANDON:
-				out.add(TownySettings.getLangString("status_siege_attacker_abandon"));
-				break;
+				return (TownySettings.getLangString("status_siege_attacker_abandon"));
+			default:
+				return "???";
 		}
 	}
 

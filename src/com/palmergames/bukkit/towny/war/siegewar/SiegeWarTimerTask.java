@@ -60,13 +60,12 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					//Adjust points
 					//TODO - Here we need to cycle through all residents in the world....
 
-
 					//Check if scheduled end time has arrived
 					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {
 
-						//Find out who won
-						TownyObject winner = SiegeWarUtil.calculateSiegeWinner(siege);
+						siege.setActualEndTime(System.currentTimeMillis());
 
+						TownyObject winner = SiegeWarUtil.calculateSiegeWinner(siege);
 						if(winner instanceof Town) {
 							SiegeWarUtil.defenderWin(siege, (Town)winner);
 						} else{
@@ -81,8 +80,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				} else {
 					//The siege is inactive/completed
 
-					//This sieges stay in all lists for for 24 hours or until cooldown has expired,
-					//whichever is sooner
+					//No need to be writing to DB now
+
+					//This sieges stay in all lists until cooldown has expired,
+					//Then siege gets deleted from everywhere
 
 					//TODO
 				}
