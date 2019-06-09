@@ -58,9 +58,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 						SiegeWarUtil.applyUpkeepCost(siege);
 
 					//Adjust points
-					//Here we need to cycle through all residents in the world....
-					//TODO
-					//Todo -dont forget to save to db sometimes etc.
+					//TODO - Here we need to cycle through all residents in the world....
+
 
 					//Check if scheduled end time has arrived
 					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {

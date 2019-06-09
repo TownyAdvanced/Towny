@@ -345,9 +345,8 @@ public class SiegeWarUtil {
     public static void attackerWin(Towny plugin, Siege siege, Nation winnerNation) {
         siege.setStatus(SiegeStatus.ATTACKER_WIN);
         captureTown(plugin, siege, winnerNation);
-        if (TownySettings.isUsingEconomy()) {
-            plunderTown(siege, winnerNation);
-        }
+        activateSiegeCooldown(siege);
+        activateRevoltCooldown(siege);
     }
 
 
@@ -357,6 +356,18 @@ public class SiegeWarUtil {
                 TownySettings.getLangString("msg_siege_war_defender_win"),
                 TownyFormatter.getFormattedTownName(winnerTown))
         ));
+        activateSiegeCooldown(siege);
+    }
+
+    private static void activateSiegeCooldown(Siege siege) {
+        double siegeDuration = siege.getActualEndTime() - siege.getActualStartTime();
+        double cooldownDuration = siegeDuration * TownySettings.getWarSiegeSiegeCooldownModifier();
+        siege.getDefendingTown().setSiegeCooldownEndTime(System.currentTimeMillis() + (long)(cooldownDuration + 0.5));
+    }
+
+    private static void activateRevoltCooldown(Siege siege) {
+        long cooldownDuration = TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS;
+        siege.getDefendingTown().setRevoltCooldownEndTime(System.currentTimeMillis() + cooldownDuration);
     }
 
     public static TownyObject calculateSiegeWinner(Siege siege) {
