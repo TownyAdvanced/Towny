@@ -358,6 +358,8 @@ public abstract class TownyDataSource {
 
 	abstract public void removeNation(Nation nation);
 
+	abstract public void removeNation(Nation nation, boolean async);
+
 	abstract public boolean hasResident(String name);
 
 	abstract public boolean hasTown(String name);

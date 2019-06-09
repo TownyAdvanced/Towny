@@ -21,7 +21,8 @@ public class DeleteNationEvent extends Event  {
 		return handlers;
 	}
 
-    public DeleteNationEvent(String nation) {
+    public DeleteNationEvent(String nation, boolean async) {
+        super(async);
         this.nationName = nation;
     }
 

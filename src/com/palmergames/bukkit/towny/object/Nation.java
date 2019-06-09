@@ -55,7 +55,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		setName(name);
 		tag = "";
-        isPublic = TownySettings.getNationDefaultPublic();
+		isPublic = TownySettings.getNationDefaultPublic();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -198,6 +198,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
+		addTown(town,false);
+	}
+
+	public void addTown(Town town, boolean async) throws AlreadyRegisteredException {
 
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
@@ -207,7 +211,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			towns.add(town);
 			town.setNation(this);
 			
-			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
+			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this, async));
 		}
 	}
 
@@ -370,14 +374,19 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return numResidents;
 	}
 
+
 	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
+		removeTown(town, false);
+	}
+
+	public void removeTown(Town town, boolean async) throws EmptyNationException, NotRegisteredException {
 
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
 
 			boolean isCapital = town.isCapital();
-			remove(town);
+			remove(town, async);
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -398,7 +407,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 	}
 
-	private void remove(Town town) {
+	private void remove(Town town, boolean async) {
 
 		//removeAssistantsIn(town);
 		try {
@@ -407,7 +416,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 		towns.remove(town);
 		
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
+		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this, async));
 	}
 
 	public void removeSiege(Siege siege) {
@@ -419,7 +428,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private void removeAllTowns() {
 
 		for (Town town : new ArrayList<Town>(towns))
-			remove(town);
+			remove(town, false);
 	}
 
 	private void removeAllSieges() {

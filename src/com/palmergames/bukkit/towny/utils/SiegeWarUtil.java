@@ -221,6 +221,7 @@ public class SiegeWarUtil {
                 //This won't happen because we checked for a nation just above
             }
 
+            //Remove town from nation (and nation itself if empty)
             removeTownFromNation(plugin, siege.getDefendingTown(), nationOfCapturedTown);
 
             addTownToNation(plugin, siege.getDefendingTown(), winnerNation);
@@ -253,7 +254,7 @@ public class SiegeWarUtil {
         boolean removeNation = false;
 
         try {
-            nation.removeTown(town);
+            nation.removeTown(town, true);
         } catch(NotRegisteredException x) {
             TownyMessaging.sendErrorMsg("Attempted to remove town from nation but Town was already removed.");
             return;  //Town was already removed
@@ -275,7 +276,7 @@ public class SiegeWarUtil {
         }
 
         if(removeNation) {
-            TownyUniverse.getDataSource().removeNation(nation);
+            TownyUniverse.getDataSource().removeNation(nation, true);
             TownyUniverse.getDataSource().saveNationList();
         } else {
             TownyUniverse.getDataSource().saveNation(nation);
@@ -289,7 +290,7 @@ public class SiegeWarUtil {
 
     private static void addTownToNation(Towny plugin, Town town,Nation nation) {
         try {
-            nation.addTown(town);
+            nation.addTown(town, true);
             TownyUniverse.getDataSource().saveTown(town);
             plugin.resetCache();
             TownyUniverse.getDataSource().saveNation(nation);

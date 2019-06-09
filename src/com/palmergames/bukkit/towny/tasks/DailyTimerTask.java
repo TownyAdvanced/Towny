@@ -146,7 +146,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (!town.payTo(nation.getTaxes(), nation, "Nation Tax")) {
 						try {
 							TownyMessaging.sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
-							nation.removeTown(town);
+							nation.removeTown(town,true);
 						} catch (EmptyNationException e) {
 							// Always has 1 town (capital) so ignore
 						} catch (NotRegisteredException e) {

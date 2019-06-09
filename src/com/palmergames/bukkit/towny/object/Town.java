@@ -1323,7 +1323,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedHoursUntilRevoltCooldownEnds() {
 		NumberFormat numberFormat = NumberFormat.getInstance();
 		numberFormat.setMaximumFractionDigits(1);
-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+		numberFormat.setRoundingMode(RoundingMode.UP);
 		return numberFormat.format(getHoursUntilRevoltCooldownEnds());
 	}
 
@@ -1345,7 +1345,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedHoursUntilSiegeCooldownEnds() {
 		NumberFormat numberFormat = NumberFormat.getInstance();
 		numberFormat.setMaximumFractionDigits(1);
-		numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+		numberFormat.setRoundingMode(RoundingMode.UP);
 		return numberFormat.format(getHoursUntilSiegeCooldownEnds());
 	}
 
