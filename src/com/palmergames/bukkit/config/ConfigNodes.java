@@ -232,7 +232,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -244,7 +244,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE(
 			"new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete",
-			"WALL_SIGN,SIGN_POST",
+			"WALL_SIGN,SIGN",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
 
@@ -272,7 +272,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN_POST,WALL_SIGN,GLOWSTONE",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN,WALL_SIGN,GLOWSTONE",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
