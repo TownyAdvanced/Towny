@@ -25,8 +25,7 @@ public class NationRemoveTownEvent extends Event  {
 		return handlers;
 	}
 
-    public NationRemoveTownEvent(Town town, Nation nation, boolean async) {
-        super(async);
+    public NationRemoveTownEvent(Town town, Nation nation) {
         this.town = town;
         this.nation = nation;
     }

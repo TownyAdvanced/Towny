@@ -3171,10 +3171,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!TownySettings.getWarSiegeEnabled())
 				throw new TownyException("Siege war disabled");  //todo - replace w lang string
 
-			if (!TownySettings.getWarSiegeAllowRevolts())
+			if (!TownySettings.getWarSiegeRevoltEnabled())
 				throw new TownyException("Siege war revolts are not allowed");
 
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_REVOLT_START.getNode()))
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_REVOLT.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);

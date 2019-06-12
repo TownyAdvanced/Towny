@@ -669,11 +669,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeNation(Nation nation) {
-		removeNation(nation, false);
-	}
-
-	@Override
-	public void removeNation(Nation nation, boolean async) {
 
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
@@ -741,7 +736,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		saveNationList();
 
-		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName(), async));
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
 
 		universe.setChangedNotify(REMOVE_NATION);
 	}

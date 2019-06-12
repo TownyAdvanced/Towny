@@ -1195,7 +1195,7 @@ public class TownyUniverse extends TownyObject {
 	@Deprecated
 	public void removeNation(Nation nation) {
 
-		getDataSource().removeNation(nation, false);
+		getDataSource().removeNation(nation);
 	}
 
 	/**

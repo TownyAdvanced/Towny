@@ -2591,12 +2591,20 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
 	}
 
-	public static boolean getWarSiegeAllowSieges() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_SIEGES);
+	public static boolean getWarSiegeInvadeEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_INVADE_ENABLED);
 	}
 
-	public static boolean getWarSiegeAllowRevolts() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_ALLOW_REVOLTS);
+	public static boolean getWarSiegePlunderEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_PLUNDER_ENABLED);
+	}
+
+	public static boolean getWarSiegeAttackEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACK_ENABLED);
+	}
+
+	public static boolean getWarSiegeRevoltEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_REVOLT_ENABLED);
 	}
 
 	public static int getWarSiegeZoneDistanceFromTown() {

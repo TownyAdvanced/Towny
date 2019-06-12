@@ -1159,6 +1159,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             while (rs.next()) {
                 siege.setStatus(SiegeStatus.parseString(rs.getString("status")));
                 siege.setTownPlundered(rs.getBoolean("townPlundered"));
+                siege.setTownInvaded(rs.getBoolean("townInvaded"));
                 String attackerWinner = rs.getString("attackerWinner");
                 if(attackerWinner != null) {
                     siege.setAttackerWinner(getNation(attackerWinner));
@@ -1772,6 +1773,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("defendingTown", siege.getDefendingTown().getName());
             nat_hm.put("status", siege.getStatus());
             nat_hm.put("townPlundered", siege.isTownPlundered());
+            nat_hm.put("townInvaded", siege.isTownInvaded());
             if(siege.hasAttackerWinner()) {
                 nat_hm.put("attackerWinner", siege.getAttackerWinner().getName());
             }

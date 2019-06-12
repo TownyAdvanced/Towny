@@ -384,7 +384,7 @@ public class TownyFormatter {
 
 		//Revolt Cooldown Timer: 71.8 hours
 		if(TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegeAllowRevolts()
+				&& TownySettings.getWarSiegeRevoltEnabled()
 		   		&& town.isRevoltCooldownActive()) {
 			out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 		}
@@ -615,10 +615,18 @@ public class TownyFormatter {
 				return (TownySettings.getLangString("status_siege_summary_in_progress"));
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
-				if(siege.isTownPlundered()) {
-					return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win_and_plunder"), getFormattedName(siege.getAttackerWinner())));
+				if(siege.isTownInvaded()) {
+					if(siege.isTownPlundered()) {
+						return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win_invade_plunder"), getFormattedName(siege.getAttackerWinner())));
+					} else {
+						return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win_invade"), getFormattedName(siege.getAttackerWinner())));
+					}
 				} else {
-					return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+					if(siege.isTownPlundered()) {
+						return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win_plunder"), getFormattedName(siege.getAttackerWinner())));
+					} else {
+						return (String.format(TownySettings.getLangString("status_siege_summary_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+					}
 				}
 			case DEFENDER_WIN:
 				return (TownySettings.getLangString("status_siege_summary_defender_win"));

@@ -21,6 +21,7 @@ public class Siege {
     private Town defendingTown;
     private SiegeStatus status;
     private boolean townPlundered;
+    private boolean townInvaded;
     private Nation attackerWinner;
     private long actualStartTime;
     private long scheduledEndTime;
@@ -107,6 +108,9 @@ public class Siege {
         this.townPlundered = townPlundered;
     }
 
+    public void setTownInvaded(boolean townInvaded) {
+        this.townInvaded = townInvaded;
+    }
     public void setAttackerWinner(Nation attackerWinner) {
         this.attackerWinner = attackerWinner;
     }
@@ -119,6 +123,9 @@ public class Siege {
         return townPlundered;
     }
 
+    public boolean isTownInvaded() {
+        return townInvaded;
+    }
     public Nation getAttackerWinner() {
         return attackerWinner;
     }

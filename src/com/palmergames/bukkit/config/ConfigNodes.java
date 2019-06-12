@@ -1573,14 +1573,22 @@ public enum ConfigNodes {
 			"true",
 			"# If true, the Siege-War feature is enabled.",
 			"# if false, the Siege-War feature is disabled."),
-	WAR_SIEGE_ALLOW_SIEGES(
-			"war.siege.allow_sieges",
+	WAR_SIEGE_ATTACK_ENABLED(
+			"war.siege.attack_enabled",
 			"true",
-			"# If true, sieges are allowed."),
-	WAR_SIEGE_ALLOW_REVOLTS(
-			"war.siege.allow_revolts",
+			"# If true, people can start sieges."),
+	WAR_SIEGE_INVADE_ENABLED(
+			"war.siege.invade_enabled",
 			"true",
-			"# If true, revolts are allowed."),
+			"# "),
+	WAR_SIEGE_PLUNDER_ENABLED(
+			"war.siege.plunder_enabled",
+			"true",
+			"#"),
+	WAR_SIEGE_REVOLT_ENABLED(
+			"war.siege.revolt_enabled",
+			"true",
+			"#."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

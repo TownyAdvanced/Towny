@@ -69,7 +69,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 						if(winner instanceof Town) {
 							SiegeWarUtil.defenderWin(siege, (Town)winner);
 						} else{
-							SiegeWarUtil.attackerWin(plugin, siege, (Nation)winner);
+							SiegeWarUtil.attackerWin(siege, (Nation)winner);
 						}
 
 	       				//Save changes to db

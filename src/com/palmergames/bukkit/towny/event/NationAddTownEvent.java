@@ -25,8 +25,7 @@ public class NationAddTownEvent extends Event  {
 		return handlers;
 	}
 
-    public NationAddTownEvent(Town town, Nation nation, boolean async) {
-        super(async);
+    public NationAddTownEvent(Town town, Nation nation) {
         this.town = town;
         this.nation = nation;
     }

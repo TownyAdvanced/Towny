@@ -1244,6 +1244,13 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 				try {
+					line = kvFile.get("townInvaded");
+					siege.setTownInvaded(Boolean.parseBoolean(line));
+				} catch (Exception e) {
+					siege.setTownInvaded(false);
+				}
+
+				try {
 					line = kvFile.get("attackerWinner");
 					if(line != null) {
 						siege.setAttackerWinner(getNation(line));
@@ -2079,6 +2086,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("defendingTown=" + siege.getDefendingTown().getName());
 		list.add("status=" + siege.getStatus().toString());
 		list.add("townPlundered=" + Boolean.toString(siege.isTownPlundered()));
+		list.add("townInvaded=" + Boolean.toString(siege.isTownInvaded()));
 		if(siege.hasAttackerWinner()) {
 			list.add("attackerWinner=" + siege.getAttackerWinner().getName());
 		}

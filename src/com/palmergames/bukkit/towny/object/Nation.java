@@ -198,10 +198,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public void addTown(Town town) throws AlreadyRegisteredException {
-		addTown(town,false);
-	}
-
-	public void addTown(Town town, boolean async) throws AlreadyRegisteredException {
 
 		if (hasTown(town))
 			throw new AlreadyRegisteredException();
@@ -211,7 +207,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			towns.add(town);
 			town.setNation(this);
 			
-			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this, async));
+			BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(town, this));
 		}
 	}
 
@@ -375,18 +371,16 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 
-	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
-		removeTown(town, false);
-	}
 
-	public void removeTown(Town town, boolean async) throws EmptyNationException, NotRegisteredException {
+
+	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
 
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
 
 			boolean isCapital = town.isCapital();
-			remove(town, async);
+			remove(town);
 
 			if (getNumTowns() == 0) {
 				throw new EmptyNationException(this);
@@ -407,7 +401,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 	}
 
-	private void remove(Town town, boolean async) {
+	private void remove(Town town) {
 
 		//removeAssistantsIn(town);
 		try {
@@ -416,7 +410,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 		towns.remove(town);
 		
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this, async));
+		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
 	public void removeSiege(Siege siege) {
@@ -428,7 +422,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private void removeAllTowns() {
 
 		for (Town town : new ArrayList<Town>(towns))
-			remove(town, false);
+			remove(town);
 	}
 
 	private void removeAllSieges() {
