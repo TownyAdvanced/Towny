@@ -81,7 +81,7 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.0.12</version>
+            <version>0.1.2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
