@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -2022,7 +2023,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
             spawnLoc = nation.getNationSpawn();
 
-            // Determine conditions
+			//If the town where the spawn is located is under siege, you cannot spawn there
+			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
+			if(spawnBlock != null) {
+				Town town = spawnBlock.getTown();
+				if (town.hasSiege() & town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+					throw new TownyException("Cannot spawn into a town which is under siege");
+			}
+
+			// Determine conditions
             if (isTownyAdmin) {
                 nationSpawnPermission = NationSpawnLevel.ADMIN;
             } else if ((split.length == 0)) {

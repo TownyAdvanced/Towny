@@ -12,13 +12,9 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownSpawnLevel;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -285,6 +281,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else {
 				spawnLoc = town.getSpawn();
+			}
+
+			//If the town where the spawn is located is under siege, you cannot spawn there
+			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
+			if(spawnBlock != null && spawnBlock.hasTown()) {
+				Town townContainingSpawn = spawnBlock.getTown();
+				if (townContainingSpawn.hasSiege() & townContainingSpawn.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+					throw new TownyException("Cannot spawn into a town which is under siege");
 			}
 
 			if (isTownyAdmin) {

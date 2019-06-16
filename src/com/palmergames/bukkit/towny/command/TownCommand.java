@@ -45,6 +45,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -2084,8 +2085,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param outpost
 	 */
 	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
-
 		try {
+			//If the town is under siege, you cannot spawn there
+			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				throw new TownyException("Cannot spawn into a town which is under siege");
+
 			boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Location spawnLoc;

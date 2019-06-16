@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
@@ -151,6 +152,22 @@ public class CombatUtil {
 				if (isPvPPlot(attackingPlayer, defendingPlayer))
 					return false;
 
+				/*
+				 * If the attacker's nation is besieging the defenders town, damage is allowed
+				 */
+				Resident attackerResident = TownyUniverse.getDataSource().getResident(attackingPlayer.getName());
+				Resident defendingResident = TownyUniverse.getDataSource().getResident(defendingPlayer.getName());;
+				if(attackerResident.hasTown()
+						&& attackerResident.hasNation()
+						&& defendingResident.hasTown()
+						&& defendingResident.getTown().hasSiege()) {
+					Nation attackerNation= attackerResident.getTown().getNation();
+					Siege siege=defendingResident.getTown().getSiege();
+					if(siege.getSiegeStatsAttackers().containsKey(attackerNation)
+						&& siege.getSiegeStatsAttackers().get(attackerNation).isActive()) {
+						return false;
+					}
+				}
 				/*
 				 * Check if we are preventing friendly fire between allies
 				 * Check the attackers TownBlock and it's Town for their PvP
