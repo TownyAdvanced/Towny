@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
@@ -301,44 +300,43 @@ public class SiegeWarUtil {
     }
 
 
-    public static void plunderTown(Siege siege, Nation winnerNation) {
-
-        if (TownySettings.isUsingEconomy()) {
-            double plunder =
-                    TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
-                            * siege.getDefendingTown().getTownBlocks().size();
-
-            try {
-                if (siege.getDefendingTown().canPayFromHoldings(plunder))
-                    siege.getDefendingTown().payTo(plunder, winnerNation, "Town was plundered by attacker");
-                else {
-                    double actualPlunder = siege.getDefendingTown().getHoldingBalance();
-                    siege.getDefendingTown().payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
-                    TownyMessaging.sendGlobalMessage("The town " + siege.getDefendingTown().getName() + " was destroyed by " +winnerNation.getName());
-                    TownyUniverse.getDataSource().removeTown(siege.getDefendingTown());
-                }
-            } catch (EconomyException x) {
-                TownyMessaging.sendErrorMsg(x.getMessage());
+    public static void plunderTown(Town defendingTown, Nation winnerNation) {
+        double plunder =
+                TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
+                        * defendingTown.getTownBlocks().size();
+        try {
+            if (defendingTown.canPayFromHoldings(plunder))
+                defendingTown.payTo(plunder, winnerNation, "Town was plundered by attacker");
+            else {
+                double actualPlunder = defendingTown.getHoldingBalance();
+                defendingTown.payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
+                TownyMessaging.sendGlobalMessage("The town " + defendingTown.getName() + " was destroyed by " +winnerNation.getName());
+                TownyUniverse.getDataSource().removeTown(defendingTown);
             }
+        } catch (EconomyException x) {
+            TownyMessaging.sendErrorMsg(x.getMessage());
         }
     }
 
-    public static void applyUpkeepCost(Siege siege) {
-        double upkeepCost = TownySettings.getWarSiegeAttackerCostPerHour();
+    public static void applySiegeUpkeepCost(Siege siege) {
+        double upkeepCostPerPlot = TownySettings.getWarSiegeAttackerCostPerPlotPerHour();
+        long upkeepCost = Math.round(upkeepCostPerPlot * siege.getDefendingTown().getTotalBlocks());
 
         //Each attacking nation who is involved must pay upkeep
-        for(Nation nation: siege.getSiegeStatsAttackers().keySet()) {
-            try {
-                if (nation.canPayFromHoldings(upkeepCost))
-                    nation.pay(upkeepCost, "Cost of maintaining siege.");
-                else {
-                    siege.getSiegeStatsAttackers().get(nation).setActive(false);
-                    TownyMessaging.sendGlobalMessage("The nation of " + nation.getName() +
-                            " has been forced to abandon the siege on the town of " + siege.getDefendingTown().getName() +
-                            ", due to lack of funds.");
+        if(upkeepCost > 1) {
+            for (Nation nation : siege.getSiegeStatsAttackers().keySet()) {
+                try {
+                    if (nation.canPayFromHoldings(upkeepCost))
+                        nation.pay(upkeepCost, "Cost of maintaining siege.");
+                    else {
+                        siege.getSiegeStatsAttackers().get(nation).setActive(false);
+                        TownyMessaging.sendGlobalMessage("The nation of " + nation.getName() +
+                                " has been forced to abandon the siege on the town of " + siege.getDefendingTown().getName() +
+                                ", due to lack of funds.");
+                    }
+                } catch (EconomyException x) {
+                    TownyMessaging.sendErrorMsg(x.getMessage());
                 }
-            } catch (EconomyException x) {
-                TownyMessaging.sendErrorMsg(x.getMessage());
             }
         }
     }
@@ -357,6 +355,16 @@ public class SiegeWarUtil {
         ));
     }
 
+    public static void attackerAbandon(Nation nation, Siege siege) {
+        siege.getSiegeStatsAttackers().get(nation).setActive(false);
+        TownyMessaging.sendGlobalMessage(nation.getName() + " has abandoned their attack on" + siege.getDefendingTown().getName());
+
+        if (siege.getActiveAttackers().size() == 0) {
+            siege.setStatus(SiegeStatus.ATTACKER_ABANDON);
+            activateSiegeCooldown(siege);
+            TownyMessaging.sendGlobalMessage("The siege on " + siege.getDefendingTown().getName() +" has been abandoned all attackers.");
+        }
+    }
 
     public static void defenderWin(Siege siege, Town winnerTown) {
         siege.setStatus(SiegeStatus.DEFENDER_WIN);
@@ -365,6 +373,14 @@ public class SiegeWarUtil {
                 TownySettings.getLangString("msg_siege_war_defender_win"),
                 TownyFormatter.getFormattedTownName(winnerTown))
         ));
+    }
+
+    public static void defenderSurrender(Siege siege) throws TownyException {
+        siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
+        siege.setAttackerWinner(siege.getActiveAttackers().get(0));
+        activateSiegeCooldown(siege);
+        activateRevoltCooldown(siege);
+        TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
 
     private static void activateSiegeCooldown(Siege siege) {

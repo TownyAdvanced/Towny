@@ -2615,8 +2615,8 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT);
 	}
 
-	public static double getWarSiegeAttackerCostPerHour() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_HOUR);
+	public static double getWarSiegeAttackerCostPerPlotPerHour() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_PLOT_PER_HOUR);
 	}
 
 	public static double getWarSiegeAttackerCostPerSiegeZoneCasualty() {

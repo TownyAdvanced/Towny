@@ -1595,9 +1595,9 @@ public enum ConfigNodes {
 			"war.siege.attacker_cost.upfront_per_plot",
 			"10.0",
 			"#..."),
-	WAR_SIEGE_ATTACKER_COST_PER_HOUR(
+	WAR_SIEGE_ATTACKER_COST_PER_PLOT_PER_HOUR(
 			"war.siege.attacker_cost.per_hour",
-			"1.0",
+			"0.1",
 			"#..."),
 	WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY(
 			"war.siege.attacker_cost.per_siege_zone_casualty",
@@ -1613,7 +1613,7 @@ public enum ConfigNodes {
 			"# their friends in a town under siege."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.attacker_plunder_amount_per_plot",
-			"12",
+			"20",
 			"# This is the amount plundered by the attacker is a siege is successful.",
 			"# If this value is lower than the upfront cost, then sieges will not be profitable",
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",
