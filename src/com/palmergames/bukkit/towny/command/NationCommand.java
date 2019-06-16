@@ -792,7 +792,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = null;
 
 		try {
+			if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeInvadeEnabled())
+				throw new TownyException("You cannot use the leave command. Your town must be either kicked from the nation, or you can use /t revolt");
+
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
 			town = resident.getTown();
 			nation = town.getNation();
 			nation.removeTown(town);

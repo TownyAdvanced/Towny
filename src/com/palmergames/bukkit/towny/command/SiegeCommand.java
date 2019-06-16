@@ -14,6 +14,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -245,6 +247,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 			if (player.isFlying())
 				throw new TownyException("You cannot be flying to start a siege.");
+
+			if(player.getPotionEffect(PotionEffectType.INVISIBILITY) != null)
+				throw new TownyException("The god(s) favour the brave. You cannot be invisible to start a siege");
 
 			if (SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player))
 				throw new TownyException("The god(s) favour wars on the land surface. You must have only sky above you to start a siege.");

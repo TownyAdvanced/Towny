@@ -145,8 +145,18 @@ public class DailyTimerTask extends TownyTimerTask {
 						continue;
 					if (!town.payTo(nation.getTaxes(), nation, "Nation Tax")) {
 						try {
-							TownyMessaging.sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
-							nation.removeTown(town);
+							/*
+							If involuntary town occupation is enabled,
+							town taxes are treated as mandatory, like town upkeep.
+							 */
+							if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeInvadeEnabled()) {
+								TownyUniverse.getDataSource().removeTown(town);
+								TownyMessaging.sendGlobalMessage(town.getName() + TownySettings.getLangString("msg_bankrupt_town"));
+							} else {
+								TownyMessaging.sendNationMessage(nation, TownySettings.getCouldntPayTaxesMsg(town, "nation"));
+								nation.removeTown(town);
+							}
+
 						} catch (EmptyNationException e) {
 							// Always has 1 town (capital) so ignore
 						} catch (NotRegisteredException e) {
