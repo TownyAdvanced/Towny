@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -76,13 +77,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		permissions.loadDefault(this);
 		siege = null;
 
-
 		siegeCooldownEndTime = System.currentTimeMillis()
-				+ TownySettings.getWarSiegeSiegeCooldownNewTownsHours()
-				* ONE_HOUR_IN_MILLIS;
-		revoltCooldownEndTime = System.currentTimeMillis()
-				+ TownySettings.getWarSiegeRevoltCooldownHours()
-				* ONE_HOUR_IN_MILLIS;
+				+ (long)(TownySettings.getWarSiegeSiegeCooldownNewTownsHours() * ONE_HOUR_IN_MILLIS);
+		revoltCooldownEndTime = 0;
 	}
 
 	@Override
@@ -1277,6 +1274,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public boolean isSiegeCooldownActive() {
+		if(hasSiege() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
+			return false; //Cooldown always off until the siege has finished
+
 		if(System.currentTimeMillis() < siegeCooldownEndTime) {
 			return true;
 		} else {

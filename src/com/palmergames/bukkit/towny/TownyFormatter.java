@@ -382,13 +382,6 @@ public class TownyFormatter {
 		} catch (TownyException e) {
 		}
 
-		//Revolt Cooldown Timer: 71.8 hours
-		if(TownySettings.getWarSiegeEnabled()
-				&& TownySettings.getWarSiegeRevoltEnabled()
-		   		&& town.isRevoltCooldownActive()) {
-			out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
-		}
-
 		// Residents [12]: James, Carry, Mason
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 		if (residents.length > 34) {
@@ -399,29 +392,41 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
+		// Plunder Value: $55,000
 		if(TownySettings.getWarSiegeEnabled() && TownySettings.isUsingEconomy()) {
 			out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
 		}
 
-		if(town.hasSiege()) {
+		//Siege Attackers [2]: Thug Nation, Ruffians
+		//Siege Victory Timer: 5.3 hours
+             //or
+		//Siege Status: Town captured by Ruffians
+		if(TownySettings.getWarSiegeEnabled() && town.hasSiege()) {
 			Siege siege =town.getSiege();
 
 			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
-				//Siege Attackers [2]: Thug Nation, Ruffians
-				//Siege Victory Timer: 5.3 hours
 				List<Nation> besiegingNations = siege.getActiveAttackers();
 				String[] namesOfBesiegingNations = getFormattedNames(besiegingNations.toArray(new Nation[0]));
 				out.addAll(ChatTools.listArr(namesOfBesiegingNations, String.format(TownySettings.getLangString("status_town_siege_attackers"), namesOfBesiegingNations.length )));
-
 				out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
 			} else {
-				//Siege Status: Town captured by Ruffians
-				//Siege Cooldown Timer: 52.7 hours
 				out.add(TownySettings.getLangString("status_town_siege_summary_prefix") + getSiegeStatusSummary(siege));
-				out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
 			}
 		}
 
+		//Siege Cooldown Timer: 33.5 hours
+		if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegeAttackEnabled()
+				&& town.isSiegeCooldownActive()) {
+			out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
+		}
+
+		//Revolt Cooldown Timer: 71.8 hours
+		if(TownySettings.getWarSiegeEnabled()
+				&& TownySettings.getWarSiegeRevoltEnabled()
+				&& town.isRevoltCooldownActive()) {
+			out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
+		}
 
 		out = formatStatusScreens(out);
 		return out;

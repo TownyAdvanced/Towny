@@ -351,8 +351,7 @@ public class SiegeWarUtil {
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_attacker_win"),
                 TownyFormatter.getFormattedNationName(winnerNation),
-                TownyFormatter.getFormattedTownName(siege.getDefendingTown()),
-                TownyFormatter.getFormattedNationName(winnerNation))
+                TownyFormatter.getFormattedTownName(siege.getDefendingTown()))
         ));
     }
 

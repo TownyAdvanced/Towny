@@ -1640,7 +1640,7 @@ public enum ConfigNodes {
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
 	WAR_SIEGE_SIEGE_COOLDOWN_NEW_TOWNS_HOURS(
 			"war.siege.siege_cooldown_new_towns_hours",
-			"48",
+			"0.05",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
