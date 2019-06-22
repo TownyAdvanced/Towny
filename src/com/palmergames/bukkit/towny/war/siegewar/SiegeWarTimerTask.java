@@ -75,7 +75,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 					//If scheduled end time has arrived, choose winner
 					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {
-						siege.setActualEndTime(System.currentTimeMillis());
 						winner = SiegeWarUtil.calculateSiegeWinner(siege);
 						if (winner instanceof Town) {
 							SiegeWarUtil.defenderWin(siege, (Town) winner);

@@ -514,12 +514,12 @@ public class TownyFormatter {
         out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
         // Siege Attacks [3]: TownA, TownB, TownC
-		List<Town> siegeAttacks = nation.getTownsUnderActiveSiegeAttack();
+		List<Town> siegeAttacks = nation.getTownsUnderSiegeAttack();
 		String[] formattedSiegeAttacks = getFormattedNames(siegeAttacks.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeAttacks, String.format(TownySettings.getLangString("status_nation_siege_attacks"), siegeAttacks.size())));
 
 		// Siege Defences [3]: TownX, TownY, TownZ
-		List<Town> siegeDefences = nation.getTownsUnderActiveSiegeDefence();
+		List<Town> siegeDefences = nation.getTownsUnderSiegeDefence();
 		String[] formattedSiegeDefences = getFormattedNames(siegeDefences.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeDefences, String.format(TownySettings.getLangString("status_nation_siege_defences"), siegeDefences.size())));
 
@@ -576,8 +576,25 @@ public class TownyFormatter {
 
 
 	private static void addSiegeStatusDefender(Siege siege, List<String> out) {
-		String defenderName = "?";
-		String surrenderStatus = siege.getSiegeStatsDefenders().isActive() ? "" : Colors.Gray + " - " + Colors.Red + "SURRENDERED";
+		String defenderName="?";
+		String combatantStatusTag;
+		SiegeStatus siegeStatus = siege.getStatus();
+
+		if(!siege.getSiegeStatsDefenders().isActive()) {
+			combatantStatusTag = Colors.Gray + " - " + Colors.Red + "SURRENDERED";
+		} else {
+			if(siegeStatus == SiegeStatus.IN_PROGRESS) {
+				combatantStatusTag = "";
+			} else {
+				if (siegeStatus == SiegeStatus.DEFENDER_WIN
+						|| siegeStatus == SiegeStatus.ATTACKER_ABANDON) {
+					combatantStatusTag = Colors.Gray + " - " + Colors.Green + "WINNER";
+				} else {
+					combatantStatusTag = Colors.Gray + " - " + Colors.Red + "DEFEATED";
+				}
+			}
+		}
+
 		if(siege.getDefendingTown().hasNation()) {
 			try {
 				defenderName = TownyFormatter.getFormattedNationName(siege.getDefendingTown().getNation());
@@ -586,7 +603,8 @@ public class TownyFormatter {
 		} else {
 			defenderName = TownyFormatter.getFormattedTownName(siege.getDefendingTown());
 		}
-		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")" + surrenderStatus);
+
+		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")" + combatantStatusTag);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -604,16 +622,34 @@ public class TownyFormatter {
 			}
 		});
 
+		Nation attackerNation;
 		String attackerName;
 		SiegeStats siegeStats;
-		String abandonStatus;
+		String combatantStatusTag;
+		SiegeStatus siegeStatus;
 		final int maxIndex = 9;  //This limits the displayed entries to 10
 		int index;
 		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
-			attackerName = getFormattedNationName(attackerNations.get(index));
-			siegeStats = siege.getSiegeStatsAttackers().get(attackerNations.get(index));
-			abandonStatus = siegeStats.isActive() ? "" : Colors.Gray + " - " + Colors.Red + "ABANDONED";
-			out.add("  " + Colors.Gold + attackerName + Colors.Gray + " - " + Colors.LightBlue + "(" + siegeStats.getSiegePointsTotal() + ") - " + abandonStatus);
+			attackerNation = attackerNations.get(index);
+			attackerName = getFormattedNationName(attackerNation);
+			siegeStats = siege.getSiegeStatsAttackers().get(attackerNation);
+			siegeStatus = siege.getStatus();
+
+			if(!siegeStats.isActive()) {
+				combatantStatusTag = Colors.Gray + " - " + Colors.Red + "ABANDONED";
+			} else {
+				if(siegeStatus == SiegeStatus.IN_PROGRESS) {
+					combatantStatusTag = "";
+				} else {
+					if (siege.getAttackerWinner() == attackerNation) {
+						combatantStatusTag = Colors.Gray + " - " + Colors.Green + "WINNER";
+					} else {
+						combatantStatusTag = Colors.Gray + " - " + Colors.Green + "DEFEATED";
+					}
+				}
+			}
+
+			out.add("  " + Colors.Gold + attackerName + Colors.Gray + " - " + Colors.LightBlue + "(" + siegeStats.getSiegePointsTotal() + ")" + combatantStatusTag);
 		}
 		if(index == maxIndex) {
 			out.add("  " + Colors.Gold + " ... & more");

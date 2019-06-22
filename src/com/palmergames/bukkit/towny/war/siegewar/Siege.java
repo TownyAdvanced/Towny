@@ -2,9 +2,11 @@ package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
+import javax.swing.*;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -141,9 +143,33 @@ public class Siege {
     }
 
     public String getFormattedHoursUntilCompletion() {
-        NumberFormat numberFormat = NumberFormat.getInstance();
-        numberFormat.setMaximumFractionDigits(1);
-        double hoursRoundedUp = Math.ceil(getHoursUntilCompletion() * 10) / 10;
-        return numberFormat.format(hoursRoundedUp);
+        if(status == SiegeStatus.IN_PROGRESS) {
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(1);
+            double hoursUntilCompletion = getHoursUntilCompletion();
+            if(hoursUntilCompletion > 0) {
+                double hoursRoundedUp = Math.ceil(hoursUntilCompletion * 10) / 10;
+                return numberFormat.format(hoursRoundedUp);
+            } else {
+                return "0";
+            }
+        } else {
+            return "0";
+        }
+    }
+
+    public String getWinnerName() {
+        switch(status) {
+            case ATTACKER_WIN:
+            case DEFENDER_SURRENDER:
+                return attackerWinner.getName();
+            case DEFENDER_WIN:
+            case ATTACKER_ABANDON:
+                return TownySettings.getLangString("siege_list_defender_winner");
+            case IN_PROGRESS:
+                return "n/a";
+            default:
+                return "Unknown siege status";
+        }
     }
 }

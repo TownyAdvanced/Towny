@@ -116,7 +116,7 @@ public class SiegeWarUtil {
             TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_siege_war_post_revolt_siege_cooldown_reset"));
 
             //Turn ON revolt cooldown
-            long revoltCooldownDurationMillis = TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS;
+            long revoltCooldownDurationMillis = (long)(TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS);
             long revoltCooldownEndTime= System.currentTimeMillis() + revoltCooldownDurationMillis;
             town.setRevoltCooldownEndTime(revoltCooldownEndTime);
 
@@ -345,6 +345,7 @@ public class SiegeWarUtil {
 
     public static void attackerWin(Siege siege, Nation winnerNation) {
         siege.setStatus(SiegeStatus.ATTACKER_WIN);
+        siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(winnerNation);
         activateSiegeCooldown(siege);
         activateRevoltCooldown(siege);
@@ -361,6 +362,7 @@ public class SiegeWarUtil {
 
         if (siege.getActiveAttackers().size() == 0) {
             siege.setStatus(SiegeStatus.ATTACKER_ABANDON);
+            siege.setActualEndTime(System.currentTimeMillis());
             activateSiegeCooldown(siege);
             TownyMessaging.sendGlobalMessage("The siege on " + siege.getDefendingTown().getName() +" has been abandoned all attackers.");
         }
@@ -368,6 +370,7 @@ public class SiegeWarUtil {
 
     public static void defenderWin(Siege siege, Town winnerTown) {
         siege.setStatus(SiegeStatus.DEFENDER_WIN);
+        siege.setActualEndTime(System.currentTimeMillis());
         activateSiegeCooldown(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
@@ -377,6 +380,7 @@ public class SiegeWarUtil {
 
     public static void defenderSurrender(Siege siege) throws TownyException {
         siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
+        siege.setActualEndTime(System.currentTimeMillis());
         siege.getSiegeStatsDefenders().setActive(false);
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
         activateSiegeCooldown(siege);
@@ -391,7 +395,7 @@ public class SiegeWarUtil {
     }
 
     private static void activateRevoltCooldown(Siege siege) {
-        long cooldownDuration = TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS;
+        long cooldownDuration = (long)(TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS);
         siege.getDefendingTown().setRevoltCooldownEndTime(System.currentTimeMillis() + cooldownDuration);
     }
 
@@ -451,7 +455,7 @@ public class SiegeWarUtil {
     }
 
     public static void addDefenderSiegePoints(List<Town> townsWithAttackersInSiegeZone) throws TownyException {
-        int siegePointsPerDefendingPlayer = TownySettings.getSiegeWarPointsPerAttackingPlayer();
+        int siegePointsPerDefendingPlayer = TownySettings.getSiegeWarPointsPerDefendingPlayer();
 
         //1. Cycle through players to find defenders
         for (Player player : BukkitTools.getOnlinePlayers()) {
@@ -460,21 +464,27 @@ public class SiegeWarUtil {
             if (!resident.hasTown())
                 continue; //Player not in a town. Cannot defend
 
-            Town town = resident.getTown();
-            if (!town.hasSiege())
+            Town townOfPlayer = resident.getTown();
+            if (!townOfPlayer.hasSiege())
                 continue;  //Town not under siege
 
-            if(town.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+            if(townOfPlayer.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
                 continue;   //Siege over
 
             TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
             if (townBlockWherePlayerIsLocated == null)
                 continue; //Player not in a town
 
-            if(townBlockWherePlayerIsLocated.getTown() != town)
-                continue;  //Player is not in their own town
+            Town townWherePlayerIsLocated = townBlockWherePlayerIsLocated.getTown();
+            if(townOfPlayer.hasNation() && townWherePlayerIsLocated.hasNation()) {
+                if(townOfPlayer.getNation() != townWherePlayerIsLocated.getNation())
+                    continue;  //Player not in any town belonging to their nation
+            } else {
+                if(townWherePlayerIsLocated != townOfPlayer)
+                    continue;  //Player is not in their own town
+            }
 
-            if(townsWithAttackersInSiegeZone.contains(town))
+            if(townsWithAttackersInSiegeZone.contains(townOfPlayer))
                 continue;  //Defender cannot score if there are attackers in the zone
 
             /* Note on Defence point scoring location:
@@ -484,7 +494,7 @@ public class SiegeWarUtil {
             */
 
             //Score points
-            SiegeStats defenderStats = town.getSiege().getSiegeStatsDefenders();
+            SiegeStats defenderStats = townOfPlayer.getSiege().getSiegeStatsDefenders();
             defenderStats.addSiegePoints(siegePointsPerDefendingPlayer);
         }
     }

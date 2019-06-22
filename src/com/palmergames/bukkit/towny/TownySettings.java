@@ -2634,8 +2634,8 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER);
 	}
 
-	public static int getWarSiegeRevoltCooldownHours() {
-		return getInt(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
+	public static double getWarSiegeRevoltCooldownHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
 	}
 
 	public static int getWarSiegeAttackerPlunderAmountPerPlot() {

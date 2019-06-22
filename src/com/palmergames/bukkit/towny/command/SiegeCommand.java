@@ -451,12 +451,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void listSieges(CommandSender sender, String[] split) {
-		List<Siege> allSieges = new ArrayList<>(TownyUniverse.getDataSource().getSieges());
-		List<Siege> siegesToSort = new ArrayList<>();
-		for(Siege siege: allSieges) {
-			if(siege.getStatus() == SiegeStatus.IN_PROGRESS)
-				siegesToSort.add(siege);
-		}
+		List<Siege> siegesToSort = new ArrayList<>(TownyUniverse.getDataSource().getSieges());
 
 		int page = 1;
 	    int total = (int) Math.ceil(((double) siegesToSort.size()) / ((double) 10));
@@ -480,19 +475,19 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 	        return;
 	    }
 
-	    //Put the highest value ones first
+	    //Siege with lowest siege timer value goes on top
 		Collections.sort(siegesToSort, new Comparator() {
 			@Override
 			public int compare(Object s1, Object s2) {
-				double s1PlunderValue= ((Siege) s1).getDefendingTown().getPlunderValue();
-				double s2PlunderValue = ((Siege)s2).getDefendingTown().getPlunderValue();
+				double s1PlunderValue= ((Siege) s1).getHoursUntilCompletion();
+				double s2PlunderValue = ((Siege)s2).getHoursUntilCompletion();
 
 				if(s1PlunderValue == s2PlunderValue) {
 					return 0;
 				} else if (s1PlunderValue > s2PlunderValue) {
-					return -1;
+					return 1;
 				} else {
-					return 0;
+					return -1;
 				}
 			}
 		});
@@ -502,29 +497,25 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			iMax = siegesToSort.size();
 		}
 
+		String headerLine = Colors.Red + TownySettings.getLangString("siege_list_header_town")
+					+ Colors.Gray + " - "
+					+ Colors.LightBlue + "("+TownySettings.getLangString("siege_list_header_victory_timer") + ")"
+					+ Colors.Gray + " - "
+					+ Colors.LightBlue + "(" + TownySettings.getLangString("siege_list_header_winner") + ")";
+
 		Siege siege;
 		Town town;
 		String output;
 		List<String> siegesOrdered = new ArrayList();
-
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			siege = siegesToSort.get(i);
 			town = siege.getDefendingTown();
-
-			if(TownySettings.isUsingEconomy()) {
-				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getFormattedPlunderValue() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getActiveAttackers().size() + ")";
-			} else {
-				output = Colors.Red + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")"  + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getActiveAttackers().size() + ")";
-			}
-
+			output = Colors.Red + town.getName()
+					+ Colors.Gray + " - "
+					+ Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")"
+					+ Colors.Gray + " - "
+					+ Colors.LightBlue + "(" + siege.getWinnerName() + ")";
 			siegesOrdered.add(output);
-		}
-
-		String headerLine;
-		if(TownySettings.isUsingEconomy()) {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("plunder_value") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer_hours") + ")" + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("number_of_attackers");
-		} else {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("number_of_attackers") + ")";
 		}
 
 		sender.sendMessage(
