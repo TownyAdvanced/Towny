@@ -119,7 +119,7 @@ town_plu: 'Towns'
 world_plu: 'Worlds'
 world_sing: 'World'
 plunder_value: 'Plunder Value'
-victory_timer: 'Victory Timer'
+victory_timer_hours: 'Victory Timer Hours'
 number_of_attackers: 'Num. Attackers'
 
 world_help_1: 'Current world''s status'
@@ -379,14 +379,13 @@ msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more th
 msg_siege_war_neutral_town_captured: '&6[War]&b The town of %s has been captured by the nation of %s!'
 msg_siege_war_nation_town_captured: '&6[War]&b The town of %s, belonging to the nation of %s, has been captured by the nation of %s!'
 msg_siege_war_nation_defeated: '&6[War]&b The nation of %s has been defeated!'
-msg_siege_war_defender_win: '&6[War]&b The defenders of the town of %s have successfully driven off the attackers from the nation of %s. The siege has failed!'
-msg_siege_war_defender_win: '&6[War]&b An army from the nation of %s has successfully breached the defences of the town of %s!!!. The town is at the mercy of the leader of %s'
+msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully driven off all attackers. The siege has failed!'
+msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s!'
 msg_siege_war_revolt: '&6[War]&b The people of the town of %s, led by %s, have revolted against the occupying nation of %s, and declared themselves free to choose their own destiny!'
 msg_siege_war_post_revolt_siege_cooldown_reset: '&6[War]&b Because of the recent revolt, the siege cooldown for your town (if any) has been reset to off.'
 msg_err_siege_war_no_siege_on_your_town: '&6[War]&c There is no siege on your town'
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s'
 msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
-msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been plundered'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
@@ -685,7 +684,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
-# Added in 0.43 
+# Added in 0.43
 town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
@@ -735,7 +734,7 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
-online: '&a(Online)' 
+online: '&a(Online)'
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Permissions: '       # Used on /town
@@ -747,7 +746,7 @@ status_forced: '&cForced'
 status_adjustable: '&aAdjustable'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosions: '              # Used on /plot perm, /res
-explosions2: '&2Explosions: '               # Used on /town and /tw 
+explosions2: '&2Explosions: '               # Used on /town and /tw
 firespread: '  &2Firespread: '
 mobspawns: '  &2Mob Spawns: '
 owner_of_x_plots: '&2Owner of &a%s plots'
@@ -755,7 +754,7 @@ status_bank: '&2Bank: &a%s'
 status_town: '&2Town: &a'
 status_no_town: 'None'
 status_town_ranks: '&2Town Ranks: &a'
-status_nation_ranks: '&2Nation Ranks: &a' 
+status_nation_ranks: '&2Nation Ranks: &a'
 jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
 status_friends: 'Friends'
 rank_list_title: ' &3Rank List'
@@ -798,7 +797,7 @@ status_nation_siege_defences: '&2Siege Defences &a[%s]&2: &f'
 status_siege_name: '&cSiege of %s'
 status_siege_summary_prefix: '&2Status: '
 status_siege_summary_in_progress: '&aIn Progress'
-status_siege_summary_attacker_win: '&aTown defences breached. Town is at the mercy of %s'
+status_siege_summary_attacker_win: '&aTown defences breached'
 status_siege_summary_attacker_win_invade: '&aTown captured by %s'
 status_siege_summary_attacker_win_plunder: '&aTown plundered by %s'
 status_siege_summary_attacker_win_invade_plunder: '&aTown captured and plundered by %s'

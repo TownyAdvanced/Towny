@@ -31,9 +31,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		siegeHelp.add(ChatTools.formatCommand("", "/siege", "here", TownySettings.getLangString("siege_help_3")));
 		siegeHelp.add(ChatTools.formatCommand("", "/siege", "list", TownySettings.getLangString("siege_help_1")));
 		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "attack", TownySettings.getLangString("siege_help_6")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "abandon " + TownySettings.getLangString("siege_help_4"), TownySettings.getLangString("siege_help_7")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "plunder " + TownySettings.getLangString("siege_help_4"), TownySettings.getLangString("siege_help_8")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "invade " + TownySettings.getLangString("siege_help_4"), TownySettings.getLangString("siege_help_10")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " abandon", TownySettings.getLangString("siege_help_7")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " plunder", TownySettings.getLangString("siege_help_8")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " invade", TownySettings.getLangString("siege_help_10")));
 		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/siege", "surrender", TownySettings.getLangString("siege_help_9")));
 	}
 
@@ -105,22 +105,24 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("here")) {
 				processShowSiegeHereRequest(player);
 
-			} else if (split[0].equalsIgnoreCase("invade")) {
-				processInvadeRequest(player, split);
-
-			} else if (split[0].equalsIgnoreCase("plunder")) {
-				processPlunderRequest(player, split);
-
 			} else if (split[0].equalsIgnoreCase("surrender")) {
 				processSurrenderRequest(player);
 
-			} else if (split[0].equalsIgnoreCase("abandon")) {
-				processAbandonRequest(player, split);
+			} else if (split.length==2 && split[1].equalsIgnoreCase("abandon")) {
+				processAbandonRequest(player, split[0]);
+
+			} else if (split.length==2 && split[1].equalsIgnoreCase("invade")) {
+				processInvadeRequest(player, split[0]);
+
+			} else if (split.length==2 && split[1].equalsIgnoreCase("plunder")) {
+				processPlunderRequest(player, split[0]);
 
 			} else if (split.length ==1){
 				//This looks like a request for town info
 				processShowSiegeOnTargetTownRequest(player, split);
 
+			} else {
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));
 			}
 
 		} catch (Exception x) {
@@ -325,12 +327,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 
 
-	private void processInvadeRequest(Player player, String[] split) throws TownyException {
-		if(split.length > 2)
-			throw new TownyException("Too many arguments for invade");
-
-		String townName = split[1];
-
+	private void processInvadeRequest(Player player, String townName) throws TownyException {
 		if (!TownySettings.getWarSiegeEnabled())
 			throw new TownyException("Siege war feature disabled");
 
@@ -373,12 +370,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 
 
-	private void processPlunderRequest(Player player, String[] split) throws TownyException {
-		if(split.length > 2)
-			throw new TownyException("Too many arguments");
-
-		String townName = split[1];
-
+	private void processPlunderRequest(Player player, String townName) throws TownyException {
 		if (!TownySettings.getWarSiegeEnabled())
 			throw new TownyException("Siege war feature disabled");
 
@@ -424,12 +416,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 
 
-	private void processAbandonRequest(Player player, String[] split) throws TownyException {
-		if(split.length > 2)
-			throw new TownyException("Too many arguments");
-
-		String townName = split[1];
-
+	private void processAbandonRequest(Player player, String townName) throws TownyException {
 		if (!TownySettings.getWarSiegeEnabled())
 			throw new TownyException("Siege war feature disabled");
 
@@ -535,9 +522,9 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 		String headerLine;
 		if(TownySettings.isUsingEconomy()) {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("plunder_value") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("number_of_attackers");
+			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("plunder_value") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer_hours") + ")" + Colors.Gray + " - " + Colors.LightBlue + "("+TownySettings.getLangString("number_of_attackers");
 		} else {
-			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("number_of_attackers");
+			headerLine = Colors.Red + TownySettings.getLangString("town_sing") + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("victory_timer") + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + TownySettings.getLangString("number_of_attackers") + ")";
 		}
 
 		sender.sendMessage(

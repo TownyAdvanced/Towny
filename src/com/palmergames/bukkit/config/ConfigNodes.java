@@ -1630,7 +1630,7 @@ public enum ConfigNodes {
 	//Timings
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.timer_interval_seconds",
-			"5",
+			"10",
 			"# The time in seconds for each siegewar timer tick."),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.max_holdout_time_hours",
@@ -1653,7 +1653,7 @@ public enum ConfigNodes {
 			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_COOLDOWN_HOURS(
 			"war.siege.revolt_cooldown_hours",
-			"168",
+			"240",
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
 			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),

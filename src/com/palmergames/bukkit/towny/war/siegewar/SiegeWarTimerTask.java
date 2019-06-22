@@ -38,10 +38,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		TownyMessaging.sendMsg("Now evaluating siege war timer task");
-
 		if (!TownySettings.getWarSiegeEnabled())
-			TownyMessaging.sendMsg("Siege war feature disabled");  //todo - replace w lang string
+			TownyMessaging.sendErrorMsg("Siege war feature disabled");
 
 		long currentTime = System.currentTimeMillis();
 		TownyObject winner;
@@ -64,43 +62,44 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				if (timeForUpkeep) {
 					if (TownySettings.isUsingEconomy())
 						SiegeWarUtil.applySiegeUpkeepCost(siege);
+				}
 
-					//Remove siege if siege cooldown has expired
+				//Process active siege
+				if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+
+					//Siege is active
+					//Add siege points
+					List<Town> townsWithAttackersInSiegeZone;
+					townsWithAttackersInSiegeZone = SiegeWarUtil.addAttackerSiegePoints();
+					SiegeWarUtil.addDefenderSiegePoints(townsWithAttackersInSiegeZone);
+
+					//If scheduled end time has arrived, choose winner
+					if(System.currentTimeMillis() > siege.getScheduledEndTime()) {
+						siege.setActualEndTime(System.currentTimeMillis());
+						winner = SiegeWarUtil.calculateSiegeWinner(siege);
+						if (winner instanceof Town) {
+							SiegeWarUtil.defenderWin(siege, (Town) winner);
+						} else {
+							SiegeWarUtil.attackerWin(siege, (Nation) winner);
+						}
+
+						//Save changes to db
+						TownyUniverse.getDataSource().saveSiege(siege);
+					} else {
+						//Save changes to db
+						if (timeToSaveSiegeToDB)
+							TownyUniverse.getDataSource().saveSiege(siege);
+					}
+
+				} else {
+
+					//Siege is finished.
+					//Wait for siege cooldown to end then delete siege
 					if (currentTime > siege.getDefendingTown().getSiegeCooldownEndTime()) {
 						TownyUniverse.getDataSource().removeSiege(siege);
 						continue;
 					}
 				}
-
-				//Add siege points
-				if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
-					List<Town> townsWithAttackersInSiegeZone;
-					townsWithAttackersInSiegeZone = SiegeWarUtil.addAttackerSiegePoints();
-					SiegeWarUtil.addDefenderSiegePoints(townsWithAttackersInSiegeZone);
-				}
-
-
-				//Resolve winner if scheduled end time has arrived
-				if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
-					siege.setActualEndTime(System.currentTimeMillis());
-					winner = SiegeWarUtil.calculateSiegeWinner(siege);
-
-					if (winner instanceof Town) {
-						SiegeWarUtil.defenderWin(siege, (Town) winner);
-					} else {
-						SiegeWarUtil.attackerWin(siege, (Nation) winner);
-					}
-
-					//Save changes to db
-					TownyUniverse.getDataSource().saveSiege(siege);
-				} else {
-					//Caching
-					if (timeToSaveSiegeToDB)
-						TownyUniverse.getDataSource().saveSiege(siege);
-				}
-
-				//Delete siege if cooldown has expired
-				//TODO!!!!!!!!!!!!!!!!!!
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(e.getMessage());
