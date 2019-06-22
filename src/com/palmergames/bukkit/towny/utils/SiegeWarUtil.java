@@ -377,6 +377,7 @@ public class SiegeWarUtil {
 
     public static void defenderSurrender(Siege siege) throws TownyException {
         siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
+        siege.getSiegeStatsDefenders().setActive(false);
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
         activateSiegeCooldown(siege);
         activateRevoltCooldown(siege);

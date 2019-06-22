@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -564,7 +565,7 @@ public class TownyFormatter {
 
  		//> Attack
 		//  NationX - (4000)
-		//  NationY - (3000)
+		//  NationY - (3000) - ABANDONED
 		//  NationZ - (2000)
 		out.add(TownySettings.getLangString("status_siege_attack_tag"));
 		addSiegeStatusAttackers(siege, out);
@@ -576,21 +577,22 @@ public class TownyFormatter {
 
 	private static void addSiegeStatusDefender(Siege siege, List<String> out) {
 		String defenderName = "?";
+		String surrenderStatus = siege.getSiegeStatsDefenders().isActive() ? "" : Colors.Gray + " - " + Colors.Red + "SURRENDERED";
 		if(siege.getDefendingTown().hasNation()) {
 			try {
-				defenderName = siege.getDefendingTown().getNation().getName();
+				defenderName = TownyFormatter.getFormattedNationName(siege.getDefendingTown().getNation());
 			} catch (NotRegisteredException e) {
 			}
 		} else {
-			defenderName = siege.getDefendingTown().getName();
+			defenderName = TownyFormatter.getFormattedTownName(siege.getDefendingTown());
 		}
-		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")");
+		out.add("  " + Colors.Gold + defenderName + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")" + surrenderStatus);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static void addSiegeStatusAttackers(Siege siege, List<String> out) {
 
-		List<Nation> attackerNations = siege.getActiveAttackers();
+		List<Nation> attackerNations = new ArrayList<>(siege.getSiegeStatsAttackers().keySet());
 		Collections.sort(attackerNations, new Comparator() {
 			@Override
 			public int compare(Object n1, Object n2) {
@@ -602,12 +604,16 @@ public class TownyFormatter {
 			}
 		});
 
-		Nation attackerNation;
+		String attackerName;
+		SiegeStats siegeStats;
+		String abandonStatus;
 		final int maxIndex = 9;  //This limits the displayed entries to 10
 		int index;
 		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
-			attackerNation = attackerNations.get(index);
-			out.add("  " + Colors.Gold + attackerNation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + siege.getSiegeStatsAttackers().get(attackerNation).getSiegePointsTotal() + ")");
+			attackerName = getFormattedNationName(attackerNations.get(index));
+			siegeStats = siege.getSiegeStatsAttackers().get(attackerNations.get(index));
+			abandonStatus = siegeStats.isActive() ? "" : Colors.Gray + " - " + Colors.Red + "ABANDONED";
+			out.add("  " + Colors.Gold + attackerName + Colors.Gray + " - " + Colors.LightBlue + "(" + siegeStats.getSiegePointsTotal() + ") - " + abandonStatus);
 		}
 		if(index == maxIndex) {
 			out.add("  " + Colors.Gold + " ... & more");
