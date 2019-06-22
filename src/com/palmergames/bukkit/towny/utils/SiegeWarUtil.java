@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -180,14 +181,14 @@ public class SiegeWarUtil {
         return true; //Co-ordinate is within the siegezone
     }
 
-    public static boolean isTownBlockOnTheTownBorder(TownBlock townBlock) {
+    public static boolean isTownBlockOnTheTownBorder(TownBlock townBlock, Town town) {
         WorldCoord worldCoord = townBlock.getWorldCoord();
 
         int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
         for (int i = 0; i < 4; i++)
             try {
                 TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-                boolean sameTown = edgeTownBlock.getTown() == townBlock.getTown();
+                boolean sameTown = (edgeTownBlock.getTown() == town);
                 if (!sameTown)
                     return true; //If the adjacent plot is in a different town, return true
             } catch (NotRegisteredException e) {
@@ -408,4 +409,83 @@ public class SiegeWarUtil {
         return winner;
     }
 
+    public static List<Town> addAttackerSiegePoints()throws TownyException {
+        List<Town> townsWithAttackersInSiegeZone = new ArrayList<>();
+        int siegePointsPerAttackingPlayer = TownySettings.getSiegeWarPointsPerAttackingPlayer();
+
+        //1. Cycle through players to find attackers
+        for (Player player : BukkitTools.getOnlinePlayers()) {
+
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            if (!resident.hasNation())
+                continue; //Player not in a nation. Cannot attack
+
+            List<Town> townsUnderActiveAttackFromPlayer = resident.getTown().getNation().getTownsUnderActiveSiegeAttack();
+            if(townsUnderActiveAttackFromPlayer.size() == 0)
+                continue; //Player's nation is not besieging anyone
+
+            TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
+            if (townBlockWherePlayerIsLocated == null)
+                continue; //Player not in a town
+
+            Town town = townBlockWherePlayerIsLocated.getTown();
+            if (!town.hasSiege())
+                continue;  //Town not under siege
+
+            if (!townsUnderActiveAttackFromPlayer.contains(town))
+                continue; //Player's nation is not actively attacking the town
+
+            if (!SiegeWarUtil.isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated, town))
+                continue;  //Player is not on a border block. Cannot score points
+
+            //Score points
+            Nation playerNation = resident.getTown().getNation();
+            SiegeStats attackerStats = town.getSiege().getSiegeStatsAttackers().get(playerNation);
+            attackerStats.addSiegePoints(siegePointsPerAttackingPlayer);
+
+            //Mark this town as having attackersin siege zone
+            townsWithAttackersInSiegeZone.add(town);
+        }
+
+        return townsWithAttackersInSiegeZone;
+    }
+
+    public static void addDefenderSiegePoints(List<Town> townsWithAttackersInSiegeZone) throws TownyException {
+        int siegePointsPerDefendingPlayer = TownySettings.getSiegeWarPointsPerAttackingPlayer();
+
+        //1. Cycle through players to find defenders
+        for (Player player : BukkitTools.getOnlinePlayers()) {
+
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            if (!resident.hasTown())
+                continue; //Player not in a town. Cannot defend
+
+            Town town = resident.getTown();
+            if (!town.hasSiege())
+                continue;  //Town not under siege
+
+            if(town.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+                continue;   //Siege over
+
+            TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
+            if (townBlockWherePlayerIsLocated == null)
+                continue; //Player not in a town
+
+            if(townBlockWherePlayerIsLocated.getTown() != town)
+                continue;  //Player is not in their own town
+
+            if(townsWithAttackersInSiegeZone.contains(town))
+                continue;  //Defender cannot score if there are attackers in the zone
+
+            /* Note on Defence point scoring location:
+             * Currently defence points are scored from ANYWHERE in the town
+             * If some problem with this becomes apparent during playtesting,
+             * this can easily be changed to border-only by adding a check in the code here.
+            */
+
+            //Score points
+            SiegeStats defenderStats = town.getSiege().getSiegeStatsDefenders();
+            defenderStats.addSiegePoints(siegePointsPerDefendingPlayer);
+        }
+    }
 }

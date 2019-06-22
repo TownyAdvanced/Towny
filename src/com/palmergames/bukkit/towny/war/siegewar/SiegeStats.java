@@ -28,4 +28,8 @@ public class SiegeStats {
     public void setSiegePointsTotal(int siegePointsTotal) {
         this.siegePointsTotal = siegePointsTotal;
     }
+
+    public void addSiegePoints(int siegePointsForAttackingPlayer) {
+        siegePointsTotal += siegePointsForAttackingPlayer;
+    }
 }

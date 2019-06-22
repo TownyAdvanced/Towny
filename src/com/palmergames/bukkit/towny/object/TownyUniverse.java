@@ -122,9 +122,22 @@ public class TownyUniverse extends TownyObject {
 		} catch (NotRegisteredException x) {
 			return null;
 		}
-
 	}
 
+
+	public static TownBlock getTownBlockWhereResidentIsLocated(Resident resident) throws TownyException {
+		try {
+			TownyWorld world = getDataSource().getWorld(resident.getWorld().getName());
+			Coord coord = Coord.parseCoord(resident);
+			if (world.hasTownBlock(coord))
+				return world.getTownBlock(coord);
+			else {
+				return null;
+			}
+		} catch (NotRegisteredException x) {
+			return null;
+		}
+	}
 	public static Nation getNationOfPlayer(Player player) throws NotRegisteredException{
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 		Nation nationOfPlayer = resident.getTown().getNation();

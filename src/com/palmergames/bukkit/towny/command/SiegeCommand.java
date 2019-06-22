@@ -215,10 +215,10 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			if (townBlockWherePlayerIsLocated == null)
 				throw new TownyException("You must be standing in a town to attack the town.");
 
-			if(!SiegeWarUtil.isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated))
+			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
+			if(!SiegeWarUtil.isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated, defendingTown))
 				throw new TownyException("You must be in a town border block to attack the town.");
 
-			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
 			Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
 
 			if (defendingTown.hasNation()) {
