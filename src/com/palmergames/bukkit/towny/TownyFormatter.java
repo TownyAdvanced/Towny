@@ -407,24 +407,22 @@ public class TownyFormatter {
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
-				//Siege Status: In Progress / Defences Breached / Town Invaded / Town Plundered
-				out.add(TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege));
-
-
-				//Siege Victory Timer: 5.3 hours
 				if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
-					out.add(String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion()));
-				}
-
-				//Siege Cooldown Timer: 33.5 hours
-				if (town.isSiegeCooldownActive()) {
-					out.add(String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds()));
+					//Siege Status: In Progress    Victory Timer: 5.3 hours
+					String status= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
+					String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
+					out.add(status + " " + victoryTimer);
+				} else {
+					//Siege Status: Town Defences Breached   Cooldown Timer: 33.5 hours
+					String status= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
+					String cooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
+					out.add(status + " " + cooldownTimer);
 				}
 
 				//Siege Points
 				//> Defence
 				//  TownA - (500)
-				out.add(TownySettings.getLangString("status_town_siege_siege_points_tag"));
+				//out.add(TownySettings.getLangString("status_town_siege_siege_points_tag"));
 				out.add(TownySettings.getLangString("status_town_siege_defence_tag"));
 				addSiegeStatusDefender(siege, out);
 
@@ -625,7 +623,7 @@ public class TownyFormatter {
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
 				if(siege.isTownInvaded()) {
-					if(siege.isTownPlundered()) {
+					if(siege.isTownInvaded()) {
 						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win_invade_plunder"), getFormattedName(siege.getAttackerWinner())));
 					} else {
 						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win_invade"), getFormattedName(siege.getAttackerWinner())));

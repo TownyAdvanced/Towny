@@ -26,15 +26,12 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 	static {
 		siegeHelp.add(ChatTools.formatTitle("/siege"));
-		siegeHelp.add(ChatTools.formatCommand("", "/siege", "", TownySettings.getLangString("siege_help_2")));
-		siegeHelp.add(ChatTools.formatCommand("", "/siege", TownySettings.getLangString("siege_help_4"), TownySettings.getLangString("siege_help_5")));
-		siegeHelp.add(ChatTools.formatCommand("", "/siege", "here", TownySettings.getLangString("siege_help_3")));
 		siegeHelp.add(ChatTools.formatCommand("", "/siege", "list", TownySettings.getLangString("siege_help_1")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "attack", TownySettings.getLangString("siege_help_6")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " abandon", TownySettings.getLangString("siege_help_7")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " plunder", TownySettings.getLangString("siege_help_8")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", TownySettings.getLangString("siege_help_4") + " invade", TownySettings.getLangString("siege_help_10")));
-		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/siege", "surrender", TownySettings.getLangString("siege_help_9")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "attack", TownySettings.getLangString("siege_help_3")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "abandon " + TownySettings.getLangString("siege_help_2"), TownySettings.getLangString("siege_help_4")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "plunder " + TownySettings.getLangString("siege_help_2"), TownySettings.getLangString("siege_help_5")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/siege", "invade " + TownySettings.getLangString("siege_help_2"), TownySettings.getLangString("siege_help_6")));
+		siegeHelp.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/siege", "surrender", TownySettings.getLangString("siege_help_7")));
 	}
 
 	public SiegeCommand(Towny instance) {
@@ -83,10 +80,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 
-			if (split.length == 0)
-				processShowSiegeOnPlayersTownRequest(player);
-
-			else if (split[0].equalsIgnoreCase("?"))
+			if (split[0].equalsIgnoreCase("?"))
 				for (String line : siegeHelp)
 					player.sendMessage(line);
 
@@ -96,27 +90,20 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("attack")) {
 				processAttackRequest(player);
 
-			} else if (split[0].equalsIgnoreCase("here")) {
-				processShowSiegeHereRequest(player);
-
 			} else if (split[0].equalsIgnoreCase("surrender")) {
 				processSurrenderRequest(player);
 
-			} else if (split.length==2 && split[1].equalsIgnoreCase("abandon")) {
-				processAbandonRequest(player, split[0]);
+			} else if (split.length==2 && split[0].equalsIgnoreCase("abandon")) {
+				processAbandonRequest(player, split[1]);
 
-			} else if (split.length==2 && split[1].equalsIgnoreCase("invade")) {
-				processInvadeRequest(player, split[0]);
+			} else if (split.length==2 && split[0].equalsIgnoreCase("invade")) {
+				processInvadeRequest(player, split[1]);
 
-			} else if (split.length==2 && split[1].equalsIgnoreCase("plunder")) {
-				processPlunderRequest(player, split[0]);
-
-			} else if (split.length ==1){
-				//This looks like a request for town info
-				processShowSiegeOnTargetTownRequest(player, split);
+			} else if (split.length==2 && split[0].equalsIgnoreCase("plunder")) {
+				processPlunderRequest(player, split[1]);
 
 			} else {
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
 
 		} catch (Exception x) {
@@ -435,7 +422,8 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			town = siege.getDefendingTown();
 			output = Colors.Red + town.getName()
 					+ Colors.Gray + " - "
-					+ Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")"
+					+ Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion()
+												+ " " + TownySettings.getLangString("hour_plu") + ")"
 					+ Colors.Gray + " - "
 					+ Colors.LightBlue + "(" + siege.getWinnerName() + ")";
 			siegesOrdered.add(output);
