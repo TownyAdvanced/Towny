@@ -212,7 +212,7 @@ public class SiegeWarUtil {
     }
 
 
-    public static void captureTown(Towny plugin, Nation attackingNation, Town defendingTown) {
+    public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         if(defendingTown.hasNation()) {
 
             Nation nationOfCapturedTown = null;
@@ -249,6 +249,8 @@ public class SiegeWarUtil {
                     attackingNation.getName()
             )));
         }
+
+        siege.setTownInvaded(true);
     }
 
     public static void removeTownFromNation(Towny plugin, Town town, Nation nation) {
@@ -301,7 +303,7 @@ public class SiegeWarUtil {
     }
 
 
-    public static void plunderTown(Town defendingTown, Nation winnerNation) {
+    public static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
         double plunder =
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
@@ -317,6 +319,8 @@ public class SiegeWarUtil {
         } catch (EconomyException x) {
             TownyMessaging.sendErrorMsg(x.getMessage());
         }
+
+        siege.setTownPlundered(true);
     }
 
     public static void applySiegeUpkeepCost(Siege siege) {

@@ -623,16 +623,16 @@ public class TownyFormatter {
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
 				if(siege.isTownInvaded()) {
-					if(siege.isTownInvaded()) {
-						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win_invade_plunder"), getFormattedName(siege.getAttackerWinner())));
+					if(siege.isTownPlundered()) {
+						return TownySettings.getLangString("status_town_siege_summary_attacker_win_invade_plunder");
 					} else {
-						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win_invade"), getFormattedName(siege.getAttackerWinner())));
+						return TownySettings.getLangString("status_town_siege_summary_attacker_win_invade");
 					}
 				} else {
 					if(siege.isTownPlundered()) {
-						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win_plunder"), getFormattedName(siege.getAttackerWinner())));
+						return TownySettings.getLangString("status_town_siege_summary_attacker_win_plunder");
 					} else {
-						return (String.format(TownySettings.getLangString("status_town_siege_summary_attacker_win"), getFormattedName(siege.getAttackerWinner())));
+						return TownySettings.getLangString("status_town_siege_summary_attacker_win");
 					}
 				}
 			case DEFENDER_WIN:

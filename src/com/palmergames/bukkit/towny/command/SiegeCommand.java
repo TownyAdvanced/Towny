@@ -275,7 +275,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		if(siege.isTownInvaded())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));
 
-		SiegeWarUtil.captureTown(plugin, siege.getAttackerWinner(),siege.getDefendingTown());
+		SiegeWarUtil.captureTown(plugin, siege, siege.getAttackerWinner(),siege.getDefendingTown());
 	}
 
 
@@ -321,7 +321,10 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		if(!TownySettings.isUsingEconomy())
 			throw new TownyException("No economy plugin is active. Cannot plunder.");
 
-		SiegeWarUtil.plunderTown(siege.getDefendingTown(), siege.getAttackerWinner());
+		if(siege.isTownPlundered())
+			throw new TownyException("You have already plundered this town.");
+
+		SiegeWarUtil.plunderTown(siege, siege.getDefendingTown(), siege.getAttackerWinner());
 	}
 
 

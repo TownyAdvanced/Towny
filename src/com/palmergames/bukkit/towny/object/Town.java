@@ -1342,9 +1342,14 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public String getFormattedHoursUntilSiegeCooldownEnds() {
-		NumberFormat numberFormat = NumberFormat.getInstance();
-		numberFormat.setMaximumFractionDigits(1);
-		double hoursRoundedUp = Math.ceil(getHoursUntilSiegeCooldownEnds() * 10) / 10;
-		return numberFormat.format(hoursRoundedUp);
+		double hoursUntilSiegeCooldownEnds = getHoursUntilSiegeCooldownEnds();
+		if(hoursUntilSiegeCooldownEnds > 0) {
+			NumberFormat numberFormat = NumberFormat.getInstance();
+			numberFormat.setMaximumFractionDigits(1);
+			double hoursRoundedUp = Math.ceil(hoursUntilSiegeCooldownEnds * 10) / 10;
+			return numberFormat.format(hoursRoundedUp);
+		} else {
+			return "0";
+		}
 	}
 }
