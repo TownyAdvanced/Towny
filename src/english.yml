@@ -381,6 +381,7 @@ msg_siege_war_post_revolt_siege_cooldown_reset: '&6[War]&b Because of the recent
 msg_err_siege_war_no_siege_on_your_town: '&6[War]&c There is no siege on your town'
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s'
 msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
+msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been plundered'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'

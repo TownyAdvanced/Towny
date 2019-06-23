@@ -315,14 +315,11 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("The town was defeated but not by your nation. You cannot plunder unless your nation is victorious in the siege");
 		}
 
-		if(siege.isTownInvaded())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townName));
-
 		if(!TownySettings.isUsingEconomy())
 			throw new TownyException("No economy plugin is active. Cannot plunder.");
 
 		if(siege.isTownPlundered())
-			throw new TownyException("You have already plundered this town.");
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townName));
 
 		SiegeWarUtil.plunderTown(siege, siege.getDefendingTown(), siege.getAttackerWinner());
 	}
