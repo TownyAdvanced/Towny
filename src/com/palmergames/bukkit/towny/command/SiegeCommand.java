@@ -75,13 +75,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			listSieges(sender, split);
 
 		} else {
-			try {
-				final Siege siege = TownyUniverse.getDataSource().getSiege(split[0]);
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(siege)));
-
-			} catch (NotRegisteredException x) {
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
-			}
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 		}
 	}
 
@@ -128,77 +122,6 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		} catch (Exception x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
-	}
-
-
-
-
-	private void processShowSiegeOnPlayersTownRequest(Player player) {
-
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-			try {
-				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-				Town town = resident.getTown();
-
-				if(!town.hasSiege()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_no_siege_on_your_town"));
-					return;
-				}
-
-				Siege siege = town.getSiege();
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(siege));
-			} catch (NotRegisteredException x) {
-				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_dont_belong_town"));
-			}
-		});
-	}
-
-
-	private void processShowSiegeOnTargetTownRequest(Player player, String[] split) throws TownyException {
-
-		try {
-			if(!TownyUniverse.getDataSource().hasTown(split[0]))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
-
-			if(!TownyUniverse.getDataSource().hasSiege(split[0]))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), split[0]));
-
-			final Siege siege = TownyUniverse.getDataSource().getSiege(split[0]);
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != siege.getDefendingTown()) || (!resident.hasTown()) ) ) {
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-			}
-			Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
-				@Override
-				public void run() {
-					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(siege));
-				}
-			});
-
-		} catch (NotRegisteredException x) {
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered")));
-		}
-	}
-
-
-	private void processShowSiegeHereRequest(Player player) throws TownyException{
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_HERE.getNode()))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-		TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-		if (townBlockWherePlayerIsLocated == null)
-			throw new TownyException("There is no town at yout current location.");
-
-		Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-		if (!defendingTown.hasSiege())
-			throw new TownyException("There is no siege at your current location.");
-
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
-			@Override
-			public void run() {
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(defendingTown.getSiege()));
-			}
-		});
 	}
 
 	private void processAttackRequest(Player player) {
