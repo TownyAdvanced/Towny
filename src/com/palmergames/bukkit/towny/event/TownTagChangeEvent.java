@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -20,6 +21,7 @@ public class TownTagChangeEvent extends Event {
     }
 
     public TownTagChangeEvent(String newTag, Town town) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.newTag = newTag;
         this.town = town;
     }

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -26,11 +27,9 @@ public class PreDeleteTownEvent extends Event {
 		return handlers;
 	}
 
-	public PreDeleteTownEvent(String town) {
-		this.townName = town;
-	}
-
 	public PreDeleteTownEvent(Town town) {
+		super(!Bukkit.getServer().isPrimaryThread());
+		this.townName = town.getName();
 		this.town = town;
 	}
 
