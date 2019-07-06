@@ -4,16 +4,16 @@ public class MemMgmt {
 
 	public static String getMemoryBar(int size, Runtime run) {
 
-		String line = "";
+		StringBuilder line = new StringBuilder();
 		double percentUsed = (run.totalMemory() - run.freeMemory()) / run.maxMemory();
 		int pivot = (int) Math.floor(size * percentUsed);
 		for (int i = 0; i < pivot - 1; i++)
-			line += "=";
+			line.append("=");
 		if (pivot < size - 1)
-			line += "+";
+			line.append("+");
 		for (int i = pivot + 1; i < size; i++)
-			line += "-";
-		return line;
+			line.append("-");
+		return line.toString();
 	}
 
 	public static String getMemSize(long num) {

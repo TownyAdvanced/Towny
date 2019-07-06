@@ -17,7 +17,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,9 +50,7 @@ public class TownyPerms {
 		try {
 			permissions = PermissionAttachment.class.getDeclaredField("permissions");
 			permissions.setAccessible(true);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
+		} catch (SecurityException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
 	}
@@ -64,11 +61,10 @@ public class TownyPerms {
 	 * 
 	 * @param filepath
 	 * @param defaultRes
-	 * @throws IOException
 	 */
-	public static void loadPerms(String filepath, String defaultRes) throws IOException {
+	public static void loadPerms(String filepath, String defaultRes) {
 
-		String fullPath = filepath + FileMgmt.fileSeparator() + defaultRes;
+		String fullPath = filepath + File.separator + defaultRes;
 
 		File file = FileMgmt.unpackResourceFile(fullPath, defaultRes, defaultRes);
 		if (file != null) {
@@ -91,7 +87,7 @@ public class TownyPerms {
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
 
-		PermissionAttachment playersAttachment = null;
+		PermissionAttachment playersAttachment;
 
 		if (resident == null) {
 			try {

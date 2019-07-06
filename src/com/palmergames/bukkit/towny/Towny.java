@@ -49,7 +49,6 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarBlockListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarCustomListener;
 import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -62,6 +61,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -695,7 +695,7 @@ public class Towny extends JavaPlugin {
 
 	public String getConfigPath() {
 
-		return getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml";
+		return getDataFolder().getPath() + File.separator + "settings" + File.separator + "config.yml";
 	}
 
 	public Object getSetting(String root) {

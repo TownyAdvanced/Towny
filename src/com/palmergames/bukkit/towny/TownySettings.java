@@ -244,7 +244,7 @@ public class TownySettings {
 	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
 
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
-		String fullPath = filepath + FileMgmt.fileSeparator() + res;
+		String fullPath = filepath + File.separator + res;
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		
 		if (file != null) {

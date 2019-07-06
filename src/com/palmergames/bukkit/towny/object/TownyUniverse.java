@@ -301,21 +301,21 @@ public class TownyUniverse extends TownyObject {
 	public boolean loadSettings() {
 
 		try {
-			TownySettings.loadConfig(getRootFolder() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "config.yml", plugin.getVersion());
-			TownySettings.loadLanguage(getRootFolder() + FileMgmt.fileSeparator() + "settings", "english.yml");
-			TownyPerms.loadPerms(getRootFolder() + FileMgmt.fileSeparator() + "settings", "townyperms.yml");
+			TownySettings.loadConfig(getRootFolder() + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadLanguage(getRootFolder() + File.separator + "settings", "english.yml");
+			TownyPerms.loadPerms(getRootFolder() + File.separator + "settings", "townyperms.yml");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 
-		String save = TownySettings.getSaveDatabase(), load = TownySettings.getLoadDatabase();
+		String saveDbType = TownySettings.getSaveDatabase(), load = TownySettings.getLoadDatabase();
 
 		// Setup any defaults before we load the database.
 		Coord.setCellSize(TownySettings.getTownBlockSize());
 
-		System.out.println("[Towny] Database: [Load] " + load + " [Save] " + save);
+		System.out.println("[Towny] Database: [Load] " + load + " [Save] " + saveDbType);
 
 		worlds.clear();
 		nations.clear();
@@ -330,14 +330,28 @@ public class TownyUniverse extends TownyObject {
 		try {
 			getDataSource().cleanupBackups();
 			// Set the new class for saving.
-			setDataSource(save);
-			getDataSource().initialize(plugin, this);
-			FileMgmt.checkFolders(new String[] {getRootFolder() + FileMgmt.fileSeparator() + "logs" }); // Setup the logs folder here as the logger will not yet be enabled.
+			switch (saveDbType.toLowerCase()) {
+				case "ff":
+				case "flatfile": {
+					setDataSource(new TownyFlatFileSource(plugin, this));
+					break;
+				}
+				case "h2":
+				case "sqlite":
+				case "mysql": {
+					setDataSource(new TownySQLSource(plugin,this, saveDbType.toLowerCase()));
+					break;
+				}
+				default: {
+				
+				}
+			}
+			FileMgmt.checkFolders(getRootFolder() + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
 			try {
 				getDataSource().backup();
 				
-				if (load.equalsIgnoreCase("flatfile") || save.equalsIgnoreCase("flatfile"))
-					getDataSource().deleteUnusedResidentFiles();
+				if (load.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile"))
+					getDataSource().deleteUnusedResidents();
 				
 			} catch (IOException e) {
 				System.out.println("[Towny] Error: Could not create backup.");
@@ -345,7 +359,7 @@ public class TownyUniverse extends TownyObject {
 				return false;
 			}
 
-			if (load.equalsIgnoreCase(save)) {
+			if (load.equalsIgnoreCase(saveDbType)) {
 				// Update all Worlds data files
 				getDataSource().saveAllWorlds();
 			} else {
@@ -369,16 +383,26 @@ public class TownyUniverse extends TownyObject {
 		}
 		return true;
 	}
-
-	public boolean loadDatabase(String databaseType) {
-
-		try {
-			setDataSource(databaseType);
-		} catch (UnsupportedOperationException e) {
-			return false;
+	
+	private boolean loadDatabase(String dbType) {
+		
+		switch (dbType.toLowerCase()) {
+			case "ff":
+			case "flatfile": {
+				setDataSource(new TownyFlatFileSource(plugin, this));
+				break;
+			}
+			case "h2":
+			case "sqlite":
+			case "mysql": {
+				setDataSource(new TownySQLSource(plugin, this, dbType.toLowerCase()));
+				break;
+			}
+			default: {
+				return false;
+			}
 		}
-		getDataSource().initialize(plugin, this);
-
+		
 		return getDataSource().loadAll();
 	}
 	
@@ -391,18 +415,7 @@ public class TownyUniverse extends TownyObject {
 			return rootFolder;
 	}
 
-	public void setDataSource(String databaseType) throws UnsupportedOperationException {
-
-		if (databaseType.equalsIgnoreCase("flatfile"))
-			setDataSource(new TownyFlatFileSource());
-		// HMOD has been moved to legacy
-		else if ((databaseType.equalsIgnoreCase("mysql")) || (databaseType.equalsIgnoreCase("sqlite")) || (databaseType.equalsIgnoreCase("h2")))
-			setDataSource(new TownySQLSource(databaseType));
-		else
-			throw new UnsupportedOperationException();
-	}
-
-	public void setDataSource(TownyDataSource dataSource) {
+	private void setDataSource(TownyDataSource dataSource) {
 
 		TownyUniverse.dataSource = dataSource;
 	}

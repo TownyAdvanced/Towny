@@ -59,16 +59,15 @@ public class NameValidation {
 	 * @return string array of the filtered names.
 	 */
 	public static String[] checkAndFilterArray(String[] arr) {
-
-		String[] out = arr;
+		
 		int count = 0;
 
 		for (String word : arr) {
-			out[count] = filterName(word);
+			arr[count] = filterName(word);
 			count++;
 		}
 
-		return out;
+		return arr;
 	}
 
 	/**
@@ -88,8 +87,7 @@ public class NameValidation {
 		  A list of all banned names (notably all sub commands like 'spawn'
 		  used in '/town spawn')
 		 */
-		ArrayList<String> bannedNames = new ArrayList<String>();
-		bannedNames.addAll(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
+		ArrayList<String> bannedNames = new ArrayList<>(Arrays.asList("list", "new", "here", "help", "?", "leave", "withdraw", "deposit", "set", "toggle", "mayor", "assistant", "kick", "add", "claim", "unclaim", "title", "outpost", "ranklist", "invite", "invites", "buy", "create"));
 		// Banned names
 		if (bannedNames.contains(name.toLowerCase()))
 			return true;

@@ -25,7 +25,7 @@ import java.util.TreeMap;
 public class KeyValueFile {
 
 	private static final String newLine = System.getProperty("line.separator");
-	private Map<String, String> keys = new HashMap<String, String>();
+	private Map<String, String> keys = new HashMap<>();
 	private String fileName;
 
 	public KeyValueFile(String fileName) {
@@ -69,7 +69,7 @@ public class KeyValueFile {
 
 	public void save() {
 
-		SortedMap<String, String> sortedKeys = new TreeMap<String, String>(keys);
+		SortedMap<String, String> sortedKeys = new TreeMap<>(keys);
 		try {
 			BufferedWriter output = new BufferedWriter(new FileWriter(fileName));
 			try {
@@ -129,7 +129,7 @@ public class KeyValueFile {
 	 */
 	public Map<String, String> returnMap() throws Exception {
 
-		return new HashMap<String, String>(keys);
+		return new HashMap<>(keys);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class KeyValueFile {
 	 */
 	public String getProperty(String var) {
 
-		return (String) keys.get(var);
+		return keys.get(var);
 	}
 
 	/**
