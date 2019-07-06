@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -26,6 +27,7 @@ public class PlayerLeaveTownEvent extends Event {
 	}
 
 	public PlayerLeaveTownEvent(Player player, WorldCoord to, WorldCoord from, Town lefttown, PlayerMoveEvent pme) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.lefttown = lefttown;
 		this.player = player;
 		this.from = from;
