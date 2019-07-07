@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -44,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
@@ -487,964 +487,1000 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 	/*
 	 * Load individual towny object
 	 */
-
+	
 	@Override
 	public boolean loadResident(Resident resident) {
-
+		
 		String line = null;
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
-		if (fileResident.exists() && fileResident.isFile()) {
-			try {
-				KeyValueFile kvFile = new KeyValueFile(path);
-				resident.setLastOnline(Long.parseLong(kvFile.get("lastOnline")));
-
-				line = kvFile.get("registered");
-				if (line != null)
-					resident.setRegistered(Long.parseLong(line));
-				else
-					resident.setRegistered(resident.getLastOnline());
-
-				line = kvFile.get("isNPC");
-				if (line != null)
-					resident.setNPC(Boolean.parseBoolean(line));
-
-				line = kvFile.get("isJailed");
-				if (line != null)
-					resident.setJailed(Boolean.parseBoolean(line));
-
-				line = kvFile.get("JailSpawn");
-				if (line != null)
-					resident.setJailSpawn(Integer.valueOf(line));
-
-				line = kvFile.get("JailTown");
-				if (line != null)
-					resident.setJailTown(line);
-
-				line = kvFile.get("title");
-				if (line != null)
-					resident.setTitle(line);
-
-				line = kvFile.get("surname");
-				if (line != null)
-					resident.setSurname(line);
-
-				line = kvFile.get("town");
-				if (line != null)
-					resident.setTown(getTown(line));
-
-				line = kvFile.get("town-ranks");
-				if (line != null)
-					resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-
-				line = kvFile.get("nation-ranks");
-				if (line != null)
-					resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
-
-				line = kvFile.get("friends");
-				if (line != null) {
-					String[] tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident friend = getResident(token);
-							if (friend != null)
-								resident.addFriend(friend);
-						}
+		try {
+			if (!fileResident.getParentFile().mkdirs() && !fileResident.getParentFile().isDirectory()) {
+				throw new IOException("Resident file: " + fileResident.getName() + " parent directory was a file!");
+			}
+			if (!fileResident.exists() && !fileResident.createNewFile()) {
+				throw new IOException("Resident file: " + fileResident.getName() + " was not able to be created!");
+			}
+			HashMap<String, String> keys = new HashMap<>();
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(fileResident));
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				keys.put(key, String.valueOf(value));
+			}
+			
+			resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
+			
+			line = keys.get("registered");
+			if (line != null)
+				resident.setRegistered(Long.parseLong(line));
+			else
+				resident.setRegistered(resident.getLastOnline());
+			
+			line = keys.get("isNPC");
+			if (line != null)
+				resident.setNPC(Boolean.parseBoolean(line));
+			
+			line = keys.get("isJailed");
+			if (line != null)
+				resident.setJailed(Boolean.parseBoolean(line));
+			
+			line = keys.get("JailSpawn");
+			if (line != null)
+				resident.setJailSpawn(Integer.valueOf(line));
+			
+			line = keys.get("JailTown");
+			if (line != null)
+				resident.setJailTown(line);
+			
+			line = keys.get("title");
+			if (line != null)
+				resident.setTitle(line);
+			
+			line = keys.get("surname");
+			if (line != null)
+				resident.setSurname(line);
+			
+			line = keys.get("town");
+			if (line != null)
+				resident.setTown(getTown(line));
+			
+			line = keys.get("town-ranks");
+			if (line != null)
+				resident.setTownRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+			
+			line = keys.get("nation-ranks");
+			if (line != null)
+				resident.setNationRanks(new ArrayList<>(Arrays.asList((line.split(",")))));
+			
+			line = keys.get("friends");
+			if (line != null) {
+				String[] tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Resident friend = getResident(token);
+						if (friend != null)
+							resident.addFriend(friend);
 					}
 				}
-
-				line = kvFile.get("protectionStatus");
-				if (line != null)
-					resident.setPermissions(line);
-
-				line = kvFile.get("townBlocks");
-				if (line != null)
-					utilLoadTownBlocks(line, null, resident);
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
-				return false;
 			}
-
-			return true;
-		} else
+			
+			line = keys.get("protectionStatus");
+			if (line != null)
+				resident.setPermissions(line);
+			
+			line = keys.get("townBlocks");
+			if (line != null)
+				utilLoadTownBlocks(line, null, resident);
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
 			return false;
+		}
+		
+		return true;
+		
 	}
-
+	
 	@Override
 	public boolean loadTown(Town town) {
-
+		
 		String line = null;
 		String[] tokens;
 		String path = getTownFilename(town);
 		File fileTown = new File(path);
-		if (fileTown.exists() && fileTown.isFile()) {
-			try {
-				KeyValueFile kvFile = new KeyValueFile(path);
-
-				line = kvFile.get("residents");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
-							Resident resident = getResident(token);
-							if (resident != null) {
-								try {
-									town.addResident(resident);
-								} catch (AlreadyRegisteredException e) {
-									TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
-								}
-
-							}
-						}
-					}
-				}
-
-				line = kvFile.get("outlaws");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
+		try {
+			if (!fileTown.getParentFile().mkdirs() && !fileTown.getParentFile().isDirectory()) {
+				throw new IOException("Resident file: " + fileTown.getName() + " parent directory was a file!");
+			}
+			if (!fileTown.exists() && !fileTown.createNewFile()) {
+				throw new IOException("Resident file: " + fileTown.getName() + " was not able to be created!");
+			}
+			HashMap<String, String> keys = new HashMap<>();
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(fileTown));
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				keys.put(key, String.valueOf(value));
+			}
+			
+			line = keys.get("residents");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
+						Resident resident = getResident(token);
+						if (resident != null) {
 							try {
-								Resident outlaw = getResident(token);
-								if (outlaw != null)
-									town.addOutlaw(outlaw);
+								town.addResident(resident);
+							} catch (AlreadyRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
 							}
-							catch(NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
-							}
+							
 						}
 					}
 				}
-
-				line = kvFile.get("mayor");
-				if (line != null)
-					town.setMayor(getResident(line));
-
-				//				line = kvFile.get("assistants");
-				//				if (line != null) {
-				//					tokens = line.split(",");
-				//					for (String token : tokens) {
-				//						if (!token.isEmpty()) {
-				//							Resident assistant = getResident(token);
-				//							if ((assistant != null) && (town.hasResident(assistant)))
-				//								town.addAssistant(assistant);
-				//						}
-				//					}
-				//				}
-
-				town.setTownBoard(kvFile.get("townBoard"));
-
-				line = kvFile.get("tag");
-				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
-
-				line = kvFile.get("protectionStatus");
-				if (line != null)
-					town.setPermissions(line);
-
-				line = kvFile.get("bonusBlocks");
-				if (line != null)
-					try {
-						town.setBonusBlocks(Integer.parseInt(line));
-					} catch (Exception e) {
-						town.setBonusBlocks(0);
-					}
-
-				line = kvFile.get("purchasedBlocks");
-				if (line != null)
-					try {
-						town.setPurchasedBlocks(Integer.parseInt(line));
-					} catch (Exception e) {
-						town.setPurchasedBlocks(0);
-					}
-
-				line = kvFile.get("plotPrice");
-				if (line != null)
-					try {
-						town.setPlotPrice(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setPlotPrice(0);
-					}
-
-				line = kvFile.get("hasUpkeep");
-				if (line != null)
-					try {
-						town.setHasUpkeep(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("taxpercent");
-				if (line != null)
-					try {
-						town.setTaxPercentage(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("taxes");
-				if (line != null)
-					try {
-						town.setTaxes(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setTaxes(0);
-					}
-
-				line = kvFile.get("plotTax");
-				if (line != null)
-					try {
-						town.setPlotTax(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setPlotTax(0);
-					}
-
-				line = kvFile.get("commercialPlotPrice");
-				if (line != null)
-					try {
-						town.setCommercialPlotPrice(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setCommercialPlotPrice(0);
-					}
-
-				line = kvFile.get("commercialPlotTax");
-				if (line != null)
-					try {
-						town.setCommercialPlotTax(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setCommercialPlotTax(0);
-					}
-
-				line = kvFile.get("embassyPlotPrice");
-				if (line != null)
-					try {
-						town.setEmbassyPlotPrice(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setEmbassyPlotPrice(0);
-					}
-
-				line = kvFile.get("embassyPlotTax");
-				if (line != null)
-					try {
-						town.setEmbassyPlotTax(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setEmbassyPlotTax(0);
-					}
-
-				line = kvFile.get("spawnCost");
-				if (line != null)
-					try {
-						town.setSpawnCost(Double.parseDouble(line));
-					} catch (Exception e) {
-						town.setSpawnCost(TownySettings.getSpawnTravelCost());
-					}
-
-				line = kvFile.get("adminDisabledPvP");
-				if (line != null)
-					try {
-						town.setAdminDisabledPVP(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				/*
-				 * line = kvFile.get("mobs");
-				 * if (line != null)
-				 * try {
-				 * town.setHasMobs(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 */
-				line = kvFile.get("open");
-				if (line != null)
-					try {
-						town.setOpen(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("public");
-				if (line != null)
-					try {
-						town.setPublic(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				/*
-				 * line = kvFile.get("explosion");
-				 * if (line != null)
-				 * try {
-				 * town.setBANG(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 *
-				 * line = kvFile.get("fire");
-				 * if (line != null)
-				 * try {
-				 * town.setFire(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 */
-				line = kvFile.get("townBlocks");
-				if (line != null)
-					utilLoadTownBlocks(line, town, null);
-
-				line = kvFile.get("homeBlock");
-				if (line != null) {
-					tokens = line.split(",");
-					if (tokens.length == 3)
+			}
+			
+			line = keys.get("outlaws");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						TownyMessaging.sendDebugMsg("Town Fetching Outlaw: " + token);
 						try {
-							TownyWorld world = getWorld(tokens[0]);
-
-							try {
-								int x = Integer.parseInt(tokens[1]);
-								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = world.getTownBlock(x, z);
-								town.forceSetHomeBlock(homeBlock);
-							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-							}
-
+							Resident outlaw = getResident(token);
+							if (outlaw != null)
+								town.addOutlaw(outlaw);
 						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+							TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
 						}
+					}
 				}
-
-				line = kvFile.get("spawn");
-				if (line != null) {
-					tokens = line.split(",");
+			}
+			
+			line = keys.get("mayor");
+			if (line != null)
+				town.setMayor(getResident(line));
+			
+			//				line = kvFile.get("assistants");
+			//				if (line != null) {
+			//					tokens = line.split(",");
+			//					for (String token : tokens) {
+			//						if (!token.isEmpty()) {
+			//							Resident assistant = getResident(token);
+			//							if ((assistant != null) && (town.hasResident(assistant)))
+			//								town.addAssistant(assistant);
+			//						}
+			//					}
+			//				}
+			
+			town.setTownBoard(keys.get("townBoard"));
+			
+			line = keys.get("tag");
+			if (line != null)
+				try {
+					town.setTag(line);
+				} catch (TownyException e) {
+					town.setTag("");
+				}
+			
+			line = keys.get("protectionStatus");
+			if (line != null)
+				town.setPermissions(line);
+			
+			line = keys.get("bonusBlocks");
+			if (line != null)
+				try {
+					town.setBonusBlocks(Integer.parseInt(line));
+				} catch (Exception e) {
+					town.setBonusBlocks(0);
+				}
+			
+			line = keys.get("purchasedBlocks");
+			if (line != null)
+				try {
+					town.setPurchasedBlocks(Integer.parseInt(line));
+				} catch (Exception e) {
+					town.setPurchasedBlocks(0);
+				}
+			
+			line = keys.get("plotPrice");
+			if (line != null)
+				try {
+					town.setPlotPrice(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setPlotPrice(0);
+				}
+			
+			line = keys.get("hasUpkeep");
+			if (line != null)
+				try {
+					town.setHasUpkeep(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("taxpercent");
+			if (line != null)
+				try {
+					town.setTaxPercentage(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("taxes");
+			if (line != null)
+				try {
+					town.setTaxes(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setTaxes(0);
+				}
+			
+			line = keys.get("plotTax");
+			if (line != null)
+				try {
+					town.setPlotTax(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setPlotTax(0);
+				}
+			
+			line = keys.get("commercialPlotPrice");
+			if (line != null)
+				try {
+					town.setCommercialPlotPrice(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setCommercialPlotPrice(0);
+				}
+			
+			line = keys.get("commercialPlotTax");
+			if (line != null)
+				try {
+					town.setCommercialPlotTax(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setCommercialPlotTax(0);
+				}
+			
+			line = keys.get("embassyPlotPrice");
+			if (line != null)
+				try {
+					town.setEmbassyPlotPrice(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setEmbassyPlotPrice(0);
+				}
+			
+			line = keys.get("embassyPlotTax");
+			if (line != null)
+				try {
+					town.setEmbassyPlotTax(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setEmbassyPlotTax(0);
+				}
+			
+			line = keys.get("spawnCost");
+			if (line != null)
+				try {
+					town.setSpawnCost(Double.parseDouble(line));
+				} catch (Exception e) {
+					town.setSpawnCost(TownySettings.getSpawnTravelCost());
+				}
+			
+			line = keys.get("adminDisabledPvP");
+			if (line != null)
+				try {
+					town.setAdminDisabledPVP(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			/*
+			 * line = kvFile.get("mobs");
+			 * if (line != null)
+			 * try {
+			 * town.setHasMobs(Boolean.parseBoolean(line));
+			 * } catch (NumberFormatException nfe) {
+			 * } catch (Exception e) {
+			 * }
+			 */
+			line = keys.get("open");
+			if (line != null)
+				try {
+					town.setOpen(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("public");
+			if (line != null)
+				try {
+					town.setPublic(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			/*
+			 * line = kvFile.get("explosion");
+			 * if (line != null)
+			 * try {
+			 * town.setBANG(Boolean.parseBoolean(line));
+			 * } catch (NumberFormatException nfe) {
+			 * } catch (Exception e) {
+			 * }
+			 *
+			 * line = kvFile.get("fire");
+			 * if (line != null)
+			 * try {
+			 * town.setFire(Boolean.parseBoolean(line));
+			 * } catch (NumberFormatException nfe) {
+			 * } catch (Exception e) {
+			 * }
+			 */
+			line = keys.get("townBlocks");
+			if (line != null)
+				utilLoadTownBlocks(line, town, null);
+			
+			line = keys.get("homeBlock");
+			if (line != null) {
+				tokens = line.split(",");
+				if (tokens.length == 3)
+					try {
+						TownyWorld world = getWorld(tokens[0]);
+						
+						try {
+							int x = Integer.parseInt(tokens[1]);
+							int z = Integer.parseInt(tokens[2]);
+							TownBlock homeBlock = world.getTownBlock(x, z);
+							town.forceSetHomeBlock(homeBlock);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+						}
+						
+					} catch (NotRegisteredException e) {
+						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+					}
+			}
+			
+			line = keys.get("spawn");
+			if (line != null) {
+				tokens = line.split(",");
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+						
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						town.forceSetSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+			
+			// Load outpost spawns
+			line = keys.get("outpostspawns");
+			if (line != null) {
+				String[] outposts = line.split(";");
+				for (String spawn : outposts) {
+					tokens = spawn.split(",");
 					if (tokens.length >= 4)
 						try {
 							World world = plugin.getServerWorld(tokens[0]);
 							double x = Double.parseDouble(tokens[1]);
 							double y = Double.parseDouble(tokens[2]);
 							double z = Double.parseDouble(tokens[3]);
-
+							
 							Location loc = new Location(world, x, y, z);
 							if (tokens.length == 6) {
 								loc.setPitch(Float.parseFloat(tokens[4]));
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
-							town.forceSetSpawn(loc);
+							town.forceAddOutpostSpawn(loc);
 						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 						}
 				}
-
-				// Load outpost spawns
-				line = kvFile.get("outpostspawns");
-				if (line != null) {
-					String[] outposts = line.split(";");
-					for (String spawn : outposts) {
-						tokens = spawn.split(",");
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddOutpostSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-							}
-					}
-				}
-
-				// Load jail spawns
-				line = kvFile.get("jailspawns");
-				if (line != null) {
-					String[] jails = line.split(";");
-					for (String spawn : jails) {
-						tokens = spawn.split(",");
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddJailSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-							}
-					}
-				}
-
-				line = kvFile.get("uuid");
-				if (line != null) {
-					try {
-						town.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException ee) {
-						town.setUuid(UUID.randomUUID());
-					}
-				}
-				line = kvFile.get("registered");
-				if (line != null){
-					try {
-						town.setRegistered(Long.valueOf(line));
-					} catch (Exception ee){
-						town.setRegistered(0);
-					}
-				}
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
-				return false;
 			}
-
-			return true;
-		} else
+			
+			// Load jail spawns
+			line = keys.get("jailspawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					tokens = spawn.split(",");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+							
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							town.forceAddJailSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						}
+				}
+			}
+			
+			line = keys.get("uuid");
+			if (line != null) {
+				try {
+					town.setUuid(UUID.fromString(line));
+				} catch (IllegalArgumentException ee) {
+					town.setUuid(UUID.randomUUID());
+				}
+			}
+			line = keys.get("registered");
+			if (line != null) {
+				try {
+					town.setRegistered(Long.valueOf(line));
+				} catch (Exception ee) {
+					town.setRegistered(0);
+				}
+			}
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 			return false;
+		}
+		
+		return true;
+		
 	}
-
+	
 	@Override
 	public boolean loadNation(Nation nation) {
-
+		
 		String line = "";
 		String[] tokens;
 		String path = getNationFilename(nation);
-		File fileResident = new File(path);
-		if (fileResident.exists() && fileResident.isFile()) {
-			try {
-				KeyValueFile kvFile = new KeyValueFile(path);
-
-				line = kvFile.get("towns");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null)
-								nation.addTown(town);
-						}
-					}
-				}
-
-				line = kvFile.get("capital");
-				if (line != null)
-					nation.setCapital(getTown(line));
-
-				//				line = kvFile.get("assistants");
-				//				if (line != null) {
-				//					tokens = line.split(",");
-				//					for (String token : tokens) {
-				//						if (!token.isEmpty()) {
-				//							Resident assistant = getResident(token);
-				//							if (assistant != null)
-				//								nation.addAssistant(assistant);
-				//						}
-				//					}
-				//				}
-
-				line = kvFile.get("nationBoard");
-				if (line != null)
-					try {
-						nation.setNationBoard(line);
-					} catch (Exception e) {
-						nation.setNationBoard("");
-					}
-				
-
-				line = kvFile.get("tag");
-				if (line != null)
-					try {
-						nation.setTag(line);
-					} catch (TownyException e) {
-						nation.setTag("");
-					}
-
-				line = kvFile.get("allies");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Nation friend = getNation(token);
-							if (friend != null)
-								nation.addAlly(friend); //("ally", friend);
-						}
-					}
-				}
-
-				line = kvFile.get("enemies");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Nation enemy = getNation(token);
-							if (enemy != null)
-								nation.addEnemy(enemy); //("enemy", enemy);
-						}
-					}
-				}
-
-				line = kvFile.get("taxes");
-				if (line != null)
-					try {
-						nation.setTaxes(Double.parseDouble(line));
-					} catch (Exception e) {
-						nation.setTaxes(0.0);
-					}
-
-				line = kvFile.get("spawnCost");
-				if (line != null)
-					try {
-						nation.setSpawnCost(Double.parseDouble(line));
-					} catch (Exception e) {
-						nation.setSpawnCost(TownySettings.getSpawnTravelCost());
-					}
-
-				line = kvFile.get("neutral");
-				if (line != null)
-					try {
-						nation.setNeutral(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("uuid");
-				if (line != null) {
-					try {
-						nation.setUuid(UUID.fromString(line));
-					} catch (IllegalArgumentException ee) {
-						nation.setUuid(UUID.randomUUID());
-					}
-				}
-				line = kvFile.get("registered");
-				if (line != null){
-					try {
-						nation.setRegistered(Long.valueOf(line));
-					} catch (Exception ee){
-						nation.setRegistered(0);
-					}
-				}
-
-				line = kvFile.get("nationSpawn");
-				if (line != null) {
-					tokens = line.split(",");
-					if (tokens.length >= 4)
-						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							nation.forceSetNationSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-						}
-				}
-
-				line = kvFile.get("isPublic");
-				if (line != null)
-					try {
-						nation.setPublic(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
-				return false;
+		File fileNation = new File(path);
+		try {
+			if (!fileNation.getParentFile().mkdirs() && !fileNation.getParentFile().isDirectory()) {
+				throw new IOException("Resident file: " + fileNation.getName() + " parent directory was a file!");
 			}
-
-			return true;
-		} else
+			if (!fileNation.exists() && !fileNation.createNewFile()) {
+				throw new IOException("Resident file: " + fileNation.getName() + " was not able to be created!");
+			}
+			HashMap<String, String> keys = new HashMap<>();
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(fileNation));
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				keys.put(key, String.valueOf(value));
+			}
+			
+			line = keys.get("towns");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
+						Town town = getTown(token);
+						if (town != null)
+							nation.addTown(town);
+					}
+				}
+			}
+			
+			line = keys.get("capital");
+			if (line != null)
+				nation.setCapital(getTown(line));
+			
+			line = keys.get("nationBoard");
+			if (line != null)
+				try {
+					nation.setNationBoard(line);
+				} catch (Exception e) {
+					nation.setNationBoard("");
+				}
+			
+			
+			line = keys.get("tag");
+			if (line != null)
+				try {
+					nation.setTag(line);
+				} catch (TownyException e) {
+					nation.setTag("");
+				}
+			
+			line = keys.get("allies");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Nation friend = getNation(token);
+						if (friend != null)
+							nation.addAlly(friend); //("ally", friend);
+					}
+				}
+			}
+			
+			line = keys.get("enemies");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Nation enemy = getNation(token);
+						if (enemy != null)
+							nation.addEnemy(enemy); //("enemy", enemy);
+					}
+				}
+			}
+			
+			line = keys.get("taxes");
+			if (line != null)
+				try {
+					nation.setTaxes(Double.parseDouble(line));
+				} catch (Exception e) {
+					nation.setTaxes(0.0);
+				}
+			
+			line = keys.get("spawnCost");
+			if (line != null)
+				try {
+					nation.setSpawnCost(Double.parseDouble(line));
+				} catch (Exception e) {
+					nation.setSpawnCost(TownySettings.getSpawnTravelCost());
+				}
+			
+			line = keys.get("neutral");
+			if (line != null)
+				try {
+					nation.setNeutral(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("uuid");
+			if (line != null) {
+				try {
+					nation.setUuid(UUID.fromString(line));
+				} catch (IllegalArgumentException ee) {
+					nation.setUuid(UUID.randomUUID());
+				}
+			}
+			line = keys.get("registered");
+			if (line != null) {
+				try {
+					nation.setRegistered(Long.valueOf(line));
+				} catch (Exception ee) {
+					nation.setRegistered(0);
+				}
+			}
+			
+			line = keys.get("nationSpawn");
+			if (line != null) {
+				tokens = line.split(",");
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+						
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						nation.forceSetNationSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+			
+			line = keys.get("isPublic");
+			if (line != null)
+				try {
+					nation.setPublic(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 			return false;
+		}
+		
+		return true;
 	}
-
+	
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-
+		
 		String line = "";
 		String[] tokens;
 		String path = getWorldFilename(world);
-
+		
 		// create the world file if it doesn't exist
 		try {
 			FileMgmt.checkFiles(path);
 		} catch (IOException e1) {
 			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading file " + path);
 		}
-
+		
 		File fileWorld = new File(path);
-		if (fileWorld.exists() && fileWorld.isFile()) {
-			try {
-				KeyValueFile kvFile = new KeyValueFile(path);
-
-				line = kvFile.get("towns");
-				if (line != null) {
-					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null) {
-								town.setWorld(world);
-								//world.addTown(town); not needed as it's handled in the Town object
-							}
+		try {
+			if (!fileWorld.getParentFile().mkdirs() && !fileWorld.getParentFile().isDirectory()) {
+				throw new IOException("Resident file: " + fileWorld.getName() + " parent directory was a file!");
+			}
+			if (!fileWorld.exists() && !fileWorld.createNewFile()) {
+				throw new IOException("Resident file: " + fileWorld.getName() + " was not able to be created!");
+			}
+			HashMap<String, String> keys = new HashMap<>();
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(fileWorld));
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				keys.put(key, String.valueOf(value));
+			}
+			
+			line = keys.get("towns");
+			if (line != null) {
+				tokens = line.split(",");
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						TownyMessaging.sendDebugMsg("World Fetching Town: " + token);
+						Town town = getTown(token);
+						if (town != null) {
+							town.setWorld(world);
+							//world.addTown(town); not needed as it's handled in the Town object
 						}
 					}
 				}
-
-				line = kvFile.get("claimable");
-				if (line != null)
-					try {
-						world.setClaimable(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("pvp");
-				if (line != null)
-					try {
-						world.setPVP(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("forcepvp");
-				if (line != null)
-					try {
-						world.setForcePVP(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("forcetownmobs");
-				if (line != null)
-					try {
-						world.setForceTownMobs(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("worldmobs");
-				if (line != null)
-					try {
-						world.setWorldMobs(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("firespread");
-				if (line != null)
-					try {
-						world.setFire(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("forcefirespread");
-				if (line != null)
-					try {
-						world.setForceFire(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("explosions");
-				if (line != null)
-					try {
-						world.setExpl(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("forceexplosions");
-				if (line != null)
-					try {
-						world.setForceExpl(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("endermanprotect");
-				if (line != null)
-					try {
-						world.setEndermanProtect(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("disableplayertrample");
-				if (line != null)
-					try {
-						world.setDisablePlayerTrample(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("disablecreaturetrample");
-				if (line != null)
-					try {
-						world.setDisableCreatureTrample(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("unclaimedZoneBuild");
-				if (line != null)
-					try {
-						world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("unclaimedZoneDestroy");
-				if (line != null)
-					try {
-						world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("unclaimedZoneSwitch");
-				if (line != null)
-					try {
-						world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("unclaimedZoneItemUse");
-				if (line != null)
-					try {
-						world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("unclaimedZoneName");
-				if (line != null)
-					try {
-						world.setUnclaimedZoneName(line);
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("unclaimedZoneIgnoreIds");
-				if (line != null)
-					try {
-						List<String> mats = new ArrayList<>();
-						for (String s : line.split(","))
-							if (!s.isEmpty())
-								try {
-									int id = Integer.parseInt(s);
-
-									mats.add(BukkitTools.getMaterial(id).name());
-
-								} catch (NumberFormatException e) {
-									mats.add(s);
-								}
-						world.setUnclaimedZoneIgnore(mats);
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingPlotManagementDelete");
-				if (line != null)
-					try {
-						world.setUsingPlotManagementDelete(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("plotManagementDeleteIds");
-				if (line != null)
-					try {
-						//List<Integer> nums = new ArrayList<Integer>();
-						List<String> mats = new ArrayList<>();
-						for (String s : line.split(","))
-							if (!s.isEmpty())
-								try {
-									int id = Integer.parseInt(s);
-
-									mats.add(BukkitTools.getMaterial(id).name());
-
-								} catch (NumberFormatException e) {
-									mats.add(s);
-								}
-						world.setPlotManagementDeleteIds(mats);
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingPlotManagementMayorDelete");
-				if (line != null)
-					try {
-						world.setUsingPlotManagementMayorDelete(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				line = kvFile.get("plotManagementMayorDelete");
-				if (line != null)
-					try {
-						List<String> materials = new ArrayList<>();
-						for (String s : line.split(","))
-							if (!s.isEmpty())
-								try {
-									materials.add(s.toUpperCase().trim());
-								} catch (NumberFormatException ignored) {
-								}
-						world.setPlotManagementMayorDelete(materials);
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingPlotManagementRevert");
-				if (line != null)
-					try {
-						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				/*
-				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-				 */
+			}
+			
+			line = keys.get("claimable");
+			if (line != null)
+				try {
+					world.setClaimable(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("pvp");
+			if (line != null)
+				try {
+					world.setPVP(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("forcepvp");
+			if (line != null)
+				try {
+					world.setForcePVP(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("forcetownmobs");
+			if (line != null)
+				try {
+					world.setForceTownMobs(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("worldmobs");
+			if (line != null)
+				try {
+					world.setWorldMobs(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("firespread");
+			if (line != null)
+				try {
+					world.setFire(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("forcefirespread");
+			if (line != null)
+				try {
+					world.setForceFire(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("explosions");
+			if (line != null)
+				try {
+					world.setExpl(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("forceexplosions");
+			if (line != null)
+				try {
+					world.setForceExpl(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("endermanprotect");
+			if (line != null)
+				try {
+					world.setEndermanProtect(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("disableplayertrample");
+			if (line != null)
+				try {
+					world.setDisablePlayerTrample(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("disablecreaturetrample");
+			if (line != null)
+				try {
+					world.setDisableCreatureTrample(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("unclaimedZoneBuild");
+			if (line != null)
+				try {
+					world.setUnclaimedZoneBuild(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("unclaimedZoneDestroy");
+			if (line != null)
+				try {
+					world.setUnclaimedZoneDestroy(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("unclaimedZoneSwitch");
+			if (line != null)
+				try {
+					world.setUnclaimedZoneSwitch(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("unclaimedZoneItemUse");
+			if (line != null)
+				try {
+					world.setUnclaimedZoneItemUse(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("unclaimedZoneName");
+			if (line != null)
+				try {
+					world.setUnclaimedZoneName(line);
+				} catch (Exception ignored) {
+				}
+			line = keys.get("unclaimedZoneIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					for (String s : line.split(","))
+						if (!s.isEmpty())
+							try {
+								int id = Integer.parseInt(s);
+								
+								mats.add(BukkitTools.getMaterial(id).name());
+								
+							} catch (NumberFormatException e) {
+								mats.add(s);
+							}
+					world.setUnclaimedZoneIgnore(mats);
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingPlotManagementDelete");
+			if (line != null)
+				try {
+					world.setUsingPlotManagementDelete(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("plotManagementDeleteIds");
+			if (line != null)
+				try {
+					//List<Integer> nums = new ArrayList<Integer>();
+					List<String> mats = new ArrayList<>();
+					for (String s : line.split(","))
+						if (!s.isEmpty())
+							try {
+								int id = Integer.parseInt(s);
+								
+								mats.add(BukkitTools.getMaterial(id).name());
+								
+							} catch (NumberFormatException e) {
+								mats.add(s);
+							}
+					world.setPlotManagementDeleteIds(mats);
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingPlotManagementMayorDelete");
+			if (line != null)
+				try {
+					world.setUsingPlotManagementMayorDelete(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			line = keys.get("plotManagementMayorDelete");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					for (String s : line.split(","))
+						if (!s.isEmpty())
+							try {
+								materials.add(s.toUpperCase().trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementMayorDelete(materials);
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingPlotManagementRevert");
+			if (line != null)
+				try {
+					world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			/*
+			 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
+			 */
 //				line = kvFile.get("usingPlotManagementRevertSpeed");
 //				if (line != null)
 //					try {
 //						world.setPlotManagementRevertSpeed(Long.parseLong(line));
 //					} catch (Exception e) {
 //					}
-				line = kvFile.get("plotManagementIgnoreIds");
-				if (line != null)
-					try {
-						List<String> mats = new ArrayList<>();
-						for (String s : line.split(","))
-							if (!s.isEmpty())
-								try {
-									int id = Integer.parseInt(s);
-
-									mats.add(BukkitTools.getMaterial(id).name());
-
-								} catch (NumberFormatException e) {
-									mats.add(s);
-								}
-						world.setPlotManagementIgnoreIds(mats);
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingPlotManagementWildRegen");
-				if (line != null)
-					try {
-						world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("PlotManagementWildRegenEntities");
-				if (line != null)
-					try {
-						List<String> entities = new ArrayList<>();
-						for (String s : line.split(","))
-							if (!s.isEmpty())
-								try {
-									entities.add(s.trim());
-								} catch (NumberFormatException ignored) {
-								}
-						world.setPlotManagementWildRevertEntities(entities);
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingPlotManagementWildRegenDelay");
-				if (line != null)
-					try {
-						world.setPlotManagementWildRevertDelay(Long.parseLong(line));
-					} catch (Exception ignored) {
-					}
-
-				line = kvFile.get("usingTowny");
-				if (line != null)
-					try {
-						world.setUsingTowny(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-
-				// loadTownBlocks(world);
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
-				return false;
-			}
-
-			return true;
-		} else {
-			TownyMessaging.sendErrorMsg("Loading Error: File error while reading " + world.getName() + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
+			line = keys.get("plotManagementIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					for (String s : line.split(","))
+						if (!s.isEmpty())
+							try {
+								int id = Integer.parseInt(s);
+								
+								mats.add(BukkitTools.getMaterial(id).name());
+								
+							} catch (NumberFormatException e) {
+								mats.add(s);
+							}
+					world.setPlotManagementIgnoreIds(mats);
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingPlotManagementWildRegen");
+			if (line != null)
+				try {
+					world.setUsingPlotManagementWildRevert(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("PlotManagementWildRegenEntities");
+			if (line != null)
+				try {
+					List<String> entities = new ArrayList<>();
+					for (String s : line.split(","))
+						if (!s.isEmpty())
+							try {
+								entities.add(s.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertEntities(entities);
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingPlotManagementWildRegenDelay");
+			if (line != null)
+				try {
+					world.setPlotManagementWildRevertDelay(Long.parseLong(line));
+				} catch (Exception ignored) {
+				}
+			
+			line = keys.get("usingTowny");
+			if (line != null)
+				try {
+					world.setUsingTowny(Boolean.parseBoolean(line));
+				} catch (Exception ignored) {
+				}
+			
+			// loadTownBlocks(world);
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 			return false;
 		}
+		
+		return true;
 	}
-
+	
 	@Override
 	public boolean loadTownBlocks() {
-
+		
 		String line = "";
 		String path;
-
+		
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			path = getTownBlockFilename(townBlock);
 			//boolean set = false;
-
+			
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
 				try {
-					KeyValueFile kvFile = new KeyValueFile(path);
-
-					line = kvFile.get("name");
+					if (!fileTownBlock.getParentFile().mkdirs() && !fileTownBlock.getParentFile().isDirectory()) {
+						throw new IOException("Resident file: " + fileTownBlock.getName() + " parent directory was a file!");
+					}
+					if (!fileTownBlock.exists() && !fileTownBlock.createNewFile()) {
+						throw new IOException("Resident file: " + fileTownBlock.getName() + " was not able to be created!");
+					}
+					HashMap<String, String> keys = new HashMap<>();
+					Properties properties = new Properties();
+					properties.load(new FileInputStream(fileTownBlock));
+					for (String key : properties.stringPropertyNames()) {
+						String value = properties.getProperty(key);
+						keys.put(key, String.valueOf(value));
+					}
+					
+					line = keys.get("name");
 					if (line != null)
 						try {
 							townBlock.setName(line.trim());
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("price");
+					
+					line = keys.get("price");
 					if (line != null)
 						try {
 							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("town");
+					
+					line = keys.get("town");
 					if (line != null)
 						try {
 							Town town = getTown(line.trim());
 							townBlock.setTown(town);
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("resident");
+					
+					line = keys.get("resident");
 					if (line != null && !line.isEmpty())
 						try {
 							Resident res = getResident(line.trim());
 							townBlock.setResident(res);
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("type");
+					
+					line = keys.get("type");
 					if (line != null)
 						try {
 							townBlock.setType(Integer.parseInt(line));
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("outpost");
+					
+					line = keys.get("outpost");
 					if (line != null)
 						try {
 							townBlock.setOutpost(Boolean.parseBoolean(line));
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.get("permissions");
+					
+					line = keys.get("permissions");
 					if ((line != null) && !line.isEmpty())
 						try {
 							townBlock.setPermissions(line.trim());
 							//set = true;
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.get("changed");
+					
+					line = keys.get("changed");
 					if (line != null)
 						try {
 							townBlock.setChanged(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.get("locked");
+					
+					line = keys.get("locked");
 					if (line != null)
 						try {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-
-					line = kvFile.getString("town");
+					
+					line = keys.get("town");
 					if (line.isEmpty()) {
 						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
 						deleteTownBlock(townBlock);
@@ -1452,12 +1488,12 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyWorld world = townBlock.getWorld();
 						world.removeTownBlock(townBlock);
 					}
-
+					
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
-
+				
 				//				if (!set) {
 				//					// no permissions found so set in relation to it's owners perms.
 				//					try {
@@ -1477,7 +1513,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 		}
 		saveTownBlockList();
-
+		
 		return true;
 	}
 
