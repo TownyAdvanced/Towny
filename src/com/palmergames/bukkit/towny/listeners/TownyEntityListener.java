@@ -809,6 +809,11 @@ public class TownyEntityListener implements Listener {
 									TownyRegenAPI.addProtectionRegenTask(task);
 									event.setYield((float) 0.0);
 									block.getDrops().clear();
+									// Temporary solution that fixes what is presumably a Spigot issue
+									// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
+									// causing blocks to drop when things are blown up which we will revert.
+									// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
+									block.setType(Material.AIR); // <--- Temp solution.
 								}
 							}
 							// Break the block
@@ -838,6 +843,11 @@ public class TownyEntityListener implements Listener {
 												TownyRegenAPI.addProtectionRegenTask(task);
 												event.setYield((float) 0.0);
 												block.getDrops().clear();
+												// Temporary solution that fixes what is presumably a Spigot issue
+												// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
+												// causing blocks to drop when things are blown up which we will revert.
+												// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
+												block.setType(Material.AIR); // <--- Temp solution.
 											}
 										}
 									}
@@ -901,6 +911,11 @@ public class TownyEntityListener implements Listener {
 											TownyRegenAPI.addProtectionRegenTask(task);
 											event.setYield((float) 0.0);
 											block.getDrops().clear();
+											// Temporary solution that fixes what is presumably a Spigot issue
+											// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
+											// causing blocks to drop when things are blown up which we will revert.
+											// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
+											block.setType(Material.AIR); // <--- Temp solution.
 										}
 										
 										baseData.setPowered(false);
@@ -914,6 +929,11 @@ public class TownyEntityListener implements Listener {
 											TownyRegenAPI.addProtectionRegenTask(task);
 											event.setYield((float) 0.0);
 											block.getDrops().clear();
+											// Temporary solution that fixes what is presumably a Spigot issue
+											// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
+											// causing blocks to drop when things are blown up which we will revert.
+											// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
+											block.setType(Material.AIR); // <--- Temp solution.
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
 													block.getState().getData() instanceof Sign ||
