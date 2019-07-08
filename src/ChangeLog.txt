@@ -3234,3 +3234,4 @@ v0.92.0.11:
       - Add ",BONE_MEAL"
     - Fix for FARM plots protecting monsters.
     - Fix for offline players changing worlds causing an NPE when we try to assign them permissions.  
+    - Fix for explosion regeneration not preventing drops.
