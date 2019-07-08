@@ -611,38 +611,7 @@ public class TownyPlayerListener implements Listener {
 		} catch (NullPointerException e) {
 			from = event.getFrom();
 		}
-
-		// Prevent fly/double jump cheats
-		if (!(event instanceof PlayerTeleportEvent)) {
-			if (TownySettings.isUsingCheatProtection() && (player.getGameMode() != GameMode.CREATIVE) && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.CHEAT_BYPASS.getNode())) {
-				try {
-					if (TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).isUsingTowny())
-						if ((from.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) && (player.getFallDistance() == 0) && (player.getVelocity().getY() <= -0.6) && (player.getLocation().getY() > 0)) {
-							// plugin.sendErrorMsg(player, "Cheat Detected!");
-
-							Location blockLocation = from;
-
-							// find the first non air block below us
-							while ((blockLocation.getBlock().getType() == Material.AIR) && (blockLocation.getY() > 0))
-								blockLocation.setY(blockLocation.getY() - 1);
-
-							// set to 1 block up so we are not sunk in the
-							// ground
-							blockLocation.setY(blockLocation.getY() + 1);
-
-							// Update the cache for this location (same
-							// WorldCoord).
-							cache.setLastLocation(blockLocation);
-							player.teleport(blockLocation);
-							return;
-						}
-				} catch (NotRegisteredException e1) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-					return;
-				}
-			}
-		}
-
+		
 		try {
 			TownyWorld fromWorld = TownyUniverse.getDataSource().getWorld(from.getWorld().getName());
 			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));

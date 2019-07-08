@@ -795,11 +795,6 @@ public enum ConfigNodes {
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
-	PROT_CHEAT(
-			"protection.cheat_protection",
-			"true",
-			"",
-			"# Prevent fly and double block jump cheats."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",

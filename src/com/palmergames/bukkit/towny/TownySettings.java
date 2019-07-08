@@ -2354,11 +2354,6 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);
 	}
 
-	public static boolean isUsingCheatProtection() {
-
-		return getBoolean(ConfigNodes.PROT_CHEAT);
-	}
-
 	public static int getTeleportWarmupTime() {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
