@@ -523,8 +523,8 @@ public class TownyEntityListener implements Listener {
 			}
 
 			// remove from world if set to remove mobs globally
-			if (townyWorld.isUsingTowny())
-				if (!townyWorld.hasWorldMobs() && ((MobRemovalTimerTask.isRemovingWorldEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld()))))) {
+			if (townyWorld.isUsingTowny()) {
+				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
 					if (plugin.isCitizens2()) {
 						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 							// TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled "
@@ -535,7 +535,10 @@ public class TownyEntityListener implements Listener {
 					} else
 						event.setCancelled(true);
 				}
-
+				if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
+					event.setCancelled(true);
+				}
+			}
 			if (!townyWorld.hasTownBlock(coord))
 				return;
 			
@@ -544,7 +547,7 @@ public class TownyEntityListener implements Listener {
 				
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
-						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesTown())))) {
+						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
 							if (plugin.isCitizens2()) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									// TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled "
@@ -556,6 +559,9 @@ public class TownyEntityListener implements Listener {
 								event.setCancelled(true);
 						}
 					}
+				}
+				if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
+					event.setCancelled(true);
 				}
 			} catch (TownyException x) {
 				
