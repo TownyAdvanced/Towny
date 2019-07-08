@@ -719,8 +719,8 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChangeWorld(PlayerChangedWorldEvent event) { // has changed worlds
-
-		TownyPerms.assignPermissions(null, event.getPlayer());
+		if (event.getPlayer().isOnline())
+			TownyPerms.assignPermissions(null, event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

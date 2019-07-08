@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -13,6 +14,7 @@ public class DisallowedPVPEvent extends Event implements Cancellable {
 	private final Player defender;
 
 	public DisallowedPVPEvent(final Player attacker, final Player defender) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.attacker = attacker;
 		this.defender = defender;
 	}

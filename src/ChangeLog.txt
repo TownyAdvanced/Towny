@@ -3221,3 +3221,16 @@ v0.92.0.11:
     - Make Netherrack ignitable in towns where firespread is turned off.
     - Fixed Smoke border particles appearing to be on the wrong. Courtesy of ArticDive.
     - Make FARM plottypes follow plot perms to determine who can slaughter animals in them. Previously it only allowed town members to kill the animals.
+    - Fix for two more async/1.14 tasks. Solves plot claiming exception. 
+    - Fix permissions HUD from throwing an exception, courtesy of ArticDive.
+    - Bump language files to 0.49
+    - More strings have been made translatable, courtesy of TheFlagCourier
+      - 'Total TownBlocks: '
+      - 'Processing Plot (Un)Claim...' 
+    - Fix the last of the async events for good, courtesy of Articdive.
+    - REQUIRED CONFIG CHANGE: in protections.switch_ids
+      - Add ",POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE"
+    - REQUIRED CONFIG CHANGE: in protections.item_use_ids
+      - Add ",BONE_MEAL"
+    - Fix for FARM plots protecting monsters.
+    - Fix for offline players changing worlds causing an NPE when we try to assign them permissions.  

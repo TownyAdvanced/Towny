@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -22,6 +23,7 @@ public class TownInvitePlayerEvent extends Event {
 	}
 
 	public TownInvitePlayerEvent(PlayerJoinTownInvite invite) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.invite = invite;
 	}
 

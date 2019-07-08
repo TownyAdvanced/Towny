@@ -1,14 +1,5 @@
 package com.palmergames.bukkit.towny.huds;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
-
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -20,6 +11,14 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class PermHUD {
 	
@@ -33,6 +32,14 @@ public class PermHUD {
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		String plotName, build, destroy, switching, item, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
+		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
+		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
+		// So we can call the toggleOn Method and return, causing this to be rerun and also the creation
+		// of the scoreboard, at least that's the plan.
+		if (board == null) {
+			toggleOn(p);
+			return;
+		}
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
@@ -84,8 +91,7 @@ public class PermHUD {
 			board.getTeam("mobspawn").setSuffix(" ");
 			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
 		} catch (NullPointerException e) {
-			toggleOn(p);			
-			return;
+			toggleOn(p);
 		}
 	}
 	
@@ -98,7 +104,7 @@ public class PermHUD {
 		}
 		return wildernessName.toString();
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
