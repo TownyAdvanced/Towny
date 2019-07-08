@@ -3235,3 +3235,7 @@ v0.92.0.11:
     - Fix for FARM plots protecting monsters.
     - Fix for offline players changing worlds causing an NPE when we try to assign them permissions.  
     - Fix for explosion regeneration not preventing drops.
+    - Removed Feature: cheat_protection
+      - This feature existed originally as a way to block players from using client-side blocks to jump over walls.
+      - It has become less-than-reliable and after 1.13 added swimming it has become a problem.
+      - Due to the common use of actual anti cheat plugins we are removing this feature entirely. If it still appears as an option in your config you can remove it safely.
