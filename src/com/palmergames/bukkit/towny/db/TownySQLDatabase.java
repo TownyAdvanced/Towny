@@ -48,7 +48,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class TownySQLSource extends TownyDatabaseHandler {
+public class TownySQLDatabase extends TownyDatabaseHandler {
 
     private final Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<>();
     private BukkitTask task = null;
@@ -65,7 +65,7 @@ public class TownySQLSource extends TownyDatabaseHandler {
 
     // private boolean ish2 = false;
 
-    public TownySQLSource(Towny plugin, TownyUniverse universe, String type) {
+    public TownySQLDatabase(Towny plugin, TownyUniverse universe, String type) {
         super(plugin, universe);
         this.type = type;
         try {
@@ -153,17 +153,17 @@ public class TownySQLSource extends TownyDatabaseHandler {
          */
         task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
         
-            while (!TownySQLSource.this.queryQueue.isEmpty()) {
+            while (!TownySQLDatabase.this.queryQueue.isEmpty()) {
             
-                SQL_Task query = TownySQLSource.this.queryQueue.poll();
+                SQL_Task query = TownySQLDatabase.this.queryQueue.poll();
             
                 if (query.update) {
                 
-                    TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+                    TownySQLDatabase.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
                 
                 } else {
                 
-                    TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+                    TownySQLDatabase.this.QueueDeleteDB(query.tb_name, query.args);
                 
                 }
             

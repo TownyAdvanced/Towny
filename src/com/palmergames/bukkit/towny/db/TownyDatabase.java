@@ -37,14 +37,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * Make sure to load TownBlocks, then HomeBlock, then Spawn.
  */
 
-public abstract class TownyDataSource {
+public abstract class TownyDatabase {
 
 	final Lock lock = new ReentrantLock();
 
 	protected final TownyUniverse universe;
 	protected final Towny plugin;
 
-	TownyDataSource(Towny plugin, TownyUniverse universe) {
+	TownyDatabase(Towny plugin, TownyUniverse universe) {
 		this.universe = universe;
 		this.plugin = plugin;
 	}

@@ -55,7 +55,7 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_TOW
  * @author ElgarL
  * 
  */
-public abstract class TownyDatabaseHandler extends TownyDataSource {
+public abstract class TownyDatabaseHandler extends TownyDatabase {
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;

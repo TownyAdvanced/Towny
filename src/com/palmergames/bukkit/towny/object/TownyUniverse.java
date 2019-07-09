@@ -3,9 +3,9 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
-import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.db.TownyDatabase;
+import com.palmergames.bukkit.towny.db.TownyFlatFileDatabase;
+import com.palmergames.bukkit.towny.db.TownySQLDatabase;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -61,7 +61,7 @@ public class TownyUniverse extends TownyObject {
 	protected Hashtable<String, Nation> nations = new Hashtable<>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<>();
 
-	private static TownyDataSource dataSource;
+	private static TownyDatabase dataSource;
 	private static TownyPermissionSource permissionSource;
 	
 	private static War warEvent;
@@ -333,13 +333,13 @@ public class TownyUniverse extends TownyObject {
 			switch (saveDbType.toLowerCase()) {
 				case "ff":
 				case "flatfile": {
-					setDataSource(new TownyFlatFileSource(plugin, this));
+					setDataSource(new TownyFlatFileDatabase(plugin, this));
 					break;
 				}
 				case "h2":
 				case "sqlite":
 				case "mysql": {
-					setDataSource(new TownySQLSource(plugin,this, saveDbType.toLowerCase()));
+					setDataSource(new TownySQLDatabase(plugin,this, saveDbType.toLowerCase()));
 					break;
 				}
 				default: {
@@ -377,7 +377,7 @@ public class TownyUniverse extends TownyObject {
 		File f = new File(plugin.getDataFolder(), "outpostschecked.txt");
 		if (!(f.exists())) {
 			for (Town town : getDataSource().getTowns()) {
-				TownySQLSource.validateTownOutposts(town);
+				TownySQLDatabase.validateTownOutposts(town);
 			}
 			plugin.saveResource("outpostschecked.txt", false);
 		}
@@ -389,13 +389,13 @@ public class TownyUniverse extends TownyObject {
 		switch (dbType.toLowerCase()) {
 			case "ff":
 			case "flatfile": {
-				setDataSource(new TownyFlatFileSource(plugin, this));
+				setDataSource(new TownyFlatFileDatabase(plugin, this));
 				break;
 			}
 			case "h2":
 			case "sqlite":
 			case "mysql": {
-				setDataSource(new TownySQLSource(plugin, this, dbType.toLowerCase()));
+				setDataSource(new TownySQLDatabase(plugin, this, dbType.toLowerCase()));
 				break;
 			}
 			default: {
@@ -415,12 +415,12 @@ public class TownyUniverse extends TownyObject {
 			return rootFolder;
 	}
 
-	private void setDataSource(TownyDataSource dataSource) {
+	private void setDataSource(TownyDatabase dataSource) {
 
 		TownyUniverse.dataSource = dataSource;
 	}
 
-	public static TownyDataSource getDataSource() {
+	public static TownyDatabase getDataSource() {
 
 		return dataSource;
 	}
