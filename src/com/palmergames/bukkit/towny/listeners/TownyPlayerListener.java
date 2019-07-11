@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
@@ -21,20 +22,14 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -63,7 +58,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Attachable;
 import org.bukkit.material.Door;
 import org.bukkit.material.Sign;
 
@@ -94,12 +88,8 @@ public class TownyPlayerListener implements Listener {
 			player.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
 			return;
 		}
-
-		try {
-			plugin.getTownyUniverse().onLogin(player);
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
+		
+		com.palmergames.bukkit.towny.TownyUniverse.getInstance().onLogin(player);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -108,48 +98,47 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			return;
 		}
-
-		plugin.getTownyUniverse().onLogout(event.getPlayer());
+		
+		com.palmergames.bukkit.towny.TownyUniverse.getInstance().onLogout(event.getPlayer());
 
 		// Remove from teleport queue (if exists)
 		try {
-			if (TownyTimerHandler.isTeleportWarmupRunning())
-				plugin.getTownyUniverse().abortTeleportRequest(TownyUniverse.getDataSource().getResident(event.getPlayer().getName().toLowerCase()));
-		} catch (NotRegisteredException e) {
+			if (TownyTimerHandler.isTeleportWarmupRunning()) {
+				TownyAPI.getInstance().abortTeleportRequest(com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabase().getResident(event.getPlayer().getName().toLowerCase()));
+			}
+		} catch (NotRegisteredException ignored) {
 		}
 
 		plugin.deleteCache(event.getPlayer());
 		TownyPerms.removeAttachment(event.getPlayer().getName());
 	}
-
+	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-
 		if (plugin.isError()) {
 			return;
 		}
-
+		
 		Player player = event.getPlayer();
-
+		
 		if (!TownySettings.isTownRespawning())
 			return;
-
-		try {
-			Location respawn = null;			
-			respawn = plugin.getTownyUniverse().getTownSpawnLocation(player);
-			// Check if only respawning in the same world as the town's spawn.
-			if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
-				return;
-	
-			// Bed spawn or town.
-			if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {		
-				event.setRespawnLocation(player.getBedSpawnLocation());	
-			} else {		
-				event.setRespawnLocation(respawn);	
-			}	
-
-		} catch (TownyException e) {
+		
+		Location respawn;
+		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
+		if (respawn == null) {
 			// Town has not set respawn location. Using default.
+			return;
+		}
+		// Check if only respawning in the same world as the town's spawn.
+		if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
+			return;
+		
+		// Bed spawn or town.
+		if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {
+			event.setRespawnLocation(player.getBedSpawnLocation());
+		} else {
+			event.setRespawnLocation(respawn);
 		}
 	}
 	

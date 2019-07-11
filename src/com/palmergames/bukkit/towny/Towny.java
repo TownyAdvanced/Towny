@@ -34,7 +34,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
@@ -93,7 +92,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyWarBlockListener townyWarBlockListener = new TownyWarBlockListener(this);
 	private final TownyWarCustomListener townyWarCustomListener = new TownyWarCustomListener(this);
-	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener(this);
+	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener(this);
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -122,8 +121,7 @@ public class Towny extends JavaPlugin {
 		 * Register bStats Metrics
 		 *  
 		 */
-		@SuppressWarnings("unused")
-		BStats bStatsMetrics = new BStats(this);
+		new BStats(this);
 		
 		/*
 		 * Register MCStats Metrics
@@ -138,7 +136,7 @@ public class Towny extends JavaPlugin {
 
 		version = this.getDescription().getVersion();
 
-		townyUniverse = new TownyUniverse(this);
+		townyUniverse = TownyUniverse.getInstance();
 
 		// Setup classes
 		BukkitTools.initialize(this);
@@ -185,18 +183,15 @@ public class Towny extends JavaPlugin {
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
-				if (player != null)
-					try {
-						getTownyUniverse().onLogin(player);
-					} catch (TownyException x) {
-						TownyMessaging.sendErrorMsg(player, x.getMessage());
-					}
+				if (player != null) {
+					townyUniverse.onLogin(player);
+				}
 		}
 	}
 
 	public void setWorldFlags() {
 
-		for (Town town : TownyUniverse.getDataSource().getTowns()) {
+		for (Town town : TownyUniverse.getInstance().getDatabase().getTowns()) {
 			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
@@ -206,8 +201,8 @@ public class Towny extends JavaPlugin {
 						TownyWorld world = town.getHomeBlock().getWorld();
 						if (!world.hasTown(town)) {
 							world.addTown(town);
-							TownyUniverse.getDataSource().saveTown(town);
-							TownyUniverse.getDataSource().saveWorld(world);
+							TownyUniverse.getInstance().getDatabase().saveTown(town);
+							TownyUniverse.getInstance().getDatabase().saveWorld(world);
 						}
 					} catch (TownyException e) {
 						// Error fetching homeblock
@@ -225,14 +220,17 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("==============================================================");
 
-		if (TownyUniverse.getDataSource() != null && error == false)
-			TownyUniverse.getDataSource().saveQueues();
+		if (TownyUniverse.getInstance().getDatabase() != null && !error) {
+			TownyUniverse.getInstance().getDatabase().saveQueues();
+		}
 
-		if (error == false)
+		if (!error) {
 			TownyWar.onDisable();
+		}
 
-		if (TownyUniverse.isWarTime())
-			getTownyUniverse().getWarEvent().toggleEnd();
+		if (TownyAPI.getInstance().isWarTime()) {
+			TownyAPI.getInstance().getWarEvent().toggleEnd();
+		}
 
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
@@ -246,7 +244,7 @@ public class Towny extends JavaPlugin {
 		playerCache.clear();
 		
 		// Shut down our saving task.
-		TownyUniverse.getDataSource().cancelTask();
+		TownyUniverse.getInstance().getDatabase().cancelTask();
 
 		townyUniverse = null;
 
@@ -432,16 +430,17 @@ public class Towny extends JavaPlugin {
 		}
 		TownySettings.setLastRunVersion(getVersion());
 		
-		TownyUniverse.getDataSource().saveAll();
-		TownyUniverse.getDataSource().cleanup();
+		TownyUniverse.getInstance().getDatabase().saveAll();
+		TownyUniverse.getInstance().getDatabase().cleanup();
 	}
 
 	/**
-	 * Fetch the TownyUniverse instance
+	 * Fetch the TownyUniverse instance.
 	 * 
 	 * @return TownyUniverse
+	 * @deprecated use {@link com.palmergames.bukkit.towny.TownyUniverse#getInstance()}
 	 */
-	public TownyUniverse getTownyUniverse() {
+	public com.palmergames.bukkit.towny.TownyUniverse getTownyUniverse() {
 
 		return townyUniverse;
 	}
@@ -514,8 +513,7 @@ public class Towny extends JavaPlugin {
 	public void newCache(Player player) {
 
 		try {
-			getTownyUniverse();
-			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()), player));
+			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getInstance().getDatabase().getWorld(player.getWorld().getName()), player));
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
 		}
@@ -621,7 +619,7 @@ public class Towny extends JavaPlugin {
 			return;
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());			 
+			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
 			resident.setModes(modes, notify);
 
 		} catch (NotRegisteredException e) {
@@ -637,7 +635,7 @@ public class Towny extends JavaPlugin {
 	public void removePlayerMode(Player player) {
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
 			resident.clearModes();
 
 		} catch (NotRegisteredException e) {
@@ -660,7 +658,7 @@ public class Towny extends JavaPlugin {
 	public List<String> getPlayerMode(String name) {
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(name);
+			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(name);
 			return resident.getModes();
 
 		} catch (NotRegisteredException e) {
@@ -684,7 +682,7 @@ public class Towny extends JavaPlugin {
 	public boolean hasPlayerMode(String name, String mode) {
 
 		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(name);
+			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(name);
 			return resident.hasMode(mode);
 
 		} catch (NotRegisteredException e) {

@@ -22,11 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_NATION_TAX;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.COLLECTED_TONW_TAX;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_NATION;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.UPKEEP_TOWN;
-
 public class DailyTimerTask extends TownyTimerTask {
 
 	public DailyTimerTask(Towny plugin) {
@@ -115,7 +110,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (TownyUniverse.getDataSource().hasNation(nation.getName()))
 				collectNationTaxes(nation);
 		}
-		universe.setChangedNotify(COLLECTED_NATION_TAX);
 	}
 
 	/**
@@ -182,7 +176,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (TownyUniverse.getDataSource().hasTown(town.getName()))
 				collectTownTaxes(town);
 		}
-		universe.setChangedNotify(COLLECTED_TONW_TAX);
 	}
 
 	/**
@@ -378,8 +371,6 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
-
-		universe.setChangedNotify(UPKEEP_TOWN);
 	}
 
 	/**
@@ -389,9 +380,9 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	public void collectNationCosts() throws EconomyException {
 
-		List<Nation> nations = new ArrayList<Nation>(TownyUniverse.getDataSource().getNations());
+		List<Nation> nations = new ArrayList<>(TownyUniverse.getDataSource().getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
-		Nation nation = null;
+		Nation nation;
 
 		while (nationItr.hasNext()) {
 			nation = nationItr.next();
@@ -430,7 +421,5 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 		}
-
-		universe.setChangedNotify(UPKEEP_NATION);
 	}
 }

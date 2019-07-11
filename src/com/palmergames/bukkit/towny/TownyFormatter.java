@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -11,7 +12,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -49,14 +49,12 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
-
-		List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, residentList);
+		List<Resident> onlineResidents = TownCommand.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 

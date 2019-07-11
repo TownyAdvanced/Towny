@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -45,7 +44,7 @@ public class TownyAsciiMap {
 		boolean hasTown = false;
 		Resident resident;
 		try {
-			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
 			if (resident.hasTown())
 				hasTown = true;
 		} catch (TownyException x) {
@@ -55,7 +54,7 @@ public class TownyAsciiMap {
 
 		TownyWorld world;
 		try {
-			world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+			world = TownyUniverse.getInstance().getDatabase().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;

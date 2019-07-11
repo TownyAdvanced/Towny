@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
@@ -23,7 +24,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -38,18 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_NATION;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_RESIDENT;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_TOWN;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_WORLD;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_NATION;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_RESIDENT;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.REMOVE_TOWN_BLOCK;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_NATION;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_RESIDENT;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.RENAME_TOWN;
 
 /**
  * @author ElgarL
@@ -313,7 +301,7 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 			resident.clear();
 			
 			
-			for (Town townOutlaw : TownyUniverse.getDataSource().getTowns()) {
+			for (Town townOutlaw : getTowns()) {
 				if (townOutlaw.hasOutlaw(resident)) {
 					townOutlaw.removeOutlaw(resident);
 					saveTown(townOutlaw);
@@ -328,8 +316,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 			e.printStackTrace();
 		}
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
-
-		universe.setChangedNotify(REMOVE_RESIDENT);
 	}
 
 	@Override
@@ -371,8 +357,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 				TownyRegenAPI.addPlotChunk(plotData, true);
 			}
 		}
-
-		universe.setChangedNotify(REMOVE_TOWN_BLOCK);
 		// Raise an event to signal the unclaim
 		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
 	}
@@ -407,8 +391,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
 
 		universe.getResidentMap().put(filteredName.toLowerCase(), new Resident(filteredName));
-
-		universe.setChangedNotify(NEW_RESIDENT);
 	}
 
 	@Override
@@ -433,8 +415,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		} finally {
 			lock.unlock();
 		}
-
-		universe.setChangedNotify(NEW_TOWN);
 	}
 
 	@Override
@@ -459,7 +439,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		} finally {
 			lock.unlock();
 		}
-		universe.setChangedNotify(NEW_NATION);
 	}
 
 	@Override
@@ -476,8 +455,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
 		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
-
-		universe.setChangedNotify(NEW_WORLD);
 	}
 
 	@Override
@@ -589,8 +566,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		saveWorld(townyWorld);
 
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
-
-		universe.setChangedNotify(REMOVE_TOWN);
 	}
 
 	@Override
@@ -652,8 +627,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		saveNationList();
 
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation.getName()));
-
-		universe.setChangedNotify(REMOVE_NATION);
 	}
 
 	@Override
@@ -812,9 +785,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		}
 
 		BukkitTools.getPluginManager().callEvent(new RenameTownEvent(oldName, town));
-
-		universe.setChangedNotify(RENAME_TOWN);
-
 	}
 		
 
@@ -916,8 +886,6 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		}
 
 		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
-
-		universe.setChangedNotify(RENAME_NATION);
 	}
 
 	@Override
@@ -1053,7 +1021,5 @@ public abstract class TownyDatabaseHandler extends TownyDatabase {
 		}
 		
 		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
-		
-		universe.setChangedNotify(RENAME_RESIDENT);
 	}
 }

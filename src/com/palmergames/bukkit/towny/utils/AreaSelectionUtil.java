@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -9,7 +10,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
@@ -43,7 +43,7 @@ public class AreaSelectionUtil {
 				TownBlock tb = pos.getTownBlock();
 				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
 					Town town = tb.getTown();
-					if (TownyUniverse.isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
+					if (TownyUniverse.getInstance().isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
 						tb.setOutpost(true);
 						out.add(pos);
 					} else {

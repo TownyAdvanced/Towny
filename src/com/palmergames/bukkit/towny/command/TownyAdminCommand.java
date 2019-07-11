@@ -470,7 +470,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
-				TownCommand.townKickResidents(getSender(), town.getMayor(), town, TownyUniverse.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
+				TownCommand.townKickResidents(getSender(), town.getMayor(), town, TownCommand.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -374,7 +375,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (TownyTimerHandler.isTeleportWarmupRunning()) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-					plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);
+					TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 				} else {
 					// Don't use teleport warmup
 					if (player.getVehicle() != null)
@@ -475,8 +476,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
 		String colour;
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
 			if (player.canSee(BukkitTools.getPlayerExact(resident.getName()))) {
 				if (resident.isKing())
 					colour = Colors.Gold;
@@ -495,8 +496,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
 		String colour;
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
 			if (resident.isKing())
 				colour = Colors.Gold;
 			else if (resident.isMayor())

@@ -3,13 +3,13 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
@@ -24,11 +24,9 @@ import org.bukkit.event.Listener;
  * Date: 4/15/12
  */
 public class TownyCustomListener implements Listener {
-
 	private final Towny plugin;
 
 	public TownyCustomListener(Towny instance) {
-
 		plugin = instance;
 	}
 
@@ -53,7 +51,7 @@ public class TownyCustomListener implements Listener {
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				String msg = chunkNotifier.getNotificationString(resident);
 				if (msg != null)

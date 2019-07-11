@@ -2,13 +2,13 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.bukkit.entity.Player;
@@ -38,15 +38,13 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public abstract class TownyDatabase {
-
 	final Lock lock = new ReentrantLock();
-
-	protected final TownyUniverse universe;
 	protected final Towny plugin;
+	protected final TownyUniverse universe;
 
 	TownyDatabase(Towny plugin, TownyUniverse universe) {
-		this.universe = universe;
 		this.plugin = plugin;
+		this.universe = universe;
 	}
 
 	public abstract boolean backup() throws IOException;

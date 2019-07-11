@@ -94,7 +94,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new TownTagChangeEvent(this.tag, this));
-		setChangedName(true);
 	}
 
 	public String getTag() {

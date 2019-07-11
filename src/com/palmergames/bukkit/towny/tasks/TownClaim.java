@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
@@ -13,7 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -34,11 +34,11 @@ import java.util.List;
 public class TownClaim extends Thread {
 
 	Towny plugin;
-	volatile Player player;
-	protected Location outpostLocation;
-	volatile Town town;
-	List<WorldCoord> selection;
-	boolean outpost, claim, forced;
+	private volatile Player player;
+	private Location outpostLocation;
+	private volatile Town town;
+	private List<WorldCoord> selection;
+	private boolean outpost, claim, forced;
 
 	/**
 	 * @param plugin reference to towny
@@ -66,8 +66,8 @@ public class TownClaim extends Thread {
 	@Override
 	public void run() {
 
-		List<TownyWorld> worlds = new ArrayList<TownyWorld>();
-		List<Town> towns = new ArrayList<Town>();
+		List<TownyWorld> worlds = new ArrayList<>();
+		List<Town> towns = new ArrayList<>();
 		TownyWorld world;
 		if (player != null)
 			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Town Claim..." : "Town unclaim..."));
@@ -114,7 +114,7 @@ public class TownClaim extends Thread {
 
 			Resident resident = null;
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
 			} catch (TownyException e) {
 				// Yeah the resident has to exist!
 			}
@@ -131,13 +131,17 @@ public class TownClaim extends Thread {
 			}
 		}
 
-		if (!towns.isEmpty())
-			for (Town test : towns) 
-				TownyUniverse.getDataSource().saveTown(test);
+		if (!towns.isEmpty()) {
+			for (Town test : towns) {
+				TownyUniverse.getInstance().getDatabase().saveTown(test);
+			}
+		}
 
-		if (!worlds.isEmpty())
-			for (TownyWorld test : worlds)
-				TownyUniverse.getDataSource().saveWorld(test);
+		if (!worlds.isEmpty()) {
+			for (TownyWorld test : worlds) {
+				TownyUniverse.getInstance().getDatabase().saveWorld(test);
+			}
+		}
 
 		plugin.resetCache();
 
@@ -187,11 +191,10 @@ public class TownClaim extends Thread {
 					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
 					townBlock.setLocked(true);
 				}
-				plotChunk = null;				
 			}
 
-			TownyUniverse.getDataSource().saveTownBlock(townBlock);
-			TownyUniverse.getDataSource().saveTownBlockList();
+			TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDatabase().saveTownBlockList();
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
@@ -207,23 +210,19 @@ public class TownClaim extends Thread {
 				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
 			}
 			if (!townBlock.isOutpost() && townBlock.hasTown()) {
-				if (TownyUniverse.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
+				if (TownyUniverse.getInstance().isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
 					townBlock.setOutpost(true);
 				}
 			}
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-				@Override
-				public void run() {
-
-					
-					TownyUniverse.getDataSource().removeTownBlock(townBlock);
-					
-					// Raise an event to signal the unclaim
-					// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
-					//BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
-				}
+				
+				TownyUniverse.getInstance().getDatabase().removeTownBlock(townBlock);
+				
+				// Raise an event to signal the unclaim
+				// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
+				//BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
 			}, 1);
 
 		} catch (NotRegisteredException e) {
@@ -233,17 +232,13 @@ public class TownClaim extends Thread {
 
 	public static void townUnclaimAll(Towny plugin, final Town town) {
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-			@Override
-			public void run() {
-
-				TownyUniverse.getDataSource().removeTownBlocks(town);
-				TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
-				
-				// Raise an event to signal the unclaim
-				BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, null));
-			}
+			TownyUniverse.getInstance().getDatabase().removeTownBlocks(town);
+			TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
+			
+			// Raise an event to signal the unclaim
+			BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, null));
 		}, 1);
 
 	}

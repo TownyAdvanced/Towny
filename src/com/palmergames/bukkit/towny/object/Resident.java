@@ -14,11 +14,9 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -29,8 +27,8 @@ import java.util.List;
 
 public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
-	private List<Resident> friends = new ArrayList<Resident>();
-	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
+	private List<Resident> friends = new ArrayList<>();
+	private List<Object[][][]> regenUndo = new ArrayList<>();
 	private Town town = null;
 	private long lastOnline, registered;
 	private boolean isNPC = false;
@@ -42,11 +40,11 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private Location teleportDestination;
 	private double teleportCost;
 	private String chatFormattedName;
-	private List<String> modes = new ArrayList<String>();
+	private List<String> modes = new ArrayList<>();
 	private ConfirmationType confirmationType;
 
-	private List<String> townRanks = new ArrayList<String>();
-	private List<String> nationRanks = new ArrayList<String>();
+	private List<String> townRanks = new ArrayList<>();
+	private List<String> nationRanks = new ArrayList<>();
 
 	public Resident(String name) {
 
@@ -214,7 +212,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (title.matches(" "))
 			title = "";
 		this.title = title;
-		setChangedName(true);
 	}
 
 	public String getTitle() {
@@ -232,7 +229,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (surname.matches(" "))
 			surname = "";
 		this.surname = surname;
-		setChangedName(true);
 	}
 
 	public String getSurname() {
@@ -441,7 +437,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	public void setChatFormattedName(String chatFormattedName) {
 
 		this.chatFormattedName = chatFormattedName;
-		setChangedName(false);
 	}
 
 	//TODO: Restore /tw regen and /tw regen undo functionality.

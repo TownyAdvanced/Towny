@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -54,7 +56,7 @@ public enum NationSpawnLevel {
 	public void checkIfAllowed(Towny plugin, Player player, Nation nation) throws TownyException {
 
 		if (!(isAllowed(nation) && hasPermissionNode(plugin, player, nation))) {
-			boolean war = TownyUniverse.isWarTime();
+			boolean war = TownyAPI.getInstance().isWarTime();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
 				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
@@ -67,20 +69,17 @@ public enum NationSpawnLevel {
 	}
 
 	public boolean isAllowed(Nation nation) {
-
-		return this == NationSpawnLevel.ADMIN ? true : isAllowedNation(nation);
+		return this == NationSpawnLevel.ADMIN || isAllowedNation(nation);
 	}
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Nation nation) {
-
-		return this == NationSpawnLevel.ADMIN ? true : (plugin.isPermissions() && TownyUniverse.getPermissionSource().has(player, this.permissionNode)) || ((!plugin.isPermissions()) && (isAllowedNation(nation)));
+		return this == NationSpawnLevel.ADMIN || ((plugin.isPermissions() && TownyUniverse.getInstance().getPermissionSource().has(player, this.permissionNode)) || ((!plugin.isPermissions()) && (isAllowedNation(nation))));
 	}
 	
-	private boolean isAllowedNation(Nation nation)
-	{
-		boolean war = TownyUniverse.isWarTime();
+	private boolean isAllowedNation(Nation nation) {
+		boolean war = TownyAPI.getInstance().isWarTime();
 		NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
-		return level == NSpawnLevel.TRUE ? true : level == NSpawnLevel.FALSE ? false : level == NSpawnLevel.WAR ? war : !war;
+		return level == NSpawnLevel.TRUE || (level != NSpawnLevel.FALSE && ((level == NSpawnLevel.WAR) == war));
 	}
 
 	public double getCost() {

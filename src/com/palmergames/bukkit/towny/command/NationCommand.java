@@ -3,7 +3,13 @@ package com.palmergames.bukkit.towny.command;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.google.common.collect.ListMultimap;
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
@@ -17,7 +23,15 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.NationSpawnLevel;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -27,7 +41,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -38,7 +51,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import javax.naming.InvalidNameException;
-
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -474,7 +486,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length > 0) {
 			try {
 				Nation nation = TownyUniverse.getDataSource().getNation(split[0]);
-				List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, nation);
+				List<Resident> onlineResidents = TownCommand.getOnlineResidentsViewable(player, nation);
 				if (onlineResidents.size() > 0 ) {
 					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
@@ -718,10 +730,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public void newNation(Player player, String name, String capitalName) {
 
-		TownyUniverse universe = plugin.getTownyUniverse();
+		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		try {
 
-			Town town = TownyUniverse.getDataSource().getTown(capitalName);
+			Town town = universe.getDatabase().getTown(capitalName);
 			if (town.hasNation())
 				throw new TownyException(TownySettings.getLangString("msg_err_already_nation"));
 
@@ -733,13 +745,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || TownyUniverse.getDataSource().hasNation(filteredName))
+			if ((filteredName == null) || universe.getDatabase().hasNation(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
 			if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getNewNationPrice(), "New Nation Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_nation2"), TownySettings.getNewNationPrice()));
 
-			newNation(universe, name, town);
+			newNation(name, town);
 			/*
 			 * universe.newNation(name); Nation nation =
 			 * universe.getNation(name); nation.addTown(town);
@@ -759,7 +771,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public Nation newNation(TownyUniverse universe, String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
 
 		TownyUniverse.getDataSource().newNation(name);
 		Nation nation = TownyUniverse.getDataSource().getNation(name);
@@ -2138,7 +2150,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 
             // Show message if we are using Vault and are charging for spawn travel.
-            if ( !TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) ) {
+            if ( !com.palmergames.bukkit.towny.TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) ) {
                 TownyEconomyObject payee = nation;
                 if (!TownySettings.isTownSpawnPaidToTown())
                     payee = TownyEconomyObject.SERVER_ACCOUNT;
@@ -2161,7 +2173,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 if (TownyTimerHandler.isTeleportWarmupRunning()) {
                     // Use teleport warmup
                     player.sendMessage(String.format(TownySettings.getLangString("msg_nation_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-                    plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);
+                    TownyAPI.getInstance().requestTeleport(player, spawnLoc);
                 } else {
                     // Don't use teleport warmup
                     if (player.getVehicle() != null)
@@ -2171,11 +2183,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     player.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
                 }
             }
-        } catch (TownyException e) {
-            TownyMessaging.sendErrorMsg(player, e.getMessage());
-        } catch (EconomyException e) {
+        } catch (TownyException | EconomyException e) {
             TownyMessaging.sendErrorMsg(player, e.getMessage());
         }
-    }
+	}
 
 }
