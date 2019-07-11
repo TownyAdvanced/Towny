@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -13,7 +15,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -54,7 +55,7 @@ public class TownyEntityMonitorListener implements Listener {
 		TownyWorld World = null;
 
 		try {
-			World = TownyUniverse.getDataSource().getWorld(defenderEntity.getLocation().getWorld().getName());
+			World = TownyUniverse.getInstance().getDatabase().getWorld(defenderEntity.getLocation().getWorld().getName());
 			if (!World.isUsingTowny())
 				return;
 
@@ -78,7 +79,7 @@ public class TownyEntityMonitorListener implements Listener {
 				Resident defenderResident = null;
 
 				try {
-					defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
+					defenderResident = TownyUniverse.getInstance().getDatabase().getResident(defenderPlayer.getName());
 				} catch (NotRegisteredException e) {
 					return;
 				}
@@ -90,7 +91,7 @@ public class TownyEntityMonitorListener implements Listener {
 						attackerPlayer = (Player) projectile.getShooter();
 
 						try {
-							attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
+							attackerResident = TownyUniverse.getInstance().getDatabase().getResident(attackerPlayer.getName());
 						} catch (NotRegisteredException e) {
 						}
 					}
@@ -99,7 +100,7 @@ public class TownyEntityMonitorListener implements Listener {
 					// This was a player kill
 					attackerPlayer = (Player) attackerEntity;
 					try {
-						attackerResident = TownyUniverse.getDataSource().getResident(attackerPlayer.getName());
+						attackerResident = TownyUniverse.getInstance().getDatabase().getResident(attackerPlayer.getName());
 					} catch (NotRegisteredException e) {
 					}
 				}
@@ -114,7 +115,7 @@ public class TownyEntityMonitorListener implements Listener {
 					
 				}
 
-				if (TownyUniverse.isWarTime())
+				if (TownyAPI.getInstance().isWarTime())
 					wartimeDeathPoints(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
 			/*
@@ -126,7 +127,7 @@ public class TownyEntityMonitorListener implements Listener {
 					Resident defenderResident = null;
 
 					try {
-						defenderResident = TownyUniverse.getDataSource().getResident(defenderPlayer.getName());
+						defenderResident = TownyUniverse.getInstance().getDatabase().getResident(defenderPlayer.getName());
 					} catch (NotRegisteredException e) {
 						return;
 					}
@@ -139,7 +140,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 	private void wartimeDeathPoints(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		if (attackerPlayer != null && defenderPlayer != null && TownyUniverse.isWarTime())
+		if (attackerPlayer != null && defenderPlayer != null && TownyAPI.getInstance().isWarTime())
 			try {
 				if (CombatUtil.isAlly(attackerPlayer.getName(), defenderPlayer.getName()))
 					return;
@@ -178,8 +179,8 @@ public class TownyEntityMonitorListener implements Listener {
 	
 	public void deathPayment(Player defenderPlayer, Resident defenderResident) throws NotRegisteredException {
 
-		if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) != null) {
-			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
+		if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) != null) {
+			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
 				return;				
 		}
 		if (defenderResident.isJailed())
@@ -273,7 +274,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 
-		if (attackerPlayer != null && TownyUniverse.isWarTime() && TownySettings.getWartimeDeathPrice() > 0 ) {
+		if (attackerPlayer != null && TownyAPI.getInstance().isWarTime() && TownySettings.getWartimeDeathPrice() > 0 ) {
 			try {
 				if (attackerResident == null)
 					throw new NotRegisteredException(String.format("The attackingResident %s has not been registered.", attackerPlayer.getName()));
@@ -321,8 +322,8 @@ public class TownyEntityMonitorListener implements Listener {
 				TownyMessaging.sendErrorMsg(defenderPlayer, TownySettings.getLangString("msg_err_wartime_could_not_take_deathfunds"));
 			}			
 		} else if (TownySettings.isChargingDeath() && attackerPlayer != null) {
-			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) != null) {
-				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
+			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) != null) {
+				if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA || TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.JAIL)
 					return;				
 			}
 			if (defenderResident.isJailed())
@@ -439,14 +440,14 @@ public class TownyEntityMonitorListener implements Listener {
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
 			Location loc = defenderPlayer.getLocation();
-			if (!TownyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
+			if (!TownyUniverse.getInstance().getDatabase().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
 				return;
-			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()) == null)
+			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) == null)
 				return;
-			if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
+			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() == TownBlockType.ARENA)
 				return;
 			if (defenderResident.isJailed()) {
-				if (TownyUniverse.getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.JAIL) {
+				if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()).getType() != TownBlockType.JAIL) {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_killed_attempting_to_escape_jail"), defenderPlayer.getName()));
 					return;
 				}							
@@ -465,11 +466,11 @@ public class TownyEntityMonitorListener implements Listener {
 				
 				if (attackerTown.hasOutlaw(defenderResident)) {
 
-					if (TownyUniverse.getTownBlock(loc) == null)
+					if (TownyAPI.getInstance().getTownBlock(loc) == null)
 						return;
 
 					try {
-						if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
+						if (TownyAPI.getInstance().getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName())
 							return;
 					} catch (NotRegisteredException e1) {
 						e1.printStackTrace();
@@ -478,8 +479,8 @@ public class TownyEntityMonitorListener implements Listener {
 					if (!attackerTown.hasJailSpawn()) 
 						return;
 
-					if (!TownyUniverse.isWarTime()) {
-						if (!TownyUniverse.getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
+					if (!TownyAPI.getInstance().isWarTime()) {
+						if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 							return;
 						defenderResident.setJailed(defenderPlayer, 1, attackerTown);
 						return;
@@ -489,7 +490,7 @@ public class TownyEntityMonitorListener implements Listener {
 						Integer index = 1;
 						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
 							try {
-								jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
+								jailBlock = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 							} catch (TownyException e) {
 								e.printStackTrace();
 							} 
@@ -518,11 +519,11 @@ public class TownyEntityMonitorListener implements Listener {
 				e1.printStackTrace();
 			}			
 		
-			if (TownyUniverse.getTownBlock(loc) == null)
+			if (TownyAPI.getInstance().getTownBlock(loc) == null)
 				return;
 				
 			try {
-				if (TownyUniverse.getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName()) 
+				if (TownyAPI.getInstance().getTownBlock(loc).getTown().getName() != attackerResident.getTown().getName())
 					return;
 			} catch (NotRegisteredException e1) {
 				e1.printStackTrace();
@@ -538,14 +539,14 @@ public class TownyEntityMonitorListener implements Listener {
 			if (!town.hasJailSpawn()) 
 				return;
 			
-			if (!TownyUniverse.isWarTime()) {
+			if (!TownyAPI.getInstance().isWarTime()) {
 				defenderResident.setJailed(defenderPlayer, 1, town);
 			} else {
 				TownBlock jailBlock = null;
 				Integer index = 1;
 				for (Location jailSpawn : town.getAllJailSpawns()) {
 					try {
-						jailBlock = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
+						jailBlock = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName()).getTownBlock(Coord.parseCoord(jailSpawn));
 					} catch (TownyException e) {
 						e.printStackTrace();
 					} 

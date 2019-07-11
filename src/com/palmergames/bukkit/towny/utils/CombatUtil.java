@@ -1,17 +1,9 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Wolf;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,9 +16,16 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Material;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Wolf;
+
+import java.util.List;
 
 /**
  * 
@@ -48,7 +47,7 @@ public class CombatUtil {
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
 
 		try {
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
+			TownyWorld world = TownyUniverse.getInstance().getDatabase().getWorld(defender.getWorld().getName());
 
 			// World using Towny
 			if (!world.isUsingTowny())
@@ -403,8 +402,8 @@ public class CombatUtil {
 	public static boolean isAlly(String attackingResident, String defendingResident) {
 
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(attackingResident);
-			Resident residentB = TownyUniverse.getDataSource().getResident(defendingResident);
+			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(attackingResident);
+			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(defendingResident);
 			if (residentA.getTown() == residentB.getTown())
 				return true;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -449,8 +448,8 @@ public class CombatUtil {
 	public static boolean canAttackEnemy(String a, String b) {
 
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(a);
-			Resident residentB = TownyUniverse.getDataSource().getResident(b);
+			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(a);
+			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -495,8 +494,8 @@ public class CombatUtil {
 	public static boolean isEnemy(String a, String b) {
 
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(a);
-			Resident residentB = TownyUniverse.getDataSource().getResident(b);
+			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(a);
+			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -541,7 +540,7 @@ public class CombatUtil {
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 
 		try {
-			return CombatUtil.isEnemy(TownyUniverse.getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
+			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException e) {
 			return false;
 		}

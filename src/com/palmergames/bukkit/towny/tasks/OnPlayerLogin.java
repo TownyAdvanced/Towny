@@ -6,13 +6,13 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
@@ -61,7 +61,7 @@ public class OnPlayerLogin implements Runnable {
 				resident.setRegistered(System.currentTimeMillis());
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
-						Town town = TownyUniverse.getDataSource().getTown(TownySettings.getDefaultTownName());
+						Town town = TownyUniverse.getInstance().getDatabase().getTown(TownySettings.getDefaultTownName());
 						town.addResident(resident);
 						universe.getDatabase().saveTown(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {

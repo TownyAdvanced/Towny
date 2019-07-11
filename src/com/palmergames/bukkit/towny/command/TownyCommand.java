@@ -410,15 +410,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		if (town != null) {
 			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");
-			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + Double.toString(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotPrice()));
+			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + town.getPlotPrice() + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
+			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + town.getCommercialPlotPrice() + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + town.getEmbassyPlotPrice());
 
-			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + Double.toString(town.getTaxes()) + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + Double.toString(town.getPlotTax()));
-			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + Double.toString(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + Double.toString(town.getEmbassyPlotTax()));
+			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + town.getTaxes() + (town.isTaxPercentage()? "%" : "") + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + town.getPlotTax());
+			output.add(Colors.Rose + "            " + Colors.Green + "Shop: " + Colors.LightGreen + town.getCommercialPlotTax() + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + town.getEmbassyPlotTax());
 
 			if (nation != null) {
 				output.add(Colors.Yellow + "Nation [" + TownyFormatter.getFormattedName(nation) + "]");
-				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + Double.toString(nation.getTaxes()) + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + nation.getTaxes() + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
 			}
 		}
 		return output;

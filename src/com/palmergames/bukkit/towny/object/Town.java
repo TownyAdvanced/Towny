@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
@@ -33,10 +34,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
-	private List<Resident> residents = new ArrayList<Resident>();
-	private List<Resident> outlaws = new ArrayList<Resident>();
-	private List<Location> outpostSpawns = new ArrayList<Location>();
-	private List<Location> jailSpawns = new ArrayList<Location>();
+	private List<Resident> residents = new ArrayList<>();
+	private List<Resident> outlaws = new ArrayList<>();
+	private List<Location> outpostSpawns = new ArrayList<>();
+	private List<Location> jailSpawns = new ArrayList<>();
 	
 	private Resident mayor;
 	private int bonusBlocks, purchasedBlocks;
@@ -170,7 +171,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public List<Resident> getAssistants() {
 
-		List<Resident> assistants = new ArrayList<Resident>();
+		List<Resident> assistants = new ArrayList<>();
 		
 		for (Resident assistant: residents) {
 			if (assistant.hasTownRank("assistant"))
@@ -237,7 +238,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public boolean isCapital() {
 
-		return hasNation() ? nation.isCapital(this) : false;
+		return hasNation() && nation.isCapital(this);
 	}
 
 	public void setHasUpkeep(boolean hasUpkeep) {
@@ -447,7 +448,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				Nation nation = this.getNation();
 				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = this.getHomeBlock().getCoord();
-				if (nation.getCapital().getHomeBlock().getWorld().getName() != this.getHomeBlock().getWorld().getName()) {
+				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
 					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
 					try {
 						nation.removeTown(this);
@@ -455,7 +456,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 						e.printStackTrace();
 					}
 				}
-				double distance = 0;
+				double distance;
 				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));			
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_nation_town_moved_their_homeblock_too_far"), this.getName()));
@@ -521,7 +522,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (hasWorld()) {
 			try {
 				world.removeTown(this);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		}
 
@@ -529,7 +530,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		try {
 			this.world.addTown(this);
-		} catch (AlreadyRegisteredException e) {
+		} catch (AlreadyRegisteredException ignored) {
 		}
 	}
 
@@ -544,7 +545,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (world != null)
 			return world;
 
-		return TownyUniverse.getDataSource().getTownWorld(this.getName());
+		return TownyUniverse.getInstance().getDatabase().getTownWorld(this.getName());
 	}
 
 	public boolean hasMayor() {
@@ -554,26 +555,27 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
 
-		if (!hasResident(resident))
+		if (!hasResident(resident)) {
 			throw new NotRegisteredException();
-		else {
+		} else {
 
 			remove(resident);
 
-			if (getNumResidents() == 0)
-					throw new EmptyTownException(this);
+			if (getNumResidents() == 0) {
+				throw new EmptyTownException(this);
+			}
 		}
 	}
 
 	private void removeAllResidents() {
 
-		for (Resident resident : new ArrayList<Resident>(residents))
+		for (Resident resident : new ArrayList<>(residents))
 			remove(resident);
 	}
 
 	private void remove(Resident resident) {
 
-		for (TownBlock townBlock : new ArrayList<TownBlock>(resident.getTownBlocks())) {
+		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
 			
 			// Do not remove Embassy plots
 			if (townBlock.getType() != TownBlockType.EMBASSY) {
@@ -583,7 +585,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
 				
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
@@ -593,7 +595,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (isMayor(resident)) {
 
 			if (residents.size() > 1) {
-				for (Resident assistant : new ArrayList<Resident>(getAssistants()))
+				for (Resident assistant : new ArrayList<>(getAssistants()))
 					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
 						try {
 							setMayor(assistant);
@@ -605,7 +607,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 					}
 				if (isMayor(resident)) {
 					// Still mayor and no assistants so pick a resident to be mayor
-					for (Resident newMayor : new ArrayList<Resident>(getResidents()))
+					for (Resident newMayor : new ArrayList<>(getResidents()))
 						if (newMayor != resident) {
 							try {
 								setMayor(newMayor);
@@ -628,10 +630,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(resident, resident.getTown()));
 			}
 			resident.setTown(null);
-		} catch (AlreadyRegisteredException e) {
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (NotRegisteredException e) {
+		} catch (AlreadyRegisteredException ignored) {
+		} catch (IllegalStateException | NotRegisteredException e) {
 			e.printStackTrace();
 		}
 		residents.remove(resident);
@@ -730,7 +730,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			} catch (TownyException e) {
 			}
 			townBlocks.remove(townBlock);
-			TownyUniverse.getDataSource().saveTown(this);
+			TownyUniverse.getInstance().getDatabase().saveTown(this);
 		}
 	}
 
@@ -747,7 +747,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
 		try {
-			TownBlock outpost = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			TownBlock outpost = TownyUniverse.getInstance().getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (outpost.getX() == spawnBlock.getX() && outpost.getZ() == spawnBlock.getZ()) {
 				if (!outpost.isOutpost())
 					throw new TownyException("Location is not within an outpost plot.");
@@ -810,7 +810,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void removeOutpostSpawn(Coord coord) {
 
-		for (Location spawn : new ArrayList<Location>(outpostSpawns)) {
+		for (Location spawn : new ArrayList<>(outpostSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
@@ -896,7 +896,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public boolean isHomeBlock(TownBlock townBlock) {
 
-		return hasHomeBlock() ? townBlock == homeBlock : false;
+		return hasHomeBlock() && townBlock == homeBlock;
 	}
 
 	public void setPlotTax(double plotTax) {
@@ -980,7 +980,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "Town (" + getName() + ")");
 		out.add(getTreeDepth(depth + 1) + "Mayor: " + (hasMayor() ? getMayor().getName() : "None"));
 		out.add(getTreeDepth(depth + 1) + "Home: " + homeBlock);
@@ -1038,13 +1038,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
 		try {
-			TownBlock jail = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			TownBlock jail = TownyUniverse.getInstance().getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
 					throw new TownyException("Location is not within a Jail plot.");
 				
 				jailSpawns.add(spawn);
-				TownyUniverse.getDataSource().saveTown(this);			
+				TownyUniverse.getInstance().getDatabase().saveTown(this);
 			}
 
 		} catch (NotRegisteredException e) {
@@ -1055,11 +1055,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public void removeJailSpawn(Coord coord) {
 
-		for (Location spawn : new ArrayList<Location>(jailSpawns)) {
+		for (Location spawn : new ArrayList<>(jailSpawns)) {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
-				TownyUniverse.getDataSource().saveTown(this);
+				TownyUniverse.getInstance().getDatabase().saveTown(this);
 			}
 		}
 	}
@@ -1242,8 +1242,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		sentinvites.remove(invite);
 	}
 
-	private List<Invite> receivedinvites = new ArrayList<Invite>();
-	private List<Invite> sentinvites = new ArrayList<Invite>();
+	private List<Invite> receivedinvites = new ArrayList<>();
+	private List<Invite> sentinvites = new ArrayList<>();
 
 	public int getOutpostLimit() {
 		return TownySettings.getMaxOutposts(this);
