@@ -65,6 +65,7 @@ public class TownClaim extends Thread {
 
 	@Override
 	public void run() {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		List<TownyWorld> worlds = new ArrayList<>();
 		List<Town> towns = new ArrayList<>();
@@ -114,7 +115,7 @@ public class TownClaim extends Thread {
 
 			Resident resident = null;
 			try {
-				resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDatabase().getResident(player.getName());
 			} catch (TownyException e) {
 				// Yeah the resident has to exist!
 			}
@@ -133,13 +134,13 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				TownyUniverse.getInstance().getDatabase().saveTown(test);
+				townyUniverse.getDatabase().saveTown(test);
 			}
 		}
 
 		if (!worlds.isEmpty()) {
 			for (TownyWorld test : worlds) {
-				TownyUniverse.getInstance().getDatabase().saveWorld(test);
+				townyUniverse.getDatabase().saveWorld(test);
 			}
 		}
 
@@ -192,9 +193,10 @@ public class TownClaim extends Thread {
 					townBlock.setLocked(true);
 				}
 			}
-
-			TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
-			TownyUniverse.getInstance().getDatabase().saveTownBlockList();
+			
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			townyUniverse.getDatabase().saveTownBlock(townBlock);
+			townyUniverse.getDatabase().saveTownBlockList();
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
@@ -203,14 +205,15 @@ public class TownClaim extends Thread {
 	}
 
 	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force) throws TownyException {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
 			final TownBlock townBlock = worldCoord.getTownBlock();
 			if (town != townBlock.getTown() && !force) {
 				throw new TownyException(TownySettings.getLangString("msg_area_not_own"));
 			}
 			if (!townBlock.isOutpost() && townBlock.hasTown()) {
-				if (TownyUniverse.getInstance().isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
+				if (townyUniverse.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
 					townBlock.setOutpost(true);
 				}
 			}
@@ -218,7 +221,7 @@ public class TownClaim extends Thread {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
 				
-				TownyUniverse.getInstance().getDatabase().removeTownBlock(townBlock);
+				townyUniverse.getDatabase().removeTownBlock(townBlock);
 				
 				// Raise an event to signal the unclaim
 				// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.

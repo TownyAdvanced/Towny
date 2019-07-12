@@ -399,9 +399,10 @@ public class PlayerCacheUtil {
 		TownBlock townBlock = null;
 		Town playersTown = null;
 		Town targetTown = null;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			playersTown = TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown();
+			playersTown = townyUniverse.getDatabase().getResident(player.getName()).getTown();
 		} catch (NotRegisteredException e) {
 		}
 
@@ -413,7 +414,7 @@ public class PlayerCacheUtil {
 			try {
 				// Wilderness Permissions
 				if (status == TownBlockStatus.UNCLAIMED_ZONE) {
-					if (TownyUniverse.getInstance().getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
+					if (townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
 						return true;
 					} else {
 						// Don't have permission to build/destroy/switch/item_use here
@@ -425,7 +426,7 @@ public class PlayerCacheUtil {
 					// Nation_Zone wilderness type Permissions 
 					if (status == TownBlockStatus.NATION_ZONE) {
 						// Admins that also have wilderness permission can bypass the nation zone.
-						if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && TownyUniverse.getInstance().getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
+						if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
 							return true;
 						} else {
 						
@@ -441,7 +442,7 @@ public class PlayerCacheUtil {
 								return false;
 							}
 							if (playersNation.equals(nearestNation)){
-								if (TownyUniverse.getInstance().getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
+								if (townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
 									return true;
 								} else {
 									// Don't have permission to build/destroy/switch/item_use here
@@ -463,7 +464,7 @@ public class PlayerCacheUtil {
 		}
 
 		// Allow admins to have ALL permissions over towns.
-		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
 			return true;
 
 
@@ -474,10 +475,10 @@ public class PlayerCacheUtil {
 			/*
 			 * Check town overrides before testing plot permissions
 			 */
-			if (targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasOwnTownOverride(player, material, action))) {
+			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
 				return true;
 
-			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasAllTownOverride(player, material, action))) {
+			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
 				return true;
 
 			} else if (status == TownBlockStatus.PLOT_FRIEND) {
@@ -486,7 +487,7 @@ public class PlayerCacheUtil {
 					if (townBlock.getType() == TownBlockType.WILDS) {
 
 						try {
-							if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
 						} catch (NotRegisteredException e) {
 						}
@@ -511,7 +512,7 @@ public class PlayerCacheUtil {
 					if (townBlock.getType() == TownBlockType.WILDS) {
 
 						try {
-							if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
 						} catch (NotRegisteredException e) {
 						}
@@ -537,7 +538,7 @@ public class PlayerCacheUtil {
 					if (townBlock.getType() == TownBlockType.WILDS) {
 
 						try {
-							if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 								return true;
 						} catch (NotRegisteredException e) {
 						}
@@ -565,10 +566,10 @@ public class PlayerCacheUtil {
 			/*
 			 * Check town overrides before testing town permissions
 			 */
-			if (targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasTownOwnedOverride(player, material, action))) {
+			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasTownOwnedOverride(player, material, action))) {
 				return true;
 
-			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasAllTownOverride(player, material, action))) {
+			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
 				return true;
 
 			} else if (townBlock.getPermissions().getResidentPerm(action)) {
@@ -576,7 +577,7 @@ public class PlayerCacheUtil {
 				if (townBlock.getType() == TownBlockType.WILDS) {
 
 					try {
-						if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
 					} catch (NotRegisteredException e) {
 					}
@@ -600,10 +601,10 @@ public class PlayerCacheUtil {
 			/*
 			 * Check town overrides before testing town permissions
 			 */
-			if (targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasOwnTownOverride(player, material, action))) {
+			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
 				return true;
 
-			} else if (!targetTown.equals(playersTown) && (TownyUniverse.getInstance().getPermissionSource().hasAllTownOverride(player, material, action))) {
+			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
 				return true;
 
 			} else if (townBlock.getPermissions().getAllyPerm(action)) {
@@ -611,7 +612,7 @@ public class PlayerCacheUtil {
 				if (townBlock.getType() == TownBlockType.WILDS) {
 
 					try {
-						if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
 					} catch (NotRegisteredException e) {
 					}
@@ -635,7 +636,7 @@ public class PlayerCacheUtil {
 			/*
 			 * Check town overrides before testing town permissions
 			 */
-			if (TownyUniverse.getInstance().getPermissionSource().hasAllTownOverride(player, material, action)) {
+			if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action)) {
 				return true;
 
 			} else if (townBlock.getPermissions().getOutsiderPerm(action)) {
@@ -643,7 +644,7 @@ public class PlayerCacheUtil {
 				if (townBlock.getType() == TownBlockType.WILDS) {
 
 					try {
-						if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
 							return true;
 					} catch (NotRegisteredException ignored) {
 					}

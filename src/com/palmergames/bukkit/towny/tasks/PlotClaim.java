@@ -123,6 +123,7 @@ public class PlotClaim extends Thread {
 				Town town = townBlock.getTown();
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 				try {
 					Resident owner = townBlock.getResident();
@@ -151,8 +152,8 @@ public class PlotClaim extends Thread {
 						// Set the plot permissions to mirror the new owners.
 						townBlock.setType(townBlock.getType());
 						
-						TownyUniverse.getInstance().getDatabase().saveResident(owner);
-						TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+						townyUniverse.getDatabase().saveResident(owner);
+						townyUniverse.getDatabase().saveTownBlock(townBlock);
 
 						// Update any caches for this WorldCoord
 						plugin.updateCache(worldCoord);
@@ -170,9 +171,9 @@ public class PlotClaim extends Thread {
 						// Set the plot permissions to mirror the towns.
 						townBlock.setType(townBlock.getType());
 						
-						TownyUniverse.getInstance().getDatabase().saveResident(owner);
+						townyUniverse.getDatabase().saveResident(owner);
 						// Update the townBlock data file so it's no longer using custom settings.
-						TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+						townyUniverse.getDatabase().saveTownBlock(townBlock);
 
 						return true;
 					} else {
@@ -200,7 +201,7 @@ public class PlotClaim extends Thread {
 
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
-					TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+					townyUniverse.getDatabase().saveTownBlock(townBlock);
 
 					return true;
 				}

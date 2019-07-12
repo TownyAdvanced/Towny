@@ -36,12 +36,13 @@ public class ResidentPurge extends Thread {
 		int count = 0;
 
 		message("Scanning for old residents...");
-		for (Resident resident : new ArrayList<>(TownyUniverse.getInstance().getDatabase().getResidents())) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		for (Resident resident : new ArrayList<>(townyUniverse.getDatabase().getResidents())) {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
 				count++;
 				message("Deleting resident: " + resident.getName());
-				TownyUniverse.getInstance().getDatabase().removeResident(resident);
-				TownyUniverse.getInstance().getDatabase().removeResidentList(resident);
+				townyUniverse.getDatabase().removeResident(resident);
+				townyUniverse.getDatabase().removeResidentList(resident);
 			}
 		}
 

@@ -131,8 +131,9 @@ public class TownyBlockListener implements Listener {
 		Block block = event.getBlock();
 		WorldCoord worldCoord;
 		
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownyWorld world = TownyUniverse.getInstance().getDatabase().getWorld(block.getWorld().getName());
+			TownyWorld world = townyUniverse.getDatabase().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
@@ -155,7 +156,7 @@ public class TownyBlockListener implements Listener {
 			boolean playerNeutral = false;
 			if (TownyAPI.getInstance().isWarTime()) {
 				try {
-					Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+					Resident resident = townyUniverse.getDatabase().getResident(player.getName());
 					if (resident.isJailed())
 						playerNeutral = true;	
 					if (resident.hasTown())

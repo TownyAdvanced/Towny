@@ -150,9 +150,9 @@ public class TownyRegenAPI {
 	 * @param plotChunk
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
-
-		if (TownyUniverse.getInstance().getDatabase().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
-			TownyUniverse.getInstance().getDatabase().savePlotData(plotChunk);
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getDatabase().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+			townyUniverse.getDatabase().savePlotData(plotChunk);
 		}
 	}
 

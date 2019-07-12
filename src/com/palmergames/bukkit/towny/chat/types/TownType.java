@@ -29,13 +29,14 @@ public class TownType extends ChatType {
 
 	@Override
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			final UUID town = TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown().getUuid();
+			final UUID town = townyUniverse.getDatabase().getResident(player.getName()).getTown().getUuid();
 
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
-				if(TownyUniverse.getInstance().getDatabase().getResident(p.getName()).getTown().getUuid().equals(town)) {
+				if(townyUniverse.getDatabase().getResident(p.getName()).getTown().getUuid().equals(town)) {
 					newRecipients.add(p);
 				}
 			}

@@ -400,10 +400,11 @@ public class CombatUtil {
 	 * @return true if the defender is an ally of the attacker.
 	 */
 	public static boolean isAlly(String attackingResident, String defendingResident) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(attackingResident);
-			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(defendingResident);
+			Resident residentA = townyUniverse.getDatabase().getResident(attackingResident);
+			Resident residentB = townyUniverse.getDatabase().getResident(defendingResident);
 			if (residentA.getTown() == residentB.getTown())
 				return true;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -446,10 +447,11 @@ public class CombatUtil {
 	 * @return true if they can attack.
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(a);
-			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(b);
+			Resident residentA = townyUniverse.getDatabase().getResident(a);
+			Resident residentB = townyUniverse.getDatabase().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -492,10 +494,11 @@ public class CombatUtil {
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(String a, String b) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getInstance().getDatabase().getResident(a);
-			Resident residentB = TownyUniverse.getInstance().getDatabase().getResident(b);
+			Resident residentA = townyUniverse.getDatabase().getResident(a);
+			Resident residentB = townyUniverse.getDatabase().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())

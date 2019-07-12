@@ -19,6 +19,7 @@ public class BaseCommand implements TabCompleter{
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		LinkedList<String> output = new LinkedList<>();
 		String lastArg = "";
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		// Get the last argument
 		if (args.length > 0) {
@@ -27,21 +28,21 @@ public class BaseCommand implements TabCompleter{
 
 		if (!lastArg.equalsIgnoreCase("")) {
 			// Match nations
-			for (Nation nation : TownyUniverse.getInstance().getDatabase().getNations()) {
+			for (Nation nation : townyUniverse.getDatabase().getNations()) {
 				if (nation.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(nation.getName());
 				}
 
 			}
 			// Match towns
-			for (Town town : TownyUniverse.getInstance().getDatabase().getTowns()) {
+			for (Town town : townyUniverse.getDatabase().getTowns()) {
 				if (town.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(town.getName());
 				}
 
 			}
 			// Match residents
-			for (Resident resident : TownyUniverse.getInstance().getDatabase().getResidents()) {
+			for (Resident resident : townyUniverse.getDatabase().getResidents()) {
 				if (resident.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(resident.getName());
 				}

@@ -29,15 +29,16 @@ public class TownyWorldListener implements Listener {
 	private void newWorld(String worldName) {
 
 		//String worldName = event.getWorld().getName();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownyUniverse.getInstance().getDatabase().newWorld(worldName);
-			TownyWorld world = TownyUniverse.getInstance().getDatabase().getWorld(worldName);
+			townyUniverse.getDatabase().newWorld(worldName);
+			TownyWorld world = townyUniverse.getDatabase().getWorld(worldName);
 			if (world == null)
 				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
-				if (!TownyUniverse.getInstance().getDatabase().loadWorld(world)) {
+				if (!townyUniverse.getDatabase().loadWorld(world)) {
 					// First time world has been noticed
-					TownyUniverse.getInstance().getDatabase().saveWorld(world);
+					townyUniverse.getDatabase().saveWorld(world);
 				}
 			}
 		} catch (AlreadyRegisteredException e) {

@@ -190,8 +190,8 @@ public class Towny extends JavaPlugin {
 	}
 
 	public void setWorldFlags() {
-
-		for (Town town : TownyUniverse.getInstance().getDatabase().getTowns()) {
+		TownyUniverse universe = TownyUniverse.getInstance();
+		for (Town town : universe.getDatabase().getTowns()) {
 			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
@@ -201,8 +201,8 @@ public class Towny extends JavaPlugin {
 						TownyWorld world = town.getHomeBlock().getWorld();
 						if (!world.hasTown(town)) {
 							world.addTown(town);
-							TownyUniverse.getInstance().getDatabase().saveTown(town);
-							TownyUniverse.getInstance().getDatabase().saveWorld(world);
+							universe.getDatabase().saveTown(town);
+							universe.getDatabase().saveWorld(world);
 						}
 					} catch (TownyException e) {
 						// Error fetching homeblock
@@ -219,9 +219,9 @@ public class Towny extends JavaPlugin {
 	public void onDisable() {
 
 		System.out.println("==============================================================");
-
-		if (TownyUniverse.getInstance().getDatabase() != null && !error) {
-			TownyUniverse.getInstance().getDatabase().saveQueues();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getDatabase() != null && !error) {
+			townyUniverse.getDatabase().saveQueues();
 		}
 
 		if (!error) {
@@ -244,9 +244,9 @@ public class Towny extends JavaPlugin {
 		playerCache.clear();
 		
 		// Shut down our saving task.
-		TownyUniverse.getInstance().getDatabase().cancelTask();
+		townyUniverse.getDatabase().cancelTask();
 
-		townyUniverse = null;
+		this.townyUniverse = null;
 
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 		System.out.println("=============================================================");
@@ -429,9 +429,9 @@ public class Towny extends JavaPlugin {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}
 		TownySettings.setLastRunVersion(getVersion());
-		
-		TownyUniverse.getInstance().getDatabase().saveAll();
-		TownyUniverse.getInstance().getDatabase().cleanup();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		townyUniverse.getDatabase().saveAll();
+		townyUniverse.getDatabase().cleanup();
 	}
 
 	/**

@@ -115,11 +115,12 @@ public class ConfirmationHandler {
 	}
 
 	public static void handleConfirmation(Resident r, ConfirmationType type) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (type == ConfirmationType.TOWNDELETE) {
 			if (towndeleteconfirmations.containsKey(r)) {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
-					TownyUniverse.getInstance().getDatabase().removeTown(towndeleteconfirmations.get(r));
+					townyUniverse.getDatabase().removeTown(towndeleteconfirmations.get(r));
 					removeConfirmation(r,type, true);
 					return;
 				}
@@ -131,7 +132,7 @@ public class ConfirmationHandler {
 				if (player == null) {
 					throw new TownyException("Player could not be found!");
 				}
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				}
 				int days = townypurgeconfirmations.get(r);
@@ -151,7 +152,7 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.NATIONDELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
-					TownyUniverse.getInstance().getDatabase().removeNation(nationdeleteconfirmations.get(r));
+					townyUniverse.getDatabase().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);
 				}

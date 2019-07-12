@@ -193,19 +193,18 @@ public class TownyWar {
 	}
 
 	public static boolean callAttackCellEvent(Towny plugin, Player player, Block block, WorldCoord worldCoord) throws TownyException {
-
 		int topY = block.getWorld().getHighestBlockYAt(block.getX(), block.getZ()) - 1;
 		if (block.getY() < topY)
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_must_be_placed_above_ground"));
 
-		TownyUniverse universe = TownyUniverse.getInstance();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident attackingResident;
 		Town landOwnerTown, attackingTown;
 		Nation landOwnerNation, attackingNation;
 		TownBlock townBlock;
 
 		try {
-			attackingResident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			attackingResident = townyUniverse.getDatabase().getResident(player.getName());
 			attackingTown = attackingResident.getTown();
 			attackingNation = attackingTown.getNation();
 		} catch (NotRegisteredException e) {
@@ -226,7 +225,7 @@ public class TownyWar {
 		// Check Peace
 		if (landOwnerNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
-		if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
+		if (!townyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online
@@ -323,11 +322,11 @@ public class TownyWar {
 		// Set yourself as target's enemy so they can retaliate.
 		if (!landOwnerNation.hasEnemy(attackingNation)) {
 			landOwnerNation.addEnemy(attackingNation);
-			TownyUniverse.getInstance().getDatabase().saveNation(landOwnerNation);
+			townyUniverse.getDatabase().saveNation(landOwnerNation);
 		}
 
 		// Update Cache
-		universe.addWarZone(worldCoord);
+		townyUniverse.addWarZone(worldCoord);
 		plugin.updateCache(worldCoord);
 
 		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));

@@ -22,10 +22,11 @@ public class TownyLoginListener implements Listener {
 	    String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);		
 		boolean disallowed = false;
 		Player player = event.getPlayer();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (player.getName().startsWith(npcPrefix)) {
-			if (TownyUniverse.getInstance().getDatabase().hasResident(player.getName()))
-			    if (TownyUniverse.getInstance().getDatabase().getResident(player.getName()).isMayor()){
+			if (townyUniverse.getDatabase().hasResident(player.getName()))
+			    if (townyUniverse.getDatabase().getResident(player.getName()).isMayor()){
 			    	// Deny because this is an NPC account which is a mayor of a town.
 			    	event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			    	disallowed = true;

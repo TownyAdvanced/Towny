@@ -88,10 +88,11 @@ public class TownyPerms {
 	public static void assignPermissions(Resident resident, Player player) {
 
 		PermissionAttachment playersAttachment;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (resident == null) {
 			try {
-				resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDatabase().getResident(player.getName());
 			} catch (NotRegisteredException e) {
 				// failed to get resident
 				e.printStackTrace();
@@ -114,7 +115,7 @@ public class TownyPerms {
 		TownyWorld World;
 
 		try {
-			World = TownyUniverse.getInstance().getDatabase().getWorld(player.getLocation().getWorld().getName());
+			World = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			// World not registered with Towny.
 			e.printStackTrace();

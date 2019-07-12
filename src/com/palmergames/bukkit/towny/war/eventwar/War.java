@@ -512,7 +512,7 @@ public class War {
 			townBlock.getTown().addBonusBlocks(-1);
 			attacker.addBonusBlocks(1);
 		}
-		
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
 			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
@@ -522,8 +522,8 @@ public class War {
 					remove(attacker, townBlock.getTown().getNation());
 				else
 					remove(attacker, townBlock.getTown());
-				TownyUniverse.getInstance().getDatabase().saveTown(townBlock.getTown());
-				TownyUniverse.getInstance().getDatabase().saveTown(attacker);
+				townyUniverse.getDatabase().saveTown(townBlock.getTown());
+				townyUniverse.getDatabase().saveTown(attacker);
 				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
@@ -541,13 +541,13 @@ public class War {
 			if (townBlock.getType().equals(TownBlockType.JAIL)){
 				Town town = townBlock.getTown();				
 				int count = 0;
-				for (Resident resident : TownyUniverse.getInstance().getDatabase().getResidents()){
+				for (Resident resident : townyUniverse.getDatabase().getResidents()){
 					try {						
 						if (resident.isJailed())
 							if (resident.getJailTown().equals(town.toString())) 
 								if (Coord.parseCoord(town.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
-									TownyUniverse.getInstance().getDatabase().saveResident(resident);
+									townyUniverse.getDatabase().saveResident(resident);
 									count++;
 								}
 					} catch (TownyException e) {
@@ -557,8 +557,8 @@ public class War {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), town, count));
 			}				
 		}
-		TownyUniverse.getInstance().getDatabase().saveTown(townBlock.getTown());
-		TownyUniverse.getInstance().getDatabase().saveTown(attacker);
+		townyUniverse.getDatabase().saveTown(townBlock.getTown());
+		townyUniverse.getDatabase().saveTown(attacker);
 	}
 
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {

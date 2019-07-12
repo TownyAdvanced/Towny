@@ -16,9 +16,10 @@ public class MayorCheck extends ChatCheck {
 
 	@Override
 	public boolean runCheck(Player player, String checkString) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			if(TownyUniverse.getInstance().getDatabase().getResident(player.getName()).hasTown()) {
-				return TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown().isMayor(TownyUniverse.getInstance().getDatabase().getResident(player.getName()));
+			if(townyUniverse.getDatabase().getResident(player.getName()).hasTown()) {
+				return townyUniverse.getDatabase().getResident(player.getName()).getTown().isMayor(townyUniverse.getDatabase().getResident(player.getName()));
 			}
 		} catch(NotRegisteredException ignore) {
 		}

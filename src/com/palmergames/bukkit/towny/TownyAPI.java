@@ -356,8 +356,9 @@ public class TownyAPI {
     }
     
     public void clearWarEvent() {
-        TownyUniverse.getInstance().getWarEvent().cancelTasks(BukkitTools.getScheduler());
-        TownyUniverse.getInstance().setWarEvent(null);
+        TownyUniverse townyUniverse = TownyUniverse.getInstance();
+        townyUniverse.getWarEvent().cancelTasks(BukkitTools.getScheduler());
+        townyUniverse.setWarEvent(null);
     }
     public void requestTeleport(Player player, Location spawnLoc) {
         

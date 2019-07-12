@@ -1032,19 +1032,18 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public void addJailSpawn(Location spawn) throws TownyException {
-
 		removeJailSpawn(Coord.parseCoord(spawn));
-
+		
 		Coord spawnBlock = Coord.parseCoord(spawn);
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownBlock jail = TownyUniverse.getInstance().getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			TownBlock jail = townyUniverse.getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
 					throw new TownyException("Location is not within a Jail plot.");
 				
 				jailSpawns.add(spawn);
-				TownyUniverse.getInstance().getDatabase().saveTown(this);
+				townyUniverse.getDatabase().saveTown(this);
 			}
 
 		} catch (NotRegisteredException e) {

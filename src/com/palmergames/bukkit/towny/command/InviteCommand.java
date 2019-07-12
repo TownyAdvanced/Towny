@@ -116,8 +116,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public static void parseDeny(Player player, String[] args) {
 		Resident resident;
 		Town town;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDatabase().getResident(player.getName());
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -132,7 +133,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// We cut the first argument out of it so /invite *accept* args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
 			try {
-				town = TownyUniverse.getInstance().getDatabase().getTown(args[0]);
+				town = townyUniverse.getDatabase().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;
@@ -169,8 +170,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public static void parseAccept(Player player, String[] args) {
 		Resident resident;
 		Town town;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDatabase().getResident(player.getName());
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -182,7 +184,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (args.length >= 1) {
 			try {
-				town = TownyUniverse.getInstance().getDatabase().getTown(args[0]);
+				town = townyUniverse.getDatabase().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;

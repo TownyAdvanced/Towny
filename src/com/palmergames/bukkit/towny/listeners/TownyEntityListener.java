@@ -78,7 +78,6 @@ import java.util.List;
  * 
  */
 public class TownyEntityListener implements Listener {
-
 	private final Towny plugin;
 
 	public TownyEntityListener(Towny instance) {
@@ -93,7 +92,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -219,7 +217,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
-
 		if (plugin.isError()) {
 			return;
 		}
@@ -276,11 +273,11 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-
 		if (plugin.isError()) {
 				return;
 		}
-
+		
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld = null;
 		
 		Entity entity = event.getEntity();		
@@ -297,7 +294,7 @@ public class TownyEntityListener implements Listener {
           damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
 											
 				try {
-					townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(entity.getWorld().getName());
+					townyWorld = townyUniverse.getDatabase().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -310,7 +307,7 @@ public class TownyEntityListener implements Listener {
 			if (event.getDamager() instanceof Projectile) {
 				
 				try {
-					townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(entity.getWorld().getName());
+					townyWorld = townyUniverse.getDatabase().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -363,7 +360,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
-
 		LingeringPotion potion = event.getEntity();		
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = null;
@@ -438,7 +434,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPotionSplashEvent(PotionSplashEvent event) {
-
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
 		Entity attacker;
@@ -501,7 +496,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -575,7 +569,6 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -584,11 +577,12 @@ public class TownyEntityListener implements Listener {
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
 		Entity passenger = entity.getPassenger();
-
+		
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld World = null;
 
 		try {
-			World = TownyUniverse.getInstance().getDatabase().getWorld(block.getLocation().getWorld().getName());
+			World = townyUniverse.getDatabase().getWorld(block.getLocation().getWorld().getName());
 			if (!World.isUsingTowny())
 				return;
 
@@ -599,7 +593,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		try {
-			TownyWorld townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(block.getLocation().getWorld().getName());
+			TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(block.getLocation().getWorld().getName());
 
 			if (townyWorld.isUsingTowny()) {
 
@@ -659,18 +653,18 @@ public class TownyEntityListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-
+		
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		switch (event.getEntity().getType()) {
 
 		case WITHER:
 
 			try {
-				TownyWorld townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(event.getBlock().getWorld().getName());
 
 				if (!townyWorld.isUsingTowny())
 					return;
@@ -688,7 +682,7 @@ public class TownyEntityListener implements Listener {
 		case ENDERMAN:
 
 			try {
-				TownyWorld townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(event.getBlock().getWorld().getName());
 
 				if (!townyWorld.isUsingTowny())
 					return;
