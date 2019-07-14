@@ -32,6 +32,7 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -228,252 +229,266 @@ public final class TownyFlatFileDatabase extends TownyDatabaseHandler {
 	/*
 	 * Load keys
 	 */
-
+	
 	@Override
 	public boolean loadTownBlockList() {
-
+		
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 		String line = null;
-        
-        try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "townblocks.txt"))) {
-            
-            while ((line = fin.readLine()) != null)
-                if (!line.equals("")) {
-                    
-                    String[] tokens = line.split(",");
-                    
-                    if (tokens.length < 3)
-                        continue;
-                    
-                    TownyWorld world;
-                    
-                    try {
-                        
-                        world = getWorld(tokens[0]);
-                        
-                    } catch (NotRegisteredException ex) {
-                        
-                        /*
-                         * The world is not listed.
-                         * Allow the creation of new worlds here to account
-                         * for mod worlds which are not reported at startup.
-                         */
-                        newWorld(tokens[0]);
-                        world = getWorld(tokens[0]);
-                        
-                    }
-                    
-                    int x = Integer.parseInt(tokens[1]);
-                    int z = Integer.parseInt(tokens[2]);
-                    
-                    try {
-                        world.newTownBlock(x, z);
-                    } catch (AlreadyRegisteredException ignored) {
-                    }
-                    
-                }
-            
-            return true;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Townblock List at " + line + ", in towny\\data\\townblocks.txt");
-            e.printStackTrace();
-            return false;
-            
-        }
+		
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "townblocks.txt"))) {
+			
+			while ((line = fin.readLine()) != null) {
+				if (!line.equals("")) {
+					
+					String[] tokens = line.split(",");
+					
+					if (tokens.length < 3) {
+						continue;
+					}
+					
+					TownyWorld world;
+					
+					try {
+						
+						world = getWorld(tokens[0]);
+						
+					} catch (NotRegisteredException ex) {
+						
+						/*
+						 * The world is not listed.
+						 * Allow the creation of new worlds here to account
+						 * for mod worlds which are not reported at startup.
+						 */
+						newWorld(tokens[0]);
+						world = getWorld(tokens[0]);
+						
+					}
+					
+					int x = Integer.parseInt(tokens[1]);
+					int z = Integer.parseInt(tokens[2]);
+					
+					try {
+						world.newTownBlock(x, z);
+					} catch (AlreadyRegisteredException ignored) {
+					}
+					
+				}
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Townblock List at " + line + ", in towny\\data\\townblocks.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
 	}
-    
-    @Override
-    public boolean loadResidentList() {
-        TownyMessaging.sendDebugMsg("Loading Resident List");
-        String line = null;
-        File residentsFolder = new File(dataFolderPath + File.separator + "residents");
-        File[] children = residentsFolder.listFiles();
-        if (children == null || children.length == 0) {
-            return true;
-        }
-        try {
-            for (File file : children) {
-				if (file.isDirectory()) {
-					continue;
+	
+	@Override
+	public boolean loadResidentList() {
+		
+		TownyMessaging.sendDebugMsg("Loading Resident List");
+		String line = null;
+		
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "residents.txt"))) {
+			
+			while ((line = fin.readLine()) != null) {
+				if (!line.equals("")) {
+					newResident(line);
 				}
-				// remove the .txt which should be the length - 4
-				line = file.getName().substring(0, file.getName().length() - 4);
-                newResident(line);
-            }
-        } catch (AlreadyRegisteredException e) {
-            TownyMessaging.sendErrorMsg("Error Loading Resident Name for " + line + ", resident is possibly listed twice.");
-            e.printStackTrace();
-            return false;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Resident Name for " + line + ", in towny\\data\\residents");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean loadTownList() {
-        
-        TownyMessaging.sendDebugMsg("Loading Town List");
-        String line = null;
-        File townsFolder = new File(dataFolderPath + File.separator + "towns");
-        File[] children = townsFolder.listFiles();
-        if (children == null || children.length == 0) {
-            return true;
-        }
-        try {
-            for (File file : children) {
-				if (file.isDirectory()) {
-					continue;
+			}
+			
+			return true;
+			
+		} catch (AlreadyRegisteredException e) {
+			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", resident is possibly listed twice.");
+			e.printStackTrace();
+			return false;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Resident List at " + line + ", in towny\\data\\residents.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+	}
+	
+	@Override
+	public boolean loadTownList() {
+		
+		TownyMessaging.sendDebugMsg("Loading Town List");
+		String line = null;
+		BufferedReader fin;
+		
+		try {
+			fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "towns.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			while ((line = fin.readLine()) != null)
+				if (!line.equals(""))
+					newTown(line);
+			
+			return true;
+			
+		} catch (AlreadyRegisteredException e) {
+			e.printStackTrace();
+			return false;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Town List at " + line + ", in towny\\data\\towns.txt");
+			e.printStackTrace();
+			return false;
+			
+		} finally {
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException ignore) {
 				}
-				// remove the .txt which should be the length - 4
-				line = file.getName().substring(0, file.getName().length() - 4);
-                newTown(line);
-            }
-        } catch (AlreadyRegisteredException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Town Name for " + line + ", in towny\\data\\towns");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
+			}
+		}
+		
+	}
+	
 	@Override
 	public boolean loadNationList() {
-        
-        TownyMessaging.sendDebugMsg("Loading Nation List");
-        String line = null;
-        File nationsFolder = new File(dataFolderPath + File.separator + "nations");
-        File[] children = nationsFolder.listFiles();
-        if (children == null || children.length == 0) {
-            return true;
-        }
-        try {
-            for (File file : children) {
-            	if (file.isDirectory()) {
-            		continue;
-				}
-				// remove the .txt which should be the length - 4
-				line = file.getName().substring(0, file.getName().length() - 4);
-                newNation(line);
-            }
-        } catch (AlreadyRegisteredException e) {
-            e.printStackTrace();
-            return false;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Nation Name for " + line + ", in towny\\data\\nations");
-            e.printStackTrace();
-            return false;
-            
-        }
-        return true;
-    }
-
+		
+		TownyMessaging.sendDebugMsg("Loading Nation List");
+		String line = null;
+		BufferedReader fin;
+		
+		try {
+			fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "nations.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			while ((line = fin.readLine()) != null)
+				if (!line.equals(""))
+					newNation(line);
+			
+			return true;
+			
+		} catch (AlreadyRegisteredException e) {
+			e.printStackTrace();
+			return false;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Nation List at " + line + ", in towny\\data\\nations.txt");
+			e.printStackTrace();
+			return false;
+			
+		} finally {
+			try {
+				fin.close();
+			} catch (IOException ignore) {
+			}
+		}
+	}
+	
 	@Override
 	public boolean loadWorldList() {
-
+		
 		if (plugin != null) {
 			TownyMessaging.sendDebugMsg("Loading Server World List");
-			for (World world : plugin.getServer().getWorlds())
+			for (World world : plugin.getServer().getWorlds()) {
 				try {
 					newWorld(world.getName());
 				} catch (AlreadyRegisteredException e) {
 					//e.printStackTrace();
 				}
+			}
 		}
-
+		
 		// Can no longer reply on Bukkit to report ALL available worlds.
+		
 		TownyMessaging.sendDebugMsg("Loading World List");
-        String line = null;
-        File worldsFolder = new File(dataFolderPath + File.separator + "worlds");
-        File[] children = worldsFolder.listFiles();
-        if (children == null || children.length == 0) {
-            return true;
-        }
-        try {
-            for (File file : children) {
-				if (file.isDirectory()) {
-					continue;
-				}
-				// remove the .txt which should be the length - 4
-				line = file.getName().substring(0, file.getName().length() - 4);
-                newWorld(line);
-            }
-        } catch (AlreadyRegisteredException e) {
-            // Ignore this as the world may have been passed to us by bukkit
-            return true;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading World Name for " + line + ", in towny\\data\\worlds");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
+		
+		String line = null;
+		
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "worlds.txt"))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals(""))
+					newWorld(line);
+			
+			return true;
+			
+		} catch (AlreadyRegisteredException e) {
+			// Ignore this as the world may have been passed to us by bukkit
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading World List at " + line + ", in towny\\data\\worlds.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
+	}
+	
 	@Override
 	public boolean loadRegenList() {
-
+		
 		TownyMessaging.sendDebugMsg("Loading Regen List");
-
+		
 		String line = null;
-        
-        String[] split;
-        PlotBlockData plotData;
-        try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "regen.txt"))) {
-            
-            while ((line = fin.readLine()) != null)
-                if (!line.equals("")) {
-                    split = line.split(",");
-                    plotData = loadPlotData(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                    if (plotData != null) {
-                        TownyRegenAPI.addPlotChunk(plotData, false);
-                    }
-                }
-            
-            return true;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
-            e.printStackTrace();
-            return false;
-            
-        }
-
+		
+		String[] split;
+		PlotBlockData plotData;
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "regen.txt"))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					plotData = loadPlotData(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					if (plotData != null) {
+						TownyRegenAPI.addPlotChunk(plotData, false);
+					}
+				}
+			
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
 	}
-
+	
 	@Override
 	public boolean loadSnapshotList() {
-
+		
 		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
-
+		
 		String line = null;
-        
-        String[] split;
-        try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
-            
-            while ((line = fin.readLine()) != null)
-                if (!line.equals("")) {
-                    split = line.split(",");
-                    WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                    TownyRegenAPI.addWorldCoord(worldCoord);
-                }
-            return true;
-            
-        } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
-            e.printStackTrace();
-            return false;
-            
-        }
-
+		
+		String[] split;
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					TownyRegenAPI.addWorldCoord(worldCoord);
+				}
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
+		
 	}
 
 	/*
