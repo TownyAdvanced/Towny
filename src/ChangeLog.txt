@@ -3246,3 +3246,4 @@ v0.92.0.11:
       - givebonus message version 2.0 is not in effect.
     - Renamed a TownySetting to be more clear and accurate.
     - Fix for nationzones not respecting config settings.
+    - Cut-off for Pre-Release 5.
