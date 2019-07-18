@@ -2502,7 +2502,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
 	}
 
-	public static int getAmountOfResidentsForTown() {
+	public static int getAmountOfResidentsForOutpost() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 

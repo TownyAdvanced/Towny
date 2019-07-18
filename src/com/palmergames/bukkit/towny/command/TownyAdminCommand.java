@@ -273,22 +273,26 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void giveBonus(String[] split) throws TownyException {
 
 		Town town;
+		boolean isTown = false;
 
 		try {
 			if (split.length != 2)
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_input"), "Eg: givebonus [town/player] [n]"));
 			try {
 				town = TownyUniverse.getDataSource().getTown(split[0]);
+				isTown = true;
 			} catch (NotRegisteredException e) {
-				town = TownyUniverse.getDataSource().getResident(split[0]).getTown();
+				town = TownyUniverse.getDataSource().getResident(split[0]).getTown();				
 			}
 			try {
 				town.setBonusBlocks(town.getBonusBlocks() + Integer.parseInt(split[1].trim()));
 				TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_give_total"), town.getName(), split[1], town.getBonusBlocks()));
-				TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
-				if (isConsole) {
-					TownyMessaging.sendTownMessagePrefixed(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which your server admin did not create.");
-					TownyMessaging.sendTownMessagePrefixed(town, "You should consider changing servers and requesting a refund of your money.");
+				if (!isConsole || isTown) 
+					TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
+				if (isConsole && !isTown) {
+					TownyMessaging.sendMessage(town, "You have been given " + Integer.parseInt(split[1].trim()) + " bonus townblocks.");
+					TownyMessaging.sendMessage(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which the developers did not intend to be sold.");
+					TownyMessaging.sendMessage(town, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
 				}
 			} catch (NumberFormatException nfe) {
 				throw new TownyException(TownySettings.getLangString("msg_error_must_be_int"));

@@ -2920,7 +2920,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 
 
-					if (TownySettings.getAmountOfResidentsForTown() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForTown()) {
+					if (TownySettings.getAmountOfResidentsForOutpost() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForOutpost()) {
 						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
 					}
 
