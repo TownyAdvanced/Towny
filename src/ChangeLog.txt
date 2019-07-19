@@ -3250,3 +3250,4 @@ v0.92.0.11:
     - Fix farm plots not allowing for killing of allowed animals.
     - Fix for towny.admin's not having the ability to set plots notforsale.
     - Removed sqlite from listed valid database types. Reports are that it is broken, but almost no one uses it vs h2/mysql.
+    - Fix nation-disbanding-due-to-not-enough-residents not saving the town/nation properly.
