@@ -247,6 +247,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					
+					if (TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
+						for (WorldCoord worldCoord : selection) {
+							setPlotForSale(resident, worldCoord, -1);
+						}
+						return true;
+					}
+					
 					if (!townBlock.getType().equals(TownBlockType.EMBASSY)) 
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection);
 					else

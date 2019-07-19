@@ -3248,3 +3248,4 @@ v0.92.0.11:
     - Fix for nationzones not respecting config settings.
     - Cut-off for Pre-Release 5.
     - Fix farm plots not allowing for killing of allowed animals.
+    - Fix for towny.admin's not having the ability to set plots notforsale.
