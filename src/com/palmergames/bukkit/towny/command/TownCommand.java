@@ -2212,10 +2212,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			double travelCost = 0;
 			
-			if (townSpawnPermission == TownSpawnLevel.UNAFFILIATED)
-				travelCost = townSpawnPermission.getCost(town);
-			else
-				travelCost = townSpawnPermission.getCost();
+			// Taking whichever is smaller, the cost of the spawn price set by the town, or the cost set in the config (which is the maximum a town can set their spawncost to.) 
+			travelCost = Math.min(townSpawnPermission.getCost(town), townSpawnPermission.getCost());
 
 			// Check if need/can pay
 			if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&
