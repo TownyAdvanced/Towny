@@ -3228,7 +3228,6 @@ v0.92.0.11:
       - 'Processing Plot (Un)Claim...' 
     - Fix the last of the async events for good, courtesy of Articdive.
     - REQUIRED CONFIG CHANGE: in protections.switch_ids
-    - Possible fix for NationZones not always respecting config settings.
       - Add ",POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE"
     - REQUIRED CONFIG CHANGE: in protections.item_use_ids
       - Add ",BONE_MEAL"
@@ -3243,7 +3242,7 @@ v0.92.0.11:
     - Fix for the fix for explosion regeneration not preventing drops.
     - Fix for adding or removing ranks returning Null.
     - Fix for obnoxious givebonus message showing at times it should not have appeared.
-      - givebonus message version 2.0 is not in effect.
+      - givebonus message version 2.0 is now in effect.
     - Renamed a TownySetting to be more clear and accurate.
     - Fix for nationzones not respecting config settings.
     - Cut-off for Pre-Release 5.

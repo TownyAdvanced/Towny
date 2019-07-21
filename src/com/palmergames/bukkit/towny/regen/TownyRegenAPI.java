@@ -141,7 +141,7 @@ public class TownyRegenAPI {
 			TownyUniverse.getDataSource().saveRegenList();
 		}
 	}
-
+	
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
 	 * 
