@@ -650,7 +650,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 								}
 							}
 							catch(NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, please remove this resident from the file or restore their resident file.");
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
 							}
 						}
 					}
@@ -668,7 +668,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 									town.addOutlaw(outlaw);
 							}
 							catch(NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, removing from list...");
 							}
 						}
 					}
