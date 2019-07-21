@@ -3259,3 +3259,5 @@ v0.92.0.11:
     - Automatically remove deleted residents from town files and deleted towns from resident files, courtesy of KarlOfDuty.
 0.94.0.0:
     - Bump version number for release build.
+0.94.0.1:
+    - Switch to Bukkit 1.14.3 for development.
