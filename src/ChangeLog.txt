@@ -3251,3 +3251,7 @@ v0.92.0.11:
     - Removed sqlite from listed valid database types. Reports are that it is broken, but almost no one uses it vs h2/mysql.
     - Fix nation-disbanding-due-to-not-enough-residents not saving the town/nation properly.
     - Fix scenario where town and nation spawn costs were not what was set by the town/nation and only used the config's costs.
+    - Removed Config Setting: using_permissions.
+      - This setting goes back to the days when bukkit did not have in-built permissions, and all permissions related things relied on Permissions/GroupManager/etc.
+      - There is no scenario now where the server doesn't have permissions (everyone at least has the built-in BukkitPermissions.)
+      - Some admins were setting this config option to False trying to solve other issues related to permissions and it was becoming problematic.

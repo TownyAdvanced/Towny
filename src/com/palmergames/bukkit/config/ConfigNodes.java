@@ -616,12 +616,6 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
-	PLUGIN_USING_PERMISSIONS(
-			"plugin.interfacing.using_permissions",
-			"true",
-			"",
-			"# True to attempt to use GroupManager, LuckPerms, or other compliant Permission Manager",
-			"# False to disable permission checks and rely on Towny settings (This should almost never be set to false on a modern server.)"),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(

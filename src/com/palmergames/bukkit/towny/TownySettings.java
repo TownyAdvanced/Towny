@@ -2324,16 +2324,6 @@ public class TownySettings {
 		return !getBoolean(ConfigNodes.PLUGIN_RESET_LOG_ON_BOOT);
 	}
 
-	public static boolean isUsingPermissions() {
-
-		return getBoolean(ConfigNodes.PLUGIN_USING_PERMISSIONS);
-	}
-
-	public static void setUsingPermissions(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_PERMISSIONS.getRoot(), newSetting);
-	}
-
 	public static String getNameFilterRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_FILTER_REGEX);
