@@ -983,10 +983,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null)
-								nation.addTown(town);
+
+							try {
+								TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
+								Town town = getTown(token);
+								if (town != null)
+									nation.addTown(town);
+							}
+							catch(NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a town in the nation file of " + nation.getName() + ".txt. The town " + token + " does not exist, removing it from nation... (Will require editing of the nation file if it is the capital)");
+							}
 						}
 					}
 				}
