@@ -639,14 +639,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
-							Resident resident = getResident(token);
-							if (resident != null) {
-								try {
-									town.addResident(resident);
-								} catch (AlreadyRegisteredException e) {
-									TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+							try {
+								Resident resident = getResident(token);
+								if (resident != null) {
+									try {
+										town.addResident(resident);
+									} catch (AlreadyRegisteredException e) {
+										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+									}
 								}
-
+							}
+							catch(NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, removing them from town... (Will require manual editing of the town file if they are the mayor)");
 							}
 						}
 					}
@@ -664,7 +668,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 									town.addOutlaw(outlaw);
 							}
 							catch(NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, skipping...");
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading an outlaw of town file " + town.getName() + ".txt. The outlaw " + token + " does not exist, removing from list...");
 							}
 						}
 					}
@@ -979,10 +983,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
-							Town town = getTown(token);
-							if (town != null)
-								nation.addTown(town);
+
+							try {
+								TownyMessaging.sendDebugMsg("Nation Fetching Town: " + token);
+								Town town = getTown(token);
+								if (town != null)
+									nation.addTown(town);
+							}
+							catch(NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a town in the nation file of " + nation.getName() + ".txt. The town " + token + " does not exist, removing it from nation... (Will require editing of the nation file if it is the capital)");
+							}
 						}
 					}
 				}
