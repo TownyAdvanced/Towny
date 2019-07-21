@@ -39,7 +39,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
-import com.palmergames.bukkit.towny.permissions.NullPermSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
