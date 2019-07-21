@@ -639,14 +639,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
 							TownyMessaging.sendDebugMsg("Town Fetching Resident: " + token);
-							Resident resident = getResident(token);
-							if (resident != null) {
-								try {
-									town.addResident(resident);
-								} catch (AlreadyRegisteredException e) {
-									TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+							try {
+								Resident resident = getResident(token);
+								if (resident != null) {
+									try {
+										town.addResident(resident);
+									} catch (AlreadyRegisteredException e) {
+										TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " is already a member of a town (" + resident.getTown().getName() + ").");
+									}
 								}
-
+							}
+							catch(NotRegisteredException e) {
+								TownyMessaging.sendErrorMsg("Loading Error: Exception while reading a resident in the town file of " + town.getName() + ".txt. The resident " + token + " does not exist, please remove this resident from the file or restore their resident file.");
 							}
 						}
 					}
