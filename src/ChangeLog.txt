@@ -3255,3 +3255,4 @@ v0.92.0.11:
       - This setting goes back to the days when bukkit did not have in-built permissions, and all permissions related things relied on Permissions/GroupManager/etc.
       - There is no scenario now where the server doesn't have permissions (everyone at least has the built-in BukkitPermissions.)
       - Some admins were setting this config option to False trying to solve other issues related to permissions and it was becoming problematic.
+    - Cut off for PR6.
