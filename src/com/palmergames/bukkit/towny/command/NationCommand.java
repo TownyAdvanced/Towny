@@ -2051,21 +2051,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
          		throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
    			}
 
-
-//			// Check the permissions (Inspired by the town command but rewritten. (So we can actually read it :3 ))
-//            if(!isTownyAdmin) {
-//                if (nationSpawnPermission == TownSpawnLevel.UNAFFILIATED) {
-//					boolean war = TownyUniverse.isWarTime();
-//					if(war){
-//						throw new TownyException(TownySettings.getLangString("msg_err_nation_spawn_war"));
-//					}
-//
-//					if (!nation.isPublic()) {
-//                        throw new TownyException(TownySettings.getLangString("msg_err_nation_not_public"));
-//                    }
-//                }
-//            }
-
             if (!isTownyAdmin) {
                 // Prevent spawn travel while in disallowed zones (if
                 // configured)
@@ -2094,10 +2079,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             }
 
             double travelCost = 0;
-            if (nationSpawnPermission == NationSpawnLevel.UNAFFILIATED)
-            	travelCost = nationSpawnPermission.getCost(nation);
-            else
-            	travelCost = nationSpawnPermission.getCost();
+
+            // Taking whichever is smaller, the cost of the spawn price set by the nation, or the cost set in the config (which is the maximum a nation can set their spawncost to.)
+            travelCost = Math.min(nationSpawnPermission.getCost(nation),nationSpawnPermission.getCost());
 
             // Check if need/can pay
             if ( (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) &&

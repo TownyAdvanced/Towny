@@ -13,6 +13,8 @@ import org.bukkit.event.HandlerList;
  */
 public class TownAddResidentRankEvent extends Event
 {
+	private static final HandlerList handlers = new HandlerList();
+	
     private Resident resident;
     private String rank;
     private Town town;
@@ -53,7 +55,12 @@ public class TownAddResidentRankEvent extends Event
 
 	@Override
 	public HandlerList getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+
+		return handlers;
 	}
 }

@@ -564,7 +564,7 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"",
-			"# Valid load and save types are: flatfile, mysql, sqlite, h2."),
+			"# Valid load and save types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
 
@@ -616,12 +616,6 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
-	PLUGIN_USING_PERMISSIONS(
-			"plugin.interfacing.using_permissions",
-			"true",
-			"",
-			"# True to attempt to use GroupManager, LuckPerms, or other compliant Permission Manager",
-			"# False to disable permission checks and rely on Towny settings (This should almost never be set to false on a modern server.)"),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(
@@ -795,11 +789,6 @@ public enum ConfigNodes {
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
-	PROT_CHEAT(
-			"protection.cheat_protection",
-			"true",
-			"",
-			"# Prevent fly and double block jump cheats."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",

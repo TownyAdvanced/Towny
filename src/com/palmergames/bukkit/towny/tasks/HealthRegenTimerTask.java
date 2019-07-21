@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
@@ -62,8 +63,8 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		
 		// Heal while in town.
 		double currentHP = player.getHealth();
-		if (currentHP < player.getMaxHealth()) {
-			player.setHealth(Math.min(player.getMaxHealth(), ++currentHP));
+		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()) {
+			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue(), ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
 			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);

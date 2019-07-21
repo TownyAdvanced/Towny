@@ -294,35 +294,30 @@ public class Towny extends JavaPlugin {
 		List<String> using = new ArrayList<>();
 		Plugin test;
 
-		if (TownySettings.isUsingPermissions()) {
-			test = getServer().getPluginManager().getPlugin("GroupManager");
+		test = getServer().getPluginManager().getPlugin("GroupManager");
+		if (test != null) {
+			// groupManager = (GroupManager)test;
+			this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
+			using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
+		} else {
+			// Try Vault
+			test = getServer().getPluginManager().getPlugin("Vault");
 			if (test != null) {
-				// groupManager = (GroupManager)test;
-				this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
-				using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
-			} else {
-				// Try Vault
-				test = getServer().getPluginManager().getPlugin("Vault");
-				if (test != null) {
-					net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
-					if (chat == null) {
-						// No Chat implementation
-						test = null;
-						// Fall back to BukkitPermissions below
-					} else {
-						getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
-						using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
-					}
-				}
-
-				if (test == null) {
-					getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
-					using.add("BukkitPermissions");
+				net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
+				if (chat == null) {
+					// No Chat implementation
+					test = null;
+					// Fall back to BukkitPermissions below
+				} else {
+					getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
+					using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
 				}
 			}
-		} else {
-			// Not using Permissions
-			getTownyUniverse().setPermissionSource(new NullPermSource(this));
+
+			if (test == null) {
+				getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+				using.add("BukkitPermissions");
+			}
 		}
 
 		if (TownySettings.isUsingEconomy()) {
@@ -465,12 +460,6 @@ public class Towny extends JavaPlugin {
 	protected void setError(boolean error) {
 
 		this.error = error;
-	}
-
-	// is permissions active
-	public boolean isPermissions() {
-
-		return TownySettings.isUsingPermissions();
 	}
 
 	// is Essentials active

@@ -523,8 +523,8 @@ public class TownyEntityListener implements Listener {
 			}
 
 			// remove from world if set to remove mobs globally
-			if (townyWorld.isUsingTowny())
-				if (!townyWorld.hasWorldMobs() && ((MobRemovalTimerTask.isRemovingWorldEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld()))))) {
+			if (townyWorld.isUsingTowny()) {
+				if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
 					if (plugin.isCitizens2()) {
 						if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 							// TownyMessaging.sendDebugMsg("onCreatureSpawn world: Canceled "
@@ -535,7 +535,10 @@ public class TownyEntityListener implements Listener {
 					} else
 						event.setCancelled(true);
 				}
-
+				if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
+					event.setCancelled(true);
+				}
+			}
 			if (!townyWorld.hasTownBlock(coord))
 				return;
 			
@@ -544,7 +547,7 @@ public class TownyEntityListener implements Listener {
 				
 				if (townyWorld.isUsingTowny() && !townyWorld.isForceTownMobs()) {
 					if (!townBlock.getTown().hasMobs() && !townBlock.getPermissions().mobs) {
-						if ((MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || ((livingEntity instanceof Villager) && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesTown())))) {
+						if (MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
 							if (plugin.isCitizens2()) {
 								if (!CitizensAPI.getNPCRegistry().isNPC(livingEntity)) {
 									// TownyMessaging.sendDebugMsg("onCreatureSpawn town: Canceled "
@@ -556,6 +559,9 @@ public class TownyEntityListener implements Listener {
 								event.setCancelled(true);
 						}
 					}
+				}
+				if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
+					event.setCancelled(true);
 				}
 			} catch (TownyException x) {
 				
@@ -807,13 +813,8 @@ public class TownyEntityListener implements Listener {
 									ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 									task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 									TownyRegenAPI.addProtectionRegenTask(task);
-									event.setYield((float) 0.0);
+									event.setYield(0.0f);
 									block.getDrops().clear();
-									// Temporary solution that fixes what is presumably a Spigot issue
-									// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
-									// causing blocks to drop when things are blown up which we will revert.
-									// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
-									block.setType(Material.AIR); // <--- Temp solution.
 								}
 							}
 							// Break the block
@@ -841,13 +842,8 @@ public class TownyEntityListener implements Listener {
 												ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 												task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 												TownyRegenAPI.addProtectionRegenTask(task);
-												event.setYield((float) 0.0);
+												event.setYield(0.0f);
 												block.getDrops().clear();
-												// Temporary solution that fixes what is presumably a Spigot issue
-												// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
-												// causing blocks to drop when things are blown up which we will revert.
-												// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
-												block.setType(Material.AIR); // <--- Temp solution.
 											}
 										}
 									}
@@ -909,13 +905,8 @@ public class TownyEntityListener implements Listener {
 											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 											TownyRegenAPI.addProtectionRegenTask(task);
-											event.setYield((float) 0.0);
+											event.setYield(0.0f);
 											block.getDrops().clear();
-											// Temporary solution that fixes what is presumably a Spigot issue
-											// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
-											// causing blocks to drop when things are blown up which we will revert.
-											// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
-											block.setType(Material.AIR); // <--- Temp solution.
 										}
 										
 										baseData.setPowered(false);
@@ -927,13 +918,8 @@ public class TownyEntityListener implements Listener {
 											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
 											TownyRegenAPI.addProtectionRegenTask(task);
-											event.setYield((float) 0.0);
+											event.setYield(0.0f);
 											block.getDrops().clear();
-											// Temporary solution that fixes what is presumably a Spigot issue
-											// Above event.setYield((float) 0.0); no longer works as of MC 1.14,
-											// causing blocks to drop when things are blown up which we will revert.
-											// Tracked on spigot issue tracker here: https://hub.spigotmc.org/jira/browse/SPIGOT-5155
-											block.setType(Material.AIR); // <--- Temp solution.
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
 													block.getState().getData() instanceof Sign ||
@@ -1028,7 +1014,6 @@ public class TownyEntityListener implements Listener {
 
 		} catch (NotRegisteredException e1) {
 			// Not a known Towny world.
-			// event.setCancelled(true);
 			return;		
 		}
 
@@ -1088,7 +1073,7 @@ public class TownyEntityListener implements Listener {
 									event.setCancelled(true);
 					}
 				}
-			}
+		}
 
 		} else {
 

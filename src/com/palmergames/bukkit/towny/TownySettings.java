@@ -2324,16 +2324,6 @@ public class TownySettings {
 		return !getBoolean(ConfigNodes.PLUGIN_RESET_LOG_ON_BOOT);
 	}
 
-	public static boolean isUsingPermissions() {
-
-		return getBoolean(ConfigNodes.PLUGIN_USING_PERMISSIONS);
-	}
-
-	public static void setUsingPermissions(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_PERMISSIONS.getRoot(), newSetting);
-	}
-
 	public static String getNameFilterRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_FILTER_REGEX);
@@ -2352,11 +2342,6 @@ public class TownySettings {
 	public static String getNameRemoveRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);
-	}
-
-	public static boolean isUsingCheatProtection() {
-
-		return getBoolean(ConfigNodes.PROT_CHEAT);
 	}
 
 	public static int getTeleportWarmupTime() {
@@ -2507,7 +2492,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
 	}
 
-	public static int getAmountOfResidentsForTown() {
+	public static int getAmountOfResidentsForOutpost() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 

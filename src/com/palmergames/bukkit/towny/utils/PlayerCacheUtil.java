@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * Groups all the cache status and permissions in one place.
@@ -270,8 +269,10 @@ public class PlayerCacheUtil {
 						// There will almost always be a town in any world where towny is enabled. 
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
-					}					
-					distance = distance + TownySettings.getNationZonesCapitalBonusSize();
+					}
+					if (nearestTown.isCapital()) {
+						distance = distance + TownySettings.getNationZonesCapitalBonusSize();
+					}
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;
