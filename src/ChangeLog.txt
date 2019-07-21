@@ -3256,3 +3256,5 @@ v0.92.0.11:
       - There is no scenario now where the server doesn't have permissions (everyone at least has the built-in BukkitPermissions.)
       - Some admins were setting this config option to False trying to solve other issues related to permissions and it was becoming problematic.
     - Cut off for PR6.
+0.94.0.0:
+    - Bump version number for release build.
