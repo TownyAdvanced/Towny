@@ -2,11 +2,11 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -17,7 +17,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +34,8 @@ import java.util.Set;
  */
 public class TownyPerms {
 
-	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<String, Permission>();
-	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<String, PermissionAttachment>();
+	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
+	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	
@@ -51,9 +50,7 @@ public class TownyPerms {
 		try {
 			permissions = PermissionAttachment.class.getDeclaredField("permissions");
 			permissions.setAccessible(true);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
+		} catch (SecurityException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
 	}
@@ -64,11 +61,10 @@ public class TownyPerms {
 	 * 
 	 * @param filepath
 	 * @param defaultRes
-	 * @throws IOException
 	 */
-	public static void loadPerms(String filepath, String defaultRes) throws IOException {
+	public static void loadPerms(String filepath, String defaultRes) {
 
-		String fullPath = filepath + FileMgmt.fileSeparator() + defaultRes;
+		String fullPath = filepath + File.separator + defaultRes;
 
 		File file = FileMgmt.unpackResourceFile(fullPath, defaultRes, defaultRes);
 		if (file != null) {
@@ -91,11 +87,12 @@ public class TownyPerms {
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
 
-		PermissionAttachment playersAttachment = null;
+		PermissionAttachment playersAttachment;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (resident == null) {
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = townyUniverse.getDatabase().getResident(player.getName());
 			} catch (NotRegisteredException e) {
 				// failed to get resident
 				e.printStackTrace();
@@ -115,10 +112,10 @@ public class TownyPerms {
 			return;
 		}
 
-		TownyWorld World = null;
+		TownyWorld World;
 
 		try {
-			World = TownyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
+			World = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			// World not registered with Towny.
 			e.printStackTrace();
@@ -158,12 +155,10 @@ public class TownyPerms {
 				 */
 				playersAttachment.getPermissible().recalculatePermissions();
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
+		
 		/*
 		 * Store the attachment for future reference
 		 */
@@ -178,8 +173,9 @@ public class TownyPerms {
 	 */
 	public static void removeAttachment(String name) {
 		
-		if (attachments.containsKey(name))
+		if (attachments.containsKey(name)) {
 			attachments.remove(name);
+		}
 		
 	}
 	
@@ -202,8 +198,9 @@ public class TownyPerms {
 	 */
 	public static void updateTownPerms(Town town) {
 		
-		for (Resident resident: town.getResidents())
+		for (Resident resident: town.getResidents()) {
 			assignPermissions(resident, null);
+		}
 		
 	}
 	
@@ -214,8 +211,9 @@ public class TownyPerms {
 	 */
 	public static void updateNationPerms(Nation nation) {
 		
-		for (Town town: nation.getTowns())
+		for (Town town: nation.getTowns()) {
 			updateTownPerms(town);
+		}
 		
 	}
 
@@ -241,7 +239,7 @@ public class TownyPerms {
 	 */
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
 		
-		Set<String> permList = new HashSet<String>();
+		Set<String> permList = new HashSet<>();
 		
 		// Start by adding the default perms everyone gets
 		permList.addAll(getDefault());

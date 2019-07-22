@@ -2,23 +2,21 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOGIN;
 
 
 /**
@@ -28,7 +26,7 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.PLAYER_LOG
 public class OnPlayerLogin implements Runnable {
 	
 	Towny plugin;
-	TownyUniverse universe;
+	com.palmergames.bukkit.towny.TownyUniverse universe;
 	volatile Player player;
 	
 	/**
@@ -40,7 +38,7 @@ public class OnPlayerLogin implements Runnable {
 	public OnPlayerLogin(Towny plugin, Player player) {
 		
 		this.plugin = plugin;
-		this.universe = plugin.getTownyUniverse();
+		this.universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		this.player = player;
 	}
 
@@ -49,42 +47,40 @@ public class OnPlayerLogin implements Runnable {
 		
 		Resident resident = null;
 
-		if (!TownyUniverse.getDataSource().hasResident(player.getName())) {
+		if (!universe.getDatabase().hasResident(player.getName())) {
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
 			 */
 			try {
-				TownyUniverse.getDataSource().newResident(player.getName());
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				universe.getDatabase().newResident(player.getName());
+				resident = universe.getDatabase().getResident(player.getName());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
 					TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
-				if (!TownySettings.getDefaultTownName().equals(""))
+				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
-						Town town = TownyUniverse.getDataSource().getTown(TownySettings.getDefaultTownName());
+						Town town = TownyUniverse.getInstance().getDatabase().getTown(TownySettings.getDefaultTownName());
 						town.addResident(resident);
-						TownyUniverse.getDataSource().saveTown(town);
-					} catch (NotRegisteredException ex) {
-					} catch (AlreadyRegisteredException ex) {
+						universe.getDatabase().saveTown(town);
+					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
-
-				TownyUniverse.getDataSource().saveResident(resident);
-				TownyUniverse.getDataSource().saveResidentList();
+				}
 				
-			} catch (AlreadyRegisteredException ex) {
-				// Should never happen
-			} catch (NotRegisteredException ex) {
+				universe.getDatabase().saveResident(resident);
+				universe.getDatabase().saveResidentList();
+				
+			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
 				// Should never happen
 			}
-
+			
 		} else {
 			/*
 			 * This resident is known so fetch the data and update it.
 			 */
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = universe.getDatabase().getResident(player.getName());
 				if (TownySettings.isUsingEssentials()) {
 					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 					/*
@@ -94,8 +90,8 @@ public class OnPlayerLogin implements Runnable {
 						resident.setLastOnline(System.currentTimeMillis());
 				} else
 					resident.setLastOnline(System.currentTimeMillis());
-
-				TownyUniverse.getDataSource().saveResident(resident);
+				
+				universe.getDatabase().saveResident(resident);
 				
 			} catch (NotRegisteredException ex) {
 				// Should never happen
@@ -112,25 +108,25 @@ public class OnPlayerLogin implements Runnable {
 					TownyMessaging.sendTownBoard(player, resident.getTown());
 				}
 				if (TownySettings.getShowNationBoardOnLogin()) {
-					if (resident.getTown().hasNation())
+					if (resident.getTown().hasNation()) {
 						TownyMessaging.sendNationBoard(player, resident.getTown().getNation());
+					}
 				}
 				resident.getTown(); // Exception check, this does not do anything at all!
-			} catch (NotRegisteredException ex) {
+			} catch (NotRegisteredException ignored) {
 			}
 
-		if (TownyUniverse.isWarTime())
+		if (TownyAPI.getInstance().isWarTime()) {
 			universe.getWarEvent().sendScores(player, 3);
+		}
 
 		//Schedule to setup default modes when the player has finished loading
-		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
+		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1) {
 			TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
+		}
 		
 		// Send any warning messages at login.
 		warningMessage(resident);
-		
-		
-		universe.setChangedNotify(PLAYER_LOGIN);
 	}
 	
 	/**

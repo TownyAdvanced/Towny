@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,65 +13,54 @@ public class WorldCoord extends Coord {
 	private String worldName;
 
 	public WorldCoord(String worldName, int x, int z) {
-
 		super(x, z);
 		this.worldName = worldName;
 	}
 
 	public WorldCoord(String worldName, Coord coord) {
-
 		super(coord);
 		this.worldName = worldName;
 	}
 
 	public WorldCoord(WorldCoord worldCoord) {
-
 		super(worldCoord);
 		this.worldName = worldCoord.getWorldName();
 	}
 
 	public String getWorldName() {
-
 		return worldName;
 	}
 
 	public Coord getCoord() {
-
 		return new Coord(x, z);
 	}
 
 	@Deprecated
 	public TownyWorld getWorld() throws NotRegisteredException {
-
 		return getTownyWorld();
 	}
 
 	@Deprecated
 	public WorldCoord(TownyWorld world, int x, int z) {
-
 		super(x, z);
 		this.worldName = world.getName();
 	}
 
 	@Deprecated
 	public WorldCoord(TownyWorld world, Coord coord) {
-
 		super(coord);
 		this.worldName = world.getName();
 	}
 
 	public static WorldCoord parseWorldCoord(Entity entity) {
-
 		return parseWorldCoord(entity.getLocation());
 	}
 
 	public static WorldCoord parseWorldCoord(Location loc) {
-
 		return new WorldCoord(loc.getWorld().getName(), parseCoord(loc));
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
-
 		return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
 	}
 
@@ -91,7 +81,6 @@ public class WorldCoord extends Coord {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		if (obj == this)
 			return true;
 		if (!(obj instanceof Coord))
@@ -108,7 +97,6 @@ public class WorldCoord extends Coord {
 
 	@Override
 	public String toString() {
-
 		return worldName + "," + super.toString();
 	}
 
@@ -118,7 +106,6 @@ public class WorldCoord extends Coord {
 	 * @return the relevant org.bukkit.World instance
 	 */
 	public World getBukkitWorld() {
-
 		return Bukkit.getWorld(worldName);
 	}
 
@@ -129,9 +116,7 @@ public class WorldCoord extends Coord {
 	 *         NotRegisteredException.
 	 */
 	public TownyWorld getTownyWorld() throws NotRegisteredException {
-
-		return TownyUniverse.getDataSource().getWorld(worldName);
-
+		return TownyUniverse.getInstance().getDatabase().getWorld(worldName);
 	}
 
 	/**
@@ -141,7 +126,6 @@ public class WorldCoord extends Coord {
 	 * @throws NotRegisteredException - If there is no TownBlock @ WorldCoord, then this exception.
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
-
 		return getTownyWorld().getTownBlock(getCoord());
 	}
 }

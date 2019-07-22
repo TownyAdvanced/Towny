@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +11,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -218,11 +218,7 @@ public abstract class TownyPermissionSource {
 	}
 
 	public boolean testPermission(Player player, String perm) {
-
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!has(player, perm)))
-			return false;
-
-		return true;
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
 	}
 
 	/**

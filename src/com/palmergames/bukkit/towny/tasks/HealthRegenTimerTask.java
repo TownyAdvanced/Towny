@@ -8,11 +8,12 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
@@ -29,7 +30,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		if (TownyUniverse.isWarTime())
+		if (TownyAPI.getInstance().isWarTime())
 			return;
 
 		for (Player player : server.getOnlinePlayers()) {
@@ -38,10 +39,11 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 			Coord coord = Coord.parseCoord(player);
 			try {
-				TownyWorld world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				TownyUniverse townyUniverse = TownyUniverse.getInstance();
+				TownyWorld world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
 				TownBlock townBlock = world.getTownBlock(coord);
 
-				if (CombatUtil.isAlly(townBlock.getTown(), TownyUniverse.getDataSource().getResident(player.getName()).getTown()))
+				if (CombatUtil.isAlly(townBlock.getTown(), townyUniverse.getDatabase().getResident(player.getName()).getTown()))
 					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 						incHealth(player);
 			} catch (TownyException x) {
