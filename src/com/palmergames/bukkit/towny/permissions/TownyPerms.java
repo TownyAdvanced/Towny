@@ -124,9 +124,15 @@ public class TownyPerms {
 
 		if (attachments.containsKey(resident.getName())) {
 			playersAttachment = attachments.get(resident.getName());
-		} else
-			playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+		} else {
+			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
+			try {
+				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+			} catch (Exception e) {
+				return;
+			}
 
+		}
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
 		 * will perform a recalculation of perms for each addition.

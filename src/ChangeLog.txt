@@ -3282,3 +3282,4 @@ v0.92.0.11:
 	- REQUIRED CONFIG CHANGE: protections.switch_ids
 	  - Add: ",BARREL"
 0.94.0.2:
+    - Attempt #2 at silencing the AssignPermissions() error seen when DungeonsXL moves offline players out of dungeon worlds.
