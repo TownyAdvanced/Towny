@@ -37,7 +37,7 @@ public class SetDefaultModes extends TimerTask {
 			if (!modeString.isEmpty())
 				modes = modeString.split(",");
 			try {
-				townyUniverse.getDatabase().getResident(name).resetModes(modes, notify);
+				townyUniverse.getDataSource().getResident(name).resetModes(modes, notify);
 			} catch (NotRegisteredException e) {
 				// No resident by this name.
 			}

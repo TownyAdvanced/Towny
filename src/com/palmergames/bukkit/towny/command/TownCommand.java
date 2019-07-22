@@ -137,7 +137,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 			try {
-				final Town town = TownyUniverse.getInstance().getDatabase().getTown(split[0]);
+				final Town town = TownyUniverse.getInstance().getDataSource().getTown(split[0]);
 				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
 			} catch (NotRegisteredException x) {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
@@ -155,7 +155,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 0) {
 				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 					try {
-						Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
 
 						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town));
@@ -216,7 +216,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					Town tbTown = tb.getTown(); 
-					Town pTown = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+					Town pTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 					if (tbTown != pTown)
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -230,8 +230,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));					
 					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
-					if (!townyUniverse.getDatabase().getResident(player.getName()).getTown().equals(town))
+					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 				}
 
@@ -255,7 +255,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 					Town tbTown = tb.getTown(); 
-					Town pTown = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+					Town pTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 					if (tbTown != pTown)
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_bank_plot"));
 					boolean goodPlot = false;
@@ -270,8 +270,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 					}
 					Coord coord = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-					Town town = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
-					if (!townyUniverse.getDatabase().getResident(player.getName()).getTown().equals(town))
+					Town town = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getTownBlock(coord).getTown();
+					if (!townyUniverse.getDataSource().getResident(player.getName()).getTown().equals(town))
 						throw new TownyException(TownySettings.getLangString("msg_err_unable_to_use_bank_outside_your_town"));
 				}
 
@@ -293,9 +293,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 
 					if (split.length == 1) {
-						town = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+						town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 					} else {
-						town = townyUniverse.getDatabase().getTown(split[1]);
+						town = townyUniverse.getDataSource().getTown(split[1]);
 					}
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
@@ -355,7 +355,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode())){
 								throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 							}
-							Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+							Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 							if (resident.hasTown()){
 								Town town = resident.getTown();
 								List<Location> outposts = town.getAllOutpostSpawns();
@@ -429,9 +429,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Town town = null;
 					try {
 						if (split.length == 1) {
-							town = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+							town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 						} else {
-							town = townyUniverse.getDatabase().getTown(split[1]);
+							town = townyUniverse.getDataSource().getTown(split[1]);
 						}
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
@@ -445,7 +445,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					try {
-						Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
 						TownyMessaging.sendMessage(player, TownyFormatter.getRanks(town));
 					} catch (NotRegisteredException x) {
@@ -457,9 +457,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Town town;
 					try {
 						if (split.length == 1)
-							town = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+							town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 						else
-							town = townyUniverse.getDatabase().getTown(split[1]);
+							town = townyUniverse.getDataSource().getTown(split[1]);
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
 						return;
@@ -514,7 +514,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					try {
-						Town town = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+						Town town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 						StringBuilder builder = new StringBuilder();
 						for (String s : newSplit) {
 							builder.append(s + " ");
@@ -533,8 +533,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				} else {
 					try {
-						final Town town = townyUniverse.getDatabase().getTown(split[0]);
-						Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+						final Town town = townyUniverse.getDataSource().getTown(split[0]);
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != town) || (!resident.hasTown()) ) ) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
@@ -567,7 +567,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		// We know he has the main permission to manage this stuff. So Let's continue:
 
-		Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 
 		String received = TownySettings.getLangString("town_received_invites")
 				.replace("%a", Integer.toString(InviteHandler.getReceivedInvitesAmount(resident.getTown()))
@@ -653,7 +653,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (newSplit.length >= 2) { // /invite deny args[1]
 					try {
-						nation = townyUniverse.getDatabase().getNation(newSplit[1]);
+						nation = townyUniverse.getDataSource().getNation(newSplit[1]);
 					} catch (NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 						return;
@@ -693,7 +693,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				if (newSplit.length >= 2) { // /invite deny args[1]
 					try {
-						nation = townyUniverse.getDatabase().getNation(newSplit[1]);
+						nation = townyUniverse.getDataSource().getNation(newSplit[1]);
 					} catch (NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 						return;
@@ -751,8 +751,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("Eg: /town outlaw add/remove [name]");
 
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
-				target = townyUniverse.getDatabase().getResident(split[1]);
+				resident = townyUniverse.getDataSource().getResident(player.getName());
+				target = townyUniverse.getDataSource().getResident(split[1]);
 				town = resident.getTown();
 			} catch (TownyException x) {
 				throw new TownyException(x.getMessage());
@@ -775,7 +775,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendPrefixedTownMessage(town,String.format(TownySettings.getLangString("msg_kicked"), player.getName(), target.getName()));
 						}
 					town.addOutlaw(target);
-					townyUniverse.getDatabase().saveTown(town);
+					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_declared_outlaw"), town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_declared_an_outlaw"), target.getName(), town.getName()));
 				} catch (AlreadyRegisteredException e) {
@@ -789,7 +789,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
 					town.removeOutlaw(target);
-					townyUniverse.getDatabase().saveTown(town);
+					townyUniverse.getDataSource().saveTown(town);
 					TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_undeclared_outlaw"), town.getName()));
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_you_have_undeclared_an_outlaw"), target.getName(), town.getName()));
 				} catch (NotRegisteredException e) {
@@ -807,7 +807,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDatabase().saveTown(town);
+			townyUniverse.getDataSource().saveTown(town);
 
 		}
 
@@ -889,7 +889,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length > 0) {
 			try {
-				Town town = townyUniverse.getDatabase().getTown(split[0]);
+				Town town = townyUniverse.getDataSource().getTown(split[0]);
 				List<Resident> onlineResidents = getOnlineResidentsViewable(player, town);
 				if (onlineResidents.size() > 0) {
 					TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
@@ -902,7 +902,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 			try {
-				Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				Town town = resident.getTown();
 				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 			} catch (NotRegisteredException x) {
@@ -920,7 +920,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(CommandSender sender, String[] split) {
 
-		List<Town> townsToSort = TownyUniverse.getInstance().getDatabase().getTowns();
+		List<Town> townsToSort = TownyUniverse.getInstance().getDataSource().getTowns();
 		int page = 1;
 		int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
 		if (split.length > 1) {
@@ -982,7 +982,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public void showTownStatusHere(Player player) {
 
 		try {
-			TownyWorld world = TownyUniverse.getInstance().getDatabase().getWorld(player.getWorld().getName());
+			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
 			Coord coord = Coord.parseCoord(player);
 			showTownStatusAtCoord(player, world, coord);
 		} catch (TownyException e) {
@@ -1043,7 +1043,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Resident resident;
 			Town town;
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
 			} catch (TownyException x) {
@@ -1065,7 +1065,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				boolean outsiderintown = false;
 				if (TownySettings.getOutsidersPreventPVPToggle()) {
 					for (Player target : Bukkit.getOnlinePlayers()) {
-						Resident targetresident = townyUniverse.getDatabase().getResident(target.getName());
+						Resident targetresident = townyUniverse.getDataSource().getResident(target.getName());
 						Block block = target.getLocation().getBlock().getRelative(BlockFace.DOWN);
 						if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
 							WorldCoord coord = WorldCoord.parseWorldCoord(target.getLocation());
@@ -1127,7 +1127,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Integer.parseInt(split[1]);
 						index = Integer.valueOf(split[1]);
-						Resident jailedresident = townyUniverse.getDatabase().getResident(split[2]);
+						Resident jailedresident = townyUniverse.getDataSource().getResident(split[2]);
 						if (!player.hasPermission("towny.command.town.toggle.jail"))
 							throw new TownyException(TownySettings.getLangString("msg_no_permission_to_jail_your_residents"));
 						if (!jailedresident.hasTown())
@@ -1148,7 +1148,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(TownySettings.getLangString("msg_no_self_jailing"));
 
 							if (jailedresident.isJailed()) {
-								Town jailTown = townyUniverse.getDatabase().getTown(jailedresident.getJailTown());
+								Town jailTown = townyUniverse.getDataSource().getTown(jailedresident.getJailTown());
 								if (jailTown != sendertown) {
 									throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
 								} else {
@@ -1186,7 +1186,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			for (TownBlock townBlock : town.getTownBlocks()) {
 				if (!townBlock.hasResident() && !townBlock.isChanged()) {
 					townBlock.setType(townBlock.getType());
-					townyUniverse.getDatabase().saveTownBlock(townBlock);
+					townyUniverse.getDataSource().saveTownBlock(townBlock);
 				}
 			}
 
@@ -1194,7 +1194,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(town);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 			
-			townyUniverse.getDatabase().saveTown(town);
+			townyUniverse.getDataSource().saveTown(town);
 		}
 	}
 
@@ -1246,8 +1246,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("Eg: /town rank add/remove [resident] [rank]");
 
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
-				target = townyUniverse.getDatabase().getResident(split[1]);
+				resident = townyUniverse.getDataSource().getResident(player.getName());
+				target = townyUniverse.getDataSource().getResident(split[1]);
 				town = resident.getTown();
 
 				if (town != target.getTown())
@@ -1314,7 +1314,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDatabase().saveResident(target);
+			townyUniverse.getDataSource().saveResident(target);
 
 		}
 
@@ -1343,7 +1343,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyWorld oldWorld = null;
 
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 
 				if (town.hasNation())
@@ -1393,9 +1393,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(TownySettings.getLangString("msg_not_mayor"));
 
 							String oldMayor = town.getMayor().getName();
-							Resident newMayor = townyUniverse.getDatabase().getResident(split[1]);
+							Resident newMayor = townyUniverse.getDataSource().getResident(split[1]);
 							town.setMayor(newMayor);
-							TownyPerms.assignPermissions(townyUniverse.getDatabase().getResident(oldMayor), null);
+							TownyPerms.assignPermissions(townyUniverse.getDataSource().getResident(oldMayor), null);
 							plugin.deleteCache(oldMayor);
 							plugin.deleteCache(newMayor.getName());
 							TownyMessaging.sendTownMessage(town, TownySettings.getNewMayorMsg(newMayor.getName()));
@@ -1623,7 +1623,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (TownyAPI.getInstance().isWarTime())
 							throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-						world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+						world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
@@ -1631,7 +1631,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 								throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
-						townBlock = townyUniverse.getDatabase().getWorld(player.getWorld().getName()).getTownBlock(coord);
+						townBlock = townyUniverse.getDataSource().getWorld(player.getWorld().getName()).getTownBlock(coord);
 						oldWorld = town.getWorld();
 						town.setHomeBlock(townBlock);
 						town.setSpawn(player.getLocation());
@@ -1659,7 +1659,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
 					try {
-						TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName());
+						TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
 						if (townyWorld.getTownBlock(Coord.parseCoord(player.getLocation())).getTown().getName().equals(town.getName())) {
 							town.addOutpostSpawn(player.getLocation());
 							TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_outpost_spawn"));
@@ -1699,19 +1699,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			townyUniverse.getDatabase().saveTown(town);
-			townyUniverse.getDatabase().saveTownList();
+			townyUniverse.getDataSource().saveTown(town);
+			townyUniverse.getDataSource().saveTownList();
 
 			if (nation != null) {
-				townyUniverse.getDatabase().saveNation(nation);
+				townyUniverse.getDataSource().saveNation(nation);
 				// TownyUniverse.getDataSource().saveNationList();
 			}
 
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.
 			if (oldWorld != null) {
-				townyUniverse.getDatabase().saveWorld(town.getWorld());
-				townyUniverse.getDatabase().saveWorld(oldWorld);
+				townyUniverse.getDataSource().saveWorld(town.getWorld());
+				townyUniverse.getDataSource().saveWorld(oldWorld);
 			}
 		}
 	}
@@ -1726,7 +1726,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		try {
-			resident = townyUniverse.getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 
 		} catch (TownyException x) {
@@ -1752,7 +1752,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				
-				townyUniverse.getDatabase().saveTown(town);
+				townyUniverse.getDataSource().saveTown(town);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
@@ -1817,7 +1817,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownyAPI.getInstance().isWarTime())
 				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-			if (TownySettings.hasTownLimit() && townyUniverse.getDatabase().getTowns().size() >= TownySettings.getTownLimit())
+			if (TownySettings.hasTownLimit() && townyUniverse.getDataSource().getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(TownySettings.getLangString("msg_err_universe_limit"));
 
 			// Check the name is valid and doesn't already exist.
@@ -1828,14 +1828,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || townyUniverse.getDatabase().hasTown(filteredName))
+			if ((filteredName == null) || townyUniverse.getDataSource().hasTown(filteredName))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
 
-			Resident resident = townyUniverse.getDatabase().getResident(mayorName);
+			Resident resident = townyUniverse.getDataSource().getResident(mayorName);
 			if (resident.hasTown())
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_already_res"), resident.getName()));
 
-			TownyWorld world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+			TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 			if (!world.isUsingTowny())
 				throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
@@ -1875,8 +1875,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		world.newTownBlock(key);
-		townyUniverse.getDatabase().newTown(name);
-		Town town = townyUniverse.getDatabase().getTown(name);
+		townyUniverse.getDataSource().newTown(name);
+		Town town = townyUniverse.getDataSource().getTown(name);
 		town.addResident(resident);
 		town.setMayor(resident);
 		TownBlock townBlock = world.getTownBlock(key);
@@ -1914,13 +1914,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		
-		townyUniverse.getDatabase().saveResident(resident);
-		townyUniverse.getDatabase().saveTownBlock(townBlock);
-		townyUniverse.getDatabase().saveTown(town);
-		townyUniverse.getDatabase().saveWorld(world);
+		townyUniverse.getDataSource().saveResident(resident);
+		townyUniverse.getDataSource().saveTownBlock(townBlock);
+		townyUniverse.getDataSource().saveTown(town);
+		townyUniverse.getDataSource().saveWorld(world);
 		
-		townyUniverse.getDatabase().saveTownList();
-		townyUniverse.getDatabase().saveTownBlockList();
+		townyUniverse.getDataSource().saveTownList();
+		townyUniverse.getDataSource().saveTownBlockList();
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -1934,8 +1934,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			townyUniverse.getDatabase().renameTown(town, newName);
-			town = townyUniverse.getDatabase().getTown(newName);
+			townyUniverse.getDataSource().renameTown(town, newName);
+			town = townyUniverse.getDataSource().getTown(newName);
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), player.getName(), town.getName()));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -1952,7 +1952,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownyAPI.getInstance().isWarTime())
 				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-			resident = townyUniverse.getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			plugin.deleteCache(resident.getName());
 
@@ -1986,15 +1986,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		try {
 			townRemoveResident(town, resident);
 		} catch (EmptyTownException et) {
-			townyUniverse.getDatabase().removeTown(et.getTown());
+			townyUniverse.getDataSource().removeTown(et.getTown());
 
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
 		
-		townyUniverse.getDatabase().saveResident(resident);
-		townyUniverse.getDatabase().saveTown(town);
+		townyUniverse.getDataSource().saveResident(resident);
+		townyUniverse.getDataSource().saveTown(town);
 
 		// Reset everyones cache permissions as this player leaving could affect
 		// multiple areas
@@ -2024,7 +2024,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 
-			Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			Town town;
 			String notAffordMSG;
 
@@ -2043,7 +2043,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else {
 				// split.length > 1
-				town = townyUniverse.getDatabase().getTown(split[0]);
+				town = townyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
 
 				townSpawn(player, split, town, notAffordMSG, outpost);
@@ -2071,7 +2071,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 			boolean isTownyAdmin = townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
-			Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			Location spawnLoc;
 			TownSpawnLevel townSpawnPermission;
 
@@ -2189,8 +2189,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (inTown == null && disallowedZones.contains("unclaimed"))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "the Wilderness"));
-					if (inTown != null && resident.hasNation() && townyUniverse.getDatabase().getTown(inTown).hasNation()) {
-						Nation inNation = townyUniverse.getDatabase().getTown(inTown).getNation();
+					if (inTown != null && resident.hasNation() && townyUniverse.getDataSource().getTown(inTown).hasNation()) {
+						Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
 						Nation playerNation = resident.getTown().getNation();
 						if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Enemy areas"));
@@ -2290,7 +2290,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			try {
-				Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
@@ -2303,14 +2303,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only_delete_town"));
 
-				town = townyUniverse.getDatabase().getTown(split[0]);
+				town = townyUniverse.getDataSource().getTown(split[0]);
 
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
-			townyUniverse.getDatabase().removeTown(town);
+			townyUniverse.getDataSource().removeTown(town);
 		}
 
 	}
@@ -2329,7 +2329,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2405,7 +2405,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_invited_join_town"), name, msg.toString()));
 			TownyMessaging.sendTownMessage(town, ChatTools.color(msg.toString()));
-			townyUniverse.getDatabase().saveTown(town);
+			townyUniverse.getDataSource().saveTown(town);
 		} else
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
 	}
@@ -2415,8 +2415,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.addResident(resident);
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDatabase().saveResident(resident);
-		townyUniverse.getDatabase().saveTown(town);
+		townyUniverse.getDataSource().saveResident(resident);
+		townyUniverse.getDataSource().saveTown(town);
 	}
 
 	private static void townInviteResident(String sender,Town town, Resident newMember) throws TownyException {
@@ -2464,8 +2464,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.removeResident(resident);
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDatabase().saveResident(resident);
-		townyUniverse.getDatabase().saveTown(town);
+		townyUniverse.getDataSource().saveResident(resident);
+		townyUniverse.getDataSource().saveTown(town);
 	}
 
 	public static void townKickResidents(Object sender, Resident resident, Town town, List<Resident> kicking) {
@@ -2505,12 +2505,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_kicked"), (player != null) ? player.getName() : "CONSOLE", msg.toString()));
 			TownyMessaging.sendTownMessage(town, ChatTools.color(msg.toString()));
 			try {
-				if (!(sender instanceof Player) || !townyUniverse.getDatabase().getResident(player.getName()).hasTown() || !TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown().equals(town))
+				if (!(sender instanceof Player) || !townyUniverse.getDataSource().getResident(player.getName()).hasTown() || !TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().equals(town))
 					// For when the an admin uses /ta town {name} kick {residents}
 					TownyMessaging.sendMessage(sender, ChatTools.color(msg.toString()));
 			} catch (NotRegisteredException e) {
 			}
-			townyUniverse.getDatabase().saveTown(town);
+			townyUniverse.getDataSource().saveTown(town);
 		} else {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
 		}
@@ -2534,8 +2534,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 						try {
 							town.getNation().removeTown(town);
-							townyUniverse.getDatabase().saveTown(town);
-							townyUniverse.getDatabase().saveNation(nation);
+							townyUniverse.getDataSource().saveTown(town);
+							townyUniverse.getDataSource().saveNation(nation);
 							TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_capital_not_enough_residents_left_nation"), town.getName()));
 						} catch (EmptyNationException e) {
 							e.printStackTrace();
@@ -2546,7 +2546,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			TownyMessaging.sendNationMessage(town.getNation(), String.format(TownySettings.getLangString("msg_nation_disbanded_town_not_enough_residents"), town.getName()));
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(town.getNation()));
-			townyUniverse.getDatabase().removeNation(town.getNation());
+			townyUniverse.getDataSource().removeNation(town.getNation());
 
 			if (TownySettings.isRefundNationDisbandLowResidents()) {
 				try {
@@ -2560,8 +2560,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_town_not_enough_residents_left_nation"), town.getName()));
 				town.getNation().removeTown(town);
-				townyUniverse.getDatabase().saveTown(town);
-				townyUniverse.getDatabase().saveNation(nation);
+				townyUniverse.getDataSource().saveTown(town);
+				townyUniverse.getDataSource().saveNation(nation);
 			} catch (EmptyNationException e) {
 				e.printStackTrace();
 			}
@@ -2603,8 +2603,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			resident = townyUniverse.getDatabase().getResident(residentName);
-			town = townyUniverse.getDatabase().getTown(townName);
+			resident = townyUniverse.getDataSource().getResident(residentName);
+			town = townyUniverse.getDataSource().getTown(townName);
 
 			// Check if resident is currently in a town.
 			if (resident.hasTown())
@@ -2656,7 +2656,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (name.equalsIgnoreCase("Console")) {
 				town = specifiedTown;
 			} else {
-				resident = TownyUniverse.getInstance().getDatabase().getResident(name);
+				resident = TownyUniverse.getInstance().getDataSource().getResident(name);
 				if (specifiedTown == null)
 					town = resident.getTown();
 				else
@@ -2739,7 +2739,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
-							townyUniverse.getDatabase().saveTownBlock(townBlock);
+							townyUniverse.getDataSource().saveTownBlock(townBlock);
 						}
 					}
 					if (townBlockOwner instanceof Town)
@@ -2856,7 +2856,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDatabase().saveTownBlock(townBlock);
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
 					}
 				}
 			}
@@ -2887,9 +2887,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 				}
 
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
-				world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				if (!world.isUsingTowny()) {
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
@@ -3009,9 +3009,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (TownyAPI.getInstance().isWarTime())
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
-				world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
@@ -3107,7 +3107,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (amount < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 
 			town.withdrawFromBank(resident, amount);
@@ -3122,7 +3122,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 
 			double bankcap = TownySettings.getTownBankCap();
@@ -3158,7 +3158,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (matches.size() == 1) {
 				// Match found online
 				try {
-					Resident target = townyUniverse.getDatabase().getResident(matches.get(0).getName());
+					Resident target = townyUniverse.getDataSource().getResident(matches.get(0).getName());
 					invited.add(target);
 				} catch (TownyException x) {
 					TownyMessaging.sendErrorMsg(sender, x.getMessage());
@@ -3167,7 +3167,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// No online matches so test for offline.
 				Resident target;
 				try {
-					target = townyUniverse.getDatabase().getResident(name);
+					target = townyUniverse.getDataSource().getResident(name);
 					invited.add(target);
 				} catch (NotRegisteredException x) {
 					TownyMessaging.sendErrorMsg(sender, x.getMessage());

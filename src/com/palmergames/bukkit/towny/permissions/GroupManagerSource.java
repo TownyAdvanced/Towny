@@ -172,7 +172,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
 
 					try {
-						resident = TownyUniverse.getInstance().getDatabase().getResident(event.getUserName());
+						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getUserName());
 						player = BukkitTools.getPlayerExact(resident.getName());
 						if (player != null) {
 							//setup default modes for this player.

@@ -23,7 +23,7 @@ public class ConfirmCommand extends BukkitCommand {
 			Player player = (Player) commandSender;
 			Resident resident;
 			try {
-				resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			} catch (TownyException e) {
 				return true;
 			}

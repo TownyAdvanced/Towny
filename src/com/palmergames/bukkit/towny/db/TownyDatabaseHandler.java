@@ -43,7 +43,7 @@ import java.util.UUID;
  * @author ElgarL
  * 
  */
-public abstract class TownyDatabaseHandler extends TownyDatabase {
+public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;

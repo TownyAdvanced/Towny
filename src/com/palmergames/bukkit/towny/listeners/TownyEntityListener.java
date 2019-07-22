@@ -62,8 +62,6 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.material.Attachable;
-import org.bukkit.material.PressurePlate;
-import org.bukkit.material.Sign;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
@@ -155,14 +153,14 @@ public class TownyEntityListener implements Listener {
 				}
 				TownyUniverse universe = TownyUniverse.getInstance();
 				//Cancel because one of two players has no town and should not be interfering during war.
-				if (!universe.getDatabase().getResident(attacker.getName()).hasTown() || !universe.getDatabase().getResident(defender.getName()).hasTown()){
+				if (!universe.getDataSource().getResident(attacker.getName()).hasTown() || !universe.getDataSource().getResident(defender.getName()).hasTown()){
 					TownyMessaging.sendMessage(attacker, TownySettings.getWarAPlayerHasNoTownMsg());
 					event.setCancelled(true);
 					return;
 				}
 				try {
-					Town attackerTown = universe.getDatabase().getResident(attacker.getName()).getTown();
-					Town defenderTown = universe.getDatabase().getResident(defender.getName()).getTown();
+					Town attackerTown = universe.getDataSource().getResident(attacker.getName()).getTown();
+					Town defenderTown = universe.getDataSource().getResident(defender.getName()).getTown();
 	
 					//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 					if ((!attackerTown.hasNation() || !defenderTown.hasNation()) && TownySettings.isWarTimeTownsNeutral()) {
@@ -229,7 +227,7 @@ public class TownyEntityListener implements Listener {
 			TownyWorld townyWorld;
 
 			try {
-				townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName());
+				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 
 				// remove drops from monster deaths if in an arena plot
 				if (townyWorld.isUsingTowny()) {
@@ -294,7 +292,7 @@ public class TownyEntityListener implements Listener {
           damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
 											
 				try {
-					townyWorld = townyUniverse.getDatabase().getWorld(entity.getWorld().getName());
+					townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -307,7 +305,7 @@ public class TownyEntityListener implements Listener {
 			if (event.getDamager() instanceof Projectile) {
 				
 				try {
-					townyWorld = townyUniverse.getDatabase().getWorld(entity.getWorld().getName());
+					townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
@@ -365,7 +363,7 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld = null;
 		
 		try {
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 		} catch (NotRegisteredException e) {
 			// Failed to fetch a world
 			return;
@@ -508,7 +506,7 @@ public class TownyEntityListener implements Listener {
 			TownyWorld townyWorld = null;
 
 			try {
-				townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName());
+				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 			} catch (NotRegisteredException e) {
 				// Failed to fetch a world
 				return;
@@ -582,7 +580,7 @@ public class TownyEntityListener implements Listener {
 		TownyWorld World = null;
 
 		try {
-			World = townyUniverse.getDatabase().getWorld(block.getLocation().getWorld().getName());
+			World = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
 			if (!World.isUsingTowny())
 				return;
 
@@ -593,7 +591,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		try {
-			TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(block.getLocation().getWorld().getName());
+			TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
 
 			if (townyWorld.isUsingTowny()) {
 
@@ -664,7 +662,7 @@ public class TownyEntityListener implements Listener {
 		case WITHER:
 
 			try {
-				TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
 
 				if (!townyWorld.isUsingTowny())
 					return;
@@ -682,7 +680,7 @@ public class TownyEntityListener implements Listener {
 		case ENDERMAN:
 
 			try {
-				TownyWorld townyWorld = townyUniverse.getDatabase().getWorld(event.getBlock().getWorld().getName());
+				TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(event.getBlock().getWorld().getName());
 
 				if (!townyWorld.isUsingTowny())
 					return;
@@ -750,7 +748,7 @@ public class TownyEntityListener implements Listener {
 		  once per explosion.
 		 */
 		try {
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(event.getLocation().getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
 
 			if (!townyWorld.isUsingTowny())
 				return;
@@ -1001,7 +999,7 @@ public class TownyEntityListener implements Listener {
 
 		try {
 			worldName = hanging.getWorld().getName();
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(worldName);
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(worldName);
 
 			if (!townyWorld.isUsingTowny())
 				return;
@@ -1107,7 +1105,7 @@ public class TownyEntityListener implements Listener {
 		Entity hanging = event.getEntity();
 
 		try {
-			TownyWorld townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(hanging.getWorld().getName());
+			TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(hanging.getWorld().getName());
 
 			if (!townyWorld.isUsingTowny())
 				return;

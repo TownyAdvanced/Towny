@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.db.TownyDatabase;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -79,8 +79,8 @@ public class TownyUniverse {
 		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getRootFolder();
 	}
 
-	public static TownyDatabase getDataSource() {
-		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabase();
+	public static TownyDataSource getDataSource() {
+		return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource();
 	}
 
 	public void setPermissionSource(TownyPermissionSource permissionSource) {

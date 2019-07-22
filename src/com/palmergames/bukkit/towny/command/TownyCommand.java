@@ -147,14 +147,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Town town = null;
 				if (split.length > 1) {
 					try {
-						town = townyUniverse.getDatabase().getTown(split[1]);
+						town = townyUniverse.getDataSource().getTown(split[1]);
 					} catch (NotRegisteredException x) {
 						sendErrorMsg(player, x.getMessage());
 						return;
 					}
 				} else if (split.length == 1)
 					try {
-						Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 						town = resident.getTown();
 					} catch (NotRegisteredException e) {
 					}
@@ -196,7 +196,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
 				if (townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-					Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					resident.toggleMode(split, true);
 				} else
 					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
@@ -250,10 +250,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		String townLine;
 		for (Nation nations : nationsToSort) {
 			nationLine = Colors.Gold + "-" + nations.getName();
-			if (townyUniverse.getDatabase().getResident(player.getName()).hasNation())
-				if (townyUniverse.getDatabase().getResident(player.getName()).getTown().getNation().hasEnemy(nations))
+			if (townyUniverse.getDataSource().getResident(player.getName()).hasNation())
+				if (townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasEnemy(nations))
 					nationLine += Colors.Red + " (Enemy)";
-				else if (townyUniverse.getDatabase().getResident(player.getName()).getTown().getNation().hasAlly(nations))
+				else if (townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation().hasAlly(nations))
 					nationLine += Colors.Green + " (Ally)";
 			output.add(nationLine);
 			for (Town towns : townsToSort) {
@@ -311,30 +311,30 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<>(universe.getDatabase().getTowns());
-				list.addAll(universe.getDatabase().getNations());
+				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
+				list.addAll(universe.getDataSource().getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
 				towny_top.addAll(getMostResidents(list, 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDatabase().getTowns()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns()), 10));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDatabase().getNations()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getNations()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("land"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<TownBlockOwner> list = new ArrayList<>(universe.getDatabase().getResidents());
-				list.addAll(universe.getDatabase().getTowns());
+				List<TownBlockOwner> list = new ArrayList<>(universe.getDataSource().getResidents());
+				list.addAll(universe.getDataSource().getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
 				towny_top.addAll(getMostLand(list, 10));
 			} else if (args[1].equalsIgnoreCase("resident")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDatabase().getResidents()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getResidents()), 10));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDatabase().getTowns()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns()), 10));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else
@@ -354,8 +354,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDatabase().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDatabase().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDatabase().getNations().size());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDatabase().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getDatabase().getAllTownBlocks().size());
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDataSource().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDataSource().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDataSource().getNations().size());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getDataSource().getAllTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70----- ");
 		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (test != null){

@@ -75,7 +75,7 @@ public class TownyWarCustomListener implements Listener {
 		} else {
 			playerName = player.getName();
 			try {
-				playerName = universe.getDatabase().getResident(player.getName()).getFormattedName();
+				playerName = universe.getDataSource().getResident(player.getName()).getFormattedName();
 			} catch (TownyException ignored) {
 			}
 		}
@@ -88,10 +88,10 @@ public class TownyWarCustomListener implements Listener {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getDatabase().getResident(cell.getNameOfFlagOwner());
+				attackingPlayer = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
 				if (player != null) {
 					try {
-						defendingPlayer = universe.getDatabase().getResident(player.getName());
+						defendingPlayer = universe.getDataSource().getResident(player.getName());
 					} catch (NotRegisteredException ignored) {
 					}
 				}
@@ -131,7 +131,7 @@ public class TownyWarCustomListener implements Listener {
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			Resident attackingResident = universe.getDatabase().getResident(cell.getNameOfFlagOwner());
+			Resident attackingResident = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
@@ -181,7 +181,7 @@ public class TownyWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			universe.getDatabase().removeTownBlock(townBlock);
+			universe.getDataSource().removeTownBlock(townBlock);
 
 			// Attacker Claim Automatically
 			try {

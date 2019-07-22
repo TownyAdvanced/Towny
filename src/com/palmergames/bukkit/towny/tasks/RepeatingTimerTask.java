@@ -52,7 +52,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				}
 				
 				townBlock.setLocked(false);
-				TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 				plugin.updateCache(townBlock.getWorldCoord());
 
 				if (!TownyRegenAPI.hasWorldCoords())

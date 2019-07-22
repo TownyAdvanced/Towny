@@ -28,21 +28,21 @@ public class BaseCommand implements TabCompleter{
 
 		if (!lastArg.equalsIgnoreCase("")) {
 			// Match nations
-			for (Nation nation : townyUniverse.getDatabase().getNations()) {
+			for (Nation nation : townyUniverse.getDataSource().getNations()) {
 				if (nation.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(nation.getName());
 				}
 
 			}
 			// Match towns
-			for (Town town : townyUniverse.getDatabase().getTowns()) {
+			for (Town town : townyUniverse.getDataSource().getTowns()) {
 				if (town.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(town.getName());
 				}
 
 			}
 			// Match residents
-			for (Resident resident : townyUniverse.getDatabase().getResidents()) {
+			for (Resident resident : townyUniverse.getDataSource().getResidents()) {
 				if (resident.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(resident.getName());
 				}

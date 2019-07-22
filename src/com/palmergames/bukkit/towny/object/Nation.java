@@ -255,7 +255,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void setNationSpawn(Location spawn) throws TownyException {
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
-		TownBlock townBlock = TownyUniverse.getInstance().getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+		TownBlock townBlock = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
 				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));

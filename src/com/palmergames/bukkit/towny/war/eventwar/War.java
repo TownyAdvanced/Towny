@@ -197,7 +197,7 @@ public class War {
 		}
 
 		//Gather all nations at war
-		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabase().getNations()) {
+		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
 			if (!nation.isNeutral()) {
 				add(nation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
@@ -380,7 +380,7 @@ public class War {
 		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
 		TownyMessaging.sendMessageToMode(townBlock.getTown(), healString, "");
 		for (Player p : wzd.getDefenders()) {
-			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabase().getResident(p.getName()).getTown() != townBlock.getTown())
+			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown() != townBlock.getTown())
 				TownyMessaging.sendMessage(p, healString);
 		}
 		launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
@@ -399,7 +399,7 @@ public class War {
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 
 		Player attackerPlayer = wzd.getRandomAttacker();
-		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDatabase().getResident(attackerPlayer.getName());
+		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getResident(attackerPlayer.getName());
 		Town attacker = attackerResident.getTown();
 
 		//Health, messaging, fireworks..
@@ -522,8 +522,8 @@ public class War {
 					remove(attacker, townBlock.getTown().getNation());
 				else
 					remove(attacker, townBlock.getTown());
-				townyUniverse.getDatabase().saveTown(townBlock.getTown());
-				townyUniverse.getDatabase().saveTown(attacker);
+				townyUniverse.getDataSource().saveTown(townBlock.getTown());
+				townyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
 				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
@@ -541,13 +541,13 @@ public class War {
 			if (townBlock.getType().equals(TownBlockType.JAIL)){
 				Town town = townBlock.getTown();				
 				int count = 0;
-				for (Resident resident : townyUniverse.getDatabase().getResidents()){
+				for (Resident resident : townyUniverse.getDataSource().getResidents()){
 					try {						
 						if (resident.isJailed())
 							if (resident.getJailTown().equals(town.toString())) 
 								if (Coord.parseCoord(town.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
-									townyUniverse.getDatabase().saveResident(resident);
+									townyUniverse.getDataSource().saveResident(resident);
 									count++;
 								}
 					} catch (TownyException e) {
@@ -557,8 +557,8 @@ public class War {
 					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_jailbreak"), town, count));
 			}				
 		}
-		townyUniverse.getDatabase().saveTown(townBlock.getTown());
-		townyUniverse.getDatabase().saveTown(attacker);
+		townyUniverse.getDataSource().saveTown(townBlock.getTown());
+		townyUniverse.getDataSource().saveTown(attacker);
 	}
 
 	public void remove(Town attacker, Nation nation) throws NotRegisteredException {
