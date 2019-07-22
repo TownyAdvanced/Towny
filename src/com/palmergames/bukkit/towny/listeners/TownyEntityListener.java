@@ -90,7 +90,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -245,7 +245,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
 		if (plugin.isError()) {
 			return;
@@ -358,7 +358,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 *  @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
 		ThrownPotion potion = event.getEntity();
 		Location loc = potion.getLocation();		
@@ -432,7 +432,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPotionSplashEvent(PotionSplashEvent event) {
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
@@ -494,7 +494,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event
 	 * @throws NotRegisteredException
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -567,7 +567,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event
 	 * @throws NotRegisteredException
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -651,7 +651,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -735,7 +735,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 
 		if (plugin.isError()) {
@@ -946,7 +946,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event
 	 * @throws NotRegisteredException 
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) throws NotRegisteredException {
 
 		if (plugin.isError()) {
@@ -987,7 +987,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
 
 		if (plugin.isError()) {
@@ -1093,7 +1093,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHangingPlace(HangingPlaceEvent event) {
 
 		if (plugin.isError()) {
