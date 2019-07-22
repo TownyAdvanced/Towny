@@ -3281,3 +3281,4 @@ v0.92.0.11:
 	  - You will have to edit these sign names in your Towny\data\worlds\WORLDNAME.txt files as well.
 	- REQUIRED CONFIG CHANGE: protections.switch_ids
 	  - Add: ",BARREL"
+0.94.0.2:
