@@ -45,7 +45,7 @@ public class TownyAsciiMap {
 		Resident resident;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = townyUniverse.getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 			if (resident.hasTown())
 				hasTown = true;
 		} catch (TownyException x) {
@@ -55,7 +55,7 @@ public class TownyAsciiMap {
 
 		TownyWorld world;
 		try {
-			world = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		} catch (NotRegisteredException e1) {
 			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;

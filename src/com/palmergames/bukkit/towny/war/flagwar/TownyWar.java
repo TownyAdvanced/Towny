@@ -204,7 +204,7 @@ public class TownyWar {
 		TownBlock townBlock;
 
 		try {
-			attackingResident = townyUniverse.getDatabase().getResident(player.getName());
+			attackingResident = townyUniverse.getDataSource().getResident(player.getName());
 			attackingTown = attackingResident.getTown();
 			attackingNation = attackingTown.getNation();
 		} catch (NotRegisteredException e) {
@@ -322,7 +322,7 @@ public class TownyWar {
 		// Set yourself as target's enemy so they can retaliate.
 		if (!landOwnerNation.hasEnemy(attackingNation)) {
 			landOwnerNation.addEnemy(attackingNation);
-			townyUniverse.getDatabase().saveNation(landOwnerNation);
+			townyUniverse.getDataSource().saveNation(landOwnerNation);
 		}
 
 		// Update Cache

@@ -124,7 +124,7 @@ public class TownyRegenAPI {
 
 		if (PlotChunks.containsKey(getPlotKey(plotChunk))) {
 			PlotChunks.remove(getPlotKey(plotChunk));
-			TownyUniverse.getInstance().getDatabase().saveRegenList();
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 	
@@ -140,7 +140,7 @@ public class TownyRegenAPI {
 			//plotChunk.initialize();
 			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
 			if (save)
-				TownyUniverse.getInstance().getDatabase().saveRegenList();
+				TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 
@@ -151,8 +151,8 @@ public class TownyRegenAPI {
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDatabase().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
-			townyUniverse.getDatabase().savePlotData(plotChunk);
+		if (townyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+			townyUniverse.getDataSource().savePlotData(plotChunk);
 		}
 	}
 
@@ -162,7 +162,7 @@ public class TownyRegenAPI {
 	 * @param plotChunk
 	 */
 	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
-		TownyUniverse.getInstance().getDatabase().deletePlotData(plotChunk);
+		TownyUniverse.getInstance().getDataSource().deletePlotData(plotChunk);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class TownyRegenAPI {
 	 * @param townBlock
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		return TownyUniverse.getInstance().getDatabase().loadPlotData(townBlock);
+		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
 	}
 
 	/**

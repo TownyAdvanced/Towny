@@ -92,7 +92,7 @@ public class TownyPerms {
 
 		if (resident == null) {
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (NotRegisteredException e) {
 				// failed to get resident
 				e.printStackTrace();
@@ -115,7 +115,7 @@ public class TownyPerms {
 		TownyWorld World;
 
 		try {
-			World = townyUniverse.getDatabase().getWorld(player.getLocation().getWorld().getName());
+			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			// World not registered with Towny.
 			e.printStackTrace();

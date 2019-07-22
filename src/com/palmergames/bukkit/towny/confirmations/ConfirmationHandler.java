@@ -120,7 +120,7 @@ public class ConfirmationHandler {
 			if (towndeleteconfirmations.containsKey(r)) {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
-					townyUniverse.getDatabase().removeTown(towndeleteconfirmations.get(r));
+					townyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
 					removeConfirmation(r,type, true);
 					return;
 				}
@@ -152,7 +152,7 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.NATIONDELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
-					townyUniverse.getDatabase().removeNation(nationdeleteconfirmations.get(r));
+					townyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);
 				}

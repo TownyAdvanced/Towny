@@ -190,7 +190,7 @@ public class Towny extends JavaPlugin {
 
 	public void setWorldFlags() {
 		TownyUniverse universe = TownyUniverse.getInstance();
-		for (Town town : universe.getDatabase().getTowns()) {
+		for (Town town : universe.getDataSource().getTowns()) {
 			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
@@ -200,8 +200,8 @@ public class Towny extends JavaPlugin {
 						TownyWorld world = town.getHomeBlock().getWorld();
 						if (!world.hasTown(town)) {
 							world.addTown(town);
-							universe.getDatabase().saveTown(town);
-							universe.getDatabase().saveWorld(world);
+							universe.getDataSource().saveTown(town);
+							universe.getDataSource().saveWorld(world);
 						}
 					} catch (TownyException e) {
 						// Error fetching homeblock
@@ -219,8 +219,8 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDatabase() != null && !error) {
-			townyUniverse.getDatabase().saveQueues();
+		if (townyUniverse.getDataSource() != null && !error) {
+			townyUniverse.getDataSource().saveQueues();
 		}
 
 		if (!error) {
@@ -243,7 +243,7 @@ public class Towny extends JavaPlugin {
 		playerCache.clear();
 		
 		// Shut down our saving task.
-		townyUniverse.getDatabase().cancelTask();
+		townyUniverse.getDataSource().cancelTask();
 
 		this.townyUniverse = null;
 
@@ -424,8 +424,8 @@ public class Towny extends JavaPlugin {
 		}
 		TownySettings.setLastRunVersion(getVersion());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDatabase().saveAll();
-		townyUniverse.getDatabase().cleanup();
+		townyUniverse.getDataSource().saveAll();
+		townyUniverse.getDataSource().cleanup();
 	}
 
 	/**
@@ -501,7 +501,7 @@ public class Towny extends JavaPlugin {
 	public void newCache(Player player) {
 
 		try {
-			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getInstance().getDatabase().getWorld(player.getWorld().getName()), player));
+			playerCache.put(player.getName().toLowerCase(), new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player));
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
 		}
@@ -607,7 +607,7 @@ public class Towny extends JavaPlugin {
 			return;
 
 		try {
-			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			resident.setModes(modes, notify);
 
 		} catch (NotRegisteredException e) {
@@ -623,7 +623,7 @@ public class Towny extends JavaPlugin {
 	public void removePlayerMode(Player player) {
 
 		try {
-			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			resident.clearModes();
 
 		} catch (NotRegisteredException e) {
@@ -646,7 +646,7 @@ public class Towny extends JavaPlugin {
 	public List<String> getPlayerMode(String name) {
 
 		try {
-			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(name);
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
 			return resident.getModes();
 
 		} catch (NotRegisteredException e) {
@@ -670,7 +670,7 @@ public class Towny extends JavaPlugin {
 	public boolean hasPlayerMode(String name, String mode) {
 
 		try {
-			Resident resident = TownyUniverse.getInstance().getDatabase().getResident(name);
+			Resident resident = TownyUniverse.getInstance().getDataSource().getResident(name);
 			return resident.hasMode(mode);
 
 		} catch (NotRegisteredException e) {

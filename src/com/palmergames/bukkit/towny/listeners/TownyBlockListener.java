@@ -79,7 +79,7 @@ public class TownyBlockListener implements Listener {
 		boolean playerNeutral = false;
 		if (TownyAPI.getInstance().isWarTime()) {
 			try {
-				Resident resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				if (resident.isJailed())
 					playerNeutral = true;				
 				if (resident.hasTown())
@@ -132,7 +132,7 @@ public class TownyBlockListener implements Listener {
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownyWorld world = townyUniverse.getDatabase().getWorld(block.getWorld().getName());
+			TownyWorld world = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
@@ -154,7 +154,7 @@ public class TownyBlockListener implements Listener {
 			boolean playerNeutral = false;
 			if (TownyAPI.getInstance().isWarTime()) {
 				try {
-					Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					if (resident.isJailed())
 						playerNeutral = true;	
 					if (resident.hasTown())
@@ -299,7 +299,7 @@ public class TownyBlockListener implements Listener {
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
 		try {
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 			currentTownBlock = townyWorld.getTownBlock(coord);
 		} catch (NotRegisteredException e) {
 		}
@@ -343,7 +343,7 @@ public class TownyBlockListener implements Listener {
 		TownyWorld townyWorld;
 
 		try {
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(loc.getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
 
 			if (!townyWorld.isUsingTowny())
 				return false;
@@ -411,7 +411,7 @@ public class TownyBlockListener implements Listener {
 		int count = 0;
 		
 		try {
-			townyWorld = TownyUniverse.getInstance().getDatabase().getWorld(event.getBlock().getLocation().getWorld().getName());
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 			return;

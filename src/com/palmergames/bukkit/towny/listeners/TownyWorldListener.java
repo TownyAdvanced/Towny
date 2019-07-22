@@ -31,14 +31,14 @@ public class TownyWorldListener implements Listener {
 		//String worldName = event.getWorld().getName();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			townyUniverse.getDatabase().newWorld(worldName);
-			TownyWorld world = townyUniverse.getDatabase().getWorld(worldName);
+			townyUniverse.getDataSource().newWorld(worldName);
+			TownyWorld world = townyUniverse.getDataSource().getWorld(worldName);
 			if (world == null)
 				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
-				if (!townyUniverse.getDatabase().loadWorld(world)) {
+				if (!townyUniverse.getDataSource().loadWorld(world)) {
 					// First time world has been noticed
-					townyUniverse.getDatabase().saveWorld(world);
+					townyUniverse.getDataSource().saveWorld(world);
 				}
 			}
 		} catch (AlreadyRegisteredException e) {

@@ -25,8 +25,8 @@ public class TownyLoginListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (player.getName().startsWith(npcPrefix)) {
-			if (townyUniverse.getDatabase().hasResident(player.getName()))
-			    if (townyUniverse.getDatabase().getResident(player.getName()).isMayor()){
+			if (townyUniverse.getDataSource().hasResident(player.getName()))
+			    if (townyUniverse.getDataSource().getResident(player.getName()).isMayor()){
 			    	// Deny because this is an NPC account which is a mayor of a town.
 			    	event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			    	disallowed = true;

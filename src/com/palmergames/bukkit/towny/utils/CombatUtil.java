@@ -47,7 +47,7 @@ public class CombatUtil {
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
 
 		try {
-			TownyWorld world = TownyUniverse.getInstance().getDatabase().getWorld(defender.getWorld().getName());
+			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName());
 
 			// World using Towny
 			if (!world.isUsingTowny())
@@ -403,8 +403,8 @@ public class CombatUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
-			Resident residentA = townyUniverse.getDatabase().getResident(attackingResident);
-			Resident residentB = townyUniverse.getDatabase().getResident(defendingResident);
+			Resident residentA = townyUniverse.getDataSource().getResident(attackingResident);
+			Resident residentB = townyUniverse.getDataSource().getResident(defendingResident);
 			if (residentA.getTown() == residentB.getTown())
 				return true;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -450,8 +450,8 @@ public class CombatUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
-			Resident residentA = townyUniverse.getDatabase().getResident(a);
-			Resident residentB = townyUniverse.getDatabase().getResident(b);
+			Resident residentA = townyUniverse.getDataSource().getResident(a);
+			Resident residentB = townyUniverse.getDataSource().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -497,8 +497,8 @@ public class CombatUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
-			Resident residentA = townyUniverse.getDatabase().getResident(a);
-			Resident residentB = townyUniverse.getDatabase().getResident(b);
+			Resident residentA = townyUniverse.getDataSource().getResident(a);
+			Resident residentB = townyUniverse.getDataSource().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -543,7 +543,7 @@ public class CombatUtil {
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 
 		try {
-			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
+			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException e) {
 			return false;
 		}

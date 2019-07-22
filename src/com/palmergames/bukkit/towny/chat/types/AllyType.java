@@ -20,7 +20,7 @@ public class AllyType extends ChatType {
 	@Override
 	public boolean canChat(Player player) {
 		try {
-			return TownyUniverse.getInstance().getDatabase().getResident(player.getName()).hasTown() && TownyUniverse.getInstance().getDatabase().getResident(player.getName()).getTown().hasNation();
+			return TownyUniverse.getInstance().getDataSource().getResident(player.getName()).hasTown() && TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().hasNation();
 		} catch(NotRegisteredException ignore) {
 
 		}
@@ -31,13 +31,13 @@ public class AllyType extends ChatType {
 	public Collection<Player> getRecipients(Collection<Player> recipients, Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			final Nation nation = townyUniverse.getDatabase().getResident(player.getName()).getTown().getNation();
+			final Nation nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
 
 			Collection<Player> newRecipients = new HashSet<>();
 
 			for(Player p : recipients) {
-				if (!townyUniverse.getDatabase().getResident(p.getName()).getTown().getNation().getUuid().equals(nation.getUuid())
-						&& !townyUniverse.getDatabase().getResident(p.getName()).getTown().getNation().hasAlly(nation)) {
+				if (!townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().getUuid().equals(nation.getUuid())
+						&& !townyUniverse.getDataSource().getResident(p.getName()).getTown().getNation().hasAlly(nation)) {
 					continue;
 				}
 				newRecipients.add(p);

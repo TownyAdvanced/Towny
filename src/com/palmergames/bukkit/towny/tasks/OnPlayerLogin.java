@@ -47,29 +47,29 @@ public class OnPlayerLogin implements Runnable {
 		
 		Resident resident = null;
 
-		if (!universe.getDatabase().hasResident(player.getName())) {
+		if (!universe.getDataSource().hasResident(player.getName())) {
 			/*
 			 * No record of this resident exists
 			 * So create a fresh set of data.
 			 */
 			try {
-				universe.getDatabase().newResident(player.getName());
-				resident = universe.getDatabase().getResident(player.getName());
+				universe.getDataSource().newResident(player.getName());
+				resident = universe.getDataSource().getResident(player.getName());
 				
 				if (TownySettings.isShowingRegistrationMessage())				
 					TownyMessaging.sendMessage(player, TownySettings.getRegistrationMsg(player.getName()));
 				resident.setRegistered(System.currentTimeMillis());
 				if (!TownySettings.getDefaultTownName().equals("")) {
 					try {
-						Town town = TownyUniverse.getInstance().getDatabase().getTown(TownySettings.getDefaultTownName());
+						Town town = TownyUniverse.getInstance().getDataSource().getTown(TownySettings.getDefaultTownName());
 						town.addResident(resident);
-						universe.getDatabase().saveTown(town);
+						universe.getDataSource().saveTown(town);
 					} catch (NotRegisteredException | AlreadyRegisteredException ignored) {
 					}
 				}
 				
-				universe.getDatabase().saveResident(resident);
-				universe.getDatabase().saveResidentList();
+				universe.getDataSource().saveResident(resident);
+				universe.getDataSource().saveResidentList();
 				
 			} catch (AlreadyRegisteredException | NotRegisteredException ex) {
 				// Should never happen
@@ -80,7 +80,7 @@ public class OnPlayerLogin implements Runnable {
 			 * This resident is known so fetch the data and update it.
 			 */
 			try {
-				resident = universe.getDatabase().getResident(player.getName());
+				resident = universe.getDataSource().getResident(player.getName());
 				if (TownySettings.isUsingEssentials()) {
 					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 					/*
@@ -91,7 +91,7 @@ public class OnPlayerLogin implements Runnable {
 				} else
 					resident.setLastOnline(System.currentTimeMillis());
 				
-				universe.getDatabase().saveResident(resident);
+				universe.getDataSource().saveResident(resident);
 				
 			} catch (NotRegisteredException ex) {
 				// Should never happen

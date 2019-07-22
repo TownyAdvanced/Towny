@@ -115,7 +115,7 @@ public class TownClaim extends Thread {
 
 			Resident resident = null;
 			try {
-				resident = townyUniverse.getDatabase().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (TownyException e) {
 				// Yeah the resident has to exist!
 			}
@@ -134,13 +134,13 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				townyUniverse.getDatabase().saveTown(test);
+				townyUniverse.getDataSource().saveTown(test);
 			}
 		}
 
 		if (!worlds.isEmpty()) {
 			for (TownyWorld test : worlds) {
-				townyUniverse.getDatabase().saveWorld(test);
+				townyUniverse.getDataSource().saveWorld(test);
 			}
 		}
 
@@ -195,8 +195,8 @@ public class TownClaim extends Thread {
 			}
 			
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			townyUniverse.getDatabase().saveTownBlock(townBlock);
-			townyUniverse.getDatabase().saveTownBlockList();
+			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townyUniverse.getDataSource().saveTownBlockList();
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock));
@@ -221,7 +221,7 @@ public class TownClaim extends Thread {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
 				
-				townyUniverse.getDatabase().removeTownBlock(townBlock);
+				townyUniverse.getDataSource().removeTownBlock(townBlock);
 				
 				// Raise an event to signal the unclaim
 				// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
@@ -237,7 +237,7 @@ public class TownClaim extends Thread {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-			TownyUniverse.getInstance().getDatabase().removeTownBlocks(town);
+			TownyUniverse.getInstance().getDataSource().removeTownBlocks(town);
 			TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
 			
 			// Raise an event to signal the unclaim

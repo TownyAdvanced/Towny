@@ -295,7 +295,7 @@ public class PlayerCacheUtil {
 		 */
 		Resident resident;
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (TownyException e) {
 			System.out.print("Failed to fetch resident: " + player.getName());
 			return TownBlockStatus.NOT_REGISTERED;
@@ -404,7 +404,7 @@ public class PlayerCacheUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			playersTown = townyUniverse.getDatabase().getResident(player.getName()).getTown();
+			playersTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
 		} catch (NotRegisteredException e) {
 		}
 

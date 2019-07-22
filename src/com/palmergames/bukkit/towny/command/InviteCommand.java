@@ -82,7 +82,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		// /invite args[0] args[1}
 		Resident resident;
 		try {
-			resident = TownyUniverse.getInstance().getDatabase().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -119,7 +119,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = townyUniverse.getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -134,7 +134,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// We cut the first argument out of it so /invite *accept* args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
 			try {
-				town = townyUniverse.getDatabase().getTown(args[0]);
+				town = townyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;
@@ -173,7 +173,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			resident = townyUniverse.getDatabase().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
@@ -185,7 +185,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (args.length >= 1) {
 			try {
-				town = townyUniverse.getDatabase().getTown(args[0]);
+				town = townyUniverse.getDataSource().getTown(args[0]);
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 				return;
@@ -246,7 +246,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				name = "Console";
 			} else {
 				try {
-					name = TownyUniverse.getInstance().getDatabase().getResident(name).getName();
+					name = TownyUniverse.getInstance().getDataSource().getResident(name).getName();
 				} catch (NotRegisteredException e) {
 					name = "Unknown";
 				}

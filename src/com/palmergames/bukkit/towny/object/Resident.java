@@ -121,7 +121,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDatabase().saveResident(this);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	public void setJailed(Player player, Integer index, Town town) {
@@ -157,7 +157,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDatabase().saveResident(this);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	public boolean isJailed() {

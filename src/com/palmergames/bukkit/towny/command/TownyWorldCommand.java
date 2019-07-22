@@ -108,7 +108,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 			try {
-				Globalworld = TownyUniverse.getInstance().getDatabase().getWorld(split[0].toLowerCase());
+				Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(split[0].toLowerCase());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -126,7 +126,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 			try {
 				if (Globalworld == null)
-					Globalworld = townyUniverse.getDatabase().getWorld(player.getWorld().getName());
+					Globalworld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 			} catch (NotRegisteredException e) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_area_not_recog"));
 				return;
@@ -264,7 +264,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<String> formatedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
-		for (TownyWorld world : TownyUniverse.getInstance().getDatabase().getWorlds()) {
+		for (TownyWorld world : TownyUniverse.getInstance().getDataSource().getWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}
@@ -427,7 +427,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			townyUniverse.getDatabase().saveWorld(Globalworld);
+			townyUniverse.getDataSource().saveWorld(Globalworld);
 			
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(Globalworld);
@@ -553,7 +553,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			TownyUniverse.getInstance().getDatabase().saveWorld(Globalworld);
+			TownyUniverse.getInstance().getDataSource().saveWorld(Globalworld);
 		}
 	}
 

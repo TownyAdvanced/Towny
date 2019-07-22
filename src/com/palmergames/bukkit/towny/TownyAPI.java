@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.db.TownyDatabase;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -49,7 +49,7 @@ public class TownyAPI {
      */
     public Location getTownSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             Town town = resident.getTown();
             return town.getSpawn();
         } catch (TownyException x) {
@@ -65,7 +65,7 @@ public class TownyAPI {
      */
     public Location getNationSpawnLocation(Player player) {
         try {
-            Resident resident = townyUniverse.getDatabase().getResident(player.getName());
+            Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             Nation nation = resident.getTown().getNation();
             return nation.getNationSpawn();
         } catch (TownyException x) {
@@ -174,7 +174,7 @@ public class TownyAPI {
         WorldCoord worldCoord;
         
         try {
-            worldCoord = new WorldCoord(townyUniverse.getDatabase().getWorld(block.getWorld().getName()).getName(), Coord.parseCoord(block));
+            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(block.getWorld().getName()).getName(), Coord.parseCoord(block));
         } catch (NotRegisteredException e) {
             // No record so must be Wilderness
             return true;
@@ -198,7 +198,7 @@ public class TownyAPI {
         WorldCoord worldCoord;
         
         try {
-            worldCoord = new WorldCoord(townyUniverse.getDatabase().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
         } catch (NotRegisteredException e) {
             // No record so must be Wilderness
             return true;
@@ -220,7 +220,7 @@ public class TownyAPI {
      */
     public String getTownName(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDatabase().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
             return worldCoord.getTownBlock().getTown().getName();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -237,7 +237,7 @@ public class TownyAPI {
      */
     public UUID getTownUUID(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDatabase().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
             return worldCoord.getTownBlock().getTown().getUuid();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -253,7 +253,7 @@ public class TownyAPI {
      */
     public TownBlock getTownBlock(Location location) {
         try {
-            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDatabase().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
+            WorldCoord worldCoord = new WorldCoord(townyUniverse.getDataSource().getWorld(location.getWorld().getName()).getName(), Coord.parseCoord(location));
             return worldCoord.getTownBlock();
         } catch (NotRegisteredException e) {
             // No data so return null
@@ -268,7 +268,7 @@ public class TownyAPI {
      */
     public List<Resident> getActiveResidents() {
         List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getDatabase().getResidents()) {
+        for (Resident resident : townyUniverse.getDataSource().getResidents()) {
             if (isActiveResident(resident)) {
                 activeResidents.add(resident);
             }
@@ -289,11 +289,10 @@ public class TownyAPI {
     /**
      * Gets Towny's saving Database
      *
-     * @return the {@link TownyDatabase}
-     * @deprecated use {@link TownyUniverse#getInstance()#getDatabase()}
+     * @return the {@link TownyDataSource}
      */
-    public TownyDatabase getDataSource() {
-        return townyUniverse.getDatabase();
+    public TownyDataSource getDataSource() {
+        return townyUniverse.getDataSource();
     }
     
     /**

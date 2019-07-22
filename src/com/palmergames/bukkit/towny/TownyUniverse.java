@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.db.TownyDatabase;
-import com.palmergames.bukkit.towny.db.TownyFlatFileDatabase;
-import com.palmergames.bukkit.towny.db.TownySQLDatabase;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  * Towny's class for internal API Methods
- * If you don't want to change the database, war, permissions or similiar behavior
+ * If you don't want to change the dataSource, war, permissions or similiar behavior
  * and only for example want to get Resident objects you should use {@link TownyAPI}
  *
  * @author Lukas Mansour (Articdive)
@@ -45,7 +45,7 @@ public class TownyUniverse {
     private final Hashtable<String, Nation> nations = new Hashtable<>();
     private final Hashtable<String, TownyWorld> worlds = new Hashtable<>();
     private final String rootFolder;
-    private TownyDatabase database;
+    private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
     private War warEvent;
     
@@ -70,7 +70,7 @@ public class TownyUniverse {
         String saveDbType = TownySettings.getSaveDatabase();
         String loadDbType = TownySettings.getLoadDatabase();
         
-        // Setup any defaults before we load the database.
+        // Setup any defaults before we load the dataSource.
         Coord.setCellSize(TownySettings.getTownBlockSize());
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
@@ -86,18 +86,18 @@ public class TownyUniverse {
         }
         
         try {
-            database.cleanupBackups();
+            dataSource.cleanupBackups();
             // Set the new class for saving.
             switch (saveDbType.toLowerCase()) {
                 case "ff":
                 case "flatfile": {
-                    this.database = new TownyFlatFileDatabase(towny, this);
+                    this.dataSource = new TownyFlatFileSource(towny, this);
                     break;
                 }
                 case "h2":
                 case "sqlite":
                 case "mysql": {
-                    this.database = new TownySQLDatabase(towny, this, saveDbType.toLowerCase());
+                    this.dataSource = new TownySQLSource(towny, this, saveDbType.toLowerCase());
                     break;
                 }
                 default: {
@@ -106,10 +106,10 @@ public class TownyUniverse {
             }
             FileMgmt.checkFolders(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
             try {
-                database.backup();
+                dataSource.backup();
                 
                 if (loadDbType.equalsIgnoreCase("flatfile") || saveDbType.equalsIgnoreCase("flatfile")) {
-                    database.deleteUnusedResidents();
+                    dataSource.deleteUnusedResidents();
                 }
                 
             } catch (IOException e) {
@@ -120,10 +120,10 @@ public class TownyUniverse {
             
             if (loadDbType.equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
-                database.saveAllWorlds();
+                dataSource.saveAllWorlds();
             } else {
                 //Formats are different so save ALL data.
-                database.saveAll();
+                dataSource.saveAll();
             }
             
         } catch (UnsupportedOperationException e) {
@@ -133,8 +133,8 @@ public class TownyUniverse {
         
         File f = new File(rootFolder, "outpostschecked.txt");
         if (!(f.exists())) {
-            for (Town town : database.getTowns()) {
-                TownySQLDatabase.validateTownOutposts(town);
+            for (Town town : dataSource.getTowns()) {
+                TownySQLSource.validateTownOutposts(town);
             }
             towny.saveResource("outpostschecked.txt", false);
         }
@@ -146,13 +146,13 @@ public class TownyUniverse {
         switch (loadDbType.toLowerCase()) {
             case "ff":
             case "flatfile": {
-                this.database = new TownyFlatFileDatabase(towny, this);
+                this.dataSource = new TownyFlatFileSource(towny, this);
                 break;
             }
             case "h2":
             case "sqlite":
             case "mysql": {
-                this.database = new TownySQLDatabase(towny, this, loadDbType.toLowerCase());
+                this.dataSource = new TownySQLSource(towny, this, loadDbType.toLowerCase());
                 break;
             }
             default: {
@@ -160,7 +160,7 @@ public class TownyUniverse {
             }
         }
         
-        return database.loadAll();
+        return dataSource.loadAll();
     }
     
     public void onLogin(Player player) {
@@ -186,9 +186,9 @@ public class TownyUniverse {
     public void onLogout(Player player) {
         
         try {
-            Resident resident = database.getResident(player.getName());
+            Resident resident = dataSource.getResident(player.getName());
             resident.setLastOnline(System.currentTimeMillis());
-            database.saveResident(resident);
+            dataSource.saveResident(resident);
         } catch (NotRegisteredException ignored) {
         }
     }
@@ -259,8 +259,8 @@ public class TownyUniverse {
         return worlds;
     }
     
-    public TownyDatabase getDatabase() {
-        return database;
+    public TownyDataSource getDataSource() {
+        return dataSource;
     }
     
     public List<String> getTreeString(int depth) {
@@ -283,13 +283,13 @@ public class TownyUniverse {
             out.addAll(nation.getTreeString(depth + 2));
         }
         
-        Collection<Town> townsWithoutNation = database.getTownsWithoutNation();
+        Collection<Town> townsWithoutNation = dataSource.getTownsWithoutNation();
         out.add(getTreeDepth(depth + 1) + "Towns (" + townsWithoutNation.size() + "):");
         for (Town town : townsWithoutNation) {
             out.addAll(town.getTreeString(depth + 2));
         }
         
-        Collection<Resident> residentsWithoutTown = database.getResidentsWithoutTown();
+        Collection<Resident> residentsWithoutTown = dataSource.getResidentsWithoutTown();
         out.add(getTreeDepth(depth + 1) + "Residents (" + residentsWithoutTown.size() + "):");
         for (Resident resident : residentsWithoutTown) {
             out.addAll(resident.getTreeString(depth + 2));

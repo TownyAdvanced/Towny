@@ -49,14 +49,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public final class TownyFlatFileDatabase extends TownyDatabaseHandler {
+public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	private final Queue<FlatFile_Task> queryQueue = new ConcurrentLinkedQueue<>();
 	private final BukkitTask task;
 
 	private final String newLine = System.getProperty("line.separator");
 	
-	public TownyFlatFileDatabase(Towny plugin, TownyUniverse universe) {
+	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
 		// Create files and folders if non-existent
 		try {
@@ -89,9 +89,9 @@ public final class TownyFlatFileDatabase extends TownyDatabaseHandler {
 		 */
 		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
 			
-			while (!TownyFlatFileDatabase.this.queryQueue.isEmpty()) {
+			while (!TownyFlatFileSource.this.queryQueue.isEmpty()) {
 				
-				FlatFile_Task query = TownyFlatFileDatabase.this.queryQueue.poll();
+				FlatFile_Task query = TownyFlatFileSource.this.queryQueue.poll();
 				
 				try {
 					

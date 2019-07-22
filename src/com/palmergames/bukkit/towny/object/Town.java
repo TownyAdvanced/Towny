@@ -545,7 +545,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (world != null)
 			return world;
 
-		return TownyUniverse.getInstance().getDatabase().getTownWorld(this.getName());
+		return TownyUniverse.getInstance().getDataSource().getTownWorld(this.getName());
 	}
 
 	public boolean hasMayor() {
@@ -585,7 +585,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-				TownyUniverse.getInstance().getDatabase().saveTownBlock(townBlock);
+				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 				
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
@@ -730,7 +730,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			} catch (TownyException e) {
 			}
 			townBlocks.remove(townBlock);
-			TownyUniverse.getInstance().getDatabase().saveTown(this);
+			TownyUniverse.getInstance().getDataSource().saveTown(this);
 		}
 	}
 
@@ -747,7 +747,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
 		try {
-			TownBlock outpost = TownyUniverse.getInstance().getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			TownBlock outpost = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (outpost.getX() == spawnBlock.getX() && outpost.getZ() == spawnBlock.getZ()) {
 				if (!outpost.isOutpost())
 					throw new TownyException("Location is not within an outpost plot.");
@@ -1037,13 +1037,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		Coord spawnBlock = Coord.parseCoord(spawn);
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownBlock jail = townyUniverse.getDatabase().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+			TownBlock jail = townyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
 					throw new TownyException("Location is not within a Jail plot.");
 				
 				jailSpawns.add(spawn);
-				townyUniverse.getDatabase().saveTown(this);
+				townyUniverse.getDataSource().saveTown(this);
 			}
 
 		} catch (NotRegisteredException e) {
@@ -1058,7 +1058,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDatabase().saveTown(this);
+				TownyUniverse.getInstance().getDataSource().saveTown(this);
 			}
 		}
 	}

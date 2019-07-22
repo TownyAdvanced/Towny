@@ -288,7 +288,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null)
 				try {
-					if (TownyUniverse.getInstance().getDatabase().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
+					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
 						player.sendMessage(line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
