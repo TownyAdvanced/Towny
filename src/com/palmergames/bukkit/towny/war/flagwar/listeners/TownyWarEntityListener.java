@@ -11,13 +11,6 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class TownyWarEntityListener implements Listener {
 
-	//private Towny plugin;
-
-	public TownyWarEntityListener(Towny plugin) {
-
-		//this.plugin = plugin;
-	}
-
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityExplode(EntityExplodeEvent event) {
 

@@ -5,12 +5,9 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.palmergames.util.KeyValue;
-import com.palmergames.util.Sorting;
-
 public class KeyValueTable<K, V> {
 
-	private List<KeyValue<K, V>> keyValues = new ArrayList<KeyValue<K, V>>();
+	private List<KeyValue<K, V>> keyValues = new ArrayList<>();
 
 	public List<KeyValue<K, V>> getKeyValues() {
 
@@ -37,12 +34,12 @@ public class KeyValueTable<K, V> {
 		//	throw new Exception();
 
 		for (int i = 0; i < keys.size(); i++)
-			keyValues.add(new KeyValue<K, V>(keys.get(i), values.get(i)));
+			keyValues.add(new KeyValue<>(keys.get(i), values.get(i)));
 	}
 
 	public void put(K key, V value) {
 
-		keyValues.add(new KeyValue<K, V>(key, value));
+		keyValues.add(new KeyValue<>(key, value));
 	}
 
 	public void add(KeyValue<K, V> keyValue) {

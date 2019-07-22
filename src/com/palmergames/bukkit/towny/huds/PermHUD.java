@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.huds;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -8,7 +9,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
@@ -98,7 +98,7 @@ public class PermHUD {
 	private static String getFormattedWildernessName(World w) {
 		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
 		try {
-			wildernessName.append(TownyUniverse.getDataSource().getWorld(w.getName()).getUnclaimedZoneName());
+			wildernessName.append(TownyUniverse.getInstance().getDatabase().getWorld(w.getName()).getUnclaimedZoneName());
 		} catch (NotRegisteredException e) {
 			wildernessName.append("Unknown");
 		}
