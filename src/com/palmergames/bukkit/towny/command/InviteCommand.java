@@ -26,6 +26,7 @@ import java.util.List;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
 
+	@SuppressWarnings("unused")
 	private static Towny plugin;
 	private static final List<String> invite_help = new ArrayList<>();
 

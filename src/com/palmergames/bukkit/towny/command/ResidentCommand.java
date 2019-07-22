@@ -90,6 +90,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+	@SuppressWarnings("static-access")
 	private void parseResidentCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -115,6 +116,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
+	@SuppressWarnings("static-access")
 	public void parseResidentCommand(final Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 

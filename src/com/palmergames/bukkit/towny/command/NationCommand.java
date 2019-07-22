@@ -122,6 +122,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
+	@SuppressWarnings("static-access")
 	private void parseNationCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -146,6 +147,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
+	@SuppressWarnings("static-access")
 	public void parseNationCommand(final Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
