@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
@@ -26,8 +24,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	private List<ItemStack> contents = new ArrayList<ItemStack>();
 	
 	//Tekkit - InventoryView
-
-	private static final Material placeholder = Material.DIRT;
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 

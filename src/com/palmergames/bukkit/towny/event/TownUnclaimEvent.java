@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 public class TownUnclaimEvent extends Event  {
@@ -26,6 +26,7 @@ public class TownUnclaimEvent extends Event  {
 	}
 
     public TownUnclaimEvent(Town _town, WorldCoord _worldcoord) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.town = _town;
         this.worldCoord = _worldcoord;
     }
@@ -41,7 +42,7 @@ public class TownUnclaimEvent extends Event  {
     /**
     *
     * @return the Unclaimed WorldCoord.
-    * 
+    *
     */
    public WorldCoord getWorldCoord() {
        return worldCoord;

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -24,8 +25,8 @@ public class PlotChangeOwnerEvent extends Event {
      * @param oldowner - Old Owner
      * @param newowner - New Owner
      */
-    public PlotChangeOwnerEvent(Resident oldowner, Resident newowner, TownBlock townBlock, boolean async) {
-        super(async);
+    public PlotChangeOwnerEvent(Resident oldowner, Resident newowner, TownBlock townBlock) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.newowner = newowner;
         this.oldowner = oldowner;
         this.townBlock = townBlock;

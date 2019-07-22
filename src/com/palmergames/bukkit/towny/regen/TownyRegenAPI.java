@@ -1,38 +1,24 @@
 package com.palmergames.bukkit.towny.regen;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
+import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.regen.block.BlockInventoryHolder;
-import com.palmergames.bukkit.towny.regen.block.BlockLocation;
-import com.palmergames.bukkit.towny.regen.block.BlockMobSpawner;
-import com.palmergames.bukkit.towny.regen.block.BlockObject;
-import com.palmergames.bukkit.towny.regen.block.BlockSign;
-import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -48,19 +34,19 @@ public class TownyRegenAPI {
 	}
 
 	// table containing snapshot data of active reversions.
-	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<String, PlotBlockData>();
+	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
 
 	// List of all old plots still to be processed for Block removal
-	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<WorldCoord>();
+	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
 
 	// A list of worldCoords which are needing snapshots
-	private static List<WorldCoord> worldCoords = new ArrayList<WorldCoord>();
+	private static List<WorldCoord> worldCoords = new ArrayList<>();
 	
 	// A holder for each protection regen task
-	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<BlockLocation, ProtectionRegenTask>();
+	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
-	private static  Set<Block> protectionPlaceholders = new HashSet<Block>();
+	private static  Set<Block> protectionPlaceholders = new HashSet<>();
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
@@ -138,10 +124,10 @@ public class TownyRegenAPI {
 
 		if (PlotChunks.containsKey(getPlotKey(plotChunk))) {
 			PlotChunks.remove(getPlotKey(plotChunk));
-			TownyUniverse.getDataSource().saveRegenList();
+			TownyUniverse.getInstance().getDatabase().saveRegenList();
 		}
 	}
-
+	
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
 	 * 
@@ -154,7 +140,7 @@ public class TownyRegenAPI {
 			//plotChunk.initialize();
 			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
 			if (save)
-				TownyUniverse.getDataSource().saveRegenList();
+				TownyUniverse.getInstance().getDatabase().saveRegenList();
 		}
 	}
 
@@ -164,9 +150,9 @@ public class TownyRegenAPI {
 	 * @param plotChunk
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
-
-		if (TownyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
-			TownyUniverse.getDataSource().savePlotData(plotChunk);
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getDatabase().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+			townyUniverse.getDatabase().savePlotData(plotChunk);
 		}
 	}
 
@@ -176,8 +162,7 @@ public class TownyRegenAPI {
 	 * @param plotChunk
 	 */
 	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
-
-		TownyUniverse.getDataSource().deletePlotData(plotChunk);
+		TownyUniverse.getInstance().getDatabase().deletePlotData(plotChunk);
 	}
 
 	/**
@@ -186,8 +171,7 @@ public class TownyRegenAPI {
 	 * @param townBlock
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-
-		return TownyUniverse.getDataSource().loadPlotData(townBlock);
+		return TownyUniverse.getInstance().getDatabase().loadPlotData(townBlock);
 	}
 
 	/**

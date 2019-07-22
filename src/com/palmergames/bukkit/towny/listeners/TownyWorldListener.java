@@ -1,26 +1,17 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldInitEvent;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import org.bukkit.event.world.WorldLoadEvent;
 
 public class TownyWorldListener implements Listener {
-
-	//private final Towny plugin;
-
-	public TownyWorldListener(Towny instance) {
-
-		//plugin = instance;
-	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onWorldLoad(WorldLoadEvent event) {
@@ -38,15 +29,16 @@ public class TownyWorldListener implements Listener {
 	private void newWorld(String worldName) {
 
 		//String worldName = event.getWorld().getName();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
-			TownyUniverse.getDataSource().newWorld(worldName);
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(worldName);
+			townyUniverse.getDatabase().newWorld(worldName);
+			TownyWorld world = townyUniverse.getDatabase().getWorld(worldName);
 			if (world == null)
 				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
-				if (!TownyUniverse.getDataSource().loadWorld(world)) {
+				if (!townyUniverse.getDatabase().loadWorld(world)) {
 					// First time world has been noticed
-					TownyUniverse.getDataSource().saveWorld(world);
+					townyUniverse.getDatabase().saveWorld(world);
 				}
 			}
 		} catch (AlreadyRegisteredException e) {

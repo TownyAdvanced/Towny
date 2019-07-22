@@ -3208,7 +3208,6 @@ v0.92.0.11:
     - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.string_check_regex
       - Must be changed to: ^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$
     - Removal of bPerms from the codebase. If you are still using bPerms I sure hope that it's completely Vault compliant now. 
-      - Shout out to dumptruckman for making many great plugins, of which bPerms is one.
     - Removal of native iConomy 5.01 support. 
       - iConomy 5.01 is no longer developed by the Towny team. There are new versions (Currently at 5.08) which use Vault to connect with Towny and other plugins.
     - Fix Entity Info Tool displaying 4 outputs.
@@ -3227,3 +3226,44 @@ v0.92.0.11:
     - More strings have been made translatable, courtesy of TheFlagCourier
       - 'Total TownBlocks: '
       - 'Processing Plot (Un)Claim...' 
+    - Fix the last of the async events for good, courtesy of Articdive.
+    - REQUIRED CONFIG CHANGE: in protections.switch_ids
+      - Add ",POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE"
+    - REQUIRED CONFIG CHANGE: in protections.item_use_ids
+      - Add ",BONE_MEAL"
+    - Fix for FARM plots protecting monsters.
+    - Fix for offline players changing worlds causing an NPE when we try to assign them permissions.  
+    - Fix for explosion regeneration not preventing drops.
+    - Removed Feature: cheat_protection
+      - This feature existed originally as a way to block players from using client-side blocks to jump over walls.
+      - It has become less-than-reliable and after 1.13 added swimming it has become a problem.
+      - Due to the common use of actual anti cheat plugins we are removing this feature entirely. If it still appears as an option in your config you can remove it safely.
+    - Fix blocking of villager baby spawning.
+    - Fix for the fix for explosion regeneration not preventing drops.
+    - Fix for adding or removing ranks returning Null.
+    - Fix for obnoxious givebonus message showing at times it should not have appeared.
+      - givebonus message version 2.0 is now in effect.
+    - Renamed a TownySetting to be more clear and accurate.
+    - Fix for nationzones not respecting config settings.
+    - Cut-off for Pre-Release 5.
+    - Fix farm plots not allowing for killing of allowed animals.
+    - Fix for towny.admin's not having the ability to set plots notforsale.
+    - Removed sqlite from listed valid database types. Reports are that it is broken, but almost no one uses it vs h2/mysql.
+    - Fix nation-disbanding-due-to-not-enough-residents not saving the town/nation properly.
+    - Fix scenario where town and nation spawn costs were not what was set by the town/nation and only used the config's costs.
+    - Removed Config Setting: using_permissions.
+      - This setting goes back to the days when bukkit did not have in-built permissions, and all permissions related things relied on Permissions/GroupManager/etc.
+      - There is no scenario now where the server doesn't have permissions (everyone at least has the built-in BukkitPermissions.)
+      - Some admins were setting this config option to False trying to solve other issues related to permissions and it was becoming problematic.
+    - Cut off for PR6.
+    - Automatically remove deleted residents from town files and deleted towns from resident files, courtesy of KarlOfDuty.
+0.94.0.0:
+    - Bump version number for release build.
+0.94.0.1:
+    - Switch to Bukkit 1.14.3 for development.
+    - Major Database overhaul, courtesy of ArticDive.
+      - Make TownySQLSource implement TownyDatabaseHandler directly
+      - Make TownyUniverse a singleton, since there is only ever 1 instance of the class.
+      - Take TownyUniverse out of the objects package and put it on root, (rename to TownyAPI?? or take out API methods into a new class called TownyAPI, also a singleton.), Deprecate the old version and make it forward to the new TownyUniverse.
+      - Remove all calls to our own deprecated methods.
+      - Slightly optimize the calls to our internal API.

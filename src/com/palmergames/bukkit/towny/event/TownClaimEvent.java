@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -25,7 +26,7 @@ public class TownClaimEvent extends Event  {
 	}
 
     public TownClaimEvent(TownBlock townBlock) {
-    	super(true);
+    	super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = townBlock;
     }
 

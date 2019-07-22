@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SQL_Schema {
 
-    private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+    private static final String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
     private static String getWORLDS() {
 

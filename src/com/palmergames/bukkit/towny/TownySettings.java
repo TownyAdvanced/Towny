@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -244,7 +243,7 @@ public class TownySettings {
 	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
 
 		String res = getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
-		String fullPath = filepath + FileMgmt.fileSeparator() + res;
+		String fullPath = filepath + File.separator + res;
 		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
 		
 		if (file != null) {
@@ -1996,7 +1995,7 @@ public class TownySettings {
 
 	public static int getMaxResidentPlots(Resident resident) {
 
-		int maxPlots = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_PLOTS.getNode());
+		int maxPlots = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_PLOTS.getNode());
 		if (maxPlots == -1)
 			maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
 		return maxPlots;
@@ -2004,7 +2003,7 @@ public class TownySettings {
 	
 	public static int getMaxResidentExtraPlots(Resident resident) {
 
-		int extraPlots = TownyUniverse.getPermissionSource().getPlayerPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_EXTRA_PLOTS.getNode());
+		int extraPlots = TownyUniverse.getInstance().getPermissionSource().getPlayerPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_EXTRA_PLOTS.getNode());
 		if (extraPlots == -1)
 			extraPlots = 0;
 		return extraPlots;
@@ -2012,7 +2011,7 @@ public class TownySettings {
 
 	public static int getMaxResidentOutposts(Resident resident) {
 
-		int maxOutposts = TownyUniverse.getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
+		int maxOutposts = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
 		return maxOutposts;
 	}
 
@@ -2324,16 +2323,6 @@ public class TownySettings {
 		return !getBoolean(ConfigNodes.PLUGIN_RESET_LOG_ON_BOOT);
 	}
 
-	public static boolean isUsingPermissions() {
-
-		return getBoolean(ConfigNodes.PLUGIN_USING_PERMISSIONS);
-	}
-
-	public static void setUsingPermissions(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_PERMISSIONS.getRoot(), newSetting);
-	}
-
 	public static String getNameFilterRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_FILTER_REGEX);
@@ -2352,11 +2341,6 @@ public class TownySettings {
 	public static String getNameRemoveRegex() {
 
 		return getString(ConfigNodes.FILTERS_REGEX_NAME_REMOVE_REGEX);
-	}
-
-	public static boolean isUsingCheatProtection() {
-
-		return getBoolean(ConfigNodes.PROT_CHEAT);
 	}
 
 	public static int getTeleportWarmupTime() {
@@ -2507,7 +2491,7 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NOTIFICATION_USING_TITLES);		
 	}
 
-	public static int getAmountOfResidentsForTown() {
+	public static int getAmountOfResidentsForOutpost() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 
