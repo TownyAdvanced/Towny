@@ -3261,3 +3261,9 @@ v0.92.0.11:
     - Bump version number for release build.
 0.94.0.1:
     - Switch to Bukkit 1.14.3 for development.
+    - Major Database overhaul, courtesy of ArticDive.
+      - Make TownySQLSource implement TownyDatabaseHandler directly
+      - Make TownyUniverse a singleton, since there is only ever 1 instance of the class.
+      - Take TownyUniverse out of the objects package and put it on root, (rename to TownyAPI?? or take out API methods into a new class called TownyAPI, also a singleton.), Deprecate the old version and make it forward to the new TownyUniverse.
+      - Remove all calls to our own deprecated methods.
+      - Slightly optimize the calls to our internal API.
