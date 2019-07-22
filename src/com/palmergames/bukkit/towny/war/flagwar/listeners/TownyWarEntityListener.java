@@ -6,7 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 
 public class TownyWarEntityListener implements Listener {

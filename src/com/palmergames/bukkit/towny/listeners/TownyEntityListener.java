@@ -26,6 +26,7 @@ import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -913,8 +914,10 @@ public class TownyEntityListener implements Listener {
 											block.getDrops().clear();
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
-													block.getState().getData() instanceof Sign ||
-													block.getState().getData() instanceof PressurePlate || 
+													Tag.SIGNS.isTagged(block.getType()) ||
+													Tag.WOODEN_PRESSURE_PLATES.isTagged(block.getType()) ||
+													block.getType().equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE) ||
+													block.getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) ||
 													block.getState() instanceof ShulkerBox) {
 												block.setType(Material.AIR);
 											}

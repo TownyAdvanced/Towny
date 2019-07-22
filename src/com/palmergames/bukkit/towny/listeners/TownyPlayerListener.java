@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -256,7 +257,7 @@ public class TownyPlayerListener implements Listener {
 
 						block = event.getClickedBlock();
 						
-						if (block.getState().getData() instanceof Sign) {
+						if (Tag.SIGNS.isTagged(block.getType())) {
 							Sign sign = (Sign) block.getState().getData();
 							BlockFace facing = sign.getFacing();
 							BlockFace attachedFace = sign.getAttachedFace();
@@ -267,7 +268,7 @@ public class TownyPlayerListener implements Listener {
 									ChatTools.formatCommand("", "Facing", "", facing.toString()),
 									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
 									));
-						} else if (block.getState().getData() instanceof Door) {
+						} else if (Tag.DOORS.isTagged(block.getType())) {
 							Door door = (Door) block.getState().getData();
 							BlockFace face = null;
 							boolean isOpen = false;
