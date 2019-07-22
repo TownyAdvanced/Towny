@@ -3267,3 +3267,15 @@ v0.92.0.11:
       - Take TownyUniverse out of the objects package and put it on root, (rename to TownyAPI?? or take out API methods into a new class called TownyAPI, also a singleton.), Deprecate the old version and make it forward to the new TownyUniverse.
       - Remove all calls to our own deprecated methods.
       - Slightly optimize the calls to our internal API.
+    - Update for signs and dyes, courtesy of TheFlagCourier.
+	- REQUIRED CONFIG CHANGE: protection.item_use_ids
+	  - Add ",BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE"
+	  - Stops players from using dyes on signs.
+	- REQUIRED CONFIG CHANGE: 
+	  - In THREE places of the config you must change the sign names. These places are:
+	    - new_world_settings.plot_management.block_delete.unclaim_delete
+	    - new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete
+	    - new_world_settings.plot_management.revert_on_unclaim.block_ignore
+	  - Change: SIGN_POST,WALL_SIGN 
+	  - To: ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN
+	  - You will have to edit these sign names in your Towny\data\worlds\WORLDNAME.txt files as well.
