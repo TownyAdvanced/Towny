@@ -798,11 +798,6 @@ public class TownyPlayerListener implements Listener {
 
 				// Wilderness Handled here.
 				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
-					// if (status == TownBlockStatus.UNCLAIMED_ZONE)
-					// TownyMessaging.sendErrorMsg(player,
-					// String.format(TownySettings.getLangString("msg_err_cannot_perform_action"),
-					// world.getUnclaimedZoneName()));
-
 					cancelState = true;
 				}
 
@@ -812,8 +807,7 @@ public class TownyPlayerListener implements Listener {
 			} catch (NullPointerException e) {
 				System.out.print("NPE generated!");
 				System.out.print("Player: " + player.getName());
-				System.out.print("Item: " + item.getData().getItemType().name());
-				// System.out.print("Block: " + block.getType().toString());
+				System.out.print("Item: " + item.getType().name());
 			}
 
 		} catch (NotRegisteredException e1) {

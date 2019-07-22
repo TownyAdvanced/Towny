@@ -424,7 +424,7 @@ public class TownyBlockListener implements Listener {
 				return;
 			}
 			
-			if (TownyAPI.getInstance().isWilderness(block)) {
+			if (TownyAPI.getInstance().isWilderness(block.getLocation())) {
 				if (townyWorld.isUsingTowny()) {
 					if (townyWorld.isExpl()) {
 						if (townyWorld.isUsingPlotManagementWildRevert()) {

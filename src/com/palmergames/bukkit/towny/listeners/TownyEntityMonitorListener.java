@@ -40,6 +40,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class TownyEntityMonitorListener implements Listener {
 
+	@SuppressWarnings("unused")
 	private final Towny plugin;
 
 	public TownyEntityMonitorListener(Towny instance) {
@@ -148,7 +149,7 @@ public class TownyEntityMonitorListener implements Listener {
 						monarchDeath(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
 
 					if (TownySettings.getWarPointsForKill() > 0){
-						plugin.getTownyUniverse().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
+						TownyUniverse.getInstance().getWarEvent().townScored(defenderResident.getTown(), attackerResident.getTown(), defenderPlayer, attackerPlayer, TownySettings.getWarPointsForKill());
 					}
 				}
 			} catch (NotRegisteredException e) {
@@ -157,7 +158,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 	private void monarchDeath(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
 
-		War warEvent = plugin.getTownyUniverse().getWarEvent();
+		War warEvent = TownyUniverse.getInstance().getWarEvent();
 		try {
 
 			Nation defenderNation = defenderResident.getTown().getNation();
@@ -302,9 +303,9 @@ public class TownyEntityMonitorListener implements Listener {
 						// Town doesn't have enough funds.
 						townPrice = town.getHoldingBalance();
 						try {
-							plugin.getTownyUniverse().getWarEvent().remove(attackerResident.getTown(), town);
+							TownyUniverse.getInstance().getWarEvent().remove(attackerResident.getTown(), town);
 						} catch (NotRegisteredException e) {
-							plugin.getTownyUniverse().getWarEvent().remove(town);
+							TownyUniverse.getInstance().getWarEvent().remove(town);
 						}
 					} else if (!TownySettings.isEcoClosedEconomyEnabled()){
 						TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_player_couldnt_pay_player_town_bank_paying_instead"), defenderResident.getName(), attackerResident.getName(), townPrice));
