@@ -3300,3 +3300,10 @@ v0.92.0.11:
     - New Config Option: economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier
       - Default: false
       - If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers.
+    - New Language Strings:
+      - The following things can now be translated:
+        - The "Added " when you add someone to your friendslist.
+        - The "Not Registered" message show when the NotRegisteredException exception is called from failed commands.
+      - The getFormattedResidents() format which has 3 colours can now have their colours set.
+        - These are commonly seen in the /res screen for the friends list; the townranks in the /town screen; the nationranks in the /nationscreen, and probably other places where to show a list of residents.
+        - The first colour is the start of the line, the second colour is the [#] section, the third colour is the list of resident names.

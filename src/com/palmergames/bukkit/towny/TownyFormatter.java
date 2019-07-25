@@ -78,7 +78,7 @@ public class TownyFormatter {
 	
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
-		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Colors.Green, Colors.LightGreen, Colors.White));
+		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), TownySettings.getLangString("res_format_list_1"), TownySettings.getLangString("res_format_list_2"), TownySettings.getLangString("res_format_list_3")));
 	}
 
 	public static String[] getFormattedNames(List<Resident> residentList) {
