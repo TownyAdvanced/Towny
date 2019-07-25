@@ -1,5 +1,5 @@
 name: Towny
-version: 0.49
+version: 0.50
 language: english
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://towny.palmergames.com/'
@@ -851,3 +851,6 @@ msg_err_nation_over_town_limit: '&cYour nation has reached the maximum number of
 msg_process_claim: 'Processing Plot Claim...'
 msg_process_unclaim: 'Processing Plot Unclaim...'
 msg_total_townblocks: 'Total TownBlocks: '
+
+# Added in 0.50
+friend_list: 'Friends List'

@@ -3290,3 +3290,6 @@ v0.92.0.11:
     - Return FileMgmt.fileSeparator() so TownyNameUpdater will enable.
       - It is deprecated, as TownyNameUpdater will be integrated into Towny in the future.
 0.94.0.4:
+    - New Command: /resident friend list
+      - Returns a list of your friends.
+    - Language files bumped to 0.50.

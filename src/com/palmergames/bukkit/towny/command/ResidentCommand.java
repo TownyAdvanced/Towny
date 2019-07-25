@@ -599,6 +599,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "add " + TownySettings.getLangString("res_2"), ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "remove " + TownySettings.getLangString("res_2"), ""));
+			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "list", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "clear", ""));
 		} else {
 			Resident resident;
@@ -619,6 +620,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				String[] names = StringMgmt.remFirstArg(split);
 				residentFriendRemove(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+			
+			} else if (split[0].equalsIgnoreCase("list")) {
+
+				residentFriendList(player, resident);
 
 			} else if (split[0].equalsIgnoreCase("clearlist") || split[0].equalsIgnoreCase("clear")) {
 
@@ -627,6 +632,24 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		}
+	}
+
+	private void residentFriendList(Player player, Resident resident) {
+		
+		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("friend_list")));
+		String colour;
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident friends : resident.getFriends()) {
+			if (friends.isKing())
+				colour = Colors.Gold;
+			else if (friends.isMayor())
+				colour = Colors.LightBlue;
+			else
+				colour = Colors.White;
+			formatedList.add(colour + friends.getName() + Colors.White);
+		}
+		for (String line : ChatTools.list(formatedList))
+			player.sendMessage(line);
 	}
 
 	public void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
