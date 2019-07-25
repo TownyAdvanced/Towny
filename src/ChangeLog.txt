@@ -3288,4 +3288,5 @@ v0.92.0.11:
     - Work around solution for crossbows and fireworks until we can get the shooter of the firework via the Bukkit API.
       - If either explosions or PVP is disallowed where the victim is located, the damage will be cancelled.
     - Return FileMgmt.fileSeparator() so TownyNameUpdater will enable.
-      - It is deprecated, as TownyNameUpdater will be integrated into Towny in the future. 
+      - It is deprecated, as TownyNameUpdater will be integrated into Towny in the future.
+0.94.0.4:
