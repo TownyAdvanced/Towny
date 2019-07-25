@@ -352,7 +352,7 @@ public class TownyEntityListener implements Listener {
 		// As of July 25, 2019 there is no way to get shooter of firework via crossbow.
 		// TODO: Check back here https://hub.spigotmc.org/jira/browse/SPIGOT-5201
 		if (damager.equals("FIREWORK"))
-			if (!locationCanExplode(townyWorld, entity.getLocation()) || !CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(entity.getLocation())))
+			if (!locationCanExplode(townyWorld, entity.getLocation()) || CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(entity.getLocation())))
 				event.setCancelled(true);
 			
 	}
