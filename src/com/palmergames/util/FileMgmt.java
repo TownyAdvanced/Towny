@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 
 public class FileMgmt {
 
-	public static void checkFolders(String[] folders) {
+	public static void checkFolders(String... folders) {
 
 		for (String folder : folders) {
 			File f = new File(folder);
@@ -34,7 +34,7 @@ public class FileMgmt {
 		}
 	}
 
-	public static void checkFiles(String[] files) throws IOException {
+	public static void checkFiles(String... files) throws IOException {
 
 		for (String file : files) {
 			File f = new File(file);
@@ -43,11 +43,6 @@ public class FileMgmt {
 				f.createNewFile();
 			}
 		}
-	}
-
-	public static String fileSeparator() {
-
-		return System.getProperty("file.separator");
 	}
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
@@ -110,7 +105,7 @@ public class FileMgmt {
 		 * so refresh just in case.
 		 */
 		try {
-			checkFiles(new String[]{filePath});
+			checkFiles(filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -255,28 +250,17 @@ public class FileMgmt {
 		synchronized (sourceFile) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
-				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation + fileSeparator() + sourceFile.getName()));
+				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
 					f.delete();
 				// Move file to new directory
-				boolean success = sourceFile.renameTo(new File((sourceFile.getParent() + fileSeparator() + targetLocation), sourceFile.getName()));
-				if (!success) {
-					// File was not successfully moved
-				}
+				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
+				
 			}
 		}
 	}
 
-	public static void zipDirectory(File sourceFolder, File destination) throws IOException {
-
-		synchronized (sourceFolder) {
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
-			recursiveZipDirectory(sourceFolder, output);
-			output.close();
-		}
-	}
-
-	public static void zipDirectories(File[] sourceFolders, File destination) throws IOException {
+	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 
 		synchronized (sourceFolders) {
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
@@ -292,12 +276,11 @@ public class FileMgmt {
 
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
-			int bytesIn = 0;
+			int bytesIn;
 			for (String aDirList : dirList) {
 				File f = new File(sourceFolder, aDirList);
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
-					continue;
 				} else if (f.isFile() && f.canRead()) {
 					FileInputStream input = new FileInputStream(f);
 					ZipEntry anEntry = new ZipEntry(f.getPath());
@@ -344,7 +327,7 @@ public class FileMgmt {
 
 		synchronized (backupsDir) {
 
-			TreeSet<Long> deleted = new TreeSet<Long>();
+			TreeSet<Long> deleted = new TreeSet<>();
 			if (backupsDir.isDirectory()) {
 				File[] children = backupsDir.listFiles();
 				if (children != null) {
@@ -402,9 +385,7 @@ public class FileMgmt {
 								}
 							}
 
-						} catch (Exception e) {
-							// Ignore file
-						}
+						} catch (Exception ignored) {}
 					}
 
 					if (count > 0) {
@@ -414,5 +395,11 @@ public class FileMgmt {
 			}
 		}
 
+	}
+	
+	@Deprecated
+	public static String fileSeparator() {
+
+		return System.getProperty("file.separator");
 	}
 }

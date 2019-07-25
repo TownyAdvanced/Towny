@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -17,7 +18,9 @@ public class DeletePlayerEvent extends Event {
         return handlers;
     }
 
-    public DeletePlayerEvent(String player) { this.playerName = player;
+    public DeletePlayerEvent(String player) {
+        super(!Bukkit.getServer().isPrimaryThread());
+        this.playerName = player;
     }
 
     /**

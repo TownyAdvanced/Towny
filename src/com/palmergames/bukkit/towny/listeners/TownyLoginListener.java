@@ -1,5 +1,10 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -8,36 +13,20 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-
-
 
 public class TownyLoginListener implements Listener {
-	
-	@SuppressWarnings("unused")
-	private final Towny plugin;
-	
-	public TownyLoginListener(Towny instance) {
-
-		plugin = instance;
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL) 
+	@EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerLogin(PlayerLoginEvent event) throws NotRegisteredException {
 		String npcPrefix = TownySettings.getNPCPrefix();
 		String warChest = "towny-war-chest";
 	    String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);		
-		Boolean disallowed = false;
+		boolean disallowed = false;
 		Player player = event.getPlayer();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (player.getName().startsWith(npcPrefix)) {
-			if (TownyUniverse.getDataSource().hasResident(player.getName()))
-			    if (TownyUniverse.getDataSource().getResident(player.getName()).isMayor()){
+			if (townyUniverse.getDataSource().hasResident(player.getName()))
+			    if (townyUniverse.getDataSource().getResident(player.getName()).isMayor()){
 			    	// Deny because this is an NPC account which is a mayor of a town.
 			    	event.disallow(null, "Towny is preventing you from logging in using this account name.");
 			    	disallowed = true;

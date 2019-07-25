@@ -7,8 +7,6 @@ package com.palmergames.bukkit.towny.permissions;
 public enum PermissionNodes {
 	TOWNY_ADMIN("towny.admin"),
 	TOWNY_ADMIN_NATION_ZONE("towny.admin.nation_zone"),
-
-	CHEAT_BYPASS("towny.cheat.bypass"),
 	
 	/*
 	 * Nation command permissions

@@ -1,14 +1,9 @@
 package com.palmergames.bukkit.util;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import de.themoep.idconverter.IdMappings;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -21,10 +16,10 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-
-import de.themoep.idconverter.IdMappings;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -40,7 +35,6 @@ public class BukkitTools {
 	private static Server server = null;
 	
 	public static void initialize(Towny plugin) {
-
 		BukkitTools.plugin = plugin;
 		BukkitTools.server = plugin.getServer();
 	}
@@ -55,7 +49,28 @@ public class BukkitTools {
 	}
 	
 	public static List<Player> matchPlayer(String name) {
-		return getServer().matchPlayer(name);
+		List<Player> matchedPlayers = new ArrayList<>();
+		
+		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
+			String iterPlayerName = iterPlayer.getName();
+			if (plugin.isCitizens2()) {
+				if (CitizensAPI.getNPCRegistry().isNPC(iterPlayer)) {
+					continue;
+				}
+			}
+			if (name.equalsIgnoreCase(iterPlayerName)) {
+				// Exact match
+				matchedPlayers.clear();
+				matchedPlayers.add(iterPlayer);
+				break;
+			}
+			if (iterPlayerName.toLowerCase(java.util.Locale.ENGLISH).contains(name.toLowerCase(java.util.Locale.ENGLISH))) {
+				// Partial match
+				matchedPlayers.add(iterPlayer);
+			}
+		}
+		
+		return matchedPlayers;
 	}
 	
 	public static Player getPlayerExact(String name) {
@@ -96,10 +111,6 @@ public class BukkitTools {
 	
 	public static BukkitScheduler getScheduler() {
 		return getServer().getScheduler();
-	}
-	
-	public static boolean isPrimaryThread() {
-		return Bukkit.isPrimaryThread();
 	}
 	
 	/**
@@ -155,7 +166,7 @@ public class BukkitTools {
 	 */
 	public static HashMap<String, Integer> getPlayersPerWorld() {
 
-		HashMap<String, Integer> m = new HashMap<String, Integer>();
+		HashMap<String, Integer> m = new HashMap<>();
 		for (World world : getServer().getWorlds())
 			m.put(world.getName(), 0);
 		for (Player player :  getServer().getOnlinePlayers())
@@ -167,21 +178,11 @@ public class BukkitTools {
 	/*
 	 * Block handling Methods.
 	 */
-	
-	/**
-	 * Find a block at a specific offset.
-	 * 
-	 * @param block
-	 * @param xOffset
-	 * @param yOffset
-	 * @param zOffset
-	 * @return Block at the new location.
-	 */
-	public static Block getBlockOffset(Block block, int xOffset, int yOffset, int zOffset) {
 
-		return block.getWorld().getBlockAt(block.getX() + xOffset, block.getY() + yOffset, block.getZ() + zOffset);
+	public static String getTypeKey(Block block) {
+		return block.getType().getKey().toString();
 	}
-
+	
 	// Will be removed completely when the new plotsnapshot system is made.
 	@Deprecated
 	public static int getTypeId(Block block) {
@@ -220,11 +221,6 @@ public class BukkitTools {
 		return state.getData();
 	}
 	
-	public static byte getDataData(BlockState state) {
-		
-		return getData(state).getData();
-	}
-	
 	
 	/*
 	 * Item Handling Methods
@@ -233,11 +229,6 @@ public class BukkitTools {
 	public static MaterialData getData(ItemStack stack) {
 		
 		return stack.getData();
-	}
-	
-	public static byte getDataData(ItemStack stack) {
-		
-		return getData(stack).getData();
 	}
 	
 	
@@ -258,17 +249,6 @@ public class BukkitTools {
 	}
 	
 	/**
-	 * Find a Material from an enum name.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public static Material getMaterial(String name) {
-		
-		return Material.getMaterial(name);
-	}
-	
-	/**
 	 * Get the Id (magic number) of a Material type.
 	 * 
 	 * @param material
@@ -278,34 +258,6 @@ public class BukkitTools {
 	public static int getMaterialId(Material material) {
 		
 		return material.getId();
-	}
-	
-
-	/**
-	 * Compiles a list of all whitelisted users.
-	 * 
-	 * @return List of all whitelist player names.
-	 */
-	public static List<String> getWhiteListedUsers() {
-
-		List<String> names = new ArrayList<String>();
-		try {
-			BufferedReader fin = new BufferedReader(new FileReader("white-list.txt"));
-
-			try {
-				String line;
-				while ((line = fin.readLine()) != null)
-					names.add(line);
-			} catch (IOException e) {
-			}
-
-			try {
-				fin.close();
-			} catch (IOException e) {
-			}
-		} catch (FileNotFoundException e) {
-		}
-		return names;
 	}
 
 	/**

@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 public class NationRemoveTownEvent extends Event  {
@@ -26,6 +26,7 @@ public class NationRemoveTownEvent extends Event  {
 	}
 
     public NationRemoveTownEvent(Town town, Nation nation) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.town = town;
         this.nation = nation;
     }

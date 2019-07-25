@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -9,7 +10,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.StringMgmt;
 
@@ -20,7 +20,7 @@ public class AreaSelectionUtil {
 
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 
 		if (args.length == 0) {
 			// claim with no sub command entered so attempt selection of one plot
@@ -43,7 +43,7 @@ public class AreaSelectionUtil {
 				TownBlock tb = pos.getTownBlock();
 				if (!tb.isOutpost() && tb.hasTown()) { // isOutpost(), only for mysql however, if we include this we can skip the outposts on flatfile so less laggy!
 					Town town = tb.getTown();
-					if (TownyUniverse.isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
+					if (TownyUniverse.getInstance().isTownBlockLocContainedInTownOutposts(town.getAllOutpostSpawns(), tb)) {
 						tb.setOutpost(true);
 						out.add(pos);
 					} else {
@@ -70,7 +70,7 @@ public class AreaSelectionUtil {
 
 	public static List<WorldCoord> selectWorldCoordAreaRect(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		if (pos.getTownyWorld().isClaimable()) {
 			if (args.length > 0) {
 				int r = 0, available = 1000;
@@ -117,7 +117,7 @@ public class AreaSelectionUtil {
 
 	public static List<WorldCoord> selectWorldCoordAreaCircle(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		if (pos.getTownyWorld().isClaimable()) {
 			if (args.length > 0) {
 				int r = 0, available = 0;
@@ -170,7 +170,7 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();		
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
@@ -178,7 +178,7 @@ public class AreaSelectionUtil {
 				} else {
 					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );					
 				}
-			} catch (NotRegisteredException e) {				
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
@@ -191,7 +191,7 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterTownOwnedBlocks(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (!worldCoord.getTownBlock().hasTown())
@@ -210,60 +210,60 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterWildernessBlocks(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().hasTown())
 					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
 
 	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().isOwner(owner))
 					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
 
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().isForSale())
 					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
 
 	public static List<WorldCoord> filterPlotsNotForSale(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().isForSale())
 					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}
 
 	public static List<WorldCoord> filterUnownedPlots(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<WorldCoord>();
+		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
 				if (worldCoord.getTownBlock().getPlotPrice() > -1)
 					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
+			} catch (NotRegisteredException ignored) {
 			}
 		return out;
 	}

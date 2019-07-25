@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -8,6 +10,7 @@ public class PlotChangeOwnerEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
     private Resident oldowner;
     private Resident newowner;
+    private TownBlock townBlock;
 
     @Override
     public HandlerList getHandlers() {
@@ -22,9 +25,11 @@ public class PlotChangeOwnerEvent extends Event {
      * @param oldowner - Old Owner
      * @param newowner - New Owner
      */
-    public PlotChangeOwnerEvent(Resident oldowner, Resident newowner) {
+    public PlotChangeOwnerEvent(Resident oldowner, Resident newowner, TownBlock townBlock) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.newowner = newowner;
         this.oldowner = oldowner;
+        this.townBlock = townBlock;
     }
 
     public String getNewowner() {
@@ -36,5 +41,9 @@ public class PlotChangeOwnerEvent extends Event {
             return "undefined";
         }
         return oldowner.getName();
+    }
+
+    public TownBlock getTownBlock() {
+        return townBlock;
     }
 }

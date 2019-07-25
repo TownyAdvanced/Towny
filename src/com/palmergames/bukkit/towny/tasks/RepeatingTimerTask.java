@@ -3,9 +3,9 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
@@ -47,13 +47,12 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				PlotBlockData plotChunk = new PlotBlockData(townBlock);
 				plotChunk.initialize(); // Create a new snapshot.
 
-				if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null))
+				if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null)) {
 					TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save the snapshot.
-
-				plotChunk = null;
-
+				}
+				
 				townBlock.setLocked(false);
-				TownyUniverse.getDataSource().saveTownBlock(townBlock);
+				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 				plugin.updateCache(townBlock.getWorldCoord());
 
 				if (!TownyRegenAPI.hasWorldCoords())

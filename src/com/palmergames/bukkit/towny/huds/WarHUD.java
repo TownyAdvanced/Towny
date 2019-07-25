@@ -1,7 +1,13 @@
 package com.palmergames.bukkit.towny.huds;
 
-import java.util.Hashtable;
-
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -10,14 +16,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import java.util.Hashtable;
 
 public class WarHUD {
 
@@ -87,7 +86,7 @@ public class WarHUD {
 	public static void updateHomeTown(Player p) {
 		String homeTown;
 		try {
-			homeTown = TownyUniverse.getDataSource().getResident(p.getName()).getTown().getName();
+			homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
 		} catch (NotRegisteredException e) {
 			homeTown = "Townless!";
 		}
@@ -97,7 +96,7 @@ public class WarHUD {
 	public static void updateScore(Player p, War war) {
 		String score;
 		try {
-			Town home = TownyUniverse.getDataSource().getResident(p.getName()).getTown();
+			Town home = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
 			Hashtable<Town, Integer> scores = war.getTownScores();
 			if (scores.containsKey(home))
 				score = scores.get(home) + "";

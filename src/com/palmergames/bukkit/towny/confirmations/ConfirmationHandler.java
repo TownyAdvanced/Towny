@@ -1,13 +1,14 @@
 package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
@@ -24,10 +25,10 @@ public class ConfirmationHandler {
 		ConfirmationHandler.plugin = plugin;
 	}
 
-	private static HashMap<Resident, Town> towndeleteconfirmations = new HashMap<Resident, Town>();
-	private static HashMap<Resident, Town> townunclaimallconfirmations = new HashMap<Resident, Town>();
-	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<Resident, Nation>();
-	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<Resident, Integer>();
+	private static HashMap<Resident, Town> towndeleteconfirmations = new HashMap<>();
+	private static HashMap<Resident, Town> townunclaimallconfirmations = new HashMap<>();
+	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<>();
+	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<>();
 
 	public static void addConfirmation(final Resident r, final ConfirmationType type, Object extra) throws TownyException {
 		// We use "extra" in certain instances like the number of days for something e.t.c
@@ -114,11 +115,12 @@ public class ConfirmationHandler {
 	}
 
 	public static void handleConfirmation(Resident r, ConfirmationType type) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (type == ConfirmationType.TOWNDELETE) {
 			if (towndeleteconfirmations.containsKey(r)) {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
-					TownyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
+					townyUniverse.getDataSource().removeTown(towndeleteconfirmations.get(r));
 					removeConfirmation(r,type, true);
 					return;
 				}
@@ -126,14 +128,16 @@ public class ConfirmationHandler {
 		}
 		if (type == ConfirmationType.PURGE) {
 			if (townypurgeconfirmations.containsKey(r)) {
-				if (!TownyUniverse.getPermissionSource().testPermission(TownyUniverse.getPlayer(r), PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
+				Player player = TownyAPI.getInstance().getPlayer(r);
+				if (player == null) {
+					throw new TownyException("Player could not be found!");
+				}
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				}
 				int days = townypurgeconfirmations.get(r);
-				Player player = TownyUniverse.getPlayer(r);
 				new ResidentPurge(plugin, player, TimeTools.getMillis(days + "d")).start();
 				removeConfirmation(r,type, true);
-
 			}
 		}
 		if (type == ConfirmationType.UNCLAIMALL) {
@@ -148,10 +152,9 @@ public class ConfirmationHandler {
 		if (type == ConfirmationType.NATIONDELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
-					TownyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
+					townyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);
-					return;
 				}
 			}
 		}

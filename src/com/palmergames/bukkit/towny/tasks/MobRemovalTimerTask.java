@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
@@ -21,8 +22,8 @@ import java.util.List;
 public class MobRemovalTimerTask extends TownyTimerTask {
 
 	private Server server;
-	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<Class<?>>();
-	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<Class<?>>();
+	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
+	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 
@@ -44,22 +45,20 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		// Build a list of mobs to be removed
-		List<LivingEntity> livingEntitiesToRemove = new ArrayList<LivingEntity>();
+		List<LivingEntity> livingEntitiesToRemove = new ArrayList<>();
 
 		for (World world : server.getWorlds()) {
 			TownyWorld townyWorld;
 
 			// Filter worlds not registered
 			try {
-				townyWorld = TownyUniverse.getDataSource().getWorld(world.getName());
-			} catch (NotRegisteredException e) {
+				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(world.getName());
+			} catch (NotRegisteredException | NullPointerException e) {
 				// World was not registered by Towny, so we skip all mobs in it.
 				continue;
-			} catch (NullPointerException ex) {
-				// Spigot has unloaded this world.
-				continue;
-			}
-
+			} // Spigot has unloaded this world.
+			
+			
 			// Filter worlds not using towny.
 			if (!townyWorld.isUsingTowny())
 				continue;
@@ -71,7 +70,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			//
 			for (LivingEntity livingEntity : world.getLivingEntities()) {
 				Location livingEntityLoc = livingEntity.getLocation();
-				if (!livingEntityLoc.getChunk().isLoaded())
+				if (!world.isChunkLoaded(livingEntityLoc.getBlockX() >> 4, livingEntityLoc.getBlockZ() >> 4))
 					continue;
 
 				Coord coord = Coord.parseCoord(livingEntityLoc);

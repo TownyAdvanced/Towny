@@ -3,11 +3,13 @@ package com.palmergames.bukkit.towny.command;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -17,13 +19,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -45,7 +45,7 @@ import java.util.List;
 public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> output = new ArrayList<String>();
+	private static final List<String> output = new ArrayList<>();
 
 	static {
 		output.add(ChatTools.formatTitle("/resident"));
@@ -84,12 +84,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else
 			try {
 				parseResidentCommandForConsole(sender, args);
-			} catch (TownyException e) {
+			} catch (TownyException ignored) {
 			}
 
 		return true;
 	}
 
+	@SuppressWarnings("static-access")
 	private void parseResidentCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -103,13 +104,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 			try {
-				final Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
-					@Override
-				    public void run() {
-						Player player = null;
-						TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resident, player));
-					}
+				final Resident resident = TownyUniverse.getInstance().getDataSource().getResident(split[0]);
+				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+					Player player = null;
+					TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resident, player));
 				});
 			} catch (NotRegisteredException x) {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
@@ -118,14 +116,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
+	@SuppressWarnings("static-access")
 	public void parseResidentCommand(final Player player, String[] split) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
 
 			if (split.length == 0) {
 
 				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
 				} catch (NotRegisteredException x) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
@@ -138,18 +138,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_LIST.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_LIST.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				listResidents(player);
 
 			} else if (split[0].equalsIgnoreCase("tax")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				try {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(resident));
 				} catch (NotRegisteredException x) {
 					throw new TownyException(TownySettings.getLangString("msg_err_not_registered"));
@@ -157,7 +157,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			
 			} else if (split[0].equalsIgnoreCase("jail")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				if (!TownySettings.isAllowingBail()) {
@@ -172,20 +172,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				if (!TownyUniverse.getDataSource().getResident(player.getName()).isJailed())
+				if (!townyUniverse.getDataSource().getResident(player.getName()).isJailed())
 					return;
 				
 				if (split[1].equalsIgnoreCase("paybail")) {
-					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 					if (resident.canPayFromHoldings(TownySettings.getBailAmount())) {
-						Town JailTown = TownyUniverse.getDataSource().getTown(resident.getJailTown());
+						Town JailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
 						resident.payTo(TownySettings.getBailAmount(), JailTown, "Bail");
 						resident.setJailed(false);
 						resident.setJailSpawn(0);
 						resident.setJailTown("");
 						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + "has paid bail and is free.");
 						player.teleport(resident.getTown().getSpawn());
-						TownyUniverse.getDataSource().saveResident(resident);
+						townyUniverse.getDataSource().saveResident(resident);
 					} else {
 						TownyMessaging.sendErrorMsg(player, Colors.Red + "Unable to afford bail.");
 					}
@@ -213,7 +213,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("friend")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_FRIEND.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_FRIEND.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
@@ -221,7 +221,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("spawn")) {
 
-				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode()))
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode()))
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				residentSpawn(player);
@@ -229,16 +229,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			} else {
 
 				try {
-					final Resident resident = TownyUniverse.getDataSource().getResident(split[0]);
-					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
+					final Resident resident = townyUniverse.getDataSource().getResident(split[0]);
+					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 					}
-					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
-						@Override
-					    public void run() {
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player));
-						}
-					});
+					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player)));
 				} catch (NotRegisteredException x) {
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 				}
@@ -256,13 +251,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 * @param player
 	 */
 	public void residentSpawn(Player player) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		boolean isTownyAdmin = TownyUniverse.getPermissionSource().isTownyAdmin(player);
+		boolean isTownyAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
 		Resident resident;
 
 		try {
 
-			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 			Town town;
 			Location spawnLoc;
 			String notAffordMSG;
@@ -272,6 +268,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			town = resident.getTown();
 			notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
+
+			if (resident.isJailed())
+			{
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
+				return;
+			}
 
 			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null) {
 
@@ -293,18 +295,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
 				if (!disallowedZones.isEmpty()) {
-					String inTown = null;
+					String inTown;
 					try {
 						Location loc = plugin.getCache(player).getLastLocation();
-						inTown = TownyUniverse.getTownName(loc);
+						inTown = TownyAPI.getInstance().getTownName(loc);
 					} catch (NullPointerException e) {
-						inTown = TownyUniverse.getTownName(player.getLocation());
+						inTown = TownyAPI.getInstance().getTownName(player.getLocation());
 					}
 
 					if (inTown == null && disallowedZones.contains("unclaimed"))
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "the Wilderness"));
-					if (inTown != null && resident.hasNation() && TownyUniverse.getDataSource().getTown(inTown).hasNation()) {
-						Nation inNation = TownyUniverse.getDataSource().getTown(inTown).getNation();
+					if (inTown != null && resident.hasNation() && townyUniverse.getDataSource().getTown(inTown).hasNation()) {
+						Nation inNation = townyUniverse.getDataSource().getTown(inTown).getNation();
 						Nation playerNation = resident.getTown().getNation();
 						if (inNation.hasEnemy(playerNation) && disallowedZones.contains("enemy"))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_spawn_disallowed_from"), "Enemy areas"));
@@ -328,11 +330,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			if (UsingESS && !isTownyAdmin) {
 				try {
-					User user = plugin.getEssentials().getUser(player);
+					User essentialsUser = plugin.getEssentials().getUser(player);
 
-					if (!user.isJailed()) {
+					// This jail check is specifically for essentials jails, not towny ones.
+					if (!essentialsUser.isJailed()) {
 
-						Teleport teleport = user.getTeleport();
+						Teleport teleport = essentialsUser.getTeleport();
 						if (!chunk.isLoaded())
 							chunk.load();
 						// Cause an essentials exception if in cooldown.
@@ -346,7 +349,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			// Show message if we are using iConomy and are charging for spawn
+			// Show message if we are using an Economy and are charging for spawn
 			// travel.
 			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, town, String.format("Resident Spawn (%s)", townSpawnPermission))) {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost))); // +
@@ -367,7 +370,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (TownyTimerHandler.isTeleportWarmupRunning()) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-					plugin.getTownyUniverse().requestTeleport(player, spawnLoc, travelCost);
+					TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 				} else {
 					// Don't use teleport warmup
 					if (player.getVehicle() != null)
@@ -377,12 +380,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					player.teleport(spawnLoc, TeleportCause.COMMAND);
 				}
 			}
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
-		} catch (EconomyException e) {
+		} catch (TownyException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
-
+		
 	}
 
 	/**
@@ -393,11 +394,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		Resident resident;
 
 		try {
-			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident = townyUniverse.getDataSource().getResident(player.getName());
 
 		} catch (NotRegisteredException e) {
 			// unknown resident
@@ -417,7 +419,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		}
 
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		TownyPermission perm = resident.getPermissions();
@@ -425,7 +427,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		// Special case chat spy
 		if (newSplit[0].equalsIgnoreCase("spy")) {
 			
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
 			resident.toggleMode(newSplit, true);
@@ -447,7 +449,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		notifyPerms(player, perm);
-		TownyUniverse.getDataSource().saveResident(resident);
+		townyUniverse.getDataSource().saveResident(resident);
 
 	}
 
@@ -468,8 +470,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
 		String colour;
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
 			if (player.canSee(BukkitTools.getPlayerExact(resident.getName()))) {
 				if (resident.isKing())
 					colour = Colors.Gold;
@@ -488,8 +490,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		sender.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("res_list")));
 		String colour;
-		ArrayList<String> formatedList = new ArrayList<String>();
-		for (Resident resident : plugin.getTownyUniverse().getActiveResidents()) {
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
 			if (resident.isKing())
 				colour = Colors.Gold;
 			else if (resident.isMayor())
@@ -516,6 +518,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	public void residentSet(Player player, String[] split) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatCommand("", "/resident set", "perm ...", "'/resident set perm' " + TownySettings.getLangString("res_5")));
@@ -523,13 +526,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			Resident resident;
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET.getNode(split[0].toLowerCase())))
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET.getNode(split[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if (split[0].equalsIgnoreCase("perm")) {
@@ -547,8 +550,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				return;
 
 			}
-
-			TownyUniverse.getDataSource().saveResident(resident);
+			
+			townyUniverse.getDataSource().saveResident(resident);
 		}
 	}
 
@@ -562,6 +565,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "townunclaim", "", TownySettings.getLangString("mode_3")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
+			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "constantplots", "", ""));
 			// String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() ==
 			// null ? "flag" :
 			// TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
@@ -579,7 +584,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		List<String> list = Arrays.asList(split);
-		if ((list.contains("spy")) && (plugin.isPermissions() && !TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode()))) {
+		if ((list.contains("spy")) && !TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 			return;
 		}
@@ -589,15 +594,17 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void residentFriend(Player player, String[] split) {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "add " + TownySettings.getLangString("res_2"), ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "remove " + TownySettings.getLangString("res_2"), ""));
+			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "list", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "clear", ""));
 		} else {
 			Resident resident;
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
@@ -607,12 +614,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendAdd(player, resident, TownyUniverse.getDataSource().getResidents(player, names));
+				residentFriendAdd(player, resident, townyUniverse.getDataSource().getResidents(player, names));
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendRemove(player, resident, TownyUniverse.getDataSource().getResidents(player, names));
+				residentFriendRemove(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+			
+			} else if (split[0].equalsIgnoreCase("list")) {
+
+				residentFriendList(player, resident);
 
 			} else if (split[0].equalsIgnoreCase("clearlist") || split[0].equalsIgnoreCase("clear")) {
 
@@ -623,9 +634,27 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	private void residentFriendList(Player player, Resident resident) {
+		
+		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("friend_list")));
+		String colour;
+		ArrayList<String> formatedList = new ArrayList<>();
+		for (Resident friends : resident.getFriends()) {
+			if (friends.isKing())
+				colour = Colors.Gold;
+			else if (friends.isMayor())
+				colour = Colors.LightBlue;
+			else
+				colour = Colors.White;
+			formatedList.add(colour + friends.getName() + Colors.White);
+		}
+		for (String line : ChatTools.list(formatedList))
+			player.sendMessage(line);
+	}
+
 	public void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
 
-		ArrayList<Resident> remove = new ArrayList<Resident>();
+		ArrayList<Resident> remove = new ArrayList<>();
 
 		for (Resident newFriend : invited)
 
@@ -654,11 +683,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		 */
 		if (invited.size() > 0) {
 
-			String msg = "Added ";
+			StringBuilder msg = new StringBuilder("Added ");
 
 			for (Resident newFriend : invited) {
 
-				msg += newFriend.getName() + ", ";
+				msg.append(newFriend.getName()).append(", ");
 				Player p = BukkitTools.getPlayer(newFriend.getName());
 
 				if (p != null) {
@@ -669,10 +698,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			}
 
-			msg = msg.substring(0, msg.length() - 2);
-			msg += TownySettings.getLangString("msg_to_list");
-			TownyMessaging.sendMsg(player, msg);
-			TownyUniverse.getDataSource().saveResident(resident);
+			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
+			msg.append(TownySettings.getLangString("msg_to_list"));
+			TownyMessaging.sendMsg(player, msg.toString());
+			TownyUniverse.getInstance().getDataSource().saveResident(resident);
 
 		} else {
 
@@ -683,8 +712,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	public void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
 
-		List<Resident> remove = new ArrayList<Resident>();
-		List<Resident> toKick = new ArrayList<Resident>(kicking);
+		List<Resident> remove = new ArrayList<>();
+		List<Resident> toKick = new ArrayList<>(kicking);
 
 		for (Resident friend : toKick) {
 			try {
@@ -700,18 +729,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				toKick.remove(friend);
 
 		if (toKick.size() > 0) {
-			String msg = TownySettings.getLangString("msg_removed");
+			StringBuilder msg = new StringBuilder(TownySettings.getLangString("msg_removed"));
 			Player p;
 			for (Resident member : toKick) {
-				msg += member.getName() + ", ";
+				msg.append(member.getName()).append(", ");
 				p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
 					TownyMessaging.sendMsg(p, String.format(TownySettings.getLangString("msg_friend_remove"), player.getName()));
 			}
-			msg = msg.substring(0, msg.length() - 2);
-			msg += TownySettings.getLangString("msg_from_list");
-			TownyMessaging.sendMsg(player, msg);
-			TownyUniverse.getDataSource().saveResident(resident);
+			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
+			msg.append(TownySettings.getLangString("msg_from_list"));
+			TownyMessaging.sendMsg(player, msg.toString());
+			TownyUniverse.getInstance().getDataSource().saveResident(resident);
 		} else
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_invalid_name"));
 
@@ -724,7 +753,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		LinkedList<String> output = new LinkedList<String>();
+		LinkedList<String> output = new LinkedList<>();
 		String lastArg = "";
 
 		// Get the last argument
@@ -735,7 +764,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (!lastArg.equalsIgnoreCase("")) {
 
 			// Match residents
-			for (Resident resident : TownyUniverse.getDataSource().getResidents()) {
+			for (Resident resident : TownyUniverse.getInstance().getDataSource().getResidents()) {
 				if (resident.getName().toLowerCase().startsWith(lastArg)) {
 					output.add(resident.getName());
 				}

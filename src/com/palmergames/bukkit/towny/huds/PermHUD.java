@@ -1,14 +1,6 @@
 package com.palmergames.bukkit.towny.huds;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
-
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -17,9 +9,16 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class PermHUD {
 	
@@ -33,6 +32,14 @@ public class PermHUD {
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		String plotName, build, destroy, switching, item, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
+		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
+		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
+		// So we can call the toggleOn Method and return, causing this to be rerun and also the creation
+		// of the scoreboard, at least that's the plan.
+		if (board == null) {
+			toggleOn(p);
+			return;
+		}
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
@@ -72,28 +79,32 @@ public class PermHUD {
 
 	private static void clearPerms (Player p) {
 		Scoreboard board = p.getScoreboard();
-		board.getTeam("plot").setSuffix(" ");
-		board.getTeam("build").setSuffix(" ");
-		board.getTeam("destroy").setSuffix(" ");
-		board.getTeam("switching").setSuffix(" ");
-		board.getTeam("item").setSuffix(" ");
-		board.getTeam("pvp").setSuffix(" ");
-		board.getTeam("explosions").setSuffix(" ");
-		board.getTeam("firespread").setSuffix(" ");
-		board.getTeam("mobspawn").setSuffix(" ");
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+		try {
+			board.getTeam("plot").setSuffix(" ");
+			board.getTeam("build").setSuffix(" ");
+			board.getTeam("destroy").setSuffix(" ");
+			board.getTeam("switching").setSuffix(" ");
+			board.getTeam("item").setSuffix(" ");
+			board.getTeam("pvp").setSuffix(" ");
+			board.getTeam("explosions").setSuffix(" ");
+			board.getTeam("firespread").setSuffix(" ");
+			board.getTeam("mobspawn").setSuffix(" ");
+			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+		} catch (NullPointerException e) {
+			toggleOn(p);
+		}
 	}
 	
 	private static String getFormattedWildernessName(World w) {
 		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
 		try {
-			wildernessName.append(TownyUniverse.getDataSource().getWorld(w.getName()).getUnclaimedZoneName());
+			wildernessName.append(TownyUniverse.getInstance().getDataSource().getWorld(w.getName()).getUnclaimedZoneName());
 		} catch (NotRegisteredException e) {
 			wildernessName.append("Unknown");
 		}
 		return wildernessName.toString();
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";

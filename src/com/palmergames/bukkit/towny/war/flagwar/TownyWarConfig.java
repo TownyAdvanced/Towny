@@ -6,6 +6,7 @@ import com.palmergames.util.TimeTools;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class TownyWarConfig {
 
 	public static boolean isAffectedMaterial(Material material) {
 
-		return material == Material.LEGACY_WOOL || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
+		return Tag.WOOL.isTagged(material) || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
 	}
 
 	public static DyeColor[] getWoolColors() {

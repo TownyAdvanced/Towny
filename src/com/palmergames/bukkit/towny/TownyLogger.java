@@ -4,8 +4,8 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyEconomyObject;
-import com.palmergames.util.FileMgmt;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -20,7 +20,7 @@ public class TownyLogger {
 
 	public static void setup(String root, boolean append) {
 
-		String logFolder = root + FileMgmt.fileSeparator() + "logs";
+		String logFolder = root + File.separator + "logs";
 		//FileMgmt.checkFolders(new String[]{logFolder});
 
 		setupLogger(log, logFolder, "towny.log", new TownyLogFormatter(), TownySettings.isAppendingToLog());
@@ -44,7 +44,7 @@ public class TownyLogger {
 	public static void setupLogger(Logger logger, String logFolder, String filename, Formatter formatter, boolean append) {
 
 		try {
-			FileHandler fh = new FileHandler(logFolder + FileMgmt.fileSeparator() + filename, append);
+			FileHandler fh = new FileHandler(logFolder + File.separator + filename, append);
 			fh.setFormatter(formatter);
 			logger.addHandler(fh);
 		} catch (IOException e) {

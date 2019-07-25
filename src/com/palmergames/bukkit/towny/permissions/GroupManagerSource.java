@@ -1,5 +1,11 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.events.GMGroupEvent;
@@ -12,13 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * @author ElgarL
@@ -173,7 +172,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
 
 					try {
-						resident = TownyUniverse.getDataSource().getResident(event.getUserName());
+						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getUserName());
 						player = BukkitTools.getPlayerExact(resident.getName());
 						if (player != null) {
 							//setup default modes for this player.
@@ -181,7 +180,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 							plugin.setPlayerMode(player, modes, false);
 							plugin.resetCache(player);
 						}
-					} catch (NotRegisteredException x) {
+					} catch (NotRegisteredException ignored) {
 					}
 
 				}

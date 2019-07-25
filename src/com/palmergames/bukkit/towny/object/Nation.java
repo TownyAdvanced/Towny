@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
@@ -21,13 +22,13 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,9 +37,9 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	//private List<Resident> assistants = new ArrayList<Resident>();
-	private List<Town> towns = new ArrayList<Town>();
-	private List<Nation> allies = new ArrayList<Nation>();
-	private List<Nation> enemies = new ArrayList<Nation>();
+	private List<Town> towns = new ArrayList<>();
+	private List<Nation> allies = new ArrayList<>();
+	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
@@ -63,7 +64,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if (this.tag.matches(" "))
 			this.tag = "";
 		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
-		setChangedName(true);
 	}
 
 	public String getTag() {
@@ -99,7 +99,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public boolean removeAllAllies() {
 
-		for (Nation ally : new ArrayList<Nation>(getAllies()))
+		for (Nation ally : new ArrayList<>(getAllies()))
 			try {
 				removeAlly(ally);
 				ally.removeAlly(this);
@@ -142,7 +142,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public boolean removeAllEnemies() {
 
-		for (Nation enemy : new ArrayList<Nation>(getEnemies()))
+		for (Nation enemy : new ArrayList<>(getEnemies()))
 			try {
 				removeEnemy(enemy);
 				enemy.removeEnemy(this);
@@ -163,7 +163,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public boolean isKing(Resident resident) {
 
-		return hasCapital() ? getCapital().isMayor(resident) : false;
+		return hasCapital() && getCapital().isMayor(resident);
 	}
 
 	public boolean hasCapital() {
@@ -228,6 +228,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		this.capital = capital;
 		try {
+			recheckTownDistance();
 			TownyPerms.assignPermissions(capital.getMayor(), null);
 		} catch (Exception e) {
 			// Dummy catch to prevent errors on startup when setting nation.
@@ -254,7 +255,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void setNationSpawn(Location spawn) throws TownyException {
 		Coord spawnBlock = Coord.parseCoord(spawn);
 
-		TownBlock townBlock = TownyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
+		TownBlock townBlock = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
 			if(this.capital == null){
 				throw new TownyException(TownySettings.getLangString("msg_err_spawn_not_within_capital"));
@@ -307,12 +308,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 				if (hasEnemy(nation) && !hasAlly(nation))
 					return true;
 			}
-		} catch (AlreadyRegisteredException x) {
-			return false;
-		} catch (NotRegisteredException e) {
+		} catch (AlreadyRegisteredException | NotRegisteredException x) {
 			return false;
 		}
-
+		
 		return false;
 	}
 
@@ -323,7 +322,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 //
 	public List<Resident> getAssistants() {
 
-		List<Resident> assistants = new ArrayList<Resident>();
+		List<Resident> assistants = new ArrayList<>();
 		
 		for (Town town: towns)
 		for (Resident assistant: town.getResidents()) {
@@ -399,7 +398,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		//removeAssistantsIn(town);
 		try {
 			town.setNation(null);
-		} catch (AlreadyRegisteredException e) {
+		} catch (AlreadyRegisteredException ignored) {
 		}
 		towns.remove(town);
 		
@@ -408,13 +407,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	private void removeAllTowns() {
 
-		for (Town town : new ArrayList<Town>(towns))
+		for (Town town : new ArrayList<>(towns))
 			remove(town);
 	}
 
 //	public boolean hasAssistantIn(Town town) {
 //
-//		for (Resident resident : town.getResidents())
+//		for (Resident resident : town.getResidentMap())
 //			if (hasAssistant(resident))
 //				return true;
 //		return false;
@@ -422,7 +421,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 //
 //	private void removeAssistantsIn(Town town) {
 //
-//		for (Resident resident : new ArrayList<Resident>(town.getResidents()))
+//		for (Resident resident : new ArrayList<Resident>(town.getResidentMap()))
 //			if (hasAssistant(resident))
 //				try {
 //					removeAssistant(resident);
@@ -451,7 +450,33 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		removeAllEnemies();
 		removeAllTowns();
 		capital = null;
-		//assistants.clear();
+	}
+
+	/**
+	 * Method for rechecking town distances to a new nation capital/moved nation capital homeblock.
+	 * @throws TownyException
+	 */
+	public void recheckTownDistance() throws TownyException {
+		if(capital != null) {
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				final Coord capitalCoord = capital.getHomeBlock().getCoord();
+				Iterator it = towns.iterator();
+				while(it.hasNext()) {
+					Town town = (Town) it.next();
+					Coord townCoord = town.getHomeBlock().getCoord();
+					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
+						it.remove();
+						continue;
+					}
+
+					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+					if (distance > TownySettings.getNationRequiresProximity()) {
+						town.setNation(null);
+						it.remove();
+					}
+				}
+			}
+		}
 	}
 
 	public void setNeutral(boolean neutral) throws TownyException {
@@ -521,7 +546,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	@Override
 	public List<Resident> getResidents() {
 
-		List<Resident> out = new ArrayList<Resident>();
+		List<Resident> out = new ArrayList<>();
 		for (Town town : getTowns())
 			out.addAll(town.getResidents());
 		return out;
@@ -530,7 +555,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "Nation (" + getName() + ")");
 		out.add(getTreeDepth(depth + 1) + "Capital: " + getCapital().getName());
 		
@@ -575,7 +600,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	@Override
 	public List<Resident> getOutlaws() {
 
-		List<Resident> out = new ArrayList<Resident>();
+		List<Resident> out = new ArrayList<>();
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return out;
@@ -590,11 +615,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public boolean hasValidUUID() {
-		if (uuid != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return uuid != null;
 	}
 
 	public long getRegistered() {
@@ -643,9 +664,9 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		sentinvites.remove(invite);
 	}
 
-	private List<Invite> receivedinvites = new ArrayList<Invite>();
-	private List<Invite> sentinvites = new ArrayList<Invite>();
-	private List<Invite> sentallyinvites = new ArrayList<Invite>();
+	private List<Invite> receivedinvites = new ArrayList<>();
+	private List<Invite> sentinvites = new ArrayList<>();
+	private List<Invite> sentallyinvites = new ArrayList<>();
 
 
 	@Override

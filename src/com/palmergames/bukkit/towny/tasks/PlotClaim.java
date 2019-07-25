@@ -1,14 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -17,10 +12,14 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ElgarL
@@ -29,11 +28,11 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 public class PlotClaim extends Thread {
 
 	Towny plugin;
-	volatile Player player;
-	volatile Resident resident;
-	volatile TownyWorld world;
-	List<WorldCoord> selection;
-	boolean claim, forced;
+	private volatile Player player;
+	private volatile Resident resident;
+	private volatile TownyWorld world;
+	private List<WorldCoord> selection;
+	private boolean claim, forced;
 
 	/**
 	 * @param plugin reference to towny
@@ -57,8 +56,12 @@ public class PlotClaim extends Thread {
 		
 		int claimed = 0;
 
-		if (player != null)
-			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Plot Claim..." : "Plot unclaim..."));
+		if (player != null){
+			if (claim = true)
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_claim"));
+			else
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_unclaim"));
+		}
 
 		if (selection != null) {
 
@@ -95,17 +98,19 @@ public class PlotClaim extends Thread {
 
 		if (player != null) {
 			if (claim) {
-				if ((selection != null) && (selection.size() > 0) && (claimed > 0))
-					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				else
+				if ((selection != null) && (selection.size() > 0) && (claimed > 0)) {
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_claimed") + ((selection.size() > 5) ? TownySettings.getLangString("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+				} else {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_not_claimed_1"));
-			} else if (selection != null)
-				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? "Total TownBlocks: " + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-			else
+				}
+			} else if (selection != null) {
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed") + ((selection.size() > 5) ? TownySettings.getLangString("msg_total_townblocks") + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+			} else {
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_unclaimed"));
+			}
 		}
-
-		TownyUniverse.getDataSource().saveResident(resident);
+		
+		TownyUniverse.getInstance().getDataSource().saveResident(resident);
 		plugin.resetCache();
 
 	}
@@ -118,6 +123,7 @@ public class PlotClaim extends Thread {
 				Town town = townBlock.getTown();
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
+				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 				try {
 					Resident owner = townBlock.getResident();
@@ -145,9 +151,9 @@ public class PlotClaim extends Thread {
 
 						// Set the plot permissions to mirror the new owners.
 						townBlock.setType(townBlock.getType());
-
-						TownyUniverse.getDataSource().saveResident(owner);
-						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						
+						townyUniverse.getDataSource().saveResident(owner);
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						// Update any caches for this WorldCoord
 						plugin.updateCache(worldCoord);
@@ -164,10 +170,10 @@ public class PlotClaim extends Thread {
 
 						// Set the plot permissions to mirror the towns.
 						townBlock.setType(townBlock.getType());
-
-						TownyUniverse.getDataSource().saveResident(owner);
+						
+						townyUniverse.getDataSource().saveResident(owner);
 						// Update the townBlock data file so it's no longer using custom settings.
-						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 						return true;
 					} else {
@@ -195,7 +201,7 @@ public class PlotClaim extends Thread {
 
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
-					TownyUniverse.getDataSource().saveTownBlock(townBlock);
+					townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 					return true;
 				}
@@ -216,7 +222,7 @@ public class PlotClaim extends Thread {
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
-			TownyUniverse.getDataSource().saveTownBlock(townBlock);
+			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 
 			plugin.updateCache(worldCoord);
 
@@ -229,7 +235,7 @@ public class PlotClaim extends Thread {
 
 	private void residentUnclaimAll() {
 
-		List<TownBlock> selection = new ArrayList<TownBlock>(resident.getTownBlocks());
+		List<TownBlock> selection = new ArrayList<>(resident.getTownBlocks());
 
 		for (TownBlock townBlock : selection) {
 			try {

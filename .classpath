@@ -2,17 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../lib/bpermissions.jar"/>
 	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="../lib/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="../lib/iConomy.jar"/>
-	<classpathentry kind="lib" path="../lib/PermissionsEx.jar"/>
-	<classpathentry kind="lib" path="../lib/bukkit.jar" sourcepath="/lib/bukkit.jar">
+	<classpathentry kind="lib" path="../lib/bukkit1.14.3.jar" sourcepath="/lib/bukkit1.14.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="../lib/citizensapi-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="../lib/TheNewChat.jar"/>
 	<classpathentry kind="lib" path="../lib/Vault.jar"/>
 	<classpathentry kind="lib" path="../lib/Reserve.jar"/>
 	<classpathentry kind="output" path="bin"/>

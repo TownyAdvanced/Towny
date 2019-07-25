@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Nation;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import com.palmergames.bukkit.towny.object.Nation;
 
 
 public class RenameNationEvent extends Event  {
@@ -25,6 +25,7 @@ public class RenameNationEvent extends Event  {
 	}
 
     public RenameNationEvent(String oldName, Nation nation) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.oldName = oldName;
         this.nation = nation;
     }

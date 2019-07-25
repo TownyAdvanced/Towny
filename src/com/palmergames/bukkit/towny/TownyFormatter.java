@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -11,19 +12,16 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,14 +49,12 @@ public class TownyFormatter {
 	}
 
 	public static List<String> getFormattedOnlineResidents(String prefix, ResidentList residentList, Player player) {
-
-		List<Resident> onlineResidents = TownyUniverse.getOnlineResidentsViewable(player, residentList);
+		List<Resident> onlineResidents = TownCommand.getOnlineResidentsViewable(player, residentList);
 		return getFormattedResidents(prefix, onlineResidents);
 	}
 
 	public static List<String> getFormattedResidents(Town town) {
-
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 
@@ -281,7 +277,7 @@ public class TownyFormatter {
 	 */
 	public static List<String> getStatus(Town town) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 
 		TownyWorld world = town.getWorld();
 
@@ -294,8 +290,8 @@ public class TownyFormatter {
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard()));
-		} catch (NullPointerException e) {
+			out.addAll(ChatTools.color(String.format(TownySettings.getLangString("status_town_board"), town.getTownBoard())));
+		} catch (NullPointerException ignored) {
 		}
 		// Created Date
 		Long registered= town.getRegistered();

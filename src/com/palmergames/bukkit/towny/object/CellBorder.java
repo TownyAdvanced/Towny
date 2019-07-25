@@ -77,8 +77,8 @@ public class CellBorder extends WorldCoord {
 
 	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
 
-		int x = getBlockX();
-		int z = getBlockZ();
+		int x = getBlockX(); // positive x is east, negative x is west
+		int z = getBlockZ(); // positive z is south, negative z is north
 		int w = Coord.getCellSize() - 1;
 		World world = getBukkitWorld();
 
