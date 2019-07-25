@@ -1807,12 +1807,29 @@ public class TownySettings {
 
 		double multiplier;
 
-		if (nation != null)
-			multiplier = Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
-		else
+		if (nation != null) {
+			if (isNationUpkeepPerTown()) {
+				if (isNationLevelModifierAffectingNationUpkeepPerTown()) 
+					return (getNationUpkeep() * nation.getTowns().size()) * Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				else 
+					return (getNationUpkeep() * nation.getTowns().size());
+			} else {
+				multiplier = Double.valueOf(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+			}
+		} else
 			multiplier = 1.0;
 
 		return getNationUpkeep() * multiplier;
+	}
+
+	private static boolean isNationLevelModifierAffectingNationUpkeepPerTown() {
+
+		return getBoolean(ConfigNodes.ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER);
+	}
+
+	private static boolean isNationUpkeepPerTown() {
+
+		return getBoolean(ConfigNodes.ECO_PRICE_NATION_UPKEEP_PERTOWN);
 	}
 
 	public static boolean getNationDefaultPublic(){

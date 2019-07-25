@@ -3293,3 +3293,10 @@ v0.92.0.11:
     - New Command: /resident friend list
       - Returns a list of your friends.
     - Language files bumped to 0.50.
+    - New Config Option: economy.daily_taxes.nation_pertown_upkeep
+      - Default: false
+      - Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)
+      - calculated by (number of towns in nation X price_nation_upkeep).
+    - New Config Option: economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier
+      - Default: false
+      - If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers.
