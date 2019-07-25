@@ -396,4 +396,10 @@ public class FileMgmt {
 		}
 
 	}
+	
+	@Deprecated
+	public static String fileSeparator() {
+
+		return System.getProperty("file.separator");
+	}
 }
