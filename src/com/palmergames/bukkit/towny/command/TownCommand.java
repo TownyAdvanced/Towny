@@ -80,6 +80,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
 
+	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
+	private static final Comparator<Town> BY_NAME = (t1, t2) -> t1.getName().compareTo(t2.getName());
+	private static final Comparator<Town> BY_BANK_BALANCE = (t1, t2) -> {
+		try {
+			return Double.compare(t2.getHoldingBalance(), t1.getHoldingBalance());
+		} catch (EconomyException e) {
+			throw new RuntimeException("Failed to get balance. Aborting.");
+		}
+	};
+
 	static {
 		output.add(ChatTools.formatTitle("/town"));
 		output.add(ChatTools.formatCommand("", "/town", "", TownySettings.getLangString("town_help_1")));
@@ -922,33 +932,68 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		List<Town> townsToSort = TownyUniverse.getInstance().getDataSource().getTowns();
 		int page = 1;
+		boolean pageSet = false;
+		boolean comparatorSet = false;
+		Comparator<Town> comparator = BY_NUM_RESIDENTS;
 		int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
-		if (split.length > 1) {
-			try {
-				page = Integer.parseInt(split[1]);
-				if (page < 0) {
-					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
+		for (int i = 1; i < split.length; i++) {
+			if (split[i].equalsIgnoreCase("by")) {
+				if (comparatorSet) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_multiple_comparators"));
 					return;
-				} else if (page == 0) {
+				}
+				i++;
+				if (i < split.length) {
+					comparatorSet = true;
+					if (split[i].equalsIgnoreCase("residents")) {
+						comparator = BY_NUM_RESIDENTS;
+					} else if (split[i].equalsIgnoreCase("balance")) {
+						comparator = BY_BANK_BALANCE;
+					} else if (split[i].equalsIgnoreCase("name")) {
+						comparator = BY_NAME;
+					} else {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_missing_comparator"));
+					return;
+				}
+				comparatorSet = true;
+			} else {
+				if (pageSet) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_too_many_pages"));
+					return;
+				}
+				try {
+					page = Integer.parseInt(split[1]);
+					if (page < 0) {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_negative"));
+						return;
+					} else if (page == 0) {
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
+						return;
+					}
+					pageSet = true;
+				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
 					return;
 				}
-			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_must_be_int"));
-				return;
 			}
 		}
+
 		if (page > total) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
 		}
 
-		townsToSort.sort((Comparator) (t1, t2) -> {
-			if (((Town) t2).getNumResidents() == ((Town) t1).getNumResidents()) {
-				return 0;
-			}
-			return (((Town) t2).getNumResidents() > ((Town) t1).getNumResidents()) ? 1 : -1;
-		});
+		try {
+			Collections.sort(townsToSort, comparator);
+		} catch (RuntimeException e) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
+			return;
+		}
+
 		int iMax = page * 10;
 		if ((page * 10) > townsToSort.size()) {
 			iMax = townsToSort.size();
