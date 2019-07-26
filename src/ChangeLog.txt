@@ -3307,3 +3307,16 @@ v0.92.0.11:
       - The getFormattedResidents() format which has 3 colours can now have their colours set.
         - These are commonly seen in the /res screen for the friends list; the townranks in the /town screen; the nationranks in the /nationscreen, and probably other places where to show a list of residents.
         - The first colour is the start of the line, the second colour is the [#] section, the third colour is the list of resident names.
+    - Changed Command: /nation list, courtesy of professorg
+      - Now available are comparators to choose how to order the list of nations:
+      - options are:
+        - /n list by name: order alphabetically.
+        - /n list by resident: order by nation with the most residents across all towns.
+        - /n list by balance: order by nation with the highest nation bank balance.
+        - /n list by towns: order by the nation with the most towns.
+    - Changed Command: /town list, courtesy of professorg
+      - Now available are comparators to choose how to order the list of towns:
+      - options are:
+        - /t list by name: order alphabetically.
+        - /t list by resident: order by town with the most residents.
+        - /t list by balance: order by town with the highest town bank balance.

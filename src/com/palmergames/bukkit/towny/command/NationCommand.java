@@ -54,6 +54,7 @@ import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -700,6 +701,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						comparator = BY_BANK_BALANCE;
 					} else if (split[i].equalsIgnoreCase("towns")) {
 						comparator = BY_NUM_TOWNS;
+					} else if (split[i].equalsIgnoreCase("name")) {
+						comparator = BY_NAME;						
 					} else {
 						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
 						return;
@@ -756,7 +759,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		sender.sendMessage(
 				ChatTools.formatList(
 						TownySettings.getLangString("nation_plu"),
-						Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Towns)",
+						Colors.Gold + TownySettings.getLangString("nation_name") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_towns"),
 						nationsordered,
 						TownySettings.getListPageMsg(page, total)
 				));

@@ -67,6 +67,7 @@ import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -1003,11 +1004,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town = townsToSort.get(i);
 			String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
 			if (town.isOpen())
-				output += Colors.White + " (Open)";
+				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
 		}
 		sender.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
-				Colors.Blue + "Town Name" + Colors.Gray + " - " + Colors.LightBlue + "(Number of Residents)",
+				Colors.Blue + TownySettings.getLangString("town_name") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents"),
 				townsformatted, TownySettings.getListPageMsg(page, total)
 				)
 		);
