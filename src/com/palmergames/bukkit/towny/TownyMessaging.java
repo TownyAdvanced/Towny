@@ -453,7 +453,7 @@ public class TownyMessaging {
 	 */
 	public static void sendTownBoard(Player player, Town town) {
 
-		for (String line : ChatTools.color(Colors.Gold + "[" + town.getName() + "] " + Colors.Yellow + town.getTownBoard()))
+		for (String line : ChatTools.color(TownySettings.getLangString("townboard_message_colour_1") + "[" + town.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + town.getTownBoard()))
 			player.sendMessage(line);
 	}
 	
@@ -465,7 +465,7 @@ public class TownyMessaging {
 	 */
 	public static void sendNationBoard(Player player, Nation nation) {
 
-		for (String line : ChatTools.color(Colors.Gold + "[" + nation.getName() + "] " + Colors.Yellow + nation.getNationBoard()))
+		for (String line : ChatTools.color(TownySettings.getLangString("nationboard_message_colour_1") + "[" + nation.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + nation.getNationBoard()))
 			player.sendMessage(line);
 	}
 	

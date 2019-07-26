@@ -683,7 +683,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		 */
 		if (invited.size() > 0) {
 
-			StringBuilder msg = new StringBuilder("Added ");
+			StringBuilder msg = new StringBuilder(TownySettings.getLangString("res_friend_added"));
 
 			for (Resident newFriend : invited) {
 

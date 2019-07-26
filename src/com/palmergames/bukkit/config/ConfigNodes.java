@@ -1228,6 +1228,15 @@ public enum ConfigNodes {
 			"100.0",
 			"# The server's daily charge on each nation. If a nation fails to pay this upkeep",
 			"# all of it's member town are kicked and the Nation is removed."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN(
+			"economy.daily_taxes.nation_pertown_upkeep",
+			"false",
+			"# Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)",
+			"# calculated by (number of towns in nation X price_nation_upkeep)."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER(
+			"economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier",
+			"false",
+			"# If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers."),
 	ECO_PRICE_TOWN_UPKEEP(
 			"economy.daily_taxes.price_town_upkeep",
 			"10.0",
