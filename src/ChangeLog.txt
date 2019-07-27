@@ -3327,3 +3327,4 @@ v0.92.0.11:
       - It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.
     - Fix messages showing when unclaiming an area where nothing can be unclaimed. 
     - Change upkeep messages for towns and nations to display fallen towns/nations in a much more condensed way.
+    - Change town tax, plot tax, nation tax messages to display in a much more condensed way.
