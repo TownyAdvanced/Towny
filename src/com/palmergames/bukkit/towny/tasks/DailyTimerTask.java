@@ -16,9 +16,11 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -330,6 +332,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectTownCosts() throws EconomyException, TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
+		List<String> removedTowns = new ArrayList<>();
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -349,7 +352,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Town is paying upkeep
 						if (!town.pay(upkeep, "Town Upkeep")) {
 							townyUniverse.getDataSource().removeTown(town);
-							TownyMessaging.sendGlobalMessage(town.getName() + TownySettings.getLangString("msg_bankrupt_town"));
+							removedTowns.add(town.getName());
 						}
 					} else if (upkeep < 0) {
 						// Negative upkeep
@@ -372,8 +375,15 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					}
 				}
-			}
+			}			
 		}
+		if (removedTowns != null) {
+			if (removedTowns.size() == 1) 
+				TownyMessaging.sendGlobalMessage(removedTowns.toString() + TownySettings.getLangString("msg_bankrupt_town"));
+			else
+				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));//String.format(TownySettings.getLangString("msg_bankrupt_town_multiple"), Arrays.toString(removedTowns.toArray())));
+		}
+			
 	}
 
 	/**
@@ -384,6 +394,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectNationCosts() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Nation> nations = new ArrayList<>(townyUniverse.getDataSource().getNations());
+		List<String> removedNations = new ArrayList<>();
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 
@@ -403,7 +414,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (!nation.pay(TownySettings.getNationUpkeepCost(nation), "Nation Upkeep")) {
 						townyUniverse.getDataSource().removeNation(nation);
-						TownyMessaging.sendGlobalMessage(nation.getName() + TownySettings.getLangString("msg_bankrupt_nation"));
+						removedNations.add(nation.getName());
 					}
 					if (nation.isNeutral()) {
 						if (!nation.pay(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
@@ -421,6 +432,12 @@ public class DailyTimerTask extends TownyTimerTask {
 					nation.pay(upkeep, "Negative Nation Upkeep");
 				}
 			}
+		}
+		if (removedNations != null) {
+			if (removedNations.size() == 1) 
+				TownyMessaging.sendGlobalMessage(removedNations.toString() + TownySettings.getLangString("msg_bankrupt_nations"));
+			else
+				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, TownySettings.getLangString("msg_bankrupt_nation_multiple")));
 		}
 	}
 }
