@@ -1154,6 +1154,12 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock",
 			"25.0",
 			"# The price for a town to expand one townblock."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
+			"economy.new_expand.price_claim_townblock_refund",
+			"0.0",
+			"# The amount refunded to a town when they unclaim a townblock.",
+			"# Warning: do not set this higher than the cose to claim a townblock.",
+			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.earth2me.essentials.api.Economy;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -9,6 +10,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -96,6 +98,7 @@ public class TownClaim extends Thread {
 					// Mark this town as modified for saving.
 					if (!towns.contains(town))
 						towns.add(town);
+					
 
 				} catch (NotRegisteredException e) {
 					// Invalid world
@@ -104,6 +107,15 @@ public class TownClaim extends Thread {
 					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
 
+			}
+		
+			if (!claim && TownySettings.getClaimRefundPrice() != 0.0) {
+				try {
+					town.collect(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
 			}
 
 		} else if (!claim) {
@@ -122,6 +134,7 @@ public class TownClaim extends Thread {
 			if (resident == null) {
 				return;
 			}
+			int townSize = town.getTownBlocks().size();
 			// Send confirmation message,
 			try {
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.UNCLAIMALL, null);
@@ -129,6 +142,14 @@ public class TownClaim extends Thread {
 			} catch (TownyException e) {
 				e.printStackTrace();
 				// Also shouldn't be possible if resident is parsed correctly, since this can only be run form /town unclaim all a.s.o
+			}
+			if (TownySettings.getClaimRefundPrice() != 0.0) {
+				try {
+					town.collect(TownySettings.getClaimRefundPrice()*townSize, "Town Unclaim Refund");
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("refund_message"), TownySettings.getClaimRefundPrice()*townSize, townSize));
+				} catch (EconomyException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -157,7 +178,6 @@ public class TownClaim extends Thread {
 					TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_wait_locked"));
 			}
 		}
-
 	}
 
 	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost) throws TownyException {
@@ -227,6 +247,7 @@ public class TownClaim extends Thread {
 				// As of 0.91.4.3 we are doing this inside of the removeTownBlock code to support more types of unclaiming.
 				//BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, worldCoord));
 			}, 1);
+			
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(TownySettings.getLangString("msg_not_claimed_1"));

@@ -3320,3 +3320,9 @@ v0.92.0.11:
         - /t list by name: order alphabetically.
         - /t list by resident: order by town with the most residents.
         - /t list by balance: order by town with the highest town bank balance.
+    - New Config Option: economy.new_expand.price_claim_townblock_refund
+      - default: 0.0
+      - The amount refunded to a town when they unclaim a townblock.
+      - Warning: do not set this higher than the cose to claim a townblock.
+      - It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.
+    - Fix messages showing when unclaiming an area where nothing can be unclaimed. 

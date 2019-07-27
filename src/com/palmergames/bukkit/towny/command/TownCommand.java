@@ -3070,6 +3070,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
+					if (selection.isEmpty())
+						throw new TownyException(TownySettings.getLangString("msg_err_empty_area_selection"));
 
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
