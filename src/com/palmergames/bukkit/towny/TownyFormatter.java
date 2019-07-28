@@ -42,6 +42,7 @@ public class TownyFormatter {
 	 * list
 	 */
 	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
+    public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
 
 	public static void initialize(Towny plugin) {
 
@@ -79,6 +80,13 @@ public class TownyFormatter {
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
 		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), TownySettings.getLangString("res_format_list_1"), TownySettings.getLangString("res_format_list_2"), TownySettings.getLangString("res_format_list_3")));
+	}
+	
+	public static List<String> getFormattedTowns(String prefix, List<Town> townList) {
+		
+		Town[] arrayTowns = townList.toArray(new Town[0]);
+
+		return ChatTools.listArr(getFormattedNames(arrayTowns), String.format(embassyTownListPrefixFormat, prefix, townList.size(), TownySettings.getLangString("res_format_list_1"), TownySettings.getLangString("res_format_list_2"), TownySettings.getLangString("res_format_list_3")));
 	}
 
 	public static String[] getFormattedNames(List<Resident> residentList) {
@@ -183,6 +191,24 @@ public class TownyFormatter {
 			}
 		out.add(line);
 		
+		// Embassies in: Camelot, London, Tokyo
+		List<Town> townEmbassies = new ArrayList<Town>();
+		try {
+			
+			String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
+			
+			for(TownBlock tB : resident.getTownBlocks()) {
+				if(!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
+					
+					townEmbassies.add(tB.getTown());
+				
+				}
+				
+			}
+		} catch (NotRegisteredException e) {}
+			
+		out.addAll(getFormattedTowns(TownySettings.getLangString("status_embassy_town"), townEmbassies));
+			
 		// Town ranks
 		if (resident.hasTown()) {
 			if (!resident.getTownRanks().isEmpty())
