@@ -42,7 +42,7 @@ public class TownyFormatter {
 	 * list
 	 */
 	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
-    public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
+        public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
 
 	public static void initialize(Towny plugin) {
 
@@ -206,8 +206,10 @@ public class TownyFormatter {
 				
 			}
 		} catch (NotRegisteredException e) {}
-			
-		out.addAll(getFormattedTowns(TownySettings.getLangString("status_embassy_town"), townEmbassies));
+		
+		if (townEmbassies.size() > 0) {
+			out.addAll(getFormattedTowns(TownySettings.getLangString("status_embassy_town"), townEmbassies));
+		}
 			
 		// Town ranks
 		if (resident.hasTown()) {
