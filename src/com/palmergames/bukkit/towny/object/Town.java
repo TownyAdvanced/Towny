@@ -687,11 +687,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		removeAllResidents();
 		mayor = null;
 		residents.clear();
-		//assistants.clear();
 		homeBlock = null;
 		outpostSpawns.clear();
 		jailSpawns.clear();
-
+		
 		try {
 			if (hasWorld()) {
 				world.removeTownBlocks(getTownBlocks());
