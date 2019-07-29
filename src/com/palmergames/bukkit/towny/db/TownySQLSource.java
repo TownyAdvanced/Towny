@@ -19,7 +19,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -27,7 +29,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -598,12 +604,56 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean loadRegenList() {
-        return false;
+		TownyMessaging.sendDebugMsg("Loading Regen List");
+		
+		String line = null;
+		
+		String[] split;
+		PlotBlockData plotData;
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "regen.txt"))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					plotData = loadPlotData(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					if (plotData != null) {
+						TownyRegenAPI.addPlotChunk(plotData, false);
+					}
+				}
+			
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
     }
     
     @Override
     public boolean loadSnapshotList() {
-        return false;
+		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
+		
+		String line = null;
+		
+		String[] split;
+		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
+			
+			while ((line = fin.readLine()) != null)
+				if (!line.equals("")) {
+					split = line.split(",");
+					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					TownyRegenAPI.addWorldCoord(worldCoord);
+				}
+			return true;
+			
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
+			e.printStackTrace();
+			return false;
+			
+		}
     }
     
     /*
@@ -1869,12 +1919,37 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     @Override
     public boolean saveRegenList() {
-        return false;
+
+        try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "regen.txt"))) {
+            for (PlotBlockData plot : new ArrayList<>(TownyRegenAPI.getPlotChunks().values()))
+                fout.write(plot.getWorldName() + "," + plot.getX() + "," + plot.getZ() + System.getProperty("line.separator"));
+            
+        } catch (Exception e) {
+            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving regen file");
+            e.printStackTrace();
+            return false;
+            
+        }
+
+		return true;
     }
     
     @Override
     public boolean saveSnapshotList() {
-        return false;
+        try (BufferedWriter fout = new BufferedWriter(new FileWriter(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
+            while (TownyRegenAPI.hasWorldCoords()) {
+                WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
+                fout.write(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ() + System.getProperty("line.separator"));
+            }
+            
+        } catch (Exception e) {
+            TownyMessaging.sendErrorMsg("Saving Error: Exception while saving snapshot_queue file");
+            e.printStackTrace();
+            return false;
+            
+        }
+
+		return true;
     }
     
     /**
