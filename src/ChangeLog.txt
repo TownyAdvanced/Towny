@@ -3329,3 +3329,5 @@ v0.92.0.11:
     - Change upkeep messages for towns and nations to display fallen towns/nations in a much more condensed way.
     - Change town tax, plot tax, nation tax messages to display in a much more condensed way.
     - Fix MYSQL servers not loading due to missing DB code for saving and loading of RegenList and SnapshotList.
+    - New Feature: Embassy information on the /res screen, courtesy of SeruhioX. 
+      - "Embassies in {town(s)}" now shows in the /res screen for players that own embassies in other towns.
