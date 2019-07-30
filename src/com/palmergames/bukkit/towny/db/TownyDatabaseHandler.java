@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -318,6 +319,39 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
+	public void removeOneOfManyTownBlocks(TownBlock townBlock, Town town) {
+
+		Resident resident = null;
+		try {
+			resident = townBlock.getResident();
+		} catch (NotRegisteredException ignored) {
+		}
+		
+		TownyWorld world = townBlock.getWorld();
+		WorldCoord coord = townBlock.getWorldCoord(); 
+
+		if (world.isUsingPlotManagementDelete())
+			TownyRegenAPI.addDeleteTownBlockIdQueue(coord);
+
+		// Move the plot to be restored
+		if (world.isUsingPlotManagementRevert()) {
+			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
+			if (plotData != null && !plotData.getBlockList().isEmpty()) {
+				TownyRegenAPI.addPlotChunk(plotData, true);
+			}
+		}
+		
+		
+		deleteTownBlock(townBlock);
+		townBlock.clear();
+		if (resident != null)
+			saveResident(resident);
+
+		world.removeTownBlock(townBlock);
+		// Raise an event to signal the unclaim
+		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, coord));	
+	}
+	
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
 
@@ -366,6 +400,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
 			removeTownBlock(townBlock);
+	}
+	
+	public void removeManyTownBlocks(Town town) {
+
+		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
+			removeOneOfManyTownBlocks(townBlock, town);
+		saveTownBlockList();
 	}
 
 	@Override
@@ -506,7 +547,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
-		removeTownBlocks(town);
+		removeManyTownBlocks(town);		
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
@@ -514,9 +555,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			if (town.hasNation()) {
 				Nation nation = town.getNation();
-				nation.removeTown(town);
-
-				saveNation(nation);
+				// Although the town might believe it is in the nation, it doesn't mean the nation thinks so.
+				if (nation.hasTown(town)) {
+					nation.removeTown(town);
+					saveNation(nation);
+				}
+				town.setNation(null);
 			}
 			town.clear();
 		} catch (EmptyNationException e) {
@@ -524,6 +568,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
+		} catch (AlreadyRegisteredException ignored) {
+			// This should only be happening when a town thinks it is in the nation, while the nation doesn't consider the town a member.
 		}
 
 		for (Resident resident : toSave) {
