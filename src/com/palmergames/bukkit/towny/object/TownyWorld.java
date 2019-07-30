@@ -165,18 +165,21 @@ public class TownyWorld extends TownyObject {
 
 	public void removeTownBlock(TownBlock townBlock) {
 
-		try {
-			if (townBlock.hasResident())
-				townBlock.getResident().removeTownBlock(townBlock);
-		} catch (NotRegisteredException e) {
+		if (hasTownBlock(townBlock.getCoord())) {			
+	
+			try {
+				if (townBlock.hasResident())
+					townBlock.getResident().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+			try {
+				if (townBlock.hasTown())
+					townBlock.getTown().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+	
+			removeTownBlock(townBlock.getCoord());
 		}
-		try {
-			if (townBlock.hasTown())
-				townBlock.getTown().removeTownBlock(townBlock);
-		} catch (NotRegisteredException e) {
-		}
-
-		removeTownBlock(townBlock.getCoord());
 	}
 
 	public void removeTownBlocks(List<TownBlock> townBlocks) {

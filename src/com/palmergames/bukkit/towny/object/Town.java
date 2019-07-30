@@ -690,19 +690,19 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		homeBlock = null;
 		outpostSpawns.clear();
 		jailSpawns.clear();
-		
-		try {
-			if (hasWorld()) {
-				world.removeTownBlocks(getTownBlocks());
-				world.removeTown(this);
-			}
-		} catch (NotRegisteredException e) {
-		}
-		if (hasNation())
-			try {
-				nation.removeTown(this);
-			} catch (NotRegisteredException e) {
-			}
+	
+//		try {                                               This section is being removed because the only method that calls town.clear() already does a check for the nation, 
+//			if (hasWorld()) {                               and later on also saves the world. Still not understood, is whether world.removeTownblocks would even remove townblocks
+//				world.removeTownBlocks(getTownBlocks());    which exist in other worlds beside the one in which the town spawn resides. Removed as of 0.94.0.5 by LlmDl.
+//				world.removeTown(this);
+//			}
+//		} catch (NotRegisteredException e) {
+//		}
+//		if (hasNation())
+//			try {
+//				nation.removeTown(this);
+//			} catch (NotRegisteredException e) {
+//			}
 	}
 
 	public boolean hasWorld() {
