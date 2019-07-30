@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownCreateEvent;
+import com.palmergames.bukkit.towny.event.TownDeleteEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -1907,7 +1909,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
-			newTown(world, name, resident, key, player.getLocation());
+			BukkitTools.getPluginManager().callEvent(new TownCreateEvent(newTown(world, name, resident, key, player.getLocation())));
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2355,6 +2357,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
+			BukkitTools.getPluginManager().callEvent(new TownDeleteEvent(town));
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 			townyUniverse.getDataSource().removeTown(town);
 		}
