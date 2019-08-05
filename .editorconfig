@@ -1,0 +1,19 @@
+# top-most EditorConfig file
+root = true
+
+# Match anything.
+[*]
+# Use windows style newline.
+end_of_line = crlf
+# Don't insert a newline at the end of files.
+insert_final_newline = false
+# Do not allow a space before a newline.
+trim_trailing_whitespace = true
+
+# Matches multiple files with brace expansion notation
+# Set default charset
+charset = utf-8
+
+# 4 space indentation
+indent_style = tab
+indent_size = 4
