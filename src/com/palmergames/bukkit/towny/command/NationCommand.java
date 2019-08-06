@@ -81,7 +81,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return Double.compare(n2.getNumTownblocks(), n1.getNumTownblocks());
 	};
 	private static final Comparator<Nation> BY_NUM_TOWNS = (n1, n2) -> n2.getTowns().size() - n1.getTowns().size();
-	
+	private static final Comparator<Nation> BY_NUM_ONLINE = (n1, n2) -> TownyAPI.getInstance().getOnlinePlayers(n2).size() - TownyAPI.getInstance().getOnlinePlayers(n1).size();
 
 	static {
 
@@ -707,9 +707,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					} else if (split[i].equalsIgnoreCase("name")) {
 						comparator = BY_NAME;						
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
-						comparator = BY_TOWNBLOCKS_CLAIMED;					
+						comparator = BY_TOWNBLOCKS_CLAIMED;
+					} else if (split[i].equalsIgnoreCase("online")) {
+						comparator = BY_NUM_ONLINE;
 					} else {
-						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator_nation"));
 						return;
 					}
 				} else {

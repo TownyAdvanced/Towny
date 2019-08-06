@@ -93,6 +93,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static final Comparator<Town> BY_TOWNBLOCKS_CLAIMED = (t1, t2) -> {
 		return Double.compare(t2.getTownBlocks().size(), t1.getTownBlocks().size());
 	};
+	private static final Comparator<Town> BY_NUM_ONLINE = (t1, t2) -> TownyAPI.getInstance().getOnlinePlayers(t2).size() - TownyAPI.getInstance().getOnlinePlayers(t1).size();
+
 
 	static {
 		output.add(ChatTools.formatTitle("/town"));
@@ -957,6 +959,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						comparator = BY_NAME;
 					} else if (split[i].equalsIgnoreCase("townblocks")) {
 						comparator = BY_TOWNBLOCKS_CLAIMED;
+					} else if (split[i].equalsIgnoreCase("online")) {
+						comparator = BY_NUM_ONLINE;
 					} else {
 						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator_town"));
 						return;

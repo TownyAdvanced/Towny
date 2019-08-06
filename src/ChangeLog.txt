@@ -3335,3 +3335,5 @@ v0.92.0.11:
     - Add /n list by townblocks: order nations by how many townblocks their towns have collectively claimed.
     - Add /t list by townblocks: order towns by how many townblocks they have claimed.
     - API: Add nation.getNumTownBlocks(); 
+    - Add /n list by online: order nations by how many players are online at that moment.
+    - Add /t list by online: order towns by how many players are online at that moment.
