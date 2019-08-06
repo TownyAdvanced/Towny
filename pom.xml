@@ -22,7 +22,8 @@
     </organization>
 
     <properties>
-        <project.bukkitAPI>1.13</project.bukkitAPI>
+        <java.version>1.8</java.version>
+        <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -48,12 +49,12 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>creatorfromhell-repo</id>
-            <url>https://dl.bintray.com/theneweconomy/java/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>creatorfromhell-repo</id>
+            <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
         <repository>
             <id>ess-repo</id>
@@ -74,9 +75,8 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-            <!-- NOTE: Make sure this version works with project.bukkitAPI set above! -->
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
@@ -91,7 +91,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
@@ -122,10 +122,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -135,10 +135,6 @@
             <resource>
                 <directory>resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>*.txt</include>
-                    <include>*.yml</include>
-                </includes>
             </resource>
         </resources>
     </build>
