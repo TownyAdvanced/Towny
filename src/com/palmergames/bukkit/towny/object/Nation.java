@@ -716,4 +716,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 		return spawnCost;
 	}
+	
+	public int getNumTownblocks() {
+		int townBlocksClaimed = 0;
+		for (Town towns : this.getTowns()) {
+			townBlocksClaimed = townBlocksClaimed + towns.getTownBlocks().size();
+		}
+		return townBlocksClaimed;
+	}
 }

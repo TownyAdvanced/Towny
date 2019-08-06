@@ -77,6 +77,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new RuntimeException("Failed to get balance. Aborting.");
 		}
 	};
+	private static final Comparator<Nation> BY_TOWNBLOCKS_CLAIMED = (n1, n2) -> {
+			return Double.compare(n2.getNumTownblocks(), n1.getNumTownblocks());
+	};
 	private static final Comparator<Nation> BY_NUM_TOWNS = (n1, n2) -> n2.getTowns().size() - n1.getTowns().size();
 	
 
@@ -689,7 +692,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) {
 				if (comparatorSet) {
-					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_multiple_comparators"));
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_multiple_comparators_nation"));
 					return;
 				}
 				i++;
@@ -703,6 +706,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						comparator = BY_NUM_TOWNS;
 					} else if (split[i].equalsIgnoreCase("name")) {
 						comparator = BY_NAME;						
+					} else if (split[i].equalsIgnoreCase("townblocks")) {
+						comparator = BY_TOWNBLOCKS_CLAIMED;					
 					} else {
 						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
 						return;

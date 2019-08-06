@@ -90,6 +90,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new RuntimeException("Failed to get balance. Aborting.");
 		}
 	};
+	private static final Comparator<Town> BY_TOWNBLOCKS_CLAIMED = (t1, t2) -> {
+		return Double.compare(t2.getTownBlocks().size(), t1.getTownBlocks().size());
+	};
 
 	static {
 		output.add(ChatTools.formatTitle("/town"));
@@ -952,8 +955,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						comparator = BY_BANK_BALANCE;
 					} else if (split[i].equalsIgnoreCase("name")) {
 						comparator = BY_NAME;
+					} else if (split[i].equalsIgnoreCase("townblocks")) {
+						comparator = BY_TOWNBLOCKS_CLAIMED;
 					} else {
-						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator"));
+						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator_town"));
 						return;
 					}
 				} else {
