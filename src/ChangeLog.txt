@@ -3337,3 +3337,5 @@ v0.92.0.11:
     - API: Add nation.getNumTownBlocks(); 
     - Add /n list by online: order nations by how many players are online at that moment.
     - Add /t list by online: order towns by how many players are online at that moment.
+    - New Permission Node: towny.bypass_death_costs
+      - Stops a player from paying the death costs. 

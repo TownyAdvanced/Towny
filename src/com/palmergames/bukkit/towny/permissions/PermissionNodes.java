@@ -329,6 +329,7 @@ public enum PermissionNodes {
 	TOWNY_CHAT_SPY("towny.chat.spy"),
 	
 	TOWNY_OUTLAW_JAILER("towny.outlaw.jailer"),
+	TOWNY_BYPASS_DEATH_COSTS("towny.bypass_death_costs"),
 
 	// Info nodes
 
