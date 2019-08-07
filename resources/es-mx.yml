@@ -1,5 +1,5 @@
 name: Towny
-version: 0.50
+version: 0.51
 language: español
 author: VreyaViress
 website: 'http://towny.palmergames.com'
@@ -8,7 +8,7 @@ description: >
     Si desea cambiar alguna de las entradas, haga una copia con otro nombre.
     Los archivos de lenguajes alternos pueden ser activados alterando la entrada
     [language] en config.yml
-
+    
 #
 #
 #         DEBES mantener los espacios en los textos.
@@ -503,8 +503,8 @@ msg_you_lost_money_dying: 'You lost %s.'
 msg_your_town_lost_money_dying: 'Your town lost %s.'
 msg_your_nation_lost_money_dying: 'Your nation lost %s.'
 msg_err_couldnt_take_deathfunds: 'Could not take death funds.'
-msg_err_couldnt_take_town_deathfunds: 'Could not take town death funds.'
-msg_err_couldnt_take_nation_deathfunds: 'Could not take nation death funds.'
+msg_err_couldnt_take_town_deathfunds: 'Could not take town death funds.' 
+msg_err_couldnt_take_nation_deathfunds: 'Could not take nation death funds.' 
 msg_you_gained_money_for_killing: 'You gained %s for killing %s.'
 
 msg_err_ender_pearls_disabled: '&4Ender Pearls are disabled!'
@@ -645,7 +645,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
-# Added in 0.43
+# Added in 0.43 
 town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
@@ -696,7 +696,7 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
-online: '&a(Online)'
+online: '&a(Online)' 
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Permissions: '       # Used on /town
@@ -708,7 +708,7 @@ status_forced: '&cForced'
 status_adjustable: '&aAdjustable'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosions: '              # Used on /plot perm, /res
-explosions2: '&2Explosions: '               # Used on /town and /tw
+explosions2: '&2Explosions: '               # Used on /town and /tw 
 firespread: '  &2Firespread: '
 mobspawns: '  &2Mob Spawns: '
 owner_of_x_plots: '&2Owner of &a%s plots'
@@ -716,7 +716,7 @@ status_bank: '&2Bank: &a%s'
 status_town: '&2Town: &a'
 status_no_town: 'None'
 status_town_ranks: '&2Town Ranks: &a'
-status_nation_ranks: '&2Nation Ranks: &a'
+status_nation_ranks: '&2Nation Ranks: &a' 
 jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
 status_friends: 'Friends'
 rank_list_title: ' &3Rank List'
@@ -872,3 +872,7 @@ msg_couldnt_pay_plot_taxes_multiple: '&bThe following residents could not afford
 msg_bankrupt_town2: '&b%s couldn''t afford to remain a town.'
 msg_bankrupt_nation2: '&b%s couldn''t afford to remain a nation.'
 status_embassy_town: '&2Embajadas en'
+
+# Added in 0.51:
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try resident, balance, towns, name, townblocks, online.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try resident, balance, name, townblocks, online.'
