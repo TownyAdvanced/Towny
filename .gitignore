@@ -1,11 +1,13 @@
-# IDE Specific
+# IDEA Specific
 /.idea
 *.iml
 
-# Holdovers from the ol' Ant system
+# Eclipse Specific
 .classpath
 .project
 .externalToolBuilders
+
+# Holdovers from the ol' Ant system
 /bin
 /lib
 
