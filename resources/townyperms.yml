@@ -74,7 +74,7 @@ towns:
         donator:
             # Currently only an example rank holder with no extra permissions
         vip:
-            - towny.cheat.bypass
+            # Currently only an example rank holder with no extra permissions
         # Sheriff rank is able to jail other town members.
         sheriff:
             - towny.command.town.toggle.jail
