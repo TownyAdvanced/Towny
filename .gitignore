@@ -1,8 +1,15 @@
-/bin
+# IDEA Specific
 /.idea
 *.iml
+
+# Eclipse Specific
 .classpath
 .project
 .externalToolBuilders
-# Add this for people who use IntelliJ to make Towny be in 1 directory only.
+
+# Holdovers from the ol' Ant system
+/bin
 /lib
+
+# Prevent Maven Leakage
+/target
