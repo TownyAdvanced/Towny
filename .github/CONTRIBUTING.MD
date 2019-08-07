@@ -29,7 +29,7 @@ Please make sure to read our [License](https://github.com/LlmDl/Towny/blob/maste
 ## Dependency Inclusion
 For the sanity of the rest of us, please adhere to the following guidelines when attempting to
 include a dependency or 3rd-party library.
-1. Libraries need to be aproved by the current maintainer before being merged. Preferably, ask before commiting.     
+1. Libraries need to be approved by the current maintainer before being merged. Preferably, ask before commiting.     
 1. Prevent Class Not Found errors    
    - Do not reference a plugin in a loaded class, unless that plugin is enabled.
 2. Do not embed your own plugins within Towny
@@ -45,4 +45,4 @@ Pull-Request your updated version. Please try to keep the title simple and inclu
 e.g "German Translation v0.42"    
 If you are creating a new language file, feel-free to use either the english translation e.g "norwegian.yml" or the global placeholder e.g "es-mx"    
 If you are editing a language which contains the '(apostrophe) character such as French, please make sure you run it all through a YAML Parser,    
-You have to double up the '' when you want one ' to appear. It may help to do this anyways, as other characters may also require an excape sequence.    
+You have to double up the '' when you want one ' to appear. It may help to do this anyways, as other characters may also require an escape sequence.    
