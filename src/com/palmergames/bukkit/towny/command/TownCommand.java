@@ -1011,7 +1011,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = townsToSort.get(i);
-			String output = Colors.Blue + town.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
+			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
 			if (town.isOpen())
 				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
@@ -1917,7 +1917,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
 
 			newTown(world, name, resident, key, player.getLocation());
-			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), name));
+			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			// TODO: delete town data that might have been done

@@ -760,7 +760,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		List<String> nationsordered = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Nation nation = nationsToSort.get(i);
-			String output = Colors.Gold + nation.getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
+			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumResidents() + ")" + Colors.Gray + " - " + Colors.LightBlue + "(" + nation.getNumTowns() + ")";
 			nationsordered.add(output);
 		}
 		sender.sendMessage(
@@ -814,7 +814,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * universe.getDataSource().saveNationList();
 			 */
 
-			TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), name));
+			TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			// TODO: delete town data that might have been done
@@ -875,8 +875,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			plugin.resetCache();
 
-			TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_nation_town_left"), town.getName())));
-			TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_town_left_nation"), nation.getName())));
+			TownyMessaging.sendNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_nation_town_left"), StringMgmt.remUnderscore(town.getName()))));
+			TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_town_left_nation"), StringMgmt.remUnderscore(nation.getName()))));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;

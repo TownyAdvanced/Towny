@@ -3339,3 +3339,4 @@ v0.92.0.11:
     - Add /t list by online: order towns by how many players are online at that moment.
     - New Permission Node: towny.bypass_death_costs
       - Stops a player from paying the death costs. 
+    - Removed underscores from showing in town and nations names in the following places: /t new, /t list, /n new, /n list, /n leave.
