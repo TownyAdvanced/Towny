@@ -3340,3 +3340,9 @@ v0.92.0.11:
     - New Permission Node: towny.bypass_death_costs
       - Stops a player from paying the death costs. 
     - Removed underscores from showing in town and nations names in the following places: /t new, /t list, /n new, /n list, /n leave.
+    - Removed some old BukkitTools.getMaterial(BlockID int) calls on the loading of worlds' ignoreID lists. These have been material lists for a long time, doubtful anyone is converting something that old anymore.
+      - Long-term this gets us closer to removing the de.themoep.idconverter package.
+      - Remaining spots include:
+        - a deprecated permission node wilderness check.
+        - a part of TownySettings that converts lists of blocksIDs to materials.
+        - the PlotBlockData restoreNextBlock (which we have to keep around for a while longer.)

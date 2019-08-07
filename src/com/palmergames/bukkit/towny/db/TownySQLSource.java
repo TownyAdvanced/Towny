@@ -1256,14 +1256,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         search = (line.contains("#")) ? "#" : ",";
                         for (String split : line.split(search))
                             if (!split.isEmpty())
-                                try {
-                                    int id = Integer.parseInt(split);
+                            	mats.add(split);
 
-                                    mats.add(BukkitTools.getMaterial(id).name());
-
-                                } catch (NumberFormatException e) {
-                                    mats.add(split);
-                                }
                         world.setUnclaimedZoneIgnore(mats);
                     } catch (Exception ignored) {
                     }
@@ -1281,14 +1275,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         search = (line.contains("#")) ? "#" : ",";
                         for (String split : line.split(search))
                             if (!split.isEmpty())
-                                try {
-                                    int id = Integer.parseInt(split);
+                            	mats.add(split);
 
-                                    mats.add(BukkitTools.getMaterial(id).name());
-
-                                } catch (NumberFormatException e) {
-                                    mats.add(split);
-                                }
                         world.setPlotManagementDeleteIds(mats);
                     } catch (Exception ignored) {
                     }
@@ -1336,14 +1324,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         search = (line.contains("#")) ? "#" : ",";
                         for (String split : line.split(search))
                             if (!split.isEmpty())
-                                try {
-                                    int id = Integer.parseInt(split);
+                            	mats.add(split);
 
-                                    mats.add(BukkitTools.getMaterial(id).name());
-
-                                } catch (NumberFormatException e) {
-                                    mats.add(split);
-                                }
                         world.setPlotManagementIgnoreIds(mats);
                     } catch (Exception ignored) {
                     }

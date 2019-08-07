@@ -1267,14 +1267,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					List<String> mats = new ArrayList<>();
 					for (String s : line.split(","))
 						if (!s.isEmpty())
-							try {
-								int id = Integer.parseInt(s);
-								
-								mats.add(BukkitTools.getMaterial(id).name());
-								
-							} catch (NumberFormatException e) {
-								mats.add(s);
-							}
+							mats.add(s);
+
 					world.setUnclaimedZoneIgnore(mats);
 				} catch (Exception ignored) {
 				}
@@ -1292,14 +1286,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					List<String> mats = new ArrayList<>();
 					for (String s : line.split(","))
 						if (!s.isEmpty())
-							try {
-								int id = Integer.parseInt(s);
-								
-								mats.add(BukkitTools.getMaterial(id).name());
-								
-							} catch (NumberFormatException e) {
-								mats.add(s);
-							}
+							mats.add(s);
+
 					world.setPlotManagementDeleteIds(mats);
 				} catch (Exception ignored) {
 				}
@@ -1345,14 +1333,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					List<String> mats = new ArrayList<>();
 					for (String s : line.split(","))
 						if (!s.isEmpty())
-							try {
-								int id = Integer.parseInt(s);
-								
-								mats.add(BukkitTools.getMaterial(id).name());
-								
-							} catch (NumberFormatException e) {
 								mats.add(s);
-							}
+
 					world.setPlotManagementIgnoreIds(mats);
 				} catch (Exception ignored) {
 				}
