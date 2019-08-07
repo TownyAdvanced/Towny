@@ -3347,3 +3347,5 @@ v0.92.0.11:
         - a part of TownySettings that converts lists of blocksIDs to materials.
         - the PlotBlockData restoreNextBlock (which we have to keep around for a while longer.)
     - Fix null locationCanExplode error seen since fireworks got handled in 0.94.0.3. 
+    - The Towny project has now become Mavenized, courtesy of FlagCourier.
+      - The previous build system used was Ant, which was in use from 2010-2019.
