@@ -281,6 +281,13 @@ public class TownyEntityListener implements Listener {
 		
 		Entity entity = event.getEntity();		
 		String damager = event.getDamager().getType().name();
+		
+		try {
+			townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		
 		// Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.  
 		if (TownyAPI.getInstance().isWarTime() && !TownyWarConfig.isAllowingExplosionsInWarZone() && entity instanceof Player && damager.equals("PRIMED_TNT"))
 			event.setCancelled(true);			
@@ -291,12 +298,6 @@ public class TownyEntityListener implements Listener {
 		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
 		  if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
           damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
-											
-				try {
-					townyWorld = townyUniverse.getDataSource().getWorld(entity.getWorld().getName());
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
 								
 				if (!locationCanExplode(townyWorld, entity.getLocation())) {
 					event.setCancelled(true);
