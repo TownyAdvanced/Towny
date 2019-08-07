@@ -248,7 +248,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Attempt to send player to bed spawn.
 	 * 
-	 * @param player
+	 * @param player - Player.
 	 */
 	public void residentSpawn(Player player) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -508,9 +508,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 * 
 	 * Command: /resident set [] ... []
 	 * 
-	 * @param player
-	 * @param split
-	 * @throws TownyException
+	 * @param player - Player.
+	 * @param split  - Current command arguments.
+	 * @throws TownyException- Exception.
 	 */
 
 	/*

@@ -644,10 +644,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Set the plot type if we are permitted
 	 * 
-	 * @param resident
-	 * @param worldCoord
-	 * @param type
-	 * @throws TownyException
+	 * @param resident - Residen object.
+	 * @param worldCoord - worldCoord.
+	 * @param type - plot type.
+	 * @throws TownyException - Exception.
 	 */
 	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -704,10 +704,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Set the plot for sale/not for sale if permitted
 	 * 
-	 * @param resident
-	 * @param worldCoord
-	 * @param forSale
-	 * @throws TownyException
+	 * @param resident - Resident Object.
+	 * @param worldCoord - WorldCoord.
+	 * @param forSale - Price.
+	 * @throws TownyException - Exception.
 	 */
 	public void setPlotForSale(Resident resident, WorldCoord worldCoord, double forSale) throws TownyException {
 
@@ -751,9 +751,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * Toggle the plots flags for pvp/explosion/fire/mobs (if town/world
 	 * permissions allow)
 	 * 
-	 * @param player
-	 * @param townBlock
-	 * @param split
+	 * @param player - Player.
+	 * @param townBlock - TownBlock object.
+	 * @param split  - Current command arguments.
 	 */
 	public void plotToggle(Player player, TownBlock townBlock, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -858,9 +858,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * Test the townBlock to ensure we are either the plot owner, or the
 	 * mayor/assistant
 	 * 
-	 * @param resident
-	 * @param townBlock
-	 * @throws TownyException
+	 * @param resident - Resident Object.
+	 * @param townBlock - TownBlock Object.
+	 * @return - returns owner of plot.
+	 * @throws TownyException - Exception.
 	 */
 	public TownBlockOwner plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 

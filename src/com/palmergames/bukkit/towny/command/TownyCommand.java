@@ -367,7 +367,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send a map of the nearby townblocks status to player Command: /towny map
 	 * 
-	 * @param player
+	 * @param player - Player.
 	 */
 
 	public static void showMap(Player player) {
@@ -378,7 +378,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send the list of costs for Economy to player Command: /towny prices
 	 * 
-	 * @param town
+	 * @param town - Town object.
 	 */
 
 	/*
@@ -388,6 +388,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	 */
 
 	// TODO: Proceduralize and make parse function for /towny prices [town]
+	/**
+	 * Returns prices for town's taxes/upkeep.
+	 * @param town
+	 * @return - Prices screen for a town.
+	 */
 	public List<String> getTownyPrices(Town town) {
 
 		List<String> output = new ArrayList<>();

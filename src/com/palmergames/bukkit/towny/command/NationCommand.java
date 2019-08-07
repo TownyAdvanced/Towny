@@ -678,6 +678,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * list
 	 *
 	 * @param sender - Player to send the list to.
+	 * @param split  - Current command arguments.
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -778,6 +779,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Create a new nation. Command: /nation new [nation] *[capital]
 	 *
 	 * @param player - Player creating the new nation.
+	 * @param name - Nation name.
+	 * @param capitalName - Capital city name.
 	 */
 
 	public void newNation(Player player, String name, String capitalName) {
@@ -2013,9 +2016,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
      * Wrapper for the nationSpawn() method. All calls should be through here
      * unless bypassing for admins.
      *
-     * @param player
-     * @param split
-     * @throws TownyException
+     * @param player - Player.
+     * @param split  - Current command arguments.
+     * @throws TownyException - Exception.
      */
     public static void nationSpawn(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2063,10 +2066,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
     /**
      * Core nation spawn function to allow admin use.
      *
-     * @param player
-     * @param split
-     * @param nation
-     * @param notAffordMSG
+     * @param player - Player.
+     * @param split  - Current command arguments.
+     * @param nation - Nation.
+     * @param notAffordMSG - Message for lack of funds.
      */
     public static void nationSpawn(Player player, String[] split, Nation nation, String notAffordMSG) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();

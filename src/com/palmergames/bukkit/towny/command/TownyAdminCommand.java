@@ -903,7 +903,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Remove residents who havn't logged in for X amount of days.
 	 * 
-	 * @param split
+	 * @param split - Current command arguments.
 	 */
 	public void purge(String[] split) {
 
@@ -944,8 +944,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * Delete a resident and it's data file (if not online) Available Only to
 	 * players with the 'towny.admin' permission node.
 	 * 
-	 * @param player
-	 * @param split
+	 * @param player - Player.
+	 * @param split - Current command arguments.
 	 */
 	public void residentDelete(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();

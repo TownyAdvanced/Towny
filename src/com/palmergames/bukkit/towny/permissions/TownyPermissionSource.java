@@ -63,11 +63,11 @@ public abstract class TownyPermissionSource {
 
 	/**
 	 * Test if the player has a wild override to permit this action.
-	 * 
-	 * @param world
-	 * @param player
-	 * @param material
-	 * @param action
+	 *  
+	 * @param world - TownyWorld object.
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - Action type.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
@@ -123,9 +123,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an own town (or all town) override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
@@ -154,10 +154,10 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
-	 * @return
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
+	 * @return - True if action is permitted.
 	 */
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
@@ -186,9 +186,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an all town override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {

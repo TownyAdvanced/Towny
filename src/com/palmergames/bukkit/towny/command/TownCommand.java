@@ -930,7 +930,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send a list of all towns in the universe to player Command: /town list
 	 *
-	 * @param sender
+	 * @param sender - Sender (player or console.)
+	 * @param split  - Current command arguments.
 	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -1032,7 +1033,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send a the status of the town the player is physically at to him
 	 *
-	 * @param player
+	 * @param player - Player.
 	 */
 	public void showTownStatusHere(Player player) {
 
@@ -1048,10 +1049,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Send a the status of the town at the target coordinates to the player
 	 *
-	 * @param player
-	 * @param world
-	 * @param coord
-	 * @throws TownyException
+	 * @param player - Player.
+	 * @param world - TownyWorld object.
+	 * @param coord - Coord.
+	 * @throws TownyException - Exception.
 	 */
 	public void showTownStatusAtCoord(Player player, TownyWorld world, Coord coord) throws TownyException {
 
@@ -1817,11 +1818,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Town buys bonus blocks after checking the configured maximum.
 	 *
-	 * @param town
-	 * @param inputN
-	 * @param player
+	 * @param town - Towm object.
+	 * @param inputN - Number of townblocks being bought.
+	 * @param player - Player.
 	 * @return The number of purchased bonus blocks.
-	 * @throws TownyException
+	 * @throws TownyException - Exception.
 	 */
 	public static int townBuyBonusTownBlocks(Town town, int inputN, Object player) throws TownyException {
 
@@ -1859,7 +1860,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Create a new town. Command: /town new [town]
 	 *
-	 * @param player
+	 * @param player - Player.
 	 * @param name - name of town
 	 * @param mayorName - name of mayor
 	 * @param noCharge - charging for creation - /ta town new NAME MAYOR has no charge.
@@ -2069,10 +2070,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * Wrapper for the townSpawn() method. All calls should be through here
 	 * unless bypassing for admins.
 	 *
-	 * @param player
-	 * @param split
-	 * @param outpost
-	 * @throws TownyException
+	 * @param player - Player.
+	 * @param split  - Current command arguments.
+	 * @param outpost - Whether this in an outpost or not.
+	 * @throws TownyException - Exception.
 	 */
 	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2115,11 +2116,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Core spawn function to allow admin use.
 	 *
-	 * @param player
-	 * @param split
-	 * @param town
-	 * @param notAffordMSG
-	 * @param outpost
+	 * @param player - Player.
+	 * @param split  - Current command arguments.
+	 * @param town - Town object.
+	 * @param notAffordMSG - Message shown due to lack of funds.
+	 * @param outpost - Whether this is an outpost.
 	 */
 	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2375,8 +2376,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * with online players and kick them from town. Command: /town kick
 	 * [resident] .. [resident]
 	 *
-	 * @param player
-	 * @param names
+	 * @param player - Player.
+	 * @param names - List of names to kick.
 	 */
 
 	public static void townKick(Player player, String[] names) {
@@ -2627,8 +2628,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * If no arguments are given (or error), send usage of command. If sender is
 	 * a player: args = [town]. Elsewise: args = [resident] [town]
 	 *
-	 * @param sender
-	 * @param args
+	 * @param sender - Sender of command.
+	 * @param args - Current command arguments.
 	 */
 	public static void parseTownJoin(CommandSender sender, String[] args) {
 
@@ -2692,9 +2693,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * with online players and invite them to town. Command: /town add
 	 * [resident] .. [resident]
 	 *
-	 * @param sender
-	 * @param specifiedTown to add to if not null
-	 * @param names
+	 * @param sender - Sender.
+	 * @param specifiedTown - Town to add to if not null.
+	 * @param names - Names to add.
 	 */
 
 	public static void townAdd(Object sender, Town specifiedTown, String[] names) {
