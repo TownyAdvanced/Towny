@@ -724,4 +724,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 		return townBlocksClaimed;
 	}
+	
+	public Resident getKing() {
+		return capital.getMayor();
+	}
 }

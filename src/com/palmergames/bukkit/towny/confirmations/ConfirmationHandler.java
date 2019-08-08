@@ -29,6 +29,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Town> townunclaimallconfirmations = new HashMap<>();
 	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<>();
 	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<>();
+	private static HashMap<Resident, Nation> nationmergeconfirmations = new HashMap<>();
 
 	public static void addConfirmation(final Resident r, final ConfirmationType type, Object extra) throws TownyException {
 		// We use "extra" in certain instances like the number of days for something e.t.c
@@ -77,6 +78,17 @@ public class ConfirmationHandler {
 				}
 			}.runTaskLater(plugin, 400);
 		}
+		if (type == ConfirmationType.NATIONMERGE) {
+			r.setConfirmationType(type);
+			nationmergeconfirmations.put(r, (Nation) extra);
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					removeConfirmation(r, type, false);
+				}
+			}.runTaskLater(plugin, 400);
+		}
 	}
 
 	public static void removeConfirmation(Resident r, ConfirmationType type, boolean successful) {
@@ -107,6 +119,13 @@ public class ConfirmationHandler {
 				sendmessage = true;
 			}
 			nationdeleteconfirmations.remove(r);
+			r.setConfirmationType(null);
+		}
+		if (type == ConfirmationType.NATIONMERGE) {
+			if (nationmergeconfirmations.containsKey(r) && !successful) {
+				sendmessage = true;
+			}
+			nationmergeconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (sendmessage) {
@@ -156,6 +175,15 @@ public class ConfirmationHandler {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nationdeleteconfirmations.get(r)));
 					removeConfirmation(r,type, true);
 				}
+			}
+		}
+		if (type == ConfirmationType.NATIONMERGE) {
+			if (nationmergeconfirmations.containsKey(r)) {
+				Nation succumbingNation = r.getTown().getNation();
+				Nation prevailingNation = nationmergeconfirmations.get(r);
+				townyUniverse.getDataSource().mergeNation(succumbingNation, prevailingNation);
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), succumbingNation, prevailingNation));
+				removeConfirmation(r,type, true);
 			}
 		}
 	}

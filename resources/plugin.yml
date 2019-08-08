@@ -1,7 +1,7 @@
 name: Towny
 main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
-api-version: ${project.bukkitAPI}
+api-version: ${project.bukkitAPIVersion}
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
 website: http://towny.palmergames.com/
 description: >
