@@ -3349,3 +3349,13 @@ v0.92.0.11:
     - Fix null locationCanExplode error seen since fireworks got handled in 0.94.0.3. 
     - The Towny project has now become Mavenized, courtesy of FlagCourier.
       - The previous build system used was Ant, which was in use from 2010-2019.
+    - New Command: /nation merge {nationname}
+	  - Requests the given nation to merge into your nation.
+	  - Can only be used by the nation king, and requires the king of the other nation to be online to accept the merger.
+	  - The soon-to-be-ex-king will receive a confirmation message asking if they will accept the dissolution of their nation.
+	  - If accepted the towns of the nation transfer to the remaining nation. The nation's bank money is also transferred.
+	  - Requires the towny.command.nation.merge permission node.
+	- New Command: /ta nation {oldnation} merge {newnation}
+	  - Command to forcefully merge the oldnation into the newnation.
+	  - Requires the towny.command.townyadmin.nation.merge permission node.
+	- API: added Nation.getKing().
