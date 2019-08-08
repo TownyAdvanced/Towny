@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.NameValidation;
 import org.bukkit.entity.Player;
 
@@ -1063,5 +1064,52 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		
 		BukkitTools.getPluginManager().callEvent(new RenameResidentEvent(oldName, resident));
+	}
+	
+	/** 
+	 * Merges the succumbingNation into the prevailingNation.
+	 * 
+	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
+	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
+	 * @exception EmptyNationException - When the succumbingNation's last town is removed, this will remove the nation.
+	 * @exception EconomyException - Shouldn't happen but could if there's a problem with the Economy plugin.
+	 * @throws NotRegisteredException - Shouldn't happen.
+	 * @throws AlreadyRegisteredException - Shouldn't happen. 
+	 * 
+	 * @author LlmDl
+	 */
+	public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws NotRegisteredException, AlreadyRegisteredException {
+		
+		lock.lock();
+		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
+		Town lastTown = null;
+		try {
+			succumbingNation.payTo(succumbingNation.getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+			for (Town town : towns) {			
+				lastTown = town;
+				for (Resident res : town.getResidents()) {
+					if (res.hasTitle() || res.hasSurname()) {
+						res.setTitle("");
+						res.setSurname("");
+					}
+					res.updatePermsForNationRemoval();
+					saveResident(res);
+				}
+				succumbingNation.removeTown(town);
+				prevailingNation.addTown(town);
+				saveTown(town);
+			}
+		} catch (EconomyException ignored) {
+		} catch (EmptyNationException en) {
+			// This is the intended end-result of the merge.
+			prevailingNation.addTown(lastTown);
+			saveTown(lastTown);
+			String name = en.getNation().getName();
+			universe.getDataSource().removeNation(en.getNation());
+			saveNation(prevailingNation);
+			universe.getDataSource().saveNationList();
+			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(TownySettings.getLangString("msg_del_nation"), name)));
+			lock.unlock();
+		}
 	}
 }

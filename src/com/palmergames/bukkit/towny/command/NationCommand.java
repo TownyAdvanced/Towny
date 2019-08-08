@@ -219,6 +219,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// TODO: Check if player is an admin
 					newNation(player, split[1], split[2]);
 				}
+			} else if (split[0].equalsIgnoreCase("merge")) {
+				
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_MERGE.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+				
+				if (split.length == 1)
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_nation_name"));
+				else if (split.length == 2) {
+					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+					if (!resident.isKing())
+						throw new TownyException(TownySettings.getLangString("msg_err_merging_for_kings_only"));
+					mergeNation(player, split[1]);
+				}
+				
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode()))
@@ -846,6 +860,31 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
 
 		return nation;
+	}
+
+	public void mergeNation(Player player, String name) throws TownyException {
+		
+		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+		Nation nation = null;
+		Nation remainingNation = null;
+		try {
+			nation = universe.getDataSource().getNation(name);
+			remainingNation = universe.getDataSource().getResident(player.getName()).getTown().getNation();
+		} catch (NotRegisteredException e) {
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
+		}
+		if (remainingNation.getName().equalsIgnoreCase(name))
+			throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), name));
+
+		if (nation !=null ) {
+			Resident king = nation.getKing();
+			if (!BukkitTools.isOnline(king.getName())) {
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
+			}
+			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
+			ConfirmationHandler.addConfirmation(king, ConfirmationType.NATIONMERGE, remainingNation);
+			TownyMessaging.sendConfirmationMessage(BukkitTools.getPlayer(king.getName()), null, null, null, null);			
+		}
 	}
 
 	public void nationLeave(Player player) {

@@ -599,6 +599,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] rename [newname]", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] delete", ""));
 			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[nation] recheck", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin nation", "[oldnation] merge [newnation]", ""));
 
 			return;
 		}
@@ -628,13 +629,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[1].equalsIgnoreCase("recheck")) {
 				nation.recheckTownDistance();
 				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("nation_rechecked_by_admin"), nation.getName()));
-			}else if (split[1].equalsIgnoreCase("rename")) {
+			} else if (split[1].equalsIgnoreCase("rename")) {
 
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renameNation(nation, split[2]);
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
+			} else if (split[1].equalsIgnoreCase("merge")) {
+				Nation remainingNation = null;
+				try {
+					remainingNation = townyUniverse.getDataSource().getNation(split[2]);
+				} catch (NotRegisteredException e) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), split[2]));
+				}
+				if (remainingNation.equals(nation))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_name"), split[2]));
+				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), nation, remainingNation));				
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException e) {
