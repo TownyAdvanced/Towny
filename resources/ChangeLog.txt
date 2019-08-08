@@ -3359,3 +3359,5 @@ v0.92.0.11:
 	  - Command to forcefully merge the oldnation into the newnation.
 	  - Requires the towny.command.townyadmin.nation.merge permission node.
 	- API: added Nation.getKing().
+	- New Language File: chinese.yml courtesy of qsefthuopq.
+	
