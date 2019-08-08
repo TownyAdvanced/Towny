@@ -107,6 +107,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "ally [] .. [] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_2")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "enemy [add/remove] " + TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("king_help_3")));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "delete", ""));
+		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "merge {nation}", ""));
 		king_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "say", "[message]"));
 
 	}
