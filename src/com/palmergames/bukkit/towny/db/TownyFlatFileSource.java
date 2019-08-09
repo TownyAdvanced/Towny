@@ -598,10 +598,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File fileTown = new File(path);
 		try {
 			if (!fileTown.getParentFile().mkdirs() && !fileTown.getParentFile().isDirectory()) {
-				throw new IOException("Resident file: " + fileTown.getName() + " parent directory was a file!");
+				throw new IOException("Town file: " + fileTown.getName() + " parent directory was a file!");
 			}
 			if (!fileTown.exists() && !fileTown.createNewFile()) {
-				throw new IOException("Resident file: " + fileTown.getName() + " was not able to be created!");
+				throw new IOException("Town file: " + fileTown.getName() + " was not able to be created!");
 			}
 			HashMap<String, String> keys = new HashMap<>();
 			Properties properties = new Properties();
@@ -951,10 +951,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File fileNation = new File(path);
 		try {
 			if (!fileNation.getParentFile().mkdirs() && !fileNation.getParentFile().isDirectory()) {
-				throw new IOException("Resident file: " + fileNation.getName() + " parent directory was a file!");
+				throw new IOException("Nation file: " + fileNation.getName() + " parent directory was a file!");
 			}
 			if (!fileNation.exists() && !fileNation.createNewFile()) {
-				throw new IOException("Resident file: " + fileNation.getName() + " was not able to be created!");
+				throw new IOException("Nation file: " + fileNation.getName() + " was not able to be created!");
 			}
 			HashMap<String, String> keys = new HashMap<>();
 			Properties properties = new Properties();
@@ -1119,10 +1119,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File fileWorld = new File(path);
 		try {
 			if (!fileWorld.getParentFile().mkdirs() && !fileWorld.getParentFile().isDirectory()) {
-				throw new IOException("Resident file: " + fileWorld.getName() + " parent directory was a file!");
+				throw new IOException("World file: " + fileWorld.getName() + " parent directory was a file!");
 			}
 			if (!fileWorld.exists() && !fileWorld.createNewFile()) {
-				throw new IOException("Resident file: " + fileWorld.getName() + " was not able to be created!");
+				throw new IOException("World file: " + fileWorld.getName() + " was not able to be created!");
 			}
 			HashMap<String, String> keys = new HashMap<>();
 			Properties properties = new Properties();
@@ -1398,10 +1398,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
 				try {
 					if (!fileTownBlock.getParentFile().mkdirs() && !fileTownBlock.getParentFile().isDirectory()) {
-						throw new IOException("Resident file: " + fileTownBlock.getName() + " parent directory was a file!");
+						throw new IOException("TownBlock file: " + fileTownBlock.getName() + " parent directory was a file!");
 					}
 					if (!fileTownBlock.exists() && !fileTownBlock.createNewFile()) {
-						throw new IOException("Resident file: " + fileTownBlock.getName() + " was not able to be created!");
+						throw new IOException("TownBlock file: " + fileTownBlock.getName() + " was not able to be created!");
 					}
 					HashMap<String, String> keys = new HashMap<>();
 					Properties properties = new Properties();
@@ -1490,19 +1490,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
-				
-				//				if (!set) {
-				//					// no permissions found so set in relation to it's owners perms.
-				//					try {
-				//						if (townBlock.hasResident()) {
-				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-				//						} else {
-				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-				//						}
-				//					} catch (NotRegisteredException e) {
-				//						// Will never reach here
-				//					}
-				//				}
+
 			} else {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 				TownyWorld world = townBlock.getWorld();
