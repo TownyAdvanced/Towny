@@ -912,7 +912,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Remove residents who havn't logged in for X amount of days.
-	 *
+	 * 
 	 * @param split - Current command arguments.
 	 */
 	public void purge(String[] split) {
@@ -953,7 +953,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Delete a resident and it's data file (if not online) Available Only to
 	 * players with the 'towny.admin' permission node.
-	 *
+	 * 
 	 * @param player - Player.
 	 * @param split - Current command arguments.
 	 */
@@ -1096,23 +1096,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * Coord(key.getX() + 1, key.getZ()), player.getLocation()); Town t3 =
 	 * newTown(plugin.getTownyUniverse(), player.getWorld(), "t3", r3, new
 	 * Coord(key.getX(), key.getZ() + 1), player.getLocation()); Nation n1 =
-	 *
+	 * 
 	 * }
-	 *
+	 * 
 	 * public void seedTowny() { TownyUniverse townyUniverse =
 	 * plugin.getTownyUniverse(); Random r = new Random(); for (int i = 0; i <
 	 * 1000; i++) {
-	 *
+	 * 
 	 * try { townyUniverse.newNation(Integer.toString(r.nextInt())); } catch
 	 * (TownyException e) { } try {
 	 * townyUniverse.newTown(Integer.toString(r.nextInt())); } catch
 	 * (TownyException e) { } try {
 	 * townyUniverse.newResident(Integer.toString(r.nextInt())); } catch
 	 * (TownyException e) { } } }
-	 *
+	 * 
 	 * private static double getTotalEconomy() { double total = 0; try { return
 	 * total; } catch (Exception e) { } return total; }
-	 *
+	 * 
 	 * private static int getNumBankAccounts() { try { return 0; } catch
 	 * (Exception e) { return 0; } }
 	 */

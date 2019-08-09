@@ -72,10 +72,10 @@ import java.util.Map;
 
 /**
  * Towny Plugin for Bukkit
- *
+ * 
  * Website: http://code.google.com/a/eclipselabs.org/p/towny/ Source:
  * http://code.google.com/a/eclipselabs.org/p/towny/source/browse/
- *
+ * 
  * @author Shade, ElgarL
  */
 
@@ -121,7 +121,6 @@ public class Towny extends JavaPlugin {
 		
 		/*
 		 * Register bStats Metrics
-		 *
 		 */
 		new Metrics(this);
 		
@@ -424,7 +423,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Fetch the TownyUniverse instance.
-	 *
+	 * 
 	 * @return TownyUniverse
 	 * @deprecated use {@link com.palmergames.bukkit.towny.TownyUniverse#getInstance()}
 	 */
@@ -515,7 +514,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Fetch the current players cache
 	 * Creates a new one, if one doesn't exist.
-	 *
+	 * 
 	 * @param player - Player to get the current cache from.
 	 * @return the current (or new) cache for this player.
 	 */
@@ -573,7 +572,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Resets a specific players cache if their location has changed
-	 *
+	 * 
 	 * @param player - Player, whose cache is to be updated.
 	 */
 	public void updateCache(Player player) {
@@ -587,7 +586,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Resets a specific players cache
-	 *
+	 * 
 	 * @param player - Player, whose cache is to be reset.
 	 */
 	public void resetCache(Player player) {
@@ -611,7 +610,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Remove ALL current modes (and set the defaults)
-	 *
+	 * 
 	 * @param player - player, whose modes are to be reset (all removed).
 	 */
 	public void removePlayerMode(Player player) {
@@ -628,7 +627,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Fetch a list of all the players current modes.
-	 *
+	 * 
 	 * @param player - player, whose modes are to be listed, taken.
 	 * @return list of modes
 	 */
@@ -651,7 +650,7 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Check if the player has a specific mode.
-	 *
+	 * 
 	 * @param player - Player to be checked
 	 * @param mode - Mode to be checked for within player.
 	 * @return true if the mode is present.

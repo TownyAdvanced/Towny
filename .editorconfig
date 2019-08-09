@@ -9,7 +9,7 @@ root = true
 [*.java]
 end_of_line = crlf
 insert_final_newline = false
-trim_trailing_whitespace = true
+trim_trailing_whitespace = false
 charset = utf-8
 indent_size = 4
 indent_style = tab
