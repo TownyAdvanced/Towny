@@ -77,7 +77,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         this.type = type;
         try {
         
-            FileMgmt.checkFolders(
+            FileMgmt.checkOrCreateFolders(
                     rootFolderPath,
                     dataFolderPath,
                     dataFolderPath + File.separator + "plot-block-data");
@@ -1812,13 +1812,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         String backupType = TownySettings.getFlatFileBackupType();
         long t = System.currentTimeMillis();
         String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
-        FileMgmt.checkFolders(
+        FileMgmt.checkOrCreateFolders(
                 rootFolderPath,
                 rootFolderPath + File.separator + "backup");
         switch (backupType.toLowerCase()) {
             case "folder": {
                 TownyLogger.shutDown();
-                FileMgmt.checkFolders(newBackupFolder);
+                FileMgmt.checkOrCreateFolders(newBackupFolder);
                 FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
                 FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
                 FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));

@@ -21,27 +21,58 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class FileMgmt {
-
-	public static void checkFolders(String... folders) {
-
+	/**
+	 * Checks a folderPath to see if it exists, if it doesn't it will attempt
+	 * to create the folder at the designated path.
+	 *
+	 * @param folderPath {@link String} containing a path to a folder.
+	 * @return True if the folder exists or if it was successfully created.
+	 */
+	public static boolean checkOrCreateFolder(String folderPath) {
+		File file = new File(folderPath);
+		return file.exists() || file.mkdirs() || file.isDirectory();
+	}
+	
+	/**
+	 * Checks an array of folderPaths to see if they exist, if they don't
+	 * it will try to create the folder at the designated paths.
+	 *
+	 * @param folders array of {@link String} containing a path to a folder.
+	 */
+	public static void checkOrCreateFolders(String... folders) {
 		for (String folder : folders) {
-			File f = new File(folder);
-			if (!(f.exists() && f.isDirectory())) {
-				f.getParentFile().mkdirs();
-				f.mkdir();
-
-			}
+			checkOrCreateFolder(folder);
 		}
 	}
-
+	
+	/**
+	 * Checks a filePath to see if it exists, if it doesn't it will attempt
+	 * to create the file at the designated path.
+	 *
+	 * @param filePath {@link String} containing a path to a file.
+	 * @return True if the folder exists or if it was successfully created.
+	 */
+	public static boolean checkOrCreateFile(String filePath) {
+		File file = new File(filePath);
+		if (!checkOrCreateFolder(file.getParentFile().getPath())) {
+			return false;
+		}
+		try {
+			return file.exists() || file.createNewFile();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks an array of folderPaths to see if they exist, if they don't
+	 * it will try to create the folder at the designated paths.
+	 *
+	 * @param files array of {@link String} containing a path to a file.
+	 */
 	public static void checkFiles(String... files) throws IOException {
-
 		for (String file : files) {
-			File f = new File(file);
-			if (!(f.exists() && f.isFile())) {
-				f.getParentFile().mkdirs();
-				f.createNewFile();
-			}
+			checkOrCreateFile(file);
 		}
 	}
 
@@ -74,19 +105,6 @@ public class FileMgmt {
 				out.close();
 			}
 		}
-	}
-
-	public static File checkYMLExists(File file) {
-
-		if (!file.exists()) {
-			try {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return file;
 	}
 
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
