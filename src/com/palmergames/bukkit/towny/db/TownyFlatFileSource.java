@@ -1474,19 +1474,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
-				
-				//				if (!set) {
-				//					// no permissions found so set in relation to it's owners perms.
-				//					try {
-				//						if (townBlock.hasResident()) {
-				//							townBlock.setPermissions(townBlock.getResident().getPermissions().toString());
-				//						} else {
-				//							townBlock.setPermissions(townBlock.getTown().getPermissions().toString());
-				//						}
-				//					} catch (NotRegisteredException e) {
-				//						// Will never reach here
-				//					}
-				//				}
+
 			} else {
 				TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
 				TownyWorld world = townBlock.getWorld();
