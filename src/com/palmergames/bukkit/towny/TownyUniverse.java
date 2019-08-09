@@ -104,7 +104,7 @@ public class TownyUniverse {
                 
                 }
             }
-            FileMgmt.checkOrCreateFolders(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
+            FileMgmt.checkOrCreateFolder(rootFolder + File.separator + "logs"); // Setup the logs folder here as the logger will not yet be enabled.
             try {
                 dataSource.backup();
                 
