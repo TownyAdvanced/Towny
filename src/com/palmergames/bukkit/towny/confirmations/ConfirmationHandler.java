@@ -209,6 +209,8 @@ public class ConfirmationHandler {
 						removeConfirmation(type, false);
 					}
 				}.runTaskLater(plugin, 400);
+			} else {
+				TownyMessaging.sendMsg("Unable to start a new confirmation, one already exists of type: " + consoleConfirmationType.toString());
 			}
 		}
 
@@ -272,7 +274,6 @@ public class ConfirmationHandler {
 			removeConfirmation(type, true);
 			consoleExtra = null;
 			return;
-
 		}
 		if (type == ConfirmationType.PURGE) {
 			int days = (Integer) consoleExtra;

@@ -3364,3 +3364,4 @@ v0.92.0.11:
 	- The german.yml has been updated by Sprugente.
 	- The FileMgmt has seen a slight touch-up courtesy of Articdive.
 	  - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
+	- Added confirmations to /ta town {townname} delete when used from the Console.
