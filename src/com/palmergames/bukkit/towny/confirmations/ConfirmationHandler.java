@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.util.TimeTools;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,6 +31,8 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<>();
 	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<>();
 	private static HashMap<Resident, Nation> nationmergeconfirmations = new HashMap<>();
+	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
+	private static Object consoleExtra = null;
 
 	public static void addConfirmation(final Resident r, final ConfirmationType type, Object extra) throws TownyException {
 		// We use "extra" in certain instances like the number of days for something e.t.c
@@ -188,4 +191,63 @@ public class ConfirmationHandler {
 		}
 	}
 
+	/**
+	 * Adds a confirmation for the console.
+	 * 
+	 * @param type - Type of ConfirmationType.
+	 * @param extra - Extra object, used for the number of days to purge for example.
+	 * @author LlmDl
+	 */
+	public static void addConfirmation(final ConfirmationType type, Object extra) {
+		if (type == ConfirmationType.PURGE) {
+			if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
+				consoleExtra = extra;
+				consoleConfirmationType = type;
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(type, false);
+					}
+				}.runTaskLater(plugin, 400);
+			}
+		}
+		
+	}
+
+	/** 
+	 * Removes confirmations for the console.
+	 * 
+	 * @param type of ConfirmationType
+	 * @param successful
+	 * @author LlmDl
+	 */
+	public static void removeConfirmation(final ConfirmationType type, boolean successful) {
+		boolean sendmessage = false;
+		if (type == ConfirmationType.PURGE) {
+			if (consoleConfirmationType != null && !successful) {
+				sendmessage = true;
+			}
+			consoleConfirmationType = ConfirmationType.NULL;			
+		}
+		if (sendmessage) {
+			TownyMessaging.sendMsg(TownySettings.getLangString("successful_cancel"));
+		}
+		
+	}
+	
+	/**
+	 * Handles confirmations sent via the console.
+	 * 
+	 * @param type of ConfirmationType.
+	 * @throws TownyException
+	 * @author LlmDl
+	 */
+	public static void handleConfirmation(ConfirmationType type) throws TownyException {
+		if (type == ConfirmationType.PURGE) {
+			int days = (Integer) consoleExtra;
+			new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
+			removeConfirmation(type, true);
+			consoleExtra = null;
+		}
+	}
 }

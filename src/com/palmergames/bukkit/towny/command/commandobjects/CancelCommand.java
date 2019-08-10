@@ -36,6 +36,15 @@ public class CancelCommand extends BukkitCommand {
 					return true;
 				}
 			}
+		} else {
+			// Must be a console.
+			if (ConfirmationHandler.consoleConfirmationType != null) {
+				ConfirmationHandler.removeConfirmation(ConfirmationHandler.consoleConfirmationType, false);
+				return true;
+			} else { 
+				TownyMessaging.sendMsg(TownySettings.getLangString("no_confirmations_open"));
+				return true;
+			}
 		}
 		return true;
 	}
