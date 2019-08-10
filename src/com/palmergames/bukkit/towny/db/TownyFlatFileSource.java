@@ -136,21 +136,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				rootFolderPath + File.separator + "backup");
 		switch (backupType.toLowerCase()) {
 			case "folder": {
-				TownyLogger.shutDown();
 				FileMgmt.checkOrCreateFolder(newBackupFolder);
 				FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
 				FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
 				FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
-				plugin.setupLogger();
 				return true;
 			}
 			case "zip": {
-				TownyLogger.shutDown();
 				FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"),
 						new File(dataFolderPath),
 						new File(logFolderPath),
 						new File(settingsFolderPath));
-				plugin.setupLogger();
 				return true;
 			}
 			default:

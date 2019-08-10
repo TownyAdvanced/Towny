@@ -49,6 +49,8 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -78,7 +80,8 @@ import java.util.Map;
  */
 
 public class Towny extends JavaPlugin {
-
+	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
+	private static final TownyLogger townyLogger = TownyLogger.getInstance();
 	private String version = "2.0.0";
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -118,7 +121,6 @@ public class Towny extends JavaPlugin {
 		
 		/*
 		 * Register bStats Metrics
-		 *  
 		 */
 		new Metrics(this);
 		
@@ -172,12 +174,13 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
-		TownyLogger.log.info("=============================================================");
-		if (isError())
-			TownyLogger.log.info("[WARNING] - ***** SAFE MODE ***** " + version);
-		else
-			TownyLogger.log.info("[Towny] Version: " + version + " - Mod Enabled");
-		TownyLogger.log.info("=============================================================");
+		LOGGER.info("=============================================================");
+		if (isError()) {
+			LOGGER.info("[WARNING] - ***** SAFE MODE ***** " + version);
+		} else {
+			LOGGER.info("[Towny] Version: " + version + " - Mod Enabled");
+		}
+		LOGGER.info("=============================================================");
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -194,7 +197,7 @@ public class Towny extends JavaPlugin {
 			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
-				TownyLogger.log.warning("[Towny Error] Detected an error with the world files. Attempting to repair");
+				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");
 				if (town.hasHomeBlock())
 					try {
 						TownyWorld world = town.getHomeBlock().getWorld();
@@ -205,10 +208,11 @@ public class Towny extends JavaPlugin {
 						}
 					} catch (TownyException e) {
 						// Error fetching homeblock
-						TownyLogger.log.warning("[Towny Error] Failed get world data for: " + town.getName());
+						LOGGER.warn("[Towny Error] Failed get world data for: " + town.getName());
 					}
-				else
-					TownyLogger.log.warning("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
+				else {
+					LOGGER.warn("[Towny Error] No Homeblock - Failed to detect world for: " + town.getName());
+				}
 			}
 		}
 
@@ -249,8 +253,6 @@ public class Towny extends JavaPlugin {
 
 		System.out.println("[Towny] Version: " + version + " - Mod Disabled");
 		System.out.println("=============================================================");
-
-		TownyLogger.shutDown();
 	}
 
 	public boolean load() {
@@ -260,7 +262,7 @@ public class Towny extends JavaPlugin {
 			return false;
 		}
 
-		setupLogger();
+		townyLogger.setupLogger();
 
 		checkPlugins();
 
@@ -319,23 +321,23 @@ public class Towny extends JavaPlugin {
 
 		if (TownySettings.isUsingEconomy()) {
 
-			if (TownyEconomyHandler.setupEconomy())
+			if (TownyEconomyHandler.setupEconomy()) {
 				using.add(TownyEconomyHandler.getVersion());
-			else {
+			} else {
 				TownyMessaging.sendErrorMsg("No compatible Economy plugins found. Install Vault.jar with any of the supported eco systems.");
 				TownyMessaging.sendErrorMsg("If you do not want an economy to be used, set using_economy: false in your Towny config.yml.");
 			}
 		}
 
 		test = getServer().getPluginManager().getPlugin("Essentials");
-		if (test == null)
+		if (test == null) {
 			TownySettings.setUsingEssentials(false);
-		else if (TownySettings.isUsingEssentials()) {
+		} else if (TownySettings.isUsingEssentials()) {
 			this.essentials = (Essentials) test;
 			using.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
 		}
 		
-		test = getServer().getPluginManager().getPlugin("Questioner");	
+		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			TownyMessaging.sendErrorMsg("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations.");
 			TownyMessaging.sendErrorMsg("You may safely remove Questioner.jar from your plugins folder.");
@@ -345,33 +347,22 @@ public class Towny extends JavaPlugin {
 		 * Test for Citizens2 so we can avoid removing their NPC's
 		 */
 		test = getServer().getPluginManager().getPlugin("Citizens");
-		if (test != null) 
-			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled())
+		if (test != null) {
+			if (getServer().getPluginManager().getPlugin("Citizens").isEnabled()) {
 				citizens2 = test.getDescription().getVersion().startsWith("2");
+			}
+		}
 
-		if (using.size() > 0)
-			TownyLogger.log.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+		if (using.size() > 0) {
+			LOGGER.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+		}
 
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
-		
-		/*
-		 * Leaving this out for the time being, at the request of the authors of EssentialsX
-		 */
-//		if (TownySettings.isUsingEssentials()){
-//			TownyLogger.log.warning("Essentials detected: The Towny authors would like to make you");
-//			TownyLogger.log.warning("aware that Essentials has been causing town and nation bank");
-//			TownyLogger.log.warning("accounts to reset. Furthermore their handling of bank accounts");
-//			TownyLogger.log.warning("has left vital town, nation, warchest and server accounts");
-//			TownyLogger.log.warning("vulnerable to exploitation. Towny has made changes to stop");
-//			TownyLogger.log.warning("these exploits from occuring but we cannot stop Essentials");
-//			TownyLogger.log.warning("Economy from reseting bank accounts. Please change to another");
-//			TownyLogger.log.warning("Essentials-type plugin as soon as you are able.");
-//		}
-			
+	
 	}
 
 	private void registerEvents() {
@@ -408,17 +399,19 @@ public class Towny extends JavaPlugin {
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
-			TownyLogger.log.info("------------------------------------");
-			TownyLogger.log.info("[Towny] ChangeLog up until v" + getVersion());
+			LOGGER.info("------------------------------------");
+			LOGGER.info("[Towny] ChangeLog up until v" + getVersion());
 			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
-				if (line.startsWith("v" + lastVersion))
+				if (line.startsWith("v" + lastVersion)) {
 					display = true;
-				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0)
-					TownyLogger.log.info(line);
+				}
+				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+					LOGGER.info(line);
+				}
 			}
-			TownyLogger.log.info("------------------------------------");
+			LOGGER.info("------------------------------------");
 		} catch (IOException e) {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}
@@ -691,13 +684,9 @@ public class Towny extends JavaPlugin {
 
 	public void log(String msg) {
 
-		if (TownySettings.isLogging())
-			TownyLogger.log.info(ChatColor.stripColor(msg));
-	}
-
-	public void setupLogger() {
-
-		TownyLogger.setup(getTownyUniverse().getRootFolder(), TownySettings.isAppendingToLog());
+		if (TownySettings.isLogging()) {
+			LOGGER.info(ChatColor.stripColor(msg));
+		}
 	}
 	
 
