@@ -199,6 +199,19 @@ public class ConfirmationHandler {
 	 * @author LlmDl
 	 */
 	public static void addConfirmation(final ConfirmationType type, Object extra) {
+		if (type == ConfirmationType.TOWNDELETE) {
+			if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
+				consoleExtra = extra;
+				consoleConfirmationType = type;
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(type, false);
+					}
+				}.runTaskLater(plugin, 400);
+			}
+		}
+
 		if (type == ConfirmationType.PURGE) {
 			if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
 				consoleExtra = extra;
@@ -231,6 +244,12 @@ public class ConfirmationHandler {
 			}
 			consoleConfirmationType = ConfirmationType.NULL;			
 		}
+		if (type == ConfirmationType.TOWNDELETE) {
+			if (consoleConfirmationType != null && !successful) {
+				sendmessage = true;
+			}
+			consoleConfirmationType = ConfirmationType.NULL;			
+		}
 		if (sendmessage) {
 			TownyMessaging.sendMsg(TownySettings.getLangString("successful_cancel"));
 		}
@@ -245,6 +264,16 @@ public class ConfirmationHandler {
 	 * @author LlmDl
 	 */
 	public static void handleConfirmation(ConfirmationType type) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (type == ConfirmationType.TOWNDELETE) {
+			Town town = (Town) consoleExtra;
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
+			townyUniverse.getDataSource().removeTown(town);
+			removeConfirmation(type, true);
+			consoleExtra = null;
+			return;
+
+		}
 		if (type == ConfirmationType.PURGE) {
 			int days = (Integer) consoleExtra;
 			new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();

@@ -483,10 +483,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.townKickResidents(getSender(), town.getMayor(), town, TownCommand.getValidatedResidents(getSender(), StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-				
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("town_deleted_by_admin"), town.getName()));
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
-				townyUniverse.getDataSource().removeTown(town);
+				if (!isConsole) {
+					ConfirmationHandler.addConfirmation(TownyUniverse.getInstance().getDataSource().getResident(sender.getName()), ConfirmationType.TOWNDELETE, town); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+					TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+				} else { //isConsole
+					ConfirmationHandler.addConfirmation(ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);					
+				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
