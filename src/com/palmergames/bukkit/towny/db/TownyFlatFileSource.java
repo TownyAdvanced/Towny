@@ -641,18 +641,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setMayor(getResident(line));
 				
-				//				line = kvFile.get("assistants");
-				//				if (line != null) {
-				//					tokens = line.split(",");
-				//					for (String token : tokens) {
-				//						if (!token.isEmpty()) {
-				//							Resident assistant = getResident(token);
-				//							if ((assistant != null) && (town.hasResident(assistant)))
-				//								town.addAssistant(assistant);
-				//						}
-				//					}
-				//				}
-				
 				town.setTownBoard(keys.get("townBoard"));
 				
 				line = keys.get("tag");
@@ -768,15 +756,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				/*
-				 * line = kvFile.get("mobs");
-				 * if (line != null)
-				 * try {
-				 * town.setHasMobs(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 */
 				line = keys.get("open");
 				if (line != null)
 					try {
@@ -789,23 +768,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setPublic(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				/*
-				 * line = kvFile.get("explosion");
-				 * if (line != null)
-				 * try {
-				 * town.setBANG(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 *
-				 * line = kvFile.get("fire");
-				 * if (line != null)
-				 * try {
-				 * town.setFire(Boolean.parseBoolean(line));
-				 * } catch (NumberFormatException nfe) {
-				 * } catch (Exception e) {
-				 * }
-				 */
+
 				line = keys.get("townBlocks");
 				if (line != null)
 					utilLoadTownBlocks(line, town, null);
@@ -923,6 +886,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
+			} finally {
+				saveTown(town);
 			}
 			return true;
 		} else {
@@ -1297,15 +1262,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setUsingPlotManagementRevert(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				/*
-				 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-				 */
-//				line = kvFile.get("usingPlotManagementRevertSpeed");
-//				if (line != null)
-//					try {
-//						world.setPlotManagementRevertSpeed(Long.parseLong(line));
-//					} catch (Exception e) {
-//					}
+
 				line = keys.get("plotManagementIgnoreIds");
 				if (line != null)
 					try {
