@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 
@@ -45,7 +46,7 @@ public class ConfirmCommand extends BukkitCommand {
 			}
 		} else {
 			// Must be a console.
-			if (ConfirmationHandler.consoleConfirmationType != null) {
+			if (!ConfirmationHandler.consoleConfirmationType.equals(ConfirmationType.NULL)) {
 				try {
 					ConfirmationHandler.handleConfirmation(ConfirmationHandler.consoleConfirmationType);
 				} catch (TownyException e) {

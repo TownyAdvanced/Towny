@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.command.CommandSender;
@@ -38,7 +39,7 @@ public class CancelCommand extends BukkitCommand {
 			}
 		} else {
 			// Must be a console.
-			if (ConfirmationHandler.consoleConfirmationType != null) {
+			if (!ConfirmationHandler.consoleConfirmationType.equals(ConfirmationType.NULL)) {
 				ConfirmationHandler.removeConfirmation(ConfirmationHandler.consoleConfirmationType, false);
 				return true;
 			} else { 
