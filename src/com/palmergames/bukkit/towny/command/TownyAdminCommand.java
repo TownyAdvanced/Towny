@@ -925,12 +925,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			return;
 		}
-		Resident resident = null;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
-		}
+		
 		int days = 1;
 
 		try {
@@ -939,14 +934,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
-		if (resident != null) {
-			try {
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.PURGE, days); // It takes the senders town & nation, an admin deleting another town has no confirmation.
-				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
+		if (!isConsole) {
+
+			Resident resident = null;
+			try {
+				resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
+			
+			if (resident != null) {
+				try {
+					ConfirmationHandler.addConfirmation(resident, ConfirmationType.PURGE, days); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+					TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
+
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
+				}
+			}
+		} else { // isConsole
+			ConfirmationHandler.addConfirmation(ConfirmationType.PURGE, days);
+			TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
 		}
 	}
 
