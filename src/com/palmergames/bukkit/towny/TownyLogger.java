@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -98,18 +97,6 @@ public class TownyLogger {
 				.withAppend(append)
 				.build()
 		);
-		appenders.add(
-			ConsoleAppender.newBuilder()
-				.withName("Towny-Console")
-				.withLayout(PatternLayout.newBuilder()
-					.withPattern(PatternLayout.DEFAULT_CONVERSION_PATTERN)
-					.withAlwaysWriteExceptions(false)
-					.withNoConsoleNoAnsi(false)
-					.withConfiguration(config)
-					.build())
-				.withBufferedIo(false)
-				.withBufferSize(0).build()
-		);
 		// store a list of appender references.
 		List<AppenderRef[]> appenderRefs = new ArrayList<>();
 		// Start appenders, give them the LoggerConfig and add their references to the referenceList
@@ -120,9 +107,13 @@ public class TownyLogger {
 		}
 		LoggerConfig townyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny", null, appenderRefs.get(0), null, config, null);
 		townyConfig.addAppender(appenders.get(0), Level.ALL, null);
-		townyConfig.addAppender(appenders.get(3), Level.INFO, null);
+		// These are Vanilla MC's loggers.
+		townyConfig.addAppender(config.getAppender("TerminalConsole"), Level.INFO, null);
+		townyConfig.addAppender(config.getAppender("File"), Level.INFO, null);
+		
 		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, appenderRefs.get(1), null, config, null);
 		townyMoneyConfig.addAppender(appenders.get(1), Level.ALL, null);
+		
 		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, appenderRefs.get(2), null, config, null);
 		townyDebugConfig.addAppender(appenders.get(2), Level.ALL, null);
 		
