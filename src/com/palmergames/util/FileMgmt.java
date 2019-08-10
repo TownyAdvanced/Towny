@@ -39,10 +39,13 @@ public class FileMgmt {
 	 *
 	 * @param folders array of {@link String} containing a path to a folder.
 	 */
-	public static void checkOrCreateFolders(String... folders) {
+	public static boolean checkOrCreateFolders(String... folders) {
 		for (String folder : folders) {
-			checkOrCreateFolder(folder);
+			if (!checkOrCreateFolder(folder)) {
+				return false;
+			}
 		}
+		return true;
 	}
 	
 	/**
@@ -70,15 +73,17 @@ public class FileMgmt {
 	 *
 	 * @param files array of {@link String} containing a path to a file.
 	 */
-	public static void checkFiles(String... files) throws IOException {
+	public static boolean checkOrCreateFiles(String... files) {
 		for (String file : files) {
-			checkOrCreateFile(file);
+			if (!checkOrCreateFile(file)) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-
 		synchronized (sourceLocation) {
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
@@ -122,11 +127,7 @@ public class FileMgmt {
 		 * or it's the default file
 		 * so refresh just in case.
 		 */
-		try {
-			checkFiles(filePath);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		checkOrCreateFile(filePath);
 
 		// Populate a new file
 		try {

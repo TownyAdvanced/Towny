@@ -75,22 +75,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public TownySQLSource(Towny plugin, TownyUniverse universe, String type) {
         super(plugin, universe);
         this.type = type;
-        try {
-        
-            FileMgmt.checkOrCreateFolders(
-                    rootFolderPath,
-                    dataFolderPath,
-                    dataFolderPath + File.separator + "plot-block-data");
-            FileMgmt.checkFiles(
-                    dataFolderPath + File.separator + "regen.txt",
-                    dataFolderPath + File.separator + "snapshot_queue.txt");
-        
-        } catch (IOException e) {
-            TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
-        }
-    
-    
-    
+		if (!FileMgmt.checkOrCreateFolders(
+			rootFolderPath,
+			dataFolderPath,
+			dataFolderPath + File.separator + "plot-block-data"
+		) || !FileMgmt.checkOrCreateFiles(
+			dataFolderPath + File.separator + "regen.txt",
+			dataFolderPath + File.separator + "snapshot_queue.txt"
+		)) {
+			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
+		
+		}
         /*
          *  Setup SQL connection
          */
@@ -1817,7 +1812,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 rootFolderPath + File.separator + "backup");
         switch (backupType.toLowerCase()) {
             case "folder": {
-                FileMgmt.checkOrCreateFolders(newBackupFolder);
+                FileMgmt.checkOrCreateFolder(newBackupFolder);
                 FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
                 FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
                 FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));

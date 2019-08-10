@@ -59,31 +59,29 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
 		// Create files and folders if non-existent
-		try {
-			FileMgmt.checkOrCreateFolders(
-					rootFolderPath,
-					dataFolderPath,
-					dataFolderPath + File.separator + "residents",
-					dataFolderPath + File.separator + "towns",
-					dataFolderPath + File.separator + "towns" + File.separator + "deleted",
-					dataFolderPath + File.separator + "nations",
-					dataFolderPath + File.separator + "nations" + File.separator + "deleted",
-					dataFolderPath + File.separator + "worlds",
-					dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
-					dataFolderPath + File.separator + "plot-block-data",
-					dataFolderPath + File.separator + "townblocks");
-			FileMgmt.checkFiles(
-					dataFolderPath + File.separator + "townblocks.txt",
-					dataFolderPath + File.separator + "residents.txt",
-					dataFolderPath + File.separator + "towns.txt",
-					dataFolderPath + File.separator + "nations.txt",
-					dataFolderPath + File.separator + "worlds.txt",
-					dataFolderPath + File.separator + "regen.txt",
-					dataFolderPath + File.separator + "snapshot_queue.txt");
-		} catch (IOException e) {
+		if (!FileMgmt.checkOrCreateFolders(
+			rootFolderPath,
+			dataFolderPath,
+			dataFolderPath + File.separator + "residents",
+			dataFolderPath + File.separator + "towns",
+			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
+			dataFolderPath + File.separator + "nations",
+			dataFolderPath + File.separator + "nations" + File.separator + "deleted",
+			dataFolderPath + File.separator + "worlds",
+			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
+			dataFolderPath + File.separator + "plot-block-data",
+			dataFolderPath + File.separator + "townblocks"
+		) || FileMgmt.checkOrCreateFiles(
+			dataFolderPath + File.separator + "townblocks.txt",
+			dataFolderPath + File.separator + "residents.txt",
+			dataFolderPath + File.separator + "towns.txt",
+			dataFolderPath + File.separator + "nations.txt",
+			dataFolderPath + File.separator + "worlds.txt",
+			dataFolderPath + File.separator + "regen.txt",
+			dataFolderPath + File.separator + "snapshot_queue.txt"
+		)) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
-		
 		/*
 		 * Start our Async queue for pushing data to the database.
 		 */
@@ -138,7 +136,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				rootFolderPath + File.separator + "backup");
 		switch (backupType.toLowerCase()) {
 			case "folder": {
-				FileMgmt.checkOrCreateFolders(newBackupFolder);
+				FileMgmt.checkOrCreateFolder(newBackupFolder);
 				FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
 				FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
 				FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
@@ -1098,9 +1096,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path = getWorldFilename(world);
 		
 		// create the world file if it doesn't exist
-		try {
-			FileMgmt.checkFiles(path);
-		} catch (IOException e1) {
+		if (!FileMgmt.checkOrCreateFile(path)) {
 			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading file " + path);
 		}
 		
@@ -1947,7 +1943,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveTownBlock(TownBlock townBlock) {
 
-		FileMgmt.checkOrCreateFolders(dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName());
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName());
 
 		List<String> list = new ArrayList<>();
 
@@ -2159,7 +2155,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean savePlotData(PlotBlockData plotChunk) {
 
-		FileMgmt.checkOrCreateFolders(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName());
         
         String path = getPlotFilename(plotChunk);
         try (DataOutputStream fout = new DataOutputStream(new FileOutputStream(path))) {
