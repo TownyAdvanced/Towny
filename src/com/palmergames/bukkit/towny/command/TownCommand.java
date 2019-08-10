@@ -82,6 +82,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> output = new ArrayList<>();
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
+	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_NAME = (t1, t2) -> t1.getName().compareTo(t2.getName());
 	private static final Comparator<Town> BY_BANK_BALANCE = (t1, t2) -> {
 		try {
@@ -962,6 +963,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						comparator = BY_TOWNBLOCKS_CLAIMED;
 					} else if (split[i].equalsIgnoreCase("online")) {
 						comparator = BY_NUM_ONLINE;
+					} else if (split[i].equalsIgnoreCase("open")) {
+						comparator = BY_OPEN;
 					} else {
 						TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_invalid_comparator_town"));
 						return;
@@ -996,6 +999,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (page > total) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
 			return;
+		}
+		
+		if (comparator.equals(BY_OPEN)) {
+			List<Town> townsList = TownyUniverse.getInstance().getDataSource().getTowns();
+			List<Town> openTownsList = new ArrayList<>();
+			for (Town town : townsList) {
+				if (town.isOpen())
+					openTownsList.add(town);
+			}
+			if (!openTownsList.isEmpty())
+				townsToSort = openTownsList;
+			else
+				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("no_open_towns"));
 		}
 
 		try {

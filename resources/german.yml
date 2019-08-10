@@ -890,8 +890,9 @@ status_embassy_town: '&2Botschaften in'
 
 # Added in 0.51:
 msg_error_invalid_comparator_nation: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, name, townblocks, online.'
+msg_error_invalid_comparator_town: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, name, townblocks, online, open.'
 msg_err_merging_for_kings_only: '&bNur Könige können die Funktion ''Zusammenschließen'' nutzen.'
 msg_err_king_of_that_nation_is_not_online: '&bDer König von %s, %s, ist nicht Online. Das Zusammenschließen ist fehlgeschlagen.'
 nation1_has_merged_with_nation2: '&6Die Nation %s hat zugestimmt, mit der vorherrschenden  Nation %s zusammenzuschließen.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Wärst du einverstanden, deine Nation %s aufzulösen, um ein Teil der Nation %s zu werden? Das gesamte Geld der Städte und der Nation würde nach %s transferiert werden.'
+no_open_towns: 'No open towns to list.'
