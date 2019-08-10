@@ -625,9 +625,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				NationCommand.nationAdd(nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
-				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("nation_deleted_by_admin"), nation.getName()));
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
-				townyUniverse.getDataSource().removeNation(nation);
+				if (!isConsole) {
+					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("nation_deleted_by_admin"), nation.getName()));
+					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), nation.getName()));
+					townyUniverse.getDataSource().removeNation(nation);
+				} else {
+					ConfirmationHandler.addConfirmation(ConfirmationType.NATIONDELETE, nation); // It takes the nation, an admin deleting another town has no confirmation.
+					TownyMessaging.sendConfirmationMessage(Bukkit.getConsoleSender(), null, null, null, null);
+				}
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
 				nation.recheckTownDistance();

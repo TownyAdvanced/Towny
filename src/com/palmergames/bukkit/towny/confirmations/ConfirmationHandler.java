@@ -199,8 +199,8 @@ public class ConfirmationHandler {
 	 * @author LlmDl
 	 */
 	public static void addConfirmation(final ConfirmationType type, Object extra) {
-		if (type == ConfirmationType.TOWNDELETE) {
-			if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
+		if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
+			if (type == ConfirmationType.TOWNDELETE) {
 				consoleExtra = extra;
 				consoleConfirmationType = type;
 				new BukkitRunnable() {
@@ -209,13 +209,8 @@ public class ConfirmationHandler {
 						removeConfirmation(type, false);
 					}
 				}.runTaskLater(plugin, 400);
-			} else {
-				TownyMessaging.sendMsg("Unable to start a new confirmation, one already exists of type: " + consoleConfirmationType.toString());
 			}
-		}
-
-		if (type == ConfirmationType.PURGE) {
-			if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
+			if (type == ConfirmationType.PURGE) {
 				consoleExtra = extra;
 				consoleConfirmationType = type;
 				new BukkitRunnable() {
@@ -224,11 +219,20 @@ public class ConfirmationHandler {
 						removeConfirmation(type, false);
 					}
 				}.runTaskLater(plugin, 400);
-			} else {
-				TownyMessaging.sendMsg("Unable to start a new confirmation, one already exists of type: " + consoleConfirmationType.toString());
 			}
+			if (type == ConfirmationType.NATIONDELETE) {
+				consoleExtra = extra;
+				consoleConfirmationType = type;
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(type, false);
+					}
+				}.runTaskLater(plugin, 400);			
+			}
+		} else {
+			TownyMessaging.sendMsg("Unable to start a new confirmation, one already exists of type: " + consoleConfirmationType.toString());
 		}
-		
 	}
 
 	/** 
@@ -241,13 +245,19 @@ public class ConfirmationHandler {
 	public static void removeConfirmation(final ConfirmationType type, boolean successful) {
 		boolean sendmessage = false;
 		if (type == ConfirmationType.PURGE) {
-			if (consoleConfirmationType != null && !successful) {
+			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
 				sendmessage = true;
 			}
 			consoleConfirmationType = ConfirmationType.NULL;			
 		}
 		if (type == ConfirmationType.TOWNDELETE) {
-			if (consoleConfirmationType != null && !successful) {
+			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
+				sendmessage = true;
+			}
+			consoleConfirmationType = ConfirmationType.NULL;			
+		}
+		if (type == ConfirmationType.NATIONDELETE) {
+			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
 				sendmessage = true;
 			}
 			consoleConfirmationType = ConfirmationType.NULL;			
@@ -280,6 +290,14 @@ public class ConfirmationHandler {
 			new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
 			removeConfirmation(type, true);
 			consoleExtra = null;
+		}
+		if (type == ConfirmationType.NATIONDELETE) {
+			Nation nation = (Nation) consoleExtra;
+			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
+			townyUniverse.getDataSource().removeNation(nation);
+			removeConfirmation(type, true);
+			consoleExtra = null;
+			return;
 		}
 	}
 }
