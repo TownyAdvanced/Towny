@@ -217,7 +217,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					newNation(player, split[1], resident.getTown().getName());
 
 				} else {
-					// TODO: Check if player is an admin
+					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
+						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
 					newNation(player, split[1], split[2]);
 				}
 			} else if (split[0].equalsIgnoreCase("merge")) {

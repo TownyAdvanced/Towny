@@ -3367,3 +3367,4 @@ v0.92.0.11:
 	- Added confirmations to /ta town {townname} delete when used from the Console.
 	- Added confirmations to /ta nation {nationname} delete when used from the Console.
 	- Add /t list by open: lists only open towns, in order of most residents to least residents.
+	- Fix a missing permission check.
