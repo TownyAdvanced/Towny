@@ -3019,7 +3019,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					if (TownySettings.isUsingEconomy())
-						blockCost = TownySettings.getClaimPrice();
+						blockCost = town.getTownBlockCost();
 				}
 
 				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
@@ -3049,11 +3049,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if(blockedClaims > 0){
 					throw new TownyException(String.format(TownySettings.getLangString("msg_claim_error"), blockedClaims, selection.size()));
 				}
-				try {
-					double cost = blockCost * selection.size();
-					double missingAmount = cost - town.getHoldingBalance();
-					if (TownySettings.isUsingEconomy() && !town.pay(cost, String.format("Town Claim (%d)", selection.size())))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim2"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+				
+				try {					
+					if (selection.size() == 1 && !outpost)
+						blockCost = town.getTownBlockCost();
+					else
+						blockCost = town.getTownBlockCostN(selection.size());
+
+					double missingAmount = blockCost - town.getHoldingBalance();
+					if (TownySettings.isUsingEconomy() && !town.pay(blockCost, String.format("Town Claim (%d)", selection.size())))
+						throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim2"), selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 				} catch (EconomyException e1) {
 					throw new TownyException("Economy Error");
 				}
@@ -3161,10 +3166,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try {
-			double cost = blockCost * selection.size();
-			double missingAmount = cost - town.getHoldingBalance();
-			if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(cost))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks2"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+			if (selection.size() == 1)
+				blockCost = town.getTownBlockCost();
+			else
+				blockCost = town.getTownBlockCostN(selection.size());
+
+			double missingAmount = blockCost - town.getHoldingBalance();
+			if (TownySettings.isUsingEconomy() && !owner.canPayFromHoldings(blockCost))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks2"), selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 		} catch (EconomyException e1) {
 			throw new TownyException("Economy Error");
 		}
