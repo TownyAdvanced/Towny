@@ -361,7 +361,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public double getBonusBlockCost() {
 		double nextprice = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		return nextprice;
-	}	
+	}
+	
+	public double getTownblockCost() {
+		double nextprice = (Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
+		return nextprice;
+	}
 
 	public double getBonusBlockCostN(int inputN) throws TownyException {
 		
