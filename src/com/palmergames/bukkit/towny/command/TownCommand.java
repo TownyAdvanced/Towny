@@ -336,7 +336,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					/*
 					 * perm test performed in method.
 					 */
-					townSet(player, newSplit);
+					townSet(player, newSplit, false, null);
 
 				} else if (split[0].equalsIgnoreCase("buy")) {
 
@@ -350,7 +350,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					/*
 					 * perm test performed in method.
 					 */
-					townToggle(player, newSplit);
+					townToggle(player, newSplit, false, null);
 
 				} else if (split[0].equalsIgnoreCase("mayor")) {
 
@@ -1098,7 +1098,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "delete", ""));
 	}
 
-	public void townToggle(Player player, String[] split) throws TownyException {
+	public static void townToggle(Player player, String[] split, boolean admin, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
@@ -1113,10 +1113,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town toggle", "jail [number] [resident]", ""));
 		} else {
 			Resident resident;
-			Town town;
+
 			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-				town = resident.getTown();
+				
+				if (!admin) {
+					resident = townyUniverse.getDataSource().getResident(player.getName());
+					town = resident.getTown();
+				} else { // Admin actions will be carried out as the mayor of the town for the purposes of some tests.
+					resident = town.getMayor();
+				}
 
 			} catch (TownyException x) {
 				throw new TownyException(x.getMessage());
@@ -1125,7 +1130,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("public")) {
 
 				town.setPublic(!town.isPublic());
@@ -1270,7 +1274,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void toggleTest(Player player, Town town, String split) throws TownyException {
+	private static void toggleTest(Player player, Town town, String split) throws TownyException {
 
 		// Make sure we are allowed to set these permissions.
 
@@ -1392,7 +1396,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void townSet(Player player, String[] split) throws TownyException {
+	public static void townSet(Player player, String[] split, boolean admin, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
@@ -1410,13 +1414,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
 		} else {
 			Resident resident;
-			Town town = null;
+
 			Nation nation = null;
 			TownyWorld oldWorld = null;
 
 			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
-				town = resident.getTown();
+				if (!admin) {
+					resident = townyUniverse.getDataSource().getResident(player.getName());
+					town = resident.getTown();
+				} else // Have the resident being tested be the mayor.
+					resident = town.getMayor();
 
 				if (town.hasNation())
 					nation = town.getNation();
@@ -2002,7 +2009,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return town;
 	}
 
-	public void townRename(Player player, Town town, String newName) {
+	public static void townRename(Player player, Town town, String newName) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
