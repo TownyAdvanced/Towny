@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -42,7 +43,7 @@ public class TownyFormatter {
 	 * list
 	 */
 	public static final String residentListPrefixFormat = "%3$s%1$s %4$s[%2$d]%3$s:%5$s ";
-        public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
+    public static final String embassyTownListPrefixFormat = "%3$s%1$s:%5$s ";
 
 	public static void initialize(Towny plugin) {
 
@@ -460,7 +461,10 @@ public class TownyFormatter {
 		if (nation.isPublic()) {
 			if (line.length() > 0)
 				line += Colors.Gray + " | ";
-			line += TownySettings.getLangString("status_public");
+			try {
+				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
+			} catch (TownyException ignored) {
+			}
 		}		
 		// Bank: 534 coins | Peaceful | Public
 		
