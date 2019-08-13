@@ -3397,3 +3397,4 @@ v0.92.0.11:
     - Change to /nation screen.
       - Overly long lists of towns/allies/enemies have been cut off after ~10 names.
       - Use the new /n townlist/allylist/enemylist commands to see full list of names.
+    - Bump Language Files to 0.52.
