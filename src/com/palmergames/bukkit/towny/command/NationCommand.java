@@ -89,6 +89,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", "", TownySettings.getLangString("nation_help_1")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "list", TownySettings.getLangString("nation_help_4")));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "townlist", ""));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", TownySettings.getLangString("nation_help_10")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
@@ -193,6 +194,72 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				listNations(player, split);
+				
+			} else if (split[0].equalsIgnoreCase("townlist")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOWNLIST.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				Nation nation = null;
+				try {
+					if (split.length == 1) {
+						nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					} else {
+						nation = townyUniverse.getDataSource().getNation(split[1]);
+					}
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+					return;
+				}
+				TownyMessaging.sendMessage(player, ChatTools.formatTitle(TownyFormatter.getFormattedName(nation)));
+				TownyMessaging.sendMessage(player, ChatTools.listArr(TownyFormatter.getFormattedNames(nation.getTowns().toArray(new Town[0])), String.format(TownySettings.getLangString("status_nation_towns"), nation.getTowns().size())));
+
+			} else if (split[0].equalsIgnoreCase("allylist")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLYLIST.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				Nation nation = null;
+				try {
+					if (split.length == 1) {
+						nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					} else {
+						nation = townyUniverse.getDataSource().getNation(split[1]);
+					}
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+					return;
+				}
+				
+				if (nation.getAllies().isEmpty())
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_nation_has_no_allies")); 
+				else {
+					TownyMessaging.sendMessage(player, ChatTools.formatTitle(TownyFormatter.getFormattedName(nation)));
+					TownyMessaging.sendMessage(player, ChatTools.listArr(TownyFormatter.getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
+				}
+
+			} else if (split[0].equalsIgnoreCase("enemylist")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMYLIST.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				Nation nation = null;
+				try {
+					if (split.length == 1) {
+						nation = townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation();
+					} else {
+						nation = townyUniverse.getDataSource().getNation(split[1]);
+					}
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_specify_name"));
+					return;
+				}
+				if (nation.getEnemies().isEmpty())
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_error_nation_has_no_enemies")); 
+				else {
+					TownyMessaging.sendMessage(player, ChatTools.formatTitle(TownyFormatter.getFormattedName(nation)));
+					TownyMessaging.sendMessage(player, ChatTools.listArr(TownyFormatter.getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+				}
 
 			} else if (split[0].equalsIgnoreCase("new")) {
 

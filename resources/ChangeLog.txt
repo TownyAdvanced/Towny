@@ -3378,3 +3378,22 @@ v0.92.0.11:
     - New Command: /ta nation {nationname} set ....
 0.94.0.6:
     - Fix for /nation status screen not properly showing nation spawn coordinates when nation is set to public.
+    - New Command: /n townlist (nation)
+      - (nation) is optional, to show townlist of a nation you aren't a part of.
+      - lists all towns in a nation.
+      - requires towny.command.nation.townlist permission node.
+    - New Command: /n allylist (nation)
+      - (nation) is optional, to show allylist of a nation you aren't a part of.
+      - lists all allies of a nation.
+      - requires towny.command.nation.allylist permission node.
+    - New Command: /n enemylist (nation)
+      - (nation) is optional, to show enemylist of a nation you aren't a part of.
+      - lists all enemies of a nation.
+      - requires towny.command.nation.enemylist permission node.
+    - New Permission nodes:
+      - towny.command.nation.townlist.
+      - towny.command.nation.allylist.
+      - towny.command.nation.enemylist.
+    - Change to /nation screen.
+      - Overly long lists of towns/allies/enemies have been cut off after ~10 names.
+      - Use the new /n townlist/allylist/enemylist commands to see full list of names.

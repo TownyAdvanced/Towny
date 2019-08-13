@@ -12,6 +12,9 @@ public enum PermissionNodes {
 	 * Nation command permissions
 	 */
 	TOWNY_COMMAND_NATION_LIST("towny.command.nation.list"),
+	TOWNY_COMMAND_NATION_TOWNLIST("towny.command.nation.townlist"),
+	TOWNY_COMMAND_NATION_ALLYLIST("towny.command.nation.allylist"),
+	TOWNY_COMMAND_NATION_ENEMYLIST("towny.command.nation.enemylist"),
 	TOWNY_COMMAND_NATION_NEW("towny.command.nation.new"),
 	TOWNY_COMMAND_NATION_LEAVE("towny.command.nation.leave"),
 	TOWNY_COMMAND_NATION_MERGE("towny.command.nation.merge"),

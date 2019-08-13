@@ -501,11 +501,33 @@ public class TownyFormatter {
 			out.addAll(ranklist);
 		
 		// Towns [44]: James City, Carry Grove, Mason Town
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getTowns().toArray(new Town[0])), String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));		
+		String[] towns2 = getFormattedNames(nation.getTowns().toArray(new Town[0]));
+		if (towns2.length > 10) {
+			String[] entire = towns2;
+			towns2 = new String[12];
+			System.arraycopy(entire, 0, towns2, 0, 11);
+			towns2[11] = TownySettings.getLangString("status_town_reslist_overlength");
+		}		
+		out.addAll(ChatTools.listArr(towns2, String.format(TownySettings.getLangString("status_nation_towns"), nation.getNumTowns())));
+		
 		// Allies [4]: James Nation, Carry Territory, Mason Country
-		out.addAll(ChatTools.listArr(getFormattedNames(nation.getAllies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
+		String[] allies = getFormattedNames(nation.getAllies().toArray(new Nation[0]));
+		if (allies.length > 10) {
+			String[] entire = allies;
+			allies = new String[12];
+			System.arraycopy(entire, 0, allies, 0, 11);
+			allies[11] = TownySettings.getLangString("status_town_reslist_overlength");
+		}
+		out.addAll(ChatTools.listArr(allies, String.format(TownySettings.getLangString("status_nation_allies"), nation.getAllies().size())));
 		// Enemies [4]: James Nation, Carry Territory, Mason Country
-        out.addAll(ChatTools.listArr(getFormattedNames(nation.getEnemies().toArray(new Nation[0])), String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
+		String[] enemies = getFormattedNames(nation.getEnemies().toArray(new Nation[0]));
+		if (enemies.length > 10) {
+			String[] entire = enemies;
+			enemies = new String[12];
+			System.arraycopy(entire, 0, enemies, 0, 11);
+			enemies[11] = TownySettings.getLangString("status_town_reslist_overlength");
+		}
+        out.addAll(ChatTools.listArr(enemies, String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
 		out = formatStatusScreens(out);
 		return out;
