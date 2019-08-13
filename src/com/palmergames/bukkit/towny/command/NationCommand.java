@@ -89,7 +89,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", "", TownySettings.getLangString("nation_help_1")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", TownySettings.getLangString("nation_help_2"), TownySettings.getLangString("nation_help_3")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "list", TownySettings.getLangString("nation_help_4")));
-		nation_help.add(ChatTools.formatCommand("", "/nation", "townlist", ""));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "townlist (nation)", ""));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "allylist (nation)", ""));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "enemylist (nation)", ""));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", TownySettings.getLangString("nation_help_10")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
