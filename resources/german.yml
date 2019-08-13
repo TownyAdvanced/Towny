@@ -1,5 +1,5 @@
 name: Towny
-version: 0.51
+version: 0.52
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -895,4 +895,8 @@ msg_err_merging_for_kings_only: '&bNur Könige können die Funktion ''Zusammensc
 msg_err_king_of_that_nation_is_not_online: '&bDer König von %s, %s, ist nicht Online. Das Zusammenschließen ist fehlgeschlagen.'
 nation1_has_merged_with_nation2: '&6Die Nation %s hat zugestimmt, mit der vorherrschenden  Nation %s zusammenzuschließen.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Wärst du einverstanden, deine Nation %s aufzulösen, um ein Teil der Nation %s zu werden? Das gesamte Geld der Städte und der Nation würde nach %s transferiert werden.'
-no_open_towns: 'Es sind keine offenen Städte für Liste verfügbar.'
+no_open_towns: 'Es sind keine offenen Städte für die Liste verfügbar.'
+
+# Added in 0.52:
+msg_error_nation_has_no_allies: 'Die Nation hat keine Verbündeten.'
+msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
