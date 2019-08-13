@@ -1,5 +1,5 @@
 name: Towny
-version: 0.52
+version: 0.51
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -226,7 +226,7 @@ msg_no_funds_to_buy: '&cDie stadt kann es sich nicht leisten %s %s zu kaufen. De
 msg_annexed_area: '&2Annektierter Bereich: %s'
 msg_max_plot_own: '&cDu kannst nicht mehr als %s Grundstücke besitzen.'
 msg_max_outposts_own: '&cDu kannst nicht mehr als %s Außenposten besitzen.'
-msg_wait_locked: '&2Habe etwas Gedult. Die Grundstücke sind bald verfügbar.'
+msg_wait_locked: '&2Sei nicht so ungeduldig! Die Grundstücke sind bald verfügbar.'
 msg_no_funds_new_nation: '&cDie Stadt kann eine neue Nation nicht finanzieren.'
 msg_already_claimed: '&cDieser Bereich wurde bereits von %s beansprucht'
 msg_already_claimed_1: '&cDieser Bereich (%s) gehört bereits jemanden.'
@@ -828,12 +828,12 @@ destroy: 'Zerstören'
 switch: 'Wechseln'
 item_use: 'Item_Use'
 towny_map_header: 'Towny Karte '
-towny_map_unclaimed: 'nicht beansprucht'
+towny_map_unclaimed: 'unbeansprucht'
 towny_map_claimed: 'Beansprucht'
 towny_map_forsale: 'Zu verkaufen'
 towny_map_yourtown: 'Deine Stadt'
 towny_map_yourplot: 'Dein Plot'
-towny_map_ally: 'Vebündete'
+towny_map_ally: 'Verbündete'
 towny_map_enemy: 'Feinde'
 enabled: 'Aktiviert'
 disabled: 'Deaktiviert'
@@ -843,9 +843,9 @@ adjustable: 'Einstellbar'
 
 # Added in 0.48:
 msg_no_funds_new_town2: '&c%s kann es sich nicht leisten, hier eine Stadt zu gründen. Die Kosten betragen %s.'
-msg_no_funds_new_nation2: '&cDie Stadt kann es sich nicht leisten, eine Nation zu gründen. Die Kosten betragen %s.'
-msg_no_funds_claim2: '&cDie Stadt kann es sich nicht leisten %s Stadtblöcke zu beanspruchen. Die Kosten betragen %s. Du kannst der Stadt Geld spenden indem du &e/t deposit %s &cverwendest.'
-msg_err_cant_afford_blocks2: '&cDie Stadt kann es sich nicht leisten %s Stadtblöcke zu beanspruchen. Die Kosten betragen %s. Du kannst der Stadt Geld spenden indem du &e/t deposit %s &cverwendest.'
+msg_no_funds_new_nation2: '&cDeine Stadt kann es sich nicht leisten, eine Nation zu gründen. Die Kosten betragen %s.'
+msg_no_funds_claim2: '&cDein Stadt kann es sich nicht leisten %s Stadtblöcke zu beanspruchen. Die Kosten betragen %s. Du kannst der Stadt Geld spenden, indem du &e/t deposit %s &cverwendest.'
+msg_err_cant_afford_blocks2: '&cDeine Stadt kann es sich nicht leisten %s Stadtblöcke zu beanspruchen. Die Kosten betragen %s. Du kannst der Stadt Geld spenden, indem du &e/t deposit %s &cverwendest.'
 msg_err_not_enough_variables: '&cNicht genügend Variablen: '
 nation_rechecked_by_admin: '&bNation %s'' Stadtdistanz wurde erfolgreich neu überprüft.'
 msg_err_nation_over_town_limit: '&cDeine Nation hat die maximale Anzahl an Städte für eine Nation erreicht (%s).'
@@ -895,8 +895,4 @@ msg_err_merging_for_kings_only: '&bNur Könige können die Funktion ''Zusammensc
 msg_err_king_of_that_nation_is_not_online: '&bDer König von %s, %s, ist nicht Online. Das Zusammenschließen ist fehlgeschlagen.'
 nation1_has_merged_with_nation2: '&6Die Nation %s hat zugestimmt, mit der vorherrschenden  Nation %s zusammenzuschließen.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Wärst du einverstanden, deine Nation %s aufzulösen, um ein Teil der Nation %s zu werden? Das gesamte Geld der Städte und der Nation würde nach %s transferiert werden.'
-no_open_towns: 'No open towns to list.'
-
-# Added in 0.52:
-msg_error_nation_has_no_allies: 'Nation has no allies to list.'
-msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
+no_open_towns: 'Es sind keine offenen Städte für Liste verfügbar.'
