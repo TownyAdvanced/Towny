@@ -171,7 +171,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
 						// Start the claim task
-						new PlotClaim(plugin, player, resident, selection, true).start();
+						new PlotClaim(plugin, player, resident, selection, true, false).start();
 
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
@@ -225,7 +225,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task
-						new PlotClaim(plugin, player, resident, null, false).start();
+						new PlotClaim(plugin, player, resident, null, false, false).start();
 
 					} else {
 						List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
@@ -234,7 +234,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (selection.size() > 0) {
 
 							// Start the unclaim task
-							new PlotClaim(plugin, player, resident, selection, false).start();
+							new PlotClaim(plugin, player, resident, selection, false, false).start();
 
 						} else {
 							player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));

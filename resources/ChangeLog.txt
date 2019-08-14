@@ -3398,3 +3398,11 @@ v0.92.0.11:
       - Overly long lists of towns/allies/enemies have been cut off after ~10 names.
       - Use the new /n townlist/allylist/enemylist commands to see full list of names.
     - Bump Language Files to 0.52.
+    - New Command: /ta plot claim {playername}:
+      - Admin command to claim a plot for another player.
+      - Requires towny.command.townyadmin.plot.claim.
+      - Area still has to be part of a town.
+    - New Permission Node: towny.command.townyadmin.plot.claim
+      - childnode of towny.command.townyadmin.plot.* which is itselft a childnode of towny.command.townyadmin.*.
+      - default: false.
+      
