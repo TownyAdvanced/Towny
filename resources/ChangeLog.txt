@@ -3405,4 +3405,9 @@ v0.92.0.11:
     - New Permission Node: towny.command.townyadmin.plot.claim
       - childnode of towny.command.townyadmin.plot.* which is itselft a childnode of towny.command.townyadmin.*.
       - default: false.
+    - Fix saving and loading of Cyrillic characters in Towns and Nations.
+      - the regex in the config should probably have the following settings:
+        - name_check_regex: ^[а-яА-Яa-zA-Z0-9._\[\]-]*$
+        - string_check_regex: ^[а-яА-Яa-zA-Z0-9\s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
+        - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
       
