@@ -19,6 +19,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.bukkit.Bukkit;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 public class TownyLogger {
 	private static final TownyLogger instance = new TownyLogger();
@@ -37,6 +38,7 @@ public class TownyLogger {
 		String logFolderName = TownyUniverse.getInstance().getRootFolder() + File.separator + "logs";
 		// Get the standard layout for the new appenders
 		Layout<String> standardLayout = PatternLayout.newBuilder()
+			.withCharset(StandardCharsets.UTF_8)
 			.withPattern(PatternLayout.SIMPLE_CONVERSION_PATTERN)
 			.withConfiguration(config)
 			.build();
@@ -67,6 +69,7 @@ public class TownyLogger {
 			.withLayout(PatternLayout.newBuilder()
 				// The comma after the date is to seperate it in CSV, this is a really nice workaround
 				// And avoids having to use apache-csv to make it work with Log4J
+				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d{dd MMM yyyy HH:mm:ss},%m%n")
 				.withConfiguration(config)
 				.build())
@@ -152,6 +155,7 @@ public class TownyLogger {
 				.withBufferedIo(false)
 				.withBufferSize(0)
 				.withLayout(PatternLayout.newBuilder()
+					.withCharset(StandardCharsets.UTF_8)
 					.withPattern("%minecraftFormatting{%msg}%n%xEx")
 					.withConfiguration(config)
 					.build())
