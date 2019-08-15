@@ -54,6 +54,10 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
+            <id>minebench-repo</id>
+            <url>https://repo.minebench.de/</url>
+        </repository>
+        <repository>
             <id>creatorfromhell-repo</id>
             <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
@@ -78,6 +82,11 @@
             <artifactId>bukkit</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.themoep.idconverter</groupId>
+            <artifactId>mappings</artifactId>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
