@@ -901,5 +901,3 @@ msg_would_you_merge_your_nation_into_other_nation: '&6Would you agree to dissolv
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
-
-you: 'YOU'

@@ -810,5 +810,3 @@ msg_would_you_merge_your_nation_into_other_nation: '&6귀하의 국가 %s을(를
 no_open_towns: '나열할 공공 마을이 없습니다.'
 msg_error_nation_has_no_allies: '국가가 나열할 동맹국이 없습니다.'
 msg_error_nation_has_no_enemies: '국가가 나열할 적국이 없습니다.'
-
-you: '귀하'

@@ -899,5 +899,3 @@ no_open_towns: 'No open towns to list.'
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
-
-you: 'YOU'
