@@ -105,7 +105,7 @@ public class NameValidation {
 	
 		try {
 			if (namePattern == null)
-				namePattern = Pattern.compile(TownySettings.getNameCheckRegex());
+				namePattern = Pattern.compile(TownySettings.getNameCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			return namePattern.matcher(name).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
@@ -117,7 +117,7 @@ public class NameValidation {
 
 		try {
 			if (stringPattern == null)
-				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex());
+				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			return stringPattern.matcher(name).find();
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace();
