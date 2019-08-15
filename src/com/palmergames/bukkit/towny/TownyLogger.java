@@ -85,36 +85,27 @@ public class TownyLogger {
 			.setConfiguration(config)
 			.withLayout(standardLayout)
 			.build();
+		townyDebugAppender.start();
+		config.addAppender(townyDebugAppender);
 		
+		// Towny main
 		LoggerConfig townyMainConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyMainAppender.getName(), Level.ALL, null)}, null, config, null);
 		townyMainConfig.addAppender(townyMainAppender, Level.ALL, null);
 		// This is Vanilla MC's file logger
 		townyMainConfig.addAppender(config.getAppender("File"), Level.INFO, null);
-		// This is for console logging
-		if (!Bukkit.getVersion().contains("Paper")) {
-			// If we use CB or Spigot we can use the standard Vanilla MC Console Logger
-			townyMainConfig.addAppender(config.getAppender("TerminalConsole"), Level.INFO, null);
-		} else {
-			Appender townyPaperConsoleAppender = ConsoleAppender.newBuilder()
-				.withName("Towny-Console-Paper")
-				.withBufferedIo(false)
-				.withBufferSize(0)
-				.withLayout(PatternLayout.newBuilder()
-					.withPattern("%minecraftFormatting{%msg}%n%xEx")
-					.withConfiguration(config)
-					.build())
-				.build();
-			townyPaperConsoleAppender.start();
-			config.addAppender(townyPaperConsoleAppender);
-			// If we use Paper, we just use a custom Console Logger
-			townyMainConfig.addAppender(townyPaperConsoleAppender, Level.INFO, null);
-		}
-		
+		enableConsoleLogging(config, townyMainConfig);
+		// Money
 		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyMoneyAppender.getName(), Level.ALL, null)}, null, config, null);
 		townyMoneyConfig.addAppender(townyMoneyAppender, Level.ALL, null);
 		
+		// Debug
 		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyDebugAppender.getName(), Level.ALL, null)}, null, config, null);
-		townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
+		if (TownySettings.getDebug()) {
+			townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
+			enableConsoleLogging(config, townyDebugConfig);
+		} else {
+			townyDebugConfig.addAppender(townyDebugAppender, Level.OFF, null);
+		}
 		
 		config.addLogger("com.palmergames.bukkit.towny", townyMainConfig);
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
@@ -148,5 +139,27 @@ public class TownyLogger {
 	
 	public static TownyLogger getInstance() {
 		return instance;
+	}
+	
+	private void enableConsoleLogging(Configuration config, LoggerConfig loggerConfig) {
+		// This is for console logging
+		if (!Bukkit.getVersion().contains("Paper")) {
+			// If we use CB or Spigot we can use the standard Vanilla MC Console Logger
+			loggerConfig.addAppender(config.getAppender("TerminalConsole"), Level.INFO, null);
+		} else {
+			Appender townyPaperConsoleAppender = ConsoleAppender.newBuilder()
+				.withName("Towny-Console-Paper")
+				.withBufferedIo(false)
+				.withBufferSize(0)
+				.withLayout(PatternLayout.newBuilder()
+					.withPattern("%minecraftFormatting{%msg}%n%xEx")
+					.withConfiguration(config)
+					.build())
+				.build();
+			townyPaperConsoleAppender.start();
+			config.addAppender(townyPaperConsoleAppender);
+			// If we use Paper, we just use a custom Console Logger
+			loggerConfig.addAppender(townyPaperConsoleAppender, Level.INFO, null);
+		}
 	}
 }
