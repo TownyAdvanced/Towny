@@ -265,7 +265,6 @@ public class FileMgmt {
 
 	// move a file to a sub directory
 	public static void moveFile(File sourceFile, String targetLocation) {
-
 		synchronized (sourceFile) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
@@ -280,7 +279,6 @@ public class FileMgmt {
 	}
 
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
-
 		synchronized (sourceFolders) {
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
 			for (File sourceFolder : sourceFolders)
@@ -290,9 +288,7 @@ public class FileMgmt {
 	}
 
 	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
-
 		synchronized (sourceFolder) {
-
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
 			int bytesIn;
@@ -304,8 +300,9 @@ public class FileMgmt {
 					FileInputStream input = new FileInputStream(f);
 					ZipEntry anEntry = new ZipEntry(f.getPath());
 					zipStream.putNextEntry(anEntry);
-					while ((bytesIn = input.read(readBuffer)) != -1)
+					while ((bytesIn = input.read(readBuffer)) != -1) {
 						zipStream.write(readBuffer, 0, bytesIn);
+					}
 					input.close();
 				}
 			}
