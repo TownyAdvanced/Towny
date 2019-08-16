@@ -3412,3 +3412,7 @@ v0.92.0.11:
         - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
     - Added korean.yml translation by DayBreak365.
     - The german.yml has been updated to 0.52 by Sprugente.
+    - New Command: /ta town {townname} toggle forcepvp
+      - Set the town's AdminEnabledPVP setting to true or false.
+      - Forces PVP on in a town.
+    - Made the AdminEnabledPVP setting part of the saving and loading rather than being a temporary setting only accessible by other plugins.

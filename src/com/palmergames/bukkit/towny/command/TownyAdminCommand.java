@@ -566,7 +566,35 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				parseAdminTownRankCommand(player, town, StringMgmt.remArgs(split, 2));
 			} else if (split[1].equalsIgnoreCase("toggle")) {
 				
-				TownCommand.townToggle(player, StringMgmt.remArgs(split, 2), true, town);
+				if (split.length == 2 || split[2].equalsIgnoreCase("?")) {
+					sender.sendMessage(ChatTools.formatTitle("/ta town {townname} toggle"));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "pvp", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "public", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "explosion", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "fire", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "mobs", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "taxpercent", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "open", ""));					
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "jail [number] [resident]", ""));
+					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
+
+					return;
+				}
+				
+				if (split[2].equalsIgnoreCase("forcepvp")) {
+					
+					if (town.isAdminEnabledPVP())
+						town.setAdminEnabledPVP(false);
+					else 
+						town.setAdminEnabledPVP(true);
+					
+					townyUniverse.getDataSource().saveTown(town);
+					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_town_forcepvp_setting_set_to"), town.getName(), town.isAdminEnabledPVP()));
+					
+				} else
+					TownCommand.townToggle(player, StringMgmt.remArgs(split, 2), true, town);
+				
 			} else if (split[1].equalsIgnoreCase("set")) {
 				
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);

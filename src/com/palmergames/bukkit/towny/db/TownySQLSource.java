@@ -841,6 +841,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+                town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
                 town.setPurchasedBlocks(rs.getInt("purchased"));
 
@@ -1536,6 +1537,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("open", town.isOpen());
             twn_hm.put("public", town.isPublic());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
+            twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
         
             //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");

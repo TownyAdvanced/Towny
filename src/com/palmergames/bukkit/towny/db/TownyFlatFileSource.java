@@ -755,6 +755,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("adminEnabledPvP");
+				if (line != null)
+					try {
+						town.setAdminEnabledPVP(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("open");
 				if (line != null)
 					try {
@@ -1653,6 +1660,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("open=" + town.isOpen());
 		// PVP
 		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
+		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
 		/* // Mobs
 		* fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
 		*/
