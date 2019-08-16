@@ -154,6 +154,7 @@ public class TownyLogger {
 				.withName("Towny-Console-Paper")
 				.withBufferedIo(false)
 				.withBufferSize(0)
+				.setConfiguration(config)
 				.withLayout(PatternLayout.newBuilder()
 					.withCharset(StandardCharsets.UTF_8)
 					.withPattern("%minecraftFormatting{%msg}%n%xEx")
