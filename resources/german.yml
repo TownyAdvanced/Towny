@@ -8,7 +8,7 @@ description: >
     If you wish to change any of the entries, make a copy named something else.
     Alternate language files can be enabled by altering the
     [language] entry in config.yml
-    If you find any mistakes or an update is needed, please contact me:  gabrielpatrikurban@gmail.com
+    If you find any mistakes or an update is needed, please contact me in Discord: enterih0001 or open a pull request on github.
 #
 #
 #         You MUST retain spacing in the texts.
@@ -40,7 +40,7 @@ unclaimed_zone_name: 'Wildnis'
 
 
 help_0: 'Allgemeine Towny Hilfe'
-help_1: 'Gib folgende Befehle ein um mehr über Towny zu erfahren.'
+help_1: 'Verwende folgende Befehle, um mehr über Towny zu erfahren.'
 help_2: 'Stadtchat'
 help_3: 'Nationschat'
 
@@ -65,7 +65,7 @@ mayor_help_8: 'Es wird versucht,  alle Stadtblöcke freizugeben.'
 nation_help_1: 'Status deiner Nation'
 nation_help_2: '[Nation]'
 nation_help_3: 'Status der ausgewählten Nation'
-nation_help_4: 'Liste aller Nationen'
+nation_help_4: 'Eine Liste aller Nationen'
 nation_help_5: 'Deine Nation verlassen.'
 nation_help_6: 'Gründe eine neue Nation.'
 nation_help_7: 'Befehlsliste für Könige'
@@ -74,7 +74,7 @@ nation_help_9: 'Listet alle Bürger der Nation auf, die Online sind.'
 
 king_help_1: 'Hilfe für Könige'
 king_help_2: 'Verbündete festlegen'
-king_help_3: 'Feine festlegen'
+king_help_3: 'Feinde festlegen'
 
 res_1: 'Dein Status'
 res_2: '[Bürger]'
@@ -900,3 +900,6 @@ no_open_towns: 'Es sind keine offenen Städte für die Liste verfügbar.'
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'Die Nation hat keine Verbündeten.'
 msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
+msg_error_ta_plot_claim: 'Der Spielername fehlt. Bsp: /ta plot claim PlayerNameHere'
+msg_error_no_player_with_that_name: 'Es konnte kein Spiel Spieler mit dem Namen %s gefunden werden.'
+msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.' 
