@@ -896,3 +896,6 @@ no_open_towns: 'No open towns to list.'
 # Added in 0.52:
 msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
+msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
+msg_error_no_player_with_that_name: 'No player found with name %s'
+msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s' 
