@@ -3410,4 +3410,4 @@ v0.92.0.11:
         - name_check_regex: ^[а-яА-Яa-zA-Z0-9._\[\]-]*$
         - string_check_regex: ^[а-яА-Яa-zA-Z0-9\s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
         - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
-      
+    - Added korean.yml translation by DayBreak365.
