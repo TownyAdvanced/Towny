@@ -433,8 +433,10 @@ public class TownyFormatter {
 
 		List<String> out = new ArrayList<String>();
 
-		// ___[ Azur Empire ]___
-		out.add(ChatTools.formatTitle(getFormattedName(nation)));
+		// ___[ Azur Empire (Open)]___
+		String title = getFormattedName(nation);
+		title += (nation.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		out.add(ChatTools.formatTitle(title));
 
 		// Created Date
 		Long registered = nation.getRegistered();

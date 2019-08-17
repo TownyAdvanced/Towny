@@ -3416,3 +3416,19 @@ v0.92.0.11:
       - Set the town's AdminEnabledPVP setting to true or false.
       - Forces PVP on in a town.
     - Made the AdminEnabledPVP setting part of the saving and loading rather than being a temporary setting only accessible by other plugins.
+    - New Command: /n toggle open
+      - Sets the nation to be open, so that any town can join without an invite.
+      - Requires towny.command.nation.toggle.open permission node.
+    - New Command: /n join {nation}
+      - Used by a town mayor to join an open nation.
+      - Requires towny.command.nation.join permission node.
+      - Will obey various config settings:
+        - # of residents required to join a nation.
+        - Proximity to nation.
+        - Will not allow more than the max-towns-per-nation setting.
+    - New Permission Node: towny.command.nation.toggle.open
+      - Inherited by kings from towny.command.nation.*
+    - New Permission Node: towny.command.nation.join
+      - Given to mayors in the newest default townyperms.yml file.
+    - REQUIRED TOWNYPERMS.YML CHANGE:
+      - Add towny.command.nation.join to the mayor rank.

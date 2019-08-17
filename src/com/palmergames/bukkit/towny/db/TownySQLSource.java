@@ -7,7 +7,6 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -1089,6 +1088,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
                 nation.setPublic(rs.getBoolean("isPublic"));
+                
+                nation.setOpen(rs.getBoolean("isOpen"));
             }
             try {
                 line = rs.getString("registered");
@@ -1597,6 +1598,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             }
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
+            nat_hm.put("isOpen", nation.isOpen());
 
             UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 

@@ -94,6 +94,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation_help.add(ChatTools.formatCommand("", "/nation", "enemylist (nation)", ""));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "online", TownySettings.getLangString("nation_help_9")));
 		nation_help.add(ChatTools.formatCommand("", "/nation", "spawn", TownySettings.getLangString("nation_help_10")));
+		nation_help.add(ChatTools.formatCommand("", "/nation", "join (nation)", "Used to join open nations."));		
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("res_sing"), "/nation", "deposit [$]", ""));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/nation", "leave", TownySettings.getLangString("nation_help_5")));
 		nation_help.add(ChatTools.formatCommand(TownySettings.getLangString("king_sing"), "/nation", "king ?", TownySettings.getLangString("nation_help_7")));
@@ -291,6 +292,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					newNation(player, split[1], split[2]);
 				}
+			} else if (split[0].equalsIgnoreCase("join")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_JOIN.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				parseNationJoin(player, StringMgmt.remFirstArg(split));
+
 			} else if (split[0].equalsIgnoreCase("merge")) {
 				
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_MERGE.getNode()))
@@ -514,6 +522,61 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 
+	}
+	private void parseNationJoin(Player player, String[] args) {
+		
+		try {
+			Resident resident;
+			Town town;
+			Nation nation;
+			String nationName;
+
+			if (args.length < 1)
+				throw new Exception(String.format("Usage: /nation join [nation]"));
+
+			nationName = args[0];
+			
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			resident = townyUniverse.getDataSource().getResident(player.getName());
+			town = resident.getTown();
+			nation = townyUniverse.getDataSource().getNation(nationName);
+
+			// Check if town is currently in a nation.
+			if (town.hasNation())
+				throw new Exception(TownySettings.getLangString("msg_err_already_in_a_nation"));
+
+			// Check if town is town is free to join.
+			if (!nation.isOpen())
+				throw new Exception(String.format(TownySettings.getLangString("msg_err_nation_not_open"), nation.getFormattedName()));
+			
+			if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation()))
+				throw new Exception(String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
+
+			if (TownySettings.getMaxTownsPerNation() > 0) 
+	        	if (nation.getTowns().size() >= TownySettings.getMaxTownsPerNation())
+	        		throw new Exception(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
+
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = town.getHomeBlock().getCoord();
+				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
+					throw new Exception(TownySettings.getLangString("msg_err_nation_homeblock_in_another_world"));
+				}
+				double distance;
+				distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				if (distance > TownySettings.getNationRequiresProximity()) {
+					throw new Exception(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
+				}
+			}
+			List<Town> towns = new ArrayList<>();
+			towns.add(town);
+			nationAdd(nation, towns);
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+		}
+
+		
 	}
 	private static final List<String> invite = new ArrayList<>();
 	static {
@@ -1116,22 +1179,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
 			try {
-				if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_enough_residents_join_nation"), town.getName()));
-					remove.add(town);
-					continue;
-				}
-
 				if (TownySettings.getNationRequiresProximity() > 0) {
 					Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 					Coord townCoord = town.getHomeBlock().getCoord();
 					if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 						remove.add(town);
-						// TODO: String to tell the player that the town and nation are in 2 different worlds.
+						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_nation_homeblock_in_another_world"));
 						continue;
 					}
+					
 					double distance;
-
 					distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 					if (distance > TownySettings.getNationRequiresProximity()) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
@@ -1193,7 +1250,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!town.hasNation()) {
 				nation.addTown(town);
 				townyUniverse.getDataSource().saveTown(town);
-				TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_join_nation"), town.getName()));
+				TownyMessaging.sendNationMessagePrefixed(nation, String.format(TownySettings.getLangString("msg_join_nation"), town.getName()));
 			}
 
 		}
@@ -2053,7 +2110,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful public", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "peaceful", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "public", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/nation toggle", "open", ""));
 		} else {
 			Resident resident;
 
@@ -2108,6 +2167,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
                 nation.setPublic(!nation.isPublic());
                 TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_changed_public"), nation.isPublic() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
+
+            } else if(split[0].equalsIgnoreCase("open")){
+                if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_PUBLIC.getNode()))
+                    throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+                nation.setOpen(!nation.isOpen());
+                TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_changed_open"), nation.isOpen() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
             } else {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_invalid_property"), "nation"));

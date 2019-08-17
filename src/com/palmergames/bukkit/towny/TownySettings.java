@@ -1364,6 +1364,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
+	
+	public static boolean getNationDefaultOpen() {
+
+		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
+	}
 
 	public static double getTownDefaultTax() {
 

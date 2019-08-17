@@ -21,6 +21,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
 	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
+	TOWNY_COMMAND_NATION_JOIN("towny.command.nation.join"),
 	
 	// Covers all assignable ranks
 	TOWNY_COMMAND_NATION_RANK("towny.command.nation.rank.*"),
@@ -45,6 +46,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_TOGGLE("towny.command.nation.toggle.*"),
     TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL("towny.command.nation.toggle.neutral"),
     TOWNY_COMMAND_NATION_TOGGLE_PUBLIC("towny.command.nation.toggle.public"),
+    TOWNY_COMMAND_NATION_TOGGLE_OPEN("towny.command.nation.toggle.open"),
     
     TOWNY_COMMAND_NATION_SPAWN("towny.command.nation.spawn"),
 

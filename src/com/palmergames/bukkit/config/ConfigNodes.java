@@ -549,6 +549,10 @@ public enum ConfigNodes {
             "global_nation_settings.default.public",
             "false",
             "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	PLUGIN(
 			"plugin",
 			"",

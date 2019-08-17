@@ -1048,6 +1048,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setPublic(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("isOpen");
+				if (line != null)
+					try {
+						nation.setOpen(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1757,6 +1763,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		list.add("isPublic=" + nation.isPublic());
+		
+		list.add("isOpen=" + nation.isOpen());
 
 		/*
 		 *  Make sure we only save in async

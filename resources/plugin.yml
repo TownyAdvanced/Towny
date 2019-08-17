@@ -167,6 +167,7 @@ permissions:
             towny.command.nation.townlist: true
             towny.command.nation.allylist: true
             towny.command.nation.enemylist: true
+            towny.command.nation.join: true
 
     towny.command.nation.ally.*:
         description: User can access the nation ally related commands.
@@ -254,6 +255,7 @@ permissions:
         children:
             towny.command.nation.toggle.neutral: true
             towny.command.nation.toggle.public: true
+            towny.command.nation.toggle.open: true
 
     # Town command permissions
     towny.command.town.*:

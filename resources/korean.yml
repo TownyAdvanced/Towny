@@ -814,3 +814,7 @@ msg_error_ta_plot_claim: '플레이어 이름 없음, 예시: /ta plot claim 플
 msg_error_no_player_with_that_name: '%s(이)라는 이름을 가진 플레이어가 없습니다.'
 msg_admin_has_given_you_a_plot: '관리자가 당신의 이름으로 토지를 점유했습니다: %s' 
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
+msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
+msg_err_already_in_a_nation: 'Your town is already in a nation.'
+msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the king or an assistant to join.'
+msg_err_nation_homeblock_in_another_world: '&cYour town''s homeblock is not in the same world as the nation capital''s homeblock.'
