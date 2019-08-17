@@ -412,6 +412,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "mobs", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "plotborder", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "constantplotborder", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "ignoreplots", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "townclaim", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "map", ""));			
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "spy", ""));
 
 			TownyMessaging.sendMsg(resident, ("Modes set: " + StringMgmt.join(resident.getModes(), ",")));
@@ -566,7 +570,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
-			player.sendMessage(ChatTools.formatCommand("Mode", "constantplots", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "constantplotborder", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "plotborder", "", ""));
 			// String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() ==
 			// null ? "flag" :
 			// TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
