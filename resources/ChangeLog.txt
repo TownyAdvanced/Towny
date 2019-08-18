@@ -3432,3 +3432,6 @@ v0.92.0.11:
       - Given to mayors in the newest default townyperms.yml file.
     - REQUIRED TOWNYPERMS.YML CHANGE:
       - Add towny.command.nation.join to the mayor rank.
+    - New Config Option: protection.town_mob_removal_killer_bunny
+      - default: true
+      - Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits.

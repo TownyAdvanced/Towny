@@ -14,7 +14,9 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Rabbit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	private Server server;
 	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
+	private boolean isRemovingKillerBunny;
 
 	public MobRemovalTimerTask(Towny plugin, Server server) {
 
@@ -32,6 +35,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
 		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
+		isRemovingKillerBunny = TownySettings.isRemovingKillerBunny();
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
@@ -98,6 +102,13 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					// Check if the town this plot is registered to allows mobs.
 					if (town.hasMobs())
 						continue;
+					
+					// Special check if it's a rabbit, for the Killer Bunny variant.
+					if (livingEntity.getType().equals(EntityType.RABBIT))
+						if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+							livingEntitiesToRemove.add(livingEntity);							
+							continue;						
+						}
 
 					// Check that Towny is removing this type of entity inside towns.
 					if (!isRemovingTownEntity(livingEntity))

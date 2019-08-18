@@ -2602,5 +2602,9 @@ public class TownySettings {
 	public static double getNationRenameCost() {
 		return getDouble(ConfigNodes.ECO_NATION_RENAME_COST);
 	}
+
+	public static boolean isRemovingKillerBunny() {		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_TOWN_KILLER_BUNNY);
+	}
 }
 

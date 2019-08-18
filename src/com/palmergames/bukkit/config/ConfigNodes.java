@@ -743,7 +743,11 @@ public enum ConfigNodes {
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-
+	PROT_MOB_REMOVE_TOWN_KILLER_BUNNY(
+			"protection.town_mob_removal_killer_bunny",
+			"true",
+			"",
+			"# Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits."),
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
