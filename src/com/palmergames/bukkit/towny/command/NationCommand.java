@@ -2262,8 +2262,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             Location spawnLoc;
             NationSpawnLevel nationSpawnPermission;
-
             spawnLoc = nation.getNationSpawn();
+            if (spawnLoc == null) {
+				TownyMessaging.sendErrorMsg(player, "Nation has not set a spawn location.");
+			}
 
             // Determine conditions
             if (isTownyAdmin) {

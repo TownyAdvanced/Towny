@@ -49,9 +49,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private List<String> nationRanks = new ArrayList<>();
 
 	public Resident(String name) {
-
+		super(name);
 		setChatFormattedName(name);
-		setName(name);
 		setTitle("");
 		setSurname("");
 		setJailTown("");

@@ -55,8 +55,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long registered;
 
 	public Town(String name) {
-
-		setName(name);
+		super(name);
 		tag = "";
 		bonusBlocks = 0;
 		purchasedBlocks = 0;

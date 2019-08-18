@@ -41,12 +41,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import javax.naming.InvalidNameException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.naming.InvalidNameException;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:

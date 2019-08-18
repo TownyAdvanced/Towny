@@ -138,6 +138,11 @@ public class TownyUniverse {
             }
             towny.saveResource("outpostschecked.txt", false);
         }
+	
+		// Update the taxes of all nations, this is incase the TownySettings.getMaxTax() changed
+		for (Nation nation : TownyUniverse.getInstance().getDataSource().getNations()) {
+			nation.setTaxes(nation.getTaxes());
+		}
         return true;
     }
     

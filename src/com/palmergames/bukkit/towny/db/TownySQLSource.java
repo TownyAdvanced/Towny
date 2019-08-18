@@ -1082,7 +1082,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                                 loc.setPitch(Float.parseFloat(tokens[4]));
                                 loc.setYaw(Float.parseFloat(tokens[5]));
                             }
-                            nation.forceSetNationSpawn(loc);
+							nation.setNationSpawn(loc, true);
                         } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
                         }
                 }
@@ -1590,8 +1590,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
-            nat_hm.put("nationSpawn", nation.hasNationSpawn() ? nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw() : "");
-            if (nation.hasValidUUID()){
+			if (nation.hasNationSpawn()) {
+				nat_hm.put("nationSpawn", nation.getNationSpawn().getWorld().getName() + "#" + nation.getNationSpawn().getX() + "#" + nation.getNationSpawn().getY() + "#" + nation.getNationSpawn().getZ() + "#" + nation.getNationSpawn().getPitch() + "#" + nation.getNationSpawn().getYaw());
+			} else {
+				nat_hm.put("nationSpawn", "");
+			}
+            if (nation.hasUUID()){
                 nat_hm.put("uuid", nation.getUuid());
             } else {
                 nat_hm.put("uuid", UUID.randomUUID());

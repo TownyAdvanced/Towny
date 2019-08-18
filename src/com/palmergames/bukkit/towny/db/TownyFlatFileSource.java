@@ -1037,7 +1037,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								loc.setPitch(Float.parseFloat(tokens[4]));
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
-							nation.forceSetNationSpawn(loc);
+							nation.setNationSpawn(loc, true);
 						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 						}
 				}
@@ -1748,7 +1748,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("spawnCost=" + nation.getSpawnCost());
 		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
-		if (nation.hasValidUUID()){
+		if (nation.hasUUID()){
 			list.add("uuid=" + nation.getUuid());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
@@ -1757,9 +1757,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         
         // Spawn
 		if (nation.hasNationSpawn()) {
-			try {
-				list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + nation.getNationSpawn().getX() + "," + nation.getNationSpawn().getY() + "," + nation.getNationSpawn().getZ() + "," + nation.getNationSpawn().getPitch() + "," + nation.getNationSpawn().getYaw());
-			} catch (TownyException ignored) { }
+			list.add("nationSpawn=" + nation.getNationSpawn().getWorld().getName() + "," + nation.getNationSpawn().getX() + "," + nation.getNationSpawn().getY() + "," + nation.getNationSpawn().getZ() + "," + nation.getNationSpawn().getPitch() + "," + nation.getNationSpawn().getYaw());
 		}
 
 		list.add("isPublic=" + nation.isPublic());

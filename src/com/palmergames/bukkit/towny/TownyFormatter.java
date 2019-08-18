@@ -461,12 +461,10 @@ public class TownyFormatter {
 		}
 		
 		if (nation.isPublic()) {
-			if (line.length() > 0)
+			if (line.length() > 0) {
 				line += Colors.Gray + " | ";
-			try {
-				line += (nation.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]" : "");
-			} catch (TownyException ignored) {
 			}
+			line += TownySettings.getLangString("status_town_size_part_5") + (nation.hasNationSpawn() ? Coord.parseCoord(nation.getNationSpawn()).toString() : TownySettings.getLangString("status_no_town")) + "]";
 		}		
 		// Bank: 534 coins | Peaceful | Public
 		

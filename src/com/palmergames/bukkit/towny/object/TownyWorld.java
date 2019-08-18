@@ -41,8 +41,7 @@ public class TownyWorld extends TownyObject {
 	// ArrayList<TownBlock>();
 
 	public TownyWorld(String name) {
-
-		setName(name);
+		super(name);
 
 		isUsingTowny = TownySettings.isUsingTowny();
 		isPVP = TownySettings.isPvP();
