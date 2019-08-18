@@ -49,6 +49,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import javax.naming.InvalidNameException;
 import java.io.InvalidObjectException;
@@ -2374,7 +2375,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                             chunk.load();
                         // Cause an essentials exception if in cooldown.
                         teleport.cooldown(true);
-                        teleport.teleport(spawnLoc, null);
+                        teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
                     }
                 } catch (Exception e) {
                     TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());

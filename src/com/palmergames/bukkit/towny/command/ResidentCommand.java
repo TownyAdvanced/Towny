@@ -340,7 +340,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 							chunk.load();
 						// Cause an essentials exception if in cooldown.
 						teleport.cooldown(true);
-						teleport.teleport(spawnLoc, null);
+						teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
 					}
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
