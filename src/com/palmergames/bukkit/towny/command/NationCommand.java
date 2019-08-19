@@ -972,7 +972,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewNationMsg(player.getName(), StringMgmt.remUnderscore(name)));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
-			// TODO: delete town data that might have been done
 		}
 	}
 

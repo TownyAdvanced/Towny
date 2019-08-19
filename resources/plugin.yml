@@ -458,8 +458,7 @@ permissions:
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true
             towny.command.townyadmin.purge: true
-            towny.command.townyadmin.reload: true
-            towny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.reload: true            
             towny.command.townyadmin.reset: true
             towny.command.townyadmin.set.*: true
             towny.command.townyadmin.toggle.*: true
@@ -468,6 +467,16 @@ permissions:
             towny.command.townyadmin.town.spawn.freecharge: true
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
+            towny.command.townyadmin.resident.*: true
+
+    towny.command.townyadmin.resident.*:
+        description: User can access admin resident commands
+        default: false
+        children:
+            towny.command.townyadmin.resident.rename: true
+            towny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.resident.friend: true
+            towny.command.townyadmin.resident.unjail: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns

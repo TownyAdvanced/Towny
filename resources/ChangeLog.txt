@@ -3435,3 +3435,8 @@ v0.92.0.11:
     - New Config Option: protection.town_mob_removal_killer_bunny
       - default: true
       - Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits.
+    - New Command: /ta resident {resident} friend [add|remove|clear|list]      
+      - allows admins to manipulate a resident's friends list.
+      - requires towny.command.townyadmin.resident.friend permission node.
+    - New Permission node: towny.command.townyadmin.resident.friend
+      - child node of towny.command.townyadmin.resident.*
