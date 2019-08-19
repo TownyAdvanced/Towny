@@ -495,7 +495,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	public void parseAdminTownCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		// TODO Make this use the actual town command procedually.
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
@@ -1220,35 +1219,5 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
 		}
 	}
-	/*
-	 * private void warSeed(Player player) { Resident r1 =
-	 * plugin.getTownyUniverse().newResident("r1"); Resident r2 =
-	 * plugin.getTownyUniverse().newResident("r2"); Resident r3 =
-	 * plugin.getTownyUniverse().newResident("r3"); Coord key =
-	 * Coord.parseCoord(player); Town t1 = newTown(plugin.getTownyUniverse(),
-	 * player.getWorld(), "t1", r1, key, player.getLocation()); Town t2 =
-	 * newTown(plugin.getTownyUniverse(), player.getWorld(), "t2", r2, new
-	 * Coord(key.getX() + 1, key.getZ()), player.getLocation()); Town t3 =
-	 * newTown(plugin.getTownyUniverse(), player.getWorld(), "t3", r3, new
-	 * Coord(key.getX(), key.getZ() + 1), player.getLocation()); Nation n1 =
-	 * 
-	 * }
-	 * 
-	 * public void seedTowny() { TownyUniverse townyUniverse =
-	 * plugin.getTownyUniverse(); Random r = new Random(); for (int i = 0; i <
-	 * 1000; i++) {
-	 * 
-	 * try { townyUniverse.newNation(Integer.toString(r.nextInt())); } catch
-	 * (TownyException e) { } try {
-	 * townyUniverse.newTown(Integer.toString(r.nextInt())); } catch
-	 * (TownyException e) { } try {
-	 * townyUniverse.newResident(Integer.toString(r.nextInt())); } catch
-	 * (TownyException e) { } } }
-	 * 
-	 * private static double getTotalEconomy() { double total = 0; try { return
-	 * total; } catch (Exception e) { } return total; }
-	 * 
-	 * private static int getNumBankAccounts() { try { return 0; } catch
-	 * (Exception e) { return 0; } }
-	 */
+
 }

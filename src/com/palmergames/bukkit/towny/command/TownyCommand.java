@@ -240,7 +240,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyAPI.getInstance().isWarTime();
 	}
 
-	@SuppressWarnings("null")
 	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> townsToSort = War.warringTowns;
@@ -376,19 +375,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		TownyAsciiMap.generateAndSend(plugin, player, 7);
 	}
 
-	/**
-	 * Send the list of costs for Economy to player Command: /towny prices
-	 * 
-	 * @param town - Town object.
-	 */
-
-	/*
-	 * [New] Town: 100 | Nation: 500 [Upkeep] Town: 10 | Nation: 100 Town
-	 * [Elden]: [Price] Plot: 100 | Outpost: 250 [Upkeep] Resident: 20 | Plot:
-	 * 50 Nation [Albion]: [Upkeep] Town: 100 | Peace: 100
-	 */
-
-	// TODO: Proceduralize and make parse function for /towny prices [town]
 	/**
 	 * Returns prices for town's taxes/upkeep.
 	 * @param town
