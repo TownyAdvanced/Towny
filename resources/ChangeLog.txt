@@ -3448,3 +3448,5 @@ v0.92.0.11:
       - Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.
       - If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty).
     - The german.yml has been updated again by Sprugente.
+    - Added ShopPlotUtil for shop plugins to use.
+      - Contains helpful, easy-to-use tests.
