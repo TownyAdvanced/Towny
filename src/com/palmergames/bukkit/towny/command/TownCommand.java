@@ -1928,7 +1928,7 @@ public class TownCommand extends BaseCommand {
 					throw new TownyException(TownySettings.getLangString("msg_too_far"));
 
 			if (!noCharge && TownySettings.isUsingEconomy() && !resident.pay(TownySettings.getNewTownPrice(), "New Town Cost"))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? "You" : resident.getName()), TownySettings.getNewTownPrice()));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_new_town2"), (resident.getName().equals(player.getName()) ? TownySettings.getLangString("you") : resident.getName()), TownySettings.getNewTownPrice()));
 
 			newTown(world, name, resident, key, player.getLocation());
 			TownyMessaging.sendGlobalMessage(TownySettings.getNewTownMsg(player.getName(), StringMgmt.remUnderscore(name)));

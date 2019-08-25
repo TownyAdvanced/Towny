@@ -358,9 +358,7 @@ public class TownySettings {
 
 	public static List<String> getLangList(String root, String regex) {
 		List<String> data = new ArrayList<>();
-		for(String str : getLangString(root).replaceAll(" ", "").split(regex)) {
-			data.add(str);
-		}
+		for(String str : getLangString(root).replaceAll(" ", "").split(regex)) data.add(str);
 		return data;
 	}
 

@@ -919,3 +919,5 @@ command_aliases_town: 't'
 command_aliases_townyadmin: 'ta'
 command_aliases_towny: ''
 command_aliases_townyworld: 'tw'
+
+you: 'You'
