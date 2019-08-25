@@ -1364,6 +1364,11 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_OPEN);
 	}
+	
+	public static boolean getNationDefaultOpen() {
+
+		return getBoolean(ConfigNodes.GNATION_DEF_OPEN);
+	}
 
 	public static double getTownDefaultTax() {
 
@@ -1807,6 +1812,35 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
 	}
+	
+    public static double getTownPenaltyUpkeepCost(Town town) {
+    	
+    	int claimed, allowedClaims, overClaimed;
+    	
+	    if (getUpkeepPenalty() > 0) {
+	    	
+	    	claimed = town.getTownBlocks().size();
+	    	allowedClaims = getMaxTownBlocks(town);
+	    	overClaimed = claimed - allowedClaims;
+
+	    	if (!town.isOverClaimed())
+	    		return 0;
+	    	
+	    	if (isUpkeepPenaltyByPlot())
+	    		return getUpkeepPenalty() * overClaimed;
+	    	else
+	    		return getUpkeepPenalty();
+	    } else return 0;
+    }
+
+    public static double getUpkeepPenalty() {
+    	
+    	return getDouble(ConfigNodes.ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY);
+    }
+    public static boolean isUpkeepPenaltyByPlot() {
+    	
+    	return getBoolean(ConfigNodes.ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED);
+    }
 
 	public static double getNationUpkeep() {
 
@@ -2596,6 +2630,10 @@ public class TownySettings {
 
 	public static double getNationRenameCost() {
 		return getDouble(ConfigNodes.ECO_NATION_RENAME_COST);
+	}
+
+	public static boolean isRemovingKillerBunny() {		
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_TOWN_KILLER_BUNNY);
 	}
 }
 

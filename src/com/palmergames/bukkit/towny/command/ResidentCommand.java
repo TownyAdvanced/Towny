@@ -217,7 +217,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
-				residentFriend(player, newSplit);
+				residentFriend(player, newSplit, false, null);
 
 			} else if (split[0].equalsIgnoreCase("spawn")) {
 
@@ -340,7 +340,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 							chunk.load();
 						// Cause an essentials exception if in cooldown.
 						teleport.cooldown(true);
-						teleport.teleport(spawnLoc, null);
+						teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
 					}
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, "Error: " + e.getMessage());
@@ -412,6 +412,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "fire", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "mobs", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "plotborder", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "constantplotborder", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "ignoreplots", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "townclaim", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "map", ""));			
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "spy", ""));
 
 			TownyMessaging.sendMsg(resident, ("Modes set: " + StringMgmt.join(resident.getModes(), ",")));
@@ -566,7 +570,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("Mode", "tc", "", TownySettings.getLangString("mode_4")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "nc", "", TownySettings.getLangString("mode_5")));
 			player.sendMessage(ChatTools.formatCommand("Mode", "ignoreplots", "", ""));
-			player.sendMessage(ChatTools.formatCommand("Mode", "constantplots", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "constantplotborder", "", ""));
+			player.sendMessage(ChatTools.formatCommand("Mode", "plotborder", "", ""));
 			// String warFlagMaterial = (TownyWarConfig.getFlagBaseMaterial() ==
 			// null ? "flag" :
 			// TownyWarConfig.getFlagBaseMaterial().name().toLowerCase());
@@ -593,7 +598,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void residentFriend(Player player, String[] split) {
+	public static void residentFriend(Player player, String[] split, boolean admin, Resident resident) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
@@ -602,15 +607,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "list", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/resident friend", "clear", ""));
 		} else {
-			Resident resident;
 			try {
-				resident = townyUniverse.getDataSource().getResident(player.getName());
+				if (!admin)
+					resident = townyUniverse.getDataSource().getResident(player.getName());
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 				return;
 			}
 
-			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("add")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
@@ -634,7 +638,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void residentFriendList(Player player, Resident resident) {
+	private static void residentFriendList(Player player, Resident resident) {
 		
 		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("friend_list")));
 		String colour;
@@ -652,7 +656,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(line);
 	}
 
-	public void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
+	public static void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {
 
 		ArrayList<Resident> remove = new ArrayList<>();
 
@@ -710,7 +714,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
+	public static void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
 
 		List<Resident> remove = new ArrayList<>();
 		List<Resident> toKick = new ArrayList<>(kicking);

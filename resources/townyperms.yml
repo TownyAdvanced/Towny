@@ -54,6 +54,7 @@ towns:
         - towny.claimed.owntown.*
         - towny.command.nation.new
         - towny.outlaw.jailer
+        - towny.command.nation.join
 
     ranks:
         # Ranks contain additional permissions residents will be

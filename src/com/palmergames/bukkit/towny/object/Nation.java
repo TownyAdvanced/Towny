@@ -48,12 +48,14 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private long registered;
 	private Location nationSpawn;
 	private boolean isPublic;
+	private boolean isOpen;
 
 	public Nation(String name) {
 
 		setName(name);
 		tag = "";
         isPublic = TownySettings.getNationDefaultPublic();
+        isOpen = TownySettings.getNationDefaultOpen();
 	}
 
 	public void setTag(String text) throws TownyException {
@@ -208,22 +210,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		}
 	}
 
-//	public void addAssistant(Resident resident) throws AlreadyRegisteredException {
-//
-//		if (hasAssistant(resident))
-//			throw new AlreadyRegisteredException();
-//		else
-//			getAssistants().add(resident);
-//	}
-
-//	public void removeAssistant(Resident resident) throws NotRegisteredException {
-//
-//		if (!hasAssistant(resident))
-//			throw new NotRegisteredException();
-//		else
-//			assistants.remove(resident);
-//	}
-
 	public void setCapital(Town capital) {
 
 		this.capital = capital;
@@ -315,11 +301,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return false;
 	}
 
-//	public void setAssistants(List<Resident> assistants) {
-//
-//		this.assistants = assistants;
-//	}
-//
 	public List<Resident> getAssistants() {
 
 		List<Resident> assistants = new ArrayList<>();
@@ -410,24 +391,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		for (Town town : new ArrayList<>(towns))
 			remove(town);
 	}
-
-//	public boolean hasAssistantIn(Town town) {
-//
-//		for (Resident resident : town.getResidentMap())
-//			if (hasAssistant(resident))
-//				return true;
-//		return false;
-//	}
-//
-//	private void removeAssistantsIn(Town town) {
-//
-//		for (Resident resident : new ArrayList<Resident>(town.getResidentMap()))
-//			if (hasAssistant(resident))
-//				try {
-//					removeAssistant(resident);
-//				} catch (NotRegisteredException e) {
-//				}
-//	}
 
 	public void setTaxes(double taxes) {
 
@@ -705,6 +668,16 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
     public boolean isPublic() {
 
         return isPublic;
+    }
+    
+    public void setOpen(boolean isOpen) {
+    	
+    	this.isOpen = isOpen;
+    }
+    
+    public boolean isOpen() {
+    	
+    	return isOpen;
     }
     
 	public void setSpawnCost(double spawnCost) {

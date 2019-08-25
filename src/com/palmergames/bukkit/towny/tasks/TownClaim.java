@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.earth2me.essentials.api.Economy;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;

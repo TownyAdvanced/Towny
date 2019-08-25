@@ -7,7 +7,6 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -841,6 +840,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+                town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
                 town.setPurchasedBlocks(rs.getInt("purchased"));
 
@@ -1088,6 +1088,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
                 nation.setPublic(rs.getBoolean("isPublic"));
+                
+                nation.setOpen(rs.getBoolean("isOpen"));
             }
             try {
                 line = rs.getString("registered");
@@ -1536,6 +1538,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("open", town.isOpen());
             twn_hm.put("public", town.isPublic());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
+            twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
         
             //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
@@ -1595,6 +1598,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             }
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
+            nat_hm.put("isOpen", nation.isOpen());
 
             UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 

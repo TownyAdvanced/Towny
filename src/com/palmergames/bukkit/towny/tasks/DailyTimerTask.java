@@ -331,6 +331,9 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				if (town.hasUpkeep()) {
 					double upkeep = TownySettings.getTownUpkeepCost(town);
+					double upkeepPenalty = TownySettings.getTownPenaltyUpkeepCost(town);
+					if (upkeepPenalty > 0 && upkeep > 0)
+						upkeep = upkeep + upkeepPenalty;
 				
 					if (upkeep > 0) {
 						// Town is paying upkeep
@@ -338,7 +341,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							townyUniverse.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 						}
-					} else if (upkeep < 0) {
+					} else if (upkeep < 0) {						
 						// Negative upkeep
 						if (TownySettings.isUpkeepPayingPlots()) {
 							// Pay each plot owner a share of the negative

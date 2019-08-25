@@ -549,6 +549,10 @@ public enum ConfigNodes {
             "global_nation_settings.default.public",
             "false",
             "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -739,7 +743,11 @@ public enum ConfigNodes {
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-
+	PROT_MOB_REMOVE_TOWN_KILLER_BUNNY(
+			"protection.town_mob_removal_killer_bunny",
+			"true",
+			"",
+			"# Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits."),
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
@@ -1261,6 +1269,15 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"0.0",
+			"# The server's daily charge on a town which has claimed more townblocks than it is allowed."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"false",
+			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
+			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",

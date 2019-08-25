@@ -33,9 +33,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -229,7 +229,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
 		String line = null;
 		
-		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "townblocks.txt"))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "townblocks.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
@@ -285,7 +285,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading Resident List");
 		String line = null;
 		
-		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "residents.txt"))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "residents.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
@@ -316,7 +316,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		BufferedReader fin;
 		
 		try {
-			fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "towns.txt"));
+			fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "towns.txt"), StandardCharsets.UTF_8));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -356,7 +356,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		BufferedReader fin;
 		
 		try {
-			fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "nations.txt"));
+			fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "nations.txt"),StandardCharsets.UTF_8));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -405,7 +405,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		String line = null;
 		
-		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "worlds.txt"))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "worlds.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals(""))
@@ -435,7 +435,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		String[] split;
 		PlotBlockData plotData;
-		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "regen.txt"))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "regen.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
@@ -465,7 +465,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = null;
 		
 		String[] split;
-		try (BufferedReader fin = new BufferedReader(new FileReader(dataFolderPath + File.separator + "snapshot_queue.txt"))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "snapshot_queue.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
@@ -498,7 +498,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
-				properties.load(new FileInputStream(fileResident));
+				properties.load(new InputStreamReader(new FileInputStream(fileResident), StandardCharsets.UTF_8));
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -591,7 +591,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
-				properties.load(new FileInputStream(fileTown));
+				properties.load(new InputStreamReader(new FileInputStream(fileTown), StandardCharsets.UTF_8));
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -755,6 +755,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("adminEnabledPvP");
+				if (line != null)
+					try {
+						town.setAdminEnabledPVP(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("open");
 				if (line != null)
 					try {
@@ -906,7 +913,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
-				properties.load(new FileInputStream(fileNation));
+				properties.load(new InputStreamReader(new FileInputStream(fileNation), StandardCharsets.UTF_8));
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -1041,6 +1048,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setPublic(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("isOpen");
+				if (line != null)
+					try {
+						nation.setOpen(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1069,7 +1082,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = new HashMap<>();
 				Properties properties = new Properties();
-				properties.load(new FileInputStream(fileWorld));
+				properties.load(new InputStreamReader(new FileInputStream(fileWorld), StandardCharsets.UTF_8));
 				for (String key : properties.stringPropertyNames()) {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
@@ -1337,7 +1350,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				try {
 					HashMap<String, String> keys = new HashMap<>();
 					Properties properties = new Properties();
-					properties.load(new FileInputStream(fileTownBlock));
+					properties.load(new InputStreamReader(new FileInputStream(fileTownBlock), StandardCharsets.UTF_8));
 					for (String key : properties.stringPropertyNames()) {
 						String value = properties.getProperty(key);
 						keys.put(key, String.valueOf(value));
@@ -1653,6 +1666,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("open=" + town.isOpen());
 		// PVP
 		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
+		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
 		/* // Mobs
 		* fout.write("mobs=" + Boolean.toString(town.hasMobs()) + newLine);
 		*/
@@ -1749,6 +1763,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		list.add("isPublic=" + nation.isPublic());
+		
+		list.add("isOpen=" + nation.isOpen());
 
 		/*
 		 *  Make sure we only save in async

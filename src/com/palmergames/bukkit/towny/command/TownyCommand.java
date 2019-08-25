@@ -240,7 +240,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyAPI.getInstance().isWarTime();
 	}
 
-	@SuppressWarnings("null")
 	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> townsToSort = War.warringTowns;
@@ -377,19 +376,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Send the list of costs for Economy to player Command: /towny prices
-	 * 
-	 * @param town - Town object.
-	 */
-
-	/*
-	 * [New] Town: 100 | Nation: 500 [Upkeep] Town: 10 | Nation: 100 Town
-	 * [Elden]: [Price] Plot: 100 | Outpost: 250 [Upkeep] Resident: 20 | Plot:
-	 * 50 Nation [Albion]: [Upkeep] Town: 100 | Peace: 100
-	 */
-
-	// TODO: Proceduralize and make parse function for /towny prices [town]
-	/**
 	 * Returns prices for town's taxes/upkeep.
 	 * @param town
 	 * @return - Prices screen for a town.
@@ -411,6 +397,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add(Colors.Yellow + "[New] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
 		if (town != null) {
 			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
+			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
+				output.add(Colors.Yellow + "[Overclaimed Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town)));
 			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "TownBlock: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) + Colors.Gray + 
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : " | " + Colors.Green + "Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("#%").format(TownySettings.getClaimPriceIncreaseValue()-1)));
 			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "Outposts: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
@@ -418,6 +406,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		if (town == null)
 			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeep()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeep()));
 		output.add(Colors.Gray + "Town upkeep is based on " + Colors.LightGreen + " the " + (TownySettings.isUpkeepByPlot() ? " number of plots" : " town level (num residents)."));
+		if (TownySettings.getUpkeepPenalty() > 0 )
+			output.add(Colors.Gray + "Overclaimed upkeep is based on " + Colors.LightGreen + (TownySettings.isUpkeepPenaltyByPlot() ? "the number of plots overclaimed * " + TownySettings.getUpkeepPenalty() : "a flat cost of " + TownySettings.getUpkeepPenalty()));
 
 		if (town != null) {
 			output.add(Colors.Yellow + "Town [" + TownyFormatter.getFormattedName(town) + "]");

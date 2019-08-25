@@ -376,6 +376,8 @@ public class TownyFormatter {
 				bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
 				if (town.hasUpkeep())
 					bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+					bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
 				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 			}
 			out.add(bankString);
@@ -433,8 +435,10 @@ public class TownyFormatter {
 
 		List<String> out = new ArrayList<String>();
 
-		// ___[ Azur Empire ]___
-		out.add(ChatTools.formatTitle(getFormattedName(nation)));
+		// ___[ Azur Empire (Open)]___
+		String title = getFormattedName(nation);
+		title += (nation.isOpen() ? TownySettings.getLangString("status_title_open") : "");
+		out.add(ChatTools.formatTitle(title));
 
 		// Created Date
 		Long registered = nation.getRegistered();

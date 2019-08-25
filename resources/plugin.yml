@@ -164,6 +164,10 @@ permissions:
             towny.command.nation.set.*: true
             towny.command.nation.spawn: true
             towny.command.nation.toggle.*: true
+            towny.command.nation.townlist: true
+            towny.command.nation.allylist: true
+            towny.command.nation.enemylist: true
+            towny.command.nation.join: true
 
     towny.command.nation.ally.*:
         description: User can access the nation ally related commands.
@@ -251,6 +255,7 @@ permissions:
         children:
             towny.command.nation.toggle.neutral: true
             towny.command.nation.toggle.public: true
+            towny.command.nation.toggle.open: true
 
     # Town command permissions
     towny.command.town.*:
@@ -453,8 +458,7 @@ permissions:
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true
             towny.command.townyadmin.purge: true
-            towny.command.townyadmin.reload: true
-            towny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.reload: true            
             towny.command.townyadmin.reset: true
             towny.command.townyadmin.set.*: true
             towny.command.townyadmin.toggle.*: true
@@ -462,6 +466,17 @@ permissions:
             towny.command.townyadmin.town.spawn: true
             towny.command.townyadmin.town.spawn.freecharge: true
             towny.command.townyadmin.unclaim: true
+            towny.command.townyadmin.plot.*: true
+            towny.command.townyadmin.resident.*: true
+
+    towny.command.townyadmin.resident.*:
+        description: User can access admin resident commands
+        default: false
+        children:
+            towny.command.townyadmin.resident.rename: true
+            towny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.resident.friend: true
+            towny.command.townyadmin.resident.unjail: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns
@@ -490,6 +505,8 @@ permissions:
             towny.command.townyadmin.town.new: true
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
+            towny.command.townyadmin.town.set: true
+            towny.command.townyadmin.town.toggle: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -498,6 +515,15 @@ permissions:
             towny.command.townyadmin.nation.add: true
             towny.command.townyadmin.nation.delete: true
             towny.command.townyadmin.nation.rename: true
+            towny.command.townyadmin.nation.merge: true
+            towny.command.townyadmin.nation.toggle: true
+            towny.command.townyadmin.nation.set: true
+    
+    towny.command.townyadmin.plot.*:
+        description: User can access the admin plot commans.
+        default: false
+        children:
+            towny.command.townyadmin.plot.claim: true
 
     towny.command.townyadmin.toggle.*:
         description: User can access the admin toggle commands.

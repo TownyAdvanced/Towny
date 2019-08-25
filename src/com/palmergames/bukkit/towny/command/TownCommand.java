@@ -80,6 +80,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
+	private static final List<String> invite = new ArrayList<>();
 
 	private static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	private static final Comparator<Town> BY_OPEN = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
@@ -95,7 +96,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return Double.compare(t2.getTownBlocks().size(), t1.getTownBlocks().size());
 	};
 	private static final Comparator<Town> BY_NUM_ONLINE = (t1, t2) -> TownyAPI.getInstance().getOnlinePlayers(t2).size() - TownyAPI.getInstance().getOnlinePlayers(t1).size();
-
 
 	static {
 		output.add(ChatTools.formatTitle("/town"));
@@ -118,6 +118,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "mayor ?", TownySettings.getLangString("town_help_8")));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/town", "new [town] " + TownySettings.getLangString("town_help_2"), TownySettings.getLangString("town_help_7")));
 		output.add(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/town", "delete [town]", ""));
+		
+		invite.add(ChatTools.formatTitle("/town invite"));
+		invite.add(ChatTools.formatCommand("", "/town", "invite [player]", TownySettings.getLangString("town_invite_help_1")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite -[player]", TownySettings.getLangString("town_invite_help_2")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite sent", TownySettings.getLangString("town_invite_help_3")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite received", TownySettings.getLangString("town_invite_help_4")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", TownySettings.getLangString("town_invite_help_5")));
+		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", TownySettings.getLangString("town_invite_help_6")));
 	}
 
 	public TownCommand(Towny instance) {
@@ -568,17 +576,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 	}
-	private static final List<String> invite = new ArrayList<>();
-
-	static {
-		invite.add(ChatTools.formatTitle("/town invite"));
-		invite.add(ChatTools.formatCommand("", "/town", "invite [player]", TownySettings.getLangString("town_invite_help_1")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite -[player]", TownySettings.getLangString("town_invite_help_2")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite sent", TownySettings.getLangString("town_invite_help_3")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite received", TownySettings.getLangString("town_invite_help_4")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite accept [nation]", TownySettings.getLangString("town_invite_help_5")));
-		invite.add(ChatTools.formatCommand("", "/town", "invite deny [nation]", TownySettings.getLangString("town_invite_help_6")));
-	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -934,7 +931,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
 	 */
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(CommandSender sender, String[] split) {
 
@@ -1091,10 +1087,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "plots", ""));
 		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "toggle", ""));
 		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + TownySettings.getLangString("res_5")));
-		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/town",
-		// "wall [type] [height]", ""));
-		// TODO: player.sendMessage(ChatTools.formatCommand("Mayor", "/town",
-		// "wall remove", ""));
 		player.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("mayor_sing"), "/town", "delete", ""));
 	}
 
@@ -1432,7 +1424,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			// TODO: Let admin's call a subfunction of this.
 			if (split[0].equalsIgnoreCase("board")) {
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_BOARD.getNode()))
@@ -1888,7 +1879,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param mayorName - name of mayor
 	 * @param noCharge - charging for creation - /ta town new NAME MAYOR has no charge.
 	 */
-
 	public static void newTown(Player player, String name, String mayorName, boolean noCharge) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
@@ -2402,7 +2392,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param player - Player.
 	 * @param names - List of names to kick.
 	 */
-
 	public static void townKick(Player player, String[] names) {
 
 		Resident resident;
@@ -2720,7 +2709,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param specifiedTown - Town to add to if not null.
 	 * @param names - Names to add.
 	 */
-
 	public static void townAdd(Object sender, Town specifiedTown, String[] names) {
 
 		String name;
@@ -3232,9 +3220,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
-	
-	
-	
+		
 	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> invited = new ArrayList<>();
