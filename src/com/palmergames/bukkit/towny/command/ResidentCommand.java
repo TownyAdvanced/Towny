@@ -64,7 +64,7 @@ public class ResidentCommand extends BaseCommand {
 	}
 
 	public ResidentCommand(Towny instance) {
-		super("resident", "", "", TownySettings.getLangList("command_aliases_resident", ","));
+		super("resident", "", "", TownySettings.getResidentCommandAliases());
 		plugin = instance;
 	}
 

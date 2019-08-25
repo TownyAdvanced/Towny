@@ -910,13 +910,5 @@ msg_err_nation_not_open: '&cDie Tore des Landes %s ist nicht für jedermann geö
 msg_err_nation_homeblock_in_another_world: '&cDer Homeblock deiner Stadt ist nicht in der gleichen Welt wie der Homeblock der Landeshauptstadt.'
 status_bank_town_penalty_upkeep: ' &7| &2Zu hohe Unterhaltskosten: &4%s'
 
-command_aliases_invite: 'invites'
-command_aliases_nation: 'n, nat'
-command_aliases_plot: ''
-command_aliases_resident: 'res, p, player'
-command_aliases_town: 't'
-command_aliases_townyadmin: 'ta'
-command_aliases_towny: ''
-command_aliases_townyworld: 'tw'
-
 you: 'You'
+localization: 'Localization'

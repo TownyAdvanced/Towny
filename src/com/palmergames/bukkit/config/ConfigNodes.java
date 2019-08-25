@@ -1577,7 +1577,28 @@ public enum ConfigNodes {
 			"WOODEN_DOOR,ACACIA_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,BIRCH_DOOR,SPRUCE_DOOR,IRON_DOOR,CHEST,TRAPPED_CHEST,FURNACE,BURNING_FURNACE,DROPPER,DISPENSER,HOPPER,ENDER_CHEST,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,SILVER_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,NOTE_BLOCK,LEVER,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,JUKEBOX,DIODE_BLOCK_OFF,DIODE_BLOCK_ON,FENCE_GATE,GOLD_PLATE,IRON_PLATE,REDSTONE_COMPARATOR_OFF,REDSTONE_COMPARATOR_ON,BEACON",
 			"# A list of blocks that will not be exploded, mostly because they won't regenerate properly.",
 			"# These blocks will also protect the block below them, so that blocks like doors do not dupe themselves.",
-			"# Only under affect when explosions_break_blocks is true.");
+			"# Only under affect when explosions_break_blocks is true."),
+	LOCALIZATION(
+			"localization",
+			"",
+			"",
+			"",
+			"  ############################################################",
+			"  # +------------------------------------------------------+ #",
+			"  # |                 More Localizations                   | #",
+			"  # +------------------------------------------------------+ #",
+			"  ############################################################",
+			"# Even if there is no direct relationship between a feature and localization,",
+			"# it may be here if the feature was created for localization.",
+			""),
+	COMMAND_ALIASES_INVITE("localization.command.aliases.invite", "invites"),
+	COMMAND_ALIASES_NATION("localization.command.aliases.nation", "n, nat"),
+	COMMAND_ALIASES_PLOT("localization.command.aliases.plot", ""),
+	COMMAND_ALIASES_RESIDENT("localization.command.aliases.resident", "res, p, player"),
+	COMMAND_ALIASES_TOWN("localization.command.aliases.town", "t"),
+	COMMAND_ALIASES_TOWNYADMIN("localization.command.aliases.townyadmin", "ta"),
+	COMMAND_ALIASES_TOWNY("localization.command.aliases.towny", ""),
+	COMMAND_ALIASES_TOWNYWORLD("localization.command.aliases.townyworld", "tw");
 
 
 	private final String Root;

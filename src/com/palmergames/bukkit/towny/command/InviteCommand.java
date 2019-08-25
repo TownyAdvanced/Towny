@@ -39,7 +39,7 @@ public class InviteCommand extends BaseCommand {
 	}
 
 	public InviteCommand(Towny instance) {
-		super("invite", "", "", TownySettings.getLangList("command_aliases_invite", ","));
+		super("invite", "", "", TownySettings.getInviteCommandAliases());
 		plugin = instance;
 	}
 

@@ -129,7 +129,7 @@ public class TownCommand extends BaseCommand {
 	}
 
 	public TownCommand(Towny instance) {
-		super("town", "", "", TownySettings.getLangList("command_aliases_town", ","));
+		super("town", "", "", TownySettings.getTownCommandAliases());
 		plugin = instance;
 	}
 
@@ -148,7 +148,6 @@ public class TownCommand extends BaseCommand {
 		return true;
 	}
 
-	@SuppressWarnings("static-access")
 	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -163,7 +162,7 @@ public class TownCommand extends BaseCommand {
 		} else {
 			try {
 				final Town town = TownyUniverse.getInstance().getDataSource().getTown(split[0]);
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
 			} catch (NotRegisteredException x) {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
@@ -171,14 +170,13 @@ public class TownCommand extends BaseCommand {
 
 	}
 
-	@SuppressWarnings("static-access")
 	private void parseTownCommand(final Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
 
 			if (split.length == 0) {
-				Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 					try {
 						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 						Town town = resident.getTown();
@@ -563,7 +561,7 @@ public class TownCommand extends BaseCommand {
 						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && ( (resident.getTown() != town) || (!resident.hasTown()) ) ) {
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						}
-						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town)));
+						Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(town)));
 
 					} catch (NotRegisteredException x) {
 						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));

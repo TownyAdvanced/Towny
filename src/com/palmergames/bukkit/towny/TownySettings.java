@@ -335,6 +335,10 @@ public class TownySettings {
 		return config.getString(node.getRoot().toLowerCase(), node.getDefault());
 	}
 
+	public static List<String> getSplitList(ConfigNodes node, String regex) {
+		return Arrays.asList(getString(node).replaceAll(" ", "").split(regex));
+	}
+
 	public static String getString(String root, String def) {
 
 		String data = config.getString(root.toLowerCase(), def);
@@ -354,12 +358,6 @@ public class TownySettings {
 			return "";
 		}
 		return parseSingleLineString(data);
-	}
-
-	public static List<String> getLangList(String root, String regex) {
-		List<String> data = new ArrayList<>();
-		for(String str : getLangString(root).replaceAll(" ", "").split(regex)) data.add(str);
-		return data;
 	}
 
 	public static String getConfigLang(ConfigNodes node) {
@@ -2641,6 +2639,38 @@ public class TownySettings {
 
 	public static boolean isRemovingKillerBunny() {		
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_TOWN_KILLER_BUNNY);
+	}
+
+	public static List<String> getInviteCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_INVITE, ",");
+	}
+
+	public static List<String> getNationCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_NATION, ",");
+	}
+
+	public static List<String> getPlotCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_PLOT, ",");
+	}
+
+	public static List<String> getResidentCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_RESIDENT, ",");
+	}
+
+	public static List<String> getTownCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_TOWN, ",");
+	}
+
+	public static List<String> getTownyadminCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_TOWNYADMIN, ",");
+	}
+
+	public static List<String> getTownyCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_TOWNY, ",");
+	}
+
+	public static List<String> getTownyworldCommandAliases() {
+		return getSplitList(ConfigNodes.COMMAND_ALIASES_TOWNYWORLD, ",");
 	}
 }
 

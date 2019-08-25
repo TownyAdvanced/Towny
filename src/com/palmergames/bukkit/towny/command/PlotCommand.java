@@ -66,7 +66,7 @@ public class PlotCommand extends BaseCommand {
 	}
 
 	public PlotCommand(Towny instance) {
-		super("plot", "", "", TownySettings.getLangList("command_aliases_plot", ","));
+		super("plot", "", "", TownySettings.getPlotCommandAliases());
 		plugin = instance;
 	}
 

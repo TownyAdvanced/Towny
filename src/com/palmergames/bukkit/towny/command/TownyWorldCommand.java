@@ -42,7 +42,7 @@ public class TownyWorldCommand extends BaseCommand {
 	private boolean isConsole = false;
 
 	public TownyWorldCommand(Towny instance) {
-		super("townyworld", "", "", TownySettings.getLangList("command_aliases_townyworld", ","));
+		super("townyworld", "", "", TownySettings.getTownyworldCommandAliases());
 		plugin = instance;
 	}
 

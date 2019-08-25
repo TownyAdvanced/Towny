@@ -142,7 +142,7 @@ public class NationCommand extends BaseCommand {
 	}
 
 	public NationCommand(Towny instance) {
-		super("nation", "", "", TownySettings.getLangList("command_aliases_nation", ","));
+		super("nation", "", "", TownySettings.getNationCommandAliases());
 		plugin = instance;
 	}
 

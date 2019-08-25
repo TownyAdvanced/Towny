@@ -94,7 +94,7 @@ public class TownyAdminCommand extends BaseCommand {
 	}
 
 	public TownyAdminCommand(Towny instance) {
-		super("townyadmin", "", "", TownySettings.getLangList("command_aliases_townyadmin", ","));
+		super("townyadmin", "", "", TownySettings.getTownyadminCommandAliases());
 		plugin = instance;
 	}
 

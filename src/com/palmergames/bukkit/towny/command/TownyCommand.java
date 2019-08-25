@@ -69,7 +69,7 @@ public class TownyCommand extends BaseCommand {
 	}
 
 	public TownyCommand(Towny instance) {
-		super("towny", "", "", TownySettings.getLangList("command_aliases_towny", ","));
+		super("towny", "", "", TownySettings.getTownyCommandAliases());
 		plugin = instance;
 	}
 
@@ -352,7 +352,7 @@ public class TownyCommand extends BaseCommand {
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   \u00A76[\u00A7eTowny " + plugin.getVersion() + "\u00A76]");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   \u00A73By: \u00A7bChris H (Shade)/ElgarL/LlmDl");
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
+		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-   \u00A73" + TownySettings.getLangString("localization") + ": \u00A7b" + TownySettings.getLangString("author"));
 		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + "\u00A73Residents: \u00A7b" + townyUniverse.getDataSource().getResidents().size() + Colors.Gray + " | " + "\u00A73Towns: \u00A7b" + townyUniverse.getDataSource().getTowns().size() + Colors.Gray + " | " + "\u00A73Nations: \u00A7b" + townyUniverse.getDataSource().getNations().size());
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + "\u00A73Worlds: \u00A7b" + townyUniverse.getDataSource().getWorlds().size() + Colors.Gray + " | " + "\u00A73TownBlocks: \u00A7b" + townyUniverse.getDataSource().getAllTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70----- ");
