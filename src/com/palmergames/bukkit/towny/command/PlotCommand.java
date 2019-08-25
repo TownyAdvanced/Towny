@@ -1,5 +1,15 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -29,22 +39,12 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Send a list of all general towny plot help commands to player Command: /plot
  */
 
-public class PlotCommand extends BaseCommand implements CommandExecutor {
+public class PlotCommand extends BaseCommand {
 
 	private static Towny plugin;
 	public static final List<String> output = new ArrayList<>();
@@ -66,12 +66,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public PlotCommand(Towny instance) {
-
+		super("plot", "", "", TownySettings.getLangList("command_aliases_plot", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;

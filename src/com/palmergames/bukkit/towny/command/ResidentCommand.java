@@ -1,5 +1,18 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.Towny;
@@ -24,25 +37,12 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Send a list of all towny resident help commands to player Command: /resident
  */
 
-public class ResidentCommand extends BaseCommand implements CommandExecutor {
+public class ResidentCommand extends BaseCommand {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
@@ -64,12 +64,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public ResidentCommand(Towny instance) {
-
+		super("resident", "", "", TownySettings.getLangList("command_aliases_resident", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;

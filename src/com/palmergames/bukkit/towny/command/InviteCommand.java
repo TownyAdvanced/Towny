@@ -1,5 +1,12 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.io.InvalidObjectException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -15,16 +22,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.io.InvalidObjectException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class InviteCommand extends BaseCommand implements CommandExecutor {
+public class InviteCommand extends BaseCommand {
 
 	@SuppressWarnings("unused")
 	private static Towny plugin;
@@ -40,17 +39,16 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public InviteCommand(Towny instance) {
+		super("invite", "", "", TownySettings.getLangList("command_aliases_invite", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(CommandSender sender, String label, String[] args) {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if (command.getName().equalsIgnoreCase("invite")) {
-				parseInviteCommand(player, args);
-			}
+			parseInviteCommand(player, args);
 		} else
 			// Console
 			for (String line : invite_help)

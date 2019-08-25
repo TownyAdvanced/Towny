@@ -1,5 +1,15 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -14,24 +24,13 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Send a list of all general townyworld help commands to player Command:
  * /townyworld
  */
 
-public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
+public class TownyWorldCommand extends BaseCommand {
 
 	private static Towny plugin;
 	private static final List<String> townyworld_help = new ArrayList<>();
@@ -43,12 +42,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private boolean isConsole = false;
 
 	public TownyWorldCommand(Towny instance) {
-
+		super("townyworld", "", "", TownySettings.getLangList("command_aliases_townyworld", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		townyworld_help.add(ChatTools.formatTitle("/townyworld"));
 		townyworld_help.add(ChatTools.formatCommand("", "/townyworld", "", TownySettings.getLangString("world_help_1")));

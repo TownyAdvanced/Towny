@@ -5,29 +5,6 @@
  */
 package com.palmergames.bukkit.towny.db;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.FileMgmt;
-import com.palmergames.util.StringMgmt;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.scheduler.BukkitTask;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -53,6 +30,30 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
+
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.FileMgmt;
+import com.palmergames.util.StringMgmt;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
 
@@ -654,7 +655,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Load individual towny object
 	 */
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean loadResident(Resident resident) {
 
@@ -775,7 +775,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean loadTown(Town town) {
 

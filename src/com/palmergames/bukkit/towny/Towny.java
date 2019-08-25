@@ -152,15 +152,31 @@ public class Towny extends JavaPlugin {
 
 		if (load()) {
 			// Setup bukkit command interfaces
-			registerSpecialCommands();
-			getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-			getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-			getCommand("resident").setExecutor(new ResidentCommand(this));
-			getCommand("towny").setExecutor(new TownyCommand(this));
-			getCommand("town").setExecutor(new TownCommand(this));
-			getCommand("nation").setExecutor(new NationCommand(this));
-			getCommand("plot").setExecutor(new PlotCommand(this));
-			getCommand("invite").setExecutor(new InviteCommand(this));
+			// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
+			List<Command> commands = new ArrayList<>();
+			commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
+			commands.add(new DenyCommand(TownySettings.getDenyCommand()));
+			commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
+			commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+
+			commands.add(new TownyAdminCommand(this));
+			commands.add(new TownyWorldCommand(this));
+			commands.add(new TownCommand(this));
+			commands.add(new NationCommand(this));
+			commands.add(new ResidentCommand(this));
+			commands.add(new InviteCommand(this));
+			commands.add(new TownyCommand(this));
+			commands.add(new PlotCommand(this));
+			try {
+				final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+
+				bukkitCommandMap.setAccessible(true);
+				CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+
+				commandMap.registerAll("towny", commands);
+			} catch (NoSuchFieldException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 
 			TownyWar.onEnable();
 
@@ -793,25 +809,6 @@ public class Towny extends JavaPlugin {
 	public HUDManager getHUDManager() {
 		
 		return HUDManager;
-	}
-
-	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
-	private void registerSpecialCommands() {
-		List<Command> commands = new ArrayList<>();
-		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
-		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
-		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
-		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
-		try {
-			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

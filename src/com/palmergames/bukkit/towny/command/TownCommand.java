@@ -1,5 +1,25 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.io.InvalidObjectException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
+import javax.naming.InvalidNameException;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import com.google.common.collect.ListMultimap;
@@ -51,32 +71,12 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import javax.naming.InvalidNameException;
-import java.io.InvalidObjectException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand extends BaseCommand implements CommandExecutor {
+public class TownCommand extends BaseCommand {
 
 	private static Towny plugin;
 	private static final List<String> output = new ArrayList<>();
@@ -129,12 +129,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public TownCommand(Towny instance) {
-
+		super("town", "", "", TownySettings.getLangList("command_aliases_town", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;

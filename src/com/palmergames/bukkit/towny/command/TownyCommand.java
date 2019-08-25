@@ -1,5 +1,14 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
@@ -28,18 +37,8 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-public class TownyCommand extends BaseCommand implements CommandExecutor {
+public class TownyCommand extends BaseCommand {
 
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
@@ -70,12 +69,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public TownyCommand(Towny instance) {
-
+		super("towny", "", "", TownySettings.getLangList("command_aliases_towny", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getVersion();
 

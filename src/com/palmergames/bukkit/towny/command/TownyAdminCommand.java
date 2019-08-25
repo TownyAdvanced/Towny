@@ -1,5 +1,19 @@
 package com.palmergames.bukkit.towny.command;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.naming.InvalidNameException;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
@@ -32,28 +46,13 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.naming.InvalidNameException;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:
  * /townyadmin
  */
 
-public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
+public class TownyAdminCommand extends BaseCommand {
 
 	private static Towny plugin;
 	private static final List<String> ta_help = new ArrayList<>();
@@ -95,12 +94,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public TownyAdminCommand(Towny instance) {
-
+		super("townyadmin", "", "", TownySettings.getLangList("command_aliases_townyadmin", ","));
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		this.sender = sender;
 
