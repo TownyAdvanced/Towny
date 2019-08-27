@@ -3450,3 +3450,5 @@ v0.92.0.11:
     - The german.yml has been updated again by Sprugente.
     - Added ShopPlotUtil for shop plugins to use.
       - Contains helpful, easy-to-use tests.
+    - Added getPlayer() to the API's TownPreClaimEvent so that plugin which cancel Towny claims can more easily inform the player why their claim is cancelled.
+      - Suggestion by NorbiPeti.  
