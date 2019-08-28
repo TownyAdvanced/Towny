@@ -141,16 +141,14 @@ public class CellUnderAttack extends Cell {
 
 	public void updateFlag() {
 
-		DyeColor[] woolColors = TownyWarConfig.getWoolColors();
+		Material[] woolColors = TownyWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
-//TODO: Maybe fix this some day, or preferably receive a PR fixing this from someone that wants this. 
-//			int woolId = BukkitTools.getMaterialId(Material.LEGACY_WOOL);
-//			byte woolData = woolColors[flagColorId].getDyeData();
-//			BukkitTools.setTypeIdAndData(flagBlock, woolId, woolData, true);
-//
-//			for (Block block : beaconFlagBlocks)
-//				BukkitTools.setTypeIdAndData(block, woolId, woolData, true);
+			
+			flagBlock.setType(woolColors[flagColorId]);
+			
+			for (Block block : beaconFlagBlocks)
+				block.setType(woolColors[flagColorId]);
 			
 		}
 	}

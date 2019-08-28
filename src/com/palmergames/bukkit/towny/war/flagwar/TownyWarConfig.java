@@ -13,10 +13,10 @@ import java.util.Set;
 
 public class TownyWarConfig {
 
-	public static final DyeColor[] woolColors = new DyeColor[] {
-			DyeColor.LIME, DyeColor.GREEN, DyeColor.BLUE, DyeColor.CYAN,
-			DyeColor.LIGHT_BLUE, DyeColor.GRAY, DyeColor.WHITE,
-			DyeColor.PINK, DyeColor.ORANGE, DyeColor.RED };
+	public static final Material[] woolColors = new Material[] {
+			Material.LIME_WOOL, Material.GREEN_WOOL, Material.BLUE_WOOL, Material.CYAN_WOOL,
+			Material.LIGHT_BLUE_WOOL, Material.GRAY_WOOL, Material.WHITE_WOOL,
+			Material.PINK_WOOL, Material.ORANGE_WOOL, Material.RED_WOOL };
 
 	private static Material flagBaseMaterial = null;
 	private static Material flagLightMaterial = null;
@@ -29,7 +29,7 @@ public class TownyWarConfig {
 		return Tag.WOOL.isTagged(material) || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
 	}
 
-	public static DyeColor[] getWoolColors() {
+	public static Material[] getWoolColors() {
 
 		return woolColors;
 	}

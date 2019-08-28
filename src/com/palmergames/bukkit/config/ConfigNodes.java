@@ -1612,7 +1612,7 @@ public enum ConfigNodes {
 			""),
 	WAR_ENEMY_ALLOW_ATTACKS(
 			"war.enemy.allow_attacks",
-			"false",
+			"true",
 			"# If false, players won't be able to place war flags, effectively disabling warzones."),
 	WAR_ENEMY_ONLY_ATTACK_BORDER(
 			"war.enemy.only_attack_borders",
@@ -1633,7 +1633,7 @@ public enum ConfigNodes {
 	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
-			"fence",
+			"oak_fence",
 			"# This is the block a player must place to trigger the attack event."),
 	WAR_ENEMY_FLAG_LIGHT_BLOCK(
 			"war.enemy.flag.light_block",
@@ -1672,7 +1672,7 @@ public enum ConfigNodes {
 			""),
 	WAR_WARZONE_EDITABLE_MATERIALS(
 			"war.warzone.editable_materials",
-			"tnt,fence,ladder,wood_door,iron_door,fire",
+			"tnt,oak_fence,birch_fence,spruce_fence,jungle_fence,dark_oak_fence,acacia_fence,ladder,oak_door,birch_door,spruce_door,jungle_door,dark_oak_door,acacia_fence,iron_door,fire",
 			"# List of materaials that can be modified in a warzone.",
 			"# '*' = Allow all materials.",
 			"# Prepend a '-' in front of a material to remove it. Used in conjunction with when you use '*'.",
