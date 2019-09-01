@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -55,6 +56,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
@@ -1075,5 +1077,23 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
+	}
+	/*
+	 * Any player that can break the lectern will be able to get the book anyways.
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
+
+	if (plugin.isError()) {
+		event.setCancelled(true);
+		return;
+	}
+	
+	Player player = event.getPlayer();
+	org.bukkit.block.Lectern lectern = event.getLectern();
+	Location location = lectern.getLocation();
+	
+	boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
+	event.setCancelled(!bDestroy);
 	}
 }

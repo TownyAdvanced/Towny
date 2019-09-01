@@ -65,8 +65,8 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		
 		// Heal while in town.
 		double currentHP = player.getHealth();
-		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()) {
-			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue(), ++currentHP));
+		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
 			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);

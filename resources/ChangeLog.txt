@@ -3452,3 +3452,5 @@ v0.92.0.11:
       - Contains helpful, easy-to-use tests.
     - Added getPlayer() to the API's TownPreClaimEvent so that plugin which cancel Towny claims can more easily inform the player why their claim is cancelled.
       - Suggestion by NorbiPeti.
+    - Fix edge-case issue with health regen task and players who've had their health negatively modified.
+    - Add protection to books sitting in lecterns. These books can only be taken if the player can also break the lectern itself.
