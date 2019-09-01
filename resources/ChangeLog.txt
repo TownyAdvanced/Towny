@@ -3454,3 +3454,4 @@ v0.92.0.11:
       - Suggestion by NorbiPeti.
     - Fix edge-case issue with health regen task and players who've had their health negatively modified.
     - Add protection to books sitting in lecterns. These books can only be taken if the player can also break the lectern itself.
+0.94.0.7:
