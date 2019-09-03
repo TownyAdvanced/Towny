@@ -118,6 +118,7 @@ public class SQL_Schema {
 		columns.add("`open` bool NOT NULL DEFAULT '0'");
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
+		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
