@@ -3457,3 +3457,4 @@ v0.92.0.11:
 0.94.0.7:
     - Fix for mysql servers not getting the new adminenabledpvp town column.
     - Fix config not making all the values required to have a working town-upkeep-overclaimed-penalty.
+0.94.0.8:
