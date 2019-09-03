@@ -3458,3 +3458,5 @@ v0.92.0.11:
     - Fix for mysql servers not getting the new adminenabledpvp town column.
     - Fix config not making all the values required to have a working town-upkeep-overclaimed-penalty.
 0.94.0.8:
+    - Potentially fix falling towns' plotsnapshots causing an Null Error on Townblocks (Ticket #3398)
+      - Had to revert a previous fix for Exception spam that involves the now-unused RemoveManyTownblocks. 

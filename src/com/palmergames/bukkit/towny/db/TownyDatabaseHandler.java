@@ -548,7 +548,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
-		removeManyTownBlocks(town);		
+		removeTownBlocks(town);		
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
