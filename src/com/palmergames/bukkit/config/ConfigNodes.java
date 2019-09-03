@@ -1274,7 +1274,7 @@ public enum ConfigNodes {
 			"0.0",
 			"# The server's daily charge on a town which has claimed more townblocks than it is allowed."),
 	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED(
-			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty_plotbased",
 			"false",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
