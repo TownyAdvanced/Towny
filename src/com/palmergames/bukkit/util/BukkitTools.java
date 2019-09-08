@@ -6,6 +6,7 @@ import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -269,5 +270,10 @@ public class BukkitTools {
 	public static int calcChunk(int value) {
 
 		return (value * TownySettings.getTownBlockSize()) / 16;
+	}
+
+	public static OfflinePlayer getOfflinePlayer(String name) {
+
+		return Bukkit.getOfflinePlayer(getPlayerExact(name).getUniqueId());
 	}
 }

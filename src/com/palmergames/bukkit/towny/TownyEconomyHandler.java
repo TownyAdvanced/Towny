@@ -5,9 +5,13 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.ExtendedEconomyAPI;
+
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import com.palmergames.bukkit.util.BukkitTools;
 
 import java.math.BigDecimal;
 
@@ -17,6 +21,7 @@ import java.math.BigDecimal;
  * @author ElgarL
  * 
  */
+@SuppressWarnings("deprecation")
 public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
@@ -126,6 +131,7 @@ public class TownyEconomyHandler {
 	 * @param accountName - Name of the player's account (usually playername)
 	 * @return - The relevant player's economy account
 	 */
+	@SuppressWarnings("unused")
 	private static Object getEconomyAccount(String accountName) {
 
 		switch (Type) {
@@ -157,7 +163,8 @@ public class TownyEconomyHandler {
 		  return reserveEconomy.hasAccount(accountName);
 			
 		case VAULT:
-			return vaultEconomy.hasAccount(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayer(accountName);
+			return vaultEconomy.hasAccount(offlinePlayer);
 			
 		default:
 			break;
