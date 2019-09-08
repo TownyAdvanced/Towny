@@ -1,5 +1,5 @@
 name: Towny
-version: 0.52
+version: 0.53
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -909,3 +909,6 @@ msg_err_already_in_a_nation: 'Deine Stadt befindet sich bereits in einer Nation.
 msg_err_nation_not_open: '&cDie Tore des Landes %s ist nicht für jedermann geöffnet. Ersuche den Herrscher oder dessen Gehilfe für einen beitritt.'
 msg_err_nation_homeblock_in_another_world: '&cDer Homeblock deiner Stadt ist nicht in der gleichen Welt wie der Homeblock der Landeshauptstadt.'
 status_bank_town_penalty_upkeep: ' &7| &2Zu hohe Unterhaltskosten: &4%s'
+
+# Added in 0.53:
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, you''re marked as an outlaw there.'

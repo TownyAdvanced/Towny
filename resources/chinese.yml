@@ -1,5 +1,5 @@
 name: Towny
-version: 0.52
+version: 0.53
 language: Chinese
 author: ElgarL
 website: 'http://towny.palmergames.com/'
@@ -910,3 +910,6 @@ msg_err_already_in_a_nation: 'Your town is already in a nation.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the king or an assistant to join.'
 msg_err_nation_homeblock_in_another_world: '&cYour town''s homeblock is not in the same world as the nation capital''s homeblock.'
 status_bank_town_penalty_upkeep: ' &7| &2Overclaim upkeep: &4%s'
+
+# Added in 0.53:
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, you''re marked as an outlaw there.'

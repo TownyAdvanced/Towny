@@ -2242,6 +2242,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			}
 
+			// Prevent outlaws from spawning into towns they're considered an outlaw in.
+			if (!isTownyAdmin) {
+				if (town.hasOutlaw(resident))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_error_cannot_town_spawn_youre_an_outlaw_in_town"), town));
+			}
+			
 			if (!isTownyAdmin) {
 				// Prevent spawn travel while in disallowed zones (if
 				// configured)

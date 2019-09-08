@@ -3460,3 +3460,7 @@ v0.92.0.11:
 0.94.0.8:
     - Potentially fix falling towns' plotsnapshots causing an Null Error on Townblocks (Ticket #3398)
       - Had to revert a previous fix for Exception spam that involves the now-unused RemoveManyTownblocks. 
+0.94.0.9:
+    - Stop outlaws from spawning into public towns who consider them an outlaw.
+    - Language files bumped to 0.53
+    - Korean.yml updated to 0.52 by Daybreak.
