@@ -3464,3 +3464,4 @@ v0.92.0.11:
     - Stop outlaws from spawning into public towns who consider them an outlaw.
     - Language files bumped to 0.53
     - Korean.yml updated to 0.52 by Daybreak.
+    - Remove a couple deprecated things from our VaultPermSource.

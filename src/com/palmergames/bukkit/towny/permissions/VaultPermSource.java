@@ -5,6 +5,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.milkbowl.vault.chat.Chat;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class VaultPermSource extends TownyPermissionSource {
@@ -98,11 +101,12 @@ public class VaultPermSource extends TownyPermissionSource {
 		
 		int iReturn = -1;
 		
-		Player player = BukkitTools.getPlayerExact(playerName);
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(BukkitTools.getPlayerExact(playerName).getUniqueId());
+		Player player = BukkitTools.getPlayer(playerName);
 		
 		if (player != null) {
 			
-				iReturn = chat.getPlayerInfoInteger(player.getWorld(), player.getName(), node, -1);
+				iReturn = chat.getPlayerInfoInteger(player.getWorld().getName(), offlinePlayer, node, -1);
 		}
 		
 		
@@ -114,7 +118,8 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPlayerGroup(Player player) {
-		String result = chat.getPrimaryGroup(player.getWorld(), player.getName());
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
+		String result = chat.getPrimaryGroup(player.getWorld().getName(), offlinePlayer);
 		return result != null ? result : "";
 	}
 
