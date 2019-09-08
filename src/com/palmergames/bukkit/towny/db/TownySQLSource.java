@@ -654,7 +654,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * Load individual towny object
 	 */
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean loadResident(Resident resident) {
 
@@ -775,7 +774,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean loadTown(Town town) {
 

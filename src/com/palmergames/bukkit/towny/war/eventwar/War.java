@@ -52,7 +52,6 @@ public class War {
 	private WarSpoils warSpoils = new WarSpoils();
 	
 	private Towny plugin;
-	private TownyUniverse universe;
 	private boolean warTime = false;
 	private List<Integer> warTaskIds = new ArrayList<>();
 
@@ -64,7 +63,7 @@ public class War {
 	public War(Towny plugin, int startDelay) {
 
 		this.plugin = plugin;
-		this.universe = TownyUniverse.getInstance();
+		TownyUniverse.getInstance();
 		setupDelay(startDelay);
 	}
 

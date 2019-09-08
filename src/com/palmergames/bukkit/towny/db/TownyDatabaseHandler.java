@@ -831,6 +831,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 		
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 

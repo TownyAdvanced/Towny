@@ -32,9 +32,10 @@ public class PlotClaim extends Thread {
 	Towny plugin;
 	private volatile Player player;
 	private volatile Resident resident;
+	@SuppressWarnings("unused")
 	private volatile TownyWorld world;
 	private List<WorldCoord> selection;
-	private boolean claim, forced, admin;
+	private boolean claim, admin;
 
 	/**
 	 * @param plugin reference to towny

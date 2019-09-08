@@ -423,7 +423,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if(capital != null) {
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				final Coord capitalCoord = capital.getHomeBlock().getCoord();
-				Iterator it = towns.iterator();
+				Iterator<Town> it = towns.iterator();
 				while(it.hasNext()) {
 					Town town = (Town) it.next();
 					Coord townCoord = town.getHomeBlock().getCoord();

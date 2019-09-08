@@ -30,6 +30,7 @@ import java.util.List;
 public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
 
 	private List<Resident> friends = new ArrayList<>();
+	@SuppressWarnings("unused") // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private List<Object[][][]> regenUndo = new ArrayList<>();
 	private Town town = null;
 	private long lastOnline, registered;

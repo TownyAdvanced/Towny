@@ -546,6 +546,7 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
 		return getUnclaimedZoneIgnoreMaterials().contains(mat);
