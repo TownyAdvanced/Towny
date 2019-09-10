@@ -43,28 +43,27 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private Town capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
-	private String nationBoard = "/nation set board [msg]", tag;
+	private String nationBoard = "/nation set board [msg]";
+	private String tag = "";
 	public UUID uuid;
 	private long registered;
 	private Location nationSpawn;
-	private boolean isPublic;
-	private boolean isOpen;
+	private boolean isPublic = TownySettings.getNationDefaultPublic();
+	private boolean isOpen = TownySettings.getNationDefaultOpen();
+	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private transient List<Invite> sentinvites = new ArrayList<>();
+	private transient List<Invite> sentallyinvites = new ArrayList<>();
 
 	public Nation(String name) {
-
-		setName(name);
-		tag = "";
-        isPublic = TownySettings.getNationDefaultPublic();
-        isOpen = TownySettings.getNationDefaultOpen();
+		super(name);
 	}
 
 	public void setTag(String text) throws TownyException {
 
-		if (text.length() > 4)
+		if (text.length() > 4) {
 			throw new TownyException("Tag too long");
-		this.tag = text.toUpperCase();
-		if (this.tag.matches(" "))
-			this.tag = "";
+		}
+		this.tag = text.toUpperCase().trim();
 		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
 	}
 
@@ -626,11 +625,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void deleteSentInvite(Invite invite) {
 		sentinvites.remove(invite);
 	}
-
-	private List<Invite> receivedinvites = new ArrayList<>();
-	private List<Invite> sentinvites = new ArrayList<>();
-	private List<Invite> sentallyinvites = new ArrayList<>();
-
 
 	@Override
 	public void newSentAllyInvite(Invite invite) throws TooManyInvitesException {

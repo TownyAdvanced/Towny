@@ -27,38 +27,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
-
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
 	private List<Resident> friends = new ArrayList<>();
-	@SuppressWarnings("unused") // Feature is disabled as of MC 1.13, maybe it'll come back.
-	private List<Object[][][]> regenUndo = new ArrayList<>();
+	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
-	private long lastOnline, registered;
+	private long lastOnline;
+	private long registered;
 	private boolean isNPC = false;
 	private boolean isJailed = false;
-	private int JailSpawn;
-	private String JailTown;
-	private String title, surname;
-	private long teleportRequestTime;
+	private int jailSpawn;
+	private String jailTown = "";
+	private String title = "";
+	private String surname = "";
+	private long teleportRequestTime = -1;
 	private Location teleportDestination;
-	private double teleportCost;
-	private String chatFormattedName;
+	private double teleportCost = 0.0;
 	private List<String> modes = new ArrayList<>();
-	private ConfirmationType confirmationType;
+	private transient ConfirmationType confirmationType;
+	private transient List<Invite> receivedinvites = new ArrayList<>();
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
 
 	public Resident(String name) {
-
-		setChatFormattedName(name);
-		setName(name);
-		setTitle("");
-		setSurname("");
-		setJailTown("");
+		super(name);
 		permissions.loadDefault(this);
-		teleportRequestTime = -1;
-		teleportCost = 0.0;
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -167,48 +160,45 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public boolean hasJailSpawn() {
-		return this.JailSpawn <= 1;
+		return this.jailSpawn <= 1;
 	}
 
 	public int getJailSpawn() {
 
-		return JailSpawn;
+		return jailSpawn;
 	}
 
 	public void setJailSpawn(Integer index) {
 
-		this.JailSpawn = index;
+		this.jailSpawn = index;
 
 	}
 
 	public void removeJailSpawn() {
 
-		this.JailSpawn = 0;
+		this.jailSpawn = 0;
 	}
 
 	public String getJailTown() {
 
-		return JailTown;
+		return jailTown;
 	}
 
 	public void setJailTown(String jailTown) {
-		if (jailTown == null)
-			jailTown = "";
-		if (jailTown.matches(" "))
-			jailTown = "";
-		this.JailTown = jailTown;
+		if (jailTown == null) {
+			this.jailTown = "";
+			return;
+		}
+		this.jailTown = jailTown.trim();
 	}
 
 	public boolean hasJailTown(String jailtown) {
 
-		return JailTown.equalsIgnoreCase(jailtown);
+		return jailTown.equalsIgnoreCase(jailtown);
 	}
 
 	public void setTitle(String title) {
-
-		if (title.matches(" "))
-			title = "";
-		this.title = title;
+		this.title = title.trim();
 	}
 
 	public String getTitle() {
@@ -222,10 +212,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setSurname(String surname) {
-
-		if (surname.matches(" "))
-			surname = "";
-		this.surname = surname;
+		this.surname = surname.trim();
 	}
 
 	public String getSurname() {
@@ -418,22 +405,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	public double getTeleportCost() {
 
 		return teleportCost;
-	}
-
-	/**
-	 * @return the chatFormattedName
-	 */
-	public String getChatFormattedName() {
-
-		return chatFormattedName;
-	}
-
-	/**
-	 * @param chatFormattedName the chatFormattedName to set
-	 */
-	public void setChatFormattedName(String chatFormattedName) {
-
-		this.chatFormattedName = chatFormattedName;
 	}
 
 	//TODO: Restore /tw regen and /tw regen undo functionality.
@@ -668,7 +639,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		receivedinvites.remove(invite);
 	}
 
-	private List<Invite> receivedinvites = new ArrayList<>();
 
 	public void setConfirmationType(ConfirmationType confirmationType) {
 		this.confirmationType = confirmationType;
