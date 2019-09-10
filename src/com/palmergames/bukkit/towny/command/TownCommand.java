@@ -3005,7 +3005,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
-						blockCost = TownySettings.getOutpostCost();
 						attachedToEdge = false;
 						outpost = true;
 					} else
@@ -3054,6 +3053,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				try {					
 					if (selection.size() == 1 && !outpost)
 						blockCost = town.getTownBlockCost();
+					else if (selection.size() == 1 && outpost)
+						blockCost = TownySettings.getOutpostCost();
 					else
 						blockCost = town.getTownBlockCostN(selection.size());
 

@@ -3465,3 +3465,4 @@ v0.92.0.11:
     - Language files bumped to 0.53
     - Korean.yml updated to 0.52 by Daybreak.
     - Remove a couple deprecated things from our VaultPermSource.
+    - Fix outposts not charging the outpost cost in the config.
