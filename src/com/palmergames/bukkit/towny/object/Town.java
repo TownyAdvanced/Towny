@@ -807,7 +807,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	 */
 	public Location getOutpostSpawn(Integer index) throws TownyException {
 
-		if (getMaxOutpostSpawn() == 0)
+		if (getMaxOutpostSpawn() == 0 && TownySettings.isOutpostsLimitedByLevels())
 			throw new TownyException("Town has no outpost spawns set.");
 
 		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1)));

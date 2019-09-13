@@ -3466,3 +3466,4 @@ v0.92.0.11:
     - Korean.yml updated to 0.52 by Daybreak.
     - Remove a couple deprecated things from our VaultPermSource.
     - Fix outposts not charging the outpost cost in the config.
+    - Fix removeOutpost console spam on servers that aren't limiting outposts anyways.
