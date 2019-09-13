@@ -49,4 +49,10 @@ public class TownAddResidentRankEvent extends Event
     {
         return town;
     }
+
+	@Override
+	public HandlerList getHandlers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
