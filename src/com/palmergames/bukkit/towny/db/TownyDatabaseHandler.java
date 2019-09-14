@@ -941,13 +941,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		try {
 			
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(newName);				
-			} catch (InvalidNameException e) {
-				throw new NotRegisteredException(e.getMessage());
-			}
-			
 			//data needed for a new resident
 			double balance = 0.0D;
 			Town town = null;
@@ -957,7 +950,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			boolean isJailed;
 			int JailSpawn;
 			
-			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(filteredName);
+			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(newName);
 			
 			//get data needed for resident
 			if(transferBalance && TownySettings.isUsingEconomy()){
@@ -989,8 +982,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//remove old resident from residentsMap
 			//rename the resident
 			universe.getResidentMap().remove(oldName.toLowerCase());
-			resident.setName(filteredName);
-			universe.getResidentMap().put(filteredName.toLowerCase(), resident);
+			resident.setName(newName);
+			universe.getResidentMap().put(newName.toLowerCase(), resident);
 			
 			//add everything back to the resident
 			if (transferBalance && TownySettings.isUsingEconomy()) {
