@@ -3469,3 +3469,4 @@ v0.92.0.11:
     - Fix removeOutpost console spam on servers that aren't limiting outposts anyways.
 0.94.0.10:
     - Fix string regex not containing a space, causing town and nation boards to not allow spaces.
+    - Fix missing isOpen in nation mysql schema.
