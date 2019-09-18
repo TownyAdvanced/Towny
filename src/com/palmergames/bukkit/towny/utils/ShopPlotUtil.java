@@ -28,7 +28,7 @@ public class ShopPlotUtil {
 	 * @param location
 	 * @return
 	 */
-	public boolean doesPlayerOwnShopPlot(Player player, Location location) {
+	public static boolean doesPlayerOwnShopPlot(Player player, Location location) {
 		boolean owner = false;
 		try {
 			owner = TownyAPI.getInstance().getTownBlock(location).getResident().equals(TownyAPI.getInstance().getDataSource().getResident(player.getName()));
@@ -51,7 +51,7 @@ public class ShopPlotUtil {
 	 * @param location
 	 * @return
 	 */
-	public boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
+	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
 		boolean build = PlayerCacheUtil.getCachePermission(player, location, Material.DIRT, ActionType.BUILD);
 		if (build && isShopPlot(location))
 			return true;
@@ -64,7 +64,7 @@ public class ShopPlotUtil {
 	 * @param location - Location to be tested for shop plot type. 
 	 * @return true if the location is a shop plot.
 	 */
-	public boolean isShopPlot(Location location) {
+	public static boolean isShopPlot(Location location) {
 		if (!TownyAPI.getInstance().isWilderness(location)) {
 			TownBlock townblock = TownyAPI.getInstance().getTownBlock(location);
 			return isShopPlot(townblock);
@@ -77,7 +77,7 @@ public class ShopPlotUtil {
 	 * @param townblock - Townblock to be tested for shop type.
 	 * @return true if the townblock is a shop plot. 
 	 */
-	public boolean isShopPlot(TownBlock townblock) {
+	public static boolean isShopPlot(TownBlock townblock) {
 		if (townblock != null) {
 			if (townblock.getType().equals(TownBlockType.COMMERCIAL))
 				return true;
