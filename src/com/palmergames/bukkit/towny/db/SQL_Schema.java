@@ -84,6 +84,7 @@ public class SQL_Schema {
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
+		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
 
