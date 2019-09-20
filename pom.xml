@@ -54,8 +54,8 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>creatorfromhell-repo</id>
-            <url>https://dl.bintray.com/theneweconomy/java/</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/TheNewEconomy</url>
         </repository>
         <repository>
             <id>ess-repo</id>
