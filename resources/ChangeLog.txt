@@ -3471,3 +3471,4 @@ v0.92.0.11:
     - Fix string regex not containing a space, causing town and nation boards to not allow spaces.
     - Fix missing isOpen in nation mysql schema.
 0.94.0.11:
+    - Make Towny more compatible with DungeonsXL's loading and unloading of worlds.

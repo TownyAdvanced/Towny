@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,19 +32,33 @@ public class TownyWorldListener implements Listener {
 	}
 
 	private void newWorld(String worldName) {
+		
+		boolean dungeonWorld = false;
+		
+		// Don't create a new world for temporary DungeonsXL instanced worlds.
+		if (Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL").isEnabled())
+			if (worldName.startsWith("DXL_")) {
+				dungeonWorld = true;
+			}
+				
 
 		//String worldName = event.getWorld().getName();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
 		try {
 			townyUniverse.getDataSource().newWorld(worldName);
 			TownyWorld world = townyUniverse.getDataSource().getWorld(worldName);
+			if (dungeonWorld)
+				world.setUsingTowny(false);
+			
 			if (world == null)
 				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
-				if (!townyUniverse.getDataSource().loadWorld(world)) {
-					// First time world has been noticed
-					townyUniverse.getDataSource().saveWorld(world);
-				}
+				if (!dungeonWorld)
+					if (!townyUniverse.getDataSource().loadWorld(world)) {
+						// First time world has been noticed
+						townyUniverse.getDataSource().saveWorld(world);
+					}
 			}
 		} catch (AlreadyRegisteredException e) {
 			// Allready loaded			
