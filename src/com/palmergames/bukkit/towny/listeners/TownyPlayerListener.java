@@ -36,9 +36,12 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -61,9 +64,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Door;
-import org.bukkit.material.Sign;
-
 import java.util.Arrays;
 
 /**
@@ -260,41 +260,29 @@ public class TownyPlayerListener implements Listener {
 						block = event.getClickedBlock();
 						
 						if (Tag.SIGNS.isTagged(block.getType())) {
-							Sign sign = (Sign) block.getState().getData();
-							BlockFace facing = sign.getFacing();
-							BlockFace attachedFace = sign.getAttachedFace();
-							
+							BlockFace facing = null;
+							if (block.getBlockData() instanceof Sign) {
+								org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
+								facing = sign.getRotation();
+							}
+							if (block.getBlockData() instanceof WallSign)  { 
+								org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+								facing = sign.getFacing();	
+							}
 							TownyMessaging.sendMessage(player, Arrays.asList(
 									ChatTools.formatTitle("Sign Info"),
 									ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "Facing", "", facing.toString()),
-									ChatTools.formatCommand("", "AttachedFace", "", attachedFace.toString())
+									ChatTools.formatCommand("", "Facing", "", facing.toString())
 									));
 						} else if (Tag.DOORS.isTagged(block.getType())) {
-							Door door = (Door) block.getState().getData();
-							BlockFace face = null;
-							boolean isOpen = false;
-							boolean isHinge = false;
-							if (door.isTopHalf()) {
-								isHinge = door.getHinge();
-								Door otherdoor = (Door) block.getRelative(BlockFace.DOWN).getState().getData();
-								isOpen = otherdoor.isOpen();
-								face = otherdoor.getFacing();										
-							} else {
-								isOpen = door.isOpen();
-								face = door.getFacing();
-								Door otherdoor = (Door) block.getRelative(BlockFace.UP).getState().getData();
-								isHinge=otherdoor.getHinge();
-							}
-							
+							org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
 							TownyMessaging.sendMessage(player, Arrays.asList(
 									ChatTools.formatTitle("Door Info"),
 									ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
-									ChatTools.formatCommand("", "isHingedOnRight", "", String.valueOf(isHinge)),
-									ChatTools.formatCommand("", "isOpen", "", String.valueOf(isOpen)),
-									ChatTools.formatCommand("", "getFacing", "", face.toString())									
-									//ChatTools.formatCommand("", "Old Data value", "", Byte.toString(BukkitTools.getData(block)))
-									));							
+									ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
+									ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
+									ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
+									));
 						} else {
 							TownyMessaging.sendMessage(player, Arrays.asList(
 									ChatTools.formatTitle("Block Info"),
@@ -302,8 +290,8 @@ public class TownyPlayerListener implements Listener {
 									ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
 									));
 						}
+						event.setUseInteractedBlock(Event.Result.DENY);
 						event.setCancelled(true);
-
 					}
 				}
 
@@ -313,12 +301,12 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
 		}
-
-		if (event.getClickedBlock() != null) {
-			if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
-				onPlayerSwitchEvent(event, null, World);
+		if (!event.isCancelled())
+			if (event.getClickedBlock() != null) {
+				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
+					onPlayerSwitchEvent(event, null, World);
+				}
 			}
-		}
 
 	}
 
