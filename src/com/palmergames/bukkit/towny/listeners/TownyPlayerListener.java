@@ -301,7 +301,7 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(onPlayerInteract(player, event.getClickedBlock(), event.getItem()));
 			}
 		}
-		if (!event.isCancelled())
+		if (!event.useItemInHand().equals(Event.Result.DENY))
 			if (event.getClickedBlock() != null) {
 				if (TownySettings.isSwitchMaterial(event.getClickedBlock().getType().name()) || event.getAction() == Action.PHYSICAL) {
 					onPlayerSwitchEvent(event, null, World);
@@ -818,6 +818,7 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
+		
 		event.setCancelled(onPlayerSwitchEvent(player, block, errMsg, world));
 
 	}
