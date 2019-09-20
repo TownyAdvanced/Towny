@@ -29,7 +29,6 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
@@ -895,13 +894,9 @@ public class TownyEntityListener implements Listener {
 									// Piston extensions which are broken by explosions ahead of the base 
 									// block cause baseblocks to drop as items and no base block to be regenerated.
 									if (block.getType().equals(Material.PISTON_HEAD)) {
-										BlockState blockState = block.getState();
-										org.bukkit.material.PistonExtensionMaterial blockData = (org.bukkit.material.PistonExtensionMaterial) blockState.getData(); 
-										Block baseBlock = block.getRelative(blockData.getAttachedFace());
-										BlockState baseState = baseBlock.getState();
-										org.bukkit.material.PistonBaseMaterial baseData = (org.bukkit.material.PistonBaseMaterial) baseState.getData();
+										org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
+										Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
 										block = baseBlock;
-										
 										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
 											task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
@@ -909,11 +904,6 @@ public class TownyEntityListener implements Listener {
 											event.setYield(0.0f);
 											block.getDrops().clear();
 										}
-										
-										baseData.setPowered(false);
-										baseState.setData(baseData);
-										baseState.update();
-										
 									} else {
 										if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 											ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
