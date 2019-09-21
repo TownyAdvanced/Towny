@@ -180,6 +180,18 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return assistants;
 	}
 
+
+	public List<Resident> getRank(String rank) {
+
+		List<Resident> residentsWithRank = new ArrayList<Resident>();
+		
+		for (Resident resident: residents) {
+			if (assistant.hasTownRank(rank))
+				residentsWithRank.add(resident);
+		}
+		return residentsWithRank;
+	}
+
 	@Override
 	public boolean hasResident(String name) {
 
