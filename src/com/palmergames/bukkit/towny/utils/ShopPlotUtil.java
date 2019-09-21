@@ -34,6 +34,8 @@ public class ShopPlotUtil {
 			owner = TownyAPI.getInstance().getTownBlock(location).getResident().equals(TownyAPI.getInstance().getDataSource().getResident(player.getName()));
 		} catch (NotRegisteredException e) {
 			return false;
+		} catch (NullPointerException npe) {
+			return false;
 		}
 		if (owner && isShopPlot(location))
 			return true;

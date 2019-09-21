@@ -3474,3 +3474,4 @@ v0.92.0.11:
     - Make Towny more compatible with DungeonsXL's loading and unloading of worlds.
       - Prior to running this build any DXL worlds should be removed from the towny\data\worlds folder, and the towny\data\worlds.txt file.
       - Any DXL world that loads will have usingTowny=false, and not be saved by Towny.
+    - Fix possible NPE in ShopPlotUtil.
