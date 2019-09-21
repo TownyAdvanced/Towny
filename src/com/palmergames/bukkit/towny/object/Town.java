@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
+	
+	private static final List<String> mayoralSuccession = ["assistant"]; // TODO: Make setable via config file.
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -597,16 +599,18 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (isMayor(resident)) {
 
 			if (residents.size() > 1) {
-				for (Resident assistant : new ArrayList<Resident>(getAssistants()))
-					if ((assistant != resident) && (resident.hasTownRank("assistant"))) {
-						try {
-							setMayor(assistant);
-							continue;
-						} catch (TownyException e) {
-							// Error setting mayor.
-							e.printStackTrace();
+				for (String rank : mayoralSuccession) {
+					for (Resident residentWithRank : new ArrayList<Resident>(getRank(rank)))
+						if ((residentWithRank != resident) && (residentWithRank.hasTownRank("rank"))) {
+							try {
+								setMayor(residentWithRank);
+								continue;
+							} catch (TownyException e) {
+								// Error setting mayor.
+								e.printStackTrace();
+							}
 						}
-					}
+				}
 				if (isMayor(resident)) {
 					// Still mayor and no assistants so pick a resident to be mayor
 					for (Resident newMayor : new ArrayList<Resident>(getResidents()))
