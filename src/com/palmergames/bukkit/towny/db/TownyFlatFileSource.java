@@ -2137,6 +2137,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
                 case 1:
                 case 2:
                 case 3:
+                case 4:
                     /*
                      * New system requires pushing
                      * version data first

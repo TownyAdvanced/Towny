@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.regen.block;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 
 /**
  * 
@@ -13,6 +16,8 @@ public class BlockObject {
 	private int typeId = -1;
 	private byte data;
 	private BlockLocation location;
+	private BlockData blockData;
+	private Material material;
 
 	public BlockObject(int typeId) {
 
@@ -30,6 +35,23 @@ public class BlockObject {
 		this.data = 0;
 	}
 	
+	public BlockObject(BlockData blockData, Location loc) {
+		this.blockData = blockData;
+		setLocation(loc);
+	}
+	
+	public Material getMaterial() {
+		return this.blockData.getMaterial();
+	}
+	
+	public BlockData getBlockData() {
+		return this.blockData;
+	}
+	
+	public void setBlockData(BlockData blockData) {
+		this.blockData = blockData;
+	}
+
 	public BlockObject(int typeId, Location loc) {
 
 		this.typeId = typeId;
@@ -63,6 +85,9 @@ public class BlockObject {
 		this.data = data;
 	}
 	
+	public BlockObject(String key, String blockData) {
+		this.blockData = Bukkit.getServer().createBlockData(blockData);
+	}
 	public BlockObject(int typeId, byte data, Location loc) {
 
 		this.typeId = typeId;
