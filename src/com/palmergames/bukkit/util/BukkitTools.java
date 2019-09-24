@@ -9,11 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -174,65 +170,7 @@ public class BukkitTools {
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
 	}
-	
-	
-	/*
-	 * Block handling Methods.
-	 */
 
-	public static String getTypeKey(Block block) {
-		return block.getType().getKey().toString();
-	}
-	
-	// Will be removed completely when the new plotsnapshot system is made.
-	@Deprecated
-	public static int getTypeId(Block block) {
-		return block.getType().getId();
-	}	
-	// Will be removed completely when the new plotsnapshot system is made.
-	@Deprecated
-	public static byte getData(Block block) {
-		return block.getData();
-	}
-	// No Longer Used, used to be used in PlotBlockData's restorenextblock.
-	@Deprecated
-	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
-		Material mat = Material.getMaterial(IdMappings.getById(String.format("%s:%s", type, data)).getFlatteningType());
-		block.setType(mat, applyPhysics);		
-	}
-	// No Longer Used, used to be used in PlotBlockData's restorenextblock.
-	@Deprecated
-	public static void setTypeId(Block block, int type, boolean applyPhysics) {
-		Material mat = Material.getMaterial(IdMappings.getById(String.valueOf(type)).getFlatteningType());
-		block.setType(mat, applyPhysics);
-	}
-		
-	
-	/*
-	 * BlockState Methods
-	 */
-
-	public static Material getType(BlockState state) {
-		
-		return state.getType();
-	}
-	
-	public static MaterialData getData(BlockState state) {
-		
-		return state.getData();
-	}
-	
-	
-	/*
-	 * Item Handling Methods
-	 */
-	
-	public static MaterialData getData(ItemStack stack) {
-		
-		return stack.getData();
-	}
-	
-	
 	/*
 	 * Material handling Methods.
 	 */

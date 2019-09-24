@@ -8,12 +8,9 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import de.themoep.idconverter.IdMappings;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +88,7 @@ public class PlotBlockData {
 	 * 
 	 * @return true if there are more blocks to check.
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean restoreNextBlock() {
 
 		Block block = null;
@@ -98,7 +96,6 @@ public class PlotBlockData {
 		int worldx = getX() * size, worldz = getZ() * size;
 		Material blockMat, mat;
 		BlockObject storedData;
-		BlockData blockData = null;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
@@ -187,9 +184,10 @@ public class PlotBlockData {
 				
 				case 4:
 					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.getBlockData());
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getBlockData() " + storedData.getBlockData());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData " + storedData.getBlockData());
 					
 					blockListRestored += scale;
+					
 					
 					mat = storedData.getMaterial();
 					if (mat == null) {
@@ -199,7 +197,7 @@ public class PlotBlockData {
 						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
 							try {								
 								block.setType(mat, false);
-//								block.setBlockData(blockData);
+								block.setBlockData(storedData.getBlockData());
 								break;
 							} catch (Exception e) {
 								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
@@ -225,6 +223,7 @@ public class PlotBlockData {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private BlockObject getStoredBlockData(int index) {
 
 		//return based upon version
@@ -235,9 +234,9 @@ public class PlotBlockData {
 		case 3:
 			return new BlockObject(blockList.get(index - 1), (byte) (Integer.valueOf(blockList.get(index)) & 0xff));
 		case 4:
-			return new BlockObject(blockList.get(index -1));
+			return new BlockObject(blockList.get(index));
 		default:
-			return new BlockObject(blockList.get(index), (byte) 0);
+			return new BlockObject(blockList.get(index));
 		}
 
 	}
