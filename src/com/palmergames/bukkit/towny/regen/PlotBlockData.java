@@ -111,8 +111,10 @@ public class PlotBlockData {
 			case 1:
 			case 2:
 			case 3:
-			case 4:
 				scale = 2;
+				break;	
+			case 4:
+				scale = 1;
 				break;	
 			default:
 				scale = 1;
@@ -121,21 +123,20 @@ public class PlotBlockData {
 		reverse = (blockList.size() - blockListRestored) / scale;
 		
 		while (reverse > 0) {
+			reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
+			y = height - (reverse % height);
+			x = (int) (reverse / height) % size;
+			z = ((int) (reverse / height) / size) % size;
+	
+			block = world.getBlockAt(worldx + x, y, worldz + z);
+			blockMat = block.getType();
+			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
 			
 			switch (version) {
-			
+		
 				case 1:
-				case 2:
+				case 2:				
 				case 3:
-					reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
-					y = height - (reverse % height);
-					x = (int) (reverse / height) % size;
-					z = ((int) (reverse / height) / size) % size;
-			
-					block = world.getBlockAt(worldx + x, y, worldz + z);
-					blockMat = block.getType();
-					storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);			
-			
 					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
 					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
 					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getKey() " + storedData.getKey());
@@ -168,7 +169,7 @@ public class PlotBlockData {
 						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
 			
 							try {
-	
+			
 									block.setType(mat, false);		
 									break;
 							} catch (Exception e) {
@@ -185,17 +186,10 @@ public class PlotBlockData {
 					break;
 				
 				case 4:
-					reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
-					y = height - (reverse % height);
-					x = (int) (reverse / height) % size;
-					z = ((int) (reverse / height) / size) % size;
-			
-					block = world.getBlockAt(worldx + x, y, worldz + z);
-					blockMat = block.getType();
-					storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
-					
-					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.getBlockData());
 					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getBlockData() " + storedData.getBlockData());
+					
+					blockListRestored += scale;
 					
 					mat = storedData.getMaterial();
 					if (mat == null) {
@@ -203,11 +197,13 @@ public class PlotBlockData {
 					} else if (blockMat != mat) {
 						TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
 						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
-							try {
+							try {								
 								block.setType(mat, false);
-								block.setBlockData(blockData);
+//								block.setBlockData(blockData);
+								break;
 							} catch (Exception e) {
 								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
+								break;
 							}
 			
 						} else {					
@@ -216,10 +212,12 @@ public class PlotBlockData {
 			
 						return true;
 					}
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
 					break;
 					
 				default:
-					TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - You should not be seeing this message.");
+					TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - You should not be seeing this message.");					
+					
 			}
 		}
 		// reset as we are finished with the regeneration
@@ -237,7 +235,7 @@ public class PlotBlockData {
 		case 3:
 			return new BlockObject(blockList.get(index - 1), (byte) (Integer.valueOf(blockList.get(index)) & 0xff));
 		case 4:
-			return new BlockObject(blockList.get(index), Bukkit.getServer().createBlockData(blockList.get(index)).getAsString(true));
+			return new BlockObject(blockList.get(index -1));
 		default:
 			return new BlockObject(blockList.get(index), (byte) 0);
 		}

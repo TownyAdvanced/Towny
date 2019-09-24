@@ -17,7 +17,6 @@ public class BlockObject {
 	private byte data;
 	private BlockLocation location;
 	private BlockData blockData;
-	private Material material;
 
 	public BlockObject(int typeId) {
 
@@ -27,19 +26,14 @@ public class BlockObject {
 	
 	public BlockObject(String key) {
 		
-		try {
-			typeId = Integer.parseInt(key);
-		} catch(NumberFormatException ignore) {
-			this.key = key;
-		}
-		this.data = 0;
+		this.blockData = Bukkit.getServer().createBlockData(key);
 	}
 	
-	public BlockObject(BlockData blockData, Location loc) {
-		this.blockData = blockData;
-		setLocation(loc);
-	}
-	
+//	public BlockObject(BlockData blockData, Location loc) {
+//		this.blockData = blockData;
+//		setLocation(loc);
+//	}
+//	
 	public Material getMaterial() {
 		return this.blockData.getMaterial();
 	}
@@ -88,6 +82,12 @@ public class BlockObject {
 	public BlockObject(String key, String blockData) {
 		this.blockData = Bukkit.getServer().createBlockData(blockData);
 	}
+
+	public BlockObject(String key, String blockData, Location loc) {
+		this.blockData = Bukkit.getServer().createBlockData(blockData);
+		setLocation(loc);
+	}
+	
 	public BlockObject(int typeId, byte data, Location loc) {
 
 		this.typeId = typeId;

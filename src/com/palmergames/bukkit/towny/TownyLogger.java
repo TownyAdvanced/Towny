@@ -105,7 +105,6 @@ public class TownyLogger {
 		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyDebugAppender.getName(), Level.ALL, null)}, null, config, null);
 		if (TownySettings.getDebug()) {
 			townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
-			enableConsoleLogging(config, townyDebugConfig);
 		} else {
 			townyDebugConfig.addAppender(townyDebugAppender, Level.OFF, null);
 		}
