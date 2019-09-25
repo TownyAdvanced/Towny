@@ -105,6 +105,8 @@ public class TownyLogger {
 		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyDebugAppender.getName(), Level.ALL, null)}, null, config, null);
 		if (TownySettings.getDebug()) {
 			townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
+			townyDebugConfig.addAppender(config.getAppender("File"), Level.INFO, null);
+			enableConsoleLogging(config, townyDebugConfig);
 		} else {
 			townyDebugConfig.addAppender(townyDebugAppender, Level.OFF, null);
 		}
@@ -160,7 +162,7 @@ public class TownyLogger {
 					.withConfiguration(config)
 					.build())
 				.build();
-			townyPaperConsoleAppender.start();
+			townyPaperConsoleAppender.start( );
 			config.addAppender(townyPaperConsoleAppender);
 			// If we use Paper, we just use a custom Console Logger
 			loggerConfig.addAppender(townyPaperConsoleAppender, Level.INFO, null);

@@ -178,7 +178,6 @@ public class TownyMessaging {
 	 */
 	public static void sendDebugMsg(String msg) {
 		if (TownySettings.getDebug()) {
-			LOGGER.info(ChatTools.stripColour("[Towny] Debug: " + msg));
 			LOGGER_DEBUG.info(ChatTools.stripColour("[Towny] Debug: " + msg));
 		}
 		sendDevMsg(msg);
