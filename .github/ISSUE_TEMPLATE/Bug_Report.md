@@ -1,6 +1,3 @@
-This ticket template is for bug/error reports. If you are suggesting a feature and not reporting a bug please delete all the text here and begin your ticket Title with Suggestion:
-
-
 ### What steps will reproduce the problem?
 1.
 2.

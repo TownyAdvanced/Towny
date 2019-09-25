@@ -37,7 +37,25 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
 - **Maven**
 
-    - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. Developers may also run `mvn clean install` to install towny to their local Maven Repository.
+    - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
+    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry).
+        
+```
+  <repositories>
+    <repository>
+      <id>github-Towny</id>
+      <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+    </repository>   
+  </repositories>
+  <dependencies>                    
+    <dependency>
+      <groupId>com.palmergames.bukkit.towny</groupId>
+      <artifactId>Towny</artifactId>
+      <version>0.94.0.12</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>  
+```
 
 - **Ant** (_Deprecated_)
 
