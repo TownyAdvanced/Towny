@@ -85,7 +85,11 @@ public class BukkitTools {
 	 * @return a true value if online
 	 */
 	public static boolean isOnline(String playerId) {
-		return getServer().getPlayer(playerId) != null;
+		for (Player players : getOnlinePlayers()) {
+			if (players.getName().equals(playerId))
+				return true;
+		}
+		return false; 
 	}
 	
 	public static List<World> getWorlds() {
@@ -185,18 +189,6 @@ public class BukkitTools {
 	 */
 	public static Material getMaterial(int id) {
 		return Material.getMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
-	}
-	
-	/**
-	 * Get the Id (magic number) of a Material type.
-	 * 
-	 * @param material
-	 * @return
-	 */
-	@Deprecated
-	public static int getMaterialId(Material material) {
-		
-		return material.getId();
 	}
 
 	/**
