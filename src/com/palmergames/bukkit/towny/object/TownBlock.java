@@ -14,9 +14,9 @@ public class TownBlock {
 	// private List<Group> groups;
 	private TownyWorld world;
 	private Town town;
-	private Resident resident;
-	private TownBlockType type;
-	private String name;
+	private Resident resident = null;
+	private TownBlockType type = TownBlockType.RESIDENTIAL;
+	private String name = "";
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
@@ -24,17 +24,12 @@ public class TownBlock {
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
-	protected boolean isChanged;
+	protected boolean isChanged = false;
 	
 	public TownBlock(int x, int z, TownyWorld world) {
-
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
-		this.resident = null;
-		this.type = TownBlockType.RESIDENTIAL;
-		isChanged = false;
-		this.name = "";
 	}
 
 	public void setTown(Town town) {

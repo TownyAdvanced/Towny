@@ -40,12 +40,21 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Location> jailSpawns = new ArrayList<>();
 	
 	private Resident mayor;
-	private int bonusBlocks, purchasedBlocks;
-	private double taxes, plotTax, commercialPlotTax, embassyPlotTax,
-			plotPrice, commercialPlotPrice, embassyPlotPrice, spawnCost;
+	private int bonusBlocks = 0;
+	private int purchasedBlocks = 0;
+	private double taxes = TownySettings.getTownDefaultTax();
+	private double plotTax= TownySettings.getTownDefaultPlotTax();
+	private double commercialPlotTax = TownySettings.getTownDefaultShopTax();
+	private double plotPrice = 0.0;
+	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
+	private double commercialPlotPrice, embassyPlotPrice, spawnCost;
 	private Nation nation;
-	private boolean hasUpkeep, isPublic, isTaxPercentage, isOpen;
-	private String townBoard = "/town set board [msg]", tag;
+	private boolean hasUpkeep = true;
+	private boolean isPublic = TownySettings.getTownDefaultPublic();
+	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
+	private boolean isOpen = TownySettings.getTownDefaultOpen();
+	private String townBoard = "/town set board [msg]";
+	private String tag = "";
 	private TownBlock homeBlock;
 	private TownyWorld world;
 	private Location spawn;
@@ -53,22 +62,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
+	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private transient List<Invite> sentinvites = new ArrayList<>();
 
 	public Town(String name) {
-
-		setName(name);
-		tag = "";
-		bonusBlocks = 0;
-		purchasedBlocks = 0;
-		taxes = TownySettings.getTownDefaultTax();
-		plotTax = TownySettings.getTownDefaultPlotTax();
-		embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
-		commercialPlotTax = TownySettings.getTownDefaultShopTax();
-		plotPrice = 0.0;
-		hasUpkeep = true;
-		isPublic = TownySettings.getTownDefaultPublic();
-		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
-		isOpen = TownySettings.getTownDefaultOpen();
+		super(name);
 		permissions.loadDefault(this);
 	}
 
@@ -1265,9 +1263,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void deleteSentInvite(Invite invite) {
 		sentinvites.remove(invite);
 	}
-
-	private List<Invite> receivedinvites = new ArrayList<>();
-	private List<Invite> sentinvites = new ArrayList<>();
 
 	public int getOutpostLimit() {
 		return TownySettings.getMaxOutposts(this);

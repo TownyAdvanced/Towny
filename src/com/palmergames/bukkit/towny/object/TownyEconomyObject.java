@@ -15,16 +15,17 @@ import org.bukkit.World;
  *
  */
 public class TownyEconomyObject extends TownyObject {
-
+	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
+	
+	protected TownyEconomyObject(String name) {
+		super(name);
+	}
+	
 	private static final class TownyServerAccount extends TownyEconomyObject {
-		@Override
-		public String getName() {
-
-			return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+		TownyServerAccount() {
+			super(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT));
 		}
 	}
-
-	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 
 	/**
 	 * Tries to pay from the players holdings
