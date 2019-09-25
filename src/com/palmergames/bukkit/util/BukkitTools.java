@@ -206,4 +206,9 @@ public class BukkitTools {
 
 		return Bukkit.getOfflinePlayer(getPlayerExact(name).getUniqueId());
 	}
+	
+	public static OfflinePlayer getOfflinePlayerForVault(String name) {
+
+		return Bukkit.getOfflinePlayer(name);
+	}
 }

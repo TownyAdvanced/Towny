@@ -3484,3 +3484,6 @@ v0.92.0.11:
       - GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK
       - All existing Towny\data\worlds\WORLDNAME.txt files should have their plotManagementIgnoreIds lines also changed to the above.
 0.94.0.12:
+  - Switch out deprecated war and perm hud code for undeprecated code.
+  - Switch out deprecated code used to talk to Vault for a craftier method that should be more compatible with newer eco plugins over the long run.
+  - Changing the changelog's indentation because it'll format nicer this way on github. 

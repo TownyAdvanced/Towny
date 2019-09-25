@@ -21,7 +21,6 @@ import java.math.BigDecimal;
  * @author ElgarL
  * 
  */
-@SuppressWarnings("deprecation")
 public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
@@ -160,10 +159,10 @@ public class TownyEconomyHandler {
 		switch (Type) {
 
 		case RESERVE:
-		  return reserveEconomy.hasAccount(accountName);
+		    return reserveEconomy.hasAccount(accountName);
 			
 		case VAULT:
-			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayer(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
 			return vaultEconomy.hasAccount(offlinePlayer);
 			
 		default:
@@ -187,10 +186,11 @@ public class TownyEconomyHandler {
 				break;
 				
 			case VAULT: // Attempt to zero the account as Vault provides no delete method.
-				if (!vaultEconomy.hasAccount(accountName))
-					vaultEconomy.createPlayerAccount(accountName);
+				OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
+				if (!vaultEconomy.hasAccount(offlinePlayer))
+					vaultEconomy.createPlayerAccount(offlinePlayer);
 				
-				vaultEconomy.withdrawPlayer(accountName, (vaultEconomy.getBalance(accountName)));
+				vaultEconomy.withdrawPlayer(offlinePlayer, (vaultEconomy.getBalance(offlinePlayer)));
 
 				return;
 				
@@ -223,10 +223,11 @@ public class TownyEconomyHandler {
 			return reserveEconomy.getHoldings(accountName, world.getName()).doubleValue();
 
 		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
+			if (!vaultEconomy.hasAccount(offlinePlayer))
+				vaultEconomy.createPlayerAccount(offlinePlayer);
 
-			return vaultEconomy.getBalance(accountName);
+			return vaultEconomy.getBalance(offlinePlayer);
 			
 		default:
 			break;
@@ -268,10 +269,11 @@ public class TownyEconomyHandler {
 			return reserveEconomy.removeHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
+			if (!vaultEconomy.hasAccount(offlinePlayer))
+				vaultEconomy.createPlayerAccount(offlinePlayer);
 
-			return vaultEconomy.withdrawPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
+			return vaultEconomy.withdrawPlayer(offlinePlayer, amount).type == EconomyResponse.ResponseType.SUCCESS;
 			
 		default:
 			break;
@@ -300,10 +302,11 @@ public class TownyEconomyHandler {
 			return reserveEconomy.addHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
+			if (!vaultEconomy.hasAccount(offlinePlayer))
+				vaultEconomy.createPlayerAccount(offlinePlayer);
 
-			return vaultEconomy.depositPlayer(accountName, amount).type == EconomyResponse.ResponseType.SUCCESS;
+			return vaultEconomy.depositPlayer(offlinePlayer, amount).type == EconomyResponse.ResponseType.SUCCESS;
 			
 		default:
 			break;
@@ -323,10 +326,11 @@ public class TownyEconomyHandler {
 			return reserveEconomy.setHoldings(accountName, new BigDecimal(amount), world.getName());
 
 		case VAULT:
-			if (!vaultEconomy.hasAccount(accountName))
-				vaultEconomy.createPlayerAccount(accountName);
+			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayerForVault(accountName);
+			if (!vaultEconomy.hasAccount(offlinePlayer))
+				vaultEconomy.createPlayerAccount(offlinePlayer);
 
-			return vaultEconomy.depositPlayer(accountName, (amount - vaultEconomy.getBalance(accountName))).type == EconomyResponse.ResponseType.SUCCESS;
+			return vaultEconomy.depositPlayer(offlinePlayer, (amount - vaultEconomy.getBalance(offlinePlayer))).type == EconomyResponse.ResponseType.SUCCESS;
 			
 		default:
 			break;
