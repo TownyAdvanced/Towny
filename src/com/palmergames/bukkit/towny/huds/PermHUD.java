@@ -105,27 +105,26 @@ public class PermHUD {
 		return wildernessName.toString();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void toggleOn (Player p) {
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
-		String permsTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
-		String plotName_player = ChatColor.DARK_GREEN + "";
-		String build_player = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
-		String destroy_player = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
-		String switching_player = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
-		String item_player = ChatColor.DARK_GREEN + "Item: " + ChatColor.GRAY;
-		String pvp_player = ChatColor.DARK_GREEN + "PvP: ";
-		String explosions_player = ChatColor.DARK_GREEN + "Explosions: ";
-		String firespread_player = ChatColor.DARK_GREEN + "Firespread: ";
-		String mobspawn_player = ChatColor.DARK_GREEN + "Mob Spawns: ";
-		String keyTitle_player = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Key";
-		String keyResident_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "residents";
-		String keyFriend_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + "friends";
-		String keyAlly_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + "allies";
-		String keyOutsider_player = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + "outsiders";
+		String permsTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
+		String plotName_entry = ChatColor.DARK_GREEN + "";
+		String build_entry = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
+		String destroy_entry = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
+		String switching_entry = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
+		String item_entry = ChatColor.DARK_GREEN + "Item: " + ChatColor.GRAY;
+		String pvp_entry = ChatColor.DARK_GREEN + "PvP: ";
+		String explosions_entry = ChatColor.DARK_GREEN + "Explosions: ";
+		String firespread_entry = ChatColor.DARK_GREEN + "Firespread: ";
+		String mobspawn_entry = ChatColor.DARK_GREEN + "Mob Spawns: ";
+		String keyTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Key";
+		String keyResident_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "residents";
+		String keyFriend_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + "friends";
+		String keyAlly_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + "allies";
+		String keyOutsider_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + "outsiders";
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", "dummy");
+		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", "dummy", PERM_HUD_TITLE);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams
@@ -145,37 +144,37 @@ public class PermHUD {
 		Team keyAlly = board.registerNewTeam("keyAlly");
 		Team keyOutsider = board.registerNewTeam("keyOutsider");
 		//register players
-		permsTitle.addPlayer(Bukkit.getOfflinePlayer(permsTitle_player));
-		plotName.addPlayer(Bukkit.getOfflinePlayer(plotName_player));
-		build.addPlayer(Bukkit.getOfflinePlayer(build_player));
-		destroy.addPlayer(Bukkit.getOfflinePlayer(destroy_player));
-		switching.addPlayer(Bukkit.getOfflinePlayer(switching_player));
-		item.addPlayer(Bukkit.getOfflinePlayer(item_player));
-		pvp.addPlayer(Bukkit.getOfflinePlayer(pvp_player));
-		explosions.addPlayer(Bukkit.getOfflinePlayer(explosions_player));
-		firespread.addPlayer(Bukkit.getOfflinePlayer(firespread_player));
-		mobspawn.addPlayer(Bukkit.getOfflinePlayer(mobspawn_player));
-		keyTitle.addPlayer(Bukkit.getOfflinePlayer(keyTitle_player));
-		keyResident.addPlayer(Bukkit.getOfflinePlayer(keyResident_player));
-		keyFriend.addPlayer(Bukkit.getOfflinePlayer(keyFriend_player));
-		keyAlly.addPlayer(Bukkit.getOfflinePlayer(keyAlly_player));
-		keyOutsider.addPlayer(Bukkit.getOfflinePlayer(keyOutsider_player));
+		permsTitle.addEntry(permsTitle_entry);
+		plotName.addEntry(plotName_entry);
+		build.addEntry(build_entry);
+		destroy.addEntry(destroy_entry);
+		switching.addEntry(switching_entry);
+		item.addEntry(item_entry);
+		pvp.addEntry(pvp_entry);
+		explosions.addEntry(explosions_entry);
+		firespread.addEntry(firespread_entry);
+		mobspawn.addEntry(mobspawn_entry);
+		keyTitle.addEntry(keyTitle_entry);
+		keyResident.addEntry(keyResident_entry);
+		keyFriend.addEntry(keyFriend_entry);
+		keyAlly.addEntry(keyAlly_entry);
+		keyOutsider.addEntry(keyOutsider_entry);
 		//set scores for positioning
-		obj.getScore(permsTitle_player).setScore(15);
-		obj.getScore(plotName_player).setScore(14);
-		obj.getScore(build_player).setScore(13);
-		obj.getScore(destroy_player).setScore(12);
-		obj.getScore(switching_player).setScore(11);
-		obj.getScore(item_player).setScore(10);
-		obj.getScore(pvp_player).setScore(9);
-		obj.getScore(explosions_player).setScore(8);
-		obj.getScore(firespread_player).setScore(7);
-		obj.getScore(mobspawn_player).setScore(6);
-		obj.getScore(keyTitle_player).setScore(5);
-		obj.getScore(keyResident_player).setScore(4);
-		obj.getScore(keyFriend_player).setScore(3);
-		obj.getScore(keyAlly_player).setScore(2);
-		obj.getScore(keyOutsider_player).setScore(1);
+		obj.getScore(permsTitle_entry).setScore(15);
+		obj.getScore(plotName_entry).setScore(14);
+		obj.getScore(build_entry).setScore(13);
+		obj.getScore(destroy_entry).setScore(12);
+		obj.getScore(switching_entry).setScore(11);
+		obj.getScore(item_entry).setScore(10);
+		obj.getScore(pvp_entry).setScore(9);
+		obj.getScore(explosions_entry).setScore(8);
+		obj.getScore(firespread_entry).setScore(7);
+		obj.getScore(mobspawn_entry).setScore(6);
+		obj.getScore(keyTitle_entry).setScore(5);
+		obj.getScore(keyResident_entry).setScore(4);
+		obj.getScore(keyFriend_entry).setScore(3);
+		obj.getScore(keyAlly_entry).setScore(2);
+		obj.getScore(keyOutsider_entry).setScore(1);
 		//set the board
 		p.setScoreboard(board);
 		updatePerms(p);
