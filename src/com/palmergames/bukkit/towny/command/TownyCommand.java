@@ -400,7 +400,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
 				output.add(Colors.Yellow + "[Overclaimed Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town)));
 			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "TownBlock: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) + Colors.Gray + 
-					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : " | " + Colors.Green + "Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("#%").format(TownySettings.getClaimPriceIncreaseValue()-1)));
+					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : " | " + Colors.Green + "Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)));
 			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "Outposts: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
 		}
 		if (town == null)

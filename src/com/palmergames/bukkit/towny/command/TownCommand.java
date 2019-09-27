@@ -1807,6 +1807,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
 			player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
+			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
+				player.sendMessage(Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 		} else {
 			try {
