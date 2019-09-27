@@ -3489,3 +3489,4 @@ v0.92.0.11:
   - Changing the changelog's indentation because it'll format nicer this way on github. 
   - Add price increase percentage to /town buy bonus output.
   - Add decimals to price increase percentage for claiming townblocks seen in /towny prices.
+  - Fix Towny messing with lecterns in non-Towny worlds.

@@ -1072,17 +1072,31 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
-
-	if (plugin.isError()) {
-		event.setCancelled(true);
-		return;
-	}
+		
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		TownyWorld World = null;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 	
-	Player player = event.getPlayer();
-	org.bukkit.block.Lectern lectern = event.getLectern();
-	Location location = lectern.getLocation();
+		try {
+			World = townyUniverse.getDataSource().getWorld(event.getLectern().getLocation().getWorld().getName());
+			if (!World.isUsingTowny())
+				return;
 	
-	boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
-	event.setCancelled(!bDestroy);
+		} catch (NotRegisteredException e) {
+			// World not registered with Towny.
+			e.printStackTrace();
+			return;
+		}
+		
+		Player player = event.getPlayer();
+		org.bukkit.block.Lectern lectern = event.getLectern();
+		Location location = lectern.getLocation();
+		
+		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
+		event.setCancelled(!bDestroy);
 	}
 }
