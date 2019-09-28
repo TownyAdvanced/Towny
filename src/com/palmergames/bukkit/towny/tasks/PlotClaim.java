@@ -62,7 +62,7 @@ public class PlotClaim extends Thread {
 		int claimed = 0;
 
 		if (player != null){
-			if (claim = true)
+			if (claim)
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_claim"));
 			else
 				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_process_unclaim"));

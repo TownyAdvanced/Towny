@@ -3491,3 +3491,4 @@ v0.92.0.11:
   - Add decimals to price increase percentage for claiming townblocks seen in /towny prices.
   - Fix Towny messing with lecterns in non-Towny worlds.
 0.94.0.13:
+  - Fix for /plot unclaim command showing "Processing plot claim..." instead of "Processing plot unclaim..."
