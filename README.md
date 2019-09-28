@@ -35,13 +35,21 @@ ___
 <p><img align=right src="https://i.imgur.com/lX0EaLq.gif" height="155">
 Towny is currently in transition from our website http://palmergames.com/towny to using github for all downloads/documentation.
     
-Now that all Release builds and Development builds are being made available here on github's Releases tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Releases Only".
+Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Releases Only".
 </p>
 
 ___
 
 #### Connect/Support
-If you need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
+The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a development build it is expected that you have read the changelog for any important changes since the previous Release build.
+
+Some important pages to look over:
+- [Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)
+- [How Towny Works](https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works)
+
+Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
+
+If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
 If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m )
 
 ___
