@@ -3490,3 +3490,4 @@ v0.92.0.11:
   - Add price increase percentage to /town buy bonus output.
   - Add decimals to price increase percentage for claiming townblocks seen in /towny prices.
   - Fix Towny messing with lecterns in non-Towny worlds.
+0.94.0.13:
