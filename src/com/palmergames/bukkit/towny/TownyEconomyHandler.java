@@ -6,12 +6,9 @@ import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.ExtendedEconomyAPI;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
-import com.palmergames.bukkit.util.BukkitTools;
 
 import java.math.BigDecimal;
 
@@ -163,8 +160,7 @@ public class TownyEconomyHandler {
 		    return reserveEconomy.hasAccount(accountName);
 			
 		case VAULT:
-			OfflinePlayer offlinePlayer = BukkitTools.getOfflinePlayer(accountName);
-			return vaultEconomy.hasAccount(offlinePlayer);
+			return vaultEconomy.hasAccount(accountName);
 			
 		default:
 			break;
