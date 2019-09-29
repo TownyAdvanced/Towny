@@ -3268,19 +3268,19 @@ v0.92.0.11:
       - Remove all calls to our own deprecated methods.
       - Slightly optimize the calls to our internal API.
     - Update for signs and dyes, courtesy of TheFlagCourier.
-	- REQUIRED CONFIG CHANGE: protection.item_use_ids
-	  - Add ",BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE"
-	  - Stops players from using dyes on signs.
-	- REQUIRED CONFIG CHANGE: 
-	  - In THREE places of the config you must change the sign names. These places are:
-	    - new_world_settings.plot_management.block_delete.unclaim_delete
-	    - new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete
-	    - new_world_settings.plot_management.revert_on_unclaim.block_ignore
-	  - Change: SIGN_POST,WALL_SIGN 
-	  - To: ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN
-	  - You will have to edit these sign names in your Towny\data\worlds\WORLDNAME.txt files as well.
-	- REQUIRED CONFIG CHANGE: protections.switch_ids
-	  - Add: ",BARREL"
+    - REQUIRED CONFIG CHANGE: protection.item_use_ids
+      - Add ",BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE"
+      - Stops players from using dyes on signs.
+    - REQUIRED CONFIG CHANGE: 
+      - In THREE places of the config you must change the sign names. These places are:
+        - new_world_settings.plot_management.block_delete.unclaim_delete
+        - new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete
+        - new_world_settings.plot_management.revert_on_unclaim.block_ignore
+      - Change: SIGN_POST,WALL_SIGN 
+      - To: ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN
+      - You will have to edit these sign names in your Towny\data\worlds\WORLDNAME.txt files as well.
+    - REQUIRED CONFIG CHANGE: protections.switch_ids
+      - Add: ",BARREL"
 0.94.0.2:
     - Attempt #2 at silencing the AssignPermissions() error seen when DungeonsXL moves offline players out of dungeon worlds.
     - Test commit please ignore.
@@ -3350,24 +3350,24 @@ v0.92.0.11:
     - The Towny project has now become Mavenized, courtesy of FlagCourier.
       - The previous build system used was Ant, which was in use from 2010-2019.
     - New Command: /nation merge {nationname}
-	  - Requests the given nation to merge into your nation.
-	  - Can only be used by the nation king, and requires the king of the other nation to be online to accept the merger.
-	  - The soon-to-be-ex-king will receive a confirmation message asking if they will accept the dissolution of their nation.
-	  - If accepted the towns of the nation transfer to the remaining nation. The nation's bank money is also transferred.
-	  - Requires the towny.command.nation.merge permission node.
-	- New Command: /ta nation {oldnation} merge {newnation}
-	  - Command to forcefully merge the oldnation into the newnation.
-	  - Requires the towny.command.townyadmin.nation.merge permission node.
-	- API: added Nation.getKing().
-	- New Language File: chinese.yml courtesy of qsefthuopq.
-	- The TownyLogger has been removed in favour of log4j.Logger, work done by Articdive.
-	- The german.yml has been updated by Sprugente.
-	- The FileMgmt has seen a slight touch-up courtesy of Articdive.
-	  - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
-	- Added confirmations to /ta town {townname} delete when used from the Console.
-	- Added confirmations to /ta nation {nationname} delete when used from the Console.
-	- Add /t list by open: lists only open towns, in order of most residents to least residents.
-	- Fix a missing permission check.
+      - Requests the given nation to merge into your nation.
+      - Can only be used by the nation king, and requires the king of the other nation to be online to accept the merger.
+      - The soon-to-be-ex-king will receive a confirmation message asking if they will accept the dissolution of their nation.
+      - If accepted the towns of the nation transfer to the remaining nation. The nation's bank money is also transferred.
+      - Requires the towny.command.nation.merge permission node.
+    - New Command: /ta nation {oldnation} merge {newnation}
+      - Command to forcefully merge the oldnation into the newnation.
+      - Requires the towny.command.townyadmin.nation.merge permission node.
+    - API: added Nation.getKing().
+    - New Language File: chinese.yml courtesy of qsefthuopq.
+    - The TownyLogger has been removed in favour of log4j.Logger, work done by Articdive.
+    - The german.yml has been updated by Sprugente.
+    - The FileMgmt has seen a slight touch-up courtesy of Articdive.
+      - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
+    - Added confirmations to /ta town {townname} delete when used from the Console.
+    - Added confirmations to /ta nation {nationname} delete when used from the Console.
+    - Add /t list by open: lists only open towns, in order of most residents to least residents.
+    - Fix a missing permission check.
     - New Config Option: economy.new_expand.price_claim_townblock_increase
       - default: 1.0
       - How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost.
@@ -3440,7 +3440,7 @@ v0.92.0.11:
       - requires towny.command.townyadmin.resident.friend permission node.
     - New Permission node: towny.command.townyadmin.resident.friend
       - child node of towny.command.townyadmin.resident.*
-	- New Config Option: economy.daily_taxes.price_town_overclaimed_upkeep_penalty
+    - New Config Option: economy.daily_taxes.price_town_overclaimed_upkeep_penalty
       - default: 0.0
       - The server's daily charge on a town which has claimed more townblocks than it is allowed.
     - New Config Option: economy.daily_taxes.price_town_overclaimed_upkeep_penalty
@@ -3491,8 +3491,8 @@ v0.92.0.11:
   - Add decimals to price increase percentage for claiming townblocks seen in /towny prices.
   - Fix Towny messing with lecterns in non-Towny worlds.
 0.94.0.13:
-  - Fix for /plot unclaim command showing "Processing plot claim..." instead of "Processing plot unclaim..."
-  - Undo removal of deprecated Vault code in TownyEconomyHandler because it was apparently zero-ing out existing installs' town and nation banks.
+    - Fix for /plot unclaim command showing "Processing plot claim..." instead of "Processing plot unclaim..."
+    - Undo removal of deprecated Vault code in TownyEconomyHandler because it was apparently zero-ing out existing installs' town and nation banks.
 0.94.0.14:
   - Change requirements for luring animals.
     - Old behaviour: Player had to be able to break dirt where the animal stood. Affected in towns and wilderness.
@@ -3500,3 +3500,4 @@ v0.92.0.11:
       - Town-owned plots are exempt. Wilderness is exempt.
   - API: add TownyAPI.getInstance().isTownyWorld()
     - Returns true when a world has usingTowny=true.
+  - Fix changelog not displaying on startup when Towny is updated.

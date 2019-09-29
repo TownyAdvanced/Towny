@@ -404,7 +404,7 @@ public class Towny extends JavaPlugin {
 			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
-				if (line.startsWith("v" + lastVersion)) {
+				if (line.startsWith(lastVersion)) {
 					display = true;
 				}
 				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
