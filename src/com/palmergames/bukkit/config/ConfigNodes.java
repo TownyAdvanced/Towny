@@ -1061,7 +1061,7 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",
-			"# if enabled old residents will be kicked and deleted from a town",
+			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
 			"# after Two months (default) of not logging in"),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",

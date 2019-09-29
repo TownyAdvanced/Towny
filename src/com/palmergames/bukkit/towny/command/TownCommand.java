@@ -1690,6 +1690,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					else if (split[1].equalsIgnoreCase("clear")) {
 						try {
 							town.setTag(" ");
+							if (admin)
+								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_reset_town_tag"), player.getName()));
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_reset_town_tag"), player.getName()));
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -1697,6 +1699,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else
 						try {
 							town.setTag(NameValidation.checkAndFilterName(split[1]));
+							if (admin)
+								TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_set_town_tag"), player.getName(), town.getTag()));
 							TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_set_town_tag"), player.getName(), town.getTag()));
 						} catch (TownyException | InvalidNameException e) {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
