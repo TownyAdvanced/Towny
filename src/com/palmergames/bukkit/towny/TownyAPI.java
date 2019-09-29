@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -210,6 +211,20 @@ public class TownyAPI {
             // Must be wilderness
             return true;
         }
+    }
+    
+    /**
+     * Returns value of usingTowny for the given world.
+     * 
+     * @param world
+     * @return
+     */
+    public boolean isTownyWorld(World world) {
+    	try {
+			return townyUniverse.getDataSource().getWorld(world.getName()).isUsingTowny();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
     }
     
     /**

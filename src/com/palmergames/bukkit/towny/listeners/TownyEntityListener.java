@@ -241,18 +241,31 @@ public class TownyEntityListener implements Listener {
 		
 	}
 
-
+	/**
+	 * Prevents players from stealing animals in personally owned plots 
+	 * To tempt an animal in a personally owned plot requires the ability to also destroy dirt blocks there.
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
 		if (plugin.isError()) {
 			return;
 		}
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
 
 		if (event.getTarget() instanceof Player) {
-
-			Player target = (Player)event.getTarget();
 			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				if (!PlayerCacheUtil.getCachePermission(target, event.getEntity().getLocation(), Material.DIRT, TownyPermission.ActionType.DESTROY)) {
+				Location loc = event.getEntity().getLocation();
+				if (TownyAPI.getInstance().isWilderness(loc))
+					return;
+
+				if (!TownyAPI.getInstance().getTownBlock(loc).hasResident())
+					return;	
+
+				Player target = (Player)event.getTarget();
+				if (!PlayerCacheUtil.getCachePermission(target, loc, Material.DIRT, TownyPermission.ActionType.DESTROY)) {
 					event.setCancelled(true);
 				}
 			}
@@ -585,64 +598,52 @@ public class TownyEntityListener implements Listener {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld World = null;
 
-		try {
-			World = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
-			if (!World.isUsingTowny())
-				return;
-
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
-		}
-
+		
 		try {
 			TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getLocation().getWorld().getName());
+			// Prevent creatures trampling crops
+			if (townyWorld.isDisableCreatureTrample()) {
+				if ((block.getType() == Material.FARMLAND) || (block.getType() == Material.WHEAT)) {
+					if (entity instanceof Creature) {
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
 
-			if (townyWorld.isUsingTowny()) {
+			/*
+			 * Allow players in vehicles to activate pressure plates if they
+			 * are permitted.
+			 */
+			if (passengers != null) {
 
-				// Prevent creatures trampling crops
-				if (townyWorld.isDisableCreatureTrample()) {
-					if ((block.getType() == Material.FARMLAND) || (block.getType() == Material.WHEAT)) {
-						if (entity instanceof Creature) {
-							event.setCancelled(true);
+				// PlayerInteractEvent newEvent = new
+				// PlayerInteractEvent((Player)passenger, Action.PHYSICAL,
+				// null, block, BlockFace.SELF);
+				// Bukkit.getServer().getPluginManager().callEvent(newEvent);
+
+				for (Entity passenger : passengers) {
+					if (!passenger.getType().equals(EntityType.PLAYER)) 
+						return;
+					if (TownySettings.isSwitchMaterial(block.getType().name())) {
+						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
 							return;
-						}
 					}
 				}
 
-				/*
-				 * Allow players in vehicles to activate pressure plates if they
-				 * are permitted.
-				 */
-				if (passengers != null) {
+			}
 
-					// PlayerInteractEvent newEvent = new
-					// PlayerInteractEvent((Player)passenger, Action.PHYSICAL,
-					// null, block, BlockFace.SELF);
-					// Bukkit.getServer().getPluginManager().callEvent(newEvent);
+			// System.out.println("EntityInteractEvent triggered for " +
+			// entity.toString());
 
-					for (Entity passenger : passengers) {
-						if (!passenger.getType().equals(EntityType.PLAYER)) 
-							return;
-						if (TownySettings.isSwitchMaterial(block.getType().name())) {
-							if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
-								return;
-						}
-					}
-
-				}
-
-				// System.out.println("EntityInteractEvent triggered for " +
-				// entity.toString());
-
-				// Prevent creatures triggering stone pressure plates
-				if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
-					if (block.getType() == Material.STONE_PRESSURE_PLATE) {
-						if (entity instanceof Creature) {
-							event.setCancelled(true);
-							return;
-						}
+			// Prevent creatures triggering stone pressure plates
+			if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
+				if (block.getType() == Material.STONE_PRESSURE_PLATE) {
+					if (entity instanceof Creature) {
+						event.setCancelled(true);
+						return;
 					}
 				}
 			}
@@ -980,7 +981,6 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	
 	/**
 	 * Handles protection of item frames and other Hanging types.
 	 * 
@@ -1086,7 +1086,6 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-
 	/**
 	 * Placing of hanging objects like Item Frames.
 	 * 
@@ -1100,42 +1099,18 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		//long start = System.currentTimeMillis();
-
-		Player player = event.getPlayer();
 		Entity hanging = event.getEntity();
 
-		try {
-			TownyWorld townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(hanging.getWorld().getName());
-
-			if (!townyWorld.isUsingTowny())
-				return;
-
-			// Get build permissions (updates if none exist)
-			//boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), 321, (byte) 0, TownyPermission.ActionType.BUILD);
-			boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.BUILD);
-
-			// Allow placing if we are permitted
-			if (bBuild)
-				return;
-
-			/*
-			 * Fetch the players cache
-			 */
-			PlayerCache cache = plugin.getCache(player);
-
-			event.setCancelled(true);
-
-			if (cache.hasBlockErrMsg())
-				TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
-		} catch (NotRegisteredException e1) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_not_configured"));
-			event.setCancelled(true);
+		if (!TownyAPI.getInstance().isTownyWorld(hanging.getWorld()))
 			return;
-		}
 
-		//TownyMessaging.sendDebugMsg("onHangingBreak took " + (System.currentTimeMillis() - start) + "ms (" + event.getEventName() + ", " + event.isCancelled() + ")");
+		Player player = event.getPlayer();
+		
+		// Get build permissions (updates if none exist)
+		boolean bBuild = PlayerCacheUtil.getCachePermission(player, hanging.getLocation(), Material.PAINTING, TownyPermission.ActionType.BUILD);
+
+		// Cancel based on above Cache query.
+		event.setCancelled(!bBuild);
 	}
 
 }

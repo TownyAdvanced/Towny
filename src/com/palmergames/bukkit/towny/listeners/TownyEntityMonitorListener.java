@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -51,17 +50,9 @@ public class TownyEntityMonitorListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) throws NotRegisteredException {
 		Entity defenderEntity = event.getEntity();
-		TownyWorld World = null;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			World = townyUniverse.getDataSource().getWorld(defenderEntity.getLocation().getWorld().getName());
-			if (!World.isUsingTowny())
-				return;
-
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
-		}
 
 		// Was this a player death?
 		if (defenderEntity instanceof Player) {
@@ -444,7 +435,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
 			Location loc = defenderPlayer.getLocation();
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
-			if (!townyUniverse.getDataSource().getWorld(defenderPlayer.getLocation().getWorld().getName()).isUsingTowny())
+			if (!TownyAPI.getInstance().isTownyWorld(defenderPlayer.getLocation().getWorld()))
 				return;
 			if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) == null)
 				return;

@@ -3494,3 +3494,9 @@ v0.92.0.11:
   - Fix for /plot unclaim command showing "Processing plot claim..." instead of "Processing plot unclaim..."
   - Undo removal of deprecated Vault code in TownyEconomyHandler because it was apparently zero-ing out existing installs' town and nation banks.
 0.94.0.14:
+  - Change requirements for luring animals.
+    - Old behaviour: Player had to be able to break dirt where the animal stood. Affected in towns and wilderness.
+    - New behaviour: Player has to be able to break dirt where the animal stands. Affects only personally owned plots.
+      - Town-owned plots are exempt. Wilderness is exempt.
+  - API: add TownyAPI.getInstance().isTownyWorld()
+    - Returns true when a world has usingTowny=true.

@@ -328,18 +328,8 @@ public class TownyPlayerListener implements Listener {
 
 		if (event.getRightClicked() != null) {
 
-			TownyWorld World = null;
-
-			try {
-				World = TownyUniverse.getInstance().getDataSource().getWorld(event.getPlayer().getWorld().getName());
-				if (!World.isUsingTowny())
-					return;
-
-			} catch (NotRegisteredException e) {
-				// World not registered with Towny.
-				e.printStackTrace();
+			if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 				return;
-			}
 
 			Player player = event.getPlayer();
 			boolean bBuild = true;
@@ -678,6 +668,9 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
 
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBed().getWorld()))
+			return;
+		
 		if (!TownySettings.getBedUse())
 			return;
 
@@ -883,6 +876,9 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerFishEvent(PlayerFishEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) {
 			Player player = event.getPlayer();
 			Entity caught = event.getCaught();
@@ -1077,20 +1073,9 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
-		TownyWorld World = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-	
-		try {
-			World = townyUniverse.getDataSource().getWorld(event.getLectern().getLocation().getWorld().getName());
-			if (!World.isUsingTowny())
-				return;
-	
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getLectern().getWorld()))
 			return;
-		}
 		
 		Player player = event.getPlayer();
 		org.bukkit.block.Lectern lectern = event.getLectern();
