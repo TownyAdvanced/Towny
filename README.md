@@ -8,7 +8,7 @@ With help coming from other developers from time to time including dumptruckman,
 
 Towny is one of the oldest still-in-development plugins for Minecraft. It was created by Shadeness for the now-defunct server platform called hMod.
 
-It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months.
+It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months. Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.
 </p>
 
 ___
