@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import de.themoep.idconverter.IdMappings;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -209,6 +211,6 @@ public class BukkitTools {
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
-		return Bukkit.getOfflinePlayer(name);
+		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
 	}
 }

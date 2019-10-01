@@ -2,7 +2,7 @@
 
 ___
 
-<p><img align=right src="http://towny.palmergames.com/wp-content/uploads/2013/01/townylogo.png" height="155" width="153">
+<p><img align=right src="https://user-images.githubusercontent.com/879756/65964696-19d6b300-e423-11e9-9cb0-d193225ee40f.png">
 I took over from ElgarL after MC 1.8 was released. Past developers have included: Shadeness, FuzzieWuzzie, ElgarL. 
 With help coming from other developers from time to time including dumptruckman, ole8pie, SwearWord, gravypod, andrewyunt and more.
 
@@ -32,7 +32,7 @@ ___
 ___
 
 #### Staying up to date
-<p><img align=right src="https://i.imgur.com/lX0EaLq.gif" height="155">
+<p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
 Towny is currently in transition from our website http://palmergames.com/towny to using github for all downloads/documentation.
     
 Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Releases Only".
