@@ -3504,3 +3504,4 @@ v0.92.0.11:
   - Undo removal of another bit of deprecated Vault code in TownyEconomyHandler.
   - Add missing responses to successful uses of /ta town set.
   - Add clarity to config comments for the delete_old_residents option.
+  - Fix yaml in norwegian.yml.
