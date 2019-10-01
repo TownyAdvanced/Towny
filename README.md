@@ -1,4 +1,4 @@
-### Towny Advanced - Developed by [LlmDl](https://github.com/LlmDl)
+## Towny Advanced - Developed by [LlmDl](https://github.com/LlmDl)
 
 ___
 
@@ -13,7 +13,7 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 
 ___
 
-#### Current Recommended Versions
+### Current Recommended Versions
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
@@ -31,7 +31,7 @@ ___
 
 ___
 
-#### Staying up to date
+### Staying up to date
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
 Towny is currently in transition from our website http://palmergames.com/towny to using github for all downloads/documentation.
     
@@ -40,7 +40,7 @@ Now that all Release builds and Development builds are being made available here
 
 ___
 
-#### Connect/Support
+### Connect/Support
 The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a development build it is expected that you have read the changelog for any important changes since the previous Release build.
 
 Some important pages to look over:
@@ -56,12 +56,12 @@ If you want to support the developer consider becoming a patron:
 [<img align=right src="https://user-images.githubusercontent.com/879756/65957602-d3795800-e412-11e9-8b27-dda76b6fed13.PNG">](https://www.patreon.com/bePatron?u=25096724)
 ___
 
-#### Contributing
+### Contributing
 If you'd like to contribute to the Towny code, see the [Contributing.md](https://github.com/LlmDl/Towny/blob/master/.github/CONTRIBUTING.MD).
 
 ___
 
-#### Licensing
+### Licensing
 
 Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](http://creativecommons.org/licenses/by-nc-nd/3.0/)
 
@@ -70,7 +70,7 @@ If you want to modify the code to add some nice feature the least you can do is 
 
 ___
 
-#### Building
+### Building
 If you would like to build from a specific branch yourself, you can do so with either [Apache Ant](https://ant.apache.org/) or [Apache Maven](http://maven.apache.org/), depending on the age of the branch.
 
 For building, open your terminal / command prompt and navigate to the Towny Directory (either extracted, or cloned).
