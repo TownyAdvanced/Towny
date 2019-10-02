@@ -3505,3 +3505,4 @@ v0.92.0.11:
   - Add missing responses to successful uses of /ta town set.
   - Add clarity to config comments for the delete_old_residents option.
   - Fix yaml in norwegian.yml.
+0.94.0.15:
