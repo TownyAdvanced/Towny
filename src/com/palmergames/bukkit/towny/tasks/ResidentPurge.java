@@ -18,16 +18,18 @@ public class ResidentPurge extends Thread {
 	Towny plugin;
 	private CommandSender sender = null;
 	long deleteTime;
+	boolean townless;
 
 	/**
 	 * @param plugin reference to towny
 	 */
-	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime) {
+	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless) {
 
 		super();
 		this.plugin = plugin;
 		this.deleteTime = deleteTime;
 		this.setPriority(NORM_PRIORITY);
+		this.townless = townless;
 	}
 
 	@Override
@@ -39,6 +41,9 @@ public class ResidentPurge extends Thread {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		for (Resident resident : new ArrayList<>(townyUniverse.getDataSource().getResidents())) {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
+				if (townless && resident.hasTown()) {
+					continue;
+				}
 				count++;
 				message("Deleting resident: " + resident.getName());
 				townyUniverse.getDataSource().removeResident(resident);

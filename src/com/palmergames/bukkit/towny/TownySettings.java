@@ -1234,6 +1234,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ECO);
 	}
 
+	public static boolean isDeleteTownlessOnly() {
+		
+		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_TOWNLESS_ONLY);
+	}
+	
 	public static boolean isDeletingOldResidents() {
 
 		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE);

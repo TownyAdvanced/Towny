@@ -29,7 +29,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Town> towndeleteconfirmations = new HashMap<>();
 	private static HashMap<Resident, Town> townunclaimallconfirmations = new HashMap<>();
 	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<>();
-	private static HashMap<Resident, Integer> townypurgeconfirmations = new HashMap<>();
+	private static HashMap<Resident, String> townypurgeconfirmations = new HashMap<>();
 	private static HashMap<Resident, Nation> nationmergeconfirmations = new HashMap<>();
 	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
 	private static Object consoleExtra = null;
@@ -49,7 +49,7 @@ public class ConfirmationHandler {
 		}
 		if (type == ConfirmationType.PURGE) {
 			r.setConfirmationType(type);
-			townypurgeconfirmations.put(r, (Integer) extra); // However an add option doesn't overridee so, we need to check if it exists first.
+			townypurgeconfirmations.put(r, (String) extra); // However an add option doesn't overridee so, we need to check if it exists first.
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -157,8 +157,16 @@ public class ConfirmationHandler {
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
 					throw new TownyException(TownySettings.getLangString("msg_err_admin_only"));
 				}
-				int days = townypurgeconfirmations.get(r);
-				new ResidentPurge(plugin, player, TimeTools.getMillis(days + "d")).start();
+				int days = 1;
+				boolean townless = false;
+				if (townypurgeconfirmations.get(r).startsWith("townless")) {
+					townless = true;
+					days = Integer.parseInt(townypurgeconfirmations.get(r).substring(8));
+				} else {
+					days = Integer.parseInt(townypurgeconfirmations.get(r));
+				}				
+
+				new ResidentPurge(plugin, player, TimeTools.getMillis(days + "d"), townless).start();
 				removeConfirmation(r,type, true);
 			}
 		}
@@ -286,8 +294,16 @@ public class ConfirmationHandler {
 			return;
 		}
 		if (type == ConfirmationType.PURGE) {
-			int days = (Integer) consoleExtra;
-			new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d")).start();
+			int days = 1;
+			boolean townless = false;
+			if (((String) consoleExtra).startsWith("townless")) {
+				townless = true;
+				days = Integer.parseInt(((String) consoleExtra).substring(8));
+			} else {
+				days = Integer.parseInt(((String) consoleExtra));
+			}			
+			
+			new ResidentPurge(plugin, null, TimeTools.getMillis(days + "d"), townless).start();
 			removeConfirmation(type, true);
 			consoleExtra = null;
 		}

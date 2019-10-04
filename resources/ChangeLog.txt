@@ -3506,3 +3506,8 @@ v0.92.0.11:
   - Add clarity to config comments for the delete_old_residents option.
   - Fix yaml in norwegian.yml.
 0.94.0.15:
+  - New Config Option: resident_settings.delete_old_residents.delete_only_townless
+    - default: false
+    - When true only residents who have no town will be deleted by the daily old-resident-purge.
+  - Changed Command: /ta purge # {townless}
+    - Using '/ta purge #ofDays townless' will now only purge old residents that are not part of any town.

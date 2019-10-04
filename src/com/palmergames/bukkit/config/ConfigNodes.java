@@ -1072,6 +1072,10 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS_ECO(
 			"resident_settings.delete_old_residents.delete_economy_account",
 			"true"),
+	RES_SETTING_DELETE_OLD_RESIDENTS_TOWNLESS_ONLY(
+			"resident_settings.delete_old_residents.delete_only_townless",
+			"false",
+			"# When true only residents who have no town will be deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",

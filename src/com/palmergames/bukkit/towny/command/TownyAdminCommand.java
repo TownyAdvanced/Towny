@@ -1045,20 +1045,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days]", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days] {townless}", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
-
+			sender.sendMessage(ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
 			return;
 		}
 		
-		int days = 1;
+		String days = "";
+		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
+			days += "townless";
+		}
 
 		try {
-			days = Integer.parseInt(split[0]);
+			days += String.valueOf(split[0]);
 		} catch (NumberFormatException e) {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
+		
+		
 
 		if (!isConsole) {
 
