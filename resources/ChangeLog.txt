@@ -3511,3 +3511,5 @@ v0.92.0.11:
     - When true only residents who have no town will be deleted by the daily old-resident-purge.
   - Changed Command: /ta purge # {townless}
     - Using '/ta purge #ofDays townless' will now only purge old residents that are not part of any town.
+  - REQUIRED CONFIG CHANGE:
+    - Add LIGHT_GRAY_SHULKER_BOX, to your protection.switch_ids list.
