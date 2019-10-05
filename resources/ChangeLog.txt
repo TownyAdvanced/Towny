@@ -3513,3 +3513,4 @@ v0.92.0.11:
     - Using '/ta purge #ofDays townless' will now only purge old residents that are not part of any town.
   - REQUIRED CONFIG CHANGE:
     - Add LIGHT_GRAY_SHULKER_BOX, to your protection.switch_ids list.
+0.94.0.16:
