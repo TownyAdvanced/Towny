@@ -14,7 +14,8 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-[Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest) supports MC 1.13.2.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest) supports MC 1.13.2.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) supports MC 1.14.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
