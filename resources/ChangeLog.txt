@@ -3515,3 +3515,6 @@ v0.92.0.11:
     - Add LIGHT_GRAY_SHULKER_BOX, to your protection.switch_ids list.
 0.94.0.16:
   - Fix War events being fired async.
+  - New Config Option: protection.mob_removal_skips_named_mobs
+    - default: false
+    - When set to true, mobs who've been named with a nametag will not be removed by the mob removal task.

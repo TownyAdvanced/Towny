@@ -2640,5 +2640,9 @@ public class TownySettings {
 	public static boolean isRemovingKillerBunny() {		
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_TOWN_KILLER_BUNNY);
 	}
+	
+	public static boolean isSkippingRemovalOfNamedMobs() {
+		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_SKIP_NAMED_MOBS);
+	}
 }
 

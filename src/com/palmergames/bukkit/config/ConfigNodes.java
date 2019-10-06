@@ -770,7 +770,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in the world."),
-
+	PROT_MOB_REMOVE_SKIP_NAMED_MOBS(
+			"protection.mob_removal_skips_named_mobs",
+			"false",
+			"",
+			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",

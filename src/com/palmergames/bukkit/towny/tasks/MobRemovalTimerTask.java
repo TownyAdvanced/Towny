@@ -133,6 +133,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
 						continue;
 				}
+				if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
+					continue;
 
 				livingEntitiesToRemove.add(livingEntity);
 			}
