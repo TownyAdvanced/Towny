@@ -3518,3 +3518,5 @@ v0.92.0.11:
   - New Config Option: protection.mob_removal_skips_named_mobs
     - default: false
     - When set to true, mobs who've been named with a nametag will not be removed by the mob removal task.
+  - Bump language files to 0.54
+  - Made war starts message, war stats screen, and war hud translatable.

@@ -28,10 +28,10 @@ public class WarHUD {
 		try {
 			town_loc = at.getTownBlock().getTown().getName();
 			if (at.getTownBlock().isHomeBlock())
-				homeblock = "HOMEBLOCK";
+				homeblock = TownySettings.getLangString("war_hud_homeblock");
 			else
 				homeblock = "";
-		} catch (NotRegisteredException e) {town_loc = "Wilderness"; homeblock = "";}
+		} catch (NotRegisteredException e) {town_loc = TownySettings.getLangString("war_hud_wilderness"); homeblock = "";}
 		try {
 			nation_loc = at.getTownBlock().getTown().getNation().getName();
 		} catch (NotRegisteredException e) {nation_loc = "";}
@@ -45,9 +45,9 @@ public class WarHUD {
 			return;
 		String onEdge;
 		if (isOnEdgeOfTown(at, war))
-			onEdge = "True";
+			onEdge = TownySettings.getLangString("war_hud_true");
 		else
-			onEdge = "False";
+			onEdge = TownySettings.getLangString("war_hud_false");
 		p.getScoreboard().getTeam("edge").setSuffix(HUDManager.check(onEdge));
 	}
 
@@ -60,13 +60,13 @@ public class WarHUD {
 			} else {
 				isTown = true;
 				if (at.getTownBlock().getTown().getNation().isNeutral())
-					health = "Peaceful";
+					health = TownySettings.getLangString("war_hud_peaceful");
 				else
-					health = "Fallen";
+					health = TownySettings.getLangString("war_hud_fallen");
 			}
 		} catch (NotRegisteredException e) {
 			if (isTown)
-				health = "Peaceful";
+				health = TownySettings.getLangString("war_hud_peaceful");
 			else
 				health = "";
 		}
@@ -77,9 +77,9 @@ public class WarHUD {
 		if (health > 0) 
 			p.getScoreboard().getTeam("health").setSuffix(health + "" + ChatColor.AQUA + "/" + (home ? home_health : town_health));
 		else {
-			p.getScoreboard().getTeam("health").setSuffix("Fallen");
+			p.getScoreboard().getTeam("health").setSuffix(TownySettings.getLangString("war_hud_fallen"));
 			if (TownySettings.getOnlyAttackEdgesInWar())
-				p.getScoreboard().getTeam("edge").setSuffix("False");
+				p.getScoreboard().getTeam("edge").setSuffix("war_hud_false");
 		}
 	}
 
@@ -88,7 +88,7 @@ public class WarHUD {
 		try {
 			homeTown = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getName();
 		} catch (NotRegisteredException e) {
-			homeTown = "Townless!";
+			homeTown = TownySettings.getLangString("war_hud_townless");
 		}
 		p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
 	}
@@ -127,19 +127,19 @@ public class WarHUD {
 
 	public static void toggleOn (Player p, War war) {
 		boolean edges = TownySettings.getOnlyAttackEdgesInWar();
-		String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + "War";
+		String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + TownySettings.getLangString("war_hud_war");
 		String space1_entry = ChatColor.DARK_PURPLE.toString();
 		String town_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE;
-		String town_score_entry = ChatColor.WHITE + "Score: " + ChatColor.RED;
+		String town_score_entry = ChatColor.WHITE + TownySettings.getLangString("war_hud_score") + ChatColor.RED;
 		String space2_entry = ChatColor.DARK_BLUE.toString();
-		String location_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Location";
-		String nation_entry = ChatColor.WHITE + "Nation: " + ChatColor.GOLD;
-		String town_entry = ChatColor.WHITE + "Town: " + ChatColor.DARK_AQUA;
-		String edge_entry = ChatColor.WHITE + "Attackable: " + ChatColor.RED;
-		String health_entry = ChatColor.WHITE + "Health: " + ChatColor.RED;
+		String location_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + TownySettings.getLangString("war_hud_location");
+		String nation_entry = ChatColor.WHITE + TownySettings.getLangString("war_hud_nation") + ChatColor.GOLD;
+		String town_entry = ChatColor.WHITE + TownySettings.getLangString("war_hud_town") + ChatColor.DARK_AQUA;
+		String edge_entry = ChatColor.WHITE + TownySettings.getLangString("war_hud_attackable") + ChatColor.RED;
+		String health_entry = ChatColor.WHITE + TownySettings.getLangString("war_hud_health") + ChatColor.RED;
 		String home_entry = ChatColor.RED + "";
 		String space3_entry = ChatColor.DARK_GREEN.toString();
-		String top_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Top Towns";
+		String top_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + TownySettings.getLangString("war_hud_top_towns");
 		String first_entry = ChatColor.DARK_GREEN + "" + ChatColor.DARK_AQUA + "";
 		String second_entry = ChatColor.BLACK + "" + ChatColor.DARK_AQUA + "";
 		String third_entry = ChatColor.YELLOW + "" + ChatColor.DARK_AQUA + "";

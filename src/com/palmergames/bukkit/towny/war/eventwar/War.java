@@ -158,7 +158,7 @@ public class War {
 		else {
 			// Create a countdown timer
 			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
-				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format("War starts in %s", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(plugin, String.format(TownySettings.getLangString("war_starts_in_x"), TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
 				if (id == -1) {
 					TownyMessaging.sendErrorMsg("Could not schedule a countdown message for war event.");
 					end();
@@ -672,11 +672,11 @@ public class War {
 
 		List<String> output = new ArrayList<>();
 		output.add(ChatTools.formatTitle("War Stats"));
-		output.add(Colors.Green + "  Nations: " + Colors.LightGreen + warringNations.size());
-		output.add(Colors.Green + "  Towns: " + Colors.LightGreen + warringTowns.size() + " / " + townScores.size());
-		output.add(Colors.Green + "  WarZone: " + Colors.LightGreen + warZone.size() + " Town blocks");
+		output.add(Colors.Green + TownySettings.getLangString("war_stats_nations") + Colors.LightGreen + warringNations.size());
+		output.add(Colors.Green + TownySettings.getLangString("war_stats_towns") + Colors.LightGreen + warringTowns.size() + " / " + townScores.size());
+		output.add(Colors.Green + TownySettings.getLangString("war_stats_warzone") + Colors.LightGreen + warZone.size() + " Town blocks");
 		try {
-			output.add(Colors.Green + "  Spoils of War: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
+			output.add(Colors.Green + TownySettings.getLangString("war_stats_spoils_of_war") + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
 			return output;
 		} catch (EconomyException e) {
 		}
