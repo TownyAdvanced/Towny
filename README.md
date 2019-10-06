@@ -43,7 +43,7 @@ Now that all Release builds and Development builds are being made available here
 ___
 
 ### Connect/Support
-The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a development build it is expected that you have read the changelog for any important changes since the previous Release build.
+The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a development build it is expected that you have read the [changelog](https://git.io/fjbS3) for any important changes since the previous Release build.
 
 Some important pages to look over:
 - [Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)
