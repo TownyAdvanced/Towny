@@ -36,7 +36,7 @@ public class TownyWorldListener implements Listener {
 		boolean dungeonWorld = false;
 		
 		// Don't create a new world for temporary DungeonsXL instanced worlds.
-		if (Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL").isEnabled())
+		if (Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL") != null)
 			if (worldName.startsWith("DXL_")) {
 				dungeonWorld = true;
 			}
