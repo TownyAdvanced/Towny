@@ -85,15 +85,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public List<Resident> getResidents(Player player, String[] names) {
-
+		
 		List<Resident> invited = new ArrayList<>();
-		for (String name : names)
-			try {
-				Resident target = getResident(name);
+		for (String name : names) {
+			Resident target = getResident(name);
+			if (target != null) {
 				invited.add(target);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+			} else {
+				TownyMessaging.sendErrorMsg(player, "The resident " + name + "  is not registered.");
 			}
+		}
 		return invited;
 	}
 
@@ -101,11 +102,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<>();
-		for (String name : names)
-			try {
+		for (String name : names) {
+			Resident resident = getResident(name);
+			if (resident != null) {
 				matches.add(getResident(name));
-			} catch (NotRegisteredException ignored) {
 			}
+		}
 		return matches;
 	}
 
@@ -116,7 +118,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public Resident getResident(String name) throws NotRegisteredException {
+	public Resident getResident(String name) {
 
 		try {
 			name = NameValidation.checkAndFilterPlayerName(name).toLowerCase();
@@ -124,8 +126,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		if (!hasResident(name)) {
-
-			throw new NotRegisteredException(String.format("The resident '%s' is not registered.", name));
+			return null;
 
 		} else if (TownySettings.isFakeResident(name)) {
 
