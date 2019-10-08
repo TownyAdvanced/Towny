@@ -3521,3 +3521,4 @@ v0.92.0.11:
   - Bump language files to 0.54
   - Made war starts message, war stats screen, and war hud translatable.
   - Fix world imports with MV.
+  - Remove old MCStats Metrics because their website no longer collects data anyways.
