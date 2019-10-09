@@ -3524,3 +3524,4 @@ v0.92.0.11:
   - Remove old MCStats Metrics because their website no longer collects data anyways.
 0.94.0.17:
   - Fix r's and f's in the plot perm hud being reversed.
+  - Fix r's and f's being reversed in set perm command outputs.
