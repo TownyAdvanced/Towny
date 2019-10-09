@@ -46,7 +46,7 @@ public class PermHUD {
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 			TownyPermission tp = townBlock.getPermissions();
-			String v = (owner instanceof Resident) ? "r" : "f";
+			String v = (owner instanceof Resident) ? "f" : "r";
 			build = (tp.getResidentPerm(ActionType.BUILD) ? v : "-") + (tp.getAllyPerm(ActionType.BUILD) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.BUILD) ? "o" : "-");
 			destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
 			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");

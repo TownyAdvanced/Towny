@@ -3522,3 +3522,5 @@ v0.92.0.11:
   - Made war starts message, war stats screen, and war hud translatable.
   - Fix world imports with MV.
   - Remove old MCStats Metrics because their website no longer collects data anyways.
+0.94.0.17:
+  - Fix r's and f's in the plot perm hud being reversed.
