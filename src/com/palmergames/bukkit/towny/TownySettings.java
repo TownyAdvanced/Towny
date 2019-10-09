@@ -2644,5 +2644,8 @@ public class TownySettings {
 	public static boolean isSkippingRemovalOfNamedMobs() {
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_SKIP_NAMED_MOBS);
 	}
+	public static List<String> getJailBlacklistedCommands() {
+		return getStrArr(ConfigNodes.JAIL_BLACKLISTED_COMMANDS);
+	}
 }
 

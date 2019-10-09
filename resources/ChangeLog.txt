@@ -3525,3 +3525,6 @@ v0.92.0.11:
 0.94.0.17:
   - Fix r's and f's in the plot perm hud being reversed.
   - Fix r's and f's being reversed in set perm command outputs.
+  - New Config Option: jail.blacklisted_commands
+    - Default: home,spawn,teleport,tp,tpa,kill
+    - Commands which a jailed player cannot use.

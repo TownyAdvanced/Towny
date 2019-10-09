@@ -51,6 +51,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -1083,5 +1084,20 @@ public class TownyPlayerListener implements Listener {
 		
 		boolean bDestroy = PlayerCacheUtil.getCachePermission(player, location, Material.LECTERN, ActionType.DESTROY);
 		event.setCancelled(!bDestroy);
+	}
+
+	/*
+	 * Blocks jailed players using blacklisted commands. 
+	 */
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+		if (!TownyAPI.getInstance().getDataSource().getResident(event.getPlayer().getName()).isJailed())
+			return;
+				
+		String[] split = event.getMessage().substring(1).split(" ");
+		if (TownySettings.getJailBlacklistedCommands().contains(split[0])) {
+			TownyMessaging.sendErrorMsg(event.getPlayer(), TownySettings.getLangString("msg_you_cannot_use_that_command_while_jailed"));
+			event.setCancelled(true);
+		}
 	}
 }

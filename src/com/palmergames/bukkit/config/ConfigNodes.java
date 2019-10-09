@@ -1330,6 +1330,11 @@ public enum ConfigNodes {
 			"jail.bail.bail_amount",
 			"10",
 			"#Amount that bail costs."),
+	JAIL_BLACKLISTED_COMMANDS(
+			"jail.blacklisted_commands",
+			"home,spawn,teleport,tp,tpa,kill",
+			"# Commands which a jailed player cannot use."),
+	
 	BANK(
 			"bank",
 			"",
