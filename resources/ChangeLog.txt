@@ -3528,3 +3528,4 @@ v0.92.0.11:
   - New Config Option: jail.blacklisted_commands
     - Default: home,spawn,teleport,tp,tpa,kill
     - Commands which a jailed player cannot use.
+  - Language files bumped to 0.55
