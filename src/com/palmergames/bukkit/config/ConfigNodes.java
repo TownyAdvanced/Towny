@@ -1332,7 +1332,7 @@ public enum ConfigNodes {
 			"#Amount that bail costs."),
 	JAIL_BLACKLISTED_COMMANDS(
 			"jail.blacklisted_commands",
-			"home,spawn,teleport,tp,tpa,kill",
+			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
 			"# Commands which a jailed player cannot use."),
 	
 	BANK(
