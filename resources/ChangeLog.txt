@@ -3529,3 +3529,9 @@ v0.92.0.11:
     - Default: home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide
     - Commands which a jailed player cannot use.
   - Language files bumped to 0.55
+0.94.0.18: 
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - Add towny.command.nation.townlist to the default nation rank.
+    - Add towny.command.nation.allylist to the default nation rank.
+    - Add towny.command.nation.enemylist to the default nation rank.
+  
