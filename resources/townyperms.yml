@@ -24,6 +24,9 @@ nomad:
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list
+    - towny.command.nation.townlist  
+    - towny.command.nation.allylist
+    - towny.command.nation.enemylist
     - towny.town.resident
     - towny.town.spawn.public
     - towny.chat.general
@@ -92,9 +95,7 @@ nations:
         - towny.nation.spawn.ally
         - towny.town.spawn.nation
         - towny.chat.nation
-        - towny.command.nation.townlist  
-        - towny.command.nation.allylist
-        - towny.command.nation.enemylist
+
     king:
         # Kings get these permissions in addition to the default set.
         - towny.command.nation.*
