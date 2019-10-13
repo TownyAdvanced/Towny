@@ -2647,5 +2647,35 @@ public class TownySettings {
 	public static List<String> getJailBlacklistedCommands() {
 		return getStrArr(ConfigNodes.JAIL_BLACKLISTED_COMMANDS);
 	}
+	
+	public static String getPAPIFormattingBoth() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_BOTH);
+	}
+
+	public static String getPAPIFormattingTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_TOWN);
+	}
+
+	public static String getPAPIFormattingNation() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_NATION);
+	}
+	
+	public static String getPAPIFormattingNomad() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD);
+	}
+
+	public static String getPAPIFormattingResident() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_RESIDENT);
+	}
+
+	public static String getPAPIFormattingMayor() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_MAYOR);
+	}
+
+	public static String getPAPIFormattingKing() {
+		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
+	}
+
+	
 }
 

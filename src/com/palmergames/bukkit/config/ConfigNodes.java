@@ -700,7 +700,38 @@ public enum ConfigNodes {
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"# Maximum length of titles and surnames."),
+	
+	FILTERS_PAPI_CHAT_FORMATTING(
+			"filters_colour_chat.papi_chat_formatting","",
+			"# See How Towny Works wikipage for list of PAPI placeholders.",
+			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
+	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
+			"filters_colour_chat.papi_chat_formatting.both",
+			"&f[&6%n&f|&b%t&f] ",
+			"# When using PlaceholderAPI, and a tag would show both nation and town, this will determine how they are formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_TOWN(
+			"filters_colour_chat.papi_chat_formatting.town",
+			"&f[&b%s&f] ",
+			"# When using PlaceholderAPI, and a tag would showing a town, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_NATION(
+			"filters_colour_chat.papi_chat_formatting.nation",
+			"&f[&6%s&f] ",
+			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
+			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
+			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_RESIDENT(
+			"filters_colour_chat.papi_chat_formatting.ranks.resident","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_MAYOR(
+			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
+			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
+	
 
+
+	
 	PROT(
 			"protection",
 			"",

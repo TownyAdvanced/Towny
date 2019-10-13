@@ -3534,4 +3534,33 @@ v0.92.0.11:
     - Add towny.command.nation.townlist to the nomad rank.
     - Add towny.command.nation.allylist to the nomad rank.
     - Add towny.command.nation.enemylist to the nomad rank.
-  
+  - PAPI Placeholder Support:
+    - New config options:
+      - filters_colour_chat.papi_chat_formatting.both
+      - filters_colour_chat.papi_chat_formatting.town
+	  - filters_colour_chat.papi_chat_formatting.nation
+	  - filters_colour_chat.papi_chat_formatting.ranks.nomad
+	  - filters_colour_chat.papi_chat_formatting.ranks.resident
+      - filters_colour_chat.papi_chat_formatting.ranks.mayor
+      - filters_colour_chat.papi_chat_formatting.ranks.king
+    - Available tags: 
+      - %townyadvanced_town% - displays town name (if they have one.)
+      - %townyadvanced_town_formatted% - displays long-form town name (if they have one.)
+      - %townyadvanced_nation% - displays nation name (if they have one.)
+      - %townyadvanced_nation_formatted% - displays long-form nation name (if they have one.)
+      - %townyadvanced_town_balance% - displays town bank value.
+      - %townyadvanced_nation_balance% - displays nation bank value.
+      - %townyadvanced_town_tag% - displays town tag (if they have one.)
+      - %townyadvanced_town_tag_override% - displays town tag (if they have one,) or the full town name.
+      - %townyadvanced_nation_tag% - displays nation tag (if they have one.)
+      - %townyadvanced_nation_tag_override% - displays nation tag (if they have one,) or the full nation name.
+      - %townyadvanced_towny_tag% - displays town and nation tags.
+      - %townyadvanced_towny_tag_override% - displays town and nation tags if they exist, falling back to names if they don't.
+      - %townyadvanced_towny_tag_formatted% - displays town and nation tags if they exist, falling back to long-form names if they don't.
+      - %townyadvanced_title% - displays king-granted title.
+      - %townyadvanced_surname% - displays king-granted surname.
+      - %townyadvanced_towny_name_prefix% - displays mayor and king prefix.
+      - %townyadvanced_towny_name_postfix% - displays mayor and king postfix.
+      - %townyadvanced_towny_prefix% - displays title if it exists, falls back to mayor and king prefixes.
+      - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
+      - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)

@@ -340,6 +340,11 @@ public class Towny extends JavaPlugin {
 				citizens2 = test.getDescription().getVersion().startsWith("2");
 			}
 		}
+		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
+		if(test != null){
+            new TownyPlaceholderExpansion(this).register();
+            using.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
+		}
 
 		if (using.size() > 0) {
 			LOGGER.info("[Towny] Using: " + StringMgmt.join(using, ", "));
