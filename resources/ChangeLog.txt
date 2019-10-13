@@ -3564,3 +3564,4 @@ v0.92.0.11:
       - %townyadvanced_towny_prefix% - displays title if it exists, falls back to mayor and king prefixes.
       - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
+0.94.0.19:
