@@ -13,3 +13,6 @@
 
 # Prevent Maven Leakage
 /target
+
+# Javadoc
+/doc
