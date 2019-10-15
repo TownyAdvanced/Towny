@@ -21,38 +21,69 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class FileMgmt {
-
-	public static void checkFolders(String[] folders) {
-
+	/**
+	 * Checks a folderPath to see if it exists, if it doesn't it will attempt
+	 * to create the folder at the designated path.
+	 *
+	 * @param folderPath {@link String} containing a path to a folder.
+	 * @return True if the folder exists or if it was successfully created.
+	 */
+	public static boolean checkOrCreateFolder(String folderPath) {
+		File file = new File(folderPath);
+		return file.exists() || file.mkdirs() || file.isDirectory();
+	}
+	
+	/**
+	 * Checks an array of folderPaths to see if they exist, if they don't
+	 * it will try to create the folder at the designated paths.
+	 *
+	 * @param folders array of {@link String} containing a path to a folder.
+	 */
+	public static boolean checkOrCreateFolders(String... folders) {
 		for (String folder : folders) {
-			File f = new File(folder);
-			if (!(f.exists() && f.isDirectory())) {
-				f.getParentFile().mkdirs();
-				f.mkdir();
-
+			if (!checkOrCreateFolder(folder)) {
+				return false;
 			}
 		}
+		return true;
 	}
-
-	public static void checkFiles(String[] files) throws IOException {
-
+	
+	/**
+	 * Checks a filePath to see if it exists, if it doesn't it will attempt
+	 * to create the file at the designated path.
+	 *
+	 * @param filePath {@link String} containing a path to a file.
+	 * @return True if the folder exists or if it was successfully created.
+	 */
+	public static boolean checkOrCreateFile(String filePath) {
+		File file = new File(filePath);
+		if (!checkOrCreateFolder(file.getParentFile().getPath())) {
+			return false;
+		}
+		try {
+			return file.exists() || file.createNewFile();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks an array of folderPaths to see if they exist, if they don't
+	 * it will try to create the folder at the designated paths.
+	 *
+	 * @param files array of {@link String} containing a path to a file.
+	 */
+	public static boolean checkOrCreateFiles(String... files) {
 		for (String file : files) {
-			File f = new File(file);
-			if (!(f.exists() && f.isFile())) {
-				f.getParentFile().mkdirs();
-				f.createNewFile();
+			if (!checkOrCreateFile(file)) {
+				return false;
 			}
 		}
-	}
-
-	public static String fileSeparator() {
-
-		return System.getProperty("file.separator");
+		return true;
 	}
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-
 		synchronized (sourceLocation) {
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
@@ -81,19 +112,6 @@ public class FileMgmt {
 		}
 	}
 
-	public static File checkYMLExists(File file) {
-
-		if (!file.exists()) {
-			try {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return file;
-	}
-
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
 
 		// open a handle to yml file
@@ -109,11 +127,7 @@ public class FileMgmt {
 		 * or it's the default file
 		 * so refresh just in case.
 		 */
-		try {
-			checkFiles(new String[]{filePath});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		checkOrCreateFile(filePath);
 
 		// Populate a new file
 		try {
@@ -143,7 +157,7 @@ public class FileMgmt {
 
 			char[] buffer = new char[1024];
 			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -255,31 +269,20 @@ public class FileMgmt {
 		synchronized (sourceFile) {
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
-				File f = new File((sourceFile.getParent() + fileSeparator() + targetLocation + fileSeparator() + sourceFile.getName()));
+				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
 					f.delete();
 				// Move file to new directory
-				boolean success = sourceFile.renameTo(new File((sourceFile.getParent() + fileSeparator() + targetLocation), sourceFile.getName()));
-				if (!success) {
-					// File was not successfully moved
-				}
+				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
+				
 			}
 		}
 	}
 
-	public static void zipDirectory(File sourceFolder, File destination) throws IOException {
-
-		synchronized (sourceFolder) {
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
-			recursiveZipDirectory(sourceFolder, output);
-			output.close();
-		}
-	}
-
-	public static void zipDirectories(File[] sourceFolders, File destination) throws IOException {
+	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 
 		synchronized (sourceFolders) {
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination));
+			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
 			for (File sourceFolder : sourceFolders)
 				recursiveZipDirectory(sourceFolder, output);
 			output.close();
@@ -292,12 +295,11 @@ public class FileMgmt {
 
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
-			int bytesIn = 0;
+			int bytesIn;
 			for (String aDirList : dirList) {
 				File f = new File(sourceFolder, aDirList);
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
-					continue;
 				} else if (f.isFile() && f.canRead()) {
 					FileInputStream input = new FileInputStream(f);
 					ZipEntry anEntry = new ZipEntry(f.getPath());
@@ -344,7 +346,7 @@ public class FileMgmt {
 
 		synchronized (backupsDir) {
 
-			TreeSet<Long> deleted = new TreeSet<Long>();
+			TreeSet<Long> deleted = new TreeSet<>();
 			if (backupsDir.isDirectory()) {
 				File[] children = backupsDir.listFiles();
 				if (children != null) {
@@ -402,9 +404,7 @@ public class FileMgmt {
 								}
 							}
 
-						} catch (Exception e) {
-							// Ignore file
-						}
+						} catch (Exception ignored) {}
 					}
 
 					if (count > 0) {
@@ -414,5 +414,11 @@ public class FileMgmt {
 			}
 		}
 
+	}
+	
+	@Deprecated
+	public static String fileSeparator() {
+
+		return System.getProperty("file.separator");
 	}
 }

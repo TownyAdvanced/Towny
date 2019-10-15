@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
@@ -14,11 +16,9 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -27,37 +27,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver{
-
-	private List<Resident> friends = new ArrayList<Resident>();
-	private List<Object[][][]> regenUndo = new ArrayList<Object[][][]>();
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
+	private List<Resident> friends = new ArrayList<>();
+	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
-	private long lastOnline, registered;
+	private long lastOnline;
+	private long registered;
 	private boolean isNPC = false;
 	private boolean isJailed = false;
-	private int JailSpawn;
-	private String JailTown;
-	private String title, surname;
-	private long teleportRequestTime;
+	private int jailSpawn;
+	private String jailTown = "";
+	private String title = "";
+	private String surname = "";
+	private long teleportRequestTime = -1;
 	private Location teleportDestination;
-	private double teleportCost;
-	private String chatFormattedName;
-	private List<String> modes = new ArrayList<String>();
-	private ConfirmationType confirmationType;
+	private double teleportCost = 0.0;
+	private List<String> modes = new ArrayList<>();
+	private transient ConfirmationType confirmationType;
+	private transient List<Invite> receivedinvites = new ArrayList<>();
 
-	private List<String> townRanks = new ArrayList<String>();
-	private List<String> nationRanks = new ArrayList<String>();
+	private List<String> townRanks = new ArrayList<>();
+	private List<String> nationRanks = new ArrayList<>();
 
 	public Resident(String name) {
-
-		setChatFormattedName(name);
-		setName(name);
-		setTitle("");
-		setSurname("");
-		setJailTown("");
+		super(name);
 		permissions.loadDefault(this);
-		teleportRequestTime = -1;
-		teleportCost = 0.0;
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -94,7 +88,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				
 				// Use teleport warmup
 				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-				TownyUniverse.jailTeleport(player, loc);
+				TownyAPI.getInstance().jailTeleport(player, loc);
 
 				this.removeJailSpawn();
 				this.setJailTown(" ");
@@ -110,7 +104,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 				// Use teleport warmup
 				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-				TownyUniverse.jailTeleport(player, loc);
+				TownyAPI.getInstance().jailTeleport(player, loc);
 
 				this.setJailed(true);
 				this.setJailSpawn(index);
@@ -121,7 +115,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getDataSource().saveResident(this);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	public void setJailed(Player player, Integer index, Town town) {
@@ -129,7 +123,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (this.isJailed) {
 			this.setJailed(false);
 			try {
-				Location loc = null;
+				Location loc;
 				if (this.hasTown())
 					loc = this.getTown().getSpawn();
 				else
@@ -157,7 +151,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getDataSource().saveResident(this);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	public boolean isJailed() {
@@ -166,55 +160,45 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public boolean hasJailSpawn() {
-
-		if (this.JailSpawn <= 1) {
-			return true;
-		} else {
-			return false;
-		}
-
+		return this.jailSpawn <= 1;
 	}
 
 	public int getJailSpawn() {
 
-		return JailSpawn;
+		return jailSpawn;
 	}
 
 	public void setJailSpawn(Integer index) {
 
-		this.JailSpawn = index;
+		this.jailSpawn = index;
 
 	}
 
 	public void removeJailSpawn() {
 
-		this.JailSpawn = 0;
+		this.jailSpawn = 0;
 	}
 
 	public String getJailTown() {
 
-		return JailTown;
+		return jailTown;
 	}
 
 	public void setJailTown(String jailTown) {
-		if (jailTown == null)
-			jailTown = "";
-		if (jailTown.matches(" "))
-			jailTown = "";
-		this.JailTown = jailTown;
+		if (jailTown == null) {
+			this.jailTown = "";
+			return;
+		}
+		this.jailTown = jailTown.trim();
 	}
 
 	public boolean hasJailTown(String jailtown) {
 
-		return JailTown.equalsIgnoreCase(jailtown);
+		return jailTown.equalsIgnoreCase(jailtown);
 	}
 
 	public void setTitle(String title) {
-
-		if (title.matches(" "))
-			title = "";
-		this.title = title;
-		setChangedName(true);
+		this.title = title.trim();
 	}
 
 	public String getTitle() {
@@ -228,11 +212,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public void setSurname(String surname) {
-
-		if (surname.matches(" "))
-			surname = "";
-		this.surname = surname;
-		setChangedName(true);
+		this.surname = surname.trim();
 	}
 
 	public String getSurname() {
@@ -256,7 +236,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	public boolean isMayor() {
 
-		return hasTown() ? town.isMayor(this) : false;
+		return hasTown() && town.isMayor(this);
 	}
 
 	public boolean hasTown() {
@@ -266,7 +246,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	public boolean hasNation() {
 
-		return hasTown() ? town.hasNation() : false;
+		return hasTown() && town.hasNation();
 	}
 
 	public Town getTown() throws NotRegisteredException {
@@ -332,7 +312,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	public void removeAllFriends() {
 
-		for (Resident resident : new ArrayList<Resident>(friends))
+		for (Resident resident : new ArrayList<>(friends))
 			try {
 				removeFriend(resident);
 			} catch (NotRegisteredException e) {
@@ -378,7 +358,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	@Override
 	public List<String> getTreeString(int depth) {
 
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		out.add(getTreeDepth(depth) + "Resident (" + getName() + ")");
 		out.add(getTreeDepth(depth + 1) + "Registered: " + getRegistered());
 		out.add(getTreeDepth(depth + 1) + "Last Online: " + getLastOnline());
@@ -425,23 +405,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	public double getTeleportCost() {
 
 		return teleportCost;
-	}
-
-	/**
-	 * @return the chatFormattedName
-	 */
-	public String getChatFormattedName() {
-
-		return chatFormattedName;
-	}
-
-	/**
-	 * @param chatFormattedName the chatFormattedName to set
-	 */
-	public void setChatFormattedName(String chatFormattedName) {
-
-		this.chatFormattedName = chatFormattedName;
-		setChangedName(false);
 	}
 
 	//TODO: Restore /tw regen and /tw regen undo functionality.
@@ -578,8 +541,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 		if (townRanks.contains(rank)) {
 			townRanks.remove(rank);
-			if (BukkitTools.isOnline(this.getName()))
+			if (BukkitTools.isOnline(this.getName())) {
 				TownyPerms.assignPermissions(this, null);
+			}
 			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
@@ -643,12 +607,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
 					return true;
 				} else {
-
-					if (this.getTown().getNation().equals(otherresident.getTown().getNation())) {
-						return true;
-					} else {
-						return false;
-					}
+					
+					return this.getTown().getNation().equals(otherresident.getTown().getNation());
 				}
 			} catch (NotRegisteredException e) {
 				return false;
@@ -679,7 +639,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		receivedinvites.remove(invite);
 	}
 
-	private List<Invite> receivedinvites = new ArrayList<Invite>();
 
 	public void setConfirmationType(ConfirmationType confirmationType) {
 		this.confirmationType = confirmationType;

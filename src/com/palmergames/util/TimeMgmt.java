@@ -1,9 +1,9 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.palmergames.bukkit.towny.TownySettings;
 
 public class TimeMgmt {
 
@@ -25,7 +25,7 @@ public class TimeMgmt {
 
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
-		List<Long> out = new ArrayList<Long>();
+		List<Long> out = new ArrayList<>();
 		for (long[] delay : delays)
 			if (delay.length != 2)
 				return null;

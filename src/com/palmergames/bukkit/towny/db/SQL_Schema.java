@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SQL_Schema {
 
-    private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+    private static final String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
     private static String getWORLDS() {
 
@@ -84,6 +84,7 @@ public class SQL_Schema {
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
+		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
 
@@ -118,6 +119,7 @@ public class SQL_Schema {
 		columns.add("`open` bool NOT NULL DEFAULT '0'");
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
+		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");

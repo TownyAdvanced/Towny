@@ -3259,3 +3259,310 @@ v0.92.0.11:
     - Automatically remove deleted residents from town files and deleted towns from resident files, courtesy of KarlOfDuty.
 0.94.0.0:
     - Bump version number for release build.
+0.94.0.1:
+    - Switch to Bukkit 1.14.3 for development.
+    - Major Database overhaul, courtesy of ArticDive.
+      - Make TownySQLSource implement TownyDatabaseHandler directly
+      - Make TownyUniverse a singleton, since there is only ever 1 instance of the class.
+      - Take TownyUniverse out of the objects package and put it on root, (rename to TownyAPI?? or take out API methods into a new class called TownyAPI, also a singleton.), Deprecate the old version and make it forward to the new TownyUniverse.
+      - Remove all calls to our own deprecated methods.
+      - Slightly optimize the calls to our internal API.
+    - Update for signs and dyes, courtesy of TheFlagCourier.
+    - REQUIRED CONFIG CHANGE: protection.item_use_ids
+      - Add ",BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE"
+      - Stops players from using dyes on signs.
+    - REQUIRED CONFIG CHANGE: 
+      - In THREE places of the config you must change the sign names. These places are:
+        - new_world_settings.plot_management.block_delete.unclaim_delete
+        - new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete
+        - new_world_settings.plot_management.revert_on_unclaim.block_ignore
+      - Change: SIGN_POST,WALL_SIGN 
+      - To: ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN
+      - You will have to edit these sign names in your Towny\data\worlds\WORLDNAME.txt files as well.
+    - REQUIRED CONFIG CHANGE: protections.switch_ids
+      - Add: ",BARREL"
+0.94.0.2:
+    - Attempt #2 at silencing the AssignPermissions() error seen when DungeonsXL moves offline players out of dungeon worlds.
+    - Test commit please ignore.
+0.94.0.3:
+    - Work around solution for crossbows and fireworks until we can get the shooter of the firework via the Bukkit API.
+      - If either explosions or PVP is disallowed where the victim is located, the damage will be cancelled.
+    - Return FileMgmt.fileSeparator() so TownyNameUpdater will enable.
+      - It is deprecated, as TownyNameUpdater will be integrated into Towny in the future.
+0.94.0.4:
+    - New Command: /resident friend list
+      - Returns a list of your friends.
+    - Language files bumped to 0.50.
+    - New Config Option: economy.daily_taxes.nation_pertown_upkeep
+      - Default: false
+      - Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)
+      - calculated by (number of towns in nation X price_nation_upkeep).
+    - New Config Option: economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier
+      - Default: false
+      - If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers.
+    - New Language Strings:
+      - The following things can now be translated:
+        - The "Added " when you add someone to your friendslist.
+        - The "Not Registered" message show when the NotRegisteredException exception is called from failed commands.
+      - The getFormattedResidents() format which has 3 colours can now have their colours set.
+        - These are commonly seen in the /res screen for the friends list; the townranks in the /town screen; the nationranks in the /nationscreen, and probably other places where to show a list of residents.
+        - The first colour is the start of the line, the second colour is the [#] section, the third colour is the list of resident names.
+    - Changed Command: /nation list, courtesy of professorg
+      - Now available are comparators to choose how to order the list of nations:
+      - options are:
+        - /n list by name: order alphabetically.
+        - /n list by resident: order by nation with the most residents across all towns.
+        - /n list by balance: order by nation with the highest nation bank balance.
+        - /n list by towns: order by the nation with the most towns.
+    - Changed Command: /town list, courtesy of professorg
+      - Now available are comparators to choose how to order the list of towns:
+      - options are:
+        - /t list by name: order alphabetically.
+        - /t list by resident: order by town with the most residents.
+        - /t list by balance: order by town with the highest town bank balance.
+    - New Config Option: economy.new_expand.price_claim_townblock_refund
+      - default: 0.0
+      - The amount refunded to a town when they unclaim a townblock.
+      - Warning: do not set this higher than the cost to claim a townblock.
+      - It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.
+    - Fix messages showing when unclaiming an area where nothing can be unclaimed. 
+    - Change upkeep messages for towns and nations to display fallen towns/nations in a much more condensed way.
+    - Change town tax, plot tax, nation tax messages to display in a much more condensed way.
+    - Fix MYSQL servers not loading due to missing DB code for saving and loading of RegenList and SnapshotList.
+    - New Feature: Embassy information on the /res screen, courtesy of SeruhioX. 
+      - "Embassies in {town(s)}" now shows in the /res screen for players that own embassies in other towns.
+0.94.0.5:
+    - Add /n list by townblocks: order nations by how many townblocks their towns have collectively claimed.
+    - Add /t list by townblocks: order towns by how many townblocks they have claimed.
+    - API: Add nation.getNumTownBlocks(); 
+    - Add /n list by online: order nations by how many players are online at that moment.
+    - Add /t list by online: order towns by how many players are online at that moment.
+    - New Permission Node: towny.bypass_death_costs
+      - Stops a player from paying the death costs. 
+    - Removed underscores from showing in town and nations names in the following places: /t new, /t list, /n new, /n list, /n leave.
+    - Removed some old BukkitTools.getMaterial(BlockID int) calls on the loading of worlds' ignoreID lists. These have been material lists for a long time, doubtful anyone is converting something that old anymore.
+      - Long-term this gets us closer to removing the de.themoep.idconverter package.
+      - Remaining spots include:
+        - a deprecated permission node wilderness check.
+        - a part of TownySettings that converts lists of blocksIDs to materials.
+        - the PlotBlockData restoreNextBlock (which we have to keep around for a while longer.)
+    - Fix null locationCanExplode error seen since fireworks got handled in 0.94.0.3. 
+    - The Towny project has now become Mavenized, courtesy of FlagCourier.
+      - The previous build system used was Ant, which was in use from 2010-2019.
+    - New Command: /nation merge {nationname}
+      - Requests the given nation to merge into your nation.
+      - Can only be used by the nation king, and requires the king of the other nation to be online to accept the merger.
+      - The soon-to-be-ex-king will receive a confirmation message asking if they will accept the dissolution of their nation.
+      - If accepted the towns of the nation transfer to the remaining nation. The nation's bank money is also transferred.
+      - Requires the towny.command.nation.merge permission node.
+    - New Command: /ta nation {oldnation} merge {newnation}
+      - Command to forcefully merge the oldnation into the newnation.
+      - Requires the towny.command.townyadmin.nation.merge permission node.
+    - API: added Nation.getKing().
+    - New Language File: chinese.yml courtesy of qsefthuopq.
+    - The TownyLogger has been removed in favour of log4j.Logger, work done by Articdive.
+    - The german.yml has been updated by Sprugente.
+    - The FileMgmt has seen a slight touch-up courtesy of Articdive.
+      - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
+    - Added confirmations to /ta town {townname} delete when used from the Console.
+    - Added confirmations to /ta nation {nationname} delete when used from the Console.
+    - Add /t list by open: lists only open towns, in order of most residents to least residents.
+    - Fix a missing permission check.
+    - New Config Option: economy.new_expand.price_claim_townblock_increase
+      - default: 1.0
+      - How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost.
+    - Added townblocks and outpost claiming costs to the /towny prices screen. Shows cost increase when it is used.
+    - New Command: /ta town {townname} toggle ....
+    - New Command: /ta town {townname} set ....
+    - New Command: /ta nation {nationname} toggle ....
+    - New Command: /ta nation {nationname} set ....
+0.94.0.6:
+    - Fix for /nation status screen not properly showing nation spawn coordinates when nation is set to public.
+    - New Command: /n townlist (nation)
+      - (nation) is optional, to show townlist of a nation you aren't a part of.
+      - lists all towns in a nation.
+      - requires towny.command.nation.townlist permission node.
+    - New Command: /n allylist (nation)
+      - (nation) is optional, to show allylist of a nation you aren't a part of.
+      - lists all allies of a nation.
+      - requires towny.command.nation.allylist permission node.
+    - New Command: /n enemylist (nation)
+      - (nation) is optional, to show enemylist of a nation you aren't a part of.
+      - lists all enemies of a nation.
+      - requires towny.command.nation.enemylist permission node.
+    - New Permission nodes:
+      - towny.command.nation.townlist.
+      - towny.command.nation.allylist.
+      - towny.command.nation.enemylist.
+    - Change to /nation screen.
+      - Overly long lists of towns/allies/enemies have been cut off after ~10 names.
+      - Use the new /n townlist/allylist/enemylist commands to see full list of names.
+    - Bump Language Files to 0.52.
+    - New Command: /ta plot claim {playername}:
+      - Admin command to claim a plot for another player.
+      - Requires towny.command.townyadmin.plot.claim.
+      - Area still has to be part of a town.
+    - New Permission Node: towny.command.townyadmin.plot.claim
+      - childnode of towny.command.townyadmin.plot.* which is itselft a childnode of towny.command.townyadmin.*.
+      - default: false.
+    - Fix saving and loading of Cyrillic characters in Towns and Nations.
+      - the regex in the config should probably have the following settings:
+        - name_check_regex: ^[а-яА-Яa-zA-Z0-9._\[\]-]*$
+        - string_check_regex: ^[а-яА-Яa-zA-Z0-9\s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
+        - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
+    - Added korean.yml translation by DayBreak365.
+    - The german.yml has been updated to 0.52 by Sprugente.
+    - New Command: /ta town {townname} toggle forcepvp
+      - Set the town's AdminEnabledPVP setting to true or false.
+      - Forces PVP on in a town.
+    - Made the AdminEnabledPVP setting part of the saving and loading rather than being a temporary setting only accessible by other plugins.
+    - New Command: /n toggle open
+      - Sets the nation to be open, so that any town can join without an invite.
+      - Requires towny.command.nation.toggle.open permission node.
+    - New Command: /n join {nation}
+      - Used by a town mayor to join an open nation.
+      - Requires towny.command.nation.join permission node.
+      - Will obey various config settings:
+        - # of residents required to join a nation.
+        - Proximity to nation.
+        - Will not allow more than the max-towns-per-nation setting.
+    - New Permission Node: towny.command.nation.toggle.open
+      - Inherited by kings from towny.command.nation.*
+    - New Permission Node: towny.command.nation.join
+      - Given to mayors in the newest default townyperms.yml file.
+    - REQUIRED TOWNYPERMS.YML CHANGE:
+      - Add towny.command.nation.join to the mayor rank.
+    - New Config Option: protection.town_mob_removal_killer_bunny
+      - default: true
+      - Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits.
+    - New Command: /ta resident {resident} friend [add|remove|clear|list]      
+      - allows admins to manipulate a resident's friends list.
+      - requires towny.command.townyadmin.resident.friend permission node.
+    - New Permission node: towny.command.townyadmin.resident.friend
+      - child node of towny.command.townyadmin.resident.*
+    - New Config Option: economy.daily_taxes.price_town_overclaimed_upkeep_penalty
+      - default: 0.0
+      - The server's daily charge on a town which has claimed more townblocks than it is allowed.
+    - New Config Option: economy.daily_taxes.price_town_overclaimed_upkeep_penalty
+      - default: false
+      - Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.
+      - If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty).
+    - The german.yml has been updated again by Sprugente.
+    - Added ShopPlotUtil for shop plugins to use.
+      - Contains helpful, easy-to-use tests.
+    - Added getPlayer() to the API's TownPreClaimEvent so that plugin which cancel Towny claims can more easily inform the player why their claim is cancelled.
+      - Suggestion by NorbiPeti.
+    - Fix edge-case issue with health regen task and players who've had their health negatively modified.
+    - Add protection to books sitting in lecterns. These books can only be taken if the player can also break the lectern itself.
+0.94.0.7:
+    - Fix for mysql servers not getting the new adminenabledpvp town column.
+    - Fix config not making all the values required to have a working town-upkeep-overclaimed-penalty.
+0.94.0.8:
+    - Potentially fix falling towns' plotsnapshots causing an Null Error on Townblocks (Ticket #3398)
+      - Had to revert a previous fix for Exception spam that involves the now-unused RemoveManyTownblocks. 
+0.94.0.9:
+    - Stop outlaws from spawning into public towns who consider them an outlaw.
+    - Language files bumped to 0.53
+    - Korean.yml updated to 0.52 by Daybreak.
+    - Remove a couple deprecated things from our VaultPermSource.
+    - Fix outposts not charging the outpost cost in the config.
+    - Fix removeOutpost console spam on servers that aren't limiting outposts anyways.
+0.94.0.10:
+    - Fix string regex not containing a space, causing town and nation boards to not allow spaces.
+    - Fix missing isOpen in nation mysql schema.
+0.94.0.11:
+    - Make Towny more compatible with DungeonsXL's loading and unloading of worlds.
+      - Prior to running this build any DXL worlds should be removed from the towny\data\worlds folder, and the towny\data\worlds.txt file.
+      - Any DXL world that loads will have usingTowny=false, and not be saved by Towny.
+    - Fix possible NPE in ShopPlotUtil.
+    - Fix new logger not printing debug message in latest.log file.
+    - Revert-on-unclaim feature rewrite for 1.14
+      - This brings about the 4th version of the plot snapshot format used in the feature.
+      - Should faithfully regenerate things to their pre-claimed state.
+      - Still handles older version 3 snapshots but version 3 snapshots made on pre 1.13/1.14 builds will still not regenerate perfectly.
+    - REQUIRED CONFIG CHANGE: new_world_settings.plot_management.revert_on_unclaim.block_ignore set to:
+      - GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK
+      - All existing Towny\data\worlds\WORLDNAME.txt files should have their plotManagementIgnoreIds lines also changed to the above.
+0.94.0.12:
+  - Switch out deprecated war and perm hud code for undeprecated code.
+  - Switch out deprecated code used to talk to Vault for a craftier method that should be more compatible with newer eco plugins over the long run.
+  - Changing the changelog's indentation because it'll format nicer this way on github. 
+  - Add price increase percentage to /town buy bonus output.
+  - Add decimals to price increase percentage for claiming townblocks seen in /towny prices.
+  - Fix Towny messing with lecterns in non-Towny worlds.
+0.94.0.13:
+  - Fix for /plot unclaim command showing "Processing plot claim..." instead of "Processing plot unclaim..."
+  - Undo removal of deprecated Vault code in TownyEconomyHandler because it was apparently zero-ing out existing installs' town and nation banks.
+0.94.0.14:
+  - Change requirements for luring animals.
+    - Old behaviour: Player had to be able to break dirt where the animal stood. Affected in towns and wilderness.
+    - New behaviour: Player has to be able to break dirt where the animal stands. Affects only personally owned plots.
+      - Town-owned plots are exempt. Wilderness is exempt.
+  - API: add TownyAPI.getInstance().isTownyWorld()
+    - Returns true when a world has usingTowny=true.
+  - Fix changelog not displaying on startup when Towny is updated.
+  - Undo removal of another bit of deprecated Vault code in TownyEconomyHandler.
+  - Add missing responses to successful uses of /ta town set.
+  - Add clarity to config comments for the delete_old_residents option.
+  - Fix yaml in norwegian.yml.
+0.94.0.15:
+  - New Config Option: resident_settings.delete_old_residents.delete_only_townless
+    - default: false
+    - When true only residents who have no town will be deleted by the daily old-resident-purge.
+  - Changed Command: /ta purge # {townless}
+    - Using '/ta purge #ofDays townless' will now only purge old residents that are not part of any town.
+  - REQUIRED CONFIG CHANGE:
+    - Add LIGHT_GRAY_SHULKER_BOX, to your protection.switch_ids list.
+0.94.0.16:
+  - Fix War events being fired async.
+  - New Config Option: protection.mob_removal_skips_named_mobs
+    - default: false
+    - When set to true, mobs who've been named with a nametag will not be removed by the mob removal task.
+  - Bump language files to 0.54
+  - Made war starts message, war stats screen, and war hud translatable.
+  - Fix world imports with MV.
+  - Remove old MCStats Metrics because their website no longer collects data anyways.
+0.94.0.17:
+  - Fix r's and f's in the plot perm hud being reversed.
+  - Fix r's and f's being reversed in set perm command outputs.
+  - New Config Option: jail.blacklisted_commands
+    - Default: home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide
+    - Commands which a jailed player cannot use.
+  - Language files bumped to 0.55
+0.94.0.18: 
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - Add towny.command.nation.townlist to the nomad rank.
+    - Add towny.command.nation.allylist to the nomad rank.
+    - Add towny.command.nation.enemylist to the nomad rank.
+  - PAPI Placeholder Support:
+    - New config options:
+      - filters_colour_chat.papi_chat_formatting.both
+      - filters_colour_chat.papi_chat_formatting.town
+	  - filters_colour_chat.papi_chat_formatting.nation
+	  - filters_colour_chat.papi_chat_formatting.ranks.nomad
+	  - filters_colour_chat.papi_chat_formatting.ranks.resident
+      - filters_colour_chat.papi_chat_formatting.ranks.mayor
+      - filters_colour_chat.papi_chat_formatting.ranks.king
+    - Available tags: 
+      - %townyadvanced_town% - displays town name (if they have one.)
+      - %townyadvanced_town_formatted% - displays long-form town name (if they have one.)
+      - %townyadvanced_nation% - displays nation name (if they have one.)
+      - %townyadvanced_nation_formatted% - displays long-form nation name (if they have one.)
+      - %townyadvanced_town_balance% - displays town bank value.
+      - %townyadvanced_nation_balance% - displays nation bank value.
+      - %townyadvanced_town_tag% - displays town tag (if they have one.)
+      - %townyadvanced_town_tag_override% - displays town tag (if they have one,) or the full town name.
+      - %townyadvanced_nation_tag% - displays nation tag (if they have one.)
+      - %townyadvanced_nation_tag_override% - displays nation tag (if they have one,) or the full nation name.
+      - %townyadvanced_towny_tag% - displays town and nation tags.
+      - %townyadvanced_towny_tag_override% - displays town and nation tags if they exist, falling back to names if they don't.
+      - %townyadvanced_towny_tag_formatted% - displays town and nation tags if they exist, falling back to long-form names if they don't.
+      - %townyadvanced_title% - displays king-granted title.
+      - %townyadvanced_surname% - displays king-granted surname.
+      - %townyadvanced_towny_name_prefix% - displays mayor and king prefix.
+      - %townyadvanced_towny_name_postfix% - displays mayor and king postfix.
+      - %townyadvanced_towny_prefix% - displays title if it exists, falls back to mayor and king prefixes.
+      - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
+      - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
+0.95.0.0:
+  - Bump to Release version number.

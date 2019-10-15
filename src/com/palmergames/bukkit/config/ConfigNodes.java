@@ -232,7 +232,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN,WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -244,7 +244,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE(
 			"new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete",
-			"WALL_SIGN,SIGN_POST",
+			"SIGN,WALL_SIGN",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
 
@@ -272,7 +272,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN_POST,WALL_SIGN,GLOWSTONE",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
@@ -549,6 +549,10 @@ public enum ConfigNodes {
             "global_nation_settings.default.public",
             "false",
             "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -682,7 +686,7 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
-			"^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
+			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
 			"[^a-zA-Z0-9._\\[\\]-]"),
@@ -696,7 +700,38 @@ public enum ConfigNodes {
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"# Maximum length of titles and surnames."),
+	
+	FILTERS_PAPI_CHAT_FORMATTING(
+			"filters_colour_chat.papi_chat_formatting","",
+			"# See How Towny Works wikipage for list of PAPI placeholders.",
+			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
+	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
+			"filters_colour_chat.papi_chat_formatting.both",
+			"&f[&6%n&f|&b%t&f] ",
+			"# When using PlaceholderAPI, and a tag would show both nation and town, this will determine how they are formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_TOWN(
+			"filters_colour_chat.papi_chat_formatting.town",
+			"&f[&b%s&f] ",
+			"# When using PlaceholderAPI, and a tag would showing a town, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_NATION(
+			"filters_colour_chat.papi_chat_formatting.nation",
+			"&f[&6%s&f] ",
+			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
+			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
+			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_RESIDENT(
+			"filters_colour_chat.papi_chat_formatting.ranks.resident","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_MAYOR(
+			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
+			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
+	
 
+
+	
 	PROT(
 			"protection",
 			"",
@@ -739,7 +774,11 @@ public enum ConfigNodes {
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-
+	PROT_MOB_REMOVE_TOWN_KILLER_BUNNY(
+			"protection.town_mob_removal_killer_bunny",
+			"true",
+			"",
+			"# Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits."),
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
@@ -762,7 +801,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in the world."),
-
+	PROT_MOB_REMOVE_SKIP_NAMED_MOBS(
+			"protection.mob_removal_skips_named_mobs",
+			"false",
+			"",
+			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",
@@ -1053,7 +1096,7 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",
-			"# if enabled old residents will be kicked and deleted from a town",
+			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
 			"# after Two months (default) of not logging in"),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
@@ -1064,6 +1107,10 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS_ECO(
 			"resident_settings.delete_old_residents.delete_economy_account",
 			"true"),
+	RES_SETTING_DELETE_OLD_RESIDENTS_TOWNLESS_ONLY(
+			"resident_settings.delete_old_residents.delete_only_townless",
+			"false",
+			"# When true only residents who have no town will be deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -1154,6 +1201,16 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock",
 			"25.0",
 			"# The price for a town to expand one townblock."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_INCREASE(
+			"economy.new_expand.price_claim_townblock_increase",
+			"1.0",
+			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
+			"economy.new_expand.price_claim_townblock_refund",
+			"0.0",
+			"# The amount refunded to a town when they unclaim a townblock.",
+			"# Warning: do not set this higher than the cose to claim a townblock.",
+			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",
@@ -1228,6 +1285,15 @@ public enum ConfigNodes {
 			"100.0",
 			"# The server's daily charge on each nation. If a nation fails to pay this upkeep",
 			"# all of it's member town are kicked and the Nation is removed."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN(
+			"economy.daily_taxes.nation_pertown_upkeep",
+			"false",
+			"# Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)",
+			"# calculated by (number of towns in nation X price_nation_upkeep)."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER(
+			"economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier",
+			"false",
+			"# If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers."),
 	ECO_PRICE_TOWN_UPKEEP(
 			"economy.daily_taxes.price_town_upkeep",
 			"10.0",
@@ -1242,6 +1308,15 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"0.0",
+			"# The server's daily charge on a town which has claimed more townblocks than it is allowed."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty_plotbased",
+			"false",
+			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
+			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
@@ -1286,6 +1361,11 @@ public enum ConfigNodes {
 			"jail.bail.bail_amount",
 			"10",
 			"#Amount that bail costs."),
+	JAIL_BLACKLISTED_COMMANDS(
+			"jail.blacklisted_commands",
+			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
+			"# Commands which a jailed player cannot use."),
+	
 	BANK(
 			"bank",
 			"",

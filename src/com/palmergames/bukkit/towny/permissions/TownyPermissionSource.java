@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +11,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -63,11 +63,11 @@ public abstract class TownyPermissionSource {
 
 	/**
 	 * Test if the player has a wild override to permit this action.
-	 * 
-	 * @param world
-	 * @param player
-	 * @param material
-	 * @param action
+	 *  
+	 * @param world - TownyWorld object.
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - Action type.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
@@ -123,9 +123,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an own town (or all town) override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
@@ -154,10 +154,10 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
-	 * @return
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
+	 * @return - True if action is permitted.
 	 */
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
@@ -186,9 +186,9 @@ public abstract class TownyPermissionSource {
 	/**
 	 * Test if the player has an all town override to permit this action.
 	 * 
-	 * @param player
-	 * @param material
-	 * @param action
+	 * @param player - Player.
+	 * @param material - Material being tested.
+	 * @param action - ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {
@@ -218,11 +218,7 @@ public abstract class TownyPermissionSource {
 	}
 
 	public boolean testPermission(Player player, String perm) {
-
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && (!has(player, perm)))
-			return false;
-
-		return true;
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (has(player, perm));
 	}
 
 	/**
