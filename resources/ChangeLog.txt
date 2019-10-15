@@ -3565,4 +3565,4 @@ v0.92.0.11:
       - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
 0.95.0.0:
-  - Bump to Release version number.
+  - Special backported release of 0.95.0.0 for 1.13.2 servers.
