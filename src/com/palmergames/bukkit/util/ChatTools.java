@@ -14,12 +14,7 @@ import java.util.List;
 
 public class ChatTools {
 
-	public static final int lineLength = 54;
-
-	public static List<String> listArr(String[] args) {
-
-		return list(Arrays.asList(args));
-	}
+	private static final int lineLength = 54;
 
 	public static List<String> listArr(String[] args, String prefix) {
 
@@ -34,10 +29,10 @@ public class ChatTools {
 	public static List<String> list(List<String> args, String prefix) {
 
 		if (args.size() > 0) {
-			String line = "";
+			StringBuilder line = new StringBuilder();
 			for (int i = 0; i < args.size() - 1; i++)
-				line += args.get(i) + ", ";
-			line += args.get(args.size() - 1).toString();
+				line.append(args.get(i)).append(", ");
+			line.append(args.get(args.size() - 1));
 
 			return color(prefix + line);
 		}
@@ -45,7 +40,7 @@ public class ChatTools {
 		return new ArrayList<>();
 	}
 
-	public static List<String> wordWrap(String[] tokens) {
+	private static List<String> wordWrap(String[] tokens) {
 
 		List<String> out = new ArrayList<>();
 		out.add("");
@@ -72,29 +67,24 @@ public class ChatTools {
 				try {
 					if (out.get(i).substring(index, index + 1).equalsIgnoreCase("\u00A7"))
 						c = out.get(i).substring(index + 1, index + 2);
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 		}
 
 		return out;
 	}
 
-	public static String parseSingleLineString(String str) {
-
-		return str.replaceAll("&", "\u00A7");
-	}
-
 	public static String stripColour(String s) {
 
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			String c = s.substring(i, i + 1);
 			if (c.equals("\u00A7"))
 				i += 1;
 			else
-				out += c;
+				out.append(c);
 		}
-		return out;
+		return out.toString();
 	}
 
 	public static String formatTitle(String title) {

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FlatFile_Task {
 
-	public List<String> list;
+	public final List<String> list;
 	public final String path;
 	
 	/**

@@ -11,13 +11,12 @@ import de.themoep.idconverter.IdMappings;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlotBlockData {
 
-	private int defaultVersion = 3;
+	private int defaultVersion = 4;
 
 	private String worldName;
 	private TownBlock townBlock;
@@ -73,8 +72,8 @@ public class PlotBlockData {
 					case 1:
 					case 2:
 					case 3:
-						list.add(BukkitTools.getTypeKey(block));
-						list.add(((int) BukkitTools.getData(block)) + "");
+					case 4:
+						list.add(block.getBlockData().getAsString(true));
 						break;
 					default:
 						list.add(block.getType().getKey().toString());
@@ -89,6 +88,7 @@ public class PlotBlockData {
 	 * 
 	 * @return true if there are more blocks to check.
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean restoreNextBlock() {
 
 		Block block = null;
@@ -109,8 +109,10 @@ public class PlotBlockData {
 			case 2:
 			case 3:
 				scale = 2;
-				break;
-	
+				break;	
+			case 4:
+				scale = 1;
+				break;	
 			default:
 				scale = 1;
 		}
@@ -118,79 +120,110 @@ public class PlotBlockData {
 		reverse = (blockList.size() - blockListRestored) / scale;
 		
 		while (reverse > 0) {
-			
 			reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
 			y = height - (reverse % height);
 			x = (int) (reverse / height) % size;
 			z = ((int) (reverse / height) / size) % size;
-
+	
 			block = world.getBlockAt(worldx + x, y, worldz + z);
 			blockMat = block.getType();
-			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);			
-
-			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
-			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
-			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getKey() " + storedData.getKey());
-			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getData() " + storedData.getData());
-			if(storedData.usesID()) {
-				if (storedData.getData() == 0) {
-					TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
-					mat = BukkitTools.getMaterial(storedData.getTypeId());
-				} else {
-					try {
-						mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId()+ ":" + storedData.getData() )).getFlatteningType());					
-					} catch (NullPointerException e) {
-						// Sometimes blocks facing causes null lookups, we fall back to the base material.
-						mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
-					}
-				}
-			} else {
-				mat = Material.matchMaterial(storedData.getKey());
-			}
-			// Increment based upon number of elements
-			blockListRestored += scale;
-				
-
-			// If this block isn't correct, replace
-			// and return as done.
-			if (mat == null) {
-				TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
-			} else if (blockMat != mat) {
-				TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
-				if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
-
-					try {
-						//restore based upon version
-						switch (version) {
-
-						case 1:
-						case 2:
-						case 3:
-							block.setType(mat, false);
-
-							break;
-						default:
-							block.setType(mat, false);
+			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
+			
+			switch (version) {
+		
+				case 1:
+				case 2:				
+				case 3:
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.toString());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getTypeID() " + storedData.getTypeId());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getKey() " + storedData.getKey());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData.getData() " + storedData.getData());
+					if(storedData.usesID()) {
+						if (storedData.getData() == 0) {
+							TownyMessaging.sendDebugMsg("IDmappings - " + Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType()));
+							mat = BukkitTools.getMaterial(storedData.getTypeId());
+						} else {
+							try {
+								mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId()+ ":" + storedData.getData() )).getFlatteningType());					
+							} catch (NullPointerException e) {
+								// Sometimes blocks facing causes null lookups, we fall back to the base material.
+								mat = Material.getMaterial(IdMappings.getById(String.valueOf(storedData.getTypeId())).getFlatteningType());
+							}
 						}
-						
-					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java - BlockID found in legacy plotsnapshot which could not be resolved to a Material. ");
+					} else {
+						mat = Material.matchMaterial(storedData.getKey());
 					}
-
-				} else {					
-					block.setType(Material.AIR);					
-				}
-
-				return true;
+					// Increment based upon number of elements
+					blockListRestored += scale;
+						
+			
+					// If this block isn't correct, replace
+					// and return as done.
+					if (mat == null) {
+						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
+					} else if (blockMat != mat) {
+						TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
+						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData())) {
+			
+							try {
+			
+									block.setType(mat, false);		
+									break;
+							} catch (Exception e) {
+								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java - BlockID found in legacy plotsnapshot which could not be resolved to a Material. ");
+							}
+			
+						} else {					
+							block.setType(Material.AIR);					
+						}
+			
+						return true;
+					}
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
+					break;
+				
+				case 4:
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - block " + block.getBlockData());
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - storedData " + storedData.getBlockData());
+					
+					blockListRestored += scale;
+					
+					
+					mat = storedData.getMaterial();
+					if (mat == null) {
+						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
+					} else if (blockMat != mat) {
+						TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - blockMat " + blockMat.toString() + " doesn't match mat " + mat.toString());
+						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
+							try {								
+								block.setType(mat, false);
+								block.setBlockData(storedData.getBlockData());
+								break;
+							} catch (Exception e) {
+								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
+								break;
+							}
+			
+						} else {					
+							block.setType(Material.AIR);					
+						}
+			
+						return true;
+					}
+					TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
+					break;
+					
+				default:
+					TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - You should not be seeing this message.");					
+					
 			}
-			TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
 		}
-
 		// reset as we are finished with the regeneration
 		resetBlockListRestored();
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private BlockObject getStoredBlockData(int index) {
 
 		//return based upon version
@@ -200,9 +233,10 @@ public class PlotBlockData {
 		case 2:
 		case 3:
 			return new BlockObject(blockList.get(index - 1), (byte) (Integer.valueOf(blockList.get(index)) & 0xff));
-
+		case 4:
+			return new BlockObject(blockList.get(index));
 		default:
-			return new BlockObject(blockList.get(index), (byte) 0);
+			return new BlockObject(blockList.get(index));
 		}
 
 	}

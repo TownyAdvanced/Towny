@@ -24,6 +24,7 @@ import java.util.List;
  * @author - Articdive
  */
 public class InviteHandler {
+	@SuppressWarnings("unused")
 	private static Towny plugin;
 	private static ListMultimap<Town, Resident> towntoresidentinvites = ArrayListMultimap.create();
 	private static ListMultimap<Nation, Town> nationtotowninvites = ArrayListMultimap.create();

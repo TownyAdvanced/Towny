@@ -4,5 +4,7 @@ public enum ConfirmationType {
 	TOWNDELETE,
 	NATIONDELETE,
 	UNCLAIMALL,
-	PURGE,
+	PURGE, 
+	NATIONMERGE,
+	NULL
 }

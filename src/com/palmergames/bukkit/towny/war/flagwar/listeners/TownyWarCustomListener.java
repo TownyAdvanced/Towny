@@ -1,11 +1,19 @@
 package com.palmergames.bukkit.towny.war.flagwar.listeners;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
@@ -14,7 +22,6 @@ import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,7 +62,7 @@ public class TownyWarCustomListener implements Listener {
 		Player player = event.getPlayer();
 		CellUnderAttack cell = event.getCell().getAttackData();
 
-		TownyUniverse universe = plugin.getTownyUniverse();
+		TownyUniverse universe = TownyUniverse.getInstance();
 
 		WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
 		universe.removeWarZone(worldCoord);
@@ -68,8 +75,8 @@ public class TownyWarCustomListener implements Listener {
 		} else {
 			playerName = player.getName();
 			try {
-				playerName = TownyUniverse.getDataSource().getResident(player.getName()).getFormattedName();
-			} catch (TownyException e) {
+				playerName = universe.getDataSource().getResident(player.getName()).getFormattedName();
+			} catch (TownyException ignored) {
 			}
 		}
 
@@ -81,11 +88,11 @@ public class TownyWarCustomListener implements Listener {
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = TownyUniverse.getDataSource().getResident(cell.getNameOfFlagOwner());
+				attackingPlayer = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
 				if (player != null) {
 					try {
-						defendingPlayer = TownyUniverse.getDataSource().getResident(player.getName());
-					} catch (NotRegisteredException e) {
+						defendingPlayer = universe.getDataSource().getResident(player.getName());
+					} catch (NotRegisteredException ignored) {
 					}
 				}
 
@@ -94,23 +101,21 @@ public class TownyWarCustomListener implements Listener {
 					if (attackingPlayer.pay(TownyWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_greater_forces"), formattedMoney));
-						} catch (TownyException e) {
+						} catch (TownyException ignored) {
 						}
 				} else {
 					if (attackingPlayer.payTo(TownyWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_attacker"), defendingPlayer.getFormattedName(), formattedMoney));
-						} catch (TownyException e) {
+						} catch (TownyException ignored) {
 						}
 						try {
 							TownyMessaging.sendResidentMessage(defendingPlayer, String.format(TownySettings.getLangString("msg_enemy_war_area_defended_defender"), attackingPlayer.getFormattedName(), formattedMoney));
-						} catch (TownyException e) {
+						} catch (TownyException ignored) {
 						}
 					}
 				}
-			} catch (EconomyException e) {
-				e.printStackTrace();
-			} catch (NotRegisteredException e) {
+			} catch (EconomyException | NotRegisteredException e) {
 				e.printStackTrace();
 			}
 		}
@@ -124,9 +129,9 @@ public class TownyWarCustomListener implements Listener {
 
 		CellUnderAttack cell = event.getCellAttackData();
 
-		TownyUniverse universe = plugin.getTownyUniverse();
+		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
-			Resident attackingResident = TownyUniverse.getDataSource().getResident(cell.getNameOfFlagOwner());
+			Resident attackingResident = universe.getDataSource().getResident(cell.getNameOfFlagOwner());
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
@@ -176,11 +181,11 @@ public class TownyWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			TownyUniverse.getDataSource().removeTownBlock(townBlock);
+			universe.getDataSource().removeTownBlock(townBlock);
 
 			// Attacker Claim Automatically
 			try {
-				List<WorldCoord> selection = new ArrayList<WorldCoord>();
+				List<WorldCoord> selection = new ArrayList<>();
 				selection.add(worldCoord);
 				TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
 				new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
@@ -199,7 +204,7 @@ public class TownyWarCustomListener implements Listener {
 				if (amount != 0 && moneyTranserMsg != null) {
 					try {
 						TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);
-					} catch (TownyException e) {
+					} catch (TownyException ignored) {
 					}
 					TownyMessaging.sendTownMessage(defendingTown, moneyTranserMsg);
 				}
@@ -217,7 +222,7 @@ public class TownyWarCustomListener implements Listener {
 
 		CellUnderAttack cell = event.getCell();
 
-		TownyUniverse universe = plugin.getTownyUniverse();
+		TownyUniverse universe = TownyUniverse.getInstance();
 
 		WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
 		universe.removeWarZone(worldCoord);
