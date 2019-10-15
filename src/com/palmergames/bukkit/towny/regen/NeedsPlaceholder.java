@@ -14,10 +14,8 @@ public class NeedsPlaceholder {
 			Material.JUNGLE_SAPLING, Material.ACACIA_SAPLING,
 			Material.DARK_OAK_SAPLING, Material.BROWN_MUSHROOM,
 			Material.RED_MUSHROOM, Material.WHEAT, Material.REDSTONE_TORCH,
-			Material.REDSTONE_WALL_TORCH, Material.SNOW, Material.OAK_WALL_SIGN,
-			Material.SPRUCE_WALL_SIGN, Material.DARK_OAK_WALL_SIGN,
-			Material.BIRCH_WALL_SIGN, Material.ACACIA_WALL_SIGN,
-			Material.JUNGLE_WALL_SIGN);
+			Material.REDSTONE_WALL_TORCH, Material.SNOW, Material.SIGN,
+			Material.WALL_SIGN);
 
 	public static boolean contains(Material material) {
 
