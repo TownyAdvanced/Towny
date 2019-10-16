@@ -3581,4 +3581,4 @@ v0.92.0.11:
     - %townyadvanced_nation_residents_amount% - number of residents in a resident's nation.
     - %townyadvanced_nation_residents_online% - number of residents in a resident's nation that are currently online.
     - %townyadvanced_nation_capital% - name of a resident's nation's capital.
- 
+  - Make /t rank add|remove {name} {rank} not care about case sensitivity.

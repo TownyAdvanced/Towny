@@ -1327,8 +1327,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			rank = split[2];
 			/*
-			 * Is this a known rank?
+			 * Match correct casing of rank, if that rank exists.
 			 */
+			for (String ranks : TownyPerms.getTownRanks()) {
+				if (ranks.equalsIgnoreCase(rank))
+					rank = ranks;
+			}			
+			/*
+			 * Is this a known rank?
+			 */			
 			if (!TownyPerms.getTownRanks().contains(rank))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_unknown_rank_available_ranks"), rank, StringMgmt.join(TownyPerms.getTownRanks(), ",")));
 
@@ -1341,7 +1348,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("add")) {
 				try {
-					if (target.addTownRank(split[2])) {
+					if (target.addTownRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
 							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_been_given_rank"), "Town", rank));
 							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
@@ -1360,7 +1367,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				try {
-					if (target.removeTownRank(split[2])) {
+					if (target.removeTownRank(rank)) {
 						if (BukkitTools.isOnline(target.getName())) {
 							TownyMessaging.sendMsg(target, String.format(TownySettings.getLangString("msg_you_have_had_rank_taken"), "Town", rank));
 							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
