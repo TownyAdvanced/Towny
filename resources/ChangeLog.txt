@@ -3566,3 +3566,19 @@ v0.92.0.11:
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
 0.95.0.0:
   - Bump to Release version number.
+0.95.0.1:
+  - More PAPI placeholders:
+    - %townyadvanced_town_residents_amount% - number of residents in a town.
+    - %townyadvanced_town_residents_online% - number of residents in a town that are currently online.
+    - %townyadvanced_town_townblocks_used% - number of townblocks claimed by a resident's town.
+    - %townyadvanced_town_townblocks_bought% - number of townblocks bought by a resident's town.
+    - %townyadvanced_town_townblocks_bonus% - number of bonus blocks given to a resident's town.
+    - %townyadvanced_town_townblocks_maximum% - number of townblocks a town has available to claim.
+    - %townyadvanced_town_townblocks_natural_maximum% - number of townblocks a town has available to claim, not counting bonus/bought townblocks.
+    - %townyadvanced_town_mayor% - a resident's town's mayor's name.
+    - %townyadvanced_nation_king% - a resident's nation's king's name.
+    - %townyadvanced_resident_friends_amount% - number of friends a resident has.
+    - %townyadvanced_nation_residents_amount% - number of residents in a resident's nation.
+    - %townyadvanced_nation_residents_online% - number of residents in a resident's nation that are currently online.
+    - %townyadvanced_nation_capital% - name of a resident's nation's capital.
+ 

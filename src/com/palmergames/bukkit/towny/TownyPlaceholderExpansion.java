@@ -113,266 +113,291 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		} catch (NotRegisteredException e) {
 			return null;
 		}
+		String town = "";
+		String nation = "";
+		String balance = "";
+		String tag = "";
+    	String title = "";
+    	String amount = "";
+    	String name = "";
 		
-
-        // %townyadvanced_town%
-        if(identifier.equals("town")){
-        	String town = "";
-        	try {
-				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return town;
-        }
-
-        // %townyadvanced_town_formatted%
-        if(identifier.equals("town_formatted")){
-        	String town = "";
-        	try {
-				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getFormattedName());
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return town;
-        }
-
-        // %townyadvanced_nation%
-        if(identifier.equals("nation")){
-        	String nation = "";
-        	try {
-				nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getName());				
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return nation;
-        }
-        
-        // %townyadvanced_nation_formatted%
-        if(identifier.equals("nation_formatted")){
-        	String nation = "";
-        	try {
-				nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getFormattedName());
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return nation;
-        }
-        
-        // %townyadvanced_town_balance%
-        if(identifier.equals("town_balance")){
-        	String balance = "";
-        	try {
-				balance = resident.getTown().getHoldingFormattedBalance();
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return balance;
-        }
-
-        // %townyadvanced_nation_balance%
-        if(identifier.equals("nation_balance")){
-        	String balance = "";
-        	try {
-				balance = resident.getTown().getNation().getHoldingFormattedBalance();
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return balance;
-        }
-        
-        // %townyadvanced_town_tag%
-        if(identifier.equals("town_tag")){
-        	String tag = "";
-        	try {
-       			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-
-        // %townyadvanced_town_tag_override%
-        if(identifier.equals("town_tag_override")){
-        	String tag = "";
-        	try {
-        		if (resident.getTown().hasTag())
-        			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
-        		else 
-        			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
-        	} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_nation_tag%
-        if(identifier.equals("nation_tag")){
-        	String tag = "";
-        	try {
-				tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getTag());
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_nation_tag_override%
-        if(identifier.equals("nation_tag_override")){
-        	String tag = "";
-        	try {
-        		if (resident.getTown().getNation().hasTag())
-        			tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getTag());
-        		else 
-        			tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getName());
-        	} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_towny_tag%
-        if(identifier.equals("towny_tag")){
-        	String tag = "";
-        	try {
-        		String town = "";
-        		String nation = "";
-        		if (resident.hasTown()) {
-        			if (resident.getTown().hasTag())
-        				town = resident.getTown().getTag();
-        			if (resident.getTown().hasNation())
-        				if (resident.getTown().getNation().hasTag())
-        					nation = resident.getTown().getNation().getTag();
-        		}
-        		if (!nation.isEmpty())
-        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-        		else if (!town.isEmpty())
-        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_towny_formatted%
-        if(identifier.equals("towny_formatted")){
-        	String tag = "";
-        	try {
-        		String town = "";
-        		String nation = "";
-        		if (resident.hasTown()) {        		
-		    		town = resident.getTown().getFormattedName();
-		    		if (resident.getTown().hasNation())
-		    			nation = resident.getTown().getNation().getFormattedName();
-        		}
-        		if (!nation.isEmpty())
-        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-        		else if (!town.isEmpty())
-        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_towny_tag_override%
-        if(identifier.equals("towny_tag_override")){
-        	String tag = "";
-        	try {
-        		String town = "";
-        		String nation = "";
-        		if (resident.hasTown()) {
-        			if (resident.getTown().hasTag())
-	       				town = resident.getTown().getTag();
+		switch (identifier) {
+			case "town": // %townyadvanced_town%
+	        	try {
+					town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return town;
+			case "town_formatted": // %townyadvanced_town_formatted%
+	        	try {
+					town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getFormattedName());
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return town;
+			case "nation": // %townyadvanced_nation% 
+	        	try {
+					nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getName());				
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return nation;
+			case "nation_formatted": // %townyadvanced_nation_formatted%
+	        	try {
+					nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getFormattedName());
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return nation;
+			case "town_balance": // %townyadvanced_town_balance%				
+	        	try {
+					balance = resident.getTown().getHoldingFormattedBalance();
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return balance;
+			case "nation_balance": // %townyadvanced_nation_balance%
+	        	try {
+					balance = resident.getTown().getNation().getHoldingFormattedBalance();
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return balance;
+			case "town_tag": // %townyadvanced_town_tag%
+	        	try {
+	       			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "town_tag_override": // %townyadvanced_town_tag_override% 
+	        	try {
+	        		if (resident.getTown().hasTag())
+	        			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getTag());
 	        		else 
-	        			town = resident.getTown().getName();
-        			if (resident.getTown().hasNation()) {
-		        		if (resident.getTown().getNation().hasTag())
-		        			nation = resident.getTown().getNation().getTag();
+	        			tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTown().getName());
+	        	} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "nation_tag":  // %townyadvanced_nation_tag%
+	        	try {
+					tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getTag());
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "nation_tag_override": // %townyadvanced_nation_tag_override%
+	        	try {
+	        		if (resident.getTown().getNation().hasTag())
+	        			tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getTag());
+	        		else 
+	        			tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getTown().getNation().getName());
+	        	} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "towny_tag": // %townyadvanced_towny_tag%
+	        	try {
+	        		if (resident.hasTown()) {
+	        			if (resident.getTown().hasTag())
+	        				town = resident.getTown().getTag();
+	        			if (resident.getTown().hasNation())
+	        				if (resident.getTown().getNation().hasTag())
+	        					nation = resident.getTown().getNation().getTag();
+	        		}
+	        		if (!nation.isEmpty())
+	        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+	        		else if (!town.isEmpty())
+	        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+	
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "towny_formatted": // %townyadvanced_towny_formatted%
+	        	try {
+	        		if (resident.hasTown()) {        		
+			    		town = resident.getTown().getFormattedName();
+			    		if (resident.getTown().hasNation())
+			    			nation = resident.getTown().getNation().getFormattedName();
+	        		}
+	        		if (!nation.isEmpty())
+	        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+	        		else if (!town.isEmpty())
+	        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+	
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "towny_tag_override": // %townyadvanced_towny_tag_override%
+	        	try {
+	        		if (resident.hasTown()) {
+	        			if (resident.getTown().hasTag())
+		       				town = resident.getTown().getTag();
 		        		else 
-		        			nation = resident.getTown().getNation().getName();
-        			}
-        		}
-        		if (!nation.isEmpty())
-        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
-        		else if (!town.isEmpty())
-        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
-			} catch (NotRegisteredException ignored) {
-			}        	
-            return tag;
-        }
-        
-        // %townyadvanced_title%
-        if(identifier.equals("title")){
-        	String title = "";
-        	if (resident.hasTitle())
-				title = resident.getTitle();        	
-            return title;
-        }
-
-        // %townyadvanced_surname%
-        if(identifier.equals("surname")){
-        	String title = "";
-        	if (resident.hasSurname())
-				title = resident.getSurname();        	
-            return title;
-        }
-        
-        // %townyadvanced_towny_name_prefix%
-        if(identifier.equals("towny_name_prefix")){
-        	String title = "";
-        	if (resident.isMayor())
-				title = TownySettings.getMayorPrefix(resident);
-			if (resident.isKing())
-				title = TownySettings.getKingPrefix(resident);        	
-            return title;
-        }
-        
-        // %townyadvanced_towny_name_postfix%
-        if(identifier.equals("towny_name_postfix")){
-        	String title = "";
-        	if (resident.isMayor())
-				title = TownySettings.getMayorPostfix(resident);
-			if (resident.isKing())
-				title = TownySettings.getKingPostfix(resident);        	
-            return title;
-        }
-        
-        // %townyadvanced_towny_prefix%
-        if(identifier.equals("towny_prefix")){
-        	String title = "";
-        	if (resident.hasTitle())
-				title = resident.getTitle();
-			else {
-				if (resident.isMayor())
+		        			town = resident.getTown().getName();
+	        			if (resident.getTown().hasNation()) {
+			        		if (resident.getTown().getNation().hasTag())
+			        			nation = resident.getTown().getNation().getTag();
+			        		else 
+			        			nation = resident.getTown().getNation().getName();
+	        			}
+	        		}
+	        		if (!nation.isEmpty())
+	        			tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+	        		else if (!town.isEmpty())
+	        			tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+				} catch (NotRegisteredException ignored) {
+				}        	
+	            return tag;
+			case "title": // %townyadvanced_title%
+	        	if (resident.hasTitle())
+					title = resident.getTitle();        	
+	            return title;
+			case "surname": // %townyadvanced_surname%
+	        	if (resident.hasSurname())
+					title = resident.getSurname();        	
+	            return title;
+			case "towny_name_prefix": // %townyadvanced_towny_name_prefix%
+	        	if (resident.isMayor())
 					title = TownySettings.getMayorPrefix(resident);
 				if (resident.isKing())
-					title = TownySettings.getKingPrefix(resident);
-			}        	
-            return title;
-        }
-        
-        // %townyadvanced_towny_postfix%
-        if(identifier.equals("towny_postfix")){
-        	String title = "";
-        	if (resident.hasSurname())
-				title = resident.getSurname();
-			else {
-				if (resident.isMayor())
+					title = TownySettings.getKingPrefix(resident);        	
+	            return title;
+			case "towny_name_postfix": // %townyadvanced_towny_name_postfix%
+	        	if (resident.isMayor())
 					title = TownySettings.getMayorPostfix(resident);
 				if (resident.isKing())
-					title = TownySettings.getKingPostfix(resident);
-			}        	
-            return title;
-        }
-        
-        // %townyadvanced_towny_colour%
-        if(identifier.equals("towny_colour")){
-        	String colour = "";
-        	if (!resident.hasTown())
-        		colour = TownySettings.getPAPIFormattingNomad();
-			else {
-				colour = TownySettings.getPAPIFormattingResident();
-				if (resident.isMayor())
-					colour = TownySettings.getPAPIFormattingMayor();
-				if (resident.isKing())
-					colour = TownySettings.getPAPIFormattingKing();
-			}        	
-            return colour;
-        }
-
-        
-        return null;
+					title = TownySettings.getKingPostfix(resident);        	
+	            return title;
+			case "towny_prefix": // %townyadvanced_towny_prefix%
+	        	if (resident.hasTitle())
+					title = resident.getTitle();
+				else {
+					if (resident.isMayor())
+						title = TownySettings.getMayorPrefix(resident);
+					if (resident.isKing())
+						title = TownySettings.getKingPrefix(resident);
+				}        	
+	            return title;
+			case "towny_postfix": // %townyadvanced_towny_postfix%
+	        	if (resident.hasSurname())
+					title = resident.getSurname();
+				else {
+					if (resident.isMayor())
+						title = TownySettings.getMayorPostfix(resident);
+					if (resident.isKing())
+						title = TownySettings.getKingPostfix(resident);
+				}        	
+	            return title;
+			case "towny_colour": // %townyadvanced_towny_colour%
+	        	String colour = "";
+	        	if (!resident.hasTown())
+	        		colour = TownySettings.getPAPIFormattingNomad();
+				else {
+					colour = TownySettings.getPAPIFormattingResident();
+					if (resident.isMayor())
+						colour = TownySettings.getPAPIFormattingMayor();
+					if (resident.isKing())
+						colour = TownySettings.getPAPIFormattingKing();
+				}        	
+	            return colour;
+			case "town_residents_amount": // %townyadvanced_town_residents_amount% 
+	            if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(resident.getTown().getNumResidents());
+					} catch (NotRegisteredException ignored) {
+					}
+	            }
+	            return amount;
+			case "town_residents_online": // %townyadvanced_town_residents_online%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(TownyAPI.getInstance().getOnlinePlayers(resident.getTown()).size());
+					} catch (NotRegisteredException ignored) {
+					}					
+				}
+				return amount;
+			case "town_townblocks_used": // %townyadvanced_town_townblocks_used%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(resident.getTown().getTownBlocks().size());
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+				return amount;
+			case "town_townblocks_bought": // %townyadvanced_town_townblocks_bought%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(resident.getTown().getPurchasedBlocks());
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+				return amount;
+			case "town_townblocks_bonus": // %townyadvanced_town_townblocks_bonus%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(resident.getTown().getBonusBlocks());
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+				return amount;
+			case "town_townblocks_maximum": // %townyadvanced_town_townblocks_maximum%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()));
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+				return amount;
+			case "town_townblocks_natural_maximum": // %townyadvanced_town_townblocks_natural_maximum%
+				if (resident.hasTown()) {
+					try {
+						amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()) - resident.getTown().getBonusBlocks() - resident.getTown().getPurchasedBlocks());
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+				return amount;
+			case "town_mayor": // %townyadvanced_town_mayor%
+				if (resident.hasTown()) {
+					try {
+						name = resident.getTown().getMayor().getName();
+					} catch (NotRegisteredException ignored) {
+					}
+				}				
+				return name;
+			case "nation_king": // %townyadvanced_nation_king%
+				if (resident.hasTown()) {
+					try {
+						if (resident.getTown().hasNation()) 
+							name = resident.getTown().getNation().getKing().getName();
+					} catch (NotRegisteredException ignored) {
+					}
+				}				
+				return name;
+			case "resident_friends_amount": // %townyadvanced_resident_friends_amount%
+					amount = String.valueOf(resident.getFriends().size());
+				return amount;
+			case "nation_residents_amount": // %townyadvanced_nation_residents_amount% 
+	            if (resident.hasTown()) {
+					try {
+						if (resident.getTown().hasNation())
+							amount = String.valueOf(resident.getTown().getNation().getNumResidents());
+					} catch (NotRegisteredException ignored) {
+					}
+	            }
+	            return amount;
+			case "nation_residents_online": // %townyadvanced_nation_residents_online%
+				if (resident.hasTown()) {
+					try {
+						if (resident.getTown().hasNation())
+							amount = String.valueOf(TownyAPI.getInstance().getOnlinePlayers(resident.getTown().getNation()).size());
+					} catch (NotRegisteredException ignored) {
+					}					
+				}
+				return amount;
+			case "nation_capital": // %townyadvanced_nation_capital%
+				if (resident.hasTown()) {
+					try {
+						if (resident.getTown().hasNation()) 
+							name = resident.getTown().getNation().getCapital().getName();
+					} catch (NotRegisteredException ignored) {
+					}
+				}				
+				return name;
+			default:
+				return null;
+		}
     }
-    
 }
