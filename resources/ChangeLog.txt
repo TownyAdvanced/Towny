@@ -3582,3 +3582,8 @@ v0.92.0.11:
     - %townyadvanced_nation_residents_online% - number of residents in a resident's nation that are currently online.
     - %townyadvanced_nation_capital% - name of a resident's nation's capital.
   - Make /t rank add|remove {name} {rank} not care about case sensitivity.
+    - Closes ticket #3445
+  - New Config Option: economy.daily_taxes.town_plotbased_upkeep_minimum_amount
+    - default: 0.0
+    - If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead.
+    - Closes Ticket #664

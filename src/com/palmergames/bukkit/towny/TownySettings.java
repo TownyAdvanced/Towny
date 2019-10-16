@@ -1777,6 +1777,7 @@ public class TownySettings {
         } else
             multiplier = 1.0;
  
+        Double amount = 0.0;
         if (town.hasNation()) {
             double nationMultiplier = 1.0;
             try {
@@ -1786,14 +1787,20 @@ public class TownySettings {
             } catch (NotRegisteredException e) {
                 e.printStackTrace();
             }
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
-                return (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
-            else
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
+            	amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
+                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+                return amount;
+            } else
                 return (getTownUpkeep() * multiplier) * nationMultiplier ;
         } else
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
-                return (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
-            else
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
+                amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
+                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+                return amount;
+            } else
                 return getTownUpkeep() * multiplier ;
     }
 
@@ -1807,6 +1814,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED);
 	}
 	
+	public static double getPlotBasedUpkeepMinimumAmount () {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT);
+		
+	}
 	public static boolean isTownLevelModifiersAffectingPlotBasedUpkeep() {
 		
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER);

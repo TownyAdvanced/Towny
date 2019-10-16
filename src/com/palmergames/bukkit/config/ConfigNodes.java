@@ -1308,6 +1308,10 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT(
+			"economy.daily_taxes.town_plotbased_upkeep_minimum_amount",
+			"0.0",
+			"# If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead."),
 	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
 			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
 			"0.0",
