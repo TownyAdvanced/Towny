@@ -55,7 +55,7 @@
         </repository>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/TheNewEconomy</url>
+            <url>https://maven.pkg.github.com/TheNewEconomy/packages/</url>
         </repository>
         <repository>
             <id>ess-repo</id>
@@ -86,13 +86,13 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.2.0</version>
+            <version>0.1.3.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc.tnc</groupId>
             <artifactId>TheNewChat</artifactId>
-            <version>1.5.0.0</version>
+            <version>1.5.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
