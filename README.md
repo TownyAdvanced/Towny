@@ -21,11 +21,11 @@ ___
 |:----:|:----:|
 | MC 1.14.* | [0.95.0.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) |
 | MC 1.13.2 | [0.95.0.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0for1.13.2) |
-| MC 1.12.2 | [0.93.1.0 for 1.12.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.12.2/) |
-| MC 1.11.2 | [0.93.1.0 for 1.11.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.11.2/) |
-| MC 1.10.2 | [0.93.1.0 for 1.10.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.10.2/) |
-| MC 1.9.4 | [0.93.1.0 for 1.9.4](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/%200.93.1.0%20for%201.9.4/) |
-| MC 1.8.9 | [0.93.1.0 for 1.8.9](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.8.9/) |
+| MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
+| MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
+| MC 1.10.2 | [0.93.1.0 for 1.10.2](https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0) |
+| MC 1.9.4 | [0.93.1.0 for 1.9.4](https://www.dropbox.com/s/eh81i4618bfmvjm/Towny_Advanced%200.93.1.0%20for%20MC%201.9.4.zip?dl=0) |
+| MC 1.8.9 | [0.93.1.0 for 1.8.9](https://www.dropbox.com/s/b9i7po8mgl8a4ck/Towny_Advanced%200.93.1.0%20for%20MC%201.8.9.zip?dl=0) |
 | MC 1.7.10 | [0.92.0.0 for 1.7.10](https://www.dropbox.com/s/vmf2g5bj7ab4coo/Towny_Advanced%200.92.0.0%20-%20MC%201.7.10.zip?dl=0) |
 | MC 1.6.4 | [0.88.0.0 for 1.6.4](https://www.dropbox.com/s/5n9r60ivldh5i8f/Towny_Advanced%200.88.0.0%20%281.6.4%29.zip?dl=0) |
 | MC 1.5.2 | [0.88.0.0 for 1.5.2](https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0) |
@@ -52,7 +52,7 @@ Some important pages to look over:
 Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
 
 If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
-If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m )
+If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m ).
 
 If you want to support the developer consider becoming a patron: 
 [<img align=right src="https://user-images.githubusercontent.com/879756/65957602-d3795800-e412-11e9-8b27-dda76b6fed13.PNG">](https://www.patreon.com/bePatron?u=25096724)
