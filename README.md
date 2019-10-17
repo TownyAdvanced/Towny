@@ -26,10 +26,10 @@ ___
 | MC 1.10.2 | [0.93.1.0 for 1.10.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.10.2/) |
 | MC 1.9.4 | [0.93.1.0 for 1.9.4](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/%200.93.1.0%20for%201.9.4/) |
 | MC 1.8.9 | [0.93.1.0 for 1.8.9](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.8.9/) |
-| MC 1.7.10 | [0.92.0.0 for 1.7.10](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.92.0.0%20%28For%20MC%201.7.10%29/) |
-| MC 1.6.4 | [0.88.0.0 for 1.6.4](http://towny.palmergames.com/?p=744) |
-| MC 1.5.2 | [0.88.0.0 for 1.5.2](http://towny.palmergames.com/download/towny-advanced-0-88-0-0-cb-1-5-2/) |
-| MC 1.2.5 | [0.82.0.0](http://towny.palmergames.com/?p=735) | 
+| MC 1.7.10 | [0.92.0.0 for 1.7.10](https://www.dropbox.com/s/vmf2g5bj7ab4coo/Towny_Advanced%200.92.0.0%20-%20MC%201.7.10.zip?dl=0) |
+| MC 1.6.4 | [0.88.0.0 for 1.6.4](https://www.dropbox.com/s/5n9r60ivldh5i8f/Towny_Advanced%200.88.0.0%20%281.6.4%29.zip?dl=0) |
+| MC 1.5.2 | [0.88.0.0 for 1.5.2](https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0) |
+| MC 1.2.5 | [0.82.0.0](https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0) | 
 
 ___
 
