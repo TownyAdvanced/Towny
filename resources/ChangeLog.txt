@@ -3587,3 +3587,5 @@ v0.92.0.11:
     - default: 0.0
     - If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead.
     - Closes Ticket #664
+  - API: new event added - NewDayEvent
+    - has gettable lists of fallen towns and nations, total town and nation upkeeps collected, time at which the event happened.

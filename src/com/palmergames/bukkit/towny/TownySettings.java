@@ -52,7 +52,7 @@ public class TownySettings {
 	}
 
 	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, language, newLanguage;
+	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -217,6 +217,19 @@ public class TownySettings {
 			config.save();
 
 			loadCachedObjects();
+		}
+	}
+	
+	public static void loadPlayerMap(String filepath) {
+		if (FileMgmt.checkOrCreateFile(filepath)) {
+			File file = new File(filepath);
+			
+			playermap = new CommentedConfiguration(file);
+			if (!playermap.load()) {
+				System.out.println("Failed to load playermap!");
+				
+				
+			}
 		}
 	}
 
