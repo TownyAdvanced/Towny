@@ -3581,6 +3581,7 @@ v0.92.0.11:
     - %townyadvanced_nation_residents_amount% - number of residents in a resident's nation.
     - %townyadvanced_nation_residents_online% - number of residents in a resident's nation that are currently online.
     - %townyadvanced_nation_capital% - name of a resident's nation's capital.
+    - Closes ticket #3446
   - Make /t rank add|remove {name} {rank} not care about case sensitivity.
     - Closes ticket #3445
   - New Config Option: economy.daily_taxes.town_plotbased_upkeep_minimum_amount
@@ -3589,3 +3590,4 @@ v0.92.0.11:
     - Closes Ticket #664
   - API: new event added - NewDayEvent
     - has gettable lists of fallen towns and nations, total town and nation upkeeps collected, time at which the event happened.
+    - Closes ticket #3323
