@@ -2126,6 +2126,25 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_RES_FR_SWITCH);
 	}
 
+	public static boolean getPermFlag_Resident_Town_Build() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_BUILD);
+	}
+
+	public static boolean getPermFlag_Resident_Town_Destroy() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_DESTROY);
+	}
+
+	public static boolean getPermFlag_Resident_Town_ItemUse() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Resident_Town_Switch() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_SWITCH);
+	}
 	public static boolean getPermFlag_Resident_Ally_Build() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_ALLY_BUILD);
@@ -2206,6 +2225,26 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_RES_SWITCH);
 	}
 
+	public static boolean getPermFlag_Town_Nation_Build() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_BUILD);
+	}
+
+	public static boolean getPermFlag_Town_Nation_Destroy() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_DESTROY);
+	}
+
+	public static boolean getPermFlag_Town_Nation_ItemUse() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Town_Nation_Switch() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_SWITCH);
+	}
+	
 	public static boolean getPermFlag_Town_Ally_Build() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_ALLY_BUILD);
@@ -2278,6 +2317,38 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 
+	public static boolean getDefaultNationPermission(TownBlockOwner owner, ActionType type) {
+
+		if (owner instanceof Resident)
+			switch (type) {
+			case BUILD:
+				return getPermFlag_Resident_Town_Build();
+			case DESTROY:
+				return getPermFlag_Resident_Town_Destroy();
+			case SWITCH:
+				return getPermFlag_Resident_Town_Switch();
+			case ITEM_USE:
+				return getPermFlag_Resident_Town_ItemUse();
+			default:
+				throw new UnsupportedOperationException();
+			}
+		else if (owner instanceof Town)
+			switch (type) {
+			case BUILD:
+				return getPermFlag_Town_Nation_Build();
+			case DESTROY:
+				return getPermFlag_Town_Nation_Destroy();
+			case SWITCH:
+				return getPermFlag_Town_Nation_Switch();
+			case ITEM_USE:
+				return getPermFlag_Town_Nation_ItemUse();
+			default:
+				throw new UnsupportedOperationException();
+			}
+		else
+			throw new UnsupportedOperationException();
+	}
+	
 	public static boolean getDefaultAllyPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
@@ -2347,6 +2418,8 @@ public class TownySettings {
 		switch (level) {
 		case RESIDENT:
 			return getDefaultResidentPermission(owner, type);
+		case NATION:
+			return getDefaultNationPermission(owner, type);
 		case ALLY:
 			return getDefaultAllyPermission(owner, type);
 		case OUTSIDER:

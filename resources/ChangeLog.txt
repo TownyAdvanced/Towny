@@ -3591,3 +3591,22 @@ v0.92.0.11:
   - API: new event added - NewDayEvent
     - has gettable lists of fallen towns and nations, total town and nation upkeeps collected, time at which the event happened.
     - Closes ticket #3323
+  - New Perm Levels: Town & Nation
+    - On player-owned plots the perm line now has Town added to it.
+      - Build/Destroy/Switch/ItemUse can be set for friends/townmembers/allies/outsiders.
+      - Allies consists of nation-members and nation-allies.
+    - On town-owned plots the perm line now has Nation added to it.    
+      - Build/Destroy/Switch/ItemUse can be set for residents/nationmembers/allies/outsiders.
+      - Allies consists of nation-allies.
+    - Closes ticket #3241
+  - New Config Options:
+	- default_perm_flags.resident.town.build, default false
+	- default_perm_flags.resident.town.destroy, default false
+	- default_perm_flags.resident.town.item_use, default false
+	- default_perm_flags.resident.town.switch, default false
+	- default_perm_flags.town.nation.build, default false
+	- default_perm_flags.town.nation.destroy, default false
+	- default_perm_flags.town.nation.item_use, default false
+	- default_perm_flags.town.nation.switch, default false
+    - These are used to set the default perm values for new plots.
+  - Language files bumped to 0.56.

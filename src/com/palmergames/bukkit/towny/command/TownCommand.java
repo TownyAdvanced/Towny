@@ -2813,7 +2813,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
-			player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
+			if (townBlockOwner instanceof Town)
+				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+			if (townBlockOwner instanceof Resident)
+				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
 			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
@@ -2831,6 +2834,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// reset the friend to resident so the perm settings don't fail
 			if (friend && split[0].equalsIgnoreCase("friend"))
 				split[0] = "resident";
+			// reset the town to nation so the perm settings don't fail
+			if (friend && split[0].equalsIgnoreCase("town"))
+				split[0] = "nation";
 
 			if (split.length == 1) {
 
@@ -2866,7 +2872,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								"residentItemUse", "outsiderBuild",
 								"outsiderDestroy", "outsiderSwitch",
 								"outsiderItemUse", "allyBuild", "allyDestroy",
-								"allySwitch", "allyItemUse" })
+								"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
+								"nationSwitch", "nationItemUse"  })
 							perm.set(element, b);
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_town_set_perm_syntax_error"));
@@ -2877,6 +2884,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else if (split.length == 2) {
 				if ((!split[0].equalsIgnoreCase("resident")
 						&& !split[0].equalsIgnoreCase("friend")
+						&& !split[0].equalsIgnoreCase("town") 
+						&& !split[0].equalsIgnoreCase("nation")
 						&& !split[0].equalsIgnoreCase("ally")
 						&& !split[0].equalsIgnoreCase("outsider"))
 						&& !split[0].equalsIgnoreCase("build")
@@ -2896,6 +2905,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						perm.residentDestroy = b;
 						perm.residentSwitch = b;
 						perm.residentItemUse = b;
+					} else if (split[0].equalsIgnoreCase("town") || split[0].equalsIgnoreCase("nation")) {
+						perm.nationBuild = b;
+						perm.nationDestroy = b;
+						perm.nationSwitch = b;
+						perm.nationItemUse = b;
 					} else if (split[0].equalsIgnoreCase("outsider")) {
 						perm.outsiderBuild = b;
 						perm.outsiderDestroy = b;
@@ -2933,6 +2947,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if ((!split[0].equalsIgnoreCase("resident")
 						&& !split[0].equalsIgnoreCase("friend")
+						&& !split[0].equalsIgnoreCase("town")
+						&& !split[0].equalsIgnoreCase("nation")
 						&& !split[0].equalsIgnoreCase("ally")
 						&& !split[0].equalsIgnoreCase("outsider"))
 						|| (!split[1].equalsIgnoreCase("build")
@@ -2966,7 +2982,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString() : perm.getColourString().replace("f", "r"))));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 			// Reset all caches as this can affect everyone.

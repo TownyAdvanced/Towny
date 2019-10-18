@@ -339,6 +339,8 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.PLOT_OWNER;
 				else if (owner.hasFriend(resident))
 					return TownBlockStatus.PLOT_FRIEND;
+				else if (resident.hasTown() && CombatUtil.isSameTown(owner.getTown(), resident.getTown()))
+					return TownBlockStatus.PLOT_TOWN;
 				else if (resident.hasTown() && CombatUtil.isAlly(owner.getTown(), resident.getTown()))
 					return TownBlockStatus.PLOT_ALLY;
 				else
@@ -361,6 +363,8 @@ public class PlayerCacheUtil {
 			
 			if (resident.getTown() != town) {
 				// Allied destroy rights
+				if (CombatUtil.isSameNation(town, resident.getTown()))
+					return TownBlockStatus.TOWN_NATION;
 				if (CombatUtil.isAlly(town, resident.getTown()))
 					return TownBlockStatus.TOWN_ALLY;
 				else if (CombatUtil.isEnemy(resident.getTown(), town)) {
@@ -516,6 +520,31 @@ public class PlayerCacheUtil {
 				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", TownySettings.getLangString(action.toString())));
 				return false;
 
+			} else if (status == TownBlockStatus.PLOT_TOWN) {
+				if (townBlock.getPermissions().getNationPerm(action)) {
+
+					if (townBlock.getType() == TownBlockType.WILDS) {
+
+						try {
+							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+								return true;
+						} catch (NotRegisteredException e) {
+						}
+
+					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
+						
+						if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
+							return true;
+						
+					} else {
+						return true;
+					}
+
+				}
+				
+				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "town members", TownySettings.getLangString(action.toString())));
+				return false;
+
 			} else if (status == TownBlockStatus.PLOT_ALLY) {
 				if (townBlock.getPermissions().getAllyPerm(action)) {
 
@@ -604,6 +633,39 @@ public class PlayerCacheUtil {
 			}
 
 			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), TownySettings.getLangString(action.toString())));
+			return false;
+		} else if (status == TownBlockStatus.TOWN_NATION) {
+			/*
+			 * Check town overrides before testing town permissions
+			 */
+			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
+				return true;
+
+			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
+				return true;
+
+			} else if (townBlock.getPermissions().getNationPerm(action)) {
+
+				if (townBlock.getType() == TownBlockType.WILDS) {
+
+					try {
+						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
+							return true;
+					} catch (NotRegisteredException e) {
+					}
+
+				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
+					
+					if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
+						return true;
+					
+				} else {
+					return true;
+				}
+
+			}
+
+			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_nation"), TownySettings.getLangString(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.TOWN_ALLY) {
