@@ -3615,3 +3615,5 @@ v0.92.0.11:
   - The german.yml has been updated to 0.56 by Sprugente.
 0.95.0.2:
   - Fix missing placeholder %townyadvanced_towny_tag_formatted% not actually existing.
+  - Fix world explosion setting not allowing explosions to damage animals, armorstands, itemframes and endercrystals in the wilderness when they ought be exploded.
+    - Closes ticket #3459
