@@ -1412,7 +1412,7 @@ public enum ConfigNodes {
 			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
 	WAR_DISALLOW_ONE_WAY_ALLIANCE(
 			"war.disallow_one_way_alliance",
-			"false",
+			"true",
 			"#By setting this to true, nations will receive a prompt for alliances and alliances will show on both nations."
 	),
 	WAR_ECONOMY(

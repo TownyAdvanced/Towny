@@ -3620,3 +3620,6 @@ v0.92.0.11:
   - Solve townless townblocks causing safemode instead of being deleted.
     - Actually deletes the townblock file now too.
     - Closes ticket #3336
+  - Change to default config: war.disallow_one_way_alliance
+    - Now defaults to true.
+    - One-way alliances are discouraged, and eventually may be done away with entirely in order to better facilitate new features and war updates.
