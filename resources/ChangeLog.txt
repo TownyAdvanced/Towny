@@ -3614,3 +3614,4 @@ v0.92.0.11:
     - Closes ticket #3443
   - The german.yml has been updated to 0.56 by Sprugente.
 0.95.0.2:
+  - Fix missing placeholder %townyadvanced_towny_tag_formatted% not actually existing.

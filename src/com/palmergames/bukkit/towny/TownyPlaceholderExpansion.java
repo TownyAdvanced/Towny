@@ -219,6 +219,27 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			} catch (NotRegisteredException ignored) {
 			}
 			return tag;
+		case "towny_tag_formatted": // %townyadvanced_towny_tag_formatted%
+			try {
+				if (resident.hasTown()) {
+					if (resident.getTown().hasTag())
+						town = resident.getTown().getTag();
+					else
+						town = resident.getTown().getFormattedName();
+					if (resident.getTown().hasNation()) {
+						if (resident.getTown().getNation().hasTag())
+							nation = resident.getTown().getNation().getTag();
+						else
+							nation = resident.getTown().getNation().getFormattedName();
+					}
+				}
+				if (!nation.isEmpty())
+					tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+				else if (!town.isEmpty())
+					tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			} catch (NotRegisteredException ignored) {
+			}
+			return tag;
 		case "towny_tag_override": // %townyadvanced_towny_tag_override%
 			try {
 				if (resident.hasTown()) {
