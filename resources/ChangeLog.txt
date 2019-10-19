@@ -3613,3 +3613,4 @@ v0.92.0.11:
   - Fix being unable to toggle debug mode in-game, courtesy of Articdive
     - Closes ticket #3443
   - The german.yml has been updated to 0.56 by Sprugente.
+0.95.0.2:
