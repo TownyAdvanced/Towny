@@ -181,7 +181,6 @@ public class Towny extends JavaPlugin {
 	public void setWorldFlags() {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for (Town town : universe.getDataSource().getTowns()) {
-			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
 				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");

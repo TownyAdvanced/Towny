@@ -1341,12 +1341,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = "";
 		String path;
 		
+
 		for (TownBlock townBlock : getAllTownBlocks()) {
 			path = getTownBlockFilename(townBlock);
 			//boolean set = false;
 			
 			File fileTownBlock = new File(path);
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
+				String test = null;
 				try {
 					HashMap<String, String> keys = new HashMap<>();
 					Properties properties = new Properties();
@@ -1421,7 +1423,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-					
+					test = "town";
 					line = keys.get("town");
 					if (line.isEmpty()) {
 						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
@@ -1432,6 +1434,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 				} catch (Exception e) {
+					if (test == "town") {
+						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
+						deleteTownBlock(townBlock);
+						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in townblocks.txt");
+						TownyWorld world = townBlock.getWorld();
+						world.removeTownBlock(townBlock);
+						continue;
+					}
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock file " + path + " at line: " + line);
 					return false;
 				}
@@ -2339,6 +2349,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		File file = new File(getTownBlockFilename(townBlock));
 		if (file.exists())
-			file.delete();
+			file.deleteOnExit();
 	}
 }
