@@ -80,7 +80,6 @@ import java.util.Map;
 
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
-	private static final TownyLogger townyLogger = TownyLogger.getInstance();
 	private String version = "2.0.0";
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -249,8 +248,11 @@ public class Towny extends JavaPlugin {
 			setError(true);
 			return false;
 		}
-
-		townyLogger.setupLogger();
+		// Enable debug logger if set in the config.
+		if (TownySettings.getDebug()) {
+			TownyLogger.getInstance().enableDebugLogger();
+			TownyLogger.getInstance().updateLoggers();
+		}
 
 		checkPlugins();
 
