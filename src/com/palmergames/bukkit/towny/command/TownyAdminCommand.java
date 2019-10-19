@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
@@ -41,12 +42,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import javax.naming.InvalidNameException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.naming.InvalidNameException;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:
@@ -1180,6 +1180,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.getDebug();
 				TownySettings.setDebug(choice);
+				if (choice) {
+					TownyLogger.getInstance().enableDebugLogger();
+				} else {
+					TownyLogger.getInstance().disableDebugLogger();
+				}
+				TownyLogger.getInstance().updateLoggers();
 				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_err_invalid_choice"));
