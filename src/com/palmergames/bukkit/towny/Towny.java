@@ -248,11 +248,6 @@ public class Towny extends JavaPlugin {
 			setError(true);
 			return false;
 		}
-		// Enable debug logger if set in the config.
-		if (TownySettings.getDebug()) {
-			TownyLogger.getInstance().enableDebugLogger();
-			TownyLogger.getInstance().updateLoggers();
-		}
 
 		checkPlugins();
 

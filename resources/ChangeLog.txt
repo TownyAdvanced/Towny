@@ -3610,3 +3610,5 @@ v0.92.0.11:
 	- default_perm_flags.town.nation.switch, default false
     - These are used to set the default perm values for new plots.
   - Language files bumped to 0.56.
+  - Fix being unable to toggle debug mode in-game, courtesy of Articdive
+    - Closes ticket #3443

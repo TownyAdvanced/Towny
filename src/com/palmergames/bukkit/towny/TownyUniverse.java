@@ -67,6 +67,12 @@ public class TownyUniverse {
             return false;
         }
         
+		// Enable debug logger if set in the config.
+		if (TownySettings.getDebug()) {
+			TownyLogger.getInstance().enableDebugLogger();
+			TownyLogger.getInstance().updateLoggers();
+		}
+		
         String saveDbType = TownySettings.getSaveDatabase();
         String loadDbType = TownySettings.getLoadDatabase();
         
