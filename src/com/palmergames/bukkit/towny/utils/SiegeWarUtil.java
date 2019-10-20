@@ -217,28 +217,29 @@ public class SiegeWarUtil {
     public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         if(defendingTown.hasNation()) {
 
-            Nation nationOfCapturedTown = null;
+            Nation nationOfDefendingTown = null;
             try {
-                nationOfCapturedTown = defendingTown.getNation();
+                nationOfDefendingTown = defendingTown.getNation();
             } catch (NotRegisteredException x) {
                 //This won't happen because we checked for a nation just above
             }
 
             //Remove town from nation (and nation itself if empty)
-            removeTownFromNation(plugin, defendingTown, nationOfCapturedTown);
+            removeTownFromNation(plugin, defendingTown, nationOfDefendingTown);
 
             addTownToNation(plugin, defendingTown, attackingNation);
 
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
-                    TownySettings.getLangString("msg_siege_war_town_captured"),
+                    TownySettings.getLangString("msg_siege_war_nation_town_captured"),
                     TownyFormatter.getFormattedTownName(defendingTown),
+                    TownyFormatter.getFormattedNationName(nationOfDefendingTown),
                     TownyFormatter.getFormattedNationName(attackingNation)
             )));
 
-            if(nationOfCapturedTown.getTowns().size() == 0) {
+            if(nationOfDefendingTown.getTowns().size() == 0) {
                 TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                         TownySettings.getLangString("msg_siege_war_nation_defeated"),
-                        TownyFormatter.getFormattedNationName(nationOfCapturedTown)
+                        TownyFormatter.getFormattedNationName(nationOfDefendingTown)
                 )));
             }
         } else {
@@ -246,8 +247,8 @@ public class SiegeWarUtil {
 
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
-                    defendingTown.getName(),
-                    attackingNation.getName()
+                    TownyFormatter.getFormattedTownName(defendingTown),
+                    TownyFormatter.getFormattedNationName(attackingNation)
             )));
         }
 
@@ -309,11 +310,13 @@ public class SiegeWarUtil {
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
         try {
-            if (defendingTown.canPayFromHoldings(plunder))
+            if (defendingTown.canPayFromHoldings(plunder)) {
                 defendingTown.payTo(plunder, winnerNation, "Town was plundered by attacker");
-            else {
+                sendPlunderSuccessMessage(defendingTown, winnerNation);
+        } else {
                 double actualPlunder = defendingTown.getHoldingBalance();
                 defendingTown.payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
+                sendPlunderSuccessMessage(defendingTown, winnerNation);
                 TownyMessaging.sendGlobalMessage("The town " + defendingTown.getName() + " was destroyed by " +winnerNation.getName());
                 TownyUniverse.getDataSource().removeTown(defendingTown);
             }
@@ -322,6 +325,27 @@ public class SiegeWarUtil {
         }
 
         siege.setTownPlundered(true);
+    }
+
+
+    private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation) {
+        if(defendingTown.hasNation()) {
+            try {
+                TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+                        TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
+                        TownyFormatter.getFormattedTownName(defendingTown),
+                        TownyFormatter.getFormattedNationName(defendingTown.getNation()),
+                        TownyFormatter.getFormattedNationName(winnerNation)
+                )));
+            } catch (NotRegisteredException e) {
+                e.printStackTrace();
+            }
+        } else {
+            TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+                    TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),
+                    TownyFormatter.getFormattedTownName(defendingTown),
+                    TownyFormatter.getFormattedNationName(winnerNation))));
+        }
     }
 
     public static void applySiegeUpkeepCost(Siege siege) {

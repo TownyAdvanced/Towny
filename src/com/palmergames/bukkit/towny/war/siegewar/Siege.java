@@ -1,9 +1,13 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.util.Colors;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -148,14 +152,23 @@ public class Siege {
         switch(status) {
             case ATTACKER_WIN:
             case DEFENDER_SURRENDER:
-                return attackerWinner.getName();
+                return Colors.Gold + TownyFormatter.getFormattedNationName(attackerWinner);
             case DEFENDER_WIN:
             case ATTACKER_ABANDON:
-                return TownySettings.getLangString("siege_list_defender_winner");
+                if(defendingTown.hasNation()) {
+                    try {
+                        return Colors.Gold + TownyFormatter.getFormattedNationName(defendingTown.getNation());
+                    } catch (NotRegisteredException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    return Colors.Blue + TownyFormatter.getFormattedTownName(defendingTown);
+                }
             case IN_PROGRESS:
                 return "n/a";
             default:
                 return "Unknown siege status";
         }
     }
+
 }
