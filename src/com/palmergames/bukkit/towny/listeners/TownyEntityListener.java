@@ -56,6 +56,7 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
+import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -326,7 +327,6 @@ public class TownyEntityListener implements Listener {
 		    	// lightning can be summoned by anyone at anything. Until we can discern the cause of the lightning
 		    	// we will block all damage to the above entities requiring special protection.
 		    	// Note 1: Some day we might be able to get the cause of the lightning.
-		    	// Note 2: Pigs will still get vaporized by the lightning as they are turned into PigZombies.
 				if (!locationCanExplode(townyWorld, entity.getLocation())) {
 					event.setDamage(0);
 					event.setCancelled(true);
@@ -1137,4 +1137,23 @@ public class TownyEntityListener implements Listener {
 		event.setCancelled(!bBuild);
 	}
 
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPigHitByLightning(PigZapEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
+		try {
+			if (!locationCanExplode(TownyAPI.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName()), event.getEntity().getLocation())) {
+				event.setCancelled(true);
+			}
+		} catch (NotRegisteredException ignored) {
+		}
+			
+			
+	}
 }

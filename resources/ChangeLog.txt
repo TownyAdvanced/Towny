@@ -3636,3 +3636,4 @@ v0.92.0.11:
   - Fix bad grammar possible to be seen on /t join command. 
   - Fix Tridents with Channeling that causes lightning strikes to harm animals, item frames and armor stands.
   - Add Villagers to list of things we protect from damage.
+  - Protect pigs from being zapped by lightning where explosions shouldn't happen.
