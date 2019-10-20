@@ -3182,12 +3182,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				if (edgeTownBlock.isOwner(owner)) {
-					//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
+					TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
 					return true;
 				}
 			} catch (NotRegisteredException e) {
 			}
-		//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
+		TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
 		return false;
 	}
 
@@ -3197,13 +3197,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		Town town = (Town) owner;
 
-		if (attachedToEdge && !isEdgeBlock(owner, selection) && !town.getTownBlocks().isEmpty()) {
-			if (selection.size() == 0)
-				throw new TownyException(TownySettings.getLangString("msg_already_claimed_2"));
-			else
-				throw new TownyException(TownySettings.getLangString("msg_err_not_attached_edge"));
-		}
-
 		if (owner instanceof Town) {
 			// Town town = (Town)owner;
 			int available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
@@ -3212,6 +3205,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (available - selection.size() < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_not_enough_blocks"));
 		}
+
 
 		try {
 			if (selection.size() == 1)
@@ -3224,6 +3218,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cant_afford_blocks2"), selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 		} catch (EconomyException e1) {
 			throw new TownyException("Economy Error");
+		}
+		
+		if (attachedToEdge && !isEdgeBlock(owner, selection) && !town.getTownBlocks().isEmpty()) {
+			if (selection.size() == 0)
+				throw new TownyException(TownySettings.getLangString("msg_already_claimed_2"));
+			else
+				throw new TownyException(TownySettings.getLangString("msg_err_not_attached_edge"));
 		}
 	}
 
