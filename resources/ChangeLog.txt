@@ -3635,3 +3635,4 @@ v0.92.0.11:
   - Language files bumped to 0.57.
   - Fix bad grammar possible to be seen on /t join command. 
   - Fix Tridents with Channeling that causes lightning strikes to harm animals, item frames and armor stands.
+  - Add Villagers to list of things we protect from damage.
