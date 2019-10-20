@@ -2687,6 +2687,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			String residentName, townName, contextualResidentName;
 			boolean console = false;
+			String exceptionMsg;
 
 			if (sender instanceof Player) {
 				// Player
@@ -2697,6 +2698,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				residentName = player.getName();
 				townName = args[0];
 				contextualResidentName = "You";
+				exceptionMsg = "msg_err_already_res2";
 			} else {
 				// Console
 				if (args.length < 2)
@@ -2705,6 +2707,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				residentName = args[0];
 				townName = args[1];
 				contextualResidentName = residentName;
+				exceptionMsg = "msg_err_already_res";
 			}
 			
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2713,7 +2716,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Check if resident is currently in a town.
 			if (resident.hasTown())
-				throw new Exception(String.format(TownySettings.getLangString("msg_err_already_res"), contextualResidentName));
+				throw new Exception(String.format(TownySettings.getLangString(exceptionMsg), contextualResidentName));
 
 			if (!console) {
 				// Check if town is town is free to join.
@@ -3182,12 +3185,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				if (edgeTownBlock.isOwner(owner)) {
-					TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
+					//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
 					return true;
 				}
 			} catch (NotRegisteredException e) {
 			}
-		TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
+		//TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
 		return false;
 	}
 

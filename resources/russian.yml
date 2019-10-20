@@ -1,5 +1,5 @@
 name: Towny
-version: 0.56
+version: 0.57
 language: russian
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://towny.palmergames.com/'
@@ -937,3 +937,6 @@ msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command whi
 
 # Added in 0.56:
 msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+
+# Added in 0.57:
+msg_err_already_res2: '&c%s already belong to a town.'

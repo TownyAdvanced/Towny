@@ -3632,3 +3632,5 @@ v0.92.0.11:
     - Requires towny.command.nation.deposit.other
     - Lets a nation member deposit money into a town bank of a town that is part of their nation.
     - Closes ticket #1953
+  - Language files bumped to 0.57.
+  - Fix bad grammar possible to be seen on /t join command. 
