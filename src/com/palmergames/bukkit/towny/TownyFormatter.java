@@ -393,7 +393,9 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
+		//Siege War Info
 		if(TownySettings.getWarSiegeEnabled()) {
+
 			// Plunder Value: $55,000
 			if(TownySettings.isUsingEconomy()) {
 				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
@@ -412,26 +414,30 @@ public class TownyFormatter {
 					String status= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
 					String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
 					out.add(status + " " + victoryTimer);
+
+					//If siege is in progress, show participants
+					//Siege Points
+					//> Defence
+					//  TownA - (500)
+					//out.add(TownySettings.getLangString("status_town_siege_siege_points_tag"));
+					out.add(TownySettings.getLangString("status_town_siege_defence_tag"));
+					addSiegeStatusDefender(siege, out);
+
+					//> Attack
+					//  NationX - (4000)
+					//  NationY - (3000) - ABANDONED
+					//  NationZ - (2000)
+					out.add(TownySettings.getLangString("status_town_siege_attack_tag"));
+					addSiegeStatusAttackers(siege, out);
+
 				} else {
-					//Siege Status: Town Defences Breached   Cooldown Timer: 12.5 hours
+					//Siege Status: Town Defences Breached by Empire (Nation)
+					//Siege Cooldown Timer: 12.5 hours
 					String status= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
-					String cooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
-					out.add(status + " " + cooldownTimer);
+					String siegeCooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
+					out.add(status);
+					out.add(siegeCooldownTimer);
 				}
-
-				//Siege Points
-				//> Defence
-				//  TownA - (500)
-				//out.add(TownySettings.getLangString("status_town_siege_siege_points_tag"));
-				out.add(TownySettings.getLangString("status_town_siege_defence_tag"));
-				addSiegeStatusDefender(siege, out);
-
-				//> Attack
-				//  NationX - (4000)
-				//  NationY - (3000) - ABANDONED
-				//  NationZ - (2000)
-				out.add(TownySettings.getLangString("status_town_siege_attack_tag"));
-				addSiegeStatusAttackers(siege, out);
 			}
 		}
 
@@ -622,19 +628,24 @@ public class TownyFormatter {
 				return (TownySettings.getLangString("status_town_siege_summary_in_progress"));
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
+				String winnerName = getFormattedNationName(siege.getAttackerWinner());
+				String message;
+
 				if(siege.isTownInvaded()) {
 					if(siege.isTownPlundered()) {
-						return TownySettings.getLangString("status_town_siege_summary_attacker_win_invade_plunder");
+						message = TownySettings.getLangString("status_town_siege_summary_attacker_win_invade_plunder");
 					} else {
-						return TownySettings.getLangString("status_town_siege_summary_attacker_win_invade");
+						message = TownySettings.getLangString("status_town_siege_summary_attacker_win_invade");
 					}
 				} else {
 					if(siege.isTownPlundered()) {
-						return TownySettings.getLangString("status_town_siege_summary_attacker_win_plunder");
+						message = TownySettings.getLangString("status_town_siege_summary_attacker_win_plunder");
 					} else {
-						return TownySettings.getLangString("status_town_siege_summary_attacker_win");
+						message = TownySettings.getLangString("status_town_siege_summary_attacker_win");
 					}
 				}
+
+				return String.format(message, winnerName);
 			case DEFENDER_WIN:
 				return (TownySettings.getLangString("status_town_siege_summary_defender_win"));
 			case ATTACKER_ABANDON:
