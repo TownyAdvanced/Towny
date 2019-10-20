@@ -582,7 +582,7 @@ public class TownyFormatter {
 			} catch (NotRegisteredException e) {
 			}
 		} else {
-			defenderName = siege.getDefendingTown().getName();
+			defenderName = TownyFormatter.getFormattedTownName(siege.getDefendingTown());
 		}
 
 		out.add("  " + Colors.White  + defenderName + " - (" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")" + combatantStatusTag);
@@ -612,7 +612,7 @@ public class TownyFormatter {
 		int index;
 		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
 			attackerNation = attackerNations.get(index);
-			attackerName = attackerNation.getName();
+			attackerName = TownyFormatter.getFormattedNationName(attackerNation);
 			siegeStats = siege.getSiegeStatsAttackers().get(attackerNation);
 			siegeStatus = siege.getStatus();
 
