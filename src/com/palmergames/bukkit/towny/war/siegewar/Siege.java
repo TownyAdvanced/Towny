@@ -152,17 +152,17 @@ public class Siege {
         switch(status) {
             case ATTACKER_WIN:
             case DEFENDER_SURRENDER:
-                return Colors.Gold + TownyFormatter.getFormattedNationName(attackerWinner);
+                return TownyFormatter.getFormattedNationName(attackerWinner);
             case DEFENDER_WIN:
             case ATTACKER_ABANDON:
                 if(defendingTown.hasNation()) {
                     try {
-                        return Colors.Gold + TownyFormatter.getFormattedNationName(defendingTown.getNation());
+                        return TownyFormatter.getFormattedNationName(defendingTown.getNation());
                     } catch (NotRegisteredException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    return Colors.Blue + TownyFormatter.getFormattedTownName(defendingTown);
+                    return TownyFormatter.getFormattedTownName(defendingTown);
                 }
             case IN_PROGRESS:
                 return "n/a";
