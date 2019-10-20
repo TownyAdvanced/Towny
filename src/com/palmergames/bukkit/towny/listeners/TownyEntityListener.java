@@ -321,6 +321,21 @@ public class TownyEntityListener implements Listener {
 				}
 			}
 		    
+		    if (damager.equals("LIGHTNING")) {
+		    	// Other than natural causes, as of the introduction of Tridents with the Channeling enchantment,
+		    	// lightning can be summoned by anyone at anything. Until we can discern the cause of the lightning
+		    	// we will block all damage to the above entities requiring special protection.
+		    	// Note 1: Some day we might be able to get the cause of the lightning.
+		    	// Note 2: Pigs will still get vaporized by the lightning as they are turned into PigZombies.
+				if (!locationCanExplode(townyWorld, entity.getLocation())) {
+					event.setDamage(0);
+					event.setCancelled(true);
+					return;
+				} else {
+					return;
+				}
+		    }
+
 		    // Handle arrows and projectiles that do not explode.
 			if (event.getDamager() instanceof Projectile) {
 				
