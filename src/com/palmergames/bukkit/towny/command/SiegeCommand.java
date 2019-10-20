@@ -389,12 +389,12 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		Collections.sort(siegesToSort, new Comparator() {
 			@Override
 			public int compare(Object s1, Object s2) {
-				double s1PlunderValue= ((Siege) s1).getHoursUntilCompletion();
-				double s2PlunderValue = ((Siege)s2).getHoursUntilCompletion();
+				double s1TimeUntilCompletion= ((Siege) s1).getTimeUntilCompletionMillis();
+				double s2timeUntilCompletion = ((Siege)s2).getTimeUntilCompletionMillis();
 
-				if(s1PlunderValue == s2PlunderValue) {
+				if(s1TimeUntilCompletion == s2timeUntilCompletion) {
 					return 0;
-				} else if (s1PlunderValue > s2PlunderValue) {
+				} else if (s1TimeUntilCompletion > s2timeUntilCompletion) {
 					return 1;
 				} else {
 					return -1;

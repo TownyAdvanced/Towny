@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -1314,17 +1315,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return revoltCooldownEndTime;
 	}
 
-	public double getHoursUntilRevoltCooldownEnds() {
-		double hoursRemainingMillis = revoltCooldownEndTime - System.currentTimeMillis();
-		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
-		return hoursRemaining;
-	}
-
 	public String getFormattedHoursUntilRevoltCooldownEnds() {
-		NumberFormat numberFormat = NumberFormat.getInstance();
-		numberFormat.setMaximumFractionDigits(1);
-		double hoursRoundedUp = Math.ceil(getHoursUntilRevoltCooldownEnds() * 10) / 10;
-		return numberFormat.format(hoursRoundedUp);
+		double hoursRemainingMillis = revoltCooldownEndTime - System.currentTimeMillis();
+		return SiegeWarUtil.getFormattedTimeValue(hoursRemainingMillis);
 	}
 
 	public double getPlunderValue() {
@@ -1335,21 +1328,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
 	}
 
-	public double getHoursUntilSiegeCooldownEnds() {
-		double hoursRemainingMillis = siegeCooldownEndTime - System.currentTimeMillis();
-		double hoursRemaining = hoursRemainingMillis / ONE_HOUR_IN_MILLIS;
-		return hoursRemaining;
-	}
-
 	public String getFormattedHoursUntilSiegeCooldownEnds() {
-		double hoursUntilSiegeCooldownEnds = getHoursUntilSiegeCooldownEnds();
-		if(hoursUntilSiegeCooldownEnds > 0) {
-			NumberFormat numberFormat = NumberFormat.getInstance();
-			numberFormat.setMaximumFractionDigits(1);
-			double hoursRoundedUp = Math.ceil(hoursUntilSiegeCooldownEnds * 10) / 10;
-			return numberFormat.format(hoursRoundedUp);
-		} else {
-			return "0";
-		}
+		double hoursUntilSiegeCooldownEnds = siegeCooldownEndTime - System.currentTimeMillis();
+		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 }

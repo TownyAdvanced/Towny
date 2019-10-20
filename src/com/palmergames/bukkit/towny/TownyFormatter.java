@@ -413,7 +413,7 @@ public class TownyFormatter {
 					String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
 					out.add(status + " " + victoryTimer);
 				} else {
-					//Siege Status: Town Defences Breached   Cooldown Timer: 33.5 hours
+					//Siege Status: Town Defences Breached   Cooldown Timer: 12.5 hours
 					String status= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
 					String cooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
 					out.add(status + " " + cooldownTimer);

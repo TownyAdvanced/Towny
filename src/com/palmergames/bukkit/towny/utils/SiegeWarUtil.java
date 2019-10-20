@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,8 @@ import java.util.List;
  */
 public class SiegeWarUtil {
 
-    public final static long ONE_MINUTE_IN_MILLIS = 60000;
+    public final static long ONE_SECOND_IN_MILLIS = 1000;
+    public final static long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
     public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
     public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
@@ -228,16 +230,15 @@ public class SiegeWarUtil {
             addTownToNation(plugin, defendingTown, attackingNation);
 
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
-                    TownySettings.getLangString("msg_siege_war_nation_town_captured"),
-                    defendingTown.getName(),
-                    nationOfCapturedTown.getName(),
-                    attackingNation.getName()
+                    TownySettings.getLangString("msg_siege_war_town_captured"),
+                    TownyFormatter.getFormattedTownName(defendingTown),
+                    TownyFormatter.getFormattedNationName(attackingNation)
             )));
 
             if(nationOfCapturedTown.getTowns().size() == 0) {
                 TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                         TownySettings.getLangString("msg_siege_war_nation_defeated"),
-                        nationOfCapturedTown.getName()
+                        TownyFormatter.getFormattedNationName(nationOfCapturedTown)
                 )));
             }
         } else {
@@ -378,8 +379,8 @@ public class SiegeWarUtil {
         activateSiegeCooldown(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
-                TownyFormatter.getFormattedTownName(winnerTown))
-        ));
+                TownyFormatter.getFormattedTownName(winnerTown)
+        )));
     }
 
     public static void defenderSurrender(Siege siege) throws TownyException {
@@ -501,5 +502,40 @@ public class SiegeWarUtil {
             SiegeStats defenderStats = townOfPlayer.getSiege().getSiegeStatsDefenders();
             defenderStats.addSiegePoints(siegePointsPerDefendingPlayer);
         }
+    }
+
+    public static String getFormattedTimeValue(double timeMillis) {
+
+        String timeUnit;
+        double timeUtilCompletion;
+
+        if(timeMillis> 0) {
+
+            if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
+                timeUnit = TownySettings.getLangString("day_plu");
+                timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
+
+            } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
+                timeUnit = TownySettings.getLangString("hour_plu");
+                timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
+
+            } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
+                timeUnit = TownySettings.getLangString("minute_plu");
+                timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
+
+            } else {
+                timeUnit = TownySettings.getLangString("second_plu");
+                timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
+            }
+
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(1);
+            double timeRoundedUp = Math.ceil(timeUtilCompletion * 10) / 10;
+            return numberFormat.format(timeRoundedUp) + " " + timeUnit;
+
+        } else {
+            return "n/a";
+        }
+
     }
 }

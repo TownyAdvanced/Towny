@@ -1,19 +1,15 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 
-import javax.swing.*;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_DAY_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 
 /**
@@ -136,25 +132,16 @@ public class Siege {
         return attackerWinner != null;
     }
 
-    public double getHoursUntilCompletion() {
-        double timeRemainingMillis = scheduledEndTime - System.currentTimeMillis();
-        double timeRemainingDays = timeRemainingMillis / ONE_HOUR_IN_MILLIS;
-        return timeRemainingDays;
+    public double getTimeUntilCompletionMillis() {
+        return scheduledEndTime - System.currentTimeMillis();
     }
 
     public String getFormattedHoursUntilCompletion() {
         if(status == SiegeStatus.IN_PROGRESS) {
-            NumberFormat numberFormat = NumberFormat.getInstance();
-            numberFormat.setMaximumFractionDigits(1);
-            double hoursUntilCompletion = getHoursUntilCompletion();
-            if(hoursUntilCompletion > 0) {
-                double hoursRoundedUp = Math.ceil(hoursUntilCompletion * 10) / 10;
-                return numberFormat.format(hoursRoundedUp);
-            } else {
-                return "0";
-            }
+            double timeUntilCompletionMillis = getTimeUntilCompletionMillis();
+            return SiegeWarUtil.getFormattedTimeValue(timeUntilCompletionMillis);
         } else {
-            return "0";
+            return "n/a";
         }
     }
 
