@@ -28,7 +28,6 @@ public class Siege {
     private SiegeStats siegeStatsDefenders;
     private Map<Nation, SiegeStats> siegeStatsAttackers;
 
-
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
     }

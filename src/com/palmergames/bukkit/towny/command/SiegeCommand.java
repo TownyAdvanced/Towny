@@ -422,8 +422,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 			town = siege.getDefendingTown();
 			output = Colors.Red + town.getName()
 					+ Colors.Gray + " - "
-					+ Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion()
-												+ " " + TownySettings.getLangString("hour_plu") + ")"
+					+ Colors.LightBlue + "(" + siege.getFormattedHoursUntilCompletion() + ")"
 					+ Colors.Gray + " - "
 					+ Colors.LightBlue + "(" + siege.getWinnerName() + ")";
 			siegesOrdered.add(output);
