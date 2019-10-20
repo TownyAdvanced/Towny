@@ -3623,3 +3623,11 @@ v0.92.0.11:
   - Change to default config: war.disallow_one_way_alliance
     - Now defaults to true.
     - One-way alliances are discouraged, and eventually may be done away with entirely in order to better facilitate new features and war updates.
+  - New Permission Node: towny.command.nation.deposit.other
+    - Allows a nation member to deposit money into the townbank of a nation member.
+    - Is NOT a child node of towny.command.nation.deposit or towny.command.nation.*
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - add towny.command.nation.deposit.other to the king and nation assistant ranks.
+  - New Command: /n deposit {amount} {townname}
+    - Requires towny.command.nation.deposit.other
+    - Lets a nation member deposit money into a town bank of a town that is part of their nation.

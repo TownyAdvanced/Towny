@@ -3273,6 +3273,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
+	
+	/**
+	 * Used to allow nation members to deposit to towns' banks in their nations.
+	 * 
+	 * @param player
+	 * @param town
+	 * @param amount
+	 */
+	public static void townDeposit(Player player, Town town, int amount) {
+		try {
+			Resident resident = TownyAPI.getInstance().getDataSource().getResident(player.getName());			
+			
+			double bankcap = TownySettings.getTownBankCap();
+			if (bankcap > 0) {
+				if (amount + town.getHoldingBalance() > bankcap)
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));			
+			}
+			
+			if (amount < 0)
+				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
+
+			if (!resident.payTo(amount, town, "Town Deposit from Nation member"))
+				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
+
+			TownyMessaging.sendNationMessage(resident.getTown().getNation(), String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, town + " town"));
+			
+		} catch (EconomyException | TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		}
+	}
 		
 	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();

@@ -20,6 +20,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_MERGE("towny.command.nation.merge"),
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
+	TOWNY_COMMAND_NATION_DEPOSIT_OTHER("towny.command.nation.deposit.other"),
 	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
 	TOWNY_COMMAND_NATION_JOIN("towny.command.nation.join"),
 	
