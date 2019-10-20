@@ -628,7 +628,7 @@ public class TownyFormatter {
 				return (TownySettings.getLangString("status_town_siege_summary_in_progress"));
 			case ATTACKER_WIN:
 			case DEFENDER_SURRENDER:
-				String winnerName = getFormattedNationName(siege.getAttackerWinner());
+				String winnerName = siege.getAttackerWinner().getName();
 				String message;
 
 				if(siege.isTownInvaded()) {
