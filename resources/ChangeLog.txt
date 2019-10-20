@@ -3631,3 +3631,4 @@ v0.92.0.11:
   - New Command: /n deposit {amount} {townname}
     - Requires towny.command.nation.deposit.other
     - Lets a nation member deposit money into a town bank of a town that is part of their nation.
+    - Closes ticket #1953
