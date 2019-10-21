@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
-import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -127,30 +126,37 @@ public class TownyBlockListener implements Listener {
 		WorldCoord worldCoord;
 		
 		try {
+
+			/*
+			 * Siege War:
+			 */
+			if (TownySettings.getWarSiegeEnabled()) {
+
+				//If player places a banner this can be a request for a siege attack
+				//Or a request to invade
+				if(TownySettings.getWarSiegeAttackEnabled()) {
+					boolean overridePermsAndPlaceBlock = evaluatePlaceSiegeBannerRequest(player, block);
+					if (overridePermsAndPlaceBlock) {
+						return;
+					}
+				}
+
+				//If player attempts to place a chest this can be a request to plunder the town
+				if(TownySettings.getWarSiegePlunderEnabled()) {
+						boolean cancelBlockPlacement = evaluatePlacePlunderChestRequest(player, block);
+						if (cancelBlockPlacement) {
+							event.setCancelled(true);
+							return;
+						}
+				}
+			}
+
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
 			worldCoord = new WorldCoord(world.getName(), Coord.parseCoord(block));
 
 			//Get build permissions (updates if none exist)
 			//boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.BUILD);
 			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.BUILD);
-
-			/*
-			 * Siege War:
-			 * If player is in a nation,
-			 * and attempts to place a banner in any town outside their nation
-			 * This is considered a siege request
-			 */
-			if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeAttackEnabled()) {
-				String blockTypeName = block.getType().getKey().getKey();
-				if(blockTypeName.contains("banner")) {
-					boolean blockPlacementOverride = evaluatePlaceBannerRequest(player, block);
-					if(blockPlacementOverride) {
-						return;
-					}
-				}
-			}
-
-
 
 			// Allow build if we are permitted
 			if (bBuild)
@@ -220,32 +226,90 @@ public class TownyBlockListener implements Listener {
 
 	}
 
+	/*
+		* If player is in a nation,
+		* And target block is in a town outside their nation
+	    * This is considered a request for siege attack
+	 */
 	//Returns: blockPlacementOverride
-	private boolean evaluatePlaceBannerRequest(Player player, Block block) throws NotRegisteredException {
+	private boolean evaluatePlaceSiegeBannerRequest(Player player, Block block) throws NotRegisteredException {
 
-		//Get Player Nation
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-		Nation playerNation;
-		if(resident.hasNation()) {
-			playerNation = resident.getTown().getNation();
+		String blockTypeName = block.getType().getKey().getKey();
+		if (blockTypeName.contains("banner")) {
+			//Get Player Nation
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Nation playerNation;
+			if(resident.hasNation()) {
+				playerNation = resident.getTown().getNation();
+			} else {
+				return false;
+			}
+
+			//Get Town Where block was placed
+			Town townWhereBlockWasPlaced;
+			TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
+			if(townBlock != null && townBlock.hasTown()) {
+				townWhereBlockWasPlaced = townBlock.getTown();
+			} else {
+				return false;
+			}
+
+			//If the target town is neutral, or a different nation than player,
+			if(!townWhereBlockWasPlaced.hasNation() || playerNation != townWhereBlockWasPlaced.getNation())
+			{
+				//If there is no siege, evaluate attack request
+				//If there is a siege already, evaluate invade request
+				if(townWhereBlockWasPlaced.hasSiege()) {
+					return SiegeWarUtil.processInvadeRequest(plugin, player, townWhereBlockWasPlaced.getName());
+				} else {
+					return SiegeWarUtil.evaluateSiegeAttackRequest(player, block);
+				}
+
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
+	}
 
-		//Get Town Where block was placed
-		Town townWhereBlockWasPlaced;
-		TownBlock townBlockWhereBannerWasPlaced = TownyUniverse.getTownBlock(block.getLocation());
-		if(townBlockWhereBannerWasPlaced != null && townBlockWhereBannerWasPlaced.hasTown()) {
-			townWhereBlockWasPlaced = townBlockWhereBannerWasPlaced.getTown();
-		} else {
-			return false;
-		}
 
-		//If the target town is neutral, or a different nation than player,
-		//evaluate siege attack request
-		if(!townWhereBlockWasPlaced.hasNation() || playerNation != townWhereBlockWasPlaced.getNation())
-		{
-			return SiegeWarUtil.processAttackRequest(player, block);
+	/*
+		* If player is in a nation,
+		* And target block is in a town outside their nation
+	    * This is considered a request to invade
+	 */
+	//Returns: cancelBlockPlacement
+	private boolean evaluatePlacePlunderChestRequest(Player player, Block block) throws NotRegisteredException {
+
+		if (block.getType().equals(Material.CHEST)) {
+			//Get Player Nation
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Nation playerNation;
+			if(resident.hasNation()) {
+				playerNation = resident.getTown().getNation();
+			} else {
+				return false;
+			}
+
+			//Get Town Where block was placed
+			Town townWhereBlockWasPlaced;
+			TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
+			if(townBlock != null && townBlock.hasTown()) {
+				townWhereBlockWasPlaced = townBlock.getTown();
+			} else {
+				return false;
+			}
+
+			//If the target town is neutral, or a different nation than player,
+			//evaluate plunder request
+			if(!townWhereBlockWasPlaced.hasNation() || playerNation != townWhereBlockWasPlaced.getNation())
+			{
+				SiegeWarUtil.evaluateTownPlunderRequest(player, townWhereBlockWasPlaced.getName());
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

@@ -88,20 +88,14 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 				listSieges(player, split);
 
 			//} else if (split[0].equalsIgnoreCase("attack")) {
-			//	processAttackRequest(player);
+			//	evaluateSiegeAttackRequest(player);
 
 			} else if (split[0].equalsIgnoreCase("surrender")) {
 				processSurrenderRequest(player);
 
 			} else if (split.length==2 && split[0].equalsIgnoreCase("abandon")) {
 				processAbandonRequest(player, split[1]);
-
-			} else if (split.length==2 && split[0].equalsIgnoreCase("invade")) {
-				processInvadeRequest(player, split[1]);
-
-			} else if (split.length==2 && split[0].equalsIgnoreCase("plunder")) {
-				processPlunderRequest(player, split[1]);
-
+				
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}
@@ -144,94 +138,6 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-
-
-	private void processInvadeRequest(Player player, String townName) throws TownyException {
-		if (!TownySettings.getWarSiegeEnabled())
-			throw new TownyException("Siege war feature disabled");
-
-		if (!TownySettings.getWarSiegeInvadeEnabled())
-			throw new TownyException("Invade not allowed. Try plunder instead.");
-
-		if(!TownyUniverse.getDataSource().hasTown(townName))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
-
-		if(!TownyUniverse.getDataSource().hasSiege(townName))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
-
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-		final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
-
-		if(siege.getStatus() == SiegeStatus.IN_PROGRESS)
-			throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");
-
-		if(siege.getStatus() == SiegeStatus.DEFENDER_WIN)
-			throw new TownyException("The defender has defeated all attackers. You cannot invade unless your nation is victorious in the siege");
-
-		if(siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
-			throw new TownyException("All attackers abandoned the siege. You cannot invade unless your nation is victorious in the siege");
-
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-		if(!resident.hasTown()
-				|| !resident.hasNation()
-				|| resident.getTown().getNation() != siege.getAttackerWinner()) {
-			throw new TownyException("The town was defeated but not by your nation. You cannot invade unless your nation is victorious in the siege");
-		}
-
-		if(siege.isTownInvaded())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));
-
-		SiegeWarUtil.captureTown(plugin, siege, siege.getAttackerWinner(),siege.getDefendingTown());
-	}
-
-
-
-	private void processPlunderRequest(Player player, String townName) throws TownyException {
-		if (!TownySettings.getWarSiegeEnabled())
-			throw new TownyException("Siege war feature disabled");
-
-		if (!TownySettings.getWarSiegePlunderEnabled())
-			throw new TownyException("Plunder not allowed. Try invade instead.");
-
-		if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-		if(!TownyUniverse.getDataSource().hasTown(townName))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
-
-		if(!TownyUniverse.getDataSource().hasSiege(townName))
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
-
-		final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
-
-		if(siege.getStatus() == SiegeStatus.IN_PROGRESS)
-			throw new TownyException("A siege is still in progress. You cannot plunder unless your nation is victorious in the siege");
-
-		if(siege.getStatus() == SiegeStatus.DEFENDER_WIN)
-			throw new TownyException("The defender has defeated all attackers. You cannot plunder unless your nation is victorious in the siege");
-
-		if(siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
-			throw new TownyException("All attackers abandoned the siege. You cannot plunder unless your nation is victorious in the siege");
-
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-		if(!resident.hasTown()
-				|| !resident.hasNation()
-				|| resident.getTown().getNation() != siege.getAttackerWinner()) {
-			throw new TownyException("The town was defeated but not by your nation. You cannot plunder unless your nation is victorious in the siege");
-		}
-
-		if(!TownySettings.isUsingEconomy())
-			throw new TownyException("No economy plugin is active. Cannot plunder.");
-
-		if(siege.isTownPlundered())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townName));
-
-		SiegeWarUtil.plunderTown(siege, siege.getDefendingTown(), siege.getAttackerWinner());
-	}
 
 
 
