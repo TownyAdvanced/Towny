@@ -3637,3 +3637,18 @@ v0.92.0.11:
   - Fix Tridents with Channeling that causes lightning strikes to harm animals, item frames and armor stands.
   - Add Villagers to list of things we protect from damage.
   - Protect pigs from being zapped by lightning where explosions shouldn't happen.
+  - New Config Options:
+    - economy.plot_type_costs.set_commercial
+    - economy.plot_type_costs.set_arena
+    - economy.plot_type_costs.set_embassy
+    - economy.plot_type_costs.set_wilds
+    - economy.plot_type_costs.set_inn
+    - economy.plot_type_costs.set_jail
+    - economy.plot_type_costs.set_farm
+    - economy.plot_type_costs.set_bank
+    - All default to a cost of 0.
+    - Set cost higher to charge person for changing their plot to the desired type.
+  - Changed Command: /towny prices
+    - Now displays costs of setting plot types.
+  - Added ability to set costs for all plot types using /plot set {type}.
+    - Money charged goes to the Server Account.

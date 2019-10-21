@@ -2774,6 +2774,37 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
 	}
 
+	public static double getPlotSetCommercialCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_COMMERCIAL);
+	}
+	
+	public static double getPlotSetArenaCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_ARENA);
+	}
+	
+	public static double getPlotSetEmbassyCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_EMBASSY);
+	}
+	
+	public static double getPlotSetWildsCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_WILDS);
+	}
+	
+	public static double getPlotSetInnCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_INN);
+	}
+	
+	public static double getPlotSetJailCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_JAIL);
+	}
+	
+	public static double getPlotSetFarmCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_FARM);
+	}
+	
+	public static double getPlotSetBankCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_BANK);
+	}
 	
 }
 

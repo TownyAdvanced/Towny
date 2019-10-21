@@ -673,8 +673,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @param worldCoord - worldCoord.
 	 * @param type - plot type.
 	 * @throws TownyException - Exception.
+	 * @throws EconomyException 
 	 */
-	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException {
+	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		if (resident.hasTown())
@@ -686,7 +687,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// are only checking for an
 				// exception
 
-				townBlock.setType(type);		
+				townBlock.setType(type, resident);		
 				Town town = resident.getTown();
 				if (townBlock.isJail()) {
 					Player p = TownyAPI.getInstance().getPlayer(resident);
@@ -709,7 +710,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			plotTestOwner(resident, townBlock); // ignore the return as we
 												// are only checking for an
 												// exception
-			townBlock.setType(type);		
+			townBlock.setType(type, resident);		
 			Town town = resident.getTown();
 			if (townBlock.isJail()) {
 				Player p = TownyAPI.getInstance().getPlayer(resident);

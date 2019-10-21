@@ -1,9 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import org.bukkit.Bukkit;
@@ -286,7 +289,7 @@ public class TownBlock {
 		setType(TownBlockType.lookup(typeId));
 	}
 
-	public void setType(String typeName) throws TownyException {
+	public void setType(String typeName, Resident resident) throws TownyException, EconomyException {
 
 		if (typeName.equalsIgnoreCase("reset"))
 			typeName = "default";					
@@ -295,7 +298,42 @@ public class TownBlock {
 		
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+
+		double cost = 0;
+		switch (type) {
+		case COMMERCIAL:
+			cost = TownySettings.getPlotSetCommercialCost();
+			break;
+		case EMBASSY:
+			cost = TownySettings.getPlotSetEmbassyCost();
+			break;
+		case ARENA:
+			cost = TownySettings.getPlotSetArenaCost();
+			break;
+		case WILDS:
+			cost = TownySettings.getPlotSetWildsCost();
+			break;
+		case INN:
+			cost = TownySettings.getPlotSetInnCost();
+			break;
+		case JAIL:
+			cost = TownySettings.getPlotSetJailCost();
+			break;
+		case FARM:
+			cost = TownySettings.getPlotSetFarmCost();
+			break;
+		case BANK:
+			cost = TownySettings.getPlotSetBankCost();
+			break;
+		default: 
+			cost = 0;
+		}
 		
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.payTo(cost, TownyEconomyObject.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
+			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
+		
+		TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+
 		if (this.isJail())
 			this.getTown().removeJailSpawn(this.getCoord());
 		
