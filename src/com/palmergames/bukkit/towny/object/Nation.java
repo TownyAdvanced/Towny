@@ -767,10 +767,11 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return result;
 	}
 
+	//Note - Do not return a town if our nation just invaded it
 	public List<Town> getTownsUnderSiegeDefence() {
 		List<Town> result = new ArrayList<Town>();
 		for(Town town: towns) {
-			if(town.hasSiege()) {
+			if(town.hasSiege() && town.getSiege().getAttackerWinner() != this) {
 				result.add(town);
 			}
 		}

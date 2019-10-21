@@ -5,19 +5,13 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -140,10 +134,28 @@ public class TownyBlockListener implements Listener {
 			//boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.BUILD);
 			boolean bBuild = PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.BUILD);
 
+			/*
+			 * Siege War:
+			 * If player is in a nation,
+			 * and attempts to place a banner in any town outside their nation
+			 * This is considered a siege request
+			 */
+			if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeAttackEnabled()) {
+				String blockTypeName = block.getType().getKey().getKey();
+				if(blockTypeName.contains("banner")) {
+					boolean blockPlacementOverride = evaluatePlaceBannerRequest(player, block);
+					if(blockPlacementOverride) {
+						return;
+					}
+				}
+			}
+
+
+
 			// Allow build if we are permitted
 			if (bBuild)
 				return;
-			
+
 			/*
 			 * Fetch the players cache
 			 */
@@ -206,6 +218,37 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 		}
 
+	}
+
+	//Returns: blockPlacementOverride
+	private boolean evaluatePlaceBannerRequest(Player player, Block block) throws NotRegisteredException {
+
+		//Get Player Nation
+		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+		Nation playerNation;
+		if(resident.hasNation()) {
+			playerNation = resident.getTown().getNation();
+		} else {
+			return false;
+		}
+
+		//Get Town Where block was placed
+		Town townWhereBlockWasPlaced;
+		TownBlock townBlockWhereBannerWasPlaced = TownyUniverse.getTownBlock(block.getLocation());
+		if(townBlockWhereBannerWasPlaced != null && townBlockWhereBannerWasPlaced.hasTown()) {
+			townWhereBlockWasPlaced = townBlockWhereBannerWasPlaced.getTown();
+		} else {
+			return false;
+		}
+
+		//If the target town is neutral, or a different nation than player,
+		//evaluate siege attack request
+		if(!townWhereBlockWasPlaced.hasNation() || playerNation != townWhereBlockWasPlaced.getNation())
+		{
+			return SiegeWarUtil.processAttackRequest(player, block);
+		} else {
+			return false;
+		}
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

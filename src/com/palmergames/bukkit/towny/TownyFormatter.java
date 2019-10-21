@@ -401,11 +401,6 @@ public class TownyFormatter {
 				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
 			}
 
-			//Revolt Cooldown Timer: 71.8 hours
-			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
-				out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
-			}
-
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
@@ -417,19 +412,10 @@ public class TownyFormatter {
 						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
 						out.add(siegeStatus + " " + victoryTimer);
 
-						//If siege is in progress, show participants
-						//Siege Points
-						//> Defence
-						//  TownA - (500)
-						//out.add(TownySettings.getLangString("status_town_siege_siege_points_tag"));
-						out.add(TownySettings.getLangString("status_town_siege_defence_tag"));
+						//Siege Defence Points: balaria (settlement) - 80
+						//Siege Attack Points:  Land of Empire (Nation)- 50
+						//                      Land of Killers (Nation) - 30
 						addSiegeStatusDefender(siege, out);
-
-						//> Attack
-						//  NationX - (4000)
-						//  NationY - (3000) - ABANDONED
-						//  NationZ - (2000)
-						out.add(TownySettings.getLangString("status_town_siege_attack_tag"));
 						addSiegeStatusAttackers(siege, out);
 					break;
 
@@ -441,9 +427,8 @@ public class TownyFormatter {
 						String townPlundered = TownySettings.getLangString("status_town_siege_plundered_prefix") + (siege.isTownPlundered() ? yes : no);
 						String townInvaded = TownySettings.getLangString("status_town_siege_invaded_prefix") + (siege.isTownInvaded() ? yes : no);
 						out.add(siegeStatus);
+						out.add(townInvaded + "  " + townPlundered);
 						out.add(siegeCooldownTimer);
-						out.add(townPlundered);
-						out.add(townInvaded);
 					break;
 
 					default:
@@ -454,6 +439,12 @@ public class TownyFormatter {
 					break;
 				}
 			}
+
+			//Revolt Cooldown Timer: 71.8 hours
+			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
+				out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
+			}
+
 		}
 
 		out = formatStatusScreens(out);
@@ -550,8 +541,6 @@ public class TownyFormatter {
 		String[] formattedSiegeDefences = getFormattedNames(siegeDefences.toArray(new Town[0]));
 		out.addAll(ChatTools.listArr(formattedSiegeDefences, String.format(TownySettings.getLangString("status_nation_siege_defences"), siegeDefences.size())));
 
-		//TODO - siege defences
-
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -585,11 +574,14 @@ public class TownyFormatter {
 			defenderName = TownyFormatter.getFormattedTownName(siege.getDefendingTown());
 		}
 
-		out.add("  " + Colors.White  + defenderName + " - (" + siege.getSiegeStatsDefenders().getSiegePointsTotal() + ")" + combatantStatusTag);
+		String defenceTag = TownySettings.getLangString("status_town_siege_defence_tag");
+		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getSiegeStatsDefenders().getSiegePointsTotal() + " " + combatantStatusTag);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static void addSiegeStatusAttackers(Siege siege, List<String> out) {
+		String prefixTag = TownySettings.getLangString("status_town_siege_attack_tag");
+		String prefixSpaces = prefixTag.replaceAll(".", " ");
 
 		List<Nation> attackerNations = new ArrayList<>(siege.getSiegeStatsAttackers().keySet());
 		Collections.sort(attackerNations, new Comparator() {
@@ -630,10 +622,12 @@ public class TownyFormatter {
 				}
 			}
 
-			out.add("  " + Colors.White + attackerName + " - (" + siegeStats.getSiegePointsTotal() + ")" + combatantStatusTag);
+			String prefix= index==0 ? prefixTag: prefixSpaces;
+			out.add(prefix + Colors.White + attackerName + " - " + siegeStats.getSiegePointsTotal() + " " + combatantStatusTag);
 		}
+
 		if(index == maxIndex) {
-			out.add("  " + Colors.White + " ... & more");
+			out.add(prefixSpaces + Colors.White + " ... & more");
 		}
 	}
 

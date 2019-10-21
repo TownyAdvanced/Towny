@@ -34,6 +34,8 @@ public class Siege {
 
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
+        status = SiegeStatus.IN_PROGRESS;
+        this.attackerWinner = null;
     }
 
     public Town getDefendingTown() {
