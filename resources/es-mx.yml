@@ -928,3 +928,5 @@ msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
+msg_err_cannot_afford_plot_set_type_cost: '&cYou cannot afford to set the plot to a %s type costing %s'
+msg_plot_set_cost: '&bYou have been charged %s for setting plot to type: %s'
