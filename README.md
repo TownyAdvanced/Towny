@@ -93,7 +93,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
     <dependency>
       <groupId>com.palmergames.bukkit.towny</groupId>
       <artifactId>Towny</artifactId>
-      <version>0.94.0.12</version>
+      <version>0.95.0.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>  
