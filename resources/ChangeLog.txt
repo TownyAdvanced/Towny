@@ -3656,4 +3656,4 @@ v0.92.0.11:
     - Default: 0
     - When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.
     - Use this setting to require players to be near or inside a town before they can be invited.
-  
+    - Closes ticket #3089
