@@ -95,7 +95,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split.length==2 && split[0].equalsIgnoreCase("abandon")) {
 				processAbandonRequest(player, split[1]);
-				
+
 			} else {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
 			}

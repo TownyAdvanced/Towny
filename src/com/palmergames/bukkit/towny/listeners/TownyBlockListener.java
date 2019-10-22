@@ -230,10 +230,9 @@ public class TownyBlockListener implements Listener {
 		* If player is in a nation,
 		* And target block is in a town outside their nation
 	    * This is considered a request for siege attack
+	    * Returns: blockPlacementOverride
 	 */
-	//Returns: blockPlacementOverride
 	private boolean evaluatePlaceSiegeBannerRequest(Player player, Block block) throws NotRegisteredException {
-
 		String blockTypeName = block.getType().getKey().getKey();
 		if (blockTypeName.contains("banner")) {
 			//Get Player Nation
@@ -259,10 +258,10 @@ public class TownyBlockListener implements Listener {
 			{
 				//If there is no siege, evaluate attack request
 				//If there is a siege already, evaluate invade request
-				if(townWhereBlockWasPlaced.hasSiege()) {
-					return SiegeWarUtil.processInvadeRequest(plugin, player, townWhereBlockWasPlaced.getName());
-				} else {
+				if(!townWhereBlockWasPlaced.hasSiege()) {
 					return SiegeWarUtil.evaluateSiegeAttackRequest(player, block);
+				} else {
+					return SiegeWarUtil.processInvadeRequest(plugin, player, townWhereBlockWasPlaced.getName());
 				}
 
 			} else {
@@ -278,8 +277,8 @@ public class TownyBlockListener implements Listener {
 		* If player is in a nation,
 		* And target block is in a town outside their nation
 	    * This is considered a request to invade
+	    * Returns: blockPlacementOverride
 	 */
-	//Returns: cancelBlockPlacement
 	private boolean evaluatePlacePlunderChestRequest(Player player, Block block) throws NotRegisteredException {
 
 		if (block.getType().equals(Material.CHEST)) {
@@ -305,8 +304,7 @@ public class TownyBlockListener implements Listener {
 			//evaluate plunder request
 			if(!townWhereBlockWasPlaced.hasNation() || playerNation != townWhereBlockWasPlaced.getNation())
 			{
-				SiegeWarUtil.evaluateTownPlunderRequest(player, townWhereBlockWasPlaced.getName());
-				return true;
+				return SiegeWarUtil.evaluateTownPlunderRequest(player, townWhereBlockWasPlaced.getName());
 			} else {
 				return false;
 			}

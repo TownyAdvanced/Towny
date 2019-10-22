@@ -541,7 +541,6 @@ public class SiegeWarUtil {
     }
 
     public static String getFormattedTimeValue(double timeMillis) {
-
         String timeUnit;
         double timeUtilCompletion;
 
@@ -577,7 +576,6 @@ public class SiegeWarUtil {
             return "n/a";
         }
     }
-
 
     //Return boolean - siegeStarted
     public static boolean evaluateSiegeAttackRequest(Player player, Block block) {
@@ -675,9 +673,7 @@ public class SiegeWarUtil {
         }
     }
 
-
-
-    //Return boolean - invasionSuccessful
+    //Return boolean - invasion success
     public static boolean processInvadeRequest(Towny plugin, Player player, String townName) {
         try {
             if (!TownySettings.getWarSiegeEnabled())
@@ -726,11 +722,8 @@ public class SiegeWarUtil {
         }
     }
 
-
-
-
-
-    public static void evaluateTownPlunderRequest(Player player, String townName) {
+    //Return boolean plunder success
+    public static boolean evaluateTownPlunderRequest(Player player, String townName) {
         try {
             if (!TownySettings.getWarSiegeEnabled())
                 throw new TownyException("Siege war feature disabled");
@@ -774,8 +767,10 @@ public class SiegeWarUtil {
 
             SiegeWarUtil.plunderTown(siege, siege.getDefendingTown(), siege.getAttackerWinner());
 
+            return true;
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
+            return false;
         }
     }
 
