@@ -2748,8 +2748,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param sender - Sender.
 	 * @param specifiedTown - Town to add to if not null.
 	 * @param names - Names to add.
+	 * @throws TownyException 
 	 */
-	public static void townAdd(Object sender, Town specifiedTown, String[] names) {
+	public static void townAdd(Object sender, Town specifiedTown, String[] names) throws TownyException {
 
 		String name;
 		if (sender instanceof Player) {
@@ -2774,7 +2775,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage());
 			return;
 		}
+		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
 
+			if (!town.hasSpawn())
+				throw new TownyException(TownySettings.getLangString("msg_err_townspawn_has_not_been_set"));
+		
+			Location spawnLoc = town.getSpawn();
+			ArrayList<String> newNames = new ArrayList<String>();
+			for (String nameForDistanceTest : names) {
+				
+				int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
+				Player player = BukkitTools.getPlayer(nameForDistanceTest);
+				Location playerLoc = player.getLocation();
+				Double distance = spawnLoc.distance(playerLoc);
+				if (distance <= maxDistance)
+					newNames.add(nameForDistanceTest);
+				else {
+					TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("msg_err_player_too_far_from_town_spawn"), nameForDistanceTest, maxDistance));
+				}
+			}
+			names = newNames.toArray(new String[0]);
+		}
 		List<String> reslist = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
 		List<String> newreslist = new ArrayList<>();

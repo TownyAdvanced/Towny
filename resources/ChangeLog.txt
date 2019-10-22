@@ -3652,3 +3652,8 @@ v0.92.0.11:
     - Now displays costs of setting plot types.
   - Added ability to set costs for all plot types using /plot set {type}.
     - Money charged goes to the Server Account.
+  - New Config Option: invite_system.maximum_distance_from_town_spawn
+    - Default: 0
+    - When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.
+    - Use this setting to require players to be near or inside a town before they can be invited.
+  

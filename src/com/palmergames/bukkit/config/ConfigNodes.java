@@ -1086,6 +1086,12 @@ public enum ConfigNodes {
 			"invite_system.maximum_invites_received.nation",
 			"10",
 			"# How many requests can one nation have from other nations for an alliance."),
+	INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN(
+			"invite_system.maximum_distance_from_town_spawn",
+			"0",
+			"# When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.",
+			"# Use this setting to require players to be near or inside a town before they can be invited."),
+	
 	RES_SETTING(
 			"resident_settings",
 			"",

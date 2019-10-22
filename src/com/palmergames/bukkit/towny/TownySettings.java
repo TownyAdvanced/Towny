@@ -2806,5 +2806,9 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_BANK);
 	}
 	
+	public static int getMaxDistanceFromTownSpawnForInvite() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN);
+	}
+	
 }
 
