@@ -3659,3 +3659,4 @@ v0.92.0.11:
     - Closes ticket #3089
 0.95.0.3:
   - Fix language string call when /town is used.
+0.95.0.4:
