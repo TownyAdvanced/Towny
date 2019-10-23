@@ -3658,3 +3658,4 @@ v0.92.0.11:
     - Use this setting to require players to be near or inside a town before they can be invited.
     - Closes ticket #3089
 0.95.0.3:
+  - Fix language string call when /town is used.
