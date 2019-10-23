@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
+import com.palmergames.bukkit.towny.war.siegewar.CombatantData;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -550,7 +550,7 @@ public class TownyFormatter {
 		String combatantStatusTag;
 		SiegeStatus siegeStatus = siege.getStatus();
 
-		if(!siege.getSiegeStatsDefenders().isActive()) {
+		if(!siege.getDefenderCombatantData().isActive()) {
 			combatantStatusTag = Colors.Gray + " - " + Colors.Red + "SURRENDERED";
 		} else {
 			if(siegeStatus == SiegeStatus.IN_PROGRESS) {
@@ -575,7 +575,7 @@ public class TownyFormatter {
 		}
 
 		String defenceTag = TownySettings.getLangString("status_town_siege_defence_tag");
-		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getSiegeStatsDefenders().getSiegePointsTotal() + " " + combatantStatusTag);
+		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderCombatantData().getSiegePointsTotal() + " " + combatantStatusTag);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -583,12 +583,12 @@ public class TownyFormatter {
 		String prefixTag = TownySettings.getLangString("status_town_siege_attack_tag");
 		String prefixSpaces = prefixTag.replaceAll(".", " ");
 
-		List<Nation> attackerNations = new ArrayList<>(siege.getSiegeStatsAttackers().keySet());
+		List<Nation> attackerNations = new ArrayList<>(siege.getAttackersCombatantData().keySet());
 		Collections.sort(attackerNations, new Comparator() {
 			@Override
 			public int compare(Object n1, Object n2) {
-				int nation1SiegePoints = siege.getSiegeStatsAttackers().get((Nation)n1).getSiegePointsTotal();
-				int nation2SiegePoints = siege.getSiegeStatsAttackers().get((Nation)n2).getSiegePointsTotal();
+				int nation1SiegePoints = siege.getAttackersCombatantData().get((Nation)n1).getSiegePointsTotal();
+				int nation2SiegePoints = siege.getAttackersCombatantData().get((Nation)n2).getSiegePointsTotal();
 
 				if(nation1SiegePoints == nation2SiegePoints) {return 0;}
 				return nation1SiegePoints < nation2SiegePoints ? 1 : -1;
@@ -597,7 +597,7 @@ public class TownyFormatter {
 
 		Nation attackerNation;
 		String attackerName;
-		SiegeStats siegeStats;
+		CombatantData siegeStats;
 		String combatantStatusTag;
 		SiegeStatus siegeStatus;
 		final int maxIndex = 9;  //This limits the displayed entries to 10
@@ -605,7 +605,7 @@ public class TownyFormatter {
 		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
 			attackerNation = attackerNations.get(index);
 			attackerName = TownyFormatter.getFormattedNationName(attackerNation);
-			siegeStats = siege.getSiegeStatsAttackers().get(attackerNation);
+			siegeStats = siege.getAttackersCombatantData().get(attackerNation);
 			siegeStatus = siege.getStatus();
 
 			if(!siegeStats.isActive()) {

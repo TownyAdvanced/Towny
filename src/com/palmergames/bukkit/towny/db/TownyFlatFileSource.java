@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
+import com.palmergames.bukkit.towny.war.siegewar.CombatantData;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -1283,17 +1283,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				try {
 					line = kvFile.get("siegeStatsDefenders");
-					siege.setSiegeStatsDefenders(SiegeWarDataUtil.unpackSiegeStatsBlob(line));
+					siege.setDefenderCombatantData(SiegeWarDataUtil.unpackSiegeStatsBlob(line));
 				} catch (Exception e) {
-					siege.setSiegeStatsDefenders(new SiegeStats());
+					siege.setDefenderCombatantData(new CombatantData());
 				}
 
 				try {
 					line = kvFile.get("siegeStatsAttackers");
-					siege.setSiegeStatsAttackers(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
+					siege.setAttackersCombatantData(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
 
 				} catch (Exception e) {
-					siege.setSiegeStatsAttackers(new HashMap<Nation,SiegeStats>());
+					siege.setAttackersCombatantData(new HashMap<Nation,CombatantData>());
 				}
 
 			} catch (Exception e) {
@@ -2094,8 +2094,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("scheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 		list.add("actualEndTime=" + Long.toString(siege.getActualEndTime()));
 		list.add("nextUpkeepTime=" + Long.toString(siege.getNextUpkeepTime()));
-		list.add("siegeStatsDefenders=" + SiegeWarDataUtil.generateSiegeStatsBlob(siege.getSiegeStatsDefenders()));
-		list.add("siegeStatsAttackers=" + SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getSiegeStatsAttackers()));
+		list.add("siegeStatsDefenders=" + SiegeWarDataUtil.generateSiegeStatsBlob(siege.getDefenderCombatantData()));
+		list.add("siegeStatsAttackers=" + SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getAttackersCombatantData()));
 
 		/*
 		 *  Make sure we only save in async

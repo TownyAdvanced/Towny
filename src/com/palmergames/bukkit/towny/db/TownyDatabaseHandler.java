@@ -556,7 +556,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Siege siege = town.getSiege();
 			//Remove siege from town, nation,and universe
 			town.setSiege(null);
-			Set<Nation> nations = siege.getSiegeStatsAttackers().keySet();
+			Set<Nation> nations = siege.getAttackersCombatantData().keySet();
 			for(Nation nation: nations) {
 				nation.removeSiege(siege);
 			}
@@ -644,7 +644,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getSiegesMap().remove(siege.getDefendingTown().getName().toLowerCase());
 
 		//Remove siege from nations
-		Set<Nation> nations = siege.getSiegeStatsAttackers().keySet();
+		Set<Nation> nations = siege.getAttackersCombatantData().keySet();
 		for(Nation nation: nations) {
 			nation.removeSiege(siege);
 		}
@@ -892,7 +892,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//Save Siege
 			saveSiege(town.getSiege());
-			for(Nation attackingNation: town.getSiege().getSiegeStatsAttackers().keySet()) {
+			for(Nation attackingNation: town.getSiege().getAttackersCombatantData().keySet()) {
 				saveNation(attackingNation); //Save nation involved in siege
 			}
 

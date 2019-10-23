@@ -1,20 +1,14 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
-import com.palmergames.bukkit.util.Colors;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 
 /**
  * Created by Goosius on 07/05/2019.
@@ -29,8 +23,8 @@ public class Siege {
     private long scheduledEndTime;
     private long actualEndTime;
     private long nextUpkeepTime;
-    private SiegeStats siegeStatsDefenders;
-    private Map<Nation, SiegeStats> siegeStatsAttackers;
+    private CombatantData defenderCombatantData;
+    private Map<Nation, CombatantData> attackersCombatantData;
 
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
@@ -42,14 +36,13 @@ public class Siege {
         return defendingTown;
     }
 
-    public Map<Nation, SiegeStats> getSiegeStatsAttackers() {
-        return siegeStatsAttackers;
+    public Map<Nation, CombatantData> getAttackersCombatantData() {
+        return attackersCombatantData;
     }
 
-    public SiegeStats getSiegeStatsDefenders() {
-        return siegeStatsDefenders;
+    public CombatantData getDefenderCombatantData() {
+        return defenderCombatantData;
     }
-
 
     public long getScheduledEndTime() {
         return scheduledEndTime;
@@ -84,19 +77,19 @@ public class Siege {
         return actualStartTime;
     }
 
-    public void setSiegeStatsDefenders(SiegeStats defendersSiegeStats) {
-        this.siegeStatsDefenders = defendersSiegeStats;
+    public void setDefenderCombatantData(CombatantData defendersSiegeStats) {
+        this.defenderCombatantData = defendersSiegeStats;
     }
 
-    public void setSiegeStatsAttackers(Map<Nation, SiegeStats> siegeStatsAttackers) {
-        this.siegeStatsAttackers = siegeStatsAttackers;
+    public void setAttackersCombatantData(Map<Nation, CombatantData> attackersCombatantData) {
+        this.attackersCombatantData = attackersCombatantData;
     }
 
     public List<Nation> getActiveAttackers() {
         List<Nation> result = new ArrayList<>();
-        for (Nation nation : new ArrayList<Nation>(siegeStatsAttackers.keySet())) {
-            if (siegeStatsAttackers.get(nation) != null
-                    && siegeStatsAttackers.get(nation).isActive()) {
+        for (Nation nation : new ArrayList<Nation>(attackersCombatantData.keySet())) {
+            if (attackersCombatantData.get(nation) != null
+                    && attackersCombatantData.get(nation).isActive()) {
                 result.add(nation);
             }
         }

@@ -1,10 +1,9 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeStats;
+import com.palmergames.bukkit.towny.war.siegewar.CombatantData;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ public class SiegeWarDataUtil {
     private static final String SIEGE_STATS_ATTACKERS_MAP_BLOB_KEYVALUE_SEPARATOR = "@";
 
 
-    public static String generateSiegeStatsBlob(SiegeStats siegeStats) {
+    public static String generateSiegeStatsBlob(CombatantData siegeStats) {
         List<String> values = new ArrayList<>();
         values.add("active" + SIEGE_STATS_BLOB_KEY_VALUE_SEPARATOR + Boolean.toString(siegeStats.isActive()));
         values.add("siegePointsTotal" + SIEGE_STATS_BLOB_KEY_VALUE_SEPARATOR + siegeStats.getSiegePointsTotal().toString());
         return StringMgmt.join(values,SIEGE_STATS_BLOB_ENTRY_SEPARATOR);
     }
 
-    public static String generateNationSiegeStatsMapBlob(Map<Nation, SiegeStats> siegeStatAttackers) {
+    public static String generateNationSiegeStatsMapBlob(Map<Nation, CombatantData> siegeStatAttackers) {
         List<String> entries = new ArrayList<>();
         for(Nation nation: siegeStatAttackers.keySet()) {
             entries.add(
@@ -42,16 +41,16 @@ public class SiegeWarDataUtil {
     }
 
 
-    public static Map<Nation, SiegeStats> unpackSiegeStatsAttackersMapBlob(String blob) throws NotRegisteredException {
+    public static Map<Nation, CombatantData> unpackSiegeStatsAttackersMapBlob(String blob) throws NotRegisteredException {
         return unpackNationSiegeStatsMap(blob,
                 SIEGE_STATS_ATTACKERS_MAP_BLOB_ENTRY_SEPARATOR,
                 SIEGE_STATS_ATTACKERS_MAP_BLOB_KEYVALUE_SEPARATOR);
     }
 
 
-    public static SiegeStats unpackSiegeStatsBlob(String blob) {
+    public static CombatantData unpackSiegeStatsBlob(String blob) {
 
-        SiegeStats siegeStats = new SiegeStats();
+        CombatantData siegeStats = new CombatantData();
         Map<String, String> siegeStatsMap = new HashMap<String,String>();
         String[] keysValuesStringArray = blob.split(SIEGE_STATS_BLOB_ENTRY_SEPARATOR);
         String[] keyValueArray;
@@ -83,18 +82,18 @@ public class SiegeWarDataUtil {
         return siegeStats;
     }
 
-    private static Map<Nation,SiegeStats> unpackNationSiegeStatsMap(
+    private static Map<Nation,CombatantData> unpackNationSiegeStatsMap(
             String givenString,
             String entrySeparator,
             String keyValueSeparator) throws NotRegisteredException {
 
-        Map<Nation, SiegeStats> result = new HashMap<Nation, SiegeStats>();
+        Map<Nation, CombatantData> result = new HashMap<Nation, CombatantData>();
 
         if(givenString.length() != 0) {
             String[] allEntriesArray = givenString.split(entrySeparator);
 
             Nation nation;
-            SiegeStats siegeStats;
+            CombatantData siegeStats;
             String[] oneEntryArray;
 
             for (String oneEntryString : allEntriesArray) {

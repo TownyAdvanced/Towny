@@ -1170,8 +1170,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
                 siege.setActualEndTime(rs.getLong("actualEndTime"));
                 siege.setNextUpkeepTime(rs.getLong("actualEndTime"));
-                siege.setSiegeStatsDefenders(SiegeWarDataUtil.unpackSiegeStatsBlob("siegeStatsDefenders"));
-                siege.setSiegeStatsAttackers(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob("siegeStatsAttackers"));
+                siege.setDefenderCombatantData(SiegeWarDataUtil.unpackSiegeStatsBlob("siegeStatsDefenders"));
+                siege.setAttackersCombatantData(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob("siegeStatsAttackers"));
             }
 
             return true;
@@ -1781,8 +1781,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("scheduledEndTime", siege.getScheduledEndTime());
             nat_hm.put("actualEndTime", siege.getActualEndTime());
             nat_hm.put("nextUpkeepTime", siege.getNextUpkeepTime());
-            nat_hm.put("siegeStatsDefenders", SiegeWarDataUtil.generateSiegeStatsBlob(siege.getSiegeStatsDefenders()));
-            nat_hm.put("siegeStatsAttackers", SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getSiegeStatsAttackers()));
+            nat_hm.put("siegeStatsDefenders", SiegeWarDataUtil.generateSiegeStatsBlob(siege.getDefenderCombatantData()));
+            nat_hm.put("siegeStatsAttackers", SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getAttackersCombatantData()));
 
             UpdateDB("SIEGES", nat_hm, Arrays.asList("defendingTown"));
 
