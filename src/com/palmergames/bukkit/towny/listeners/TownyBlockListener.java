@@ -227,6 +227,7 @@ public class TownyBlockListener implements Listener {
 	}
 
 	/*
+		* If this is a standing banner
 		* If player is in a nation,
 		* And target block is in a town which is not theirs
 	    * This is considered a request for siege attack
@@ -234,7 +235,7 @@ public class TownyBlockListener implements Listener {
 	 */
 	private boolean evaluatePlaceSiegeBannerRequest(Player player, Block block) throws NotRegisteredException {
 		String blockTypeName = block.getType().getKey().getKey();
-		if (blockTypeName.contains("banner")) {
+		if (blockTypeName.contains("banner") && !blockTypeName.contains("wall")) {
 
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			if (resident.hasNation()) {
