@@ -32,7 +32,8 @@ public class SiegeWarUtil {
     public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
     public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
-    public static void attackTown(Nation attackingNation,
+    public static void attackTown(Block block,
+                                  Nation attackingNation,
                                     Town defendingTown) throws TownyException {
 
         Siege siege;
@@ -60,6 +61,7 @@ public class SiegeWarUtil {
             siege.setAttackersCombatantData(new HashMap<Nation, CombatantData>());
             siege.getAttackersCombatantData().put(attackingNation, new CombatantData());
             siege.getAttackersCombatantData().get(attackingNation).setActive(true);
+            siege.getAttackersCombatantData().get(attackingNation).setSiegeBannerLocation(block.getLocation());
 
             //Link siege to town
             defendingTown.setSiege(siege);
@@ -71,6 +73,7 @@ public class SiegeWarUtil {
             //Add new siege attack
             siege.getAttackersCombatantData().put(attackingNation,new CombatantData());
             siege.getAttackersCombatantData().get(attackingNation).setActive(true);
+            siege.getAttackersCombatantData().get(attackingNation).setSiegeBannerLocation(block.getLocation());
         }
 
         //Link siege to nation
@@ -660,7 +663,7 @@ public class SiegeWarUtil {
             }
 
             //Setup attack
-            attackTown(nationOfAttackingPlayer, defendingTown);
+            attackTown(block, nationOfAttackingPlayer, defendingTown);
 
             return true;
         } catch (TownyException x) {
