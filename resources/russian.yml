@@ -1,5 +1,5 @@
 name: Towny
-version: 0.57
+version: 0.58
 language: russian
 author: ElgarL (Plugin developer), Communar (Russian Translation)
 website: 'http://towny.palmergames.com/'
@@ -944,3 +944,11 @@ msg_err_cannot_afford_plot_set_type_cost: '&cYou cannot afford to set the plot t
 msg_plot_set_cost: '&bYou have been charged %s for setting plot to type: %s'
 msg_err_townspawn_has_not_been_set: '&cTown spawn has not been set.'
 msg_err_player_too_far_from_town_spawn: '&c%s is too far away from your town spawn to receive an invite to town. Max distance: %s blocks.'
+
+# Added in 0.58:
+msg_resident_bail_amount: 'Resident Bail costs: '
+msg_mayor_bail_amount: 'Mayor Bail costs: '
+msg_king_bail_amount: 'King Bail costs: '
+msg_has_paid_bail: ' has paid bail and is free.'
+msg_err_unable_to_pay_bail: 'Unable to afford bail.'
+msg_err_bail_not_enabled: 'Bail is not enabled.'

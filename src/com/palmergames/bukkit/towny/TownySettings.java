@@ -1741,6 +1741,16 @@ public class TownySettings {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT);
 	}
+	
+	public static double getBailAmountMayor() {
+		
+		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_MAYOR);
+	}
+	
+	public static double getBailAmountKing() {
+		
+		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_KING);
+	}
 
 	public static double getWartimeTownBlockLossPrice() {
 

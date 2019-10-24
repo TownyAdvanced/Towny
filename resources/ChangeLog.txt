@@ -3660,3 +3660,11 @@ v0.92.0.11:
 0.95.0.3:
   - Fix language string call when /town is used.
 0.95.0.4:
+  - Language Files bumped to 0.58
+  -	New Config Option: jail.bail.bail_amount_mayor
+    - Default: 10
+    - Amount that bail costs for Town mayors.
+  - New Config Option: jail.bail.bail_amount_king
+    - Default: 10
+    - Amount that bail costs for Nation kings.
+  - You can now charge separate bail amounts for Mayors and Kings.

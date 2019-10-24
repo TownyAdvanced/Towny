@@ -1407,7 +1407,15 @@ public enum ConfigNodes {
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),
+			"#Amount that bail costs for normal residents/nomads."),
+	JAIL_BAIL_BAIL_AMOUNT_MAYOR(
+			"jail.bail.bail_amount_mayor",
+			"10",
+			"#Amount that bail costs for Town mayors."),
+	JAIL_BAIL_BAIL_AMOUNT_KING(
+			"jail.bail.bail_amount_king",
+			"10",
+			"#Amount that bail costs for Nation kings."),
 	JAIL_BLACKLISTED_COMMANDS(
 			"jail.blacklisted_commands",
 			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
