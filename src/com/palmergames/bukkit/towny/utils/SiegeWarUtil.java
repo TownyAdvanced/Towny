@@ -139,6 +139,66 @@ public class SiegeWarUtil {
         }
     }
 
+    public static void processAbandonSiegeRequest(Player player, String townName) throws TownyException {
+
+        if(!TownyUniverse.getDataSource().hasTown(townName))
+            throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
+
+        if(!TownyUniverse.getDataSource().hasSiege(townName))
+            throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
+
+        if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
+            throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+        final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
+
+        if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
+            throw new TownyException("The siege is already over");
+
+        Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+        Nation nation = resident.getTown().getNation();
+
+        if(!siege.getActiveAttackers().contains(nation))
+            throw new TownyException("Your nation is not attacking this town right now");
+
+        SiegeWarUtil.attackerAbandon(nation, siege);
+    }
+
+
+    public static boolean processSurrenderRequest(Player player) {
+
+        try {
+            if (!TownySettings.getWarSiegeEnabled())
+                throw new TownyException("Siege war feature disabled");  //todo - replace w lang string
+
+            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
+                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            Town town = resident.getTown();
+
+            if(!town.hasSiege())
+                throw new TownyException("Your town is not under siege");
+
+            Siege siege = town.getSiege();
+
+            if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
+                throw new TownyException("The siege is over");
+
+            if(siege.getActiveAttackers().size() > 1)
+                throw new TownyException("You cannot surrender if there is more than one attacker");
+
+            //Surrender
+            SiegeWarUtil.defenderSurrender(siege);
+
+            return true;
+
+        } catch (TownyException x) {
+            TownyMessaging.sendErrorMsg(player, x.getMessage());
+            return false;
+        }
+    }
+
 
     ///////////////////PROCESS ONGOING SIEGE ACTIVITY //////////////////////
 
@@ -580,12 +640,9 @@ public class SiegeWarUtil {
     }
 
     //Return boolean - siegeStarted
-    public static boolean evaluateSiegeAttackRequest(Player player, Block block) {
+    public static boolean processAttackTownRequest(Player player, Block block) {
 
         try {
-           // if (!TownySettings.getWarSiegeEnabled())
-           //     throw new TownyException("Siege war feature disabled");  //todo - replace w lang string
-
             if (!TownySettings.getWarSiegeAttackEnabled())
                 throw new TownyException("Siege Attacks not allowed");
 
@@ -676,11 +733,8 @@ public class SiegeWarUtil {
     }
 
     //Return boolean - invasion success
-    public static boolean processInvadeRequest(Towny plugin, Player player, String townName) {
+    public static boolean processInvadeTownRequest(Towny plugin, Player player, String townName) {
         try {
-            if (!TownySettings.getWarSiegeEnabled())
-                throw new TownyException("Siege war feature disabled");
-
             if (!TownySettings.getWarSiegeInvadeEnabled())
                 throw new TownyException("Invade not allowed. Try plunder instead.");
 
