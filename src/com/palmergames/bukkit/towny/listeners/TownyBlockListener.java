@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -31,7 +32,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.meta.BannerMeta;
 
 import java.util.List;
 
@@ -130,7 +130,10 @@ public class TownyBlockListener implements Listener {
 
 			//Siege War
 			if (TownySettings.getWarSiegeEnabled()) {
-				evaluateSiegeWarPlaceBlockRequest(player, block);
+				boolean blockPlacementOverride = evaluateSiegeWarPlaceBlockRequest(player, block);
+				if(blockPlacementOverride) {
+					return;
+				}
 			}
 
 			TownyWorld world = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
@@ -212,28 +215,39 @@ public class TownyBlockListener implements Listener {
 	 * non-white standing banner - could be attack or invade
 	 * white standing banner - could be surrender or abandon
 	 * chest - could be plunder
+	 *
+	 * Return - blockPlacementOverride
 	 */
-	public void evaluateSiegeWarPlaceBlockRequest(Player player, Block block) throws NotRegisteredException
+	public boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block) throws NotRegisteredException
 	{
 		String blockTypeName = block.getType().getKey().getKey();
 		if (blockTypeName.contains("banner") && !blockTypeName.contains("wall")) {
+			TownyMessaging.sendGlobalMessage("banner detected");
+			TownyMessaging.sendGlobalMessage("Material: " + block.getType());
+			TownyMessaging.sendGlobalMessage("Block Type Name: " + blockTypeName);
+			TownyMessaging.sendGlobalMessage("Block State: " + block.getState());
+
 			if(block.getType() == Material.WHITE_BANNER
-				&& (((BannerMeta)block.getState()).getPatterns().size() ==0)) {
+				&& ((Banner)block.getState()).getPatterns().size() == 0) {
 				//Standing white banner
-				evaluateSiegeWarPlaceWhiteBannerRequest(player, block);
+				return evaluateSiegeWarPlaceWhiteBannerRequest(player, block);
 			} else {
 				//Standing coloured banner
-				evaluateSiegeWarPlaceColouredBannerRequest(player,block);
+				return evaluateSiegeWarPlaceColouredBannerRequest(player,block);
 			}
 		} else if (block.getType().equals(Material.CHEST)) {
 			//Chest
-			evaluateSiegeWarPlaceChestRequest(player, block);
+			return evaluateSiegeWarPlaceChestRequest(player, block);
+		} else {
+			return false;
 		}
 	}
 
 	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block) throws NotRegisteredException {
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 		if (resident.hasTown()) {
+
+			TownyMessaging.sendGlobalMessage("Has town");
 
 			//Get Town Where block was placed
 			Town townWhereBlockWasPlaced;
@@ -248,11 +262,13 @@ public class TownyBlockListener implements Listener {
 			Town residentTown = resident.getTown();
 			if (townWhereBlockWasPlaced != residentTown) {
 
-				//If there is no siege, evaluate attack request
-				//If there is a siege already, evaluate invade request
+				TownyMessaging.sendGlobalMessage("Eval");
+
 				if (!townWhereBlockWasPlaced.hasSiege()) {
+					//There is no siege, evaluate attack request
 					return SiegeWarUtil.processAttackTownRequest(player, block);
 				} else {
+					//There is a siege already, evaluate invade request
 					return SiegeWarUtil.processInvadeTownRequest(plugin, player, townWhereBlockWasPlaced.getName());
 				}
 			}
@@ -273,10 +289,17 @@ public class TownyBlockListener implements Listener {
 				return false;
 			}
 
-			//If the target town is the players and is under siege, evaluate surrender request
-			Town residentTown = resident.getTown();
-			if (townWhereBlockWasPlaced == residentTown && townWhereBlockWasPlaced.hasSiege()) {
-				return SiegeWarUtil.processSurrenderRequest(player);
+			//If the target town is under siege, evaluate surrender request
+			if(townWhereBlockWasPlaced.hasSiege()) {
+				Town residentTown = resident.getTown();
+
+				if(townWhereBlockWasPlaced == residentTown) {
+					//Banner placer is in their own town - surrender request
+					return SiegeWarUtil.processSurrenderRequest(player);
+				} else {
+					//Banner placer is not in their own town - abandon request
+					return SiegeWarUtil.processAbandonSiegeRequest(player, townWhereBlockWasPlaced.getName());
+				}
 			}
 		}
 		return false;

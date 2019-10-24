@@ -139,29 +139,35 @@ public class SiegeWarUtil {
         }
     }
 
-    public static void processAbandonSiegeRequest(Player player, String townName) throws TownyException {
+    public static boolean processAbandonSiegeRequest(Player player, String townName)  {
+        try {
+            if(!TownyUniverse.getDataSource().hasTown(townName))
+                throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
 
-        if(!TownyUniverse.getDataSource().hasTown(townName))
-            throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
+            if(!TownyUniverse.getDataSource().hasSiege(townName))
+                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
 
-        if(!TownyUniverse.getDataSource().hasSiege(townName))
-            throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
+            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
+                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-        if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
-            throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+            final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
 
-        final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
+            if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
+                throw new TownyException("The siege is already over");
 
-        if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-            throw new TownyException("The siege is already over");
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            Nation nation = resident.getTown().getNation();
 
-        Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-        Nation nation = resident.getTown().getNation();
+            if(!siege.getActiveAttackers().contains(nation))
+                throw new TownyException("Your nation is not attacking this town right now");
 
-        if(!siege.getActiveAttackers().contains(nation))
-            throw new TownyException("Your nation is not attacking this town right now");
+            SiegeWarUtil.attackerAbandon(nation, siege);
+            return true;
 
-        SiegeWarUtil.attackerAbandon(nation, siege);
+        } catch (TownyException x) {
+            TownyMessaging.sendErrorMsg(player, x.getMessage());
+            return false;
+        }
     }
 
 
