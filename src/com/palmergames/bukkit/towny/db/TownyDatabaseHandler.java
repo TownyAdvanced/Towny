@@ -972,8 +972,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
 			isMayor = resident.isMayor();
-			isJailed = resident.isJailed();
+			isJailed = resident.isJailed();			
 			JailSpawn = resident.getJailSpawn();
+			
+			if (resident.isJailed()) {
+				try {
+					universe.getJailedResidentMap().remove(universe.getDataSource().getResident(oldName));
+					universe.getJailedResidentMap().add(universe.getDataSource().getResident(newName));
+				} catch (Exception ignored) {
+				}
+			}
+				
 			
 			//delete the resident and tidy up files
 			deleteResident(resident);
