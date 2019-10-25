@@ -337,7 +337,9 @@ public class TownyFormatter {
 		            (TownySettings.isSellingBonusBlocks() ? String.format(TownySettings.getLangString("status_town_size_part_2"), town.getPurchasedBlocks(), TownySettings.getMaxPurchedBlocks()) : "") + 
 		            (town.getBonusBlocks() > 0 ? String.format(TownySettings.getLangString("status_town_size_part_3"), town.getBonusBlocks()) : "") + 
 		            (TownySettings.getNationBonusBlocks(town) > 0 ? String.format(TownySettings.getLangString("status_town_size_part_4"), TownySettings.getNationBonusBlocks(town)) : "") + 
-		            (town.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : TownySettings.getLangString("status_no_town")) + "]" : "")
+		            (town.isPublic() ? TownySettings.getLangString("status_town_size_part_5") + 
+		            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawn()) : TownySettings.getLangString("status_no_town"))  + "]" 
+		            				: (town.hasHomeBlock() ? town.getHomeBlock().getCoord().toString() : TownySettings.getLangString("status_no_town")) + "]") : "")
 		           );
 		} catch (TownyException e) {
 		}

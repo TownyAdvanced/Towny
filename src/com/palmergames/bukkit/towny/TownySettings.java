@@ -2820,5 +2820,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN);
 	}
 	
+	public static boolean getTownDisplaysXYZ() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS);
+	}
+	
 }
 

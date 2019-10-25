@@ -3676,3 +3676,7 @@ v0.92.0.11:
     - Remaining days are shown on a player's /res screen. 
     - Closes ticket #3232
   - Make plot set only show cost when the cost is more than 0.
+  - New Config Option: global_town_settings.display_xyz_instead_of_towny_coords
+    - default: false
+    - If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords.
+    - Closes ticket #3347

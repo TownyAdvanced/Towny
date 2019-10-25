@@ -468,7 +468,13 @@ public enum ConfigNodes {
 			"1000000.0",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
-	),	
+	),
+	GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS(
+			"global_town_settings.display_xyz_instead_of_towny_coords",
+			"false",
+			"# If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",

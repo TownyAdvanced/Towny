@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -212,5 +213,11 @@ public class BukkitTools {
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
 		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+	}
+	
+	public static String convertCoordtoXYZ(Location loc) {
+		String string = loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ(); 
+		
+		return string;
 	}
 }
