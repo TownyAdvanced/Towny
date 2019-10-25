@@ -3675,4 +3675,4 @@ v0.92.0.11:
     - When the days amount is not used the player will be jailed indefinetly as usual.
     - Remaining days are shown on a player's /res screen. 
     - Closes ticket #3232
-  - 
+  - Make plot set only show cost when the cost is more than 0.

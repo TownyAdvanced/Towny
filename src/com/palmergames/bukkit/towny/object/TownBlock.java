@@ -332,7 +332,8 @@ public class TownBlock {
 		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.payTo(cost, TownyEconomyObject.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
 			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
 		
-		TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+		if (cost > 0)
+			TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
 
 		if (this.isJail())
 			this.getTown().removeJailSpawn(this.getCoord());
