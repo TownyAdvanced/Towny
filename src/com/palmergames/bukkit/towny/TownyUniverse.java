@@ -44,6 +44,7 @@ public class TownyUniverse {
     private final Hashtable<String, Town> towns = new Hashtable<>();
     private final Hashtable<String, Nation> nations = new Hashtable<>();
     private final Hashtable<String, TownyWorld> worlds = new Hashtable<>();
+    private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
@@ -255,6 +256,10 @@ public class TownyUniverse {
     
     public Hashtable<String, Resident> getResidentMap() {
         return residents;
+    }
+    
+    public List<Resident> getJailedResidentMap() {
+        return jailedResidents;
     }
     
     public Hashtable<String, Town> getTownsMap() {

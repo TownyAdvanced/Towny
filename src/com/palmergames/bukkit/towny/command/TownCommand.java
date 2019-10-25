@@ -1186,15 +1186,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!town.hasJailSpawn())
 					throw new TownyException(String.format(TownySettings.getLangString("msg_town_has_no_jails")));
 
-				Integer index;
+				Integer index, days;
 				if (split.length <= 2) {
 					player.sendMessage(ChatTools.formatTitle("/town toggle jail"));
 					player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+					player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
 
-				} else if (split.length == 3) {
+				} else if (split.length > 2) {
 					try {
 						Integer.parseInt(split[1]);
 						index = Integer.valueOf(split[1]);
+						if (split.length == 4) {
+							days = Integer.valueOf(split[3]);
+							if (days < 1)
+								throw new TownyException(TownySettings.getLangString("msg_err_days_must_be_greater_than_zero"));
+						} else
+							days = 0;
 						Resident jailedresident = townyUniverse.getDataSource().getResident(split[2]);
 						if (!player.hasPermission("towny.command.town.toggle.jail"))
 							throw new TownyException(TownySettings.getLangString("msg_no_permission_to_jail_your_residents"));
@@ -1209,7 +1216,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 							Player jailedplayer = TownyAPI.getInstance().getPlayer(jailedresident);
 							if (jailedplayer == null) {
-								throw new TownyException(String.format("%s is not online", jailedresident.getName()));
+								throw new TownyException(String.format(TownySettings.getLangString("msg_player_is_not_online"), jailedresident.getName()));
 							}
 							Town sendertown = resident.getTown();
 							if (jailedplayer.getUniqueId().equals(player.getUniqueId()))
@@ -1220,7 +1227,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								if (jailTown != sendertown) {
 									throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
 								} else {
-									jailedresident.setJailedByMayor(jailedplayer, index, sendertown);
+									jailedresident.setJailedByMayor(jailedplayer, index, sendertown, days);
 									return;
 
 								}
@@ -1229,7 +1236,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if (jailedresident.getTown() != sendertown)
 								throw new TownyException(TownySettings.getLangString("msg_resident_not_your_town"));
 
-							jailedresident.setJailedByMayor(jailedplayer, index, sendertown);
+							jailedresident.setJailedByMayor(jailedplayer, index, sendertown, days);
 
 						} catch (NotRegisteredException x) {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
@@ -1238,6 +1245,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} catch (NumberFormatException e) {
 						player.sendMessage(ChatTools.formatTitle("/town toggle jail"));
 						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+						player.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
 						return;
 					} catch (NullPointerException e) {
 						e.printStackTrace();

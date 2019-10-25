@@ -3668,3 +3668,11 @@ v0.92.0.11:
     - Default: 10
     - Amount that bail costs for Nation kings.
   - You can now charge separate bail amounts for Mayors and Kings.
+  - Changed Command: /town toggle jail [jailnumber] [resident] (days)
+    - Town mayors may now jail for an optional amount of days.
+    - On Towny newdays (when taxes/upkeep are collected) jailed players who have a day amount set will have their day amount lowered by one.
+    - Players who have served their sentence will be unjailed.
+    - When the days amount is not used the player will be jailed indefinetly as usual.
+    - Remaining days are shown on a player's /res screen. 
+    - Closes ticket #3232
+  - 

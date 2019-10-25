@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.IOException;
@@ -75,9 +76,30 @@ public class DailyTimerTask extends TownyTimerTask {
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly()).start();
 		}
 
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		// Reduce jailed residents jail time
+		if (!townyUniverse.getJailedResidentMap().isEmpty()) {
+			for (Resident resident : townyUniverse.getJailedResidentMap()) {
+				if (resident.hasJailDays()) {
+					if (resident.getJailDays() == 1) {
+						Town jailTown = null;
+						try {
+							jailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
+						} catch (NotRegisteredException ignored) {
+						}
+						int index = resident.getJailSpawn();
+						resident.setJailed(BukkitTools.getPlayer(resident.getName()), index, jailTown);
+					} else 
+						resident.setJailDays(resident.getJailDays() - 1);
+					
+				}
+			}			
+		}
+
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
 		townyUniverse.getDataSource().cleanupBackups();
 		if (TownySettings.isBackingUpDaily())
 			try {

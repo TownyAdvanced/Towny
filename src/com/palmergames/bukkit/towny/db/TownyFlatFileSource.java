@@ -524,6 +524,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setJailSpawn(Integer.valueOf(line));
 				
+				line = keys.get("JailDays");
+				if (line != null)
+					resident.setJailDays(Integer.valueOf(line));
+				
 				line = keys.get("JailTown");
 				if (line != null)
 					resident.setJailTown(line);
@@ -1586,6 +1590,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isJailed=" + resident.isJailed());
 		// JailSpawn
 		list.add("JailSpawn=" + resident.getJailSpawn());
+		// JailDays
+		list.add("JailDays=" + resident.getJailDays());
 		// JailTown
 		list.add("JailTown=" + resident.getJailTown());
 

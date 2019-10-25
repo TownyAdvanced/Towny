@@ -149,6 +149,7 @@ public class SQL_Schema {
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
 		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
 		columns.add("`JailSpawn` mediumint");
+		columns.add("`JailDays` mediumint");
 		columns.add("`JailTown` mediumtext");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
