@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class DailyTimerTask extends TownyTimerTask {
 	
@@ -83,17 +83,26 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Resident resident : townyUniverse.getJailedResidentMap()) {
 				if (resident.hasJailDays()) {
 					if (resident.getJailDays() == 1) {
-						Town jailTown = null;
-						try {
-							jailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
-						} catch (NotRegisteredException ignored) {
-						}
-						int index = resident.getJailSpawn();
-						resident.setJailed(BukkitTools.getPlayer(resident.getName()), index, jailTown);
+						resident.setJailDays(0);
+						new BukkitRunnable() {
+
+				            @Override
+				            public void run() {				            	
+				            	Town jailTown = null;
+								try {
+									jailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
+								} catch (NotRegisteredException ignored) {
+								}
+								int index = resident.getJailSpawn();
+				            	resident.setJailed(resident , index, jailTown);
+				            }
+				            
+				        }.runTaskLater(this.plugin, 20);
 					} else 
 						resident.setJailDays(resident.getJailDays() - 1);
 					
 				}
+				townyUniverse.getDataSource().saveResident(resident);
 			}			
 		}
 

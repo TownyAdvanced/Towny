@@ -96,8 +96,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	public void freeFromJail(Player player, Integer index) {
 		this.removeJailSpawn();
 		this.setJailTown(" ");
-		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), player.getName(), index));		
+		TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
+		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));		
 	}
 
 	public void setJailedByMayor(Player player, Integer index, Town town, Integer days) {
@@ -107,10 +107,11 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			try {
 				Location loc = this.getTown().getSpawn();
 				
-				// Use teleport warmup
-				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
-				TownyAPI.getInstance().jailTeleport(player, loc);
-
+				if (BukkitTools.isOnline(player.getName())) {
+					// Use teleport warmup
+					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
+					TownyAPI.getInstance().jailTeleport(player, loc);
+				}
 				freeFromJail(player, index);
 			} catch (TownyException e) {
 				e.printStackTrace();
@@ -127,7 +128,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				sendToJail(player, index);
 				if (days > 0) {
 					this.setJailDays(days);
-					player.sendMessage(String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
 				}
 			} catch (TownyException e) {
 				e.printStackTrace();
@@ -136,18 +137,22 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
-	public void setJailed(Player player, Integer index, Town town) {
-
+	public void setJailed(Resident resident, Integer index, Town town) {
+		Player player = null;
+		if (BukkitTools.isOnline(resident.getName()))
+			player = BukkitTools.getPlayer(resident.getName());
+		
 		if (this.isJailed) {
 			this.setJailed(false);
 			try {
-				Location loc;
-				if (this.hasTown())
-					loc = this.getTown().getSpawn();
-				else
-					loc = player.getWorld().getSpawnLocation();
-
-				player.teleport(loc);				
+				if (player != null) {
+					Location loc;
+					if (this.hasTown())
+						loc = this.getTown().getSpawn();
+					else
+						loc = player.getWorld().getSpawnLocation();
+					player.teleport(loc);
+				}
 				freeFromJail(player, index);
 			} catch (TownyException e) {
 				e.printStackTrace();
