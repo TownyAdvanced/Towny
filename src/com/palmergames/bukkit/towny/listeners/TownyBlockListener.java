@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
+import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -54,6 +55,14 @@ public class TownyBlockListener implements Listener {
 
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
+
+		//Siege War
+		if (TownySettings.getWarSiegeEnabled()) {
+			boolean skipPermChecks = evaluateSiegeWarBreakBlockRequest(player, block, event);
+			if (skipPermChecks) {
+				return;
+			}
+		}
 
 		//Get build permissions (updates cache if none exist)
 		//boolean bDestroy = PlayerCacheUtil.getCachePermission(player, block.getLocation(), BukkitTools.getTypeId(block), BukkitTools.getData(block), TownyPermission.ActionType.DESTROY);
@@ -212,8 +221,8 @@ public class TownyBlockListener implements Listener {
 	}
 
 	/*
-	 * non-white standing banner - could be attack or invade
-	 * white standing banner - could be surrender or abandon
+	 * coloured banner - could be attack or invade
+	 * white banner - could be surrender
 	 * chest - could be plunder
 	 *
 	 * Return - blockPlacementOverride
@@ -221,18 +230,14 @@ public class TownyBlockListener implements Listener {
 	public boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block) throws NotRegisteredException
 	{
 		String blockTypeName = block.getType().getKey().getKey();
-		if (blockTypeName.contains("banner") && !blockTypeName.contains("wall")) {
-			TownyMessaging.sendGlobalMessage("banner detected");
-			TownyMessaging.sendGlobalMessage("Material: " + block.getType());
-			TownyMessaging.sendGlobalMessage("Block Type Name: " + blockTypeName);
-			TownyMessaging.sendGlobalMessage("Block State: " + block.getState());
+		if (blockTypeName.contains("banner")) {
 
-			if(block.getType() == Material.WHITE_BANNER
+			if(blockTypeName.contains("white")
 				&& ((Banner)block.getState()).getPatterns().size() == 0) {
-				//Standing white banner
+				//white banner
 				return evaluateSiegeWarPlaceWhiteBannerRequest(player, block);
 			} else {
-				//Standing coloured banner
+				//coloured banner
 				return evaluateSiegeWarPlaceColouredBannerRequest(player,block);
 			}
 		} else if (block.getType().equals(Material.CHEST)) {
@@ -242,6 +247,48 @@ public class TownyBlockListener implements Listener {
 			return false;
 		}
 	}
+
+	//If the breaker is in a town & this block is a 'siege banner'
+	//1. It can only be broken by a resident of the attacker nation
+	//2. If broken, siege is abandoned
+	//Returns skipPermChecks
+	public boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
+		try {
+			String blockTypeName = block.getType().getKey().getKey();
+
+			if (blockTypeName.contains("banner")) {
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
+				if (resident.hasTown()) {
+					Town residentTown = resident.getTown();
+					Siege activeSiege = SiegeWarUtil.getActiveSiegeGivenBannerLocation(block.getLocation());
+
+					if (activeSiege == null) {
+						//This is not a siege banner
+						//Continue with regular checks
+						return false;
+					} else if (residentTown.hasNation()
+							&& activeSiege.getAttackersCombatantData().containsKey(residentTown.getNation())) {
+						//This is a siege banner being destroyed by owner
+						//Override perms and destroy
+						SiegeWarUtil.processAbandonSiegeRequest(player, activeSiege.getDefendingTown().getName());
+						return true;
+					} else {
+						//This is a siege banner but not being destroyed by owner
+						//Override perms and do not destroy
+						event.setCancelled(true);
+						return true;
+					}
+				}
+			}
+		} catch (NotRegisteredException e) {
+			//If player, town, nation, or siege, are not found,
+			//Continue with regular checks
+		}
+
+		return false;
+	}
+
 
 	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block) throws NotRegisteredException {
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -289,17 +336,9 @@ public class TownyBlockListener implements Listener {
 				return false;
 			}
 
-			//If the target town is under siege, evaluate surrender request
-			if(townWhereBlockWasPlaced.hasSiege()) {
-				Town residentTown = resident.getTown();
-
-				if(townWhereBlockWasPlaced == residentTown) {
-					//Banner placer is in their own town - surrender request
-					return SiegeWarUtil.processSurrenderRequest(player);
-				} else {
-					//Banner placer is not in their own town - abandon request
-					return SiegeWarUtil.processAbandonSiegeRequest(player, townWhereBlockWasPlaced.getName());
-				}
+			//If the target town is resident's and is under siege, evaluate surrender request
+			if(townWhereBlockWasPlaced.hasSiege() && townWhereBlockWasPlaced == resident.getTown()) {
+				return SiegeWarUtil.processSurrenderRequest(player);
 			}
 		}
 		return false;

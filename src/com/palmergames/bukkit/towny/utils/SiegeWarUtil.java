@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Anonymoose on 19/05/2019.
@@ -493,7 +494,6 @@ public class SiegeWarUtil {
         siege.getDefenderCombatantData().setActive(false);
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
         activateSiegeCooldown(siege);
-        activateRevoltCooldown(siege);
         TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
 
@@ -836,4 +836,27 @@ public class SiegeWarUtil {
         }
     }
 
+    public static Siege getActiveSiegeGivenBannerLocation(Location location) {
+        //Look through all sieges
+        //Note that we don't just look at the given location
+        //....because mayor may have unclaimed the plot after the siege started
+        for (Siege siege : TownyUniverse.getDataSource().getSieges()) {
+
+            //Location must match
+            //Siege must be in progress
+            //Attack must be active
+            for (CombatantData attackerData : siege.getAttackersCombatantData().values()) {
+                if (attackerData.getSiegeBannerLocation().equals(location)) {
+                    if (siege.getStatus() == SiegeStatus.IN_PROGRESS && attackerData.isActive()) {
+                        return siege;
+                    } else {
+                        return null;
+                    }
+                }
+
+            }
+        }
+        //No siege banner found at the given location
+        return null;
+    }
 }
