@@ -86,7 +86,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reload", TownySettings.getLangString("admin_panel_2")));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "reset", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "backup", ""));
-		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "mysqldump/mysqlsave/mysqlload", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "mysqldump", ""));
+		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "database [save/load]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "newday", TownySettings.getLangString("admin_panel_3")));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "purge [number of days]", ""));
 		ta_help.add(ChatTools.formatCommand("", "/townyadmin", "delete [] .. []", "delete a residents data files."));
@@ -205,27 +206,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(getSender(), "Error: " + e.getMessage());
 
 				}
+			} else if (split[0].equalsIgnoreCase("database")) {
+
+				parseAdminDatabaseCommand(StringMgmt.remFirstArg(split));
+				return true;				
+				
 			} else if (split[0].equalsIgnoreCase("mysqldump")) {
 				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
 					TownyDataSource dataSource = new TownyFlatFileSource(plugin, townyUniverse);
 					dataSource.saveAll();
 					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_mysql_dump_success"));
-					return true;
-				} else 
-					throw new TownyException(TownySettings.getLangString("msg_err_mysql_not_being_used"));
-
-			} else if (split[0].equalsIgnoreCase("mysqlsave")) {
-				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
-					TownyUniverse.getInstance().getDataSource().saveAll();
-					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_mysql_save_success"));
-					return true;
-				} else 
-					throw new TownyException(TownySettings.getLangString("msg_err_mysql_not_being_used"));
-
-			} else if (split[0].equalsIgnoreCase("mysqlload")) {
-				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
-					TownyUniverse.getInstance().getDataSource().loadAll();
-					TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_mysql_load_success"));
 					return true;
 				} else 
 					throw new TownyException(TownySettings.getLangString("msg_err_mysql_not_being_used"));
@@ -266,6 +256,26 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+
+	private void parseAdminDatabaseCommand(String[] split) {
+	
+		if (split.length == 0 || split.length > 2 || split[0].equalsIgnoreCase("?")) {
+			sender.sendMessage(ChatTools.formatTitle("/townyadmin database"));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin database", "save", ""));
+			sender.sendMessage(ChatTools.formatCommand(TownySettings.getLangString("admin_sing"), "/townyadmin database", "load", ""));
+			return;
+		}
+		
+		if (split[0].equalsIgnoreCase("save")) {
+			TownyUniverse.getInstance().getDataSource().saveAll();
+			TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_save_success"));
+	
+		} else if (split[0].equalsIgnoreCase("load")) {
+			TownyUniverse.getInstance().clearAll();			
+			TownyUniverse.getInstance().getDataSource().loadAll();
+			TownyMessaging.sendMsg(getSender(), TownySettings.getLangString("msg_load_success"));			
+		}
 	}
 
 	private void parseAdminPlotCommand(String[] split) throws TownyException {

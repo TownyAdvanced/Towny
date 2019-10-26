@@ -82,11 +82,8 @@ public class TownyUniverse {
         
         System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         
-        worlds.clear();
-        nations.clear();
-        towns.clear();
-        residents.clear();
-        
+        clearAll();
+                
         if (!loadDatabase(loadDbType)) {
             System.out.println("[Towny] Error: Failed to load!");
             return false;
@@ -346,6 +343,13 @@ public class TownyUniverse {
             instance = new TownyUniverse();
         }
         return instance;
+    }
+    
+    public void clearAll() {
+    	worlds.clear();
+        nations.clear();
+        towns.clear();
+        residents.clear();
     }
     
 }
