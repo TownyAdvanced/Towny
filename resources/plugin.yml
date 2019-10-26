@@ -462,7 +462,10 @@ permissions:
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true
             towny.command.townyadmin.purge: true
-            towny.command.townyadmin.reload: true            
+            towny.command.townyadmin.reload: true
+            towny.command.townyadmin.mysqldump: true
+            towny.command.townyadmin.mysqlsave: true
+            towny.command.townyadmin.mysqlload: true
             towny.command.townyadmin.reset: true
             towny.command.townyadmin.set.*: true
             towny.command.townyadmin.toggle.*: true

@@ -249,6 +249,9 @@ public enum PermissionNodes {
 	
 	TOWNY_COMMAND_TOWNYADMIN_GIVEBONUS("towny.command.townyadmin.givebonus"),
 	TOWNY_COMMAND_TOWNYADMIN_RELOAD("towny.command.townyadmin.reload"),
+	TOWNY_COMMAND_TOWNYADMIN_MYSQLDUMP("towny.command.townyadmin.mysqldump"),
+	TOWNY_COMMAND_TOWNYADMIN_MYSQLSAVE("towny.command.townyadmin.mysqlsave"),
+	TOWNY_COMMAND_TOWNYADMIN_MYSQLLOAD("towny.command.townyadmin.mysqlload"),
 	TOWNY_COMMAND_TOWNYADMIN_RESET("towny.command.townyadmin.reset"),
 	TOWNY_COMMAND_TOWNYADMIN_BACKUP("towny.command.townyadmin.backup"),
 	TOWNY_COMMAND_TOWNYADMIN_NEWDAY("towny.command.townyadmin.newday"),
