@@ -703,8 +703,11 @@ public class TownyWorld extends TownyObject {
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
-					
+
 					Coord townCoord = b.getCoord();
+					
+					if (key.equals(townCoord)) continue;
+					
 					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 					if (dist < min)
 						min = dist;

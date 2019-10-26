@@ -19,11 +19,13 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -355,6 +357,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						player.sendMessage(ChatTools.formatTitle("/... set"));
 						player.sendMessage(ChatTools.formatCommand("", "set", "[plottype]", "Ex: Inn, Wilds, Farm, Embassy etc"));
+						player.sendMessage(ChatTools.formatCommand("", "set", "outpost", "Costs " + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
 						player.sendMessage(ChatTools.formatCommand("", "set", "reset", "Removes a plot type"));
 						player.sendMessage(ChatTools.formatCommand("", "set", "[name]", "Names a plot"));
 						player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
@@ -416,6 +419,35 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							}
 							return true;
+						} else if (split[0].equalsIgnoreCase("outpost")) {
+							System.out.println("plot set outpost");
+
+							if (TownySettings.isAllowingOutposts()) {
+								if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
+									throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));								
+								
+								TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+								
+								// Test we are allowed to work on this plot
+								plotTestOwner(resident, townBlock);
+								
+								Town town = townBlock.getTown();
+								TownyWorld townyWorld = townBlock.getWorld();
+								boolean isAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
+								Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+								
+								 if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin)) {
+									 if (TownySettings.isUsingEconomy() && !town.pay(TownySettings.getOutpostCost(), String.format("Plot Set Outpost"))) 
+										 throw new TownyException(TownySettings.getLangString("msg_err_cannot_afford_to_set_outpost"));
+
+									 TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), TownySettings.getLangString("outpost")));
+									 townBlock.setOutpost(true);
+									 town.addOutpostSpawn(player.getLocation());
+									 townyUniverse.getDataSource().saveTown(town);
+									 townyUniverse.getDataSource().saveTownBlock(townBlock);
+								 }
+								return true;
+							}
 						} 
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
@@ -423,6 +455,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						setPlotType(resident, worldCoord, split[0]);
 
 						player.sendMessage(String.format(TownySettings.getLangString("msg_plot_set_type"), split[0]));
+						
 
 					} else {
 

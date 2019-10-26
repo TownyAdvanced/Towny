@@ -837,8 +837,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
-			} else {
-				TownyMessaging.sendErrorMsg("removeOutPostSpawn : no outpost found where one ought to be");
 			}
 		}
 	}

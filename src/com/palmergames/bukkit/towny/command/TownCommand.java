@@ -46,6 +46,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1732,7 +1733,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 						world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
-							throw new TownyException(TownySettings.getLangString("msg_too_close"));
+							throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));
 
 						if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 							if ((world.getMinDistanceFromOtherTowns(coord, resident.getTown()) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
@@ -1957,10 +1958,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
 			
 			if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
-				throw new TownyException(TownySettings.getLangString("msg_too_close"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
 
 			if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
-				throw new TownyException(TownySettings.getLangString("msg_too_close"));
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));
 
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((world.getMinDistanceFromOtherTowns(key) > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
@@ -3049,39 +3050,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				double blockCost = 0;
 				List<WorldCoord> selection;
 				boolean attachedToEdge = true, outpost = false;
+				boolean isAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 
-					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
-						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-					
-					if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_enough_outposts_free_to_claim"), town.getMaxOutpostSpawn(), town.getOutpostLimit()));
-
-
-					if (TownySettings.getAmountOfResidentsForOutpost() != 0 && town.getResidents().size() < TownySettings.getAmountOfResidentsForOutpost()) {
-						throw new TownyException(TownySettings.getLangString("msg_err_not_enough_residents"));
-					}
-
-					int maxOutposts = TownySettings.getMaxResidentOutposts(resident);
-					if (!townyUniverse.getPermissionSource().isTownyAdmin(player) && maxOutposts != -1 && (maxOutposts <= resident.getTown().getAllOutpostSpawns().size()))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_max_outposts_own"), maxOutposts));
-
 					if (TownySettings.isAllowingOutposts()) {
-
+						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
+							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						
+						// Run various tests required by configuration/permissions through Util.
+						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin);
+						
 						if (world.hasTownBlock(key))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));
 
-						if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
-							throw new TownyException(TownySettings.getLangString("msg_too_close"));
-
-						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks()))
-							throw new TownyException(TownySettings.getLangString("msg_too_close"));
 						
-						if ((world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot()))
-							throw new TownyException(TownySettings.getLangString("msg_too_close"));
-
 						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
 						attachedToEdge = false;
 						outpost = true;
@@ -3101,10 +3085,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if ((world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks()))
-					throw new TownyException(TownySettings.getLangString("msg_too_close"));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
 
 				if(!town.hasHomeBlock() && world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
-					throw new TownyException(TownySettings.getLangString("msg_too_close"));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));
 
 				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 				selection = AreaSelectionUtil.filterTownOwnedBlocks(selection);

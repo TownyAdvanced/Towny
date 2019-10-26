@@ -3688,3 +3688,8 @@ v0.92.0.11:
   - New Command: /ta database [save|load]
     - Saves or loads the database.
     - Closes ticket #2070
+  - New Command: /plot set outpost
+    - Used on an already claimed plot to turn it into an outpost.
+    - Requires towny.command.town.claim.outpost permission node.
+    - Charges the town the same amount to claim an outpost.
+    - Closes ticket #2912
