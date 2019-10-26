@@ -6,11 +6,13 @@ import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.ExtendedEconomyAPI;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Economy handler to interface with Register or Vault directly.
@@ -161,6 +163,29 @@ public class TownyEconomyHandler {
 			
 		case VAULT:
 			return vaultEconomy.hasAccount(accountName);
+			
+		default:
+			break;
+
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Check if account exists
+	 * 
+	 * @param uniqueId
+	 * @return
+	 */
+	public static boolean hasEconomyAccount(UUID uniqueId) {
+		switch (Type) {
+
+		case RESERVE:
+		    return reserveEconomy.hasAccount(uniqueId);
+			
+		case VAULT:
+			return vaultEconomy.hasAccount(Bukkit.getOfflinePlayer(uniqueId));
 			
 		default:
 			break;
@@ -360,5 +385,7 @@ public class TownyEconomyHandler {
 		return String.format("%.2f", balance);
 
 	}
+
+
 
 }

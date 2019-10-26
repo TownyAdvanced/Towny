@@ -949,7 +949,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			boolean isJailed;
 			int JailSpawn;
 			
-			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(newName);
+			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(BukkitTools.getPlayerExact(newName).getUniqueId());
 			
 			//get data needed for resident
 			if(transferBalance && TownySettings.isUsingEconomy()){

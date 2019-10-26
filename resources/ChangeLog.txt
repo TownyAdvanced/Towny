@@ -3680,3 +3680,5 @@ v0.92.0.11:
     - default: false
     - If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords.
     - Closes ticket #3347
+  - Fix bug where Towny failed to find the new economy accounts for player's who've changed their name.
+    - Closes ticket #3466
