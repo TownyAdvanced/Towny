@@ -3682,3 +3682,6 @@ v0.92.0.11:
     - Closes ticket #3347
   - Fix bug where Towny failed to find the new economy accounts for player's who've changed their name.
     - Closes ticket #3466
+  - New Command: /ta mysqldump
+    - When your config has save & load set to mysql you can use this command to dump the mysql database to flatfile.
+    - Closes ticket #2628
