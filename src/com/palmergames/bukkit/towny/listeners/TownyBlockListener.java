@@ -139,8 +139,8 @@ public class TownyBlockListener implements Listener {
 
 			//Siege War
 			if (TownySettings.getWarSiegeEnabled()) {
-				boolean blockPlacementOverride = evaluateSiegeWarPlaceBlockRequest(player, block);
-				if(blockPlacementOverride) {
+				boolean skipPermChecks = evaluateSiegeWarPlaceBlockRequest(player, block);
+				if(skipPermChecks) {
 					return;
 				}
 			}
@@ -225,7 +225,7 @@ public class TownyBlockListener implements Listener {
 	 * white banner - could be surrender
 	 * chest - could be plunder
 	 *
-	 * Return - blockPlacementOverride
+	 * Return - skipOtherPerChecks
 	 */
 	public boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block) throws NotRegisteredException
 	{
@@ -248,11 +248,10 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 
-	//If the breaker is in a town & this block is a 'siege banner'
-	//1. It can only be broken by a resident of the attacker nation
-	//2. If broken, siege is abandoned
-	//Returns skipPermChecks
+	//While a siege exists, nobody can destroy the siege banner
+	//Returns skipAdditionalPermChecks
 	public boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
+		boolean skipRemainingPermChecks = false;
 		try {
 			String blockTypeName = block.getType().getKey().getKey();
 
@@ -260,41 +259,29 @@ public class TownyBlockListener implements Listener {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
 				if (resident.hasTown()) {
-					Town residentTown = resident.getTown();
 					Siege activeSiege = SiegeWarUtil.getActiveSiegeGivenBannerLocation(block.getLocation());
 
 					if (activeSiege == null) {
 						//This is not a siege banner
-						//Continue with regular checks
 						return false;
-					} else if (residentTown.hasNation()
-							&& activeSiege.getAttackersCombatantData().containsKey(residentTown.getNation())) {
-						//This is a siege banner being destroyed by owner
-						//Override perms and destroy
-						SiegeWarUtil.processAbandonSiegeRequest(player, activeSiege.getDefendingTown().getName());
-						return true;
 					} else {
-						//This is a siege banner but not being destroyed by owner
-						//Override perms and do not destroy
+						//This block is the banner of an active siege
 						event.setCancelled(true);
-						return true;
+						skipRemainingPermChecks = true;
+						throw new TownyException("This is a siege banner. It cannot be destroyed while the associated siege attack is in progress.");
 					}
 				}
 			}
-		} catch (NotRegisteredException e) {
-			//If player, town, nation, or siege, are not found,
-			//Continue with regular checks
+		} catch (TownyException x) {
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
-
-		return false;
+		return skipRemainingPermChecks;
 	}
 
 
 	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block) throws NotRegisteredException {
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 		if (resident.hasTown()) {
-
-			TownyMessaging.sendGlobalMessage("Has town");
 
 			//Get Town Where block was placed
 			Town townWhereBlockWasPlaced;
@@ -308,8 +295,6 @@ public class TownyBlockListener implements Listener {
 			//If the target town is different town to player, evaluate siege request
 			Town residentTown = resident.getTown();
 			if (townWhereBlockWasPlaced != residentTown) {
-
-				TownyMessaging.sendGlobalMessage("Eval");
 
 				if (!townWhereBlockWasPlaced.hasSiege()) {
 					//There is no siege, evaluate attack request
@@ -336,9 +321,15 @@ public class TownyBlockListener implements Listener {
 				return false;
 			}
 
-			//If the target town is resident's and is under siege, evaluate surrender request
-			if(townWhereBlockWasPlaced.hasSiege() && townWhereBlockWasPlaced == resident.getTown()) {
-				return SiegeWarUtil.processSurrenderRequest(player);
+			//Under Siege
+			if(townWhereBlockWasPlaced.hasSiege()) {
+				// Residents town - surrender
+				// Not residents town  abandon
+				if(townWhereBlockWasPlaced == resident.getTown()) {
+					return SiegeWarUtil.processSurrenderRequest(player);
+				} else {
+					return SiegeWarUtil.processAbandonSiegeRequest(player,townWhereBlockWasPlaced.getName());
+				}
 			}
 		}
 		return false;
