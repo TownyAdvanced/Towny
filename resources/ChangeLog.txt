@@ -3685,3 +3685,9 @@ v0.92.0.11:
   - New Command: /ta mysqldump
     - When your config has save & load set to mysql you can use this command to dump the mysql database to flatfile.
     - Closes ticket #2628
+  - New Command: /ta mysqlsave
+    - Saves to the mysql database.
+    - Closes ticket #2070
+  - New Command: /ta mysqlload
+    - Loads from the mysql database.
+    - Closes ticket #2070
