@@ -949,16 +949,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			boolean isJailed;
 			int JailSpawn;
 			
-			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(BukkitTools.getPlayerExact(newName).getUniqueId());
-			
-			//get data needed for resident
-			if(transferBalance && TownySettings.isUsingEconomy()){
+			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
 				try {
 					balance = resident.getHoldingBalance();
 					resident.removeAccount();
 				} catch (EconomyException ignored) {
 				}				
 			}
+			
+			//get data needed for resident
 			List<Resident> friends = resident.getFriends();
 			List<String> nationRanks = resident.getNationRanks();
 			TownyPermission permissions = resident.getPermissions();
@@ -994,7 +993,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getResidentMap().put(newName.toLowerCase(), resident);
 			
 			//add everything back to the resident
-			if (transferBalance && TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
 					resident.setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {
