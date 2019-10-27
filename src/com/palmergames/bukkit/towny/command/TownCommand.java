@@ -1420,6 +1420,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawncost [$]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
+			player.sendMessage(ChatTools.formatCommand("", "/town set", "title/surname [resident] [text]", ""));
 		} else {
 			Resident resident;
 
@@ -1459,6 +1460,76 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.setTownBoard(line);
 					TownyMessaging.sendTownBoard(player, town);
 				}
+			} else if (split[0].equalsIgnoreCase("title")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				// Give the resident a title
+				if (split.length < 2)
+					TownyMessaging.sendErrorMsg(player, "Eg: /town set title bilbo Jester ");
+				else
+					resident = townyUniverse.getDataSource().getResident(split[1]);
+				
+				if (resident.hasTown()) {
+					if (resident.getTown() != townyUniverse.getDataSource().getResident(player.getName()).getTown()) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_same_town"), resident.getName()));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_same_town"), resident.getName()));
+					return;
+				}
+				split = StringMgmt.remArgs(split, 2);
+				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_input_too_long"));
+					return;
+				}
+
+				String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				resident.setTitle(title + " ");
+				townyUniverse.getDataSource().saveResident(resident);
+
+				if (resident.hasTitle())
+					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_set_title"), resident.getName(), resident.getTitle()));
+				else
+					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Title", resident.getName()));
+
+			} else if (split[0].equalsIgnoreCase("surname")) {
+
+				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode()))
+					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+				// Give the resident a title
+				if (split.length < 2)
+					TownyMessaging.sendErrorMsg(player, "Eg: /town set surname bilbo the dwarf ");
+				else
+
+					resident = townyUniverse.getDataSource().getResident(split[1]);
+				if (resident.hasTown()) {
+					if (resident.getTown() != townyUniverse.getDataSource().getResident(player.getName()).getTown()) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_same_town"), resident.getName()));
+						return;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_same_town"), resident.getName()));
+					return;
+				}
+				split = StringMgmt.remArgs(split, 2);
+				if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_input_too_long"));
+					return;
+				}
+
+				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+				resident.setSurname(" " + surname);
+				townyUniverse.getDataSource().saveResident(resident);
+
+				if (resident.hasSurname())
+					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_set_surname"), resident.getName(), resident.getSurname()));
+				else
+					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_clear_title_surname"), "Surname", resident.getName()));
+
 
 			} else {
 

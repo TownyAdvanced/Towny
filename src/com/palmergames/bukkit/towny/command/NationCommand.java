@@ -2052,8 +2052,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (split.length < 2)
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set title bilbo Jester ");
 				else
-
 					resident = townyUniverse.getDataSource().getResident(split[1]);
+				
 				if (resident.hasNation()) {
 					if (resident.getTown().getNation() != townyUniverse.getDataSource().getResident(player.getName()).getTown().getNation()) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_not_same_nation"), resident.getName()));

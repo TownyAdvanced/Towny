@@ -355,6 +355,8 @@ permissions:
             towny.command.town.set.plottax: true
             towny.command.town.set.shoptax: true
             towny.command.town.set.embassytax: true
+            towny.command.town.set.title: true
+            towny.command.town.set.surname: true
 
     towny.command.town.toggle.*:
         description: User can toggle all town settings.

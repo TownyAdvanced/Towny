@@ -114,6 +114,8 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
+			TOWNY_COMMAND_TOWN_SET_TITLE("towny.command.town.set.title"),
+			TOWNY_COMMAND_TOWN_SET_SURNAME("towny.command.town.set.surname"),
 		
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),

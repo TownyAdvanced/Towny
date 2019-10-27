@@ -3709,3 +3709,12 @@ v0.92.0.11:
     - This allows colours to be used in the title/surname options.
     - The default config will have the &, if you don't want colour codes used in titles/surnames you can skip this.
     - Closes ticket #3172
+  - New Commands: /town set title {resident} {title} & /town set surname {resident} {title}
+    - Exactly like the King ability to set titles and surnames.
+    - This is being made available to mayors so that mayors can better role play their own townmembers.
+    - Permission nodes: towny.command.town.set.title & towny.command.town.set.surname are child nodes of towny.command.town.set.*
+    - Closes ticket #3439
+  - New Permission node: towny.command.town.set.title
+    - Child node of towny.command.town.set.*
+  - New Permission node: towny.command.town.set.surname
+    - Child node of towny.command.town.set.*
