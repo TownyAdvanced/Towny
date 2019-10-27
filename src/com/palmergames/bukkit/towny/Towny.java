@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.command.InviteCommand;
@@ -68,14 +69,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Towny Plugin for Bukkit
  * 
- * Website: http://code.google.com/a/eclipselabs.org/p/towny/ Source:
- * http://code.google.com/a/eclipselabs.org/p/towny/source/browse/
+ * Website & Source: https://github.com/TownyAdvanced/Towny
  * 
- * @author Shade, ElgarL
+ * @author Shade, ElgarL, LlmDl
  */
 
 public class Towny extends JavaPlugin {
@@ -120,7 +121,7 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Register bStats Metrics
 		 */
-		new Metrics(this);
+		Metrics metrics = new Metrics(this);
 
 		version = this.getDescription().getVersion();
 
@@ -148,6 +149,13 @@ public class Towny extends JavaPlugin {
 			getCommand("nation").setExecutor(new NationCommand(this));
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
+
+			metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					return TownySettings.getString(ConfigNodes.LANGUAGE);
+				}
+			}));
 
 			TownyWar.onEnable();
 

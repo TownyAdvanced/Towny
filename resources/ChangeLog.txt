@@ -3693,3 +3693,6 @@ v0.92.0.11:
     - Requires towny.command.town.claim.outpost permission node.
     - Charges the town the same amount to claim an outpost.
     - Closes ticket #2912
+  - The german.yml has been updated to 0.58 by Sprugente.
+  - Add language chart to bStats.
+    - Closes ticket #3472
