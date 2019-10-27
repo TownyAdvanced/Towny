@@ -507,10 +507,16 @@ public class War {
 
 	private void remove(Town attacker, TownBlock townBlock) throws NotRegisteredException {
 		// Add bonus blocks
-		if (TownySettings.getWarEventCostsTownblocks()){		
+		if (TownySettings.getWarEventCostsTownblocks() || TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()){		
 			townBlock.getTown().addBonusBlocks(-1);
 			attacker.addBonusBlocks(1);
 		}
+		
+		if (TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
+			townBlock.setTown(attacker);
+			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+		}		
+		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		try {
 			// Check for money loss in the defending town

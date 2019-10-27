@@ -3696,3 +3696,11 @@ v0.92.0.11:
   - The german.yml has been updated to 0.58 by Sprugente.
   - Add language chart to bStats.
     - Closes ticket #3472
+  - New Config Option: war.event.winner_takes_ownership_of_townblocks
+    - Default: false
+    - If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.
+    - One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town.
+    - Closes ticket #3470
+  - Added ability to have Event War actually transfer conquered townblocks over to the winning town permanently.
+    - Does not transfer townblocks which did not have their HP drop to 0. 
+    - This means rushing to a town's homeblock will only net you the townblocks you won on the way, and not the entire town.

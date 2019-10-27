@@ -1572,7 +1572,12 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
 			"# and the losing town gains a negative (-1) bonus townblock."),
-
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+			"war.event.winner_takes_ownership_of_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.",
+			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town."),
+	
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),
