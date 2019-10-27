@@ -695,7 +695,7 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^a-zA-Z0-9._\\[\\]-]"),
+			"[^a-zA-Z0-9&._\\[\\]-]"),
 
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
@@ -708,7 +708,7 @@ public enum ConfigNodes {
 			"# Maximum length of titles and surnames."),
 	
 	FILTERS_PAPI_CHAT_FORMATTING(
-			"filters_colour_chat.papi_chat_formatting","",
+			"filters_colour_chat.papi_chat_formatting","","",
 			"# See How Towny Works wikipage for list of PAPI placeholders.",
 			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
 	FILTERS_PAPI_CHAT_FORMATTING_BOTH(

@@ -3704,3 +3704,8 @@ v0.92.0.11:
   - Added ability to have Event War actually transfer conquered townblocks over to the winning town permanently.
     - Does not transfer townblocks which did not have their HP drop to 0. 
     - This means rushing to a town's homeblock will only net you the townblocks you won on the way, and not the entire town.
+  - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.name_remove_regex
+    - Change to '[^a-zA-Z0-9&._\[\]-]'
+    - This allows colours to be used in the title/surname options.
+    - The default config will have the &, if you don't want colour codes used in titles/surnames you can skip this.
+    - Closes ticket #3172
