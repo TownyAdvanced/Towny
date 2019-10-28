@@ -9,7 +9,11 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class TownBlock {
 
@@ -24,6 +28,7 @@ public class TownBlock {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
+	private HashSet<CustomDataField> metadata = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -182,8 +187,6 @@ public class TownBlock {
 
 		return type;
 	}
-
-	
 	
 	public void setType(TownBlockType type) {
 		if (type != this.type)
@@ -452,5 +455,14 @@ public class TownBlock {
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;
+	}
+	
+	public void addMetaData(CustomDataField md) {
+		if (metadata == null)
+		{
+			metadata = new HashSet<>();
+		}
+		
+		metadata.add(md);
 	}
 }

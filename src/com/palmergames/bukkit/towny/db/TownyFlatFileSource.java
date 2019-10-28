@@ -21,6 +21,9 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.naming.InvalidNameException;
@@ -77,7 +80,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "nations.txt",
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "regen.txt",
-			dataFolderPath + File.separator + "snapshot_queue.txt"
+			dataFolderPath + File.separator + "snapshot_queue.txt",
+			dataFolderPath + File.separator + "metadata.yml"
 		)) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
@@ -277,6 +281,26 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 			
 		}
+	}
+	
+	public boolean loadMetadata() {
+		File mdFile = new File(dataFolderPath + File.separator + "metadata.yml");
+		
+		// Make sure default paths are in place.
+		FileConfiguration metadata = YamlConfiguration.loadConfiguration(mdFile);
+		metadata.addDefault("towns", new ArrayList<Object>());
+		metadata.addDefault("townblocks", "");
+		metadata.options().copyDefaults(true);
+		
+		try{
+			metadata.save(new File(dataFolderPath + File.separator + "metadata.yml"));
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Error saving meta data defaults:");
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@Override

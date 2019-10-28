@@ -3,13 +3,13 @@ package com.palmergames.bukkit.towny.object.metadata;
 public class IntegerDataField extends CustomDataField<Integer> {
 	
 	// Initializes default value to zero.
-	public IntegerDataField()
+	public IntegerDataField(String key)
 	{
-		super(CustomDataFieldType.IntegerField, 0);
+		super(key, CustomDataFieldType.IntegerField);
 	}
 	
 	// Allow for initialization with default value provided.
-	public IntegerDataField(Integer value) {
-		super(CustomDataFieldType.IntegerField, value);
+	public IntegerDataField(String key, Integer value) {
+		super(key, CustomDataFieldType.IntegerField, value);
 	}
 }

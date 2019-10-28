@@ -51,7 +51,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
-	final String metaDataFolderPath;
 	
 	public TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
@@ -60,7 +59,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		this.settingsFolderPath = rootFolderPath + File.separator + "settings";
 		this.logFolderPath = rootFolderPath + File.separator + "logs";
 		this.backupFolderPath = rootFolderPath + File.separator + "backup";
-		this.metaDataFolderPath = rootFolderPath + File.separator + "metadata";
 	}
 	
 	@Override

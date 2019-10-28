@@ -1,13 +1,25 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
+import com.palmergames.bukkit.towny.object.TownBlock;
+
 public abstract class CustomDataField<T> {
 	private CustomDataFieldType type;
 	private T value;
+	private String key;
+	private TownBlock parentBlock;
 	
-	public CustomDataField(CustomDataFieldType type, T value)
+	public CustomDataField(String key, CustomDataFieldType type, T value)
 	{
 		this.type = type;
 		this.setValue(value);
+		this.key = key;
+	}
+
+	public CustomDataField(String key, CustomDataFieldType type)
+	{
+		this.type = type;
+		this.value = null;
+		this.key = key;
 	}
 
 	public CustomDataFieldType getType() {
@@ -23,5 +35,9 @@ public abstract class CustomDataField<T> {
 		// TODO: Save to yml
 		
 		this.value = value;
+	}
+
+	public String getKey() {
+		return key;
 	}
 }
