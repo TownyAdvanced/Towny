@@ -3718,3 +3718,4 @@ v0.92.0.11:
     - Child node of towny.command.town.set.*
   - New Permission node: towny.command.town.set.surname
     - Child node of towny.command.town.set.*
+0.95.0.5:
