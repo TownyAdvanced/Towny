@@ -54,8 +54,7 @@ Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) 
 If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
 If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m ).
 
-If you want to support the developer consider becoming a patron: 
-[<img align=right src="https://user-images.githubusercontent.com/879756/65957602-d3795800-e412-11e9-8b27-dda76b6fed13.PNG">](https://www.patreon.com/bePatron?u=25096724)
+If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
 ___
 
 ### Contributing
