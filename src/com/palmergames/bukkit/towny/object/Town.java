@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -27,8 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.*;
 
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
@@ -1275,7 +1274,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public boolean isSiegeCooldownActive() {
-		if(hasSiege() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
+		if(hasSiegeFront() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
 			return false; //Cooldown always off until the siege has finished
 
 		if(System.currentTimeMillis() < siegeCooldownEndTime) {
@@ -1302,8 +1301,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		this.revoltCooldownEndTime = timeMillis;
 	}
 
-
-	public boolean hasSiege() {
+	public boolean hasSiegeFront() {
 		return siege != null;
 	}
 

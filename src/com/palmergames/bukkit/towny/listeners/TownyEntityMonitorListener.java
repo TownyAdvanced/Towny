@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -80,7 +81,7 @@ public class TownyEntityMonitorListener implements Listener {
 					&& TownySettings.isUsingEconomy()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()
-					&& defenderResident.getTown().getNation().getSieges().size() != 0) {
+					&& defenderResident.getTown().getNation().getSiegeFronts().size() != 0) {
 
 				checkForSiegeDeathCosts(defenderPlayer, defenderResident);
 			}
@@ -454,10 +455,10 @@ public class TownyEntityMonitorListener implements Listener {
 			//We already checked for player being in a town + nation
 		}
 
-		//Check if the player died in one of their nation's active siegezones
-		for (Siege siege : nation.getSieges()) {
-			if(siege.getStatus() == SiegeStatus.IN_PROGRESS) {
-				for (TownBlock townBlock : siege.getDefendingTown().getTownBlocks()) {
+		//Check if the player died in one of their nation's active siegefronts
+		for (SiegeFront siegeFront : nation.getSiegeFronts()) {
+			if(siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+				for (TownBlock townBlock : siegeFront.getSiege().getDefendingTown().getTownBlocks()) {
 
 					if (!townBlock.getWorld().equals(killedPlayer.getWorld()))
 						continue;
@@ -467,7 +468,7 @@ public class TownyEntityMonitorListener implements Listener {
 					roundedDistance = (int) Math.ceil(trueDistance);
 
 					if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
-						applySiegeDeathCost(killedResident, nation, siege);
+						applySiegeDeathCost(killedResident, nation, siegeFront.getSiege());
 					}
 				}
 			}
@@ -510,8 +511,8 @@ public class TownyEntityMonitorListener implements Listener {
 					&& attackerResident.hasTown()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()) {
-				for(Siege siege: defenderResident.getTown().getNation().getSieges()) {
-					if(defenderResident.getTown() == siege.getDefendingTown()) {
+				for(SiegeFront siegeFront: defenderResident.getTown().getNation().getSiegeFronts()) {
+					if(defenderResident.getTown() == siegeFront.getSiege().getDefendingTown()) {
 						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
 						return;
 					}

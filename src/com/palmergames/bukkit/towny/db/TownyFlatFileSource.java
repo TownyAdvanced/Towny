@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.CombatantData;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -1136,7 +1136,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						if (!token.isEmpty()) {
 							Siege siege = getSiege(token);
 							if (siege != null)
-								nation.addSiege(siege);
+								nation.addSiegeFront(siege);
 						}
 					}
 				}
@@ -1283,17 +1283,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				try {
 					line = kvFile.get("siegeStatsDefenders");
-					siege.setDefenderCombatantData(SiegeWarDataUtil.unpackSiegeStatsBlob(line));
+					siege.setDefenderSiegeFront(SiegeWarDataUtil.unpackSiegeStatsBlob(line));
 				} catch (Exception e) {
-					siege.setDefenderCombatantData(new CombatantData());
+					siege.setDefenderSiegeFront(new SiegeFront());
 				}
 
 				try {
 					line = kvFile.get("siegeStatsAttackers");
-					siege.setAttackersCombatantData(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
+					siege.setSiegeFronts(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
 
 				} catch (Exception e) {
-					siege.setAttackersCombatantData(new HashMap<Nation,CombatantData>());
+					siege.setSiegeFronts(new HashMap<Nation,SiegeFront>());
 				}
 
 			} catch (Exception e) {
@@ -2007,7 +2007,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Sieges & Revolts
-		list.add("siege=" + Boolean.toString(town.hasSiege()));
+		list.add("siege=" + Boolean.toString(town.hasSiegeFront()));
 		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeCooldownEndTime()));
 		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltCooldownEndTime()));
 
@@ -2094,18 +2094,47 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("scheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 		list.add("actualEndTime=" + Long.toString(siege.getActualEndTime()));
 		list.add("nextUpkeepTime=" + Long.toString(siege.getNextUpkeepTime()));
-		list.add("siegeStatsDefenders=" + SiegeWarDataUtil.generateSiegeStatsBlob(siege.getDefenderCombatantData()));
-		list.add("siegeStatsAttackers=" + SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getAttackersCombatantData()));
+		list.add("siegeStatsDefenders:");
+		list.addAll(getSerializedSiegeCombatantData(null, siege.getDefenderSiegeFront()));
+		list.add("siegeStatsAttackers:");
+		list.add("[");
+		list.addAll(getSerializedAttackerCombatantsMap(siege.getSiegeFronts()));
+		list.add("]");
 
 		/*
 		 *  Make sure we only save in async
 		 */
+
 		this.queryQueue.add(new FlatFile_Task(list, getSiegeFilename(siege)));
 
 		return true;
 	}
 
+	private List<String> getSerializedSiegeCombatantData(Nation nation, SiegeFront combatantData) {
+		List<String>list = new ArrayList<String>();
+		list.add("{");
+		list.add("nation=" + nation.getName());
+		list.add("active=" + combatantData.isActive());
+		list.add("siegePointsTotal=" + combatantData.getSiegePointsTotal());
+		list.add("siegeBannerLocation=" +combatantData.getSiegeBannerLocationForSerialization());
+		list.add("playerArrivalTimeMap=" + combatantData.getPlayerArrivalTimeMapForSerialization());
+		list.add("}");
+		return list;
+	}
 
+	private List<String> getSerializedAttackerCombatantsMap(Map<Nation,SiegeFront> attackersMap) {
+		List<String>list = new ArrayList<>();
+		boolean firstEntry = false;
+		for(Map.Entry<Nation, SiegeFront> entry: attackersMap.entrySet()) {
+			if(firstEntry){
+				firstEntry = false;
+			} else {
+				list.add(",\n");
+			}
+			list.addAll(getSerializedSiegeCombatantData(entry.getKey(), entry.getValue()));
+		}
+		return list;
+	}
 
 	@Override
 	public boolean saveWorld(TownyWorld world) {

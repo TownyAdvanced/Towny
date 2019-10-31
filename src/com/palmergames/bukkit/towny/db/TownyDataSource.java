@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.util.FileMgmt;
 
 import org.bukkit.entity.Player;
@@ -158,6 +159,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveSiegeList();
 
+	abstract public boolean saveSiegeFrontList();
+
 	abstract public boolean saveWorldList();
 
 	abstract public boolean saveRegenList();
@@ -171,6 +174,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveNation(Nation nation);
 
 	abstract public boolean saveSiege(Siege siege);
+
+	abstract public boolean saveSiegeFront(SiegeFront siegeFront);
 
 	abstract public boolean saveWorld(TownyWorld world);
 
@@ -193,6 +198,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteNation(Nation nation);
 
 	abstract public void deleteSiege(Siege siege);
+
+	abstract public void deleteSiegeFront(SiegeFront siegeFront);
 
 	abstract public void deleteWorld(TownyWorld world);
 
@@ -431,5 +438,11 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newSiege(String townName) throws AlreadyRegisteredException;
-    abstract public Siege getSiege(String townName) throws NotRegisteredException;
+
+	abstract public Siege getSiege(String townName) throws NotRegisteredException;
+
+	abstract public void newSiegeFront(String townName, String attackerName) throws AlreadyRegisteredException;
+
+	abstract public SiegeFront getSiegeFront(String townName, String attackerName) throws NotRegisteredException;
+
 }

@@ -1083,7 +1083,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                         if (!token.isEmpty()) {
                             Siege siege = getSiege(token);
                             if (siege != null)
-                                nation.addSiege(siege);
+                                nation.addSiegeFront(siege);
                         }
                     }
                 }
@@ -1170,8 +1170,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siege.setScheduledEndTime(rs.getLong("scheduledEndTime"));
                 siege.setActualEndTime(rs.getLong("actualEndTime"));
                 siege.setNextUpkeepTime(rs.getLong("actualEndTime"));
-                siege.setDefenderCombatantData(SiegeWarDataUtil.unpackSiegeStatsBlob("siegeStatsDefenders"));
-                siege.setAttackersCombatantData(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob("siegeStatsAttackers"));
+                siege.setDefenderSiegeFront(SiegeWarDataUtil.unpackSiegeStatsBlob("siegeStatsDefenders"));
+                siege.setSiegeFronts(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob("siegeStatsAttackers"));
             }
 
             return true;
@@ -1706,7 +1706,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
-            twn_hm.put("siege", Boolean.toString(town.hasSiege()));
+            twn_hm.put("siege", Boolean.toString(town.hasSiegeFront()));
             twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeCooldownEndTime()));
             twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltCooldownEndTime()));
 
@@ -1781,8 +1781,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("scheduledEndTime", siege.getScheduledEndTime());
             nat_hm.put("actualEndTime", siege.getActualEndTime());
             nat_hm.put("nextUpkeepTime", siege.getNextUpkeepTime());
-            nat_hm.put("siegeStatsDefenders", SiegeWarDataUtil.generateSiegeStatsBlob(siege.getDefenderCombatantData()));
-            nat_hm.put("siegeStatsAttackers", SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getAttackersCombatantData()));
+            nat_hm.put("siegeStatsDefenders", SiegeWarDataUtil.generateSiegeStatsBlob(siege.getDefenderSiegeFront()));
+            nat_hm.put("siegeStatsAttackers", SiegeWarDataUtil.generateNationSiegeStatsMapBlob(siege.getSiegeFronts()));
 
             UpdateDB("SIEGES", nat_hm, Arrays.asList("defendingTown"));
 

@@ -5,8 +5,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,25 +25,23 @@ public class Siege {
     private long scheduledEndTime;
     private long actualEndTime;
     private long nextUpkeepTime;
-    private CombatantData defenderCombatantData;
-    private Map<Nation, CombatantData> attackersCombatantData;
+    private int defenderSiegePointsTotal;
+    private Map<Player, Long> defenderPlayerArrivalTimeMap; //player, timestamp of arrival in zone
+    private Map<Nation, SiegeFront> siegeFronts;    //Attackers
 
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
         status = SiegeStatus.IN_PROGRESS;
         this.attackerWinner = null;
+        siegeFronts =new HashMap<>();
     }
 
     public Town getDefendingTown() {
         return defendingTown;
     }
 
-    public Map<Nation, CombatantData> getAttackersCombatantData() {
-        return attackersCombatantData;
-    }
-
-    public CombatantData getDefenderCombatantData() {
-        return defenderCombatantData;
+    public Map<Nation, SiegeFront> getSiegeFronts() {
+        return siegeFronts;
     }
 
     public long getScheduledEndTime() {
@@ -77,19 +77,15 @@ public class Siege {
         return actualStartTime;
     }
 
-    public void setDefenderCombatantData(CombatantData defendersSiegeStats) {
-        this.defenderCombatantData = defendersSiegeStats;
-    }
-
-    public void setAttackersCombatantData(Map<Nation, CombatantData> attackersCombatantData) {
-        this.attackersCombatantData = attackersCombatantData;
+    public void setSiegeFronts(Map<Nation, SiegeFront> siegeFronts) {
+        this.siegeFronts = siegeFronts;
     }
 
     public List<Nation> getActiveAttackers() {
         List<Nation> result = new ArrayList<>();
-        for (Nation nation : new ArrayList<Nation>(attackersCombatantData.keySet())) {
-            if (attackersCombatantData.get(nation) != null
-                    && attackersCombatantData.get(nation).isActive()) {
+        for (Nation nation : new ArrayList<Nation>(siegeFronts.keySet())) {
+            if (siegeFronts.get(nation) != null
+                    && siegeFronts.get(nation).isActive()) {
                 result.add(nation);
             }
         }

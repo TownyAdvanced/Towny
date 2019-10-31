@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.CombatantData;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -401,8 +401,8 @@ public class TownyFormatter {
 				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
 			}
 
-			if(town.hasSiege()) {
-				Siege siege = town.getSiege();
+			if(town.hasSiegeFront()) {
+				Siege siege = town.getSiege().getSiege();
 
 
 				switch (siege.getStatus()){
@@ -420,6 +420,7 @@ public class TownyFormatter {
 					break;
 
 					case ATTACKER_WIN:
+					case DEFENDER_SURRENDER:
 						siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
 						String siegeCooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
 						String yes = TownySettings.getLangString("status_yes");
@@ -550,7 +551,7 @@ public class TownyFormatter {
 		String combatantStatusTag;
 		SiegeStatus siegeStatus = siege.getStatus();
 
-		if(!siege.getDefenderCombatantData().isActive()) {
+		if(!siege.getDefenderSiegeFront().isActive()) {
 			combatantStatusTag = Colors.Gray + " - " + Colors.Red + "SURRENDERED";
 		} else {
 			if(siegeStatus == SiegeStatus.IN_PROGRESS) {
@@ -575,7 +576,7 @@ public class TownyFormatter {
 		}
 
 		String defenceTag = TownySettings.getLangString("status_town_siege_defence_tag");
-		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderCombatantData().getSiegePointsTotal() + " " + combatantStatusTag);
+		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderSiegeFront().getSiegePointsTotal() + " " + combatantStatusTag);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -583,12 +584,12 @@ public class TownyFormatter {
 		String prefixTag = TownySettings.getLangString("status_town_siege_attack_tag");
 		String prefixSpaces = prefixTag.replaceAll(".", " ");
 
-		List<Nation> attackerNations = new ArrayList<>(siege.getAttackersCombatantData().keySet());
+		List<Nation> attackerNations = new ArrayList<>(siege.getSiegeFronts().keySet());
 		Collections.sort(attackerNations, new Comparator() {
 			@Override
 			public int compare(Object n1, Object n2) {
-				int nation1SiegePoints = siege.getAttackersCombatantData().get((Nation)n1).getSiegePointsTotal();
-				int nation2SiegePoints = siege.getAttackersCombatantData().get((Nation)n2).getSiegePointsTotal();
+				int nation1SiegePoints = siege.getSiegeFronts().get((Nation)n1).getSiegePointsTotal();
+				int nation2SiegePoints = siege.getSiegeFronts().get((Nation)n2).getSiegePointsTotal();
 
 				if(nation1SiegePoints == nation2SiegePoints) {return 0;}
 				return nation1SiegePoints < nation2SiegePoints ? 1 : -1;
@@ -597,7 +598,7 @@ public class TownyFormatter {
 
 		Nation attackerNation;
 		String attackerName;
-		CombatantData siegeStats;
+		SiegeFront siegeStats;
 		String combatantStatusTag;
 		SiegeStatus siegeStatus;
 		final int maxIndex = 9;  //This limits the displayed entries to 10
@@ -605,7 +606,7 @@ public class TownyFormatter {
 		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
 			attackerNation = attackerNations.get(index);
 			attackerName = TownyFormatter.getFormattedNationName(attackerNation);
-			siegeStats = siege.getAttackersCombatantData().get(attackerNation);
+			siegeStats = siege.getSiegeFronts().get(attackerNation);
 			siegeStatus = siege.getStatus();
 
 			if(!siegeStats.isActive()) {
@@ -636,13 +637,15 @@ public class TownyFormatter {
 			case IN_PROGRESS:
 				return (TownySettings.getLangString("status_town_siege_summary_in_progress"));
 			case ATTACKER_WIN:
-			case DEFENDER_SURRENDER:
 				String message = TownySettings.getLangString("status_town_siege_summary_attacker_win");
 				return String.format(message, siege.getWinnerName());
+			case DEFENDER_SURRENDER:
+				return "Town Surrendered to " + siege.getWinnerName();
 			case DEFENDER_WIN:
-			case ATTACKER_ABANDON:
 				message = TownySettings.getLangString("status_town_siege_summary_defender_win");
 				return String.format(message, siege.getWinnerName());
+			case ATTACKER_ABANDON:
+				return "The attacker(s) abandoned the siege";
 			default:
 				return "???";
 		}

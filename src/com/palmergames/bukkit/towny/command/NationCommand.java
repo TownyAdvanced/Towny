@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -793,14 +792,38 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = null;
 
 		try {
-			if (TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeInvadeEnabled())
-				throw new TownyException("You cannot use the leave command. Your town must be either kicked from the nation, or you can use /t revolt");
-
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
 			town = resident.getTown();
 			nation = town.getNation();
 			nation.removeTown(town);
+
+			if (TownySettings.getWarSiegeEnabled()) {
+				if(TownySettings.getWarSiegeRevoltEnabled() ) {
+					if (town.isRevoltCooldownActive()) {
+						throw new TownyException("You cannot use the leave command while your town revolt immunity is active. \n" +
+								"\nEither wait for revolt immunity to expire, or persuade the nation to kick your town.");
+					} else {
+						TownyMessaging.sendGlobalMessage(
+								TownyFormatter.getFormattedTownName(town)
+										+ " has risen up in revolt, and declared independance from "
+										+ TownyFormatter.getFormattedNationName(nation));
+
+						//Begin revolt immunity
+						double revoltImmunityHours = TownySettings.getWarSiegeRevoltCooldownHours();
+						long revoltImmunityMillis = (long) ((revoltImmunityHours * 60 * 60 * 1000) + 0.5);
+						town.setRevoltCooldownEndTime(revoltImmunityMillis);
+
+						//Stop siege immunity
+						town.setSiegeCooldownEndTime(0);
+					}
+				} else {
+					//If revolt is disabled, you can only leave if nation kicks you
+					throw new TownyException("Towns cannot leave nations without permission. \n" +
+							"\nTo leave your current nation, persuade the king (or assistants) to kick your town.");
+
+				}
+			}
 
 			/*
 			 * Remove all resident titles/nationRanks before saving the town itself.
@@ -2027,7 +2050,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
 			if(spawnBlock != null) {
 				Town town = spawnBlock.getTown();
-				if (town.hasSiege() & town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				if (town.hasSiegeFront() & town.getSiege().getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
 					throw new TownyException("Cannot spawn into a town which is under siege");
 			}
 
