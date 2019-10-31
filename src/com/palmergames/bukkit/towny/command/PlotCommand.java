@@ -448,7 +448,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								 }
 								return true;
 							}
-						} 
+						}
 
 						WorldCoord worldCoord = new WorldCoord(world, Coord.parseCoord(player));
 
@@ -504,6 +504,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
 
+				} else if (split[0].equalsIgnoreCase("meta")) {
+
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					plotTestOwner(resident, townBlock);
+
+					String function = split[1];
+					String customFieldName = split[2];
+					
+					// Save...
+
+					player.sendMessage("Your trying this out huh?");
 				} else
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 

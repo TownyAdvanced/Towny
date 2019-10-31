@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -11,11 +9,12 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
-
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TownBlock {
+public class TownBlock implements ConfigurationSerializable {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -28,7 +27,8 @@ public class TownBlock {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField> metadata = null;
+	private ArrayList<CustomDataField> metadata = null;
+	private boolean hasMeta = false;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -458,11 +458,55 @@ public class TownBlock {
 	}
 	
 	public void addMetaData(CustomDataField md) {
-		if (metadata == null)
+		if (getMetadata() == null)
 		{
-			metadata = new HashSet<>();
+			metadata = new ArrayList<>();
 		}
 		
-		metadata.add(md);
+		getMetadata().add(md);
+		
+		this.hasMeta = true;
+	}
+
+	@Override
+	public Map<String, Object> serialize() {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("x", getX());
+		map.put("z", getZ());
+		map.put("world", getWorld().getName());
+		map.put("customDataFields", this.getMetadata());
+		return map;
+	}
+	
+	public static TownBlock deserialize(Map<String, Object> args) {
+		
+		TownyWorld world = new TownyWorld((String)args.get("world"));
+		TownBlock newBlock = new TownBlock((int)args.get("x"), (int)args.get("z"), world);
+		
+		for (CustomDataField meta : (ArrayList<CustomDataField>)args.get("customDataFields"))
+			newBlock.addMetaData(meta);
+		
+		return newBlock;
+	}
+
+	public ArrayList<CustomDataField> getMetadata() {
+		return metadata;
+	}
+
+	public boolean hasMeta() {
+		return hasMeta;
+	}
+
+	public void setMetadata(String str) {
+		
+		if (metadata == null)
+			metadata = new ArrayList<>();
+		
+		this.hasMeta = true;
+		
+		String[] objects = str.split(";");
+		for (int i = 0; i < objects.length; i++) {
+			metadata.add(CustomDataField.load(objects[i]));
+		}
 	}
 }

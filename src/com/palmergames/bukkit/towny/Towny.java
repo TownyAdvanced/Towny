@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -30,12 +31,11 @@ import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataFieldType;
+import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
+import com.palmergames.bukkit.towny.object.metadata.StringDataField;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -56,6 +56,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -137,7 +139,8 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		ConfirmationHandler.initialize(this);
-
+		
+	
 		if (load()) {
 			// Setup bukkit command interfaces
 			registerSpecialCommands();
@@ -165,7 +168,12 @@ public class Towny extends JavaPlugin {
 
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
+			
+			
 		}
+		
+		
+		
 
 		registerEvents();
 
@@ -183,6 +191,25 @@ public class Towny extends JavaPlugin {
 				if (player != null) {
 					townyUniverse.onLogin(player);
 				}
+		}
+		
+		TownyWorld world = townyUniverse.getWorldMap().get("world");
+		
+		for (TownBlock tb: world.getTownBlocks())
+		{
+			if (tb.hasMeta())
+			{
+				getLogger().info(tb.getMetadata().get(0).getKey());
+			}
+		}
+		
+		try {
+			getLogger().info("" + world.getTownBlocks().size());
+			TownBlock block = world.getTownBlock(new Coord(1,-5));
+			block.addMetaData(new IntegerDataField("level", 1));
+			townyUniverse.getDataSource().saveTownBlock(block);
+		} catch (NotRegisteredException e) {
+			getLogger().info("OH NO!!!");
 		}
 	}
 

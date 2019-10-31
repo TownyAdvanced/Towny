@@ -1379,12 +1379,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public boolean loadMetadata() {
-    	// TODO: Add support for sql if feasible
-		return false;
-	}
-
-	@Override
     public boolean loadTownBlocks() {
 
         String line = "";
