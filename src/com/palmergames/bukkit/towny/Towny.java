@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -168,13 +169,8 @@ public class Towny extends JavaPlugin {
 
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
-			
-			
 		}
 		
-		
-		
-
 		registerEvents();
 
 		LOGGER.info("=============================================================");
@@ -195,13 +191,15 @@ public class Towny extends JavaPlugin {
 		
 		TownyWorld world = townyUniverse.getWorldMap().get("world");
 		
-		for (TownBlock tb: world.getTownBlocks())
-		{
-			if (tb.hasMeta())
-			{
-				getLogger().info(tb.getMetadata().get(0).getKey());
-			}
+		IntegerDataField levelField = new IntegerDataField("level", 0);
+		
+		try {
+			TownyAPI.getInstance().registerCustomDataField(levelField);
+		} catch (KeyAlreadyRegisteredException e) {
+			getLogger().info(e.getMessage());
 		}
+		
+		getLogger().info("Successfully registered " + levelField.getKey());
 		
 		try {
 			getLogger().info("" + world.getTownBlocks().size());

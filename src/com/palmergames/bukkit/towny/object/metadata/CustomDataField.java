@@ -1,13 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class CustomDataField<T> {
 	private CustomDataFieldType type;
 	private T value;
@@ -85,5 +77,19 @@ public abstract class CustomDataField<T> {
 		}
 		
 		return field;
+	}
+	
+	@Override
+	public boolean equals(Object rhs) {
+		if (rhs instanceof CustomDataField)
+			return ((CustomDataField) rhs).getKey().equals(this.getKey());
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		// Use the key as a unique id
+		return getKey().hashCode();
 	}
 }

@@ -46,14 +46,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
@@ -1447,9 +1440,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					line = keys.get("metadata");
-					if (!line.isEmpty()) {
+					if (!line.isEmpty() && line != null) 
 						townBlock.setMetadata(line.trim());
-					}
+					
 					
 				} catch (Exception e) {
 					if (test == "town") {
@@ -1992,7 +1985,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (townBlock.hasMeta()) {
-			ArrayList<CustomDataField> tdata = townBlock.getMetadata();
+			HashSet<CustomDataField> tdata = townBlock.getMetadata();
 			for (CustomDataField cdf : tdata) {
 				md.append(cdf.toString()).append(";");
 			}

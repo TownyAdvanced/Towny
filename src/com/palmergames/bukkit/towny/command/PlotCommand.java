@@ -21,6 +21,8 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
@@ -32,6 +34,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -508,13 +511,52 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 					plotTestOwner(resident, townBlock);
-
-					String function = split[1];
-					String customFieldName = split[2];
 					
-					// Save...
+					if (split.length == 1) {
+						if (townBlock.hasMeta()) {
+							for (CustomDataField field : townBlock.getMetadata()) {
+								player.sendMessage(field.getKey() + " = " + field.getValue() + " hashcode = " + field.hashCode());
+							}
+						} else {
+							TownyMessaging.sendErrorMsg(player, "This plot doesn't have any associated metadata");
+						}
+					}
+					
+					if (split.length < 4) {
+						player.sendMessage(ChatTools.formatTitle("/... meta"));
+						player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+					}
+					
+					if (split.length == 4) {
+						String operation = split[1];
+						String mdKey = split[2];
+						String val = split[3];
 
-					player.sendMessage("Your trying this out huh?");
+						plotTestOwner(resident, townBlock);
+						
+						if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey))
+							TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
+						else {
+							CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+							
+							for (CustomDataField cdf: townBlock.getMetadata()) {
+								if (cdf.equals(md)) {
+									
+									// Change state
+									cdf.setValue(val);
+									
+									// Let user know that it was successful.
+									TownyMessaging.sendMessage(player, ChatColor.GREEN + "Key " + mdKey + " was successfully updated to " + cdf.getValue());
+
+									// Save changes.
+									townyUniverse.getDataSource().saveTownBlock(townBlock);
+								}
+							}
+							
+						}
+					}
+					
+						
 				} else
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 

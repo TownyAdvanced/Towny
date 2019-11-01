@@ -9,12 +9,14 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-public class TownBlock implements ConfigurationSerializable {
+public class TownBlock {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -27,7 +29,7 @@ public class TownBlock implements ConfigurationSerializable {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private ArrayList<CustomDataField> metadata = null;
+	private HashSet<CustomDataField> metadata = null;
 	private boolean hasMeta = false;
 
 	//Plot level permissions
@@ -460,7 +462,7 @@ public class TownBlock implements ConfigurationSerializable {
 	public void addMetaData(CustomDataField md) {
 		if (getMetadata() == null)
 		{
-			metadata = new ArrayList<>();
+			metadata = new HashSet<>();
 		}
 		
 		getMetadata().add(md);
@@ -468,28 +470,7 @@ public class TownBlock implements ConfigurationSerializable {
 		this.hasMeta = true;
 	}
 
-	@Override
-	public Map<String, Object> serialize() {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("x", getX());
-		map.put("z", getZ());
-		map.put("world", getWorld().getName());
-		map.put("customDataFields", this.getMetadata());
-		return map;
-	}
-	
-	public static TownBlock deserialize(Map<String, Object> args) {
-		
-		TownyWorld world = new TownyWorld((String)args.get("world"));
-		TownBlock newBlock = new TownBlock((int)args.get("x"), (int)args.get("z"), world);
-		
-		for (CustomDataField meta : (ArrayList<CustomDataField>)args.get("customDataFields"))
-			newBlock.addMetaData(meta);
-		
-		return newBlock;
-	}
-
-	public ArrayList<CustomDataField> getMetadata() {
+	public HashSet<CustomDataField> getMetadata() {
 		return metadata;
 	}
 
@@ -500,7 +481,7 @@ public class TownBlock implements ConfigurationSerializable {
 	public void setMetadata(String str) {
 		
 		if (metadata == null)
-			metadata = new ArrayList<>();
+			metadata = new HashSet<>();
 		
 		this.hasMeta = true;
 		
