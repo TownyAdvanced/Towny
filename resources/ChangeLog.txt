@@ -3361,7 +3361,7 @@ v0.92.0.11:
     - API: added Nation.getKing().
     - New Language File: chinese.yml courtesy of qsefthuopq.
     - The TownyLogger has been removed in favour of log4j.Logger, work done by Articdive.
-    - The german.yml has been updated by Sprugente.
+    - The german.yml has been updated by Sprungente.
     - The FileMgmt has seen a slight touch-up courtesy of Articdive.
       - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
     - Added confirmations to /ta town {townname} delete when used from the Console.
@@ -3411,7 +3411,7 @@ v0.92.0.11:
         - string_check_regex: ^[а-яА-Яa-zA-Z0-9\s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
         - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
     - Added korean.yml translation by DayBreak365.
-    - The german.yml has been updated to 0.52 by Sprugente.
+    - The german.yml has been updated to 0.52 by Sprungente.
     - New Command: /ta town {townname} toggle forcepvp
       - Set the town's AdminEnabledPVP setting to true or false.
       - Forces PVP on in a town.
@@ -3447,7 +3447,7 @@ v0.92.0.11:
       - default: false
       - Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.
       - If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty).
-    - The german.yml has been updated again by Sprugente.
+    - The german.yml has been updated again by Sprungente.
     - Added ShopPlotUtil for shop plugins to use.
       - Contains helpful, easy-to-use tests.
     - Added getPlayer() to the API's TownPreClaimEvent so that plugin which cancel Towny claims can more easily inform the player why their claim is cancelled.
@@ -3612,7 +3612,7 @@ v0.92.0.11:
   - Language files bumped to 0.56.
   - Fix being unable to toggle debug mode in-game, courtesy of Articdive
     - Closes ticket #3443
-  - The german.yml has been updated to 0.56 by Sprugente.
+  - The german.yml has been updated to 0.56 by Sprungente.
 0.95.0.2:
   - Fix missing placeholder %townyadvanced_towny_tag_formatted% not actually existing.
   - Fix world explosion setting not allowing explosions to damage animals, armorstands, itemframes and endercrystals in the wilderness when they ought be exploded.
@@ -3693,7 +3693,7 @@ v0.92.0.11:
     - Requires towny.command.town.claim.outpost permission node.
     - Charges the town the same amount to claim an outpost.
     - Closes ticket #2912
-  - The german.yml has been updated to 0.58 by Sprugente.
+  - The german.yml has been updated to 0.58 by Sprungente.
   - Add language chart to bStats.
     - Closes ticket #3472
   - New Config Option: war.event.winner_takes_ownership_of_townblocks
@@ -3705,7 +3705,7 @@ v0.92.0.11:
     - Does not transfer townblocks which did not have their HP drop to 0. 
     - This means rushing to a town's homeblock will only net you the townblocks you won on the way, and not the entire town.
   - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.name_remove_regex
-    - Change to '[^a-zA-Z0-9&._\[\]-]'
+    - Change to '[^a-zA-Z0-9\&._\[\]-]'
     - This allows colours to be used in the title/surname options.
     - The default config will have the &, if you don't want colour codes used in titles/surnames you can skip this.
     - Closes ticket #3172
@@ -3718,3 +3718,5 @@ v0.92.0.11:
     - Child node of towny.command.town.set.*
   - New Permission node: towny.command.town.set.surname
     - Child node of towny.command.town.set.*
+0.95.0.5:
+  - Fix above name_remove_regex change for default configs.
