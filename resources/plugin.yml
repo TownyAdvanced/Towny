@@ -57,6 +57,14 @@ permissions:
             towny.wild.*: true
             towny.claimed.*: true
             towny.admin.nation_zone: true
+            towny.meta.modify: true
+            towny.meta.add: true
+
+    towny.meta.modify:
+        description: User is allowed to edit metadata on plots/towns.
+
+    towny.meta.add:
+        description: User is allowed to add metadata on plots/towns.
 
     towny.outlaw.jailer:
         description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
@@ -526,7 +534,7 @@ permissions:
             towny.command.townyadmin.nation.merge: true
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.set: true
-    
+
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commans.
         default: false

@@ -1560,7 +1560,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("public", town.isPublic());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
-			twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
+			if (town.hasMeta())
+				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
         
             //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
@@ -1748,7 +1749,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
             tb_hm.put("locked", townBlock.isLocked());
             tb_hm.put("changed", townBlock.isChanged());
-            tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
+            if (townBlock.hasMeta())
+				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
+            
 
             UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 

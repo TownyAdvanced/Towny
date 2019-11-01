@@ -475,10 +475,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_dont_belong_town"));
 					}
 
-				} else if (split[0].equalsIgnoreCase("meta")) {
-					
-					handleMetaCommand(player, split);
-
 				} else if (split[0].equalsIgnoreCase("outlawlist")) {
 
 					Town town;
@@ -3443,100 +3439,5 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		return onlineResidents;
-	}
-	
-	public static void handleMetaCommand(Player player, String[] split) {
-		Town town = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		try {
-			town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(player, e.getClass().toString());
-			return;
-		}
-
-		if (split.length == 1) {
-			if (town.hasMeta()) {
-				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
-				for (CustomDataField field : town.getMetadata()) {
-					player.sendMessage(field.getKey() + " = " + field.getValue());
-				}
-			} else {
-				TownyMessaging.sendErrorMsg(player, "This plot doesn't have any associated metadata");
-			}
-
-			return;
-		}
-
-		if (split.length < 3) {
-			player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
-			return;
-		}
-
-		if (split.length == 4) {
-			String operation = split[1];
-			String mdKey = split[2];
-			String val = split[3];
-
-			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)){
-				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
-				return;
-			} else if (split[1].equalsIgnoreCase("set")) {
-				CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
-
-				for (CustomDataField cdf: town.getMetadata()) {
-					if (cdf.equals(md)) {
-
-						// Check if the given value is valid for this field.
-						try {
-							cdf.isValidType(val);
-						} catch (InvalidMetadataTypeException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage());
-							return;
-						}
-
-
-						// Change state TODO: Add type casting..
-						cdf.setValue(val);
-
-						// Let user know that it was successful.
-						TownyMessaging.sendMessage(player, ChatColor.GREEN + "Key " + mdKey + " was successfully updated to " + cdf.getValue());
-
-						// Save changes.
-						townyUniverse.getDataSource().saveTown(town);
-					}
-				}
-
-				return;
-
-			}
-		} else if (split[1].equalsIgnoreCase("add")) {
-			String mdKey = split[2];
-
-			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
-				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
-				return;
-			}
-
-			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
-
-			if (town.hasMeta()) {
-				for (CustomDataField cdf : town.getMetadata()) {
-					if (cdf.equals(md)) {
-						TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " already exists!");
-						return;
-					}
-				}
-			}
-
-			player.sendMessage(ChatColor.GREEN + "Custom data was successfully added to townblock!");
-
-			town.addMetaData(md);
-
-			// Save.
-			townyUniverse.getDataSource().saveTown(town);
-		}
 	}
 }

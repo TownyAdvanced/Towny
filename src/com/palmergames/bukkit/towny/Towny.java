@@ -185,6 +185,14 @@ public class Towny extends JavaPlugin {
 				}
 		}
 		
+		IntegerDataField level = new IntegerDataField("level", 0);
+		try {
+			TownyAPI.getInstance().registerCustomDataField(level);
+		} catch (Exception e) {
+			getLogger().info(e.getMessage());
+		}
+		
+		
 	}
 
 	public void setWorldFlags() {
