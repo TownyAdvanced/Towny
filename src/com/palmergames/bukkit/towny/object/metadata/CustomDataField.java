@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
+import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+
 public abstract class CustomDataField<T> {
 	private CustomDataFieldType type;
 	private T value;
@@ -75,6 +77,28 @@ public abstract class CustomDataField<T> {
 		}
 		
 		return field;
+	}
+	
+	public void isValidType(String str) throws InvalidMetadataTypeException {
+		switch (type) {
+			case IntegerField:
+				try {
+					Integer.parseInt(str);
+				} catch (NumberFormatException e) {
+					throw new InvalidMetadataTypeException(type);
+				}
+				break;
+			case BooleanField:
+				// Apparently any string that isn't "true" is just evaluated to false.
+				break;
+			case DecimalField:
+				try {
+					Double.parseDouble(str);
+				} catch (NumberFormatException e) {
+					throw new InvalidMetadataTypeException(type);
+				}
+				break;
+		}
 	}
 	
 	@Override

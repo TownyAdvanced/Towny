@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -547,6 +548,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								if (cdf.equals(md)) {
 									
 									// Change state
+									try {
+										cdf.isValidType(val);
+									} catch (InvalidMetadataTypeException e) {
+										TownyMessaging.sendErrorMsg(player, e.getMessage());
+										return false;
+									}
+									
 									cdf.setValue(val);
 									
 									// Let user know that it was successful.

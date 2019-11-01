@@ -137,7 +137,6 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		ConfirmationHandler.initialize(this);
-		
 	
 		if (load()) {
 			// Setup bukkit command interfaces
@@ -186,19 +185,6 @@ public class Towny extends JavaPlugin {
 				}
 		}
 		
-		TownyWorld world = townyUniverse.getWorldMap().get("world");
-		
-		DecimalDataField levelField = new DecimalDataField("exp", 0.0);
-		BooleanDataField allowField = new BooleanDataField("allow", false);
-		
-		try {
-			TownyAPI.getInstance().registerCustomDataField(levelField);
-			TownyAPI.getInstance().registerCustomDataField(allowField);
-		} catch (KeyAlreadyRegisteredException e) {
-			getLogger().info(e.getMessage());
-		}
-		
-		getLogger().info("Successfully registered " + levelField.getKey());
 	}
 
 	public void setWorldFlags() {
