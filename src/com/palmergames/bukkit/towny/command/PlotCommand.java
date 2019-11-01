@@ -514,17 +514,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (split.length == 1) {
 						if (townBlock.hasMeta()) {
+							player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
 							for (CustomDataField field : townBlock.getMetadata()) {
-								player.sendMessage(field.getKey() + " = " + field.getValue() + " hashcode = " + field.hashCode());
+								player.sendMessage(field.getKey() + " = " + field.getValue());
 							}
 						} else {
 							TownyMessaging.sendErrorMsg(player, "This plot doesn't have any associated metadata");
 						}
+						
+						return true;
 					}
 					
-					if (split.length < 4) {
-						player.sendMessage(ChatTools.formatTitle("/... meta"));
+					if (split.length < 3) {
 						player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+						return false;
 					}
 					
 					if (split.length == 4) {
@@ -534,9 +537,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						plotTestOwner(resident, townBlock);
 						
-						if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey))
+						if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)){
 							TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
-						else {
+							return false;
+						} else if (split[1].equalsIgnoreCase("set")) {
 							CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 							
 							for (CustomDataField cdf: townBlock.getMetadata()) {
@@ -553,7 +557,34 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							
+							return true;
+							
+						} 
+					} else if (split[1].equalsIgnoreCase("add")) {
+						String mdKey = split[2];
+
+						if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
+							TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
+							return false;
 						}
+						
+						CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+						if (townBlock.hasMeta()) {
+							for (CustomDataField cdf: townBlock.getMetadata()) {
+								if (cdf.equals(md)) {
+									TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " already exists!");
+									return false;
+								}
+							}
+						}
+						
+
+						player.sendMessage(ChatColor.GREEN + "Custom data was successfully added to townblock!");
+
+						townBlock.addMetaData(md);
+
+						// Save.
+						townyUniverse.getDataSource().saveTownBlock(townBlock);
 					}
 					
 						

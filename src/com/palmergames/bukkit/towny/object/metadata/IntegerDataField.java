@@ -1,9 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Map;
-
 public class IntegerDataField extends CustomDataField<Integer> {
 	
 	// Initializes default value to zero.

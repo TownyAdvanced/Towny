@@ -33,10 +33,7 @@ import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWeatherListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.object.metadata.CustomDataFieldType;
-import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
-import com.palmergames.bukkit.towny.object.metadata.StringDataField;
+import com.palmergames.bukkit.towny.object.metadata.*;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -191,24 +188,17 @@ public class Towny extends JavaPlugin {
 		
 		TownyWorld world = townyUniverse.getWorldMap().get("world");
 		
-		IntegerDataField levelField = new IntegerDataField("level", 0);
+		DecimalDataField levelField = new DecimalDataField("exp", 0.0);
+		BooleanDataField allowField = new BooleanDataField("allow", false);
 		
 		try {
 			TownyAPI.getInstance().registerCustomDataField(levelField);
+			TownyAPI.getInstance().registerCustomDataField(allowField);
 		} catch (KeyAlreadyRegisteredException e) {
 			getLogger().info(e.getMessage());
 		}
 		
 		getLogger().info("Successfully registered " + levelField.getKey());
-		
-		try {
-			getLogger().info("" + world.getTownBlocks().size());
-			TownBlock block = world.getTownBlock(new Coord(1,-5));
-			block.addMetaData(new IntegerDataField("level", 1));
-			townyUniverse.getDataSource().saveTownBlock(block);
-		} catch (NotRegisteredException e) {
-			getLogger().info("OH NO!!!");
-		}
 	}
 
 	public void setWorldFlags() {

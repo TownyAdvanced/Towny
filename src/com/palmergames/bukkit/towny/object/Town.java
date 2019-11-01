@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -24,11 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
@@ -64,6 +61,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long registered;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
+	private HashSet<CustomDataField> metadata = null;
+	private boolean hasMeta;
 
 	public Town(String name) {
 		super(name);
@@ -1275,5 +1274,37 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public boolean isOverClaimed() {
 		
 		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
+	}
+
+	public void addMetaData(CustomDataField md) {
+		if (getMetadata() == null)
+		{
+			metadata = new HashSet<>();
+		}
+
+		getMetadata().add(md);
+
+		this.hasMeta = true;
+	}
+
+	public HashSet<CustomDataField> getMetadata() {
+		return metadata;
+	}
+
+	public boolean hasMeta() {
+		return hasMeta;
+	}
+
+	public void setMetadata(String str) {
+
+		if (metadata == null)
+			metadata = new HashSet<>();
+
+		this.hasMeta = true;
+
+		String[] objects = str.split(";");
+		for (int i = 0; i < objects.length; i++) {
+			metadata.add(CustomDataField.load(objects[i]));
+		}
 	}
 }

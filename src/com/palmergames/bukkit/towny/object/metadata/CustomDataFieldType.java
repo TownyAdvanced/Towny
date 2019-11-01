@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum CustomDataFieldType {
-	IntegerField(0), StringField(1);
+	IntegerField(0), StringField(1), BooleanField(2), DecimalField(3);
 	
 	public Integer value;
 	

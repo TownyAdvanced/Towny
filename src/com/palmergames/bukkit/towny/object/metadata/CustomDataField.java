@@ -42,14 +42,8 @@ public abstract class CustomDataField<T> {
 	public String toString() {
 		String out = "";
 		
-		switch (type) {
-			case IntegerField:
-				out += "0";
-				break;
-			case StringField:
-				out += "1";
-				break;
-		}
+		// Type
+		out += type.getValue().toString();
 		
 		// Key
 		out += "," + getKey();
@@ -73,7 +67,11 @@ public abstract class CustomDataField<T> {
 				break;
 			case StringField:
 				field = new StringDataField(key, tokens[2]);
+			case BooleanField:
+				field = new BooleanDataField(key, Boolean.parseBoolean(tokens[2]));
 				break;
+			case DecimalField:
+				field = new DecimalDataField(key, Double.parseDouble(tokens[2]));
 		}
 		
 		return field;

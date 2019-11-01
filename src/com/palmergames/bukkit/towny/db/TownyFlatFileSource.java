@@ -894,6 +894,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setRegistered(0);
 					}
 				}
+
+				line = keys.get("metadata");
+				if (!line.isEmpty() && line != null)
+					town.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1734,6 +1738,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
+
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (town.hasMeta()) {
+			HashSet<CustomDataField> tdata = town.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+
+		list.add("metadata=" + md.toString());
 
 		/*
 		 *  Make sure we only save in async
