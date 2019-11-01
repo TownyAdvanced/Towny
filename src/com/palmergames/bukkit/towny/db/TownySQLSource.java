@@ -795,196 +795,195 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
+                line = rs.getString("residents");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    for (String token : tokens) {
+                        if (!token.isEmpty()) {
+                            Resident resident = getResident(token);
+                            if (resident != null)
+                                town.addResident(resident);
+                        }
+                    }
+                }
 
-				line = rs.getString("residents");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident resident = getResident(token);
-							if (resident != null)
-								town.addResident(resident);
-						}
-					}
-				}
+                town.setMayor(getResident(rs.getString("mayor")));
+                // line = rs.getString("assistants");
+                // if (line != null) {
+                // tokens = line.split(",");
+                // for (String token : tokens) {
+                // if (!token.isEmpty()) {
+                // Resident assistant = getResident(token);
+                // if ((assistant != null) && (town.hasResident(assistant)))
+                // town.addAssistant(assistant);
+                // }
+                // }
+                // }
+                town.setTownBoard(rs.getString("townBoard"));
+                line = rs.getString("tag");
+                if (line != null)
+                    try {
+                        town.setTag(line);
+                    } catch (TownyException e) {
+                        town.setTag("");
+                    }
+                town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
+                town.setBonusBlocks(rs.getInt("bonus"));
+                town.setTaxPercentage(rs.getBoolean("taxpercent"));
+                town.setTaxes(rs.getFloat("taxes"));
+                town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
+                town.setPlotPrice(rs.getFloat("plotPrice"));
+                town.setPlotTax(rs.getFloat("plotTax"));
+                town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
+                town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
+                town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
+                town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
+                town.setSpawnCost(rs.getFloat("spawnCost"));
+                town.setOpen(rs.getBoolean("open"));
+                town.setPublic(rs.getBoolean("public"));
+                town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+                town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
-				town.setMayor(getResident(rs.getString("mayor")));
-				// line = rs.getString("assistants");
-				// if (line != null) {
-				// tokens = line.split(",");
-				// for (String token : tokens) {
-				// if (!token.isEmpty()) {
-				// Resident assistant = getResident(token);
-				// if ((assistant != null) && (town.hasResident(assistant)))
-				// town.addAssistant(assistant);
-				// }
-				// }
-				// }
-				town.setTownBoard(rs.getString("townBoard"));
-				line = rs.getString("tag");
-				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
-				town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-				town.setBonusBlocks(rs.getInt("bonus"));
-				town.setTaxPercentage(rs.getBoolean("taxpercent"));
-				town.setTaxes(rs.getFloat("taxes"));
-				town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
-				town.setPlotPrice(rs.getFloat("plotPrice"));
-				town.setPlotTax(rs.getFloat("plotTax"));
-				town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
-				town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
-				town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
-				town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
-				town.setSpawnCost(rs.getFloat("spawnCost"));
-				town.setOpen(rs.getBoolean("open"));
-				town.setPublic(rs.getBoolean("public"));
-				town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
-				town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
+                town.setPurchasedBlocks(rs.getInt("purchased"));
 
-				town.setPurchasedBlocks(rs.getInt("purchased"));
+                line = rs.getString("homeBlock");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    if (tokens.length == 3)
+                        try {
+                            TownyWorld world = getWorld(tokens[0]);
 
-				line = rs.getString("homeBlock");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					if (tokens.length == 3)
-						try {
-							TownyWorld world = getWorld(tokens[0]);
+                            try {
+                                int x = Integer.parseInt(tokens[1]);
+                                int z = Integer.parseInt(tokens[2]);
+                                TownBlock homeBlock = world.getTownBlock(x, z);
+                                town.forceSetHomeBlock(homeBlock);
+                            } catch (NumberFormatException e) {
+                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+                            } catch (NotRegisteredException e) {
+                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+                            } catch (TownyException e) {
+                                TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+                            }
 
-							try {
-								int x = Integer.parseInt(tokens[1]);
-								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = world.getTownBlock(x, z);
-								town.forceSetHomeBlock(homeBlock);
-							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-							}
+                        } catch (NotRegisteredException e) {
+                            TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+                        }
+                }
 
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-						}
-				}
+                line = rs.getString("spawn");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    if (tokens.length >= 4)
+                        try {
+                            World world = plugin.getServerWorld(tokens[0]);
+                            double x = Double.parseDouble(tokens[1]);
+                            double y = Double.parseDouble(tokens[2]);
+                            double z = Double.parseDouble(tokens[3]);
 
-				line = rs.getString("spawn");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					if (tokens.length >= 4)
-						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
+                            Location loc = new Location(world, x, y, z);
+                            if (tokens.length == 6) {
+                                loc.setPitch(Float.parseFloat(tokens[4]));
+                                loc.setYaw(Float.parseFloat(tokens[5]));
+                            }
+                            town.forceSetSpawn(loc);
+                        } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+                        }
+                }
+                // Load outpost spawns
+                line = rs.getString("outpostSpawns");
+                if (line != null) {
+                    String[] outposts = line.split(";");
+                    for (String spawn : outposts) {
+                        search = (line.contains("#")) ? "#" : ",";
+                        tokens = spawn.split(search);
+                        if (tokens.length >= 4)
+                            try {
+                                World world = plugin.getServerWorld(tokens[0]);
+                                double x = Double.parseDouble(tokens[1]);
+                                double y = Double.parseDouble(tokens[2]);
+                                double z = Double.parseDouble(tokens[3]);
 
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							town.forceSetSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-						}
-				}
-				// Load outpost spawns
-				line = rs.getString("outpostSpawns");
-				if (line != null) {
-					String[] outposts = line.split(";");
-					for (String spawn : outposts) {
-						search = (line.contains("#")) ? "#" : ",";
-						tokens = spawn.split(search);
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
+                                Location loc = new Location(world, x, y, z);
+                                if (tokens.length == 6) {
+                                    loc.setPitch(Float.parseFloat(tokens[4]));
+                                    loc.setYaw(Float.parseFloat(tokens[5]));
+                                }
+                                town.forceAddOutpostSpawn(loc);
+                            } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+                            }
+                    }
+                }
+                // Load jail spawns
+                line = rs.getString("jailSpawns");
+                if (line != null) {
+                    String[] jails = line.split(";");
+                    for (String spawn : jails) {
+                        search = (line.contains("#")) ? "#" : ",";
+                        tokens = spawn.split(search);
+                        if (tokens.length >= 4)
+                            try {
+                                World world = plugin.getServerWorld(tokens[0]);
+                                double x = Double.parseDouble(tokens[1]);
+                                double y = Double.parseDouble(tokens[2]);
+                                double z = Double.parseDouble(tokens[3]);
 
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddOutpostSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-							}
-					}
-				}
-				// Load jail spawns
-				line = rs.getString("jailSpawns");
-				if (line != null) {
-					String[] jails = line.split(";");
-					for (String spawn : jails) {
-						search = (line.contains("#")) ? "#" : ",";
-						tokens = spawn.split(search);
-						if (tokens.length >= 4)
-							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddJailSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-							}
-					}
-				}
-				line = rs.getString("outlaws");
-				if (line != null) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = line.split(search);
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							Resident resident = getResident(token);
-							if (resident != null)
-								town.addOutlaw(resident);
-						}
-					}
-				}
-				try {
-					town.setUuid(UUID.fromString(rs.getString("uuid")));
-				} catch (IllegalArgumentException | NullPointerException ee) {
-					town.setUuid(UUID.randomUUID());
-				}
+                                Location loc = new Location(world, x, y, z);
+                                if (tokens.length == 6) {
+                                    loc.setPitch(Float.parseFloat(tokens[4]));
+                                    loc.setYaw(Float.parseFloat(tokens[5]));
+                                }
+                                town.forceAddJailSpawn(loc);
+                            } catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+                            }
+                    }
+                }
+                line = rs.getString("outlaws");
+                if (line != null) {
+                    search = (line.contains("#")) ? "#" : ",";
+                    tokens = line.split(search);
+                    for (String token : tokens) {
+                        if (!token.isEmpty()) {
+                            Resident resident = getResident(token);
+                            if (resident != null)
+                                town.addOutlaw(resident);
+                        }
+                    }
+                }
+                try {
+                    town.setUuid(UUID.fromString(rs.getString("uuid")));
+                } catch (IllegalArgumentException | NullPointerException ee) {
+                    town.setUuid(UUID.randomUUID());
+                }
 
 
-				/*
-				 * Attempt these for older databases.
-				 */
-				try {
+                /*
+                 * Attempt these for older databases.
+                 */
+                try {
 
-					line = rs.getString("townBlocks");
-					if (line != null)
-						utilLoadTownBlocks(line, town, null);
+                    line = rs.getString("townBlocks");
+                    if (line != null)
+                        utilLoadTownBlocks(line, town, null);
 
-				} catch (SQLException ignored) {
-				}
+                } catch (SQLException ignored) {
+                }
 
-				try {
-					line = rs.getString("registered");
-					if (line != null) {
-						town.setRegistered(Long.valueOf(line));
-					} else {
-						town.setRegistered(0);
-					}
-				} catch (SQLException ignored) {
+                try {
+                    line = rs.getString("registered");
+                    if (line != null) {
+                        town.setRegistered(Long.valueOf(line));
+                    } else {
+                        town.setRegistered(0);
+                    }
+                } catch (SQLException ignored) {
 
-				} catch (NumberFormatException | NullPointerException e) {
-					town.setRegistered(0);
-				}
+                } catch (NumberFormatException | NullPointerException e) {
+                    town.setRegistered(0);
+                }
 
 				try {
 					line = rs.getString("metadata");
