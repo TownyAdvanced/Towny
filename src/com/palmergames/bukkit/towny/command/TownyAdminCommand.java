@@ -1217,11 +1217,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				choice = !TownySettings.getDebug();
 				TownySettings.setDebug(choice);
-				if (choice) {
-					TownyLogger.getInstance().enableDebugLogger();
-				} else {
-					TownyLogger.getInstance().disableDebugLogger();
-				}
+				TownyLogger.getInstance().toggleDebugLogger();
 				TownyLogger.getInstance().updateLoggers();
 				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (choice ? Colors.Green + TownySettings.getLangString("enabled") : Colors.Red + TownySettings.getLangString("disabled")));
 			} catch (Exception e) {
