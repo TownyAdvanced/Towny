@@ -681,10 +681,10 @@ public class TownyFormatter {
 		if (resident == null)
 			return "null";
 		if (resident.isKing())
-			return TownySettings.getKingPrefix(resident) + resident.getName() + TownySettings.getKingPostfix(resident);
+			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getKingPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getKingPostfix(resident));
 		else if (resident.isMayor())
-			return TownySettings.getMayorPrefix(resident) + resident.getName() + TownySettings.getMayorPostfix(resident);
-		return resident.getName();
+			return (resident.hasTitle() ? resident.getTitle() + " " : TownySettings.getMayorPrefix(resident)) + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : TownySettings.getMayorPostfix(resident));
+		return (resident.hasTitle() ? resident.getTitle() + " " : "") + resident.getName() + (resident.hasSurname() ? " " + resident.getSurname() : "");
 	}
 
 	public static String getFormattedTownName(Town town) {

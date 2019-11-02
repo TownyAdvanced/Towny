@@ -3723,3 +3723,4 @@ v0.92.0.11:
   - Bump language files to 0.59.
   - Fix toggling debug mode off stopping all MC logging, courtesy of ArticDive in PR #3485
     - Closes ticket #3468
+  - Make /res screen display title and surname if they are present, falling back to the king/mayor prefix/postfix.
