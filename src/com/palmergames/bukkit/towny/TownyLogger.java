@@ -148,17 +148,13 @@ public class TownyLogger {
 		config.addLogger("com.palmergames.bukkit.towny.debug", townyDebugConfig);
 	}
 	
-	public void disableDebugLogger() {
+	public void toggleDebugLogger() {
 		LoggerConfig townyDebugConfig = config.getLoggerConfig("Towny-Debug");
-		townyDebugConfig.removeAppender("Towny-Debug");
-		townyDebugConfig.removeAppender("File");
-		if (!Bukkit.getVersion().contains("Paper")) {
-			townyDebugConfig.removeAppender("TerminalConsole");
+		if (townyDebugConfig.isStarted()) {
+			townyDebugConfig.stop();
 		} else {
-			townyDebugConfig.removeAppender("Towny-Console-Paper");
+			townyDebugConfig.start();
 		}
-		
-		config.removeLogger("com.palmergames.bukkit.towny.debug");
 	}
 	
 	private void enableMoneyLogger() {
