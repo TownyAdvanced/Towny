@@ -3721,3 +3721,5 @@ v0.92.0.11:
 0.95.0.5:
   - Fix above name_remove_regex change for default configs.
   - Bump language files to 0.59.
+  - Fix toggling debug mode off stopping all MC logging, courtesy of ArticDive in PR #3485
+    - Closes ticket #3468
