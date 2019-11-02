@@ -26,8 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -40,10 +40,10 @@ public class TownyUniverse {
     private static TownyUniverse instance;
     private final Towny towny;
     
-    private final Hashtable<String, Resident> residents = new Hashtable<>();
-    private final Hashtable<String, Town> towns = new Hashtable<>();
-    private final Hashtable<String, Nation> nations = new Hashtable<>();
-    private final Hashtable<String, TownyWorld> worlds = new Hashtable<>();
+    private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -247,11 +247,11 @@ public class TownyUniverse {
         return rootFolder;
     }
     
-    public Hashtable<String, Nation> getNationsMap() {
+    public ConcurrentHashMap<String, Nation> getNationsMap() {
         return nations;
     }
     
-    public Hashtable<String, Resident> getResidentMap() {
+    public ConcurrentHashMap<String, Resident> getResidentMap() {
         return residents;
     }
     
@@ -259,11 +259,11 @@ public class TownyUniverse {
         return jailedResidents;
     }
     
-    public Hashtable<String, Town> getTownsMap() {
+    public ConcurrentHashMap<String, Town> getTownsMap() {
         return towns;
     }
     
-    public Hashtable<String, TownyWorld> getWorldMap() {
+    public ConcurrentHashMap<String, TownyWorld> getWorldMap() {
         return worlds;
     }
     
