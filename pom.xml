@@ -132,7 +132,6 @@
             <version>2.10.4</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>

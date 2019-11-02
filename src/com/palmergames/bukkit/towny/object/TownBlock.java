@@ -31,7 +31,7 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private boolean hasMeta = false;
+	private boolean hasMeta = (getMetadata() == null);
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -462,13 +462,16 @@ public class TownBlock {
 	
 	public void addMetaData(CustomDataField md) {
 		if (getMetadata() == null)
-		{
 			metadata = new HashSet<>();
-		}
 		
 		getMetadata().add(md);
+	}
+	
+	public void removeMetaData(CustomDataField md) {
+		if (!hasMeta())
+			return;
 		
-		this.hasMeta = true;
+		getMetadata().remove(md);
 	}
 
 	public HashSet<CustomDataField> getMetadata() {
@@ -483,8 +486,6 @@ public class TownBlock {
 		
 		if (metadata == null)
 			metadata = new HashSet<>();
-		
-		this.hasMeta = true;
 		
 		String[] objects = str.split(";");
 		for (int i = 0; i < objects.length; i++) {

@@ -67,7 +67,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private HashSet<CustomDataField> metadata = null;
-	private boolean hasMeta;
+	private boolean hasMeta = (getMetadata() == null);
 
 	public Town(String name) {
 		super(name);
@@ -1283,13 +1283,16 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public void addMetaData(CustomDataField md) {
 		if (getMetadata() == null)
-		{
 			metadata = new HashSet<>();
-		}
 
 		getMetadata().add(md);
+	}
 
-		this.hasMeta = true;
+	public void removeMetaData(CustomDataField md) {
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md);
 	}
 
 	public HashSet<CustomDataField> getMetadata() {
@@ -1304,8 +1307,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		if (metadata == null)
 			metadata = new HashSet<>();
-
-		this.hasMeta = true;
 
 		String[] objects = str.split(";");
 		for (int i = 0; i < objects.length; i++) {

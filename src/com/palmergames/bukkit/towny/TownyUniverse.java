@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.HashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -46,7 +47,7 @@ public class TownyUniverse {
     private final Hashtable<String, Town> towns = new Hashtable<>();
     private final Hashtable<String, Nation> nations = new Hashtable<>();
     private final Hashtable<String, TownyWorld> worlds = new Hashtable<>();
-    private final Hashtable<String, CustomDataField> registeredMetadata = new Hashtable<>();
+    private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -363,7 +364,7 @@ public class TownyUniverse {
         residents.clear();
     }
 
-	public Hashtable<String, CustomDataField> getRegisteredMetadataMap() {
+	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
 		return registeredMetadata;
 	}
 }

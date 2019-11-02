@@ -12,7 +12,11 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
-import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -21,7 +25,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -659,7 +662,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
-				handleMetaCommand(player, split);
+				handleTownMetaCommand(player, split);
 			}
 
 		} catch (TownyException e) {
@@ -1276,7 +1279,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void handleMetaCommand(Player player, String[] split) {
+	public static void handleTownMetaCommand(Player player, String[] split) throws TownyException {
 		Town town = null;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
@@ -1287,11 +1290,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_META.getNode()))
+			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
 		if (split.length == 2) {
-			if (!player.hasPermission("towny.meta.modify")) {
-				TownyMessaging.sendErrorMsg("You don't have permissions for this.");
-				return;
-			}
 			if (town.hasMeta()) {
 				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
 				for (CustomDataField field : town.getMetadata()) {
@@ -1319,10 +1321,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
 				return;
 			} else if (split[2].equalsIgnoreCase("set")) {
-				if (!player.hasPermission("towny.meta.modify")) {
-					TownyMessaging.sendErrorMsg("You don't have permissions for this.");
-					return;
-				}
 				CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 				if (town.hasMeta()) {
 					for (CustomDataField cdf: town.getMetadata()) {
@@ -1383,7 +1381,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 	
-	public static boolean handlePlotMetaCommand(Player player, String[] split) {
+	public static boolean handlePlotMetaCommand(Player player, String[] split) throws TownyException {
 		
 		String world = player.getWorld().getName();
 		TownBlock townBlock = null;
@@ -1396,7 +1394,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return false;
 		}
 
-		
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_META.getNode()))
+			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		
 		if (split.length == 1) {
 			if (townBlock.hasMeta()) {
@@ -1427,10 +1426,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
 				return false;
 			} else if (split[1].equalsIgnoreCase("set")) {
-				if (!player.hasPermission("towny.meta.modify")) {
-					TownyMessaging.sendErrorMsg("You don't have permissions for this.");
-					return false;
-				}
 				CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 				if (townBlock.hasMeta())
 				{
