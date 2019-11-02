@@ -1,11 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public enum CustomDataFieldType {
     IntegerField(0, "Integer"), StringField(1, "String"), BooleanField(2, "Boolean"), DecimalField(3,"Decimal");
     
