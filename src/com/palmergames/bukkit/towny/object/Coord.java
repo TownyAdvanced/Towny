@@ -2,13 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A class to hold and calculate coordinates in a grid according to the size

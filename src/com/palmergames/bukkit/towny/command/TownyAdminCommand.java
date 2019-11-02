@@ -1470,18 +1470,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 
-				TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " is not part of this plot, if possible please add it");
+				TownyMessaging.sendErrorMsg(player,  "Key " + mdKey + " is not part of this plot, if possible please add it");
 
 				return false;
 
 			}
 		} else if (split[1].equalsIgnoreCase("add")) {
-
-			if (!player.hasPermission("towny.meta.add")) {
-				TownyMessaging.sendErrorMsg("You don't have permissions for this.");
-				return false;
-			}
-			
 			String mdKey = split[2];
 
 			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
@@ -1493,7 +1487,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (townBlock.hasMeta()) {
 				for (CustomDataField cdf: townBlock.getMetadata()) {
 					if (cdf.equals(md)) {
-						TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " already exists!");
+						TownyMessaging.sendErrorMsg(player, "Key " + mdKey + " already exists!");
 						return false;
 					}
 				}
