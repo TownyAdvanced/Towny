@@ -36,7 +36,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -138,7 +137,7 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		ConfirmationHandler.initialize(this);
-	
+
 		if (load()) {
 			// Setup bukkit command interfaces
 			registerSpecialCommands();
@@ -167,7 +166,7 @@ public class Towny extends JavaPlugin {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
 		}
-		
+
 		registerEvents();
 
 		LOGGER.info("=============================================================");
@@ -185,15 +184,6 @@ public class Towny extends JavaPlugin {
 					townyUniverse.onLogin(player);
 				}
 		}
-		
-		IntegerDataField level = new IntegerDataField("level", 0);
-		try {
-			TownyAPI.getInstance().registerCustomDataField(level);
-		} catch (Exception e) {
-			getLogger().info(e.getMessage());
-		}
-		
-		
 	}
 
 	public void setWorldFlags() {
