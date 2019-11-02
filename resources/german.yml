@@ -1,5 +1,5 @@
 name: Towny
-version: 0.58
+version: 0.59
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -973,3 +973,6 @@ homeblock: 'Heimatblock'
 townblock: 'Stadtblock'
 outpost: 'Aussenposten'
 msg_err_not_same_town: '&b%s doesn''t belong to your town.'
+
+# Added in 0.59:
+msg_modes_set: 'Modes set: '
