@@ -1309,6 +1309,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 4) {
 			player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
 			player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+			player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
 			return;
 		}
 
@@ -1431,6 +1432,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length < 3) {
 			player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+			player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+			player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
 			return false;
 		}
 
