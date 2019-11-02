@@ -2829,5 +2829,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS);
 	}
 	
+	public static boolean isTownListRandom() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
+	}
+	
 }
 

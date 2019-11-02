@@ -3724,3 +3724,8 @@ v0.92.0.11:
   - Fix toggling debug mode off stopping all MC logging, courtesy of ArticDive in PR #3485
     - Closes ticket #3468
   - Make /res screen display title and surname if they are present, falling back to the king/mayor prefix/postfix.
+  - New Config Option: global_town_settings.display_town_list_randomly
+    - Default: false
+    - If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts.
+    - Closes ticket #3456
+  - Added /town list ? & /nation list ? pages

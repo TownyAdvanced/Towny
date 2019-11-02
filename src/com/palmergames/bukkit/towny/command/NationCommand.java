@@ -869,6 +869,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listNations(CommandSender sender, String[] split) {
+		
+		if (split[1].equals("?")) {
+			sender.sendMessage(ChatTools.formatTitle("/nation list"));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by residents", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by towns", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by open", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by balance", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by name", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by townblocks", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "by online", ""));
+			return;
+		}
 		List<Nation> nationsToSort = TownyUniverse.getInstance().getDataSource().getNations();
 
 		int page = 1;

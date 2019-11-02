@@ -474,6 +474,11 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords."
 	),
+	GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY(
+			"global_town_settings.display_town_list_randomly",
+			"false",
+			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
+	),
 	
 	GNATION_SETTINGS(
 			"global_nation_settings",

@@ -935,6 +935,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(CommandSender sender, String[] split) {
 
+		
+		if (split[1].equals("?")) {
+			sender.sendMessage(ChatTools.formatTitle("/town list"));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by residents", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by open", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by balance", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by name", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by townblocks", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by online", ""));
+			return;
+		}
 		List<Town> townsToSort = TownyUniverse.getInstance().getDataSource().getTowns();
 		int page = 1;
 		boolean pageSet = false;
@@ -1012,7 +1023,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try {
-			Collections.sort(townsToSort, comparator);
+			if (!TownySettings.isTownListRandom())
+				Collections.sort(townsToSort, comparator);
+			else 
+				Collections.shuffle(townsToSort);
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
 			return;
@@ -1025,13 +1039,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = townsToSort.get(i);
-			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")";
+			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
 			if (town.isOpen())
 				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
 		}
 		sender.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
-				Colors.Blue + TownySettings.getLangString("town_name") + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents"),
+				Colors.Blue + TownySettings.getLangString("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents")),
 				townsformatted, TownySettings.getListPageMsg(page, total)
 				)
 		);
