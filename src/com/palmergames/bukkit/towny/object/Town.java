@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -67,7 +68,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private HashSet<CustomDataField> metadata = null;
-	private boolean hasMeta = (getMetadata() == null);
+	private boolean hasMeta = false;
 
 	public Town(String name) {
 		super(name);
@@ -1284,8 +1285,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void addMetaData(CustomDataField md) {
 		if (getMetadata() == null)
 			metadata = new HashSet<>();
-
+		
 		getMetadata().add(md);
+
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public void removeMetaData(CustomDataField md) {
@@ -1293,6 +1296,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			return;
 
 		getMetadata().remove(md);
+		
+		if (getMetadata().size() == 0)
+			this.metadata = null;
+
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public HashSet<CustomDataField> getMetadata() {
@@ -1300,7 +1308,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public boolean hasMeta() {
-		return hasMeta;
+		return getMetadata() != null;
 	}
 
 	public void setMetadata(String str) {

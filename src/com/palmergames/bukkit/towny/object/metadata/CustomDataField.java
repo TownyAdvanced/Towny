@@ -114,4 +114,20 @@ public abstract class CustomDataField<T> {
 		// Use the key as a unique id
 		return getKey().hashCode();
 	}
+	
+	public CustomDataField newCopy() {
+		switch (type) {
+			case BooleanField:
+				return new BooleanDataField(getKey(), (Boolean)getValue());
+			case IntegerField:
+				return new IntegerDataField(getKey(), (Integer)getValue());
+			case DecimalField:
+				return new DecimalDataField(getKey(), (Double)getValue());
+			case StringField:
+				return new StringDataField(getKey(), (String)getValue());
+		}
+		
+		return null;
+	}
+	
 }

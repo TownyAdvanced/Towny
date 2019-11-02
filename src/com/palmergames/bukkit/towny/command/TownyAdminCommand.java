@@ -1348,9 +1348,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 
-				TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " is not part of this town, if possible please add it");
-
-				return;
+				TownyMessaging.sendErrorMsg(player, "Key " + mdKey + " is not part of this town, if possible please add it");
 
 			}
 		} else if (split[2].equalsIgnoreCase("add")) {
@@ -1366,18 +1364,37 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasMeta()) {
 				for (CustomDataField cdf : town.getMetadata()) {
 					if (cdf.equals(md)) {
-						TownyMessaging.sendErrorMsg(player, ChatColor.GREEN + "Key " + mdKey + " already exists!");
+						TownyMessaging.sendErrorMsg(player, "Key " + mdKey + " already exists!");
 						return;
 					}
 				}
 			}
 
 			player.sendMessage(ChatColor.GREEN + "Custom data was successfully added to townblock!");
+			
+			town.addMetaData(md.newCopy());
+			
+		} else if (split[2].equalsIgnoreCase("remove")) {
+			String mdKey = split[3];
 
-			town.addMetaData(md);
+			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
+				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
+				return;
+			}
 
-			// Save.
-			townyUniverse.getDataSource().saveTown(town);
+			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+
+			if (town.hasMeta()) {
+				for (CustomDataField cdf : town.getMetadata()) {
+					if (cdf.equals(md)) {
+						town.removeMetaData(cdf);
+						player.sendMessage(ChatColor.GREEN + "Data successfully deleted!");
+						return;
+					}
+				}
+			}
+			
+			TownyMessaging.sendErrorMsg(player, "Key cannot be deleted because it does not exist!");
 		}
 	}
 	
@@ -1482,13 +1499,33 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-
 			player.sendMessage(ChatColor.GREEN + "Custom data was successfully added to townblock!");
 
-			townBlock.addMetaData(md);
+			townBlock.addMetaData(md.newCopy());
+			
+		} else if (split[1].equalsIgnoreCase("remove")) {
+			String mdKey = split[2];
 
-			// Save.
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
+				TownyMessaging.sendErrorMsg(player, "The metadata for " + "\"" + mdKey + "\"" + " is not registered!");
+				return false;
+			}
+
+			CustomDataField md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+
+			if (townBlock.hasMeta()) {
+				for (CustomDataField cdf : townBlock.getMetadata()) {
+					if (cdf.equals(md)) {
+						townBlock.removeMetaData(cdf);
+						player.sendMessage(ChatColor.GREEN + "Data successfully deleted!");
+						return true;
+					}
+				}
+			}
+
+			TownyMessaging.sendErrorMsg(player, "Key cannot be deleted because it does not exist!");
+			
+			return false;
 		}
 		
 		return true;
