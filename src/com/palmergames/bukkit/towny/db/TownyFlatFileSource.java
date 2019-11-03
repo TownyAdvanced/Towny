@@ -1747,7 +1747,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				md.append(cdf.toString()).append(";");
 			}
 		}
-		Towny.getPlugin().getLogger().info(md.toString());
 		list.add("metadata=" + md.toString());
 
 		/*
