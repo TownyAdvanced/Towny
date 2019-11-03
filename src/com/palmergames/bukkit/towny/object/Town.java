@@ -67,7 +67,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private HashSet<CustomDataField> metadata = null;
-	private boolean hasMeta = false;
 
 	public Town(String name) {
 		super(name);

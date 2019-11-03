@@ -28,7 +28,6 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private boolean hasMeta = false;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();

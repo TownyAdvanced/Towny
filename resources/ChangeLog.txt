@@ -3729,3 +3729,24 @@ v0.92.0.11:
     - If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts.
     - Closes ticket #3456
   - Added /town list ? & /nation list ? pages
+  - New Feature: Town and TownBlock Metadata, courtesy of Siris.
+    - Plugins or townyadmins can now place metadata onto Towns and TownBlocks.
+    - Metadata keys must already be registered by a plugin.
+    - These metadata will be saved and loaded to/from the Towny database by Towny.
+    - Until the github wiki is updated for 0.95.1.0 please reference: https://github.com/TownyAdvanced/Towny/pull/3482
+  - New Command: /ta town [townname] meta, courtesy of Siris.
+    - Used to view a town's metadata.  
+  - New Command: /ta town [townname] meta set [key] [value], courtesy of Siris
+    - Sets a metadata value
+    - Used by admins to manipulate metadata
+  - New Command: /ta town [townname] meta [add|remove] [key], courtesy of Siris
+    - Adds or removes a metadata
+    - Used by admins to manipulate metadata
+  - New Command: /ta plot meta, courtesy of Siris.
+    - Used to view a townblock's metadata.
+  - New Command: /ta plot meta set [key] [value], courtesy of Siris
+    - Sets a metadata value
+    - Used by admins to manipulate metadata
+  - New Command: /ta plot meta [add|remove] [key], courtesy of Siris
+    - Adds or removes a metadata
+    - Used by admins to manipulate metadata

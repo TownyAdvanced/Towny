@@ -98,6 +98,8 @@ public abstract class CustomDataField<T> {
                     throw new InvalidMetadataTypeException(type);
                 }
                 break;
+            default:
+            	break;
         }
     }
     
