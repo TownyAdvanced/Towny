@@ -19,7 +19,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -41,7 +41,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private List<Town> towns = new ArrayList<Town>();
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
-	private List<SiegeFront> siegeFronts = new ArrayList<SiegeFront>();
+	private List<SiegeZone> siegeFronts = new ArrayList<SiegeZone>();
 	private Town capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
@@ -413,7 +413,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
-	public void removeSiegeFront(SiegeFront siegeFront) {
+	public void removeSiegeZone(SiegeZone siegeFront) {
 		siegeFronts.remove(siegeFront);
 		//Todo - do we need this???
 		//BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
@@ -427,7 +427,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	private void removeAllSiegeFronts() {
 
-		for (SiegeFront siegeFront : new ArrayList<SiegeFront>(siegeFronts))
+		for (SiegeZone siegeFront : new ArrayList<SiegeZone>(siegeFronts))
 			siegeFronts.remove(siegeFront);
 	}
 
@@ -744,13 +744,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return spawnCost;
 	}
 
-	public void addSiegeFront(SiegeFront siegeFront) {
+	public void addSiegeZone(SiegeZone siegeFront) {
 		siegeFronts.add(siegeFront);
 	}
 
 	public List<Town> getTownsUnderSiegeAttack() {
 		List<Town> result = new ArrayList<Town>();
-		for(SiegeFront siegeFront: siegeFronts) {
+		for(SiegeZone siegeFront: siegeFronts) {
 			result.add(siegeFront.getSiege().getDefendingTown());
 		}
 		return result;
@@ -758,7 +758,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public List<Town> getTownsUnderActiveSiegeAttack() {
 		List<Town> result = new ArrayList<Town>();
-		for(SiegeFront siegeFront: siegeFronts) {
+		for(SiegeZone siegeFront: siegeFronts) {
 			if(siegeFront.isActive()
 					&& siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				result.add(siegeFront.getSiege().getDefendingTown());
@@ -771,7 +771,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public List<Town> getTownsUnderSiegeDefence() {
 		List<Town> result = new ArrayList<Town>();
 		for(Town town: towns) {
-			if(town.hasSiegeFront() && town.getSiege().getAttackerWinner() != this) {
+			if(town.hasSiege() && town.getSiege().getAttackerWinner() != this) {
 				result.add(town);
 			}
 		}
@@ -781,7 +781,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public List<Town> getTownsUnderActiveSiegeDefence() {
 		List<Town> result = new ArrayList<Town>();
 		for(Town town: towns) {
-			if(town.hasSiegeFront() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
+			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				result.add(town);
 			}
 		}
@@ -789,12 +789,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public boolean isNationAttackingTown(Town town) {
-		return town.hasSiegeFront()
+		return town.hasSiege()
 				&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS
-				&& town.getSiege().getSiegeFronts().containsKey(this);
+				&& town.getSiege().getSiegeZones().containsKey(this);
 	}
 
-	public List<SiegeFront> getSiegeFronts() {
+	public List<SiegeZone> getSiegeFronts() {
 		return siegeFronts;
 	}
 

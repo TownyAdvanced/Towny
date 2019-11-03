@@ -3,12 +3,9 @@ package com.palmergames.bukkit.towny.war.siegewar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
-import com.palmergames.bukkit.util.BukkitTools;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +91,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 					//Siege is finished.
 					//Wait for siege cooldown to end then delete siege
-					if (currentTime > siege.getDefendingTown().getSiegeCooldownEndTime()) {
+					if (currentTime > siege.getDefendingTown().getSiegeImmunityEndTime()) {
 						TownyUniverse.getDataSource().removeSiege(siege);
 						continue;
 					}

@@ -17,7 +17,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -62,7 +62,7 @@ public class TownyUniverse extends TownyObject {
 	protected Hashtable<String, Town> towns = new Hashtable<>();
 	protected Hashtable<String, Nation> nations = new Hashtable<>();
 	protected Hashtable<String, Siege> sieges = new Hashtable<>();
-	protected Hashtable<String, SiegeFront> siegeFronts = new Hashtable<>();
+	protected Hashtable<String, SiegeZone> siegeFronts = new Hashtable<>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<>();
 
 

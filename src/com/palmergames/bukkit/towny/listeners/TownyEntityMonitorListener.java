@@ -17,7 +17,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -28,8 +28,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-
-import java.util.List;
 
 //import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -456,7 +454,7 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 
 		//Check if the player died in one of their nation's active siegefronts
-		for (SiegeFront siegeFront : nation.getSiegeFronts()) {
+		for (SiegeZone siegeFront : nation.getSiegeFronts()) {
 			if(siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				for (TownBlock townBlock : siegeFront.getSiege().getDefendingTown().getTownBlocks()) {
 
@@ -511,7 +509,7 @@ public class TownyEntityMonitorListener implements Listener {
 					&& attackerResident.hasTown()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()) {
-				for(SiegeFront siegeFront: defenderResident.getTown().getNation().getSiegeFronts()) {
+				for(SiegeZone siegeFront: defenderResident.getTown().getNation().getSiegeFronts()) {
 					if(defenderResident.getTown() == siegeFront.getSiege().getDefendingTown()) {
 						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
 						return;

@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -1019,23 +1019,23 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("siegeCooldownEndTime");
 				if (line != null) {
 					try {
-						town.setSiegeCooldownEndTime(Long.parseLong(line));
+						town.setSiegeImmunityEndTime(Long.parseLong(line));
 					} catch (Exception e) {
-						town.setSiegeCooldownEndTime(0);
+						town.setSiegeImmunityEndTime(0);
 					}
 				} else {
-					town.setSiegeCooldownEndTime(0);
+					town.setSiegeImmunityEndTime(0);
 				}
 
 				line = kvFile.get("revoltCooldownEndTime");
 				if (line != null) {
 					try {
-						town.setRevoltCooldownEndTime(Long.parseLong(line));
+						town.setRevoltImmunityEndTime(Long.parseLong(line));
 					} catch (Exception e) {
-						town.setRevoltCooldownEndTime(0);
+						town.setRevoltImmunityEndTime(0);
 					}
 				} else {
-					town.setRevoltCooldownEndTime(0);
+					town.setRevoltImmunityEndTime(0);
 				}
 
 			} catch (Exception e) {
@@ -1136,7 +1136,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 						if (!token.isEmpty()) {
 							Siege siege = getSiege(token);
 							if (siege != null)
-								nation.addSiegeFront(siege);
+								nation.addSiegeZone(siege);
 						}
 					}
 				}
@@ -1262,9 +1262,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 				try {
 					line = kvFile.get("actualStartTime");
-					siege.setActualStartTime(Long.parseLong(line));
+					siege.setStartTime(Long.parseLong(line));
 				} catch (Exception e) {
-					siege.setActualStartTime(0);
+					siege.setStartTime(0);
 				}
 
 				try {
@@ -1285,15 +1285,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = kvFile.get("siegeStatsDefenders");
 					siege.setDefenderSiegeFront(SiegeWarDataUtil.unpackSiegeStatsBlob(line));
 				} catch (Exception e) {
-					siege.setDefenderSiegeFront(new SiegeFront());
+					siege.setDefenderSiegeFront(new SiegeZone());
 				}
 
 				try {
 					line = kvFile.get("siegeStatsAttackers");
-					siege.setSiegeFronts(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
+					siege.setSiegeZones(SiegeWarDataUtil.unpackSiegeStatsAttackersMapBlob(line));
 
 				} catch (Exception e) {
-					siege.setSiegeFronts(new HashMap<Nation,SiegeFront>());
+					siege.setSiegeZones(new HashMap<Nation,SiegeZone>());
 				}
 
 			} catch (Exception e) {
@@ -2007,9 +2007,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
 		// Sieges & Revolts
-		list.add("siege=" + Boolean.toString(town.hasSiegeFront()));
-		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeCooldownEndTime()));
-		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltCooldownEndTime()));
+		list.add("siege=" + Boolean.toString(town.hasSiege()));
+		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeImmunityEndTime()));
+		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltImmunityEndTime()));
 
 		/*
 		 *  Make sure we only save in async
@@ -2090,7 +2090,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		if(siege.hasAttackerWinner()) {
 			list.add("attackerWinner=" + siege.getAttackerWinner().getName());
 		}
-		list.add("actualStartTime=" + Long.toString(siege.getActualStartTime()));
+		list.add("actualStartTime=" + Long.toString(siege.getStartTime()));
 		list.add("scheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 		list.add("actualEndTime=" + Long.toString(siege.getActualEndTime()));
 		list.add("nextUpkeepTime=" + Long.toString(siege.getNextUpkeepTime()));
@@ -2098,7 +2098,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.addAll(getSerializedSiegeCombatantData(null, siege.getDefenderSiegeFront()));
 		list.add("siegeStatsAttackers:");
 		list.add("[");
-		list.addAll(getSerializedAttackerCombatantsMap(siege.getSiegeFronts()));
+		list.addAll(getSerializedAttackerCombatantsMap(siege.getSiegeZones()));
 		list.add("]");
 
 		/*
@@ -2110,22 +2110,22 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	private List<String> getSerializedSiegeCombatantData(Nation nation, SiegeFront combatantData) {
+	private List<String> getSerializedSiegeCombatantData(Nation nation, SiegeZone combatantData) {
 		List<String>list = new ArrayList<String>();
 		list.add("{");
 		list.add("nation=" + nation.getName());
 		list.add("active=" + combatantData.isActive());
-		list.add("siegePointsTotal=" + combatantData.getSiegePointsTotal());
+		list.add("siegePointsTotal=" + combatantData.getSiegePoints());
 		list.add("siegeBannerLocation=" +combatantData.getSiegeBannerLocationForSerialization());
 		list.add("playerArrivalTimeMap=" + combatantData.getPlayerArrivalTimeMapForSerialization());
 		list.add("}");
 		return list;
 	}
 
-	private List<String> getSerializedAttackerCombatantsMap(Map<Nation,SiegeFront> attackersMap) {
+	private List<String> getSerializedAttackerCombatantsMap(Map<Nation,SiegeZone> attackersMap) {
 		List<String>list = new ArrayList<>();
 		boolean firstEntry = false;
-		for(Map.Entry<Nation, SiegeFront> entry: attackersMap.entrySet()) {
+		for(Map.Entry<Nation, SiegeZone> entry: attackersMap.entrySet()) {
 			if(firstEntry){
 				firstEntry = false;
 			} else {

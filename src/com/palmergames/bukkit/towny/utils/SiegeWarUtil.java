@@ -9,7 +9,7 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Location;
@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Anonymoose on 19/05/2019.
@@ -36,11 +37,11 @@ public class SiegeWarUtil {
                                     Town defendingTown) throws TownyException {
 
         Siege siege;
-        SiegeFront defenderSiegeFront =null;
-        SiegeFront attackerSiegeFront;
+        SiegeZone defenderSiegeFront =null;
+        SiegeZone siegeZone;
         boolean newSiege;
 
-        if(!defendingTown.hasSiegeFront()) {
+        if(!defendingTown.hasSiege()) {
             newSiege = true;
 
             //Create Siege
@@ -50,48 +51,39 @@ public class SiegeWarUtil {
             siege.setTownPlundered(false);
             siege.setTownInvaded(false);
             siege.setAttackerWinner(null);
-            siege.setActualStartTime(System.currentTimeMillis());
+            siege.setStartTime(System.currentTimeMillis());
             siege.setScheduledEndTime((System.currentTimeMillis() +
                     ((long)(TownySettings.getWarSiegeMaxHoldoutTimeHours() * ONE_HOUR_IN_MILLIS))));
             siege.setActualEndTime(0);
             siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
+            defendingTown.setSiege(siege);
 
-            ///Create defender siege Front
-            TownyUniverse.getDataSource().newSiegeFront(defendingTown.getName(), null);
-            defenderSiegeFront = TownyUniverse.getDataSource().getSiegeFront(defendingTown.getName(), null);
-            defenderSiegeFront.setActive(true);
-            defenderSiegeFront.setSiege(siege);
-            siege.setDefenderSiegeFront(defenderSiegeFront);
-            defendingTown.setSiege(defenderSiegeFront);
         } else {
             //Get Siege
             newSiege = false;
             siege = TownyUniverse.getDataSource().getSiege(defendingTown.getName());
         }
 
-        //Create attacker siege front
+        //Create siege zone
         TownyUniverse.getDataSource().newSiegeFront(defendingTown.getName(), attackingNation.getName());
-        attackerSiegeFront = TownyUniverse.getDataSource().getSiegeFront(defendingTown.getName(), attackingNation.getName());
-        attackerSiegeFront.setActive(true);
-        attackerSiegeFront.setSiege(siege);
-        attackerSiegeFront.setSiegeBannerLocation(block.getLocation());
-        siege.getSiegeFronts().put(attackingNation, attackerSiegeFront);
-        attackingNation.addSiegeFront(attackerSiegeFront);
+        siegeZone = TownyUniverse.getDataSource().getSiegeZone(defendingTown.getName(), attackingNation.getName());
+        siegeZone.setActive(true);
+        siegeZone.setSiege(siege);
+        siegeZone.setSiegeBannerLocation(block.getLocation());
+        siege.getSiegeZones().put(attackingNation, siegeZone);
+        attackingNation.addSiegeZone(siegeZone);
 
-        //Save siegefront, siege, nation, and town
-        TownyUniverse.getDataSource().saveSiegeFront(attackerSiegeFront);
+        //Save siegezone, siege, nation, and town
+        TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
         TownyUniverse.getDataSource().saveSiege(siege);
         TownyUniverse.getDataSource().saveNation(attackingNation);
         TownyUniverse.getDataSource().saveTown(defendingTown);
+        TownyUniverse.getDataSource().saveSiegeZoneList();
 
-        //If new siege,save defender siege front and siege list
+        //If new siege,save siege list
         if(newSiege) {
-            TownyUniverse.getDataSource().saveSiegeFront(defenderSiegeFront);
             TownyUniverse.getDataSource().saveSiegeList();
         }
-
-        //Save siegefront list
-        TownyUniverse.getDataSource().saveSiegeFrontList();
 
         //Send global message;
         if(newSiege) {
@@ -122,7 +114,7 @@ public class SiegeWarUtil {
                             TownyFormatter.getFormattedNationName(town.getNation())));
 
             //Turn OFF siege cooldown
-            town.setSiegeCooldownEndTime(0);
+            town.setSiegeImmunityEndTime(0);
 
             //Tell town that siege cooldown has been reset to off
             TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_siege_war_post_revolt_siege_cooldown_reset"));
@@ -130,7 +122,7 @@ public class SiegeWarUtil {
             //Turn ON revolt cooldown
             long revoltCooldownDurationMillis = (long)(TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS);
             long revoltCooldownEndTime= System.currentTimeMillis() + revoltCooldownDurationMillis;
-            town.setRevoltCooldownEndTime(revoltCooldownEndTime);
+            town.setRevoltImmunityEndTime(revoltCooldownEndTime);
 
             if(nation.getTowns().size() == 0) {
                 TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
@@ -188,10 +180,10 @@ public class SiegeWarUtil {
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
             Town town = resident.getTown();
 
-            if(!town.hasSiegeFront())
+            if(!town.hasSiege())
                 throw new TownyException("Your town is not under siege");
 
-            Siege siege = town.getSiege().getSiege();
+            Siege siege = town.getSiege();
 
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
                 throw new TownyException("The siege is over");
@@ -439,12 +431,12 @@ public class SiegeWarUtil {
 
         //Each attacking nation who is involved must pay upkeep
         if(upkeepCost > 1) {
-            for (Nation nation : siege.getSiegeFronts().keySet()) {
+            for (Nation nation : siege.getSiegeZones().keySet()) {
                 try {
                     if (nation.canPayFromHoldings(upkeepCost))
                         nation.pay(upkeepCost, "Cost of maintaining siege.");
                     else {
-                        siege.getSiegeFronts().get(nation).setActive(false);
+                        siege.getSiegeZones().get(nation).setActive(false);
                         TownyMessaging.sendGlobalMessage("The nation of " + nation.getName() +
                                 " has been forced to abandon the siege on the town of " + siege.getDefendingTown().getName() +
                                 ", due to lack of funds.");
@@ -471,7 +463,7 @@ public class SiegeWarUtil {
     }
 
     public static void attackerAbandon(Nation nation, Siege siege) {
-        siege.getSiegeFronts().get(nation).setActive(false);
+        siege.getSiegeZones().get(nation).setActive(false);
         TownyMessaging.sendGlobalMessage(nation.getName() + " has abandoned their attack on" + siege.getDefendingTown().getName());
 
         if (siege.getActiveAttackers().size() == 0) {
@@ -495,34 +487,37 @@ public class SiegeWarUtil {
     public static void defenderSurrender(Siege siege) throws TownyException {
         siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
         siege.setActualEndTime(System.currentTimeMillis());
-        siege.getDefenderSiegeFront().setActive(false);
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
         activateSiegeCooldown(siege);
         TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
 
     private static void activateSiegeCooldown(Siege siege) {
-        double siegeDuration = siege.getActualEndTime() - siege.getActualStartTime();
+        double siegeDuration = siege.getActualEndTime() - siege.getStartTime();
         double cooldownDuration = siegeDuration * TownySettings.getWarSiegeSiegeCooldownModifier();
-        siege.getDefendingTown().setSiegeCooldownEndTime(System.currentTimeMillis() + (long)(cooldownDuration + 0.5));
+        siege.getDefendingTown().setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(cooldownDuration + 0.5));
     }
 
     private static void activateRevoltCooldown(Siege siege) {
         long cooldownDuration = (long)(TownySettings.getWarSiegeRevoltCooldownHours() * ONE_HOUR_IN_MILLIS);
-        siege.getDefendingTown().setRevoltCooldownEndTime(System.currentTimeMillis() + cooldownDuration);
+        siege.getDefendingTown().setRevoltImmunityEndTime(System.currentTimeMillis() + cooldownDuration);
     }
 
     public static TownyObject calculateSiegeWinner(Siege siege) {
-        TownyObject winner = siege.getDefendingTown();
-        int winningPoints = siege.getDefenderSiegeFront().getSiegePointsTotal();
+        //If all siege zones are negative points, defender wins
+        //Otherwise, the siege zone attacker with the highest points wins
 
-        for(Nation attackingNation: siege.getSiegeFronts().keySet()) {
-            SiegeFront stats = siege.getSiegeFronts().get(attackingNation);
-            if(stats.getSiegePointsTotal() > winningPoints) {
-                winner = attackingNation;
-                winningPoints = stats.getSiegePointsTotal();
+        TownyObject winner = siege.getDefendingTown();
+        int winningPoints = 0;
+
+        for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+            if(entry.getValue().isActive()
+                && entry.getValue().getSiegePoints() > winningPoints) {
+                winner = entry.getKey();
+                winningPoints = entry.getValue().getSiegePoints();
             }
         }
+
         return winner;
     }
 
@@ -546,7 +541,7 @@ public class SiegeWarUtil {
                 continue; //Player not in a town
 
             Town town = townBlockWherePlayerIsLocated.getTown();
-            if (!town.hasSiegeFront())
+            if (!town.hasSiege())
                 continue;  //Town not under siege
 
             if (!townsUnderActiveAttackFromPlayer.contains(town))
@@ -557,8 +552,10 @@ public class SiegeWarUtil {
 
             //Score points
             Nation playerNation = resident.getTown().getNation();
-            SiegeFront attackerStats = town.getSiege().getSiege().getAttackerSiegeFronts().get(playerNation);
-            attackerStats.addSiegePoints(siegePointsPerAttackingPlayer);
+
+            //TODO - This whole area needs overhaul
+            //SiegeZone attackerStats = town.getSiege().getAttackerSiegeFronts().get(playerNation);
+            //attackerStats.addSiegePoints(siegePointsPerAttackingPlayer);
 
             //Mark this town as having attackersin siege zone
             townsWithAttackersInSiegeZone.add(town);
@@ -578,10 +575,10 @@ public class SiegeWarUtil {
                 continue; //Player not in a town. Cannot defend
 
             Town townOfPlayer = resident.getTown();
-            if (!townOfPlayer.hasSiegeFront())
+            if (!townOfPlayer.hasSiege())
                 continue;  //Town not under siege
 
-            if(townOfPlayer.getSiege().getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+            if(townOfPlayer.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
                 continue;   //Siege over
 
             TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
@@ -607,7 +604,8 @@ public class SiegeWarUtil {
             */
 
             //Score points
-            townOfPlayer.getSiege().addSiegePoints(siegePointsPerDefendingPlayer);
+            //townOfPlayer.getSiege().addSiegePoints(siegePointsPerDefendingPlayer);
+            //TODO - This whole area needs overhaul
         }
     }
 
@@ -848,7 +846,7 @@ public class SiegeWarUtil {
             //Location must match
             //Siege must be in progress
             //Attack must be active
-            for (SiegeFront attackerData : siege.getSiegeFronts().values()) {
+            for (SiegeZone attackerData : siege.getSiegeZones().values()) {
                 if (attackerData.getSiegeBannerLocation().equals(location)) {
                     if (siege.getStatus() == SiegeStatus.IN_PROGRESS && attackerData.isActive()) {
                         return siege;

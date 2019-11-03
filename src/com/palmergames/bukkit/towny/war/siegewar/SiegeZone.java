@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -10,20 +11,20 @@ import java.util.Map;
 /**
  * Created by Goosius on 02/06/2019.
  */
-public class SiegeFront {
+public class SiegeZone {
 
     private Siege siege;
+    private Location siegeBannerLocation;
     private Nation attackingNation;
     private boolean active;
-    private int siegePointsTotal;
-    private Location siegeBannerLocation;
+    private int siegePoints;
     private Map<Player, Long> playerArrivalTimeMap; //player, timestamp of arrival in zone
 
-    public SiegeFront() {
+    public SiegeZone() {
         attackingNation = null;
         siege = null;
         active = false;
-        siegePointsTotal = 0;
+        siegePoints = 0;
         siegeBannerLocation = null;
         playerArrivalTimeMap = new HashMap<>();
     }
@@ -48,8 +49,8 @@ public class SiegeFront {
         return playerArrivalTimeMap;
     }
 
-    public Integer getSiegePointsTotal() {
-        return siegePointsTotal;
+    public Integer getSiegePoints() {
+        return siegePoints;
     }
 
     public void setActive(boolean active) {
@@ -60,12 +61,12 @@ public class SiegeFront {
         return active;
     }
 
-    public void setSiegePointsTotal(int siegePointsTotal) {
-        this.siegePointsTotal = siegePointsTotal;
+    public void setSiegePoints(int siegePoints) {
+        this.siegePoints = siegePoints;
     }
 
     public void addSiegePoints(int siegePointsForAttackingPlayer) {
-        siegePointsTotal += siegePointsForAttackingPlayer;
+        siegePoints += siegePointsForAttackingPlayer;
     }
 
     public String getSiegeBannerLocationForSerialization() {

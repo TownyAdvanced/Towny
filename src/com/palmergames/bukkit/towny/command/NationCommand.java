@@ -812,10 +812,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						//Begin revolt immunity
 						double revoltImmunityHours = TownySettings.getWarSiegeRevoltCooldownHours();
 						long revoltImmunityMillis = (long) ((revoltImmunityHours * 60 * 60 * 1000) + 0.5);
-						town.setRevoltCooldownEndTime(revoltImmunityMillis);
+						town.setRevoltImmunityEndTime(revoltImmunityMillis);
 
 						//Stop siege immunity
-						town.setSiegeCooldownEndTime(0);
+						town.setSiegeImmunityEndTime(0);
 					}
 				} else {
 					//If revolt is disabled, you can only leave if nation kicks you
@@ -2050,7 +2050,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
 			if(spawnBlock != null) {
 				Town town = spawnBlock.getTown();
-				if (town.hasSiegeFront() & town.getSiege().getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				if (town.hasSiege() & town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
 					throw new TownyException("Cannot spawn into a town which is under siege");
 			}
 

@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,27 +20,25 @@ public class Siege {
     private boolean townPlundered;
     private boolean townInvaded;
     private Nation attackerWinner;
-    private long actualStartTime;
-    private long scheduledEndTime;
-    private long actualEndTime;
+    private long startTime;           //Start of siege
+    private long scheduledEndTime;    //Scheduled end of siege
+    private long actualEndTime;       //Actual end time of siege
     private long nextUpkeepTime;
-    private int defenderSiegePointsTotal;
-    private Map<Player, Long> defenderPlayerArrivalTimeMap; //player, timestamp of arrival in zone
-    private Map<Nation, SiegeFront> siegeFronts;    //Attackers
+    private Map<Nation, SiegeZone> siegeZones;
 
     public Siege(Town defendingTown) {
         this.defendingTown = defendingTown;
         status = SiegeStatus.IN_PROGRESS;
         this.attackerWinner = null;
-        siegeFronts =new HashMap<>();
+        siegeZones =new HashMap<>();
     }
 
     public Town getDefendingTown() {
         return defendingTown;
     }
 
-    public Map<Nation, SiegeFront> getSiegeFronts() {
-        return siegeFronts;
+    public Map<Nation, SiegeZone> getSiegeZones() {
+        return siegeZones;
     }
 
     public long getScheduledEndTime() {
@@ -57,8 +54,8 @@ public class Siege {
         return nextUpkeepTime;
     }
 
-    public void setActualStartTime(long actualStartTime) {
-        this.actualStartTime = actualStartTime;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     public void setScheduledEndTime(long scheduledEndTime) {
@@ -73,19 +70,19 @@ public class Siege {
         this.nextUpkeepTime = nextUpkeepTime;
     }
 
-    public long getActualStartTime() {
-        return actualStartTime;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setSiegeFronts(Map<Nation, SiegeFront> siegeFronts) {
-        this.siegeFronts = siegeFronts;
+    public void setSiegeZones(Map<Nation, SiegeZone> siegeZones) {
+        this.siegeZones = siegeZones;
     }
 
     public List<Nation> getActiveAttackers() {
         List<Nation> result = new ArrayList<>();
-        for (Nation nation : new ArrayList<Nation>(siegeFronts.keySet())) {
-            if (siegeFronts.get(nation) != null
-                    && siegeFronts.get(nation).isActive()) {
+        for (Nation nation : new ArrayList<Nation>(siegeZones.keySet())) {
+            if (siegeZones.get(nation) != null
+                    && siegeZones.get(nation).isActive()) {
                 result.add(nation);
             }
         }

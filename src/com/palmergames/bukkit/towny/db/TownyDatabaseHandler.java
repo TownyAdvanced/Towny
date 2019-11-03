@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 
@@ -553,32 +554,27 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		//Remove siege
 		if(town.getSiege() != null) {
-
 			Siege siege = town.getSiege();
 
-			//Remove defenders siege front
-			universe.getSiegeFrontsMap().remove(town.getName(), null);
-			town.setSiege(null);
-
-			//Remove attacker siege fronts
-			Set<Nation> nations = siege.getSiegeFronts().keySet();
-			for(Nation nation: nations) {
-				universe.getSiegeFrontsMap().remove(town.getName(), nation.getName());
-				nation.removeSiegeFront(siege.getSiegeFronts().get(nation));
+			//Remove siege zones
+			for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+				entry.getKey().removeSiegeZone(entry.getValue());
+				universe.getSiegeZonesMap().remove(town.getName(), entry.getKey().getName());
 			}
 
 			//Remove siege
+			town.setSiege(null);
 			universe.getSiegesMap().remove(siege.getDefendingTown().getName().toLowerCase());
 
-			//Save data
-			deleteSiege(siege);
-			deleteSiegeFront(siege.getDefenderSiegeFront());
-			for(Nation nation: nations) {
-				saveNation(nation);
-				deleteSiegeFront(siege.getSiegeFronts().get(nation));
+			//Save siege & zone data
+			for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+				saveNation(entry.getKey());
+				deleteSiegeZone(entry.getValue());
 			}
+			deleteSiege(siege);
 
-			saveSiegeFrontList();
+			//Save list data
+			saveSiegeZoneList();
 			saveSiegeList();
 		}
 
@@ -652,25 +648,33 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//todo ????????? do we need this?
 		//BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
-		//Remove siege from universe
+		//Remove siege & zones from universe
 		universe.getSiegesMap().remove(siege.getDefendingTown().getName().toLowerCase());
+		for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+			universe.getSiegeZonesMap().remove(
+					entry.getKey().getName().toLowerCase(),
+					siege.getDefendingTown().getName().toLowerCase())
+		}
 
-		//Remove siege from nations
-		Set<Nation> nations = siege.getSiegeFronts().keySet();
-		for(Nation nation: nations) {
-			nation.removeSiegeFront(siege);
+		//Remove siege zones from nations
+		for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+			entry.getKey().removeSiegeZone(entry.getValue());
 		}
 
 		//Remove siege from town
 		siege.getDefendingTown().setSiege(null);
 
-		//Save changes to DB
+		//Save main data files
 		deleteSiege(siege);
-		for(Nation nation: nations) {
-			saveNation(nation);
+		for(Map.Entry<Nation,SiegeZone> entry: siege.getSiegeZones().entrySet()) {
+			deleteSiegeZone(entry.getValue());
+			saveNation(entry.getKey());
 		}
 		saveTown(siege.getDefendingTown());
+
+		//Save list files
 		saveSiegeList();
+		saveSiegeZoneList();
 
 		//Todo - do we need something like this?
 		//BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));

@@ -287,7 +287,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
 			if(spawnBlock != null && spawnBlock.hasTown()) {
 				Town townContainingSpawn = spawnBlock.getTown();
-				if (townContainingSpawn.hasSiegeFront() & townContainingSpawn.getSiege().getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				if (townContainingSpawn.hasSiege() & townContainingSpawn.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
 					throw new TownyException("Cannot spawn into a town which is under siege");
 			}
 

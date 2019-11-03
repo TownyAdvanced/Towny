@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -56,8 +55,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private UUID uuid;
 	private long registered;
 	private Siege siege;
-	private long siegeCooldownEndTime;
-	private long revoltCooldownEndTime;
+	private long siegeImmunityEndTime;
+	private long revoltImmunityEndTime;
 
 	public Town(String name) {
 
@@ -76,10 +75,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
 		siege = null;
-
-		siegeCooldownEndTime = System.currentTimeMillis()
+		siegeImmunityEndTime = System.currentTimeMillis()
 				+ (long)(TownySettings.getWarSiegeSiegeCooldownNewTownsHours() * ONE_HOUR_IN_MILLIS);
-		revoltCooldownEndTime = 0;
+		revoltImmunityEndTime = 0;
 	}
 
 	@Override
@@ -1274,10 +1272,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public boolean isSiegeCooldownActive() {
-		if(hasSiegeFront() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
+		if(hasSiege() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
 			return false; //Cooldown always off until the siege has finished
 
-		if(System.currentTimeMillis() < siegeCooldownEndTime) {
+		if(System.currentTimeMillis() < siegeImmunityEndTime) {
 			return true;
 		} else {
 			return false;
@@ -1285,36 +1283,36 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public int getRevoltCooldownRemainingMinutes() {
-		double resultDouble = (revoltCooldownEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
+		double resultDouble = (revoltImmunityEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
 		return (int) (resultDouble + 0.5);
 	}
 
 	public boolean isRevoltCooldownActive() {
-		return System.currentTimeMillis() < revoltCooldownEndTime;
+		return System.currentTimeMillis() < revoltImmunityEndTime;
 	}
 
-	public void setSiegeCooldownEndTime(long endTimeMillis) {
-		this.siegeCooldownEndTime = endTimeMillis;
+	public void setSiegeImmunityEndTime(long endTimeMillis) {
+		this.siegeImmunityEndTime = endTimeMillis;
 	}
 
-	public void setRevoltCooldownEndTime(long timeMillis) {
-		this.revoltCooldownEndTime = timeMillis;
+	public void setRevoltImmunityEndTime(long timeMillis) {
+		this.revoltImmunityEndTime = timeMillis;
 	}
 
-	public boolean hasSiegeFront() {
+	public boolean hasSiege() {
 		return siege != null;
 	}
 
-	public long getSiegeCooldownEndTime() {
-		return siegeCooldownEndTime;
+	public long getSiegeImmunityEndTime() {
+		return siegeImmunityEndTime;
 	}
 
-	public long getRevoltCooldownEndTime() {
-		return revoltCooldownEndTime;
+	public long getRevoltImmunityEndTime() {
+		return revoltImmunityEndTime;
 	}
 
 	public String getFormattedHoursUntilRevoltCooldownEnds() {
-		double hoursRemainingMillis = revoltCooldownEndTime - System.currentTimeMillis();
+		double hoursRemainingMillis = revoltImmunityEndTime - System.currentTimeMillis();
 		return SiegeWarUtil.getFormattedTimeValue(hoursRemainingMillis);
 	}
 
@@ -1327,7 +1325,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public String getFormattedHoursUntilSiegeCooldownEnds() {
-		double hoursUntilSiegeCooldownEnds = siegeCooldownEndTime - System.currentTimeMillis();
+		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
 		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 }

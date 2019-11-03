@@ -296,7 +296,7 @@ public class TownyBlockListener implements Listener {
 			Town residentTown = resident.getTown();
 			if (townWhereBlockWasPlaced != residentTown) {
 
-				if (!townWhereBlockWasPlaced.hasSiegeFront()) {
+				if (!townWhereBlockWasPlaced.hasSiege()) {
 					//There is no siege, evaluate attack request
 					return SiegeWarUtil.processAttackTownRequest(player, block);
 				} else {
@@ -322,7 +322,7 @@ public class TownyBlockListener implements Listener {
 			}
 
 			//Under Siege
-			if(townWhereBlockWasPlaced.hasSiegeFront()) {
+			if(townWhereBlockWasPlaced.hasSiege()) {
 				// Residents town - surrender
 				// Not residents town  abandon
 				if(townWhereBlockWasPlaced == resident.getTown()) {

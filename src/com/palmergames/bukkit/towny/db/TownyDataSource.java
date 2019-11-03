@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -14,7 +13,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeFront;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.util.FileMgmt;
 
 import org.bukkit.entity.Player;
@@ -159,7 +158,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveSiegeList();
 
-	abstract public boolean saveSiegeFrontList();
+	abstract public boolean saveSiegeZoneList();
 
 	abstract public boolean saveWorldList();
 
@@ -175,7 +174,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveSiege(Siege siege);
 
-	abstract public boolean saveSiegeFront(SiegeFront siegeFront);
+	abstract public boolean saveSiegeZone(SiegeZone siegeFront);
 
 	abstract public boolean saveWorld(TownyWorld world);
 
@@ -199,7 +198,7 @@ public abstract class TownyDataSource {
 
 	abstract public void deleteSiege(Siege siege);
 
-	abstract public void deleteSiegeFront(SiegeFront siegeFront);
+	abstract public void deleteSiegeZone(SiegeZone siegeFront);
 
 	abstract public void deleteWorld(TownyWorld world);
 
@@ -443,6 +442,6 @@ public abstract class TownyDataSource {
 
 	abstract public void newSiegeFront(String townName, String attackerName) throws AlreadyRegisteredException;
 
-	abstract public SiegeFront getSiegeFront(String townName, String attackerName) throws NotRegisteredException;
+	abstract public SiegeZone getSiegeZone(String townName, String attackerName) throws NotRegisteredException;
 
 }
