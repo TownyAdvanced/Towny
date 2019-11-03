@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -794,7 +795,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             String search;
 
             while (rs.next()) {
-
                 line = rs.getString("residents");
                 if (line != null) {
                     search = (line.contains("#")) ? "#" : ",";
@@ -961,8 +961,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 
                 /*
-				 * Attempt these for older databases.
-				 */
+                 * Attempt these for older databases.
+                 */
                 try {
 
                     line = rs.getString("townBlocks");
@@ -984,6 +984,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 } catch (NumberFormatException | NullPointerException e) {
                     town.setRegistered(0);
                 }
+
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						town.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+					
+				}
 
                 s.close();
                 return true;
@@ -1378,7 +1387,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
     }
 
-    @Override
+	@Override
     public boolean loadTownBlocks() {
 
         String line = "";
@@ -1437,7 +1446,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         }
 
                     boolean outpost = rs.getBoolean("outpost");
-                    if (line != null)
+                    if (line != null && !line.isEmpty())
                         try {
                             townBlock.setOutpost(outpost);
                         } catch (Exception ignored) {
@@ -1462,6 +1471,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                         townBlock.setLocked(result);
                     } catch (Exception ignored) {
                     }
+                    
+					try {
+						line = rs.getString("metadata");
+						if (line != null) {
+							townBlock.setMetadata(line);
+						}
+					} catch (SQLException ignored) {
+					}
     
                 }
 
@@ -1543,6 +1560,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("public", town.isPublic());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
+			if (town.hasMeta())
+				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
+			else
+				twn_hm.put("metadata", "");
         
             //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
@@ -1730,6 +1751,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             tb_hm.put("permissions", (townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
             tb_hm.put("locked", townBlock.isLocked());
             tb_hm.put("changed", townBlock.isChanged());
+            if (townBlock.hasMeta())
+				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
+			else
+				tb_hm.put("metadata", "");
 
             UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 

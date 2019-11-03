@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.HashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -44,6 +47,7 @@ public class TownyUniverse {
     private final Hashtable<String, Town> towns = new Hashtable<>();
     private final Hashtable<String, Nation> nations = new Hashtable<>();
     private final Hashtable<String, TownyWorld> worlds = new Hashtable<>();
+    private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -338,6 +342,14 @@ public class TownyUniverse {
         return false;
     }
     
+    public void addCustomCustomDataField(CustomDataField cdf) throws KeyAlreadyRegisteredException {
+    	
+    	if (this.getRegisteredMetadataMap().containsKey(cdf.getKey()))
+    		throw new KeyAlreadyRegisteredException();
+    	
+    	this.getRegisteredMetadataMap().put(cdf.getKey(), cdf);
+	}
+    
     public static TownyUniverse getInstance() {
         if (instance == null) {
             instance = new TownyUniverse();
@@ -351,5 +363,8 @@ public class TownyUniverse {
         towns.clear();
         residents.clear();
     }
-    
+
+	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+		return registeredMetadata;
+	}
 }

@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -47,6 +48,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.HashSet;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
@@ -892,6 +894,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setRegistered(0);
 					}
 				}
+
+				line = keys.get("metadata");
+				if (!line.isEmpty() && line != null)
+					town.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1437,6 +1443,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.removeTownBlock(townBlock);
 					}
 					
+					line = keys.get("metadata");
+					if (!line.isEmpty() && line != null) 
+						townBlock.setMetadata(line.trim());
+					
+					
 				} catch (Exception e) {
 					if (test == "town") {
 						TownyMessaging.sendDebugMsg("TownBlock file missing Town, deleting " + path);
@@ -1728,6 +1739,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (town.hasMeta()) {
+			HashSet<CustomDataField> tdata = town.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
+
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1974,6 +1995,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + townBlock.isChanged());
 
 		list.add("locked=" + townBlock.isLocked());
+		
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (townBlock.hasMeta()) {
+			HashSet<CustomDataField> tdata = townBlock.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+
+		list.add("metadata=" + md.toString());
 
 		/*
 		 *  Make sure we only save in async
