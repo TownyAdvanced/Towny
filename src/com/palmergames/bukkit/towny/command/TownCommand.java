@@ -934,17 +934,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(CommandSender sender, String[] split) {
-
-		if ( split.length < 3 || split[1].equals("?")) {
+		
+		if (split.length == 2 && split[1].equals("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/town list"));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by residents", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by open", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by balance", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by name", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by townblocks", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by online", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #}", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by residents", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by open", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by balance", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by name", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by townblocks", ""));
+			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by online", ""));
 			return;
 		}
+
 		List<Town> townsToSort = TownyUniverse.getInstance().getDataSource().getTowns();
 		int page = 1;
 		boolean pageSet = false;
@@ -1002,25 +1004,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 		}
-
-		if (page > total) {
-			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
-			return;
-		}
-		
-		if (comparator.equals(BY_OPEN)) {
+		if (comparator == BY_OPEN) {
 			List<Town> townsList = TownyUniverse.getInstance().getDataSource().getTowns();
 			List<Town> openTownsList = new ArrayList<>();
 			for (Town town : townsList) {
 				if (town.isOpen())
 					openTownsList.add(town);
 			}
-			if (!openTownsList.isEmpty())
+			if (!openTownsList.isEmpty()) {
 				townsToSort = openTownsList;
-			else
+				total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
+			} else {
 				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("no_open_towns"));
+				return;
+			}
 		}
 
+		if (page > total) {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getListNotEnoughPagesMsg(total));
+			return;
+		}
+		
 		try {
 			if (!TownySettings.isTownListRandom())
 				Collections.sort(townsToSort, comparator);
@@ -1030,21 +1034,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_error_comparator_failed"));
 			return;
 		}
-
+		
 		int iMax = page * 10;
 		if ((page * 10) > townsToSort.size()) {
 			iMax = townsToSort.size();
 		}
+
 		List<String> townsformatted = new ArrayList();
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Town town = townsToSort.get(i);
-			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
+			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
+					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + town.getNumResidents() + ")");
 			if (town.isOpen())
 				output += TownySettings.getLangString("status_title_open");
 			townsformatted.add(output);
 		}
 		sender.sendMessage(ChatTools.formatList(TownySettings.getLangString("town_plu"),
-				Colors.Blue + TownySettings.getLangString("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents")),
+				Colors.Blue + TownySettings.getLangString("town_name") + 
+				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("number_of_residents")),
 				townsformatted, TownySettings.getListPageMsg(page, total)
 				)
 		);
