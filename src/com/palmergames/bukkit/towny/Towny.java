@@ -169,13 +169,13 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
-		LOGGER.info("=============================================================");
+		System.out.println("=============================================================");
 		if (isError()) {
-			LOGGER.info("[WARNING] - ***** SAFE MODE ***** " + version);
+			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
-			LOGGER.info("[Towny] Version: " + version + " - Mod Enabled");
+			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
 		}
-		LOGGER.info("=============================================================");
+		System.out.println("=============================================================");
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -288,7 +288,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null) {
 			// groupManager = (GroupManager)test;
-			this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
+			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
 			using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
 		} else {
 			// Try Vault
@@ -300,13 +300,13 @@ public class Towny extends JavaPlugin {
 					test = null;
 					// Fall back to BukkitPermissions below
 				} else {
-					getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
+					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
 					using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
 				}
 			}
 
 			if (test == null) {
-				getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
 				using.add("BukkitPermissions");
 			}
 		}
@@ -351,7 +351,7 @@ public class Towny extends JavaPlugin {
 		}
 
 		if (using.size() > 0) {
-			LOGGER.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+			System.out.println("[Towny] Using: " + StringMgmt.join(using, ", "));
 		}
 
 
