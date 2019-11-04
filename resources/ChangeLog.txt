@@ -3729,7 +3729,7 @@ v0.92.0.11:
     - If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts.
     - Closes ticket #3456
   - Added /town list ? & /nation list ? pages
-  - New Feature: Town and TownBlock Metadata, courtesy of Siris.
+  - New Feature: Town and TownBlock Metadata, courtesy of Siris in PR #3482
     - Plugins or townyadmins can now place metadata onto Towns and TownBlocks.
     - Metadata keys must already be registered by a plugin.
     - These metadata will be saved and loaded to/from the Towny database by Towny.
@@ -3749,7 +3749,7 @@ v0.92.0.11:
     - Used by admins to manipulate metadata
   - New Command: /ta plot meta [add|remove] [key], courtesy of Siris
     - Adds or removes a metadata
-  - Swap out HashTables for ConcurrentHashMaps, courtesy of Silverwolfg11
+  - Swap out HashTables for ConcurrentHashMaps, courtesy of Silverwolfg11 in PR #3488
     - Should increase performance.
     - Used by admins to manipulate metadata
   - Fix /plot set outpost failing due to your own town's townblocks being too close.
