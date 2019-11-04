@@ -896,8 +896,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 
 				line = keys.get("metadata");
-				if (!line.isEmpty() && line != null)
-					town.setMetadata(line.trim());
+				if (line != null)
+					if (!line.isEmpty())
+						town.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1433,6 +1434,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
+
 					test = "town";
 					line = keys.get("town");
 					if (line.isEmpty()) {
@@ -1443,9 +1445,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.removeTownBlock(townBlock);
 					}
 					
+					test = "metadata";
 					line = keys.get("metadata");
-					if (!line.isEmpty() && line != null) 
-						townBlock.setMetadata(line.trim());
+					if (line != null)
+						if (!line.isEmpty())
+							townBlock.setMetadata(line.trim());
 					
 					
 				} catch (Exception e) {
