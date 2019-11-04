@@ -935,8 +935,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void listTowns(CommandSender sender, String[] split) {
 
-		
-		if (split[1].equals("?")) {
+		if ( split.length < 3 || split[1].equals("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/town list"));
 			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by residents", ""));
 			sender.sendMessage(ChatTools.formatCommand("", "/town list", "by open", ""));
