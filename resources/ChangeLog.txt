@@ -3752,3 +3752,5 @@ v0.92.0.11:
   - Swap out HashTables for ConcurrentHashMaps, courtesy of Silverwolfg11
     - Should increase performance.
     - Used by admins to manipulate metadata
+  - Fix /plot set outpost failing due to your own town's townblocks being too close.
+    - Closes ticket #3489

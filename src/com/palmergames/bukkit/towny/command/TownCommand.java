@@ -3141,11 +3141,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 
 					if (TownySettings.isAllowingOutposts()) {
-						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST.getNode()))
+						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode()))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 						
 						// Run various tests required by configuration/permissions through Util.
-						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin);
+						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
 						
 						if (world.hasTownBlock(key))
 							throw new TownyException(String.format(TownySettings.getLangString("msg_already_claimed_1"), key));

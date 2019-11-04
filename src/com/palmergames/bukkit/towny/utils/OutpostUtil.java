@@ -14,7 +14,7 @@ public class OutpostUtil {
 	 * @return - Returns true if all required tests for outposts are met.
 	 * @throws TownyException 
 	 */
-	public static boolean OutpostTests(Town town, Resident resident, TownyWorld world, Coord key, boolean isAdmin) throws TownyException {
+	public static boolean OutpostTests(Town town, Resident resident, TownyWorld world, Coord key, boolean isAdmin, boolean isPlotSetOutpost) throws TownyException {
 
 		// The config can be set up to dole out numbers of outposts to towns based on resident counts/belonging to a nation.
 		if (TownySettings.isOutpostsLimitedByLevels() && (town.getMaxOutpostSpawn() >= town.getOutpostLimit()))
@@ -34,12 +34,20 @@ public class OutpostUtil {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("homeblock")));
 
 		// Outposts can have a minimum required distance from other towns' townblocks.
-		if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+		if (!isPlotSetOutpost) {
+			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+			// Outposts can have a minimum required distance from other outposts.
+			if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot())
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+		} else {
+			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceFromTownPlotblocks())
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
+			// Outposts can have a minimum required distance from other outposts.
+			if (world.getMinDistanceFromOtherTownsPlots(key, town) < TownySettings.getMinDistanceForOutpostsFromPlot())
+				throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("townblock")));
 
-		// Outposts can have a minimum required distance from other outposts.
-		if (world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceForOutpostsFromPlot())
-			throw new TownyException(String.format(TownySettings.getLangString("msg_too_close2"), TownySettings.getLangString("outpost")));
+		}
 
 		return true;		
 	}
