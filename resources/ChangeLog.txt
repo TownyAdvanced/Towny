@@ -3758,3 +3758,4 @@ v0.92.0.11:
   - TOWNYPERMS.YML CHANGE: add towny.chat.alliance to your default nation group.
   - Fix alliances not persisting across server restarts when nothing else causes the nation to save.
 0.95.0.6:
+  - German.yml updated by enterih.
