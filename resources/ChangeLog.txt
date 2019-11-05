@@ -3756,3 +3756,4 @@ v0.92.0.11:
     - Closes ticket #3489
   - Fix error message not showing when a town has sent too many invites out.
   - TOWNYPERMS.YML CHANGE: add towny.chat.alliance to your default nation group.
+  - Fix alliances not persisting across server restarts when nothing else causes the nation to save.
