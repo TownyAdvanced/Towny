@@ -95,6 +95,7 @@ nations:
         - towny.nation.spawn.ally
         - towny.town.spawn.nation
         - towny.chat.nation
+        - towny.chat.alliance
 
     king:
         # Kings get these permissions in addition to the default set.
