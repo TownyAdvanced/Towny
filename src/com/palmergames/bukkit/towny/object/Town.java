@@ -91,7 +91,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4)
-			throw new TownyException("Tag too long");
+			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
@@ -135,7 +135,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setMayor(Resident mayor) throws TownyException {
 
 		if (!hasResident(mayor))
-			throw new TownyException("Mayor doesn't belong to town.");
+			throw new TownyException(TownySettings.getLangString("msg_err_mayor_doesnt_belong_to_town"));
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);
@@ -146,7 +146,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (hasNation())
 			return nation;
 		else
-			throw new NotRegisteredException("Town doesn't belong to any nation.");
+			throw new NotRegisteredException(TownySettings.getLangString("msg_err_town_doesnt_belong_to_any_nation"));
 	}
 
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -450,7 +450,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			return false;
 		}
 		if (!hasTownBlock(homeBlock))
-			throw new TownyException("Town has no claim over this town block.");
+			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_claim_over_this_town_block"));
 		this.homeBlock = homeBlock;
 
 		// Set the world as it may have changed
@@ -694,7 +694,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		else {
 			this.spawn = null;
-			throw new TownyException("Town has not set a spawn location.");
+			throw new TownyException(TownySettings.getLangString("msg_err_town_has_not_set_a_spawn_location"));
 		}
 	}
 
@@ -776,13 +776,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			TownBlock outpost = TownyUniverse.getInstance().getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (outpost.getX() == spawnBlock.getX() && outpost.getZ() == spawnBlock.getZ()) {
 				if (!outpost.isOutpost())
-					throw new TownyException("Location is not within an outpost plot.");
+					throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_an_outpost_plot"));
 
 				outpostSpawns.add(spawn);
 			}
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException("Location is not within a Town.");
+			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
 		}
 
 	}
@@ -809,7 +809,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public Location getOutpostSpawn(Integer index) throws TownyException {
 
 		if (getMaxOutpostSpawn() == 0 && TownySettings.isOutpostsLimitedByLevels())
-			throw new TownyException("Town has no outpost spawns set.");
+			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_outpost_spawns_set"));
 
 		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1)));
 	}
@@ -994,10 +994,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		//	throw new TownyException("You don't have access to the town's bank.");
 
 		if (TownySettings.isUsingEconomy()) {
-			if (!payTo(amount, resident, "Town Widthdraw"))
-				throw new TownyException("There is not enough money in the bank.");
+			if (!payTo(amount, resident, "Town Withdraw"))
+				throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
 		} else
-			throw new TownyException("Economy has not been turned on.");
+			throw new TownyException(TownySettings.getLangString("msg_err_no_economy"));
 
 	}
 
@@ -1064,14 +1064,14 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			TownBlock jail = townyUniverse.getDataSource().getWorld(spawn.getWorld().getName()).getTownBlock(spawnBlock);
 			if (jail.getX() == spawnBlock.getX() && jail.getZ() == spawnBlock.getZ()) {
 				if (!jail.isJail())
-					throw new TownyException("Location is not within a Jail plot.");
+					throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_jail_plot"));
 				
 				jailSpawns.add(spawn);
 				townyUniverse.getDataSource().saveTown(this);
 			}
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException("Location is not within a Town.");
+			throw new TownyException(TownySettings.getLangString("msg_err_location_is_not_within_a_town"));
 		}
 
 	}
@@ -1107,7 +1107,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public Location getJailSpawn(Integer index) throws TownyException {
 
 		if (getMaxJailSpawn() == 0)
-			throw new TownyException("Town has no jail spawns set.");
+			throw new TownyException(TownySettings.getLangString("msg_err_town_has_no_jail_spawns_set"));
 
 		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
 	}

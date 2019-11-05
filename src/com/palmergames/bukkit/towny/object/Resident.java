@@ -281,7 +281,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (hasTown())
 			return town;
 		else
-			throw new NotRegisteredException("Resident doesn't belong to any town");
+			throw new NotRegisteredException(TownySettings.getLangString("msg_err_resident_doesnt_belong_to_any_town"));
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
@@ -495,7 +495,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 
 	@Override
@@ -505,7 +505,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, ("Modes set: " + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -516,7 +516,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		this.modes.clear();
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
-			TownyMessaging.sendErrorMsg("Could not set default modes for " + getName() + ".");
+			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
 	}
 

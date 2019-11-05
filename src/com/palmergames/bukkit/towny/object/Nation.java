@@ -61,7 +61,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public void setTag(String text) throws TownyException {
 
 		if (text.length() > 4) {
-			throw new TownyException("Tag too long");
+			throw new TownyException(TownySettings.getLangString("msg_err_tag_too_long"));
 		}
 		this.tag = text.toUpperCase().trim();
 		Bukkit.getPluginManager().callEvent(new NationTagChangeEvent(this.tag));
@@ -227,7 +227,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public Location getNationSpawn() throws TownyException {
 		if(nationSpawn == null){
-			throw new TownyException("Nation has not set a spawn location.");
+			throw new TownyException(TownySettings.getLangString("msg_err_nation_has_not_set_a_spawn_location"));
 		}
 
 		return nationSpawn;

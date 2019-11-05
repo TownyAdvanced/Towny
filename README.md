@@ -79,7 +79,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 - **Maven**
 
     - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
-    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry).
+    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry)
         
 ```
   <repositories>
