@@ -3754,3 +3754,4 @@ v0.92.0.11:
     - Used by admins to manipulate metadata
   - Fix /plot set outpost failing due to your own town's townblocks being too close.
     - Closes ticket #3489
+  - Fix error message not showing when a town has sent too many invites out.

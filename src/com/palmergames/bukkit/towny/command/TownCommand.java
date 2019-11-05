@@ -2640,7 +2640,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} catch (TooManyInvitesException e) {
 			newMember.deleteReceivedInvite(invite);
 			town.deleteSentInvite(invite);
-			throw new TownyException(TownySettings.getLangString(e.getMessage()));
+			throw new TownyException(e.getMessage());
 		}
 	}
 
