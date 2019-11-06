@@ -302,14 +302,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			resident.clear();
 			
-			
-			for (Town townOutlaw : getTowns()) {
-				if (townOutlaw.hasOutlaw(resident)) {
-					townOutlaw.removeOutlaw(resident);
-					saveTown(townOutlaw);
-				}
-			}
-			
 		} catch (EmptyTownException e) {
 			removeTown(town);
 
@@ -317,6 +309,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// town not registered
 			e.printStackTrace();
 		}
+		
+		try {
+			for (Town townOutlaw : getTowns()) {
+				if (townOutlaw.hasOutlaw(resident)) {
+					townOutlaw.removeOutlaw(resident);
+					saveTown(townOutlaw);
+				}
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
