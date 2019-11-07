@@ -499,31 +499,6 @@ public class TownyWorld extends TownyObject {
 
 	}
 
-	/**
-	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
-	 * 
-	 * @return - List of blocked materials.
-	 */
-	@Deprecated
-	public List<String> getUnclaimedZoneIgnoreIds() {
-
-		if (unclaimedZoneIgnoreBlockMaterials == null)
-			return TownySettings.getUnclaimedZoneIgnoreMaterials();
-		else
-			return unclaimedZoneIgnoreBlockMaterials;
-	}
-
-	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(Material mat)}
-	 * 
-	 * @return - true, if it is an ignored material
-	 */
-	@Deprecated
-	public boolean isUnclaimedZoneIgnoreId(String id) {
-
-		return getUnclaimedZoneIgnoreMaterials().contains(id);
-	}
-
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
 		this.unclaimedZoneIgnoreBlockMaterials = unclaimedZoneIgnoreIds;
