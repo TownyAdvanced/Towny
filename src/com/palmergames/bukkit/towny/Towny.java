@@ -49,6 +49,9 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+
+import net.milkbowl.vault.permission.Permission;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -59,6 +62,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -301,7 +305,12 @@ public class Towny extends JavaPlugin {
 					// Fall back to BukkitPermissions below
 				} else {
 					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
-					using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+					if (vaultPermProvider != null) {
+						using.add(vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault " + test.getDescription().getVersion());
+					} else {
+						using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+					}
 				}
 			}
 
@@ -396,8 +405,8 @@ public class Towny extends JavaPlugin {
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
-			LOGGER.info("------------------------------------");
-			LOGGER.info("[Towny] ChangeLog up until v" + getVersion());
+			System.out.println("------------------------------------");
+			System.out.println("[Towny] ChangeLog up until v" + getVersion());
 			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
@@ -405,10 +414,10 @@ public class Towny extends JavaPlugin {
 					display = true;
 				}
 				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					LOGGER.info(line);
+					System.out.println(line);
 				}
 			}
-			LOGGER.info("------------------------------------");
+			System.out.println("------------------------------------");
 		} catch (IOException e) {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}

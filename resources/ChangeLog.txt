@@ -3761,3 +3761,6 @@ v0.92.0.11:
   - German.yml updated by enterih.
   - Fix outlaw not getting removed if hermit, courtesy of benjads.
   - Fix loading of mysql databases' townblocks and the new metadata.
+0.95.0.7:
+  - Add permission plugin information to Towny startup's Using section.
+  - Make changelog on updates more readable from the console, hello.
