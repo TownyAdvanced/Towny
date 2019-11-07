@@ -1474,7 +1474,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     
 					try {
 						line = rs.getString("metadata");
-						if (line != null) {
+						if (line != null && !line.isEmpty()) {
 							townBlock.setMetadata(line);
 						}
 					} catch (SQLException ignored) {
