@@ -582,7 +582,7 @@ public class TownySQLSource extends TownyFlatFileSource {
     }
 
     @Override
-    public boolean loadSiegeList() {
+    public boolean loadSiegeZoneList() {
 
         String townName;
         Statement s = null;

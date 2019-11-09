@@ -159,4 +159,11 @@ public class Siege {
         }
     }
 
+    public boolean getTownPlundered() {
+        return townPlundered;
+    }
+
+    public boolean getTownInvaded() {
+        return townInvaded;
+    }
 }

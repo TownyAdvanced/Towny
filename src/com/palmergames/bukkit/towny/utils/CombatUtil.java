@@ -162,7 +162,7 @@ public class CombatUtil {
 						&& defendingResident.hasTown()
 						&& defendingResident.getTown().hasSiege()) {
 					Nation attackerNation= attackerResident.getTown().getNation();
-					Siege siege=defendingResident.getTown().getSiege().getSiege();
+					Siege siege=defendingResident.getTown().getSiege();
 					if(siege.getSiegeZones().containsKey(attackerNation)
 						&& siege.getSiegeZones().get(attackerNation).isActive()) {
 						return false;

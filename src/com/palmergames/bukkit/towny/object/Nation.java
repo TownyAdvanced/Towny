@@ -41,7 +41,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private List<Town> towns = new ArrayList<Town>();
 	private List<Nation> allies = new ArrayList<Nation>();
 	private List<Nation> enemies = new ArrayList<Nation>();
-	private List<SiegeZone> siegeFronts = new ArrayList<SiegeZone>();
+	private List<SiegeZone> siegeZones = new ArrayList<SiegeZone>();
 	private Town capital;
 	private double taxes, spawnCost;
 	private boolean neutral = false;
@@ -413,8 +413,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
-	public void removeSiegeZone(SiegeZone siegeFront) {
-		siegeFronts.remove(siegeFront);
+	public void removeSiegeZone(SiegeZone siegeZone) {
+		siegeZones.remove(siegeZone);
 		//Todo - do we need this???
 		//BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
@@ -425,10 +425,10 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			remove(town);
 	}
 
-	private void removeAllSiegeFronts() {
+	private void removeAllSiegeZones() {
 
-		for (SiegeZone siegeFront : new ArrayList<SiegeZone>(siegeFronts))
-			siegeFronts.remove(siegeFront);
+		for (SiegeZone siegeZone : new ArrayList<SiegeZone>(siegeZones))
+			siegeZones.remove(siegeZone);
 	}
 
 
@@ -470,7 +470,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		removeAllAllies();
 		removeAllEnemies();
 		removeAllTowns();
-		removeAllSiegeFronts();
+		removeAllSiegeZones();
 		capital = null;
 	}
 
@@ -745,12 +745,12 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	public void addSiegeZone(SiegeZone siegeFront) {
-		siegeFronts.add(siegeFront);
+		siegeZones.add(siegeFront);
 	}
 
 	public List<Town> getTownsUnderSiegeAttack() {
 		List<Town> result = new ArrayList<Town>();
-		for(SiegeZone siegeFront: siegeFronts) {
+		for(SiegeZone siegeFront: siegeZones) {
 			result.add(siegeFront.getSiege().getDefendingTown());
 		}
 		return result;
@@ -758,7 +758,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public List<Town> getTownsUnderActiveSiegeAttack() {
 		List<Town> result = new ArrayList<Town>();
-		for(SiegeZone siegeFront: siegeFronts) {
+		for(SiegeZone siegeFront: siegeZones) {
 			if(siegeFront.isActive()
 					&& siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				result.add(siegeFront.getSiege().getDefendingTown());
@@ -794,8 +794,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 				&& town.getSiege().getSiegeZones().containsKey(this);
 	}
 
-	public List<SiegeZone> getSiegeFronts() {
-		return siegeFronts;
+	public List<SiegeZone> getSiegeZones() {
+		return siegeZones;
 	}
 
 }

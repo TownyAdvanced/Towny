@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.google.common.util.concurrent.Service;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -402,7 +403,7 @@ public class TownyFormatter {
 			}
 
 			if(town.hasSiege()) {
-				Siege siege = town.getSiege().getSiege();
+				Siege siege = town.getSiege();
 
 
 				switch (siege.getStatus()){
@@ -551,7 +552,7 @@ public class TownyFormatter {
 		String combatantStatusTag;
 		SiegeStatus siegeStatus = siege.getStatus();
 
-		if(!siege.getDefenderSiegeFront().isActive()) {
+		if(siege.getStatus() == SiegeStatus.DEFENDER_SURRENDER) {
 			combatantStatusTag = Colors.Gray + " - " + Colors.Red + "SURRENDERED";
 		} else {
 			if(siegeStatus == SiegeStatus.IN_PROGRESS) {
@@ -576,7 +577,9 @@ public class TownyFormatter {
 		}
 
 		String defenceTag = TownySettings.getLangString("status_town_siege_defence_tag");
-		out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderSiegeFront().getSiegePointsTotal() + " " + combatantStatusTag);
+		out.add("????????");
+		//TODO THIS WHOLE BIT NEEDS REFACTOR
+		//out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderSiegeFront().getSiegePointsTotal() + " " + combatantStatusTag);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

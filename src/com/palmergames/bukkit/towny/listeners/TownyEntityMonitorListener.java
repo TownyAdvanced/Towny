@@ -79,7 +79,7 @@ public class TownyEntityMonitorListener implements Listener {
 					&& TownySettings.isUsingEconomy()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()
-					&& defenderResident.getTown().getNation().getSiegeFronts().size() != 0) {
+					&& defenderResident.getTown().getNation().getSiegeZones().size() != 0) {
 
 				checkForSiegeDeathCosts(defenderPlayer, defenderResident);
 			}
@@ -454,7 +454,7 @@ public class TownyEntityMonitorListener implements Listener {
 		}
 
 		//Check if the player died in one of their nation's active siegefronts
-		for (SiegeZone siegeFront : nation.getSiegeFronts()) {
+		for (SiegeZone siegeFront : nation.getSiegeZones()) {
 			if(siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
 				for (TownBlock townBlock : siegeFront.getSiege().getDefendingTown().getTownBlocks()) {
 
@@ -488,7 +488,7 @@ public class TownyEntityMonitorListener implements Listener {
 								" cannot afford to continue the siege on " +
 								TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
 								"The siege has been automatically abandoned.");
-				TownyUniverse.getDataSource().removeSiege(siege);
+				TownyUniverse.getDataSource().removeSiegeZone(siege);
 			}
 
 		} catch (EconomyException x) {
@@ -509,7 +509,7 @@ public class TownyEntityMonitorListener implements Listener {
 					&& attackerResident.hasTown()
 					&& defenderResident.hasTown()
 					&& defenderResident.getTown().hasNation()) {
-				for(SiegeZone siegeFront: defenderResident.getTown().getNation().getSiegeFronts()) {
+				for(SiegeZone siegeFront: defenderResident.getTown().getNation().getSiegeZones()) {
 					if(defenderResident.getTown() == siegeFront.getSiege().getDefendingTown()) {
 						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
 						return;

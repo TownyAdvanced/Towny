@@ -61,8 +61,7 @@ public class TownyUniverse extends TownyObject {
 	protected Hashtable<String, Resident> residents = new Hashtable<>();
 	protected Hashtable<String, Town> towns = new Hashtable<>();
 	protected Hashtable<String, Nation> nations = new Hashtable<>();
-	protected Hashtable<String, Siege> sieges = new Hashtable<>();
-	protected Hashtable<String, SiegeZone> siegeFronts = new Hashtable<>();
+	protected Hashtable<String, SiegeZone> siegeZones = new Hashtable<>();
 	protected Hashtable<String, TownyWorld> worlds = new Hashtable<>();
 
 
@@ -345,7 +344,7 @@ public class TownyUniverse extends TownyObject {
 		worlds.clear();
 		nations.clear();
 		towns.clear();
-		sieges.clear();
+		siegeZones.clear();
 		residents.clear();
 
 		if (!loadDatabase(load)) {
@@ -473,11 +472,11 @@ public class TownyUniverse extends TownyObject {
 	}
 
 	/**
-	 * @return Hashtable of all sieges
+	 * @return Hashtable of all siege Zones
 	 */
-	public Hashtable<String, Siege> getSiegesMap() {
+	public Hashtable<String, SiegeZone> getSiegeZonesMap() {
 
-		return this.sieges;
+		return this.siegeZones;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ public class SiegeZone {
 
     private Siege siege;
     private Location siegeBannerLocation;
-    private Nation attackingNation;
+    private Nation attackingNation; //Can be if nation is deleted
     private boolean active;
     private int siegePoints;
     private Map<Player, Long> playerArrivalTimeMap; //player, timestamp of arrival in zone
@@ -29,6 +30,31 @@ public class SiegeZone {
         playerArrivalTimeMap = new HashMap<>();
     }
 
+    public SiegeZone(Siege siege, Nation attackingNation) {
+        this.siege = siege;
+        this.attackingNation = attackingNation;
+        active = false;
+        siegePoints = 0;
+        siegeBannerLocation = null;
+        playerArrivalTimeMap = new HashMap<>();
+    }
+
+    public String getName() {
+        return attackingNation.getName().toLowerCase() + "$vs$" + siege.getDefendingTown().getName().toLowerCase();
+    }
+
+    public static String generateName(String attackingNationName, String defendingTownName) {
+        return attackingNationName.toLowerCase() + "$vs$" + defendingTownName.toLowerCase();
+    }
+
+    public static String generateName(Nation nation,Town town) {
+        return generateName(nation.getName(), town.getName());
+    }
+
+    public static String[] generateTownAndNationName(String siegeZoneName) {
+        return siegeZoneName.split("$vs$");
+    }
+
     public Siege getSiege() {
         return siege;
     }
@@ -37,11 +63,11 @@ public class SiegeZone {
         return attackingNation;
     }
 
-    public Location getSiegeBannerLocation() {
+    public Location getFlagLocation() {
         return siegeBannerLocation;
     }
 
-    public void setSiegeBannerLocation(Location location) {
+    public void setFlagLocation(Location location) {
         this.siegeBannerLocation = location;
     }
 
@@ -94,5 +120,9 @@ public class SiegeZone {
 
     public void setSiege(Siege siege) {
         this.siege = siege;
+    }
+
+    public void setAttackingNation(Nation attackingNation) {
+        this.attackingNation = attackingNation;
     }
 }

@@ -100,7 +100,7 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSieges() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeZoneList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSieges() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
@@ -128,7 +128,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadNationList();
 
-	abstract public boolean loadSiegeList();
+	abstract public boolean loadSiegeZoneList();
 
 	abstract public boolean loadWorldList();
 
@@ -144,7 +144,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadNation(Nation nation);
 
-	abstract public boolean loadSiege(Siege siege);
+	abstract public boolean loadSiegeZone(SiegeZone siegeZone);
 
 	abstract public boolean loadWorld(TownyWorld world);
 
@@ -155,8 +155,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTownList();
 
 	abstract public boolean saveNationList();
-
-	abstract public boolean saveSiegeList();
 
 	abstract public boolean saveSiegeZoneList();
 
@@ -171,8 +169,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTown(Town town);
 
 	abstract public boolean saveNation(Nation nation);
-
-	abstract public boolean saveSiege(Siege siege);
 
 	abstract public boolean saveSiegeZone(SiegeZone siegeFront);
 
@@ -195,8 +191,6 @@ public abstract class TownyDataSource {
 	abstract public void deleteTown(Town town);
 
 	abstract public void deleteNation(Nation nation);
-
-	abstract public void deleteSiege(Siege siege);
 
 	abstract public void deleteSiegeZone(SiegeZone siegeFront);
 
@@ -282,12 +276,11 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
-	public boolean loadSieges() {
-
-		TownyMessaging.sendDebugMsg("Loading Sieges");
-		for (Siege siege : getSieges())
-			if (!loadSiege(siege)) {
-				System.out.println("[Towny] Loading Error: Could not read siege data '" + siege.getDefendingTown().getName() + "'.");
+	public boolean loadSiegesZones() {
+		TownyMessaging.sendDebugMsg("Loading Siege Zones");
+		for (SiegeZone siegeZone : getSiegeZones())
+			if (!loadSiegeZone(siegeZone)) {
+				System.out.println("[Towny] Loading Error: Could not read siege zone data '" + siegeZone.getName() + "'.");
 				return false;
 			}
 		return true;
@@ -368,9 +361,9 @@ public abstract class TownyDataSource {
 
 	abstract public boolean hasTown(String name);
 
-	abstract public boolean hasSiege(String name);
-
 	abstract public boolean hasNation(String name);
+
+	abstract public boolean hasSiegeZone(String name);
 
 	abstract public List<Town> getTowns(String[] names);
 
@@ -380,11 +373,13 @@ public abstract class TownyDataSource {
 
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
 
+	abstract public SiegeZone getSiegeZone(String attackerNationName, String defendingTownName) throws NotRegisteredException;
+
 	abstract public List<Nation> getNations(String[] names);
 
 	abstract public List<Nation> getNations();
 
-	abstract public List<Siege> getSieges();
+	abstract public List<SiegeZone> getSiegeZones();
 
 	abstract public Nation getNation(String name) throws NotRegisteredException;
 
@@ -410,6 +405,8 @@ public abstract class TownyDataSource {
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void newSiegeZone(String attackingNationName, String defendingTownName) throws AlreadyRegisteredException;
+
 	abstract public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void removeTown(Town town);
@@ -424,7 +421,7 @@ public abstract class TownyDataSource {
 
 	abstract public Set<String> getNationsKeys();
 
-	abstract public Set<String> getSiegesKeys();
+	abstract public Set<String> getSiegeZonesKeys();
 
 	abstract public List<Town> getTownsWithoutNation();
 
@@ -435,13 +432,5 @@ public abstract class TownyDataSource {
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void newSiege(String townName) throws AlreadyRegisteredException;
-
-	abstract public Siege getSiege(String townName) throws NotRegisteredException;
-
-	abstract public void newSiegeFront(String townName, String attackerName) throws AlreadyRegisteredException;
-
-	abstract public SiegeZone getSiegeZone(String townName, String attackerName) throws NotRegisteredException;
 
 }

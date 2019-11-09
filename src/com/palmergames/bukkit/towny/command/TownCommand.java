@@ -2087,7 +2087,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
 		try {
 			//If the town is under siege, you cannot spawn there
-			if(town.hasSiege() && town.getSiege().getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
 				throw new TownyException("Cannot spawn into a town which is under siege");
 
 			boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());

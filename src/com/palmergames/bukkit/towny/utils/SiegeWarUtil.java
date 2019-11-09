@@ -37,7 +37,6 @@ public class SiegeWarUtil {
                                     Town defendingTown) throws TownyException {
 
         Siege siege;
-        SiegeZone defenderSiegeFront =null;
         SiegeZone siegeZone;
         boolean newSiege;
 
@@ -45,8 +44,7 @@ public class SiegeWarUtil {
             newSiege = true;
 
             //Create Siege
-            TownyUniverse.getDataSource().newSiege(defendingTown.getName());
-            siege = TownyUniverse.getDataSource().getSiege(defendingTown.getName());
+            siege = new Siege(defendingTown);
             siege.setStatus(SiegeStatus.IN_PROGRESS);
             siege.setTownPlundered(false);
             siege.setTownInvaded(false);
@@ -61,15 +59,19 @@ public class SiegeWarUtil {
         } else {
             //Get Siege
             newSiege = false;
-            siege = TownyUniverse.getDataSource().getSiege(defendingTown.getName());
+            siege = defendingTown.getSiege();
         }
 
         //Create siege zone
-        TownyUniverse.getDataSource().newSiegeFront(defendingTown.getName(), attackingNation.getName());
-        siegeZone = TownyUniverse.getDataSource().getSiegeZone(defendingTown.getName(), attackingNation.getName());
+        TownyUniverse.getDataSource().newSiegeZone(
+                attackingNation.getName(),
+                defendingTown.getName());
+        siegeZone = TownyUniverse.getDataSource().getSiegeZone(
+                attackingNation.getName(),
+                defendingTown.getName());
         siegeZone.setActive(true);
         siegeZone.setSiege(siege);
-        siegeZone.setSiegeBannerLocation(block.getLocation());
+        siegeZone.setFlagLocation(block.getLocation());
         siege.getSiegeZones().put(attackingNation, siegeZone);
         attackingNation.addSiegeZone(siegeZone);
 
@@ -79,11 +81,6 @@ public class SiegeWarUtil {
         TownyUniverse.getDataSource().saveNation(attackingNation);
         TownyUniverse.getDataSource().saveTown(defendingTown);
         TownyUniverse.getDataSource().saveSiegeZoneList();
-
-        //If new siege,save siege list
-        if(newSiege) {
-            TownyUniverse.getDataSource().saveSiegeList();
-        }
 
         //Send global message;
         if(newSiege) {
@@ -141,13 +138,13 @@ public class SiegeWarUtil {
             if(!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
 
-            if(!TownyUniverse.getDataSource().hasSiege(townName))
+            if(!TownyUniverse.getDataSource().getTown(townName).hasSiege())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
 
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
+            final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
 
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
                 throw new TownyException("The siege is already over");
@@ -748,13 +745,13 @@ public class SiegeWarUtil {
             if (!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
 
-            if (!TownyUniverse.getDataSource().hasSiege(townName))
+            if (!TownyUniverse.getDataSource().getTown(townName).hasSiege())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
 
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
+            final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
 
             if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
                 throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");
@@ -800,10 +797,10 @@ public class SiegeWarUtil {
             if(!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
 
-            if(!TownyUniverse.getDataSource().hasSiege(townName))
+            if(!TownyUniverse.getDataSource().getTown(townName).hasSiege())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
 
-            final Siege siege = TownyUniverse.getDataSource().getSiege(townName);
+            final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
 
             if(siege.getStatus() == SiegeStatus.IN_PROGRESS)
                 throw new TownyException("A siege is still in progress. You cannot plunder unless your nation is victorious in the siege");
@@ -839,24 +836,22 @@ public class SiegeWarUtil {
 
     public static Siege getActiveSiegeGivenBannerLocation(Location location) {
         //Look through all sieges
-        //Note that we don't just look at the given location
+        //Note that we don't just look at the town at the given location
         //....because mayor may have unclaimed the plot after the siege started
-        for (Siege siege : TownyUniverse.getDataSource().getSieges()) {
 
-            //Location must match
-            //Siege must be in progress
-            //Attack must be active
-            for (SiegeZone attackerData : siege.getSiegeZones().values()) {
-                if (attackerData.getSiegeBannerLocation().equals(location)) {
-                    if (siege.getStatus() == SiegeStatus.IN_PROGRESS && attackerData.isActive()) {
-                        return siege;
-                    } else {
-                        return null;
-                    }
+        //Location must match
+        //Siege must be in progress
+        //Siege zone must be active
+        for (SiegeZone siegeZone : TownyUniverse.getDataSource().getSiegeZones()) {
+            if (siegeZone.getFlagLocation().equals(location)) {
+                if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.isActive()) {
+                    return siegeZone.getSiege();
+                } else {
+                    return null;
                 }
-
             }
-        }
+
+    }
         //No siege banner found at the given location
         return null;
     }

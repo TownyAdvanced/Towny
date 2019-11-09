@@ -92,7 +92,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					//Siege is finished.
 					//Wait for siege cooldown to end then delete siege
 					if (currentTime > siege.getDefendingTown().getSiegeImmunityEndTime()) {
-						TownyUniverse.getDataSource().removeSiege(siege);
+						TownyUniverse.getDataSource().removeSiegeZone(siege);
 						continue;
 					}
 				}
