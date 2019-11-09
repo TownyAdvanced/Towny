@@ -3764,3 +3764,4 @@ v0.92.0.11:
 0.95.0.7:
   - Add permission plugin information to Towny startup's Using section.
   - Make changelog on updates more readable from the console, hello.
+  - Attempt to stop the perm hud plotname NPE, again.

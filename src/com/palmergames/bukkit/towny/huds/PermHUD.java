@@ -60,12 +60,13 @@ public class PermHUD {
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}
-			plotName = townBlock.getName() == null ? " " : (PLOTNAME_TITLE + townBlock.getName());
+			plotName = (townBlock.getName().isEmpty() ? "" : (PLOTNAME_TITLE + townBlock.getName()));
 		} catch (NotRegisteredException e) {
 			clearPerms(p);
 			return;
 		}
-		board.getTeam("plot").setSuffix(HUDManager.check(plotName));
+		if (!plotName.isEmpty())
+			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
 		board.getTeam("build").setSuffix(build);
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);
