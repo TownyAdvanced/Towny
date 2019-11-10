@@ -263,9 +263,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if(universe.getSiegeZonesMap().containsKey(siegeZoneName.toLowerCase()))
 				throw new AlreadyRegisteredException("Siege Zone is already registered");
 
-			Siege siege = universe.getTownsMap().get(defendingTownName.toLowerCase()).getSiege();
+			Town town = universe.getTownsMap().get(defendingTownName.toLowerCase());
 			Nation nation = universe.getNationsMap().get(attackingNationName.toLowerCase());
-			SiegeZone siegeZone = new SiegeZone(siege, nation);
+			SiegeZone siegeZone = new SiegeZone(nation, town);
 
 			universe.getSiegeZonesMap().put(siegeZoneName.toLowerCase(), siegeZone);
 
@@ -733,8 +733,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Siege siege;
 		for(SiegeZone siegeZone: siegeZonesToDelete) {
 			siege = siegeZone.getSiege();
-			siege.getSiegeZones().remove(nation); //Remove nation from siege
-			townsToSave.add(siege.getDefendingTown());  //Prepare to save town
+			siegeZone.getSiege().getSiegeZones().remove(nation); //Remove nation from siege
+			townsToSave.add(siegeZone.getDefendingTown());  //Prepare to save town
 			if(siege.getSiegeZones().size() == 0) {
 				siege.getDefendingTown().setSiege(null);
 				siege.getDefendingTown().setSiegeImmunityEndTime(0);

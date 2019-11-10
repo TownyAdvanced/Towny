@@ -24,10 +24,12 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 public class TownyFormatter {
 
@@ -402,22 +404,41 @@ public class TownyFormatter {
 				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
 			}
 
+			//Revolt Cooldown Timer: 71.8 hours
+			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
+				out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
+			}
+
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
-
 				switch (siege.getStatus()){
 					case IN_PROGRESS:
-						//Siege Status: In Progress    Victory Timer: 5.3 hours
+						//Siege Status: In Progress
 						String siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
-						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
-						out.add(siegeStatus + " " + victoryTimer);
+						out.add(siegeStatus);
 
-						//Siege Defence Points: balaria (settlement) - 80
-						//Siege Attack Points:  Land of Empire (Nation)- 50
-						//                      Land of Killers (Nation) - 30
-						addSiegeStatusDefender(siege, out);
-						addSiegeStatusAttackers(siege, out);
+						//Siege Victory Timer: 5.3 hours
+						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
+						out.add(victoryTimer);
+
+						//Siege Zones: Land of Empire (Nation) [+30], Land of Killers (Nation) [+30]
+						StringBuilder builtLine = new StringBuilder();
+						builtLine.append(TownySettings.getLangString("status_town_siege_zones_tag"));
+						builtLine.append(Colors.White);
+						boolean firstEntry = true;
+						for(Map.Entry<Nation,SiegeZone> entry: town.getSiege().getSiegeZones().entrySet()) {
+							if(firstEntry) {
+								firstEntry = false;
+							} else {
+								builtLine.append(", ");
+							}
+							builtLine.append(getFormattedName(entry.getKey()));
+							builtLine.append(" [");
+							builtLine.append(entry.getValue().getSiegePointsForDisplay());
+							builtLine.append("]");
+						}
+						out.add(builtLine.toString());
 					break;
 
 					case ATTACKER_WIN:
@@ -440,11 +461,6 @@ public class TownyFormatter {
 						out.add(siegeCooldownTimer);
 					break;
 				}
-			}
-
-			//Revolt Cooldown Timer: 71.8 hours
-			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
-				out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 			}
 
 		}

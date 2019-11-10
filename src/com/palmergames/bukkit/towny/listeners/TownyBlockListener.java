@@ -34,6 +34,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -139,7 +140,7 @@ public class TownyBlockListener implements Listener {
 
 			//Siege War
 			if (TownySettings.getWarSiegeEnabled()) {
-				boolean skipPermChecks = evaluateSiegeWarPlaceBlockRequest(player, block);
+				boolean skipPermChecks = evaluateSiegeWarPlaceBlockRequest(player, block,event);
 				if(skipPermChecks) {
 					return;
 				}
@@ -227,7 +228,9 @@ public class TownyBlockListener implements Listener {
 	 *
 	 * Return - skipOtherPerChecks
 	 */
-	public boolean evaluateSiegeWarPlaceBlockRequest(Player player, Block block) throws NotRegisteredException
+	public boolean evaluateSiegeWarPlaceBlockRequest(Player player,
+													 Block block,
+													 BlockPlaceEvent event) throws NotRegisteredException
 	{
 		String blockTypeName = block.getType().getKey().getKey();
 		if (blockTypeName.contains("banner")) {
@@ -235,10 +238,10 @@ public class TownyBlockListener implements Listener {
 			if(blockTypeName.contains("white")
 				&& ((Banner)block.getState()).getPatterns().size() == 0) {
 				//white banner
-				return evaluateSiegeWarPlaceWhiteBannerRequest(player, block);
+				return evaluateSiegeWarPlaceWhiteBannerRequest(player, block,event);
 			} else {
 				//coloured banner
-				return evaluateSiegeWarPlaceColouredBannerRequest(player,block);
+				return evaluateSiegeWarPlaceColouredBannerRequest(player,block,event);
 			}
 		} else if (block.getType().equals(Material.CHEST)) {
 			//Chest
@@ -279,36 +282,62 @@ public class TownyBlockListener implements Listener {
 	}
 
 
-	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block) throws NotRegisteredException {
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-		if (resident.hasTown()) {
+	//Return - skip other perm checks
+	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block, BlockPlaceEvent event) throws NotRegisteredException {
+		//If the target block is in the wilderness next to a town,
+		//Then only valid siege actions are permitted
+		TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
 
-			//Get Town Where block was placed
+		if(townBlock == null) {
+			//Check for siege start request
+			Coord blockCoordinate = Coord.parseCoord(block);
+			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
+
+			TownBlock[] nearbyTownBlocksArray = new TownBlock[4];
+			nearbyTownBlocksArray[0] =townyWorld.getTownBlock(blockCoordinate.add(0,-1));
+			nearbyTownBlocksArray[1] =townyWorld.getTownBlock(blockCoordinate.add(0,1));
+			nearbyTownBlocksArray[2] =townyWorld.getTownBlock(blockCoordinate.add(1,0));
+			nearbyTownBlocksArray[3] =townyWorld.getTownBlock(blockCoordinate.add(-1,0));
+
+			List<TownBlock> nearbyTownBlocks = new ArrayList<>();
+			for(TownBlock nearbyTownBlock: nearbyTownBlocksArray) {
+				if(nearbyTownBlock != null && nearbyTownBlock.hasTown()) {
+					nearbyTownBlocks.add(nearbyTownBlock);
+				}
+			}
+
+			if(nearbyTownBlocks.size() == 0) {
+				//No town blocks nearby. Continue.
+				return false;
+			} else  {
+				//One or more town blocks nearby. Evaluate siege attack request
+				SiegeWarUtil.processAttackTownRequest(player, block, nearbyTownBlocks,event);
+				return true;
+			}
+
+		} else {
+			//Check for siege invasion request
+
 			Town townWhereBlockWasPlaced;
-			TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
-			if (townBlock != null && townBlock.hasTown()) {
+			if(townBlock.hasTown()) {
 				townWhereBlockWasPlaced = townBlock.getTown();
 			} else {
-				return false;
+				return false;	//Not sure how we get here. But in any case,
+				                //don't treat it as an invasion request
 			}
 
 			//If the target town is different town to player, evaluate siege request
-			Town residentTown = resident.getTown();
-			if (townWhereBlockWasPlaced != residentTown) {
-
-				if (!townWhereBlockWasPlaced.hasSiege()) {
-					//There is no siege, evaluate attack request
-					return SiegeWarUtil.processAttackTownRequest(player, block);
-				} else {
-					//There is a siege already, evaluate invade request
-					return SiegeWarUtil.processInvadeTownRequest(plugin, player, townWhereBlockWasPlaced.getName());
-				}
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			if (!resident.hasTown() || resident.getTown() != townWhereBlockWasPlaced ) {
+				SiegeWarUtil.processInvadeTownRequest(plugin, player, townWhereBlockWasPlaced.getName(),event);
+				return true;
+			} else {
+				return false;
 			}
 		}
-		return false;
 	}
 
-	private boolean evaluateSiegeWarPlaceWhiteBannerRequest(Player player, Block block) throws NotRegisteredException {
+	private boolean evaluateSiegeWarPlaceWhiteBannerRequest(Player player, Block block, BlockPlaceEvent event) throws NotRegisteredException {
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 		if (resident.hasTown()) {
 
@@ -326,9 +355,11 @@ public class TownyBlockListener implements Listener {
 				// Residents town - surrender
 				// Not residents town  abandon
 				if(townWhereBlockWasPlaced == resident.getTown()) {
-					return SiegeWarUtil.processSurrenderRequest(player);
+					SiegeWarUtil.processSurrenderRequest(player, event);
+					return true;
 				} else {
-					return SiegeWarUtil.processAbandonSiegeRequest(player,townWhereBlockWasPlaced.getName());
+					SiegeWarUtil.processAbandonSiegeRequest(player, townWhereBlockWasPlaced.getName(), event);
+					return true;
 				}
 			}
 		}

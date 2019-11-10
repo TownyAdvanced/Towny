@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class SiegeWarUtil {
                 attackingNation.getName(),
                 defendingTown.getName());
         siegeZone.setActive(true);
-        siegeZone.setSiege(siege);
+
         siegeZone.setFlagLocation(block.getLocation());
         siege.getSiegeZones().put(attackingNation, siegeZone);
         attackingNation.addSiegeZone(siegeZone);
@@ -132,7 +133,7 @@ public class SiegeWarUtil {
         }
     }
 
-    public static boolean processAbandonSiegeRequest(Player player, String townName)  {
+    public static void processAbandonSiegeRequest(Player player, String townName, BlockPlaceEvent event)  {
         try {
             if(!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
@@ -155,16 +156,15 @@ public class SiegeWarUtil {
                 throw new TownyException("Your nation is not attacking this town right now");
 
             SiegeWarUtil.attackerAbandon(nation, siege);
-            return true;
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
+            event.setCancelled(true);
         }
     }
 
 
-    public static boolean processSurrenderRequest(Player player) {
+    public static void processSurrenderRequest(Player player, BlockPlaceEvent event) {
 
         try {
             if (!TownySettings.getWarSiegeEnabled())
@@ -190,11 +190,9 @@ public class SiegeWarUtil {
             //Surrender
             SiegeWarUtil.defenderSurrender(siege);
 
-            return true;
-
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
+            event.setCancelled(true);
         }
     }
 
@@ -643,7 +641,10 @@ public class SiegeWarUtil {
     }
 
     //Return boolean - siegeStarted
-    public static boolean processAttackTownRequest(Player player, Block block) {
+    public static void processAttackTownRequest(Player player,
+                                                   Block block,
+                                                   List<TownBlock> nearbyTownBlocks,
+                                                   BlockPlaceEvent event) {
 
         try {
             if (!TownySettings.getWarSiegeAttackEnabled())
@@ -652,14 +653,12 @@ public class SiegeWarUtil {
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-            if (townBlockWherePlayerIsLocated == null)
-                throw new TownyException("You must be standing in a town to attack the town.");
+            if (nearbyTownBlocks.size() > 1)
+                throw new TownyException("To start a siege attack, " +
+                        "the wilderness plot containing the banner must be facing just one town plot. " +
+                        "Try a different location for the banner");
 
-            Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-           // if(!SiegeWarUtil.isTownBlockOnTheTownBorder(townBlockWherePlayerIsLocated, defendingTown))
-            //    throw new TownyException("You must be in a town border block to attack the town.");
-
+            Town defendingTown = nearbyTownBlocks.get(0).getTown();
             Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
 
             if (defendingTown.hasNation()) {
@@ -724,19 +723,19 @@ public class SiegeWarUtil {
 
             //Setup attack
             attackTown(block, nationOfAttackingPlayer, defendingTown);
-
-            return true;
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
+            event.setCancelled(true);
         } catch (EconomyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
+            event.setCancelled(true);
         }
     }
 
-    //Return boolean - invasion success
-    public static boolean processInvadeTownRequest(Towny plugin, Player player, String townName) {
+    public static void processInvadeTownRequest(Towny plugin,
+                                                   Player player,
+                                                   String townName,
+                                                   BlockPlaceEvent event) {
         try {
             if (!TownySettings.getWarSiegeInvadeEnabled())
                 throw new TownyException("Invade not allowed. Try plunder instead.");
@@ -774,10 +773,9 @@ public class SiegeWarUtil {
 
             SiegeWarUtil.captureTown(plugin, siege, siege.getAttackerWinner(), siege.getDefendingTown());
 
-            return true;
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
+            event.setCancelled(true);
         }
     }
 

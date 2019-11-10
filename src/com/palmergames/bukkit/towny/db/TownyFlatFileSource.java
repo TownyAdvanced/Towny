@@ -191,7 +191,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
 
-		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges";
+		path = rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegeszones";
 		names = getSiegeZonesKeys();
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
@@ -214,7 +214,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getSiegeZoneFilename(SiegeZone siegeZone) {
 
-		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "siege-zones" + FileMgmt.fileSeparator() + siegeZone.getName() + ".txt";
+		return rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones" + FileMgmt.fileSeparator() + siegeZone.getName() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
@@ -428,7 +428,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		BufferedReader fin;
 
 		try {
-			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "siege-zones.txt"));
+			fin = new BufferedReader(new FileReader(rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -1352,7 +1352,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				siegeZone.setAttackingNation(getNation(line));
 
 				line = kvFile.get("defendingTown");
-				siegeZone.setSiege(getTown(line).getSiege());
+				siegeZone.setDefendingTown(getTown(line));
 
 				line = kvFile.get("active");
 				siegeZone.setActive(Boolean.parseBoolean(line));
@@ -2178,7 +2178,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("flagLocationY=" + siegeZone.getFlagLocation().getY());
 		list.add("flagLocationZ=" + siegeZone.getFlagLocation().getZ());
 		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
-		list.add("defendingTown=" + siegeZone.getSiege().getDefendingTown().getName());
+		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
 		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
 		list.add("playerArrivalTimes=" + StringMgmt.join(siegeZone.getPlayerNameArrivalTimeMap(), ",", "@"));

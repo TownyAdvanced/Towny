@@ -1209,7 +1209,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siegeZone.setFlagLocation(flagLocation);
 
                 siegeZone.setAttackingNation(getNation(rs.getString("attackingNation")));
-                siegeZone.setSiege(getTown(rs.getString("defendingTown")).getSiege());
+                siegeZone.setDefendingTown(getTown(rs.getString("defendingTown")));
                 siegeZone.setActive(rs.getBoolean("active"));
                 siegeZone.setSiegePoints(rs.getInt("siegePoints"));
             }
@@ -1829,7 +1829,7 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("flagLocationY", siegeZone.getFlagLocation().getY());
             nat_hm.put("flagLocationZ", siegeZone.getFlagLocation().getZ());
             nat_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
-            nat_hm.put("defendingTown", siegeZone.getSiege().getDefendingTown().getName());
+            nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
             nat_hm.put("active", siegeZone.isActive());
             nat_hm.put("siegePoints", siegeZone.getSiegePoints());
             nat_hm.put("playerArrivalTimes", StringMgmt.join(siegeZone.getPlayerNameArrivalTimeMap(), ",", "@"));
