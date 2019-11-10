@@ -89,6 +89,10 @@ public class Siege {
         return result;
     }
 
+    public List<Nation> getAllAttackers() {
+        return new ArrayList<Nation>(siegeZones.keySet());
+    }
+
     public void setStatus(SiegeStatus status) {
         this.status = status;
     }

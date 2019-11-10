@@ -69,7 +69,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("list")) {
 
-			listSieges(sender, split);
+			//listSieges(sender, split);
 
 		} else {
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), split[0]));
@@ -85,7 +85,7 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 					player.sendMessage(line);
 
 			else if (split[0].equalsIgnoreCase("list")) {
-				listSieges(player, split);
+				//listSieges(player, split);
 
 			//} else if (split[0].equalsIgnoreCase("attack")) {
 			//	processAttackTownRequest(player);
@@ -104,15 +104,15 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 
 
 
-
 	/**
 	 * Send a list of all sieges in the universe to player Command: /siege list
 	 *
 	 * @param sender - Player to send the list to.
 	 */
+	/*
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void listSieges(CommandSender sender, String[] split) {
-		List<Siege> siegesToSort = new ArrayList<>(TownyUniverse.getDataSource().getSieges());
+		List<Siege> siegesToSort = new ArrayList<>(TownyUniverse.getDataSource().getAllSieges());
 
 		int page = 1;
 	    int total = (int) Math.ceil(((double) siegesToSort.size()) / ((double) 10));
@@ -187,4 +187,5 @@ public class SiegeCommand extends BaseCommand implements CommandExecutor {
 					TownySettings.getListPageMsg(page, total)
 			));
 	}
+	*/
 }

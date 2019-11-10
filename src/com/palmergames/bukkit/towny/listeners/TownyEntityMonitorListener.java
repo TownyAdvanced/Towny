@@ -488,7 +488,7 @@ public class TownyEntityMonitorListener implements Listener {
 								" cannot afford to continue the siege on " +
 								TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
 								"The siege has been automatically abandoned.");
-				TownyUniverse.getDataSource().removeSiegeZone(siege);
+				TownyUniverse.getDataSource().removeSiege(siege);
 			}
 
 		} catch (EconomyException x) {

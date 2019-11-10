@@ -931,12 +931,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTownBlock(townBlock);
 			}
 
-			//Save Siege
-			saveSiege(town.getSiege());
 			//Save Siege zones and associated nations
 			for(Map.Entry<Nation,SiegeZone> entry: town.getSiege().getSiegeZones().entrySet()) {
-				saveNation(entry.getKey());
 				saveSiegeZone(entry.getValue());
+				saveNation(entry.getKey());
 			}
 
 			saveTown(town);

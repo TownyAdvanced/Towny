@@ -75,6 +75,15 @@ public class SiegeZone {
         return playerArrivalTimeMap;
     }
 
+    public Map<String, Long> getPlayerNameArrivalTimeMap() {
+        Map<String, Long> result = new HashMap<>();
+        for(Map.Entry<Player, Long> entry: playerArrivalTimeMap.entrySet()) {
+            result.put(entry.getKey().getName().toLowerCase(),
+                    entry.getValue());
+        }
+        return result;
+    }
+
     public Integer getSiegePoints() {
         return siegePoints;
     }

@@ -100,12 +100,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeZoneList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSieges() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeZoneList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSiegesZones() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveNationList() && saveTownList() && saveSiegeList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveSieges() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveNationList() && saveTownList() && saveSiegeZoneList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveSiegeZones() && saveResidents() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -328,11 +328,10 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
-	public boolean saveSieges() {
-
-		TownyMessaging.sendDebugMsg("Saving Sieges");
-		for (Siege siege : getSieges())
-			saveSiege(siege);
+	public boolean saveSiegeZones() {
+		TownyMessaging.sendDebugMsg("Saving Siege Zones");
+		for (SiegeZone siegeZone : getSiegeZones())
+			saveSiegeZone(siegeZone);
 		return true;
 	}
 

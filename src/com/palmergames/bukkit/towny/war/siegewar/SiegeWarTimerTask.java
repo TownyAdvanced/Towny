@@ -50,7 +50,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 
 		//Cycle through all sieges
-		for (Siege siege : new ArrayList<>(TownyUniverse.getDataSource().getSieges())) {
+		for (Siege siege : new ArrayList<>(SiegeWarUtil.getAllSieges())) {
 
 			TownyMessaging.sendMsg("Now evaluating siege on " + siege.getDefendingTown().getName());
 
@@ -80,11 +80,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 						}
 
 						//Save changes to db
-						TownyUniverse.getDataSource().saveSiege(siege);
+						TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
 					} else {
 						//Save changes to db
 						if (timeToSaveSiegeToDB)
-							TownyUniverse.getDataSource().saveSiege(siege);
+							TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
 					}
 
 				} else {
@@ -92,7 +92,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					//Siege is finished.
 					//Wait for siege cooldown to end then delete siege
 					if (currentTime > siege.getDefendingTown().getSiegeImmunityEndTime()) {
-						TownyUniverse.getDataSource().removeSiegeZone(siege);
+						TownyUniverse.getDataSource().removeSiege(siege);
 						continue;
 					}
 				}

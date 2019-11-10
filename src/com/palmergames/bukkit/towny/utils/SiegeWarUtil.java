@@ -77,7 +77,6 @@ public class SiegeWarUtil {
 
         //Save siegezone, siege, nation, and town
         TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-        TownyUniverse.getDataSource().saveSiege(siege);
         TownyUniverse.getDataSource().saveNation(attackingNation);
         TownyUniverse.getDataSource().saveTown(defendingTown);
         TownyUniverse.getDataSource().saveSiegeZoneList();
@@ -854,5 +853,15 @@ public class SiegeWarUtil {
     }
         //No siege banner found at the given location
         return null;
+    }
+
+    public static List<Siege> getAllSieges() {
+        List<Siege> result = new ArrayList<>();
+        for(SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
+            if(!result.contains(siegeZone.getSiege())) {
+                result.add(siegeZone.getSiege());
+            }
+        }
+        return result;
     }
 }

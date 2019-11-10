@@ -2079,18 +2079,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("siegeStatus=" + siege.getStatus().toString());
 			list.add("siegeTownPlundered=" + siege.getTownPlundered());
 			list.add("siegeTownInvaded=" + siege.getTownInvaded());
-			list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
-
-
+			if(siege.getAttackerWinner() != null) {
+				list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
+			}
 			list.add("siegeStatus=" + siege.getStatus().toString());
 			list.add("siegeStatus=" + siege.getStatus().toString());
 			list.add("siegeActualStartTime=" + Long.toString(siege.getStartTime()));
 			list.add("siegeScheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 			list.add("siegeActualEndTime=" + Long.toString(siege.getActualEndTime()));
 			list.add("siegeNextUpkeepTime=" + Long.toString(siege.getNextUpkeepTime()));
-
-			Nation[] attackers = town.getSiege().getSiegeZones().keySet().toArray(new Nation[0]);
-			list.add("siegeZones=" + StringMgmt.join(attackers, ","));
+			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getAllAttackers()));
 		}
 
 		/*
@@ -2183,6 +2181,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("defendingTown=" + siegeZone.getSiege().getDefendingTown().getName());
 		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
+		list.add("playerArrivalTimes=" + StringMgmt.join(siegeZone.getPlayerNameArrivalTimeMap(), ",", "@"));
 
 		/*
 		 *  Make sure we only save in async
@@ -2193,31 +2192,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	private List<String> getSerializedSiegeCombatantData(Nation nation, SiegeZone combatantData) {
-		List<String>list = new ArrayList<String>();
-		list.add("{");
-		list.add("nation=" + nation.getName());
-		list.add("active=" + combatantData.isActive());
-		list.add("siegePointsTotal=" + combatantData.getSiegePoints());
-		list.add("siegeBannerLocation=" +combatantData.getSiegeBannerLocationForSerialization());
-		list.add("playerArrivalTimeMap=" + combatantData.getPlayerArrivalTimeMapForSerialization());
-		list.add("}");
-		return list;
-	}
-
-	private List<String> getSerializedAttackerCombatantsMap(Map<Nation,SiegeZone> attackersMap) {
-		List<String>list = new ArrayList<>();
-		boolean firstEntry = false;
-		for(Map.Entry<Nation, SiegeZone> entry: attackersMap.entrySet()) {
-			if(firstEntry){
-				firstEntry = false;
-			} else {
-				list.add(",\n");
-			}
-			list.addAll(getSerializedSiegeCombatantData(entry.getKey(), entry.getValue()));
-		}
-		return list;
-	}
 
 	@Override
 	public boolean saveWorld(TownyWorld world) {
