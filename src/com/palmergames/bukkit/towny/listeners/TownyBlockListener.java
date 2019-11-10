@@ -230,24 +230,31 @@ public class TownyBlockListener implements Listener {
 	 */
 	public boolean evaluateSiegeWarPlaceBlockRequest(Player player,
 													 Block block,
-													 BlockPlaceEvent event) throws NotRegisteredException
+													 BlockPlaceEvent event)
 	{
-		String blockTypeName = block.getType().getKey().getKey();
-		if (blockTypeName.contains("banner")) {
+		try {
+			String blockTypeName = block.getType().getKey().getKey();
+			if (blockTypeName.contains("banner")) {
 
-			if(blockTypeName.contains("white")
-				&& ((Banner)block.getState()).getPatterns().size() == 0) {
-				//white banner
-				return evaluateSiegeWarPlaceWhiteBannerRequest(player, block,event);
+				if (blockTypeName.contains("white")
+						&& ((Banner) block.getState()).getPatterns().size() == 0) {
+					//white banner
+					return evaluateSiegeWarPlaceWhiteBannerRequest(player, block, event);
+				} else {
+					//coloured banner
+					return evaluateSiegeWarPlaceColouredBannerRequest(player, block, event);
+				}
+			} else if (block.getType().equals(Material.CHEST)) {
+				//Chest
+				return evaluateSiegeWarPlaceChestRequest(player, block);
 			} else {
-				//coloured banner
-				return evaluateSiegeWarPlaceColouredBannerRequest(player,block,event);
+				return false;
 			}
-		} else if (block.getType().equals(Material.CHEST)) {
-			//Chest
-			return evaluateSiegeWarPlaceChestRequest(player, block);
-		} else {
-			return false;
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(player, "Problem placing siege banner");
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			event.setCancelled(true);
+			return true;
 		}
 	}
 
@@ -291,27 +298,45 @@ public class TownyBlockListener implements Listener {
 		if(townBlock == null) {
 			//Check for siege start request
 			Coord blockCoordinate = Coord.parseCoord(block);
-			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(block.getWorld().getName());
+			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-			TownBlock[] nearbyTownBlocksArray = new TownBlock[4];
-			nearbyTownBlocksArray[0] =townyWorld.getTownBlock(blockCoordinate.add(0,-1));
-			nearbyTownBlocksArray[1] =townyWorld.getTownBlock(blockCoordinate.add(0,1));
-			nearbyTownBlocksArray[2] =townyWorld.getTownBlock(blockCoordinate.add(1,0));
-			nearbyTownBlocksArray[3] =townyWorld.getTownBlock(blockCoordinate.add(-1,0));
+			TownBlock nearbyTownBlock;
+			List<TownBlock> nearbyTownBlocksWithTowns = new ArrayList<>();
 
-			List<TownBlock> nearbyTownBlocks = new ArrayList<>();
-			for(TownBlock nearbyTownBlock: nearbyTownBlocksArray) {
-				if(nearbyTownBlock != null && nearbyTownBlock.hasTown()) {
-					nearbyTownBlocks.add(nearbyTownBlock);
+			if(townyWorld.hasTownBlock(blockCoordinate.add(0,-1))) {
+				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(0,-1));
+				if(nearbyTownBlock.hasTown()) {
+					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
 				}
 			}
 
-			if(nearbyTownBlocks.size() == 0) {
+			if(townyWorld.hasTownBlock(blockCoordinate.add(0,1))) {
+				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(0,1));
+				if(nearbyTownBlock.hasTown()) {
+					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
+				}
+			}
+
+			if(townyWorld.hasTownBlock(blockCoordinate.add(1,0))) {
+				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(1,0));
+				if(nearbyTownBlock.hasTown()) {
+					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
+				}
+			}
+
+			if(townyWorld.hasTownBlock(blockCoordinate.add(-1,0))) {
+				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(-1,0));
+				if(nearbyTownBlock.hasTown()) {
+					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
+				}
+			}
+
+			if(nearbyTownBlocksWithTowns.size() == 0) {
 				//No town blocks nearby. Continue.
 				return false;
 			} else  {
 				//One or more town blocks nearby. Evaluate siege attack request
-				SiegeWarUtil.processAttackTownRequest(player, block, nearbyTownBlocks,event);
+				SiegeWarUtil.processAttackTownRequest(player, block, nearbyTownBlocksWithTowns,event);
 				return true;
 			}
 
