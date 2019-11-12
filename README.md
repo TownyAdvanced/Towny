@@ -14,12 +14,12 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) supports MC 1.14.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) supports MC 1.14.*.
 * [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) supports MC 1.14.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
-| MC 1.14.* | [0.95.0.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) |
+| MC 1.14.* | [0.95.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) |
 | MC 1.13.2 | [0.95.0.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
@@ -92,7 +92,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
     <dependency>
       <groupId>com.palmergames.bukkit.towny</groupId>
       <artifactId>Towny</artifactId>
-      <version>0.95.0.0</version>
+      <version>0.95.1.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>  
