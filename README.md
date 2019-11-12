@@ -51,8 +51,7 @@ Some important pages to look over:
 
 Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
 
-If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
-If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m ).
+If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
 If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
 ___
