@@ -14,12 +14,12 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) supports MC 1.14.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) supports MC 1.14.*.
 * [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) supports MC 1.14.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
-| MC 1.14.* | [0.95.0.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) |
+| MC 1.14.* | [0.95.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) |
 | MC 1.13.2 | [0.95.0.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
@@ -51,8 +51,7 @@ Some important pages to look over:
 
 Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
 
-If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
-If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m ).
+If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
 If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
 ___
@@ -92,7 +91,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
     <dependency>
       <groupId>com.palmergames.bukkit.towny</groupId>
       <artifactId>Towny</artifactId>
-      <version>0.95.0.0</version>
+      <version>0.95.1.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>  
