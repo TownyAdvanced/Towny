@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.95.1.1</version>
+    <version>0.95.1.0 (1.13.2)</version>
 
     <licenses>
         <license>
@@ -24,7 +24,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
+        <project.bukkitAPIVersion>1.13</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -119,7 +119,7 @@
             <version>2.0.25-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Included in vanilla minecraft's JAR -->
+        <!-- Included in vanilla Minecraft's JAR -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>

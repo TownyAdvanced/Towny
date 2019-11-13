@@ -3565,6 +3565,7 @@ v0.92.0.11:
       - %townyadvanced_towny_postfix% - displays surname if it exists, falls back to mayor and king postfixes.
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
 0.95.0.0:
+  - Special backported release of 0.95.0.0 for 1.13.2 servers.
   - Bump to Release version number.
 0.95.0.1:
   - More PAPI placeholders:
@@ -3767,5 +3768,5 @@ v0.92.0.11:
   - Attempt to stop the perm hud plotname NPE, again.
 0.95.1.0: 
   - Bump version number for release.
-0.95.1.1:
-  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper.
+  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper. (Backported from 0.95.1.1 for 1.14)
+  - Special Release for 1.13.2 Servers

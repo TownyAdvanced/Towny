@@ -30,6 +30,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.ShulkerBox;
+import org.bukkit.block.data.type.Sign;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
@@ -938,7 +939,7 @@ public class TownyEntityListener implements Listener {
 											block.getDrops().clear();
 											// Work around for attachable blocks dropping items. Doesn't work perfectly but does stop more than before.
 											if (block.getState().getData() instanceof Attachable || 
-													Tag.SIGNS.isTagged(block.getType()) ||
+													block.getState().getData() instanceof Sign ||
 													Tag.WOODEN_PRESSURE_PLATES.isTagged(block.getType()) ||
 													block.getType().equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE) ||
 													block.getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) ||
