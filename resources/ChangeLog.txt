@@ -3771,3 +3771,6 @@ v0.92.0.11:
   - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper.
   - Add nation_zones_enabled & database_type to bstats.
 0.95.1.2:
+  - Fix server_type never returning Spigot.
+  - Changed from using the Bukkit API to the Spigot API.
+  - New feature: when your server is running not-craftbukkit (spigot, paper etc) the plot notifications will appear in the Action Bar line.

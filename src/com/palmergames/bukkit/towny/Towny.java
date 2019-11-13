@@ -107,6 +107,7 @@ public class Towny extends JavaPlugin {
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
+	public static boolean isSpigot = false;
 
 	private boolean error = false;
 	
@@ -125,6 +126,8 @@ public class Towny extends JavaPlugin {
 		version = this.getDescription().getVersion();
 
 		townyUniverse = TownyUniverse.getInstance();
+		
+		isSpigot = BukkitTools.isSpigot();
 
 		// Setup classes
 		BukkitTools.initialize(this);
@@ -826,7 +829,15 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("server_type", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return Bukkit.getServer().getName();
+				if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
+					return "Paper";
+				else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
+					if (isSpigot)
+						return "Spigot";
+					else 
+						return "CraftBukkit";
+				}
+				return "Unknown";
 			}
 		}));
 
