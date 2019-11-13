@@ -3770,3 +3770,4 @@ v0.92.0.11:
 0.95.1.1:
   - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper.
   - Add nation_zones_enabled & database_type to bstats.
+0.95.1.2:
