@@ -3767,3 +3767,5 @@ v0.92.0.11:
   - Attempt to stop the perm hud plotname NPE, again.
 0.95.1.0: 
   - Bump version number for release.
+0.95.1.1:
+  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper.

@@ -121,11 +121,6 @@ public class Towny extends JavaPlugin {
 	public void onEnable() {
 
 		System.out.println("====================      Towny      ========================");
-		
-		/*
-		 * Register bStats Metrics
-		 */
-		Metrics metrics = new Metrics(this);
 
 		version = this.getDescription().getVersion();
 
@@ -154,12 +149,7 @@ public class Towny extends JavaPlugin {
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
 
-			metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
-				@Override
-				public String call() throws Exception {
-					return TownySettings.getString(ConfigNodes.LANGUAGE);
-				}
-			}));
+			addMetricsCharts();
 
 			TownyWar.onEnable();
 
@@ -820,4 +810,25 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	private void addMetricsCharts() {
+		/*
+		 * Register bStats Metrics
+		 */
+		Metrics metrics = new Metrics(this);
+		
+		metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return TownySettings.getString(ConfigNodes.LANGUAGE);
+			}
+		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("server_type", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return Bukkit.getServer().getName();
+			}
+		}));
+		
+	}
 }
