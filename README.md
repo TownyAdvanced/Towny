@@ -20,7 +20,7 @@ ___
 | Minecraft Version | Towny Version |
 |:----:|:----:|
 | MC 1.14.* | [0.95.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) |
-| MC 1.13.2 | [0.95.0.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0for1.13.2) |
+| MC 1.13.2 | [0.95.1.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
 | MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
 | MC 1.10.2 | [0.93.1.0 for 1.10.2](https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0) |
