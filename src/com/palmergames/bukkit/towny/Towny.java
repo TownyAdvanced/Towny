@@ -828,6 +828,20 @@ public class Towny extends JavaPlugin {
 			public String call() throws Exception {
 				return Bukkit.getServer().getName();
 			}
+		}));		
+
+		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return String.valueOf(TownySettings.getNationZonesEnabled());
+			}
+		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("database_type", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return TownySettings.getSaveDatabase();
+			}
 		}));
 		
 	}

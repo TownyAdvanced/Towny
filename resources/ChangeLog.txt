@@ -3769,4 +3769,5 @@ v0.92.0.11:
 0.95.1.0: 
   - Bump version number for release.
   - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper. (Backported from 0.95.1.1 for 1.14)
+  - Add nation_zones_enabled & database_type to bstats.
   - Special Release for 1.13.2 Servers
