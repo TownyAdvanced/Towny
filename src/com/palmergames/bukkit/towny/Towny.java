@@ -844,7 +844,10 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return String.valueOf(TownySettings.getNationZonesEnabled());
+				if (TownySettings.getNationZonesEnabled())
+					return "true";
+				else
+					return "false";
 			}
 		}));
 		
