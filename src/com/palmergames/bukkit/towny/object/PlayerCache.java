@@ -182,12 +182,12 @@ public class PlayerCache {
 		destroyMatPermission = new HashMap<Material,Boolean>();
 		switchMatPermission = new HashMap<Material,Boolean>();
 		itemUseMatPermission = new HashMap<Material,Boolean>();
-		
-		// Pre 1.13 hashmaps here.
-		buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-		destroyPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-		switchPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
-		itemUsePermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+//		
+//		// Pre 1.13 hashmaps here.
+//		buildPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+//		destroyPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+//		switchPermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
+//		itemUsePermission = new HashMap<Integer, HashMap<Byte,Boolean>>();
 	}
 
 	public enum TownBlockStatus {
@@ -200,10 +200,12 @@ public class PlayerCache {
 		OUTSIDER,
 		PLOT_OWNER,
 		PLOT_FRIEND,
+		PLOT_TOWN,
 		PLOT_ALLY,
 		TOWN_OWNER,
 		TOWN_RESIDENT,
 		TOWN_ALLY,
+		TOWN_NATION,
 		ENEMY
 	}
 

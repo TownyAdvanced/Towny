@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -10,6 +11,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
@@ -20,7 +22,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -159,6 +160,25 @@ public class TownyAPI {
         
         for (Town town : nation.getTowns()) {
             players.addAll(getOnlinePlayers(town));
+        }
+        return players;
+    }
+    
+    
+    /** 
+     * Gets all online {@link Player}s for a specific {@link Nation}s alliance.
+     * 
+     * @param nation {@link Nation} of which you want all the online allied {@link Player}s.
+     * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
+     */
+    public List<Player> getOnlinePlayersAlliance(Nation nation) {
+    	ArrayList<Player> players = new ArrayList<>();
+    	
+        players.addAll(getOnlinePlayers(nation));
+        if (!nation.getAllies().isEmpty()) {
+			for (Nation nations : nation.getAllies()) {
+				players.addAll(getOnlinePlayers(nations));
+			}
         }
         return players;
     }
@@ -387,6 +407,10 @@ public class TownyAPI {
         
         TeleportWarmupTimerTask.abortTeleportRequest(resident);
     }
+    
+    public void registerCustomDataField(CustomDataField field) throws KeyAlreadyRegisteredException {
+    	townyUniverse.addCustomCustomDataField(field);
+	}
     
     public static TownyAPI getInstance() {
         if (instance == null) {

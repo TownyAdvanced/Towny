@@ -468,7 +468,18 @@ public enum ConfigNodes {
 			"1000000.0",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
-	),	
+	),
+	GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS(
+			"global_town_settings.display_xyz_instead_of_towny_coords",
+			"false",
+			"# If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords."
+	),
+	GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY(
+			"global_town_settings.display_town_list_randomly",
+			"false",
+			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -689,7 +700,7 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^a-zA-Z0-9._\\[\\]-]"),
+			"[^a-zA-Z0-9\\&._\\[\\]-]"),
 
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
@@ -702,7 +713,7 @@ public enum ConfigNodes {
 			"# Maximum length of titles and surnames."),
 	
 	FILTERS_PAPI_CHAT_FORMATTING(
-			"filters_colour_chat.papi_chat_formatting","",
+			"filters_colour_chat.papi_chat_formatting","","",
 			"# See How Towny Works wikipage for list of PAPI placeholders.",
 			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
 	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
@@ -953,6 +964,10 @@ public enum ConfigNodes {
 	FLAGS_RES_FR_DESTROY("default_perm_flags.resident.friend.destroy", "true"),
 	FLAGS_RES_FR_ITEM_USE("default_perm_flags.resident.friend.item_use", "true"),
 	FLAGS_RES_FR_SWITCH("default_perm_flags.resident.friend.switch", "true"),
+	FLAGS_RES_TOWN_BUILD("default_perm_flags.resident.town.build", "false"),
+	FLAGS_RES_TOWN_DESTROY("default_perm_flags.resident.town.destroy", "false"),
+	FLAGS_RES_TOWN_ITEM_USE("default_perm_flags.resident.town.item_use","false"),
+	FLAGS_RES_TOWN_SWITCH("default_perm_flags.resident.town.switch", "false"),
 	FLAGS_RES_ALLY_BUILD("default_perm_flags.resident.ally.build", "false"),
 	FLAGS_RES_ALLY_DESTROY("default_perm_flags.resident.ally.destroy", "false"),
 	FLAGS_RES_ALLY_ITEM_USE(
@@ -995,6 +1010,10 @@ public enum ConfigNodes {
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),
 	FLAGS_TOWN_RES_ITEM_USE("default_perm_flags.town.resident.item_use", "true"),
 	FLAGS_TOWN_RES_SWITCH("default_perm_flags.town.resident.switch", "true"),
+	FLAGS_TOWN_NATION_BUILD("default_perm_flags.town.nation.build", "false"),
+	FLAGS_TOWN_NATION_DESTROY("default_perm_flags.town.nation.destroy", "false"),
+	FLAGS_TOWN_NATION_ITEM_USE("default_perm_flags.town.nation.item_use", "false"),
+	FLAGS_TOWN_NATION_SWITCH("default_perm_flags.town.nation.switch", "false"),
 	FLAGS_TOWN_ALLY_BUILD("default_perm_flags.town.ally.build", "false"),
 	FLAGS_TOWN_ALLY_DESTROY("default_perm_flags.town.ally.destroy", "false"),
 	FLAGS_TOWN_ALLY_ITEM_USE("default_perm_flags.town.ally.item_use", "false"),
@@ -1078,6 +1097,12 @@ public enum ConfigNodes {
 			"invite_system.maximum_invites_received.nation",
 			"10",
 			"# How many requests can one nation have from other nations for an alliance."),
+	INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN(
+			"invite_system.maximum_distance_from_town_spawn",
+			"0",
+			"# When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.",
+			"# Use this setting to require players to be near or inside a town before they can be invited."),
+	
 	RES_SETTING(
 			"resident_settings",
 			"",
@@ -1308,6 +1333,10 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT(
+			"economy.daily_taxes.town_plotbased_upkeep_minimum_amount",
+			"0.0",
+			"# If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead."),
 	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
 			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
 			"0.0",
@@ -1323,6 +1352,35 @@ public enum ConfigNodes {
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
+	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
+	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
+			"0.0",
+			"# Cost to use /plot set shop to change a normal plot to a shop plot."),
+	ECO_PLOT_TYPE_COSTS_ARENA("economy.plot_type_costs.set_arena",
+			"0.0",
+			"# Cost to use /plot set arena to change a normal plot to a arena plot."),
+	ECO_PLOT_TYPE_COSTS_EMBASSY("economy.plot_type_costs.set_embassy",
+			"0.0",
+			"# Cost to use /plot set embassy to change a normal plot to a embassy plot."),
+	ECO_PLOT_TYPE_COSTS_WILDS("economy.plot_type_costs.set_wilds",
+			"0.0",
+			"# Cost to use /plot set wilds to change a normal plot to a wilds plot."),
+	ECO_PLOT_TYPE_COSTS_INN("economy.plot_type_costs.set_inn",
+			"0.0",
+			"# Cost to use /plot set inn to change a normal plot to a inn plot."),
+	ECO_PLOT_TYPE_COSTS_JAIL("economy.plot_type_costs.set_jail",
+			"0.0",
+			"# Cost to use /plot set jail to change a normal plot to a jail plot."),
+	ECO_PLOT_TYPE_COSTS_FARM("economy.plot_type_costs.set_farm",
+			"0.0",
+			"# Cost to use /plot set farm to change a normal plot to a farm plot."),
+	ECO_PLOT_TYPE_COSTS_BANK("economy.plot_type_costs.set_bank",
+			"0.0",
+			"# Cost to use /plot set bank to change a normal plot to a bank plot."),
+//	ECO_PLOT_TYPE_COSTS_OUTPOST("economy.plot_type_costs.set_outpost",
+//			"0.0",
+//			"# Cost to use /plot set outpost to change a normal plot to a outpost plot."),
+	
 	JAIL(
 			"jail",
 			"",
@@ -1360,7 +1418,15 @@ public enum ConfigNodes {
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),
+			"#Amount that bail costs for normal residents/nomads."),
+	JAIL_BAIL_BAIL_AMOUNT_MAYOR(
+			"jail.bail.bail_amount_mayor",
+			"10",
+			"#Amount that bail costs for Town mayors."),
+	JAIL_BAIL_BAIL_AMOUNT_KING(
+			"jail.bail.bail_amount_king",
+			"10",
+			"#Amount that bail costs for Nation kings."),
 	JAIL_BLACKLISTED_COMMANDS(
 			"jail.blacklisted_commands",
 			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
@@ -1400,7 +1466,7 @@ public enum ConfigNodes {
 			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
 	WAR_DISALLOW_ONE_WAY_ALLIANCE(
 			"war.disallow_one_way_alliance",
-			"false",
+			"true",
 			"#By setting this to true, nations will receive a prompt for alliances and alliances will show on both nations."
 	),
 	WAR_ECONOMY(
@@ -1511,7 +1577,12 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
 			"# and the losing town gains a negative (-1) bonus townblock."),
-
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+			"war.event.winner_takes_ownership_of_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.",
+			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town."),
+	
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),

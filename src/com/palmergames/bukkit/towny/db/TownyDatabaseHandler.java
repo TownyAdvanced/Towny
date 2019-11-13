@@ -302,14 +302,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			resident.clear();
 			
-			
-			for (Town townOutlaw : getTowns()) {
-				if (townOutlaw.hasOutlaw(resident)) {
-					townOutlaw.removeOutlaw(resident);
-					saveTown(townOutlaw);
-				}
-			}
-			
 		} catch (EmptyTownException e) {
 			removeTown(town);
 
@@ -317,6 +309,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// town not registered
 			e.printStackTrace();
 		}
+		
+		try {
+			for (Town townOutlaw : getTowns()) {
+				if (townOutlaw.hasOutlaw(resident)) {
+					townOutlaw.removeOutlaw(resident);
+					saveTown(townOutlaw);
+				}
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident.getName()));
 	}
 
@@ -580,10 +584,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		
 		// Look for residents inside of this town's jail and free them
-		// TODO: Perhaps in the future a new object JailedResidents can be used to make this searching much quicker.
-		for (Resident jailedRes : getResidents()) {
+		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
-                jailedRes.setJailed(BukkitTools.getPlayer(jailedRes.getName()), 0, town);
+                jailedRes.setJailed(jailedRes, 0, town);
                 saveResident(jailedRes);
             }
 		}
@@ -950,16 +953,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			boolean isJailed;
 			int JailSpawn;
 			
-			boolean transferBalance = !TownyEconomyHandler.hasEconomyAccount(newName);
-			
-			//get data needed for resident
-			if(transferBalance && TownySettings.isUsingEconomy()){
+			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
 				try {
 					balance = resident.getHoldingBalance();
 					resident.removeAccount();
 				} catch (EconomyException ignored) {
 				}				
 			}
+			
+			//get data needed for resident
 			List<Resident> friends = resident.getFriends();
 			List<String> nationRanks = resident.getNationRanks();
 			TownyPermission permissions = resident.getPermissions();
@@ -973,8 +975,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			registered = resident.getRegistered();			
 			lastOnline = resident.getLastOnline();
 			isMayor = resident.isMayor();
-			isJailed = resident.isJailed();
+			isJailed = resident.isJailed();			
 			JailSpawn = resident.getJailSpawn();
+			
+			if (resident.isJailed()) {
+				try {
+					universe.getJailedResidentMap().remove(universe.getDataSource().getResident(oldName));
+					universe.getJailedResidentMap().add(universe.getDataSource().getResident(newName));
+				} catch (Exception ignored) {
+				}
+			}
+				
 			
 			//delete the resident and tidy up files
 			deleteResident(resident);
@@ -986,7 +997,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getResidentMap().put(newName.toLowerCase(), resident);
 			
 			//add everything back to the resident
-			if (transferBalance && TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
 				try {
 					resident.setBalance(balance, "Rename Player - Transfer to new account");
 				} catch (EconomyException e) {

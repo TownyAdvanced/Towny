@@ -95,10 +95,12 @@ nations:
         - towny.nation.spawn.ally
         - towny.town.spawn.nation
         - towny.chat.nation
+        - towny.chat.alliance
 
     king:
         # Kings get these permissions in addition to the default set.
         - towny.command.nation.*
+        - towny.command.nation.deposit.other
         
     ranks:
         assistant:
@@ -106,5 +108,6 @@ nations:
             - towny.command.nation.invite.add
             - towny.command.nation.ally.*
             - towny.command.nation.enemy
+            - towny.command.nation.deposit.other
         helper:
             - towny.command.nation.add

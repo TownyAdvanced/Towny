@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -23,7 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+
 public class DailyTimerTask extends TownyTimerTask {
+	
+	private double totalTownUpkeep = 0.0;
+	private double totalNationUpkeep = 0.0;
+	private List<String> removedTowns = new ArrayList<>();
+	private List<String> removedNations = new ArrayList<>();
 
 	public DailyTimerTask(Towny plugin) {
 
@@ -49,7 +58,11 @@ public class DailyTimerTask extends TownyTimerTask {
 				collectTownCosts();
 				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
 				collectNationCosts();
+				
+				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+				
 			} catch (EconomyException ignored) {
+				System.out.println("Economy Exception");
 			} catch (TownyException e) {
 				// TODO king exception
 				e.printStackTrace();
@@ -63,9 +76,39 @@ public class DailyTimerTask extends TownyTimerTask {
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly()).start();
 		}
 
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		// Reduce jailed residents jail time
+		if (!townyUniverse.getJailedResidentMap().isEmpty()) {
+			for (Resident resident : townyUniverse.getJailedResidentMap()) {
+				if (resident.hasJailDays()) {
+					if (resident.getJailDays() == 1) {
+						resident.setJailDays(0);
+						new BukkitRunnable() {
+
+				            @Override
+				            public void run() {				            	
+				            	Town jailTown = null;
+								try {
+									jailTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
+								} catch (NotRegisteredException ignored) {
+								}
+								int index = resident.getJailSpawn();
+				            	resident.setJailed(resident , index, jailTown);
+				            }
+				            
+				        }.runTaskLater(this.plugin, 20);
+					} else 
+						resident.setJailDays(resident.getJailDays() - 1);
+					
+				}
+				townyUniverse.getDataSource().saveResident(resident);
+			}			
+		}
+
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
 		townyUniverse.getDataSource().cleanupBackups();
 		if (TownySettings.isBackingUpDaily())
 			try {
@@ -125,7 +168,6 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (nation.getTaxes() > 0) {
 
 			List<Town> towns = new ArrayList<>(nation.getTowns());
-			List<String> removedTowns = new ArrayList<>();
 			ListIterator<Town> townItr = towns.listIterator();
 			Town town;
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -316,7 +358,6 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectTownCosts() throws EconomyException, TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
-		List<String> removedTowns = new ArrayList<>();
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -335,6 +376,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (upkeepPenalty > 0 && upkeep > 0)
 						upkeep = upkeep + upkeepPenalty;
 				
+					totalTownUpkeep = totalTownUpkeep + upkeep;
 					if (upkeep > 0) {
 						// Town is paying upkeep
 						if (!town.pay(upkeep, "Town Upkeep")) {
@@ -369,8 +411,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_bankrupt_town2"),ChatTools.list(removedTowns)));
 			else
 				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, TownySettings.getLangString("msg_bankrupt_town_multiple")));
-		}
-			
+		}	
 	}
 
 	/**
@@ -381,7 +422,6 @@ public class DailyTimerTask extends TownyTimerTask {
 	public void collectNationCosts() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Nation> nations = new ArrayList<>(townyUniverse.getDataSource().getNations());
-		List<String> removedNations = new ArrayList<>();
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
 
@@ -396,6 +436,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				double upkeep = TownySettings.getNationUpkeepCost(nation);
 
+				totalNationUpkeep = totalNationUpkeep + upkeep;
 				if (upkeep > 0) {
 					// Town is paying upkeep
 

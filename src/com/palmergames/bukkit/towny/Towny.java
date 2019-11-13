@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.command.InviteCommand;
@@ -48,6 +49,9 @@ import com.palmergames.bukkit.towny.war.flagwar.listeners.TownyWarEntityListener
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
+
+import net.milkbowl.vault.permission.Permission;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -58,6 +62,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -68,19 +73,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Towny Plugin for Bukkit
  * 
- * Website: http://code.google.com/a/eclipselabs.org/p/towny/ Source:
- * http://code.google.com/a/eclipselabs.org/p/towny/source/browse/
+ * Website & Source: https://github.com/TownyAdvanced/Towny
  * 
- * @author Shade, ElgarL
+ * @author Shade, ElgarL, LlmDl
  */
 
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger("com.palmergames.bukkit.towny");
-	private static final TownyLogger townyLogger = TownyLogger.getInstance();
 	private String version = "2.0.0";
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -117,11 +121,6 @@ public class Towny extends JavaPlugin {
 	public void onEnable() {
 
 		System.out.println("====================      Towny      ========================");
-		
-		/*
-		 * Register bStats Metrics
-		 */
-		new Metrics(this);
 
 		version = this.getDescription().getVersion();
 
@@ -150,6 +149,8 @@ public class Towny extends JavaPlugin {
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
 
+			addMetricsCharts();
+
 			TownyWar.onEnable();
 
 			if (TownySettings.isTownyUpdating(getVersion())) {
@@ -162,13 +163,13 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
-		LOGGER.info("=============================================================");
+		System.out.println("=============================================================");
 		if (isError()) {
-			LOGGER.info("[WARNING] - ***** SAFE MODE ***** " + version);
+			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
-			LOGGER.info("[Towny] Version: " + version + " - Mod Enabled");
+			System.out.println("[Towny] Version: " + version + " - Mod Enabled");
 		}
-		LOGGER.info("=============================================================");
+		System.out.println("=============================================================");
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -182,7 +183,6 @@ public class Towny extends JavaPlugin {
 	public void setWorldFlags() {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for (Town town : universe.getDataSource().getTowns()) {
-			TownyMessaging.sendDebugMsg("[Towny] Setting flags for: " + town.getName());
 
 			if (town.getWorld() == null) {
 				LOGGER.warn("[Towny Error] Detected an error with the world files. Attempting to repair");
@@ -250,8 +250,6 @@ public class Towny extends JavaPlugin {
 			return false;
 		}
 
-		townyLogger.setupLogger();
-
 		checkPlugins();
 
 		setWorldFlags();
@@ -284,7 +282,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null) {
 			// groupManager = (GroupManager)test;
-			this.getTownyUniverse().setPermissionSource(new GroupManagerSource(this, test));
+			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
 			using.add(String.format("%s v%s", "GroupManager", test.getDescription().getVersion()));
 		} else {
 			// Try Vault
@@ -296,13 +294,18 @@ public class Towny extends JavaPlugin {
 					test = null;
 					// Fall back to BukkitPermissions below
 				} else {
-					getTownyUniverse().setPermissionSource(new VaultPermSource(this, chat));
-					using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
+					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+					if (vaultPermProvider != null) {
+						using.add(vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault " + test.getDescription().getVersion());
+					} else {
+						using.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
+					}
 				}
 			}
 
 			if (test == null) {
-				getTownyUniverse().setPermissionSource(new BukkitPermSource(this));
+				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
 				using.add("BukkitPermissions");
 			}
 		}
@@ -347,7 +350,7 @@ public class Towny extends JavaPlugin {
 		}
 
 		if (using.size() > 0) {
-			LOGGER.info("[Towny] Using: " + StringMgmt.join(using, ", "));
+			System.out.println("[Towny] Using: " + StringMgmt.join(using, ", "));
 		}
 
 
@@ -392,8 +395,8 @@ public class Towny extends JavaPlugin {
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
-			LOGGER.info("------------------------------------");
-			LOGGER.info("[Towny] ChangeLog up until v" + getVersion());
+			System.out.println("------------------------------------");
+			System.out.println("[Towny] ChangeLog up until v" + getVersion());
 			String lastVersion = TownySettings.getLastRunVersion(getVersion()).split("_")[0];
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
@@ -401,10 +404,10 @@ public class Towny extends JavaPlugin {
 					display = true;
 				}
 				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					LOGGER.info(line);
+					System.out.println(line);
 				}
 			}
-			LOGGER.info("------------------------------------");
+			System.out.println("------------------------------------");
 		} catch (IOException e) {
 			TownyMessaging.sendDebugMsg("Could not read ChangeLog.txt");
 		}
@@ -807,4 +810,25 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	private void addMetricsCharts() {
+		/*
+		 * Register bStats Metrics
+		 */
+		Metrics metrics = new Metrics(this);
+		
+		metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return TownySettings.getString(ConfigNodes.LANGUAGE);
+			}
+		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("server_type", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return Bukkit.getServer().getName();
+			}
+		}));
+		
+	}
 }

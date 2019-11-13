@@ -3361,7 +3361,7 @@ v0.92.0.11:
     - API: added Nation.getKing().
     - New Language File: chinese.yml courtesy of qsefthuopq.
     - The TownyLogger has been removed in favour of log4j.Logger, work done by Articdive.
-    - The german.yml has been updated by Sprugente.
+    - The german.yml has been updated by Sprungente.
     - The FileMgmt has seen a slight touch-up courtesy of Articdive.
       - Might be a fix for some servers who've been unable to update beyond 0.94.0.0 without townblocks causing safemode.
     - Added confirmations to /ta town {townname} delete when used from the Console.
@@ -3411,7 +3411,7 @@ v0.92.0.11:
         - string_check_regex: ^[а-яА-Яa-zA-Z0-9\s._\[\]\#\?\!\@\$\%\^\&\*\-\,\*\(\)\{\}]*$
         - name_remove_regex: '[^а-яА-Яa-zA-Z0-9._\[\]-]'
     - Added korean.yml translation by DayBreak365.
-    - The german.yml has been updated to 0.52 by Sprugente.
+    - The german.yml has been updated to 0.52 by Sprungente.
     - New Command: /ta town {townname} toggle forcepvp
       - Set the town's AdminEnabledPVP setting to true or false.
       - Forces PVP on in a town.
@@ -3447,7 +3447,7 @@ v0.92.0.11:
       - default: false
       - Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.
       - If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty).
-    - The german.yml has been updated again by Sprugente.
+    - The german.yml has been updated again by Sprungente.
     - Added ShopPlotUtil for shop plugins to use.
       - Contains helpful, easy-to-use tests.
     - Added getPlayer() to the API's TownPreClaimEvent so that plugin which cancel Towny claims can more easily inform the player why their claim is cancelled.
@@ -3566,3 +3566,207 @@ v0.92.0.11:
       - %townyadvanced_towny_colour% - used to show colours before nomads, residents, mayors and kings. (Set in the config.yml.)
 0.95.0.0:
   - Special backported release of 0.95.0.0 for 1.13.2 servers.
+  - Bump to Release version number.
+0.95.0.1:
+  - More PAPI placeholders:
+    - %townyadvanced_town_residents_amount% - number of residents in a town.
+    - %townyadvanced_town_residents_online% - number of residents in a town that are currently online.
+    - %townyadvanced_town_townblocks_used% - number of townblocks claimed by a resident's town.
+    - %townyadvanced_town_townblocks_bought% - number of townblocks bought by a resident's town.
+    - %townyadvanced_town_townblocks_bonus% - number of bonus blocks given to a resident's town.
+    - %townyadvanced_town_townblocks_maximum% - number of townblocks a town has available to claim.
+    - %townyadvanced_town_townblocks_natural_maximum% - number of townblocks a town has available to claim, not counting bonus/bought townblocks.
+    - %townyadvanced_town_mayor% - a resident's town's mayor's name.
+    - %townyadvanced_nation_king% - a resident's nation's king's name.
+    - %townyadvanced_resident_friends_amount% - number of friends a resident has.
+    - %townyadvanced_nation_residents_amount% - number of residents in a resident's nation.
+    - %townyadvanced_nation_residents_online% - number of residents in a resident's nation that are currently online.
+    - %townyadvanced_nation_capital% - name of a resident's nation's capital.
+    - Closes ticket #3446
+  - Make /t rank add|remove {name} {rank} not care about case sensitivity.
+    - Closes ticket #3445
+  - New Config Option: economy.daily_taxes.town_plotbased_upkeep_minimum_amount
+    - default: 0.0
+    - If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead.
+    - Closes Ticket #664
+  - API: new event added - NewDayEvent
+    - has gettable lists of fallen towns and nations, total town and nation upkeeps collected, time at which the event happened.
+    - Closes ticket #3323
+  - New Perm Levels: Town & Nation
+    - On player-owned plots the perm line now has Town added to it.
+      - Build/Destroy/Switch/ItemUse can be set for friends/townmembers/allies/outsiders.
+      - Allies consists of nation-members and nation-allies.
+    - On town-owned plots the perm line now has Nation added to it.    
+      - Build/Destroy/Switch/ItemUse can be set for residents/nationmembers/allies/outsiders.
+      - Allies consists of nation-allies.
+    - Closes ticket #3241
+  - New Config Options:
+	- default_perm_flags.resident.town.build, default false
+	- default_perm_flags.resident.town.destroy, default false
+	- default_perm_flags.resident.town.item_use, default false
+	- default_perm_flags.resident.town.switch, default false
+	- default_perm_flags.town.nation.build, default false
+	- default_perm_flags.town.nation.destroy, default false
+	- default_perm_flags.town.nation.item_use, default false
+	- default_perm_flags.town.nation.switch, default false
+    - These are used to set the default perm values for new plots.
+  - Language files bumped to 0.56.
+  - Fix being unable to toggle debug mode in-game, courtesy of Articdive
+    - Closes ticket #3443
+  - The german.yml has been updated to 0.56 by Sprungente.
+0.95.0.2:
+  - Fix missing placeholder %townyadvanced_towny_tag_formatted% not actually existing.
+  - Fix world explosion setting not allowing explosions to damage animals, armorstands, itemframes and endercrystals in the wilderness when they ought be exploded.
+    - Closes ticket #3459
+  - Solve townless townblocks causing safemode instead of being deleted.
+    - Actually deletes the townblock file now too.
+    - Closes ticket #3336
+  - Change to default config: war.disallow_one_way_alliance
+    - Now defaults to true.
+    - One-way alliances are discouraged, and eventually may be done away with entirely in order to better facilitate new features and war updates.
+  - New Permission Node: towny.command.nation.deposit.other
+    - Allows a nation member to deposit money into the townbank of a nation member.
+    - Is NOT a child node of towny.command.nation.deposit or towny.command.nation.*
+  - REQUIRED TOWNYPERMS.YML CHANGE:
+    - add towny.command.nation.deposit.other to the king and nation assistant ranks.
+  - New Command: /n deposit {amount} {townname}
+    - Requires towny.command.nation.deposit.other
+    - Lets a nation member deposit money into a town bank of a town that is part of their nation.
+    - Closes ticket #1953
+  - Language files bumped to 0.57.
+  - Fix bad grammar possible to be seen on /t join command. 
+  - Fix Tridents with Channeling that causes lightning strikes to harm animals, item frames and armor stands.
+  - Add Villagers to list of things we protect from damage.
+  - Protect pigs from being zapped by lightning where explosions shouldn't happen.
+  - New Config Options:
+    - economy.plot_type_costs.set_commercial
+    - economy.plot_type_costs.set_arena
+    - economy.plot_type_costs.set_embassy
+    - economy.plot_type_costs.set_wilds
+    - economy.plot_type_costs.set_inn
+    - economy.plot_type_costs.set_jail
+    - economy.plot_type_costs.set_farm
+    - economy.plot_type_costs.set_bank
+    - All default to a cost of 0.
+    - Set cost higher to charge person for changing their plot to the desired type.
+  - Changed Command: /towny prices
+    - Now displays costs of setting plot types.
+  - Added ability to set costs for all plot types using /plot set {type}.
+    - Money charged goes to the Server Account.
+  - New Config Option: invite_system.maximum_distance_from_town_spawn
+    - Default: 0
+    - When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.
+    - Use this setting to require players to be near or inside a town before they can be invited.
+    - Closes ticket #3089
+0.95.0.3:
+  - Fix language string call when /town is used.
+0.95.0.4:
+  - Language Files bumped to 0.58
+  -	New Config Option: jail.bail.bail_amount_mayor
+    - Default: 10
+    - Amount that bail costs for Town mayors.
+  - New Config Option: jail.bail.bail_amount_king
+    - Default: 10
+    - Amount that bail costs for Nation kings.
+  - You can now charge separate bail amounts for Mayors and Kings.
+  - Changed Command: /town toggle jail [jailnumber] [resident] (days)
+    - Town mayors may now jail for an optional amount of days.
+    - On Towny newdays (when taxes/upkeep are collected) jailed players who have a day amount set will have their day amount lowered by one.
+    - Players who have served their sentence will be unjailed.
+    - When the days amount is not used the player will be jailed indefinetly as usual.
+    - Remaining days are shown on a player's /res screen. 
+    - Closes ticket #3232
+  - Make plot set only show cost when the cost is more than 0.
+  - New Config Option: global_town_settings.display_xyz_instead_of_towny_coords
+    - default: false
+    - If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords.
+    - Closes ticket #3347
+  - Fix bug where Towny failed to find the new economy accounts for player's who've changed their name.
+    - Closes ticket #3466
+  - New Command: /ta mysqldump
+    - When your config has save & load set to mysql you can use this command to dump the mysql database to flatfile.
+    - Closes ticket #2628
+  - New Command: /ta database [save|load]
+    - Saves or loads the database.
+    - Closes ticket #2070
+  - New Command: /plot set outpost
+    - Used on an already claimed plot to turn it into an outpost.
+    - Requires towny.command.town.claim.outpost permission node.
+    - Charges the town the same amount to claim an outpost.
+    - Closes ticket #2912
+  - The german.yml has been updated to 0.58 by Sprungente.
+  - Add language chart to bStats.
+    - Closes ticket #3472
+  - New Config Option: war.event.winner_takes_ownership_of_townblocks
+    - Default: false
+    - If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.
+    - One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town.
+    - Closes ticket #3470
+  - Added ability to have Event War actually transfer conquered townblocks over to the winning town permanently.
+    - Does not transfer townblocks which did not have their HP drop to 0. 
+    - This means rushing to a town's homeblock will only net you the townblocks you won on the way, and not the entire town.
+  - REQUIRED CONFIG CHANGE: filters_colour_chat.regex.name_remove_regex
+    - Change to '[^a-zA-Z0-9\&._\[\]-]'
+    - This allows colours to be used in the title/surname options.
+    - The default config will have the &, if you don't want colour codes used in titles/surnames you can skip this.
+    - Closes ticket #3172
+  - New Commands: /town set title {resident} {title} & /town set surname {resident} {title}
+    - Exactly like the King ability to set titles and surnames.
+    - This is being made available to mayors so that mayors can better role play their own townmembers.
+    - Permission nodes: towny.command.town.set.title & towny.command.town.set.surname are child nodes of towny.command.town.set.*
+    - Closes ticket #3439
+  - New Permission node: towny.command.town.set.title
+    - Child node of towny.command.town.set.*
+  - New Permission node: towny.command.town.set.surname
+    - Child node of towny.command.town.set.*
+0.95.0.5:
+  - Fix above name_remove_regex change for default configs.
+  - Bump language files to 0.59.
+  - Fix toggling debug mode off stopping all MC logging, courtesy of ArticDive in PR #3485
+    - Closes ticket #3468
+  - Make /res screen display title and surname if they are present, falling back to the king/mayor prefix/postfix.
+  - New Config Option: global_town_settings.display_town_list_randomly
+    - Default: false
+    - If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts.
+    - Closes ticket #3456
+  - Added /town list ? & /nation list ? pages
+  - New Feature: Town and TownBlock Metadata, courtesy of Siris in PR #3482
+    - Plugins or townyadmins can now place metadata onto Towns and TownBlocks.
+    - Metadata keys must already be registered by a plugin.
+    - These metadata will be saved and loaded to/from the Towny database by Towny.
+    - Until the github wiki is updated for 0.95.1.0 please reference: https://github.com/TownyAdvanced/Towny/pull/3482
+  - New Command: /ta town [townname] meta, courtesy of Siris.
+    - Used to view a town's metadata.  
+  - New Command: /ta town [townname] meta set [key] [value], courtesy of Siris
+    - Sets a metadata value
+    - Used by admins to manipulate metadata
+  - New Command: /ta town [townname] meta [add|remove] [key], courtesy of Siris
+    - Adds or removes a metadata
+    - Used by admins to manipulate metadata
+  - New Command: /ta plot meta, courtesy of Siris.
+    - Used to view a townblock's metadata.
+  - New Command: /ta plot meta set [key] [value], courtesy of Siris
+    - Sets a metadata value
+    - Used by admins to manipulate metadata
+  - New Command: /ta plot meta [add|remove] [key], courtesy of Siris
+    - Adds or removes a metadata
+  - Swap out HashTables for ConcurrentHashMaps, courtesy of Silverwolfg11 in PR #3488
+    - Should increase performance.
+    - Used by admins to manipulate metadata
+  - Fix /plot set outpost failing due to your own town's townblocks being too close.
+    - Closes ticket #3489
+  - Fix error message not showing when a town has sent too many invites out.
+  - TOWNYPERMS.YML CHANGE: add towny.chat.alliance to your default nation group.
+  - Fix alliances not persisting across server restarts when nothing else causes the nation to save.
+0.95.0.6:
+  - German.yml updated by enterih.
+  - Fix outlaw not getting removed if hermit, courtesy of benjads.
+  - Fix loading of mysql databases' townblocks and the new metadata.
+0.95.0.7:
+  - Add permission plugin information to Towny startup's Using section.
+  - Make changelog on updates more readable from the console, hello.
+  - Attempt to stop the perm hud plotname NPE, again.
+0.95.1.0: 
+  - Bump version number for release.
+  - Add server_type to bstats metrics, will show us what % uses Craftbukkit, Spigot & Paper. (Backported from 0.95.1.1 for 1.14)
+  - Special Release for 1.13.2 Servers

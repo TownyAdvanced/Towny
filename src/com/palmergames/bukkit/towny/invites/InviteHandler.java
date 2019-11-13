@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -77,6 +78,8 @@ public class InviteHandler {
 				getNationtonationinvites().remove(sendernation, receivernation);
 				receivernation.deleteReceivedInvite(invite);
 				sendernation.deleteSentAllyInvite(invite);
+				TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
+				TownyUniverse.getInstance().getDataSource().saveNation(sendernation);
 				return;
 			}
 			// Nation invited other Nation to ally

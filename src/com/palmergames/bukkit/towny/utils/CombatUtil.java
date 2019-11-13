@@ -440,6 +440,41 @@ public class CombatUtil {
 	}
 
 	/**
+	 * Is town b in a nation with town a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if they are allies.
+	 */
+	public static boolean isSameNation(Town a, Town b) {
+
+		try {
+			if (a == b)
+				return true;
+			if (a.getNation() == b.getNation())
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Is town b in a nation with town a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if they are allies.
+	 */
+	public static boolean isSameTown(Town a, Town b) {
+
+		if (a == b)
+			return true;
+		return false;
+	}
+
+	
+	/**
 	 * Can resident a attack resident b?
 	 * 
 	 * @param a

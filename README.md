@@ -14,22 +14,22 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest) supports MC 1.14.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) supports MC 1.14.*.
 * [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) supports MC 1.14.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
-| MC 1.14.* | [0.95.0.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0) |
-| MC 1.13.2 | [0.94.0.0](https://github.com/TownyAdvanced/Towny/releases/tag/v0.94.0.0) |
-| MC 1.12.2 | [0.93.1.0 for 1.12.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.12.2/) |
-| MC 1.11.2 | [0.93.1.0 for 1.11.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.11.2/) |
-| MC 1.10.2 | [0.93.1.0 for 1.10.2](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.10.2/) |
-| MC 1.9.4 | [0.93.1.0 for 1.9.4](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/%200.93.1.0%20for%201.9.4/) |
-| MC 1.8.9 | [0.93.1.0 for 1.8.9](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.93.1.0%20for%201.8.9/) |
-| MC 1.7.10 | [0.92.0.0 for 1.7.10](http://towny.palmergames.com/file-repo/Towny%20Advanced/Releases/0.92.0.0%20%28For%20MC%201.7.10%29/) |
-| MC 1.6.4 | [0.88.0.0 for 1.6.4](http://towny.palmergames.com/?p=744) |
-| MC 1.5.2 | [0.88.0.0 for 1.5.2](http://towny.palmergames.com/download/towny-advanced-0-88-0-0-cb-1-5-2/) |
-| MC 1.2.5 | [0.82.0.0](http://towny.palmergames.com/?p=735) | 
+| MC 1.14.* | [0.95.1.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) |
+| MC 1.13.2 | [0.95.0.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.0.0for1.13.2) |
+| MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
+| MC 1.11.2 | [0.93.1.0 for 1.11.2](https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0) |
+| MC 1.10.2 | [0.93.1.0 for 1.10.2](https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0) |
+| MC 1.9.4 | [0.93.1.0 for 1.9.4](https://www.dropbox.com/s/eh81i4618bfmvjm/Towny_Advanced%200.93.1.0%20for%20MC%201.9.4.zip?dl=0) |
+| MC 1.8.9 | [0.93.1.0 for 1.8.9](https://www.dropbox.com/s/b9i7po8mgl8a4ck/Towny_Advanced%200.93.1.0%20for%20MC%201.8.9.zip?dl=0) |
+| MC 1.7.10 | [0.92.0.0 for 1.7.10](https://www.dropbox.com/s/vmf2g5bj7ab4coo/Towny_Advanced%200.92.0.0%20-%20MC%201.7.10.zip?dl=0) |
+| MC 1.6.4 | [0.88.0.0 for 1.6.4](https://www.dropbox.com/s/5n9r60ivldh5i8f/Towny_Advanced%200.88.0.0%20%281.6.4%29.zip?dl=0) |
+| MC 1.5.2 | [0.88.0.0 for 1.5.2](https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0) |
+| MC 1.2.5 | [0.82.0.0](https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0) | 
 
 ___
 
@@ -51,11 +51,9 @@ Some important pages to look over:
 
 Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
 
-If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network.
-If you are a server admin that wants to get cutting edge updates on the development of the plugin and want to help test things before they become public, join us in our [Discord server]( https://discord.gg/gnpVs5m )
+If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
-If you want to support the developer consider becoming a patron: 
-[<img align=right src="https://user-images.githubusercontent.com/879756/65957602-d3795800-e412-11e9-8b27-dda76b6fed13.PNG">](https://www.patreon.com/bePatron?u=25096724)
+If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
 ___
 
 ### Contributing
@@ -80,20 +78,20 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 - **Maven**
 
     - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
-    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry).
+    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry)
         
 ```
   <repositories>
     <repository>
       <id>github-Towny</id>
-      <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+      <url>https://maven.pkg.github.com/TownyAdvanced/Towny/packages</url>
     </repository>   
   </repositories>
   <dependencies>                    
     <dependency>
       <groupId>com.palmergames.bukkit.towny</groupId>
       <artifactId>Towny</artifactId>
-      <version>0.94.0.12</version>
+      <version>0.95.1.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>  

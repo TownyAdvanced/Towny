@@ -57,6 +57,7 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
+import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -307,15 +308,36 @@ public class TownyEntityListener implements Listener {
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : entity = " + entity);
 		TownyMessaging.sendDebugMsg("EntityDamageByEntityEvent : damager = " + damager);
 		
-		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal) {
-		  if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
-          damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
+		// Entities requiring special protection.
+		if (entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof Animals || entity instanceof EnderCrystal || entity instanceof Villager) {
+			
+			// Handle exploding causes of damage.
+		    if (damager.equals("PRIMED_TNT") || damager.equals("MINECART_TNT") || damager.equals("WITHER_SKULL") || damager.equals("FIREBALL") ||
+                damager.equals("SMALL_FIREBALL") || damager.equals("LARGE_FIREBALL") || damager.equals("WITHER") || damager.equals("CREEPER") || damager.equals("FIREWORK")) {
 								
 				if (!locationCanExplode(townyWorld, entity.getLocation())) {
 					event.setCancelled(true);
 					return;
+				} else {
+					return;
 				}
 			}
+		    
+		    if (damager.equals("LIGHTNING")) {
+		    	// Other than natural causes, as of the introduction of Tridents with the Channeling enchantment,
+		    	// lightning can be summoned by anyone at anything. Until we can discern the cause of the lightning
+		    	// we will block all damage to the above entities requiring special protection.
+		    	// Note 1: Some day we might be able to get the cause of the lightning.
+				if (!locationCanExplode(townyWorld, entity.getLocation())) {
+					event.setDamage(0);
+					event.setCancelled(true);
+					return;
+				} else {
+					return;
+				}
+		    }
+
+		    // Handle arrows and projectiles that do not explode.
 			if (event.getDamager() instanceof Projectile) {
 				
 				try {
@@ -348,6 +370,8 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 				}
 			}
+			
+			// Handle player causes against entities that should be protected.
 			if (event.getDamager() instanceof Player) {
 				Player player = (Player) event.getDamager();
 				boolean bDestroy = false;
@@ -1114,4 +1138,23 @@ public class TownyEntityListener implements Listener {
 		event.setCancelled(!bBuild);
 	}
 
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPigHitByLightning(PigZapEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+		
+		try {
+			if (!locationCanExplode(TownyAPI.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName()), event.getEntity().getLocation())) {
+				event.setCancelled(true);
+			}
+		} catch (NotRegisteredException ignored) {
+		}
+			
+			
+	}
 }

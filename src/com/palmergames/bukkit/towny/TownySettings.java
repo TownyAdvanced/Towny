@@ -52,7 +52,7 @@ public class TownySettings {
 	}
 
 	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, language, newLanguage;
+	private static CommentedConfiguration config, newConfig, language, newLanguage, playermap;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
@@ -217,6 +217,19 @@ public class TownySettings {
 			config.save();
 
 			loadCachedObjects();
+		}
+	}
+	
+	public static void loadPlayerMap(String filepath) {
+		if (FileMgmt.checkOrCreateFile(filepath)) {
+			File file = new File(filepath);
+			
+			playermap = new CommentedConfiguration(file);
+			if (!playermap.load()) {
+				System.out.println("Failed to load playermap!");
+				
+				
+			}
 		}
 	}
 
@@ -1653,6 +1666,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_EVENT_COSTS_TOWNBLOCKS);
 	}
 
+	public static boolean getWarEventWinnerTakesOwnershipOfTownblocks() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS);
+	}
+	
 	public static boolean isChargingDeath() {
 		
 		return (getDeathPrice()>0 || getDeathPriceTown()>0 || getDeathPriceNation()>0 );
@@ -1728,6 +1746,16 @@ public class TownySettings {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT);
 	}
+	
+	public static double getBailAmountMayor() {
+		
+		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_MAYOR);
+	}
+	
+	public static double getBailAmountKing() {
+		
+		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_KING);
+	}
 
 	public static double getWartimeTownBlockLossPrice() {
 
@@ -1777,6 +1805,7 @@ public class TownySettings {
         } else
             multiplier = 1.0;
  
+        Double amount = 0.0;
         if (town.hasNation()) {
             double nationMultiplier = 1.0;
             try {
@@ -1786,14 +1815,20 @@ public class TownySettings {
             } catch (NotRegisteredException e) {
                 e.printStackTrace();
             }
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
-                return (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
-            else
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
+            	amount = (((getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier) ;
+                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+                return amount;
+            } else
                 return (getTownUpkeep() * multiplier) * nationMultiplier ;
         } else
-            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep())
-                return (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
-            else
+            if (isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep()) {
+                amount = (getTownUpkeep() * multiplier) * Double.valueOf(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString()) ;
+                if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
+               		amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+                return amount;
+            } else
                 return getTownUpkeep() * multiplier ;
     }
 
@@ -1807,6 +1842,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED);
 	}
 	
+	public static double getPlotBasedUpkeepMinimumAmount () {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT);
+		
+	}
 	public static boolean isTownLevelModifiersAffectingPlotBasedUpkeep() {
 		
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER);
@@ -2101,6 +2141,25 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_RES_FR_SWITCH);
 	}
 
+	public static boolean getPermFlag_Resident_Town_Build() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_BUILD);
+	}
+
+	public static boolean getPermFlag_Resident_Town_Destroy() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_DESTROY);
+	}
+
+	public static boolean getPermFlag_Resident_Town_ItemUse() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Resident_Town_Switch() {
+
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_SWITCH);
+	}
 	public static boolean getPermFlag_Resident_Ally_Build() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_ALLY_BUILD);
@@ -2181,6 +2240,26 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_RES_SWITCH);
 	}
 
+	public static boolean getPermFlag_Town_Nation_Build() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_BUILD);
+	}
+
+	public static boolean getPermFlag_Town_Nation_Destroy() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_DESTROY);
+	}
+
+	public static boolean getPermFlag_Town_Nation_ItemUse() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Town_Nation_Switch() {
+
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_SWITCH);
+	}
+	
 	public static boolean getPermFlag_Town_Ally_Build() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_ALLY_BUILD);
@@ -2253,6 +2332,38 @@ public class TownySettings {
 			throw new UnsupportedOperationException();
 	}
 
+	public static boolean getDefaultNationPermission(TownBlockOwner owner, ActionType type) {
+
+		if (owner instanceof Resident)
+			switch (type) {
+			case BUILD:
+				return getPermFlag_Resident_Town_Build();
+			case DESTROY:
+				return getPermFlag_Resident_Town_Destroy();
+			case SWITCH:
+				return getPermFlag_Resident_Town_Switch();
+			case ITEM_USE:
+				return getPermFlag_Resident_Town_ItemUse();
+			default:
+				throw new UnsupportedOperationException();
+			}
+		else if (owner instanceof Town)
+			switch (type) {
+			case BUILD:
+				return getPermFlag_Town_Nation_Build();
+			case DESTROY:
+				return getPermFlag_Town_Nation_Destroy();
+			case SWITCH:
+				return getPermFlag_Town_Nation_Switch();
+			case ITEM_USE:
+				return getPermFlag_Town_Nation_ItemUse();
+			default:
+				throw new UnsupportedOperationException();
+			}
+		else
+			throw new UnsupportedOperationException();
+	}
+	
 	public static boolean getDefaultAllyPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
@@ -2322,6 +2433,8 @@ public class TownySettings {
 		switch (level) {
 		case RESIDENT:
 			return getDefaultResidentPermission(owner, type);
+		case NATION:
+			return getDefaultNationPermission(owner, type);
 		case ALLY:
 			return getDefaultAllyPermission(owner, type);
 		case OUTSIDER:
@@ -2676,6 +2789,49 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
 	}
 
+	public static double getPlotSetCommercialCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_COMMERCIAL);
+	}
+	
+	public static double getPlotSetArenaCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_ARENA);
+	}
+	
+	public static double getPlotSetEmbassyCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_EMBASSY);
+	}
+	
+	public static double getPlotSetWildsCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_WILDS);
+	}
+	
+	public static double getPlotSetInnCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_INN);
+	}
+	
+	public static double getPlotSetJailCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_JAIL);
+	}
+	
+	public static double getPlotSetFarmCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_FARM);
+	}
+	
+	public static double getPlotSetBankCost() {
+		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_BANK);
+	}
+	
+	public static int getMaxDistanceFromTownSpawnForInvite() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN);
+	}
+	
+	public static boolean getTownDisplaysXYZ() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS);
+	}
+	
+	public static boolean isTownListRandom() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
+	}
 	
 }
 

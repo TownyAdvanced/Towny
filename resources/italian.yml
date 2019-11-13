@@ -1,5 +1,5 @@
 name: Towny
-version: 0.55
+version: 0.59
 language: italian
 author: Leomixer17
 website: 'http://towny.palmergames.com/'
@@ -870,7 +870,6 @@ not_registered: 'Not registered.'
 msg_error_missing_comparator: '&bMust specify what to sort by.'
 msg_error_invalid_comparator: '&bInvalid comparator.'
 msg_error_multiple_comparators: '&bToo many comparators. Only specify one.'
-msg_error_multiple_comparators: '&bToo many pages. Only specify one.'
 msg_error_comparator_failed: '&bComparator failed. Try a different one.'
 number_of_residents: '(Number of Residents)'
 number_of_towns: '(Number of Towns)'
@@ -936,3 +935,67 @@ war_starts_in_x: 'War starts in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
+
+# Added in 0.56:
+msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+
+# Added in 0.57:
+msg_err_already_res2: '&c%s already belong to a town.'
+msg_err_cannot_afford_plot_set_type_cost: '&cYou cannot afford to set the plot to a %s type costing %s'
+msg_plot_set_cost: '&bYou have been charged %s for setting plot to type: %s'
+msg_err_townspawn_has_not_been_set: '&cTown spawn has not been set.'
+msg_err_player_too_far_from_town_spawn: '&c%s is too far away from your town spawn to receive an invite to town. Max distance: %s blocks.'
+
+# Added in 0.58:
+msg_resident_bail_amount: 'Resident Bail costs: '
+msg_mayor_bail_amount: 'Mayor Bail costs: '
+msg_king_bail_amount: 'King Bail costs: '
+msg_has_paid_bail: ' has paid bail and is free.'
+msg_err_unable_to_pay_bail: 'Unable to afford bail.'
+msg_err_bail_not_enabled: 'Bail is not enabled.'
+msg_you_have_been_freed_from_jail: 'You have been freed from jail.'
+msg_player_has_been_freed_from_jail_number: '%s has been freed from jail number %s.'
+msg_you_have_been_sent_to_jail: 'You have been sent to jail.'
+msg_player_has_been_sent_to_jail_number: '%s has been sent to jail number %s.'
+msg_player_is_not_online: '%s is not online.'
+msg_err_days_must_be_greater_than_zero: '&cDays must be greater than zero.'
+msg_you've_been_jailed_for_x_days: 'You have been jailed for %s days.'
+msg_jailed_for_x_days: ' &2for %s days.'
+msg_mysql_dump_success: 'MySQL database dump complete.'
+msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
+msg_save_success: 'Database saved.'
+msg_load_success: 'Database loaded.'
+msg_err_cannot_afford_to_set_outpost: 'Your town does not have enough funds to set this townblock to an outpost.'
+msg_too_close2: 'This area is too close to another town''s  %s.'
+homeblock: 'homeblock'
+townblock: 'townblock'
+outpost: 'outpost'
+msg_err_not_same_town: '&b%s doesn''t belong to your town.'
+
+# Added in 0.59:
+msg_modes_set: 'Modes set: '
+msg_err_this_plot_doesnt_have_any_associated_metadata: 'This plot doesn''t have any associated metadata.'
+msg_err_the_metadata_for_key_is_not_registered: 'The metadata for ''%s'' is not registered!'
+msg_key_x_was_successfully_updated_to_x: 'Key %s was successfully updated to %s.'
+msg_err_key_x_is_not_part_of_this_plot: 'Key %s is not part of this plot, if possible please add it.'
+msg_err_key_x_already_exists: 'Key %s already exists!'
+msg_custom_data_was_successfully_added_to_townblock: 'Custom data was successfully added to townblock!'
+msg_data_successfully_deleted: 'Data successfully deleted!'
+msg_err_key_cannot_be_deleted: 'Key cannot be deleted because it does not exist!'
+msg_err_this_town_doesnt_have_any_associated_metadata: 'This town doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_town: 'Key %s is not part of this town, if possible please add it.'
+msg_custom_data_was_successfully_added_to_town: 'Custom data was successfully added to town!'
+msg_error_too_many_pages: 'Too many pages.'
+msg_err_location_is_not_within_a_town: 'Location is not within a town.'
+msg_err_location_is_not_within_a_jail_plot: 'Location is not within a Jail plot.'
+msg_err_town_has_no_jail_spawns_set: 'Town has no jail spawns set.'
+msg_err_town_has_no_outpost_spawns_set: 'Town has no outpost spawns set.'
+msg_err_location_is_not_within_an_outpost_plot: 'Location is not within an outpost plot.'
+msg_err_town_has_not_set_a_spawn_location: 'Town has not set a spawn location.'
+msg_err_town_has_no_claim_over_this_town_block: 'Town has no claim over this town block.'
+msg_err_town_doesnt_belong_to_any_nation: 'Town doesn''t belong to any nation.'
+msg_err_mayor_doesnt_belong_to_town: 'Mayor doesn''t belong to town.'
+msg_err_tag_too_long: 'Tag too long.'
+msg_err_nation_has_not_set_a_spawn_location: 'Nation has not set a spawn location.'
+msg_err_resident_doesnt_belong_to_any_town: 'Resident doesn''t belong to any town'
+msg_err_could_not_set_default_modes_for: 'Could not set default modes for '

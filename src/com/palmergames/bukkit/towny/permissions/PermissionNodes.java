@@ -20,6 +20,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_MERGE("towny.command.nation.merge"),
 	TOWNY_COMMAND_NATION_WITHDRAW("towny.command.nation.withdraw"),
 	TOWNY_COMMAND_NATION_DEPOSIT("towny.command.nation.deposit"),
+	TOWNY_COMMAND_NATION_DEPOSIT_OTHER("towny.command.nation.deposit.other"),
 	TOWNY_COMMAND_NATION_OTHERNATION("towny.command.nation.othernation"),
 	TOWNY_COMMAND_NATION_JOIN("towny.command.nation.join"),
 	
@@ -113,6 +114,8 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
+			TOWNY_COMMAND_TOWN_SET_TITLE("towny.command.town.set.title"),
+			TOWNY_COMMAND_TOWN_SET_SURNAME("towny.command.town.set.surname"),
 		
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
@@ -136,7 +139,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_CLAIM("towny.command.town.claim.*"),
 			TOWNY_COMMAND_TOWN_CLAIM_TOWN("towny.command.town.claim.town"),
 				TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE("towny.command.town.claim.town.multiple"),
-			TOWNY_COMMAND_TOWN_CLAIM_OUPTPOST("towny.command.town.claim.outpost"),
+			TOWNY_COMMAND_TOWN_CLAIM_OUTPOST("towny.command.town.claim.outpost"),
 		
 		TOWNY_COMMAND_TOWN_UNCLAIM("towny.command.town.unclaim"),
 		TOWNY_COMMAND_TOWN_UNCLAIM_ALL("towny.command.town.unclaim.all"),
@@ -212,6 +215,7 @@ public enum PermissionNodes {
 		
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),
     	TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM("towny.command.townyadmin.plot.claim"),
+		TOWNY_COMMAND_TOWNYADMIN_PLOT_META("towny.command.townyadmin.plot.meta"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
@@ -229,6 +233,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER("towny.command.townyadmin.town.spawn"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_SPAWN_OTHER("towny.command.townyadmin.nation.spawn"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
+	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_NATION("towny.command.townyadmin.nation.*"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ADD("towny.command.townyadmin.nation.add"),
@@ -248,6 +253,8 @@ public enum PermissionNodes {
 	
 	TOWNY_COMMAND_TOWNYADMIN_GIVEBONUS("towny.command.townyadmin.givebonus"),
 	TOWNY_COMMAND_TOWNYADMIN_RELOAD("towny.command.townyadmin.reload"),
+	TOWNY_COMMAND_TOWNYADMIN_MYSQLDUMP("towny.command.townyadmin.mysqldump"),
+	TOWNY_COMMAND_TOWNYADMIN_DATABASE("towny.command.townyadmin.database"),
 	TOWNY_COMMAND_TOWNYADMIN_RESET("towny.command.townyadmin.reset"),
 	TOWNY_COMMAND_TOWNYADMIN_BACKUP("towny.command.townyadmin.backup"),
 	TOWNY_COMMAND_TOWNYADMIN_NEWDAY("towny.command.townyadmin.newday"),

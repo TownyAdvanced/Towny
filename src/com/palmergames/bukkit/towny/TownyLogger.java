@@ -21,47 +21,66 @@ import org.bukkit.Bukkit;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author Lukas Mansour (Articdive)
+ */
 public class TownyLogger {
 	private static final TownyLogger instance = new TownyLogger();
 	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
+	private final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+	private final Configuration config = ctx.getConfiguration();
+	private Appender townyMainAppender;
+	private Appender townyMoneyAppender;
+	private Appender townyDebugAppender;
+	private Appender consoleAppender;
 	
 	private TownyLogger() {
-		
-	}
-	
-	void setupLogger() {
-		// Hook into Log4J2
-		final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-		final Configuration config = ctx.getConfiguration();
-		final boolean append = TownySettings.isAppendingToLog();
-		
 		String logFolderName = TownyUniverse.getInstance().getRootFolder() + File.separator + "logs";
-		// Get the standard layout for the new appenders
+		//Create the standard layout
 		Layout<String> standardLayout = PatternLayout.newBuilder()
 			.withCharset(StandardCharsets.UTF_8)
 			.withPattern(PatternLayout.SIMPLE_CONVERSION_PATTERN)
 			.withConfiguration(config)
 			.build();
+		createMainAppender(logFolderName, standardLayout);
+		createMoneyAppender(logFolderName);
+		createDebugAppender(logFolderName, standardLayout);
+		createConsoleAppender();
 		
+		townyMainAppender.start();
+		config.addAppender(townyMainAppender);
+		
+		townyMoneyAppender.start();
+		config.addAppender(townyMoneyAppender);
+		
+		townyDebugAppender.start();
+		config.addAppender(townyDebugAppender);
+		
+		enableMainLogger();
+		enableMoneyLogger();
+		updateLoggers();
+	}
+	
+	private void createMainAppender(String logFolderName, Layout<String> standardLayout) {
 		// Towny main logger
-		Appender townyMainAppender = FileAppender.newBuilder()
+		townyMainAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "towny.log")
 			.withName("Towny")
-			.withAppend(append)
+			.withAppend(TownySettings.isAppendingToLog())
 			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
 			.withLayout(standardLayout)
 			.build();
-		townyMainAppender.start();
-		config.addAppender(townyMainAppender);
-		
+	}
+	
+	private void createMoneyAppender(String logFolderName) {
 		// Towny money logger
-		Appender townyMoneyAppender = FileAppender.newBuilder()
+		townyMoneyAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "money.csv")
 			.withName("Towny-Money")
-			.withAppend(append)
+			.withAppend(TownySettings.isAppendingToLog())
 			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
@@ -74,47 +93,75 @@ public class TownyLogger {
 				.withConfiguration(config)
 				.build())
 			.build();
-		townyMoneyAppender.start();
-		config.addAppender(townyMoneyAppender);
-		
+	}
+	
+	private void createDebugAppender(String logFolderName, Layout<String> standardLayout) {
 		// Towny debug logger
-		Appender townyDebugAppender = FileAppender.newBuilder()
+		townyDebugAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "debug.log")
 			.withName("Towny-Debug")
-			.withAppend(append)
+			.withAppend(TownySettings.isAppendingToLog())
 			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
 			.withLayout(standardLayout)
 			.build();
-		townyDebugAppender.start();
-		config.addAppender(townyDebugAppender);
-		
-		// Towny main
+	}
+	
+	private void createConsoleAppender() {
+		if (!Bukkit.getVersion().contains("Paper")) {
+			// If we use CB or Spigot we can use the standard Vanilla MC Console Logger
+			consoleAppender = config.getAppender("TerminalConsole");
+		} else {
+			consoleAppender = ConsoleAppender.newBuilder()
+				.withName("Towny-Console-Paper")
+				.withBufferedIo(false)
+				.withBufferSize(0)
+				.setConfiguration(config)
+				.withLayout(PatternLayout.newBuilder()
+					.withCharset(StandardCharsets.UTF_8)
+					.withPattern("%minecraftFormatting{%msg}%n%xEx")
+					.withConfiguration(config)
+					.build())
+				.build();
+			config.addAppender(consoleAppender);
+			consoleAppender.start();
+		}
+	}
+	
+	private void enableMainLogger() {
 		LoggerConfig townyMainConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyMainAppender.getName(), Level.ALL, null)}, null, config, null);
 		townyMainConfig.addAppender(townyMainAppender, Level.ALL, null);
-		// This is Vanilla MC's file logger
 		townyMainConfig.addAppender(config.getAppender("File"), Level.INFO, null);
-		enableConsoleLogging(config, townyMainConfig);
-		// Money
+		townyMainConfig.addAppender(consoleAppender, Level.INFO, null);
+		
+		config.addLogger("com.palmergames.bukkit.towny", townyMainConfig);
+	}
+	
+	public void enableDebugLogger() {
+		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyDebugAppender.getName(), Level.ALL, null)}, null, config, null);
+		townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
+		townyDebugConfig.addAppender(config.getAppender("File"), Level.INFO, null);
+		townyDebugConfig.addAppender(consoleAppender, Level.INFO, null);
+		
+		config.addLogger("com.palmergames.bukkit.towny.debug", townyDebugConfig);
+	}
+	
+	public void toggleDebugLogger() {
+		LoggerConfig townyDebugConfig = config.getLoggerConfig("Towny-Debug");
+		if (townyDebugConfig.isStarted()) {
+			townyDebugConfig.stop();
+		} else {
+			townyDebugConfig.start();
+		}
+	}
+	
+	private void enableMoneyLogger() {
 		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyMoneyAppender.getName(), Level.ALL, null)}, null, config, null);
 		townyMoneyConfig.addAppender(townyMoneyAppender, Level.ALL, null);
 		
-		// Debug
-		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Debug", null, new AppenderRef[]{AppenderRef.createAppenderRef(townyDebugAppender.getName(), Level.ALL, null)}, null, config, null);
-		if (TownySettings.getDebug()) {
-			townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
-			townyDebugConfig.addAppender(config.getAppender("File"), Level.INFO, null);
-			enableConsoleLogging(config, townyDebugConfig);
-		} else {
-			townyDebugConfig.addAppender(townyDebugAppender, Level.OFF, null);
-		}
-		
-		config.addLogger("com.palmergames.bukkit.towny", townyMainConfig);
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
-		config.addLogger("com.palmergames.bukkit.towny.debug", townyDebugConfig);
-		ctx.updateLoggers();
 	}
 	
 	public void logMoneyTransaction(TownyEconomyObject a, double amount, TownyEconomyObject b, String reason) {
@@ -141,31 +188,11 @@ public class TownyLogger {
 		return String.format("[%s] %s", type, obj != null ? obj.getName() : "");
 	}
 	
-	public static TownyLogger getInstance() {
-		return instance;
+	public void updateLoggers() {
+		ctx.updateLoggers();
 	}
 	
-	private void enableConsoleLogging(Configuration config, LoggerConfig loggerConfig) {
-		// This is for console logging
-		if (!Bukkit.getVersion().contains("Paper")) {
-			// If we use CB or Spigot we can use the standard Vanilla MC Console Logger
-			loggerConfig.addAppender(config.getAppender("TerminalConsole"), Level.INFO, null);
-		} else {
-			Appender townyPaperConsoleAppender = ConsoleAppender.newBuilder()
-				.withName("Towny-Console-Paper")
-				.withBufferedIo(false)
-				.withBufferSize(0)
-				.setConfiguration(config)
-				.withLayout(PatternLayout.newBuilder()
-					.withCharset(StandardCharsets.UTF_8)
-					.withPattern("%minecraftFormatting{%msg}%n%xEx")
-					.withConfiguration(config)
-					.build())
-				.build();
-			townyPaperConsoleAppender.start( );
-			config.addAppender(townyPaperConsoleAppender);
-			// If we use Paper, we just use a custom Console Logger
-			loggerConfig.addAppender(townyPaperConsoleAppender, Level.INFO, null);
-		}
+	public static TownyLogger getInstance() {
+		return instance;
 	}
 }

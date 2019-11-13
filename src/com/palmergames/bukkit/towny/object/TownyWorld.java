@@ -10,7 +10,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 public class TownyWorld extends TownyObject {
@@ -30,7 +30,7 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<>();
+	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
 	
@@ -499,31 +499,6 @@ public class TownyWorld extends TownyObject {
 
 	}
 
-	/**
-	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
-	 * 
-	 * @return - List of blocked materials.
-	 */
-	@Deprecated
-	public List<String> getUnclaimedZoneIgnoreIds() {
-
-		if (unclaimedZoneIgnoreBlockMaterials == null)
-			return TownySettings.getUnclaimedZoneIgnoreMaterials();
-		else
-			return unclaimedZoneIgnoreBlockMaterials;
-	}
-
-	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(Material mat)}
-	 * 
-	 * @return - true, if it is an ignored material
-	 */
-	@Deprecated
-	public boolean isUnclaimedZoneIgnoreId(String id) {
-
-		return getUnclaimedZoneIgnoreMaterials().contains(id);
-	}
-
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
 		this.unclaimedZoneIgnoreBlockMaterials = unclaimedZoneIgnoreIds;
@@ -703,8 +678,11 @@ public class TownyWorld extends TownyObject {
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
-					
+
 					Coord townCoord = b.getCoord();
+					
+					if (key.equals(townCoord)) continue;
+					
 					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 					if (dist < min)
 						min = dist;
