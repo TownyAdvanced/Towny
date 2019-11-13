@@ -3775,3 +3775,5 @@ v0.92.0.11:
   - Changed from using the Bukkit API to the Spigot API.
   - New feature: when your server is running not-craftbukkit (spigot, paper etc) the plot notifications will appear in the Action Bar line.
     - Closes ticket #2929
+  - REQUIRED CONFIG.YML CHANGE:
+    - Add ",BREWING_STAND" to the end of the protection.switch_ids to protect Brewing Stands.
