@@ -86,11 +86,11 @@ public class SiegeWarUtil {
         if(newSiege) {
             TownyMessaging.sendGlobalMessage(
                     "The nation of " + attackingNation.getName() +
-                            " has joined the siege on the town of " + defendingTown.getName());
+                            " has initiated a siege on the town of " + defendingTown.getName());
         } else {
             TownyMessaging.sendGlobalMessage(
                     "The nation of " + attackingNation.getName() +
-                            " has initiated a siege on the town of " + defendingTown.getName());
+                            " has joined the siege on the town of " + defendingTown.getName());
         }
 
 
@@ -133,29 +133,73 @@ public class SiegeWarUtil {
         }
     }
 
-    public static void processAbandonSiegeRequest(Player player, String townName, BlockPlaceEvent event)  {
+    public static void processAbandonSiegeRequest(Player player,
+                                                  Block block,
+                                                  List<TownBlock> nearbyTownBlocksWithTowns,
+                                                  BlockPlaceEvent event)  {
         try {
-            if(!TownyUniverse.getDataSource().hasTown(townName))
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
-
-            if(!TownyUniverse.getDataSource().getTown(townName).hasSiege())
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
-
+            //If player has no permission to abandon,send error
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
-
-            if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-                throw new TownyException("The siege is already over");
-
+            //Player has no town
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-            Nation nation = resident.getTown().getNation();
+            if(!resident.hasTown())
+                throw new TownyException("You cannot place an abandon banner because you do not belong to a town.");
 
-            if(!siege.getActiveAttackers().contains(nation))
+            if(!resident.getTown().hasNation())
+                throw new TownyException("You cannot place an abandon banner because you do not belong to a nation.");
+
+            //Get list of adjacent towns with sieges
+            List<Town> nearbyTownsWithSieges =new ArrayList<>();
+            for(TownBlock nearbyTownBlock: nearbyTownBlocksWithTowns) {
+                if(nearbyTownBlock.getTown().hasSiege()
+                        && nearbyTownBlock.getTown().getSiege().getStatus() == SiegeStatus.IN_PROGRESS){
+                    nearbyTownsWithSieges.add(nearbyTownBlock.getTown());
+                }
+            }
+
+            //If none are under active siege, send error
+            if(nearbyTownsWithSieges.size() == 0)
+                throw new TownyException("You cannot place an abandon banner because none of the nearby towns are under siege.");
+
+            //Get the active siege zones
+            List<SiegeZone> nearbyActiveSiegeZones = new ArrayList<>();
+            for(Town nearbyTownWithSiege: nearbyTownsWithSieges) {
+                for(SiegeZone siegeZone: nearbyTownWithSiege.getSiege().getSiegeZones().values()) {
+                    if(siegeZone.isActive())
+                        nearbyActiveSiegeZones.add(siegeZone);
+                }
+            }
+
+            //Find the nearest active zone to the player
+            SiegeZone targetedSiegeZone = null;
+            double distanceToTarget = -1;
+            for(SiegeZone siegeZone: nearbyActiveSiegeZones) {
+                if (targetedSiegeZone == null) {
+                    targetedSiegeZone = siegeZone;
+                    distanceToTarget = block.getLocation().distance(targetedSiegeZone.getFlagLocation());
+                } else {
+                    double distanceToNewTarget = block.getLocation().distance(siegeZone.getFlagLocation());
+                    if(distanceToNewTarget < distanceToTarget) {
+                        targetedSiegeZone = siegeZone;
+                        distanceToTarget = distanceToNewTarget;
+                    }
+                }
+            }
+
+            //If the player's nation is not the attacker, send error
+            Nation residentNation = resident.getTown().getNation();
+            if(targetedSiegeZone.getAttackingNation() != residentNation)
                 throw new TownyException("Your nation is not attacking this town right now");
 
-            SiegeWarUtil.attackerAbandon(nation, siege);
+            //If the player is too far from the targeted zone, error error
+            if(distanceToTarget > TownySettings.getTownBlockSize())
+                throw new TownyException("You cannot place an abandon banner because " +
+                        "you are too far from the nearest attack banner. " +
+                        "Move closer to the attack banner");
+
+            SiegeWarUtil.attackerAbandon(targetedSiegeZone);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -164,28 +208,30 @@ public class SiegeWarUtil {
     }
 
 
-    public static void processSurrenderRequest(Player player, BlockPlaceEvent event) {
+    public static void processSurrenderRequest(Player player,
+                                               Town townWhereBlockWasPlaced,
+                                               BlockPlaceEvent event) {
 
         try {
             if (!TownySettings.getWarSiegeEnabled())
                 throw new TownyException("Siege war feature disabled");  //todo - replace w lang string
 
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            if(!resident.hasTown())
+                throw new TownyException("You cannot place a surrender banner because you do not belong to a town.");
+
+            if(resident.getTown() != townWhereBlockWasPlaced)
+                throw new TownyException("You cannot place a surrender banner because this is not your town.");
+
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-            Town town = resident.getTown();
-
-            if(!town.hasSiege())
-                throw new TownyException("Your town is not under siege");
-
-            Siege siege = town.getSiege();
-
+            Siege siege = townWhereBlockWasPlaced.getSiege();
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-                throw new TownyException("The siege is over");
+                throw new TownyException("You cannot place a surrender banner because the siege is over");
 
             if(siege.getActiveAttackers().size() > 1)
-                throw new TownyException("You cannot surrender if there is more than one attacker");
+                throw new TownyException("You cannot place a surrender banner if there is more than 1 attacker");
 
             //Surrender
             SiegeWarUtil.defenderSurrender(siege);
@@ -447,7 +493,7 @@ public class SiegeWarUtil {
         siege.setStatus(SiegeStatus.ATTACKER_WIN);
         siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(winnerNation);
-        activateSiegeCooldown(siege);
+        activateSiegeImmunityTimer(siege);
         activateRevoltCooldown(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_attacker_win"),
@@ -456,22 +502,22 @@ public class SiegeWarUtil {
         ));
     }
 
-    public static void attackerAbandon(Nation nation, Siege siege) {
-        siege.getSiegeZones().get(nation).setActive(false);
-        TownyMessaging.sendGlobalMessage(nation.getName() + " has abandoned their attack on" + siege.getDefendingTown().getName());
+    public static void attackerAbandon(SiegeZone siegeZone) {
+        siegeZone.setActive(false);
+        TownyMessaging.sendGlobalMessage(siegeZone.getAttackingNation().getName() + " has abandoned their attack on" + siegeZone.getDefendingTown().getName());
 
-        if (siege.getActiveAttackers().size() == 0) {
-            siege.setStatus(SiegeStatus.ATTACKER_ABANDON);
-            siege.setActualEndTime(System.currentTimeMillis());
-            activateSiegeCooldown(siege);
-            TownyMessaging.sendGlobalMessage("The siege on " + siege.getDefendingTown().getName() +" has been abandoned all attackers.");
+        if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
+            siegeZone.getSiege().setStatus(SiegeStatus.ATTACKER_ABANDON);
+            siegeZone.getSiege().setActualEndTime(System.currentTimeMillis());
+            activateSiegeImmunityTimer(siegeZone.getSiege());
+            TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");
         }
     }
 
     public static void defenderWin(Siege siege, Town winnerTown) {
         siege.setStatus(SiegeStatus.DEFENDER_WIN);
         siege.setActualEndTime(System.currentTimeMillis());
-        activateSiegeCooldown(siege);
+        activateSiegeImmunityTimer(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
                 TownyFormatter.getFormattedTownName(winnerTown)
@@ -482,11 +528,11 @@ public class SiegeWarUtil {
         siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
         siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
-        activateSiegeCooldown(siege);
+        activateSiegeImmunityTimer(siege);
         TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
 
-    private static void activateSiegeCooldown(Siege siege) {
+    private static void activateSiegeImmunityTimer(Siege siege) {
         double siegeDuration = siege.getActualEndTime() - siege.getStartTime();
         double cooldownDuration = siegeDuration * TownySettings.getWarSiegeSiegeCooldownModifier();
         siege.getDefendingTown().setSiegeImmunityEndTime(System.currentTimeMillis() + (long)(cooldownDuration + 0.5));
@@ -762,11 +808,11 @@ public class SiegeWarUtil {
 
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-            if (!resident.hasTown()
-                    || !resident.hasNation()
-                    || resident.getTown().getNation() != siege.getAttackerWinner()) {
+            if(!resident.hasTown() || !resident.getTown().hasNation())
+                throw new TownyException("You must be a resident of a town in a nation to use the invade action.");
+
+            if (resident.getTown().getNation() != siege.getAttackerWinner())
                 throw new TownyException("The town was defeated but not by your nation. You cannot invade unless your nation is victorious in the siege");
-            }
 
             if (siege.isTownInvaded())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));

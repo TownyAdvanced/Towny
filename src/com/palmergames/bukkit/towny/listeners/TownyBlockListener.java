@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -235,24 +236,15 @@ public class TownyBlockListener implements Listener {
 		try {
 			String blockTypeName = block.getType().getKey().getKey();
 			if (blockTypeName.contains("banner")) {
-
-				if (blockTypeName.contains("white")
-						&& ((Banner) block.getState()).getPatterns().size() == 0) {
-					//white banner
-					return evaluateSiegeWarPlaceWhiteBannerRequest(player, block, event);
-				} else {
-					//coloured banner
-					return evaluateSiegeWarPlaceColouredBannerRequest(player, block, event);
-				}
+				return evaluateSiegeWarPlaceBannerRequest(player, block, blockTypeName, event);
 			} else if (block.getType().equals(Material.CHEST)) {
-				//Chest
 				return evaluateSiegeWarPlaceChestRequest(player, block);
 			} else {
 				return false;
 			}
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Problem placing siege banner");
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			e.printStackTrace();
 			event.setCancelled(true);
 			return true;
 		}
@@ -289,108 +281,98 @@ public class TownyBlockListener implements Listener {
 	}
 
 
-	//Return - skip other perm checks
-	private boolean evaluateSiegeWarPlaceColouredBannerRequest(Player player, Block block, BlockPlaceEvent event) throws NotRegisteredException {
-		//If the target block is in the wilderness next to a town,
-		//Then only valid siege actions are permitted
+	private boolean evaluateSiegeWarPlaceBannerRequest(Player player,
+													   Block block,
+													   String blockTypeName,
+													   BlockPlaceEvent event)
+														throws NotRegisteredException
+	{
 		TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
 
 		if(townBlock == null) {
-			//Check for siege start request
-			Coord blockCoordinate = Coord.parseCoord(block);
-			TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
-
-			TownBlock nearbyTownBlock;
-			List<TownBlock> nearbyTownBlocksWithTowns = new ArrayList<>();
-
-			if(townyWorld.hasTownBlock(blockCoordinate.add(0,-1))) {
-				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(0,-1));
-				if(nearbyTownBlock.hasTown()) {
-					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
-				}
-			}
-
-			if(townyWorld.hasTownBlock(blockCoordinate.add(0,1))) {
-				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(0,1));
-				if(nearbyTownBlock.hasTown()) {
-					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
-				}
-			}
-
-			if(townyWorld.hasTownBlock(blockCoordinate.add(1,0))) {
-				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(1,0));
-				if(nearbyTownBlock.hasTown()) {
-					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
-				}
-			}
-
-			if(townyWorld.hasTownBlock(blockCoordinate.add(-1,0))) {
-				nearbyTownBlock= townyWorld.getTownBlock(blockCoordinate.add(-1,0));
-				if(nearbyTownBlock.hasTown()) {
-					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
-				}
-			}
-
-			if(nearbyTownBlocksWithTowns.size() == 0) {
-				//No town blocks nearby. Continue.
+			//Wilderness found
+			//Possible abandon or attack request
+			List<TownBlock> nearbyTownBlocks = getAdjacentTownBlocks(player, block);
+			if (nearbyTownBlocks.size() == 0) {
+				//No town blocks are nearby. Normal block placement
 				return false;
-			} else  {
-				//One or more town blocks nearby. Evaluate siege attack request
-				SiegeWarUtil.processAttackTownRequest(player, block, nearbyTownBlocksWithTowns,event);
+			} else {
+				//One or more town are nearby.
+				if (blockTypeName.contains("white")
+						&& ((Banner) block.getState()).getPatterns().size() == 0) {
+					//White banner
+					SiegeWarUtil.processAbandonSiegeRequest(player,
+							block,
+							nearbyTownBlocks,
+							event);
+					return true;
+				} else {
+					//Coloured banner
+					SiegeWarUtil.processAttackTownRequest(
+							player,
+							block,
+							nearbyTownBlocks,
+							event);
+					return true;
+				}
+			}
+
+		} else if (townBlock.hasTown()) {
+			Town townWhereBlockWasPlaced = townBlock.getTown();
+
+			//If there is no siege, do normal block placement
+			if(!townWhereBlockWasPlaced.hasSiege())
+				return false;
+
+			//During a siege or aftermath, all in-town banner placement is restricted to siege actions only
+			if (blockTypeName.contains("white")
+					&& ((Banner) block.getState()).getPatterns().size() == 0) {
+				//White banner
+				SiegeWarUtil.processSurrenderRequest(
+						player,
+						townWhereBlockWasPlaced,
+						event);
+				return true;
+			} else {
+				//Coloured banner
+				SiegeWarUtil.processInvadeTownRequest(
+						plugin,
+						player,
+						townWhereBlockWasPlaced.getName(),
+						event);
 				return true;
 			}
 
 		} else {
-			//Check for siege invasion request
-
-			Town townWhereBlockWasPlaced;
-			if(townBlock.hasTown()) {
-				townWhereBlockWasPlaced = townBlock.getTown();
-			} else {
-				return false;	//Not sure how we get here. But in any case,
-				                //don't treat it as an invasion request
-			}
-
-			//If the target town is different town to player, evaluate siege request
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			if (!resident.hasTown() || resident.getTown() != townWhereBlockWasPlaced ) {
-				SiegeWarUtil.processInvadeTownRequest(plugin, player, townWhereBlockWasPlaced.getName(),event);
-				return true;
-			} else {
-				return false;
-			}
+			//Not sure how we got here
+			//But in any case do not treat it as a special siege action
+			return false;
 		}
 	}
 
-	private boolean evaluateSiegeWarPlaceWhiteBannerRequest(Player player, Block block, BlockPlaceEvent event) throws NotRegisteredException {
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-		if (resident.hasTown()) {
+	private List<TownBlock> getAdjacentTownBlocks(Player player, Block block) throws NotRegisteredException{
+		TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-			//Get Town Where block was placed
-			Town townWhereBlockWasPlaced;
-			TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
-			if (townBlock != null && townBlock.hasTown()) {
-				townWhereBlockWasPlaced = townBlock.getTown();
-			} else {
-				return false;
-			}
+		List<Coord> nearbyCoOrdinates =new ArrayList<>();
+		Coord blockCoordinate = Coord.parseCoord(block);
+		nearbyCoOrdinates.add(blockCoordinate.add(0,-1));
+		nearbyCoOrdinates.add(blockCoordinate.add(0,1));
+		nearbyCoOrdinates.add(blockCoordinate.add(1,0));
+		nearbyCoOrdinates.add(blockCoordinate.add(-1,0));
 
-			//Under Siege
-			if(townWhereBlockWasPlaced.hasSiege()) {
-				// Residents town - surrender
-				// Not residents town  abandon
-				if(townWhereBlockWasPlaced == resident.getTown()) {
-					SiegeWarUtil.processSurrenderRequest(player, event);
-					return true;
-				} else {
-					SiegeWarUtil.processAbandonSiegeRequest(player, townWhereBlockWasPlaced.getName(), event);
-					return true;
+		List<TownBlock> nearbyTownBlocksWithTowns = new ArrayList<>();
+		TownBlock nearbyTownBlock;
+		for(Coord nearbyCoord: nearbyCoOrdinates){
+			if(townyWorld.hasTownBlock(nearbyCoord)) {
+				nearbyTownBlock = townyWorld.getTownBlock(nearbyCoord);
+				if (nearbyTownBlock.hasTown()) {
+					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
 				}
 			}
 		}
-		return false;
-	}
 
+		return nearbyTownBlocksWithTowns;
+	}
 
 	private boolean evaluateSiegeWarPlaceChestRequest(Player player, Block block) throws NotRegisteredException {
 		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
