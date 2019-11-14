@@ -35,6 +35,7 @@ public class TownyWorld extends TownyObject {
 	private List<String> entityExplosionProtection = null;
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
 	private boolean isFire = TownySettings.isFire();
@@ -191,6 +192,16 @@ public class TownyWorld extends TownyObject {
 																						 * )
 																						 */);
 		return out;
+	}
+
+	public void setWarAllowed(boolean isWarAllowed) {
+
+		this.isWarAllowed = isWarAllowed;
+	}
+
+	public boolean isWarAllowed() {
+
+		return this.isWarAllowed;
 	}
 
 	public void setPVP(boolean isPVP) {

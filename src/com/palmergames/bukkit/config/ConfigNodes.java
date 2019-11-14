@@ -171,7 +171,11 @@ public enum ConfigNodes {
 			"new_world_settings.pvp.force_pvp_on",
 			"false",
 			"# force_pvp_on is a global flag and overrides any towns flag setting"),
-
+	NWS_WAR_ALLOWED(
+			"new_world_settings.pvp.war_allowed",
+			"true",
+			"# If set to false the world will not be included in war events."),
+	
 	NWS_WORLD_MONSTERS_HEADER("new_world_settings.mobs", "", ""),
 	NWS_WORLD_MONSTERS_ON(
 			"new_world_settings.mobs.world_monsters_on",

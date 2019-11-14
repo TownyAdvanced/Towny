@@ -215,7 +215,8 @@ public class TownyUniverse {
     
     public void addWarZone(WorldCoord worldCoord) {
         try {
-            worldCoord.getTownyWorld().addWarZone(worldCoord);
+        	if (worldCoord.getTownyWorld().isWarAllowed())
+            	worldCoord.getTownyWorld().addWarZone(worldCoord);
         } catch (NotRegisteredException e) {
             // Not a registered world
         }

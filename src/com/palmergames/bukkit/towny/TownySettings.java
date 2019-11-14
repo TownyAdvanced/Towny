@@ -2832,6 +2832,10 @@ public class TownySettings {
 	public static boolean isTownListRandom() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY);
 	}
+
+	public static boolean isWarAllowed() {
+		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
+	}
 	
 }
 

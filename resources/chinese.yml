@@ -1,5 +1,5 @@
 name: Towny
-version: 0.59
+version: 0.60
 language: Chinese
 author: ElgarL
 website: 'http://towny.palmergames.com/'
@@ -1001,3 +1001,7 @@ msg_err_tag_too_long: 'Tag too long.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nation has not set a spawn location.'
 msg_err_resident_doesnt_belong_to_any_town: 'Resident doesn''t belong to any town'
 msg_err_could_not_set_default_modes_for: 'Could not set default modes for '
+
+# Added in 0.60
+msg_set_war_allowed_on: 'War will be allowed in this world.'
+msg_set_war_allowed_off: 'War will not affect this world.'

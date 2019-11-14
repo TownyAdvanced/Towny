@@ -3779,3 +3779,12 @@ v0.92.0.11:
     - Add ",BREWING_STAND" to the end of the protection.switch_ids to protect Brewing Stands.
 0.95.1.3:
   - Fix bstats nation_zones_enabled always returning false.
+  - New Config Option: new_world_settings.pvp.war_allowed
+    - Default: true
+    - If set to false the world will not be included in war events.
+    - Note that like all other new_world_settings this is only the default setting applied to newly added worlds.
+      - The actual value is stored per-world.
+    - Closes ticket #1188
+  - New Command: /tw toggle warallowed
+    - toggles whether Event War affects the world.
+  - Language files bumped to 0.60.

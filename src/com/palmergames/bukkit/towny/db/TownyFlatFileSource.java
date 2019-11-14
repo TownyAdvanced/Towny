@@ -1332,7 +1332,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				// loadTownBlocks(world);
+				line = keys.get("warAllowed");
+				if (line != null)
+					try {
+						world.setWarAllowed(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
@@ -1931,6 +1936,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Using Towny
 		list.add("usingTowny=" + world.isUsingTowny());
 
+		// is War allowed
+		list.add("");
+		list.add("# This setting is used to enable or disable Event war in this world.");
+		list.add("warAllowed=" + world.isWarAllowed());
+
+		
 		/*
 		 *  Make sure we only save in async
 		 */

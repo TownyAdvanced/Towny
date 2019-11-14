@@ -1,5 +1,5 @@
 name: Towny
-version: 0.59
+version: 0.60
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -1001,3 +1001,7 @@ msg_err_tag_too_long: 'Der tag ist zu lang.'
 msg_err_nation_has_not_set_a_spawn_location: 'Die Nation hat keinen festgelegten Spawnpunkt.'
 msg_err_resident_doesnt_belong_to_any_town: 'Der Einwohner gehört zu keiner Stadt.'
 msg_err_could_not_set_default_modes_for: 'Der Defaultmodus konnte nicht festgelegt werden für'
+
+# Added in 0.60
+msg_set_war_allowed_on: 'War will be allowed in this world.'
+msg_set_war_allowed_off: 'War will not affect this world.'

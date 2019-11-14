@@ -1371,6 +1371,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     world.setUsingTowny(result);
                 } catch (Exception ignored) {
                 }
+                
+                result = rs.getBoolean("warAllowed");
+                try {
+                    world.setWarAllowed(result);
+                } catch (Exception ignored) {
+                }
 
             }
 
@@ -1718,6 +1724,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             // Using Towny
             nat_hm.put("usingTowny", world.isUsingTowny());
 
+            // War allowed in this world.
+            nat_hm.put("warAllowed", world.isWarAllowed());
+            
             UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 
         } catch (Exception e) {

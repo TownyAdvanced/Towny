@@ -314,14 +314,14 @@ public class PlayerCacheUtil {
 			if (TownyAPI.getInstance().isWarTime()) {
 				if (TownySettings.isAllowWarBlockGriefing()) {
 					try {
-						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral())
+						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral() && worldCoord.getTownyWorld().isWarAllowed())
 							return TownBlockStatus.WARZONE;
 					} catch (NotRegisteredException e) {
 
 					}
 				}
 				//If this town is not in a nation and we are set to non peaceful/neutral status during war.
-				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation())
+				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation() && worldCoord.getTownyWorld().isWarAllowed())
 					return TownBlockStatus.WARZONE;
 			}
 

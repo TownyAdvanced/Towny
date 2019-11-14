@@ -57,6 +57,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
+		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 
