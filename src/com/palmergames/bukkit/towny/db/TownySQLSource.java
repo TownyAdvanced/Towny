@@ -18,13 +18,11 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.utils.SiegeWarDataUtil;
 import com.palmergames.bukkit.towny.war.siegewar.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -1109,7 +1107,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     }
                 }
 
-                line = rs.getString("siegesZones");
+                line = rs.getString("sieges");
                 if (line != null) {
                     tokens = line.split(",");
                     for (String token : tokens) {
@@ -1832,7 +1830,8 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
             nat_hm.put("active", siegeZone.isActive());
             nat_hm.put("siegePoints", siegeZone.getSiegePoints());
-            nat_hm.put("playerArrivalTimes", StringMgmt.join(siegeZone.getPlayerNameArrivalTimeMap(), ",", "@"));
+            nat_hm.put("attackerPlayerArrivalTimes", StringMgmt.join(siegeZone.getAttackerPlayerNameArrivalTimeMap(), ",", "@"));
+            nat_hm.put("defenderPlayerArrivalTimes", StringMgmt.join(siegeZone.getDefenderPlayerNameArrivalTimeMap(), ",", "@"));
 
             UpdateDB("SIEGESZONES", nat_hm, Arrays.asList("siegeZoneName"));
 

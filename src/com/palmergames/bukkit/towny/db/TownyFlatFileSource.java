@@ -1214,7 +1214,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = kvFile.get("siegeZones");
+				line = kvFile.get("sieges");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
@@ -2181,7 +2181,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
 		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
-		list.add("playerArrivalTimes=" + StringMgmt.join(siegeZone.getPlayerNameArrivalTimeMap(), ",", "@"));
+		list.add("attackerPlayerArrivalTimes=" + StringMgmt.join(siegeZone.getAttackerPlayerNameArrivalTimeMap(), ",", "@"));
+		list.add("defenderPlayerArrivalTimes=" + StringMgmt.join(siegeZone.getDefenderPlayerNameArrivalTimeMap(), ",", "@"));
 
 		/*
 		 *  Make sure we only save in async

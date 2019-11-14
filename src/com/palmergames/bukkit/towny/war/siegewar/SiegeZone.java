@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -19,7 +18,8 @@ public class SiegeZone {
     private Town defendingTown;
     private boolean active;
     private int siegePoints;
-    private Map<Player, Long> playerArrivalTimeMap; //player, timestamp of arrival in zone
+    private Map<Player, Long> attackerPlayerArrivalTimeMap; //player, timestamp of arrival in zone
+    private Map<Player, Long> defenderPlayerArrivalTimeMap; //player, timestamp of arrival in zone
 
     public SiegeZone() {
         attackingNation = null;
@@ -27,7 +27,8 @@ public class SiegeZone {
         active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
-        playerArrivalTimeMap = new HashMap<>();
+        attackerPlayerArrivalTimeMap = new HashMap<>();
+        defenderPlayerArrivalTimeMap = new HashMap<>();
     }
 
     public SiegeZone(Nation attackingNation, Town defendingTown) {
@@ -36,7 +37,8 @@ public class SiegeZone {
         active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
-        playerArrivalTimeMap = new HashMap<>();
+        attackerPlayerArrivalTimeMap = new HashMap<>();
+        defenderPlayerArrivalTimeMap = new HashMap<>();
     }
 
     public String getName() {
@@ -71,13 +73,26 @@ public class SiegeZone {
         this.siegeBannerLocation = location;
     }
 
-    public Map<Player, Long> getPlayerArrivalTimeMap() {
-        return playerArrivalTimeMap;
+    public Map<Player, Long> getAttackerPlayerArrivalTimeMap() {
+        return attackerPlayerArrivalTimeMap;
     }
 
-    public Map<String, Long> getPlayerNameArrivalTimeMap() {
+    public Map<Player, Long> getDefenderPlayerArrivalTimeMap() {
+        return defenderPlayerArrivalTimeMap;
+    }
+
+    public Map<String, Long> getAttackerPlayerNameArrivalTimeMap() {
         Map<String, Long> result = new HashMap<>();
-        for(Map.Entry<Player, Long> entry: playerArrivalTimeMap.entrySet()) {
+        for(Map.Entry<Player, Long> entry: attackerPlayerArrivalTimeMap.entrySet()) {
+            result.put(entry.getKey().getName().toLowerCase(),
+                    entry.getValue());
+        }
+        return result;
+    }
+
+    public Map<String, Long> getDefenderPlayerNameArrivalTimeMap() {
+        Map<String, Long> result = new HashMap<>();
+        for(Map.Entry<Player, Long> entry: defenderPlayerArrivalTimeMap.entrySet()) {
             result.put(entry.getKey().getName().toLowerCase(),
                     entry.getValue());
         }
@@ -124,7 +139,7 @@ public class SiegeZone {
        StringBuilder result = new StringBuilder();
        boolean firstEntry = true;
 
-       for(Map.Entry<Player, Long> entry: playerArrivalTimeMap.entrySet()) {
+       for(Map.Entry<Player, Long> entry: attackerPlayerArrivalTimeMap.entrySet()) {
            if(firstEntry){
               firstEntry = false;
            } else {
@@ -148,4 +163,9 @@ public class SiegeZone {
     public Town getDefendingTown() {
         return defendingTown;
     }
+
+    public void adjustSiegePoints(int adjustment) {
+        siegePoints += adjustment;
+    }
+
 }

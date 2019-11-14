@@ -14,12 +14,14 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Utility;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -466,6 +468,8 @@ public class SiegeWarUtil {
     }
 
     public static void applySiegeUpkeepCost(Siege siege) {
+        //TODO - REFACTOR TO BE MORE EFFICIENT
+        //E.G CYCLE THE ZONES DIRECTLY
         double upkeepCostPerPlot = TownySettings.getWarSiegeAttackerCostPerPlotPerHour();
         long upkeepCost = Math.round(upkeepCostPerPlot * siege.getDefendingTown().getTotalBlocks());
 
@@ -477,6 +481,7 @@ public class SiegeWarUtil {
                         nation.pay(upkeepCost, "Cost of maintaining siege.");
                     else {
                         siege.getSiegeZones().get(nation).setActive(false);
+                        TownyUniverse.getDataSource().saveSiegeZone( siege.getSiegeZones().get(nation));
                         TownyMessaging.sendGlobalMessage("The nation of " + nation.getName() +
                                 " has been forced to abandon the siege on the town of " + siege.getDefendingTown().getName() +
                                 ", due to lack of funds.");
@@ -907,5 +912,124 @@ public class SiegeWarUtil {
             }
         }
         return result;
+    }
+
+    public static void evaluateSiegeZone(SiegeZone siegeZone) {
+        if(!siegeZone.isActive()) {
+            return;
+        }
+
+        Resident resident;
+
+        //Cycle all online players
+        for(Player player: BukkitTools.getOnlinePlayers()) {
+
+            try {
+                resident = TownyUniverse.getDataSource().getResident(player.getName());
+
+                if (resident.hasTown()) {
+
+                    //TODO - DEHARDCODE THE POINT VALUES
+
+                    if (siegeZone.getDefendingTown() == resident.getTown()) {
+                        //See if the player can contribute points to the siege defence
+                        evaluateSiegeZoneOccupant(
+                                player,
+                                siegeZone,
+                                siegeZone.getDefenderPlayerArrivalTimeMap(),
+                                -1);
+                    }
+
+                    if (resident.getTown().hasNation()
+                            && siegeZone.getAttackingNation() == resident.getTown().getNation()) {
+                        //See if the player can contribute points to the siege attack
+                        evaluateSiegeZoneOccupant(
+                                player,
+                                siegeZone,
+                                siegeZone.getAttackerPlayerArrivalTimeMap(),
+                                1);                   }
+                }
+
+            } catch (NotRegisteredException e) {
+                continue;
+            }
+        }
+    }
+
+    private static void evaluateSiegeZoneOccupant(Player player,
+                                                  SiegeZone siegeZone,
+                                                  Map<Player, Long> playerArrivalTimeMap,
+                                                  int siegePointsForZoneOccupation) {
+
+        //Is the player already registered as being in the siege zone ?
+        if (playerArrivalTimeMap.containsKey(player)) {
+
+            if (!isPlayerInSiegePointZone(player, siegeZone)) {
+                //If the player has left the siege zone
+                //Remove them from the scoring map
+                playerArrivalTimeMap.remove(player);
+
+            } else {
+                //If defender has been in the siege zone long enough,
+                //Adjust siege points down
+                //TODO - DEHARDCODE THE TIME VALUE
+                if (playerArrivalTimeMap.get(player) < System.currentTimeMillis() - 60000) {
+                    siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
+                }
+            }
+
+        } else {
+            if (!isPlayerInSiegePointZone(player, siegeZone)) {
+                //If player is in siege point zone, add them to the scoring map
+                playerArrivalTimeMap.put(player, System.currentTimeMillis());
+            }
+        }
+    }
+
+    //Must be in same world as flag
+    //Must be within 1 townblock length of flag
+    //Must be in wilderness
+    private static boolean isPlayerInSiegePointZone(Player player, SiegeZone siegeZone) {
+        if (player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
+                && player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize()) {
+
+            TownBlock townBlock = TownyUniverse.getTownBlock(player.getLocation());
+            if (townBlock == null) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    public static void evaluateSiege(Siege siege) {
+        //Process active siege
+        if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+
+            //If scheduled end time has arrived, choose winner
+            if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
+                TownyObject siegeWinner = SiegeWarUtil.calculateSiegeWinner(siege);
+                if (siegeWinner instanceof Town) {
+                    SiegeWarUtil.defenderWin(siege, (Town) siegeWinner);
+                } else {
+                    SiegeWarUtil.attackerWin(siege, (Nation) siegeWinner);
+                }
+
+                //Save changes to db
+                TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
+            }
+
+        } else {
+
+            //Siege is finished.
+            //Wait for siege immunity timer to end then delete siege
+            if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
+                TownyUniverse.getDataSource().removeSiege(siege);
+            }
+        }
+
     }
 }
