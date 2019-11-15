@@ -170,4 +170,10 @@ public class Siege {
     public boolean getTownInvaded() {
         return townInvaded;
     }
+
+    public void setAllSiegeZonesToInactive() {
+        for(SiegeZone siegeZone: siegeZones.values()) {
+            siegeZone.setActive(false);
+        }
+    }
 }

@@ -89,8 +89,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations" + FileMgmt.fileSeparator() + "deleted",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges" + FileMgmt.fileSeparator() + "deleted",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds" + FileMgmt.fileSeparator() + "deleted",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "plot-block-data",
@@ -100,7 +100,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "residents.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "towns.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "nations.txt",
-					rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges.txt",
+					rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "worlds.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "regen.txt",
 					rootFolder + dataFolder + FileMgmt.fileSeparator() + "snapshot_queue.txt" });
@@ -1214,11 +1214,15 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = kvFile.get("sieges");
+				line = kvFile.get("siegeszones");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
+
+							System.out.println("NATIONNAME: " + nation.getName().toLowerCase());
+							System.out.println("TOKEN: " + token);
+
 							SiegeZone siegeZone = getSiegeZone(nation.getName().toLowerCase(), token);
 							if (siegeZone != null)
 								nation.addSiegeZone(siegeZone);
@@ -1885,7 +1889,7 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
-		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "sieges.txt"));
+		this.queryQueue.add(new FlatFile_Task(list, rootFolder + dataFolder + FileMgmt.fileSeparator() + "siegezones.txt"));
 
 		return true;
 

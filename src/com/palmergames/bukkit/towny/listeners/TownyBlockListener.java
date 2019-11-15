@@ -238,7 +238,7 @@ public class TownyBlockListener implements Listener {
 			if (blockTypeName.contains("banner")) {
 				return evaluateSiegeWarPlaceBannerRequest(player, block, blockTypeName, event);
 			} else if (block.getType().equals(Material.CHEST)) {
-				return evaluateSiegeWarPlaceChestRequest(player, block);
+				return evaluateSiegeWarPlaceChestRequest(player, block, event);
 			} else {
 				return false;
 			}
@@ -374,26 +374,41 @@ public class TownyBlockListener implements Listener {
 		return nearbyTownBlocksWithTowns;
 	}
 
-	private boolean evaluateSiegeWarPlaceChestRequest(Player player, Block block) throws NotRegisteredException {
-		Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-		if (resident.hasTown()) {
+	private boolean evaluateSiegeWarPlaceChestRequest(Player player,
+													  Block block,
+													  BlockPlaceEvent event) throws NotRegisteredException {
 
-			//Get Town Where block was placed
-			Town townWhereBlockWasPlaced;
-			TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
-			if (townBlock != null && townBlock.hasTown()) {
-				townWhereBlockWasPlaced = townBlock.getTown();
+		//Get Town Where block was placed
+		Town townWhereBlockWasPlaced;
+		TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
+		if (townBlock != null && townBlock.hasTown()) {
+			townWhereBlockWasPlaced = townBlock.getTown();
+		} else {
+			return false;
+		}
+
+		/*
+		 * During a siege or aftermath
+		 * If any resident member of the attacking nations attempts to place a chest,
+		 * it is evaluated as a siege action
+		*/
+		if (townWhereBlockWasPlaced.hasSiege()) {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Siege siege = townWhereBlockWasPlaced.getSiege();
+
+			if(resident.hasTown()
+			    && resident.hasNation()
+					&& siege.getSiegeZones().keySet().contains(resident.getTown().getNation())) {
+
+				SiegeWarUtil.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
+				return true;
 			} else {
 				return false;
 			}
-
-			//If the target town is a a different town than player's, evaluate plunder request
-			Town residentTown = resident.getTown();
-			if (townWhereBlockWasPlaced != residentTown) {
-				return SiegeWarUtil.evaluateTownPlunderRequest(player, townWhereBlockWasPlaced.getName());
-			}
+		} else {
+			return false;
 		}
-		return false;
+
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

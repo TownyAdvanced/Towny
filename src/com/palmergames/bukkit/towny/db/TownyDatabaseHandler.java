@@ -248,6 +248,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 
 	public void newSiegeZone(String siegeZoneName) throws AlreadyRegisteredException {
+		System.out.println("About to create new siege zone");
 		String[] townAndNationArray = SiegeZone.generateTownAndNationName(siegeZoneName);
 		newSiegeZone(townAndNationArray[0],townAndNationArray[1]);
 	}
@@ -257,8 +258,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		lock.lock();
 
+		System.out.println("About to create new siege zone 2");
+
 		try {
 			String siegeZoneName = SiegeZone.generateName(attackingNationName, defendingTownName);
+
+			System.out.println("About to create new siege zone with name: " +siegeZoneName);
 
 			if(universe.getSiegeZonesMap().containsKey(siegeZoneName.toLowerCase()))
 				throw new AlreadyRegisteredException("Siege Zone is already registered");
@@ -278,6 +283,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public SiegeZone getSiegeZone(String nationName, String townName) throws NotRegisteredException  {
 		String siegeZoneName = SiegeZone.generateName(nationName,townName);
+
+		System.out.println("ZONENAME: " + siegeZoneName);
+		System.out.println("ZONES IN UNIVERSE " + universe.getSiegeZonesMap().size());
+
 
 		if(!universe.getSiegeZonesMap().containsKey(siegeZoneName.toLowerCase())) {
 			throw new NotRegisteredException("Siege Zone not found");

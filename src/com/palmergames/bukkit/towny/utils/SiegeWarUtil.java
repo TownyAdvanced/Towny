@@ -498,6 +498,7 @@ public class SiegeWarUtil {
         siege.setStatus(SiegeStatus.ATTACKER_WIN);
         siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(winnerNation);
+        siege.setAllSiegeZonesToInactive();
         activateSiegeImmunityTimer(siege);
         activateRevoltCooldown(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
@@ -514,6 +515,7 @@ public class SiegeWarUtil {
         if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
             siegeZone.getSiege().setStatus(SiegeStatus.ATTACKER_ABANDON);
             siegeZone.getSiege().setActualEndTime(System.currentTimeMillis());
+            siegeZone.getSiege().setAllSiegeZonesToInactive();
             activateSiegeImmunityTimer(siegeZone.getSiege());
             TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");
         }
@@ -522,6 +524,7 @@ public class SiegeWarUtil {
     public static void defenderWin(Siege siege, Town winnerTown) {
         siege.setStatus(SiegeStatus.DEFENDER_WIN);
         siege.setActualEndTime(System.currentTimeMillis());
+        siege.setAllSiegeZonesToInactive();
         activateSiegeImmunityTimer(siege);
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
@@ -533,6 +536,7 @@ public class SiegeWarUtil {
         siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
         siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(siege.getActiveAttackers().get(0));
+        siege.setAllSiegeZonesToInactive();
         activateSiegeImmunityTimer(siege);
         TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
@@ -778,8 +782,8 @@ public class SiegeWarUtil {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
             event.setCancelled(true);
         } catch (EconomyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
             event.setCancelled(true);
+            TownyMessaging.sendErrorMsg(player, x.getMessage());
         }
     }
 
@@ -825,13 +829,13 @@ public class SiegeWarUtil {
             SiegeWarUtil.captureTown(plugin, siege, siege.getAttackerWinner(), siege.getDefendingTown());
 
         } catch (TownyException x) {
-            TownyMessaging.sendErrorMsg(player, x.getMessage());
             event.setCancelled(true);
+            TownyMessaging.sendErrorMsg(player, x.getMessage());
         }
     }
 
     //Return boolean plunder success
-    public static boolean evaluateTownPlunderRequest(Player player, String townName) {
+    public static void processPlunderTownRequest(Player player, String townName, BlockPlaceEvent event) {
         try {
             if (!TownySettings.getWarSiegeEnabled())
                 throw new TownyException("Siege war feature disabled");
@@ -874,11 +878,9 @@ public class SiegeWarUtil {
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townName));
 
             SiegeWarUtil.plunderTown(siege, siege.getDefendingTown(), siege.getAttackerWinner());
-
-            return true;
         } catch (TownyException x) {
+            event.setCancelled(true);
             TownyMessaging.sendErrorMsg(player, x.getMessage());
-            return false;
         }
     }
 
@@ -915,6 +917,7 @@ public class SiegeWarUtil {
     }
 
     public static void evaluateSiegeZone(SiegeZone siegeZone) {
+        System.out.println("Evaluating siege zone now");
         if(!siegeZone.isActive()) {
             return;
         }
@@ -928,7 +931,6 @@ public class SiegeWarUtil {
                 resident = TownyUniverse.getDataSource().getResident(player.getName());
 
                 if (resident.hasTown()) {
-
                     //TODO - DEHARDCODE THE POINT VALUES
 
                     if (siegeZone.getDefendingTown() == resident.getTown()) {
@@ -973,13 +975,13 @@ public class SiegeWarUtil {
                 //If defender has been in the siege zone long enough,
                 //Adjust siege points down
                 //TODO - DEHARDCODE THE TIME VALUE
-                if (playerArrivalTimeMap.get(player) < System.currentTimeMillis() - 60000) {
+                if (System.currentTimeMillis() > playerArrivalTimeMap.get(player) + 60000) {
                     siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
                 }
             }
 
         } else {
-            if (!isPlayerInSiegePointZone(player, siegeZone)) {
+            if (isPlayerInSiegePointZone(player, siegeZone)) {
                 //If player is in siege point zone, add them to the scoring map
                 playerArrivalTimeMap.put(player, System.currentTimeMillis());
             }
@@ -990,6 +992,7 @@ public class SiegeWarUtil {
     //Must be within 1 townblock length of flag
     //Must be in wilderness
     private static boolean isPlayerInSiegePointZone(Player player, SiegeZone siegeZone) {
+
         if (player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
                 && player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize()) {
 
