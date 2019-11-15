@@ -3798,3 +3798,4 @@ v0.92.0.11:
   - Added placeholders:
     - %townyadvanced_daily_town_upkeep% - Shows town's upkeep cost.
     - %townyadvanced_daily_nation_upkeep% - Shows nation's upkeep cost.
+    - Closes ticket #3496
