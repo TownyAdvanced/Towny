@@ -115,6 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		String title = "";
 		String amount = "";
 		String name = "";
+		Double cost = 0.0;
 
 		switch (identifier) {
 		case "town": // %townyadvanced_town%
@@ -417,6 +418,23 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				}
 			}
 			return name;
+		case "daily_town_upkeep": // %townyadvanced_daily_town_upkeep%
+			if (resident.hasTown()) {
+				try {
+					cost = TownySettings.getTownUpkeepCost(resident.getTown());
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return String.valueOf(cost);
+		case "daily_nation_upkeep": // %townyadvanced_daily_nation_upkeep%
+			if (resident.hasTown()) {
+				try {
+					if (resident.getTown().hasNation())
+						cost = TownySettings.getNationUpkeepCost(resident.getTown().getNation());
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return String.valueOf(cost);
 		default:
 			return null;
 		}
