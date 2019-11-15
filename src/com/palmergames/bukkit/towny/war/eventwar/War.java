@@ -330,7 +330,8 @@ public class War {
 			if (warringTowns.contains(town))
 				numTowns++;
 		}
-		if (numTowns > 0)
+		// The nation capital must be one of the valid towns for a nation to go to war.
+		if (numTowns > 0 && warringTowns.contains(nation.getCapital()))
 			warringNations.add(nation);
 	}
 

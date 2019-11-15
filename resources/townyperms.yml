@@ -30,7 +30,8 @@ nomad:
     - towny.town.resident
     - towny.town.spawn.public
     - towny.chat.general
-    
+    - towny.command.towny.war.hud
+
 # This section of permissions covers players who are members of a town.
 towns:
     default:

@@ -3788,14 +3788,17 @@ v0.92.0.11:
   - New Command: /tw toggle warallowed
     - toggles whether Event War affects the world.
   - Language files bumped to 0.60.
+  - Added placeholders:
+    - %townyadvanced_daily_town_upkeep% - Shows town's upkeep cost.
+    - %townyadvanced_daily_nation_upkeep% - Shows nation's upkeep cost.
+    - Closes ticket #3496
+  - TOWNYPERMS.YML REQUIRED CHANGE:
+    - add towny.command.towny.war.hud to your nomad rank.
   - Make the start of the War Event smarter.
     - Townblocks in worlds which are not warallowed will no longer be included.
     - Towns with no homeblock will no longer be included.
     - Towns which have their homeblock in a world which is not warallowed will no longer be included.
     - Nations which do not have any qualifying towns will not be included.
+    - Nations which do not have their capital city involved will not be included.
     - War will not start if there is less than 2 nations participating.
     - War requires at least one enemy-enemy relationship between nations to start. 
-  - Added placeholders:
-    - %townyadvanced_daily_town_upkeep% - Shows town's upkeep cost.
-    - %townyadvanced_daily_nation_upkeep% - Shows nation's upkeep cost.
-    - Closes ticket #3496
