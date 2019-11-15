@@ -183,6 +183,47 @@ public class War {
 	 */
 	public void start() {
 
+		//Gather all nations at war
+		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
+			if (!nation.isNeutral()) {
+				add(nation);
+				if (warringNations.contains(nation))
+					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
+			} else if (!TownySettings.isDeclaringNeutral()) {
+				try {
+					nation.setNeutral(false);
+					add(nation);
+					if (warringNations.contains(nation))
+						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
+				} catch (TownyException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		// Cannot have a war with less than 2 nations.
+		if (warringNations.size() < 2) {
+			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_not_enough_nations"));
+			return;
+		}
+		
+		// Lets make sure that at least 2 nations consider each other enemies.
+		boolean enemy = false; 
+		for (Nation nation : warringNations) {
+			for (Nation nation2 : warringNations) {
+				if (nation.hasEnemy(nation2) && nation2.hasEnemy(nation)) {
+					enemy = true;
+					break;
+				}
+			}			
+		}
+		if (!enemy) {
+			TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_no_enemies_for_war"));;
+			return;
+		}
+		
+		outputParticipants();
+		
 		warTime = true;
 
 		// Seed spoils of war		
@@ -195,22 +236,7 @@ public class War {
 			TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
 		}
 
-		//Gather all nations at war
-		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
-			if (!nation.isNeutral()) {
-				add(nation);
-				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
-			} else if (!TownySettings.isDeclaringNeutral()) {
-				try {
-					nation.setNeutral(false);
-					add(nation);
-					TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+		
 		// Start the WarTimerTask
 		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
 		if (id == -1) {
@@ -219,6 +245,22 @@ public class War {
 		} else
 			addTaskId(id);
 		checkEnd();
+	}
+
+	private void outputParticipants() {
+		List<String> warParticipants = new ArrayList<>();
+		for (Nation nation : warringNations) {
+			int towns = 0;
+			for (Town town : nation.getTowns())
+				if (warringTowns.contains(town))
+					towns++;
+			warParticipants.add(String.format(TownySettings.getLangString("msg_war_participants"), nation.getName(), towns));			
+		}
+		TownyMessaging.sendGlobalMessage(ChatTools.formatTitle("War Participants"));
+		TownyMessaging.sendGlobalMessage(TownySettings.getLangString("msg_war_participants_header"));
+		for (String string : warParticipants)
+			TownyMessaging.sendGlobalMessage(string);
+		TownyMessaging.sendGlobalMessage(ChatTools.formatTitle("----------------"));
 	}
 
 	/**
@@ -275,10 +317,21 @@ public class War {
 	 */
 	private void add(Nation nation) {
 
-		for (Town town : nation.getTowns())
-			if (town.getTownBlocks().size() > 0)
-				add(town);
-		warringNations.add(nation);
+		int numTowns = 0;
+		for (Town town : nation.getTowns()) {
+			// A town without a homeblock cannot be won over in war.
+			if (!town.hasHomeBlock())
+				continue;
+			try {
+				if (town.getTownBlocks().size() > 0 && town.getHomeBlock().getWorld().isWarAllowed())
+					add(town);
+			} catch (TownyException ignored) {
+			}
+			if (warringTowns.contains(town))
+				numTowns++;
+		}
+		if (numTowns > 0)
+			warringNations.add(nation);
 	}
 
 	/**
@@ -286,15 +339,21 @@ public class War {
 	 * @param town
 	 */
 	private void add(Town town) {
-
-		TownyMessaging.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
-		townScores.put(town, 0);
-		warringTowns.add(town);
-		for (TownBlock townBlock : town.getTownBlocks())
+		int numTownBlocks = 0;
+		for (TownBlock townBlock : town.getTownBlocks()) {
+			if (!townBlock.getWorld().isWarAllowed())
+				continue;
+			numTownBlocks++;
 			if (town.isHomeBlock(townBlock))
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneHomeBlockHealth());
 			else
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
+		}
+		if (numTownBlocks > 0) {
+			TownyMessaging.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
+			townScores.put(town, 0);
+			warringTowns.add(town);
+		}			
 	}
 
 	/**

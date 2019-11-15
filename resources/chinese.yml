@@ -1005,3 +1005,8 @@ msg_err_could_not_set_default_modes_for: 'Could not set default modes for '
 # Added in 0.60
 msg_set_war_allowed_on: 'War will be allowed in this world.'
 msg_set_war_allowed_off: 'War will not affect this world.'
+msg_war_not_enough_nations: '&6[War]&f Less than 2 nations gathered for war, war canceled.'
+msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, war canceled.'
+msg_war_prefix: '&6[War]&f '
+msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
+msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
