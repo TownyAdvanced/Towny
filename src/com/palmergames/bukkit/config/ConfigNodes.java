@@ -1617,7 +1617,7 @@ public enum ConfigNodes {
 		"# before certain actions can be performed, measured in milliseconds."),
 	WAR_ENEMY_ALLOW_ATTACKS(
 			"war.enemy.allow_attacks",
-			"true",
+			"false",
 			"# If false, players won't be able to place war flags, effectively disabling warzones."),
 	WAR_ENEMY_ONLY_ATTACK_BORDER(
 			"war.enemy.only_attack_borders",
