@@ -1191,10 +1191,6 @@ public class TownySQLSource extends TownyFlatFileSource {
 
             String line;
             String[] listEntries;
-            String[] mapEntries;
-            String[] keyValuePair;
-            Player player;
-            Long playerScoreTime;
             World flagLocationWorld;
             double flagLocationX;
             double flagLocationY;
@@ -1221,27 +1217,8 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siegeZone.setActive(rs.getBoolean("active"));
                 siegeZone.setSiegePoints(rs.getInt("siegePoints"));
 
-                line = rs.getString("attackerPlayerScoreTimeMap");
-                if(line != null) {
-                    mapEntries = line.split(",");
-                    for(String entry: mapEntries) {
-                        keyValuePair = entry.split("@");
-                        player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
-                        playerScoreTime = Long.parseLong(keyValuePair[1]);
-                        siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
-                    }
-                }
-
-                line =rs.getString("defenderPlayerScoreTimeMap");
-                if(line != null) {
-                mapEntries = line.split(",");
-                    for(String entry: mapEntries) {
-                        keyValuePair = entry.split("@");
-                        player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
-                        playerScoreTime = Long.parseLong(keyValuePair[1]);
-                        siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
-                    }
-                }
+                //Player-scoretime maps are not saved/loaded
+                //As it is tricky but with no significant benefit
 
             }
 
@@ -1864,8 +1841,9 @@ public class TownySQLSource extends TownyFlatFileSource {
             nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
             nat_hm.put("active", siegeZone.isActive());
             nat_hm.put("siegePoints", siegeZone.getSiegePoints());
-            nat_hm.put("attackerPlayerScoreTimeMap", StringMgmt.join(siegeZone.getAttackerPlayerIdScoreTimeMap(), ",", "@"));
-            nat_hm.put("defenderPlayerScoreTimeMap", StringMgmt.join(siegeZone.getDefenderPlayerIdScoreTimeMap(), ",", "@"));
+
+            //Player-scoretime maps are not saved/loaded
+            //As it is tricky but with no significant benefit
 
             UpdateDB("SIEGESZONES", nat_hm, Arrays.asList("siegeZoneName"));
 

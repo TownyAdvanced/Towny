@@ -1317,10 +1317,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		double flagLocationX;
 		double flagLocationY;
 		double flagLocationZ;
-		String[] mapEntries;
-		String[] keyValuePair;
-		Player player;
-		Long playerScoreTime;
 
 		String path = getSiegeZoneFilename(siegeZone);
 		File siegeZoneFile = new File(path);
@@ -1354,27 +1350,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = kvFile.get("siegePoints");
 				siegeZone.setSiegePoints(Integer.parseInt(line));
 
-				line = kvFile.get("attackerPlayerScoreTimeMap");
-				if(line != null) {
-					mapEntries = line.split(",");
-					for (String entry : mapEntries) {
-						keyValuePair = entry.split("@");
-						player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
-						playerScoreTime = Long.parseLong(keyValuePair[1]);
-						siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
-					}
-				}
-
-				line = kvFile.get("defenderPlayerScoreTimeMap");
-				if(line != null) {
-					mapEntries = line.split(",");
-					for (String entry : mapEntries) {
-						keyValuePair = entry.split("@");
-						player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
-						playerScoreTime = Long.parseLong(keyValuePair[1]);
-						siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
-					}
-				}
+				//Player-scoretime maps are not saved/loaded
+				//As it is tricky but with no significant benefit
 
 			} catch (Exception e) {
 				String filename = getSiegeZoneFilename(siegeZone);
@@ -2185,8 +2162,8 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
 		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
-		list.add("attackerPlayerScoreTimeMap=" + StringMgmt.join(siegeZone.getAttackerPlayerIdScoreTimeMap(), ",", "@"));
-		list.add("defenderPlayerScoreTimeMap=" + StringMgmt.join(siegeZone.getDefenderPlayerIdScoreTimeMap(), ",", "@"));
+		//Player-scoretime maps are not saved/loaded
+		//As it is tricky but with no significant benefit
 
 		/*
 		 *  Make sure we only save in async
