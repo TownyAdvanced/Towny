@@ -33,14 +33,12 @@ public class TownyWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
-	private static Map<TownBlock, CellUnderAttack> townBlocksUnderAttack;
 	private static Map<Town, Long> lastFlag;
 
 	public static void onEnable() {
 
 		cellsUnderAttack = new HashMap<>();
 		cellsUnderAttackByPlayer = new HashMap<>();
-		townBlocksUnderAttack = new HashMap<>();
 		lastFlag = new HashMap<>();
 	}
 

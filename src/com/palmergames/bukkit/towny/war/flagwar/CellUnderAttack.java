@@ -3,8 +3,6 @@ package com.palmergames.bukkit.towny.war.flagwar;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.TownySettings;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
