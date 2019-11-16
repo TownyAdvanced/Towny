@@ -827,6 +827,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			nation = resident.getTown().getNation();
 
+			boolean underAttack = false;
+			for (Town town : nation.getTowns()) {
+				if (TownyWar.isUnderAttack(town) || System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
+					underAttack = true;
+					break;
+				}
+			}
+
+			if (underAttack)
+				throw new TownyException("You can't do this while a town in your nation is under attack!");
+			
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
 		} catch (TownyException | EconomyException x) {
@@ -1070,6 +1081,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 			nation = town.getNation();
 
+			if (TownyWar.isUnderAttack(town)) {
+				throw new TownyException("You cannot do that while under attack!");
+			}
+
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
+				throw new TownyException("You cannot do that! You were attacked too recently!");
+			}
+			
 			nation.removeTown(town);
 
 			/*

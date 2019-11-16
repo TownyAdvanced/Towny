@@ -62,6 +62,10 @@ public class TownyWarCustomListener implements Listener {
 		Player player = event.getPlayer();
 		CellUnderAttack cell = event.getCell().getAttackData();
 
+		try {
+			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+		} catch (NotRegisteredException ignored) {}
+
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
@@ -140,6 +144,8 @@ public class TownyWarCustomListener implements Listener {
 
 			TownBlock townBlock = worldCoord.getTownBlock();
 			Town defendingTown = townBlock.getTown();
+
+			TownyWar.townFlagged(defendingTown);
 
 			// Payments
 			double amount = 0;
@@ -221,6 +227,10 @@ public class TownyWarCustomListener implements Listener {
 			return;
 
 		CellUnderAttack cell = event.getCell();
+
+		try {
+			TownyWar.townFlagged(TownyWar.cellToWorldCoord(cell).getTownBlock().getTown());
+		} catch (NotRegisteredException ignored) {}
 
 		TownyUniverse universe = TownyUniverse.getInstance();
 

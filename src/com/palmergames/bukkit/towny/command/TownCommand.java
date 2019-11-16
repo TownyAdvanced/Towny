@@ -1819,6 +1819,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownBlock townBlock;
 					TownyWorld world;
 					try {
+
+						if (TownyWar.isUnderAttack(town)) {
+							throw new TownyException("You cannot do that while under attack!");
+						}
+
+						if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
+							throw new TownyException("You cannot do that! You were attacked too recently!");
+						}
+						
 						if (TownyAPI.getInstance().isWarTime())
 							throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
@@ -2154,6 +2163,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
+			
+			if (TownyWar.isUnderAttack(town)) {
+				TownyMessaging.sendErrorMsg(player, "You cannot do that while under attack!");
+				return;
+			}
+
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
+				TownyMessaging.sendErrorMsg(player, "You cannot do that! You were attacked too recently!");
+				return;
+			}
+			
 			plugin.deleteCache(resident.getName());
 
 		} catch (TownyException x) {
@@ -3245,6 +3265,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
+				if (TownyWar.isUnderAttack(town))
+					throw new TownyException(TownySettings.getLangString("msg_flagged_cannot_do"));
+
+				if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000)
+					throw new TownyException("You cannot do this! You were attacked too recently!");
+
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
@@ -3348,6 +3374,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
+
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000)
+				throw new TownyException("You cannot do this! You were attacked too recently!");
 
 			town.withdrawFromBank(resident, amount);
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));

@@ -33,11 +33,15 @@ public class TownyWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
+	private static Map<TownBlock, CellUnderAttack> townBlocksUnderAttack;
+	private static Map<Town, Long> lastFlag;
 
 	public static void onEnable() {
 
 		cellsUnderAttack = new HashMap<>();
 		cellsUnderAttackByPlayer = new HashMap<>();
+		townBlocksUnderAttack = new HashMap<>();
+		lastFlag = new HashMap<>();
 	}
 
 	public static void onDisable() {
@@ -352,5 +356,19 @@ public class TownyWar {
 	public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {
 
 		return new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
+	}
+
+	public static long lastFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			return lastFlag.get(town);
+		else
+			return 0;
+	}
+
+	public static void townFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			lastFlag.replace(town, System.currentTimeMillis());
+		else
+			lastFlag.put(town, System.currentTimeMillis());
 	}
 }
