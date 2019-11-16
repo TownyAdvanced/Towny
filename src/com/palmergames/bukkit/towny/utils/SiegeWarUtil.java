@@ -14,14 +14,12 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Utility;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +51,8 @@ public class SiegeWarUtil {
             siege.setTownInvaded(false);
             siege.setAttackerWinner(null);
             siege.setStartTime(System.currentTimeMillis());
-            siege.setScheduledEndTime((System.currentTimeMillis() +
+            siege.setScheduledEndTime(
+                    (System.currentTimeMillis() +
                     ((long)(TownySettings.getWarSiegeMaxHoldoutTimeHours() * ONE_HOUR_IN_MILLIS))));
             siege.setActualEndTime(0);
             siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
@@ -334,8 +333,9 @@ public class SiegeWarUtil {
 
 
     public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
-        if(defendingTown.hasNation()) {
+        siege.setTownInvaded(true);
 
+        if(defendingTown.hasNation()) {
             Nation nationOfDefendingTown = null;
             try {
                 nationOfDefendingTown = defendingTown.getNation();
@@ -370,8 +370,6 @@ public class SiegeWarUtil {
                     TownyFormatter.getFormattedNationName(attackingNation)
             )));
         }
-
-        siege.setTownInvaded(true);
     }
 
     public static void removeTownFromNation(Towny plugin, Town town, Nation nation) {
@@ -425,6 +423,8 @@ public class SiegeWarUtil {
 
 
     public static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
+        siege.setTownPlundered(true);
+
         double plunder =
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
@@ -442,8 +442,6 @@ public class SiegeWarUtil {
         } catch (EconomyException x) {
             TownyMessaging.sendErrorMsg(x.getMessage());
         }
-
-        siege.setTownPlundered(true);
     }
 
 
@@ -924,6 +922,13 @@ public class SiegeWarUtil {
 
         Resident resident;
 
+
+        //TODO - Consider if player changes town/nation while recorded here
+        //Or logs off
+        //These players would end up as ....garbage on the map....
+        //You may want to consider removing them
+        //For example by checking online status & allegiance within the lower method
+
         //Cycle all online players
         for(Player player: BukkitTools.getOnlinePlayers()) {
 
@@ -938,7 +943,7 @@ public class SiegeWarUtil {
                         evaluateSiegeZoneOccupant(
                                 player,
                                 siegeZone,
-                                siegeZone.getDefenderPlayerArrivalTimeMap(),
+                                siegeZone.getDefenderPlayerScoreTimeMap(),
                                 -1);
                     }
 
@@ -948,7 +953,7 @@ public class SiegeWarUtil {
                         evaluateSiegeZoneOccupant(
                                 player,
                                 siegeZone,
-                                siegeZone.getAttackerPlayerArrivalTimeMap(),
+                                siegeZone.getAttackerPlayerScoreTimeMap(),
                                 1);                   }
                 }
 
@@ -960,30 +965,31 @@ public class SiegeWarUtil {
 
     private static void evaluateSiegeZoneOccupant(Player player,
                                                   SiegeZone siegeZone,
-                                                  Map<Player, Long> playerArrivalTimeMap,
+                                                  Map<Player, Long> playerScoreTimeMap,
                                                   int siegePointsForZoneOccupation) {
 
         //Is the player already registered as being in the siege zone ?
-        if (playerArrivalTimeMap.containsKey(player)) {
+        if (playerScoreTimeMap.containsKey(player)) {
 
             if (!isPlayerInSiegePointZone(player, siegeZone)) {
                 //If the player has left the siege zone
                 //Remove them from the scoring map
-                playerArrivalTimeMap.remove(player);
+                playerScoreTimeMap.remove(player);
 
             } else {
                 //If defender has been in the siege zone long enough,
-                //Adjust siege points down
+                //Adjust siege points down, & reset time
                 //TODO - DEHARDCODE THE TIME VALUE
-                if (System.currentTimeMillis() > playerArrivalTimeMap.get(player) + 60000) {
+                if (System.currentTimeMillis() > playerScoreTimeMap.get(player)) {
                     siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
+                    playerScoreTimeMap.put(player, System.currentTimeMillis() + 60000);
                 }
             }
 
         } else {
             if (isPlayerInSiegePointZone(player, siegeZone)) {
                 //If player is in siege point zone, add them to the scoring map
-                playerArrivalTimeMap.put(player, System.currentTimeMillis());
+                playerScoreTimeMap.put(player, System.currentTimeMillis() + 60000);
             }
         }
     }

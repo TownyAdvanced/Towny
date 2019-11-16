@@ -18,8 +18,8 @@ public class SiegeZone {
     private Town defendingTown;
     private boolean active;
     private int siegePoints;
-    private Map<Player, Long> attackerPlayerArrivalTimeMap; //player, timestamp of arrival in zone
-    private Map<Player, Long> defenderPlayerArrivalTimeMap; //player, timestamp of arrival in zone
+    private Map<Player, Long> attackerPlayerScoreTimeMap; //player, time when they will score
+    private Map<Player, Long> defenderPlayerScoreTimeMap; //player, time when they will score
 
     public SiegeZone() {
         attackingNation = null;
@@ -27,8 +27,8 @@ public class SiegeZone {
         active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
-        attackerPlayerArrivalTimeMap = new HashMap<>();
-        defenderPlayerArrivalTimeMap = new HashMap<>();
+        attackerPlayerScoreTimeMap = new HashMap<>();
+        defenderPlayerScoreTimeMap = new HashMap<>();
     }
 
     public SiegeZone(Nation attackingNation, Town defendingTown) {
@@ -37,8 +37,8 @@ public class SiegeZone {
         active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
-        attackerPlayerArrivalTimeMap = new HashMap<>();
-        defenderPlayerArrivalTimeMap = new HashMap<>();
+        attackerPlayerScoreTimeMap = new HashMap<>();
+        defenderPlayerScoreTimeMap = new HashMap<>();
     }
 
     public String getName() {
@@ -73,28 +73,33 @@ public class SiegeZone {
         this.siegeBannerLocation = location;
     }
 
-    public Map<Player, Long> getAttackerPlayerArrivalTimeMap() {
-        return attackerPlayerArrivalTimeMap;
+    public Map<Player, Long> getAttackerPlayerScoreTimeMap() {
+        return attackerPlayerScoreTimeMap;
     }
 
-    public Map<Player, Long> getDefenderPlayerArrivalTimeMap() {
-        return defenderPlayerArrivalTimeMap;
+    public Map<Player, Long> getDefenderPlayerScoreTimeMap() {
+        return defenderPlayerScoreTimeMap;
     }
 
-    public Map<String, Long> getAttackerPlayerNameArrivalTimeMap() {
+    public Map<String, Long> getAttackerPlayerIdScoreTimeMap() {
         Map<String, Long> result = new HashMap<>();
-        for(Map.Entry<Player, Long> entry: attackerPlayerArrivalTimeMap.entrySet()) {
-            result.put(entry.getKey().getName().toLowerCase(),
-                    entry.getValue());
+        for(Map.Entry<Player, Long> entry: attackerPlayerScoreTimeMap.entrySet()) {
+            System.out.println("TEST");
+            System.out.println(entry);
+            System.out.println(entry.getKey());
+            System.out.println(entry.getKey().getUniqueId());
+            System.out.println(entry.getKey().getUniqueId().toString());
+            System.out.println(entry.getValue());
+
+            result.put(entry.getKey().getUniqueId().toString(), entry.getValue());
         }
         return result;
     }
 
-    public Map<String, Long> getDefenderPlayerNameArrivalTimeMap() {
+    public Map<String, Long> getDefenderPlayerIdScoreTimeMap() {
         Map<String, Long> result = new HashMap<>();
-        for(Map.Entry<Player, Long> entry: defenderPlayerArrivalTimeMap.entrySet()) {
-            result.put(entry.getKey().getName().toLowerCase(),
-                    entry.getValue());
+        for(Map.Entry<Player, Long> entry: defenderPlayerScoreTimeMap.entrySet()) {
+            result.put(entry.getKey().getUniqueId().toString(), entry.getValue());
         }
         return result;
     }
@@ -139,7 +144,7 @@ public class SiegeZone {
        StringBuilder result = new StringBuilder();
        boolean firstEntry = true;
 
-       for(Map.Entry<Player, Long> entry: attackerPlayerArrivalTimeMap.entrySet()) {
+       for(Map.Entry<Player, Long> entry: attackerPlayerScoreTimeMap.entrySet()) {
            if(firstEntry){
               firstEntry = false;
            } else {

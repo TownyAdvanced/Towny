@@ -26,6 +26,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
@@ -1187,16 +1188,25 @@ public class TownySQLSource extends TownyFlatFileSource {
             s = cntx.createStatement();
             rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGESZONES " +
                                              "WHERE siegeZoneName='" + siegeZone.getName() + "'");
-            while (rs.next()) {
-                World flagLocationWorld;
-                double flagLocationX;
-                double flagLocationY;
-                double flagLocationZ;
 
-                flagLocationWorld = BukkitTools.getWorld(rs.getString("flagLocationWorld"));
-                flagLocationX = rs.getDouble("flagLocationX");
-                flagLocationY = rs.getDouble("flagLocationY");
-                flagLocationZ = rs.getDouble("flagLocationZ");
+            String line;
+            String[] listEntries;
+            String[] mapEntries;
+            String[] keyValuePair;
+            Player player;
+            Long playerScoreTime;
+            World flagLocationWorld;
+            double flagLocationX;
+            double flagLocationY;
+            double flagLocationZ;
+
+            while (rs.next()) {
+                line = rs.getString("flagLocation");
+                listEntries = line.split(",");
+                flagLocationWorld = BukkitTools.getWorld(listEntries[0]);
+                flagLocationX = rs.getDouble(listEntries[1]);
+                flagLocationY = rs.getDouble(listEntries[2]);
+                flagLocationZ = rs.getDouble(listEntries[3]);
 
                 Location flagLocation = new Location(
                         flagLocationWorld,
@@ -1210,6 +1220,29 @@ public class TownySQLSource extends TownyFlatFileSource {
                 siegeZone.setDefendingTown(getTown(rs.getString("defendingTown")));
                 siegeZone.setActive(rs.getBoolean("active"));
                 siegeZone.setSiegePoints(rs.getInt("siegePoints"));
+
+                line = rs.getString("attackerPlayerScoreTimeMap");
+                if(line != null) {
+                    mapEntries = line.split(",");
+                    for(String entry: mapEntries) {
+                        keyValuePair = entry.split("@");
+                        player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
+                        playerScoreTime = Long.parseLong(keyValuePair[1]);
+                        siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
+                    }
+                }
+
+                line =rs.getString("defenderPlayerScoreTimeMap");
+                if(line != null) {
+                mapEntries = line.split(",");
+                    for(String entry: mapEntries) {
+                        keyValuePair = entry.split("@");
+                        player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
+                        playerScoreTime = Long.parseLong(keyValuePair[1]);
+                        siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
+                    }
+                }
+
             }
 
             return true;
@@ -1822,16 +1855,17 @@ public class TownySQLSource extends TownyFlatFileSource {
         try {
             HashMap<String, Object> nat_hm = new HashMap<>();
 
-            nat_hm.put("flagLocationWorld", siegeZone.getFlagLocation().getWorld().getName());
-            nat_hm.put("flagLocationX", siegeZone.getFlagLocation().getX());
-            nat_hm.put("flagLocationY", siegeZone.getFlagLocation().getY());
-            nat_hm.put("flagLocationZ", siegeZone.getFlagLocation().getZ());
-            nat_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
+            nat_hm.put("flag_location", siegeZone.getFlagLocation().getWorld().getName()
+                    + "," + siegeZone.getFlagLocation().getX()
+                    + "," + siegeZone.getFlagLocation().getY()
+                    + "," + siegeZone.getFlagLocation().getZ());
+
+           nat_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
             nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
             nat_hm.put("active", siegeZone.isActive());
             nat_hm.put("siegePoints", siegeZone.getSiegePoints());
-            nat_hm.put("attackerPlayerArrivalTimes", StringMgmt.join(siegeZone.getAttackerPlayerNameArrivalTimeMap(), ",", "@"));
-            nat_hm.put("defenderPlayerArrivalTimes", StringMgmt.join(siegeZone.getDefenderPlayerNameArrivalTimeMap(), ",", "@"));
+            nat_hm.put("attackerPlayerScoreTimeMap", StringMgmt.join(siegeZone.getAttackerPlayerIdScoreTimeMap(), ",", "@"));
+            nat_hm.put("defenderPlayerScoreTimeMap", StringMgmt.join(siegeZone.getDefenderPlayerIdScoreTimeMap(), ",", "@"));
 
             UpdateDB("SIEGESZONES", nat_hm, Arrays.asList("siegeZoneName"));
 

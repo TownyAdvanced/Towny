@@ -26,6 +26,7 @@ import com.palmergames.util.KeyValueFile;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.naming.InvalidNameException;
@@ -1310,21 +1311,16 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadSiegeZone(SiegeZone siegeZone) {
-		/*
-		flagLocationWorld=???
-		flagLocationX=101
-		flagLocationY=102
-		flagLocationZ=102
-		attackingNation=woodnation
-		defendingTown=stonetown
-		active=true
-		siegePoints=20
-		 */
 		String line = "";
+		String[] locationValues;
 		World flagLocationWorld;
 		double flagLocationX;
 		double flagLocationY;
 		double flagLocationZ;
+		String[] mapEntries;
+		String[] keyValuePair;
+		Player player;
+		Long playerScoreTime;
 
 		String path = getSiegeZoneFilename(siegeZone);
 		File siegeZoneFile = new File(path);
@@ -1332,24 +1328,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				KeyValueFile kvFile = new KeyValueFile(path);
 
-				line = kvFile.get("flagLocationWorld");
-				flagLocationWorld = BukkitTools.getWorld(line);
-
-				line = kvFile.get("flagLocationX");
-				flagLocationX = Double.parseDouble(line);
-
-				line = kvFile.get("flagLocationY");
-				flagLocationY = Double.parseDouble(line);
-
-				line = kvFile.get("flagLocationZ");
-				flagLocationZ = Double.parseDouble(line);
+				line = kvFile.get("flagLocation");
+				locationValues = line.split(",");
+				flagLocationWorld = BukkitTools.getWorld(locationValues[0]);
+				flagLocationX = Double.parseDouble(locationValues[1]);
+				flagLocationY = Double.parseDouble(locationValues[2]);
+				flagLocationZ = Double.parseDouble(locationValues[3]);
 
 				Location flagLocation = new Location(
 						flagLocationWorld,
 						flagLocationX,
 						flagLocationY,
 						flagLocationZ);
-
 				siegeZone.setFlagLocation(flagLocation);
 
 				line = kvFile.get("attackingNation");
@@ -1363,6 +1353,28 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = kvFile.get("siegePoints");
 				siegeZone.setSiegePoints(Integer.parseInt(line));
+
+				line = kvFile.get("attackerPlayerScoreTimeMap");
+				if(line != null) {
+					mapEntries = line.split(",");
+					for (String entry : mapEntries) {
+						keyValuePair = entry.split("@");
+						player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
+						playerScoreTime = Long.parseLong(keyValuePair[1]);
+						siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
+					}
+				}
+
+				line = kvFile.get("defenderPlayerScoreTimeMap");
+				if(line != null) {
+					mapEntries = line.split(",");
+					for (String entry : mapEntries) {
+						keyValuePair = entry.split("@");
+						player = BukkitTools.getServer().getPlayer(UUID.fromString(keyValuePair[0]));
+						playerScoreTime = Long.parseLong(keyValuePair[1]);
+						siegeZone.getAttackerPlayerScoreTimeMap().put(player, playerScoreTime);
+					}
+				}
 
 			} catch (Exception e) {
 				String filename = getSiegeZoneFilename(siegeZone);
@@ -2086,8 +2098,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			if(siege.getAttackerWinner() != null) {
 				list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
 			}
-			list.add("siegeStatus=" + siege.getStatus().toString());
-			list.add("siegeStatus=" + siege.getStatus().toString());
 			list.add("siegeActualStartTime=" + Long.toString(siege.getStartTime()));
 			list.add("siegeScheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 			list.add("siegeActualEndTime=" + Long.toString(siege.getActualEndTime()));
@@ -2165,28 +2175,18 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean saveSiegeZone(SiegeZone siegeZone) {
-		/*
-		flagLocationWorld=???
-		flagLocationX=101
-		flagLocationY=102
-		flagLocationZ=102
-		attackingNation=woodnation
-		defendingTown=stonetown
-		active=true
-		siegePoints=20
-		 */
 		List<String> list = new ArrayList<>();
 
-		list.add("flagLocationWorld=" + siegeZone.getFlagLocation().getWorld().getName());
-		list.add("flagLocationX=" + siegeZone.getFlagLocation().getX());
-		list.add("flagLocationY=" + siegeZone.getFlagLocation().getY());
-		list.add("flagLocationZ=" + siegeZone.getFlagLocation().getZ());
+		list.add("flagLocation=" + siegeZone.getFlagLocation().getWorld().getName()
+				+ "," + siegeZone.getFlagLocation().getX()
+				+ "," + siegeZone.getFlagLocation().getY()
+				+ "," + siegeZone.getFlagLocation().getZ());
 		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
 		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
-		list.add("attackerPlayerArrivalTimes=" + StringMgmt.join(siegeZone.getAttackerPlayerNameArrivalTimeMap(), ",", "@"));
-		list.add("defenderPlayerArrivalTimes=" + StringMgmt.join(siegeZone.getDefenderPlayerNameArrivalTimeMap(), ",", "@"));
+		list.add("attackerPlayerScoreTimeMap=" + StringMgmt.join(siegeZone.getAttackerPlayerIdScoreTimeMap(), ",", "@"));
+		list.add("defenderPlayerScoreTimeMap=" + StringMgmt.join(siegeZone.getDefenderPlayerIdScoreTimeMap(), ",", "@"));
 
 		/*
 		 *  Make sure we only save in async

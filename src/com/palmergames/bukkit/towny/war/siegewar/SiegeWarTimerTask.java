@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
@@ -47,7 +46,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			if (System.currentTimeMillis() > nextTimeToSavePointsToDB) {
 				nextTimeToSavePointsToDB = System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS;
-				saveSiegePointsToDB();
+				saveActiveSiegeZonesToDB();
 			}
 		}
 	}
@@ -63,9 +62,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	}
 
 
-	private void saveSiegePointsToDB() {
+	private void saveActiveSiegeZonesToDB() {
 		for(SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
-			TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+			if(siegeZone.isActive()) {
+				TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+			}
 		}
 	}
 
