@@ -465,9 +465,10 @@ public class TownyEntityMonitorListener implements Listener {
 					trueDistance = Math.sqrt(Math.pow(townBlockCoord.getX() - playerCoord.getX(), 2) + Math.pow(townBlockCoord.getZ() - playerCoord.getZ(), 2));
 					roundedDistance = (int) Math.ceil(trueDistance);
 
-					if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
+					//TODO - Refactor this whole death in siege thing
+					//if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
 						applySiegeDeathCost(killedResident, nation, siegeFront.getSiege());
-					}
+					//}
 				}
 			}
 		}

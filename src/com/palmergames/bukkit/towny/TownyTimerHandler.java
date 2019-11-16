@@ -113,8 +113,6 @@ public class TownyTimerHandler{
 
 	public static void toggleSiegeWarTimer(boolean on) {
 
-		TownyMessaging.sendMsg("Now toggling siege war timer to: " + on);
-
 		if(!TownySettings.getWarSiegeEnabled()) {
 			TownyMessaging.sendMsg("Siege War is disabled in settings. Siege war timer not changed");
 			return;
@@ -130,7 +128,7 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(siegeWarTask);
 			siegeWarTask = -1;
 		}
-		TownyMessaging.sendMsg("Siege War Timer set to " + on);
+
 		//universe.setChangedNotify(TOGGLE_DAILY_TIMER); //todo will we do something here
 	}
 

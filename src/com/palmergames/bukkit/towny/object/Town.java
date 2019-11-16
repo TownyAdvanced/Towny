@@ -76,7 +76,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		permissions.loadDefault(this);
 		siege = null;
 		siegeImmunityEndTime = System.currentTimeMillis()
-				+ (long)(TownySettings.getWarSiegeSiegeCooldownNewTownsHours() * ONE_HOUR_IN_MILLIS);
+				+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
 		revoltImmunityEndTime = 0;
 	}
 
@@ -294,6 +294,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		// Admin has disabled PvP for this town.
 		if (isAdminDisabledPVP())
 			return false;
+
+		if(TownySettings.getWarSiegeEnabled()
+		   && TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+		   && siege != null
+		   && siege.getStatus() == SiegeStatus.IN_PROGRESS) {
+		   return true;
+		}
 
 		return this.permissions.pvp;
 	}

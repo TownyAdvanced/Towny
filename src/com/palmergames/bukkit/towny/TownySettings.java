@@ -2607,8 +2607,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_REVOLT_ENABLED);
 	}
 
-	public static int getWarSiegeZoneDistanceFromTown() {
-		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DISTANCE_FROM_TOWN);
+	public static boolean getWarSiegePvpAlwaysOnInBesiegedTowns() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
@@ -2627,15 +2627,15 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 
-	public static double getWarSiegeSiegeCooldownNewTownsHours() {
-		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_NEW_TOWNS_HOURS);
+	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS);
 	}
 	public static double getWarSiegeSiegeImmunityTimeModifier() {
-		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER);
+		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER);
 	}
 
-	public static double getWarSiegeRevoltImmunityHours() {
-		return getDouble(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
+	public static double getWarSiegeRevoltImmunityTimeHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS);
 	}
 
 	public static int getWarSiegeAttackerPlunderAmountPerPlot() {
@@ -2653,5 +2653,10 @@ public class TownySettings {
 	public static int getSiegeWarPointsPerDefendingPlayer() {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER);
 	}
+
+	public static int getWarSiegeZoneOccupationScorintTimeRequirementSeconds() {
+		return getInt(ConfigNodes.WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS);
+	}
+
 }
 

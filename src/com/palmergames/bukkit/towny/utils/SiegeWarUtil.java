@@ -79,7 +79,7 @@ public class SiegeWarUtil {
         siege.getSiegeZones().put(attackingNation, siegeZone);
         attackingNation.addSiegeZone(siegeZone);
 
-        //Save siegezone, siege, nation, and town
+        //Save siegezone, siege, nation, and town to DB
         TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
         TownyUniverse.getDataSource().saveNation(attackingNation);
         TownyUniverse.getDataSource().saveTown(defendingTown);
@@ -393,7 +393,50 @@ public class SiegeWarUtil {
     }
 
     private static void attackerWin(Siege siege, Nation winnerNation) {
-        siege.setStatus(SiegeStatus.ATTACKER_WIN);
+        updateAndSaveSiegeCompletionValues(siege, SiegeStatus.ATTACKER_WIN, winnerNation);
+
+        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+                TownySettings.getLangString("msg_siege_war_attacker_win"),
+                TownyFormatter.getFormattedNationName(winnerNation),
+                TownyFormatter.getFormattedTownName(siege.getDefendingTown()))
+        ));
+    }
+
+    private static void attackerAbandon(SiegeZone siegeZone) {
+        siegeZone.setActive(false);
+        TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+
+        TownyMessaging.sendGlobalMessage(siegeZone.getAttackingNation().getName() + " has abandoned their attack on" + siegeZone.getDefendingTown().getName());
+
+        if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
+            updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
+                    SiegeStatus.ATTACKER_ABANDON,
+                    null);
+            TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");
+        }
+    }
+
+    private static void defenderWin(Siege siege, Town winnerTown) {
+        updateAndSaveSiegeCompletionValues(siege, SiegeStatus.DEFENDER_WIN, null);
+
+        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+                TownySettings.getLangString("msg_siege_war_defender_win"),
+                TownyFormatter.getFormattedTownName(winnerTown)
+        )));
+    }
+
+    private static void defenderSurrender(Siege siege) throws TownyException {
+        updateAndSaveSiegeCompletionValues(siege,
+                                            SiegeStatus.DEFENDER_SURRENDER,
+                                            siege.getActiveAttackers().get(0));
+
+        TownyMessaging.sendGlobalMessage("Town has surrendered.");
+    }
+
+    private static void updateAndSaveSiegeCompletionValues(Siege siege,
+                                                           SiegeStatus siegeStatus,
+                                                           Nation winnerNation) {
+        siege.setStatus(siegeStatus);
         siege.setActualEndTime(System.currentTimeMillis());
         siege.setAttackerWinner(winnerNation);
         siege.setAllSiegeZonesToInactive();
@@ -404,69 +447,6 @@ public class SiegeWarUtil {
         for(SiegeZone siegeZone: siege.getSiegeZones().values()) {
             TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
         }
-
-        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
-                TownySettings.getLangString("msg_siege_war_attacker_win"),
-                TownyFormatter.getFormattedNationName(winnerNation),
-                TownyFormatter.getFormattedTownName(siege.getDefendingTown()))
-        ));
-    }
-
-    public static void attackerAbandon(SiegeZone siegeZone) {
-        siegeZone.setActive(false);
-        TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-
-        TownyMessaging.sendGlobalMessage(siegeZone.getAttackingNation().getName() + " has abandoned their attack on" + siegeZone.getDefendingTown().getName());
-
-        if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
-            siegeZone.getSiege().setStatus(SiegeStatus.ATTACKER_ABANDON);
-            siegeZone.getSiege().setActualEndTime(System.currentTimeMillis());
-            siegeZone.getSiege().setAllSiegeZonesToInactive();
-            activateSiegeImmunityTimer(siegeZone.getDefendingTown());
-
-            //Save to db
-            TownyUniverse.getDataSource().saveTown(siegeZone.getDefendingTown());
-            for(SiegeZone otherSiegeZone: siegeZone.getSiege().getSiegeZones().values()) {
-                if(otherSiegeZone != siegeZone) {
-                    TownyUniverse.getDataSource().saveSiegeZone(otherSiegeZone);
-                }
-            }
-            TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");
-        }
-    }
-
-    private static void defenderWin(Siege siege, Town winnerTown) {
-        siege.setStatus(SiegeStatus.DEFENDER_WIN);
-        siege.setActualEndTime(System.currentTimeMillis());
-        siege.setAllSiegeZonesToInactive();
-        activateSiegeImmunityTimer(winnerTown);
-
-        //Save to db
-        TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
-        for(SiegeZone siegeZone: siege.getSiegeZones().values()) {
-            TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-        }
-
-        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
-                TownySettings.getLangString("msg_siege_war_defender_win"),
-                TownyFormatter.getFormattedTownName(winnerTown)
-        )));
-    }
-
-    private static void defenderSurrender(Siege siege) throws TownyException {
-        siege.setStatus(SiegeStatus.DEFENDER_SURRENDER);
-        siege.setActualEndTime(System.currentTimeMillis());
-        siege.setAttackerWinner(siege.getActiveAttackers().get(0));
-        siege.setAllSiegeZonesToInactive();
-        activateSiegeImmunityTimer(siege.getDefendingTown());
-
-        //Save to db
-        TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
-        for(SiegeZone siegeZone: siege.getSiegeZones().values()) {
-            TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-        }
-
-        TownyMessaging.sendGlobalMessage("Town has surrendered.");
     }
 
     private static void activateSiegeImmunityTimer(Town town) {
@@ -476,7 +456,7 @@ public class SiegeWarUtil {
     }
 
     public static void activateRevoltImmunityTimer(Town town) {
-        long immunityDuration = (long)(TownySettings.getWarSiegeRevoltImmunityHours() * ONE_HOUR_IN_MILLIS);
+        long immunityDuration = (long)(TownySettings.getWarSiegeRevoltImmunityTimeHours() * ONE_HOUR_IN_MILLIS);
         town.setRevoltImmunityEndTime(System.currentTimeMillis() + immunityDuration);
     }
 
@@ -880,7 +860,7 @@ public class SiegeWarUtil {
             }
 
             //Player must still be in the open
-            if(!doesPlayerHaveANonAirBlockAboveThem(player)) {
+            if(doesPlayerHaveANonAirBlockAboveThem(player)) {
                 playerScoreTimeMap.remove(player);
                 return true;
             }
@@ -888,7 +868,9 @@ public class SiegeWarUtil {
             //Player must have been there long enough
             if (System.currentTimeMillis() > playerScoreTimeMap.get(player)) {
                 siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
-                playerScoreTimeMap.put(player, System.currentTimeMillis() + 60000);
+                playerScoreTimeMap.put(player,
+                    System.currentTimeMillis()
+                            + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
                 return true;
             }
 
@@ -901,7 +883,7 @@ public class SiegeWarUtil {
             }
 
             //Player must be in the open
-            if(!doesPlayerHaveANonAirBlockAboveThem(player)) {
+            if(doesPlayerHaveANonAirBlockAboveThem(player)) {
                 return false;
             }
 
@@ -910,7 +892,14 @@ public class SiegeWarUtil {
                 return false;
             }
 
-            playerScoreTimeMap.put(player, System.currentTimeMillis() + 60000);
+            playerScoreTimeMap.put(player,
+                    System.currentTimeMillis()
+                            + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+
+            System.out.println("DURATION MILLIS: " + System.currentTimeMillis()
+                    + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds()
+                    * ONE_SECOND_IN_MILLIS));
+
             return true; //Player added to zone
         }
     }

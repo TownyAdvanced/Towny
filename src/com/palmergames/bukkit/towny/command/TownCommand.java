@@ -44,7 +44,6 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -1083,6 +1082,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_public"), town.isPublic() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
+
+				if(TownySettings.getWarSiegeEnabled()
+						&& TownySettings.getWarSiegePvpAlwaysOnInBesiegedTowns()
+						&& town.hasSiege()
+						&& (town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS))
+				{
+					throw new TownyException("PVP is always on in besieged towns.");
+				}
+
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				boolean outsiderintown = false;
@@ -1106,6 +1114,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (outsiderintown) {
 					throw new TownyException(TownySettings.getLangString("msg_cant_toggle_pvp_outsider_in_town"));
 				}
+
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
