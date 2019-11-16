@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1819,6 +1820,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownBlock townBlock;
 					TownyWorld world;
 					try {
+
+						if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
+							throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
+						}
+
+						if (System.currentTimeMillis()- TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+							throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
+						}
+						
 						if (TownyAPI.getInstance().isWarTime())
 							throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
@@ -2154,6 +2164,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
+			
+			if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
+				return;
+			}
+
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
+				return;
+			}
+			
 			plugin.deleteCache(resident.getName());
 
 		} catch (TownyException x) {
@@ -3245,6 +3266,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
+				if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown())
+					throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
+
+				if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
+					throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
+
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode()))
@@ -3348,6 +3375,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
+
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
+				throw new TownyException("You cannot do this! You were attacked too recently!");
 
 			town.withdrawFromBank(resident, amount);
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));

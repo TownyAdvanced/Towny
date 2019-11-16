@@ -1,5 +1,5 @@
 name: Towny
-version: 0.60
+version: 0.61
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -305,7 +305,7 @@ msg_must_specify_amnt: '&bDu musst einen Betrag angeben. z.B.: %s 54'
 msg_town_set_tax: '&b%s hat die tägliche Einwohnersteuer auf %s gesetzt.'
 msg_town_set_plottax: '&b%s hat die tägliche Grundsteuer auf %s gesetzt.'
 msg_town_set_plotprice: '&b%s hat den Preis für Grundstücke auf %s gesetzt.'
-msg_town_set_alttax: '&b%s hat die 
+msg_town_set_alttax: '&b%s hat die
 von %s Grundstücken auf %s gesetzt.'
 msg_town_set_altprice: '&b%s hat den Preis für %s Grundstücke auf %s gesetzt.'
 msg_town_set_nation_tax: '&b%s hat die Nationssteuer auf %s gesetzt.'
@@ -393,7 +393,7 @@ msg_err_dont_belong_town: '&cDu gehörst zu keiner Stadt.'
 msg_err_dont_belong_nation: '&bDu gehörst zu keiner Nation.'
 msg_err_not_same_nation: '&b%s gehört nicht zu deiner Nation.'
 msg_err_rect_auto: '&cNur Städte oder Bürger können ''auto'' benutzen.'
-msg_err_invalid_radius: '&cUngültiger Radius. Benutze eine ganze Zahl oder 
+msg_err_invalid_radius: '&cUngültiger Radius. Benutze eine ganze Zahl oder
 ''auto''.'
 msg_err_not_configured: '&cDiese Welt wurde nicht von Towny konfiguriert.'
 msg_err_updating_item_perms: '&cBeim Aktualisieren der Use-Berechtigungen im Zwischenspeicher ist ein Fehler aufgetreten.'
@@ -517,8 +517,8 @@ msg_you_lost_money_dying: 'Du hast %s verloren.'
 msg_your_town_lost_money_dying: 'Deine Stadt hat %s verloren.'
 msg_your_nation_lost_money_dying: 'Deine Nation hat %s verloren.'
 msg_err_couldnt_take_deathfunds: 'Konnte das Geld für den Tod nicht einziehen.'
-msg_err_couldnt_take_town_deathfunds: 'Konnte das Geld für das Stürzen der Stadt nicht einziehen.' 
-msg_err_couldnt_take_nation_deathfunds: 'Konnte das Geld für das Stürzen der Nation nicht einziehen.' 
+msg_err_couldnt_take_town_deathfunds: 'Konnte das Geld für das Stürzen der Stadt nicht einziehen.'
+msg_err_couldnt_take_nation_deathfunds: 'Konnte das Geld für das Stürzen der Nation nicht einziehen.'
 msg_you_gained_money_for_killing: 'Du hast %s für das Töten von %s bekommen .'
 
 msg_err_ender_pearls_disabled: '&Enderperlen sind abgeschaltet!'
@@ -659,7 +659,7 @@ nation_zone_this_area_under_protection_of: 'Dieser teil der %s steht unter dem S
 you_have_been_invited_to_join2: 'Du wurdest eingeladen, %s beizutreten'
 you_have_been_requested_to_ally2: 'Du wurdest angefragt, dich mit %s zu verbünden'
 
-# Added in 0.43 
+# Added in 0.43
 town_help_11: 'Erstellt eine neue Stadt. Verwende ''_'' statt Leerzeichen.'
 changed_plot_town: '&bDu hast das Grundstück erfolgreich der Stadt %s zugewiesen!'
 not_standing_in_plot: 'Du stehst nicht innerhalb eines gültigen Grundstücks!'
@@ -711,7 +711,7 @@ msg_err_over_outposts_limit: 'Du kannst dich nicht zu deinem Außenposten telepo
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Vogelfreie: &f'                    # Used on /t outlawlist
-online: '&a(Online)' 
+online: '&a(Online)'
 registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Berechtigungen: '       # Used on /town
@@ -723,7 +723,7 @@ status_forced: '&cFestgelegt'
 status_adjustable: '&aEinstellbar'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosionen: '              # Used on /plot perm, /res
-explosions2: '&2Explosionen: '               # Used on /town and /tw 
+explosions2: '&2Explosionen: '               # Used on /town and /tw
 firespread: '  &2Feuerausbreitung: '
 mobspawns: '  &2Mobspawns: '
 owner_of_x_plots: '&2Besitzer von &a%s Grundstücken'
@@ -840,7 +840,6 @@ enabled: 'Aktiviert'
 disabled: 'Deaktiviert'
 forced: 'Erzwungen'
 adjustable: 'Einstellbar'
-adjustable: 'Einstellbar'
 
 # Added in 0.48:
 msg_no_funds_new_town2: '&c%s kann es sich nicht leisten, hier eine Stadt zu gründen. Die Kosten betragen %s.'
@@ -902,7 +901,7 @@ msg_error_nation_has_no_allies: 'Die Nation hat keine Verbündeten.'
 msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
 msg_error_ta_plot_claim: 'Der Spielername fehlt. Bsp: /ta plot claim PlayerNameHier'
 msg_error_no_player_with_that_name: 'Es konnte kein Spiel Spieler mit dem Namen %s gefunden werden.'
-msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.' 
+msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.'
 msg_town_forcepvp_setting_set_to: 'Die PvP-Einstellung der Stadt %s wurde geändert zu %s'
 msg_nation_changed_open: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
 msg_err_already_in_a_nation: 'Deine Stadt befindet sich bereits in einer Nation.'
@@ -932,14 +931,14 @@ war_hud_top_towns: 'Beste Städte'
 war_stats_nations: '  Nationen: '
 war_stats_towns: '  Städte: '
 war_stats_warzone: '  Kriegszone: '
-war_stats_spoils_of_war: '  Kriegsbeute: ' 
+war_stats_spoils_of_war: '  Kriegsbeute: '
 war_starts_in_x: 'Krieg startet in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4Während du im Gefängnis sitzt, kannst du den Befehl nicht ausführen.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cMitglieder der Nation sind für %s nicht berechtigt.' 
+msg_cache_block_error_town_nation: '&cMitglieder der Nation sind für %s nicht berechtigt.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s gehört bereits einer Stadt an.'
@@ -1010,3 +1009,8 @@ msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, wa
 msg_war_prefix: '&6[War]&f '
 msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
+msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'

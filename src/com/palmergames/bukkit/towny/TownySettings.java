@@ -22,6 +22,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
@@ -2837,5 +2838,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
 	}
 	
+	public static int timeToWaitAfterFlag() {
+		return getInt(ConfigNodes.WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED);
+	}
+	
+	public static boolean isFlaggedInteractionTown() {
+		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED);
+	}
+	
+	public static boolean isFlaggedInteractionNation() {
+		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
+	}
 }
 

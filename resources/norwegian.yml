@@ -1,5 +1,5 @@
 name: Towny
-version: 0.60
+version: 0.61
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://towny.palmergames.com/'
@@ -8,7 +8,7 @@ description: >
     If you wish to change any of the entries, make a copy named something else.
     Alternate language files can be enabled by altering the
     [language] entry in config.yml
-    
+
 #
 #
 #         You MUST retain spacing in the texts.
@@ -515,8 +515,8 @@ msg_you_lost_money_dying: 'Du mistet %s.'
 msg_your_town_lost_money_dying: 'Din by mistet %s.'
 msg_your_nation_lost_money_dying: 'Din nasjon mistet %s.'
 msg_err_couldnt_take_deathfunds: 'Kunne ikke ta dødsmidler.'
-msg_err_couldnt_take_town_deathfunds: 'Kunne ikke ta byens dødsmidler.' 
-msg_err_couldnt_take_nation_deathfunds: 'Kunne ikke ta nasjonens dødsmidler.' 
+msg_err_couldnt_take_town_deathfunds: 'Kunne ikke ta byens dødsmidler.'
+msg_err_couldnt_take_nation_deathfunds: 'Kunne ikke ta nasjonens dødsmidler.'
 msg_you_gained_money_for_killing: 'Du fikk %s for å drepe %s.'
 
 msg_err_ender_pearls_disabled: '&4Ender Perler er deaktivert!'
@@ -657,7 +657,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 you_have_been_invited_to_join2: 'You have been invited to join %s'
 you_have_been_requested_to_ally2: 'You have been requested to ally %s'
 
-# Added in 0.43 
+# Added in 0.43
 town_help_11: 'Create a new town. Use ''_'' and not spaces.'
 changed_plot_town: '&bYou have successfully changed the plot''s town to %s!'
 not_standing_in_plot: 'You are not standing inside of a valid plot!'
@@ -708,7 +708,7 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: '&2Outlaws: &f'                    # Used on /t outlawlist
-online: '&a(Online)' 
+online: '&a(Online)'
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
 status_perm: '&2Perm: '                     # Used on /plot perm, /res
 status_permissions: '&2Permissions: '       # Used on /town
@@ -720,7 +720,7 @@ status_forced: '&cForced'
 status_adjustable: '&aAdjustable'
 status_pvp: '&2PVP: '
 explosions: '  &2Explosions: '              # Used on /plot perm, /res
-explosions2: '&2Explosions: '               # Used on /town and /tw 
+explosions2: '&2Explosions: '               # Used on /town and /tw
 firespread: '  &2Firespread: '
 mobspawns: '  &2Mob Spawns: '
 owner_of_x_plots: '&2Owner of &a%s plots'
@@ -728,7 +728,7 @@ status_bank: '&2Bank: &a%s'
 status_town: '&2Town: &a'
 status_no_town: 'None'
 status_town_ranks: '&2Town Ranks: &a'
-status_nation_ranks: '&2Nation Ranks: &a' 
+status_nation_ranks: '&2Nation Ranks: &a'
 jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
 status_friends: 'Friends'
 rank_list_title: ' &3Rank List'
@@ -898,7 +898,7 @@ msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'No player found with name %s'
-msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s' 
+msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
 msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
 msg_err_already_in_a_nation: 'Your town is already in a nation.'
@@ -928,14 +928,14 @@ war_hud_top_towns: 'Top Towns'
 war_stats_nations: '  Nations: '
 war_stats_towns: '  Towns: '
 war_stats_warzone: '  WarZone: '
-war_stats_spoils_of_war: '  Spoils of War: ' 
+war_stats_spoils_of_war: '  Spoils of War: '
 war_starts_in_x: 'War starts in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
@@ -1006,3 +1006,8 @@ msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, wa
 msg_war_prefix: '&6[War]&f '
 msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
+msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'

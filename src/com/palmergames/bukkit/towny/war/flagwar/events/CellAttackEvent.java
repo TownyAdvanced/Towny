@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.flagwar.events;
 
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -31,6 +32,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 	private Block flagBaseBlock;
 	private boolean cancelled = false;
 	private String reason = null;
+	private long time;
 
 	public CellAttackEvent(Towny plugin, Player player, Block flagBaseBlock) {
 
@@ -38,6 +40,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 		this.plugin = plugin;
 		this.player = player;
 		this.flagBaseBlock = flagBaseBlock;
+		this.time = TownyWarConfig.getFlagWaitingTime();
 	}
 
 	public Player getPlayer() {
@@ -52,7 +55,15 @@ public class CellAttackEvent extends Event implements Cancellable {
 
 	public CellUnderAttack getData() {
 
-		return new CellUnderAttack(plugin, player.getName(), flagBaseBlock);
+		return new CellUnderAttack(plugin, player.getName(), flagBaseBlock, time);
+	}
+
+	public long getTime() {
+		return time;
+	}
+	
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 	@Override

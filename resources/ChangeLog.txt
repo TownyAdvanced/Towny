@@ -3803,3 +3803,15 @@ v0.92.0.11:
     - War will not start if there is less than 2 nations participating.
     - War requires at least one enemy-enemy relationship between nations to start.
 0.95.1.4:
+  - Fixed Flag War - Courtesy of the CivWars team [Emperor-Koala, FlagCourier]
+  - Language files bumped to 0.61.
+  - Flag War: Added safeguards to prevent defenders from playing dirty - see next three config options.
+    - New Config Option: war.enemy.prevent_interaction_while_flagged
+      - Default: true
+      - Prevents players in towns from withdrawing from the bank, leaving the town/nation, and unclaiming land while an enemy war flag is in play.
+    - New Config Option: war.enemy.prevent_nation_interaction_while_flagged
+      - Default: true
+      - Same as above, applies to national level and extends to all towns in a nation.
+    - New Config Option: war.enemy.time_to_wait_after_flagged
+      - Default: 600000 (ms)
+      - Time after a flag has expired or been defended until players can perform special interactions.

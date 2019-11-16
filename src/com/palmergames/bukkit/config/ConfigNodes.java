@@ -1603,10 +1603,12 @@ public enum ConfigNodes {
 			"",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                   Flag war settings                  | #",
+			"# |                   Flag War Settings                  | #",
 			"# |                                                      | #",
-			"# |               Separate from Event War                | #",
-			"# |                 Unsupported / Buggy                  | #",
+			"# |               [Separate from Event War]              | #",
+			"# |           --------------------------------           | #",
+			"# |        DEPRECATED: Minimally Supported Through       | #",
+		    "# |             3rd Party Contributions Only             | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1633,7 +1635,7 @@ public enum ConfigNodes {
 	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
-			"fence",
+			"oak_fence",
 			"# This is the block a player must place to trigger the attack event."),
 	WAR_ENEMY_FLAG_LIGHT_BLOCK(
 			"war.enemy.flag.light_block",
@@ -1659,6 +1661,21 @@ public enum ConfigNodes {
 	WAR_ENEMY_BEACON_WIREFRAME_BLOCK(
 			"war.enemy.beacon.wireframe_block",
 			"glowstone"),
+	WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while their town",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_nation_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while a town in their nation",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
+		"war.enemy.time_to_wait_after_flagged",
+		"600000",
+		"# This is how much time that must pass after a town in a nation has been flagged",
+		"# before certain actions can be performed, measured in milliseconds."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",
@@ -1672,7 +1689,7 @@ public enum ConfigNodes {
 			""),
 	WAR_WARZONE_EDITABLE_MATERIALS(
 			"war.warzone.editable_materials",
-			"tnt,fence,ladder,wood_door,iron_door,fire",
+			"tnt,oak_fence,birch_fence,spruce_fence,jungle_fence,dark_oak_fence,acacia_fence,ladder,oak_door,birch_door,spruce_door,jungle_door,dark_oak_door,acacia_fence,iron_door,fire",
 			"# List of materaials that can be modified in a warzone.",
 			"# '*' = Allow all materials.",
 			"# Prepend a '-' in front of a material to remove it. Used in conjunction with when you use '*'.",
