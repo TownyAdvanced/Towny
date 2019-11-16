@@ -1603,18 +1603,15 @@ public enum ConfigNodes {
 			"",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                   Flag war settings                  | #",
+			"# |                   Flag War Settings                  | #",
 			"# |                                                      | #",
-			"# |               Separate from Event War                | #",
-			"# |                 Unsupported / Buggy                  | #",
+			"# |               [Separate from Event War]              | #",
+			"# |           --------------------------------           | #",
+			"# |        DEPRECATED: Minimally Supported Through       | #",
+		    "# |             3rd Party Contributions Only             | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
-		"war.enemy.time_to_wait_after_flagged",
-		"600000",
-		"# This is how much time that must pass after a town in a nation has been flagged",
-		"# before certain actions can be performed, measured in milliseconds."),
 	WAR_ENEMY_ALLOW_ATTACKS(
 			"war.enemy.allow_attacks",
 			"false",
@@ -1664,6 +1661,21 @@ public enum ConfigNodes {
 	WAR_ENEMY_BEACON_WIREFRAME_BLOCK(
 			"war.enemy.beacon.wireframe_block",
 			"glowstone"),
+	WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while their town",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_nation_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while a town in their nation",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
+		"war.enemy.time_to_wait_after_flagged",
+		"600000",
+		"# This is how much time that must pass after a town in a nation has been flagged",
+		"# before certain actions can be performed, measured in milliseconds."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",

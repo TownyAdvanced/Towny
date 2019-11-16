@@ -836,7 +836,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 
-			if (underAttack)
+			if (underAttack && TownySettings.isFlaggedInteractionNation())
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_nation_under_attack"));
 			
 			nation.withdrawFromBank(resident, amount);
@@ -1082,7 +1082,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 			nation = town.getNation();
 
-			if (TownyWar.isUnderAttack(town)) {
+			if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 			}
 

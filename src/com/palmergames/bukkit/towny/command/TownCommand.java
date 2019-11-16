@@ -1821,7 +1821,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyWorld world;
 					try {
 
-						if (TownyWar.isUnderAttack(town)) {
+						if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 							throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 						}
 
@@ -2165,7 +2165,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			
-			if (TownyWar.isUnderAttack(town)) {
+			if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 				return;
 			}
@@ -3266,7 +3266,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 
-				if (TownyWar.isUnderAttack(town))
+				if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown())
 					throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 
 				if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
