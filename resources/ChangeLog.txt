@@ -3803,3 +3803,5 @@ v0.92.0.11:
     - War will not start if there is less than 2 nations participating.
     - War requires at least one enemy-enemy relationship between nations to start.
 0.95.1.4:
+  - Fix and updated the older Flag War system (courtesy of the CivWars team)
+  - Language files bumped to 0.61.
