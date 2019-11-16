@@ -35,6 +35,7 @@ ___
 
 ### Staying up to date
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
+    
 Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Releases Only".
     
 Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/towny-advanced.72694/watch) on Spigot you will be notified on that website when a new build is out.
