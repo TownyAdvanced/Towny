@@ -1324,7 +1324,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
 	}
 
-	public String getFormattedHoursUntilSiegeCooldownEnds() {
+	public String getFormattedHoursUntilSiegeImmunityEnds() {
 		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
 		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}

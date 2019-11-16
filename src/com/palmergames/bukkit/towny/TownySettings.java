@@ -2630,11 +2630,11 @@ public class TownySettings {
 	public static double getWarSiegeSiegeCooldownNewTownsHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_NEW_TOWNS_HOURS);
 	}
-	public static double getWarSiegeSiegeCooldownModifier() {
+	public static double getWarSiegeSiegeImmunityTimeModifier() {
 		return getDouble(ConfigNodes.WAR_SIEGE_SIEGE_COOLDOWN_MODIFIER);
 	}
 
-	public static double getWarSiegeRevoltCooldownHours() {
+	public static double getWarSiegeRevoltImmunityHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_REVOLT_COOLDOWN_HOURS);
 	}
 

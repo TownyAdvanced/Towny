@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -789,7 +790,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public void nationLeave(Player player) {
 
 		Town town = null;
-		Nation nation = null;
+		Nation nation;
 
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -799,30 +800,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.removeTown(town);
 
 			if (TownySettings.getWarSiegeEnabled()) {
-				if(TownySettings.getWarSiegeRevoltEnabled() ) {
-					if (town.isRevoltCooldownActive()) {
-						throw new TownyException("You cannot use the leave command while your town revolt immunity is active. \n" +
-								"\nEither wait for revolt immunity to expire, or persuade the nation to kick your town.");
-					} else {
-						TownyMessaging.sendGlobalMessage(
-								TownyFormatter.getFormattedTownName(town)
-										+ " has risen up in revolt, and declared independance from "
-										+ TownyFormatter.getFormattedNationName(nation));
 
-						//Begin revolt immunity
-						double revoltImmunityHours = TownySettings.getWarSiegeRevoltCooldownHours();
-						long revoltImmunityMillis = (long) ((revoltImmunityHours * 60 * 60 * 1000) + 0.5);
-						town.setRevoltImmunityEndTime(revoltImmunityMillis);
+				if(!TownySettings.getWarSiegeRevoltEnabled())
+					throw new TownyException("Towns cannot leave nations without permission."
+							+ " To leave your current nation, persuade the king (or an assistant) to kick your town.");
 
-						//Stop siege immunity
-						town.setSiegeImmunityEndTime(0);
-					}
-				} else {
-					//If revolt is disabled, you can only leave if nation kicks you
-					throw new TownyException("Towns cannot leave nations without permission. \n" +
-							"\nTo leave your current nation, persuade the king (or assistants) to kick your town.");
+				if (town.isRevoltCooldownActive())
+					throw new TownyException("You cannot use the leave command while your town revolt immunity is active."
+							+ " Either wait for revolt immunity to expire, or persuade the king (or an assistant) to kick your town.");
 
-				}
+				//Activate revolt immunity
+				SiegeWarUtil.activateRevoltImmunityTimer(town);
+				//End siege immunity
+				town.setSiegeImmunityEndTime(0);
+
+				TownyMessaging.sendGlobalMessage(
+						TownyFormatter.getFormattedTownName(town)
+								+ " has risen in revolt, and declared independence from "
+								+ TownyFormatter.getFormattedNationName(nation));
 			}
 
 			/*

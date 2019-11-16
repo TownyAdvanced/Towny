@@ -14,16 +14,10 @@ import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILL
 
 public class SiegeWarTimerTask extends TownyTimerTask {
 
-	private static boolean timeForUpkeep;
 	private static long nextTimeForUpkeep;
-	private static boolean timeToSaveSiegeToDB;
-	private static long nextTimeToSavePointsToDB;
 
 	static
 	{
-		timeToSaveSiegeToDB = false;
-		nextTimeToSavePointsToDB = System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS;
-		timeForUpkeep = false;
 		nextTimeForUpkeep = System.currentTimeMillis() + ONE_HOUR_IN_MILLIS;
 	}
 
@@ -43,11 +37,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				nextTimeForUpkeep = System.currentTimeMillis() + ONE_HOUR_IN_MILLIS;
 				doSiegeUpkeep();
 			}
-
-			if (System.currentTimeMillis() > nextTimeToSavePointsToDB) {
-				nextTimeToSavePointsToDB = System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS;
-				saveActiveSiegeZonesToDB();
-			}
 		}
 	}
 
@@ -58,15 +47,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		for (Siege siege : new ArrayList<>(SiegeWarUtil.getAllSieges())) {
 			if (TownySettings.isUsingEconomy())
 				SiegeWarUtil.applySiegeUpkeepCost(siege);
-		}
-	}
-
-
-	private void saveActiveSiegeZonesToDB() {
-		for(SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
-			if(siegeZone.isActive()) {
-				TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-			}
 		}
 	}
 

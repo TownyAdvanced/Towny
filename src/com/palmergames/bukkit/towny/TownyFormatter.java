@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import com.google.common.util.concurrent.Service;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,7 +23,6 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -437,7 +435,7 @@ public class TownyFormatter {
 						out.add(builtLine.toString());
 
 						//Siege Victory Timer: 5.3 hours
-						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilCompletion());
+						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
 						out.add(victoryTimer);
 					break;
 
@@ -450,16 +448,16 @@ public class TownyFormatter {
 						String townInvaded = TownySettings.getLangString("status_town_siege_invaded_prefix") + (siege.isTownInvaded() ? yes : no);
 						out.add(siegeStatus);
 						out.add(townInvaded + "  " + townPlundered);
-						String siegeCooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
-						out.add(siegeCooldownTimer);
+						String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						out.add(siegeImmunityTimer);
 					break;
 
 					case DEFENDER_WIN:
 					case ATTACKER_ABANDON:
 						siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
-						siegeCooldownTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeCooldownEnds());
+						siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
 						out.add(siegeStatus);
-						out.add(siegeCooldownTimer);
+						out.add(siegeImmunityTimer);
 					break;
 				}
 			}

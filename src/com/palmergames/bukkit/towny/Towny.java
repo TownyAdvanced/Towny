@@ -153,7 +153,6 @@ public class Towny extends JavaPlugin {
 			getCommand("towny").setExecutor(new TownyCommand(this));
 			getCommand("town").setExecutor(new TownCommand(this));
 			getCommand("nation").setExecutor(new NationCommand(this));
-			getCommand("siege").setExecutor(new SiegeCommand(this));
 			getCommand("plot").setExecutor(new PlotCommand(this));
 			getCommand("invite").setExecutor(new InviteCommand(this));
 

@@ -219,10 +219,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				townLeave(player);
 
-			} else if (split[0].equalsIgnoreCase("revolt")) {
-
-				processRevoltRequest(player);
-
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
 
 				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode()))
@@ -3164,47 +3160,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		} catch (EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-
-	/////////////////////PROCESS REVOLT REQUEST ///////////////////////////////////
-	public static void processRevoltRequest(Player player) {
-
-		try {
-			if (!TownySettings.getWarSiegeEnabled())
-				throw new TownyException("Siege war disabled");  //todo - replace w lang string
-
-			if (!TownySettings.getWarSiegeRevoltEnabled())
-				throw new TownyException("Siege war revolts are not allowed");
-
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_REVOLT.getNode()))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-			TownBlock townBlockWherePlayerIsLocated = TownyUniverse.getTownBlockWherePlayerIsLocated(player);
-			if (townBlockWherePlayerIsLocated == null)
-				throw new TownyException("You must be standing in your town to start a revolt.");
-
-			Town defendingTown = townBlockWherePlayerIsLocated.getTown();
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			if(!(defendingTown == resident.getTown())) {
-				throw new TownyException("You cannot start a revolt in a town other than your own.");
-			}
-
-			if(!defendingTown.hasNation()) {
-				throw new TownyException("Your town is not ruled by any nation. You have nobody to revolt against.");
-			}
-
-			if (defendingTown.isRevoltCooldownActive()) {
-				throw new TownyException(
-						"This town is in a revolt cooldown period. " +
-								"It cannot revolt for " +
-								defendingTown.getRevoltCooldownRemainingMinutes() + " minutes");
-			}
-
-			SiegeWarUtil.revolt(plugin, resident, defendingTown);
-
-		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}

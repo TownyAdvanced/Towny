@@ -243,7 +243,7 @@ public class TownyBlockListener implements Listener {
 				return false;
 			}
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(player, "Problem placing siege banner");
+			TownyMessaging.sendErrorMsg(player, "Problem placing banner");
 			e.printStackTrace();
 			event.setCancelled(true);
 			return true;
@@ -252,40 +252,30 @@ public class TownyBlockListener implements Listener {
 
 	//While a siege exists, nobody can destroy the siege banner
 	//Returns skipAdditionalPermChecks
-	public boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
-		boolean skipRemainingPermChecks = false;
-		try {
-			String blockTypeName = block.getType().getKey().getKey();
+	private boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
+		String blockTypeName = block.getType().getKey().getKey();
 
-			if (blockTypeName.contains("banner")) {
-				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+		if (blockTypeName.contains("banner")) {
+			Siege activeSiege = SiegeWarUtil.getActiveSiegeGivenBannerLocation(block.getLocation());
 
-				if (resident.hasTown()) {
-					Siege activeSiege = SiegeWarUtil.getActiveSiegeGivenBannerLocation(block.getLocation());
-
-					if (activeSiege == null) {
-						//This is not a siege banner
-						return false;
-					} else {
-						//This block is the banner of an active siege
-						event.setCancelled(true);
-						skipRemainingPermChecks = true;
-						throw new TownyException("This is a siege banner. It cannot be destroyed while the associated siege attack is in progress.");
-					}
-				}
+			if (activeSiege == null) {
+				//This is not a siege banner
+				return false;
+			} else {
+				//This block is the banner of an active siege
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(player, "\"This is a siege banner. It cannot be destroyed while the associated siege attack is in progress.");
+				return true;
 			}
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+		} else {
+			return false;
 		}
-		return skipRemainingPermChecks;
 	}
-
 
 	private boolean evaluateSiegeWarPlaceBannerRequest(Player player,
 													   Block block,
 													   String blockTypeName,
 													   BlockPlaceEvent event)
-														throws NotRegisteredException
 	{
 		TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
 
@@ -318,7 +308,10 @@ public class TownyBlockListener implements Listener {
 			}
 
 		} else if (townBlock.hasTown()) {
-			Town townWhereBlockWasPlaced = townBlock.getTown();
+			Town townWhereBlockWasPlaced = null;
+
+			try { townWhereBlockWasPlaced = townBlock.getTown();
+			} catch (NotRegisteredException e) {}
 
 			//If there is no siege, do normal block placement
 			if(!townWhereBlockWasPlaced.hasSiege())
@@ -350,8 +343,15 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 
-	private List<TownBlock> getAdjacentTownBlocks(Player player, Block block) throws NotRegisteredException{
-		TownyWorld townyWorld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+	private List<TownBlock> getAdjacentTownBlocks(Player player, Block block) {
+		TownyWorld townyWorld;
+		List<TownBlock> nearbyTownBlocks = new ArrayList<>();
+
+		try {
+			townyWorld = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+		} catch (NotRegisteredException e) {
+			return nearbyTownBlocks;
+		}
 
 		List<Coord> nearbyCoOrdinates =new ArrayList<>();
 		Coord blockCoordinate = Coord.parseCoord(block);
@@ -360,18 +360,20 @@ public class TownyBlockListener implements Listener {
 		nearbyCoOrdinates.add(blockCoordinate.add(1,0));
 		nearbyCoOrdinates.add(blockCoordinate.add(-1,0));
 
-		List<TownBlock> nearbyTownBlocksWithTowns = new ArrayList<>();
-		TownBlock nearbyTownBlock;
+		TownBlock nearbyTownBlock = null;
 		for(Coord nearbyCoord: nearbyCoOrdinates){
 			if(townyWorld.hasTownBlock(nearbyCoord)) {
-				nearbyTownBlock = townyWorld.getTownBlock(nearbyCoord);
+
+				try {nearbyTownBlock = townyWorld.getTownBlock(nearbyCoord);
+				} catch (NotRegisteredException e) {}
+
 				if (nearbyTownBlock.hasTown()) {
-					nearbyTownBlocksWithTowns.add(nearbyTownBlock);
+					nearbyTownBlocks.add(nearbyTownBlock);
 				}
 			}
 		}
 
-		return nearbyTownBlocksWithTowns;
+		return nearbyTownBlocks;
 	}
 
 	private boolean evaluateSiegeWarPlaceChestRequest(Player player,

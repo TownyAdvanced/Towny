@@ -131,12 +131,12 @@ public class Siege {
         return scheduledEndTime - System.currentTimeMillis();
     }
 
-    public String getFormattedHoursUntilCompletion() {
+    public String getFormattedHoursUntilScheduledCompletion() {
         if(status == SiegeStatus.IN_PROGRESS) {
             double timeUntilCompletionMillis = getTimeUntilCompletionMillis();
             return SiegeWarUtil.getFormattedTimeValue(timeUntilCompletionMillis);
         } else {
-            return "n/a";
+            return "0";
         }
     }
 
