@@ -3815,3 +3815,8 @@ v0.92.0.11:
     - New Config Option: war.enemy.time_to_wait_after_flagged
       - Default: 600000 (ms)
       - Time after a flag has expired or been defended until players can perform special interactions.
+  - New Feature: nation zones show notifications when you enter into them.
+  - New Config Option: global_nation_settings.nationzone.show_notifications
+    - Default: false
+    - When set to true, players will receive a notification when they enter into a nationzone.
+    - Set to false by default because, like the nationzone feature, it will generate more load on servers.
