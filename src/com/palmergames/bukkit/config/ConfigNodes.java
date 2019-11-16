@@ -526,6 +526,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_NATIONZONE_SHOW_NOTIFICATIONS(
+			"global_nation_settings.nationzone.show_notifications",
+			"false",
+			"",
+			"# When set to true, players will receive a notification when they enter into a nationzone.",
+			"# Set to false by default because, like the nationzone feature, it will generate more load on servers."),
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
