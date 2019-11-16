@@ -3816,6 +3816,7 @@ v0.92.0.11:
       - Default: 600000 (ms)
       - Time after a flag has expired or been defended until players can perform special interactions.
   - New Feature: nation zones show notifications when you enter into them.
+    - Closes ticket #3406
   - New Config Option: global_nation_settings.nationzone.show_notifications
     - Default: false
     - When set to true, players will receive a notification when they enter into a nationzone.
