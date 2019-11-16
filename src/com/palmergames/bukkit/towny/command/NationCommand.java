@@ -36,6 +36,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -829,14 +830,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			boolean underAttack = false;
 			for (Town town : nation.getTowns()) {
-				if (TownyWar.isUnderAttack(town) || System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
+				if (TownyWar.isUnderAttack(town) || System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 					underAttack = true;
 					break;
 				}
 			}
 
 			if (underAttack)
-				throw new TownyException("You can't do this while a town in your nation is under attack!");
+				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_nation_under_attack"));
 			
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
@@ -1082,11 +1083,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation = town.getNation();
 
 			if (TownyWar.isUnderAttack(town)) {
-				throw new TownyException("You cannot do that while under attack!");
+				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
 			}
 
-			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < 10*60*1000) {
-				throw new TownyException("You cannot do that! You were attacked too recently!");
+			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
+				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 			}
 			
 			nation.removeTown(town);

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.60
+version: 0.61
 language: Chinese
 author: ElgarL
 website: 'http://towny.palmergames.com/'
@@ -13,7 +13,7 @@ description: >
 #        请在config.yml中将language改为Chinese.yml(文件名)
 #        本翻译未进行测试,,因变量相同无法颠倒
 #        所以可能存在语序颠倒,内容不当等问题
-#    
+#
 #       Towny WIKI(Chinese version)城镇中文百科: http://mineplugin.org/Towny
 #       %s = 插件提供的变量
 
@@ -515,8 +515,8 @@ msg_you_lost_money_dying: '你失去了 %s.'
 msg_your_town_lost_money_dying: '你的城镇失去了 %s.'
 msg_your_nation_lost_money_dying: '你的国家失去了 %s.'
 msg_err_couldnt_take_deathfunds: '你支付不起死亡费用.'
-msg_err_couldnt_take_town_deathfunds: '你支付不起城镇死亡费用.' 
-msg_err_couldnt_take_nation_deathfunds: '你支付不起国家死亡费用.' 
+msg_err_couldnt_take_town_deathfunds: '你支付不起城镇死亡费用.'
+msg_err_couldnt_take_nation_deathfunds: '你支付不起国家死亡费用.'
 msg_you_gained_money_for_killing: '你获得了 %s 元,因为你杀死了 %s.'
 
 msg_err_ender_pearls_disabled: '&4无法使用末影珍珠!'
@@ -538,10 +538,6 @@ msg_war_jailbreak: '&6[战争]&f %s 发生了越狱, %s 名囚犯逃脱了(s)!'
 msg_war_town_removed_from_war_titlemsg: '你的城镇退出了这场战争'
 msg_war_nation_removed_from_war_titlemsg: '你的国家退出了这场战争'
 msg_war_append_townblocks_fallen: ' 城镇沦陷了)'
-
-msg_town_plots_revenue_disclaimer: '&a收入与地主是否付得起土地费用有关.'
-msg_town_set_perm_syntax_error: '无效指令. 用 /town set perm ? 查看正确指令格式.'
-msg_plot_set_perm_syntax_error: '无效指令. 用 /plot set perm ? 查看正确指令格式.'
 
 msg_town_plots_revenue_disclaimer: '&a显示的收入是预计的，并且地皮的所有者是否可以支付是一个因素'
 msg_town_set_perm_syntax_error: '此命令无效的单词组合. 查看 ''/town set perm ?'' 用于正确的命令语法.'
@@ -711,7 +707,7 @@ msg_err_over_outposts_limit: '你无法传送到城镇前哨, 已经超过你的
 # 如果你是译者,你可以跳过这部分，因为翻译后可能会不怎么好看.
 # 你最好在游戏里看下是怎么样的.
 outlaws: '&2放逐者: &f'                    # 用于 /t outlawlist
-online: '&a(在线)' 
+online: '&a(在线)'
 registered_last_online: '&2注册时间: &a%s &8| &2最后在线: &a%s'
 status_perm: '&2权限: '                     # 用于 /plot perm, /res
 status_permissions: '&2权限: '       # 用于 /town
@@ -723,7 +719,7 @@ status_forced: '&c强制'
 status_adjustable: '&a可调整'
 status_pvp: '&2PvP: '
 explosions: '  &2爆炸保护: '              # 用于 /plot perm, /res
-explosions2: '&2爆炸保护: '               # 用于 /town and /tw 
+explosions2: '&2爆炸保护: '               # 用于 /town and /tw
 firespread: '  &2火势蔓延: '
 mobspawns: '  &2生物生成: '
 owner_of_x_plots: '&2拥有&a%s片土地'
@@ -731,7 +727,7 @@ status_bank: '&2银行: &a%s'
 status_town: '&2城镇: &a'
 status_no_town: '无'
 status_town_ranks: '&2城镇等级: &a'
-status_nation_ranks: '&2国家等级: &a' 
+status_nation_ranks: '&2国家等级: &a'
 jailed_in_town: '&2监禁: &a是 &2位于城镇: &a%s'
 status_friends: '好友'
 rank_list_title: ' &3头衔列表'
@@ -902,7 +898,7 @@ msg_error_nation_has_no_allies: 'Nation has no allies to list.'
 msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'No player found with name %s'
-msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s' 
+msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
 msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
 msg_err_already_in_a_nation: 'Your town is already in a nation.'
@@ -932,14 +928,14 @@ war_hud_top_towns: 'Top Towns'
 war_stats_nations: '  Nations: '
 war_stats_towns: '  Towns: '
 war_stats_warzone: '  WarZone: '
-war_stats_spoils_of_war: '  Spoils of War: ' 
+war_stats_spoils_of_war: '  Spoils of War: '
 war_starts_in_x: 'War starts in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
@@ -1010,3 +1006,8 @@ msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, wa
 msg_war_prefix: '&6[War]&f '
 msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
+msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'

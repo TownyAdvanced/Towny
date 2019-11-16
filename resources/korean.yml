@@ -1,5 +1,5 @@
 name: Towny
-version: 0.60
+version: 0.61
 language: 한국어
 author: 'Daybreak 새벽'
 website: 'http://towny.palmergames.com/'
@@ -8,7 +8,7 @@ description: >
   만약 수정을 원한다면, 다른 이름의 복제본을 만드십시오.
   언어 파일은 config.yml에서 [language]를 통해 변경 가능합니다.
 
-# 
+#
 #                   텍스트는 공백을 포함하여야 합니다.
 #  텍스트가 공백으로 시작하거나 끝나는 경우, 이는 그대로 유지되어야 합니다.
 #
@@ -811,7 +811,7 @@ msg_error_nation_has_no_allies: '국가가 나열할 동맹국이 없습니다.'
 msg_error_nation_has_no_enemies: '국가가 나열할 적국이 없습니다.'
 msg_error_ta_plot_claim: '플레이어 이름 없음, 예시: /ta plot claim 플레이어이름'
 msg_error_no_player_with_that_name: '%s(이)라는 이름을 가진 플레이어가 없습니다.'
-msg_admin_has_given_you_a_plot: '관리자가 당신의 이름으로 토지를 점유했습니다: %s' 
+msg_admin_has_given_you_a_plot: '관리자가 당신의 이름으로 토지를 점유했습니다: %s'
 msg_town_forcepvp_setting_set_to: '마을 %s의 PVP 설정이 %s로 강제되었습니다.'
 msg_nation_changed_open: '&c이국가의 공공 설정이 %s로 변경되었습니다.'
 msg_err_already_in_a_nation: '귀하의 마을은 이미 국가에 소속되어 있습니다.'
@@ -841,14 +841,14 @@ war_hud_top_towns: 'Top Towns'
 war_stats_nations: '  Nations: '
 war_stats_towns: '  Towns: '
 war_stats_warzone: '  WarZone: '
-war_stats_spoils_of_war: '  Spoils of War: ' 
+war_stats_spoils_of_war: '  Spoils of War: '
 war_starts_in_x: 'War starts in %s'
 
 # Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.' 
+msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
 
 # Added in 0.57:
 msg_err_already_res2: '&c%s already belong to a town.'
@@ -881,7 +881,7 @@ msg_too_close2: 'This area is too close to another town''s  %s.'
 homeblock: 'homeblock'
 townblock: 'townblock'
 outpost: 'outpost'
-msg_err_not_same_town: '&b%s doesn''t belong to your town.' 
+msg_err_not_same_town: '&b%s doesn''t belong to your town.'
 
 # Added in 0.59:
 msg_modes_set: 'Modes set: '
@@ -919,3 +919,8 @@ msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, wa
 msg_war_prefix: '&6[War]&f '
 msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+
+# Added in 0.61
+msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
+msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
