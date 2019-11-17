@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * @author dumptruckman & Articdive
+ * @author dumptruckman &amp; Articdive
  */
 public class CommentedConfiguration extends YamlConfiguration {
 	private HashMap<String, String> comments;

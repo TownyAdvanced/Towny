@@ -329,7 +329,7 @@ public class TownyUniverse {
      *
      * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
      * @param tb                   - TownBlock to check if its contained..
-     * @return {@link true} if the TownBlock is considered an outpost by it's Town.
+     * @return true if the TownBlock is considered an outpost by it's Town.
      * @author Lukas Mansour (Articdive)
      */
     public boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {

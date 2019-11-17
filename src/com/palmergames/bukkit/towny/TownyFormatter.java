@@ -143,6 +143,7 @@ public class TownyFormatter {
 	/**
 	 * 
 	 * @param resident
+	 * @param player
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Resident resident, Player player) {
@@ -273,7 +274,7 @@ public class TownyFormatter {
 
 	/**
 	 * 
-	 * @param out - List<String>
+	 * @param out - List&lt;String&gt;
 	 * @return a string list with all lines split at a middle-ish " " and shortened so that they fit equally into 80 characters chat line.
 	 * Please do not pass this anything longer than 159 characters. 
 	 */

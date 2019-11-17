@@ -1076,8 +1076,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
 	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
-	 * @exception EmptyNationException - When the succumbingNation's last town is removed, this will remove the nation.
-	 * @exception EconomyException - Shouldn't happen but could if there's a problem with the Economy plugin.
 	 * @throws NotRegisteredException - Shouldn't happen.
 	 * @throws AlreadyRegisteredException - Shouldn't happen. 
 	 * 

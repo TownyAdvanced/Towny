@@ -384,7 +384,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 * 
 	 * @param player - Player.
 	 * @param split  - Current command arguments.
-	 * @throws TownyException- Exception.
+	 * @throws TownyException - Exception.
 	 */
 
 	/*

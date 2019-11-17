@@ -222,8 +222,6 @@ public class FileMgmt {
 	 *
 	 * @param source String to write.
 	 * @param file   File to write to.
-	 *
-	 * @return True on success.
 	 */
 	public static void stringToFile(String source, File file) {
 

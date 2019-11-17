@@ -32,7 +32,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 //import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
- * @author Shade & ElgarL
+ * @author Shade &amp; ElgarL
  *
  *         This class handles Player deaths and associated costs.
  *
