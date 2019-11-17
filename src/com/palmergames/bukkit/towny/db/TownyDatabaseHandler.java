@@ -564,18 +564,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	}
 
-	@Override
-	public void removeTown(Town town) {
-		
-		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
-		removeTownBlocks(town);
+
+
+	//@Override //todo - make me override
+	public void ruinTown(Town town) {
+		town.setRecentlyRuined(true);
+		town.setRecentlyRuinedEndTime(System.currentTimeMillis() + 3000);
 
 		List<SiegeZone> siegeZonesToDelete = new ArrayList<>();
+		List<Nation> nationsToSave = new ArrayList<>();
 		if(town.getSiege() != null) {
 			for(Map.Entry<Nation,SiegeZone> entry: town.getSiege().getSiegeZones().entrySet()) {
 				siegeZonesToDelete.add(entry.getValue());
-				saveNation(entry.getKey());
+				nationsToSave.add(entry.getKey());
 			}
 		}
 
@@ -586,12 +588,123 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (town.hasNation()) {
 				Nation nation = town.getNation();
 				nation.removeTown(town);
-				saveNation(nation);
+				nationsToSave.add(nation);
 			}
 
 			// Clear all town blocks so the sign removal triggers.
 			removeTownBlocks(town);
 
+			town.clear();
+		} catch (EmptyNationException e) {
+			removeNation(e.getNation());
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), e.getNation()));
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+
+		for (Resident resident : residentsToSave) {
+			resident.clearModes();
+			removeResident(resident);
+			saveResident(resident);
+		}
+
+		// Look for residents inside of this town's jail and free them
+		// TODO: Perhaps in the future a new object JailedResidents can be used to make this searching much quicker.
+		for (Resident jailedRes : getResidents()) {
+			if (jailedRes.hasJailTown(town.getName())) {
+				jailedRes.setJailed(BukkitTools.getPlayer(jailedRes.getName()), 0, town);
+				saveResident(jailedRes);
+			}
+		}
+
+		if (TownyEconomyHandler.isActive())
+			try {
+				town.payTo(town.getHoldingBalance(), new WarSpoils(), "Remove Town");
+				town.removeAccount();
+			} catch (Exception e) {
+			}
+
+		//Remove items from universe
+		universe.getTownsMap().remove(town.getName().toLowerCase());
+		for(SiegeZone siegeZone: siegeZonesToDelete) {
+			universe.getSiegeZonesMap().remove(siegeZone.getName());
+		}
+
+		//Remove siege zones from DB
+		for(SiegeZone siegeZone: siegeZonesToDelete) {
+			deleteSiegeZone(siegeZone);
+		}
+		//Save nations
+		for(Nation nationToSave: nationsToSave) {
+			saveNation(nationToSave);
+		}
+
+		plugin.resetCache();
+
+		deleteTown(town);
+
+		if(siegeZonesToDelete.size() >0){
+			saveSiegeZoneList();
+		}
+
+		saveTownList();
+		try {
+			townyWorld.removeTown(town);
+		} catch (NotRegisteredException e) {
+			// Must already be removed
+		}
+
+		if(town.hasSiege()) {
+			saveSiegeZoneList();
+		}
+
+		saveWorld(townyWorld);
+	}
+
+	public void removeRuinedTown(Town town) {
+		//Calledby siege timer only
+	}
+
+	@Override
+	public void removeTown(Town town) {
+		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
+
+		boolean putTownIntoRuinedState = false;
+		if(TownySettings.getWarSiegeEnabled()) {
+			//Todo - add a config here
+			putTownIntoRuinedState = true;
+		}
+
+		List<TownBlock> townBlocksToKeep = null;
+		if(putTownIntoRuinedState) {
+			townBlocksToKeep = town.getTownBlocks();
+			town.setRecentlyRuined(true);
+			town.setRecentlyRuinedEndTime(System.currentTimeMillis() + 3000);
+			town.setPVP(true);
+			town.setPermissions("");
+		}
+
+		List<SiegeZone> siegeZonesToDelete = new ArrayList<>();
+		List<Nation> nationsToSave = new ArrayList<>();
+		if(town.getSiege() != null) {
+			for(Map.Entry<Nation,SiegeZone> entry: town.getSiege().getSiegeZones().entrySet()) {
+				siegeZonesToDelete.add(entry.getValue());
+				nationsToSave.add(entry.getKey());
+			}
+		}
+
+		List<Resident> residentsToSave = new ArrayList<>(town.getResidents());
+		TownyWorld townyWorld = town.getWorld();
+
+		try {
+			if (town.hasNation()) {
+				Nation nation = town.getNation();
+				nation.removeTown(town);
+				nationsToSave.add(nation);
+			}
+
+			// Clear all town blocks so the sign removal triggers.
+			removeTownBlocks(town);
 			town.clear();
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
@@ -628,27 +741,33 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getSiegeZonesMap().remove(siegeZone.getName());
 		}
 
-		//Remove siege zones from DB
+		//Remove siege zones and nations from DB
 		for(SiegeZone siegeZone: siegeZonesToDelete) {
 			deleteSiegeZone(siegeZone);
+		}
+		for(Nation nationToSave: nationsToSave) {
+			saveNation(nationToSave);
 		}
 
 		plugin.resetCache();
 
-		deleteTown(town);
-
-		saveTownList();
-		try {
-			townyWorld.removeTown(town);
-		} catch (NotRegisteredException e) {
-			// Must already be removed
-		}
-
-		if(town.hasSiege()) {
+		if(siegeZonesToDelete.size() >0){
 			saveSiegeZoneList();
 		}
 
-		saveWorld(townyWorld);
+		if(putTownIntoRuinedState) {
+			//Re-add the zones back in
+			town.setTownblocks(townBlocksToKeep);
+		} else {
+			deleteTown(town);
+			saveTownList();
+			try {
+				townyWorld.removeTown(town);
+			} catch (NotRegisteredException e) {
+				// Must already be removed
+			}
+			saveWorld(townyWorld);
+		}
 
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 

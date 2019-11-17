@@ -967,4 +967,35 @@ public class SiegeWarUtil {
         }
 
     }
+
+    public static void ruinTown(Town town) {
+        /*
+
+- Create a ruin method....
+  --- set recentlyRuined = true
+  --- set recentlyRuinedEndTime
+  --- set town balance to 0
+  --- remove all residents from town
+  --- set town nation to null
+  --- set mayor to null
+  --- set siege to null
+  --- (LEAVE TOWN BLOCKS IN PLACE)
+  --- set pvp to ON
+  --- set all perms to OFF
+  --- isOpen = false
+  --- isPublic = false
+  --- remove town from nation
+         */
+
+        town.setRecentlyRuined(true);
+        town.setRecentlyRuinedEndTime(System.currentTimeMillis() + 60000); //TODo - dehardcode
+        if(TownySettings.isUsingEconomy()) {
+            try {
+                town.setBalance(0,"Ruined");
+            } catch (EconomyException e) {
+            }
+        }
+        town.getResidents().clear();
+
+    }
 }

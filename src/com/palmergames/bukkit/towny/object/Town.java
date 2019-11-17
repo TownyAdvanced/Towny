@@ -54,6 +54,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
+	private boolean recentlyRuined;
+	private long recentlyRuinedEndTime;
 	private Siege siege;
 	private long siegeImmunityEndTime;
 	private long revoltImmunityEndTime;
@@ -1334,5 +1336,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public String getFormattedHoursUntilSiegeImmunityEnds() {
 		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
 		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
+	}
+
+	public void setRecentlyRuined(boolean recentlyRuined) {
+		this.recentlyRuined = recentlyRuined;
+	}
+
+	public void setRecentlyRuinedEndTime(long recentlyRuinedEndTime) {
+		this.recentlyRuinedEndTime = recentlyRuinedEndTime;
 	}
 }
