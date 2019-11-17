@@ -1594,6 +1594,11 @@ public enum ConfigNodes {
 			"true",
 			"# If this setting is true, then pvp is always set to on during sieges",
 			"# It is automatically set to off when the siege ends"),
+	WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS(
+			"war.siege.teleport_disabled_to_besieged_towns",
+			"true",
+			"# If this setting is true, then you cannot teleport to a besieged town.",
+			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

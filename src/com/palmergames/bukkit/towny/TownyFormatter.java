@@ -658,11 +658,11 @@ public class TownyFormatter {
 				String message = TownySettings.getLangString("status_town_siege_summary_attacker_win");
 				return String.format(message, siege.getWinnerName());
 			case DEFENDER_SURRENDER:
-				return "Defender Surrender - Town surrendered to " + siege.getWinnerName();
+				return "Defender Surrender - To " + siege.getWinnerName();
 			case DEFENDER_WIN:
 				return TownySettings.getLangString("status_town_siege_summary_defender_win");
 			case ATTACKER_ABANDON:
-				return "Attacker Abandon - All attackers abandoned the siege";
+				return "Attacker Abandon";
 			default:
 				return "???";
 		}

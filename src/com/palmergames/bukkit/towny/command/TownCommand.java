@@ -360,12 +360,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					townSpawn(player, newSplit, false);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
+
+					Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
 					if (split.length >= 2) {
 						if (split[1].equalsIgnoreCase("list")) {
 							if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode())){
 								throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 							}
-							Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 							if (resident.hasTown()){
 								Town town = resident.getTown();
 								List<Location> outposts = town.getAllOutpostSpawns();
@@ -1088,7 +1090,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						&& town.hasSiege()
 						&& (town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS))
 				{
-					throw new TownyException("PVP is always on in besieged towns.");
+					throw new TownyException("In besieged towns, PVP is automatically set to 'ON', and cannot be changed until the siege is over.");
 				}
 
 				// Make sure we are allowed to set these permissions.
@@ -2046,7 +2048,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException {
 
 		try {
-
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Town town;
 			String notAffordMSG;
@@ -2091,9 +2092,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void townSpawn(Player player, String[] split, Town town, String notAffordMSG, Boolean outpost) {
 		try {
-			//If the town is under siege, you cannot spawn there
-			if(town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
-				throw new TownyException("Cannot spawn into a town which is under siege");
+
+			if(TownySettings.getWarSiegeEnabled()
+					&& TownySettings.getWarSiegeTeleportDisabledToBesiegedTowns()
+					&& town.hasSiege()
+					&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+			{
+				TownyMessaging.sendErrorMsg(player, "Town/Outpost spawn is disabled while the town is under siege.");
+				return;
+			}
 
 			boolean isTownyAdmin = TownyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());

@@ -74,6 +74,8 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 			}
 
+			/*
+			//DISABLED FOR NOW --- until we are sure we don't want it
 			//Killed while besieging a town ?
 			if (TownySettings.getWarSiegeEnabled()
 					&& TownySettings.isUsingEconomy()
@@ -83,6 +85,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 				checkForSiegeDeathCosts(defenderPlayer, defenderResident);
 			}
+			*/
 
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {

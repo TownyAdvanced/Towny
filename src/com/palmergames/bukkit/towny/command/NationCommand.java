@@ -2043,10 +2043,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			//If the town where the spawn is located is under siege, you cannot spawn there
 			TownBlock spawnBlock= TownyUniverse.getTownBlock(spawnLoc);
-			if(spawnBlock != null) {
+			if(spawnBlock != null && spawnBlock.hasTown()) {
 				Town town = spawnBlock.getTown();
-				if (town.hasSiege() & town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
-					throw new TownyException("Cannot spawn into a town which is under siege");
+
+				if(TownySettings.getWarSiegeEnabled()
+						&& TownySettings.getWarSiegeTeleportDisabledToBesiegedTowns()
+						&& town.hasSiege()
+						&& town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				{
+					TownyMessaging.sendErrorMsg(player, "Nation spawn is disabled if the spawn-point is located in a besieged town");
+					return;
+				}
 			}
 
 			// Determine conditions
