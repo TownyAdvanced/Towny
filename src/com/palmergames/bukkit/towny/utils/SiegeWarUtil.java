@@ -738,8 +738,7 @@ public class SiegeWarUtil {
         System.out.println("Evaluating siege zone now");
 
         if(siegeZone.isActive()) {
-            boolean saveSiegeZoneToDB = false;
-            boolean siegeZoneChanged;
+            boolean siegeZoneChanged = false;
             Resident resident;
 
             //Cycle all online players
@@ -751,51 +750,68 @@ public class SiegeWarUtil {
                     if (resident.hasTown()) {
                         //TODO - DEHARDCODE THE POINT VALUES
 
-                        if (siegeZone.getDefendingTown() == resident.getTown()) {
-                            //See if the player can contribute points to the siege defence
-                            siegeZoneChanged = evaluateSiegeZoneOccupant(
+                        if (resident.getTown() == siegeZone.getDefendingTown()) {
+
+                            //Resident of defending town
+                            siegeZoneChanged =
+                            siegeZoneChanged ||
+                                    evaluateSiegeZoneOccupant(
                                     player,
                                     siegeZone,
                                     siegeZone.getDefenderPlayerScoreTimeMap(),
                                     TownySettings.getSiegeWarPointsPerDefendingPlayer());
 
-                            if(siegeZoneChanged && !saveSiegeZoneToDB)
-                                saveSiegeZoneToDB = true;
                         }
 
-                        if (resident.getTown().hasNation()
-                                && siegeZone.getAttackingNation() == resident.getTown().getNation()) {
-                            //See if the player can contribute points to the siege attack
-                            siegeZoneChanged = evaluateSiegeZoneOccupant(
-                                    player,
-                                    siegeZone,
-                                    siegeZone.getAttackerPlayerScoreTimeMap(),
-                                    TownySettings.getSiegeWarPointsPerAttackingPlayer());
+                        if (resident.getTown().hasNation()) {
 
-                            if(siegeZoneChanged && !saveSiegeZoneToDB)
-                                saveSiegeZoneToDB = true;
+                            if (siegeZone.getDefendingTown().hasNation()
+                                    && siegeZone.getDefendingTown().getNation()
+                                    == resident.getTown().getNation()) {
+
+                                //Nation member of defending town
+                                siegeZoneChanged =
+                                siegeZoneChanged ||
+                                evaluateSiegeZoneOccupant(
+                                        player,
+                                        siegeZone,
+                                        siegeZone.getDefenderPlayerScoreTimeMap(),
+                                        TownySettings.getSiegeWarPointsPerDefendingPlayer());
+                            }
+
+                            if (siegeZone.getAttackingNation()
+                                    == resident.getTown().getNation()) {
+
+                                //Nation member of attacking nation
+                                siegeZoneChanged =
+                                siegeZoneChanged ||
+                                evaluateSiegeZoneOccupant(
+                                        player,
+                                        siegeZone,
+                                        siegeZone.getAttackerPlayerScoreTimeMap(),
+                                        TownySettings.getSiegeWarPointsPerAttackingPlayer());
+                            }
                         }
                     }
-
                 } catch (NotRegisteredException e) {
                 }
             }
 
             //Remove garbage from player score time maps
-            siegeZoneChanged = removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
+            siegeZoneChanged =
+            siegeZoneChanged ||
+            removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
                                                 siegeZone.getDefendingTown(),
                                                 null);
-            if(siegeZoneChanged && !saveSiegeZoneToDB)
-                saveSiegeZoneToDB = true;
 
-            siegeZoneChanged = removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
+            siegeZoneChanged =
+            siegeZoneChanged ||
+            removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
                                                 null,
                                                 siegeZone.getAttackingNation());
-            if(siegeZoneChanged && !saveSiegeZoneToDB)
-                saveSiegeZoneToDB = true;
 
             //Save siege zone to db if it was changed
-            if(saveSiegeZoneToDB) {
+            if(siegeZoneChanged) {
                 TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
             }
         }
