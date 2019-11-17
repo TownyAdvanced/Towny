@@ -187,7 +187,7 @@ public class TownyAPI {
      * Check if the specified {@link Block} is in the wilderness.
      *
      * @param block {@link Block} to test for.
-     * @return {@link true} if the {@link Block} is in the wilderness, false otherwise.
+     * @return true if the {@link Block} is in the wilderness, false otherwise.
      * @deprecated Use {@link #isWilderness(Location)} with block.getLocation()
      */
     @Deprecated
@@ -213,7 +213,7 @@ public class TownyAPI {
      * Check if the specified {@link Location} is in the wilderness.
      *
      * @param location {@link Location} to test widlerness for.
-     * @return {@link true} if the {@link Location} is in the wilderness, false otherwise.
+     * @return true if the {@link Location} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(Location location) {
         WorldCoord worldCoord;
@@ -315,7 +315,7 @@ public class TownyAPI {
      * Check if the specified {@link Resident} is an active Resident.
      *
      * @param resident {@link Resident} to test for activity.
-     * @return {@link true) if the player is active, false otherwise.
+     * @return true if the player is active, false otherwise.
      */
     public boolean isActiveResident(Resident resident) {
         return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (BukkitTools.isOnline(resident.getName())));
@@ -334,7 +334,7 @@ public class TownyAPI {
      * Gets the {@link TownyPermissionSource} that is active.
      *
      * @return {@link TownyPermissionSource} that is in use.
-     * @deprecated use {@link TownyUniverse#getInstance()#getPermissionSource()}
+	 * @deprecated use {@link TownyUniverse#getPermissionSource()}
      */
     public TownyPermissionSource getPermissionSource() {
         return townyUniverse.getPermissionSource();
@@ -343,7 +343,7 @@ public class TownyAPI {
     /**
      * Checks if server is currently in war-time.
      *
-     * @return {@link true} if the server is in war-time.
+     * @return true if the server is in war-time.
      */
     public boolean isWarTime() {
         return townyUniverse.getWarEvent() != null && townyUniverse.getWarEvent().isWarTime();
@@ -383,7 +383,7 @@ public class TownyAPI {
      * Gets the {@link War} that is currently active
      
      * @return the currently active {@link War}, null if none is active.
-     * @deprecated use {@link TownyUniverse#getInstance()#getWarEvent()}
+     * @deprecated use {@link TownyUniverse#getWarEvent()} 
      */
     public War getWarEvent() {
         return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();

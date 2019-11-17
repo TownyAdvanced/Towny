@@ -79,7 +79,7 @@ import java.util.concurrent.Callable;
 /**
  * Towny Plugin for Bukkit
  * 
- * Website & Source: https://github.com/TownyAdvanced/Towny
+ * Website &amp; Source: https://github.com/TownyAdvanced/Towny
  * 
  * @author Shade, ElgarL, LlmDl
  */

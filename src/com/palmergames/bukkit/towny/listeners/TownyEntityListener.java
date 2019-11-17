@@ -606,7 +606,6 @@ public class TownyEntityListener implements Listener {
 	 * Handles crop trampling as well as pressure plates (switch use)
 	 * 
 	 * @param event
-	 * @throws NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityInteract(EntityInteractEvent event) {
