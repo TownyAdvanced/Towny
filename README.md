@@ -15,7 +15,7 @@ ___
 
 ### Current Recommended Versions
 * [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0) supports MC 1.14.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) supports MC 1.14.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.*.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
@@ -51,6 +51,8 @@ Some important pages to look over:
 - [How Towny Works](https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works)
 
 Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=question.md&title=Question%3A)
+
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Percentage of issues still open")
 
 If you still need help, join us in our [IRC channel #towny](http://webchat.esper.net/?channels=towny) on the Esper.net network, or on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
 
