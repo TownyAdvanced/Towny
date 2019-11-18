@@ -7,6 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -49,6 +51,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 					return;
 				}
 				p.teleport(resident.getTeleportDestination());
+				CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
 				teleportQueue.poll();
 			} else {
 				break;

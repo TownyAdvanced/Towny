@@ -376,6 +376,16 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
+			"global_town_settings.spawn_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
+			"global_town_settings.pvp_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before pvp can be toggled by a town.",
+			"# Applies to residents of the town using /res toggle pvp, as well as",
+			"# plots having their PVP toggled using /plot toggle pvp."),	
 	GTOWN_SETTINGS_TOWN_RESPAWN(
 			"global_town_settings.town_respawn",
 			"false",

@@ -2527,6 +2527,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
 	}
 	
+	public static int getSpawnCooldownTime() {
+		
+		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
+	}
+	
+	public static int getPVPCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_PVP_COOLDOWN_TIMER);
+	}
+	
 	public static String getTownAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);

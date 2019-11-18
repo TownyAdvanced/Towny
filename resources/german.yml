@@ -1,5 +1,5 @@
 name: Towny
-version: 0.61
+version: 0.62
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://towny.palmergames.com/'
@@ -1014,3 +1014,7 @@ msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
 msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
 msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
 msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
+
+# Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: `You cannot toggle PVP, %s seconds remaining.'
+msg_err_cannot_spawn_x_seconds_remaining: `You cannot spawn for another %s seconds.'

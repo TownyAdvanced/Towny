@@ -263,6 +263,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(false);
 		TownyTimerHandler.toggleHealthRegen(false);
 		TownyTimerHandler.toggleTeleportWarmup(false);
+		TownyTimerHandler.toggleCooldownTimer(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
 
 		// Start timers
@@ -271,6 +272,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleMobRemoval(true);
 		TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen());
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
+		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		resetCache();
 
