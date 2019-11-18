@@ -54,10 +54,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
-	private Siege siege;
-	private long siegeImmunityEndTime;
-	private long revoltImmunityEndTime;
 	private long recentlyRuinedEndTime;
+	private long revoltImmunityEndTime;
+	private long siegeImmunityEndTime;
+	private Siege siege;
 
 	public Town(String name) {
 
@@ -75,10 +75,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 		isOpen = TownySettings.getTownDefaultOpen();
 		permissions.loadDefault(this);
-		siege = null;
+		recentlyRuinedEndTime = 0;
+		revoltImmunityEndTime = 0;
 		siegeImmunityEndTime = System.currentTimeMillis()
 				+ (long)(TownySettings.getWarSiegeSiegeImmunityTimeNewTownsHours() * ONE_HOUR_IN_MILLIS);
-		revoltImmunityEndTime = 0;
+		siege = null;
 	}
 
 	@Override

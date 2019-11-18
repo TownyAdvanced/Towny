@@ -990,6 +990,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                     town.setRegistered(0);
                 }
 
+                town.setRecentlyRuinedEndTime(rs.getLong("recentlyRuinedEndTime"));
                 town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
                 town.setSiegeImmunityEndTime(rs.getLong("siegeCooldownEndTime"));
 
@@ -1753,6 +1754,7 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("registered", 0);
             }
 
+            twn_hm.put("recentlyRuinedEndTime", Long.toString(town.getRecentlyRuinedEndTime()));
             twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
             twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));
 

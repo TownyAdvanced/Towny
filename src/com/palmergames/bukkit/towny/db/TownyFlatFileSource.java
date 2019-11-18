@@ -1003,6 +1003,17 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
+				line = kvFile.get("recentlyRuinedEndTime");
+				if (line != null) {
+					try {
+						town.setRecentlyRuinedEndTime(Long.parseLong(line));
+					} catch (Exception e) {
+						town.setRecentlyRuinedEndTime(0);
+					}
+				} else {
+					town.setRecentlyRuinedEndTime(0);
+				}
+
 				line = kvFile.get("revoltCooldownEndTime");
 				if (line != null) {
 					try {
@@ -2062,6 +2073,9 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
+
+		//Ruins
+		list.add("recentlyRuinedEndTime=" + Long.toString(town.getRecentlyRuinedEndTime()));
 
 		// Sieges & Revolts
 		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltImmunityEndTime()));
