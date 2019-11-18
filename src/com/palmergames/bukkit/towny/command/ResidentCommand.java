@@ -266,7 +266,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		
 			resident = townyUniverse.getDataSource().getResident(player.getName());
 			
-			if (CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
+			if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
 
 			Town town;
@@ -388,7 +388,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (!chunk.isLoaded())
 						chunk.load();
 					player.teleport(spawnLoc, TeleportCause.COMMAND);
-					CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
+					if (TownySettings.getSpawnCooldownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
 				}
 			}
 		} catch (TownyException | EconomyException e) {
@@ -451,7 +452,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
 			
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
-			if (resident.hasTown()) {
+			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown()) {
 				if (CooldownTimerTask.hasCooldown(resident.getTown(), CooldownType.PVP))
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident, CooldownType.PVP))
@@ -460,7 +461,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}			
 			perm.pvp = !perm.pvp;
 			// Add a task for the resident.
-			CooldownTimerTask.addCooldownTimer(resident, CooldownType.PVP);
+			if (TownySettings.getPVPCoolDownTime() > 0)
+				CooldownTimerTask.addCooldownTimer(resident, CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
 			perm.fire = !perm.fire;
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {

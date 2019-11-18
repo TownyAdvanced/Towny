@@ -1156,7 +1156,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				
 				// Test to see if the pvp cooldown timer is active for the town.
-				if (CooldownTimerTask.hasCooldown(town, CooldownType.PVP))					 
+				if (TownySettings.getPVPCoolDownTime() > 0 && CooldownTimerTask.hasCooldown(town, CooldownType.PVP))					 
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(town, CooldownType.PVP)));
 				
 				boolean outsiderintown = false;
@@ -1177,7 +1177,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!outsiderintown) {
 					town.setPVP(!town.isPVP());
 					// Add a cooldown to PVP toggling.
-					CooldownTimerTask.addCooldownTimer(town, CooldownType.PVP);
+					if (TownySettings.getPVPCoolDownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(town, CooldownType.PVP);
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 				} else if (outsiderintown) {
 					throw new TownyException(TownySettings.getLangString("msg_cant_toggle_pvp_outsider_in_town"));
@@ -2258,7 +2259,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			String notAffordMSG;
 			
-			if (CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
+			if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
 
 			// Set target town and affiliated messages.
@@ -2515,7 +2516,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!chunk.isLoaded())
 						chunk.load();
 					player.teleport(spawnLoc, TeleportCause.COMMAND);
-					CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
+					if (TownySettings.getSpawnCooldownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
 				}
 			}
 		} catch (TownyException | EconomyException e) {

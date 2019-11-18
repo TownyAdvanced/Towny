@@ -835,18 +835,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					
-					// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
-					if (CooldownTimerTask.hasCooldown(townBlock.getTown(), CooldownType.PVP))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(townBlock.getTown(), CooldownType.PVP)));
-
-					// Test to see if the pvp cooldown timer is active for this plot.
-					if (CooldownTimerTask.hasCooldown(townBlock, CooldownType.PVP))
-						throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(townBlock.getTown(), CooldownType.PVP)));
-
+					if (TownySettings.getPVPCoolDownTime() > 0) {
+						// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
+						if (CooldownTimerTask.hasCooldown(townBlock.getTown(), CooldownType.PVP))
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(townBlock.getTown(), CooldownType.PVP)));
+	
+						// Test to see if the pvp cooldown timer is active for this plot.
+						if (CooldownTimerTask.hasCooldown(townBlock, CooldownType.PVP))
+							throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(townBlock.getTown(), CooldownType.PVP)));
+					}
 
 					townBlock.getPermissions().pvp = !townBlock.getPermissions().pvp;
 					// Add a cooldown timer for this plot.
-					CooldownTimerTask.addCooldownTimer(townBlock, CooldownType.PVP);
+					if (TownySettings.getPVPCoolDownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(townBlock, CooldownType.PVP);
 					TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("msg_changed_pvp"), "Plot", townBlock.getPermissions().pvp ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
