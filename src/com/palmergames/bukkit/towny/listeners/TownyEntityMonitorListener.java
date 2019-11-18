@@ -74,19 +74,6 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 			}
 
-			/*
-			//DISABLED FOR NOW --- until we are sure we don't want it
-			//Killed while besieging a town ?
-			if (TownySettings.getWarSiegeEnabled()
-					&& TownySettings.isUsingEconomy()
-					&& defenderResident.hasTown()
-					&& defenderResident.getTown().hasNation()
-					&& defenderResident.getTown().getNation().getSiegeZones().size() != 0) {
-
-				checkForSiegeDeathCosts(defenderPlayer, defenderResident);
-			}
-			*/
-
 			// Killed by another entity?			
 			if (defenderEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
@@ -439,66 +426,6 @@ public class TownyEntityMonitorListener implements Listener {
 
 			}
 		}
-	}
-
-	/*
-	If the player died close to any town(s) they were besieging, the attacking nation incurs a small cost.
-	 */
-	private void checkForSiegeDeathCosts(Player killedPlayer, Resident killedResident) {
-		Coord playerCoord = Coord.parseCoord(killedPlayer);
-		Nation nation = null;
-		Coord townBlockCoord;
-		double trueDistance;
-		int roundedDistance;
-		try {
-			nation =killedResident.getTown().getNation();
-		} catch (NotRegisteredException x) {
-			//We already checked for player being in a town + nation
-		}
-
-		//Check if the player died in one of their nation's active siegefronts
-		for (SiegeZone siegeFront : nation.getSiegeZones()) {
-			if(siegeFront.getSiege().getStatus() == SiegeStatus.IN_PROGRESS) {
-				for (TownBlock townBlock : siegeFront.getSiege().getDefendingTown().getTownBlocks()) {
-
-					if (!townBlock.getWorld().equals(killedPlayer.getWorld()))
-						continue;
-
-					townBlockCoord = townBlock.getCoord();
-					trueDistance = Math.sqrt(Math.pow(townBlockCoord.getX() - playerCoord.getX(), 2) + Math.pow(townBlockCoord.getZ() - playerCoord.getZ(), 2));
-					roundedDistance = (int) Math.ceil(trueDistance);
-
-					//TODO - Refactor this whole death in siege thing
-					//if (roundedDistance <= TownySettings.getWarSiegeZoneDistanceFromTown()) {
-						applySiegeDeathCost(killedResident, nation, siegeFront.getSiege());
-					//}
-				}
-			}
-		}
-	}
-
-	private void applySiegeDeathCost(Resident killedResident, Nation nation, Siege siege) {
-		try {
-			double cost = TownySettings.getWarSiegeAttackerCostPerSiegeZoneCasualty();
-			if(nation.canPayFromHoldings(cost)) {
-				nation.pay(cost,
-						TownyFormatter.getFormattedResidentName(killedResident)
-						+ " + died in the siegezone of: " +
-						TownyFormatter.getFormattedTownName(siege.getDefendingTown()));
-			} else {
-				//Cancel siege
-				TownyMessaging.sendGlobalMessage(
-						TownyFormatter.getFormattedNationName(nation) +
-								" cannot afford to continue the siege on " +
-								TownyFormatter.getFormattedTownName(siege.getDefendingTown()) + "." +
-								"The siege has been automatically abandoned.");
-				TownyUniverse.getDataSource().removeSiege(siege);
-			}
-
-		} catch (EconomyException x) {
-			TownyMessaging.sendErrorMsg(x.getMessage());
-		}
-
 	}
 
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
