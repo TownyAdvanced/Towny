@@ -36,6 +36,8 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -2279,6 +2281,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
         try {
 
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+            
+            if (CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
+            
             Nation nation;
             String notAffordMSG;
 
@@ -2472,6 +2478,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     if (!chunk.isLoaded())
                         chunk.load();
                     player.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
                 }
             }
         } catch (TownyException | EconomyException e) {
