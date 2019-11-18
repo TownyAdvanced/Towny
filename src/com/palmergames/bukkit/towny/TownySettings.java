@@ -2614,6 +2614,15 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS);
 	}
 
+	public static boolean getWarSiegeDelayTownDeletion() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_TOWN_DELETION);
+	}
+
+	public static int getWarSiegeRuinTownDurationMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_RUIN_TOWN_DURATION_MINUTES);
+	}
+
+
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
 		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT);
 	}

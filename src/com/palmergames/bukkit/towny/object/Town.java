@@ -54,11 +54,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private UUID uuid;
 	private long registered;
-	private boolean recentlyRuined;
-	private long recentlyRuinedEndTime;
 	private Siege siege;
 	private long siegeImmunityEndTime;
 	private long revoltImmunityEndTime;
+	private long recentlyRuinedEndTime;
 
 	public Town(String name) {
 
@@ -698,7 +697,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return homeBlock != null;
 	}
 
-	public void clear() throws EmptyNationException {
+	public void clear(boolean delayTownDeletion) throws EmptyNationException {
 
 		//Cleanup
 		removeAllResidents();
@@ -710,9 +709,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		jailSpawns.clear();
 
 		try {
-			if (hasWorld()) {
-				world.removeTownBlocks(getTownBlocks());
-				world.removeTown(this);
+			if(!delayTownDeletion) {
+				if (hasWorld()) {
+					world.removeTownBlocks(getTownBlocks());
+					world.removeTown(this);
+				}
 			}
 		} catch (NotRegisteredException e) {
 		}
@@ -1338,8 +1339,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 
-	public void setRecentlyRuined(boolean recentlyRuined) {
-		this.recentlyRuined = recentlyRuined;
+	public boolean isRuined() {
+		return residents.size() == 0;
 	}
 
 	public void setRecentlyRuinedEndTime(long recentlyRuinedEndTime) {

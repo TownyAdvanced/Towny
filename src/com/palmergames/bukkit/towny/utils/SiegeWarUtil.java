@@ -235,6 +235,7 @@ public class SiegeWarUtil {
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
+        activateRevoltImmunityTimer(defendingTown);
 
         if(defendingTown.hasNation()) {
             Nation nationOfDefendingTown = null;
@@ -333,7 +334,7 @@ public class SiegeWarUtil {
             if (defendingTown.canPayFromHoldings(plunder)) {
                 defendingTown.payTo(plunder, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation);
-        } else {
+            } else {
                 double actualPlunder = defendingTown.getHoldingBalance();
                 defendingTown.payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation);
@@ -534,6 +535,9 @@ public class SiegeWarUtil {
 
             Town defendingTown = nearbyTownBlocks.get(0).getTown();
             Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
+
+            if(defendingTown.isRuined())
+                throw new TownyException("You cannot attack a ruined town.");
 
             if (defendingTown.hasNation()) {
                 Nation nationOfDefendingTown = defendingTown.getNation();
@@ -965,37 +969,6 @@ public class SiegeWarUtil {
                 TownyUniverse.getDataSource().removeSiege(siege);
             }
         }
-
     }
 
-    public static void ruinTown(Town town) {
-        /*
-
-- Create a ruin method....
-  --- set recentlyRuined = true
-  --- set recentlyRuinedEndTime
-  --- set town balance to 0
-  --- remove all residents from town
-  --- set town nation to null
-  --- set mayor to null
-  --- set siege to null
-  --- (LEAVE TOWN BLOCKS IN PLACE)
-  --- set pvp to ON
-  --- set all perms to OFF
-  --- isOpen = false
-  --- isPublic = false
-  --- remove town from nation
-         */
-
-        town.setRecentlyRuined(true);
-        town.setRecentlyRuinedEndTime(System.currentTimeMillis() + 60000); //TODo - dehardcode
-        if(TownySettings.isUsingEconomy()) {
-            try {
-                town.setBalance(0,"Ruined");
-            } catch (EconomyException e) {
-            }
-        }
-        town.getResidents().clear();
-
-    }
 }

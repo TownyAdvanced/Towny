@@ -1599,6 +1599,18 @@ public enum ConfigNodes {
 			"true",
 			"# If this setting is true, then you cannot teleport to a besieged town.",
 			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
+	WAR_SIEGE_DELAY_TOWN_DELETION(
+			"war.siege.delay_town_delation",
+			"true",
+			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time",
+            "# In this state, the town cannot be claimed, but can be looted",
+			"# This setting is generally considered essential to siegewar.",
+			"# Because when true, it prevents mayors from avoiding sieges/occupation by",
+			"# removing then quickly recreating their town."),
+	WAR_SIEGE_RUIN_TOWN_DURATION_MINUTES(
+			"war.siege.ruin_town_duration_hours",
+			"3",
+			"#"),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(

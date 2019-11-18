@@ -410,6 +410,8 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTown(Town town);
 
+	abstract public void removeTown(Town town, boolean delayTownDeletion);
+
 	public abstract void removeSiege(Siege siege);
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;

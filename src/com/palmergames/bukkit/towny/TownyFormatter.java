@@ -357,7 +357,9 @@ public class TownyFormatter {
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
-		out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
+		if(town.hasMayor()) {
+			out.add(String.format(TownySettings.getLangString("rank_list_mayor"), getFormattedName(town.getMayor())));
+		}
 
 		// Assistants [2]: Sammy, Ginger
 		List<String> ranklist = new ArrayList<String>();

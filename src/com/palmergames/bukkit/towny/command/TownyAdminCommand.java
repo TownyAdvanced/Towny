@@ -476,7 +476,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				TownyMessaging.sendMessage(sender, String.format(TownySettings.getLangString("town_deleted_by_admin"), town.getName()));
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_town"), town.getName()));
-				TownyUniverse.getDataSource().removeTown(town);
+				TownyUniverse.getDataSource().removeTown(town, false);
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
