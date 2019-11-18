@@ -2078,7 +2078,6 @@ public class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("siegeActualStartTime=" + Long.toString(siege.getStartTime()));
 			list.add("siegeScheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
 			list.add("siegeActualEndTime=" + Long.toString(siege.getActualEndTime()));
-			list.add("siegeNextUpkeepTime=" + Long.toString(siege.getNextUpkeepTime()));
 			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getAllAttackers()));
 		}
 

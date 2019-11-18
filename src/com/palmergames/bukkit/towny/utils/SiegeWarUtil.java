@@ -57,7 +57,6 @@ public class SiegeWarUtil {
                     (System.currentTimeMillis() +
                     ((long)(TownySettings.getWarSiegeMaxHoldoutTimeHours() * ONE_HOUR_IN_MILLIS))));
             siege.setActualEndTime(0);
-            siege.setNextUpkeepTime(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
             defendingTown.setSiege(siege);
 
         } else {

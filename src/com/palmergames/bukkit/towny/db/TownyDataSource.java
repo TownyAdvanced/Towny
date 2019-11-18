@@ -410,7 +410,9 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTown(Town town);
 
-	abstract public void removeTown(Town town, boolean delayTownDeletion);
+	abstract public void removeTown(Town town, boolean delayFullRemoval);
+
+	abstract public void removeRuinedTown(Town town);
 
 	public abstract void removeSiege(Siege siege);
 

@@ -1346,4 +1346,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void setRecentlyRuinedEndTime(long recentlyRuinedEndTime) {
 		this.recentlyRuinedEndTime = recentlyRuinedEndTime;
 	}
+
+	public long getRecentlyRuinedEndTime() {
+		return recentlyRuinedEndTime;
+	}
 }

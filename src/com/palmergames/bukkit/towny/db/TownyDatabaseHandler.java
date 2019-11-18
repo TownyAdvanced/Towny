@@ -565,8 +565,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	}
 
-	//Calledby siege timer only
-	public void deleteRuinedTown(Town town) {
+	//Called by siege timer only
+	public void removeRuinedTown(Town town) {
 		removeTownBlocks(town);
 		TownyWorld townyWorld = town.getWorld();
 		try {
@@ -587,15 +587,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town) {
-		boolean delayTownDeletion = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayTownDeletion();
-		removeTown(town, delayTownDeletion);
+		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayTownDeletion();
+		removeTown(town, delayFullRemoval);
 	}
 
+	//If the delay argument is true, then town will be set to 'ruined',
+	//but not fully removed
 	@Override
-	public void removeTown(Town town, boolean delayTownDeletion) {
+	public void removeTown(Town town, boolean delayFullRemoval) {
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
-		if(delayTownDeletion) {
+		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
 					(TownySettings.getWarSiegeRuinTownDurationMinutes()) * SiegeWarUtil.ONE_MINUTE_IN_MILLIS);
 			town.setPublic(false);
@@ -622,7 +624,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				nationsToSave.add(nation);
 			}
 
-			if(delayTownDeletion) {
+			if(delayFullRemoval) {
 				//Reset townblock permissions
 				for(TownBlock townBlock: town.getTownBlocks()) {
 					townBlock.setType(townBlock.getType());
@@ -632,7 +634,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				removeTownBlocks(town);
 			}
 
-			town.clear(delayTownDeletion);
+			town.clear(delayFullRemoval);
 
 		} catch (EmptyNationException e) {
 			removeNation(e.getNation());
@@ -664,7 +666,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 		//Remove town and siege zones from universe
-		if(!delayTownDeletion) {
+		if(!delayFullRemoval) {
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 		}
 		for(SiegeZone siegeZone: siegeZonesToDelete) {
@@ -683,7 +685,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveSiegeZoneList();
 		}
 
-		if(delayTownDeletion) {
+		if(delayFullRemoval) {
 			saveTown(town);
 		} else {
 			deleteTown(town);

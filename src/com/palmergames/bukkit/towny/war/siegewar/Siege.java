@@ -23,7 +23,6 @@ public class Siege {
     private long startTime;           //Start of siege
     private long scheduledEndTime;    //Scheduled end of siege
     private long actualEndTime;       //Actual end time of siege
-    private long nextUpkeepTime;
     private Map<Nation, SiegeZone> siegeZones;
 
     public Siege(Town defendingTown) {
@@ -49,11 +48,6 @@ public class Siege {
         return actualEndTime;
     }
 
-
-    public long getNextUpkeepTime() {
-        return nextUpkeepTime;
-    }
-
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
@@ -64,10 +58,6 @@ public class Siege {
 
     public void setActualEndTime(long actualEndTime) {
         this.actualEndTime = actualEndTime;
-    }
-
-    public void setNextUpkeepTime(long nextUpkeepTime) {
-        this.nextUpkeepTime = nextUpkeepTime;
     }
 
     public long getStartTime() {

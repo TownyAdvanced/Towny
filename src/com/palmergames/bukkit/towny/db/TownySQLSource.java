@@ -1018,7 +1018,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                     siege.setStartTime(rs.getLong("siegeActualStartTime"));
                     siege.setScheduledEndTime(rs.getLong("siegeScheduledEndTime"));
                     siege.setActualEndTime(rs.getLong("siegeActualEndTime"));
-                    siege.setNextUpkeepTime(rs.getLong("siegeNextUpkeepTime"));
 
                     line = rs.getString("siegeZones");
                     String[] nationNames = line.split(",");
@@ -1768,7 +1767,6 @@ public class TownySQLSource extends TownyFlatFileSource {
                 twn_hm.put("siegeActualStartTime", siege.getStartTime());
                 twn_hm.put("siegeScheduledEndTime", siege.getScheduledEndTime());
                 twn_hm.put("siegeActualEndTime", siege.getActualEndTime());
-                twn_hm.put("siegeNextUpkeepTime", siege.getNextUpkeepTime());
                 twn_hm.put("siegeZones", StringMgmt.join(siege.getAllAttackers()));
             }
 
