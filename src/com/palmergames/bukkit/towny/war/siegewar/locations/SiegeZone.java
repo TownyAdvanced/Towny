@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.siegewar;
+package com.palmergames.bukkit.towny.war.siegewar.locations;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -57,7 +57,7 @@ public class SiegeZone {
         return siegeZoneName.split("#vs#");
     }
 
-    public Siege getSiege() {
+    public com.palmergames.bukkit.towny.war.siegewar.locations.Siege getSiege() {
         return defendingTown.getSiege();
     }
 

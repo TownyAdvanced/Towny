@@ -19,13 +19,13 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -606,7 +606,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
-					(TownySettings.getWarSiegeFullTownRemovalDelayMinutes() * SiegeWarUtil.ONE_MINUTE_IN_MILLIS));
+					(TownySettings.getWarSiegeFullTownRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
 			town.setPermissions("residentBuild,residentDestroy,residentSwitch,residentItemUse,outsiderBuild,outsiderDestroy,outsiderSwitch,outsiderItemUse,allyBuild,allyDestroy,allySwitch,allyItemUse,pvp,fire,explosion,mobs");

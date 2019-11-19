@@ -11,13 +11,13 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -291,14 +291,14 @@ public class TownyBlockListener implements Listener {
 				if (blockTypeName.contains("white")
 						&& ((Banner) block.getState()).getPatterns().size() == 0) {
 					//White banner
-					SiegeWarUtil.processAbandonSiegeRequest(player,
+					AbandonAttack.processAbandonSiegeRequest(player,
 							block,
 							nearbyTownBlocks,
 							event);
 					return true;
 				} else {
 					//Coloured banner
-					SiegeWarUtil.processAttackTownRequest(
+					AttackTown.processAttackTownRequest(
 							player,
 							block,
 							nearbyTownBlocks,
@@ -321,14 +321,14 @@ public class TownyBlockListener implements Listener {
 			if (blockTypeName.contains("white")
 					&& ((Banner) block.getState()).getPatterns().size() == 0) {
 				//White banner
-				SiegeWarUtil.processSurrenderRequest(
+				SurrenderTown.processTownSurrenderRequest(
 						player,
 						townWhereBlockWasPlaced,
 						event);
 				return true;
 			} else {
 				//Coloured banner
-				SiegeWarUtil.processInvadeTownRequest(
+				InvadeTown.processInvadeTownRequest(
 						plugin,
 						player,
 						townWhereBlockWasPlaced.getName(),
@@ -402,7 +402,7 @@ public class TownyBlockListener implements Listener {
 			    && resident.hasNation()
 					&& siege.getSiegeZones().keySet().contains(resident.getTown().getNation())) {
 
-				SiegeWarUtil.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
+				PlunderTown.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
 				return true;
 			} else {
 				return false;

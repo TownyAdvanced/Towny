@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.siegewar;
+package com.palmergames.bukkit.towny.war.siegewar.enums;
 
 /**
  * @author Goosius

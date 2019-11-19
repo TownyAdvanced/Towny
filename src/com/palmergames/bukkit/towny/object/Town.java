@@ -18,19 +18,19 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.*;
 
-import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
-import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
+import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
+import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
@@ -1324,7 +1324,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public String getFormattedHoursUntilRevoltCooldownEnds() {
 		double hoursRemainingMillis = revoltImmunityEndTime - System.currentTimeMillis();
-		return SiegeWarUtil.getFormattedTimeValue(hoursRemainingMillis);
+		return TimeMgmt.getFormattedTimeValue(hoursRemainingMillis);
 	}
 
 	public double getPlunderValue() {
@@ -1337,7 +1337,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	public String getFormattedHoursUntilSiegeImmunityEnds() {
 		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
-		return SiegeWarUtil.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
+		return TimeMgmt.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);
 	}
 
 	public boolean isRuined() {

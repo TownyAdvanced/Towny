@@ -1,10 +1,11 @@
-package com.palmergames.bukkit.towny.war.siegewar;
+package com.palmergames.bukkit.towny.war.siegewar.locations;
 
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.util.TimeMgmt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,7 +125,7 @@ public class Siege {
     public String getFormattedHoursUntilScheduledCompletion() {
         if(status == SiegeStatus.IN_PROGRESS) {
             double timeUntilCompletionMillis = getTimeUntilCompletionMillis();
-            return SiegeWarUtil.getFormattedTimeValue(timeUntilCompletionMillis);
+            return TimeMgmt.getFormattedTimeValue(timeUntilCompletionMillis);
         } else {
             return "0";
         }

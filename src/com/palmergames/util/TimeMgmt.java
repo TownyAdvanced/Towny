@@ -1,5 +1,6 @@
 package com.palmergames.util;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class TimeMgmt {
 			{ 24 * 60 * 60, 60 * 60 }, // <= day, Warn every hour
 			{ Integer.MAX_VALUE, 24 * 60 * 60 } // <= max, Warn every day
 	};
+	public final static long ONE_SECOND_IN_MILLIS = 1000;
+	public final static long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
+	public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
+	public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
 	public static List<Long> getCountdownDelays(int start) {
 
@@ -65,4 +70,41 @@ public class TimeMgmt {
 			out += (out.length() > 0 ? ", " : "") + l + TownySettings.getLangString("msg_seconds");
 		return out;
 	}
+
+	public static String getFormattedTimeValue(double timeMillis) {
+        String timeUnit;
+        double timeUtilCompletion;
+
+        if(timeMillis> 0) {
+
+            NumberFormat numberFormat = NumberFormat.getInstance();
+
+            if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = TownySettings.getLangString("day_plu");
+                timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
+
+            } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = TownySettings.getLangString("hour_plu");
+                timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
+
+            } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
+                numberFormat.setMaximumFractionDigits(1);
+                timeUnit = TownySettings.getLangString("minute_plu");
+                timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
+
+            } else {
+                numberFormat.setMaximumFractionDigits(0);
+                timeUnit = TownySettings.getLangString("second_plu");
+                timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
+            }
+
+            double timeRoundedUp = Math.ceil(timeUtilCompletion * 10) / 10;
+            return numberFormat.format(timeRoundedUp) + " " + timeUnit;
+
+        } else {
+            return "0";
+        }
+    }
 }

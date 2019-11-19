@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import com.palmergames.bukkit.towny.war.siegewar.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
