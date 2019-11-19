@@ -1,27 +1,27 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import java.util.concurrent.ConcurrentHashMap;
+import javafx.util.Pair;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.config.ConfigNodes;
 
 public class CooldownTimerTask extends TownyTimerTask {
 	
-	private static ConcurrentHashMap<ConcurrentHashMap<Object, CooldownType>, Long> cooldowns;	
+	private static ConcurrentHashMap<Pair<Object, CooldownType>, Long> cooldowns;	
 
 
 	public enum CooldownType{
-		PVP(ConfigNodes.GTOWN_SETTINGS_PVP_COOLDOWN_TIMER),
-		TELEPORT(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
+		PVP(TownySettings.getPVPCoolDownTime()),
+		TELEPORT(TownySettings.getSpawnCooldownTime());
 		
-		private ConfigNodes seconds;
+		private int seconds;
 		
 		private int getSeconds() {
-			return TownySettings.getInt(seconds);
+			return seconds;
 		}
 
-		CooldownType(ConfigNodes seconds) {
+		CooldownType(int seconds) {
 			this.seconds = seconds;
 		}
 		
@@ -38,7 +38,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 		long currentTime = System.currentTimeMillis();
 
 		while (!cooldowns.isEmpty()) {
-			for (ConcurrentHashMap map : cooldowns.keySet()) {
+			for (Pair<Object, CooldownType> map : cooldowns.keySet()) {
 				long time = cooldowns.get(map);
 				if (time < currentTime)					
 					cooldowns.remove(map);
@@ -48,22 +48,19 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 	
 	public static void addCooldownTimer(Object object, CooldownType type) {
-		ConcurrentHashMap<Object, CooldownType> map = new ConcurrentHashMap<>();
-		map.put(object, type);
+		Pair<Object, CooldownType> map = new Pair<Object, CooldownType>(object, type);
 		cooldowns.put(map, (System.currentTimeMillis() + (type.getSeconds() * 1000)));
 	}
 	
 	public static boolean hasCooldown(Object object, CooldownType type) {
-		ConcurrentHashMap<Object, CooldownType> map = new ConcurrentHashMap<>();
-		map.put(object, type);
+		Pair<Object, CooldownType> map = new Pair<Object, CooldownType>(object, type);
 		if (cooldowns.containsKey(map))			
 			return true;
 		return false;
 	}
 	
 	public static int getCooldownRemaining(Object object, CooldownType type) {
-		ConcurrentHashMap<Object, CooldownType> map = new ConcurrentHashMap<>();
-		map.put(object, type);
+		Pair<Object, CooldownType> map = new Pair<Object, CooldownType>(object, type);
 		if (cooldowns.containsKey(map))
 			return (int) ((cooldowns.get(map) - System.currentTimeMillis())/1000);
 		return 0;		
