@@ -20,6 +20,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -259,10 +261,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		boolean isTownyAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
 		Resident resident;
-
+		
 		try {
-
+		
 			resident = townyUniverse.getDataSource().getResident(player.getName());
+			
+			if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
+
 			Town town;
 			Location spawnLoc;
 			String notAffordMSG;
@@ -382,6 +388,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (!chunk.isLoaded())
 						chunk.load();
 					player.teleport(spawnLoc, TeleportCause.COMMAND);
+					if (TownySettings.getSpawnCooldownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
 				}
 			}
 		} catch (TownyException | EconomyException e) {
@@ -442,7 +450,19 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 			
 		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
+			
+			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
+			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown()) {
+				if (CooldownTimerTask.hasCooldown(resident.getTown(), CooldownType.PVP))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown(), CooldownType.PVP))); 
+				if (CooldownTimerTask.hasCooldown(resident, CooldownType.PVP))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getTown(), CooldownType.PVP)));
+
+			}			
 			perm.pvp = !perm.pvp;
+			// Add a task for the resident.
+			if (TownySettings.getPVPCoolDownTime() > 0)
+				CooldownTimerTask.addCooldownTimer(resident, CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
 			perm.fire = !perm.fire;
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {
