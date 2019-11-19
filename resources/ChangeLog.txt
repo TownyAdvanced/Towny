@@ -3822,3 +3822,14 @@ v0.92.0.11:
     - When set to true, players will receive a notification when they enter into a nationzone.
     - Set to false by default because, like the nationzone feature, it will generate more load on servers.
 0.95.1.5:
+  - New Feature: Cooldown timers for toggling PVP and using res/town spawn commands.
+    - Closes tickets #2224 #2315
+  - New Config Option: global_town_settings.spawn_cooldown_time
+    - default '30'
+    - Number of seconds that must pass before a player can use /n spawn, /t spawn or /res spawn.
+  - New Config Option: global_town_settings.pvp_cooldown_time
+    - default '30'
+    - Number of seconds that must pass before pvp can be toggled by a town using /t toggle pvp.
+    - Also applies to residents of the town using /res toggle pvp, as well as plots having their PVP toggled using /plot toggle pvp.
+    - /ta town {town} toggle pvp bypasses cooldowntimer.
+  - Language files bumped to 0.62.
