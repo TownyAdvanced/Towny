@@ -414,8 +414,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		universe.setChangedNotify(REMOVE_TOWN_BLOCK);
 
+		//Todo - Is this the right thing to do?
+		//If I do not wrap it, then I get a "TownUnclaimEvent cannot be trigger asynchronously error
+
 		// Raise an event to signal the unclaim
-		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
+		if(!town.isRuined()) {
+			BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
+		}
 
 	}
 

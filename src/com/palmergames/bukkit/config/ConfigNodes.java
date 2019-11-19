@@ -1614,7 +1614,7 @@ public enum ConfigNodes {
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
-			"war.siege.attacker_cost.upfront_per_plot",
+			"war.siege.attacker_cost_upfront_per_plot",
 			"10.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
