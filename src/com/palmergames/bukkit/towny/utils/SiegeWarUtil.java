@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Goosius on 19/05/2019.
+ * @author Goosius
  */
 public class SiegeWarUtil {
 
@@ -105,17 +105,21 @@ public class SiegeWarUtil {
                                                   List<TownBlock> nearbyTownBlocksWithTowns,
                                                   BlockPlaceEvent event)  {
         try {
+
+            if(!TownySettings.getWarSiegeAbandonEnabled())
+                throw new TownyException("Siege abandon not allowed");
+
+            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+            if(!resident.hasTown())
+                throw new TownyException("You must belong to a town to abandon a siege");
+
+            Town townOfResident = resident.getTown();
+            if(!townOfResident.hasNation())
+                throw new TownyException("You must belong to a nation to abandon a siege");
+
             //If player has no permission to abandon,send error
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            //Player has no town
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-            if(!resident.hasTown())
-                throw new TownyException("You cannot place an abandon banner because you do not belong to a town.");
-
-            if(!resident.getTown().hasNation())
-                throw new TownyException("You cannot place an abandon banner because you do not belong to a nation.");
 
             //Get list of adjacent towns with sieges
             List<Town> nearbyTownsWithSieges =new ArrayList<>();
@@ -156,8 +160,8 @@ public class SiegeWarUtil {
             }
 
             //If the player's nation is not the attacker, send error
-            Nation residentNation = resident.getTown().getNation();
-            if(targetedSiegeZone.getAttackingNation() != residentNation)
+            Nation nationOfResident = townOfResident.getNation();
+            if(targetedSiegeZone.getAttackingNation() != nationOfResident)
                 throw new TownyException("Your nation is not attacking this town right now");
 
             //If the player is too far from the targeted zone, error error
@@ -229,8 +233,6 @@ public class SiegeWarUtil {
         }
         return false;  //There is nothing but air above them
     }
-
-
 
     private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
@@ -310,7 +312,6 @@ public class SiegeWarUtil {
         TownyUniverse.getDataSource().saveTown(town);
     }
 
-
     private static void addTownToNation(Towny plugin, Town town,Nation nation) {
         try {
             nation.addTown(town);
@@ -321,7 +322,6 @@ public class SiegeWarUtil {
             return;   //Town already in nation
         }
     }
-
 
     private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
         siege.setTownPlundered(true);
@@ -363,32 +363,6 @@ public class SiegeWarUtil {
                     TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),
                     TownyFormatter.getFormattedTownName(defendingTown),
                     TownyFormatter.getFormattedNationName(winnerNation))));
-        }
-    }
-
-    public static void applySiegeUpkeepCost(Siege siege) {
-        //TODO - REFACTOR TO BE MORE EFFICIENT
-        //E.G CYCLE THE ZONES DIRECTLY
-        double upkeepCostPerPlot = TownySettings.getWarSiegeAttackerCostPerPlotPerHour();
-        long upkeepCost = Math.round(upkeepCostPerPlot * siege.getDefendingTown().getTotalBlocks());
-
-        //Each attacking nation who is involved must pay upkeep
-        if(upkeepCost > 1) {
-            for (Nation nation : siege.getSiegeZones().keySet()) {
-                try {
-                    if (nation.canPayFromHoldings(upkeepCost))
-                        nation.pay(upkeepCost, "Cost of maintaining siege.");
-                    else {
-                        siege.getSiegeZones().get(nation).setActive(false);
-                        TownyUniverse.getDataSource().saveSiegeZone( siege.getSiegeZones().get(nation));
-                        TownyMessaging.sendGlobalMessage("The nation of " + nation.getName() +
-                                " has been forced to abandon the siege on the town of " + siege.getDefendingTown().getName() +
-                                ", due to lack of funds.");
-                    }
-                } catch (EconomyException x) {
-                    TownyMessaging.sendErrorMsg(x.getMessage());
-                }
-            }
         }
     }
 
@@ -524,20 +498,19 @@ public class SiegeWarUtil {
             if (!TownySettings.getWarSiegeAttackEnabled())
                 throw new TownyException("Siege Attacks not allowed");
 
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+            Resident attackingResident = TownyUniverse.getDataSource().getResident(player.getName());
+            if(!attackingResident.hasTown())
+                throw new TownyException("You must belong to a town to start a siege");
 
-            if (nearbyTownBlocks.size() > 1)
-                throw new TownyException("To start a siege attack, " +
-                        "the wilderness plot containing the banner must be facing just one town plot. " +
-                        "Try a different location for the banner");
+            Town townOfAttackingResident = attackingResident.getTown();
+            if(!townOfAttackingResident.hasNation())
+                throw new TownyException("You must belong to a nation to start a siege");
 
             Town defendingTown = nearbyTownBlocks.get(0).getTown();
-            Nation nationOfAttackingPlayer = TownyUniverse.getNationOfPlayer(player);
+            if(townOfAttackingResident == defendingTown)
+                throw new TownyException("You cannot attack your own town");
 
-            if(defendingTown.isRuined())
-                throw new TownyException("You cannot attack a ruined town.");
-
+            Nation nationOfAttackingPlayer= townOfAttackingResident.getNation();
             if (defendingTown.hasNation()) {
                 Nation nationOfDefendingTown = defendingTown.getNation();
 
@@ -547,6 +520,15 @@ public class SiegeWarUtil {
                 if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
                     throw new TownyException("You cannot attack a town unless the nation of that town is an enemy of your nation.");
             }
+
+
+            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
+                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
+            if (nearbyTownBlocks.size() > 1)
+                throw new TownyException("To start a siege attack, " +
+                        "the wilderness plot containing the banner must be facing just one town plot. " +
+                        "Try a different location for the banner");
 
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
                 throw new TownyException("Your nation is already attacking this town.");
@@ -597,6 +579,9 @@ public class SiegeWarUtil {
                     throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
                 }
             }
+
+            if(defendingTown.isRuined())
+                throw new TownyException("You cannot attack a ruined town.");
 
             //Setup attack
             attackTown(block, nationOfAttackingPlayer, defendingTown);
@@ -889,7 +874,7 @@ public class SiegeWarUtil {
                 siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
                 playerScoreTimeMap.put(player,
                     System.currentTimeMillis()
-                            + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+                            + (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
                 return true;
             }
 
@@ -913,10 +898,10 @@ public class SiegeWarUtil {
 
             playerScoreTimeMap.put(player,
                     System.currentTimeMillis()
-                            + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+                            + (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
 
             System.out.println("DURATION MILLIS: " + System.currentTimeMillis()
-                    + (TownySettings.getWarSiegeZoneOccupationScorintTimeRequirementSeconds()
+                    + (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds()
                     * ONE_SECOND_IN_MILLIS));
 
             return true; //Player added to zone

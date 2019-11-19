@@ -9,14 +9,19 @@ import com.palmergames.bukkit.towny.utils.SiegeWarUtil;
 import java.util.ArrayList;
 
 import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_HOUR_IN_MILLIS;
+import static com.palmergames.bukkit.towny.utils.SiegeWarUtil.ONE_MINUTE_IN_MILLIS;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarTimerTask extends TownyTimerTask {
 
 	private static long nextTimeToRemoveRuinedTowns;
 
 	static
 	{
-		nextTimeToRemoveRuinedTowns = System.currentTimeMillis() + ONE_HOUR_IN_MILLIS;
+		nextTimeToRemoveRuinedTowns = System.currentTimeMillis() +
+				(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 	}
 
 	public SiegeWarTimerTask(Towny plugin) {
@@ -32,7 +37,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateSieges();
 
 			if (System.currentTimeMillis() > nextTimeToRemoveRuinedTowns) {
-				nextTimeToRemoveRuinedTowns = System.currentTimeMillis() + ONE_HOUR_IN_MILLIS;
+				nextTimeToRemoveRuinedTowns = System.currentTimeMillis() +
+						(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 				removeRuinedTowns();
 			}
 		}

@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
 
-	// Town Level
+    // Town Level
 	public enum TownLevel {
 		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT
 	}
@@ -2590,16 +2590,20 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
 	}
 
+	public static boolean getWarSiegeAttackEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACK_ENABLED);
+	}
+
+	public static boolean getWarSiegeAbandonEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_ABANDON_ENABLED);
+	}
+
 	public static boolean getWarSiegeInvadeEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_INVADE_ENABLED);
 	}
 
 	public static boolean getWarSiegePlunderEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PLUNDER_ENABLED);
-	}
-
-	public static boolean getWarSiegeAttackEnabled() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_ATTACK_ENABLED);
 	}
 
 	public static boolean getWarSiegeRevoltEnabled() {
@@ -2609,34 +2613,28 @@ public class TownySettings {
 	public static boolean getWarSiegePvpAlwaysOnInBesiegedTowns() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
-
 	public static boolean getWarSiegeTeleportDisabledToBesiegedTowns() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS);
 	}
 
-	public static boolean getWarSiegeDelayTownDeletion() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_TOWN_DELETION);
+	public static boolean getWarSiegeDelayFullTownRemoval() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL);
 	}
 
-	public static int getWarSiegeRuinTownDurationMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_RUIN_TOWN_DURATION_MINUTES);
+	public static int getWarSiegeFullTownRemovalDelayMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_FULL_TOWN_REMOVAL_DELAY_MINUTES);
 	}
-
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
 		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT);
 	}
 
-	public static double getWarSiegeAttackerCostPerPlotPerHour() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_PLOT_PER_HOUR);
-	}
-
-	public static double getWarSiegeAttackerCostPerSiegeZoneCasualty() {
-		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY);
-	}
-
 	public static long getWarSiegeTimerIntervalSeconds() {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
+	}
+
+	public static long getWarSiegeTownRuinsRemovalTimerIntervalMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES);
 	}
 
 	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {
@@ -2666,7 +2664,7 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER);
 	}
 
-	public static int getWarSiegeZoneOccupationScorintTimeRequirementSeconds() {
+	public static int getWarSiegeZoneOccupationScoringTimeRequirementSeconds() {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS);
 	}
 

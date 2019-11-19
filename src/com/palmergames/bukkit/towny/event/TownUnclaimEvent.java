@@ -26,6 +26,7 @@ public class TownUnclaimEvent extends Event  {
 	}
 
     public TownUnclaimEvent(Town _town, WorldCoord _worldcoord) {
+        super();
         this.town = _town;
         this.worldCoord = _worldcoord;
     }

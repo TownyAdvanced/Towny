@@ -1577,6 +1577,10 @@ public enum ConfigNodes {
 			"war.siege.attack_enabled",
 			"true",
 			"# If true, people can start sieges."),
+	WAR_SIEGE_ABANDON_ENABLED(
+			"war.siege.abandon_enabled",
+			"true",
+			"# If true, people can abandon sieges."),
 	WAR_SIEGE_INVADE_ENABLED(
 			"war.siege.invade_enabled",
 			"true",
@@ -1599,40 +1603,20 @@ public enum ConfigNodes {
 			"true",
 			"# If this setting is true, then you cannot teleport to a besieged town.",
 			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
-	WAR_SIEGE_DELAY_TOWN_DELETION(
-			"war.siege.delay_town_delation",
+	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
+			"war.siege.delay_full_town_removal",
 			"true",
 			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time",
-            "# In this state, the town cannot be claimed, but can be looted",
+			"# In this state, the town cannot be claimed, but can be looted",
 			"# This setting is generally considered essential to siegewar.",
 			"# Because when true, it prevents mayors from avoiding sieges/occupation by",
 			"# removing then quickly recreating their town."),
-	WAR_SIEGE_RUIN_TOWN_DURATION_MINUTES(
-			"war.siege.ruin_town_duration_hours",
-			"3",
-			"#"),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.attacker_cost.upfront_per_plot",
 			"10.0",
 			"#..."),
-	WAR_SIEGE_ATTACKER_COST_PER_PLOT_PER_HOUR(
-			"war.siege.attacker_cost.per_hour",
-			"0.1",
-			"#..."),
-	WAR_SIEGE_ATTACKER_COST_PER_SIEGE_ZONE_CASUALTY(
-			"war.siege.attacker_cost.per_siege_zone_casualty",
-			"15.0",
-			"# If a player from a besieging nation dies in the siege zone",
-			"# then a money cost (usually small) is applied to the besieging nation.",
-			"# This applies regardless of the cause of death.",
-			"",
-			"# Reason 1: This prevents the besieging nation from gaining advantage by",
-			"# 'Spamming' a town with quick-respawning players with no items.",
-			"",
-			"# Reason 2: This allows nomads and non-nation towns to better assist",
-			"# their friends in a town under siege."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.attacker_plunder_amount_per_plot",
 			"20",
@@ -1646,6 +1630,10 @@ public enum ConfigNodes {
 			"war.siege.timer_interval_seconds",
 			"6",
 			"# The time in seconds for each siegewar timer tick."),
+	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
+			"war.siege.ruins_removal_interval_minutes",
+			"60",
+			"# The time in minutes for each scan & deletion of town ruins"),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.max_holdout_time_hours",
 			"0.1",
@@ -1671,6 +1659,10 @@ public enum ConfigNodes {
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
 			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
+	WAR_SIEGE_FULL_TOWN_REMOVAL_DELAY_MINUTES(
+			"war.siege.full_town_removal_delay_minutes",
+			"3",
+			"#"),
 
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(

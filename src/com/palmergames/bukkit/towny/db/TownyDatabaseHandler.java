@@ -413,8 +413,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		universe.setChangedNotify(REMOVE_TOWN_BLOCK);
+
 		// Raise an event to signal the unclaim
 		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
+
 	}
 
 	@Override
@@ -587,7 +589,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town) {
-		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayTownDeletion();
+		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval();
 		removeTown(town, delayFullRemoval);
 	}
 
@@ -599,7 +601,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
-					(TownySettings.getWarSiegeRuinTownDurationMinutes()) * SiegeWarUtil.ONE_MINUTE_IN_MILLIS);
+					(TownySettings.getWarSiegeFullTownRemovalDelayMinutes() * SiegeWarUtil.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
 			town.setPermissions("residentBuild,residentDestroy,residentSwitch,residentItemUse,outsiderBuild,outsiderDestroy,outsiderSwitch,outsiderItemUse,allyBuild,allyDestroy,allySwitch,allyItemUse,pvp,fire,explosion,mobs");

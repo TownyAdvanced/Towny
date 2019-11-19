@@ -1,9 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-
 /**
- * Created by Goosius on 06/06/2019.
+ * @author Goosius
  */
 public enum SiegeStatus {
     IN_PROGRESS, ATTACKER_WIN, DEFENDER_WIN, ATTACKER_ABANDON, DEFENDER_SURRENDER, UNKNOWN;

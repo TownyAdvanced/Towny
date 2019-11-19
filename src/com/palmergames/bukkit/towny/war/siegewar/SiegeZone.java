@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Goosius on 02/06/2019.
+ * @author Goosius
  */
 public class SiegeZone {
 

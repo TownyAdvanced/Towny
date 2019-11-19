@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Goosius on 07/05/2019.
+ * @author Goosius
  */
 public class Siege {
     private Town defendingTown;
