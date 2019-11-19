@@ -1156,7 +1156,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				
 				// Test to see if the pvp cooldown timer is active for the town.
-				if (TownySettings.getPVPCoolDownTime() > 0 && CooldownTimerTask.hasCooldown(town, CooldownType.PVP))					 
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town, CooldownType.PVP))					 
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(town, CooldownType.PVP)));
 				
 				boolean outsiderintown = false;
@@ -1177,7 +1177,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!outsiderintown) {
 					town.setPVP(!town.isPVP());
 					// Add a cooldown to PVP toggling.
-					if (TownySettings.getPVPCoolDownTime() > 0)
+					if (TownySettings.getPVPCoolDownTime() > 0 && !admin)
 						CooldownTimerTask.addCooldownTimer(town, CooldownType.PVP);
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 				} else if (outsiderintown) {
