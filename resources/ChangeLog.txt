@@ -3833,3 +3833,4 @@ v0.92.0.11:
     - Also applies to residents of the town using /res toggle pvp, as well as plots having their PVP toggled using /plot toggle pvp.
     - /ta town {town} toggle pvp bypasses cooldowntimer.
   - Language files bumped to 0.62.
+0.95.1.6:
