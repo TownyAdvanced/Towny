@@ -2327,7 +2327,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
-					String durationFormatted = TimeMgmt.getFormattedTimeValue(TownySettings.getWarSiegeFullTownRemovalDelayMinutes());
+					long durationMillis = TownySettings.getWarSiegeFullTownRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS;
+					String durationFormatted = TimeMgmt.getFormattedTimeValue(durationMillis);
 					TownyMessaging.sendErrorMsg(player, "WARNING!!!: If you delete your town it will enter a 'ruined' state for " + durationFormatted + "."
 							+ " In this state, all perms are enabled & the town can be griefed.");
 				}
