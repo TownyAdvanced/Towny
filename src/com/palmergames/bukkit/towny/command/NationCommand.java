@@ -2298,8 +2298,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
             Resident resident = townyUniverse.getDataSource().getResident(player.getName());
             
-            if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
+            if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT))); 
             
             Nation nation;
             String notAffordMSG;
@@ -2513,7 +2513,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                         chunk.load();
                     player.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
                     if (TownySettings.getSpawnCooldownTime() > 0)
-                    	CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
+                    	CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
                 }
             }
         } catch (TownyException | EconomyException e) {

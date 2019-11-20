@@ -1168,8 +1168,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				toggleTest(player, town, StringMgmt.join(split, " "));
 				
 				// Test to see if the pvp cooldown timer is active for the town.
-				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town, CooldownType.PVP))					 
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(town, CooldownType.PVP)));
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP))					 
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_toggle_pvp_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
 				
 				boolean outsiderintown = false;
 				if (TownySettings.getOutsidersPreventPVPToggle()) {
@@ -1190,7 +1190,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.setPVP(!town.isPVP());
 					// Add a cooldown to PVP toggling.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !admin)
-						CooldownTimerTask.addCooldownTimer(town, CooldownType.PVP);
+						CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
 					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_changed_pvp"), town.getName(), town.isPVP() ? TownySettings.getLangString("enabled") : TownySettings.getLangString("disabled")));
 				} else if (outsiderintown) {
 					throw new TownyException(TownySettings.getLangString("msg_cant_toggle_pvp_outsider_in_town"));
@@ -2273,8 +2273,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			String notAffordMSG;
 			
-			if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident, CooldownType.TELEPORT))
-				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident, CooldownType.TELEPORT))); 
+			if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT))); 
 
 			// Set target town and affiliated messages.
 			if ((split.length == 0) || ((split.length > 0) && (outpost))) {
@@ -2541,7 +2541,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						chunk.load();
 					player.teleport(spawnLoc, TeleportCause.COMMAND);
 					if (TownySettings.getSpawnCooldownTime() > 0)
-						CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
+						CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 				}
 			}
 		} catch (TownyException | EconomyException e) {
