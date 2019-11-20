@@ -1,16 +1,24 @@
 package com.palmergames.bukkit.towny.war.flagwar;
 
-import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackCanceledEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellAttackEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellDefendedEvent;
 import com.palmergames.bukkit.towny.war.flagwar.events.CellWonEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -25,16 +33,18 @@ public class TownyWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;
 	private static Map<String, List<CellUnderAttack>> cellsUnderAttackByPlayer;
+	private static Map<Town, Long> lastFlag;
 
 	public static void onEnable() {
 
-		cellsUnderAttack = new HashMap<Cell, CellUnderAttack>();
-		cellsUnderAttackByPlayer = new HashMap<String, List<CellUnderAttack>>();
+		cellsUnderAttack = new HashMap<>();
+		cellsUnderAttackByPlayer = new HashMap<>();
+		lastFlag = new HashMap<>();
 	}
 
 	public static void onDisable() {
 
-		for (CellUnderAttack cell : new ArrayList<CellUnderAttack>(cellsUnderAttack.values())) {
+		for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
 			attackCanceled(cell);
 		}
 	}
@@ -73,16 +83,16 @@ public class TownyWar {
 	
 	public static boolean isUnderAttack(Town town) {
 		for(CellUnderAttack cua : cellsUnderAttack.values()) {
-			
-			try
-			{
-				Town townUnderAttack = TownyUniverse.getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
+			try {
+				Town townUnderAttack = TownyAPI.getInstance().getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
+				if (townUnderAttack == null) {
+					continue;
+				}
 				if(townUnderAttack == town) {
 					return true;
 				}
 			}
-			catch(NotRegisteredException e)
-			{
+			catch(NotRegisteredException ignored) {
 			}
 		}
 		return false;
@@ -142,14 +152,14 @@ public class TownyWar {
 		if (cells == null)
 			return null;
 		else
-			return new ArrayList<CellUnderAttack>(cells);
+			return new ArrayList<>(cells);
 	}
 
 	private static void addFlagToPlayerCount(String playerName, CellUnderAttack cell) {
 
 		List<CellUnderAttack> activeFlags = getCellsUnderAttackByPlayer(playerName);
 		if (activeFlags == null)
-			activeFlags = new ArrayList<CellUnderAttack>();
+			activeFlags = new ArrayList<>();
 
 		activeFlags.add(cell);
 		cellsUnderAttackByPlayer.put(playerName, activeFlags);
@@ -185,19 +195,18 @@ public class TownyWar {
 	}
 
 	public static boolean callAttackCellEvent(Towny plugin, Player player, Block block, WorldCoord worldCoord) throws TownyException {
-
 		int topY = block.getWorld().getHighestBlockYAt(block.getX(), block.getZ()) - 1;
 		if (block.getY() < topY)
 			throw new TownyException(TownySettings.getLangString("msg_err_enemy_war_must_be_placed_above_ground"));
 
-		TownyUniverse universe = plugin.getTownyUniverse();
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident attackingResident;
 		Town landOwnerTown, attackingTown;
 		Nation landOwnerNation, attackingNation;
 		TownBlock townBlock;
 
 		try {
-			attackingResident = TownyUniverse.getDataSource().getResident(player.getName());
+			attackingResident = townyUniverse.getDataSource().getResident(player.getName());
 			attackingTown = attackingResident.getTown();
 			attackingNation = attackingTown.getNation();
 		} catch (NotRegisteredException e) {
@@ -218,7 +227,7 @@ public class TownyWar {
 		// Check Peace
 		if (landOwnerNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), landOwnerNation.getFormattedName()));
-		if (!TownyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
+		if (!townyUniverse.getPermissionSource().isTownyAdmin(player) && attackingNation.isNeutral())
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_is_peaceful"), attackingNation.getFormattedName()));
 
 		// Check Minimum Players Online
@@ -315,12 +324,11 @@ public class TownyWar {
 		// Set yourself as target's enemy so they can retaliate.
 		if (!landOwnerNation.hasEnemy(attackingNation)) {
 			landOwnerNation.addEnemy(attackingNation);
-			plugin.getTownyUniverse();
-			TownyUniverse.getDataSource().saveNation(landOwnerNation);
+			townyUniverse.getDataSource().saveNation(landOwnerNation);
 		}
 
 		// Update Cache
-		universe.addWarZone(worldCoord);
+		townyUniverse.addWarZone(worldCoord);
 		plugin.updateCache(worldCoord);
 
 		TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_enemy_war_area_under_attack"), landOwnerTown.getFormattedName(), worldCoord.toString(), attackingResident.getFormattedName()));
@@ -330,7 +338,7 @@ public class TownyWar {
 	public static void checkIfTownHasMinOnlineForWar(Town town) throws TownyException {
 
 		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInTownForWar();
-		int onlinePlayerCount = TownyUniverse.getOnlinePlayers(town).size();
+		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(town).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, town.getFormattedName()));
 	}
@@ -338,7 +346,7 @@ public class TownyWar {
 	public static void checkIfNationHasMinOnlineForWar(Nation nation) throws TownyException {
 
 		int requiredOnline = TownyWarConfig.getMinPlayersOnlineInNationForWar();
-		int onlinePlayerCount = TownyUniverse.getOnlinePlayers(nation).size();
+		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(nation).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_enemy_war_require_online"), requiredOnline, nation.getFormattedName()));
 	}
@@ -346,5 +354,19 @@ public class TownyWar {
 	public static WorldCoord cellToWorldCoord(Cell cell) throws NotRegisteredException {
 
 		return new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
+	}
+
+	public static long lastFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			return lastFlag.get(town);
+		else
+			return 0;
+	}
+
+	public static void townFlagged(Town town) {
+		if (lastFlag.containsKey(town))
+			lastFlag.replace(town, System.currentTimeMillis());
+		else
+			lastFlag.put(town, System.currentTimeMillis());
 	}
 }

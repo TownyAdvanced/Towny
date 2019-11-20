@@ -1,16 +1,20 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 
 /**
@@ -23,7 +27,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	public TeleportWarmupTimerTask(Towny plugin) {
 
 		super(plugin);
-		teleportQueue = new ArrayDeque<Resident>();
+		teleportQueue = new ArrayDeque<>();
 	}
 
 	@Override
@@ -37,14 +41,18 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				break;
 			if (currentTime > resident.getTeleportRequestTime() + (TownySettings.getTeleportWarmupTime() * 1000)) {
 				resident.clearTeleportRequest();
-				try {
-					// Make sure the chunk we teleport to is loaded.
-					Chunk chunk = resident.getTeleportDestination().getWorld().getChunkAt(resident.getTeleportDestination().getBlock());
-					if (!chunk.isLoaded())
-						chunk.load();
-					TownyUniverse.getPlayer(resident).teleport(resident.getTeleportDestination());
-				} catch (TownyException ignore) {
+				// Make sure the chunk we teleport to is loaded.
+				Chunk chunk = resident.getTeleportDestination().getWorld().getChunkAt(resident.getTeleportDestination().getBlock());
+				if (!chunk.isLoaded()) {
+					chunk.load();
 				}
+				Player p = TownyAPI.getInstance().getPlayer(resident);
+				if (p == null) {
+					return;
+				}
+				p.teleport(resident.getTeleportDestination());
+				if (TownySettings.getSpawnCooldownTime() > 0)
+					CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
 				teleportQueue.poll();
 			} else {
 				break;
@@ -60,7 +68,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			teleportQueue.add(resident);
 		} catch (NullPointerException e) {
 			System.out.println("[Towny] Error: Null returned from teleport queue.");
-			System.out.println(e.getStackTrace());
+			System.out.println(Arrays.toString(e.getStackTrace()));
 		}
 	}
 

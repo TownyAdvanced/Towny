@@ -28,7 +28,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	static
 	{
-		nextTimeToRemoveRuinedTowns = System.currentTimeMillis() +
+		nextTimeToRemoveRuinedTowns =
+				System.currentTimeMillis() +
 				(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 	}
 
@@ -45,8 +46,9 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			evaluateSieges();
 
 			if (System.currentTimeMillis() > nextTimeToRemoveRuinedTowns) {
-				nextTimeToRemoveRuinedTowns = System.currentTimeMillis() +
-						(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+				nextTimeToRemoveRuinedTowns =
+						System.currentTimeMillis() +
+								(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 				RemoveRuinedTowns.removeRuinedTowns();
 			}
 		}

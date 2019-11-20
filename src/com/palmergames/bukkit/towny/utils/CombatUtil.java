@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
-
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
@@ -9,10 +8,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -25,9 +24,16 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.Material;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Wolf;
+
+import java.util.List;
 
 /**
  * 
@@ -49,7 +55,7 @@ public class CombatUtil {
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
 
 		try {
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(defender.getWorld().getName());
+			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName());
 
 			// World using Towny
 			if (!world.isUsingTowny())
@@ -153,22 +159,6 @@ public class CombatUtil {
 					return false;
 
 				/*
-				 * If the attacker's nation is besieging the defenders town, damage is allowed
-				 */
-				Resident attackerResident = TownyUniverse.getDataSource().getResident(attackingPlayer.getName());
-				Resident defendingResident = TownyUniverse.getDataSource().getResident(defendingPlayer.getName());;
-				if(attackerResident.hasTown()
-						&& attackerResident.hasNation()
-						&& defendingResident.hasTown()
-						&& defendingResident.getTown().hasSiege()) {
-					Nation attackerNation= attackerResident.getTown().getNation();
-					Siege siege=defendingResident.getTown().getSiege();
-					if(siege.getSiegeZones().containsKey(attackerNation)
-						&& siege.getSiegeZones().get(attackerNation).isActive()) {
-						return false;
-					}
-				}
-				/*
 				 * Check if we are preventing friendly fire between allies
 				 * Check the attackers TownBlock and it's Town for their PvP
 				 * status, else the world.
@@ -193,10 +183,8 @@ public class CombatUtil {
 				 * Defender is not a player so check for PvM
 				 */
 				if (defenderTB != null) {
-					if(defenderTB.getType() == TownBlockType.FARM) {
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.COBBLESTONE, ActionType.DESTROY))
-							return true;
-						if (TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
+					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
+						if (PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT, ActionType.DESTROY))
 							return false;
 					}
 					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
@@ -420,10 +408,11 @@ public class CombatUtil {
 	 * @return true if the defender is an ally of the attacker.
 	 */
 	public static boolean isAlly(String attackingResident, String defendingResident) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(attackingResident);
-			Resident residentB = TownyUniverse.getDataSource().getResident(defendingResident);
+			Resident residentA = townyUniverse.getDataSource().getResident(attackingResident);
+			Resident residentB = townyUniverse.getDataSource().getResident(defendingResident);
 			if (residentA.getTown() == residentB.getTown())
 				return true;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -459,6 +448,41 @@ public class CombatUtil {
 	}
 
 	/**
+	 * Is town b in a nation with town a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if they are allies.
+	 */
+	public static boolean isSameNation(Town a, Town b) {
+
+		try {
+			if (a == b)
+				return true;
+			if (a.getNation() == b.getNation())
+				return true;
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Is town b in a nation with town a?
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if they are allies.
+	 */
+	public static boolean isSameTown(Town a, Town b) {
+
+		if (a == b)
+			return true;
+		return false;
+	}
+
+	
+	/**
 	 * Can resident a attack resident b?
 	 * 
 	 * @param a
@@ -466,10 +490,11 @@ public class CombatUtil {
 	 * @return true if they can attack.
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(a);
-			Resident residentB = TownyUniverse.getDataSource().getResident(b);
+			Resident residentA = townyUniverse.getDataSource().getResident(a);
+			Resident residentB = townyUniverse.getDataSource().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -512,10 +537,11 @@ public class CombatUtil {
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(String a, String b) {
-
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
 		try {
-			Resident residentA = TownyUniverse.getDataSource().getResident(a);
-			Resident residentB = TownyUniverse.getDataSource().getResident(b);
+			Resident residentA = townyUniverse.getDataSource().getResident(a);
+			Resident residentB = townyUniverse.getDataSource().getResident(b);
 			if (residentA.getTown() == residentB.getTown())
 				return false;
 			if (residentA.getTown().getNation() == residentB.getTown().getNation())
@@ -560,7 +586,7 @@ public class CombatUtil {
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 
 		try {
-			return CombatUtil.isEnemy(TownyUniverse.getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
+			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
 		} catch (NotRegisteredException e) {
 			return false;
 		}

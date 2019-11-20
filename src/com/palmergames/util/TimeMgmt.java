@@ -1,12 +1,16 @@
 package com.palmergames.util;
 
 import java.text.NumberFormat;
+import com.palmergames.bukkit.towny.TownySettings;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.TownySettings;
-
 public class TimeMgmt {
+
+	public final static long ONE_SECOND_IN_MILLIS = 1000;
+	public final static long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
+	public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
+	public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
 	public final static long[][] defaultCountdownDelays = new long[][] {
 			{ 10, 1 }, // <= 10s, Warn every 1s
@@ -18,10 +22,6 @@ public class TimeMgmt {
 			{ 24 * 60 * 60, 60 * 60 }, // <= day, Warn every hour
 			{ Integer.MAX_VALUE, 24 * 60 * 60 } // <= max, Warn every day
 	};
-	public final static long ONE_SECOND_IN_MILLIS = 1000;
-	public final static long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
-	public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
-	public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
 	public static List<Long> getCountdownDelays(int start) {
 
@@ -30,7 +30,7 @@ public class TimeMgmt {
 
 	public static List<Long> getCountdownDelays(int start, long[][] delays) {
 
-		List<Long> out = new ArrayList<Long>();
+		List<Long> out = new ArrayList<>();
 		for (long[] delay : delays)
 			if (delay.length != 2)
 				return null;

@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -15,14 +15,6 @@ import com.palmergames.util.TimeTools;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static com.palmergames.bukkit.towny.object.TownyObservableType.NEW_DAY;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DAILY_TIMER;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_DRAW_SMOKE_TIMER;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_HEALTH_REGEN;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_MOB_REMOVAL;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_REPEATING_TIMER;
-import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TELEPORT_WARMUP;
-
 
 /**
  * Handler for all running timers
@@ -33,12 +25,10 @@ import static com.palmergames.bukkit.towny.object.TownyObservableType.TOGGLE_TEL
 public class TownyTimerHandler{
 	
 	private static Towny plugin;
-	private static TownyUniverse universe;
 	
 	public static void initialize (Towny plugin) {
 		
 		TownyTimerHandler.plugin = plugin;
-		universe = plugin.getTownyUniverse();
 	}
 	
 	private static int townyRepeatingTask = -1;
@@ -47,6 +37,7 @@ public class TownyTimerHandler{
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
+	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
 
 	public static void newDay() {
@@ -61,7 +52,6 @@ public class TownyTimerHandler{
 			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		}
-		universe.setChangedNotify(NEW_DAY);
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -74,7 +64,6 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(townyRepeatingTask);
 			townyRepeatingTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_REPEATING_TIMER);
 	}
 
 	public static void toggleMobRemoval(boolean on) {
@@ -87,14 +76,13 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(mobRemoveTask);
 			mobRemoveTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_MOB_REMOVAL);
 	}
 
 	public static void toggleDailyTimer(boolean on) {
 
 		if (on && !isDailyTimerRunning()) {
 			long timeTillNextDay = townyTime();
-			TownyMessaging.sendMsg("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
+			System.out.println("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
 			
 			if (TownySettings.isEconomyAsync())
 				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
@@ -107,7 +95,6 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(dailyTask);
 			dailyTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_DAILY_TIMER);
 	}
 
 	public static void toggleSiegeWarTimer(boolean on) {
@@ -141,7 +128,6 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(healthRegenTask);
 			healthRegenTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_HEALTH_REGEN);
 	}
 
 	public static void toggleTeleportWarmup(boolean on) {
@@ -154,7 +140,18 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(teleportWarmupTask);
 			teleportWarmupTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_TELEPORT_WARMUP);
+	}
+	
+	public static void toggleCooldownTimer(boolean on) {
+		
+		if (on && !isCooldownTimerRunning()) {
+			cooldownTimerTask = BukkitTools.scheduleSyncRepeatingTask(new CooldownTimerTask(plugin), 0, 20);
+			if (cooldownTimerTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule cooldown timer loop.");			
+		} else if (!on && isCooldownTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(cooldownTimerTask);
+			cooldownTimerTask = -1;
+		}
 	}
 	
 	public static void toggleDrawSmokeTask(boolean on) {
@@ -166,7 +163,6 @@ public class TownyTimerHandler{
 			BukkitTools.getScheduler().cancelTask(drawSmokeTask);
 			drawSmokeTask = -1;
 		}
-		universe.setChangedNotify(TOGGLE_DRAW_SMOKE_TIMER);			
 	}
 
 	public static boolean isTownyRepeatingTaskRunning() {
@@ -200,6 +196,11 @@ public class TownyTimerHandler{
 		return teleportWarmupTask != -1;
 	}
 	
+	public static boolean isCooldownTimerRunning() {
+
+		return cooldownTimerTask != -1;
+	}
+	
 	public static boolean isDrawSmokeTaskRunning() {
 		
 		return drawSmokeTask != -1;
@@ -213,7 +214,7 @@ public class TownyTimerHandler{
 	 */
 	public static Long townyTime() {
 
-		Long secondsInDay = TownySettings.getDayInterval();
+		long secondsInDay = TownySettings.getDayInterval();
 
 		// Get Calendar instance
 		Calendar now = Calendar.getInstance();
@@ -222,10 +223,10 @@ public class TownyTimerHandler{
 		TimeZone timeZone = now.getTimeZone();
 		
 		// Get current system time in milliseconds
-		Long timeMilli = System.currentTimeMillis();
+		long timeMilli = System.currentTimeMillis();
 		
 		// Calculate the TimeZone specific offset (including DST)
-		Integer timeOffset = timeZone.getOffset(timeMilli)/1000;
+		int timeOffset = timeZone.getOffset(timeMilli)/1000;
 
 		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
 	}

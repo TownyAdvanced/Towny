@@ -3,16 +3,19 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,11 +27,9 @@ import org.bukkit.event.Listener;
  * Date: 4/15/12
  */
 public class TownyCustomListener implements Listener {
-
 	private final Towny plugin;
 
 	public TownyCustomListener(Towny instance) {
-
 		plugin = instance;
 	}
 
@@ -53,11 +54,15 @@ public class TownyCustomListener implements Listener {
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				String msg = chunkNotifier.getNotificationString(resident);
 				if (msg != null)
-					player.sendMessage(msg);
+					if (!Towny.isSpigot)
+						player.sendMessage(msg);
+					else {
+						player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+					}
 			}
 		} catch (NotRegisteredException e) {
 			// likely Citizens' NPC

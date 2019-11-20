@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -11,7 +12,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
@@ -120,7 +125,7 @@ public class ChunkNotification {
 		List<String> out = new ArrayList<String>();
 		String output;
 
-		output = getAreaNotification();
+		output = getAreaNotification(resident);
 		if (output != null && output.length() > 0)
 			out.add(output);
 		
@@ -151,18 +156,50 @@ public class ChunkNotification {
 		return out;
 	}
 
-	public String getAreaNotification() {
+	public String getAreaNotification(Resident resident) {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
-			if (toWild)
+			if (toWild) {
 				try {
+					if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
+						Player player = BukkitTools.getPlayer(resident.getName());
+						TownyWorld toWorld = this.to.getTownyWorld();
+						try {
+							if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
+								Town nearestTown = null; 
+								nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
+								return String.format(areaWildernessNotificationFormat, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+							}
+						} catch (NotRegisteredException ignored) {
+						}
+					}
+					
 					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
 				} catch (NotRegisteredException ex) {
 					// Not a Towny registered world
 				}
-			else
+			
+			} else
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
-		}
+			
+		} else if (fromWild && toWild) 
+			try {
+				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
+					Player player = BukkitTools.getPlayer(resident.getName());
+					TownyWorld toWorld = this.to.getTownyWorld();
+					try {
+						if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
+							Town nearestTown = null; 
+							nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
+							return String.format(areaWildernessNotificationFormat, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+						} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
+							return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
+						}
+					} catch (NotRegisteredException ignored) {
+					}
+				}
+			} catch (NotRegisteredException ignored) {
+			}
 		return null;
 	}
 	

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -22,6 +23,7 @@ public class NationRequestAllyNationEvent extends Event {
 	}
 
 	public NationRequestAllyNationEvent(NationAllyNationInvite invite) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.invite = invite;
 	}
 

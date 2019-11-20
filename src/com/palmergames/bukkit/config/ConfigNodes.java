@@ -171,7 +171,11 @@ public enum ConfigNodes {
 			"new_world_settings.pvp.force_pvp_on",
 			"false",
 			"# force_pvp_on is a global flag and overrides any towns flag setting"),
-
+	NWS_WAR_ALLOWED(
+			"new_world_settings.pvp.war_allowed",
+			"true",
+			"# If set to false the world will not be included in war events."),
+	
 	NWS_WORLD_MONSTERS_HEADER("new_world_settings.mobs", "", ""),
 	NWS_WORLD_MONSTERS_ON(
 			"new_world_settings.mobs.world_monsters_on",
@@ -232,7 +236,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_DELETE(
 			"new_world_settings.plot_management.block_delete.unclaim_delete",
-			"BED_BLOCK,TORCH,REDSTONE_WIRE,SIGN_POST,WOODEN_DOOR,WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
+			"BED_BLOCK,TORCH,REDSTONE_WIRE,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,WOODEN_DOOR,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,STONE_PLATE,IRON_DOOR_BLOCK,WOOD_PLATE,REDSTONE_TORCH_OFF,REDSTONE_TORCH_ON,DIODE_BLOCK_OFF,DIODE_BLOCK_ON",
 			"# These items will be deleted upon a plot being unclaimed"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
@@ -244,7 +248,7 @@ public enum ConfigNodes {
 			"true"),
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE(
 			"new_world_settings.plot_management.mayor_plotblock_delete.mayor_plot_delete",
-			"WALL_SIGN,SIGN_POST",
+			"ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
 
@@ -272,7 +276,7 @@ public enum ConfigNodes {
 			"1s"),
 	NWS_PLOT_MANAGEMENT_REVERT_IGNORE(
 			"new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,MOB_SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,SIGN_POST,WALL_SIGN,GLOWSTONE",
+			"GOLD_ORE,LAPIS_ORE,LAPIS_BLOCK,GOLD_BLOCK,IRON_ORE,IRON_BLOCK,MOSSY_COBBLESTONE,TORCH,SPAWNER,DIAMOND_ORE,DIAMOND_BLOCK,ACACIA_SIGN,BIRCH_SIGN,DARK_OAK_SIGN,JUNGLE_SIGN,OAK_SIGN,SPRUCE_SIGN,ACACIA_WALL_SIGN,BIRCH_WALL_SIGN,DARK_OAK_WALL_SIGN,JUNGLE_WALL_SIGN,OAK_WALL_SIGN,SPRUCE_WALL_SIGN,GLOWSTONE,EMERALD_ORE,EMERALD_BLOCK",
 			"# These block types will NOT be regenerated"),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
@@ -372,6 +376,16 @@ public enum ConfigNodes {
 			"global_town_settings.teleport_warmup_time",
 			"0",
 			"# If non zero it delays any spawn request by x seconds."),
+	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
+			"global_town_settings.spawn_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
+			"global_town_settings.pvp_cooldown_time",
+			"30",
+			"# Number of seconds that must pass before pvp can be toggled by a town.",
+			"# Applies to residents of the town using /res toggle pvp, as well as",
+			"# plots having their PVP toggled using /plot toggle pvp."),	
 	GTOWN_SETTINGS_TOWN_RESPAWN(
 			"global_town_settings.town_respawn",
 			"false",
@@ -468,7 +482,18 @@ public enum ConfigNodes {
 			"1000000.0",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
-	),	
+	),
+	GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS(
+			"global_town_settings.display_xyz_instead_of_towny_coords",
+			"false",
+			"# If set to true, the /town screen will display the xyz coordinate for a town's spawn rather than the homeblock's Towny coords."
+	),
+	GTOWN_SETTINGS_DISPLAY_TOWN_LIST_RANDOMLY(
+			"global_town_settings.display_town_list_randomly",
+			"false",
+			"# If set to true the /town list command will list randomly, rather than by whichever comparator is used, hiding resident counts."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -511,6 +536,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When set to true, nation zones are disabled during the the Towny war types."),
+	GNATION_SETTINGS_NATIONZONE_SHOW_NOTIFICATIONS(
+			"global_nation_settings.nationzone.show_notifications",
+			"false",
+			"",
+			"# When set to true, players will receive a notification when they enter into a nationzone.",
+			"# Set to false by default because, like the nationzone feature, it will generate more load on servers."),
 	GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN(
 			"global_nation_settings.display_board_onlogin",
 			"true",
@@ -549,6 +580,10 @@ public enum ConfigNodes {
             "global_nation_settings.default.public",
             "false",
             "# If set to true, any newly made nation will have their spawn set to public."),
+    GNATION_DEF_OPEN(
+            "global_nation_settings.default.open",
+            "false",
+            "# If set to true, any newly made nation will have open status and any town may join without an invite."),
 	PLUGIN(
 			"plugin",
 			"",
@@ -564,7 +599,7 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"",
-			"# Valid load and save types are: flatfile, mysql, sqlite, h2."),
+			"# Valid load and save types are: flatfile, mysql, h2."),
 	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
 	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
 
@@ -616,12 +651,6 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
-	PLUGIN_USING_PERMISSIONS(
-			"plugin.interfacing.using_permissions",
-			"true",
-			"",
-			"# True to attempt to use GroupManager, LuckPerms, or other compliant Permission Manager",
-			"# False to disable permission checks and rely on Towny settings (This should almost never be set to false on a modern server.)"),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(
@@ -688,10 +717,10 @@ public enum ConfigNodes {
 			"^[a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
-			"^[a-zA-Z0-9\\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
+			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),
 	FILTERS_REGEX_NAME_REMOVE_REGEX(
 			"filters_colour_chat.regex.name_remove_regex",
-			"[^a-zA-Z0-9._\\[\\]-]"),
+			"[^a-zA-Z0-9\\&._\\[\\]-]"),
 
 	FILTERS_MODIFY_CHAT("filters_colour_chat.modify_chat", "", ""),
 	FILTERS_MAX_NAME_LGTH(
@@ -702,7 +731,38 @@ public enum ConfigNodes {
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"# Maximum length of titles and surnames."),
+	
+	FILTERS_PAPI_CHAT_FORMATTING(
+			"filters_colour_chat.papi_chat_formatting","","",
+			"# See How Towny Works wikipage for list of PAPI placeholders.",
+			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
+	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
+			"filters_colour_chat.papi_chat_formatting.both",
+			"&f[&6%n&f|&b%t&f] ",
+			"# When using PlaceholderAPI, and a tag would show both nation and town, this will determine how they are formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_TOWN(
+			"filters_colour_chat.papi_chat_formatting.town",
+			"&f[&b%s&f] ",
+			"# When using PlaceholderAPI, and a tag would showing a town, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_NATION(
+			"filters_colour_chat.papi_chat_formatting.nation",
+			"&f[&6%s&f] ",
+			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
+			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
+			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_RESIDENT(
+			"filters_colour_chat.papi_chat_formatting.ranks.resident","&f"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_MAYOR(
+			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
+	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
+			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
+	
 
+
+	
 	PROT(
 			"protection",
 			"",
@@ -716,7 +776,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT",
+			"BONE_MEAL,FLINT_AND_STEEL,BUCKET,WATER_BUCKET,LAVA_BUCKET,MINECART,STORAGE_MINECART,INK_SACK,SHEARS,ENDER_PEARL,GLASS_BOTTLE,FIREBALL,ARMOR_STAND,SKULL_ITEM,BIRCH_BOAT,ACACIA_BOAT,DARK_OAK_BOAT,JUNGLE_BOAT,OAK_BOAT,SPRUCE_BOAT,END_CRYSTAL,POWERED_MINECART,COMMAND_MINECART,EXPLOSIVE_MINECART,HOPPER_MINECART,CHORUS_FRUIT,BLACK_DYE,BLUE_DYE,BROWN_DYE,CYAN_DYE,GRAY_DYE,GREEN_DYE,LIGHT_BLUE_DYE,LIGHT_GRAY_DYE,LIME_DYE,MAGENTA_DYE,ORANGE_DYE,PINK_DYE,PURPLE_DYE,RED_DYE,WHITE_DYE,YELLOW_DYE",
 			"",
 			"# Items that can be blocked within towns via town/plot flags",
 			"# 259 - flint and steel",
@@ -730,7 +790,7 @@ public enum ConfigNodes {
 			"# 385 - fire charge"),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME",
+			"JUKEBOX,NOTE_BLOCK,BEACON,CHEST,TRAPPED_CHEST,FURNACE,DISPENSER,HOPPER,DROPPER,LEVER,COMPARATOR,REPEATER,STONE_PRESSURE_PLATE,ACACIA_PRESSURE_PLATE,BIRCH_PRESSURE_PLATE,DARK_OAK_PRESSURE_PLATE,JUNGLE_PRESSURE_PLATE,OAK_PRESSURE_PLATE,SPRUCE_PRESSURE_PLATE,HEAVY_WEIGHTED_PRESSURE_PLATE,LIGHT_WEIGHTED_PRESSURE_PLATE,STONE_BUTTON,ACACIA_BUTTON,BIRCH_BUTTON,DARK_OAK_BUTTON,JUNGLE_BUTTON,OAK_BUTTON,SPRUCE_BUTTON,ACACIA_DOOR,BIRCH_DOOR,DARK_OAK_DOOR,JUNGLE_DOOR,OAK_DOOR,SPRUCE_DOOR,ACACIA_FENCE_GATE,BIRCH_FENCE_GATE,DARK_OAK_FENCE_GATE,OAK_FENCE_GATE,JUNGLE_FENCE_GATE,SPRUCE_FENCE_GATE,ACACIA_TRAPDOOR,BIRCH_TRAPDOOR,DARK_OAK_TRAPDOOR,JUNGLE_TRAPDOOR,OAK_TRAPDOOR,SPRUCE_TRAPDOOR,MINECART,COMMAND_BLOCK_MINECART,CHEST_MINECART,FURNACE_MINECART,HOPPER_MINECART,TNT_MINECART,SHULKER_BOX,WHITE_SHULKER_BOX,ORANGE_SHULKER_BOX,MAGENTA_SHULKER_BOX,LIGHT_BLUE_SHULKER_BOX,LIGHT_GRAY_SHULKER_BOX,YELLOW_SHULKER_BOX,LIME_SHULKER_BOX,PINK_SHULKER_BOX,GRAY_SHULKER_BOX,CYAN_SHULKER_BOX,PURPLE_SHULKER_BOX,BLUE_SHULKER_BOX,BROWN_SHULKER_BOX,GREEN_SHULKER_BOX,RED_SHULKER_BOX,BLACK_SHULKER_BOX,CARROT_STICK,DAYLIGHT_DETECTOR,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,LECTERN,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BLAST_FURNACE,BELL,BARREL,DRAGON_EGG,ITEM_FRAME,POTTED_ACACIA_SAPLING,POTTED_ALLIUM,POTTED_AZURE_BLUET,POTTED_BAMBOO,POTTED_BIRCH_SAPLING,POTTED_BLUE_ORCHID,POTTED_BROWN_MUSHROOM,POTTED_CACTUS,POTTED_CORNFLOWER,POTTED_DANDELION,POTTED_DARK_OAK_SAPLING,POTTED_DEAD_BUSH,POTTED_FERN,POTTED_JUNGLE_SAPLING,POTTED_LILY_OF_THE_VALLEY,POTTED_OAK_SAPLING,POTTED_ORANGE_TULIP,POTTED_OXEYE_DAISY,POTTED_PINK_TULIP,POTTED_POPPY,POTTED_RED_MUSHROOM,POTTED_RED_TULIP,POTTED_SPRUCE_SAPLING,POTTED_WHITE_TULIP,POTTED_WITHER_ROSE,BARREL,BREWING_STAND",
 			"",
 			"# Items which can be blocked or enabled via town/plot flags",
 			"# 25 - noteblock",
@@ -745,7 +805,11 @@ public enum ConfigNodes {
 			"# Husk, Stray, SkeletonHorse, ZombieHorse, Vex, Vindicator, Evoker, Endermite, PolarBear",
 			"",
 			"# Remove living entities within a town's boundaries, if the town has the mob removal flag set."),
-
+	PROT_MOB_REMOVE_TOWN_KILLER_BUNNY(
+			"protection.town_mob_removal_killer_bunny",
+			"true",
+			"",
+			"# Whether the town mob removal should remove THE_KILLER_BUNNY type rabbits."),
 	PROT_MOB_REMOVE_VILLAGER_BABIES_TOWN(
 			"protection.town_prevent_villager_breeding",
 			"false",
@@ -768,7 +832,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Prevent the spawning of villager babies in the world."),
-
+	PROT_MOB_REMOVE_SKIP_NAMED_MOBS(
+			"protection.mob_removal_skips_named_mobs",
+			"false",
+			"",
+			"# When set to true, mobs who've been named with a nametag will not be removed by the mob removal task."),
 	PROT_MOB_REMOVE_SPEED(
 			"protection.mob_removal_speed",
 			"5s",
@@ -795,11 +863,6 @@ public enum ConfigNodes {
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
-	PROT_CHEAT(
-			"protection.cheat_protection",
-			"true",
-			"",
-			"# Prevent fly and double block jump cheats."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",
@@ -921,6 +984,10 @@ public enum ConfigNodes {
 	FLAGS_RES_FR_DESTROY("default_perm_flags.resident.friend.destroy", "true"),
 	FLAGS_RES_FR_ITEM_USE("default_perm_flags.resident.friend.item_use", "true"),
 	FLAGS_RES_FR_SWITCH("default_perm_flags.resident.friend.switch", "true"),
+	FLAGS_RES_TOWN_BUILD("default_perm_flags.resident.town.build", "false"),
+	FLAGS_RES_TOWN_DESTROY("default_perm_flags.resident.town.destroy", "false"),
+	FLAGS_RES_TOWN_ITEM_USE("default_perm_flags.resident.town.item_use","false"),
+	FLAGS_RES_TOWN_SWITCH("default_perm_flags.resident.town.switch", "false"),
 	FLAGS_RES_ALLY_BUILD("default_perm_flags.resident.ally.build", "false"),
 	FLAGS_RES_ALLY_DESTROY("default_perm_flags.resident.ally.destroy", "false"),
 	FLAGS_RES_ALLY_ITEM_USE(
@@ -963,6 +1030,10 @@ public enum ConfigNodes {
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),
 	FLAGS_TOWN_RES_ITEM_USE("default_perm_flags.town.resident.item_use", "true"),
 	FLAGS_TOWN_RES_SWITCH("default_perm_flags.town.resident.switch", "true"),
+	FLAGS_TOWN_NATION_BUILD("default_perm_flags.town.nation.build", "false"),
+	FLAGS_TOWN_NATION_DESTROY("default_perm_flags.town.nation.destroy", "false"),
+	FLAGS_TOWN_NATION_ITEM_USE("default_perm_flags.town.nation.item_use", "false"),
+	FLAGS_TOWN_NATION_SWITCH("default_perm_flags.town.nation.switch", "false"),
 	FLAGS_TOWN_ALLY_BUILD("default_perm_flags.town.ally.build", "false"),
 	FLAGS_TOWN_ALLY_DESTROY("default_perm_flags.town.ally.destroy", "false"),
 	FLAGS_TOWN_ALLY_ITEM_USE("default_perm_flags.town.ally.item_use", "false"),
@@ -1046,6 +1117,12 @@ public enum ConfigNodes {
 			"invite_system.maximum_invites_received.nation",
 			"10",
 			"# How many requests can one nation have from other nations for an alliance."),
+	INVITE_SYSTEM_MAX_DISTANCE_FROM_TOWN_SPAWN(
+			"invite_system.maximum_distance_from_town_spawn",
+			"0",
+			"# When set above 0, the maximum distance a player can be from a town's spawn in order to receive an invite.",
+			"# Use this setting to require players to be near or inside a town before they can be invited."),
+	
 	RES_SETTING(
 			"resident_settings",
 			"",
@@ -1064,7 +1141,7 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",
-			"# if enabled old residents will be kicked and deleted from a town",
+			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
 			"# after Two months (default) of not logging in"),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
@@ -1075,6 +1152,10 @@ public enum ConfigNodes {
 	RES_SETTING_DELETE_OLD_RESIDENTS_ECO(
 			"resident_settings.delete_old_residents.delete_economy_account",
 			"true"),
+	RES_SETTING_DELETE_OLD_RESIDENTS_TOWNLESS_ONLY(
+			"resident_settings.delete_old_residents.delete_only_townless",
+			"false",
+			"# When true only residents who have no town will be deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -1165,6 +1246,16 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock",
 			"25.0",
 			"# The price for a town to expand one townblock."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_INCREASE(
+			"economy.new_expand.price_claim_townblock_increase",
+			"1.0",
+			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+	ECO_PRICE_CLAIM_TOWNBLOCK_REFUND(
+			"economy.new_expand.price_claim_townblock_refund",
+			"0.0",
+			"# The amount refunded to a town when they unclaim a townblock.",
+			"# Warning: do not set this higher than the cose to claim a townblock.",
+			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",
@@ -1239,6 +1330,15 @@ public enum ConfigNodes {
 			"100.0",
 			"# The server's daily charge on each nation. If a nation fails to pay this upkeep",
 			"# all of it's member town are kicked and the Nation is removed."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN(
+			"economy.daily_taxes.nation_pertown_upkeep",
+			"false",
+			"# Uses total number of towns in the nation to determine upkeep instead of nation level (Number of Residents)",
+			"# calculated by (number of towns in nation X price_nation_upkeep)."),
+	ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER(
+			"economy.daily_taxes.nation_pertown_upkeep_affected_by_nation_level_modifier",
+			"false",
+			"# If set to true, the per-town-upkeep system will be modified by the Nation Levels' upkeep modifiers."),
 	ECO_PRICE_TOWN_UPKEEP(
 			"economy.daily_taxes.price_town_upkeep",
 			"10.0",
@@ -1253,12 +1353,54 @@ public enum ConfigNodes {
 			"economy.daily_taxes.town_plotbased_upkeep_affected_by_town_level_modifier",
 			"false",
 			"# If set to true, the plot-based-upkeep system will be modified by the Town Levels' upkeep modifiers."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT(
+			"economy.daily_taxes.town_plotbased_upkeep_minimum_amount",
+			"0.0",
+			"# If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
+			"0.0",
+			"# The server's daily charge on a town which has claimed more townblocks than it is allowed."),
+	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED(
+			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty_plotbased",
+			"false",
+			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
+			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
 	ECO_UPKEEP_PLOTPAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
+	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
+	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
+			"0.0",
+			"# Cost to use /plot set shop to change a normal plot to a shop plot."),
+	ECO_PLOT_TYPE_COSTS_ARENA("economy.plot_type_costs.set_arena",
+			"0.0",
+			"# Cost to use /plot set arena to change a normal plot to a arena plot."),
+	ECO_PLOT_TYPE_COSTS_EMBASSY("economy.plot_type_costs.set_embassy",
+			"0.0",
+			"# Cost to use /plot set embassy to change a normal plot to a embassy plot."),
+	ECO_PLOT_TYPE_COSTS_WILDS("economy.plot_type_costs.set_wilds",
+			"0.0",
+			"# Cost to use /plot set wilds to change a normal plot to a wilds plot."),
+	ECO_PLOT_TYPE_COSTS_INN("economy.plot_type_costs.set_inn",
+			"0.0",
+			"# Cost to use /plot set inn to change a normal plot to a inn plot."),
+	ECO_PLOT_TYPE_COSTS_JAIL("economy.plot_type_costs.set_jail",
+			"0.0",
+			"# Cost to use /plot set jail to change a normal plot to a jail plot."),
+	ECO_PLOT_TYPE_COSTS_FARM("economy.plot_type_costs.set_farm",
+			"0.0",
+			"# Cost to use /plot set farm to change a normal plot to a farm plot."),
+	ECO_PLOT_TYPE_COSTS_BANK("economy.plot_type_costs.set_bank",
+			"0.0",
+			"# Cost to use /plot set bank to change a normal plot to a bank plot."),
+//	ECO_PLOT_TYPE_COSTS_OUTPOST("economy.plot_type_costs.set_outpost",
+//			"0.0",
+//			"# Cost to use /plot set outpost to change a normal plot to a outpost plot."),
+	
 	JAIL(
 			"jail",
 			"",
@@ -1296,7 +1438,20 @@ public enum ConfigNodes {
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
-			"#Amount that bail costs."),
+			"#Amount that bail costs for normal residents/nomads."),
+	JAIL_BAIL_BAIL_AMOUNT_MAYOR(
+			"jail.bail.bail_amount_mayor",
+			"10",
+			"#Amount that bail costs for Town mayors."),
+	JAIL_BAIL_BAIL_AMOUNT_KING(
+			"jail.bail.bail_amount_king",
+			"10",
+			"#Amount that bail costs for Nation kings."),
+	JAIL_BLACKLISTED_COMMANDS(
+			"jail.blacklisted_commands",
+			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
+			"# Commands which a jailed player cannot use."),
+	
 	BANK(
 			"bank",
 			"",
@@ -1331,7 +1486,7 @@ public enum ConfigNodes {
 			"#This setting allows you disable the ability for a nation to pay to remain neutral during a war."),
 	WAR_DISALLOW_ONE_WAY_ALLIANCE(
 			"war.disallow_one_way_alliance",
-			"false",
+			"true",
 			"#By setting this to true, nations will receive a prompt for alliances and alliances will show on both nations."
 	),
 	WAR_ECONOMY(
@@ -1442,7 +1597,12 @@ public enum ConfigNodes {
 			"false",
 			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town gains a bonus townblock,",
 			"# and the losing town gains a negative (-1) bonus townblock."),
-
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+			"war.event.winner_takes_ownership_of_townblocks",
+			"false",
+			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.",
+			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town."),
+	
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),
@@ -1459,10 +1619,12 @@ public enum ConfigNodes {
 			"",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                   Flag war settings                  | #",
+			"# |                   Flag War Settings                  | #",
 			"# |                                                      | #",
-			"# |               Separate from Event War                | #",
-			"# |                 Unsupported / Buggy                  | #",
+			"# |               [Separate from Event War]              | #",
+			"# |           --------------------------------           | #",
+			"# |        DEPRECATED: Minimally Supported Through       | #",
+		    "# |             3rd Party Contributions Only             | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -1489,7 +1651,7 @@ public enum ConfigNodes {
 	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
-			"fence",
+			"oak_fence",
 			"# This is the block a player must place to trigger the attack event."),
 	WAR_ENEMY_FLAG_LIGHT_BLOCK(
 			"war.enemy.flag.light_block",
@@ -1515,6 +1677,21 @@ public enum ConfigNodes {
 	WAR_ENEMY_BEACON_WIREFRAME_BLOCK(
 			"war.enemy.beacon.wireframe_block",
 			"glowstone"),
+	WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while their town",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED(
+		"war.enemy.prevent_nation_interaction_while_flagged",
+		"true",
+		"# While true, prevent players from performing certain actions while a town in their nation",
+		"# has an active enemy war flag placed."),
+	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
+		"war.enemy.time_to_wait_after_flagged",
+		"600000",
+		"# This is how much time that must pass after a town in a nation has been flagged",
+		"# before certain actions can be performed, measured in milliseconds."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",
@@ -1528,7 +1705,7 @@ public enum ConfigNodes {
 			""),
 	WAR_WARZONE_EDITABLE_MATERIALS(
 			"war.warzone.editable_materials",
-			"tnt,fence,ladder,wood_door,iron_door,fire",
+			"tnt,oak_fence,birch_fence,spruce_fence,jungle_fence,dark_oak_fence,acacia_fence,ladder,oak_door,birch_door,spruce_door,jungle_door,dark_oak_door,acacia_fence,iron_door,fire",
 			"# List of materaials that can be modified in a warzone.",
 			"# '*' = Allow all materials.",
 			"# Prepend a '-' in front of a material to remove it. Used in conjunction with when you use '*'.",

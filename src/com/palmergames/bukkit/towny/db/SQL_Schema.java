@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SQL_Schema {
 
-    private static String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+    private static final String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 
     private static String getWORLDS() {
 
@@ -57,6 +57,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
+		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 
@@ -84,6 +85,7 @@ public class SQL_Schema {
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
+		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
 
@@ -118,6 +120,7 @@ public class SQL_Schema {
 		columns.add("`open` bool NOT NULL DEFAULT '0'");
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
+		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
@@ -126,6 +129,7 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -147,6 +151,7 @@ public class SQL_Schema {
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
 		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
 		columns.add("`JailSpawn` mediumint");
+		columns.add("`JailDays` mediumint");
 		columns.add("`JailTown` mediumtext");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
@@ -176,6 +181,7 @@ public class SQL_Schema {
 		columns.add("`permissions` mediumtext NOT NULL");
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 

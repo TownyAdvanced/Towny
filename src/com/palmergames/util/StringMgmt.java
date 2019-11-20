@@ -141,4 +141,8 @@ public class StringMgmt {
 		return false;
 	}
 	
+	public static String remUnderscore (String str) {
+		return str.replaceAll("_", " ");
+	}
+	
 }

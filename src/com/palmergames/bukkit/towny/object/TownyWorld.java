@@ -5,27 +5,24 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
 public class TownyWorld extends TownyObject {
 
-	private List<Town> towns = new ArrayList<Town>();
-	private boolean isClaimable = true, isPVP, isForcePVP, isExplosion,
-			isForceExpl, isFire, isForceFire, isForceTownMobs, hasWorldMobs,
-			isDisableCreatureTrample, isDisablePlayerTrample,
-			isEndermanProtect, isUsingTowny,
-			isUsingPlotManagementDelete = true,
-			isUsingPlotManagementMayorDelete = true,
-			isUsingPlotManagementRevert = true,
-			isUsingPlotManagementWildRevert = true;
-	private Long plotManagementRevertSpeed, plotManagementWildRevertDelay;
+	private List<Town> towns = new ArrayList<>();
+	private boolean isClaimable = true;
+	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
+	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
+	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
+	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();
+	private long plotManagementRevertSpeed = TownySettings.getPlotManagementSpeed();
+	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
 	private List<String> plotManagementMayorDelete = null;
@@ -33,40 +30,30 @@ public class TownyWorld extends TownyObject {
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 	private String unclaimedZoneName = null;
-	private Hashtable<Coord, TownBlock> townBlocks = new Hashtable<>();
+	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
+	
+	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isWarAllowed = TownySettings.isWarAllowed();
+	private boolean isPVP = TownySettings.isPvP();
+	private boolean isForcePVP = TownySettings.isForcingPvP();
+	private boolean isFire = TownySettings.isFire();
+	private boolean isForceFire = TownySettings.isForcingFire();
+	private boolean hasWorldMobs = TownySettings.isWorldMonstersOn();
+	private boolean isForceTownMobs = TownySettings.isForcingMonsters();
+	private boolean isExplosion = TownySettings.isExplosions();
+	private boolean isForceExpl = TownySettings.isForcingExplosions();
+	private boolean isEndermanProtect = TownySettings.getEndermanProtect();
+	
+	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
+	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 
 	// TODO: private List<TownBlock> adminTownBlocks = new
 	// ArrayList<TownBlock>();
 
 	public TownyWorld(String name) {
-
-		setName(name);
-
-		isUsingTowny = TownySettings.isUsingTowny();
-		isPVP = TownySettings.isPvP();
-		isForcePVP = TownySettings.isForcingPvP();
-		isFire = TownySettings.isFire();
-		isForceFire = TownySettings.isForcingFire();
-		hasWorldMobs = TownySettings.isWorldMonstersOn();
-		isForceTownMobs = TownySettings.isForcingMonsters();
-		isExplosion = TownySettings.isExplosions();
-		isForceExpl = TownySettings.isForcingExplosions();
-		isEndermanProtect = TownySettings.getEndermanProtect();
-
-		isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
-		isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-
-		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
-		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
-		/*
-		 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-		 */
-		setPlotManagementRevertSpeed(TownySettings.getPlotManagementSpeed());
-		setUsingPlotManagementWildRevert(TownySettings.isUsingPlotManagementWildRegen());
-		setPlotManagementWildRevertDelay(TownySettings.getPlotManagementWildRegenDelay());
-
+		super(name);
 	}
 
 	public List<Town> getTowns() {
@@ -165,18 +152,21 @@ public class TownyWorld extends TownyObject {
 
 	public void removeTownBlock(TownBlock townBlock) {
 
-		try {
-			if (townBlock.hasResident())
-				townBlock.getResident().removeTownBlock(townBlock);
-		} catch (NotRegisteredException e) {
+		if (hasTownBlock(townBlock.getCoord())) {			
+	
+			try {
+				if (townBlock.hasResident())
+					townBlock.getResident().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+			try {
+				if (townBlock.hasTown())
+					townBlock.getTown().removeTownBlock(townBlock);
+			} catch (NotRegisteredException e) {
+			}
+	
+			removeTownBlock(townBlock.getCoord());
 		}
-		try {
-			if (townBlock.hasTown())
-				townBlock.getTown().removeTownBlock(townBlock);
-		} catch (NotRegisteredException e) {
-		}
-
-		removeTownBlock(townBlock.getCoord());
 	}
 
 	public void removeTownBlocks(List<TownBlock> townBlocks) {
@@ -202,6 +192,16 @@ public class TownyWorld extends TownyObject {
 																						 * )
 																						 */);
 		return out;
+	}
+
+	public void setWarAllowed(boolean isWarAllowed) {
+
+		this.isWarAllowed = isWarAllowed;
+	}
+
+	public boolean isWarAllowed() {
+
+		return this.isWarAllowed;
 	}
 
 	public void setPVP(boolean isPVP) {
@@ -411,6 +411,11 @@ public class TownyWorld extends TownyObject {
 			return plotManagementIgnoreIds;
 	}
 
+	public boolean isPlotManagementIgnoreIds(Material mat) {
+		return getPlotManagementIgnoreIds().contains(mat.toString());
+	}
+	
+	@Deprecated
 	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
 
 		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
@@ -505,31 +510,6 @@ public class TownyWorld extends TownyObject {
 
 	}
 
-	/**
-	 * @deprecated Replaced by {@link #getUnclaimedZoneIgnoreMaterials()}
-	 * 
-	 * @return - List of blocked materials.
-	 */
-	@Deprecated
-	public List<String> getUnclaimedZoneIgnoreIds() {
-
-		if (unclaimedZoneIgnoreBlockMaterials == null)
-			return TownySettings.getUnclaimedZoneIgnoreMaterials();
-		else
-			return unclaimedZoneIgnoreBlockMaterials;
-	}
-
-	/**
-	 * @deprecated Replaced by {@link #isUnclaimedZoneIgnoreMaterial(Material mat)}
-	 * 
-	 * @return - true, if it is an ignored material
-	 */
-	@Deprecated
-	public boolean isUnclaimedZoneIgnoreId(String id) {
-
-		return getUnclaimedZoneIgnoreMaterials().contains(id);
-	}
-
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
 		this.unclaimedZoneIgnoreBlockMaterials = unclaimedZoneIgnoreIds;
@@ -543,6 +523,7 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
 		return getUnclaimedZoneIgnoreMaterials().contains(mat);
@@ -708,8 +689,11 @@ public class TownyWorld extends TownyObject {
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
-					
+
 					Coord townCoord = b.getCoord();
+					
+					if (key.equals(townCoord)) continue;
+					
 					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
 					if (dist < min)
 						min = dist;

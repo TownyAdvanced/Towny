@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -24,8 +25,8 @@ public class PlotChangeTypeEvent extends Event {
      * @param oldType- Old Type
      * @param newType - New Type
      */
-    public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock, boolean async) {
-    	super(async);
+    public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock) {
+    	super(!Bukkit.getServer().isPrimaryThread());
         this.newType = newType;
         this.oldType = oldType;
         this.townBlock = townBlock;

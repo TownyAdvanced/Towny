@@ -2,27 +2,22 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
-import com.palmergames.util.FileMgmt;
-
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
@@ -45,58 +40,20 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public abstract class TownyDataSource {
+	final Lock lock = new ReentrantLock();
+	protected final Towny plugin;
+	protected final TownyUniverse universe;
 
-	protected final Lock lock = new ReentrantLock();
-
-	protected TownyUniverse universe;
-	protected Towny plugin;
-	protected boolean firstRun = true;
-
-	public void initialize(Towny plugin, TownyUniverse universe) {
-
-		this.universe = universe;
+	TownyDataSource(Towny plugin, TownyUniverse universe) {
 		this.plugin = plugin;
+		this.universe = universe;
 	}
 
-	public synchronized void backup() throws IOException {
-		//place holder to be overridden
-	}
+	public abstract boolean backup() throws IOException;
 
-	public synchronized void cleanupBackups() {
+	public abstract void cleanupBackups();
 
-		long deleteAfter = TownySettings.getBackupLifeLength();
-		if (deleteAfter >= 0)
-			FileMgmt.deleteOldBackups(new File(universe.getRootFolder() + FileMgmt.fileSeparator() + "backup"), deleteAfter);
-
-	}
-
-	public synchronized void deleteUnusedResidentFiles() {
-		//place holder to be overridden
-	}
-
-	public boolean confirmContinuation(String msg) {
-
-		Boolean choice = null;
-		String input = null;
-		while (choice == null) {
-			System.out.println(msg);
-			System.out.print("    Continue (y/n): ");
-			Scanner in = new Scanner(System.in);
-			input = in.next();
-			input = input.toLowerCase();
-			if (input.equals("y") || input.equals("yes")) {
-				in.close();
-				return true;
-			} else if (input.equals("n") || input.equals("no")) {
-				in.close();
-				return false;
-			}
-			in.close();
-
-		}
-		System.out.println("[Towny] Error recieving input, exiting.");
-		return false;
-	}
+	public abstract void deleteUnusedResidents();
 
 	public boolean loadAll() {
 
@@ -199,32 +156,6 @@ public abstract class TownyDataSource {
 	abstract public void deleteTownBlock(TownBlock townBlock);
 
 	abstract public void deleteFile(String file);
-
-	/*
-	 * public boolean loadWorldList() {
-	 * return loadServerWorldsList();
-	 * }
-	 *
-	 * public boolean loadServerWorldsList() {
-	 * sendDebugMsg("Loading Server World List");
-	 * for (World world : plugin.getServer().getWorlds())
-	 * try {
-	 * //String[] split = world.getName().split("/");
-	 * //String worldName = split[split.length-1];
-	 * //universe.newWorld(worldName);
-	 * universe.newWorld(world.getName());
-	 * } catch (AlreadyRegisteredException e) {
-	 * e.printStackTrace();
-	 * } catch (NotRegisteredException e) {
-	 * e.printStackTrace();
-	 * }
-	 * return true;
-	 * }
-	 */
-
-	/*
-	 * Load all of category
-	 */
 
 	public boolean cleanup() {
 
@@ -406,7 +337,7 @@ public abstract class TownyDataSource {
 
 	abstract public void newSiegeZone(String attackingNationName, String defendingTownName) throws AlreadyRegisteredException;
 
-	abstract public void newWorld(String name) throws AlreadyRegisteredException, NotRegisteredException;
+	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 
 	abstract public void removeTown(Town town);
 
@@ -433,6 +364,8 @@ public abstract class TownyDataSource {
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+	
+	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 

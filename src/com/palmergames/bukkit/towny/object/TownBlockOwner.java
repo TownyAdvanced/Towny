@@ -1,16 +1,20 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TownBlockOwner extends TownyEconomyObject {
 
-	protected List<TownBlock> townBlocks = new ArrayList<TownBlock>();
+	protected List<TownBlock> townBlocks = new ArrayList<>();
 	protected TownyPermission permissions = new TownyPermission();
-
+	
+	protected TownBlockOwner(String name) {
+		super(name);
+	}
+	
 	public void setTownblocks(List<TownBlock> townblocks) {
 
 		this.townBlocks = townblocks;

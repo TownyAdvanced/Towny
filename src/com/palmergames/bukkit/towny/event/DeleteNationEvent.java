@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -22,6 +23,7 @@ public class DeleteNationEvent extends Event  {
 	}
 
     public DeleteNationEvent(String nation) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.nationName = nation;
     }
 

@@ -1,14 +1,19 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
+
+import java.util.HashSet;
 
 public class TownBlock {
 
@@ -16,27 +21,23 @@ public class TownBlock {
 	// private List<Group> groups;
 	private TownyWorld world;
 	private Town town;
-	private Resident resident;
-	private TownBlockType type;
-	private String name;
+	private Resident resident = null;
+	private TownBlockType type = TownBlockType.RESIDENTIAL;
+	private String name = "";
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
+	private HashSet<CustomDataField> metadata = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
-	protected boolean isChanged;
+	protected boolean isChanged = false;
 	
 	public TownBlock(int x, int z, TownyWorld world) {
-
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
-		this.resident = null;
-		this.type = TownBlockType.RESIDENTIAL;
-		isChanged = false;
-		this.name = "";
 	}
 
 	public void setTown(Town town) {
@@ -82,7 +83,7 @@ public class TownBlock {
 		}
 		if (successful && resident != null) { //Should not cause a NPE, is checkingg if resident is null and
 			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
-			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this, !Bukkit.getServer().isPrimaryThread()));
+			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
 		}
 		this.resident = resident;
 	}
@@ -186,8 +187,6 @@ public class TownBlock {
 
 		return type;
 	}
-
-	
 	
 	public void setType(TownBlockType type) {
 		if (type != this.type)
@@ -195,7 +194,7 @@ public class TownBlock {
 
 
 		if (type != null){
-			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this, !Bukkit.getServer().isPrimaryThread()));
+			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 		}
 		this.type = type;
 
@@ -294,7 +293,7 @@ public class TownBlock {
 		setType(TownBlockType.lookup(typeId));
 	}
 
-	public void setType(String typeName) throws TownyException {
+	public void setType(String typeName, Resident resident) throws TownyException, EconomyException {
 
 		if (typeName.equalsIgnoreCase("reset"))
 			typeName = "default";					
@@ -303,7 +302,43 @@ public class TownBlock {
 		
 		if (type == null)
 			throw new TownyException(TownySettings.getLangString("msg_err_not_block_type"));
+
+		double cost = 0;
+		switch (type) {
+		case COMMERCIAL:
+			cost = TownySettings.getPlotSetCommercialCost();
+			break;
+		case EMBASSY:
+			cost = TownySettings.getPlotSetEmbassyCost();
+			break;
+		case ARENA:
+			cost = TownySettings.getPlotSetArenaCost();
+			break;
+		case WILDS:
+			cost = TownySettings.getPlotSetWildsCost();
+			break;
+		case INN:
+			cost = TownySettings.getPlotSetInnCost();
+			break;
+		case JAIL:
+			cost = TownySettings.getPlotSetJailCost();
+			break;
+		case FARM:
+			cost = TownySettings.getPlotSetFarmCost();
+			break;
+		case BANK:
+			cost = TownySettings.getPlotSetBankCost();
+			break;
+		default: 
+			cost = 0;
+		}
 		
+		if (cost > 0 && TownySettings.isUsingEconomy() && !resident.payTo(cost, TownyEconomyObject.SERVER_ACCOUNT, String.format("Plot set to %s", type)))
+			throw new EconomyException(String.format(TownySettings.getLangString("msg_err_cannot_afford_plot_set_type_cost"), type, TownyEconomyHandler.getFormattedBalance(cost)));
+		
+		if (cost > 0)
+			TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("msg_plot_set_cost"), TownyEconomyHandler.getFormattedBalance(cost), type));
+
 		if (this.isJail())
 			this.getTown().removeJailSpawn(this.getCoord());
 		
@@ -421,5 +456,44 @@ public class TownBlock {
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;
+	}
+	
+	public void addMetaData(CustomDataField md) {
+		if (getMetadata() == null)
+			metadata = new HashSet<>();
+		
+		getMetadata().add(md);
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+	
+	public void removeMetaData(CustomDataField md) {
+		if (!hasMeta())
+			return;
+		
+		getMetadata().remove(md);
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
+
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+
+	public HashSet<CustomDataField> getMetadata() {
+		return metadata;
+	}
+
+	public boolean hasMeta() {
+		return getMetadata() != null;
+	}
+
+	public void setMetadata(String str) {
+		
+		if (metadata == null)
+			metadata = new HashSet<>();
+		
+		String[] objects = str.split(";");
+		for (int i = 0; i < objects.length; i++) {
+			metadata.add(CustomDataField.load(objects[i]));
+		}
 	}
 }

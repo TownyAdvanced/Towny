@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import com.palmergames.bukkit.towny.object.Town;
 
 
 public class NewTownEvent extends Event  {
@@ -24,6 +24,7 @@ public class NewTownEvent extends Event  {
 	}
 
     public NewTownEvent(Town town) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.town = town;
     }
 

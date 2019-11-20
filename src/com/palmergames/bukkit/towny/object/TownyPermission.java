@@ -6,9 +6,10 @@ import com.palmergames.bukkit.util.Colors;
 //TODO: 12 permission so far. Anything else will expand it to include even more variables. Possibly change the data structure.
 public class TownyPermission {
 
-	public boolean residentBuild, residentDestroy, residentSwitch,
-			residentItemUse, outsiderBuild, outsiderDestroy, outsiderSwitch,
-			outsiderItemUse, allyBuild, allyDestroy, allySwitch, allyItemUse;
+	public boolean residentBuild, residentDestroy, residentSwitch, residentItemUse, 
+			outsiderBuild, outsiderDestroy, outsiderSwitch, outsiderItemUse, 
+			allyBuild, allyDestroy, allySwitch, allyItemUse, 
+			nationBuild, nationDestroy, nationSwitch, nationItemUse;
 	public boolean pvp, fire, explosion, mobs;
 
 	public TownyPermission() {
@@ -35,6 +36,10 @@ public class TownyPermission {
 		allyDestroy = b;
 		allySwitch = b;
 		allyItemUse = b;
+		nationBuild = b;
+		nationDestroy = b;
+		nationSwitch = b;
+		nationItemUse = b;
 
 		pvp = b;
 		fire = b;
@@ -70,6 +75,14 @@ public class TownyPermission {
 			allySwitch = b;
 		else if (s.equalsIgnoreCase("allyItemUse"))
 			allyItemUse = b;
+		else if (s.equalsIgnoreCase("nationBuild"))
+			nationBuild = b;
+		else if (s.equalsIgnoreCase("nationDestroy"))
+			nationDestroy = b;
+		else if (s.equalsIgnoreCase("nationSwitch"))
+			nationSwitch = b;
+		else if (s.equalsIgnoreCase("nationItemUse"))
+			nationItemUse = b;
 		else if (s.equalsIgnoreCase("pvp"))
 			pvp = b;
 		else if (s.equalsIgnoreCase("fire"))
@@ -116,6 +129,14 @@ public class TownyPermission {
 			out += (out.length() > 0 ? "," : "") + "allySwitch";
 		if (allyItemUse)
 			out += (out.length() > 0 ? "," : "") + "allyItemUse";
+		if (nationBuild)
+			out += (out.length() > 0 ? "," : "") + "nationBuild";
+		if (nationDestroy)
+			out += (out.length() > 0 ? "," : "") + "nationDestroy";
+		if (nationSwitch)
+			out += (out.length() > 0 ? "," : "") + "nationSwitch";
+		if (nationItemUse)
+			out += (out.length() > 0 ? "," : "") + "nationItemUse";
 		if (pvp)
 			out += (out.length() > 0 ? "," : "") + "pvp";
 		if (fire)
@@ -140,7 +161,7 @@ public class TownyPermission {
 	}
 
 	public enum PermLevel {
-		RESIDENT, ALLY, OUTSIDER;
+		RESIDENT, NATION, ALLY, OUTSIDER;
 
 		@Override
 		public String toString() {
@@ -197,9 +218,29 @@ public class TownyPermission {
 		}
 	}
 
+	public boolean getNationPerm(ActionType type) {
+
+		switch (type) {
+		case BUILD:
+			return nationBuild;
+		case DESTROY:
+			return nationDestroy;
+		case SWITCH:
+			return nationSwitch;
+		case ITEM_USE:
+			return nationItemUse;
+		default:
+			throw new UnsupportedOperationException();
+		}
+	}
 	public String getColourString() {
 
-		return Colors.LightGreen + "Build = " + Colors.LightGray + (residentBuild ? "f" : "-") + (allyBuild ? "a" : "-") + (outsiderBuild ? "o" : "-") + Colors.LightGreen + " Destroy = " + Colors.LightGray + (residentDestroy ? "f" : "-") + (allyDestroy ? "a" : "-") + (outsiderDestroy ? "o" : "-") + Colors.LightGreen + " Switch = " + Colors.LightGray + (residentSwitch ? "f" : "-") + (allySwitch ? "a" : "-") + (outsiderSwitch ? "o" : "-") + Colors.LightGreen + " Item = " + Colors.LightGray + (residentItemUse ? "f" : "-") + (allyItemUse ? "a" : "-") + (outsiderItemUse ? "o" : "-");
+		return Colors.LightGreen + "Build = " + Colors.LightGray + (residentBuild ? "f" : "-") + (nationBuild ? "n" : "-") + (allyBuild ? "a" : "-") + (outsiderBuild ? "o" : "-") + 
+				Colors.LightGreen + " Destroy = " + Colors.LightGray + (residentDestroy ? "f" : "-") + (nationDestroy ? "n" : "-") + (allyDestroy ? "a" : "-") + (outsiderDestroy ? "o" : "-"); 
+	}
+	public String getColourString2() {
+		return Colors.LightGreen + "Switch = " + Colors.LightGray + (residentSwitch ? "f" : "-") + (nationSwitch ? "n" : "-") + (allySwitch ? "a" : "-") + (outsiderSwitch ? "o" : "-") + 
+				Colors.LightGreen + " Item = " + Colors.LightGray + (residentItemUse ? "f" : "-") + (nationItemUse ? "n" : "-") + (allyItemUse ? "a" : "-") + (outsiderItemUse ? "o" : "-");
 	}
 
 	public void loadDefault(TownBlockOwner owner) {
@@ -208,6 +249,10 @@ public class TownyPermission {
 		residentDestroy = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.DESTROY);
 		residentSwitch = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.SWITCH);
 		residentItemUse = TownySettings.getDefaultPermission(owner, PermLevel.RESIDENT, ActionType.ITEM_USE);
+		nationBuild = TownySettings.getDefaultPermission(owner, PermLevel.NATION, ActionType.BUILD);
+		nationDestroy = TownySettings.getDefaultPermission(owner, PermLevel.NATION, ActionType.DESTROY);
+		nationSwitch = TownySettings.getDefaultPermission(owner, PermLevel.NATION, ActionType.SWITCH);
+		nationItemUse = TownySettings.getDefaultPermission(owner, PermLevel.NATION, ActionType.ITEM_USE);
 		allyBuild = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.BUILD);
 		allyDestroy = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.DESTROY);
 		allySwitch = TownySettings.getDefaultPermission(owner, PermLevel.ALLY, ActionType.SWITCH);

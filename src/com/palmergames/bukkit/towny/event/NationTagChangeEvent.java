@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -18,6 +19,7 @@ public class NationTagChangeEvent extends Event {
     }
 
     public NationTagChangeEvent(String newTag) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.newTag = newTag;
     }
 
