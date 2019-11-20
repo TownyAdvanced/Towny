@@ -52,7 +52,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				}
 				p.teleport(resident.getTeleportDestination());
 				if (TownySettings.getSpawnCooldownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(resident, CooldownType.TELEPORT);
+					CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
 				teleportQueue.poll();
 			} else {
 				break;
