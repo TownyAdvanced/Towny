@@ -122,7 +122,7 @@ public class TownyTimerHandler{
 	public static void toggleCooldownTimer(boolean on) {
 		
 		if (on && !isCooldownTimerRunning()) {
-			cooldownTimerTask = BukkitTools.scheduleSyncRepeatingTask(new CooldownTimerTask(plugin), 0, 20);
+			cooldownTimerTask = BukkitTools.scheduleAsyncRepeatingTask(new CooldownTimerTask(plugin), 0, 20);
 			if (cooldownTimerTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule cooldown timer loop.");			
 		} else if (!on && isCooldownTimerRunning()) {
