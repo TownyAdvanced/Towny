@@ -104,18 +104,18 @@ public class SiegeWarBlockPlacingUtil {
 			} catch (NotRegisteredException e) {
 			}
 
-			if (townBlock.hasTown()) {
+			if (!townBlock.hasTown()) {
 				return false;
 			}
 
-			Town townWhereBlockWasPlaced = null;
+			Town town = null;
 			try {
-				townWhereBlockWasPlaced = townBlock.getTown();
+				town = townBlock.getTown();
 			} catch (NotRegisteredException e) {
 			}
 
 			//If there is no siege, do normal block placement
-			if (!townWhereBlockWasPlaced.hasSiege())
+			if (!town.hasSiege())
 				return false;
 
 			//During a siege or aftermath, all in-town banner placement is restricted to siege actions only
@@ -124,7 +124,7 @@ public class SiegeWarBlockPlacingUtil {
 				//White banner
 				SurrenderTown.processTownSurrenderRequest(
 					player,
-					townWhereBlockWasPlaced,
+					town,
 					event);
 				return true;
 			} else {
@@ -132,7 +132,7 @@ public class SiegeWarBlockPlacingUtil {
 				InvadeTown.processInvadeTownRequest(
 					plugin,
 					player,
-					townWhereBlockWasPlaced.getName(),
+					town.getName(),
 					event);
 				return true;
 			}

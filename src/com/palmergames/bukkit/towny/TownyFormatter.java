@@ -431,18 +431,13 @@ public class TownyFormatter {
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
 		//Siege War Info
-		if(TownySettings.getWarSiegeEnabled()) {
+		if(TownySettings.getWarSiegeEnabled() && !town.isRuined()) {
 
 			// Plunder Value: $55,000
 			if(TownySettings.isUsingEconomy()) {
 				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
 			}
 
-			//Revolt Cooldown Timer: 71.8 hours
-			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
-				out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
-			}
-			
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
@@ -501,6 +496,11 @@ public class TownyFormatter {
 				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeCooldownActive()) {
 					out.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
 				}
+			}
+
+			//Revolt Cooldown Timer: 71.8 hours
+			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
+				out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 			}
 
 		}
