@@ -2,7 +2,7 @@ name: Towny
 version: 0.63
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu
-website: 'http://townyadvanced.github.io'
+website: 'http://townyadvanced.github.io/'
 description: >
     Archivo con todos los mensajes del juego, no modificar.
     Si aun asi deseas modificarlo, haz una copia de seguridad antes.

@@ -2,7 +2,7 @@ name: Towny
 version: 0.63
 language: español
 author: VreyaViress
-website: 'http://townyadvanced.github.io'
+website: 'http://townyadvanced.github.io/'
 description: >
     Archivo de lenguaje para todos los mensajes del juego.  No altere este archivo.
     Si desea cambiar alguna de las entradas, haga una copia con otro nombre.

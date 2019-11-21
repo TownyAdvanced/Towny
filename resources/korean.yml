@@ -2,7 +2,7 @@ name: Towny
 version: 0.63
 language: 한국어
 author: 'Daybreak 새벽'
-website: 'http://townyadvanced.github.io'
+website: 'http://townyadvanced.github.io/'
 description: >
   플러그인의 모든 메시지들이 저장된 언어 파일입니다. 이 파일을 수정하지 마십시오.
   만약 수정을 원한다면, 다른 이름의 복제본을 만드십시오.
