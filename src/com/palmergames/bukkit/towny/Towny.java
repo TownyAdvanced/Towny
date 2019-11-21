@@ -545,6 +545,8 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Resets all Online player caches if their location equals this one
+	 * 
+	 * @param worldCoord - the location to check for
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 

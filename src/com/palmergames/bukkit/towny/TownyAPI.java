@@ -236,8 +236,8 @@ public class TownyAPI {
     /**
      * Returns value of usingTowny for the given world.
      * 
-     * @param world
-     * @return
+     * @param world - the world to check
+     * @return true or false
      */
     public boolean isTownyWorld(World world) {
     	try {

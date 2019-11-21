@@ -102,8 +102,9 @@ public class TownyFormatter {
 	}
 
 	/**
+	 * Gets the metadata of a TownBlock
 	 * 
-	 * @param townBlock
+	 * @param townBlock the TownBlock to check
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownBlock townBlock) {
@@ -141,9 +142,10 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * 
-	 * @param resident
-	 * @param player
+	 *  Gets the metadata of a Resident
+	 *  
+	 * @param resident the resident to check the status of
+	 * @param player make sure the resident is an online player
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Resident resident, Player player) {
@@ -243,7 +245,7 @@ public class TownyFormatter {
 	/**
 	 * Returns a Chat Formatted List of all town residents who hold a rank.
 	 * 
-	 * @param town
+	 * @param town the town for which to check against.
 	 * @return a list containing formatted rank data.
 	 */
 	public static List<String> getRanks(Town town) {
@@ -303,8 +305,9 @@ public class TownyFormatter {
 	}	
 	
 	/**
+	 * Gets the metadata of a Town
 	 * 
-	 * @param town
+	 * @param town the town in which to check
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Town town) {
@@ -433,8 +436,9 @@ public class TownyFormatter {
 	}
 
 	/**
+	 * Gets the metadata of a Nation
 	 * 
-	 * @param nation
+	 * @param nation the nation to check against
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(Nation nation) {
@@ -544,8 +548,9 @@ public class TownyFormatter {
 	}
 
 	/**
+	 * Gets the metadata for a World
 	 * 
-	 * @param world
+	 * @param world the world to check
 	 * @return a string list containing the results.
 	 */
 	public static List<String> getStatus(TownyWorld world) {
@@ -595,7 +600,7 @@ public class TownyFormatter {
 	/**
 	 * Returns the tax info this resident will have to pay at the next new day.
 	 * 
-	 * @param resident
+	 * @param resident the resident to check
 	 * @return tax status message
 	 */
 	public static List<String> getTaxStatus(Resident resident) {

@@ -151,8 +151,8 @@ public class TownyEconomyHandler {
 	/**
 	 * Check if account exists
 	 * 
-	 * @param accountName
-	 * @return
+	 * @param accountName the economy account to check
+	 * @return true if the account exists
 	 */
 	public static boolean hasEconomyAccount(String accountName) {
 
@@ -175,8 +175,8 @@ public class TownyEconomyHandler {
 	/**
 	 * Check if account exists
 	 * 
-	 * @param uniqueId
-	 * @return
+	 * @param uniqueId the UUID of the account to check
+	 * @return true if the account exists
 	 */
 	public static boolean hasEconomyAccount(UUID uniqueId) {
 		switch (Type) {
@@ -197,6 +197,8 @@ public class TownyEconomyHandler {
 
 	/**
 	 * Attempt to delete the economy account.
+	 * 
+	 * @param accountName name of the account to delete
 	 */
 	public static void removeAccount(String accountName) {
 
@@ -230,7 +232,8 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns the accounts current balance
 	 * 
-	 * @param accountName
+	 * @param accountName name of the economy account
+	 * @param world name of world to check in (for TNE Reserve)   
 	 * @return double containing the total in the account
 	 */
 	public static double getBalance(String accountName, World world) {
@@ -260,8 +263,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Returns true if the account has enough money
 	 * 
-	 * @param accountName
-	 * @param amount
+	 * @param accountName name of an economy account
+	 * @param amount minimum amount to check against (Double)
+	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
 	public static boolean hasEnough(String accountName, Double amount, World world) {
@@ -275,8 +279,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Attempts to remove an amount from an account
 	 * 
-	 * @param accountName
-	 * @param amount
+	 * @param accountName name of the account to modify
+	 * @param amount amount of currency to remove from the account
+	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
 	public static boolean subtract(String accountName, Double amount, World world) {
@@ -305,9 +310,9 @@ public class TownyEconomyHandler {
 	/**
 	 * Add funds to an account.
 	 * 
-	 * @param accountName
-	 * @param amount
-	 * @param world
+	 * @param accountName account to add funds to
+	 * @param amount amount of currency to add
+	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
 	public static boolean add(String accountName, Double amount, World world) {
@@ -360,7 +365,7 @@ public class TownyEconomyHandler {
 	/**
 	 * Format this balance according to the current economy systems settings.
 	 * 
-	 * @param balance
+	 * @param balance account balance passed by the economy handler
 	 * @return string containing the formatted balance
 	 */
 	public static String getFormattedBalance(double balance) {

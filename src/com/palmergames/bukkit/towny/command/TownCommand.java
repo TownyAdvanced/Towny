@@ -2659,7 +2659,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param sender - Sender.
 	 * @param specifiedTown - Town to add to if not null.
 	 * @param names - Names to add.
-	 * @throws TownyException 
+	 * @throws TownyException - General Exception, or if Town's spawn has not been set
 	 */
 	public static void townAdd(Object sender, Town specifiedTown, String[] names) throws TownyException {
 

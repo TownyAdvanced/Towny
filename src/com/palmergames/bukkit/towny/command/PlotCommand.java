@@ -707,7 +707,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @param worldCoord - worldCoord.
 	 * @param type - plot type.
 	 * @throws TownyException - Exception.
-	 * @throws EconomyException 
+	 * @throws EconomyException - Exception thrown if error with economy.
 	 */
 	public void setPlotType(Resident resident, WorldCoord worldCoord, String type) throws TownyException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
