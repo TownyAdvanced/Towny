@@ -929,7 +929,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param sender - Sender (player or console.)
 	 * @param split  - Current command arguments.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	public void listTowns(CommandSender sender, String[] split) {
 		
 		if (split.length == 2 && split[1].equals("?")) {
@@ -2264,14 +2264,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town = resident.getTown();
 				notAffordMSG = TownySettings.getLangString("msg_err_cant_afford_tp");
 
-				SpawnUtil.Spawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
+				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 
 			} else {
 				// split.length > 1
 				town = townyUniverse.getDataSource().getTown(split[0]);
 				notAffordMSG = String.format(TownySettings.getLangString("msg_err_cant_afford_tp_town"), town.getName());
 
-				SpawnUtil.Spawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
+				SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, SpawnType.TOWN);
 
 			}
 		} catch (NotRegisteredException e) {
