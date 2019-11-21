@@ -564,7 +564,24 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
-			town.setPermissions("residentBuild,residentDestroy,residentSwitch,residentItemUse,outsiderBuild,outsiderDestroy,outsiderSwitch,outsiderItemUse,nationBuild,nationDestroy,nationSwitch,nationItemUse,allyBuild,allyDestroy,allySwitch,allyItemUse,pvp,fire,explosion,mobs");
+			for (String element : new String[] { "residentBuild",
+				"residentDestroy", "residentSwitch",
+				"residentItemUse", "outsiderBuild",
+				"outsiderDestroy", "outsiderSwitch",
+				"outsiderItemUse", "allyBuild", "allyDestroy",
+				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
+				"nationSwitch", "nationItemUse",
+				"pvp", "fire", "explosion", "mobs"})   
+			{
+				town.getPermissions().set(element, true);
+			}
+			
+			//Reset and save town blocks
+			for(TownBlock townBlock: town.getTownBlocks()) {
+				townBlock.setType(townBlock.getType());
+				universe.getDataSource().saveTownBlock(townBlock);
+			}
+			
 		} else {
 			removeTownBlocks(town);
 		}
@@ -618,7 +635,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		plugin.resetCache();
-
+		
 		if(delayFullRemoval) {
 			saveTown(town);
 		} else {
