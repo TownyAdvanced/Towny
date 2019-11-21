@@ -3,7 +3,7 @@ main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
 author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
-website: https://github.com/TownyAdvanced/Towny
+website: 'http://townyadvanced.github.io/'
 prefix: Towny
 description: >
     Resident-Town-Nation heirarchy combined with a grid based

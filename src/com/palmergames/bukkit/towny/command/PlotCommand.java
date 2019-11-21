@@ -794,7 +794,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (p == null) {
 						throw new TownyException("Player could not be found.");
 					}
-					p.sendMessage(TownySettings.getLangString("msg_err_plot_nfs"));
+					p.sendMessage(TownySettings.getLangString("msg_plot_set_to_nfs"));
 				}
 
 				// Save this townblock so the for sale status is remembered.
