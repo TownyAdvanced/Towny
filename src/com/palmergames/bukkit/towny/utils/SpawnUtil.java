@@ -199,11 +199,8 @@ public class SpawnUtil {
 				throw new TownyException(TownySettings.getLangString("msg_err_not_public"));
 
 			// Prevent outlaws from spawning into towns they're considered an outlaw in.
-			if (!isTownyAdmin) {
-				if (town.hasOutlaw(resident))
-					throw new TownyException(String.format(
-							TownySettings.getLangString("msg_error_cannot_town_spawn_youre_an_outlaw_in_town"), town));
-			}
+			if (!isTownyAdmin && town.hasOutlaw(resident))
+					throw new TownyException(String.format(TownySettings.getLangString("msg_error_cannot_town_spawn_youre_an_outlaw_in_town"), town));
 
 			break;
 		case NATION:
@@ -213,7 +210,7 @@ public class SpawnUtil {
 			// Determine conditions
 			if (isTownyAdmin) {
 				nationSpawnPermission = NationSpawnLevel.ADMIN;
-			} else if ((split.length == 0)) {
+			} else if (split.length == 0) {
 				nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
 			} else {
 				// split.length > 1
@@ -221,14 +218,13 @@ public class SpawnUtil {
 					nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
 				} else if (resident.hasNation()) {
 					Nation playerNation = resident.getTown().getNation();
-					Nation targetNation = nation;
 
-					if (playerNation == targetNation) {
+					if (playerNation == nation) {
 						nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
-					} else if (targetNation.hasEnemy(playerNation)) {
+					} else if (nation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel.
 						throw new TownyException(TownySettings.getLangString("msg_err_public_spawn_enemy"));
-					} else if (targetNation.hasAlly(playerNation)) {
+					} else if (nation.hasAlly(playerNation)) {
 						nationSpawnPermission = NationSpawnLevel.NATION_ALLY;
 					} else {
 						nationSpawnPermission = NationSpawnLevel.UNAFFILIATED;
@@ -280,19 +276,12 @@ public class SpawnUtil {
 			}
 		}
 
-		Double travelCost = 0.0;
+		double travelCost = 0.0;
 		String spawnPermission = null;
 		TownyEconomyObject payee = null;
 		// Figure out costs, payee and spawnPermmission slug for money.csv log.
 		switch (spawnType) {
 		case RESIDENT:
-			// Taking whichever is smaller, the cost of the spawn price set by the town, or
-			// the cost set in the config (which is the maximum a town can set their
-			// spawncost to.)
-			travelCost = Math.min(townSpawnPermission.getCost(town), townSpawnPermission.getCost());
-			spawnPermission = String.format(spawnType.getTypeName() + " (%s)", townSpawnPermission);
-			payee = town;
-			break;
 		case TOWN:
 			// Taking whichever is smaller, the cost of the spawn price set by the town, or
 			// the cost set in the config (which is the maximum a town can set their
@@ -321,9 +310,6 @@ public class SpawnUtil {
 		} catch (EconomyException ignored) {
 		}
 
-		// Used later to make sure the chunk we teleport to is loaded.
-		Chunk chunk = spawnLoc.getChunk();
-
 		// Essentials tests.
 		boolean usingESS = plugin.isEssentials();
 
@@ -335,8 +321,6 @@ public class SpawnUtil {
 				if (!essentialsUser.isJailed()) {
 
 					Teleport teleport = essentialsUser.getTeleport();
-					if (!chunk.isLoaded())
-						chunk.load();
 					// Cause an essentials exception if in cooldown.
 					teleport.cooldown(true);
 					teleport.teleport(spawnLoc, null, TeleportCause.COMMAND);
@@ -362,6 +346,9 @@ public class SpawnUtil {
 			} catch (EconomyException ignored) {
 			}
 		}
+		
+		// Used later to make sure the chunk we teleport to is loaded.
+		Chunk chunk = spawnLoc.getChunk();
 
 		// If an Admin or Essentials teleport isn't being used, use our own.
 		if (isTownyAdmin) {
