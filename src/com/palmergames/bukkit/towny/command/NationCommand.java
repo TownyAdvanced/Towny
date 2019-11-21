@@ -29,7 +29,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -1100,7 +1100,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							+ " Either wait for revolt immunity to expire, or persuade the king (or an assistant) to kick your town.");
 
 				//Activate revolt immunity
-				SiegeWarUtil.activateRevoltImmunityTimer(town);
+				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
 				//End siege immunity
 				town.setSiegeImmunityEndTime(0);
 

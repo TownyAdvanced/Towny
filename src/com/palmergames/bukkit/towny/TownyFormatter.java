@@ -440,9 +440,9 @@ public class TownyFormatter {
 
 			//Revolt Cooldown Timer: 71.8 hours
 			if(TownySettings.getWarSiegeRevoltEnabled() && town.isRevoltCooldownActive()) {
-				out.add(String.format(TownySettings.getLangString("status_town_revolt_cooldown_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
+				out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 			}
-
+			
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
@@ -495,6 +495,11 @@ public class TownyFormatter {
 						out.add(siegeStatus);
 						out.add(siegeImmunityTimer);
 					break;
+				}
+			} else {
+				//Siege Cooldown Timer: 100.8 hours
+				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeCooldownActive()) {
+					out.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
 				}
 			}
 

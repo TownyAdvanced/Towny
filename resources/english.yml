@@ -782,8 +782,8 @@ status_town_reslist: '&2Residents &a[%s]&2: &f'
 
 #Sieges
 status_town_siege_plunder_value: '&2Plunder Value: &a%s'
-status_town_siege_cooldown_timer: '&2Siege Immunity Timer: &a%s'
-status_town_revolt_cooldown_timer: '&2Revolt Immunity Timer: &a%s'
+status_town_siege_immunity_timer: '&2Siege Immunity Timer: &a%s'
+status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
 status_town_siege_summary_prefix: '&2Siege Status: '
 status_town_siege_plundered_prefix: '&2Town Plundered: '
 status_town_siege_invaded_prefix: '&2Town Invaded: '

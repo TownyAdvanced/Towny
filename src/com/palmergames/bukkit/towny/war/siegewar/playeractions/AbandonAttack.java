@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDbUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.block.Block;
@@ -105,7 +105,7 @@ public class AbandonAttack {
         TownyMessaging.sendGlobalMessage(siegeZone.getAttackingNation().getName() + " has abandoned their attack on" + siegeZone.getDefendingTown().getName());
 
         if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
-            SiegeWarUtil.updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
+            SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
                     SiegeStatus.ATTACKER_ABANDON,
                     null);
             TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");

@@ -6,15 +6,21 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
@@ -40,7 +46,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		if (TownySettings.getWarSiegeEnabled()) {
-			System.out.println("Nowevaluating siegewar timer");
 			
 			evaluateSiegeZones();
 
@@ -64,7 +69,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	//Cycle through all sieges
 	private void evaluateSieges() {
-		for(com.palmergames.bukkit.towny.war.siegewar.locations.Siege siege: SiegeWarUtil.getAllSieges()) {
+		for(com.palmergames.bukkit.towny.war.siegewar.locations.Siege siege: getAllSieges()) {
 			evaluateSiege(siege);
 		}
 	}
@@ -157,7 +162,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			//If scheduled end time has arrived, choose winner
 			if (System.currentTimeMillis() > siege.getScheduledEndTime()) {
-				TownyObject siegeWinner = SiegeWarUtil.calculateSiegeWinner(siege);
+				TownyObject siegeWinner = SiegeWarPointsUtil.calculateSiegeWinner(siege);
 				if (siegeWinner instanceof Town) {
 					DefenderWin.defenderWin(siege, (Town) siegeWinner);
 				} else {
@@ -188,13 +193,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		if (playerScoreTimeMap.containsKey(player)) {
 
 			//Player must still be in zone
-			if (!SiegeWarUtil.isPlayerInSiegePointZone(player, siegeZone)) {
+			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				playerScoreTimeMap.remove(player);
 				return true;
 			}
 
 			//Player must still be in the open
-			if(SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				playerScoreTimeMap.remove(player);
 				return true;
 			}
@@ -212,12 +217,12 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 		} else {
 			//Player must be in zone
-			if (!SiegeWarUtil.isPlayerInSiegePointZone(player, siegeZone)) {
+			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				return false;
 			}
 
 			//Player must be in the open
-			if(SiegeWarUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				return false;
 			}
 
@@ -281,6 +286,17 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 
 		return siegeZoneChanged;
+	}
+
+
+	private static List<Siege> getAllSieges() {
+		List<Siege> result = new ArrayList<>();
+		for(SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
+			if(!result.contains(siegeZone.getSiege())) {
+				result.add(siegeZone.getSiege());
+			}
+		}
+		return result;
 	}
 
 }

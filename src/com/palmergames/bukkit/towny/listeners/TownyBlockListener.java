@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarBlockController;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -62,7 +62,7 @@ public class TownyBlockListener implements Listener {
 
 		//Siege War
 		if (TownySettings.getWarSiegeEnabled()) {
-			boolean skipPermChecks = SiegeWarBlockController.evaluateSiegeWarBreakBlockRequest(player, block, event);
+			boolean skipPermChecks = SiegeWarBlockUtil.evaluateSiegeWarBreakBlockRequest(player, block, event);
 			if (skipPermChecks) {
 				return;
 			}
@@ -143,7 +143,7 @@ public class TownyBlockListener implements Listener {
 
 			//Siege War
 			if (TownySettings.getWarSiegeEnabled()) {
-				boolean skipPermChecks = SiegeWarBlockController.evaluateSiegeWarPlaceBlockRequest(player, block,event, plugin);
+				boolean skipPermChecks = SiegeWarBlockUtil.evaluateSiegeWarPlaceBlockRequest(player, block,event, plugin);
 				if(skipPermChecks) {
 					return;
 				}

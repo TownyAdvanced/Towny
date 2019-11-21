@@ -13,7 +13,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.util.ChatTools;
@@ -77,7 +77,7 @@ public class InvadeTown {
 
     public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
-        SiegeWarUtil.activateRevoltImmunityTimer(defendingTown);
+        SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown);
 
         if(defendingTown.hasNation()) {
             Nation nationOfDefendingTown = null;

@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDbUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import org.bukkit.entity.Player;
@@ -52,7 +52,7 @@ public class SurrenderTown {
     }
 
     private static void defenderSurrender(Siege siege) throws TownyException {
-        SiegeWarUtil.updateAndSaveSiegeCompletionValues(siege,
+        SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siege,
                                             SiegeStatus.DEFENDER_SURRENDER,
                                             siege.getActiveAttackers().get(0));
 

@@ -1,12 +1,15 @@
-package com.palmergames.bukkit.towny.war.siegewar;
+package com.palmergames.bukkit.towny.war.siegewar.utils;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -17,7 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SiegeWarBlockController {
+public class SiegeWarBlockUtil {
 	
 	/*
 	 * coloured banner - could be attack or invade
@@ -54,21 +57,50 @@ public class SiegeWarBlockController {
 		String blockTypeName = block.getType().getKey().getKey();
 
 		if (blockTypeName.contains("banner")) {
-			Siege activeSiege = SiegeWarUtil.getActiveSiegeGivenBannerLocation(block.getLocation());
-
-			if (activeSiege == null) {
+			if (isBlockNearAnActiveSiegeBanner(block)) {
 				//This is not a siege banner
 				return false;
 			} else {
 				//This block is the banner of an active siege
 				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, "\"This is a siege banner. It cannot be destroyed while the associated siege attack is in progress.");
+				TownyMessaging.sendErrorMsg(player, "\"This is a siege banner. While the siege is in progress, you cannot destroy blocks near it.");
 				return true;
 			}
 		} else {
 			return false;
 		}
 	}
+
+
+	private static boolean isBlockNearAnActiveSiegeBanner(Block block) {
+		//Look through all siege zones
+		//Note that we don't just look at the town at the given location
+		//....because mayor may have unclaimed the plot after the siege started
+
+		//Location must ne nearby
+		//Siege must be in progress
+		//Siege zone must be active
+		Location blockLocation = block.getLocation();
+		Location flagLocation;
+
+		for (SiegeZone siegeZone : com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getSiegeZones()) {
+			flagLocation = siegeZone.getFlagLocation();
+			if (
+				blockLocation.getWorld() == flagLocation.getWorld()
+					&& (Math.abs(blockLocation.getX() - flagLocation.getX()) < 3)
+					&& (Math.abs(blockLocation.getY() - flagLocation.getY()) < 3)
+					&& (Math.abs(blockLocation.getZ() - flagLocation.getZ()) < 3)
+			) {
+				if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.isActive()) {
+					return true;
+				} 
+			}
+		}
+
+		//No active siege banner found near given block
+		return false;
+	}
+
 
 	private static boolean evaluateSiegeWarPlaceBannerRequest(Player player,
 													   Block block,
@@ -238,5 +270,27 @@ public class SiegeWarBlockController {
 
 	}
 
+
+	public static boolean doesPlayerHaveANonAirBlockAboveThem(Player player) {
+		return doesLocationHaveANonAirBlockAboveIt(player.getLocation());
+	}
+
+	public static boolean doesBlockHaveANonAirBlockAboveIt(Block block) {
+		return doesLocationHaveANonAirBlockAboveIt(block.getLocation());
+	}
+
+	private static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
+		location = location.add(0,1,0);
+
+		while(location.getY() < 256)
+		{
+			if(location.getBlock().getType() != Material.AIR)
+			{
+				return true;   //There is a non-air block above them
+			}
+			location.add(0,1,0);
+		}
+		return false;  //There is nothing but air above them
+	}
 
 }
