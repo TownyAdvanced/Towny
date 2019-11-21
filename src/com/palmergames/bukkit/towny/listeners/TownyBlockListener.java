@@ -403,7 +403,16 @@ public class TownyBlockListener implements Listener {
 
 		//Get Town Where block was placed
 		Town townWhereBlockWasPlaced;
-		TownBlock townBlock = TownyUniverse.getTownBlock(block.getLocation());
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyWorld world;
+		try {
+			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		Coord coord = Coord.parseCoord(block);
+		TownBlock townBlock = world.getTownBlock(coord);
+		
 		if (townBlock != null && townBlock.hasTown()) {
 			townWhereBlockWasPlaced = townBlock.getTown();
 		} else {
@@ -416,7 +425,7 @@ public class TownyBlockListener implements Listener {
 		 * it is evaluated as a siege action
 		*/
 		if (townWhereBlockWasPlaced.hasSiege()) {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			Siege siege = townWhereBlockWasPlaced.getSiege();
 
 			if(resident.hasTown()
