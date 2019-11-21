@@ -484,14 +484,14 @@ public class TownyFormatter {
 						String townInvaded = TownySettings.getLangString("status_town_siege_invaded_prefix") + (siege.isTownInvaded() ? yes : no);
 						out.add(siegeStatus);
 						out.add(townInvaded + "  " + townPlundered);
-						String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
 						out.add(siegeImmunityTimer);
 					break;
 
 					case DEFENDER_WIN:
 					case ATTACKER_ABANDON:
 						siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
-						siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_cooldown_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
 						out.add(siegeStatus);
 						out.add(siegeImmunityTimer);
 					break;

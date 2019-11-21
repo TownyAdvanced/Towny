@@ -11,7 +11,7 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockPlacingUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
@@ -199,7 +199,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 
 			//Player must still be in the open
-			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockPlacingUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				playerScoreTimeMap.remove(player);
 				return true;
 			}
@@ -222,7 +222,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 
 			//Player must be in the open
-			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockPlacingUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				return false;
 			}
 
