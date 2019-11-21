@@ -41,7 +41,6 @@ public class SpawnUtil {
 	
 	public static void Spawn (Player player, String[] split, TownyObject townyObject, String notAffordMSG, Boolean outpost, SpawnType spawnType) throws TownyException, EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		System.out.println("Start Spawn() in SpawnUtil");
 		
 		boolean isTownyAdmin = false;
         switch (spawnType) {
@@ -57,7 +56,6 @@ public class SpawnUtil {
         default:
         	break;
         }
-        System.out.println("isTownyAdmin = " + isTownyAdmin);
 
         Resident resident = townyUniverse.getDataSource().getResident(player.getName());
         // test if the resident is in a teleport cooldown.
@@ -76,10 +74,8 @@ public class SpawnUtil {
         Location spawnLoc = null;
         TownSpawnLevel townSpawnPermission = null;
         NationSpawnLevel nationSpawnPermission = null;
-		
-        
-        System.out.println("preSpawnLevel switch(spawntype)");
-		// Figure out which Town/NationSpawnLevel this is.
+
+        // Figure out which Town/NationSpawnLevel this is.
         // Resolves where the spawnLoc.
         switch (spawnType) {
         case RESIDENT:        	
@@ -243,10 +239,6 @@ public class SpawnUtil {
         	break;
         }
 
-        
-        System.out.println("postSpawnLevel switch(spawntype)");
-        
-        System.out.println("pre disallowed zones");
 		// Prevent spawn travel while in disallowed zones (if configured)
 		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
@@ -272,7 +264,6 @@ public class SpawnUtil {
 				}
 			}
 		}
-		System.out.println("post disallowed zones");
 
 		Double travelCost = 0.0;
 		String spawnPermission = null;
@@ -299,22 +290,19 @@ public class SpawnUtil {
         default:
         	break;
         }
-		System.out.println("post costs/payee/spawnPermission switch(spawnType)");
+
 		// Check if need/can pay
 		if ((!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) && 
 				(travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)))
 			throw new TownyException(notAffordMSG);
-		System.out.println("post can-pay");
+
 		// Used later to make sure the chunk we teleport to is loaded.
 		Chunk chunk = spawnLoc.getChunk();
-		System.out.println("post chunk");
 		
 		// Essentials tests
 		boolean usingESS = plugin.isEssentials();
-		System.out.println("post usingEss set");
 
 		if (usingESS && !isTownyAdmin) {
-			System.out.println("usingEss !ta");
 			try {
 				User essentialsUser = plugin.getEssentials().getUser(player);
 
@@ -333,10 +321,7 @@ public class SpawnUtil {
 				return;
 			}
 		}
-		System.out.println("payee = " + payee);
-		System.out.println("spawnPermission = " + spawnPermission);
-		System.out.println("travelcost = "+ travelCost);
-		
+
 		// Actual taking of monies here.
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
 			if (!TownySettings.isTownSpawnPaidToTown())					
@@ -346,9 +331,7 @@ public class SpawnUtil {
 				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost)));
 			}
 		}
-		System.out.println("post paid");
 
-			
 		// If an Admin or Essentials teleport isn't being used, use our own.
 		if (isTownyAdmin) {
 			if (player.getVehicle() != null)
