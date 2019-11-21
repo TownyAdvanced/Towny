@@ -3837,3 +3837,6 @@ v0.92.0.11:
   - Language files bumped to 0.63.
   - Fix cosmetics of setting a plot not for sale appearing to display as an error.
     - Closes ticket #3503.
+  - Added SpawnUtil.
+  - Using /res spawn will now charge the town's spawn cost instead of the config's.
+    - This could mean a slight price-break.
