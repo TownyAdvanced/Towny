@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel;
@@ -37,48 +38,43 @@ public class SpawnUtil {
 	public static void initialize(Towny plugin) {
 		SpawnUtil.plugin = plugin;
 	}
-	
-	
-	public static void Spawn (Player player, String[] split, TownyObject townyObject, String notAffordMSG, Boolean outpost, SpawnType spawnType) throws TownyException, EconomyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		boolean isTownyAdmin = false;
-        switch (spawnType) {
-        case RESIDENT:
-        	isTownyAdmin = townyUniverse.getPermissionSource().isTownyAdmin(player);
-        	break;
-        case TOWN:
-        	isTownyAdmin = townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_OTHER.getNode());
-        	break;        	
-        case NATION:
-        	isTownyAdmin = townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SPAWN_OTHER.getNode());
-        	break;
-        default:
-        	break;
-        }
 
-        Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-        // test if the resident is in a teleport cooldown.
+	/**
+	 * Central Util for /res, /t, /n, /ta spawn commands. 
+	 * 
+	 * @param player - Player using spawn command.
+	 * @param split - Remaining command arguments, used primarily for outposts.
+	 * @param townyObject - Either a town or nation depending on source command.
+	 * @param notAffordMSG - Message shown when a player cannot afford their teleport.
+	 * @param outpost - Whether this is an outpost or not.
+	 * @param spawnType - SpawnType.RESIDENT/TOWN/NATION
+	 * @throws TownyException - Thrown if any of the vital conditions are not met.
+	 */
+	public static void Spawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, Boolean outpost, SpawnType spawnType) throws TownyException{
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+        // Test if the resident is in a teleport cooldown.
 		if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
 			throw new TownyException(String.format(TownySettings.getLangString("msg_err_cannot_spawn_x_seconds_remaining"), CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT))); 
 
-		// disallow jailed players from teleporting.
+		// Disallow jailed players from teleporting.
 		if (resident.isJailed()) 
 			throw new TownyException(TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
         
         Town town = null;
         Nation nation = null;
-        if (resident.hasTown())
-        	town = resident.getTown();
-
         Location spawnLoc = null;
         TownSpawnLevel townSpawnPermission = null;
-        NationSpawnLevel nationSpawnPermission = null;
-
+        NationSpawnLevel nationSpawnPermission = null;		
+		boolean isTownyAdmin = townyUniverse.getPermissionSource().has(player, spawnType.getNode());
+		
         // Figure out which Town/NationSpawnLevel this is.
-        // Resolves where the spawnLoc.
+        // Resolve where the spawnLoc will be.
         switch (spawnType) {
         case RESIDENT:        	
+            if (resident.hasTown())
+            	town = resident.getTown();
 			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null)
 				spawnLoc = player.getBedSpawnLocation();
 			else if (town != null)
@@ -239,7 +235,7 @@ public class SpawnUtil {
         	break;
         }
 
-		// Prevent spawn travel while in disallowed zones (if configured)
+		// Prevent spawn travel while in disallowed zones (if configured.)
 		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
@@ -271,7 +267,8 @@ public class SpawnUtil {
 		// Figure out costs, payee and spawnPermmission slug for money.csv log.
         switch (spawnType) {
         case RESIDENT:        	
-        	travelCost = townSpawnPermission.getCost();
+        	// Taking whichever is smaller, the cost of the spawn price set by the town, or the cost set in the config (which is the maximum a town can set their spawncost to.)
+        	travelCost = Math.min(townSpawnPermission.getCost(town), townSpawnPermission.getCost());
         	spawnPermission = String.format(spawnType.getTypeName() + " (%s)", townSpawnPermission);
         	payee = town;
         	break;        
@@ -291,15 +288,18 @@ public class SpawnUtil {
         	break;
         }
 
-		// Check if need/can pay
-		if ((!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) && 
-				(travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)))
-			throw new TownyException(notAffordMSG);
+		// Check if need/can pay.
+		try {
+			if ((!townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) && 
+					(travelCost > 0 && TownySettings.isUsingEconomy() && (resident.getHoldingBalance() < travelCost)))
+				throw new TownyException(notAffordMSG);
+		} catch (EconomyException ignored) {
+		}
 
 		// Used later to make sure the chunk we teleport to is loaded.
 		Chunk chunk = spawnLoc.getChunk();
 		
-		// Essentials tests
+		// Essentials tests.
 		boolean usingESS = plugin.isEssentials();
 
 		if (usingESS && !isTownyAdmin) {
@@ -323,12 +323,15 @@ public class SpawnUtil {
 		}
 
 		// Actual taking of monies here.
-		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
+		if (!townyUniverse.getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())) {
 			if (!TownySettings.isTownSpawnPaidToTown())					
 				payee = TownyEconomyObject.SERVER_ACCOUNT;
 			// Show message if we are using an Economy and are charging for spawn travel.
-			if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, payee, spawnPermission)) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost)));
+			try {
+				if (travelCost > 0 && TownySettings.isUsingEconomy() && resident.payTo(travelCost, payee, spawnPermission)) {
+					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_cost_spawn"), TownyEconomyHandler.getFormattedBalance(travelCost)));
+				}
+			} catch (EconomyException ignored) {
 			}
 		}
 

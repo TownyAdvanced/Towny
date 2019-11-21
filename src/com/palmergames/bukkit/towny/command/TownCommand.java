@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
@@ -44,7 +45,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
-import com.palmergames.bukkit.towny.utils.SpawnType;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -2243,9 +2243,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param split  - Current command arguments.
 	 * @param outpost - Whether this in an outpost or not.
 	 * @throws TownyException - Exception.
-	 * @throws EconomyException 
 	 */
-	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException, EconomyException {
+	public static void townSpawn(Player player, String[] split, Boolean outpost) throws TownyException{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {

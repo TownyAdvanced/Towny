@@ -11,12 +11,12 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
-import com.palmergames.bukkit.towny.utils.SpawnType;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -224,8 +224,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				SpawnUtil.Spawn(player, split, resident, TownySettings.getLangString("msg_err_cant_afford_tp"), false, SpawnType.RESIDENT);
-
-				//residentSpawn(player);
 
 			} else {
 
