@@ -3842,3 +3842,4 @@ v0.92.0.11:
     - This could mean a slight price-break.
   - Fix sending nomad outlaws to jail when killed.
     - Closes ticket #3506.
+0.95.1.7:
