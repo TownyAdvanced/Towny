@@ -5,25 +5,20 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class SiegeWarBlockBreakingUtil {
-	//While a siege exists, nobody can destroy the siege banner
+
+	//While a siege exists, nobody can destroy the siege banner or nearby blocks
 	//Returns skipAdditionalPermChecks
 	public static boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
-		String blockTypeName = block.getType().getKey().getKey();
-
-		if (blockTypeName.contains("banner")) {
-			if (isBlockNearAnActiveSiegeBanner(block)) {
-				//This is not a siege banner
-				return false;
-			} else {
-				//This block is the banner of an active siege
-				event.setCancelled(true);
-				TownyMessaging.sendErrorMsg(player, "\"This is a siege banner. While the siege is in progress, you cannot destroy blocks near it.");
-				return true;
-			}
+		if (isBlockNearAnActiveSiegeBanner(block)) {
+			//This block is the banner of an active siege
+			event.setCancelled(true);
+			TownyMessaging.sendErrorMsg(player, "While the siege is in progress you cannot destroy the siege banner or the block it is attached to.");
+			return true;
 		} else {
 			return false;
 		}
@@ -37,17 +32,20 @@ public class SiegeWarBlockBreakingUtil {
 		//Location must ne nearby
 		//Siege must be in progress
 		//Siege zone must be active
-		Location blockLocation = block.getLocation();
 		Location flagLocation;
 
 		for (SiegeZone siegeZone : com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getSiegeZones()) {
 			flagLocation = siegeZone.getFlagLocation();
-			if (
-				blockLocation.getWorld() == flagLocation.getWorld()
-					&& (Math.abs(blockLocation.getBlockX() - flagLocation.getBlockX()) < 3)
-					&& (Math.abs(blockLocation.getBlockY() - flagLocation.getBlockY()) < 3)
-					&& (Math.abs(blockLocation.getBlockZ() - flagLocation.getBlockZ()) < 3)
-			) {
+			
+			if(
+				block.getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.NORTH).getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.SOUTH).getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.EAST).getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.WEST).getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.UP).getLocation().equals(flagLocation)
+				|| block.getRelative(BlockFace.DOWN).getLocation().equals(flagLocation))
+			{
 				if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.isActive()) {
 					return true;
 				} 
