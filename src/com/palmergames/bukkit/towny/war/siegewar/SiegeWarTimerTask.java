@@ -40,7 +40,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		if (TownySettings.getWarSiegeEnabled()) {
-
+			System.out.println("Nowevaluating siegewar timer");
+			
 			evaluateSiegeZones();
 
 			evaluateSieges();

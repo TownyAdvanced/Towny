@@ -561,10 +561,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
-					(TownySettings.getWarSiegeFullTownRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
+					(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
-			town.setPermissions("residentBuild,residentDestroy,residentSwitch,residentItemUse,outsiderBuild,outsiderDestroy,outsiderSwitch,outsiderItemUse,allyBuild,allyDestroy,allySwitch,allyItemUse,pvp,fire,explosion,mobs");
+			town.setPermissions("residentBuild,residentDestroy,residentSwitch,residentItemUse,outsiderBuild,outsiderDestroy,outsiderSwitch,outsiderItemUse,nationBuild,nationDestroy,nationSwitch,nationItemUse,allyBuild,allyDestroy,allySwitch,allyItemUse,pvp,fire,explosion,mobs");
 		} else {
 			removeTownBlocks(town);
 		}
@@ -619,7 +619,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 
-		if(!delayFullRemoval) {
+		if(delayFullRemoval) {
+			saveTown(town);
+		} else {
 			deleteTown(town);
 			saveTownList();
 			try {

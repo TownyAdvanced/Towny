@@ -2799,8 +2799,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL);
 	}
 
-	public static int getWarSiegeFullTownRemovalDelayMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_FULL_TOWN_REMOVAL_DELAY_MINUTES);
+	public static int getWarSiegeRuinsRemovalDelayMinutes() {
+		return getInt(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {

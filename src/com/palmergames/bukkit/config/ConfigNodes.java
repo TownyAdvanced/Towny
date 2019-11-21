@@ -1836,9 +1836,9 @@ public enum ConfigNodes {
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
 			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
-	WAR_SIEGE_FULL_TOWN_REMOVAL_DELAY_MINUTES(
-			"war.siege.full_town_removal_delay_minutes",
-			"3",
+	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
+			"war.siege.ruins_removal_delay_minutes",
+			"1",
 			"#"),
 
 	//Siege points
