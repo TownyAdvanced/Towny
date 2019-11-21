@@ -84,10 +84,10 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
 	}
 	
-	public void sendToJail(Player player, Integer index) {
+	public void sendToJail(Player player, Integer index, Town town) {
 		this.setJailed(true);
 		this.setJailSpawn(index);
-		this.setJailTown(town.toString());
+		this.setJailTown(town.getName());
 		TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_you_have_been_sent_to_jail"));
 		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_sent_to_jail_number"), player.getName(), index));
 
@@ -125,7 +125,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 				player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 				TownyAPI.getInstance().jailTeleport(player, loc);
 
-				sendToJail(player, index);
+				sendToJail(player, index, town);
 				if (days > 0) {
 					this.setJailDays(days);
 					TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_you've_been_jailed_for_x_days"), days));
@@ -162,7 +162,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			try {
 				Location loc = town.getJailSpawn(index);
 				player.teleport(loc);
-				sendToJail(player, index);
+				sendToJail(player, index, town);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
