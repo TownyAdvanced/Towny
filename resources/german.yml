@@ -1021,3 +1021,7 @@ msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s secon
 
 # Added in 0.63
 msg_plot_set_to_nfs: 'Plot is no longer for sale.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
+msg_the_wilderness: 'the Wilderness'
+msg_enemy_areas: 'Enemy areas'
+msg_neutral_towns: 'Neutral towns'
