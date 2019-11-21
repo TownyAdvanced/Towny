@@ -3834,3 +3834,6 @@ v0.92.0.11:
     - /ta town {town} toggle pvp bypasses cooldowntimer.
   - Language files bumped to 0.62.
 0.95.1.6:
+  - Language files bumped to 0.63.
+  - Fix cosmetics of setting a plot not for sale appearing to display as an error.
+    - Closes ticket #3503.
