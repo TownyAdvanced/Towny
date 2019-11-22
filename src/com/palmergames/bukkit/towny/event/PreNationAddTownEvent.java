@@ -38,12 +38,6 @@ public class PreNationAddTownEvent extends Event implements Cancellable {
 		this.nation = nation;
 		this.nationName = nation.getName();
 	}
-	
-	public PreNationAddTownEvent(Nation nation, List<Town> towns) {
-		this.towns = towns;
-		this.nation = nation;
-		this.nationName = nation.getName();
-	}
 
 	public String getTownName() {
 		return townName;
