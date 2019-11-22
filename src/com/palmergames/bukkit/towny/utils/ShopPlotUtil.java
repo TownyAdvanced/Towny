@@ -24,9 +24,9 @@ public class ShopPlotUtil {
 	 * as well as the plot being a shop plot type. This is a simpler, probably more likely scenario
 	 * than the {@link #doesPlayerHaveAbilityToEditShopPlot(Player, Location)} test.
 	 * 
-	 * @param player
-	 * @param location
-	 * @return
+	 * @param player - {@link Player} to test
+	 * @param location - {@link Location} to test at
+	 * @return true if the player owns the plot, and it is a Shop plot
 	 */
 	public static boolean doesPlayerOwnShopPlot(Player player, Location location) {
 		boolean owner = false;
@@ -49,9 +49,9 @@ public class ShopPlotUtil {
 	 * in a town. This is a more complicated, but more permissive test than 
 	 * the {@link #doesPlayerOwnShopPlot(Player, Location)} test.
 	 * 
-	 * @param player
-	 * @param location
-	 * @return
+	 * @param player - {@link Player} to test
+	 * @param location - {@link Location} to test at
+	 * @return true if the player can build and the plot is a shop
 	 */
 	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
 		boolean build = PlayerCacheUtil.getCachePermission(player, location, Material.DIRT, ActionType.BUILD);
@@ -61,9 +61,9 @@ public class ShopPlotUtil {
 	}
 
 	/**
-	 * Use this to determine if a location is a shop plot.
+	 * Use this to determine if a {@link Location} is a shop plot.
 	 * 
-	 * @param location - Location to be tested for shop plot type. 
+	 * @param location - {@link Location} to be tested for shop plot type. 
 	 * @return true if the location is a shop plot.
 	 */
 	public static boolean isShopPlot(Location location) {
@@ -74,9 +74,9 @@ public class ShopPlotUtil {
 	}
 
 	/**
-	 * Use this to determine if a townblock is a shop plot. 
+	 * Use this to determine if a {@link TownBlock} is a shop plot. 
 	 * 
-	 * @param townblock - Townblock to be tested for shop type.
+	 * @param townblock - {@link TownBlock} to be tested for shop type.
 	 * @return true if the townblock is a shop plot. 
 	 */
 	public static boolean isShopPlot(TownBlock townblock) {

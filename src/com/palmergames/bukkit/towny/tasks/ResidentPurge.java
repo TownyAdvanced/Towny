@@ -21,7 +21,10 @@ public class ResidentPurge extends Thread {
 	boolean townless;
 
 	/**
-	 * @param plugin reference to towny
+	 * @param plugin reference to Towny
+	 * @param sender reference to CommandSender
+	 * @param deleteTime time at which resident is purged (long)
+	 * @param townless if resident should be 'Townless'
 	 */
 	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless) {
 

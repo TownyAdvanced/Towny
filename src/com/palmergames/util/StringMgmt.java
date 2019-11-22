@@ -84,6 +84,8 @@ public class StringMgmt {
 	/**
 	 * Shortens the string to fit in the specified size.
 	 * 
+	 * @param str - {@link String} to trim
+	 * @param length - length to trim to
 	 * @return the shortened string
 	 */
 	public static String trimMaxLength(String str, int length) {
@@ -97,10 +99,12 @@ public class StringMgmt {
 	}
 
 	/**
-	 * Shortens the string to fit in the specified size with an elipse "..." at
+	 * Shortens the string to fit in the specified size with an ellipse "..." at
 	 * the end.
 	 * 
-	 * @return the shortened string
+	 * @param str - {@link String} to fit
+	 * @param length - Length of the string, before shortening   
+	 * @return the shortened string, followed with ellipses
 	 */
 	public static String maxLength(String str, int length) {
 

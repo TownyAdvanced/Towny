@@ -54,7 +54,7 @@ public class NewDayEvent extends Event{
 	 * timeFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm")
 	 * timeFormat.format(event.getTime())
 	 * 
-	 * @return
+	 * @return time 
 	 */
 	public long getTime() {
 		return time;

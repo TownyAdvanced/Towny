@@ -381,9 +381,11 @@ public class SQL_Schema {
     /**
      * Call after loading to remove any old database elements we no longer need.
      *
-     * @param cntx
-     * @param db_name
+     * @param cntx - Connection.
+     * @param db_name - Name of database.
+	 * @deprecated - This method no longer does anything do to being empty.
      */
+    @Deprecated
     public static void cleanup(Connection cntx, String db_name) {
     	
 		/*

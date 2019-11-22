@@ -11,8 +11,20 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 public class OutpostUtil {
 	
 	/** 
+	 * Checks to make sure all requirements are met before an outpost can be claimed.
+	 * Will check:
+	 *   - If there are not enough free outpost plots
+	 *   - If the Outpost does not meet a minimum-distance requirement
+	 * 
+	 * @param town - Town the outpost belongs to
+	 * @param resident - Resident establishing the outpost
+	 * @param world - TownyWorld in which the outpost will be in
+	 * @param key - Coordinates where the outpost would be established
+	 * @param isAdmin - If the Resident is a Towny Administrator
+	 * @param isPlotSetOutpost - If a plot is already an outpost
+	 *    
 	 * @return - Returns true if all required tests for outposts are met.
-	 * @throws TownyException 
+	 * @throws TownyException if a condition is not met.
 	 */
 	public static boolean OutpostTests(Town town, Resident resident, TownyWorld world, Coord key, boolean isAdmin, boolean isPlotSetOutpost) throws TownyException {
 

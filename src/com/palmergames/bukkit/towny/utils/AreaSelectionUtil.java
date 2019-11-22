@@ -165,7 +165,9 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other towns as set in the config.
 	 * 
-	 * @param selection
+
+	 * @param selection - List&lt;WorldCoord&gt; of coordinates
+	 * @param town - Town to check distance from
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
@@ -186,7 +188,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 
-	 * @param selection
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterTownOwnedBlocks(List<WorldCoord> selection) {
@@ -205,7 +207,7 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks.
 	 * 
-	 * @param selection
+	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
 	 * @return List of townblocks
 	 */
 	public static List<WorldCoord> filterWildernessBlocks(List<WorldCoord> selection) {

@@ -267,7 +267,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	/**
 	 * Only to be called from the Loading methods.
 	 *
-	 * @param nationSpawn
+	 * @param nationSpawn - Location to set as Nation Spawn
 	 */
 	public void forceSetNationSpawn(Location nationSpawn){
 		this.nationSpawn = nationSpawn;
@@ -416,7 +416,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	/**
 	 * Method for rechecking town distances to a new nation capital/moved nation capital homeblock.
-	 * @throws TownyException
+	 * @throws TownyException - Generic TownyException
 	 */
 	public void recheckTownDistance() throws TownyException {
 		if(capital != null) {

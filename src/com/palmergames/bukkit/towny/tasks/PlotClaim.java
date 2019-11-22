@@ -43,6 +43,7 @@ public class PlotClaim extends Thread {
 	 * @param selection List of WoorldCoords to claim/unclaim
 	 * @param claim or unclaim
 	 * @param admin - is this admin overrided.
+	 * @param resident - see player parameter   
 	 */
 	public PlotClaim(Towny plugin, Player player, Resident resident, List<WorldCoord> selection, boolean claim, boolean admin) {
 

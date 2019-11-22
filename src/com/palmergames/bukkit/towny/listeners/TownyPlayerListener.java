@@ -963,11 +963,11 @@ public class TownyPlayerListener implements Listener {
 
 
 	/**
-	 * @author - Articdive (Just the small codeblock below)
-	 */
-	/*
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
+	 * 
+	 * @author - Articdive
+	 * @param event - PlayerDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
@@ -1000,10 +1000,13 @@ public class TownyPlayerListener implements Listener {
 	}
 
 
-	/*
+	/**
 	 * PlayerEnterTownEvent
 	 * Currently used for:
 	 *   - showing NotificationsUsingTitles upon entering a town.
+	 *   
+	 * @param event - PlayerEnterTownEvent
+	 * @throws TownyException - Generic TownyException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerEnterTown(PlayerEnterTownEvent event) throws TownyException {
@@ -1026,11 +1029,14 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	/*
+	/**
 	 * PlayerLeaveTownEvent
 	 * Currently used for:
 	 *   - showing NotificationsUsingTitles upon entering the wilderness.
 	 *   - unjailing residents
+	 *   
+	 * @param event - PlayerLeaveTownEvent
+	 * @throws TownyException - Generic TownyException   
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) throws TownyException {
@@ -1064,8 +1070,10 @@ public class TownyPlayerListener implements Listener {
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
 	}
-	/*
+	
+	/**
 	 * Any player that can break the lectern will be able to get the book anyways.
+	 * @param event - PlayerTakeLecternBookEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
@@ -1086,8 +1094,10 @@ public class TownyPlayerListener implements Listener {
 		event.setCancelled(!bDestroy);
 	}
 
-	/*
-	 * Blocks jailed players using blacklisted commands. 
+	/**
+	 * Blocks jailed players using blacklisted commands.
+	 * @param event - PlayerCommandPreprocessEvent
+	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onJailedPlayerUsesCommand(PlayerCommandPreprocessEvent event) throws NotRegisteredException {

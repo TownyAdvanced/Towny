@@ -59,8 +59,8 @@ public class TownyPerms {
 	 * Load the townyperms.yml file.
 	 * If it doesn't exist create it from the resource file in the jar.
 	 * 
-	 * @param filepath
-	 * @param defaultRes
+	 * @param filepath - Path to townyperms.yml
+	 * @param defaultRes - Default townyperms.yml within the jar.
 	 */
 	public static void loadPerms(String filepath, String defaultRes) {
 
@@ -83,7 +83,8 @@ public class TownyPerms {
 	/**
 	 * Register a specific residents permissions with Bukkit.
 	 * 
-	 * @param resident
+	 * @param resident - Resident to check if player is valid
+	 * @param player - Player to register permission
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
 
@@ -175,7 +176,7 @@ public class TownyPerms {
 	/**
 	 * Should only be called when a player leaves the server.
 	 * 
-	 * @param name
+	 * @param name - Player's name to remove attachment of
 	 */
 	public static void removeAttachment(String name) {
 		
@@ -200,7 +201,7 @@ public class TownyPerms {
 	/**
 	 * Update the permissions for all residents of a town (if online)
 	 * 
-	 * @param town
+	 * @param town - Town to target
 	 */
 	public static void updateTownPerms(Town town) {
 		
@@ -213,7 +214,7 @@ public class TownyPerms {
 	/**
 	 * Update the permissions for all residents of a nation (if online)
 	 * 
-	 * @param nation
+	 * @param nation - Nation to target
 	 */
 	public static void updateNationPerms(Nation nation) {
 		
@@ -226,7 +227,7 @@ public class TownyPerms {
 	/**
 	 * Fetch a list of permission nodes
 	 * 
-	 * @param path
+	 * @param path - path to permission nodes
 	 * @return a List of permission nodes.
 	 */
 	private static List<String> getList(String path) {
@@ -240,7 +241,7 @@ public class TownyPerms {
 	/**
 	 * Returns a sorted map of this residents current permissions.
 	 * 
-	 * @param resident
+	 * @param resident - Resident to check
 	 * @return a sorted Map of permission nodes
 	 */
 	public static LinkedHashMap<String, Boolean> getResidentPerms(Resident resident) {
@@ -374,6 +375,7 @@ public class TownyPerms {
 	/**
 	 * Default permissions everyone in a town gets
 	 * 
+	 * @param town - Town to target
 	 * @return a list of permissions
 	 */
 	public static List<String> getTownDefault(Town town) {
@@ -391,7 +393,7 @@ public class TownyPerms {
 
 	/**
 	 * A town mayors permissions
-	 * 
+	 *
 	 * @return a list of permissions
 	 */
 	public static List<String> getTownMayor() {
@@ -403,7 +405,7 @@ public class TownyPerms {
 	/**
 	 * Get a specific ranks permissions
 	 * 
-	 * @param rank
+	 * @param rank - Rank to check permissions for
 	 * @return a List of permissions
 	 */
 	public static List<String> getTownRank(String rank) {
@@ -451,7 +453,7 @@ public class TownyPerms {
 	/**
 	 * Get a specific ranks permissions
 	 * 
-	 * @param rank
+	 * @param rank - Rank to get permissions of
 	 * @return a List of Permissions
 	 */
 	public static List<String> getNationRank(String rank) {
@@ -480,7 +482,7 @@ public class TownyPerms {
 	/**
 	 * Sort a permission node list by parent/child
 	 * 
-	 * @param permList
+	 * @param permList - List of permissions
 	 * @return List sorted for priority
 	 */
 	private static List<String> sort(List<String> permList) {
@@ -517,7 +519,7 @@ public class TownyPerms {
 	 * Fetch all permissions which are registered with superperms.
 	 * {can include child nodes)
 	 * 
-	 * @param includeChildren
+	 * @param includeChildren - If child nodes should be included
 	 * @return List of all permission nodes
 	 */
 	public List<String> getAllRegisteredPermissions(boolean includeChildren) {
@@ -546,7 +548,7 @@ public class TownyPerms {
 	 * Returns a map of ALL child permissions registered with bukkit
 	 * null is empty
 	 * 
-	 * @param node
+	 * @param node - Parent node
 	 * @param playerPermArray current list of perms to check against for
 	 *            negations
 	 * @return Map of child permissions
@@ -584,7 +586,7 @@ public class TownyPerms {
 	 * Bukkit.
 	 * null is empty
 	 * 
-	 * @param node
+	 * @param node - Parent node
 	 * @return Map of child permissions
 	 */
 	public static Map<String, Boolean> getChildren(String node) {
