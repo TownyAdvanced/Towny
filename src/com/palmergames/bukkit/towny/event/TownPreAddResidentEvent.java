@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,12 +10,14 @@ public class TownPreAddResidentEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private String townName;
 	private Town town;
+	private Resident resident;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 	
-	public TownPreAddResidentEvent(Town town) {
+	public TownPreAddResidentEvent(Town town, Resident resident) {
 		this.town = town;
 		this.townName = town.getName();
+		this.resident = resident;
 	}
 
 	public static HandlerList getHandlerList() {
@@ -30,9 +33,7 @@ public class TownPreAddResidentEvent extends Event {
 		return townName;
 	}
 
-	public Town getTown() {
-		return town;
-	}
+	public Town getTown() { return town; }
 
 	public boolean isCancelled() {
 		return isCancelled;
@@ -49,4 +50,6 @@ public class TownPreAddResidentEvent extends Event {
 	public void setCancelMessage(String cancelMessage) {
 		this.cancelMessage = cancelMessage;
 	}
+
+	public Resident getResident() { return resident; }
 }

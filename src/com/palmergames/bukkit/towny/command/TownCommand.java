@@ -2605,7 +2605,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		for (Resident newMember : new ArrayList<>(invited)) {
 			try {
 
-				TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town);
+				TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
 				Bukkit.getPluginManager().callEvent(preEvent);
 
 				if (preEvent.isCancelled()) {
@@ -2874,7 +2874,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(TownySettings.getLangString("msg_err_outlaw_in_open_town"));
 			}
 
-			TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town);
+			TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, resident);
 			Bukkit.getPluginManager().callEvent(preEvent);
 
 			if (preEvent.isCancelled()) {
