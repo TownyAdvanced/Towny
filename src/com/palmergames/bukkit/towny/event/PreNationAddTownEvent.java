@@ -7,6 +7,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class PreNationAddTownEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -16,6 +20,7 @@ public class PreNationAddTownEvent extends Event implements Cancellable {
 	private Nation nation;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
+	private List<Town> towns;
 
 	@Override
 	public HandlerList getHandlers() {
@@ -30,6 +35,12 @@ public class PreNationAddTownEvent extends Event implements Cancellable {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.townName = town.getName();
 		this.town = town;
+		this.nation = nation;
+		this.nationName = nation.getName();
+	}
+	
+	public PreNationAddTownEvent(Nation nation, List<Town> towns) {
+		this.towns = towns;
 		this.nation = nation;
 		this.nationName = nation.getName();
 	}

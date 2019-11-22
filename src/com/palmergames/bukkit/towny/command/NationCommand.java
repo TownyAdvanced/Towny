@@ -618,13 +618,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			PreNationAddTownEvent preEvent = new PreNationAddTownEvent(nation, town);
-			Bukkit.getPluginManager().callEvent(preEvent);
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-				return;
-			}
-			
 			List<Town> towns = new ArrayList<>();
 			towns.add(town);
 			nationAdd(nation, towns);
