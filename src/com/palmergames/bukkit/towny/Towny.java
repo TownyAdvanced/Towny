@@ -181,9 +181,6 @@ public class Towny extends JavaPlugin {
 					townyUniverse.onLogin(player);
 				}
 		}
-		
-		// TODO: Remove this in PR.
-		getServer().getPluginManager().registerEvents(new EventValidator(), this);
 	}
 
 	public void setWorldFlags() {
