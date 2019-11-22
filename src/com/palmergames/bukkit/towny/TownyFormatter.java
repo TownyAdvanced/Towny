@@ -102,7 +102,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the metadata of a TownBlock
+	 * Gets the status screen of a TownBlock
 	 * 
 	 * @param townBlock the TownBlock to check
 	 * @return a string list containing the results.
@@ -142,7 +142,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 *  Gets the metadata of a Resident
+	 *  Gets the status screen of a Resident
 	 *  
 	 * @param resident the resident to check the status of
 	 * @param player make sure the resident is an online player
@@ -305,7 +305,7 @@ public class TownyFormatter {
 	}	
 	
 	/**
-	 * Gets the metadata of a Town
+	 * Gets the status screen of a Town
 	 * 
 	 * @param town the town in which to check
 	 * @return a string list containing the results.
@@ -436,7 +436,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the metadata of a Nation
+	 * Gets the status screen of a Nation
 	 * 
 	 * @param nation the nation to check against
 	 * @return a string list containing the results.
@@ -548,7 +548,7 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the metadata for a World
+	 * Gets the status screen for a World
 	 * 
 	 * @param world the world to check
 	 * @return a string list containing the results.
