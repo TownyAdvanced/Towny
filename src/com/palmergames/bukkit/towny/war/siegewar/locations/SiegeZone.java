@@ -108,16 +108,6 @@ public class SiegeZone {
         return siegePoints;
     }
 
-    public String getSiegePointsForDisplay() {
-        if (siegePoints > 0) {
-            return "+" + siegePoints;
-        } else if (siegePoints < 0) {
-            return "-" + siegePoints;
-        } else {
-            return "0";
-        }
-    }
-
     public void setActive(boolean active) {
         this.active = active;
     }

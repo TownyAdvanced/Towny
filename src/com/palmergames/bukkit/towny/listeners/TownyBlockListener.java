@@ -18,8 +18,8 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockBreakingUtil;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockPlacingUtil;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarBreakBlockController;
+import com.palmergames.bukkit.towny.war.siegewar.SiegeWarPlaceBlockController;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
@@ -63,7 +63,7 @@ public class TownyBlockListener implements Listener {
 
 		//Siege War
 		if (TownySettings.getWarSiegeEnabled()) {
-			boolean skipPermChecks = SiegeWarBlockBreakingUtil.evaluateSiegeWarBreakBlockRequest(player, block, event);
+			boolean skipPermChecks = SiegeWarBreakBlockController.evaluateSiegeWarBreakBlockRequest(player, block, event);
 			if (skipPermChecks) {
 				return;
 			}
@@ -144,7 +144,7 @@ public class TownyBlockListener implements Listener {
 
 			//Siege War
 			if (TownySettings.getWarSiegeEnabled()) {
-				boolean skipPermChecks = SiegeWarBlockPlacingUtil.evaluateSiegeWarPlaceBlockRequest(player, block,event, plugin);
+				boolean skipPermChecks = SiegeWarPlaceBlockController.evaluateSiegeWarPlaceBlockRequest(player, block,event, plugin);
 				if(skipPermChecks) {
 					return;
 				}

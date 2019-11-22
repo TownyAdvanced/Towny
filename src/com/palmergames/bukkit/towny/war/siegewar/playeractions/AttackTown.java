@@ -6,10 +6,10 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockPlacingUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -92,7 +92,7 @@ public class AttackTown {
             //if(player.getPotionEffect(PotionEffectType.INVISIBILITY) != null)
             //  throw new TownyException("The god(s) favour the brave. You cannot be invisible to start a siege");
 
-            if (SiegeWarBlockPlacingUtil.doesBlockHaveANonAirBlockAboveIt(block))
+            if (SiegeWarBlockUtil.doesBlockHaveANonAirBlockAboveIt(block))
                 throw new TownyException("The god(s) favour wars on the land surface. You must place the banner where there is only sky above it.");
 
             if (TownySettings.getNationRequiresProximity() > 0) {

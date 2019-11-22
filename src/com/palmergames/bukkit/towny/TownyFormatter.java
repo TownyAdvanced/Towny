@@ -447,7 +447,7 @@ public class TownyFormatter {
 						String siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
 						out.add(siegeStatus);
 
-						//Siege Zones: Land of Empire (Nation) [+30], Land of Killers (Nation) [+30]
+						//Siege Attacks: Land of Empire (Nation) [+30], Land of Killers (Nation) [-8]
 						StringBuilder builtLine = new StringBuilder();
 						builtLine.append(TownySettings.getLangString("status_town_siege_attackers_tag"));
 						builtLine.append(Colors.White);
@@ -458,9 +458,13 @@ public class TownyFormatter {
 							} else {
 								builtLine.append(", ");
 							}
+							
 							builtLine.append(getFormattedName(entry.getKey()));
+							
 							builtLine.append(" [");
-							builtLine.append(entry.getValue().getSiegePointsForDisplay());
+							if(entry.getValue().getSiegePoints() > 0)
+								builtLine.append("+");
+							builtLine.append(entry.getValue().getSiegePoints());
 							builtLine.append("]");
 						}
 						out.add(builtLine.toString());
@@ -472,14 +476,16 @@ public class TownyFormatter {
 
 					case ATTACKER_WIN:
 					case DEFENDER_SURRENDER:
-						siegeStatus= TownySettings.getLangString("status_town_siege_summary_prefix") + getStatusTownSiegeSummary(siege);
+						siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
+						String siegeWinner = String.format(TownySettings.getLangString("status_town_siege_winner"), getFormattedNationName(siege.getAttackerWinner()));
 						String yes = TownySettings.getLangString("status_yes");
 						String no = TownySettings.getLangString("status_no_green");
 						String townPlundered = TownySettings.getLangString("status_town_siege_plundered_prefix") + (siege.isTownPlundered() ? yes : no);
 						String townInvaded = TownySettings.getLangString("status_town_siege_invaded_prefix") + (siege.isTownInvaded() ? yes : no);
-						out.add(siegeStatus);
-						out.add(townInvaded + "  " + townPlundered);
 						String siegeImmunityTimer = String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds());
+						out.add(siegeStatus);
+						out.add(siegeWinner);
+						out.add(townInvaded + "  " + townPlundered);
 						out.add(siegeImmunityTimer);
 					break;
 
@@ -492,7 +498,7 @@ public class TownyFormatter {
 					break;
 				}
 			} else {
-				//Siege Cooldown Timer: 100.8 hours
+				//Siege Immunity Timer: 100.8 hours
 				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeCooldownActive()) {
 					out.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
 				}
@@ -723,10 +729,9 @@ public class TownyFormatter {
 			case IN_PROGRESS:
 				return (TownySettings.getLangString("status_town_siege_summary_in_progress"));
 			case ATTACKER_WIN:
-				String message = TownySettings.getLangString("status_town_siege_summary_attacker_win");
-				return String.format(message, siege.getWinnerName());
+				return "Attacker Victory";
 			case DEFENDER_SURRENDER:
-				return "Defender Surrender - To " + siege.getWinnerName();
+				return "Town Surrender";
 			case DEFENDER_WIN:
 				return TownySettings.getLangString("status_town_siege_summary_defender_win");
 			case ATTACKER_ABANDON:

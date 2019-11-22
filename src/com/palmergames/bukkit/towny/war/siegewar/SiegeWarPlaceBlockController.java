@@ -1,26 +1,22 @@
-package com.palmergames.bukkit.towny.war.siegewar.utils;
+package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
-import org.bukkit.Location;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class SiegeWarBlockPlacingUtil {
+public class SiegeWarPlaceBlockController {
 	
 	/*
 	 * coloured banner - could be attack or invade
@@ -72,7 +68,7 @@ public class SiegeWarBlockPlacingUtil {
 		if(!townyWorld.hasTownBlock(blockCoord)) {
 			//Wilderness found
 			//Possible abandon or attack request
-			List<TownBlock> nearbyTownBlocks = getAdjacentTownBlocks(player, block);
+			List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
 			if (nearbyTownBlocks.size() == 0) {
 				//No town blocks are nearby. Normal block placement
 				return false;
@@ -140,45 +136,9 @@ public class SiegeWarBlockPlacingUtil {
 	}
 
 
-	private static List<TownBlock> getAdjacentTownBlocks(Player player, Block block) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld townyWorld;
-		List<TownBlock> nearbyTownBlocks = new ArrayList<>();
-
-		try {
-			townyWorld = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-		} catch (NotRegisteredException e) {
-			return nearbyTownBlocks;
-		}
-
-		List<Coord> nearbyCoOrdinates =new ArrayList<>();
-		Coord blockCoordinate = Coord.parseCoord(block);
-		nearbyCoOrdinates.add(blockCoordinate.add(0,-1));
-		nearbyCoOrdinates.add(blockCoordinate.add(0,1));
-		nearbyCoOrdinates.add(blockCoordinate.add(1,0));
-		nearbyCoOrdinates.add(blockCoordinate.add(-1,0));
-
-		TownBlock nearbyTownBlock = null;
-		for(Coord nearbyCoord: nearbyCoOrdinates){
-			if(townyWorld.hasTownBlock(nearbyCoord)) {
-
-				try {nearbyTownBlock = townyWorld.getTownBlock(nearbyCoord);
-				} catch (NotRegisteredException e) {}
-
-				if (nearbyTownBlock.hasTown()) {
-					nearbyTownBlocks.add(nearbyTownBlock);
-				}
-			}
-		}
-
-		return nearbyTownBlocks;
-	}
-
 	private static boolean evaluateSiegeWarPlaceChestRequest(Player player,
 													  Block block,
 													  BlockPlaceEvent event) throws NotRegisteredException {
-
-		//Get Town Where block was placed
 		Town townWhereBlockWasPlaced;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld world;
@@ -199,7 +159,7 @@ public class SiegeWarBlockPlacingUtil {
 		/*
 		 * During a siege or aftermath
 		 * If any resident member of the attacking nations attempts to place a chest,
-		 * it is evaluated as a siege action
+		 * it is evaluated as an attempted siege action
 		 */
 		if (townWhereBlockWasPlaced.hasSiege()) {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
@@ -217,30 +177,6 @@ public class SiegeWarBlockPlacingUtil {
 		} else {
 			return false;
 		}
-
 	}
-
-
-	public static boolean doesPlayerHaveANonAirBlockAboveThem(Player player) {
-		return doesLocationHaveANonAirBlockAboveIt(player.getLocation());
-	}
-
-	public static boolean doesBlockHaveANonAirBlockAboveIt(Block block) {
-		return doesLocationHaveANonAirBlockAboveIt(block.getLocation());
-	}
-
-	private static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
-		location = location.add(0,1,0);
-
-		while(location.getY() < 256)
-		{
-			if(location.getBlock().getType() != Material.AIR)
-			{
-				return true;   //There is a non-air block above them
-			}
-			location.add(0,1,0);
-		}
-		return false;  //There is nothing but air above them
-	}
-
+	
 }

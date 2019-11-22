@@ -11,7 +11,7 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.AttackerWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.DefenderWin;
 import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockPlacingUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
@@ -74,7 +74,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
-
 	private static void evaluateSiegeZone(com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone siegeZone) {
 		if(siegeZone.isActive()) {
 			boolean siegeZoneChanged = false;
@@ -87,8 +86,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					resident = TownyUniverse.getDataSource().getResident(player.getName());
 
 					if (resident.hasTown()) {
-						//TODO - DEHARDCODE THE POINT VALUES
-
 						if (resident.getTown() == siegeZone.getDefendingTown()) {
 
 							//Resident of defending town
@@ -98,11 +95,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													player,
 													siegeZone,
 													siegeZone.getDefenderPlayerScoreTimeMap(),
-													TownySettings.getSiegeWarPointsPerDefendingPlayer());
+													-TownySettings.getSiegeWarPointsPerDefendingPlayer());
 
-						}
-
-						if (resident.getTown().hasNation()) {
+						
+						} else if (resident.getTown().hasNation()) {
 
 							if (siegeZone.getDefendingTown().hasNation()
 									&& siegeZone.getDefendingTown().getNation()
@@ -115,11 +111,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 														player,
 														siegeZone,
 														siegeZone.getDefenderPlayerScoreTimeMap(),
-														TownySettings.getSiegeWarPointsPerDefendingPlayer());
-							}
-
-							if (siegeZone.getAttackingNation()
-									== resident.getTown().getNation()) {
+														-TownySettings.getSiegeWarPointsPerDefendingPlayer());
+							
+							} else if (siegeZone.getAttackingNation() 
+								== resident.getTown().getNation()) {
 
 								//Nation member of attacking nation
 								siegeZoneChanged =
@@ -135,17 +130,26 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				} catch (NotRegisteredException e) {
 				}
 			}
-
+			
 			//Remove garbage from player score time maps
-			siegeZoneChanged =
-					siegeZoneChanged ||
-							removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
-									siegeZone.getDefendingTown(),
-									null);
+			Town defendingTown =siegeZone.getDefendingTown();
+			Nation defendingNation= null;
+			if(defendingTown.hasNation()) {
+				try {
+					defendingNation = defendingTown.getNation();
+				} catch (NotRegisteredException e) {
+				}
+			}
 
 			siegeZoneChanged =
 					siegeZoneChanged ||
 							removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
+									defendingTown,
+									defendingNation);
+
+			siegeZoneChanged =
+					siegeZoneChanged ||
+							removeGarbageFromPlayerScoreTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
 									null,
 									siegeZone.getAttackingNation());
 
@@ -184,22 +188,23 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	}
 
 
+	//Return siege-zone changed
 	private static boolean evaluateSiegeZoneOccupant(Player player,
-													 com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone siegeZone,
+													 SiegeZone siegeZone,
 													 Map<Player, Long> playerScoreTimeMap,
 													 int siegePointsForZoneOccupation) {
-
+		
 		//Is the player already registered as being in the siege zone ?
 		if (playerScoreTimeMap.containsKey(player)) {
-
+			
 			//Player must still be in zone
 			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				playerScoreTimeMap.remove(player);
 				return true;
 			}
-
+			
 			//Player must still be in the open
-			if(SiegeWarBlockPlacingUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				playerScoreTimeMap.remove(player);
 				return true;
 			}
@@ -212,17 +217,18 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 								+ (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
 				return true;
 			}
-
-			return false; //No change
+			
+			return false;
 
 		} else {
+
 			//Player must be in zone
 			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				return false;
 			}
 
 			//Player must be in the open
-			if(SiegeWarBlockPlacingUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				return false;
 			}
 
@@ -234,11 +240,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			playerScoreTimeMap.put(player,
 					System.currentTimeMillis()
 							+ (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
-
-			System.out.println("DURATION MILLIS: " + System.currentTimeMillis()
-					+ (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds()
-					* TimeMgmt.ONE_SECOND_IN_MILLIS));
-
+			
 			return true; //Player added to zone
 		}
 	}
@@ -255,6 +257,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			while (it.hasNext()) {
 				Map.Entry<Player,Long> pair = (Map.Entry)it.next();
 
+				//Remove player if offline
 				if(!pair.getKey().isOnline()) {
 					it.remove();
 					siegeZoneChanged = true;
@@ -263,18 +266,21 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 				Resident resident = TownyUniverse.getDataSource().getResident(pair.getKey().getName());
 
+				//Remove player if they have no town
 				if(!resident.hasTown()) {
 					it.remove();
 					siegeZoneChanged = true;
 					continue;
 				}
 
+				//If town filter is used, remove player if they are not in the right town
 				if(townFilter != null && resident.getTown() != townFilter) {
 					it.remove();
 					siegeZoneChanged = true;
 					continue;
 				}
 
+				//If nation filter is used, remove player if they are not in the right nation
 				if(nationFilter != null && resident.getTown().getNation() != nationFilter) {
 					it.remove();
 					siegeZoneChanged = true;
