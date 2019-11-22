@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
+import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -2360,6 +2361,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		for (Resident newMember : new ArrayList<>(invited)) {
 			try {
+
+				TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
+				Bukkit.getPluginManager().callEvent(preEvent);
+
+				if (preEvent.isCancelled()) {
+					TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
+					return;
+				}
+				
 				// only add players with the right permissions.
 				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not
 																				// online
@@ -2619,6 +2629,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown()));
 				if (town.hasOutlaw(resident))
 					throw new Exception(TownySettings.getLangString("msg_err_outlaw_in_open_town"));
+			}
+
+			TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, resident);
+			Bukkit.getPluginManager().callEvent(preEvent);
+
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
+				return;
 			}
 
 			// Check if player is already in selected town (Pointless)
