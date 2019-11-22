@@ -42,8 +42,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 * 
 	 * returns the specified prefix/suffix nodes from GroupManager
 	 * 
-	 * @param resident
-	 * @param node
+	 * @param resident - Resident to check for
+	 * @param node - Node to check
 	 * @return String of the Prefix or Suffix.
 	 */
 	@Override
@@ -88,9 +88,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 	}
 
 	/**
-	 * 
-	 * @param playerName
-	 * @param node
+	 * Gets a Group Permission's Integer Node
+	 * @param playerName - Player Name to check against
+	 * @param node - Node to check against
 	 * @return -1 = can't find
 	 */
 	@Override
@@ -128,8 +128,8 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 	/**
 	 * 
-	 * @param playerName
-	 * @param node
+	 * @param playerName - Player's Name to check against
+	 * @param node - Node to check
 	 * @return empty = can't find
 	 */
 	@Override
@@ -146,7 +146,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	/**
 	 * Returns the players Group name.
 	 * 
-	 * @param player
+	 * @param player - Player
 	 * @return name of players group
 	 */
 	@Override

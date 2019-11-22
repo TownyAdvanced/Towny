@@ -447,8 +447,8 @@ public class TownyBlockListener implements Listener {
 	/**
 	 * Test if this location has explosions enabled.
 	 * 
-	 * @param world
-	 * @param target
+	 * @param world - Towny-enabled World to check in
+	 * @param target - Location to check
 	 * @return true if allowed.
 	 */
 	public boolean locationCanExplode(TownyWorld world, Location target) {

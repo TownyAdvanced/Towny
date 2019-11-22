@@ -128,10 +128,10 @@ public class BukkitTools {
 	}
 	
 	/**
-	 * Accepts a Runnable object and a delay (-1 for no delay)
+	 * Accepts a {@link Runnable} object and a delay (-1 for no delay)
 	 * 
-	 * @param task
-	 * @param delay ticks to delay starting
+	 * @param task - Runnable
+	 * @param delay - ticks to delay starting ({@link Long})
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncDelayedTask(Runnable task, long delay) {
@@ -139,11 +139,11 @@ public class BukkitTools {
 	}
 	
 	/**
-	 * Accepts a Runnable object with a delay/repeat (-1 for no delay)
+	 * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
 	 * 
 	 * @param task runnable object
-	 * @param delay ticks to delay starting
-	 * @param repeat ticks to repeat after
+	 * @param delay ticks to delay starting ({@link Long})
+	 * @param repeat ticks to repeat after ({@link Long})
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleSyncRepeatingTask(Runnable task, long delay, long repeat) {
@@ -151,11 +151,11 @@ public class BukkitTools {
 	}
 	
 	/**
-	 * Accepts a Runnable object with a delay/repeat (-1 for no delay)
+	 * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
 	 * 
 	 * @param task runnable object
-	 * @param delay ticks to delay starting
-	 * @param repeat ticks to repeat after
+	 * @param delay ticks to delay starting ({@link Long})
+	 * @param repeat ticks to repeat after ({@link Long})
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncRepeatingTask(Runnable task, long delay, long repeat) {
@@ -186,9 +186,10 @@ public class BukkitTools {
 	 * Helpfully using Phoenix616's useful IdConverter.jar
 	 * https://www.spigotmc.org/resources/id-converter.52099/
 	 * 
-	 * @param id
-	 * @return
+	 * @param id - ID for a material ({@link Integer})
+	 * @return a Material parsed from {@link IdMappings}
 	 */
+	@Deprecated
 	public static Material getMaterial(int id) {
 		return Material.getMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
 	}
@@ -196,7 +197,7 @@ public class BukkitTools {
 	/**
 	 * Accepts an X or Z value and returns the associated Towny plot value.
 	 * 
-	 * @param value
+	 * @param value - Value to calculate for X or Z ({@link Integer})
 	 * @return int of the relevant townblock x/z.
 	 */
 	public static int calcChunk(int value) {

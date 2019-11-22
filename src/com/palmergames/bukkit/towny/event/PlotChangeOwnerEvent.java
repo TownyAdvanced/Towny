@@ -22,8 +22,11 @@ public class PlotChangeOwnerEvent extends Event {
     }
 
     /**
-     * @param oldowner - Old Owner
-     * @param newowner - New Owner
+	 * Changes the owner of a Plot
+	 * 
+     * @param oldowner - Old Owner (Resident)
+     * @param newowner - New Owner (Resident)
+	 * @param townBlock - Plot to change ownership of.
      */
     public PlotChangeOwnerEvent(Resident oldowner, Resident newowner, TownBlock townBlock) {
         super(!Bukkit.getServer().isPrimaryThread());

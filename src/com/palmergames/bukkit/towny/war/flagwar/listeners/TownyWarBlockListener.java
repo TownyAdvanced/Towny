@@ -23,10 +23,10 @@ public class TownyWarBlockListener implements Listener {
 		//this.plugin = plugin;
 	}
 
-	/**
+	/* TODO Remove This Commented Code
 	 * For Testing purposes only.
-	 */
-	/*
+	 *
+	 *
 	 * @EventHandler(priority = EventPriority.LOWEST)
 	 * public void onBlockPlace(BlockPlaceEvent event) {
 	 * Player player = event.getPlayer();
@@ -69,10 +69,8 @@ public class TownyWarBlockListener implements Listener {
 			TownyWar.checkBlock(null, block, event);
 	}
 
-	/**
-	 * TODO: Need to check if a immutable block is being moved with a sticky
-	 * piston.
-	 */
+	
+	// TODO: Need to check if a immutable block is being moved with a sticky piston.
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 

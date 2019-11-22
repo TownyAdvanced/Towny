@@ -3205,9 +3205,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Used to allow nation members to deposit to towns' banks in their nations.
 	 * 
-	 * @param player
-	 * @param town
-	 * @param amount
+	 * @param player the player issuing the command
+	 * @param town town with bank the player wants to deposit to
+	 * @param amount amount the player wishes to deposit
 	 */
 	public static void townDeposit(Player player, Town town, int amount) {
 		try {

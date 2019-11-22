@@ -313,7 +313,7 @@ public class PlotBlockData {
 	/**
 	 * fills the BlockList
 	 * 
-	 * @param blockList
+	 * @param blockList - BlockList (List&lt;String&gt;)
 	 */
 	public void setBlockList(List<String> blockList) {
 

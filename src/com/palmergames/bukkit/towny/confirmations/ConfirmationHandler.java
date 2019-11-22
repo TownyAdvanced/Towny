@@ -247,7 +247,7 @@ public class ConfirmationHandler {
 	 * Removes confirmations for the console.
 	 * 
 	 * @param type of ConfirmationType
-	 * @param successful
+	 * @param successful if the calling operation was successful or not.
 	 * @author LlmDl
 	 */
 	public static void removeConfirmation(final ConfirmationType type, boolean successful) {
@@ -280,7 +280,7 @@ public class ConfirmationHandler {
 	 * Handles confirmations sent via the console.
 	 * 
 	 * @param type of ConfirmationType.
-	 * @throws TownyException
+	 * @throws TownyException - Generic TownyException
 	 * @author LlmDl
 	 */
 	public static void handleConfirmation(ConfirmationType type) throws TownyException {

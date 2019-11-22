@@ -377,7 +377,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Returns prices for town's taxes/upkeep.
-	 * @param town
+	 * @param town - The town being checked.
 	 * @return - Prices screen for a town.
 	 */
 	public List<String> getTownyPrices(Town town) {

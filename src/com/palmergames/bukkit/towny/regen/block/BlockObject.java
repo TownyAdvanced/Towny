@@ -166,7 +166,8 @@ public class BlockObject {
 	}
 
 	/**
-	 * @param typeId the typeId to set
+	 * @param typeId  - the typeId to set
+	 * @param data - the data to set   
 	 */
 	@Deprecated
 	public void setTypeIdAndData(int typeId, byte data) {
