@@ -13,7 +13,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
-import com.palmergames.bukkit.towny.event.PreNationAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -606,6 +606,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (distance > TownySettings.getNationRequiresProximity()) {
 					throw new Exception(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
 				}
+			}
+			
+			// Check if the command is not cancelled
+			NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
+			Bukkit.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+				return;
 			}
 			
 			List<Town> towns = new ArrayList<>();
@@ -1276,7 +1285,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				// Check if the command is not cancelled
-				PreNationAddTownEvent preEvent = new PreNationAddTownEvent(nation, town);
+				NationPreAddTownEvent preEvent = new NationPreAddTownEvent(nation, town);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				
 				if (preEvent.isCancelled()) {
