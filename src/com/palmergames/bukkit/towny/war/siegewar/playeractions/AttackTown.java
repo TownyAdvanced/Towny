@@ -75,7 +75,7 @@ public class AttackTown {
                     //Deduct upfront cost
                     nationOfAttackingPlayer.pay(initialSiegeCost, "Cost of Initiating an assault siege.");
                 else {
-                    throw new TownyException(TownySettings.getLangString("msg_err_no_money."));
+                    throw new TownyException(TownySettings.getLangString("msg_err_no_money"));
                 }
             }
 
@@ -180,7 +180,7 @@ public class AttackTown {
 				);
 
 
-			TownyMessaging.sendMessage(player,moneyMessage);
+			TownyMessaging.sendMsg(attackingNation,moneyMessage);
 		}
         
         //BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
