@@ -23,8 +23,8 @@ import java.util.List;
 public class SiegeWarPlaceBlockController {
 	
 	/*
-	 * coloured banner - could be attack or invade
-	 * white banner - could be surrender
+	 * coloured standing banner - could be attack or invade
+	 * white standing banner - could be surrender
 	 * chest - could be plunder
 	 *
 	 * Return - skipOtherPerChecks
@@ -36,7 +36,7 @@ public class SiegeWarPlaceBlockController {
 	{
 		try {
 			String blockTypeName = block.getType().getKey().getKey();
-			if (blockTypeName.contains("banner")) {
+			if (blockTypeName.endsWith("banner") && !blockTypeName.contains("wall")) {
 				return evaluateSiegeWarPlaceBannerRequest(player, block, blockTypeName, event, plugin);
 			} else if (block.getType().equals(Material.CHEST)) {
 				return evaluateSiegeWarPlaceChestRequest(player, block, event);

@@ -24,7 +24,6 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
-import sun.security.krb5.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -2803,8 +2802,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
 
-	public static boolean getWarSiegeTeleportDisabledToBesiegedTowns() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS);
+	public static boolean getWarSiegeSpawningDisabledIntoBesiegedTowns() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_SPAWNING_DISABLED_INTO_BESIEGED_TOWNS);
 	}
 
 	public static boolean getWarSiegeDelayFullTownRemoval() {

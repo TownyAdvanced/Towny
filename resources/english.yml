@@ -383,6 +383,8 @@ msg_siege_war_town_ruined_from_plunder: '&6[Towny] [War]&b %s has been reduced t
 msg_siege_war_nation_defeated: '&6[Towny] [War]&b %s has been defeated!!!'
 
 #Siege war error messages
+#Spawning
+msg_err_siege_cannot_spawn_into_besieged_town: "&6[War]&c You cannot spawn into a town while it is under siege."
 #Claiming
 msg_err_siege_claim_too_near_siege_zone: "&6[War]&c The claim is too close to a siege."
 #Deleting

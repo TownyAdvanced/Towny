@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSpawnUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,15 +21,6 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.NationSpawnLevel;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.SpawnType;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownSpawnLevel;
-import com.palmergames.bukkit.towny.object.TownyEconomyObject;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -66,7 +60,7 @@ public class SpawnUtil {
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
 			throw new TownyException(TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
-
+		
 		Town town = null;
 		Nation nation = null;
 		Location spawnLoc = null;
@@ -92,10 +86,20 @@ public class SpawnUtil {
 			} else {
 				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
 			}
+
+			//Prevent spawning into besieged town
+			if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns())
+				SiegeWarSpawnUtil.throwErrorIfSpawnPointIsInsideBesiegedTown(spawnLoc);
+
 			break;
 
-		case TOWN:
+			case TOWN:
 			town = (Town) townyObject;
+
+			//Prevent spawning into besieged town
+			if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns() && town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_cannot_spawn_into_besieged_town"));
+		
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));
@@ -242,6 +246,10 @@ public class SpawnUtil {
 			break;
 		}
 
+		//Prevent spawning into besieged town
+		if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns())
+			SiegeWarSpawnUtil.throwErrorIfSpawnPointIsInsideBesiegedTown(spawnLoc);
+
 		// Prevent spawn travel while in disallowed zones (if configured.)
 		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
@@ -299,7 +307,7 @@ public class SpawnUtil {
 			payee = nation;
 			break;
 		}
-
+		
 		// Check if need/can pay.
 		try {
 			if ((!townyUniverse.getPermissionSource().has(player,

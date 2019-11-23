@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,29 +81,24 @@ public class SiegeWarBlockUtil {
 		//Note that we don't just look at the town at the given location
 		//....because mayor may have unclaimed the plot after the siege started
 
-		//Location must ne nearby
-		//Siege must be in progress
 		//Siege zone must be active
-		Location flagLocation;
-
+		//Siege must be in progress
+		//This must be the banner or the block below the banner
+		Block flagBlock;
+		
 		for (SiegeZone siegeZone : com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getSiegeZones()) {
-			flagLocation = siegeZone.getFlagLocation();
-			
-			if(
-				block.getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.NORTH).getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.SOUTH).getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.EAST).getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.WEST).getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.UP).getLocation().equals(flagLocation)
-				|| block.getRelative(BlockFace.DOWN).getLocation().equals(flagLocation))
+
+			if (!siegeZone.isActive() || siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
+				return false;
+			}
+
+			flagBlock = siegeZone.getFlagLocation().getBlock();
+			if(flagBlock.equals(block) || flagBlock.getRelative(BlockFace.DOWN).equals(block));
 			{
-				if (siegeZone.getSiege().getStatus() == SiegeStatus.IN_PROGRESS && siegeZone.isActive()) {
-					return true;
-				} 
+				return true;	
 			}
 		}
-
+		
 		//No active siege banner found near given block
 		return false;
 	}
