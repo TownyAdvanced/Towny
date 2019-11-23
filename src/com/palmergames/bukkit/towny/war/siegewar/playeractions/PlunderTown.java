@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -68,22 +69,22 @@ public class PlunderTown {
     public static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
         siege.setTownPlundered(true);
 
-        double plunder =
+        double plunderAmount =
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
         try {
-            if (defendingTown.canPayFromHoldings(plunder)) {
-                defendingTown.payTo(plunder, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation);
+            if (defendingTown.canPayFromHoldings(plunderAmount)) {
+                defendingTown.payTo(plunderAmount, winnerNation, "Town was plundered by attacker");
+                sendPlunderSuccessMessage(defendingTown, winnerNation, plunderAmount);
             } else {
                 double actualPlunder = defendingTown.getHoldingBalance();
                 defendingTown.payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation);
+                sendPlunderSuccessMessage(defendingTown, winnerNation, plunderAmount);
                 TownyMessaging.sendGlobalMessage(
                 	String.format(
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
-						TownyFormatter.getFormattedNationName(winnerNation),
-						TownyFormatter.getFormattedTownName(defendingTown)));
+						TownyFormatter.getFormattedTownName(defendingTown),
+						TownyFormatter.getFormattedNationName(winnerNation)));
                 TownyUniverse.getDataSource().removeTown(defendingTown);
             }
         } catch (EconomyException x) {
@@ -91,18 +92,20 @@ public class PlunderTown {
         }
     }
 
-    private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation) {
+    private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation, double plunderAmount) {
         //Same messages for now but may diverge in future (if we decide to track the original nation of the town)
     	if(defendingTown.hasNation()) {
 			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
 					TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
 					TownyFormatter.getFormattedTownName(defendingTown),
-					TownyFormatter.getFormattedNationName(winnerNation)
+				TownyEconomyHandler.getFormattedBalance(plunderAmount),
+				TownyFormatter.getFormattedNationName(winnerNation)
 			)));
         } else {
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),
                     TownyFormatter.getFormattedTownName(defendingTown),
+   				    TownyEconomyHandler.getFormattedBalance(plunderAmount),
                     TownyFormatter.getFormattedNationName(winnerNation))));
         }
     }

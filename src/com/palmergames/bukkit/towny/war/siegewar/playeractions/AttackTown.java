@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -85,7 +86,7 @@ public class AttackTown {
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
 
             //Setup attack
-            attackTown(block, nationOfAttackingPlayer, defendingTown);
+            attackTown(player, block, nationOfAttackingPlayer, defendingTown);
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
             event.setCancelled(true);
@@ -96,58 +97,59 @@ public class AttackTown {
     }
 
 
-    public static void attackTown(Block block,
+    public static void attackTown(Player player,
+								  Block block,
                                   Nation attackingNation,
                                     Town defendingTown) throws TownyException {
 
-        Siege siege;
-        SiegeZone siegeZone;
-        boolean newSiege;
+		Siege siege;
+		SiegeZone siegeZone;
+		boolean newSiege;
 
-        if(!defendingTown.hasSiege()) {
-            newSiege = true;
+		if (!defendingTown.hasSiege()) {
+			newSiege = true;
 
-            //Create Siege
-            siege = new Siege(defendingTown);
-            siege.setStatus(SiegeStatus.IN_PROGRESS);
-            siege.setTownPlundered(false);
-            siege.setTownInvaded(false);
-            siege.setAttackerWinner(null);
-            siege.setStartTime(System.currentTimeMillis());
-            siege.setScheduledEndTime(
-                    (System.currentTimeMillis() +
-                    ((long)(TownySettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
-            siege.setActualEndTime(0);
-            defendingTown.setSiege(siege);
+			//Create Siege
+			siege = new Siege(defendingTown);
+			siege.setStatus(SiegeStatus.IN_PROGRESS);
+			siege.setTownPlundered(false);
+			siege.setTownInvaded(false);
+			siege.setAttackerWinner(null);
+			siege.setStartTime(System.currentTimeMillis());
+			siege.setScheduledEndTime(
+				(System.currentTimeMillis() +
+					((long) (TownySettings.getWarSiegeMaxHoldoutTimeHours() * TimeMgmt.ONE_HOUR_IN_MILLIS))));
+			siege.setActualEndTime(0);
+			defendingTown.setSiege(siege);
 
-        } else {
-            //Get Siege
-            newSiege = false;
-            siege = defendingTown.getSiege();
-        }
+		} else {
+			//Get Siege
+			newSiege = false;
+			siege = defendingTown.getSiege();
+		}
 
-        //Create siege zone
-        TownyUniverse.getDataSource().newSiegeZone(
-                attackingNation.getName(),
-                defendingTown.getName());
-        siegeZone = TownyUniverse.getDataSource().getSiegeZone(
-                attackingNation.getName(),
-                defendingTown.getName());
-        siegeZone.setActive(true);
+		//Create siege zone
+		TownyUniverse.getDataSource().newSiegeZone(
+			attackingNation.getName(),
+			defendingTown.getName());
+		siegeZone = TownyUniverse.getDataSource().getSiegeZone(
+			attackingNation.getName(),
+			defendingTown.getName());
+		siegeZone.setActive(true);
 
-        siegeZone.setFlagLocation(block.getLocation());
-        siege.getSiegeZones().put(attackingNation, siegeZone);
-        attackingNation.addSiegeZone(siegeZone);
+		siegeZone.setFlagLocation(block.getLocation());
+		siege.getSiegeZones().put(attackingNation, siegeZone);
+		attackingNation.addSiegeZone(siegeZone);
 
-        //Save siegezone, siege, nation, and town to DB
-        TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-        TownyUniverse.getDataSource().saveNation(attackingNation);
-        TownyUniverse.getDataSource().saveTown(defendingTown);
-        TownyUniverse.getDataSource().saveSiegeZoneList();
+		//Save siegezone, siege, nation, and town to DB
+		TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+		TownyUniverse.getDataSource().saveNation(attackingNation);
+		TownyUniverse.getDataSource().saveTown(defendingTown);
+		TownyUniverse.getDataSource().saveSiegeZoneList();
 
-        //Send global message;
-        if(newSiege) {
-        	if(siege.getDefendingTown().hasNation()) {
+		//Send global message;
+		if (newSiege) {
+			if (siege.getDefendingTown().hasNation()) {
 				TownyMessaging.sendGlobalMessage(String.format(
 					TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
 					TownyFormatter.getFormattedNationName(attackingNation),
@@ -161,15 +163,26 @@ public class AttackTown {
 					TownyFormatter.getFormattedTownName(defendingTown)
 				));
 			}
-        } else {
+		} else {
 			TownyMessaging.sendGlobalMessage(String.format(
 				TownySettings.getLangString("msg_siege_war_siege_joined"),
 				TownyFormatter.getFormattedNationName(attackingNation),
 				TownyFormatter.getFormattedTownName(defendingTown)
 			));
-        }
+		}
+
+		if (TownySettings.isUsingEconomy()) {
+			String moneyMessage = 
+				String.format(
+				TownySettings.getLangString("msg_siege_war_attack_money"),
+					TownyEconomyHandler.getFormattedBalance(defendingTown.getSiegeCost()),
+					TownyEconomyHandler.getFormattedBalance(defendingTown.getPlunderValue())
+				);
 
 
+			TownyMessaging.sendMessage(player,moneyMessage);
+		}
+        
         //BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
         //TODO - Do we announce a new siege event like this???
     }

@@ -1354,11 +1354,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public double getPlunderValue() {
 		return TownySettings.getWarSiegeAttackerPlunderAmountPerPlot() * townBlocks.size();
 	}
-
-	public String getFormattedPlunderValue() {
-		return TownyEconomyHandler.getFormattedBalance(getPlunderValue());
+	
+	public double getSiegeCost() {
+		return TownySettings.getWarSiegeAttackerCostUpFrontPerPlot() * townBlocks.size();
 	}
-
+	
 	public String getFormattedHoursUntilSiegeImmunityEnds() {
 		double hoursUntilSiegeCooldownEnds = siegeImmunityEndTime - System.currentTimeMillis();
 		return TimeMgmt.getFormattedTimeValue(hoursUntilSiegeCooldownEnds);

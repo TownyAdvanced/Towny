@@ -438,11 +438,6 @@ public class TownyFormatter {
 				out.add(String.format(TownySettings.getLangString("status_town_revolt_immunity_timer"), town.getFormattedHoursUntilRevoltCooldownEnds()));
 			}
 
-			// Plunder Value: $55,000
-			if(TownySettings.isUsingEconomy()) {
-				out.add(String.format(TownySettings.getLangString("status_town_siege_plunder_value"), town.getFormattedPlunderValue()));
-			}
-
 			if(town.hasSiege()) {
 				Siege siege = town.getSiege();
 
