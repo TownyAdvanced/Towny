@@ -373,6 +373,7 @@ msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully dri
 msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s. The siege is over!'
 msg_siege_war_attacker_abandon: '&6[War]&b An army belonging to %s has abandoned its attack on %s'
 msg_siege_war_siege_abandon: '&6[War]&b All attacking armies have abandoned the siege of %s. The defenders are victorious!'
+msg_siege_war_town_surrender: '&6[War]&b %s has surrendered to an army belonging to %s. The siege is over!'
 msg_siege_war_neutral_town_captured: '&6[War]&b %s has been captured by %s!'
 msg_siege_war_nation_town_captured: '&6[War]&b %s, previously belonging to %s, has been captured by %s!'
 msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered by %s!'
@@ -408,6 +409,9 @@ msg_err_siege_war_cannot_plunder_without_victory: "&6[War]&c You cannot plunder 
 msg_err_siege_war_cannot_plunder_without_economy: "&6[War]&c You cannot plunder because no economy plugin is active"
 msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been plundered'
 #Surrender
+msg_err_siege_war_cannot_surrender_not_your_town: '&6[War]&c You cannot surrender because this is not your town.'
+msg_err_siege_war_cannot_surrender_siege_finished: '&6[War]&c You cannot surrender because the siege is over'
+msg_err_siege_war_cannot_surrender_multiple_attackers: '&6[War]&c You cannot surrender if there are multiple attacking nations.'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -27,17 +28,17 @@ public class SurrenderTown {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
             if(resident.getTown() != townWhereBlockWasPlaced)
-                throw new TownyException("You cannot place a surrender banner because this is not your town.");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_not_your_town"));
 
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             Siege siege = townWhereBlockWasPlaced.getSiege();
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
-                throw new TownyException("You cannot place a surrender banner because the siege is over");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_siege_finished"));
 
             if(siege.getActiveAttackers().size() > 1)
-                throw new TownyException("You cannot place a surrender banner if there is more than 1 attacker");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_multiple_attackers"));
 
             //Surrender
             defenderSurrender(siege);
@@ -48,11 +49,14 @@ public class SurrenderTown {
         }
     }
 
-    private static void defenderSurrender(Siege siege) throws TownyException {
+    private static void defenderSurrender(Siege siege) {
         SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siege,
                                             SiegeStatus.DEFENDER_SURRENDER,
                                             siege.getActiveAttackers().get(0));
 
-        TownyMessaging.sendGlobalMessage("Town has surrendered.");
+        TownyMessaging.sendGlobalMessage(String.format(
+        	TownySettings.getLangString("msg_siege_war_town_surrender"),
+			TownyFormatter.getFormattedTownName(siege.getDefendingTown()),
+			TownyFormatter.getFormattedNationName(siege.getAttackerWinner())));
     }
 }
