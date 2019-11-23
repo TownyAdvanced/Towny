@@ -1818,23 +1818,23 @@ public enum ConfigNodes {
 			"# The time in seconds for each siegewar timer tick."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
 			"war.siege.times.ruins_removal_interval_minutes",
-			"60",
+			"1",
 			"# The time in minutes for each scan & deletion of town ruins"),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.times.max_holdout_time_hours",
-			"0.1",
+			"0.02",
 			"# The maximum duration a town can hold out against a siege.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
-			"0.05",
+			"0.02",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
-			"2.5",
+			"1.5",
 			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
 			"# A high value makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
@@ -1851,7 +1851,7 @@ public enum ConfigNodes {
 			"# This setting determines the delay between a town being ruined, and final deletion."),
 	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
 		"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
-		"30",
+		"15",
 		"# This setting determines how long a player must remain in a siege zone.",
 		"# -> before siege points are awarded."),
 
