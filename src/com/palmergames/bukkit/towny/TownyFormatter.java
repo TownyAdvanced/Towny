@@ -377,17 +377,19 @@ public class TownyFormatter {
 				TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
 		// | Bank: 534 coins
-		String bankString = "";
-		if (TownySettings.isUsingEconomy()) {
-			if (TownyEconomyHandler.isActive()) {
-				bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
-				if (town.hasUpkeep())
-					bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-				if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-					bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
-				bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+		if(!town.isRuined()) {
+			String bankString = "";
+			if (TownySettings.isUsingEconomy()) {
+				if (TownyEconomyHandler.isActive()) {
+					bankString = String.format(TownySettings.getLangString("status_bank"), town.getHoldingFormattedBalance());
+					if (town.hasUpkeep())
+						bankString += String.format(TownySettings.getLangString("status_bank_town2"), new BigDecimal(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+					if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+						bankString += String.format(TownySettings.getLangString("status_bank_town_penalty_upkeep"), TownySettings.getTownPenaltyUpkeepCost(town));
+					bankString += String.format(TownySettings.getLangString("status_bank_town3"), town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
+				}
+				out.add(bankString);
 			}
-			out.add(bankString);
 		}
 
 		// Mayor: MrSand | Bank: 534 coins
