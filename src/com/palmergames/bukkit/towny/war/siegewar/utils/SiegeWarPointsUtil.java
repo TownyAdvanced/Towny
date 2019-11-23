@@ -11,7 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarPointsUtil {
+
 	public static TownyObject calculateSiegeWinner(Siege siege) {
         //If all siege zones are negative points, defender wins
         //Otherwise, the siege zone attacker with the highest points wins

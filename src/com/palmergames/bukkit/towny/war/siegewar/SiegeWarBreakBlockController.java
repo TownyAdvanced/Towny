@@ -6,6 +6,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarBreakBlockController {
 
 	//While a siege exists, nobody can destroy the siege banner or nearby blocks

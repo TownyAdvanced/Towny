@@ -15,6 +15,9 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarBlockUtil {
 	public static List<TownBlock> getAdjacentTownBlocks(Player player, Block block) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();

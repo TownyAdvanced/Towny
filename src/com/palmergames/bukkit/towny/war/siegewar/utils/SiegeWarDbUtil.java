@@ -6,7 +6,11 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarDbUtil {
+
 	public static void updateAndSaveSiegeCompletionValues(Siege siege,
 														  SiegeStatus siegeStatus,
 														  Nation winnerNation) {

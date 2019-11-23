@@ -4,7 +4,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.util.TimeMgmt;
 
+/**
+ * @author Goosius
+ */
 public class SiegeWarTimeUtil {
+
 	public static void activateSiegeImmunityTimer(Town town) {
         double siegeDuration = town.getSiege().getActualEndTime() - town.getSiege().getStartTime();
         double cooldownDuration = siegeDuration * TownySettings.getWarSiegeSiegeImmunityTimeModifier();
