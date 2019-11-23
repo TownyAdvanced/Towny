@@ -1848,7 +1848,7 @@ public enum ConfigNodes {
 	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
 			"war.siege.times.ruins_removal_delay_minutes",
 			"1",
-			"#"),
+			"# This setting determines the delay between a town being ruined, and final deletion."),
 	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
 		"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
 		"30",
