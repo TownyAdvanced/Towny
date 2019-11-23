@@ -1746,42 +1746,42 @@ public enum ConfigNodes {
 
 	//Basics
 	WAR_SIEGE_ENABLED(
-			"war.siege.enabled",
+			"war.siege.basics.enabled",
 			"true",
 			"# If true, the Siege-War feature is enabled.",
 			"# if false, the Siege-War feature is disabled."),
 	WAR_SIEGE_ATTACK_ENABLED(
-			"war.siege.attack_enabled",
+			"war.siege.basics.attack_enabled",
 			"true",
 			"# If true, people can start sieges."),
 	WAR_SIEGE_ABANDON_ENABLED(
-			"war.siege.abandon_enabled",
+			"war.siege.basics.abandon_enabled",
 			"true",
 			"# If true, people can abandon sieges."),
 	WAR_SIEGE_INVADE_ENABLED(
-			"war.siege.invade_enabled",
+			"war.siege.basics.invade_enabled",
 			"true",
 			"# "),
 	WAR_SIEGE_PLUNDER_ENABLED(
-			"war.siege.plunder_enabled",
+			"war.siege.basics.plunder_enabled",
 			"true",
 			"#"),
 	WAR_SIEGE_REVOLT_ENABLED(
-			"war.siege.revolt_enabled",
+			"war.siege.basics.revolt_enabled",
 			"true",
 			"#."),
 	WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS(
-			"war.siege.pvp_always_on_in_besieged_towns",
+			"war.siege.basics.pvp_always_on_in_besieged_towns",
 			"true",
 			"# If this setting is true, then pvp is always set to on during sieges",
 			"# It is automatically set to off when the siege ends"),
 	WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS(
-			"war.siege.teleport_disabled_to_besieged_towns",
+			"war.siege.basics.teleport_disabled_to_besieged_towns",
 			"true",
 			"# If this setting is true, then you cannot teleport to a besieged town.",
 			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
 	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
-			"war.siege.delay_full_town_removal",
+			"war.siege.basics.delay_full_town_removal",
 			"true",
 			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time",
 			"# In this state, the town cannot be claimed, but can be looted",
@@ -1791,11 +1791,11 @@ public enum ConfigNodes {
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
-			"war.siege.attacker_cost_upfront_per_plot",
+			"war.siege.costs.attacker_cost_upfront_per_plot",
 			"10.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
-			"war.siege.attacker_plunder_amount_per_plot",
+			"war.siege.costs.attacker_plunder_amount_per_plot",
 			"20",
 			"# This is the amount plundered by the attacker is a siege is successful.",
 			"# If this value is lower than the upfront cost, then sieges will not be profitable",
@@ -1804,60 +1804,60 @@ public enum ConfigNodes {
 
 	//Timings
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
-			"war.siege.timer_interval_seconds",
+			"war.siege.times.timer_interval_seconds",
 			"6",
 			"# The time in seconds for each siegewar timer tick."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
-			"war.siege.ruins_removal_interval_minutes",
+			"war.siege.times.ruins_removal_interval_minutes",
 			"60",
 			"# The time in minutes for each scan & deletion of town ruins"),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
-			"war.siege.max_holdout_time_hours",
+			"war.siege.times.max_holdout_time_hours",
 			"0.1",
 			"# The maximum duration a town can hold out against a siege.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
-			"war.siege.siege_immunity_time_new_town_hours",
+			"war.siege.times.siege_immunity_time_new_town_hours",
 			"0.05",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
-			"war.siege.siege_immunity_time_modifier",
+			"war.siege.times.siege_immunity_time_modifier",
 			"2.5",
 			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
 			"# A high value makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
 			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS(
-			"war.siege.revolt_immunity_time_hours",
+			"war.siege.times.revolt_immunity_time_hours",
 			"240",
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
 			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
 	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
-			"war.siege.ruins_removal_delay_minutes",
+			"war.siege.times.ruins_removal_delay_minutes",
 			"1",
 			"#"),
+	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
+		"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
+		"30",
+		"# This setting determines how long a player must remain in a siege zone.",
+		"# -> before siege points are awarded."),
 
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
-			"war.siege.points_per_attacking_player",
+			"war.siege.scoring.points_per_attacking_player",
 			"1",
 			"# This setting determines the number of siege points awarded per attacking player.",
 			"# The award given each tick that an attacking player is in a town border block"),
 	WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER(
-			"war.siege.points_per_defending_player",
+			"war.siege.scoring.points_per_defending_player",
 			"1",
 			"# This setting determines the number of siege points awarded per defending player.",
 			"# The award given each tick that a defending player is in the town",
-			"# It is only given IF there are no attacking players in the town"),
-	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
-			"war.siege.zone_occupation_scoring_time_requirement_seconds",
-			"30",
-			"# This setting determines how long a player must remain in a siege zone.",
-			"# -> before siege points are awarded.");
+			"# It is only given IF there are no attacking players in the town");
 
 	private final String Root;
 	private final String Default;

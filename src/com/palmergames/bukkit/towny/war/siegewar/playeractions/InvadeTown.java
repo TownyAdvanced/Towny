@@ -46,21 +46,23 @@ public class InvadeTown {
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-            if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
-                throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");
+			if(!resident.hasTown() || !resident.getTown().hasNation())
+				throw new TownyException("You must be a resident of a town in a nation to use the invade action.");
+			
+			if(resident.getTown() == siege.getDefendingTown())
+				throw new TownyException("You cannot invade your own town.");
 
+			if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
+				throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");
+			
             if (siege.getStatus() == SiegeStatus.DEFENDER_WIN)
                 throw new TownyException("The defender has defeated all attackers. You cannot invade unless your nation is victorious in the siege");
 
             if (siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
                 throw new TownyException("All attackers abandoned the siege. You cannot invade unless your nation is victorious in the siege");
-
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-            if(!resident.hasTown() || !resident.getTown().hasNation())
-                throw new TownyException("You must be a resident of a town in a nation to use the invade action.");
-
+            
             if (resident.getTown().getNation() != siege.getAttackerWinner())
                 throw new TownyException("The town was defeated but not by your nation. You cannot invade unless your nation is victorious in the siege");
 

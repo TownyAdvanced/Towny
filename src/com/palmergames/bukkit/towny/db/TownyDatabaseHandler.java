@@ -947,7 +947,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getNationsMap().remove(oldName.toLowerCase());
 			nation.setName(filteredName);
 			universe.getNationsMap().put(filteredName.toLowerCase(), nation);
-
+			//Similarly move/rename siegezones
+			String oldSiegeZoneName;
+			String newSiegeZoneName;
+			for(SiegeZone siegeZone: nation.getSiegeZones()) {
+				oldSiegeZoneName = SiegeZone.generateName(oldName, siegeZone.getDefendingTown().getName());
+				newSiegeZoneName = siegeZone.getName();
+				universe.getSiegeZonesMap().remove(oldSiegeZoneName);
+				universe.getSiegeZonesMap().put(newSiegeZoneName, siegeZone);
+			}
+			
 			if (TownyEconomyHandler.isActive()) {
 				try {
 					nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
@@ -963,9 +972,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTown(town);
 			}
 
+			for(SiegeZone siegeZone: nation.getSiegeZones()) {
+				saveSiegeZone(siegeZone);	
+			}
+			
 			saveNation(nation);
 			saveNationList();
-
+			saveSiegeZoneList();
+			
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
 			List<Nation> toSaveNation = new ArrayList<>(getNations());

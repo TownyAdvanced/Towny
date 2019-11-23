@@ -69,12 +69,12 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	//Cycle through all sieges
 	private void evaluateSieges() {
-		for(com.palmergames.bukkit.towny.war.siegewar.locations.Siege siege: getAllSieges()) {
+		for(Siege siege: getAllSieges()) {
 			evaluateSiege(siege);
 		}
 	}
 
-	private static void evaluateSiegeZone(com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone siegeZone) {
+	private static void evaluateSiegeZone(SiegeZone siegeZone) {
 		if(siegeZone.isActive()) {
 			boolean siegeZoneChanged = false;
 			Resident resident;
@@ -160,7 +160,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
-	private static void evaluateSiege(com.palmergames.bukkit.towny.war.siegewar.locations.Siege siege) {
+	private static void evaluateSiege(Siege siege) {
 		//Process active siege
 		if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 
