@@ -44,7 +44,7 @@ public class SiegeWarPlaceBlockController {
 				return false;
 			}
 		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(player, "Problem placing banner");
+			TownyMessaging.sendErrorMsg(player, "Problem placing siege related block");
 			e.printStackTrace();
 			event.setCancelled(true);
 			return true;
@@ -169,9 +169,13 @@ public class SiegeWarPlaceBlockController {
 			return false;
 		}
 		Coord coord = Coord.parseCoord(block);
+		
+		if (!world.hasTownBlock(coord)) 
+			return false;
+		
 		TownBlock townBlock = world.getTownBlock(coord);
-
-		if (townBlock != null && townBlock.hasTown()) {
+		
+		if(townBlock.hasTown()) {
 			townWhereBlockWasPlaced = townBlock.getTown();
 		} else {
 			return false;

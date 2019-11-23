@@ -147,11 +147,20 @@ public class AttackTown {
 
         //Send global message;
         if(newSiege) {
-            TownyMessaging.sendGlobalMessage(String.format(
-            	TownySettings.getLangString("msg_siege_war_siege_started"),
-				TownyFormatter.getFormattedNationName(attackingNation),
-				TownyFormatter.getFormattedTownName(defendingTown)
-			));
+        	if(siege.getDefendingTown().hasNation()) {
+				TownyMessaging.sendGlobalMessage(String.format(
+					TownySettings.getLangString("msg_siege_war_siege_started_nation_town"),
+					TownyFormatter.getFormattedNationName(attackingNation),
+					TownyFormatter.getFormattedNationName(defendingTown.getNation()),
+					TownyFormatter.getFormattedTownName(defendingTown)
+				));
+			} else {
+				TownyMessaging.sendGlobalMessage(String.format(
+					TownySettings.getLangString("msg_siege_war_siege_started_neutral_town"),
+					TownyFormatter.getFormattedNationName(attackingNation),
+					TownyFormatter.getFormattedTownName(defendingTown)
+				));
+			}
         } else {
 			TownyMessaging.sendGlobalMessage(String.format(
 				TownySettings.getLangString("msg_siege_war_siege_joined"),

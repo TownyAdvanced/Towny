@@ -2560,8 +2560,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
 					long durationMillis = TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS;
 					String durationFormatted = TimeMgmt.getFormattedTimeValue(durationMillis);
-					TownyMessaging.sendErrorMsg(player, "WARNING!!!: If you delete your town it will enter a 'ruined' state for " + durationFormatted + "."
-							+ " In this state, all perms are enabled & the town can be griefed.");
+					TownyMessaging.sendErrorMsg(player, String.format(
+						TownySettings.getLangString("msg_err_siege_war_delete_town_warning"),
+						durationFormatted));
+
 				}
 				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);

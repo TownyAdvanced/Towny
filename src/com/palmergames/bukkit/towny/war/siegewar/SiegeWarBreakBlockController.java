@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ public class SiegeWarBreakBlockController {
 	public static boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
 		if (SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
 			event.setCancelled(true);
-			TownyMessaging.sendErrorMsg(player, "While the siege is in progress you cannot destroy the siege banner or the block it is attached to.");
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_cannot_destroy_siege_banner"));
 			return true;
 		} else {
 			return false;
