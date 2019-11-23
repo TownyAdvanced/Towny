@@ -1789,6 +1789,11 @@ public enum ConfigNodes {
 			"true",
 			"# If this setting is true, then you cannot teleport to a besieged town.",
 			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
+	WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES(
+		"war.siege.switches.claiming_disabled_near_siege_zones",
+		"true",
+		"# If this setting is true, then land cannot be claimed near a siege zone.",
+		"# This setting is generally considered critical, otherwise the defender could wall off the siege zone"),
 	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
 			"war.siege.switches.delay_full_town_removal",
 			"true",
@@ -1811,7 +1816,7 @@ public enum ConfigNodes {
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",
 			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture"),
 
-	//Timings
+	//Times
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.times.timer_interval_seconds",
 			"6",
@@ -1854,7 +1859,13 @@ public enum ConfigNodes {
 		"15",
 		"# This setting determines how long a player must remain in a siege zone.",
 		"# -> before siege points are awarded."),
-
+	
+	//Distances
+	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
+		"war.siege.distances.claim_disable_distance_blocks",
+		"100",
+		"# This is the distance in regular blocks from a siege banner in which claims are disabled"),
+	
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
 			"war.siege.scoring.points_per_attacking_player",

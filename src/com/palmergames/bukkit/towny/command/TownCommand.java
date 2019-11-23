@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -2963,6 +2964,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 				}
 
+				if(TownySettings.getWarSiegeClaimingDisabledNearSiegeZones()) {
+					int claimDisableDistance = TownySettings.getWarSiegeClaimDisableDistanceBlocks();
+					for(SiegeZone siegeZone: townyUniverse.getDataSource().getSiegeZones()) {
+						if(siegeZone.isActive() && siegeZone.getFlagLocation().distance(player.getLocation()) < claimDisableDistance) {
+							throw new TownyException(TownySettings.getLangString("msg_err_siege_claim_too_near_siege_zone"));
+						}
+					}
+				}
+				
 				resident = townyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
