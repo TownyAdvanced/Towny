@@ -1802,7 +1802,7 @@ public enum ConfigNodes {
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
 			"war.siege.money.attacker_cost_upfront_per_plot",
 			"10.0",
-			"#..."),
+			"#. This value controls the upfront cost of the siege for the attacker."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
 			"war.siege.money.attacker_plunder_amount_per_plot",
 			"20.0",
