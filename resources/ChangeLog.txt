@@ -3834,3 +3834,15 @@ v0.92.0.11:
     - /ta town {town} toggle pvp bypasses cooldowntimer.
   - Language files bumped to 0.62.
 0.95.1.6:
+  - Language files bumped to 0.63.
+  - Fix cosmetics of setting a plot not for sale appearing to display as an error.
+    - Closes ticket #3503.
+  - Added SpawnUtil with PR #3505.
+  - Using /res spawn will now charge the town's spawn cost instead of the config's.
+    - This could mean a slight price-break.
+  - Fix sending nomad outlaws to jail when killed.
+    - Closes ticket #3506.
+0.95.1.7:
+  - API: TownPreAddResidentEvent & NationPreAddTownEvent, courtesy of Siris with PR #3507
+    - Can be used by other plugins to cancel residents/towns from joining towns/nations.
+    - Works for /t join and /n join as well as /t add and /n add commands. 

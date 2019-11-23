@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -31,6 +32,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -621,11 +623,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[1].equalsIgnoreCase("spawn")) {
 
-				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", false);
+				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", false, SpawnType.TOWN);
 
 			} else if (split[1].equalsIgnoreCase("outpost")) {
 
-				TownCommand.townSpawn(player, StringMgmt.remArgs(split, 2), town, "", true);
+				SpawnUtil.sendToTownySpawn(player, StringMgmt.remArgs(split, 2), town, "", true, SpawnType.TOWN);
 
 			} else if (split[1].equalsIgnoreCase("rank")) {
 				

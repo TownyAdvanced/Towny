@@ -1,8 +1,8 @@
 name: Towny
-version: 0.62
+version: 0.63
 language: italian
 author: Leomixer17
-website: 'http://towny.palmergames.com/'
+website: 'http://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
     If you wish to change any of the entries, make a copy named something else.
@@ -1017,3 +1017,10 @@ msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
 msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s seconds.'
+
+# Added in 0.63
+msg_plot_set_to_nfs: 'Plot is no longer for sale.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
+msg_the_wilderness: 'the Wilderness'
+msg_enemy_areas: 'Enemy areas'
+msg_neutral_towns: 'Neutral towns'
