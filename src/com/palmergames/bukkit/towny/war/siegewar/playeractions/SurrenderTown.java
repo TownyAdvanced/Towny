@@ -22,12 +22,9 @@ public class SurrenderTown {
                                                    Town townWhereBlockWasPlaced,
                                                    BlockPlaceEvent event) {
         try {
-            if (!TownySettings.getWarSiegeEnabled())
-                throw new TownyException("Siege war feature disabled");  //todo - replace w lang string
-
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
             if(!resident.hasTown())
-                throw new TownyException("You cannot place a surrender banner because you do not belong to a town.");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
             if(resident.getTown() != townWhereBlockWasPlaced)
                 throw new TownyException("You cannot place a surrender banner because this is not your town.");

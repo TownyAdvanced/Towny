@@ -2,8 +2,10 @@ package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
@@ -77,6 +79,10 @@ public class SiegeWarPlaceBlockController {
 				if (blockTypeName.contains("white")
 					&& ((Banner) block.getState()).getPatterns().size() == 0) {
 					//White banner
+
+					if (!TownySettings.getWarSiegeAbandonEnabled())
+						return false;
+						
 					AbandonAttack.processAbandonSiegeRequest(player,
 						block,
 						nearbyTownBlocks,
@@ -84,6 +90,10 @@ public class SiegeWarPlaceBlockController {
 					return true;
 				} else {
 					//Coloured banner
+
+					if (!TownySettings.getWarSiegeAttackEnabled())
+						return false;
+
 					AttackTown.processAttackTownRequest(
 						player,
 						block,
@@ -118,6 +128,9 @@ public class SiegeWarPlaceBlockController {
 			if (blockTypeName.contains("white")
 				&& ((Banner) block.getState()).getPatterns().size() == 0) {
 				//White banner
+				if (!TownySettings.getWarSiegeSurrenderEnabled())
+					return false;
+
 				SurrenderTown.processTownSurrenderRequest(
 					player,
 					town,
@@ -125,6 +138,9 @@ public class SiegeWarPlaceBlockController {
 				return true;
 			} else {
 				//Coloured banner
+				if (!TownySettings.getWarSiegeInvadeEnabled())
+					return false;
+				
 				InvadeTown.processInvadeTownRequest(
 					plugin,
 					player,
@@ -139,6 +155,9 @@ public class SiegeWarPlaceBlockController {
 	private static boolean evaluateSiegeWarPlaceChestRequest(Player player,
 													  Block block,
 													  BlockPlaceEvent event) throws NotRegisteredException {
+		if (!TownySettings.getWarSiegePlunderEnabled())
+			return false;
+
 		Town townWhereBlockWasPlaced;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld world;

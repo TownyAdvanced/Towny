@@ -33,9 +33,6 @@ public class InvadeTown {
                                                 String townName,
                                                 BlockPlaceEvent event) {
         try {
-            if (!TownySettings.getWarSiegeInvadeEnabled())
-                throw new TownyException("Invade not allowed. Try plunder instead.");
-
             if (!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
 
@@ -48,11 +45,14 @@ public class InvadeTown {
             final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-			if(!resident.hasTown() || !resident.getTown().hasNation())
-				throw new TownyException("You must be a resident of a town in a nation to use the invade action.");
+			if(!resident.hasTown()) 
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
+
+			if(!resident.getTown().hasNation())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 			
 			if(resident.getTown() == siege.getDefendingTown())
-				throw new TownyException("You cannot invade your own town.");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_own_town"));
 
 			if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
 				throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");

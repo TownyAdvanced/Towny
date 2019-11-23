@@ -24,12 +24,6 @@ public class PlunderTown {
 
     public static void processPlunderTownRequest(Player player, String townName, BlockPlaceEvent event) {
         try {
-            if (!TownySettings.getWarSiegeEnabled())
-                throw new TownyException("Siege war feature disabled");
-
-            if (!TownySettings.getWarSiegePlunderEnabled())
-                throw new TownyException("Plunder not allowed. Try invade instead.");
-
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
@@ -94,17 +88,13 @@ public class PlunderTown {
     }
 
     private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation) {
-        if(defendingTown.hasNation()) {
-            try {
-                TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
-                        TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
-                        TownyFormatter.getFormattedTownName(defendingTown),
-                        TownyFormatter.getFormattedNationName(defendingTown.getNation()),
-                        TownyFormatter.getFormattedNationName(winnerNation)
-                )));
-            } catch (NotRegisteredException e) {
-                e.printStackTrace();
-            }
+        //Same for now but may diverge in future (if we decide to track the original nation of the town)
+    	if(defendingTown.hasNation()) {
+			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+					TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
+					TownyFormatter.getFormattedTownName(defendingTown),
+					TownyFormatter.getFormattedNationName(winnerNation)
+			)));
         } else {
             TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),

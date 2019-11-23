@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -25,17 +26,13 @@ public class AbandonAttack {
                                                   List<TownBlock> nearbyTownBlocksWithTowns,
                                                   BlockPlaceEvent event)  {
         try {
-
-            if(!TownySettings.getWarSiegeAbandonEnabled())
-                throw new TownyException("Siege abandon not allowed");
-
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
             if(!resident.hasTown())
-                throw new TownyException("You must belong to a town to abandon a siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
             Town townOfResident = resident.getTown();
             if(!townOfResident.hasNation())
-                throw new TownyException("You must belong to a nation to abandon a siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
             //If player has no permission to abandon,send error
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
@@ -52,7 +49,7 @@ public class AbandonAttack {
 
             //If none are under active siege, send error
             if(nearbyTownsWithSieges.size() == 0)
-                throw new TownyException("You cannot place an abandon banner because none of the nearby towns are under siege.");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_no_nearby_sieges"));
 
             //Get the active siege zones
             List<SiegeZone> nearbyActiveSiegeZones = new ArrayList<>();
@@ -82,13 +79,11 @@ public class AbandonAttack {
             //If the player's nation is not the attacker, send error
             Nation nationOfResident = townOfResident.getNation();
             if(targetedSiegeZone.getAttackingNation() != nationOfResident)
-                throw new TownyException("Your nation is not attacking this town right now");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
             //If the player is too far from the targeted zone, error error
             if(distanceToTarget > TownySettings.getTownBlockSize())
-                throw new TownyException("You cannot place an abandon banner because " +
-                        "you are too far from the nearest attack banner. " +
-                        "Move closer to the attack banner");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
 
             attackerAbandon(targetedSiegeZone);
 
@@ -102,13 +97,19 @@ public class AbandonAttack {
         siegeZone.setActive(false);
         TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
 
-        TownyMessaging.sendGlobalMessage(siegeZone.getAttackingNation().getName() + " has abandoned their attack on" + siegeZone.getDefendingTown().getName());
-
+		TownyMessaging.sendGlobalMessage(
+			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
+				TownyFormatter.getFormattedNationName(siegeZone.getAttackingNation()),
+        		TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
+		
         if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
             SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
                     SiegeStatus.ATTACKER_ABANDON,
                     null);
-            TownyMessaging.sendGlobalMessage("The siege on " + siegeZone.getDefendingTown().getName() +" has been abandoned all attackers.");
-        }
+			TownyMessaging.sendGlobalMessage(
+				String.format(TownySettings.getLangString("msg_siege_war_siege_abandon"),
+					TownyFormatter.getFormattedNationName(siegeZone.getAttackingNation()),
+					TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
+		}
     }
 }

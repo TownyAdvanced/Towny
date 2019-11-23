@@ -1322,7 +1322,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return (int) (resultDouble + 0.5);
 	}
 
-	public boolean isRevoltCooldownActive() {
+	public boolean isRevoltImmunityActive() {
 		return System.currentTimeMillis() < revoltImmunityEndTime;
 	}
 

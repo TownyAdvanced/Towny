@@ -73,14 +73,6 @@ nation_help_7: 'List the king commands'
 nation_help_8: 'Create a new nation'
 nation_help_9: 'List all online residents in nation'
 
-siege_help_1: 'List all sieges'
-siege_help_2: '[town]'
-siege_help_3: 'Attack town at your location'
-siege_help_4: 'Abandon siege on target town'
-siege_help_5: 'Plunder target town'
-siege_help_6: 'Invade target town'
-siege_help_7: 'Surrender your town'
-
 king_help_1: 'Nation King Help'
 king_help_2: 'Set your alliance.'
 king_help_3: 'Set your enemies.'
@@ -110,7 +102,6 @@ admin_sing: 'Admin'
 town_sing: 'Town'
 nation_sing: 'Nation'
 nation_plu: 'Nations'
-siege_plu: 'Sieges'
 king_sing: 'King'
 town_plu: 'Towns'
 world_plu: 'Worlds'
@@ -374,17 +365,40 @@ msg_err_enemy_war_not_on_edge_of_town: '&6[War]&c Only allowed to attack the bor
 msg_err_enemy_war_cell_already_under_attack: '&6[War]&c This area is already under attack by %s.'
 msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more than %d areas at once.'
 
-#Siege war regular messages
-msg_siege_war_neutral_town_captured: '&6[War]&b %s has been captured by %s!'
-msg_siege_war_nation_town_captured: '&6[War]&b %s, belonging to %s, has been captured by %s!'
-msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered by %s!'
-msg_siege_war_nation_town_plundered: '&6[War]&b %s, belonging to %s, has been plundered by %s!'
-msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!'
+#Siege war happy-path messages
+msg_siege_war_revolt: '&6[War]&b The people of %s, led by %s, have revolted against the occupying power (%s), and declared themselves free to choose their own destiny!'
 msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully driven off all attackers. The siege has failed!'
 msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s!'
-msg_siege_war_revolt: '&6[War]&b The people of %s, led by %s, have revolted against the occupying power (%s), and declared themselves free to choose their own destiny!'
-msg_siege_war_post_revolt_siege_cooldown_reset: '&6[War]&b Because of the recent revolt, the siege cooldown for your town (if any) has been reset to off.'
-#Siege war error  messages
+msg_siege_war_attacker_abandon: '&6[War]&b %s have abandoned their attack on %s'
+msg_siege_war_siege_abandon: '&6[War]&b All attackers have abandoned the siege of %s. The defenders are victorious!'
+
+
+
+msg_siege_war_neutral_town_captured: '&6[War]&b %s has been captured by %s!'
+msg_siege_war_nation_town_captured: '&6[War]&b %s, previously belonging to %s, has been captured by %s!'
+msg_siege_war_neutral_town_plundered: '&6[War]&b %s has been plundered by %s!'
+msg_siege_war_nation_town_plundered: '&6[War]&b %s has been plundered by %s!'
+msg_siege_war_nation_defeated: '&6[War]&b %s has been defeated!'
+
+#Siege war error messages
+#Revolt
+msg_err_siege_war_town_voluntary_leave_impossible: "&6[War]&c Towns cannot leave nations without agreement. To leave your nation, persuade the king (or an assistant) to kick your town."
+msg_err_siege_war_revolt_immunity_active: "&6[War]&c You cannot revolt until your revolt immunity timer expires (i.e. gets to 0)"
+#Attack
+msg_err_siege_war_banner_must_be_placed_above_ground: '&6[War]&c The siege banner must be place above ground.'
+msg_err_siege_war_action_not_a_town_member: '&6[War]&c You must be a member of a town to do this action.'
+msg_err_siege_war_action_not_a_nation_member: '&6[War]&c You must be a member of a nation to do this action.'
+msg_err_siege_war_cannot_attack_own_town: '&6[War]&c You cannot attack your own town.'
+#Abandon
+msg_err_siege_war_cannot_abandon_no_nearby_sieges: '&6[War]&c Cannot abandon. There is no siege in this area.'
+msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c Cannot abandon. Your nation is not attacking in this area.'
+
+
+#Invade
+msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot invade your own town.'
+
+
+#Invasions
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s'
 msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
 msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been plundered'
@@ -780,20 +794,19 @@ status_town_nation: '&2Nation: &a%s'
 status_town_reslist_overlength: 'and more...'
 status_town_reslist: '&2Residents &a[%s]&2: &f'
 
-#Sieges
+#Town Info Siege Section
 status_town_siege_plunder_value: '&2Town Plunder Value: &a%s'
-status_town_siege_immunity_timer: '&2 > Immunity Timer: &a%s'
 status_town_revolt_immunity_timer: '&2Revolt Immunity Timer: &a%s'
 status_town_siege_status: '&2Siege: &a%s'
-status_town_siege_plundered_prefix: '&2Town Plundered: '
-status_town_siege_invaded_prefix: '&2 > Town Invaded: '
-status_town_siege_victory_timer: '&2 > Victory Timer: &a%s'
+status_town_siege_status_in_progress: 'In Progress'
+status_town_siege_status_attacker_win: 'Attacker Victory - %s'
+status_town_siege_status_attacker_abandon: 'Attacker Abandon'
+status_town_siege_status_defender_win: 'Town Victory'
+status_town_siege_status_defender_surrender: 'Town Surrender - to %s'
 status_town_siege_attackers_tag: '&2 > Attackers: '
-status_town_siege_summary_in_progress: 'In Progress'
-status_town_siege_summary_attacker_win: 'Attacker Victory - %s'
-status_town_siege_summary_attacker_abandon: 'Attacker Abandon'
-status_town_siege_summary_defender_win: 'Town Victory'
-status_town_siege_summary_defender_surrender: 'Town Surrender - to %s'
+status_town_siege_immunity_timer: '&2 > Immunity Timer: &a%s'
+status_town_siege_victory_timer: '&2 > Victory Timer: &a%s'
+status_town_siege_invaded_plundered_status: '&2 > Town Invaded: %s  &2Town Plundered: %s'
 
 status_nation_peaceful: '&7Peaceful'
 status_nation_king: '&2King: &a%s'

@@ -28,20 +28,17 @@ public class AttackTown {
                                                 BlockPlaceEvent event) {
 
         try {
-            if (!TownySettings.getWarSiegeAttackEnabled())
-                throw new TownyException("Siege Attacks not allowed");
-
             Resident attackingResident = TownyUniverse.getDataSource().getResident(player.getName());
             if(!attackingResident.hasTown())
-                throw new TownyException("You must belong to a town to start a siege");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
             Town townOfAttackingResident = attackingResident.getTown();
             if(!townOfAttackingResident.hasNation())
-                throw new TownyException("You must belong to a nation to start a siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
             Town defendingTown = nearbyTownBlocks.get(0).getTown();
             if(townOfAttackingResident == defendingTown)
-                throw new TownyException("You cannot attack your own town");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_own_town"));
 
             Nation nationOfAttackingPlayer= townOfAttackingResident.getNation();
             if (defendingTown.hasNation()) {
@@ -85,15 +82,8 @@ public class AttackTown {
                 }
             }
 
-            //THE FOLLOWING MATTER FOR POINTS BUT NOT FOR STARTINGSIEGE
-            //if (player.isFlying())
-            //    throw new TownyException("You cannot be flying to start a siege.");
-
-            //if(player.getPotionEffect(PotionEffectType.INVISIBILITY) != null)
-            //  throw new TownyException("The god(s) favour the brave. You cannot be invisible to start a siege");
-
             if (SiegeWarBlockUtil.doesBlockHaveANonAirBlockAboveIt(block))
-                throw new TownyException("The god(s) favour wars on the land surface. You must place the banner where there is only sky above it.");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_banner_must_be_placed_above_ground"));
 
             if (TownySettings.getNationRequiresProximity() > 0) {
                 Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();

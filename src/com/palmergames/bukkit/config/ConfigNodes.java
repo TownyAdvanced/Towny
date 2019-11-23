@@ -1744,44 +1744,53 @@ public enum ConfigNodes {
 			"############################################################",
 			""),
 
-	//Basics
+	//Switches
 	WAR_SIEGE_ENABLED(
-			"war.siege.basics.enabled",
-			"true",
+			"war.siege.switches.enabled",
+			"false",
 			"# If true, the Siege-War feature is enabled.",
 			"# if false, the Siege-War feature is disabled."),
 	WAR_SIEGE_ATTACK_ENABLED(
-			"war.siege.basics.attack_enabled",
+			"war.siege.switches.attack_enabled",
 			"true",
 			"# If true, people can start sieges."),
 	WAR_SIEGE_ABANDON_ENABLED(
-			"war.siege.basics.abandon_enabled",
+			"war.siege.switches.abandon_enabled",
 			"true",
 			"# If true, people can abandon sieges."),
+	WAR_SIEGE_TOWN_SURRENDER_ENABLED(
+		"war.siege.switches.town_surrender_enabled",
+		"true",
+		"# If true, then they mayor ofa town can surrender."),
 	WAR_SIEGE_INVADE_ENABLED(
-			"war.siege.basics.invade_enabled",
+			"war.siege.switches.invade_enabled",
 			"true",
 			"# "),
 	WAR_SIEGE_PLUNDER_ENABLED(
-			"war.siege.basics.plunder_enabled",
+			"war.siege.switches.plunder_enabled",
 			"true",
 			"#"),
-	WAR_SIEGE_REVOLT_ENABLED(
-			"war.siege.basics.revolt_enabled",
+	WAR_SIEGE_TOWN_LEAVE_DISABLED(
+			"war.siege.switches.nation_leave_disabled",
 			"true",
-			"#."),
+			"#. If true, then a town cannot leave a nation of its own accord. However the nation can always kick."),
+	WAR_SIEGE_REVOLT_ENABLED(
+			"war.siege.switches.revolt_enabled",
+			"true",
+			"#. If true, then a town can 'revolt' against the nation and leave",
+			 "# Usually enabled in combination with the town leave disable"),
 	WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS(
-			"war.siege.basics.pvp_always_on_in_besieged_towns",
+			"war.siege.switches.pvp_always_on_in_besieged_towns",
 			"true",
 			"# If this setting is true, then pvp is always set to on during sieges",
 			"# It is automatically set to off when the siege ends"),
 	WAR_SIEGE_TELEPORT_DISABLED_TO_BESIEGED_TOWNS(
-			"war.siege.basics.teleport_disabled_to_besieged_towns",
+			"war.siege.switches.teleport_disabled_to_besieged_towns",
 			"true",
 			"# If this setting is true, then you cannot teleport to a besieged town.",
 			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
 	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
-			"war.siege.basics.delay_full_town_removal",
+			"war.siege.switches.delay_full_town_removal",
 			"true",
 			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time",
 			"# In this state, the town cannot be claimed, but can be looted",
@@ -1791,12 +1800,12 @@ public enum ConfigNodes {
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
-			"war.siege.costs.attacker_cost_upfront_per_plot",
+			"war.siege.money.attacker_cost_upfront_per_plot",
 			"10.0",
 			"#..."),
 	WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT(
-			"war.siege.costs.attacker_plunder_amount_per_plot",
-			"20",
+			"war.siege.money.attacker_plunder_amount_per_plot",
+			"20.0",
 			"# This is the amount plundered by the attacker is a siege is successful.",
 			"# If this value is lower than the upfront cost, then sieges will not be profitable",
 			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",

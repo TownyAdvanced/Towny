@@ -1091,13 +1091,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (TownySettings.getWarSiegeEnabled()) {
 
-				if(!TownySettings.getWarSiegeRevoltEnabled())
-					throw new TownyException("Towns cannot leave nations without permission."
-							+ " To leave your current nation, persuade the king (or an assistant) to kick your town.");
-
-				if (town.isRevoltCooldownActive())
-					throw new TownyException("You cannot use the leave command while your town revolt immunity is active."
-							+ " Either wait for revolt immunity to expire, or persuade the king (or an assistant) to kick your town.");
+				if (TownySettings.getWarSiegeTownLeaveDisabled() && !TownySettings.getWarSiegeRevoltEnabled())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_voluntary_leave_impossible"));
+								
+				if (town.isRevoltImmunityActive())
+					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_revolt_immunity_active"));
 
 				//Activate revolt immunity
 				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
@@ -1105,9 +1103,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				town.setSiegeImmunityEndTime(0);
 
 				TownyMessaging.sendGlobalMessage(
-						TownyFormatter.getFormattedTownName(town)
-								+ " has risen in revolt, and declared independence from "
-								+ TownyFormatter.getFormattedNationName(nation));
+					String.format(TownySettings.getLangString("msg_siege_war_revolt"),
+						TownyFormatter.getFormattedTownName(town),
+						TownyFormatter.getFormattedResidentName(town.getMayor()),
+						TownyFormatter.getFormattedNationName(nation)));
 			}
 
 			/*

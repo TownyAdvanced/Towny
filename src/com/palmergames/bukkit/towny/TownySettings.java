@@ -2776,6 +2776,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ABANDON_ENABLED);
 	}
 
+	public static boolean getWarSiegeSurrenderEnabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_TOWN_SURRENDER_ENABLED);
+	}
+
 	public static boolean getWarSiegeInvadeEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_INVADE_ENABLED);
 	}
@@ -2786,6 +2790,10 @@ public class TownySettings {
 
 	public static boolean getWarSiegeRevoltEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_REVOLT_ENABLED);
+	}
+
+	public static boolean getWarSiegeTownLeaveDisabled() {
+		return getBoolean(ConfigNodes.WAR_SIEGE_TOWN_LEAVE_DISABLED);
 	}
 
 	public static boolean getWarSiegePvpAlwaysOnInBesiegedTowns() {
@@ -2826,8 +2834,8 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS);
 	}
 
-	public static int getWarSiegeAttackerPlunderAmountPerPlot() {
-		return getInt(ConfigNodes.WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT);
+	public static double getWarSiegeAttackerPlunderAmountPerPlot() {
+		return getDouble(ConfigNodes.WAR_SIEGE_ATTACKER_PLUNDER_AMOUNT_PER_PLOT);
 	}
 
 	public static double getWarSiegeMaxHoldoutTimeHours() {
