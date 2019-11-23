@@ -52,16 +52,16 @@ public class InvadeTown {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_own_town"));
 
 			if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
-				throw new TownyException("A siege is still in progress. You cannot invade unless your nation is victorious in the siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 			
             if (siege.getStatus() == SiegeStatus.DEFENDER_WIN)
-                throw new TownyException("The defender has defeated all attackers. You cannot invade unless your nation is victorious in the siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 
             if (siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
-                throw new TownyException("All attackers abandoned the siege. You cannot invade unless your nation is victorious in the siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
             
             if (resident.getTown().getNation() != siege.getAttackerWinner())
-                throw new TownyException("The town was defeated but not by your nation. You cannot invade unless your nation is victorious in the siege");
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 
             if (siege.isTownInvaded())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));
@@ -73,7 +73,7 @@ public class InvadeTown {
 				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = defendingTown.getHomeBlock().getCoord();
 				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-					throw new TownyException("This town cannot join your nation because the capital of your your nation is in a different world.");
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
 				}
 				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
@@ -141,7 +141,6 @@ public class InvadeTown {
         try {
             nation.removeTown(town);
         } catch(NotRegisteredException x) {
-            TownyMessaging.sendErrorMsg("Attempted to remove town from nation but Town was already removed.");
             return;  //Town was already removed
         } catch(EmptyNationException x) {
             removeNation = true;  //Set flag to remove nation at end of this method
