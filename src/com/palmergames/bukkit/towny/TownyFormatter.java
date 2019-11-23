@@ -728,9 +728,9 @@ public class TownyFormatter {
 			case DEFENDER_SURRENDER:
 				return String.format(TownySettings.getLangString("status_town_siege_status_defender_surrender"), getFormattedNationName(siege.getAttackerWinner()));
 			case DEFENDER_WIN:
-				return TownySettings.getLangString("status_town_siege_summary_status_win");
+				return TownySettings.getLangString("status_town_siege_status_defender_win");
 			case ATTACKER_ABANDON:
-				return TownySettings.getLangString("status_town_siege_summary_status_abandon");
+				return TownySettings.getLangString("status_town_siege_status_attacker_abandon");
 			default:
 				return "???";
 		}
