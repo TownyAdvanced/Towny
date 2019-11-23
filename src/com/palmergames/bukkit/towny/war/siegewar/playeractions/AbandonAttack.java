@@ -108,7 +108,6 @@ public class AbandonAttack {
                     null);
 			TownyMessaging.sendGlobalMessage(
 				String.format(TownySettings.getLangString("msg_siege_war_siege_abandon"),
-					TownyFormatter.getFormattedNationName(siegeZone.getAttackingNation()),
 					TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
 		}
     }

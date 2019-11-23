@@ -46,7 +46,7 @@ public class AttackTown {
                 Nation nationOfDefendingTown = defendingTown.getNation();
 
                 if(nationOfAttackingPlayer == nationOfDefendingTown)
-                    throw new TownyException(TownySettings.getLangString("err_siege_war_cannot_attack_town_in_own_nation"));
+                    throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_town_in_own_nation"));
 
                 if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
                     throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));

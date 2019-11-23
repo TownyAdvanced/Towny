@@ -104,7 +104,7 @@ public class TimeMgmt {
             return numberFormat.format(timeRoundedUp) + " " + timeUnit;
 
         } else {
-            return "0";
+            return "0 " + TownySettings.getLangString("second_plu");
         }
     }
 }

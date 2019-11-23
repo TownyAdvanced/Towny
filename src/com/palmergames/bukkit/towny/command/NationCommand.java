@@ -1087,8 +1087,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_recently_attacked"));
 			}
 			
-			nation.removeTown(town);
-
 			if (TownySettings.getWarSiegeEnabled()) {
 
 				if (TownySettings.getWarSiegeTownLeaveDisabled() && !TownySettings.getWarSiegeRevoltEnabled())
@@ -1096,7 +1094,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								
 				if (town.isRevoltImmunityActive())
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_revolt_immunity_active"));
-
+				
 				//Activate revolt immunity
 				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
 				//End siege immunity
@@ -1107,7 +1105,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyFormatter.getFormattedTownName(town),
 						TownyFormatter.getFormattedResidentName(town.getMayor()),
 						TownyFormatter.getFormattedNationName(nation)));
-			}
+			} 
+			
+			nation.removeTown(town);
 
 			/*
 			 * Remove all resident titles/nationRanks before saving the town itself.

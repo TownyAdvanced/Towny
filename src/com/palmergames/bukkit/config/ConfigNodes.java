@@ -1841,7 +1841,7 @@ public enum ConfigNodes {
 			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS(
 			"war.siege.times.revolt_immunity_time_hours",
-			"240",
+			"0.03",
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
 			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
