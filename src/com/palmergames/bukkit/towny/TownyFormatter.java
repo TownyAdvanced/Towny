@@ -500,7 +500,7 @@ public class TownyFormatter {
 					break;
 				}
 			} else {
-				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeCooldownActive()) {
+				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
 					//Siege:
 					// > Immunity Timer: 100.8 hours
 					out.add(String.format(TownySettings.getLangString("status_town_siege_status"), ""));

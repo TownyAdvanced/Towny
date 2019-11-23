@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -45,28 +46,23 @@ public class AttackTown {
                 Nation nationOfDefendingTown = defendingTown.getNation();
 
                 if(nationOfAttackingPlayer == nationOfDefendingTown)
-                    throw new TownyException("You cannot attack a town in your own nation.");
+                    throw new TownyException(TownySettings.getLangString("err_siege_war_cannot_attack_town_in_own_nation"));
 
                 if (!nationOfAttackingPlayer.hasEnemy(nationOfDefendingTown))
-                    throw new TownyException("You cannot attack a town unless the nation of that town is an enemy of your nation.");
+                    throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));
             }
-
-
+            
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             if (nearbyTownBlocks.size() > 1)
-                throw new TownyException("To start a siege attack, " +
-                        "the wilderness plot containing the banner must be facing just one town plot. " +
-                        "Try a different location for the banner");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_incorrect_town_block_facing"));
 
             if (nationOfAttackingPlayer.isNationAttackingTown(defendingTown))
-                throw new TownyException("Your nation is already attacking this town.");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_nation_already_attacking_town"));
 
-            if (defendingTown.isSiegeCooldownActive()) {
-                throw new TownyException(
-                        "This town is in a siege cooldown period. It cannot be attacked for " +
-                                defendingTown.getFormattedHoursUntilSiegeImmunityEnds() + " hours");
+            if (defendingTown.isSiegeImmunityActive()) {
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_siege_immunity"));
             }
 
             if (TownySettings.isUsingEconomy()) {
@@ -84,27 +80,9 @@ public class AttackTown {
 
             if (SiegeWarBlockUtil.doesBlockHaveANonAirBlockAboveIt(block))
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_banner_must_be_placed_above_ground"));
-
-            if (TownySettings.getNationRequiresProximity() > 0) {
-                Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
-                Coord townCoord = defendingTown.getHomeBlock().getCoord();
-                if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-                    throw new TownyException("This town cannot join your nation because the capital of your your nation is in a different world.");
-                }
-                double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
-                if (distance > TownySettings.getNationRequiresProximity()) {
-                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
-                }
-            }
-
-            if (TownySettings.getMaxTownsPerNation() > 0) {
-                if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
-                    throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
-                }
-            }
-
+            
             if(defendingTown.isRuined())
-                throw new TownyException("You cannot attack a ruined town.");
+                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
 
             //Setup attack
             attackTown(block, nationOfAttackingPlayer, defendingTown);
@@ -169,13 +147,17 @@ public class AttackTown {
 
         //Send global message;
         if(newSiege) {
-            TownyMessaging.sendGlobalMessage(
-                    "The nation of " + attackingNation.getName() +
-                            " has initiated a siege on the town of " + defendingTown.getName());
+            TownyMessaging.sendGlobalMessage(String.format(
+            	TownySettings.getLangString("msg_siege_war_siege_started"),
+				TownyFormatter.getFormattedNationName(attackingNation),
+				TownyFormatter.getFormattedTownName(defendingTown)
+			));
         } else {
-            TownyMessaging.sendGlobalMessage(
-                    "The nation of " + attackingNation.getName() +
-                            " has joined the siege on the town of " + defendingTown.getName());
+			TownyMessaging.sendGlobalMessage(String.format(
+				TownySettings.getLangString("msg_siege_war_siege_joined"),
+				TownyFormatter.getFormattedNationName(attackingNation),
+				TownyFormatter.getFormattedTownName(defendingTown)
+			));
         }
 
 

@@ -8,10 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -69,7 +66,28 @@ public class InvadeTown {
             if (siege.isTownInvaded())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));
 
-            captureTown(plugin, siege, siege.getAttackerWinner(), siege.getDefendingTown());
+            Nation nationOfAttackingPlayer = siege.getAttackerWinner();
+            Town defendingTown = siege.getDefendingTown();
+            
+			if (TownySettings.getNationRequiresProximity() > 0) {
+				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = defendingTown.getHomeBlock().getCoord();
+				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
+					throw new TownyException("This town cannot join your nation because the capital of your your nation is in a different world.");
+				}
+				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
+				if (distance > TownySettings.getNationRequiresProximity()) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
+				}
+			}
+
+			if (TownySettings.getMaxTownsPerNation() > 0) {
+				if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
+				}
+			}
+
+			captureTown(plugin, siege, siege.getAttackerWinner(), siege.getDefendingTown());
 
         } catch (TownyException x) {
             event.setCancelled(true);

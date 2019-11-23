@@ -1306,7 +1306,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		this.siege = siege;
 	}
 
-	public boolean isSiegeCooldownActive() {
+	public boolean isSiegeImmunityActive() {
 		if(hasSiege() && siege.getStatus() == SiegeStatus.IN_PROGRESS)
 			return false; //Cooldown always off until the siege has finished
 
