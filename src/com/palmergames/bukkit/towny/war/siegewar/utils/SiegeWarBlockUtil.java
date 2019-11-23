@@ -93,7 +93,7 @@ public class SiegeWarBlockUtil {
 			}
 
 			flagBlock = siegeZone.getFlagLocation().getBlock();
-			if(flagBlock.equals(block) || flagBlock.getRelative(BlockFace.DOWN).equals(block));
+			if(flagBlock.equals(block) || flagBlock.getRelative(BlockFace.DOWN).equals(block))
 			{
 				return true;	
 			}

@@ -176,11 +176,9 @@ public class AttackTown {
 				String.format(
 				TownySettings.getLangString("msg_siege_war_attack_money"),
 					TownyEconomyHandler.getFormattedBalance(defendingTown.getSiegeCost()),
-					TownyEconomyHandler.getFormattedBalance(defendingTown.getPlunderValue())
-				);
-
-
-			TownyMessaging.sendMsg(attackingNation,moneyMessage);
+					TownyEconomyHandler.getFormattedBalance(defendingTown.getPlunderValue()));
+			
+			TownyMessaging.sendMessage(player, moneyMessage);
 		}
         
         //BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
