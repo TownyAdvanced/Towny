@@ -69,17 +69,17 @@ public class PlunderTown {
     public static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
         siege.setTownPlundered(true);
 
-        double plunderAmount =
+        double fullPlunderAmount =
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
         try {
-            if (defendingTown.canPayFromHoldings(plunderAmount)) {
-                defendingTown.payTo(plunderAmount, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation, plunderAmount);
+            if (defendingTown.canPayFromHoldings(fullPlunderAmount)) {
+                defendingTown.payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
+                sendPlunderSuccessMessage(defendingTown, winnerNation, fullPlunderAmount);
             } else {
-                double actualPlunder = defendingTown.getHoldingBalance();
-                defendingTown.payTo(actualPlunder, winnerNation, "Town was plundered by attacker");
-                sendPlunderSuccessMessage(defendingTown, winnerNation, plunderAmount);
+                double actualPlunderAmount = defendingTown.getHoldingBalance();
+                defendingTown.payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
+                sendPlunderSuccessMessage(defendingTown, winnerNation, actualPlunderAmount);
                 TownyMessaging.sendGlobalMessage(
                 	String.format(
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
