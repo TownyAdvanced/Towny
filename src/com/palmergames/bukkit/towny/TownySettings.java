@@ -501,6 +501,7 @@ public class TownySettings {
 		newConfig = null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private static String convertIds(List<String> list) {
 		
 		int value;

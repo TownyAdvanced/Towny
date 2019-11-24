@@ -1884,7 +1884,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean cleanup() {
 
 		/*
