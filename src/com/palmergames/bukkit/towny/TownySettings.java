@@ -2830,8 +2830,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS);
 	}
 
-	public static long getWarSiegeTownRuinsRemovalTimerIntervalMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES);
+	public static double getWarSiegeTownRuinsRemovalTimerIntervalMinutes() {
+		return getDouble(ConfigNodes.WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES);
 	}
 
 	public static double getWarSiegeSiegeImmunityTimeNewTownsHours() {

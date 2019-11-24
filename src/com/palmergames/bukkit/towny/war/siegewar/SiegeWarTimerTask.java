@@ -36,7 +36,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	{
 		nextTimeToRemoveRuinedTowns =
 				System.currentTimeMillis() +
-				(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+					(long)(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 	}
 
 	public SiegeWarTimerTask(Towny plugin) {
@@ -54,7 +54,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			if (System.currentTimeMillis() > nextTimeToRemoveRuinedTowns) {
 				nextTimeToRemoveRuinedTowns =
 						System.currentTimeMillis() +
-								(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
+							(long)(TownySettings.getWarSiegeTownRuinsRemovalTimerIntervalMinutes() * ONE_MINUTE_IN_MILLIS);
 				RemoveRuinedTowns.removeRuinedTowns();
 			}
 		}
@@ -213,7 +213,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
 				playerScoreTimeMap.put(player,
 						System.currentTimeMillis()
-								+ (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
+								+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
 				return true;
 			}
 			
@@ -238,7 +238,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			playerScoreTimeMap.put(player,
 					System.currentTimeMillis()
-							+ (TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
+							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
 			
 			return true; //Player added to zone
 		}

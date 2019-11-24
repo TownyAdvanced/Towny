@@ -7,10 +7,10 @@ import java.util.List;
 
 public class TimeMgmt {
 
-	public final static long ONE_SECOND_IN_MILLIS = 1000;
-	public final static long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
-	public final static long ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
-	public final static long ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
+	public final static double ONE_SECOND_IN_MILLIS = 1000;
+	public final static double ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
+	public final static double ONE_HOUR_IN_MILLIS = ONE_MINUTE_IN_MILLIS * 60;
+	public final static double ONE_DAY_IN_MILLIS = ONE_HOUR_IN_MILLIS * 24;
 
 	public final static long[][] defaultCountdownDelays = new long[][] {
 			{ 10, 1 }, // <= 10s, Warn every 1s

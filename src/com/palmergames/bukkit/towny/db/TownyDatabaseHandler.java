@@ -556,12 +556,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-		
+
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
 		if(delayFullRemoval) {
 			town.setRecentlyRuinedEndTime(System.currentTimeMillis() +
-					(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
+				(long)(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS));
 			town.setPublic(false);
 			town.setOpen(false);
 			for (String element : new String[] { "residentBuild",
@@ -579,7 +579,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			//Reset and save town blocks
 			for(TownBlock townBlock: town.getTownBlocks()) {
 				townBlock.setType(townBlock.getType());
-				universe.getDataSource().saveTownBlock(townBlock);
+				saveTownBlock(townBlock);
 			}
 		} else {
 			removeTownBlocks(town);
@@ -1242,30 +1242,23 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 	
 	public void removeRuinedTown(Town town) {
-		removeTownBlocks(town);
-		TownyWorld townyWorld = town.getWorld();
-		try {
-			if(town.hasWorld()) {
-				townyWorld.removeTown(town);
-			}
-		} catch (NotRegisteredException e) {
-			// Must already be removed
-		}
 
-		//Remove data from universe
+		removeTownBlocks(town);
+
+		TownyWorld townyWorld = town.getWorld();
+
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 
-		//Delete town and townblocks
-		deleteTown(town);
-		for(TownBlock townBlock: town.getTownBlocks()) {
-			deleteTownBlock(townBlock);
-		}
-		
-		//Save lists
-		saveTownBlockList();
-		saveTownList();
-		
-		//save world
+		plugin.resetCache();
+
+			deleteTown(town);
+			saveTownList();
+			try {
+				townyWorld.removeTown(town);
+			} catch (NotRegisteredException e) {
+				// Must already be removed
+			}
+
 		saveWorld(townyWorld);
 	}
 

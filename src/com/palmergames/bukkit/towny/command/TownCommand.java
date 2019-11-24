@@ -2307,7 +2307,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 				if(TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval()) {
-					long durationMillis = TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS;
+					long durationMillis = (long)(TownySettings.getWarSiegeRuinsRemovalDelayMinutes() * TimeMgmt.ONE_MINUTE_IN_MILLIS);
 					String durationFormatted = TimeMgmt.getFormattedTimeValue(durationMillis);
 					TownyMessaging.sendErrorMsg(player, String.format(
 						TownySettings.getLangString("msg_err_siege_war_delete_town_warning"),

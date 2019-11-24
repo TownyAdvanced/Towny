@@ -2123,6 +2123,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		/*
 		 *  Make sure we only save in async
 		 */
+		 
 
 		this.queryQueue.add(new FlatFile_Task(list, getSiegeZoneFilename(siegeZone)));
 

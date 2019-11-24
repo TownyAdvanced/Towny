@@ -1823,7 +1823,7 @@ public enum ConfigNodes {
 			"# The time in seconds for each siegewar timer tick."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
 			"war.siege.times.ruins_removal_interval_minutes",
-			"1",
+			"0.1",
 			"# The time in minutes for each scan & deletion of town ruins"),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.times.max_holdout_time_hours",
