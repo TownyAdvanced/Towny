@@ -51,19 +51,16 @@ public class AbandonAttack {
             if(nearbyTownsWithSieges.size() == 0)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_no_nearby_sieges"));
 
-            //Get the active siege zones
-            List<SiegeZone> nearbyActiveSiegeZones = new ArrayList<>();
+            //Get nearby siege zones
+            List<SiegeZone> nearbySiegeZones = new ArrayList<>();
             for(Town nearbyTownWithSiege: nearbyTownsWithSieges) {
-                for(SiegeZone siegeZone: nearbyTownWithSiege.getSiege().getSiegeZones().values()) {
-                    if(siegeZone.isActive())
-                        nearbyActiveSiegeZones.add(siegeZone);
-                }
+				nearbySiegeZones.addAll(nearbyTownWithSiege.getSiege().getSiegeZones().values());
             }
 
             //Find the nearest active zone to the player
             SiegeZone targetedSiegeZone = null;
             double distanceToTarget = -1;
-            for(SiegeZone siegeZone: nearbyActiveSiegeZones) {
+            for(SiegeZone siegeZone: nearbySiegeZones) {
                 if (targetedSiegeZone == null) {
                     targetedSiegeZone = siegeZone;
                     distanceToTarget = block.getLocation().distance(targetedSiegeZone.getFlagLocation());
@@ -94,15 +91,15 @@ public class AbandonAttack {
     }
 
     private static void attackerAbandon(SiegeZone siegeZone) {
-        siegeZone.setActive(false);
-        TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-
+        //Here we simply remove the siege zone
+		TownyUniverse.getDataSource().removeSiegeZone(siegeZone);
+        
 		TownyMessaging.sendGlobalMessage(
 			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
 				TownyFormatter.getFormattedNationName(siegeZone.getAttackingNation()),
         		TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
 		
-        if (siegeZone.getSiege().getActiveAttackers().size() == 0) {
+        if (siegeZone.getSiege().getSiegeZones().size() == 0) {
             SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
                     SiegeStatus.ATTACKER_ABANDON,
                     null);

@@ -75,20 +75,35 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	}
 
 	private static void evaluateSiegeZone(SiegeZone siegeZone) {
-		if(siegeZone.isActive()) {
-			boolean siegeZoneChanged = false;
-			Resident resident;
+		boolean siegeZoneChanged = false;
+		Resident resident;
 
-			//Cycle all online players
-			for (Player player : BukkitTools.getOnlinePlayers()) {
+		//Cycle all online players
+		for (Player player : BukkitTools.getOnlinePlayers()) {
 
-				try {
-					resident = TownyUniverse.getDataSource().getResident(player.getName());
+			try {
+				resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-					if (resident.hasTown()) {
-						if (resident.getTown() == siegeZone.getDefendingTown()) {
+				if (resident.hasTown()) {
+					if (resident.getTown() == siegeZone.getDefendingTown()) {
 
-							//Resident of defending town
+						//Resident of defending town
+						siegeZoneChanged =
+								siegeZoneChanged ||
+										evaluateSiegeZoneOccupant(
+												player,
+												siegeZone,
+												siegeZone.getDefenderPlayerScoreTimeMap(),
+												-TownySettings.getSiegeWarPointsPerDefendingPlayer());
+
+					
+					} else if (resident.getTown().hasNation()) {
+
+						if (siegeZone.getDefendingTown().hasNation()
+								&& siegeZone.getDefendingTown().getNation()
+								== resident.getTown().getNation()) {
+
+							//Nation member of defending town
 							siegeZoneChanged =
 									siegeZoneChanged ||
 											evaluateSiegeZoneOccupant(
@@ -96,67 +111,50 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													siegeZone,
 													siegeZone.getDefenderPlayerScoreTimeMap(),
 													-TownySettings.getSiegeWarPointsPerDefendingPlayer());
-
 						
-						} else if (resident.getTown().hasNation()) {
+						} else if (siegeZone.getAttackingNation() 
+							== resident.getTown().getNation()) {
 
-							if (siegeZone.getDefendingTown().hasNation()
-									&& siegeZone.getDefendingTown().getNation()
-									== resident.getTown().getNation()) {
-
-								//Nation member of defending town
-								siegeZoneChanged =
-										siegeZoneChanged ||
-												evaluateSiegeZoneOccupant(
-														player,
-														siegeZone,
-														siegeZone.getDefenderPlayerScoreTimeMap(),
-														-TownySettings.getSiegeWarPointsPerDefendingPlayer());
-							
-							} else if (siegeZone.getAttackingNation() 
-								== resident.getTown().getNation()) {
-
-								//Nation member of attacking nation
-								siegeZoneChanged =
-										siegeZoneChanged ||
-												evaluateSiegeZoneOccupant(
-														player,
-														siegeZone,
-														siegeZone.getAttackerPlayerScoreTimeMap(),
-														TownySettings.getSiegeWarPointsPerAttackingPlayer());
-							}
+							//Nation member of attacking nation
+							siegeZoneChanged =
+									siegeZoneChanged ||
+											evaluateSiegeZoneOccupant(
+													player,
+													siegeZone,
+													siegeZone.getAttackerPlayerScoreTimeMap(),
+													TownySettings.getSiegeWarPointsPerAttackingPlayer());
 						}
 					}
-				} catch (NotRegisteredException e) {
 				}
+			} catch (NotRegisteredException e) {
 			}
-			
-			//Remove garbage from player score time maps
-			Town defendingTown =siegeZone.getDefendingTown();
-			Nation defendingNation= null;
-			if(defendingTown.hasNation()) {
-				try {
-					defendingNation = defendingTown.getNation();
-				} catch (NotRegisteredException e) {
-				}
+		}
+		
+		//Remove garbage from player score time maps
+		Town defendingTown =siegeZone.getDefendingTown();
+		Nation defendingNation= null;
+		if(defendingTown.hasNation()) {
+			try {
+				defendingNation = defendingTown.getNation();
+			} catch (NotRegisteredException e) {
 			}
+		}
 
-			siegeZoneChanged =
-					siegeZoneChanged ||
-							removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
-									defendingTown,
-									defendingNation);
+		siegeZoneChanged =
+				siegeZoneChanged ||
+						removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
+								defendingTown,
+								defendingNation);
 
-			siegeZoneChanged =
-					siegeZoneChanged ||
-							removeGarbageFromPlayerScoreTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
-									null,
-									siegeZone.getAttackingNation());
+		siegeZoneChanged =
+				siegeZoneChanged ||
+						removeGarbageFromPlayerScoreTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
+								null,
+								siegeZone.getAttackingNation());
 
-			//Save siege zone to db if it was changed
-			if(siegeZoneChanged) {
-				TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-			}
+		//Save siege zone to db if it was changed
+		if(siegeZoneChanged) {
+			TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
 		}
 	}
 

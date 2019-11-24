@@ -448,9 +448,9 @@ public class TownyFormatter {
 						//Siege Status: In Progress
 						String siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
 						out.add(siegeStatus);
-
+						
 						//Siege Attacks: Land of Empire (Nation) [+30], Land of Killers (Nation) [-8]
-						String[] siegeAttacks = getFormattedNames(siege.getActiveSiegeZones().toArray(new SiegeZone[0]));
+						String[] siegeAttacks = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
 						if (siegeAttacks.length > 10) {
 							String[] entire = siegeAttacks;
 							siegeAttacks = new String[10];

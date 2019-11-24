@@ -37,7 +37,7 @@ public class SurrenderTown {
             if(siege.getStatus() != SiegeStatus.IN_PROGRESS)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_siege_finished"));
 
-            if(siege.getActiveAttackers().size() > 1)
+            if(siege.getSiegeZones().size() > 1)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_multiple_attackers"));
 
             //Surrender
@@ -52,7 +52,7 @@ public class SurrenderTown {
     private static void defenderSurrender(Siege siege) {
         SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siege,
                                             SiegeStatus.DEFENDER_SURRENDER,
-                                            siege.getActiveAttackers().get(0));
+                                            siege.getSiegeZones().get(0).getAttackingNation());
 
         TownyMessaging.sendGlobalMessage(String.format(
         	TownySettings.getLangString("msg_siege_war_town_surrender"),

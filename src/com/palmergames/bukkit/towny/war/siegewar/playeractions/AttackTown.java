@@ -136,8 +136,7 @@ public class AttackTown {
 			SiegeZone.generateName(
 				attackingNation.getName(), 
 				defendingTown.getName()));
-		siegeZone.setActive(true);
-
+		
 		siegeZone.setFlagLocation(block.getLocation());
 		siege.getSiegeZones().put(attackingNation, siegeZone);
 		attackingNation.addSiegeZone(siegeZone);

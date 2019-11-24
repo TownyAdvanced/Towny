@@ -40,16 +40,7 @@ public class Siege {
     public Map<Nation, SiegeZone> getSiegeZones() {
         return siegeZones;
     }
-
-	public List<SiegeZone> getActiveSiegeZones() {
-		List<SiegeZone> result = new ArrayList<>();
-		for(SiegeZone siegeZone: siegeZones.values()) {
-			if(siegeZone.isActive())
-				result.add(siegeZone);
-		}
-		return result;
-	}
-
+    
     public long getScheduledEndTime() {
         return scheduledEndTime;
     }
@@ -78,15 +69,8 @@ public class Siege {
         this.siegeZones = siegeZones;
     }
 
-    public List<Nation> getActiveAttackers() {
-        List<Nation> result = new ArrayList<>();
-        for (Nation nation : new ArrayList<Nation>(siegeZones.keySet())) {
-            if (siegeZones.get(nation) != null
-                    && siegeZones.get(nation).isActive()) {
-                result.add(nation);
-            }
-        }
-        return result;
+    public List<Nation> getAttackers() {
+    	return new ArrayList<Nation>(siegeZones.keySet());
     }
 
     public List<Nation> getAllAttackers() {
@@ -179,10 +163,5 @@ public class Siege {
     public boolean getTownInvaded() {
         return townInvaded;
     }
-
-    public void setAllSiegeZonesToInactive() {
-        for(SiegeZone siegeZone: siegeZones.values()) {
-            siegeZone.setActive(false);
-        }
-    }
+    
 }

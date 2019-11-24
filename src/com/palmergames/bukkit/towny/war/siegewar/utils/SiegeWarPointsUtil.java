@@ -24,8 +24,7 @@ public class SiegeWarPointsUtil {
         int winningPoints = 0;
 
         for(Map.Entry<Nation, SiegeZone> entry: siege.getSiegeZones().entrySet()) {
-            if(entry.getValue().isActive()
-                && entry.getValue().getSiegePoints() > winningPoints) {
+            if(entry.getValue().getSiegePoints() > winningPoints) {
                 winner = entry.getKey();
                 winningPoints = entry.getValue().getSiegePoints();
             }

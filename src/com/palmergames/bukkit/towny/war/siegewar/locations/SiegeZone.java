@@ -16,7 +16,6 @@ public class SiegeZone {
     private Location siegeBannerLocation;
     private Nation attackingNation;
     private Town defendingTown;
-    private boolean active;
     private int siegePoints;
     private Map<Player, Long> attackerPlayerScoreTimeMap; //player, time when they will score
     private Map<Player, Long> defenderPlayerScoreTimeMap; //player, time when they will score
@@ -24,7 +23,6 @@ public class SiegeZone {
     public SiegeZone() {
         attackingNation = null;
         defendingTown = null;
-        active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
         attackerPlayerScoreTimeMap = new HashMap<>();
@@ -34,7 +32,6 @@ public class SiegeZone {
     public SiegeZone(Nation attackingNation, Town defendingTown) {
         this.defendingTown = defendingTown;
         this.attackingNation = attackingNation;
-        active = false;
         siegePoints = 0;
         siegeBannerLocation = null;
         attackerPlayerScoreTimeMap = new HashMap<>();
@@ -48,11 +45,7 @@ public class SiegeZone {
     public static String generateName(String attackingNationName, String defendingTownName) {
         return attackingNationName.toLowerCase() + "#vs#" + defendingTownName.toLowerCase();
     }
-
-    public static String generateName(Nation nation,Town town) {
-        return generateName(nation.getName(), town.getName());
-    }
-
+    
     public static String[] generateTownAndNationName(String siegeZoneName) {
         return siegeZoneName.split("#vs#");
     }
@@ -108,14 +101,6 @@ public class SiegeZone {
         return siegePoints;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
     public void setSiegePoints(int siegePoints) {
         this.siegePoints = siegePoints;
     }
@@ -123,30 +108,7 @@ public class SiegeZone {
     public void addSiegePoints(int siegePointsForAttackingPlayer) {
         siegePoints += siegePointsForAttackingPlayer;
     }
-
-    public String getSiegeBannerLocationForSerialization() {
-        return siegeBannerLocation.getBlockX()
-                + "," + siegeBannerLocation.getBlockY()
-                + "," + siegeBannerLocation.getBlockZ();
-    }
-
-    public String getPlayerArrivalTimeMapForSerialization() {
-       StringBuilder result = new StringBuilder();
-       boolean firstEntry = true;
-
-       for(Map.Entry<Player, Long> entry: attackerPlayerScoreTimeMap.entrySet()) {
-           if(firstEntry){
-              firstEntry = false;
-           } else {
-               result.append(", ");
-           }
-           result.append(entry.getKey().getName());
-           result.append("@");
-           result.append(entry.getValue());
-       }
-       return result.toString();
-    }
-
+    
     public void setAttackingNation(Nation attackingNation) {
         this.attackingNation = attackingNation;
     }

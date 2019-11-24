@@ -88,7 +88,7 @@ public class SiegeWarBlockUtil {
 		
 		for (SiegeZone siegeZone : com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getSiegeZones()) {
 
-			if (!siegeZone.isActive() || siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
+			if (siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
 				return false;
 			}
 

@@ -1302,9 +1302,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("defendingTown");
 				siegeZone.setDefendingTown(getTown(line));
 
-				line = keys.get("active");
-				siegeZone.setActive(Boolean.parseBoolean(line));
-
 				line = keys.get("siegePoints");
 				siegeZone.setSiegePoints(Integer.parseInt(line));
 
@@ -2119,7 +2116,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				+ "," + siegeZone.getFlagLocation().getZ());
 		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
-		list.add("active=" + siegeZone.isActive());
 		list.add("siegePoints=" + siegeZone.getSiegePoints());
 		//Player-scoretime maps are not saved/loaded
 		//As it is tricky but with no significant benefit

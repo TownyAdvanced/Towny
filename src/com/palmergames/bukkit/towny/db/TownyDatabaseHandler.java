@@ -1300,6 +1300,29 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		saveSiegeZoneList();
 	}
 
+
+	//Remove a particular siege, and all associated data
+	@Override
+	public void removeSiegeZone(SiegeZone siegeZone) {
+		//Remove siege zone from town
+		siegeZone.getDefendingTown().getSiege().getSiegeZones().remove(siegeZone.getAttackingNation());
+		//Remove siege zone from nation
+		siegeZone.getAttackingNation().removeSiegeZone(siegeZone);
+		//Remove siege zone from universe
+		universe.getSiegeZonesMap().remove(siegeZone.getName().toLowerCase());
+		
+		//Save town
+		saveTown(siegeZone.getDefendingTown());
+		//SaveNation
+		saveNation(siegeZone.getAttackingNation());
+		//Delete siege zone file
+		deleteSiegeZone(siegeZone);
+		
+		//Save siege zone list
+		saveSiegeZoneList();
+	}
+
+
 	@Override
 	public Set<String> getSiegeZonesKeys() {
 

@@ -1261,7 +1261,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
                 siegeZone.setAttackingNation(getNation(rs.getString("attackingNation")));
                 siegeZone.setDefendingTown(getTown(rs.getString("defendingTown")));
-                siegeZone.setActive(rs.getBoolean("active"));
                 siegeZone.setSiegePoints(rs.getInt("siegePoints"));
 
                 //Player-scoretime maps are not saved/loaded
@@ -1839,7 +1838,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
            nat_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
             nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
-            nat_hm.put("active", siegeZone.isActive());
             nat_hm.put("siegePoints", siegeZone.getSiegePoints());
 
             //Player-scoretime maps are not saved/loaded

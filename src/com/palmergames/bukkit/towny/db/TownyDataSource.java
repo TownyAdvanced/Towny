@@ -347,6 +347,8 @@ public abstract class TownyDataSource {
 
 	public abstract void removeSiege(Siege siege);
 
+	public abstract void removeSiegeZone(SiegeZone siegeZone);
+
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	abstract public Set<String> getResidentKeys();

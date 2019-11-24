@@ -17,7 +17,6 @@ public class SiegeWarDbUtil {
 		siege.setStatus(siegeStatus);
 		siege.setActualEndTime(System.currentTimeMillis());
 		siege.setAttackerWinner(winnerNation);
-		siege.setAllSiegeZonesToInactive();
 		SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown());
 
 		//Save to db
