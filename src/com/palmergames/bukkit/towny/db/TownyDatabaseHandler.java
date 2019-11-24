@@ -1252,11 +1252,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Must already be removed
 		}
 
+		//Remove data from universe
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 
+		//Delete town and townblocks
 		deleteTown(town);
+		for(TownBlock townBlock: town.getTownBlocks()) {
+			deleteTownBlock(townBlock);
+		}
+		
+		//Save lists
 		saveTownBlockList();
 		saveTownList();
+		
+		//save world
 		saveWorld(townyWorld);
 	}
 

@@ -30,6 +30,8 @@ public class AttackTown {
                                                 BlockPlaceEvent event) {
 
         try {
+			com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+        	
             Resident attackingResident = TownyUniverse.getDataSource().getResident(player.getName());
             if(!attackingResident.hasTown())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
@@ -53,7 +55,7 @@ public class AttackTown {
                     throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));
             }
             
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
+            if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             if (nearbyTownBlocks.size() > 1)

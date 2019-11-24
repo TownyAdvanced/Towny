@@ -296,9 +296,9 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	private static List<Siege> getAllSieges() {
 		List<Siege> result = new ArrayList<>();
-		for(SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
-			if(!result.contains(siegeZone.getSiege())) {
-				result.add(siegeZone.getSiege());
+		for(Town town: TownyUniverse.getDataSource().getTowns()) {
+			if(town.hasSiege()) {
+				result.add(town.getSiege());
 			}
 		}
 		return result;
