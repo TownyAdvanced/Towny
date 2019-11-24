@@ -450,40 +450,15 @@ public class TownyFormatter {
 						out.add(siegeStatus);
 
 						//Siege Attacks: Land of Empire (Nation) [+30], Land of Killers (Nation) [-8]
-
-						/*
-						// Residents [12]: James, Carry, Mason
-						String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
-						if (residents.length > 34) {
-							String[] entire = residents;
-							residents = new String[36];
-							System.arraycopy(entire, 0, residents, 0, 35);
-							residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+						String[] siegeAttacks = getFormattedNames(siege.getActiveSiegeZones().toArray(new SiegeZone[0]));
+						if (siegeAttacks.length > 10) {
+							String[] entire = siegeAttacks;
+							siegeAttacks = new String[10];
+							System.arraycopy(entire, 0, siegeAttacks, 0, 10);
+							residents[10] = TownySettings.getLangString("status_town_siege_attacks_list_overlength");
 						}
-						out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
-						*/
-
-						StringBuilder builtLine = new StringBuilder();
-						builtLine.append(TownySettings.getLangString("status_town_siege_attackers_tag"));
-						builtLine.append(Colors.White);
-						boolean firstEntry = true;
-						for(Map.Entry<Nation,SiegeZone> entry: town.getSiege().getSiegeZones().entrySet()) {
-							if(firstEntry) {
-								firstEntry = false;
-							} else {
-								builtLine.append(", ");
-							}
-							
-							builtLine.append(getFormattedName(entry.getKey()));
-							
-							builtLine.append(" [");
-							if(entry.getValue().getSiegePoints() > 0)
-								builtLine.append("+");
-							builtLine.append(entry.getValue().getSiegePoints());
-							builtLine.append("]");
-						}
-						out.add(builtLine.toString());
-
+						out.addAll(ChatTools.listArr(siegeAttacks, String.format(TownySettings.getLangString("status_town_siege_attacks_list"), siegeAttacks.length)));
+						
 						//Siege Victory Timer: 5.3 hours
 						String victoryTimer = String.format(TownySettings.getLangString("status_town_siege_victory_timer"), siege.getFormattedHoursUntilScheduledCompletion());
 						out.add(victoryTimer);
@@ -850,4 +825,23 @@ public class TownyFormatter {
 			names.add(getFormattedName(nation));
 		return names.toArray(new String[0]);
 	}
+
+	public static String[] getFormattedNames(SiegeZone[] siegeZones) {
+		List<String> names = new ArrayList<String>();
+		for (SiegeZone siegeZone : siegeZones)
+			names.add(getFormattedName(siegeZone));
+		return names.toArray(new String[0]);
+	}
+	
+	public static String getFormattedName(SiegeZone siegeZone) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getFormattedName(siegeZone.getAttackingNation()));
+		builder.append(" {");
+		if(siegeZone.getSiegePoints() > 0)
+			builder.append("+");
+		builder.append(siegeZone.getSiegePoints());
+		builder.append("}");
+		return builder.toString();
+	}
+	
 }

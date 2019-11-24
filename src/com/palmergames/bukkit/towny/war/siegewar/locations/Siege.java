@@ -41,6 +41,15 @@ public class Siege {
         return siegeZones;
     }
 
+	public List<SiegeZone> getActiveSiegeZones() {
+		List<SiegeZone> result = new ArrayList<>();
+		for(SiegeZone siegeZone: siegeZones.values()) {
+			if(siegeZone.isActive())
+				result.add(siegeZone);
+		}
+		return result;
+	}
+
     public long getScheduledEndTime() {
         return scheduledEndTime;
     }
