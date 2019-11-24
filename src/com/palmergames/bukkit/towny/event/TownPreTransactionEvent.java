@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.Bukkit;
 
 public class TownPreTransactionEvent extends Event implements Cancellable {
 	private Town town;
@@ -14,6 +15,7 @@ public class TownPreTransactionEvent extends Event implements Cancellable {
 	private boolean isCancelled = false;
 
 	public TownPreTransactionEvent(Town town, Transaction transaction) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.transaction = transaction;
 	}

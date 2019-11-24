@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.Bukkit;
 
 public class TownTransactionEvent extends Event {
 	private Town town;
@@ -11,6 +12,7 @@ public class TownTransactionEvent extends Event {
 	private Transaction transaction;
 	
 	public TownTransactionEvent(Town town, Transaction transaction) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.transaction = transaction;
 	}

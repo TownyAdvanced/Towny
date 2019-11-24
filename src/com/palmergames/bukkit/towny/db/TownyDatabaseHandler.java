@@ -557,7 +557,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 		
-		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
 		removeTownBlocks(town);		
 
