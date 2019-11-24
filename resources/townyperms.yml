@@ -59,6 +59,7 @@ towns:
         - towny.command.nation.new
         - towny.outlaw.jailer
         - towny.command.nation.join
+        - towny.command.nation.leave
 
     ranks:
         # Ranks contain additional permissions residents will be
