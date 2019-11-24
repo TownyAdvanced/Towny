@@ -7,13 +7,13 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerPreTransactionEvent extends Event implements Cancellable {
+public class TownyPreTransactionEvent extends Event implements Cancellable {
 	private Transaction transaction;
 	private static final HandlerList handlers = new HandlerList();
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled.";
 
-	public PlayerPreTransactionEvent(Transaction transaction) {
+	public TownyPreTransactionEvent(Transaction transaction) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.transaction = transaction;
 	}
