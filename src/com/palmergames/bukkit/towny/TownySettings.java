@@ -2819,8 +2819,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS);
 	}
 	
-	public static int getWarSiegeRuinsRemovalDelayMinutes() {
-		return getInt(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES);
+	public static double getWarSiegeRuinsRemovalDelayMinutes() {
+		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES);
 	}
 
 	public static double getWarSiegeAttackerCostUpFrontPerPlot() {
