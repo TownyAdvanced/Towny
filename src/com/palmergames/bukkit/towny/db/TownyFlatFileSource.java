@@ -2699,6 +2699,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
+	public void deleteSiegeZone(SiegeZone siegeZone) {
+
+		File file = new File(getSiegeZoneFilename(siegeZone));
+		if (file.exists()) {
+			FileMgmt.moveFile(file, ("deleted"));
+		}
+	}
+
+	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
 
 		File file = new File(getTownBlockFilename(townBlock));
