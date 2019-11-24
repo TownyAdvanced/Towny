@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.event.PlayerPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownyTransactionEvent;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
@@ -290,7 +290,7 @@ public class TownyEconomyHandler {
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount.intValue());
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		PlayerPreTransactionEvent preEvent = new PlayerPreTransactionEvent(transaction);
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
 		BukkitTools.getPluginManager().callEvent(preEvent);
 
@@ -336,7 +336,7 @@ public class TownyEconomyHandler {
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount.intValue());
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-		PlayerPreTransactionEvent preEvent = new PlayerPreTransactionEvent(transaction);
+		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 
 		BukkitTools.getPluginManager().callEvent(preEvent);
 		
