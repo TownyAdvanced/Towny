@@ -2040,7 +2040,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("siegeActualStartTime=" + siege.getStartTime());
 			list.add("siegeScheduledEndTime=" + siege.getScheduledEndTime());
 			list.add("siegeActualEndTime=" + siege.getActualEndTime());
-			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames()));
+			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames(), ","));
 		}
 
 		/*
