@@ -1192,7 +1192,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * 
 	 * @param player - Player using the command.
 	 * @param names - Names that will be matched to towns.
-	 * @throws TownyException
+	 * @throws TownyException generic
 	 */
 	public void nationAdd(Player player, String[] names) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -1274,10 +1274,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * 
 	 * Lastly, invites are sent and if successful, the third stage is called by the invite handler.
 	 * 
-	 * @param player
-	 * @param nation
-	 * @param invited
-	 * @throws TownyException
+	 * @param player player sending the request
+	 * @param nation Nation sending the request
+	 * @param invited the Town(s) being invited to the Nation
+	 * @throws TownyException executed when the arraylist (invited) returns empty (no valid town was entered)
 	 */
 	public static void nationAdd(Player player, Nation nation, List<Town> invited) throws TownyException {
 
@@ -1847,7 +1847,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void nationEnemy(Player player, String[] split) {
+	public void nationEnemy(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident;
 		Nation nation;
@@ -1881,7 +1881,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else
 						list.add(enemy);
 				} catch (NotRegisteredException e) {
-					// Do nothing here as the name doesn't match a Nation
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_nation_with_that_name"), name));
 				}
 			}
 			if (!list.isEmpty())

@@ -26,7 +26,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
-
 import javax.naming.InvalidNameException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -82,7 +81,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "residents.txt",
 			dataFolderPath + File.separator + "towns.txt",
 			dataFolderPath + File.separator + "nations.txt",
-			dataFolderPath + File.separator + "siegezones.txt",
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "regen.txt",
 			dataFolderPath + File.separator + "snapshot_queue.txt"
@@ -405,6 +403,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 	}
 
+
 	@Override
 	public boolean loadSiegeZoneList() {
 		TownyMessaging.sendDebugMsg("Loading Siege Zone List");
@@ -660,7 +659,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String value = properties.getProperty(key);
 					keys.put(key, String.valueOf(value));
 				}
-				
+
 				line = keys.get("residents");
 				if (line != null) {
 					tokens = line.split(",");
@@ -682,7 +681,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-				
+
 				line = keys.get("outlaws");
 				if (line != null) {
 					tokens = line.split(",");
@@ -699,13 +698,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-				
+
 				line = keys.get("mayor");
 				if (line != null)
 					town.setMayor(getResident(line));
-				
+
 				town.setTownBoard(keys.get("townBoard"));
-				
+
 				line = keys.get("tag");
 				if (line != null)
 					try {
@@ -713,11 +712,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (TownyException e) {
 						town.setTag("");
 					}
-				
+
 				line = keys.get("protectionStatus");
 				if (line != null)
 					town.setPermissions(line);
-				
+
 				line = keys.get("bonusBlocks");
 				if (line != null)
 					try {
@@ -725,7 +724,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setBonusBlocks(0);
 					}
-				
+
 				line = keys.get("purchasedBlocks");
 				if (line != null)
 					try {
@@ -733,7 +732,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setPurchasedBlocks(0);
 					}
-				
+
 				line = keys.get("plotPrice");
 				if (line != null)
 					try {
@@ -741,21 +740,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setPlotPrice(0);
 					}
-				
+
 				line = keys.get("hasUpkeep");
 				if (line != null)
 					try {
 						town.setHasUpkeep(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				
+
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
 						town.setTaxPercentage(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				
+
 				line = keys.get("taxes");
 				if (line != null)
 					try {
@@ -763,7 +762,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setTaxes(0);
 					}
-				
+
 				line = keys.get("plotTax");
 				if (line != null)
 					try {
@@ -771,7 +770,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setPlotTax(0);
 					}
-				
+
 				line = keys.get("commercialPlotPrice");
 				if (line != null)
 					try {
@@ -779,7 +778,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setCommercialPlotPrice(0);
 					}
-				
+
 				line = keys.get("commercialPlotTax");
 				if (line != null)
 					try {
@@ -787,7 +786,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setCommercialPlotTax(0);
 					}
-				
+
 				line = keys.get("embassyPlotPrice");
 				if (line != null)
 					try {
@@ -795,7 +794,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setEmbassyPlotPrice(0);
 					}
-				
+
 				line = keys.get("embassyPlotTax");
 				if (line != null)
 					try {
@@ -803,7 +802,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setEmbassyPlotTax(0);
 					}
-				
+
 				line = keys.get("spawnCost");
 				if (line != null)
 					try {
@@ -811,21 +810,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						town.setSpawnCost(TownySettings.getSpawnTravelCost());
 					}
-				
+
 				line = keys.get("adminDisabledPvP");
 				if (line != null)
 					try {
 						town.setAdminDisabledPVP(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				
+
 				line = keys.get("adminEnabledPvP");
 				if (line != null)
 					try {
 						town.setAdminEnabledPVP(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-				
+
 				line = keys.get("open");
 				if (line != null)
 					try {
@@ -842,14 +841,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("townBlocks");
 				if (line != null)
 					utilLoadTownBlocks(line, town, null);
-				
+
 				line = keys.get("homeBlock");
 				if (line != null) {
 					tokens = line.split(",");
 					if (tokens.length == 3)
 						try {
 							TownyWorld world = getWorld(tokens[0]);
-							
+
 							try {
 								int x = Integer.parseInt(tokens[1]);
 								int z = Integer.parseInt(tokens[2]);
@@ -862,12 +861,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							} catch (TownyException e) {
 								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 							}
-							
+
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
 						}
 				}
-				
+
 				line = keys.get("spawn");
 				if (line != null) {
 					tokens = line.split(",");
@@ -877,7 +876,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							double x = Double.parseDouble(tokens[1]);
 							double y = Double.parseDouble(tokens[2]);
 							double z = Double.parseDouble(tokens[3]);
-							
+
 							Location loc = new Location(world, x, y, z);
 							if (tokens.length == 6) {
 								loc.setPitch(Float.parseFloat(tokens[4]));
@@ -887,7 +886,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 						}
 				}
-				
+
 				// Load outpost spawns
 				line = keys.get("outpostspawns");
 				if (line != null) {
@@ -900,7 +899,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								double x = Double.parseDouble(tokens[1]);
 								double y = Double.parseDouble(tokens[2]);
 								double z = Double.parseDouble(tokens[3]);
-								
+
 								Location loc = new Location(world, x, y, z);
 								if (tokens.length == 6) {
 									loc.setPitch(Float.parseFloat(tokens[4]));
@@ -911,7 +910,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 					}
 				}
-				
+
 				// Load jail spawns
 				line = keys.get("jailspawns");
 				if (line != null) {
@@ -924,7 +923,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								double x = Double.parseDouble(tokens[1]);
 								double y = Double.parseDouble(tokens[2]);
 								double z = Double.parseDouble(tokens[3]);
-								
+
 								Location loc = new Location(world, x, y, z);
 								if (tokens.length == 6) {
 									loc.setPitch(Float.parseFloat(tokens[4]));
@@ -935,7 +934,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 					}
 				}
-				
+
 				line = keys.get("uuid");
 				if (line != null) {
 					try {
@@ -957,16 +956,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
 
-				line = keys.get("recentlyRuinedEndTime");
-				if (line != null) {
-					try {
-						town.setRecentlyRuinedEndTime(Long.parseLong(line));
-					} catch (Exception e) {
-						town.setRecentlyRuinedEndTime(0);
-					}
-				} else {
-					town.setRecentlyRuinedEndTime(0);
-				}
 
 				line = keys.get("revoltCooldownEndTime");
 				if (line != null) {
@@ -1004,7 +993,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					town.setSiege(null);
 				}
 
-				if(town.hasSiege()) {
+				if (town.hasSiege()) {
 					Siege siege = town.getSiege();
 
 					try {
@@ -1070,13 +1059,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 					}
 				}
-
-			} catch (Exception e) {
+				
+			} catch(Exception e){
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
-			} finally {
+			} finally{
 				saveTown(town);
 			}
+			
 			return true;
 		} else {
 			return false;
@@ -1164,14 +1154,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				line = keys.get("taxes");
-				if (line != null)
-					try {
-						nation.setTaxes(Double.parseDouble(line));
-					} catch (Exception e) {
-						nation.setTaxes(0.0);
-					}
-				
 				line = keys.get("siegeZones");
 				if (line != null) {
 					tokens = line.split(",");
@@ -1183,6 +1165,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
+
+
+				line = keys.get("taxes");
+				if (line != null)
+					try {
+						nation.setTaxes(Double.parseDouble(line));
+					} catch (Exception e) {
+						nation.setTaxes(0.0);
+					}
 				
 				line = keys.get("spawnCost");
 				if (line != null)
@@ -1261,66 +1252,67 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 
 
-	@Override
-	public boolean loadSiegeZone(SiegeZone siegeZone) {
-		String line = "";
-		String[] locationValues;
-		World flagLocationWorld;
-		double flagLocationX;
-		double flagLocationY;
-		double flagLocationZ;
 
-		String path = getSiegeZoneFilename(siegeZone);
-		File fileSiegeZone = new File(path);
-		if (fileSiegeZone.exists() && fileSiegeZone.isFile()) {
-			try {
-				HashMap<String, String> keys = new HashMap<>();
-				Properties properties = new Properties();
-				properties.load(new InputStreamReader(new FileInputStream(fileSiegeZone), StandardCharsets.UTF_8));
-				for (String key : properties.stringPropertyNames()) {
-					String value = properties.getProperty(key);
-					keys.put(key, String.valueOf(value));
-				}
+		@Override
+		public boolean loadSiegeZone(SiegeZone siegeZone) {
+			String line = "";
+			String[] locationValues;
+			World flagLocationWorld;
+			double flagLocationX;
+			double flagLocationY;
+			double flagLocationZ;
 
-				line = keys.get("flagLocation");
-				locationValues = line.split(",");
-				flagLocationWorld = BukkitTools.getWorld(locationValues[0]);
-				flagLocationX = Double.parseDouble(locationValues[1]);
-				flagLocationY = Double.parseDouble(locationValues[2]);
-				flagLocationZ = Double.parseDouble(locationValues[3]);
+			String path = getSiegeZoneFilename(siegeZone);
+			File fileSiegeZone = new File(path);
+			if (fileSiegeZone.exists() && fileSiegeZone.isFile()) {
+				try {
+					HashMap<String, String> keys = new HashMap<>();
+					Properties properties = new Properties();
+					properties.load(new InputStreamReader(new FileInputStream(fileSiegeZone), StandardCharsets.UTF_8));
+					for (String key : properties.stringPropertyNames()) {
+						String value = properties.getProperty(key);
+						keys.put(key, String.valueOf(value));
+					}
 
-				Location flagLocation = new Location(
+					line = keys.get("flagLocation");
+					locationValues = line.split(",");
+					flagLocationWorld = BukkitTools.getWorld(locationValues[0]);
+					flagLocationX = Double.parseDouble(locationValues[1]);
+					flagLocationY = Double.parseDouble(locationValues[2]);
+					flagLocationZ = Double.parseDouble(locationValues[3]);
+
+					Location flagLocation = new Location(
 						flagLocationWorld,
 						flagLocationX,
 						flagLocationY,
 						flagLocationZ);
-				siegeZone.setFlagLocation(flagLocation);
+					siegeZone.setFlagLocation(flagLocation);
 
-				line = keys.get("attackingNation");
-				siegeZone.setAttackingNation(getNation(line));
+					line = keys.get("attackingNation");
+					siegeZone.setAttackingNation(getNation(line));
 
-				line = keys.get("defendingTown");
-				siegeZone.setDefendingTown(getTown(line));
+					line = keys.get("defendingTown");
+					siegeZone.setDefendingTown(getTown(line));
 
-				line = keys.get("siegePoints");
-				siegeZone.setSiegePoints(Integer.parseInt(line));
+					line = keys.get("siegePoints");
+					siegeZone.setSiegePoints(Integer.parseInt(line));
 
-				//Player-scoretime maps are not saved/loaded
-				//As it is tricky but with no significant benefit
+					//Player-scoretime maps are not saved/loaded
+					//As it is tricky but with no significant benefit
 
-			} catch (Exception e) {
-				String filename = getSiegeZoneFilename(siegeZone);
-				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading siege zone file at line: " + line + ", in file: " + filename);
+				} catch (Exception e) {
+					String filename = getSiegeZoneFilename(siegeZone);
+					TownyMessaging.sendErrorMsg("Loading Error: Exception while reading siege zone file at line: " + line + ", in file: " + filename);
+					return false;
+				}
+
+				return true;
+			} else {
 				return false;
 			}
-
-			return true;
-		} else {
-			return false;
 		}
-	}
-
-
+		
+		
 	@Override
 	public boolean loadWorld(TownyWorld world) {
 		
@@ -1815,6 +1807,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	}
 
+
 	@Override
 	public boolean saveSiegeZoneList() {
 		List<String> list = new ArrayList<>();
@@ -1830,8 +1823,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 	}
-
-
+	
 	@Override
 	public boolean saveWorldList() {
 
@@ -2019,28 +2011,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 
-		//Ruins
-		list.add("recentlyRuinedEndTime=" + town.getRecentlyRuinedEndTime());
+			//Ruins
+			list.add("recentlyRuinedEndTime=" + town.getRecentlyRuinedEndTime());
 
-		// Sieges & Revolts
-		list.add("revoltCooldownEndTime=" + town.getRevoltImmunityEndTime());
-		list.add("siegeCooldownEndTime=" + town.getSiegeImmunityEndTime());
+			// Sieges & Revolts
+			list.add("revoltCooldownEndTime=" + town.getRevoltImmunityEndTime());
+			list.add("siegeCooldownEndTime=" + town.getSiegeImmunityEndTime());
 
-		if(town.hasSiege()) {
-			Siege siege = town.getSiege();
-			list.add("siegeStatus=" + siege.getStatus().toString());
-			list.add("siegeTownPlundered=" + siege.getTownPlundered());
-			list.add("siegeTownInvaded=" + siege.getTownInvaded());
-			if (siege.getAttackerWinner() != null) {
-				list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
+			if(town.hasSiege()) {
+				Siege siege = town.getSiege();
+				list.add("siegeStatus=" + siege.getStatus().toString());
+				list.add("siegeTownPlundered=" + siege.getTownPlundered());
+				list.add("siegeTownInvaded=" + siege.getTownInvaded());
+				if (siege.getAttackerWinner() != null) {
+					list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
+				}
+				list.add("siegeActualStartTime=" + siege.getStartTime());
+				list.add("siegeScheduledEndTime=" + siege.getScheduledEndTime());
+				list.add("siegeActualEndTime=" + siege.getActualEndTime());
+				list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames(), ","));
 			}
-			list.add("siegeActualStartTime=" + siege.getStartTime());
-			list.add("siegeScheduledEndTime=" + siege.getScheduledEndTime());
-			list.add("siegeActualEndTime=" + siege.getActualEndTime());
-			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames(), ","));
-		}
 
-		/*
+			/*
 		 *  Make sure we only save in async
 		 */
 		this.queryQueue.add(new FlatFile_Task(list, getTownFilename(town)));
@@ -2105,34 +2097,33 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	}
 
-
-	@Override
-	public boolean saveSiegeZone(SiegeZone siegeZone) {
-		List<String> list = new ArrayList<>();
-
-		list.add("flagLocation=" + siegeZone.getFlagLocation().getWorld().getName()
+	
+		@Override
+		public boolean saveSiegeZone(SiegeZone siegeZone) {
+			List<String> list = new ArrayList<>();
+	
+			list.add("flagLocation=" + siegeZone.getFlagLocation().getWorld().getName()
 				+ "," + siegeZone.getFlagLocation().getX()
 				+ "," + siegeZone.getFlagLocation().getY()
 				+ "," + siegeZone.getFlagLocation().getZ());
-		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
-		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
-		list.add("siegePoints=" + siegeZone.getSiegePoints());
-		//Player-scoretime maps are not saved/loaded
-		//As it is tricky but with no significant benefit
+			list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
+			list.add("defendingTown=" + siegeZone.getDefendingTown().getName());
+			list.add("siegePoints=" + siegeZone.getSiegePoints());
+			//Player-scoretime maps are not saved/loaded
+			//As it is tricky but with no significant benefit
+	
+			/*
+			 *  Make sure we only save in async
+			 */
+	
+	
+			this.queryQueue.add(new FlatFile_Task(list, getSiegeZoneFilename(siegeZone)));
+	
+			return true;
+			}
 
-		/*
-		 *  Make sure we only save in async
-		 */
-		 
-
-		this.queryQueue.add(new FlatFile_Task(list, getSiegeZoneFilename(siegeZone)));
-
-		return true;
-	}
-
-
-	@Override
-	public boolean saveWorld(TownyWorld world) {
+		@Override
+		public boolean saveWorld(TownyWorld world) {
 
 		List<String> list = new ArrayList<>();
 
@@ -2383,9 +2374,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Load townblocks according to the given line Townblock: x,y,forSale Eg:
 	 * townBlocks=world:10,11;10,12,true;|nether:1,1|
 	 *
-	 * @param line
-	 * @param town
-	 * @param resident
+	 * @param line - Line which to read from.
+	 * @param town - Town for which to load townblocks for.
+	 * @param resident - Owner of a given townblock.
 	 */
 	@Deprecated
 	public void utilLoadTownBlocks(String line, Town town, Resident resident) {
@@ -2494,7 +2485,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Save PlotBlockData
 	 *
-	 * @param plotChunk
+	 * @param plotChunk - Plot for data to be saved for.
 	 * @return true if saved
 	 */
 	@Override
@@ -2542,9 +2533,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData
 	 *
-	 * @param worldName
-	 * @param x
-	 * @param z
+	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param x - Coordinate for X.
+	 * @param z - Coordinate for Z.
 	 * @return PlotBlockData or null
 	 */
 	@Override
@@ -2565,7 +2556,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData for regen at unclaim
 	 *
-	 * @param townBlock
+	 * @param townBlock - townBlock being reverted
 	 * @return PlotBlockData or null
 	 */
     @Override
@@ -2697,16 +2688,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			FileMgmt.moveFile(file, ("deleted"));
 		}
 	}
-
-	@Override
-	public void deleteSiegeZone(SiegeZone siegeZone) {
-
-		File file = new File(getSiegeZoneFilename(siegeZone));
-		if (file.exists()) {
-			FileMgmt.moveFile(file, ("deleted"));
-		}
-	}
-
 
 	@Override
 	public void deleteWorld(TownyWorld world) {

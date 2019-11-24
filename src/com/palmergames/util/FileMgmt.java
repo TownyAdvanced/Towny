@@ -38,6 +38,7 @@ public class FileMgmt {
 	 * it will try to create the folder at the designated paths.
 	 *
 	 * @param folders array of {@link String} containing a path to a folder.
+	 * @return true or false   
 	 */
 	public static boolean checkOrCreateFolders(String... folders) {
 		for (String folder : folders) {
@@ -72,6 +73,7 @@ public class FileMgmt {
 	 * it will try to create the folder at the designated paths.
 	 *
 	 * @param files array of {@link String} containing a path to a file.
+	 * @return true or false   
 	 */
 	public static boolean checkOrCreateFiles(String... files) {
 		for (String file : files) {
@@ -222,8 +224,6 @@ public class FileMgmt {
 	 *
 	 * @param source String to write.
 	 * @param file   File to write to.
-	 *
-	 * @return True on success.
 	 */
 	public static void stringToFile(String source, File file) {
 
@@ -240,6 +240,10 @@ public class FileMgmt {
 
 	/**
 	 * Write a list to a file, terminating each line with a system specific new line.
+	 * 
+	 * @param source - Data source
+	 * @param targetLocation - Target location on Filesystem
+	 * @return true on success, false on IOException
 	 */
 	public static boolean listToFile(List<String> source, String targetLocation) {
 
@@ -315,6 +319,8 @@ public class FileMgmt {
 	/**
 	 * Delete file, or if path represents a directory, recursively
 	 * delete it's contents beforehand.
+	 * 
+	 * @param file - {@link File} to delete
 	 */
 	public static void deleteFile(File file) {
 
@@ -341,6 +347,9 @@ public class FileMgmt {
 	/**
 	 * Delete child files/folders of backupsDir with a filename ending
 	 * in milliseconds that is older than deleteAfter milliseconds in age.
+	 * 
+	 * @param backupsDir - {@link File} path to backupsDir
+	 * @param deleteAfter - Maximum age of files, in milliseconds
 	 */
 	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
 

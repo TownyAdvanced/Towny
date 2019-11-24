@@ -48,8 +48,9 @@ public class CombatUtil {
 	 * Only allow a Wolves owner to cause it damage, and residents with destroy
 	 * permissions to damage passive animals and villagers while in a town.
 	 * 
-	 * @param attacker
-	 * @param defender
+	 * @param plugin - Reference to Towny
+	 * @param attacker - Entity attacking the Defender
+	 * @param defender - Entity defending from the Attacker
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
@@ -105,13 +106,14 @@ public class CombatUtil {
 	 * Only allow a Wolves owner to cause it damage, and residents with destroy
 	 * permissions to damage passive animals and villagers while in a town.
 	 * 
-	 * @param world
-	 * @param attackingEntity
-	 * @param defendingEntity
-	 * @param attackingPlayer
-	 * @param defendingPlayer
+	 * @param plugin - Reference to Towny
+	 * @param world - World in which DamageCall was issued
+	 * @param attackingEntity - Entity attacking
+	 * @param defendingEntity - Entity defending
+	 * @param attackingPlayer - Player attacking
+	 * @param defendingPlayer - Player defending
 	 * @return true if we should cancel.
-	 * @throws NotRegisteredException 
+	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
 
@@ -284,9 +286,9 @@ public class CombatUtil {
 
 	/**
 	 * Is PvP disabled in this TownBlock?
-	 * Checks the world if the TownBlock is null.
 	 * 
-	 * @param townBlock
+	 * @param townBlock - TownBlock to check
+	 * @param world - World to check if TownBlock is NULL
 	 * @return true if PvP is disallowed
 	 */
 	public static boolean preventPvP(TownyWorld world, TownBlock townBlock) {
@@ -330,7 +332,7 @@ public class CombatUtil {
 	/**
 	 * Is PvP enabled in this world?
 	 * 
-	 * @param world
+	 * @param world - World to check
 	 * @return true if the world is PvP
 	 */
 	public static boolean isWorldPvP(TownyWorld world) {
@@ -345,8 +347,8 @@ public class CombatUtil {
 	/**
 	 * Should we be preventing friendly fire?
 	 * 
-	 * @param attacker
-	 * @param defender
+	 * @param attacker - Attacking Player
+	 * @param defender - Defending Player (receiving damage)
 	 * @return true if we should cancel damage.
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
@@ -378,8 +380,8 @@ public class CombatUtil {
 	/**
 	 * Return true if both attacker and defender are in Arena Plots.
 	 * 
-	 * @param attacker
-	 * @param defender
+	 * @param attacker - Attacking Player
+	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
 	 */
 	public static boolean isPvPPlot(Player attacker, Player defender) {
@@ -403,8 +405,8 @@ public class CombatUtil {
 	/**
 	 * Is the defending resident an ally of the attacking resident?
 	 * 
-	 * @param attackingResident
-	 * @param defendingResident
+	 * @param attackingResident - Attacking Resident (String)
+	 * @param defendingResident - Defending Resident (Receiving Damage; String)
 	 * @return true if the defender is an ally of the attacker.
 	 */
 	public static boolean isAlly(String attackingResident, String defendingResident) {
@@ -428,8 +430,8 @@ public class CombatUtil {
 	/**
 	 * Is town b an ally of town a?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Town A in comparison
+	 * @param b - Town B in comparison
 	 * @return true if they are allies.
 	 */
 	public static boolean isAlly(Town a, Town b) {
@@ -450,8 +452,8 @@ public class CombatUtil {
 	/**
 	 * Is town b in a nation with town a?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Town A in comparison
+	 * @param b - Town B in comparison
 	 * @return true if they are allies.
 	 */
 	public static boolean isSameNation(Town a, Town b) {
@@ -470,8 +472,8 @@ public class CombatUtil {
 	/**
 	 * Is town b in a nation with town a?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Town A in comparison
+	 * @param b - Town B in comparison
 	 * @return true if they are allies.
 	 */
 	public static boolean isSameTown(Town a, Town b) {
@@ -485,8 +487,8 @@ public class CombatUtil {
 	/**
 	 * Can resident a attack resident b?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Resident A in comparison
+	 * @param b - Resident B in comparison
 	 * @return true if they can attack.
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
@@ -514,7 +516,7 @@ public class CombatUtil {
 	/**
 	 * Test if all the listed nations are allies
 	 * 
-	 * @param possibleAllies
+	 * @param possibleAllies - List of Nations (List&lt;Nation&gt;)
 	 * @return true if they are all allies
 	 */
 	public static boolean areAllAllies(List<Nation> possibleAllies) {
@@ -532,8 +534,8 @@ public class CombatUtil {
 	/**
 	 * Is resident b an enemy of resident a?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Resident A in comparison (String)
+	 * @param b - Resident B in comparison (String)
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(String a, String b) {
@@ -557,8 +559,8 @@ public class CombatUtil {
 	/**
 	 * Is town b an enemy of town a?
 	 * 
-	 * @param a
-	 * @param b
+	 * @param a - Town A in comparison
+	 * @param b - Town B in comparison
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(Town a, Town b) {
@@ -579,8 +581,8 @@ public class CombatUtil {
 	/**
 	 * Does this WorldCoord fall within a plot owned by an enemy town?
 	 * 
-	 * @param player
-	 * @param worldCoord
+	 * @param player - Player
+	 * @param worldCoord - Location
 	 * @return true if it is an enemy plot.
 	 */
 	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {

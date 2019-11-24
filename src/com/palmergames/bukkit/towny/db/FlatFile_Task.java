@@ -9,8 +9,8 @@ public class FlatFile_Task {
 	
 	/**
 	 * Constructor to save a list
-	 * @param list
-	 * @param path
+	 * @param list - list to save.
+	 * @param path - path on filesystem.
 	 */
 	public FlatFile_Task(List<String> list, String path) {
 

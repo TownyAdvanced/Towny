@@ -49,6 +49,7 @@ public class TownClaim extends Thread {
 	 * @param selection List of WoorldCoords to claim/unclaim
 	 * @param claim or unclaim
 	 * @param forced admin forced claim/unclaim
+	 * @param isOutpost if claim is/was an Outpost   
 	 */
 	public TownClaim(Towny plugin, Player player, Town town, List<WorldCoord> selection, boolean isOutpost, boolean claim, boolean forced) {
 

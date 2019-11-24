@@ -79,9 +79,9 @@ towns:
         helper:
             - towny.claimed.townowned.switch.*
         donator:
-        # Currently only an example rank holder with no extra permissions
+            # Currently only an example rank holder with no extra permissions
         vip:
-        # Currently only an example rank holder with no extra permissions
+            # Currently only an example rank holder with no extra permissions
         # Sheriff rank is able to jail other town members.
         sheriff:
             - towny.command.town.toggle.jail
@@ -115,4 +115,3 @@ nations:
             - towny.command.nation.siege.*
         helper:
             - towny.command.nation.add
-

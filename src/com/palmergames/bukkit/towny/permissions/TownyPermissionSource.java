@@ -226,8 +226,8 @@ public abstract class TownyPermissionSource {
 	 * 
 	 * Returns true if a player has a certain permission node.
 	 * 
-	 * @param player
-	 * @param node
+	 * @param player - Player to check
+	 * @param node - Permission node to check for
 	 * @return true if the player has this permission node.
 	 */
 	public boolean has(Player player, String node) {

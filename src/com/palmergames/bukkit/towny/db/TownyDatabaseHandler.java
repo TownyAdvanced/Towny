@@ -547,7 +547,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	}
 
-
 	@Override
 	public void removeTown(Town town) {
 		boolean delayFullRemoval = TownySettings.getWarSiegeEnabled() && TownySettings.getWarSiegeDelayFullTownRemoval();
@@ -556,7 +555,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-
+		
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
 		if(delayFullRemoval) {
@@ -571,11 +570,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				"outsiderItemUse", "allyBuild", "allyDestroy",
 				"allySwitch", "allyItemUse", "nationBuild", "nationDestroy",
 				"nationSwitch", "nationItemUse",
-				"pvp", "fire", "explosion", "mobs"})   
+				"pvp", "fire", "explosion", "mobs"})
 			{
 				town.getPermissions().set(element, true);
 			}
-			
+
 			//Reset and save town blocks
 			for(TownBlock townBlock: town.getTownBlocks()) {
 				townBlock.setType(townBlock.getType());
@@ -584,10 +583,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} else {
 			removeTownBlocks(town);
 		}
-
+		
 		if(town.hasSiege())
 			removeSiege(town.getSiege());
-		
+
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
 
@@ -632,12 +631,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
+		universe.getTownsMap().remove(town.getName().toLowerCase());
+
+		plugin.resetCache();
+
+
 		if(!delayFullRemoval) {
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 		}
 
 		plugin.resetCache();
-		
+
 		if(delayFullRemoval) {
 			saveTown(town);
 		} else {
@@ -648,10 +652,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (NotRegisteredException e) {
 				// Must already be removed
 			}
+			saveWorld(townyWorld);
 		}
-
-		saveWorld(townyWorld);
-
+		
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
 	}
 
@@ -688,7 +691,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		//Delete nation and save towns
 		deleteNation(nation);
 		List<Town> toSave = new ArrayList<>(nation.getTowns());
-
+		
 		//Delete siegezones & save affected towns
 		List<SiegeZone> siegeZonesToDelete = new ArrayList<>(nation.getSiegeZones());
 		Siege siege;
@@ -705,12 +708,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		nation.clear();
 
-		//Delete from universe
 		universe.getNationsMap().remove(nation.getName().toLowerCase());
 		for(SiegeZone siegeZone: siegeZonesToDelete) {
 			universe.getSiegeZonesMap().remove(siegeZone.getName().toLowerCase());
 		}
-
+		
 		for (Town town : toSave) {
 
 			/*
@@ -958,7 +960,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				universe.getSiegeZonesMap().remove(oldSiegeZoneName);
 				universe.getSiegeZonesMap().put(newSiegeZoneName, siegeZone);
 			}
-			
+
 			if (TownyEconomyHandler.isActive()) {
 				try {
 					nation.setBalance(nationBalance, "Rename Nation - Transfer to new account");
@@ -974,14 +976,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveTown(town);
 			}
 
-			for(SiegeZone siegeZone: nation.getSiegeZones()) {
-				saveSiegeZone(siegeZone);	
-			}
-			
 			saveNation(nation);
 			saveNationList();
-			saveSiegeZoneList();
-			
+
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
 			List<Nation> toSaveNation = new ArrayList<>(getNations());
@@ -1000,6 +997,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}
 				} else
 					toSave.remove(toCheck);
+
+			for(SiegeZone siegeZone: nation.getSiegeZones()) {
+				saveSiegeZone(siegeZone);
+			}
+			saveSiegeZoneList();
 
 			for (Nation toCheck : toSaveNation)
 				saveNation(toCheck);
@@ -1152,8 +1154,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
 	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
-	 * @exception EmptyNationException - When the succumbingNation's last town is removed, this will remove the nation.
-	 * @exception EconomyException - Shouldn't happen but could if there's a problem with the Economy plugin.
 	 * @throws NotRegisteredException - Shouldn't happen.
 	 * @throws AlreadyRegisteredException - Shouldn't happen. 
 	 * 
@@ -1194,6 +1194,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 	}
 
+
 	@Override
 	public boolean hasSiegeZone(String name) {
 
@@ -1214,10 +1215,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newSiegeZone(String attackingNationName,String defendingTownName) throws AlreadyRegisteredException {
 
 		lock.lock();
-		
+
 		try {
 			String siegeZoneName = SiegeZone.generateName(attackingNationName, defendingTownName);
-			
+
 			if(universe.getSiegeZonesMap().containsKey(siegeZoneName.toLowerCase()))
 				throw new AlreadyRegisteredException("Siege Zone is already registered");
 
@@ -1240,7 +1241,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		return universe.getSiegeZonesMap().get(siegeZoneName.toLowerCase());
 	}
-	
+
 	public void removeRuinedTown(Town town) {
 
 		removeTownBlocks(town);
@@ -1251,13 +1252,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 
-			deleteTown(town);
-			saveTownList();
-			try {
-				townyWorld.removeTown(town);
-			} catch (NotRegisteredException e) {
-				// Must already be removed
-			}
+		deleteTown(town);
+		saveTownList();
+		try {
+			townyWorld.removeTown(town);
+		} catch (NotRegisteredException e) {
+			// Must already be removed
+		}
 
 		saveWorld(townyWorld);
 	}
@@ -1312,14 +1313,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		siegeZone.getAttackingNation().removeSiegeZone(siegeZone);
 		//Remove siege zone from universe
 		universe.getSiegeZonesMap().remove(siegeZone.getName().toLowerCase());
-		
+
 		//Save town
 		saveTown(siegeZone.getDefendingTown());
 		//SaveNation
 		saveNation(siegeZone.getAttackingNation());
 		//Delete siege zone file
 		deleteSiegeZone(siegeZone);
-		
+
 		//Save siege zone list
 		saveSiegeZoneList();
 	}
@@ -1330,6 +1331,5 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		return universe.getSiegeZonesMap().keySet();
 	}
-
 
 }

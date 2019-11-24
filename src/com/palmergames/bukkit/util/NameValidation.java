@@ -21,9 +21,9 @@ public class NameValidation {
 	/**
 	 * Check and perform getNameCheckRegex on any town/nation names
 	 * 
-	 * @param name
+	 * @param name - Town/Nation name {@link String}
 	 * @return result of getNameCheckRegex
-	 * @throws InvalidNameException
+	 * @throws InvalidNameException if the name parsed is blacklisted
 	 */
 	public static String checkAndFilterName(String name) throws InvalidNameException {
 
@@ -36,11 +36,11 @@ public class NameValidation {
 	}
 
 	/**
-	 * Check and perform regex on any Player names
+	 * Check and perform regex on any player names
 	 * 
-	 * @param name
+	 * @param name of a player in {@link String} format.
 	 * @return String of the valid name result.
-	 * @throws InvalidNameException
+	 * @throws InvalidNameException if the player name is invalid.
 	 */
 	public static String checkAndFilterPlayerName(String name) throws InvalidNameException {
 
@@ -55,7 +55,7 @@ public class NameValidation {
 	/**
 	 * Perform regex on all names passed and return the results.
 	 * 
-	 * @param arr
+	 * @param arr - Array of names
 	 * @return string array of the filtered names.
 	 */
 	public static String[] checkAndFilterArray(String[] arr) {
@@ -75,7 +75,7 @@ public class NameValidation {
 	 * If not a blacklist, call isValidName and
 	 * return true if it is an invalid name.
 	 * 
-	 * @param name - Name to be checked for invalidility.
+	 * @param name - Name to be checked for invalidity.
 	 * @return true if this name is blacklist/invalid
 	 */
 	public static boolean isBlacklistName(String name) {
@@ -98,7 +98,7 @@ public class NameValidation {
 	/**
 	 * Is this a valid name via getNameCheckRegex
 	 *
-	 * @param name
+	 * @param name - {@link String} containing a name from getNameCheckRegex
 	 * @return true if this name is valid.
 	 */
 	public static boolean isValidName(String name) {

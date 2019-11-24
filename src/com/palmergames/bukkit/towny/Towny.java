@@ -72,7 +72,7 @@ import java.util.concurrent.Callable;
 /**
  * Towny Plugin for Bukkit
  * 
- * Website & Source: https://github.com/TownyAdvanced/Towny
+ * Website &amp; Source: https://github.com/TownyAdvanced/Towny
  * 
  * @author Shade, ElgarL, LlmDl
  */
@@ -541,6 +541,8 @@ public class Towny extends JavaPlugin {
 
 	/**
 	 * Resets all Online player caches if their location equals this one
+	 * 
+	 * @param worldCoord - the location to check for
 	 */
 	public void updateCache(WorldCoord worldCoord) {
 

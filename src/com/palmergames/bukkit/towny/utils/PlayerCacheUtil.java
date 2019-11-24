@@ -45,10 +45,10 @@ public class PlayerCacheUtil {
 	 * 
 	 * Generates the cache if it doesn't exist.
 	 * 
-	 * @param player
-	 * @param location
-	 * @param material
-	 * @param action
+	 * @param player - Player to check
+	 * @param location - Location 
+	 * @param material - Material
+	 * @param action - ActionType
 	 * @return true if the player has permission.
 	 */
 	public static boolean getCachePermission(Player player, Location location, Material material, ActionType action) {
@@ -92,12 +92,12 @@ public class PlayerCacheUtil {
 	/**
 	 * Generate a new cache for this player/action.
 	 * 
-	 * @param player
-	 * @param location
-	 * @param worldCoord
-	 * @param status
-	 * @param material
-	 * @param action
+	 * @param player - Player
+	 * @param location - Location
+	 * @param worldCoord - WorldCoord
+	 * @param status - TownBlockStatus
+	 * @param material - Material
+	 * @param action - ActionType
 	 */
 	private static void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Material material, ActionType action) {
 
@@ -124,9 +124,9 @@ public class PlayerCacheUtil {
 	 * Update and return back the townBlockStatus for the player at this
 	 * worldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param townBlockStatus
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param townBlockStatus - TownBlockStatus
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus cacheStatus(Player player, WorldCoord worldCoord, TownBlockStatus townBlockStatus) {
@@ -142,10 +142,10 @@ public class PlayerCacheUtil {
 	/**
 	 * Update the player cache for Build rights at this WorldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param material
-	 * @param buildRight
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param material - Material
+	 * @param buildRight - Boolean
 	 */
 	private static void cacheBuild(Player player, WorldCoord worldCoord, Material material, Boolean buildRight) {
 
@@ -159,10 +159,10 @@ public class PlayerCacheUtil {
 	/**
 	 * Update the player cache for Destroy rights at this WorldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param material
-	 * @param destroyRight
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param material - Material
+	 * @param destroyRight - Boolean
 	 */
 	private static void cacheDestroy(Player player, WorldCoord worldCoord, Material material, Boolean destroyRight) {
 
@@ -176,10 +176,10 @@ public class PlayerCacheUtil {
 	/**
 	 * Update the player cache for Switch rights at this WorldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param material
-	 * @param switchRight
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param material - Material
+	 * @param switchRight - Boolean
 	 */
 	private static void cacheSwitch(Player player, WorldCoord worldCoord, Material material, Boolean switchRight) {
 
@@ -193,10 +193,10 @@ public class PlayerCacheUtil {
 	/**
 	 * Update the player cache for Item_use rights at this WorldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
-	 * @param material
-	 * @param itemUseRight
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param material - Material
+	 * @param itemUseRight - Boolean
 	 */
 	private static void cacheItemUse(Player player, WorldCoord worldCoord, Material material, Boolean itemUseRight) {
 
@@ -210,8 +210,8 @@ public class PlayerCacheUtil {
 	/**
 	 * Update the cached BlockErrMsg for this player.
 	 * 
-	 * @param player
-	 * @param msg
+	 * @param player - Player
+	 * @param msg - String
 	 */
 	public static void cacheBlockErrMsg(Player player, String msg) {
 
@@ -222,8 +222,8 @@ public class PlayerCacheUtil {
 	/**
 	 * Fetch the TownBlockStatus type for this player at this WorldCoord.
 	 * 
-	 * @param player
-	 * @param worldCoord
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
@@ -388,11 +388,11 @@ public class PlayerCacheUtil {
 	 * Test if the player has permission to perform a certain action at this
 	 * WorldCoord.
 	 * 
-	 * @param player
-	 * @param status
-	 * @param pos
-	 * @param material
-	 * @param action
+	 * @param player - {@link Player}
+	 * @param status - {@link TownBlockStatus}
+	 * @param pos - {@link WorldCoord}
+	 * @param material - {@link Material}
+	 * @param action {@link ActionType}
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {

@@ -233,9 +233,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     /**
      * Build the SQL string and execute to INSERT/UPDATE
      *
-     * @param tb_name
-     * @param args
-     * @param keys
+     * @param tb_name - Database Table name.
+     * @param args - Arguments.
+     * @param keys - Table keys.
      * @return true if the update was successful.
      */
     public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
@@ -402,8 +402,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     /**
      * Build the SQL string and execute to DELETE
      *
-     * @param tb_name
-     * @param args
+     * @param tb_name - Database Table name
+     * @param args - Arguments
      * @return true if the delete was a success.
      */
     public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
@@ -2103,7 +2103,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean cleanup() {
 
 		/*
@@ -2212,9 +2213,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
      * Load townblocks according to the given line Townblock: x,y,forSale Eg:
      * townBlocks=world:10,11;10,12,true;|nether:1,1|
      *
-     * @param line
-     * @param town
-     * @param resident
+     * @param line - Line to load
+     * @param town - Town to load from
+     * @param resident - resident to set to townblock
      */
     @Deprecated
     public void utilLoadTownBlocks(String line, Town town, Resident resident) {

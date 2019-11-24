@@ -464,9 +464,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	/**
-	 * @param homeBlock
-	 * @return true if the world/homeblock has changed
-	 * @throws TownyException
+	 * Sets the HomeBlock of a town
+	 * 
+	 * @param homeBlock - The TownBlock to set as the HomeBlock
+	 * @return true if the HomeBlock was successfully set
+	 * @throws TownyException if the TownBlock is not owned by the town
 	 */
 	public boolean setHomeBlock(TownBlock homeBlock) throws TownyException {
 
@@ -525,9 +527,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Only to be called from the Loading methods.
+<<<<<<< HEAD
 	 *
 	 * @param homeBlock
 	 * @throws TownyException
+=======
+	 * 
+	 * @param homeBlock - TownBlock to forcefully set as HomeBlock
+	 * @throws TownyException - General TownyException
+>>>>>>> origin/master
 	 */
 	public void forceSetHomeBlock(TownBlock homeBlock) throws TownyException {
 
@@ -559,8 +567,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	/**
 	 * Sets the world this town belongs to. If it's a world change it will
 	 * remove the town from the old world and place in the new.
+<<<<<<< HEAD
 	 *
 	 * @param world
+=======
+	 * 
+	 * @param world - TownyWorld to attribute a town to
+>>>>>>> origin/master
 	 */
 	public void setWorld(TownyWorld world) {
 
@@ -702,8 +715,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Only to be called from the Loading methods.
+<<<<<<< HEAD
 	 *
 	 * @param spawn
+=======
+	 * 
+	 * @param spawn - Location to forcefully set as town spawn
+>>>>>>> origin/master
 	 */
 	public void forceSetSpawn(Location spawn) {
 
@@ -711,6 +729,12 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	}
 
+	/**
+	 * Gets the Town's spawn location
+	 * 
+	 * @return Location of the town spawn
+	 * @throws TownyException if no town spawn has been set (null)
+	 */
 	public Location getSpawn() throws TownyException {
 
 		if (hasHomeBlock() && spawn != null) {
@@ -787,9 +811,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Add or update an outpost spawn
+<<<<<<< HEAD
 	 *
 	 * @param spawn
 	 * @throws TownyException
+=======
+	 * 
+	 * @param spawn - Location to set an outpost's spawn point
+	 * @throws TownyException if the Location is not within an Outpost plot.
+>>>>>>> origin/master
 	 */
 	public void addOutpostSpawn(Location spawn) throws TownyException {
 
@@ -814,8 +844,13 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Only to be called from the Loading methods.
+<<<<<<< HEAD
 	 *
 	 * @param spawn
+=======
+	 * 
+	 * @param spawn - Location to set Outpost's spawn point
+>>>>>>> origin/master
 	 */
 	public void forceAddOutpostSpawn(Location spawn) {
 
@@ -826,10 +861,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Return the Location for this Outpost index.
+<<<<<<< HEAD
 	 *
 	 * @param index
 	 * @return Location of outpost spawn
 	 * @throws TownyException
+=======
+	 * 
+	 * @param index - Numeric identifier of an Outpost
+	 * @return Location of Outpost's spawn
+	 * @throws TownyException if there are no Outpost spawns set
+>>>>>>> origin/master
 	 */
 	public Location getOutpostSpawn(Integer index) throws TownyException {
 
@@ -1114,8 +1156,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Only to be called from the Loading methods.
-	 *
-	 * @param spawn
+	 * 
+	 * @param spawn - Location to set a Jail's spawn
 	 */
 	public void forceAddJailSpawn(Location spawn) {
 
@@ -1124,10 +1166,10 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 	/**
 	 * Return the Location for this Jail index.
-	 *
-	 * @param index
-	 * @return Location of jail spawn
-	 * @throws TownyException
+	 * 
+	 * @param index - Numerical identifier of a Town Jail
+	 * @return Location of a jail spawn
+	 * @throws TownyException if there are no jail spawns set
 	 */
 	public Location getJailSpawn(Integer index) throws TownyException {
 

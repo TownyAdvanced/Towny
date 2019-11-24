@@ -362,8 +362,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect or pay upkeep for all towns.
 	 * 
-	 * @throws EconomyException
-	 * @throws TownyException
+	 * @throws EconomyException if there is an error with the economy handling
+	 * @throws TownyException if there is a error with Towny
 	 */
 	public void collectTownCosts() throws EconomyException, TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -427,7 +427,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	/**
 	 * Collect upkeep due from all nations.
 	 * 
-	 * @throws EconomyException
+	 * @throws EconomyException if there is an error with Economy handling
 	 */
 	public void collectNationCosts() throws EconomyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
