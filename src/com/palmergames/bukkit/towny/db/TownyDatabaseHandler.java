@@ -585,6 +585,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			removeTownBlocks(town);
 		}
 
+		if(town.hasSiege())
+			removeSiege(town.getSiege());
+		
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
 		TownyWorld townyWorld = town.getWorld();
 
@@ -1231,15 +1234,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public SiegeZone getSiegeZone(String nationName, String townName) throws NotRegisteredException  {
-		String siegeZoneName = SiegeZone.generateName(nationName,townName);
-
+	public SiegeZone getSiegeZone(String siegeZoneName) throws NotRegisteredException {
 		if(!universe.getSiegeZonesMap().containsKey(siegeZoneName.toLowerCase())) {
 			throw new NotRegisteredException("Siege Zone not found");
 		}
 		return universe.getSiegeZonesMap().get(siegeZoneName.toLowerCase());
 	}
-
+	
 	public void removeRuinedTown(Town town) {
 		removeTownBlocks(town);
 		TownyWorld townyWorld = town.getWorld();
@@ -1262,11 +1263,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	//Remove a particular siege, and all associated data
 	@Override
 	public void removeSiege(Siege siege) {
-
-		//todo ????????? do we need this?
-		//BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
-
-		//Remove siege from siege
+		//Remove siege from town
 		siege.getDefendingTown().setSiege(null);
 
 		List<SiegeZone> siegeZonesToRemove = new ArrayList<>();
@@ -1301,12 +1298,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			deleteSiegeZone(siegeZone);
 		}
 		saveSiegeZoneList();
-
-		//Todo - do we need something like this?
-		//BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town.getName()));
-
-		//Todo - do we need something like this?
-		//universe.setChangedNotify(REMOVE_TOWN);
 	}
 
 	@Override

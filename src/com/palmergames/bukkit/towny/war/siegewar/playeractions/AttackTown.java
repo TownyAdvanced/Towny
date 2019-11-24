@@ -133,8 +133,9 @@ public class AttackTown {
 			attackingNation.getName(),
 			defendingTown.getName());
 		siegeZone = TownyUniverse.getDataSource().getSiegeZone(
-			attackingNation.getName(),
-			defendingTown.getName());
+			SiegeZone.generateName(
+				attackingNation.getName(), 
+				defendingTown.getName()));
 		siegeZone.setActive(true);
 
 		siegeZone.setFlagLocation(block.getLocation());

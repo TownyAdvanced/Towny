@@ -174,7 +174,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				}
 
 				//Save changes to db
-				TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
+				com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+				townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
 			}
 
 		} else {

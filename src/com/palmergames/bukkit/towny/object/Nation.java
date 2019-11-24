@@ -757,6 +757,14 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		return siegeZones;
 	}
 
+	public List<String> getSiegeZoneNames() {
+		List<String> names = new ArrayList<>();
+		for(SiegeZone siegeZone: siegeZones) {
+			names.add(siegeZone.getName());
+		}
+		return names;
+	}
+
 	public int getNumTownblocks() {
 		int townBlocksClaimed = 0;
 		for (Town towns : this.getTowns()) {

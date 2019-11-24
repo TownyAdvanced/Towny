@@ -83,8 +83,17 @@ public class Siege {
     public List<Nation> getAllAttackers() {
         return new ArrayList<Nation>(siegeZones.keySet());
     }
+    
+	public List<String> getSiegeZoneNames() {
+    	List<String> names = new ArrayList<>();
+    	for(SiegeZone siegeZone: siegeZones.values()) {
+    		names.add(siegeZone.getName());
+		}
+    	return names;
+	}
 
-    public void setStatus(SiegeStatus status) {
+	
+	public void setStatus(SiegeStatus status) {
         this.status = status;
     }
 

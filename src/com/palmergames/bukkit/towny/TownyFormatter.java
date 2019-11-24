@@ -450,6 +450,19 @@ public class TownyFormatter {
 						out.add(siegeStatus);
 
 						//Siege Attacks: Land of Empire (Nation) [+30], Land of Killers (Nation) [-8]
+
+						/*
+						// Residents [12]: James, Carry, Mason
+						String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
+						if (residents.length > 34) {
+							String[] entire = residents;
+							residents = new String[36];
+							System.arraycopy(entire, 0, residents, 0, 35);
+							residents[35] = TownySettings.getLangString("status_town_reslist_overlength");
+						}
+						out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
+						*/
+
 						StringBuilder builtLine = new StringBuilder();
 						builtLine.append(TownySettings.getLangString("status_town_siege_attackers_tag"));
 						builtLine.append(Colors.White);
@@ -630,95 +643,7 @@ public class TownyFormatter {
 		out = formatStatusScreens(out);
 		return out;
 	}
-
-	private static void addSiegeStatusDefender(Siege siege, List<String> out) {
-		String defenderName="?";
-		String combatantStatusTag;
-		SiegeStatus siegeStatus = siege.getStatus();
-
-		if(siege.getStatus() == SiegeStatus.DEFENDER_SURRENDER) {
-			combatantStatusTag = Colors.Gray + " - " + Colors.Red + "SURRENDERED";
-		} else {
-			if(siegeStatus == SiegeStatus.IN_PROGRESS) {
-				combatantStatusTag = "";
-			} else {
-				if (siegeStatus == SiegeStatus.DEFENDER_WIN
-						|| siegeStatus == SiegeStatus.ATTACKER_ABANDON) {
-					combatantStatusTag = Colors.Gray + " - " + Colors.Green + "WINNER";
-				} else {
-					combatantStatusTag = Colors.Gray + " - " + Colors.Red + "DEFEATED";
-				}
-			}
-		}
-
-		if(siege.getDefendingTown().hasNation()) {
-			try {
-				defenderName = TownyFormatter.getFormattedNationName(siege.getDefendingTown().getNation());
-			} catch (NotRegisteredException e) {
-			}
-		} else {
-			defenderName = TownyFormatter.getFormattedTownName(siege.getDefendingTown());
-		}
-
-		String defenceTag = TownySettings.getLangString("status_town_siege_defence_tag");
-		out.add("????????");
-		//TODO THIS WHOLE BIT NEEDS REFACTOR
-		//out.add(defenceTag + Colors.White  + defenderName + " - " + siege.getDefenderSiegeFront().getSiegePointsTotal() + " " + combatantStatusTag);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static void addSiegeStatusAttackers(Siege siege, List<String> out) {
-		String prefixTag = TownySettings.getLangString("status_town_siege_attack_tag");
-		String prefixSpaces = prefixTag.replaceAll(".", " ");
-
-		List<Nation> attackerNations = new ArrayList<>(siege.getSiegeZones().keySet());
-		Collections.sort(attackerNations, new Comparator() {
-			@Override
-			public int compare(Object n1, Object n2) {
-				int nation1SiegePoints = siege.getSiegeZones().get((Nation)n1).getSiegePoints();
-				int nation2SiegePoints = siege.getSiegeZones().get((Nation)n2).getSiegePoints();
-
-				if(nation1SiegePoints == nation2SiegePoints) {return 0;}
-				return nation1SiegePoints < nation2SiegePoints ? 1 : -1;
-			}
-		});
-
-		Nation attackerNation;
-		String attackerName;
-		SiegeZone siegeStats;
-		String combatantStatusTag;
-		SiegeStatus siegeStatus;
-		final int maxIndex = 9;  //This limits the displayed entries to 10
-		int index;
-		for(index=0; index < attackerNations.size() && index <= maxIndex; index++ ) {
-			attackerNation = attackerNations.get(index);
-			attackerName = TownyFormatter.getFormattedNationName(attackerNation);
-			siegeStats = siege.getSiegeZones().get(attackerNation);
-			siegeStatus = siege.getStatus();
-
-			if(!siegeStats.isActive()) {
-				combatantStatusTag = Colors.Gray + " - " + Colors.Red + "ABANDONED";
-			} else {
-				if(siegeStatus == SiegeStatus.IN_PROGRESS) {
-					combatantStatusTag = "";
-				} else {
-					if (siege.getAttackerWinner() == attackerNation) {
-						combatantStatusTag = Colors.Gray + " - " + Colors.Green + "WINNER";
-					} else {
-						combatantStatusTag = Colors.Gray + " - " + Colors.Green + "DEFEATED";
-					}
-				}
-			}
-
-			String prefix= index==0 ? prefixTag: prefixSpaces;
-			out.add(prefix + Colors.White + attackerName + " - " + siegeStats.getSiegePoints() + " " + combatantStatusTag);
-		}
-
-		if(index == maxIndex) {
-			out.add(prefixSpaces + Colors.White + " ... & more");
-		}
-	}
-
+	
 	private static String getStatusTownSiegeSummary(Siege siege) {
 		switch(siege.getStatus()) {
 			case IN_PROGRESS:

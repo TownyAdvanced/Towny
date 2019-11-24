@@ -302,9 +302,9 @@ public abstract class TownyDataSource {
 	abstract public Town getTown(String name) throws NotRegisteredException;
 
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
-
-	abstract public SiegeZone getSiegeZone(String attackerNationName, String defendingTownName) throws NotRegisteredException;
-
+	
+	abstract public SiegeZone getSiegeZone(String name) throws NotRegisteredException;
+		
 	abstract public List<Nation> getNations(String[] names);
 
 	abstract public List<Nation> getNations();

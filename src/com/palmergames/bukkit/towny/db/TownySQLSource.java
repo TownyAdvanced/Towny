@@ -1068,13 +1068,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     siege.setActualEndTime(rs.getLong("siegeActualEndTime"));
 
                     line = rs.getString("siegeZones");
-                    String[] nationNames = line.split(",");
-                    Nation nation;
-                    SiegeZone siegeZone;
-                    for(String nationName: nationNames) {
-                        nation = universe.getDataSource().getNation(nationName.toLowerCase());
-                        siegeZone = universe.getDataSource().getSiegeZone(nationName.toLowerCase(), town.getName().toLowerCase());
-                        town.getSiege().getSiegeZones().put(nation,siegeZone);
+                    String[] siegeZoneNames = line.split(",");
+					SiegeZone siegeZone;
+                    for(String siegeZoneName: siegeZoneNames) {
+                        siegeZone = universe.getDataSource().getSiegeZone(siegeZoneName);
+                        town.getSiege().getSiegeZones().put(siegeZone.getAttackingNation(),siegeZone);
                     }
 
                 }
@@ -1160,7 +1158,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     tokens = line.split(",");
                     for (String token : tokens) {
                         if (!token.isEmpty()) {
-                            SiegeZone siegeZone = getSiegeZone(nation.getName().toLowerCase(), token);
+                            SiegeZone siegeZone = getSiegeZone(token);
                             if (siegeZone != null)
                                 nation.addSiegeZone(siegeZone);
                         }
@@ -1802,7 +1800,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-            nat_hm.put("sieges", StringMgmt.join(nation.getTownsUnderSiegeAttack(), "#"));
+            nat_hm.put("sieges", StringMgmt.join(nation.getSiegeZoneNames(), "#"));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());

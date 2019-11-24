@@ -183,7 +183,7 @@ public class SiegeWarPlaceBlockController {
 
 		/*
 		 * During a siege or aftermath
-		 * If any resident member of the attacking nations attempts to place a chest,
+		 * If any player from one of the attacking nations attempts to place a chest,
 		 * it is evaluated as an attempted siege action
 		 */
 		if (townWhereBlockWasPlaced.hasSiege()) {
@@ -192,7 +192,7 @@ public class SiegeWarPlaceBlockController {
 
 			if(resident.hasTown()
 				&& resident.hasNation()
-				&& siege.getSiegeZones().keySet().contains(resident.getTown().getNation())) {
+				&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
 
 				PlunderTown.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
 				return true;

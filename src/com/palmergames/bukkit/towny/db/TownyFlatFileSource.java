@@ -1061,13 +1061,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					try {
 						line = keys.get("siegeZones");
-						String[] nationNames = line.split(",");
+						String[] siegeZoneNames = line.split(",");
 						Nation nation;
 						SiegeZone siegeZone;
-						for (String nationName : nationNames) {
-							nation = universe.getDataSource().getNation(nationName.toLowerCase());
-							siegeZone = universe.getDataSource().getSiegeZone(nationName.toLowerCase(), town.getName().toLowerCase());
-							town.getSiege().getSiegeZones().put(nation, siegeZone);
+						for (String siegeZoneName : siegeZoneNames) {
+							siegeZone = universe.getDataSource().getSiegeZone(siegeZoneName);
+							town.getSiege().getSiegeZones().put(siegeZone.getAttackingNation(), siegeZone);
 						}
 					} catch (Exception e) {
 					}
@@ -1179,11 +1178,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-
-							System.out.println("NATIONNAME: " + nation.getName().toLowerCase());
-							System.out.println("TOKEN: " + token);
-
-							SiegeZone siegeZone = getSiegeZone(nation.getName().toLowerCase(), token);
+							SiegeZone siegeZone = getSiegeZone(token);
 							if (siegeZone != null)
 								nation.addSiegeZone(siegeZone);
 						}
@@ -2030,11 +2025,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + md.toString());
 
 		//Ruins
-		list.add("recentlyRuinedEndTime=" + Long.toString(town.getRecentlyRuinedEndTime()));
+		list.add("recentlyRuinedEndTime=" + town.getRecentlyRuinedEndTime());
 
 		// Sieges & Revolts
-		list.add("revoltCooldownEndTime=" + Long.toString(town.getRevoltImmunityEndTime()));
-		list.add("siegeCooldownEndTime=" + Long.toString(town.getSiegeImmunityEndTime()));
+		list.add("revoltCooldownEndTime=" + town.getRevoltImmunityEndTime());
+		list.add("siegeCooldownEndTime=" + town.getSiegeImmunityEndTime());
 
 		if(town.hasSiege()) {
 			Siege siege = town.getSiege();
@@ -2044,10 +2039,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (siege.getAttackerWinner() != null) {
 				list.add("siegeAttackerWinner=" + siege.getAttackerWinner().getName());
 			}
-			list.add("siegeActualStartTime=" + Long.toString(siege.getStartTime()));
-			list.add("siegeScheduledEndTime=" + Long.toString(siege.getScheduledEndTime()));
-			list.add("siegeActualEndTime=" + Long.toString(siege.getActualEndTime()));
-			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getAllAttackers()));
+			list.add("siegeActualStartTime=" + siege.getStartTime());
+			list.add("siegeScheduledEndTime=" + siege.getScheduledEndTime());
+			list.add("siegeActualEndTime=" + siege.getActualEndTime());
+			list.add("siegeZones=" + StringMgmt.join(town.getSiege().getSiegeZoneNames()));
 		}
 
 		/*
@@ -2080,7 +2075,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
-		list.add("sieges=" + StringMgmt.join(nation.getTownsUnderSiegeAttack(), ","));
+		list.add("sieges=" + StringMgmt.join(nation.getSiegeZoneNames(), ","));
 
 		// Taxes
 		list.add("taxes=" + nation.getTaxes());
