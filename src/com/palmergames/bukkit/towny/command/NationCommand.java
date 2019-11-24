@@ -1822,7 +1822,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void nationEnemy(Player player, String[] split) {
+	public void nationEnemy(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident;
 		Nation nation;
@@ -1856,7 +1856,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					else
 						list.add(enemy);
 				} catch (NotRegisteredException e) {
-					// Do nothing here as the name doesn't match a Nation
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_no_nation_with_that_name"), name));
 				}
 			}
 			if (!list.isEmpty())

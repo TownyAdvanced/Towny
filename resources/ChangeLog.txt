@@ -3848,3 +3848,6 @@ v0.92.0.11:
     - Works for /t join and /n join as well as /t add and /n add commands. 
   - REQUIRED TOWNYPERMS.YML CHANGE: add towny.command.nation.leave to the mayor group.
     - Closes ticket #3511
+  - Language files bumped to 0.64.
+  - Fix lack of feedback when adding a nation enemy that doesn't exist.
+    - Closes ticket #3512

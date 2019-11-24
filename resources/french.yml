@@ -1,5 +1,5 @@
 name: Towny
-version: 0.63
+version: 0.64
 language: french
 author: Noiknez,TheCalypso
 website: 'http://townyadvanced.github.io/'
@@ -1022,3 +1022,6 @@ msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
 msg_the_wilderness: 'the Wilderness'
 msg_enemy_areas: 'Enemy areas'
 msg_neutral_towns: 'Neutral towns'
+
+# Added in 0.64
+msg_err_no_nation_with_that_name: 'No nation found with name %s'
