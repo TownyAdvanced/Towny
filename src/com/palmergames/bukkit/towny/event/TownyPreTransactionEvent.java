@@ -46,7 +46,7 @@ public class TownyPreTransactionEvent extends Event implements Cancellable {
 		return transaction;
 	}
 	
-	public int getNewAmount() {
+	public int getNewBalance() {
 		switch (transaction.getType()) {
 			case ADD:
 				return (int) (TownyEconomyHandler.getBalance(transaction.getPlayer().getName(),

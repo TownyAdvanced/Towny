@@ -58,7 +58,7 @@ public class NationPreTransactionEvent extends Event implements Cancellable {
 		this.cancelMessage = cancelMessage;
 	}
 
-	public int getNewAmount() {
+	public int getNewBalance() {
 		try {
 			switch (transaction.getType()) {
 				case DEPOSIT:
