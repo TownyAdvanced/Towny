@@ -181,6 +181,8 @@ public class SiegeWarPlaceBlockController {
 			return false;
 		}
 
+		System.out.println("Noe evaluating place chest 1");
+
 		/*
 		 * During a siege or aftermath
 		 * If any player from one of the attacking nations attempts to place a chest,
@@ -190,10 +192,14 @@ public class SiegeWarPlaceBlockController {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			Siege siege = townWhereBlockWasPlaced.getSiege();
 
+			System.out.println("Noe evaluating place chest 2");
+			
 			if(resident.hasTown()
 				&& resident.hasNation()
 				&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
 
+				System.out.println("Noe evaluating place chest 3");
+			
 				PlunderTown.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
 				return true;
 			} else {

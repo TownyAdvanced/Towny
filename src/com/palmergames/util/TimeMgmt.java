@@ -86,7 +86,7 @@ public class TimeMgmt {
 
             } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString(",hour_plu");
+                timeUnit = TownySettings.getLangString("hour_plu");
                 timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
 
             } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {

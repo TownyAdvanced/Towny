@@ -33,8 +33,8 @@ public class PlunderTown {
 
             if(!TownyUniverse.getDataSource().hasTown(townName))
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
-
-            if(!TownyUniverse.getDataSource().getTown(townName).hasSiege())
+            
+			if(!TownyUniverse.getDataSource().getTown(townName).hasSiege())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
 
             final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
@@ -48,14 +48,11 @@ public class PlunderTown {
             if(siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
 
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-            if(!resident.hasTown()
-                    || !resident.hasNation()
-                    || resident.getTown().getNation() != siege.getAttackerWinner()) {
+			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			
+			if(resident.getTown().getNation() != siege.getAttackerWinner())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
-            }
-
+			
             if(siege.isTownPlundered())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_plundered"), townName));
 
