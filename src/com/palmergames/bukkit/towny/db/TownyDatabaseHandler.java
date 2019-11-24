@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -550,6 +551,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town) {
 		
+		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
+		BukkitTools.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled())
+			return;
+		
 		BukkitTools.getPluginManager().callEvent(new PreDeleteTownEvent(town));
 
 		removeTownBlocks(town);		
@@ -616,6 +623,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeNation(Nation nation) {
+
+		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation.getName());
+		BukkitTools.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled())
+			return;
 
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
