@@ -1062,7 +1062,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					try {
 						line = keys.get("siegeZones");
 						String[] siegeZoneNames = line.split(",");
-						Nation nation;
 						SiegeZone siegeZone;
 						for (String siegeZoneName : siegeZoneNames) {
 							siegeZone = universe.getDataSource().getSiegeZone(siegeZoneName);
@@ -1172,8 +1171,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception e) {
 						nation.setTaxes(0.0);
 					}
-
-				line = keys.get("siegeszones");
+				
+				line = keys.get("siegeZones");
 				if (line != null) {
 					tokens = line.split(",");
 					for (String token : tokens) {
@@ -1184,8 +1183,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				}
-
-
+				
 				line = keys.get("spawnCost");
 				if (line != null)
 					try {
@@ -2075,7 +2073,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
-		list.add("sieges=" + StringMgmt.join(nation.getSiegeZoneNames(), ","));
+		list.add("siegeZones=" + StringMgmt.join(nation.getSiegeZoneNames(), ","));
 
 		// Taxes
 		list.add("taxes=" + nation.getTaxes());
