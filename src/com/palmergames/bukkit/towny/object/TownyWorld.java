@@ -705,10 +705,10 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	/**
-	 * Returns the closes town from a given coord (key).
-	 * 
-	 * @param key - Coord.
-	 * @param nearestTown - Closest town to given coord.
+	 * Returns the closest town from a given coord (key).
+	 * @param key - Coord
+	 * @param nearestTown - Closest town to the given coord.
+	 * @return the nearestTown
 	 */
 	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
 		
@@ -729,10 +729,11 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	/**
-	 * Returns the closes town from a given coord (key).
+	 * Returns the closest town with a nation from a given coord (key).
 	 * 
 	 * @param key - Coord.
 	 * @param nearestTown - Closest town to given coord.
+	 * @return the nearest town belonging to a nation.   
 	 */
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
 		

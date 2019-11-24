@@ -57,7 +57,7 @@ public class War {
 
 	/**
 	 * Creates a new War instance.
-	 * @param plugin
+	 * @param plugin - {@link Towny}
 	 * @param startDelay - the delay before war will begin
 	 */
 	public War(Towny plugin, int startDelay) {
@@ -149,7 +149,7 @@ public class War {
 	
 	/**
 	 * Creates a delay before war begins
-	 * @param delay
+	 * @param delay - Delay before war begins
 	 */
 	public void setupDelay(int delay) {
 
@@ -313,7 +313,7 @@ public class War {
 
 	/**
 	 * Add a nation to war, and all the towns within it.
-	 * @param nation
+	 * @param nation {@link Nation} to incorporate into War
 	 */
 	private void add(Nation nation) {
 
@@ -337,7 +337,7 @@ public class War {
 
 	/**
 	 * Add a town to war. Set the townblocks in the town to the correct health.
-	 * @param town
+	 * @param town {@link Town} to incorporate into war
 	 */
 	private void add(Town town) {
 		int numTownBlocks = 0;
@@ -361,8 +361,8 @@ public class War {
 	 * A town has scored.
 	 * @param town - the scoring town
 	 * @param n - the score to be added
-	 * @param fallenObject - the object that fell
-	 * @param townBlocksFallen -  the number of fallen townblocks
+	 * @param fallenObject - the {@link Object} that fell
+	 * @param townBlocksFallen -  the number of fallen townblocks {@link TownBlock}s ({@link Integer})
 	 */
 	public void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
 
@@ -384,11 +384,11 @@ public class War {
 
 	/**
 	 * A town has scored and there is data on the attacking/defending town
-	 * @param defenderTown
-	 * @param attackerTown
-	 * @param defenderPlayer
-	 * @param attackerPlayer
-	 * @param n - the score to be added
+	 * @param defenderTown - {@link Town} defending an attack
+	 * @param attackerTown - {@link Town} on the attack
+	 * @param defenderPlayer - {@link Player} defending
+	 * @param attackerPlayer - {@link Player} attacking
+	 * @param n - the score to be added ({@link Integer})
 	 */
 	public void townScored(Town defenderTown,  Town attackerTown, Player defenderPlayer, Player attackerPlayer, int n) {
 		String[] pointMessage;
@@ -411,9 +411,9 @@ public class War {
 
 	/**
 	 * Update a plot given the WarZoneData on the TownBlock
-	 * @param townBlock
-	 * @param wzd
-	 * @throws NotRegisteredException
+	 * @param townBlock - {@link TownBlock}
+	 * @param wzd - {@link WarZoneData}
+	 * @throws NotRegisteredException - Generic
 	 */
 	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		if (!wzd.hasAttackers()) 
@@ -424,9 +424,9 @@ public class War {
 
 	/**
 	 * Heals a plot. Only occurs when the plot has no attackers.
-	 * @param townBlock
-	 * @param wzd
-	 * @throws NotRegisteredException
+	 * @param townBlock - The {@link TownBlock} to be healed.
+	 * @param wzd - {@link WarZoneData}
+	 * @throws NotRegisteredException - Generic
 	 */
 	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
@@ -451,9 +451,9 @@ public class War {
 
 	/**
 	 * There are attackers on the plot, update the health.
-	 * @param townBlock
-	 * @param wzd
-	 * @throws NotRegisteredException
+	 * @param townBlock - The {@link TownBlock} being attacked
+	 * @param wzd - {@link WarZoneData}
+	 * @throws NotRegisteredException - Generic
 	 */
 	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
 
@@ -523,10 +523,11 @@ public class War {
 	}
 
 	/**
-	 * Correctly returns the health of a TownBlock given the change in the health.
-	 * @param townBlock
-	 * @param healthChange
-	 * @return
+	 * Correctly returns the health of a {@link TownBlock} given the change in the health.
+	 * 
+	 * @param townBlock - The TownBlock to get health of
+	 * @param healthChange - Modifier to the health of the TownBlock ({@link Integer})
+	 * @return the health of the TownBlock
 	 */
 	private int getHealth(TownBlock townBlock, int healthChange) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
@@ -540,11 +541,11 @@ public class War {
 	}
 
 	/**
-	 * Launch a firework at a given plot
-	 * @param townblock
-	 * @param atPlayer
-	 * @param type
-	 * @param c
+	 * Launch a {@link Firework} at a given plot
+	 * @param townblock - The {@link TownBlock} to fire in
+	 * @param atPlayer - The {@link Player} in which the location is grabbed
+	 * @param type - The {@link FireworkEffect} type
+	 * @param c - The Firework {@link Color}
 	 */
 	private void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c)
 	{
@@ -758,7 +759,7 @@ public class War {
 	//// SCORE CALCULATIONS ////
 	
 	/**
-	 * 
+	 * Gets the scores of a {@link War}
 	 * @param maxListing Maximum lines to return. Value of -1 return all.
 	 * @return A list of the current scores per town sorted in descending order.
 	 */

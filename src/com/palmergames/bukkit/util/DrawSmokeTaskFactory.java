@@ -13,7 +13,9 @@ public class DrawSmokeTaskFactory {
 
     /**
      * Send to the smoke effect to the player.
-     * @return LocationRunnable
+	 * 
+	 * @param player - {@link Player} to send smoke effect
+     * @return {@link LocationRunnable}
      */
     public static LocationRunnable sendToPlayer(final Player player) {
         return new LocationRunnable() {

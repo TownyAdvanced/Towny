@@ -40,7 +40,7 @@ public class PlayerCache {
 	/**
 	 * Update the cache with new coordinates.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - World Coordinate to set as the lastWorldCoord
 	 */
 	public void setLastTownBlock(WorldCoord worldCoord) {
 
@@ -50,7 +50,7 @@ public class PlayerCache {
 	/**
 	 * Reset the cache permissions and update the cache with new coordinates.
 	 * 
-	 * @param worldCoord
+	 * @param worldCoord - World Coordinate to setLastTownBlock
 	 */
 	public void resetAndUpdate(WorldCoord worldCoord) {
 		
@@ -71,7 +71,7 @@ public class PlayerCache {
 	/**
 	 * Update the players WorldCoord, resetting all permissions if it has changed.
 	 * 
-	 * @param pos
+	 * @param pos - WorldCoord to setLastTownBlock
 	 * @return true if changed.
 	 */
 	public boolean updateCoord(WorldCoord pos) {
@@ -83,7 +83,15 @@ public class PlayerCache {
 		} else
 			return false;
 	}
-	
+
+	/**
+	 * Checks from cache if a certain ActionType can be performed on a given Material
+	 * 
+	 * @param material - Material to check
+	 * @param action - ActionType to check
+	 * @return true if permission to perform an ActionType based on the material is granted
+	 * @throws NullPointerException if passed an invalid or NULL ActionType
+	 */
 	public boolean getCachePermission(Material material, ActionType action) throws NullPointerException {
 
 		switch (action) {

@@ -22,8 +22,11 @@ public class PlotChangeTypeEvent extends Event {
     }
 
     /**
+	 * Changes a plot's TownBlockType
+	 * 
      * @param oldType- Old Type
      * @param newType - New Type
+	 * @param townBlock - Plot to target
      */
     public PlotChangeTypeEvent(TownBlockType oldType, TownBlockType newType, TownBlock townBlock) {
     	super(!Bukkit.getServer().isPrimaryThread());

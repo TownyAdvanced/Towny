@@ -388,6 +388,7 @@ public enum PermissionNodes {
 	 * Retrieves the permission node
 	 * replacing the character *
 	 * 
+	 * @param replace - String
 	 * @return The permission node
 	 */
 	public String getNode(String replace) {

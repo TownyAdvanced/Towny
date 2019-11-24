@@ -523,8 +523,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *
-	 * @param modes
-	 * @param notify
+	 * @param modes - String Array of modes
+	 * @param notify - If notifications should be sent
 	 */
 	public void resetModes(String[] modes, boolean notify) {
 

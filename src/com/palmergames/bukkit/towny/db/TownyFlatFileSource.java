@@ -2071,9 +2071,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Load townblocks according to the given line Townblock: x,y,forSale Eg:
 	 * townBlocks=world:10,11;10,12,true;|nether:1,1|
 	 *
-	 * @param line
-	 * @param town
-	 * @param resident
+	 * @param line - Line which to read from.
+	 * @param town - Town for which to load townblocks for.
+	 * @param resident - Owner of a given townblock.
 	 */
 	@Deprecated
 	public void utilLoadTownBlocks(String line, Town town, Resident resident) {
@@ -2182,7 +2182,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Save PlotBlockData
 	 *
-	 * @param plotChunk
+	 * @param plotChunk - Plot for data to be saved for.
 	 * @return true if saved
 	 */
 	@Override
@@ -2230,9 +2230,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData
 	 *
-	 * @param worldName
-	 * @param x
-	 * @param z
+	 * @param worldName - World in which to load PlotBlockData for.
+	 * @param x - Coordinate for X.
+	 * @param z - Coordinate for Z.
 	 * @return PlotBlockData or null
 	 */
 	@Override
@@ -2253,7 +2253,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/**
 	 * Load PlotBlockData for regen at unclaim
 	 *
-	 * @param townBlock
+	 * @param townBlock - townBlock being reverted
 	 * @return PlotBlockData or null
 	 */
     @Override

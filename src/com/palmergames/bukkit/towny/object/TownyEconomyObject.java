@@ -30,10 +30,10 @@ public class TownyEconomyObject extends TownyObject {
 	/**
 	 * Tries to pay from the players holdings
 	 *
-	 * @param amount
-	 * @param reason
-	 * @return true if successfull
-	 * @throws EconomyException
+	 * @param amount value to deduct from the player's account
+	 * @param reason leger memo stating why amount is deducted
+	 * @return true if successful
+	 * @throws EconomyException if the transaction fails
 	 */
 	public boolean pay(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
@@ -61,9 +61,10 @@ public class TownyEconomyObject extends TownyObject {
 	/**
 	 * When collecting money add it to the Accounts bank
 	 *
-	 * @param amount
-	 * @param reason
-	 * @throws EconomyException
+	 * @param amount currency to collect
+	 * @param reason memo regarding transaction
+	 * @return collected or pay to server account   
+	 * @throws EconomyException if transaction fails
 	 */
 	public boolean collect(double amount, String reason) throws EconomyException {
 		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
@@ -83,11 +84,11 @@ public class TownyEconomyObject extends TownyObject {
 	/**
 	 * When one account is paying another account(Taxes/Plot Purchasing)
 	 *
-	 * @param amount
-	 * @param collector
-	 * @param reason
+	 * @param amount currency to be collected
+	 * @param collector recipient of transaction
+	 * @param reason memo regarding transaction
 	 * @return true if successfully payed amount to collector.
-	 * @throws EconomyException
+	 * @throws EconomyException if transaction fails
 	 */
 	public boolean payTo(double amount, TownyEconomyObject collector, String reason) throws EconomyException {
 		boolean payed = _payTo(amount, collector);
@@ -130,8 +131,10 @@ public class TownyEconomyObject extends TownyObject {
 	/**
 	 * Set balance and log this action
 	 *
-	 * @param amount
-	 * @param reason
+	 * @param amount currency to transact
+	 * @param reason memo regarding transaction
+	 * @return true, or pay/collect balance for given reason
+	 * @throws EconomyException if transaction fails
 	 */
 	public boolean setBalance(double amount, String reason) throws EconomyException {
 		double balance = getHoldingBalance();
@@ -167,9 +170,9 @@ public class TownyEconomyObject extends TownyObject {
 	/**
 	 * Does this object have enough in it's economy account to pay?
 	 *
-	 * @param amount
+	 * @param amount currency to check for
 	 * @return true if there is enough.
-	 * @throws EconomyException
+	 * @throws EconomyException if failure
 	 */
 	public boolean canPayFromHoldings(double amount) throws EconomyException {
 		return TownyEconomyHandler.hasEnough(getEconomyName(), amount, getBukkitWorld());

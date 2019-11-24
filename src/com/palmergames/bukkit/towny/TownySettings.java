@@ -96,7 +96,7 @@ public class TownySettings {
 	 *
 	 * townBlockLimit is a required field even if using a calculated ratio.
 	 *
-	 * @throws IOException
+	 * @throws IOException if unable to load the Town Levels
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 
@@ -124,7 +124,7 @@ public class TownySettings {
 	 * numResidents:namePrefix:namePostfix:capitalPrefix:capitalPostfix:
 	 * kingPrefix:kingPostfix
 	 *
-	 * @throws IOException
+	 * @throws IOException if Nation Levels cannot be loaded from config
 	 */
 
 	public static void loadNationLevelConfig() throws IOException {
