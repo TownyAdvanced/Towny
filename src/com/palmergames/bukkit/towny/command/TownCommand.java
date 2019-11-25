@@ -3080,6 +3080,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (selection.isEmpty())
 						throw new TownyException(TownySettings.getLangString("msg_err_empty_area_selection"));
 
+					if (selection.get(0).getTownBlock().isHomeBlock())
+						throw new TownyException(TownySettings.getLangString("msg_err_cannot_unclaim_homeblock"));
+					
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
 

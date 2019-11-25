@@ -938,3 +938,4 @@ msg_neutral_towns: 'Neutral towns'
 
 # Added in 0.64
 msg_err_no_nation_with_that_name: 'No nation found with name %s'
+msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
