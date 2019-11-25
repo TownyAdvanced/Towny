@@ -412,6 +412,7 @@ msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot invade un
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s.'
 msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
 #Plunder
+msg_err_siege_war_cannot_plunder_own_town: '&6[War]&c You cannot plunder your own town.'
 msg_err_siege_war_cannot_plunder_without_victory: "&6[War]&c You cannot plunder unless your nation is victorious in the siege."
 msg_err_siege_war_cannot_plunder_without_economy: "&6[War]&c You cannot plunder because no economy plugin is active"
 msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been plundered.'

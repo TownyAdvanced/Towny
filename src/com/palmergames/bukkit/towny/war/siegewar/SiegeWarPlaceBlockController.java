@@ -46,8 +46,7 @@ public class SiegeWarPlaceBlockController {
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Problem placing siege related block");
 			e.printStackTrace();
-			event.setCancelled(true);
-			return true;
+			return false;
 		}
 	}
 
@@ -56,17 +55,11 @@ public class SiegeWarPlaceBlockController {
 													   Block block,
 													   String blockTypeName,
 													   BlockPlaceEvent event,
-													   Towny plugin)
+													   Towny plugin) throws NotRegisteredException
 	{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld townyWorld;
-		try {
-			townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-		} catch (NotRegisteredException e) {
-			event.setCancelled(true);
-			return false;
-		}
-
+		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
+		
 		Coord blockCoord = Coord.parseCoord(block);
 
 		if(!townyWorld.hasTownBlock(blockCoord)) {
@@ -107,29 +100,29 @@ public class SiegeWarPlaceBlockController {
 
 		} else {
 			TownBlock townBlock = null;
-			try {
+			if(townyWorld.hasTownBlock(blockCoord)) {
 				townBlock = townyWorld.getTownBlock(blockCoord);
-			} catch (NotRegisteredException e) {
 			}
 
-			if (!townBlock.hasTown()) {
+			if (townBlock == null) {
 				return false;
 			}
-
-			Town town = null;
-			try {
+			
+			Town town;
+			if(townBlock.hasTown()) {
 				town = townBlock.getTown();
-			} catch (NotRegisteredException e) {
+			} else {
+				return false;
 			}
-
+			
 			//If there is no siege, do normal block placement
 			if (!town.hasSiege())
 				return false;
 
-			//During a siege or aftermath, all in-town banner placement is restricted to siege actions only
 			if (blockTypeName.contains("white")
 				&& ((Banner) block.getState()).getPatterns().size() == 0) {
-				//White banner
+				//White Banner: Evaluate surrender action if siege exists in target town
+				
 				if (!TownySettings.getWarSiegeSurrenderEnabled())
 					return false;
 
@@ -138,17 +131,26 @@ public class SiegeWarPlaceBlockController {
 					town,
 					event);
 				return true;
+				
 			} else {
-				//Coloured banner
+				//Coloured Banner: Evaluate invade action if siege exists in target town,
+				// and player is a member of any of the attacking nations
+				
 				if (!TownySettings.getWarSiegeInvadeEnabled())
 					return false;
 				
-				InvadeTown.processInvadeTownRequest(
-					plugin,
-					player,
-					town.getName(),
-					event);
-				return true;
+				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+				Siege siege = town.getSiege();
+
+				if(resident.hasTown()
+					&& resident.hasNation()
+					&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
+
+					InvadeTown.processInvadeTownRequest(plugin, player, resident, town, siege, event);
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 	}
@@ -157,17 +159,14 @@ public class SiegeWarPlaceBlockController {
 	private static boolean evaluateSiegeWarPlaceChestRequest(Player player,
 													  Block block,
 													  BlockPlaceEvent event) throws NotRegisteredException {
+		//Plunder chest: Evaluate plunder action if a member of any attacking nation attempts to place banner
+		
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
 
-		Town townWhereBlockWasPlaced;
+		Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		TownyWorld world;
-		try {
-			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
 		Coord coord = Coord.parseCoord(block);
 		
 		if (!world.hasTownBlock(coord)) 
@@ -176,31 +175,20 @@ public class SiegeWarPlaceBlockController {
 		TownBlock townBlock = world.getTownBlock(coord);
 		
 		if(townBlock.hasTown()) {
-			townWhereBlockWasPlaced = townBlock.getTown();
+			town = townBlock.getTown();
 		} else {
 			return false;
 		}
-
-		System.out.println("Noe evaluating place chest 1");
-
-		/*
-		 * During a siege or aftermath
-		 * If any player from one of the attacking nations attempts to place a chest,
-		 * it is evaluated as an attempted siege action
-		 */
-		if (townWhereBlockWasPlaced.hasSiege()) {
+		
+		if (town.hasSiege()) {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-			Siege siege = townWhereBlockWasPlaced.getSiege();
-
-			System.out.println("Noe evaluating place chest 2");
-			
+			Siege siege = town.getSiege();
+	
 			if(resident.hasTown()
 				&& resident.hasNation()
 				&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
 
-				System.out.println("Noe evaluating place chest 3");
-			
-				PlunderTown.processPlunderTownRequest(player, townWhereBlockWasPlaced.getName(), event);
+				PlunderTown.processPlunderTownRequest(player, resident, town.getName(), event);
 				return true;
 			} else {
 				return false;
@@ -209,5 +197,4 @@ public class SiegeWarPlaceBlockController {
 			return false;
 		}
 	}
-	
 }

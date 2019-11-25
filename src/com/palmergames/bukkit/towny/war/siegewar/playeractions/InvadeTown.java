@@ -27,67 +27,48 @@ public class InvadeTown {
 
     public static void processInvadeTownRequest(Towny plugin,
                                                 Player player,
-                                                String townName,
+                                                Resident resident,
+                                                Town town,
+                                                Siege siege,
                                                 BlockPlaceEvent event) {
         try {
-            if (!TownyUniverse.getDataSource().hasTown(townName))
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_not_registered_1"), townName));
+        	
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
+				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-            if (!TownyUniverse.getDataSource().getTown(townName).hasSiege())
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_no_siege_on_target_town"), townName));
-
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
-                throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            final Siege siege = TownyUniverse.getDataSource().getTown(townName).getSiege();
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-
-			if(!resident.hasTown()) 
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
-
-			if(!resident.getTown().hasNation())
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
-			
 			if(resident.getTown() == siege.getDefendingTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_own_town"));
 
-			if (siege.getStatus() == SiegeStatus.IN_PROGRESS)
+			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 			
-            if (siege.getStatus() == SiegeStatus.DEFENDER_WIN)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
-
-            if (siege.getStatus() == SiegeStatus.ATTACKER_ABANDON)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
-            
             if (resident.getTown().getNation() != siege.getAttackerWinner())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
 
             if (siege.isTownInvaded())
-                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), townName));
+                throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), town.getName()));
 
-            Nation nationOfAttackingPlayer = siege.getAttackerWinner();
-            Town defendingTown = siege.getDefendingTown();
+            Nation attackerWinner = siege.getAttackerWinner();
             
 			if (TownySettings.getNationRequiresProximity() > 0) {
-				Coord capitalCoord = nationOfAttackingPlayer.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = defendingTown.getHomeBlock().getCoord();
-				if (!nationOfAttackingPlayer.getCapital().getHomeBlock().getWorld().getName().equals(defendingTown.getHomeBlock().getWorld().getName())) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
+				Coord capitalCoord = attackerWinner.getCapital().getHomeBlock().getCoord();
+				Coord townCoord = town.getHomeBlock().getCoord();
+				if (!attackerWinner.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
 				}
 				double distance = Math.sqrt(Math.pow(capitalCoord.getX() - townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - townCoord.getZ(), 2));
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), defendingTown.getName()));
+					throw new TownyException(String.format(TownySettings.getLangString("msg_err_town_not_close_enough_to_nation"), town.getName()));
 				}
 			}
 
 			if (TownySettings.getMaxTownsPerNation() > 0) {
-				if (nationOfAttackingPlayer.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
+				if (attackerWinner.getTowns().size() >= TownySettings.getMaxTownsPerNation()){
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_nation_over_town_limit"), TownySettings.getMaxTownsPerNation()));
 				}
 			}
 
-			captureTown(plugin, siege, siege.getAttackerWinner(), siege.getDefendingTown());
+			captureTown(plugin, siege, attackerWinner, town);
 
         } catch (TownyException x) {
             event.setCancelled(true);
