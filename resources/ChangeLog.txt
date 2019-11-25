@@ -3851,3 +3851,13 @@ v0.92.0.11:
   - Language files bumped to 0.64.
   - Fix lack of feedback when adding a nation enemy that doesn't exist.
     - Closes ticket #3512
+  - API: New events courtesy of Siris.
+    - TownyTransactionEvent: Monitor all economy transactions.
+    - TownyPreTransactionEvent : Cancellable event on all economy transactions.
+    - NationTransactionEvent: Monitor all nation deposits/withdrawls.
+    - NationPreTransactionEvent: Cancellable event on all nation deposits/withdrawls.
+    - TownTransactionEvent: Monitor all town deposits/withdrawls.
+    - TownPreTransactionEvent: Cancellable event on all town deposits/withdrawls.
+    - PlotPreClearEvent: Cancellable event used to stop clearing of a plot.
+    - PreDeleteTownEvent: Cancellable event used to stop a town from being deleted.
+    - PreDeleteNationEvent: Cancellable event used to stop a nation from being deleted.
