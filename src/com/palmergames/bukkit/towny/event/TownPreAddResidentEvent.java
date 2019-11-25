@@ -3,10 +3,11 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class TownPreAddResidentEvent extends Event {
+public class TownPreAddResidentEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private String townName;
@@ -28,7 +29,7 @@ public class TownPreAddResidentEvent extends Event {
 	
 	@Override
 	public HandlerList getHandlers() {
-		return null;
+		return handlers;
 	}
 
 	public String getTownName() {
@@ -36,11 +37,13 @@ public class TownPreAddResidentEvent extends Event {
 	}
 
 	public Town getTown() { return town; }
-
+	
+	@Override
 	public boolean isCancelled() {
 		return isCancelled;
 	}
-
+	
+    @Override
 	public void setCancelled(boolean cancelled) {
 		isCancelled = cancelled;
 	}
