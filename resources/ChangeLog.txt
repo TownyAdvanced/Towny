@@ -3865,3 +3865,4 @@ v0.92.0.11:
   - Made it so that towns cannot unclaim their homeblocks, they must move them to another townblock first.
     - /t unclaim all still allows a town to fully-unclaim, but the first townblock they claim will become the homeblock.
   - Fixed an NPE on the townscreen for towns which have no homeblock.
+  - korean.yml updated by wolfwork with PR #3513
