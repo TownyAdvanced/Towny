@@ -423,110 +423,59 @@ public class TownyPlayerListener implements Listener {
 			}
 
 			Player player = event.getPlayer();
-			boolean bBuild = true;
 			Material block = null;
-
-			/*
-			 * Protect specific entity interactions.
-			 */
-			switch (event.getRightClicked().getType()) {
+			ActionType actionType = ActionType.SWITCH;
 			
+			switch (event.getRightClicked().getType()) {
 				case ITEM_FRAME:
-					
-					TownyMessaging.sendDebugMsg("ItemFrame Right Clicked");
 					block = Material.ITEM_FRAME;
-					// Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
+					actionType = ActionType.DESTROY;
 					break;
-	
+					
 				case PAINTING:
-	
 					block = Material.PAINTING;
-					// Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.DESTROY);
+					actionType = ActionType.DESTROY;
 					break;
-	
+					
 				case MINECART:
-					
+				case MINECART_MOB_SPAWNER:
 					block = Material.MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 					break;
-				
-				case MINECART_CHEST:					      
-					block = Material.CHEST_MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
-					break;
-				
-				case MINECART_FURNACE:
 					
+				case MINECART_CHEST:
+					block = Material.CHEST_MINECART;
+					break;
+					
+				case MINECART_FURNACE:
 					block = Material.FURNACE_MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 					break;
 				
 				case MINECART_COMMAND:
-					
 					block = Material.COMMAND_BLOCK_MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 					break;
-				
-				case MINECART_HOPPER:
 					
+				case MINECART_HOPPER:
 					block = Material.HOPPER_MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
 					break;
 					
 				case MINECART_TNT:
-					
 					block = Material.TNT_MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
-					break;
-					
-				case MINECART_MOB_SPAWNER:
-					
-					block = Material.MINECART;
-					if ((block != null) && (!TownySettings.isSwitchMaterial(block.name())))
-						return;
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
-					break;
-					
-				default:
 					break;
 			}
-					
-				if ((block != null ) && (!TownySettings.isSwitchMaterial(block.toString())))
-					return;
-	
-					// Get permissions (updates if none exist)
-					bBuild = PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, TownyPermission.ActionType.SWITCH);
+			
+			if (block != null && TownySettings.isSwitchMaterial(block.name())) {
+				// Check if the player has valid permission for interacting with the entity based on the action type.
+				if (!PlayerCacheUtil.getCachePermission(player, event.getRightClicked().getLocation(), block, actionType)) {
+					event.setCancelled(true); // Cancel the event
+					/*
+					 * Fetch the players cache
+					 */
+					PlayerCache cache = plugin.getCache(player);
 
-			if (block != null) {
-
-				// Allow the removal if we are permitted
-				if (bBuild)
-					return;
-
-				event.setCancelled(true);
-
-				/*
-				 * Fetch the players cache
-				 */
-				PlayerCache cache = plugin.getCache(player);
-
-				if (cache.hasBlockErrMsg())
-					TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
-
+					if (cache.hasBlockErrMsg())
+						TownyMessaging.sendErrorMsg(player, cache.getBlockErrMsg());
+				}
+				
 				return;
 			}
 
