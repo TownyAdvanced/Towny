@@ -630,12 +630,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				town.removeAccount();
 			} catch (Exception ignored) {
 			}
-
-		universe.getTownsMap().remove(town.getName().toLowerCase());
-
-		plugin.resetCache();
-
-
+		
 		if(!delayFullRemoval) {
 			universe.getTownsMap().remove(town.getName().toLowerCase());
 		}
@@ -1245,21 +1240,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeRuinedTown(Town town) {
 
 		removeTownBlocks(town);
-
-		TownyWorld townyWorld = town.getWorld();
-
+		
 		universe.getTownsMap().remove(town.getName().toLowerCase());
 
 		plugin.resetCache();
 
 		deleteTown(town);
 		saveTownList();
+		TownyWorld townyWorld = town.getWorld();
 		try {
 			townyWorld.removeTown(town);
 		} catch (NotRegisteredException e) {
 			// Must already be removed
 		}
-
 		saveWorld(townyWorld);
 	}
 
