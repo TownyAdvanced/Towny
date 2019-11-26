@@ -435,6 +435,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 				}
 			}
 			return String.valueOf(cost);
+		case "has_town": // %townyadvanced_has_town%
+			return String.valueOf(resident.hasTown());
+		case "has_nation": // %townyadvanced_has_nation%
+			return String.valueOf(resident.hasNation());
+
 		default:
 			return null;
 		}

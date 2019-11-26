@@ -13,7 +13,10 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
+import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -30,6 +33,8 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -846,8 +851,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (underAttack && TownySettings.isFlaggedInteractionNation())
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_nation_under_attack"));
 			
+			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
+			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
+			BukkitTools.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+				return;
+			}
+			
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "nation"));
+			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
@@ -871,10 +886,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (amount < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
+			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
+
+			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
+			BukkitTools.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(preEvent.getCancelMessage());
+				return;
+			}
+			
 			if (!resident.payTo(amount, nation, "Nation Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "nation"));
+			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
@@ -2294,6 +2320,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static void nationRename(Player player, Nation nation, String newName) {
 
+		NationPreRenameEvent event = new NationPreRenameEvent(nation, newName);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_rename_cancelled"));
+			return;
+		}
+		
 		try {
 			TownyUniverse.getInstance().getDataSource().renameNation(nation, newName);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), nation.getName()));

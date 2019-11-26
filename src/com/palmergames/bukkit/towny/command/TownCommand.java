@@ -14,7 +14,10 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
+import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -36,6 +39,8 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -2162,6 +2167,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townRename(Player player, Town town, String newName) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_rename_cancelled"));
+			return;
+		}
 
 		try {
 			townyUniverse.getDataSource().renameTown(town, newName);
@@ -3108,6 +3120,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (selection.isEmpty())
 						throw new TownyException(TownySettings.getLangString("msg_err_empty_area_selection"));
 
+					if (selection.get(0).getTownBlock().isHomeBlock())
+						throw new TownyException(TownySettings.getLangString("msg_err_cannot_unclaim_homeblock"));
+					
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
 
@@ -3200,9 +3215,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (System.currentTimeMillis()-TownyWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag())
 				throw new TownyException("You cannot do this! You were attacked too recently!");
-
+			
+			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
+			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
+			BukkitTools.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+				return;
+			}
+			
 			town.withdrawFromBank(resident, amount);
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_withdrew_xx"), resident.getName(), amount, "town"));
+			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
@@ -3225,10 +3250,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (amount < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
+			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
+			
+			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
+			BukkitTools.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+				return;
+			}
+			
 			if (!resident.payTo(amount, town, "Town Deposit"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
-
+			
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, "town"));
+			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (TownyException | EconomyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
@@ -3254,11 +3290,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (amount < 0)
 				throw new TownyException(TownySettings.getLangString("msg_err_negative_money"));
 
+			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
+
+			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
+			BukkitTools.getPluginManager().callEvent(preEvent);
+
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+				return;
+			}
+			
 			if (!resident.payTo(amount, town, "Town Deposit from Nation member"))
 				throw new TownyException(TownySettings.getLangString("msg_insuf_funds"));
 
 			TownyMessaging.sendNationMessage(resident.getTown().getNation(), String.format(TownySettings.getLangString("msg_xx_deposited_xx"), resident.getName(), amount, town + " town"));
-			
+			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 		} catch (EconomyException | TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}

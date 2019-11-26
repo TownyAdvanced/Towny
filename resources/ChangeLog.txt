@@ -3851,3 +3851,34 @@ v0.92.0.11:
   - Language files bumped to 0.64.
   - Fix lack of feedback when adding a nation enemy that doesn't exist.
     - Closes ticket #3512
+  - API: New events courtesy of Siris with PR #3510
+    - TownyTransactionEvent: Monitor all economy transactions.
+    - TownyPreTransactionEvent : Cancellable event on all economy transactions.
+    - NationTransactionEvent: Monitor all nation deposits/withdrawls.
+    - NationPreTransactionEvent: Cancellable event on all nation deposits/withdrawls.
+    - TownTransactionEvent: Monitor all town deposits/withdrawls.
+    - TownPreTransactionEvent: Cancellable event on all town deposits/withdrawls.
+    - PlotPreClearEvent: Cancellable event used to stop clearing of a plot.
+    - PreDeleteTownEvent: Cancellable event used to stop a town from being deleted.
+    - PreDeleteNationEvent: Cancellable event used to stop a nation from being deleted.
+    - Closes ticket #3322
+  - Made it so that towns cannot unclaim their homeblocks, they must move them to another townblock first.
+    - /t unclaim all still allows a town to fully-unclaim, but the first townblock they claim will become the homeblock.
+  - Fixed an NPE on the townscreen for towns which have no homeblock.
+  - korean.yml updated by wolfwork with PR #3513
+0.95.1.8:
+  - Improvement to switch handling tile entites, courtesy of Silverwolfg11.
+  - Added placeholders:
+    - %townyadvanced_has_town% - returns true or false whether the resident has a town.
+    - %townyadvanced_has_nation% - returns true or false whether the resident has a nation.
+    - Closes ticket #3497.
+  - API: New War Events added:
+    - EventWarPreStartEvent - used to manipulate the war spoils amount.
+    - EventWarStartEvent - used to get a list of towns, nations participating in the war, as well as the final initial amount of war spoils.
+    - EventWarEndEvent - used to get a list of surviving towns & nations, the town with the highest score, as well as the townWinnings and nationWinnings.
+    - Closes ticekt #3087.
+  - Language files bumped to 0.65.
+  - API: New cancellable pre-rename events:
+    - TownPreRenameEvent.
+    - NationPreRenameEvent. 
+    - Closes ticket #3121.

@@ -22,7 +22,7 @@ Please make sure to read our [License](https://github.com/LlmDl/Towny/blob/maste
 4. Don't run IDE Formatters over entire class files, unless it's a new class-file you're implementing.   
    - This is done to avoid us changing the lines everytime, each IDE is different so we don't have a constant here and there.
    - This also keeps file compares on github simple.
-5. Do not use NMS (Net Minecraft Server), Spigot or Craftbukkit code. Towny uses the Bukkit API only.
+5. Do not use NMS (Net Minecraft Server) or Craftbukkit code. Towny uses the Spigot/Bukkit API only.
 6. Reflection should be a last resort.   
 7. No Packet-Handling (Netty or ProtcolLib)   
 

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.64
+version: 0.65
 language: 한국어
 author: 'Daybreak 새벽'
 website: 'http://townyadvanced.github.io/'
@@ -820,7 +820,7 @@ msg_err_nation_homeblock_in_another_world: '&c귀하의 마을의 홈블록이 �
 status_bank_town_penalty_upkeep: ' &7| &2과점유 유지비: &4%s'
 
 # Added in 0.53:
-msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'You cannot spawn to %s, you''re marked as an outlaw there.'
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '당신은 %s(으)로 소환될 수 없습니다, 당신은 해당 마을의 무법자입니다.'
 
 # Added in 0.54:
 war_hud_homeblock: 'HOMEBLOCK'
@@ -830,31 +830,31 @@ war_hud_false: 'False'
 war_hud_peaceful: 'Peaceful'
 war_hud_fallen: 'Fallen'
 war_hud_townless: 'Townless!'
-war_hud_war: 'War'
-war_hud_score: 'Score: '
-war_hud_location: 'Location'
-war_hud_nation: 'Nation: '
-war_hud_town: 'Town: '
-war_hud_attackable: 'Attackable: '
-war_hud_health: 'Health: '
-war_hud_top_towns: 'Top Towns'
-war_stats_nations: '  Nations: '
-war_stats_towns: '  Towns: '
-war_stats_warzone: '  WarZone: '
+war_hud_war: '전쟁'
+war_hud_score: '점수: '
+war_hud_location: '위치'
+war_hud_nation: '국가: '
+war_hud_town: '마을: '
+war_hud_attackable: '공격 가능: '
+war_hud_health: '체력: '
+war_hud_top_towns: '상위 마을들'
+war_stats_nations: '  국가들: '
+war_stats_towns: '  마을들: '
+war_stats_warzone: '  전쟁터: '
 war_stats_spoils_of_war: '  Spoils of War: '
-war_starts_in_x: 'War starts in %s'
+war_starts_in_x: '전쟁이 %s초 뒤에 시작됩니다'
 
 # Added in 0.55:
-msg_you_cannot_use_that_command_while_jailed: '&4You cannot use that command while jailed.'
+msg_you_cannot_use_that_command_while_jailed: '&4감옥에 갇힌 동안 해당 명령어를 사용할 수 없습니다.'
 
 # Added in 0.56:
-msg_cache_block_error_town_nation: '&cNation members aren''t allowed to %s.'
+msg_cache_block_error_town_nation: '&c국민은 %s을/를 할 수 없습니다.'
 
 # Added in 0.57:
-msg_err_already_res2: '&c%s already belong to a town.'
+msg_err_already_res2: '&c%s님은 이미 마을에 속해있습니다.'
 msg_err_cannot_afford_plot_set_type_cost: '&cYou cannot afford to set the plot to a %s type costing %s'
 msg_plot_set_cost: '&bYou have been charged %s for setting plot to type: %s'
-msg_err_townspawn_has_not_been_set: '&cTown spawn has not been set.'
+msg_err_townspawn_has_not_been_set: '&c마을 소환지점이 설정되지 않았습니다.'
 msg_err_player_too_far_from_town_spawn: '&c%s is too far away from your town spawn to receive an invite to town. Max distance: %s blocks.'
 
 # Added in 0.58:
@@ -864,9 +864,9 @@ msg_king_bail_amount: 'King Bail costs: '
 msg_has_paid_bail: ' has paid bail and is free.'
 msg_err_unable_to_pay_bail: 'Unable to afford bail.'
 msg_err_bail_not_enabled: 'Bail is not enabled.'
-msg_you_have_been_freed_from_jail: 'You have been freed from jail.'
+msg_you_have_been_freed_from_jail: '감옥에서 해방되었습니다.'
 msg_player_has_been_freed_from_jail_number: '%s has been freed from jail number %s.'
-msg_you_have_been_sent_to_jail: 'You have been sent to jail.'
+msg_you_have_been_sent_to_jail: '감옥에 수감되었습니다.'
 msg_player_has_been_sent_to_jail_number: '%s has been sent to jail number %s.'
 msg_player_is_not_online: '%s is not online.'
 msg_err_days_must_be_greater_than_zero: '&cDays must be greater than zero.'
@@ -896,24 +896,24 @@ msg_err_key_cannot_be_deleted: 'Key cannot be deleted because it does not exist!
 msg_err_this_town_doesnt_have_any_associated_metadata: 'This town doesn''t have any associated metadata.'
 msg_err_key_x_is_not_part_of_this_town: 'Key %s is not part of this town, if possible please add it.'
 msg_custom_data_was_successfully_added_to_town: 'Custom data was successfully added to town!'
-msg_error_too_many_pages: 'Too many pages.'
+msg_error_too_many_pages: '페이지가 너무 많습니다.'
 msg_err_location_is_not_within_a_town: 'Location is not within a town.'
 msg_err_location_is_not_within_a_jail_plot: 'Location is not within a Jail plot.'
-msg_err_town_has_no_jail_spawns_set: 'Town has no jail spawns set.'
+msg_err_town_has_no_jail_spawns_set: '마을의 감옥 위치가 설정되지 않았습니다.'
 msg_err_town_has_no_outpost_spawns_set: 'Town has no outpost spawns set.'
 msg_err_location_is_not_within_an_outpost_plot: 'Location is not within an outpost plot.'
-msg_err_town_has_not_set_a_spawn_location: 'Town has not set a spawn location.'
+msg_err_town_has_not_set_a_spawn_location: '마을의 소환 지점이 설정되지 않았습니다.'
 msg_err_town_has_no_claim_over_this_town_block: 'Town has no claim over this town block.'
-msg_err_town_doesnt_belong_to_any_nation: 'Town doesn''t belong to any nation.'
+msg_err_town_doesnt_belong_to_any_nation: '마을은 어떤 국가에도 속할 수 없습니다.'
 msg_err_mayor_doesnt_belong_to_town: 'Mayor doesn''t belong to town.'
-msg_err_tag_too_long: 'Tag too long.'
+msg_err_tag_too_long: '태그가 너무 깁니다.'
 msg_err_nation_has_not_set_a_spawn_location: 'Nation has not set a spawn location.'
 msg_err_resident_doesnt_belong_to_any_town: 'Resident doesn''t belong to any town'
 msg_err_could_not_set_default_modes_for: 'Could not set default modes for '
 
 # Added in 0.60
-msg_set_war_allowed_on: 'War will be allowed in this world.'
-msg_set_war_allowed_off: 'War will not affect this world.'
+msg_set_war_allowed_on: '이 세계에서 전쟁이 허용되었습니다.'
+msg_set_war_allowed_off: '전쟁은 더 이상 이 세계에서 일어나지 않습니다.'
 msg_war_not_enough_nations: '&6[War]&f Less than 2 nations gathered for war, war canceled.'
 msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, war canceled.'
 msg_war_prefix: '&6[War]&f '
@@ -921,20 +921,24 @@ msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
+msg_war_flag_deny_town_under_attack: '공격 중에는 해당 행동를 할 수 없습니다!'
 msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
-msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
+msg_war_flag_deny_recently_attacked: '해당 행동을 할 수 없습니다! 최근에 공격받은 적이 있습니다!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
 msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s seconds.'
 
 # Added in 0.63
-msg_plot_set_to_nfs: 'Plot is no longer for sale.'
+msg_plot_set_to_nfs: '토지를 더 이상 판매하지 않습니다.'
 msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
 msg_the_wilderness: 'the Wilderness'
-msg_enemy_areas: 'Enemy areas'
-msg_neutral_towns: 'Neutral towns'
+msg_enemy_areas: '적대 지역들'
+msg_neutral_towns: '중립 마을들'
 
 # Added in 0.64
 msg_err_no_nation_with_that_name: 'No nation found with name %s'
+msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
+
+# Added in 0.65
+msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'

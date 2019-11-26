@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
+import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -488,6 +489,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							player.sendMessage(TownySettings.getLangString("msg_area_not_own"));
 							return true;
 						}
+
+						PlotPreClearEvent preEvent = new PlotPreClearEvent(townBlock);
+						BukkitTools.getPluginManager().callEvent(preEvent);
+						
+						if (preEvent.isCancelled()) {
+							player.sendMessage(preEvent.getCancelMessage());
+							return false;
+						}
+							
 
 						for (String material : townyUniverse.getDataSource().getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
