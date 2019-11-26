@@ -3872,3 +3872,8 @@ v0.92.0.11:
     - %townyadvanced_has_town% - returns true or false whether the resident has a town.
     - %townyadvanced_has_nation% - returns true or false whether the resident has a nation.
     - Closes ticket #3497.
+  - API: New War Events added:
+    - EventWarPreStartEvent - used to manipulate the war spoils amount.
+    - EventWarStartEvent - used to get a list of towns, nations participating in the war, as well as the final initial amount of war spoils.
+    - EventWarEndEvent - used to get a list of surviving towns & nations, the town with the highest score, as well as the townWinnings and nationWinnings.
+    - Closes ticekt #3087.

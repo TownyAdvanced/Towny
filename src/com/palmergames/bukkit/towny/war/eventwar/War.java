@@ -7,6 +7,9 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.EventWarEndEvent;
+import com.palmergames.bukkit.towny.event.EventWarPreStartEvent;
+import com.palmergames.bukkit.towny.event.EventWarStartEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -182,6 +185,14 @@ public class War {
 	 * Seed the spoils, add the nations, start the timer task.
 	 */
 	public void start() {
+		
+		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
+		Bukkit.getServer().getPluginManager().callEvent(preEvent);
+		if (preEvent.getWarSpoils() != 0.0)
+			try {
+				warSpoils.collect(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
+			} catch (EconomyException ignored) {
+			}
 
 		//Gather all nations at war
 		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
@@ -223,7 +234,7 @@ public class War {
 		}
 		
 		outputParticipants();
-		
+
 		warTime = true;
 
 		// Seed spoils of war		
@@ -232,10 +243,12 @@ public class War {
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_seeding_spoils_with"), TownySettings.getBaseSpoilsOfWar()));			
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_total_seeding_spoils"), warSpoils.getHoldingBalance()));
 			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_activate_war_hud_tip")));
+			
+			EventWarStartEvent event = new EventWarStartEvent(warringTowns, warringNations, warSpoils.getHoldingBalance());
+			Bukkit.getServer().getPluginManager().callEvent(event);
 		} catch (EconomyException e) {
 			TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
 		}
-
 		
 		// Start the WarTimerTask
 		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
@@ -287,12 +300,13 @@ public class War {
 		
 
 		double halfWinnings;
+		double nationWinnings = 0;
 		try {
 			
 			// Compute war spoils
 			halfWinnings = getWarSpoils().getHoldingBalance() / 2.0;
 			try {
-				double nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
+				nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
 				for (Nation winningNation : warringNations) {
 					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
 					TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningNationSpoilsMsg(winningNation, TownyEconomyHandler.getFormattedBalance(nationWinnings)));
@@ -306,9 +320,15 @@ public class War {
 				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
 				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
 				TownyMessaging.sendGlobalMessage(TownySettings.getWarTimeWinningTownSpoilsMsg(winningTownScore.key, TownyEconomyHandler.getFormattedBalance(halfWinnings), winningTownScore.value));
+				
+				EventWarEndEvent event = new EventWarEndEvent(warringTowns, winningTownScore.key, halfWinnings, warringNations, nationWinnings);
+				Bukkit.getServer().getPluginManager().callEvent(event);
 			} catch (TownyException e) {
 			}
 		} catch (EconomyException e1) {}
+		
+		
+		
 	}
 
 	/**
