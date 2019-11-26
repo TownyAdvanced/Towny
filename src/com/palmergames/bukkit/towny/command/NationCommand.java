@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -2294,6 +2295,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static void nationRename(Player player, Nation nation, String newName) {
 
+		NationPreRenameEvent event = new NationPreRenameEvent(nation, newName);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_rename_cancelled"));
+			return;
+		}
+		
 		try {
 			TownyUniverse.getInstance().getDataSource().renameNation(nation, newName);
 			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), player.getName(), nation.getName()));

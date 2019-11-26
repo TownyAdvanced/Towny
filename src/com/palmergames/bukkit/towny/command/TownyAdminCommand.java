@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -612,6 +614,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
+				
+				TownPreRenameEvent event = new TownPreRenameEvent(town, split[2]);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+				if (event.isCancelled()) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_rename_cancelled"));
+					return;
+				}
 
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renameTown(town, split[2]);
@@ -798,6 +807,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
+				NationPreRenameEvent event = new NationPreRenameEvent(nation, split[2]);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+				if (event.isCancelled()) {
+					TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_err_rename_cancelled"));
+					return;
+				}
+				
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renameNation(nation, split[2]);
 					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));

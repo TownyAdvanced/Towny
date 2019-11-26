@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
+import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
@@ -2151,6 +2152,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townRename(Player player, Town town, String newName) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		
+		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_rename_cancelled"));
+			return;
+		}
 
 		try {
 			townyUniverse.getDataSource().renameTown(town, newName);
