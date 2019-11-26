@@ -188,7 +188,7 @@ public class SiegeWarPlaceBlockController {
 				&& resident.hasNation()
 				&& siege.getSiegeZones().containsKey(resident.getTown().getNation())) {
 
-				PlunderTown.processPlunderTownRequest(player, resident, town.getName(), event);
+				PlunderTown.processPlunderTownRequest(player, resident, town, siege, event);
 				return true;
 			} else {
 				return false;
