@@ -3868,3 +3868,7 @@ v0.92.0.11:
   - korean.yml updated by wolfwork with PR #3513
 0.95.1.8:
   - Improvement to switch handling tile entites, courtesy of Silverwolfg11.
+  - Added placeholders:
+    - %townyadvanced_has_town% - returns true or false whether the resident has a town.
+    - %townyadvanced_has_nation% - returns true or false whether the resident has a nation.
+    - Closes ticket #3497.
