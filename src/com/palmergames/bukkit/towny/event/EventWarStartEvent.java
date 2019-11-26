@@ -36,7 +36,7 @@ public class EventWarStartEvent extends Event{
 	/**
 	 * The towns who have gone to war.
 	 * 
-	 * @return List<Town> - Towns at war at beginning.
+	 * @return List&lt;Town&gt; - Towns at war at beginning.
 	 */
 	public List<Town> getWarringTowns() {
 		return this.warringTowns;
@@ -45,7 +45,7 @@ public class EventWarStartEvent extends Event{
 	/**
 	 * The nations who have gone to war.
 	 * 
-	 * @return List<Nation> - Nations at war at beginning.
+	 * @return List&lt;Nation&gt; - Nations at war at beginning.
 	 */
 	public List<Nation> getWarringNations() {
 		return this.warringNations;

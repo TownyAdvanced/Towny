@@ -38,7 +38,7 @@ public class EventWarEndEvent extends Event {
 	/**
 	 * List of Nations who outlasted the war. Half of the warspoils is divided amongst them.
 	 * 
-	 * @return List<Nation> - The list of nations who survived the war event.
+	 * @return List&lt;Nation&gt; - The list of nations who survived the war event.
 	 */
 	public List<Nation> getWarringNations() {
 		return this.warringNations;
@@ -47,7 +47,7 @@ public class EventWarEndEvent extends Event {
 	/**
 	 * List of Towns who outlasted the war.
 	 * 
-	 * @return List<Town> - The list of towns who survived the war event.
+	 * @return List&lt;Town&gt; - The list of towns who survived the war event.
 	 */
 	public List<Town> getWarringTowns() {
 		return this.warringTowns;
