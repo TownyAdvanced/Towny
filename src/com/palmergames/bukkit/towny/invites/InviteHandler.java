@@ -1,21 +1,11 @@
 package com.palmergames.bukkit.towny.invites;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.NationCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
-import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
-import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
-import com.palmergames.bukkit.util.ChatTools;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
