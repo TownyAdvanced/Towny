@@ -3902,3 +3902,5 @@ v0.92.0.11:
   - Fix flagwar NPE seen when Towny failed to enable.
   - Fix savingtask NPE seen when Towny failed to enable.
   - Add helpful messages shown when town & nation levels fail to load on startup. 
+  - Fixed building with maven and some people having errors re: javadocs, courtesy of TheFlagCourier with PR #3521.
+    - Closes ticket #3519.
