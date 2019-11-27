@@ -1,8 +1,14 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.object.Nation;
 
 public class NationAllyNationInvite implements Invite {
 
@@ -30,4 +36,35 @@ public class NationAllyNationInvite implements Invite {
 	public TownyInviteSender getSender() {
 		return sender;
 	}
+
+	//Emperor-Koala Start
+	@Override
+	public void accept() throws TownyException {
+			Nation receivernation = (Nation) getReceiver();
+			Nation sendernation = (Nation) getSender();
+			receivernation.addAlly(sendernation);
+			sendernation.addAlly(receivernation);
+			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
+			TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
+//			InviteHandler.getNationtonationinvites().remove(sendernation, receivernation);
+			receivernation.deleteReceivedInvite(this);
+			sendernation.deleteSentAllyInvite(this);
+			TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
+			TownyUniverse.getInstance().getDataSource().saveNation(sendernation);
+	}
+
+	@Override
+	public void decline(boolean fromSender) {
+		Nation receivernation = (Nation) getReceiver();
+		Nation sendernation = (Nation) getSender();
+//		InviteHandler.getNationtonationinvites().remove(sendernation, receivernation);
+		receivernation.deleteReceivedInvite(this);
+		sendernation.deleteSentAllyInvite(this);
+		if (!fromSender) {
+			TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+		} else {
+			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
+		}
+	}
+	//Emperor-Koala End
 }

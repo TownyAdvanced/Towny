@@ -1,8 +1,18 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.command.NationCommand;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TownJoinNationInvite implements Invite {
 
@@ -30,4 +40,33 @@ public class TownJoinNationInvite implements Invite {
 	public TownyInviteSender getSender() {
 		return sender;
 	}
+
+	//Emperor-Koala Start
+	@Override
+	public void accept() throws TownyException {
+		Town town = (Town) getReceiver();
+		List<Town> towns = new ArrayList<>();
+		towns.add(town);
+		Nation nation = (Nation) getSender();
+		NationCommand.nationAdd(nation, towns);
+		// Message handled in nationAdd()
+//		InviteHandler.getNationtotowninvites().remove(nation, town);
+		town.deleteReceivedInvite(this);
+		nation.deleteSentInvite(this);
+	}
+
+	@Override
+	public void decline(boolean fromSender) {
+		Town town = (Town) getReceiver();
+		Nation nation = (Nation) getSender();
+//		InviteHandler.getNationtotowninvites().remove(nation, town);
+		town.deleteReceivedInvite(this);
+		nation.deleteSentInvite(this);
+		if (!fromSender) {
+			TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
+		} else {
+			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
+		}
+	}
+	//Emperor-Koala End
 }

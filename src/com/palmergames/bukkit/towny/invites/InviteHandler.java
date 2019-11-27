@@ -27,9 +27,8 @@ import java.util.List;
 public class InviteHandler {
 	@SuppressWarnings("unused")
 	private static Towny plugin;
-	private static ListMultimap<Town, Resident> towntoresidentinvites = ArrayListMultimap.create();
-	private static ListMultimap<Nation, Town> nationtotowninvites = ArrayListMultimap.create();
-	private static ListMultimap<Nation, Nation> nationtonationinvites = ArrayListMultimap.create();
+	
+	private static List<Invite> activeInvites = new ArrayList<>();
 
 	public static void initialize(Towny plugin) {
 
@@ -37,136 +36,45 @@ public class InviteHandler {
 	}
 
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
-		TownyInviteSender sender = invite.getSender();
-		TownyInviteReceiver receiver = invite.getReceiver();
-		if (receiver instanceof Resident) {
-			// Town invited Resident
-			if (sender instanceof Town) { // Has to be true!
-				Resident resident = (Resident) invite.getReceiver();
-				Town town = (Town) invite.getSender();
-				TownCommand.townAddResident(town, resident);
-				TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
-				getTowntoresidentinvites().remove(town, resident);
-				resident.deleteReceivedInvite(invite);
-				town.deleteSentInvite(invite);
-				return;
-			}
-		}
-		if (receiver instanceof Town) {
-			if (sender instanceof Nation) { // Has to be true!
-				Town town = (Town) invite.getReceiver();
-				List<Town> towns = new ArrayList<Town>();
-				towns.add(town);
-				Nation nation = (Nation) invite.getSender();
-				NationCommand.nationAdd(nation, towns);
-				// Message handled in nationAdd()
-				getNationtotowninvites().remove(nation, town);
-				town.deleteReceivedInvite(invite);
-				nation.deleteSentInvite(invite);
-				return;
-			}
-			// Nation invited Town
-		}
-		if (receiver instanceof Nation) {
-			if (sender instanceof Nation) { // Has to be true!
-				Nation receivernation = (Nation) invite.getReceiver();
-				Nation sendernation = (Nation) invite.getSender();
-				receivernation.addAlly(sendernation);
-				sendernation.addAlly(receivernation);
-				TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
-				TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
-				getNationtonationinvites().remove(sendernation, receivernation);
-				receivernation.deleteReceivedInvite(invite);
-				sendernation.deleteSentAllyInvite(invite);
-				TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
-				TownyUniverse.getInstance().getDataSource().saveNation(sendernation);
-				return;
-			}
-			// Nation invited other Nation to ally
+		if (activeInvites.contains(invite)) {
+			invite.accept();
+			activeInvites.remove(invite);
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
 		// It shouldn't be possible for this exception to happen via normally using Towny
 	}
 
 	public static void declineInvite(Invite invite, boolean fromSender) throws InvalidObjectException {
-		TownyInviteSender sender = invite.getSender();
-		TownyInviteReceiver receiver = invite.getReceiver();
-		if (receiver instanceof Resident) {
-			// Town invited Resident
-			if (sender instanceof Town) { // Has to be true!
-				Resident resident = (Resident) invite.getReceiver();
-				Town town = (Town) invite.getSender();
-				getTowntoresidentinvites().remove(town, resident);
-				resident.deleteReceivedInvite(invite);
-				town.deleteSentInvite(invite);
-				if (!fromSender) {
-					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
-					TownyMessaging.sendMessage(invite.getReceiver(), TownySettings.getLangString("successful_deny"));
-				} else {
-					TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
-				}
-				return;
-			}
-		}
-		if (receiver instanceof Town) {
-			if (sender instanceof Nation) { // Has to be true!
-				Town town = (Town) invite.getReceiver();
-				Nation nation = (Nation) invite.getSender();
-				getNationtotowninvites().remove(nation, town);
-				town.deleteReceivedInvite(invite);
-				nation.deleteSentInvite(invite);
-				if (!fromSender) {
-					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_deny_invite"), town.getName()));
-				} else {
-					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
-				}
-				return;
-			}
-			// Nation invited Town
-		}
-		if (receiver instanceof Nation) {
-			if (sender instanceof Nation) { // Has to be true!
-				Nation receivernation = (Nation) invite.getReceiver();
-				Nation sendernation = (Nation) invite.getSender();
-				getNationtonationinvites().remove(sendernation, receivernation);
-				receivernation.deleteReceivedInvite(invite);
-				sendernation.deleteSentAllyInvite(invite);
-				if (!fromSender) {
-					TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
-				} else {
-					TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
-				}
-
-				return;
-			}
-			// Nation invited other Nation to ally
+		if (activeInvites.contains(invite)) {
+			invite.decline(fromSender);
+			activeInvites.remove(invite);
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
 		// It shouldn't be possible for this exception to happen via normally using Towny
 	}
-
-	public static ListMultimap<Nation, Nation> getNationtonationinvites() {
-		return nationtonationinvites;
+	
+	public static void addInvite(Invite invite) {
+		activeInvites.add(invite);
 	}
-
-	public static ListMultimap<Nation, Town> getNationtotowninvites() {
-		return nationtotowninvites;
+	
+	public static List<Invite> getActiveInvites() {
+		return activeInvites;
 	}
-
-	public static ListMultimap<Town, Resident> getTowntoresidentinvites() {
-		return towntoresidentinvites;
+	
+	public static boolean inviteIsActive(Invite invite) {
+		for (Invite activeInvite : activeInvites) {
+			if (activeInvite.getReceiver().equals(invite.getReceiver()) && activeInvite.getSender().equals(invite.getSender()))
+				return true;
+		}
+		return false;
 	}
-
-	public static void addInviteToList(PlayerJoinTownInvite invite) {
-		towntoresidentinvites.put((Town) invite.getSender(), (Resident) invite.getReceiver());
-	}
-
-	public static void addInviteToList(TownJoinNationInvite invite) {
-		nationtotowninvites.put((Nation) invite.getSender(), (Town) invite.getReceiver());
-	}
-
-	public static void addInviteToList(NationAllyNationInvite invite) {
-		nationtonationinvites.put((Nation) invite.getSender(), (Nation) invite.getReceiver());
+	
+	public static boolean inviteIsActive(TownyInviteSender sender, TownyInviteReceiver receiver) {
+		for (Invite activeInvite : activeInvites) {
+			if (activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
+				return true;
+		}
+		return false;
 	}
 
 	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver) {
