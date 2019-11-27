@@ -88,7 +88,12 @@ public enum ConfigNodes {
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
-			"# Limits the maximum amount of bonus blocks a town can buy."),
+			"# Limits the maximum amount of bonus blocks a town can buy.",
+			"# This setting does nothing when town.max_purchased_blocks_uses_town_levels is set to true."),
+	TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS(
+			"town.max_purchased_blocks_uses_town_levels",
+			"true",
+			"# When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase."),
 	TOWN_MAX_PLOTS_PER_RESIDENT(
 			"town.max_plots_per_resident",
 			"100",
