@@ -5,14 +5,18 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -199,16 +203,16 @@ public class TownyRegenAPI {
 		return "[" + townBlock.getWorld().getName() + "|" + townBlock.getX() + "|" + townBlock.getZ() + "]";
 	}
 
-	//TODO: restore functionality of the chunk regen command for use in 1.13+ servers.
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
-//	public static void regenChunk(Player player) {
-//		
+	/**
+	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
+	 * 
+	 * @param player
+	 */
+	@SuppressWarnings("deprecation")
+	public static void regenChunk(Player player) {
+		
 //		try {
-//			Coord coord = Coord.parseCoord(player);
+			Coord coord = Coord.parseCoord(player);
 //			World world = player.getWorld();
 //			Chunk chunk = world.getChunkAt(player.getLocation());
 //			int maxHeight = world.getMaxHeight();
@@ -254,15 +258,13 @@ public class TownyRegenAPI {
 //			}
 //			
 //			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
-//
-//			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
+
+			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
 //
 //		} catch (NotRegisteredException e) {
 //			// Failed to get resident
 //		}
-//		
-//		
-//	}
+	}
 //	
 //	/**
 //	 * Restore the relevant chunk using the snapshot data stored in the resident
