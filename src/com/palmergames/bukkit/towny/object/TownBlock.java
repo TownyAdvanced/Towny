@@ -13,8 +13,9 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
 import java.util.HashSet;
+import java.util.UUID;
 
-public class TownBlock {
+public class TownBlock implements Groupable {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -28,6 +29,8 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
+	private UUID groupID = null;
+	private String groupName = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -494,4 +497,15 @@ public class TownBlock {
 			metadata.add(CustomDataField.load(objects[i]));
 		}
 	}
+	
+	@Override
+	public UUID getGroupID() {
+		return groupID;
+	}
+
+	@Override
+	public String getGroupName() {
+		return groupName;
+	}
+	
 }

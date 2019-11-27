@@ -2,18 +2,33 @@ package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 
+/**
+ * @author Suneet Tipirneni (Siris)
+ * @param <T> The type of data the data field will hold.
+ */
 public abstract class CustomDataField<T> {
     private CustomDataFieldType type;
     private T value;
     private String key;
-    
-    public CustomDataField(String key, CustomDataFieldType type, T value)
+
+	/**
+	 * 
+	 * @param key The keyname of the data field (must be unique).
+	 * @param type What type the data field show be see: {@link com.palmergames.bukkit.towny.object.metadata.CustomDataFieldType}.
+	 * @param value The default value for this field.
+	 */
+	public CustomDataField(String key, CustomDataFieldType type, T value)
     {
         this.type = type;
         this.setValue(value);
         this.key = key;
     }
 
+	/**
+	 *
+	 * @param key The keyname of the data field (must be unique).
+	 * @param type What type the data field show be see: {@link com.palmergames.bukkit.towny.object.metadata.CustomDataFieldType}.
+	 */
     public CustomDataField(String key, CustomDataFieldType type)
     {
         this.type = type;
@@ -31,7 +46,6 @@ public abstract class CustomDataField<T> {
     }
 
     public void setValue(T value) {
-        // TODO: Save to yml
         
         this.value = value;
     }
@@ -40,6 +54,10 @@ public abstract class CustomDataField<T> {
         return key;
     }
 
+	/**
+	 * 
+	 * @return A string representation that is saved into the towny database.
+	 */
     @Override
     public String toString() {
         String out = "";
@@ -78,8 +96,13 @@ public abstract class CustomDataField<T> {
         
         return field;
     }
-    
-    public void isValidType(String str) throws InvalidMetadataTypeException {
+
+	/**
+	 * Type checks a custom data field via its string representation.
+	 * @param str - The string representation of the object to be tested.
+	 * @throws InvalidMetadataTypeException thrown when the string representation does not match the expected type.
+	 */
+	public void isValidType(String str) throws InvalidMetadataTypeException {
         switch (type) {
             case IntegerField:
                 try {
@@ -102,8 +125,13 @@ public abstract class CustomDataField<T> {
             	break;
         }
     }
-    
-    @Override
+
+	/**
+	 * 
+	 * @param rhs
+	 * @return returns true if the id is matching false otherwise.
+	 */
+	@Override
     public boolean equals(Object rhs) {
         if (rhs instanceof CustomDataField)
             return ((CustomDataField) rhs).getKey().equals(this.getKey());
@@ -116,8 +144,12 @@ public abstract class CustomDataField<T> {
         // Use the key as a unique id
         return getKey().hashCode();
     }
-    
-    public CustomDataField newCopy() {
+
+	/**
+	 * 
+	 * @return A new copy or a different instance with equivalent field values.
+	 */
+	public CustomDataField newCopy() {
         switch (type) {
             case BooleanField:
                 return new BooleanDataField(getKey(), (Boolean)getValue());

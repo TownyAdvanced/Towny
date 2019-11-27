@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Groupable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -908,6 +909,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
 				
+				line = keys.get("groups");
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
 				return false;
@@ -1764,6 +1767,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 		}
 		list.add("metadata=" + md.toString());
+		
+		// Groups
+		StringBuilder groups = new StringBuilder();
+		if (town.hasGroups()) {
+			for (UUID ID : town.getPlotGroupIDs()) {
+				groups.append(ID.toString()).append(";");
+			}
+		}
+		
+		list.add("groups=" + groups.toString());
 
 		/*
 		 *  Make sure we only save in async
@@ -2026,9 +2039,28 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				md.append(cdf.toString()).append(";");
 			}
 		}
-
+		
 		list.add("metadata=" + md.toString());
+		
+		String gID = "";
+		String gName = "";
+		
+		if (townBlock.hasGroup()) {
+			// Group ID
+			gID += townBlock.getGroupID();
+			
+			// Group Name
+			if (townBlock.hasGroupName()) {
+				gName += townBlock.getGroupName();
+			}
+		}
 
+		// Group ID
+		list.add("groupID=" + gID);
+		
+		// Group Name
+		list.add("groupName=" + gName);
+		
 		/*
 		 *  Make sure we only save in async
 		 */
