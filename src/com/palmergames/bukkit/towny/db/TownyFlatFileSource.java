@@ -1485,6 +1485,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty())
 						townBlock.setMetadata(line.trim());
 					
+					test = "groupID";
+					line = keys.get("groupID");
+					if (line != null && !line.isEmpty()) 
+						townBlock.setGroupID(UUID.fromString(line));
+					
+					test = "groupName";
+					line = keys.get("grounName");
+					if (line != null && !line.isEmpty()) 
+						townBlock.setGroupName(line);
+					
 					
 				} catch (Exception e) {
 					if (test == "town") {

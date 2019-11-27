@@ -1339,17 +1339,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public List<TownBlock> getTownBlocksForGroup(UUID ID) {
 		
-		ArrayList<TownBlock> retval = new ArrayList<>();
+		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
 		if (hasGroups()) {
 			for (TownBlock block : this.getTownBlocks()) {
 				if (block.hasGroup() && block.getGroupID().equals(ID)) {
-					retval.add(block);
+					retVal.add(block);
 				}
 			}
 		}
 		
-		return retval;
+		return retVal;
 	}
 	
 	public void addPlotGroupID(UUID ID) {
