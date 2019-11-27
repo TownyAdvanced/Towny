@@ -59,46 +59,47 @@ public class SiegeWarPlaceBlockController {
 	{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
-		
 		Coord blockCoord = Coord.parseCoord(block);
 
 		if(!townyWorld.hasTownBlock(blockCoord)) {
 			//Wilderness found
 			//Possible abandon or attack request
-			List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
-			if (nearbyTownBlocks.size() == 0) {
-				//No town blocks are nearby. Normal block placement
-				return false;
+			
+			if (blockTypeName.contains("white") 
+				&& ((Banner) block.getState()).getPatterns().size() == 0) 
+			{
+				//White banner
+				if (!TownySettings.getWarSiegeAbandonEnabled())
+					return false;
+
+				AbandonAttack.processAbandonSiegeRequest(player,
+					block,
+					event);
+				
+				return true;
 			} else {
-				//One or more town are nearby.
-				if (blockTypeName.contains("white")
-					&& ((Banner) block.getState()).getPatterns().size() == 0) {
-					//White banner
+				//Coloured banner
 
-					if (!TownySettings.getWarSiegeAbandonEnabled())
-						return false;
-						
-					AbandonAttack.processAbandonSiegeRequest(player,
-						block,
-						nearbyTownBlocks,
-						event);
-					return true;
-				} else {
-					//Coloured banner
+				if (!TownySettings.getWarSiegeAttackEnabled())
+					return false;
 
-					if (!TownySettings.getWarSiegeAttackEnabled())
-						return false;
+				List<TownBlock> nearbyTownBlocks = SiegeWarBlockUtil.getAdjacentTownBlocks(player, block);
+				if (nearbyTownBlocks.size() == 0) 
+					return false;   //No town blocks are nearby. Normal block placement
 
-					AttackTown.processAttackTownRequest(
-						player,
-						block,
-						nearbyTownBlocks,
-						event);
-					return true;
-				}
+				AttackTown.processAttackTownRequest(
+					player,
+					block,
+					nearbyTownBlocks,
+					event);
+				
+				return true;
 			}
-
+			
 		} else {
+			//Town block found
+			//Could be invade or surrender request
+			
 			TownBlock townBlock = null;
 			if(townyWorld.hasTownBlock(blockCoord)) {
 				townBlock = townyWorld.getTownBlock(blockCoord);

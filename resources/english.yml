@@ -404,8 +404,8 @@ msg_err_siege_war_nation_already_attacking_town: '&6[War]&c Your nation is alrea
 msg_err_siege_war_cannot_attack_siege_immunity: '&6[War]&c The target town has siege immunity. It cannot be attacked until the siege immunity expires.'
 msg_err_siege_war_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 #Abandon
-msg_err_siege_war_cannot_abandon_no_nearby_sieges: '&6[War]&c You cannot abandon. There is no siege in this area.'
-msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon. Your nation is not attacking in this area.'
+msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks: '&6[War]&c You cannot abandon because there are no active siege banners nearby.'
+msg_err_siege_war_cannot_abandon_nation_not_attacking_zone: '&6[War]&c You cannot abandon because the nearby siege banner does not belong to your nation.'
 #Invade
 msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot invade your own town.'
 msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot invade unless your nation is victorious in the siege."

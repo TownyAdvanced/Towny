@@ -1125,7 +1125,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			if (TownySettings.getWarSiegeEnabled()) {
-
+				
 				if (TownySettings.getWarSiegeTownLeaveDisabled() && !TownySettings.getWarSiegeRevoltEnabled())
 					throw new TownyException(TownySettings.getLangString("msg_err_siege_war_town_voluntary_leave_impossible"));
 								
@@ -1134,8 +1134,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 				//Activate revolt immunity
 				SiegeWarTimeUtil.activateRevoltImmunityTimer(town);
-				//End siege immunity
-				town.setSiegeImmunityEndTime(0);
 
 				TownyMessaging.sendGlobalMessage(
 					String.format(TownySettings.getLangString("msg_siege_war_revolt"),

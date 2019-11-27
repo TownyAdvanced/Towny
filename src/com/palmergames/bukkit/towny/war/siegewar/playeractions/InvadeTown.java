@@ -78,8 +78,10 @@ public class InvadeTown {
 
     public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
+		
+        //Reset revolt immunity, to prevent immediate revolt after invasion 
         SiegeWarTimeUtil.activateRevoltImmunityTimer(defendingTown);
-
+		
         if(defendingTown.hasNation()) {
             Nation nationOfDefendingTown = null;
             try {

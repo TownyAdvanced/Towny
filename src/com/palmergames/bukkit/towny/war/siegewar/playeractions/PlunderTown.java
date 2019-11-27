@@ -36,7 +36,7 @@ public class PlunderTown {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_own_town"));
 			
 			if (siege.getStatus() != SiegeStatus.ATTACKER_WIN && siege.getStatus() != SiegeStatus.DEFENDER_SURRENDER)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_invade_without_victory"));
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));
 			
 			if(resident.getTown().getNation() != siege.getAttackerWinner())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_victory"));

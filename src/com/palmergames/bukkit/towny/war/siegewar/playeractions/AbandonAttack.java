@@ -23,7 +23,6 @@ public class AbandonAttack {
 
     public static void processAbandonSiegeRequest(Player player,
                                                   Block block,
-                                                  List<TownBlock> nearbyTownBlocksWithTowns,
                                                   BlockPlaceEvent event)  {
         try {
             Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
@@ -37,52 +36,41 @@ public class AbandonAttack {
             //If player has no permission to abandon,send error
             if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-            //Get list of adjacent towns with sieges
-            List<Town> nearbyTownsWithSieges =new ArrayList<>();
-            for(TownBlock nearbyTownBlock: nearbyTownBlocksWithTowns) {
-                if(nearbyTownBlock.getTown().hasSiege()
-                        && nearbyTownBlock.getTown().getSiege().getStatus() == SiegeStatus.IN_PROGRESS){
-                    nearbyTownsWithSieges.add(nearbyTownBlock.getTown());
-                }
-            }
-
-            //If none are under active siege, send error
-            if(nearbyTownsWithSieges.size() == 0)
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_no_nearby_sieges"));
-
-            //Get nearby siege zones
-            List<SiegeZone> nearbySiegeZones = new ArrayList<>();
-            for(Town nearbyTownWithSiege: nearbyTownsWithSieges) {
-				nearbySiegeZones.addAll(nearbyTownWithSiege.getSiege().getSiegeZones().values());
-            }
-
-            //Find the nearest active zone to the player
-            SiegeZone targetedSiegeZone = null;
-            double distanceToTarget = -1;
-            for(SiegeZone siegeZone: nearbySiegeZones) {
-                if (targetedSiegeZone == null) {
-                    targetedSiegeZone = siegeZone;
-                    distanceToTarget = block.getLocation().distance(targetedSiegeZone.getFlagLocation());
+            
+            //Find the nearest siege zone to the player,from IN_PROGRESS sieges
+            SiegeZone nearestSiegeZone = null;
+            double distanceToNearestSiegeZone = -1;
+            for(SiegeZone siegeZone: com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
+                
+            	if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+            		continue;
+            		
+            	if (nearestSiegeZone == null) {
+					nearestSiegeZone = siegeZone;
+                    distanceToNearestSiegeZone = block.getLocation().distance(nearestSiegeZone.getFlagLocation());
                 } else {
                     double distanceToNewTarget = block.getLocation().distance(siegeZone.getFlagLocation());
-                    if(distanceToNewTarget < distanceToTarget) {
-                        targetedSiegeZone = siegeZone;
-                        distanceToTarget = distanceToNewTarget;
+                    if(distanceToNewTarget < distanceToNearestSiegeZone) {
+						nearestSiegeZone = siegeZone;
+                        distanceToNearestSiegeZone = distanceToNewTarget;
                     }
                 }
             }
+            
+            //If there are no in-progress sieges at all, error
+			if(nearestSiegeZone == null)
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks"));
+			
+			//If the player is too far from the nearest zone, error
+			if(distanceToNearestSiegeZone > TownySettings.getTownBlockSize())
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_no_nearby_siege_attacks"));
 
-            //If the player's nation is not the attacker, send error
+			//If the player's nation is not the attacker, send error
             Nation nationOfResident = townOfResident.getNation();
-            if(targetedSiegeZone.getAttackingNation() != nationOfResident)
+            if(nearestSiegeZone.getAttackingNation() != nationOfResident)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
-
-            //If the player is too far from the targeted zone, error error
-            if(distanceToTarget > TownySettings.getTownBlockSize())
-                throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_abandon_nation_not_attacking_zone"));
-
-            attackerAbandon(targetedSiegeZone);
+            
+            attackerAbandon(nearestSiegeZone);
 
         } catch (TownyException x) {
             TownyMessaging.sendErrorMsg(player, x.getMessage());
