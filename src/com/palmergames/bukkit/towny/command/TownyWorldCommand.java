@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -11,7 +10,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -198,33 +196,34 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				worldToggle(player, sender, StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("regen")) {
-
-				if (isConsole)
-					throw new TownyException("Command cannot be run from console.");
-
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_REGEN.getNode()))
-					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
-
-				if (TownyAPI.getInstance().isWarTime()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
-					return;
-				}
-
-				if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
-					return;
-				}
-
-				if (TownySettings.getTownBlockSize() != 16) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
-					return;
-				}
-
-				// Regen this chunk
-				if (player != null) {
-					TownyRegenAPI.regenChunk(player);
-				}
-
+				
+				TownyMessaging.sendErrorMsg(player, "This command has been removed for 1.13 compatibility, look for its return in the future.");
+//				if (isConsole)
+//					throw new TownyException("Command cannot be run from console.");
+//
+//				if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_REGEN.getNode()))
+//					throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+//
+//				if (TownyUniverse.isWarTime()) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_war_cannot_do"));
+//					return;
+//				}
+//
+//				if (!TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_admin_only"));
+//					return;
+//				}
+//
+//				if (TownySettings.getTownBlockSize() != 16) {
+//					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_plot_regen_wrong_size"));
+//					return;
+//				}
+//
+//				// Regen this chunk
+//				if (player != null) {
+//					TownyRegenAPI.regenChunk(player);
+//				}
+//
 //			} else if (split[0].equalsIgnoreCase("undo")) {
 //				if (isConsole)
 //					throw new TownyException("Command cannot be run from console.");

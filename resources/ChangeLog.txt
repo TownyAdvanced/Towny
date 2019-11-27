@@ -3902,5 +3902,3 @@ v0.92.0.11:
   - Fix flagwar NPE seen when Towny failed to enable.
   - Fix savingtask NPE seen when Towny failed to enable.
   - Add helpful messages shown when town & nation levels fail to load on startup. 
-  - Restored /tw regen command, but not the /tw undo command.
-    - Will regenerate a chunk you're standing in as long as your town_block_size is set to 16 in the config.
