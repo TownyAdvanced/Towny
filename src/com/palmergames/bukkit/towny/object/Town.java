@@ -39,6 +39,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
+	private List<UUID> plotGroupIDs = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1314,5 +1315,44 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public int getConqueredDays() {
 		return this.conqueredDays;
+	}
+	
+	public boolean hasGroups() {
+		return plotGroupIDs != null;
+	}
+	public List<UUID> getPlotGroupIDs() {
+		return plotGroupIDs;
+	}
+	
+	public void setGroups(String str) {
+		if (plotGroupIDs == null)
+			plotGroupIDs = new ArrayList<>();
+		
+		String[] groupIDs = str.split(";");
+		
+		for (String strID : groupIDs) {
+			UUID ID = UUID.fromString(strID);
+			
+			plotGroupIDs.add(ID);
+		}
+	}
+	
+	public List<TownBlock> getTownBlocksForGroup(UUID ID) {
+		
+		ArrayList<TownBlock> retval = new ArrayList<>();
+		
+		if (hasGroups()) {
+			for (TownBlock block : this.getTownBlocks()) {
+				if (block.hasGroup() && block.getGroupID().equals(ID)) {
+					retval.add(block);
+				}
+			}
+		}
+		
+		return retval;
+	}
+	
+	public void addPlotGroupID(UUID ID) {
+		this.plotGroupIDs.add(ID);
 	}
 }
