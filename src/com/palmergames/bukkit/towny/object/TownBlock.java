@@ -507,5 +507,12 @@ public class TownBlock implements Groupable {
 	public String getGroupName() {
 		return groupName;
 	}
-	
+
+	public void setGroupID(UUID groupID) {
+		this.groupID = groupID;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 }
