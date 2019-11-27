@@ -41,7 +41,6 @@ public class TownJoinNationInvite implements Invite {
 		return sender;
 	}
 
-	//Emperor-Koala Start
 	@Override
 	public void accept() throws TownyException {
 		Town town = (Town) getReceiver();
@@ -50,7 +49,6 @@ public class TownJoinNationInvite implements Invite {
 		Nation nation = (Nation) getSender();
 		NationCommand.nationAdd(nation, towns);
 		// Message handled in nationAdd()
-//		InviteHandler.getNationtotowninvites().remove(nation, town);
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 	}
@@ -59,7 +57,6 @@ public class TownJoinNationInvite implements Invite {
 	public void decline(boolean fromSender) {
 		Town town = (Town) getReceiver();
 		Nation nation = (Nation) getSender();
-//		InviteHandler.getNationtotowninvites().remove(nation, town);
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 		if (!fromSender) {
@@ -68,5 +65,4 @@ public class TownJoinNationInvite implements Invite {
 			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("nation_revoke_invite"), nation.getName()));
 		}
 	}
-	//Emperor-Koala End
 }

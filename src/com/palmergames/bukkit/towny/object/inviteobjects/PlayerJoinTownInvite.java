@@ -38,14 +38,13 @@ public class PlayerJoinTownInvite implements Invite {
 	public TownyInviteSender getSender() {
 		return sender;
 	}
-	//Emperor-Koala Start
+	
 	@Override
 	public void accept() throws TownyException {
 		Resident resident = (Resident) getReceiver();
 		Town town = (Town) getSender();
 		TownCommand.townAddResident(town, resident);
 		TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
-//		InviteHandler.getTowntoresidentinvites().remove(town, resident);
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 	}
@@ -54,7 +53,6 @@ public class PlayerJoinTownInvite implements Invite {
 	public void decline(boolean fromSender) {
 		Resident resident = (Resident) getReceiver();
 		Town town = (Town) getSender();
-//		InviteHandler.getTowntoresidentinvites().remove(town, resident);
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 		if (!fromSender) {
@@ -64,5 +62,4 @@ public class PlayerJoinTownInvite implements Invite {
 			TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
 		}
 	}
-	//Emperor-Koala End
 }

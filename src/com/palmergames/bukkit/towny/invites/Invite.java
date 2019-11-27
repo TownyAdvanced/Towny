@@ -22,7 +22,6 @@ public interface Invite {
 	 */
 	TownyInviteSender getSender();
 
-	//Emperor-Koala Start
 	/**
 	 * @throws TownyException
 	 */
@@ -32,5 +31,4 @@ public interface Invite {
 	 * @param fromSender - Tells if invite was revoked (true) or declined (false).
 	 */
 	void decline(boolean fromSender);
-	//Emperor-Koala End
 }

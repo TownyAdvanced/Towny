@@ -37,7 +37,6 @@ public class NationAllyNationInvite implements Invite {
 		return sender;
 	}
 
-	//Emperor-Koala Start
 	@Override
 	public void accept() throws TownyException {
 			Nation receivernation = (Nation) getReceiver();
@@ -46,7 +45,6 @@ public class NationAllyNationInvite implements Invite {
 			sendernation.addAlly(receivernation);
 			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
 			TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
-//			InviteHandler.getNationtonationinvites().remove(sendernation, receivernation);
 			receivernation.deleteReceivedInvite(this);
 			sendernation.deleteSentAllyInvite(this);
 			TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
@@ -57,7 +55,6 @@ public class NationAllyNationInvite implements Invite {
 	public void decline(boolean fromSender) {
 		Nation receivernation = (Nation) getReceiver();
 		Nation sendernation = (Nation) getSender();
-//		InviteHandler.getNationtonationinvites().remove(sendernation, receivernation);
 		receivernation.deleteReceivedInvite(this);
 		sendernation.deleteSentAllyInvite(this);
 		if (!fromSender) {
@@ -66,5 +63,4 @@ public class NationAllyNationInvite implements Invite {
 			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
 		}
 	}
-	//Emperor-Koala End
 }
