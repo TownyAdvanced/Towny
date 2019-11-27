@@ -27,10 +27,11 @@ public class SurrenderTown {
             if(!resident.hasTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
-            if(resident.getTown() != townWhereBlockWasPlaced)
+			Town townOfAttackingResident = resident.getTown();
+			if(townOfAttackingResident != townWhereBlockWasPlaced)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_not_your_town"));
-
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
+			
+			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             Siege siege = townWhereBlockWasPlaced.getSiege();

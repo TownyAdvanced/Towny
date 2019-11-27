@@ -5,8 +5,11 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.playeractions.*;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.Material;
@@ -69,17 +72,46 @@ public class SiegeWarPlaceBlockController {
 				&& ((Banner) block.getState()).getPatterns().size() == 0) 
 			{
 				//White banner
+				//Possible abandon request
 				if (!TownySettings.getWarSiegeAbandonEnabled())
 					return false;
 
+				//Find the nearest siege zone to the player,from IN_PROGRESS sieges
+				SiegeZone nearestSiegeZone = null;
+				double distanceToNearestSiegeZone = -1;
+				for(SiegeZone siegeZone: com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getSiegeZones()) {
+
+					if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS)
+						continue;
+
+					if (nearestSiegeZone == null) {
+						nearestSiegeZone = siegeZone;
+						distanceToNearestSiegeZone = block.getLocation().distance(nearestSiegeZone.getFlagLocation());
+					} else {
+						double distanceToNewTarget = block.getLocation().distance(siegeZone.getFlagLocation());
+						if(distanceToNewTarget < distanceToNearestSiegeZone) {
+							nearestSiegeZone = siegeZone;
+							distanceToNearestSiegeZone = distanceToNewTarget;
+						}
+					}
+				}
+
+				//If there are no in-progress sieges at all,then regular block request
+				if(nearestSiegeZone == null)
+					return false;
+				
+				//If the player is too far from the nearest zone, then regular block request
+				if(distanceToNearestSiegeZone > TownySettings.getTownBlockSize())
+					return false;
+				
 				AbandonAttack.processAbandonSiegeRequest(player,
-					block,
+					nearestSiegeZone,
 					event);
 				
 				return true;
 			} else {
 				//Coloured banner
-
+				//Possible attack request
 				if (!TownySettings.getWarSiegeAttackEnabled())
 					return false;
 
@@ -98,7 +130,7 @@ public class SiegeWarPlaceBlockController {
 			
 		} else {
 			//Town block found
-			//Could be invade or surrender request
+			//Possible invade or surrender request
 			
 			TownBlock townBlock = null;
 			if(townyWorld.hasTownBlock(blockCoord)) {
@@ -122,7 +154,7 @@ public class SiegeWarPlaceBlockController {
 
 			if (blockTypeName.contains("white")
 				&& ((Banner) block.getState()).getPatterns().size() == 0) {
-				//White Banner: Evaluate surrender action if siege exists in target town
+				//White Banner: Evaluate Surrender request if siege exists in target town
 				
 				if (!TownySettings.getWarSiegeSurrenderEnabled())
 					return false;
@@ -134,7 +166,7 @@ public class SiegeWarPlaceBlockController {
 				return true;
 				
 			} else {
-				//Coloured Banner: Evaluate invade action if siege exists in target town,
+				//Coloured Banner: Evaluate invade request if siege exists in target town,
 				// and player is a member of any of the attacking nations
 				
 				if (!TownySettings.getWarSiegeInvadeEnabled())
