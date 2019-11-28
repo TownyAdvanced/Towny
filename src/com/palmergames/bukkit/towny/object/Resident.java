@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -521,6 +522,64 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg(TownySettings.getLangString("msg_err_could_not_set_default_modes_for") + getName() + ".");
 
+	}
+
+	/**
+	 * @author Suneet Tipirneni (Siris)
+	 * Returns the group mode that is enabled.
+	 * @return The mode as a {@link com.palmergames.bukkit.towny.object.PlotGroup},
+	 * where the substring between {} is the qualified
+	 * string representation of the {@link com.palmergames.bukkit.towny.object.PlotGroup}.
+	 * If there is not group mode, then null is returned.
+	 */
+	public PlotGroup getPlotGroupFromMode() {
+		for (String mode : getModes()) {
+			if (mode.contains("Group")) {
+				return PlotGroup.fromModeString(mode);
+			}
+		}
+		
+		return null;
+	}
+
+	/**
+	 * @author Suneet Tipirneni (Siris)
+	 * Indicates whether the given group mode is enabled.
+	 * @return A boolean, true if the given group mode is present and false if the group isn't present.
+	 */
+	public boolean hasPlotGroupMode(PlotGroup group) {
+		PlotGroup rGroup = getPlotGroupFromMode();
+		
+		if (rGroup != null && rGroup.equals(group)) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public void setPlotGroupMode(PlotGroup group, boolean notify) {
+		
+		PlotGroup pGroup = getPlotGroupFromMode();
+		
+		// Remove and replace.
+		if (pGroup != null && !pGroup.equals(group)) {
+			this.getModes().remove(pGroup.toModeString());
+			this.getModes().add(group.toModeString());
+			if (notify)
+				TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			return;
+		}
+
+		// Group mode is missing add it.
+		if (pGroup == null) {
+			this.getModes().add(group.toModeString());
+			if (notify)
+				TownyMessaging.sendMsg(this, (TownySettings.getLangString("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			return;
+		}
+
+		// If we get down here that means the desired group is already added,
+		// so we're done.
 	}
 
 	/**
