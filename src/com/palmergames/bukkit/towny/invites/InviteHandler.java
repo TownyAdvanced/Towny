@@ -29,6 +29,7 @@ public class InviteHandler {
 		if (activeInvites.contains(invite)) {
 			invite.accept();
 			activeInvites.remove(invite);
+			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
 		// It shouldn't be possible for this exception to happen via normally using Towny
@@ -38,6 +39,7 @@ public class InviteHandler {
 		if (activeInvites.contains(invite)) {
 			invite.decline(fromSender);
 			activeInvites.remove(invite);
+			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
 		// It shouldn't be possible for this exception to happen via normally using Towny
