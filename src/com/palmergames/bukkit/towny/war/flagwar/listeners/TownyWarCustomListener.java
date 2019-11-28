@@ -30,6 +30,8 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig.isFlaggedTownblockTransfered;
+
 public class TownyWarCustomListener implements Listener {
 
 	private final Towny plugin;
@@ -187,16 +189,23 @@ public class TownyWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			universe.getDataSource().removeTownBlock(townBlock);
+			if (TownyWarConfig.isFlaggedTownblockTransfered()) {
+				// Defender loses townblock
+				universe.getDataSource().removeTownBlock(townBlock);
 
-			// Attacker Claim Automatically
-			try {
-				List<WorldCoord> selection = new ArrayList<>();
-				selection.add(worldCoord);
-				TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
-				new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
-			} catch (TownyException te) {
-				// Couldn't claim it.
+				// Attacker Claim Automatically
+				try {
+					List<WorldCoord> selection = new ArrayList<>();
+					selection.add(worldCoord);
+					TownCommand.checkIfSelectionIsValid(attackingTown, selection, false, 0, false);
+					new TownClaim(plugin, null, attackingTown, selection, false, true, false).start();
+				} catch (TownyException te) {
+					// Couldn't claim it.
+				}
+			} else {
+				
+				TownyMessaging.sendTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
 			}
 
 			// Cleanup
