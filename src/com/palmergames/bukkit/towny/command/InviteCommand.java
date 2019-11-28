@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
