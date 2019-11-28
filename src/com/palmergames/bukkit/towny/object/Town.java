@@ -422,8 +422,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		int current = getPurchasedBlocks();
 		int n;
-		if (current + inputN > TownySettings.getMaxPurchedBlocks()) {
-			n = TownySettings.getMaxPurchedBlocks() - current;
+		if (current + inputN > TownySettings.getMaxPurchedBlocks(this)) {
+			n = TownySettings.getMaxPurchedBlocks(this) - current;
 		} else {
 			n = inputN;
 		}

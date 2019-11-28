@@ -44,8 +44,12 @@ public class TownyWar {
 
 	public static void onDisable() {
 
-		for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
-			attackCanceled(cell);
+	
+		try {
+			for (CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
+				attackCanceled(cell);
+			}
+		} catch (NullPointerException ignored) {
 		}
 	}
 

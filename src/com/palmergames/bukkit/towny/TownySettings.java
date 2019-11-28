@@ -43,7 +43,7 @@ public class TownySettings {
 
 	// Town Level
 	public enum TownLevel {
-		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT
+		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT, TOWN_BLOCK_BUY_BONUS_LIMIT
 	}
 
 	// Nation Level
@@ -56,8 +56,8 @@ public class TownySettings {
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
-
-	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit) {
+	
+	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit) {
 
 		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
 		m.put(TownySettings.TownLevel.NAME_PREFIX, namePrefix);
@@ -67,6 +67,7 @@ public class TownySettings {
 		m.put(TownySettings.TownLevel.TOWN_BLOCK_LIMIT, townBlockLimit);
 		m.put(TownySettings.TownLevel.UPKEEP_MULTIPLIER, townUpkeepMultiplier);
 		m.put(TownySettings.TownLevel.OUTPOST_LIMIT, townOutpostLimit);
+		m.put(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT, townBlockBuyBonusLimit);
 		configTownLevel.put(numResidents, m);
 	}
 
@@ -103,16 +104,23 @@ public class TownySettings {
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
 		for (Map<?, ?> level : levels) {
 
-			newTownLevel(
-				(Integer) level.get("numResidents"),
-				(String) level.get("namePrefix"),
-				(String) level.get("namePostfix"),
-				(String) level.get("mayorPrefix"),
-				(String) level.get("mayorPostfix"),
-				(Integer) level.get("townBlockLimit"),
-				(Double) level.get("upkeepModifier"),
-				(Integer) level.get("townOutpostLimit")
-			);
+			try {
+				newTownLevel(
+						(Integer) level.get("numResidents"),
+						(String) level.get("namePrefix"),
+						(String) level.get("namePostfix"),
+						(String) level.get("mayorPrefix"),
+						(String) level.get("mayorPostfix"),
+						(Integer) level.get("townBlockLimit"),
+						(Double) level.get("upkeepModifier"),
+						(Integer) level.get("townOutpostLimit"),
+						(Integer) level.get("townBlockBuyBonusLimit")
+						);
+			} catch (NullPointerException e) {
+				System.out.println("Your Towny config.yml's town_level section is out of date.");
+				System.out.println("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
+				throw new IOException("Config.yml town_levels incomplete.");
+			}
 
 		}
 	}
@@ -148,8 +156,8 @@ public class TownySettings {
 					(Integer) level.get("nationBonusOutpostLimit")
 				);
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Your Towny config.yml's Nation_Levels section is out of date.");
-				TownyMessaging.sendErrorMsg("This can be fixed automatically by deleting the Nation_Level section and letting Towny remake it on the next startup.");
+				System.out.println("Your Towny config.yml's nation_level section is out of date.");
+				System.out.println("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml nation_levels incomplete.");
 			}
 
@@ -556,6 +564,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 1);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 1);
@@ -566,6 +575,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 16);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 0);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 2);
@@ -576,6 +586,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 32);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 6);
@@ -586,6 +597,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 96);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 1);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -596,6 +608,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 160);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 14);
@@ -606,6 +619,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 224);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 2);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -616,6 +630,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 24);
@@ -626,6 +641,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 384);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 3);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 28);
@@ -636,6 +652,7 @@ public class TownySettings {
 			level.put("townBlockLimit", 448);
 			level.put("upkeepModifier", 1.0);
 			level.put("townOutpostLimit", 4);
+			level.put("townBlockBuyBonusLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
@@ -1107,6 +1124,11 @@ public class TownySettings {
 		int n = townOutposts + nationOutposts;
 		return n;
 	}
+	
+	public static int getMaxBonusBlocks(Town town) {
+		
+		return (Integer) getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT);
+	}
 
 	public static int getNationBonusBlocks(Nation nation) {
 
@@ -1425,9 +1447,12 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_LIMIT);
 	}
 
-	public static int getMaxPurchedBlocks() {
+	public static int getMaxPurchedBlocks(Town town) {
 
-		return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+		if (isBonusBlocksPerTownLevel())
+			return getMaxBonusBlocks(town);
+		else			
+			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
 	}
 
 	public static int getMaxClaimRadiusValue() {
@@ -1435,9 +1460,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
 	}
 
-	public static boolean isSellingBonusBlocks() {
+	public static boolean isSellingBonusBlocks(Town town) {
 
-		return getMaxPurchedBlocks() != 0;
+		return getMaxPurchedBlocks(town) != 0;
+	}
+	
+	public static boolean isBonusBlocksPerTownLevel() { 
+		
+		return getBoolean(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS);
 	}
 
 	public static double getPurchasedBonusBlocksCost() {

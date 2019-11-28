@@ -10,10 +10,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -199,12 +199,11 @@ public class TownyRegenAPI {
 		return "[" + townBlock.getWorld().getName() + "|" + townBlock.getX() + "|" + townBlock.getZ() + "]";
 	}
 
-	//TODO: restore functionality of the chunk regen command for use in 1.13+ servers.
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
+	/**
+	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
+	 * 
+	 * @param player
+	 */
 //	public static void regenChunk(Player player) {
 //		
 //		try {
@@ -260,8 +259,6 @@ public class TownyRegenAPI {
 //		} catch (NotRegisteredException e) {
 //			// Failed to get resident
 //		}
-//		
-//		
 //	}
 //	
 //	/**

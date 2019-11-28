@@ -25,7 +25,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -706,23 +706,9 @@ public class TownyPlayerListener implements Listener {
 						&& (townyUniverse.getPermissionSource().hasAllTownOverride(player, item.getType(), TownyPermission.ActionType.ITEM_USE))))
 					return cancelState;
 				
-				// Allow item_use for Event War if isAllowingItemUseInWarZone is true,
-				boolean playerNeutral = false;
-				if (TownyAPI.getInstance().isWarTime()) {
-					try {
-						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-						if (resident.isJailed())
-							playerNeutral = true;
-						if (resident.hasTown())
-							if (!War.isWarringTown(resident.getTown())) {
-								playerNeutral = true;
-							}
-					} catch (NotRegisteredException e) {
-					}			
-				}
-
-				// FlagWar here
-				if (status == TownBlockStatus.WARZONE || (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.ENEMY && !playerNeutral)) {
+				// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
+				if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+						|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 					if (!TownyWarConfig.isAllowingItemUseInWarZone()) {
 						cancelState = true;
 						TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_item"));
@@ -783,25 +769,12 @@ public class TownyPlayerListener implements Listener {
 		 */
 		PlayerCache cache = plugin.getCache(player);
 		TownBlockStatus status = cache.getStatus();
-		
-		boolean playerNeutral = false;
-		if (TownyAPI.getInstance().isWarTime()) {
-			try {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if (resident.isJailed())
-					playerNeutral = true;
-				if (resident.hasTown())
-					if (!War.isWarringTown(resident.getTown())) {
-						playerNeutral = true;
-					}
-			} catch (NotRegisteredException e) {
-			}			
-		}
 
 		/*
 		 * Flag war & now Event War
 		 */
-		if (status == TownBlockStatus.WARZONE || (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.ENEMY && !playerNeutral)) {
+		if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 			if (!TownyWarConfig.isAllowingSwitchesInWarZone()) {
 				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_warzone_cannot_use_switches"));
 				return true;

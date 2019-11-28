@@ -233,8 +233,12 @@ public class Towny extends JavaPlugin {
 
 		playerCache.clear();
 		
-		// Shut down our saving task.
-		townyUniverse.getDataSource().cancelTask();
+		try {
+			// Shut down our saving task.
+			townyUniverse.getDataSource().cancelTask();
+		} catch (NullPointerException ignored) {
+			// The saving task will not have started if this disable was fired by onEnable failing.			
+		}
 
 		this.townyUniverse = null;
 

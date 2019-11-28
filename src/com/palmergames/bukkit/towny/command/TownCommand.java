@@ -890,7 +890,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
-		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks() ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks() + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : ""));
+		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks(town) ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchedBlocks(town) + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : ""));
 		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + townOwned);
 		out.add(Colors.Green + "Farms   : " + Colors.LightGreen + farm);
 		out.add(Colors.Green + "Arenas : " + Colors.LightGreen + arena);
@@ -1951,10 +1951,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public void townBuy(Player player, String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		if (!TownySettings.isSellingBonusBlocks()) {
-			TownyMessaging.sendErrorMsg(player, "Config.yml max_purchased_blocks: '0' ");
-		}
 			
 		Resident resident;
 		Town town;
@@ -1966,10 +1962,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		}
+		
+		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel()) {
+			TownyMessaging.sendErrorMsg(player, "Config.yml max_purchased_blocks: '0' ");
+			return;
+		} else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0) {
+			TownyMessaging.sendErrorMsg(player, "Config.yml town_level townBlockBonusBuyAmount: 0");
+			return;
+		}
+			
+		
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-			player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks()));
+			player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
 				player.sendMessage(Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
@@ -2011,8 +2017,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int current = town.getPurchasedBlocks();
 
 		int n;
-		if (current + inputN > TownySettings.getMaxPurchedBlocks()) {
-			n = TownySettings.getMaxPurchedBlocks() - current;
+		if (current + inputN > TownySettings.getMaxPurchedBlocks(town)) {
+			n = TownySettings.getMaxPurchedBlocks(town) - current;
 		} else {
 			n = inputN;
 		}
