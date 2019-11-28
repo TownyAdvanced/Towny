@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -58,8 +57,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-
-
 
 
 public class NationCommand extends BaseCommand implements CommandExecutor {
@@ -1249,8 +1246,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationRevokeInviteTown(Object sender,Nation nation, List<Town> towns) {
 
 		for (Town town : towns) {
-			if (InviteHandler.getNationtotowninvites().containsEntry(nation, town)) {
-				InviteHandler.getNationtotowninvites().remove(nation, town);
+			if (InviteHandler.inviteIsActive(nation, town)) {
 				for (Invite invite : town.getReceivedInvites()) {
 					if (invite.getSender().equals(nation)) {
 						try {
@@ -1349,10 +1345,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		TownJoinNationInvite invite = new TownJoinNationInvite(player.getName(), nation, town);
 		try {
-			if (!InviteHandler.getNationtotowninvites().containsEntry(nation, town)) {
+			if (!InviteHandler.inviteIsActive(invite)) { 
 				town.newReceivedInvite(invite);
 				nation.newSentInvite(invite);
-				InviteHandler.addInviteToList(invite);
+				InviteHandler.addInvite(invite); 
 				TownyMessaging.sendRequestMessage(town.getMayor(),invite);
 				Bukkit.getPluginManager().callEvent(new NationInviteTownEvent(invite));
 			} else {
@@ -1630,19 +1626,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites,1,false);
 					return;
 				}
-				ListMultimap<Nation, Nation> nation2nations = InviteHandler.getNationtonationinvites();
-				if (nation2nations.containsKey(sendernation)) {
-					if (nation2nations.get(sendernation).contains(nation)) {
-						for (Invite invite : nation.getReceivedInvites()) {
-							if (invite.getSender().equals(sendernation)) {
-								try {
-									InviteHandler.acceptInvite(invite);
-									return;
-								} catch (InvalidObjectException e) {
-									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-								}
-							}
-						}
+				
+				Invite toAccept = null;
+
+				for (Invite invite : InviteHandler.getActiveInvites()) {
+					if (invite.getSender().equals(sendernation) && invite.getReceiver().equals(nation)) {
+						toAccept = invite;
+						break;
+					}
+				}
+				if (toAccept != null) {
+					try {
+						InviteHandler.acceptInvite(toAccept);
+						return;
+					} catch (InvalidObjectException e) {
+						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
 				}
 
@@ -1670,20 +1668,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites, 1, false);
 					return;
 				}
-				ListMultimap<Nation, Nation> nation2nations = InviteHandler.getNationtonationinvites();
-				if (nation2nations.containsKey(sendernation)) {
-					if (nation2nations.get(sendernation).contains(nation)) {
-						for (Invite invite : nation.getReceivedInvites()) {
-							if (invite.getSender().equals(sendernation)) {
-								try {
-									InviteHandler.declineInvite(invite, false);
-									TownyMessaging.sendMessage(player, TownySettings.getLangString("successful_deny_request"));
-									return;
-								} catch (InvalidObjectException e) {
-									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-								}
-							}
-						}
+
+				Invite toDecline = null;
+				
+				for (Invite invite : InviteHandler.getActiveInvites()) {
+					if (invite.getSender().equals(sendernation) && invite.getReceiver().equals(nation)) {
+						toDecline = invite;
+						break;
+					}
+				}
+				if (toDecline != null) {
+					try {
+						InviteHandler.declineInvite(toDecline, false);
+						TownyMessaging.sendMessage(player, TownySettings.getLangString("successful_deny_request"));
+					} catch (InvalidObjectException e) {
+						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
 				}
 			} else {
@@ -1696,8 +1695,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationRemoveAllyRequest(Object sender,Nation nation, ArrayList<Nation> remlist) {
 		for (Nation invited : remlist) {
-			if (InviteHandler.getNationtonationinvites().containsEntry(nation, invited)) {
-				InviteHandler.getNationtonationinvites().remove(nation, invited);
+			if (InviteHandler.inviteIsActive(nation, invited)) {
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(nation)) {
 						try {
@@ -1716,10 +1714,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationCreateAllyRequest(String sender, Nation nation, Nation receiver) throws TownyException {
 		NationAllyNationInvite invite = new NationAllyNationInvite(sender, nation, receiver);
 		try {
-			if (!InviteHandler.getNationtonationinvites().containsEntry(nation, receiver)) {
+			if (!InviteHandler.inviteIsActive(invite)) {
 				receiver.newReceivedInvite(invite);
 				nation.newSentAllyInvite(invite);
-				InviteHandler.addInviteToList(invite);
+				InviteHandler.addInvite(invite);
 				TownyMessaging.sendRequestMessage(receiver.getCapital().getMayor(),invite);
 				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
@@ -1750,7 +1748,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 							TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_allied_nations"), resident.getName(), targetNation.getName()));
 							TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_added_ally"), nation.getName()));
-//						}
+
 					} else {
 						// We are set as an enemy so can't allY
 						remove.add(targetNation);
