@@ -577,7 +577,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             return false;
         try {
             s = cntx.createStatement();
-            rs = s.executeQuery("SELECT siegeZoneName FROM " + tb_prefix + "SIEGESZONES");
+            rs = s.executeQuery("SELECT siegeZoneName FROM " + tb_prefix + "SIEGEZONES");
             while (rs.next()) {
                 try {
                     siegeZoneName = rs.getString("siegeZoneName").toLowerCase();

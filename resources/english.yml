@@ -411,6 +411,8 @@ msg_err_siege_war_cannot_invade_own_town: '&6[War]&c You cannot invade your own 
 msg_err_siege_war_cannot_invade_without_victory: "&6[War]&c You cannot invade unless your nation is victorious in the siege."
 msg_err_siege_war_no_siege_on_target_town: '&6[War]&c There is no siege on the target town of %s.'
 msg_err_siege_war_town_already_invaded: '&6[War]&c This town has already been invaded'
+msg_err_siege_war_town_already_belongs_to_your_nation: '&6[War]&c This town already belongs to your nation'
+
 #Plunder
 msg_err_siege_war_cannot_plunder_own_town: '&6[War]&c You cannot plunder your own town.'
 msg_err_siege_war_cannot_plunder_without_victory: "&6[War]&c You cannot plunder unless your nation is victorious in the siege."

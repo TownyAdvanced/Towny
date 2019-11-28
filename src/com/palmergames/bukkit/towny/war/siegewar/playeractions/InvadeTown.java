@@ -48,8 +48,11 @@ public class InvadeTown {
             if (siege.isTownInvaded())
                 throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_invaded"), town.getName()));
 
-            Nation attackerWinner = siege.getAttackerWinner();
-            
+			Nation attackerWinner = siege.getAttackerWinner();
+			
+			if(town.hasNation() && town.getNation() == attackerWinner)
+				throw new TownyException(String.format(TownySettings.getLangString("msg_err_siege_war_town_already_belongs_to_your_nation"), town.getName()));
+
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				Coord capitalCoord = attackerWinner.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = town.getHomeBlock().getCoord();

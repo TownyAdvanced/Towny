@@ -86,20 +86,12 @@ public class SpawnUtil {
 			} else {
 				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
 			}
-
-			//Prevent spawning into besieged town
-			if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns())
-				SiegeWarSpawnUtil.throwErrorIfSpawnPointIsInsideBesiegedTown(spawnLoc);
-
+			
 			break;
 
 			case TOWN:
 			town = (Town) townyObject;
 
-			//Prevent spawning into besieged town
-			if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns() && town.hasSiege() && town.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)
-				throw new TownyException(TownySettings.getLangString("msg_err_siege_cannot_spawn_into_besieged_town"));
-		
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));

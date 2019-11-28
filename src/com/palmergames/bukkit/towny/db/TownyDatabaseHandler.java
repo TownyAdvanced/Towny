@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -708,7 +709,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			toSave.add(siegeZone.getDefendingTown());  //Prepare to save town
 			if(siege.getSiegeZones().size() == 0) {
 				siege.getDefendingTown().setSiege(null);
-				siege.getDefendingTown().setSiegeImmunityEndTime(0);
+				siege.setActualEndTime(System.currentTimeMillis());
+				SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
 			}
 			deleteSiegeZone(siegeZone);
 		}
@@ -845,7 +847,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * and the file move command may fail.
 			 */
 			deleteTown(town);
-
+			if(town.hasSiege()) {
+				for(SiegeZone siegeZone: new ArrayList<>(town.getSiege().getSiegeZones().values())) {
+					deleteSiegeZone(siegeZone);
+				}
+			}
+		
 			/*
 			 * Remove the old town from the townsMap
 			 * and rename to the new name
@@ -854,6 +861,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setName(filteredName);
 			universe.getTownsMap().put(filteredName.toLowerCase(), town);
 
+			//Similarly move/rename siegezones
+			if(town.hasSiege()) {
+				String oldSiegeZoneName;
+				String newSiegeZoneName;
+				for (SiegeZone siegeZone : town.getSiege().getSiegeZones().values()) {
+					oldSiegeZoneName = SiegeZone.generateName(siegeZone.getAttackingNation().getName(), oldName);
+					newSiegeZoneName = siegeZone.getName();
+					universe.getSiegeZonesMap().remove(oldSiegeZoneName);
+					universe.getSiegeZonesMap().put(newSiegeZoneName.toLowerCase(), siegeZone);
+				}
+			}
+			
 			// If this was a nation capitol
 			if (isCapital) {
 				nation.setCapital(town);
@@ -888,9 +907,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//townBlock.setTown(town);
 				saveTownBlock(townBlock);
 			}
-
+			
 			saveTown(town);
+			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
+				saveSiegeZone(siegeZone);
+				saveNation(siegeZone.getAttackingNation());
+			}
+
 			saveTownList();
+			saveSiegeZoneList();
 			saveWorld(town.getWorld());
 
 			if (nation != null) {
@@ -949,7 +974,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//Tidy up old files
 			deleteNation(nation);
-
+			for(SiegeZone siegeZone: new ArrayList<>(nation.getSiegeZones())) {
+				deleteSiegeZone(siegeZone);
+			}
 			/*
 			 * Remove the old nation from the nationsMap
 			 * and rename to the new name
@@ -966,7 +993,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				oldSiegeZoneName = SiegeZone.generateName(oldName, siegeZone.getDefendingTown().getName());
 				newSiegeZoneName = siegeZone.getName();
 				universe.getSiegeZonesMap().remove(oldSiegeZoneName);
-				universe.getSiegeZonesMap().put(newSiegeZoneName, siegeZone);
+				universe.getSiegeZonesMap().put(newSiegeZoneName.toLowerCase(), siegeZone);
 			}
 
 			if (TownyEconomyHandler.isActive()) {
@@ -985,11 +1012,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 
 			saveNation(nation);
-			saveNationList();
-
 			for(SiegeZone siegeZone: nation.getSiegeZones()) {
 				saveSiegeZone(siegeZone);
+				saveTown(siegeZone.getDefendingTown());
 			}
+
+			saveNationList();
 			saveSiegeZoneList();
 
 			//search and update all ally/enemy lists

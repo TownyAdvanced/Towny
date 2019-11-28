@@ -17,7 +17,7 @@ public class SiegeWarDbUtil {
 		siege.setStatus(siegeStatus);
 		siege.setActualEndTime(System.currentTimeMillis());
 		siege.setAttackerWinner(winnerNation);
-		SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown());
+		SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
 
 		//Save to db
 		TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
