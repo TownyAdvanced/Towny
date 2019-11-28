@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 
@@ -129,5 +130,11 @@ public class Coord {
 	public static int getCellSize() {
 
 		return cellSize;
+	}
+
+	public Location getTopNorthWestCornerLocation(World world) {
+		int locX = this.x * getCellSize();
+		int locZ = this.z * getCellSize();
+		return new Location(world, locX, 255, locZ);
 	}
 }

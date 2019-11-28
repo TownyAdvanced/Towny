@@ -87,6 +87,10 @@ public class AttackTown {
             if(defendingTown.isRuined())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_ruined_town"));
 
+            if(SiegeWarBlockUtil.isBannerToTownElevationDifferenceOk(block, nearbyTownBlocks.get(0))) {
+				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_place_banner_far_above_town"));
+			}
+            
             //Setup attack
             attackTown(player, block, nationOfAttackingPlayer, defendingTown);
         } catch (TownyException x) {
