@@ -154,14 +154,13 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		Player player = event.getPlayer();
 
 		if (!TownySettings.isTownRespawning())
 			return;
 	
 		try {
 			Location respawn = null;			
-			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+			Resident resident = townyUniverse.getDataSource().getResident(event.getPlayer().getName());
 			// If player is jailed send them to their jailspawn.
 			if (resident.isJailed()) {
 				Town respawnTown = townyUniverse.getDataSource().getTown(resident.getJailTown());
@@ -542,10 +541,6 @@ public class TownyPlayerListener implements Listener {
 			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
 			if (!fromCoord.equals(toCoord))
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
-				//  else : plugin.sendDebugMsg("    From: " + fromCoord);
-				// plugin.sendDebugMsg("    To:   " + toCoord);
-				// plugin.sendDebugMsg("        " + from.toString());
-				// plugin.sendDebugMsg("        " + to.toString());
 
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
@@ -553,11 +548,6 @@ public class TownyPlayerListener implements Listener {
 
 		// Update the cached players current location
 		cache.setLastLocation(to);
-
-		// plugin.updateCache(player);
-		// plugin.sendDebugMsg("onBlockMove: " + player.getName() + ": ");
-		// plugin.sendDebugMsg("        " + from.toString());
-		// plugin.sendDebugMsg("        " + to.toString());
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -580,7 +570,7 @@ public class TownyPlayerListener implements Listener {
 					event.setCancelled(true);
 				}
 			}
-		} catch (NotRegisteredException e) {
+		} catch (NotRegisteredException ignored) {
 			// Not a valid resident, probably an NPC from Citizens.
 		}
 		
@@ -716,8 +706,9 @@ public class TownyPlayerListener implements Listener {
 					return cancelState;
 				}
 
-				// Wilderness Handled here.
-				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) || ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) {
+				// Non-Override Wilderness & Non-Override Claimed Land Handled here.
+				if (((status == TownBlockStatus.UNCLAIMED_ZONE) && (!wildOverride)) // Wilderness 
+						|| ((!bItemUse) && (status != TownBlockStatus.UNCLAIMED_ZONE))) { // Claimed Land
 					cancelState = true;
 				}
 
@@ -985,10 +976,7 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		if (townyUniverse.getDataSource().getResident(player.getName()).isJailed()) {
-			resident.setJailed(false);
-			resident.setJailSpawn(0);
-			resident.setJailTown("");
-			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+			resident.freeFromJail(player, resident.getJailSpawn(), true);
 			townyUniverse.getDataSource().saveResident(resident);
 		}		
 	}

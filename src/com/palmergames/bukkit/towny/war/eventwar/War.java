@@ -627,7 +627,7 @@ public class War {
 			if (townBlock.getType().equals(TownBlockType.JAIL)){
 				Town town = townBlock.getTown();				
 				int count = 0;
-				for (Resident resident : townyUniverse.getDataSource().getResidents()){
+				for (Resident resident : townyUniverse.getJailedResidentMap()){
 					try {						
 						if (resident.isJailed())
 							if (resident.getJailTown().equals(town.toString())) 
