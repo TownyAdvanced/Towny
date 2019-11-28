@@ -683,11 +683,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				Invite toAccept = null;
 				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(nation)) {
-						if (invite.getReceiver().equals(town)) {
-							toAccept = invite;
-							break;
-						}
+					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+						toAccept = invite;
+						break;
 					}
 				}
 				if (toAccept != null) {
@@ -727,10 +725,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Invite toDecline = null;
 				
 				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(nation)) {
-						if (invite.getReceiver().equals(town)) {
-							toDecline = invite;
-						}
+					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+						toDecline = invite;
+						break;
 					}
 				}
 				if (toDecline != null) {

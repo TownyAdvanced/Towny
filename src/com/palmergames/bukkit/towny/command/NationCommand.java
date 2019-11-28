@@ -1630,10 +1630,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Invite toAccept = null;
 
 				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(sendernation)) {
-						if (invite.getReceiver().equals(nation)) {
-							toAccept = invite;
-						}
+					if (invite.getSender().equals(sendernation) && invite.getReceiver().equals(nation)) {
+						toAccept = invite;
+						break;
 					}
 				}
 				if (toAccept != null) {
@@ -1673,10 +1672,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Invite toDecline = null;
 				
 				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(sendernation)) {
-						if (invite.getReceiver().equals(nation)) {
-							toDecline = invite;
-						}
+					if (invite.getSender().equals(sendernation) && invite.getReceiver().equals(nation)) {
+						toDecline = invite;
+						break;
 					}
 				}
 				if (toDecline != null) {

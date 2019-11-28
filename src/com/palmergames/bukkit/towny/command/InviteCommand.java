@@ -151,11 +151,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Invite toDecline = null;
 
 		for (Invite invite : InviteHandler.getActiveInvites()) {
-			if (invite.getSender().equals(town)) {
-				if (invite.getReceiver().equals(resident)) {
-					toDecline = invite;
-					break;
-				}
+			if (invite.getSender().equals(town) && invite.getReceiver().equals(resident)) {
+				toDecline = invite;
+				break;
 			}
 		}
 		if (toDecline != null) {
@@ -206,11 +204,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Invite toAccept = null;
 
 		for (Invite invite : InviteHandler.getActiveInvites()) {
-			if (invite.getSender().equals(town)) {
-				if (invite.getReceiver().equals(resident)) {
-					toAccept = invite;
-					break;
-				}
+			if (invite.getSender().equals(town) && invite.getReceiver().equals(resident)) {
+				toAccept = invite;
+				break;
 			}
 		}
 

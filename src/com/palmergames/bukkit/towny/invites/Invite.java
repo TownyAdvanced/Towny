@@ -23,7 +23,7 @@ public interface Invite {
 	TownyInviteSender getSender();
 
 	/**
-	 * @throws TownyException
+	 * @throws TownyException - Sends errors back up to be processed by the caller.
 	 */
 	void accept() throws TownyException;
 
