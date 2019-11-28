@@ -35,6 +35,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -540,11 +541,45 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return false;
 							}
 							
+							if (split.length == 2) {
+								// The player wants to add to group using their stored mode.
+								
+								// Get the plot group from the resident mode.
+								PlotGroup pGroup = resident.getPlotGroupFromMode();
+								
+								if (pGroup == null) {
+									// In this case we default the group name to the player's name.
+									pGroup = new PlotGroup(town.generatePlotGroupID(), resident.getName());
+								}
+								
+								// Check if a plot price is available.
+								if (!(townBlock.getPlotPrice() < 0)) {
+									pGroup.addPlotPrice(townBlock.getPlotPrice());
+								}
+								
+								// Set the plot group.
+								townBlock.setPlotGroup(pGroup);
+
+								// Save changes.
+								townyUniverse.getDataSource().saveTownBlock(townBlock);
+
+								TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was put into group " + pGroup.getName());
+								
+								return true;
+							}
+							
+							// Create brand new plot group.
 							int plotGroupID = town.generatePlotGroupID();
 							String plotGroupName = split[2];
-
+							
+							// Add the plot to the new group.
 							PlotGroup newGroup = new PlotGroup(plotGroupID, plotGroupName);
 							townBlock.setPlotGroup(newGroup);
+
+							// Check if a plot price is available.
+							if (!(townBlock.getPlotPrice() < 0)) {
+								newGroup.addPlotPrice(townBlock.getPlotPrice());
+							}
 							
 							// Don't add the group to the town data if it's already there.
 							if (town.hasPlotGroup(newGroup)) {
@@ -554,22 +589,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							// Add the plot group to the town set.
 							town.addPlotGroup(newGroup);
-
-							List<String> temp = resident.getModes();
-
-							// Set resident mode.
-							for (String str : resident.getModes()) {
-								// Remove any "group" modes already enabled.
-								if (str.contains("group")) {
-									temp.remove(str);
-								}
-							}
-
-							temp.add(newGroup.toString());
-
-							// Set the modes.
-							resident.setModes(temp.toArray(new String[temp.size()]), true);
-
+							
+							// Set the resident mode.
+							resident.setPlotGroupMode(newGroup, true);
+							
 							// Save changes.
 							townyUniverse.getDataSource().saveTownBlock(townBlock);
 							townyUniverse.getDataSource().saveTown(town);
@@ -586,6 +609,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							townBlock.removePlotGroup();
 							TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 
+							List<String> temp = resident.getModes();
+							
+							// Remove mode if present.
+							for (String str : resident.getModes()) {
+								// Remove any "group" modes already enabled.
+								if (str.contains("Group")) {
+									
+									temp.remove(str);
+									
+									// Set the modes.
+									resident.setModes(temp.toArray(new String[temp.size()]), true);
+									break;
+								}
+							}
+							
 							TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was removed from group.");
 							
 						}
