@@ -1652,7 +1652,7 @@ public enum ConfigNodes {
 	WAR_ENEMY_MAX_ACTIVE_FLAGS_PER_PLAYER(
 			"war.enemy.max_active_flags_per_player",
 			"1"),
-	WAR_ENENY_FLAG("war.enemy.flag", ""),
+	WAR_ENEMY_FLAG("war.enemy.flag", ""),
 	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
@@ -1697,6 +1697,11 @@ public enum ConfigNodes {
 		"600000",
 		"# This is how much time that must pass after a town in a nation has been flagged",
 		"# before certain actions can be performed, measured in milliseconds."),
+	WAR_ENEMY_FLAG_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
+		"war.enemy.flag_takes_ownership_of_townblocks",
+		"true",
+		"# If set to true, when a war flag finishes it's countdown successfully, the attacking town takes full control of the townblock.",
+		"# Setting this to 'False' will result only in monetary exchanges."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",
