@@ -77,6 +77,7 @@ public class SQL_Schema {
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
+		columns.add("`siegeZones` mediumtext NOT NULL");
 		columns.add("`taxes` float NOT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
@@ -88,8 +89,27 @@ public class SQL_Schema {
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
+	
+	private static String getSiegeZones() {
 
-    private static String getTOWNS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "SIEGEZONES ("
+			+ "`siegeZoneName` VARCHAR(32) NOT NULL,"
+			+ "PRIMARY KEY (`siegeZoneName`)"
+			+ ")";
+	}
+
+
+	private static List<String> getSiegeZoneColumns(){
+		List<String> columns = new ArrayList<>();
+		columns.add("`flagLocation` mediumtext NOT NULL");
+		columns.add("`attackingNation` mediumtext NOT NULL");
+		columns.add("`defendingTown` mediumtext NOT NULL");
+		columns.add("`siegePoints` mediumtext NOT NULL");
+		return columns;
+	}
+
+
+	private static String getTOWNS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
                 + "`name` VARCHAR(32) NOT NULL,"
@@ -130,6 +150,20 @@ public class SQL_Schema {
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
+
+		columns.add("`recentlyRuinedEndTime` BIGINT");
+		columns.add("`revoltCooldownEndTime` BIGINT");
+		columns.add("`siegeCooldownEndTime` BIGINT");
+
+		columns.add("`siegeStatus` mediumtext");
+		columns.add("`siegeTownPlundered` bool NOT NULL DEFAULT '0'");
+		columns.add("`siegeTownInvaded` bool NOT NULL DEFAULT '0'");
+		columns.add("`attackerWinner` mediumtext");
+		columns.add("`siegeActualStartTime` BIGINT");
+		columns.add("`siegeScheduledEndTime` BIGINT");
+		columns.add("`siegeActualEndTime` BIGINT");
+		columns.add("`siegeZones` mediumtext");
+		
 		return columns;
 	}
 
@@ -267,6 +301,44 @@ public class SQL_Schema {
 			}
 		}
 		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
+
+		/*
+		 *  Fetch SIEGEZONES Table schema.
+		 */
+		String siegeZones_create = SQL_Schema.getSiegeZones();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(siegeZones_create);
+			TownyMessaging.sendDebugMsg("Table SIEGEZONES is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table SIEGEZONES : " + ee.getMessage());
+
+		}
+		/*
+		 * Add columns to siegezones (if not already there)
+		 */
+		String siegeZone_update;
+		List<String> siegeZoneColumns = getSiegeZoneColumns();
+		for (String column : siegeZoneColumns) {
+			try {
+				siegeZone_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "SIEGEZONES` "
+					+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(siegeZone_update);
+				ps.executeUpdate();
+
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table SIEGEZONES :" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table SIEGEZONES is updated!");
+
+		
 
 		/*
          *  Fetch TOWNS Table schema.

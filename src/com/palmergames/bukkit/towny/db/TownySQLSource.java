@@ -569,15 +569,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public boolean loadSiegeZoneList() {
 
         String siegeZoneName;
-        Statement s = null;
-        ResultSet rs= null;
-
+        
         TownyMessaging.sendDebugMsg("Loading Siege zones List");
         if (!getContext())
             return false;
         try {
-            s = cntx.createStatement();
-            rs = s.executeQuery("SELECT siegeZoneName FROM " + tb_prefix + "SIEGEZONES");
+			Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT siegeZoneName FROM " + tb_prefix + "SIEGEZONES");
+
             while (rs.next()) {
                 try {
                     siegeZoneName = rs.getString("siegeZoneName").toLowerCase();
@@ -593,15 +592,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
         } catch (Exception e) {
             TownyMessaging.sendErrorMsg("SQL: siege zone list unknown error : ");
             e.printStackTrace();
-        } finally {
-            try {rs.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try { s.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         return false;
     }
