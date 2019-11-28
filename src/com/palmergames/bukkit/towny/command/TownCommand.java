@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -558,7 +559,57 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 					parseTownOutlawCommand(player, newSplit);
+				} else if (split[0].equalsIgnoreCase("group")) {
+					if (split[1].equalsIgnoreCase("remove")) {
+						String groupName = split[2];
+						
+						Town town = null;
+						
+						try {
+							town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
+						} catch (Exception e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+							return;
+						}
 
+						if (!town.hasPlotGroups()) {
+							TownyMessaging.sendErrorMsg(player, "This town doesn't haven any associated groups.");
+							return;
+						}
+
+						for (PlotGroup pg : town.getPlotGroups()) {
+							if (pg.getName().equalsIgnoreCase(groupName)) {
+								town.removePlotGroup(pg);
+								TownyMessaging.sendMessage(player, "Group was successfully deleted.");
+							}
+						}
+
+						// Save changes.
+						townyUniverse.getDataSource().saveTown(town);
+					} else if (split[1].equalsIgnoreCase("add")) {
+
+
+						Town town = null;
+
+						try {
+							town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
+						} catch (Exception e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+							return;
+						}
+						
+						String groupName = split[2];
+						PlotGroup newGroup = new PlotGroup(town.generatePlotGroupID(), groupName);
+						
+						if (town.hasGroupName(groupName)) {
+							TownyMessaging.sendErrorMsg(player, "This town already has a group named " + groupName);
+							return;
+						}
+						
+						town.addPlotGroup(newGroup);
+						
+						TownyUniverse.getInstance().getDataSource().saveTown(town);
+					}
 				} else {
 					try {
 						final Town town = townyUniverse.getDataSource().getTown(split[0]);

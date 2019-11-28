@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
@@ -31,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
@@ -40,7 +43,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private List<UUID> plotGroupIDs = null;
+	private HashSet<PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1346,42 +1349,76 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return this.conqueredDays;
 	}
 	
-	public boolean hasGroups() {
-		return plotGroupIDs != null;
-	}
-	public List<UUID> getPlotGroupIDs() {
-		return plotGroupIDs;
+	public boolean hasPlotGroup(PlotGroup group) {
+		if (hasPlotGroups())
+			return plotGroups.contains(group);
+		
+		return false;
 	}
 	
-	public void setGroups(String str) {
-		if (plotGroupIDs == null)
-			plotGroupIDs = new ArrayList<>();
-		
-		String[] groupIDs = str.split(";");
-		
-		for (String strID : groupIDs) {
-			UUID ID = UUID.fromString(strID);
-			
-			plotGroupIDs.add(ID);
-		}
-	}
-	
-	public List<TownBlock> getTownBlocksForGroup(UUID ID) {
+	public List<TownBlock> getTownBlocksForGroup(PlotGroup group) {
 		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
-		if (hasGroups()) {
-			for (TownBlock block : this.getTownBlocks()) {
-				if (block.hasGroup() && block.getGroupID().equals(ID)) {
-					retVal.add(block);
-				}
-			}
+		for (TownBlock townBlock : getTownBlocks()) {
+			if (townBlock.getPlotGroup().equals(group))
+				retVal.add(townBlock);
 		}
 		
 		return retVal;
 	}
 	
-	public void addPlotGroupID(UUID ID) {
-		this.plotGroupIDs.add(ID);
+	public void addPlotGroup(PlotGroup group) {
+		if (!hasPlotGroups()) 
+			this.plotGroups = new HashSet<>();
+		
+		this.plotGroups.add(group);
+		
+	}
+	
+	public void removePlotGroup(PlotGroup plotGroup) {
+		if (hasPlotGroups() && hasPlotGroup(plotGroup)) {
+			for (TownBlock tb : getTownBlocks()) {
+				if (tb.hasPlotGroup() && tb.getPlotGroup().equals(plotGroup)) {
+					tb.removePlotGroup();
+					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
+				}
+			}
+		}
+	}
+	
+	public void setPlotGroups(String str) {
+		
+		if (plotGroups == null)
+			plotGroups = new HashSet<>();
+		
+		String[] groups = str.split(";");
+		
+		for (String groupStr : groups) {
+			addPlotGroup(PlotGroup.fromString(groupStr));
+		}
+	}
+	
+	public int generatePlotGroupID() {
+		return (hasPlotGroups()) ? plotGroups.size() : 0;
+	}
+	
+	public boolean hasPlotGroups() {
+		return getPlotGroups() != null;
+	}
+	
+	public boolean hasGroupName(String name) {
+		if (hasPlotGroups()) {
+			for (PlotGroup pg : this.getPlotGroups()) {
+				if (pg.getName().equalsIgnoreCase(name))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public HashSet<PlotGroup> getPlotGroups() {
+		return plotGroups;
 	}
 }

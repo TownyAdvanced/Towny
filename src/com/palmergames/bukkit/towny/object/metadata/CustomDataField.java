@@ -128,7 +128,7 @@ public abstract class CustomDataField<T> {
 
 	/**
 	 * 
-	 * @param rhs
+	 * @param rhs An object that extends {@link com.palmergames.bukkit.towny.object.metadata.CustomDataField}
 	 * @return returns true if the id is matching false otherwise.
 	 */
 	@Override

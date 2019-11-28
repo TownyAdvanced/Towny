@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -44,6 +45,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Send a list of all general towny plot help commands to player Command: /plot
@@ -515,6 +517,80 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
 					}
 
+				} else if (split[0].equalsIgnoreCase("group")) {
+
+					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+					Town town = townBlock.getTown();
+
+					// Test we are allowed to work on this plot
+					plotTestOwner(resident, townBlock);
+					
+					if (split.length <= 1) {
+						player.sendMessage(ChatTools.formatTitle("/... group"));
+						player.sendMessage(ChatTools.formatCommand("", "group", "add", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
+						// TODO: Remove
+					}
+					
+					if (split.length >= 2) {
+						
+						if (split[1].equalsIgnoreCase("add")) {
+
+							if (townBlock.hasPlotGroup()) {
+								TownyMessaging.sendErrorMsg(player, "This plot already belongs to a group: " + townBlock.getPlotGroup().getName() + ", please remove it before adding it to another.");
+								return false;
+							}
+							
+							int plotGroupID = town.generatePlotGroupID();
+							String plotGroupName = split[2];
+
+							PlotGroup newGroup = new PlotGroup(plotGroupID, plotGroupName);
+							townBlock.setPlotGroup(newGroup);
+							
+							// Don't add the group to the town data if it's already there.
+							if (town.hasPlotGroup(newGroup)) {
+								TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was put into group " + newGroup.getName());
+								return true;
+							}
+
+							// Add the plot group to the town set.
+							town.addPlotGroup(newGroup);
+
+							List<String> temp = resident.getModes();
+
+							// Set resident mode.
+							for (String str : resident.getModes()) {
+								// Remove any "group" modes already enabled.
+								if (str.contains("group")) {
+									temp.remove(str);
+								}
+							}
+
+							temp.add(newGroup.toString());
+
+							// Set the modes.
+							resident.setModes(temp.toArray(new String[temp.size()]), true);
+
+							// Save changes.
+							townyUniverse.getDataSource().saveTownBlock(townBlock);
+							townyUniverse.getDataSource().saveTown(town);
+
+							TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was put into group " + newGroup.getName());
+							
+						} else if (split[1].equalsIgnoreCase("remove")) {
+							
+							if (!townBlock.hasPlotGroup()) {
+								TownyMessaging.sendErrorMsg(player, "This plot has not associated group.");
+								return false;
+							}
+							
+							townBlock.removePlotGroup();
+							TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+
+							TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was removed from group.");
+							
+						}
+					}
+					
 				} else
 					throw new TownyException(String.format(TownySettings.getLangString("msg_err_invalid_property"), split[0]));
 
