@@ -3904,3 +3904,4 @@ v0.92.0.11:
   - Add helpful messages shown when town & nation levels fail to load on startup. 
   - Fixed building with maven and some people having errors re: javadocs, courtesy of TheFlagCourier with PR #3521.
     - Closes ticket #3519.
+  - Did some tinkering with event war, created a WarUtil to contain some repeated tests.

@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -20,6 +19,7 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import org.bukkit.Location;
@@ -71,44 +71,17 @@ public class TownyBlockListener implements Listener {
 		 * Fetch the players cache
 		 */
 		PlayerCache cache = plugin.getCache(player);
-		
-		
-		/*
-		 * Allows War Event to piggy back off of Flag War editable materials, while accounting for neutral nations.
-		 */
-		boolean playerNeutral = false;
-		if (TownyAPI.getInstance().isWarTime()) {
-			try {
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-				if (resident.isJailed())
-					playerNeutral = true;				
-				if (resident.hasTown())
-					if (!War.isWarringTown(resident.getTown())) {						
-						playerNeutral = true;
-					}
-			} catch (NotRegisteredException e) {
+
+		if ((cache.getStatus() == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War
+				|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
+			if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
+				event.setCancelled(true);
+				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
 			}
-			
-		}	
-		
-		/*
-		 * Allow destroy in a WarZone (FlagWar) if it's an editable material.
-		 * Event War piggy backing on flag war's EditableMaterialInWarZone 
-		 */
-		try {
-			if (cache.getStatus() == TownBlockStatus.WARZONE || (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.ENEMY && !playerNeutral && War.isWarringTown(cache.getLastTownBlock().getTownBlock().getTown()))) {
-				if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {				
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_warzone_cannot_edit_material"), "destroy", block.getType().toString().toLowerCase()));
-				}
-				return;
-			}
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+			return;
 		}
 
 		event.setCancelled(true);
-		
 
 		/* 
 		 * display any error recorded for this plot
@@ -149,23 +122,6 @@ public class TownyBlockListener implements Listener {
 			TownBlockStatus status = cache.getStatus();
 
 			/*
-			 * Allows War Event to piggy back off of Flag War editable materials, while accounting for neutral nations.
-			 */
-			boolean playerNeutral = false;
-			if (TownyAPI.getInstance().isWarTime()) {
-				try {
-					Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-					if (resident.isJailed())
-						playerNeutral = true;	
-					if (resident.hasTown())
-						if (!War.isWarringTown(resident.getTown()))
-							playerNeutral = true;
-				} catch (NotRegisteredException e) {
-				}
-				
-			}	
-			
-			/*
 			 * Flag war
 			 */
 			if (((status == TownBlockStatus.ENEMY) && TownyWarConfig.isAllowingAttacks()) && (event.getBlock().getType() == TownyWarConfig.getFlagBaseMaterial())) {
@@ -181,7 +137,8 @@ public class TownyBlockListener implements Listener {
 				event.setCancelled(true);
 
 			// Event War piggy backing on flag war's EditableMaterialInWarZone 
-			} else if (status == TownBlockStatus.WARZONE || (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.ENEMY && !playerNeutral && War.isWarringTown(cache.getLastTownBlock().getTownBlock().getTown()))) {
+			} else if ((status == TownBlockStatus.WARZONE && TownyWarConfig.isAllowingAttacks()) // Flag War 
+					|| (TownyAPI.getInstance().isWarTime() && cache.getStatus() == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
 				if (!TownyWarConfig.isEditableMaterialInWarZone(block.getType())) {
 					event.setBuild(false);
 					event.setCancelled(true);
