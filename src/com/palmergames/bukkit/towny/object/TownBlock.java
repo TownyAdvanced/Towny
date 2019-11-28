@@ -15,7 +15,7 @@ import org.bukkit.Bukkit;
 import java.util.HashSet;
 import java.util.UUID;
 
-public class TownBlock implements Groupable {
+public class TownBlock {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -29,8 +29,7 @@ public class TownBlock implements Groupable {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private UUID groupID = null;
-	private String groupName = null;
+	private PlotGroup plotGroup = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -497,22 +496,24 @@ public class TownBlock implements Groupable {
 			metadata.add(CustomDataField.load(objects[i]));
 		}
 	}
+
+	public PlotGroup getPlotGroup() {
+		return plotGroup;
+	}
 	
-	@Override
-	public UUID getGroupID() {
-		return groupID;
+	public void setPlotGroup(String plotGroupStr) {
+		this.plotGroup = PlotGroup.fromString(plotGroupStr);
 	}
 
-	@Override
-	public String getGroupName() {
-		return groupName;
+	public void setPlotGroup(PlotGroup plotGroup) {
+		this.plotGroup = plotGroup;
 	}
-
-	public void setGroupID(UUID groupID) {
-		this.groupID = groupID;
+	
+	public void removePlotGroup() {
+		this.plotGroup = null;
 	}
-
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	
+	public boolean hasPlotGroup() {
+		return plotGroup != null;
 	}
 }
