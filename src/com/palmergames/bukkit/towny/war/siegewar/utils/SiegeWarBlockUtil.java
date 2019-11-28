@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -11,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class SiegeWarBlockUtil {
 	}
 
 	private static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
-		location = location.add(0,1,0);
+		location.add(0,1,0);
 
 		while(location.getY() < 256)
 		{
@@ -101,5 +101,51 @@ public class SiegeWarBlockUtil {
 		
 		//No active siege banner found near given block
 		return false;
+	}
+
+	public static boolean isBannerToTownElevationDifferenceOk(Block block, TownBlock townBlock) {
+		int allowedDownwardElevationDifference = TownySettings.getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference();
+		int averageDownwardElevationDifference = getAverageBlockToTownDownwardElevationDistance(block, townBlock);
+		return averageDownwardElevationDifference <= allowedDownwardElevationDifference;
+	}
+	
+
+	public static int getAverageBlockToTownDownwardElevationDistance(Block block, TownBlock townBlock) {
+		int blockElevation = block.getY();
+		
+		Location topNorthWestCornerLocation = townBlock.getCoord().getTopNorthWestCornerLocation(block.getWorld());
+		int townBlockSize = TownySettings.getTownBlockSize();
+		Location[] surfaceCornerLocations = new Location[4];
+		surfaceCornerLocations[0] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation);
+		surfaceCornerLocations[1] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,0));
+		surfaceCornerLocations[2] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(0,0,townBlockSize));
+		surfaceCornerLocations[3] = SiegeWarBlockUtil.getSurfaceLocation(topNorthWestCornerLocation.add(townBlockSize,0,townBlockSize));
+		
+		int totalElevation = 0;
+		for(Location surfaceCornerLocation: surfaceCornerLocations) {
+			totalElevation += surfaceCornerLocation.getBlockY();
+		}
+		int averageTownElevation = totalElevation / 4;
+		
+		return blockElevation - averageTownElevation;
+
+	}
+
+	//Feed in the top location you want to search from
+	//This method will search downwards
+	private static Location getSurfaceLocation(Location topLocation) {
+		topLocation.add(0,-1,0);
+
+		while(topLocation.getY() < 256)
+		{
+			if(topLocation.getBlock().getType() != Material.AIR)
+			{
+				return topLocation;
+			}
+			topLocation.add(0,-1,0);
+		}
+		
+		topLocation.setY(255); //This would only occur if it was air all the way down.....unlikely but ok, just in case
+		return topLocation;
 	}
 }

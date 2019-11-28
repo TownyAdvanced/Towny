@@ -2818,6 +2818,10 @@ public class TownySettings {
 	public static int getWarSiegeClaimDisableDistanceBlocks() {
 		return getInt(ConfigNodes.WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS);
 	}
+
+	public static int getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference() {
+		return getInt(ConfigNodes.WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE);
+	}
 	
 	public static double getWarSiegeRuinsRemovalDelayMinutes() {
 		return getDouble(ConfigNodes.WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES);

@@ -1865,6 +1865,11 @@ public enum ConfigNodes {
 		"war.siege.distances.claim_disable_distance_blocks",
 		"100",
 		"# This is the distance in regular blocks from a siege banner in which claims are disabled"),
+	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
+		"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
+		"15",
+		"# This is the max allowed elevation difference downward from siege banner to town",
+		 "# There is no limit on the upward difference"),
 	
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
