@@ -1267,7 +1267,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} finally {
 			lock.unlock();
 		}
-		//universe.setChangedNotify(NEW_SIEGE);  //Todo - what is this - should I add it?
 	}
 
 	@Override

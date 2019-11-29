@@ -57,7 +57,7 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeZoneList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSiegesZones() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadSiegeZoneList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadSiegeZones() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
@@ -207,7 +207,7 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
-	public boolean loadSiegesZones() {
+	public boolean loadSiegeZones() {
 		TownyMessaging.sendDebugMsg("Loading Siege Zones");
 		for (SiegeZone siegeZone : getSiegeZones())
 			if (!loadSiegeZone(siegeZone)) {

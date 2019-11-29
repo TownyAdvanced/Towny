@@ -1223,7 +1223,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             return false;
         try {
             s = cntx.createStatement();
-            rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGESZONES " +
+            rs = s.executeQuery("SELECT * FROM " + tb_prefix + "SIEGEZONES " +
                                              "WHERE siegeZoneName='" + siegeZone.getName() + "'");
 
             String line;
@@ -1819,24 +1819,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 "Saving siege zone " +siegeZone.getName());
 
         try {
-            HashMap<String, Object> nat_hm = new HashMap<>();
+            HashMap<String, Object> sg_hm = new HashMap<>();
 
-            nat_hm.put("flag_location", siegeZone.getFlagLocation().getWorld().getName()
+            sg_hm.put("siegeZoneName", siegeZone.getName());
+
+			sg_hm.put("flagLocation", siegeZone.getFlagLocation().getWorld().getName()
                     + "," + siegeZone.getFlagLocation().getX()
                     + "," + siegeZone.getFlagLocation().getY()
                     + "," + siegeZone.getFlagLocation().getZ());
 
-           nat_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
-            nat_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
-            nat_hm.put("siegePoints", siegeZone.getSiegePoints());
+			sg_hm.put("attackingNation", siegeZone.getAttackingNation().getName());
+			sg_hm.put("defendingTown", siegeZone.getDefendingTown().getName());
+			sg_hm.put("siegePoints", siegeZone.getSiegePoints());
 
             //Player-scoretime maps are not saved/loaded
             //As it is tricky but with no significant benefit
 
-            UpdateDB("SIEGESZONES", nat_hm, Arrays.asList("siegeZoneName"));
+            UpdateDB("SIEGEZONES", sg_hm, Collections.singletonList("siegeZoneName"));
 
         } catch (Exception e) {
-            TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
+            TownyMessaging.sendErrorMsg("SQL: Save Siegezone unknown error");
             e.printStackTrace();
         }
         return false;

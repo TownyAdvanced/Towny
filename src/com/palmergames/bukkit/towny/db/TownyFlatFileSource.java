@@ -189,7 +189,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
 
-		path = dataFolderPath + File.separator + "siegeszones";
+		path = dataFolderPath + File.separator + "siegezones";
 		names = getSiegeZonesKeys();
 
 		FileMgmt.deleteUnusedFiles(new File(path), names);
