@@ -158,7 +158,7 @@ public class SQL_Schema {
 		columns.add("`siegeStatus` mediumtext");
 		columns.add("`siegeTownPlundered` bool NOT NULL DEFAULT '0'");
 		columns.add("`siegeTownInvaded` bool NOT NULL DEFAULT '0'");
-		columns.add("`attackerWinner` mediumtext");
+		columns.add("`siegeAttackerWinner` mediumtext");
 		columns.add("`siegeActualStartTime` BIGINT");
 		columns.add("`siegeScheduledEndTime` BIGINT");
 		columns.add("`siegeActualEndTime` BIGINT");

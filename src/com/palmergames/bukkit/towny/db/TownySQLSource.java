@@ -1047,7 +1047,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     siege.setTownInvaded(rs.getBoolean("siegeTownInvaded"));
 
                     line = rs.getString("siegeAttackerWinner");
-                    if(line != null || line.isEmpty()) {
+                    if(line != null && !line.isEmpty()) {
                         siege.setAttackerWinner(getNation(rs.getString("siegeAttackerWinner")));
                     } else {
                         siege.setAttackerWinner(null);
@@ -1145,7 +1145,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
                 line = rs.getString("siegeZones");
                 if (line != null) {
-                    tokens = line.split("#");
+                    tokens = line.split(",");
                     for (String token : tokens) {
                         if (!token.isEmpty()) {
                             SiegeZone siegeZone = getSiegeZone(token);
@@ -1789,7 +1789,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("assistants", StringMgmt.join(nation.getAssistants(), "#"));
             nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
             nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
-            nat_hm.put("siegeZones", StringMgmt.join(nation.getSiegeZoneNames(), "#"));
+            nat_hm.put("siegeZones", StringMgmt.join(nation.getSiegeZoneNames(), ","));
             nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("spawnCost", nation.getSpawnCost());
             nat_hm.put("neutral", nation.isNeutral());
