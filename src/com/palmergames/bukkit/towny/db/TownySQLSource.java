@@ -1058,7 +1058,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     siege.setActualEndTime(rs.getLong("siegeActualEndTime"));
 
                     line = rs.getString("siegeZones");
-                    String[] siegeZoneNames = line.split("#");
+                    String[] siegeZoneNames = line.split(",");
 					SiegeZone siegeZone;
                     for(String siegeZoneName: siegeZoneNames) {
                         siegeZone = universe.getDataSource().getSiegeZone(siegeZoneName);
@@ -1235,11 +1235,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
             while (rs.next()) {
                 line = rs.getString("flagLocation");
+                
                 listEntries = line.split(",");
                 flagLocationWorld = BukkitTools.getWorld(listEntries[0]);
-                flagLocationX = rs.getDouble(listEntries[1]);
-                flagLocationY = rs.getDouble(listEntries[2]);
-                flagLocationZ = rs.getDouble(listEntries[3]);
+                flagLocationX = Double.parseDouble(listEntries[1]);
+                flagLocationY = Double.parseDouble(listEntries[2]);
+                flagLocationZ = Double.parseDouble(listEntries[3]);
 
                 Location flagLocation = new Location(
                         flagLocationWorld,
@@ -1762,7 +1763,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 twn_hm.put("siegeActualStartTime", siege.getStartTime());
                 twn_hm.put("siegeScheduledEndTime", siege.getScheduledEndTime());
                 twn_hm.put("siegeActualEndTime", siege.getActualEndTime());
-                twn_hm.put("siegeZones", StringMgmt.join(siege.getAllAttackers(), "#"));
+                twn_hm.put("siegeZones", StringMgmt.join(siege.getAllAttackers(), ","));
             }
 
             UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
