@@ -9,15 +9,11 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDbUtil;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Goosius
@@ -65,7 +61,7 @@ public class AbandonAttack {
         		TownyFormatter.getFormattedTownName(siegeZone.getDefendingTown())));
 		
         if (siegeZone.getSiege().getSiegeZones().size() == 0) {
-            SiegeWarDbUtil.updateAndSaveSiegeCompletionValues(siegeZone.getSiege(),
+            SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siegeZone.getSiege(),
                     SiegeStatus.ATTACKER_ABANDON,
                     null);
 			TownyMessaging.sendGlobalMessage(

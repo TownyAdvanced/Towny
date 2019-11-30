@@ -9,11 +9,11 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 /**
  * @author Goosius
  */
-public class SiegeWarDbUtil {
+public class SiegeWarSiegeCompletionUtil {
 
-	public static void updateAndSaveSiegeCompletionValues(Siege siege,
-														  SiegeStatus siegeStatus,
-														  Nation winnerNation) {
+	public static void updateSiegeValuesToComplete(Siege siege,
+												   SiegeStatus siegeStatus,
+												   Nation winnerNation) {
 		siege.setStatus(siegeStatus);
 		siege.setActualEndTime(System.currentTimeMillis());
 		siege.setAttackerWinner(winnerNation);

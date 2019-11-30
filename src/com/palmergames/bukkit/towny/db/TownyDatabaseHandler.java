@@ -1229,14 +1229,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
-
-
-	@Override
-	public boolean hasSiegeZone(String name) {
-
-		return universe.getSiegeZonesMap().containsKey(name.toLowerCase());
-	}
-
+	
 	@Override
 	public List<SiegeZone> getSiegeZones() {
 		return new ArrayList<>(universe.getSiegeZonesMap().values());
