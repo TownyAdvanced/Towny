@@ -1,5 +1,5 @@
 name: Towny
-version: 0.65
+version: 0.66
 language: italian
 author: Leomixer17
 website: 'http://townyadvanced.github.io/'
@@ -1031,3 +1031,6 @@ msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/tow
 
 # Added in 0.65
 msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
+
+# Added in 0.66
+msg_war_defender_keeps_claims: 'Capturing disabled. Defending town will keep it''s claims.'

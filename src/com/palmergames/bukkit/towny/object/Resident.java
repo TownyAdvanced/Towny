@@ -93,26 +93,30 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	}
 	
-	public void freeFromJail(Player player, Integer index) {
+	public void freeFromJail(Player player, Integer index, boolean escaped) {
+		this.setJailed(false);
 		this.removeJailSpawn();
 		this.setJailTown(" ");
-		TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
-		TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));		
+		if (!escaped) {
+			TownyMessaging.sendMsg(this, TownySettings.getLangString("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendTownMessagePrefixed(town, String.format(TownySettings.getLangString("msg_player_has_been_freed_from_jail_number"), this.getName(), index));
+		} else
+			try {
+				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_player_escaped_jail_into_wilderness"), player.getName(), TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).getUnclaimedZoneName()));
+			} catch (NotRegisteredException ignored) {}
 	}
 
 	public void setJailedByMayor(Player player, Integer index, Town town, Integer days) {
 
 		if (this.isJailed) {
-			this.setJailed(false);
 			try {
-				Location loc = this.getTown().getSpawn();
-				
+				Location loc = this.getTown().getSpawn();				
 				if (BukkitTools.isOnline(player.getName())) {
 					// Use teleport warmup
 					player.sendMessage(String.format(TownySettings.getLangString("msg_town_spawn_warmup"), TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(player, loc);
 				}
-				freeFromJail(player, index);
+				freeFromJail(player, index, false);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
@@ -143,7 +147,6 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			player = BukkitTools.getPlayer(resident.getName());
 		
 		if (this.isJailed) {
-			this.setJailed(false);
 			try {
 				if (player != null) {
 					Location loc;
@@ -153,7 +156,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 						loc = player.getWorld().getSpawnLocation();
 					player.teleport(loc);
 				}
-				freeFromJail(player, index);
+				freeFromJail(player, index, false);
 			} catch (TownyException e) {
 				e.printStackTrace();
 			}
@@ -175,7 +178,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	}
 
 	public boolean hasJailSpawn() {
-		return this.jailSpawn <= 1;
+		return this.jailSpawn > 0;
 	}
 
 	public int getJailSpawn() {

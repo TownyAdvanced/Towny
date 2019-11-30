@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.command;
 
-import com.google.common.collect.ListMultimap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -685,19 +684,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites, 1, false);
 					return;
 				}
-				ListMultimap<Nation, Town> nation2towns = InviteHandler.getNationtotowninvites();
-				if (nation2towns.containsKey(nation)) {
-					if (nation2towns.get(nation).contains(town)) {
-						for (Invite invite : town.getReceivedInvites()) {
-							if (invite.getSender().equals(nation)) {
-								try {
-									InviteHandler.acceptInvite(invite);
-									return;
-								} catch (InvalidObjectException e) {
-									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-								}
-							}
-						}
+
+				Invite toAccept = null;
+				for (Invite invite : InviteHandler.getActiveInvites()) {
+					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+						toAccept = invite;
+						break;
+					}
+				}
+				if (toAccept != null) {
+					try {
+						InviteHandler.acceptInvite(toAccept);
+						return;
+					} catch (TownyException | InvalidObjectException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -725,20 +725,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					InviteCommand.sendInviteList(player, invites, 1, false);
 					return;
 				}
-				ListMultimap<Nation, Town> nation2towns = InviteHandler.getNationtotowninvites();
-				if (nation2towns.containsKey(nation)) {
-					if (nation2towns.get(nation).contains(town)) {
-						for (Invite invite : town.getReceivedInvites()) {
-							if (invite.getSender().equals(nation)) {
-								try {
-									InviteHandler.declineInvite(invite, false);
-									TownyMessaging.sendMessage(player, TownySettings.getLangString("successful_deny"));
-									return;
-								} catch (InvalidObjectException e) {
-									e.printStackTrace(); // Shouldn't happen, however like i said a fallback
-								}
-							}
-						}
+				
+				Invite toDecline = null;
+				
+				for (Invite invite : InviteHandler.getActiveInvites()) {
+					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+						toDecline = invite;
+						break;
+					}
+				}
+				if (toDecline != null) {
+					try {
+						InviteHandler.declineInvite(toDecline, false);
+						TownyMessaging.sendMessage(player, TownySettings.getLangString("successful_deny"));
+						return;
+					} catch (InvalidObjectException e) {
+						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
 				}
 			} else {
@@ -2472,10 +2474,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, town, newMember);
 		try {
-			if (!InviteHandler.getTowntoresidentinvites().containsEntry(town, newMember)) {
+			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
 				town.newSentInvite(invite);
-				InviteHandler.addInviteToList(invite);
+				InviteHandler.addInvite(invite);
 				TownyMessaging.sendRequestMessage(newMember,invite);
 				Bukkit.getPluginManager().callEvent(new TownInvitePlayerEvent(invite));
 			} else {
@@ -2491,8 +2493,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void townRevokeInviteResident(Object sender, Town town, List<Resident> residents) {
 
 		for (Resident invited : residents) {
-			if (InviteHandler.getTowntoresidentinvites().containsEntry(town, invited)) {
-				InviteHandler.getTowntoresidentinvites().remove(town, invited);
+			if (InviteHandler.inviteIsActive(town, invited)) {
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(town)) {
 						try {

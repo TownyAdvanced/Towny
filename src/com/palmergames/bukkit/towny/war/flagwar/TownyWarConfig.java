@@ -187,4 +187,8 @@ public class TownyWarConfig {
 
         return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_ONLY_ATTACK_BORDER);
     }
+
+	public static boolean isFlaggedTownblockTransfered() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_FLAG_TAKES_OWNERSHIP_OF_TOWNBLOCKS);
+	}
 }
