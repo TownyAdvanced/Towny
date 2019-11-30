@@ -3912,3 +3912,4 @@ v0.92.0.11:
     - This is similar effect to Event War's 'winner_takes_ownership_of_townblocks', but does not mess with bonus plots.
     - Adds the 'msg_war_defender_keeps_claims' language string to notify the towns that capturing the townblock is disabled.
     - Closes ticket #3514
+  - chinese.yml updated to 0.66 by qsefthuopq
