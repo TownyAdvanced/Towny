@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
@@ -30,9 +30,8 @@ public class AttackTown {
                                                 BlockPlaceEvent event) {
 
         try {
-			com.palmergames.bukkit.towny.TownyUniverse townyUniverse = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
-        	
-            Resident attackingResident = TownyUniverse.getDataSource().getResident(player.getName());
+			TownyUniverse universe = TownyUniverse.getInstance();
+            Resident attackingResident = universe.getDataSource().getResident(player.getName());
             if(!attackingResident.hasTown())
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
@@ -55,7 +54,7 @@ public class AttackTown {
                     throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_attack_non_enemy_nation"));
             }
             
-            if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
+            if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ATTACK.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             if (nearbyTownBlocks.size() > 1)
@@ -135,10 +134,11 @@ public class AttackTown {
 		}
 
 		//Create siege zone
-		TownyUniverse.getDataSource().newSiegeZone(
+		TownyUniverse universe = TownyUniverse.getInstance();
+		universe.getDataSource().newSiegeZone(
 			attackingNation.getName(),
 			defendingTown.getName());
-		siegeZone = TownyUniverse.getDataSource().getSiegeZone(
+		siegeZone = universe.getDataSource().getSiegeZone(
 			SiegeZone.generateName(
 				attackingNation.getName(), 
 				defendingTown.getName()));
@@ -148,10 +148,10 @@ public class AttackTown {
 		attackingNation.addSiegeZone(siegeZone);
 
 		//Save siegezone, siege, nation, and town to DB
-		TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
-		TownyUniverse.getDataSource().saveNation(attackingNation);
-		TownyUniverse.getDataSource().saveTown(defendingTown);
-		TownyUniverse.getDataSource().saveSiegeZoneList();
+		universe.getDataSource().saveSiegeZone(siegeZone);
+		universe.getDataSource().saveNation(attackingNation);
+		universe.getDataSource().saveTown(defendingTown);
+		universe.getDataSource().saveSiegeZoneList();
 
 		//Send global message;
 		if (newSiege) {

@@ -1,14 +1,14 @@
 package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -32,8 +32,9 @@ public class InvadeTown {
                                                 Siege siege,
                                                 BlockPlaceEvent event) {
         try {
-        	
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
+			TownyUniverse universe = TownyUniverse.getInstance();
+
+			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_INVADE.getNode()))
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if(resident.getTown() == siege.getDefendingTown())
@@ -135,34 +136,36 @@ public class InvadeTown {
          * Remove all resident titles/nationRanks before saving the town itself.
          */
         List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
-
+		TownyUniverse universe = TownyUniverse.getInstance();
+        
         for (Resident res : titleRemove) {
             if (res.hasTitle() || res.hasSurname()) {
                 res.setTitle("");
                 res.setSurname("");
             }
             res.updatePermsForNationRemoval(); // Clears the nationRanks.
-            TownyUniverse.getDataSource().saveResident(res);
+			universe.getDataSource().saveResident(res);
         }
 
         if(removeNation) {
-            TownyUniverse.getDataSource().removeNation(nation);
-            TownyUniverse.getDataSource().saveNationList();
+			universe.getDataSource().removeNation(nation);
+			universe.getDataSource().saveNationList();
         } else {
-            TownyUniverse.getDataSource().saveNation(nation);
-            TownyUniverse.getDataSource().saveNationList();
+			universe.getDataSource().saveNation(nation);
+			universe.getDataSource().saveNationList();
             plugin.resetCache();
         }
 
-        TownyUniverse.getDataSource().saveTown(town);
+		universe.getDataSource().saveTown(town);
     }
 
     private static void addTownToNation(Towny plugin, Town town,Nation nation) {
         try {
-            nation.addTown(town);
-            TownyUniverse.getDataSource().saveTown(town);
+			TownyUniverse universe = TownyUniverse.getInstance();
+			nation.addTown(town);
+			universe.getDataSource().saveTown(town);
             plugin.resetCache();
-            TownyUniverse.getDataSource().saveNation(nation);
+			universe.getDataSource().saveNation(nation);
         } catch (AlreadyRegisteredException x) {
             return;   //Town already in nation
         }

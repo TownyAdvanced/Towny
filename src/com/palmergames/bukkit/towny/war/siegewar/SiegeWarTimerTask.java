@@ -2,8 +2,12 @@ package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
@@ -62,7 +66,8 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	//Cycle through all siege zones
 	private void evaluateSiegeZones() {
-		for(com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone siegeZone: TownyUniverse.getDataSource().getSiegeZones()) {
+		TownyUniverse universe = TownyUniverse.getInstance();
+		for(SiegeZone siegeZone: universe.getDataSource().getSiegeZones()) {
 				evaluateSiegeZone(siegeZone);
 		}
 	}
@@ -75,6 +80,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	}
 
 	private static void evaluateSiegeZone(SiegeZone siegeZone) {
+		TownyUniverse universe = TownyUniverse.getInstance();
 		boolean siegeZoneChanged = false;
 		Resident resident;
 
@@ -82,7 +88,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 
 			try {
-				resident = TownyUniverse.getDataSource().getResident(player.getName());
+				resident = universe.getDataSource().getResident(player.getName());
 
 				if (resident.hasTown()) {
 					if (resident.getTown() == siegeZone.getDefendingTown()) {
@@ -154,11 +160,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 		//Save siege zone to db if it was changed
 		if(siegeZoneChanged) {
-			TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+			universe.getDataSource().saveSiegeZone(siegeZone);
 		}
 	}
 
 	private static void evaluateSiege(Siege siege) {
+		TownyUniverse universe = TownyUniverse.getInstance();
+		
 		//Process active siege
 		if (siege.getStatus() == SiegeStatus.IN_PROGRESS) {
 
@@ -181,7 +189,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			//Siege is finished.
 			//Wait for siege immunity timer to end then delete siege
 			if (System.currentTimeMillis() > siege.getDefendingTown().getSiegeImmunityEndTime()) {
-				TownyUniverse.getDataSource().removeSiege(siege);
+				universe.getDataSource().removeSiege(siege);
 			}
 		}
 	}
@@ -263,7 +271,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					continue;
 				}
 
-				Resident resident = TownyUniverse.getDataSource().getResident(pair.getKey().getName());
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(pair.getKey().getName());
 
 				//Remove player if they have no town
 				if(!resident.hasTown()) {
@@ -296,7 +304,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 	private static List<Siege> getAllSieges() {
 		List<Siege> result = new ArrayList<>();
-		for(Town town: TownyUniverse.getDataSource().getTowns()) {
+		for(Town town: TownyUniverse.getInstance().getDataSource().getTowns()) {
 			if(town.hasSiege()) {
 				result.add(town.getSiege());
 			}

@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar.timeractions;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,10 @@ import java.util.ArrayList;
 public class RemoveRuinedTowns {
 
     public static void removeRuinedTowns() {
-        for (Town town : new ArrayList<>(TownyUniverse.getDataSource().getTowns())) {
+		TownyUniverse universe = TownyUniverse.getInstance();
+        for (Town town : new ArrayList<>(universe.getDataSource().getTowns())) {
             if(town.isRuined() && System.currentTimeMillis() > town.getRecentlyRuinedEndTime()) {
-                TownyUniverse.getDataSource().removeRuinedTown(town);
+				universe.getDataSource().removeRuinedTown(town);
             }
         }
     }

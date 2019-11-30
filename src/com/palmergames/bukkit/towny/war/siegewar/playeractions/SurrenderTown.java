@@ -3,11 +3,11 @@ package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDbUtil;
@@ -27,7 +27,8 @@ public class SurrenderTown {
                                                    Town townWhereBlockWasPlaced,
                                                    BlockPlaceEvent event) {
         try {
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			TownyUniverse universe = TownyUniverse.getInstance();
+			Resident resident = universe.getDataSource().getResident(player.getName());
             if(!resident.hasTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
@@ -35,7 +36,7 @@ public class SurrenderTown {
 			if(townOfAttackingResident != townWhereBlockWasPlaced)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_not_your_town"));
 			
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SIEGE_SURRENDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
             Siege siege = townWhereBlockWasPlaced.getSiege();

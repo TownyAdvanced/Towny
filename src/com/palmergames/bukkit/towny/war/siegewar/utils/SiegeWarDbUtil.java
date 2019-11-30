@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
@@ -20,9 +20,10 @@ public class SiegeWarDbUtil {
 		SiegeWarTimeUtil.activateSiegeImmunityTimer(siege.getDefendingTown(), siege);
 
 		//Save to db
-		TownyUniverse.getDataSource().saveTown(siege.getDefendingTown());
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		townyUniverse.getDataSource().saveTown(siege.getDefendingTown());
 		for(SiegeZone siegeZone: siege.getSiegeZones().values()) {
-			TownyUniverse.getDataSource().saveSiegeZone(siegeZone);
+			townyUniverse.getDataSource().saveSiegeZone(siegeZone);
 		}
 	}
 }

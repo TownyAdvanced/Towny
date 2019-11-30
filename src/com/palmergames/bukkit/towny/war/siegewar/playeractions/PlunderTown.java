@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
@@ -26,10 +25,12 @@ public class PlunderTown {
 												 Siege siege,
 												 BlockPlaceEvent event) {
         try {
+			TownyUniverse universe = TownyUniverse.getInstance();
+			
 			if(!TownySettings.isUsingEconomy())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_plunder_without_economy"));
 
-			if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
+			if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_PLUNDER.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 			if(resident.getTown() == siege.getDefendingTown())
@@ -59,10 +60,12 @@ public class PlunderTown {
                 TownySettings.getWarSiegeAttackerPlunderAmountPerPlot()
                         * defendingTown.getTownBlocks().size();
         try {
-            if (defendingTown.canPayFromHoldings(fullPlunderAmount)) {
+			TownyUniverse universe = TownyUniverse.getInstance();
+			
+			if (defendingTown.canPayFromHoldings(fullPlunderAmount)) {
                 defendingTown.payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation, fullPlunderAmount);
-				TownyUniverse.getDataSource().saveTown(defendingTown);
+				universe.getDataSource().saveTown(defendingTown);
             } else {
                 double actualPlunderAmount = defendingTown.getHoldingBalance();
                 defendingTown.payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
@@ -72,7 +75,7 @@ public class PlunderTown {
 						TownySettings.getLangString("msg_siege_war_town_ruined_from_plunder"),
 						TownyFormatter.getFormattedTownName(defendingTown),
 						TownyFormatter.getFormattedNationName(winnerNation)));
-                TownyUniverse.getDataSource().removeTown(defendingTown);
+				universe.getDataSource().removeTown(defendingTown);
             }
         } catch (EconomyException x) {
             TownyMessaging.sendErrorMsg(x.getMessage());

@@ -3,8 +3,11 @@ package com.palmergames.bukkit.towny.war.siegewar.playeractions;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDbUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -25,7 +28,8 @@ public class AbandonAttack {
 												  SiegeZone nearestSiegeZone,
 												  BlockPlaceEvent event)  {
         try {
-            Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+			TownyUniverse universe = TownyUniverse.getInstance();
+            Resident resident = universe.getDataSource().getResident(player.getName());
             if(!resident.hasTown())
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_town_member"));
 
@@ -34,7 +38,7 @@ public class AbandonAttack {
 				throw new TownyException(TownySettings.getLangString("msg_err_siege_war_action_not_a_nation_member"));
 
             //If player has no permission to abandon,send error
-            if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
+            if (!universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SIEGE_ABANDON.getNode()))
                 throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
             
 			//If the player's nation is not the attacker, send error
@@ -52,7 +56,8 @@ public class AbandonAttack {
 
     private static void attackerAbandon(SiegeZone siegeZone) {
         //Here we simply remove the siege zone
-		TownyUniverse.getDataSource().removeSiegeZone(siegeZone);
+		TownyUniverse universe = TownyUniverse.getInstance();
+		universe.getDataSource().removeSiegeZone(siegeZone);
         
 		TownyMessaging.sendGlobalMessage(
 			String.format(TownySettings.getLangString("msg_siege_war_attacker_abandon"),
