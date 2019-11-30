@@ -62,6 +62,7 @@ public class PlunderTown {
             if (defendingTown.canPayFromHoldings(fullPlunderAmount)) {
                 defendingTown.payTo(fullPlunderAmount, winnerNation, "Town was plundered by attacker");
                 sendPlunderSuccessMessage(defendingTown, winnerNation, fullPlunderAmount);
+				TownyUniverse.getDataSource().saveTown(defendingTown);
             } else {
                 double actualPlunderAmount = defendingTown.getHoldingBalance();
                 defendingTown.payTo(actualPlunderAmount, winnerNation, "Town was plundered by attacker");
