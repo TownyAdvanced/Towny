@@ -22,8 +22,6 @@ commands:
         aliases: []
     nation:
         aliases: [n, nat]
-    siege:
-        aliases: [s]
     plot:
         aliases: []
     resident:

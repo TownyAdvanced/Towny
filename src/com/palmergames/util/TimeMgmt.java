@@ -81,30 +81,30 @@ public class TimeMgmt {
 
             if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("day_plu");
+                timeUnit = TownySettings.getLangString("msg_days");
                 timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
 
             } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("hour_plu");
+                timeUnit = TownySettings.getLangString("msg_hours");
                 timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
 
             } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = TownySettings.getLangString("minute_plu");
+                timeUnit = TownySettings.getLangString("msg_minutes");
                 timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
 
             } else {
                 numberFormat.setMaximumFractionDigits(0);
-                timeUnit = TownySettings.getLangString("second_plu");
+                timeUnit = TownySettings.getLangString("msg_seconds");
                 timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
             }
 
             double timeRoundedUp = Math.ceil(timeUtilCompletion * 10) / 10;
-            return numberFormat.format(timeRoundedUp) + " " + timeUnit;
+            return numberFormat.format(timeRoundedUp) + timeUnit;
 
         } else {
-            return "0 " + TownySettings.getLangString("second_plu");
+            return "0" + TownySettings.getLangString("msg_seconds");
         }
     }
 }
