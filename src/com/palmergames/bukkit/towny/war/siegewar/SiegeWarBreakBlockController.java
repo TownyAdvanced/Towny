@@ -16,6 +16,7 @@ public class SiegeWarBreakBlockController {
 	//Returns boolean @skipAdditionalPermChecks
 	public static boolean evaluateSiegeWarBreakBlockRequest(Player player, Block block, BlockBreakEvent event)  {
 		if (SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
+			System.out.println("B");
 			event.setCancelled(true);
 			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_cannot_destroy_siege_banner"));
 			return true;

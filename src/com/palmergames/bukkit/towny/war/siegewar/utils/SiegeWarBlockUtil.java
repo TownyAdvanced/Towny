@@ -85,12 +85,11 @@ public class SiegeWarBlockUtil {
 		//Siege must be in progress
 		//This must be the banner or the block below the banner
 		Block flagBlock;
-		
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 
 			if (siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
-				return false;
+				continue;
 			}
 
 			flagBlock = siegeZone.getFlagLocation().getBlock();
