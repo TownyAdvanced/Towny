@@ -91,10 +91,8 @@ public class TownySettings {
 	/**
 	 * Loads town levels. Level format ignores lines starting with #.
 	 * Each line is considered a level. Each level is loaded as such:
-	 * <p>
 	 * numResidents:namePrefix:namePostfix:mayorPrefix:mayorPostfix:
 	 * townBlockLimit
-	 * <p>
 	 * townBlockLimit is a required field even if using a calculated ratio.
 	 *
 	 * @throws IOException if unable to load the Town Levels
@@ -106,16 +104,16 @@ public class TownySettings {
 
 			try {
 				newTownLevel(
-						(Integer) level.get("numResidents"),
-						(String) level.get("namePrefix"),
-						(String) level.get("namePostfix"),
-						(String) level.get("mayorPrefix"),
-						(String) level.get("mayorPostfix"),
-						(Integer) level.get("townBlockLimit"),
-						(Double) level.get("upkeepModifier"),
-						(Integer) level.get("townOutpostLimit"),
-						(Integer) level.get("townBlockBuyBonusLimit")
-						);
+					(Integer) level.get("numResidents"),
+					(String) level.get("namePrefix"),
+					(String) level.get("namePostfix"),
+					(String) level.get("mayorPrefix"),
+					(String) level.get("mayorPostfix"),
+					(Integer) level.get("townBlockLimit"),
+					(Double) level.get("upkeepModifier"),
+					(Integer) level.get("townOutpostLimit"),
+					(Integer) level.get("townBlockBuyBonusLimit")
+					);
 			} catch (NullPointerException e) {
 				System.out.println("Your Towny config.yml's town_level section is out of date.");
 				System.out.println("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
@@ -309,7 +307,7 @@ public class TownySettings {
 
 	public static SpawnLevel getSpawnLevel(ConfigNodes node) {
 		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
-		if (level == null) {
+		if(level == null) {
 			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
 		return level;
@@ -317,7 +315,7 @@ public class TownySettings {
 
 	public static NSpawnLevel getNSpawnLevel(ConfigNodes node) {
 		NSpawnLevel level = NSpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
-		if (level == null) {
+		if(level == null) {
 			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
 		return level;
@@ -1818,9 +1816,9 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.WAR_EVENT_REMOVE_ON_MONARCH_DEATH);
 	}
-
+	
 	public static double getTownUpkeepCost(Town town) {
-
+		
 		double multiplier;
 
 		if (town != null) {

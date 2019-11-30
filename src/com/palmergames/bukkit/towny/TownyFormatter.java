@@ -445,7 +445,7 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));
 
-		//Siege War Info
+		//Siege  Info
 		if(TownySettings.getWarSiegeEnabled() && !town.isRuined()) {
 
 			//Revolt Immunity Timer: 71.8 hours
@@ -462,7 +462,7 @@ public class TownyFormatter {
 						String siegeStatus= String.format(TownySettings.getLangString("status_town_siege_status"), getStatusTownSiegeSummary(siege));
 						out.add(siegeStatus);
 						
-						//Siege Attacks: Land of Empire (Nation) [+30], Land of Killers (Nation) [-8]
+						//Siege Attacks: Land of Empire (Nation) {+30}, Land of Killers (Nation) {-8}
 						String[] siegeAttacks = getFormattedNames(siege.getSiegeZones().values().toArray(new SiegeZone[0]));
 						if (siegeAttacks.length > 10) {
 							String[] entire = siegeAttacks;
@@ -500,7 +500,7 @@ public class TownyFormatter {
 			} else {
 				if(TownySettings.getWarSiegeAttackEnabled() && town.isSiegeImmunityActive()) {
 					//Siege:
-					// > Immunity Timer: 100.8 hours
+					// > Immunity Timer: 40.8 hours
 					out.add(String.format(TownySettings.getLangString("status_town_siege_status"), ""));
 					out.add(String.format(TownySettings.getLangString("status_town_siege_immunity_timer"), town.getFormattedHoursUntilSiegeImmunityEnds()));
 				}
