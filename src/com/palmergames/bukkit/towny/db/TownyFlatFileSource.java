@@ -957,6 +957,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					town.setMetadata(line.trim());
 
 
+				line = keys.get("recentlyRuinedEndTime");
+				if (line != null) {
+					try {
+						town.setRecentlyRuinedEndTime(Long.parseLong(line));
+					} catch (Exception e) {
+						town.setRecentlyRuinedEndTime(0);
+					}
+				} else {
+					town.setRecentlyRuinedEndTime(0);
+				}
+				
 				line = keys.get("revoltCooldownEndTime");
 				if (line != null) {
 					try {

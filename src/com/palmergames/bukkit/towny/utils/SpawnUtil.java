@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSpawnUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -237,11 +236,7 @@ public class SpawnUtil {
 
 			break;
 		}
-
-		//Prevent spawning into besieged town
-		if(TownySettings.getWarSiegeSpawningDisabledIntoBesiegedTowns())
-			SiegeWarSpawnUtil.throwErrorIfSpawnPointIsInsideBesiegedTown(spawnLoc);
-
+		
 		// Prevent spawn travel while in disallowed zones (if configured.)
 		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
@@ -299,7 +294,12 @@ public class SpawnUtil {
 			payee = nation;
 			break;
 		}
-		
+
+		//Prevent spawning to locations near sieges
+		if(TownySettings.getWarSiegeEnabled())
+			SiegeWarSpawnUtil.throwErrorIfSpawnPointIsTooNearSiegeZone(spawnLoc);
+
+
 		// Check if need/can pay.
 		try {
 			if ((!townyUniverse.getPermissionSource().has(player,
@@ -309,7 +309,7 @@ public class SpawnUtil {
 				throw new TownyException(notAffordMSG);
 		} catch (EconomyException ignored) {
 		}
-
+		
 		// Essentials tests.
 		boolean usingESS = plugin.isEssentials();
 
