@@ -393,8 +393,6 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 
 	public void removeSiegeZone(SiegeZone siegeZone) {
 		siegeZones.remove(siegeZone);
-		//Todo - do we need this???
-		//BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
 	}
 
 	private void removeAllTowns() {

@@ -437,22 +437,6 @@ public class TownyEntityMonitorListener implements Listener {
 
 		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
 
-			/*
-			SIEGE WAR: If the dead player was besieging the killer's town,
-			           the killer cannot jail them.
-			 */
-			if(TownySettings.getWarSiegeEnabled()
-					&& attackerResident.hasTown()
-					&& defenderResident.hasTown()
-					&& defenderResident.getTown().hasNation()) {
-				for(SiegeZone siegeFront: defenderResident.getTown().getNation().getSiegeZones()) {
-					if(defenderResident.getTown() == siegeFront.getSiege().getDefendingTown()) {
-						TownyMessaging.sendErrorMsg(attackerPlayer, "You cannot send " + defenderPlayer.getName() + " to jail while their nation is besieging your town.");
-						return;
-					}
-				}
-			}
-
 			Location loc = defenderPlayer.getLocation();
 			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			if (!TownyAPI.getInstance().isTownyWorld(defenderPlayer.getLocation().getWorld()))
