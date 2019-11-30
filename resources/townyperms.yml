@@ -76,6 +76,7 @@ towns:
             - towny.command.town.rank.vip
             - towny.command.town.rank.helper
             - towny.outlaw.jailer
+            - towny.command.town.siege
         helper:
             - towny.claimed.townowned.switch.*
         donator:
@@ -112,5 +113,6 @@ nations:
             - towny.command.nation.ally.*
             - towny.command.nation.enemy
             - towny.command.nation.deposit.other
+            - towny.command.nation.siege
         helper:
             - towny.command.nation.add
