@@ -1748,12 +1748,11 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"# |                   Siege-War settings                 | #",
 			"# |                                                      | #",
-			"# |               Separate from other war modes          | #",
+			"# |              Separate from other war modes           | #",
 			"# |                                                      | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-
 	//Switches
 	WAR_SIEGE_ENABLED(
 			"war.siege.switches.enabled",
@@ -1763,55 +1762,58 @@ public enum ConfigNodes {
 	WAR_SIEGE_ATTACK_ENABLED(
 			"war.siege.switches.attack_enabled",
 			"true",
-			"# If true, people can start sieges."),
+			"# If true, then nations can start sieges."),
 	WAR_SIEGE_ABANDON_ENABLED(
 			"war.siege.switches.abandon_enabled",
 			"true",
-			"# If true, people can abandon sieges."),
+			"# If true, then nations can abandon sieges."),
 	WAR_SIEGE_TOWN_SURRENDER_ENABLED(
-		"war.siege.switches.town_surrender_enabled",
-		"true",
-		"# If true, then they mayor ofa town can surrender."),
+			"war.siege.switches.town_surrender_enabled",
+			"true",
+			"# If true, then a town can surrender if there is only 1 nation attacker."),
 	WAR_SIEGE_INVADE_ENABLED(
 			"war.siege.switches.invade_enabled",
 			"true",
-			"# "),
+			"# If true, then a nation siege winner can invade the defeated town.",
+			"# This action will add the town to the nation"),
 	WAR_SIEGE_PLUNDER_ENABLED(
 			"war.siege.switches.plunder_enabled",
 			"true",
-			"#"),
+			"# If true, then a nation siege winner can plunder the defeated town.",
+			"# This action will steal money from the town.",
+			"# If the town does not have sufficient funds, it will be ruined."),
 	WAR_SIEGE_TOWN_LEAVE_DISABLED(
 			"war.siege.switches.nation_leave_disabled",
 			"true",
-			"#. If true, then a town cannot leave a nation of its own accord. However the nation can always kick."),
+			"#. If true, then a town cannot leave a nation of its own accord. ",
+		 	"# However the nation can always kick."),
 	WAR_SIEGE_REVOLT_ENABLED(
 			"war.siege.switches.revolt_enabled",
 			"true",
 			"#. If true, then a town can 'revolt' against the nation and leave",
-			 "# Usually enabled in combination with the town leave disable"),
+			 "# Usually enabled in combination with WAR_SIEGE_TOWN_LEAVE_DISABLED"),
 	WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS(
 			"war.siege.switches.pvp_always_on_in_besieged_towns",
 			"true",
-			"# If this setting is true, then pvp is always set to on during sieges",
-			"# It is automatically set to off when the siege ends"),
+			"# If true, then pvp is always set to on during sieges",
+			"# Pvp returns to its previous setting when the siege ends"),
 	WAR_SIEGE_SPAWNING_DISABLED_NEAR_SIEGES(
 			"war.siege.switches.teleport_disabled_to_besieged_towns",
 			"true",
-			"# If this setting is true, then you cannot teleport to a besieged town.",
-			"# This include /t spawn, /t outpost, and /n spawn  (if nation spawn is in the town)"),
+			"# If true, then you cannot spawn near a besieged town."),
 	WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES(
-		"war.siege.switches.claiming_disabled_near_siege_zones",
-		"true",
-		"# If this setting is true, then land cannot be claimed near a siege zone.",
-		"# This setting is generally considered critical, otherwise the defender could wall off the siege zone"),
+			"war.siege.switches.claiming_disabled_near_siege_zones",
+			"true",
+			"# If true, then land cannot be claimed near a siege zone.",
+			"# This setting is generally considered critical, otherwise one side could wall off the siege zone."),
 	WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL(
 			"war.siege.switches.delay_full_town_removal",
 			"true",
-			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time",
+			"# If this is true, then if a town falls, it remains in a 'ruined' state for a time.",
 			"# In this state, the town cannot be claimed, but can be looted",
-			"# This setting is generally considered essential to siegewar.",
-			"# Because when true, it prevents mayors from avoiding sieges/occupation by",
-			"# removing then quickly recreating their town."),
+			"# This setting is generally considered critical,",
+			"# because it prevents mayors from avoiding sieges/occupation by ",
+		    "# deleting then quickly recreating their town."),
 
 	//Monetary Values
 	WAR_SIEGE_ATTACKER_COST_UPFRONT_PER_PLOT(
@@ -1822,81 +1824,88 @@ public enum ConfigNodes {
 			"war.siege.money.attacker_plunder_amount_per_plot",
 			"20.0",
 			"# This is the amount plundered by the attacker is a siege is successful.",
-			"# If this value is lower than the upfront cost, then sieges will not be profitable",
-			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture",
-			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture"),
+			"# If this value is lower than the upfront cost, then sieges will not be profitable.",
+			"# If this value is a little higher than the upfront cost, then only large towns will be profitable to capture.",
+			"# If this value is much higher than the upfront cost, then all towns will be profitable to capture."),
 
 	//Times
 	WAR_SIEGE_TIMER_TICK_INTERVAL_SECONDS(
 			"war.siege.times.timer_interval_seconds",
-			"6",
-			"# The time in seconds for each siegewar timer tick."),
+			"12",
+			"# The time in seconds for each siegewar timer tick.",
+			"# It is recommended to put this between 5-12, to avoid the perception that nothing is happening in a siege."),
 	WAR_SIEGE_TOWN_RUINS_REMOVAL_INTERVAL_MINUTES(
 			"war.siege.times.ruins_removal_interval_minutes",
-			"0.1",
-			"# The time in minutes for each scan & deletion of town ruins"),
+			"60",
+			"# The time in minutes between each scan/deletion of town ruins."),
 	WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS(
 			"war.siege.times.max_holdout_time_hours",
-			"0.02",
+			"72",
 			"# The maximum duration a town can hold out against a siege.",
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
-			"# If the value is too low, casual players may be unsatisfied that they do not have enough time to defend their towns."),
+			"# If the value is too low, casual players may be unsatisfied that ",
+		    "#    they are unable to contribute to sieges, especially those involving their own town/nation"),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
-			"0.02",
+			"72",
 			"# This value determines how long a town is safe from sieges, after the town is founded.",
 			"# A high value allows more time to fortify new towns, but community engagement by mayors will be slower.",
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
 			"1.5",
-			"# This value determines how long a town is safe from sieges, after the current siege finishes.",
+			"# This value determines how long a town is safe from sieges, after a siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
-			"# A high value makes sieges less frequent and more of a 'special event'. Suitable for moderately-peaceful/moderately-aggressive servers",
+			"# A high value makes sieges less frequent. Suitable for moderately-aggressive servers",
 			"# A low value makes sieges more frequent. Suitable for highly aggressive servers."),
 	WAR_SIEGE_REVOLT_IMMUNITY_TIME_HOURS(
 			"war.siege.times.revolt_immunity_time_hours",
-			"0.03",
+			"240",
 			"# This value determines how long the defending town must wait before it can 'revolt' against the occupier, after the previous revolt.",
-			"# If the value is too high, mayors will be frustrated that it is too difficult to revolt against an occupier.",
+			"# If the value is too high, towns will be frustrated that it is too difficult to revolt against an occupier.",
 			"# If the value is too low, nations will find it difficult to hold territory due to constant revolts."),
 	WAR_SIEGE_RUINS_REMOVAL_DELAY_MINUTES(
 			"war.siege.times.ruins_removal_delay_minutes",
-			"0.1",
+			"24",
 			"# This setting determines the delay between a town being ruined, and final deletion."),
 	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
-		"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
-		"15",
-		"# This setting determines how long a player must remain in a siege zone.",
-		"# -> before siege points are awarded."),
+			"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
+			"60",
+			"# This setting determines how long a player must remain in a siege zone,",
+			"#     before siege points are awarded.",
+			"# It is recommended to have this over 30 seconds,",
+			"#     to prevent nations from too much spamming of siege zones with cannon-fodder troops"),
 	
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
-		"war.siege.distances.claim_disable_distance_blocks",
-		"100",
-		"# This is the distance in regular blocks from a siege banner in which claims are disabled"),
+			"war.siege.distances.claim_disable_distance_blocks",
+			"100",
+			"# This is the distance in regular blocks from a siege banner in which claims are disabled.",
+				"# It is recommended to have this over 60, or else siege-zone-walling may not be adequetely discouraged."),
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
-		"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
-		"15",
-		"# This is the max allowed elevation difference downward from siege banner to town",
-		 "# There is no limit on the upward difference"),
+			"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
+			"15",
+			"# This is the max allowed elevation difference downward from siege banner to town.",
+			 "# There is no limit on the upward difference.",
+		     "# This setting prevents the banner being placed on a platform high in the air."),
 	WAR_SIEGE_MIN_ALLOWED_SPAWN_DISTANCE_FROM_SIEGE_ZONE(
-		"war.siege.distances.min_allowed_spawn_distance_from_siege_zone",
-		"300",
-		"# For a spawn to be allowed, the spawn location must exceed this distance from the nearest siege zone"),
+			"war.siege.distances.min_allowed_spawn_distance_from_siege_zone",
+			"300",
+			"# This is the distance from a zone in which spawning is disallowed."),
 	
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
 			"war.siege.scoring.points_per_attacking_player",
 			"1",
 			"# This setting determines the number of siege points awarded per attacking player.",
-			"# The award given each tick that an attacking player is in a town border block"),
+			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
+			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS "),
 	WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER(
 			"war.siege.scoring.points_per_defending_player",
 			"1",
-			"# This setting determines the number of siege points awarded per defending player.",
-			"# The award given each tick that a defending player is in the town",
-			"# It is only given IF there are no attacking players in the town");
+			"# This setting determines the number of siege points awarded per defender player.",
+			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
+			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS ");
 
 	private final String Root;
 	private final String Default;
