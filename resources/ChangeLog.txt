@@ -3913,3 +3913,5 @@ v0.92.0.11:
     - Adds the 'msg_war_defender_keeps_claims' language string to notify the towns that capturing the townblock is disabled.
     - Closes ticket #3514
   - chinese.yml updated to 0.66 by qsefthuopq
+  - Made /ta ? require the towny.admin permission node.
+    - Closes ticket #3531.
