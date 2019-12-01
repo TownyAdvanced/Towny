@@ -1786,7 +1786,7 @@ public enum ConfigNodes {
 			"war.siege.switches.nation_leave_disabled",
 			"true",
 			"#. If true, then a town cannot leave a nation of its own accord. ",
-		 	"# However the nation can always kick."),
+			"# However the nation can always kick."),
 	WAR_SIEGE_REVOLT_ENABLED(
 			"war.siege.switches.revolt_enabled",
 			"true",
@@ -1881,7 +1881,7 @@ public enum ConfigNodes {
 			"war.siege.distances.claim_disable_distance_blocks",
 			"100",
 			"# This is the distance in regular blocks from a siege banner in which claims are disabled.",
-				"# It is recommended to have this over 60, or else siege-zone-walling may not be adequetely discouraged."),
+			"# It is recommended to have this over 60, or else siege-zone-walling may not be adequetely discouraged."),
 	WAR_SIEGE_MAX_ALLOWED_BANNER_TO_TOWN_DOWNWARD_ELEVATION_DIFFERENCE(
 			"war.siege.distances.max_allowed_banner_to_town_downward_elevation_difference",
 			"15",
