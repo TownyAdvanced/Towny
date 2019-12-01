@@ -28,7 +28,7 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private Group group;
+	private PlotGroup group;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -498,11 +498,16 @@ public class TownBlock {
 	
 	public boolean hasGroup() { return getGroup() != null; }
 
-	public Group getGroup() {
+	public PlotGroup getGroup() {
 		return group;
 	}
 
-	public void setGroup(Group group) {
+	public void setGroup(PlotGroup group) {
 		this.group = group;
+
+		try {
+			group.addTownBlock(this);
+		} catch (NullPointerException e) {
+		}
 	}
 }

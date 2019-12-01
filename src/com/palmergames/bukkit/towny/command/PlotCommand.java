@@ -557,9 +557,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					plotTestOwner(resident, townBlock);
 					
 					if (split.length <= 1) {
+						/*
 						player.sendMessage(ChatTools.formatTitle("/... group"));
 						player.sendMessage(ChatTools.formatCommand("", "group", "add", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
 						player.sendMessage(ChatTools.formatCommand("", "group", "remove", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
+						 */
+						
+						if (townBlock.hasGroup())
+							TownyMessaging.sendMessage(player, townBlock.getGroup().toString());
 					}
 					
 					if (split.length >= 2) {
@@ -569,19 +574,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							/*
 							PlotGroup newgrp = new PlotGroup(town.getName());
 							newgrp.setPrice(1001);
-							newgrp.setGroupName("test");
+							newgrp.setGroupName("groupname");
 							newgrp.setID(1);
-							
-							 
 							
 							TownyWorld gWorld = TownyUniverse.getInstance().getWorldMap().get("world");
 							
-							gWorld.addGroup(newgrp);
+							gWorld.newGroup("test", "groupname", 420);
 							
 							townyUniverse.getDataSource().saveGroupList();
 							
 							townyUniverse.getDataSource().saveGroup(newgrp);
-							*/
+							
+							 */
 							
 							TownyWorld groupWorld = townBlock.getWorld();
 							
@@ -598,7 +602,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								if (pGroup == null) {
 									// In this case we default the group name to the player's name.
-									pGroup = new PlotGroup(town.generatePlotGroupID(), player.getName());
+									pGroup = new PlotGroup(town.generatePlotGroupID(), player.getName(), town);
 									
 									TownyMessaging.sendErrorMsg("Group mode was null adding new group.");
 									
@@ -611,7 +615,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									pGroup.addPlotPrice(townBlock.getPlotPrice());
 								}
 								
-								// Set the plot group id.
+								// Set the plot group.
 								townBlock.setGroup(pGroup);
 
 								// Save changes.
@@ -627,7 +631,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							String plotGroupName = split[2];
 							
 							// Add the group to the new plot.
-							PlotGroup newGroup = new PlotGroup(plotGroupID, plotGroupName);
+							PlotGroup newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 							townBlock.setGroup(newGroup);
 
 							// Check if a plot price is available.
@@ -646,8 +650,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Set the resident mode.
 							resident.setPlotGroupMode(newGroup, true);
+
+							TownyWorld gWorld = TownyUniverse.getInstance().getWorldMap().get("world");
+
+							gWorld.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
+
+							townyUniverse.getDataSource().saveGroupList();
 							
 							// Save changes.
+							townyUniverse.getDataSource().saveGroup(newGroup);
 							townyUniverse.getDataSource().saveTownBlock(townBlock);
 							townyUniverse.getDataSource().saveTown(town);
 
@@ -662,11 +673,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							// Check if a plot price is available.
 							if (!(townBlock.getPlotPrice() < 0)) {
-								townBlock.getGroup().addPlotPrice(townBlock.getPlotPrice());
+								((PlotGroup)townBlock.getGroup()).addPlotPrice(townBlock.getPlotPrice());
 							}
 							
 							// Remove the group id from the townblock.
-							townBlock.setID(null);
+							townBlock.setGroup(null);
 							
 							// Save
 							TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);

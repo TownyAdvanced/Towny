@@ -302,18 +302,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					String[] tokens = line.split(",");
 					String worldName = tokens[0];
 					String townName = tokens[1];
+					int groupID = Integer.parseInt(tokens[2]);
+					String groupName = tokens[3];
 
 					TownyWorld world;
-					
+					Town town = null;
 					try {
 						world = getWorld(worldName);
+						town = new Town(townName);
 					} catch (NotRegisteredException ex) {
-						
 						newWorld(tokens[0]);
 						world = getWorld(tokens[0]);
-					}
+					} 
 
-					world.addGroup(new PlotGroup(townName));
+					world.newGroup(townName, groupName, groupID);
 				}
 			}
 			
@@ -1486,12 +1488,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null)
 						group.setTown(new Town(line.trim()));
 					
-					line = keys.get("price");
+					line = keys.get("groupPrice");
 					if (line != null)
 						group.setPrice(Double.parseDouble(line.trim()));
-					
-					line = keys.get("townblocks");
-					if (line != null && !line.isEmpty())
 						
 					
 				} catch (Exception e) {
@@ -1622,6 +1621,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty())
 						townBlock.setMetadata(line.trim());
 					
+					test = "groupID";
+					line = keys.get("groupID");
+					Integer groupID = null;
+					if (line != null && !line.isEmpty())
+						groupID = Integer.parseInt(line.trim());
+					
+					if (groupID != null)
+					{
+						PlotGroup group = getGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
+						townBlock.setGroup(group);
+					}
+					
 					
 				} catch (Exception e) {
 					if (test == "town") {
@@ -1676,7 +1687,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 		
 		for (PlotGroup group : getAllGroups()) {
-			list.add(group.getTown().getWorld().getName() + "," + group.getTown().getName());
+			list.add(group.getTown().getWorld().getName() + "," + group.getTown().getName() + "," + group.getID() + "," + group.getGroupName());
 		}
 		
 		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "groups.txt"));
@@ -1984,9 +1995,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Town
 		list.add("town=" + group.getTown().toString());
 		
-		// TownBlocks
-		list.add("townBlocks=");
-		
 		// Save file
 		this.queryQueue.add(new FlatFile_Task(list, getGroupFilename(group)));
 		
@@ -2273,12 +2281,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + md.toString());
 		
 		// Group ID
-		StringBuilder group = new StringBuilder();
+		StringBuilder groupID = new StringBuilder();
+		StringBuilder groupName = new StringBuilder();
 		if (townBlock.hasGroup()) {
-			group.append(townBlock.getGroup().getID());
+			groupID.append(townBlock.getGroup().getID());
+			groupName.append(townBlock.getGroup().getGroupName());
 		}
 		
-		list.add("groupID=" + group.toString());
+		list.add("groupID=" + groupID.toString());
 		
 		
 		/*
