@@ -21,8 +21,9 @@ public class PlotGroup extends Group {
 	 * @param id   A unique identifier for the group id.
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 */
-	public PlotGroup(int id, String name) {
+	public PlotGroup(int id, String name, Town town) {
 		super(id, name);
+		this.town = town;
 	}
 	
 	public PlotGroup(String townName) {
@@ -34,17 +35,25 @@ public class PlotGroup extends Group {
 		String[] fields = str.split(",");
 		String name = fields[0];
 		int id = Integer.parseInt(fields[1]);
-		double price = Double.parseDouble(fields[2]);
+		String townName = fields[2];
+		double price = Double.parseDouble(fields[3]);
 		
-		PlotGroup newGroup = new PlotGroup(id, name);
+		Town town = null;
+		town = new Town(townName);
+		
+		PlotGroup newGroup = new PlotGroup(id, name, town);
 		newGroup.setPrice(price);
 		
 		return newGroup;
 	}
 
+	/**
+	 * Store plot group in format "name,id,town,price"
+	 * @return The string in the format described.
+	 */
 	@Override
 	public String toString() {
-		return super.toString() + "," + getPrice() + ",";
+		return super.toString() + "," + getTown().toString() + "," + getPrice();
 	}
 	
 	public void setTown(Town town) {

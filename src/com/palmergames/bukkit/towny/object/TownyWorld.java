@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TownyWorld extends TownyObject {
 	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
-	private List<PlotGroup> groups = new ArrayList<>();
+	private ConcurrentHashMap<String, PlotGroup> groups = new ConcurrentHashMap<>();
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -89,10 +90,6 @@ public class TownyWorld extends TownyObject {
 			town.setWorld(this);
 		}
 	}
-	
-	public void addGroup(PlotGroup group) {
-		getGroups().add(group);
-	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
 
@@ -115,7 +112,8 @@ public class TownyWorld extends TownyObject {
 		townBlocks.put(new Coord(key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), this));
 		return townBlocks.get(new Coord(key.getX(), key.getZ()));
 	}
-
+	
+	
 	public boolean hasTownBlock(Coord key) {
 
 		return townBlocks.containsKey(key);
@@ -139,6 +137,28 @@ public class TownyWorld extends TownyObject {
 
 		return townBlocks.values();
 	}
+
+	public PlotGroup newGroup(String townName, String name, int id) throws AlreadyRegisteredException {
+		PlotGroup newGroup = new PlotGroup(id, name,  new Town(townName));
+		
+		if (hasGroup(townName, id))
+			throw new AlreadyRegisteredException();
+		
+		String key = townName + id;
+		
+		groups.put(key, newGroup);
+		
+		return groups.get(key);
+	}
+	
+	public PlotGroup getGroup(String townName, int groupID) {
+		return groups.get(townName + groupID);
+	}
+	
+	public boolean hasGroup(String townName, int groupID) {
+		return groups.containsKey(townName + groupID);
+	}
+
 
 	public void removeTown(Town town) throws NotRegisteredException {
 
@@ -776,6 +796,6 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public Collection<PlotGroup> getGroups() {
-		return groups;
+		return groups.values();
 	}
 }
