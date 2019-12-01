@@ -1,24 +1,24 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.UUID;
-
 /**
- * @author Suneet Tipirneni (Siris) 
+ * A simple interface which encompassed the mechanics of objects put in groups.
+ * @author Suneet Tipirneni (Siris)
+ * @param <T> An object which inherits from {@link com.palmergames.bukkit.towny.object.Group}
  */
-public interface Groupable {
+public interface Groupable<T extends Group> {
 	/**
 	 * Gets the unique ID for the group this objects belongs to.
-	 * @return UUID of ID
+	 * @return Group ID as {@link Integer}
 	 */
-	UUID getGroupID();
+	Integer getID();
 	
 	String getGroupName();
+
+	/**
+	 * Sets the unique ID for the group this object belongs to.
+	 * @param ID A unique idea in the context of the group manager.
+	 */
+	void setID(Integer ID);
 	
-	default boolean hasGroup() {
-		return (getGroupID() != null);
-	}
-	
-	default boolean hasGroupName() {
-		return (getGroupName() != null);
-	}
+	void setGroupName(String name);
 }

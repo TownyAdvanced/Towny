@@ -20,7 +20,9 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Group;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -423,6 +425,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			townBlocks.addAll(world.getTownBlocks());
 		return townBlocks;
 	}
+	
+	public List<PlotGroup> getAllGroups() {
+		List<PlotGroup> groups = new ArrayList<>();
+		
+		for (TownyWorld world : getWorlds())
+			groups.addAll(world.getGroups());
+		
+		return groups;
+	}
 
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
@@ -463,6 +474,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
+	
+	// TODO: - New Group
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {

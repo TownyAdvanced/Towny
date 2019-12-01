@@ -33,6 +33,7 @@ public class TownyWorld extends TownyObject {
 	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
+	private List<PlotGroup> groups = new ArrayList<>();
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -87,6 +88,10 @@ public class TownyWorld extends TownyObject {
 			towns.add(town);
 			town.setWorld(this);
 		}
+	}
+	
+	public void addGroup(PlotGroup group) {
+		getGroups().add(group);
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
@@ -768,5 +773,9 @@ public class TownyWorld extends TownyObject {
 	public boolean isWarZone(Coord coord) {
 
 		return warZones.contains(coord);
+	}
+
+	public Collection<PlotGroup> getGroups() {
+		return groups;
 	}
 }
