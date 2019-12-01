@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
 import java.util.HashSet;
-import java.util.UUID;
 
 public class TownBlock {
 
@@ -29,7 +28,7 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
-	private PlotGroup plotGroup = null;
+	private Group group;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -492,28 +491,18 @@ public class TownBlock {
 			metadata = new HashSet<>();
 		
 		String[] objects = str.split(";");
-		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
 		}
 	}
-
-	public PlotGroup getPlotGroup() {
-		return plotGroup;
-	}
 	
-	public void setPlotGroup(String plotGroupStr) {
-		this.plotGroup = PlotGroup.fromString(plotGroupStr);
+	public boolean hasGroup() { return getGroup() != null; }
+
+	public Group getGroup() {
+		return group;
 	}
 
-	public void setPlotGroup(PlotGroup plotGroup) {
-		this.plotGroup = plotGroup;
-	}
-	
-	public void removePlotGroup() {
-		this.plotGroup = null;
-	}
-	
-	public boolean hasPlotGroup() {
-		return plotGroup != null;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 }

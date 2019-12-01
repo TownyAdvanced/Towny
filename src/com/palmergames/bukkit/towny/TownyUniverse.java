@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -47,6 +48,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, PlotGroup> groups = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;

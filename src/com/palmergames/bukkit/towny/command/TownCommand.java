@@ -572,13 +572,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 
-						if (!town.hasPlotGroups()) {
+						if (!town.hasGroups()) {
 							TownyMessaging.sendErrorMsg(player, "This town doesn't haven any associated groups.");
 							return;
 						}
 
-						for (PlotGroup pg : town.getPlotGroups()) {
-							if (pg.getName().equalsIgnoreCase(groupName)) {
+						for (PlotGroup pg : town.getGroups()) {
+							if (pg.getGroupName().equalsIgnoreCase(groupName)) {
 								town.removePlotGroup(pg);
 								TownyMessaging.sendMessage(player, "Group was successfully deleted.");
 							}
@@ -597,9 +597,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(player, e.getMessage());
 							return;
 						}
-						
+						/*
 						String groupName = split[2];
-						PlotGroup newGroup = new PlotGroup(town.generatePlotGroupID(), groupName);
+						PlotGroup newGroup = new PlotGroup(town.generatePlotGroupID(), groupName, town);
 						
 						if (town.hasGroupName(groupName)) {
 							TownyMessaging.sendErrorMsg(player, "This town already has a group named " + groupName);
@@ -609,6 +609,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						town.addPlotGroup(newGroup);
 						
 						TownyUniverse.getInstance().getDataSource().saveTown(town);
+						
+						 */
 					}
 				} else {
 					try {

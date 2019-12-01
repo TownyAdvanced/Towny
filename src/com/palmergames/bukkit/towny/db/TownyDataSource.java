@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -55,7 +56,7 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadResidentList() && loadTownBlockList() && loadGroupList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
@@ -99,11 +100,15 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorld(TownyWorld world);
 
+	abstract public boolean loadGroupList();
+
 	abstract public boolean saveTownBlockList();
 
 	abstract public boolean saveResidentList();
 
 	abstract public boolean saveTownList();
+
+	abstract public boolean saveGroupList();
 
 	abstract public boolean saveNationList();
 
@@ -116,6 +121,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveResident(Resident resident);
 
 	abstract public boolean saveTown(Town town);
+	
+	abstract public boolean saveGroup(PlotGroup group);
 
 	abstract public boolean saveNation(Nation nation);
 

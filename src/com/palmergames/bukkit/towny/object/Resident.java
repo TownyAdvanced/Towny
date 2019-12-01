@@ -529,11 +529,21 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	 * @author Suneet Tipirneni (Siris)
 	 * Returns the group mode that is enabled.
 	 * @return The mode as a {@link com.palmergames.bukkit.towny.object.PlotGroup},
-	 * where the substring between {} is the qualified
-	 * string representation of the {@link com.palmergames.bukkit.towny.object.PlotGroup}.
-	 * If there is not group mode, then null is returned.
+	 * where the substring between the curly braces is the qualified
+	 * string representation. If there is not group mode, then null is returned.
+	 * @see PlotGroup#toString()
 	 */
 	public PlotGroup getPlotGroupFromMode() {
+		
+		PlotGroup pg = null;
+		Town town = null;
+
+		try {
+			town = getTown();
+		} catch (NotRegisteredException e) {
+			return null;
+		}
+		
 		for (String mode : getModes()) {
 			if (mode.contains("Group")) {
 				return PlotGroup.fromModeString(mode);
@@ -545,7 +555,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	/**
 	 * @author Suneet Tipirneni (Siris)
-	 * Indicates whether the given group mode is enabled.
+	 * @param group Indicates whether the given group mode is enabled.
 	 * @return A boolean, true if the given group mode is present and false if the group isn't present.
 	 */
 	public boolean hasPlotGroupMode(PlotGroup group) {
