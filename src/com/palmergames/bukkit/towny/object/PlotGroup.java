@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.List;
  * A simple class which encapsulates the grouping of townblocks.
  */
 public class PlotGroup extends Group {
+	private Resident resident = null;
 	private List<TownBlock> townBlocks;
 	private double price;
 	private Town town;
@@ -94,6 +95,19 @@ public class PlotGroup extends Group {
 	public double getPrice() {
 		return price;
 	}
+	
+	public void setResident(Resident resident) {
+		if (hasResident())
+			this.resident = resident;
+	}
+
+	public Resident getResident() throws NotRegisteredException {
+		if (!hasResident())
+			throw new NotRegisteredException("The Group " + this.toString() + "is not registered to a resident.");
+		return resident;
+	}
+
+	public boolean hasResident() { return resident != null; }
 	
 	public void addTownBlock(TownBlock townBlock) {
 		if (townBlocks == null)

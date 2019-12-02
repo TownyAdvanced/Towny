@@ -664,7 +664,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							townyUniverse.getDataSource().saveGroupList();
 							
 							// Save changes.
-							townyUniverse.getDataSource().saveGroup(newGroup);
+							townyUniverse.getDataSource().savePlotGroup(newGroup);
 							townyUniverse.getDataSource().saveTownBlock(townBlock);
 							townyUniverse.getDataSource().saveTown(town);
 

@@ -124,7 +124,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveTown(Town town);
 	
-	abstract public boolean saveGroup(PlotGroup group);
+	abstract public boolean savePlotGroup(PlotGroup group);
 
 	abstract public boolean saveNation(Nation nation);
 
