@@ -142,9 +142,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	public boolean parseTownyAdminCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (getSender()==player && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
+			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 		if (split.length == 0) {
-			if (getSender()==player && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			buildTAPanel();
 			for (String line : ta_panel) {
 				sender.sendMessage(line);
@@ -849,6 +849,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	public void adminSet(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET.getNode(split[0].toLowerCase())))
+			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+
 		if (split.length == 0) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin set"));
 			// TODO: player.sendMessage(ChatTools.formatCommand("",
@@ -862,9 +866,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			return;
 		}
-
-		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET.getNode(split[0].toLowerCase())))
-			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		if (split[0].equalsIgnoreCase("mayor")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR.getNode(split[0].toLowerCase())))

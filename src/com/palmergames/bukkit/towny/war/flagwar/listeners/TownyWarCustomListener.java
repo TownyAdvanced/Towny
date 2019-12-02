@@ -30,8 +30,6 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig.isFlaggedTownblockTransfered;
-
 public class TownyWarCustomListener implements Listener {
 
 	private final Towny plugin;
