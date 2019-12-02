@@ -3885,16 +3885,16 @@ v0.92.0.11:
 0.95.1.9:
   - REQUIRED CONFIG CHANGE:
     - If you had town.max_purchased_blocks: 0 in your config:
-      - In your town_level section you must add: 'townBlockBonusBuyLimit: 0' to each level.
+      - In your town_level section you must add: 'townBlockBuyBonusLimit: 0' to each level.
     - If you did not have town.max_purchased_blocks: 0 in your config:
-      - In your town_level section you must add: 'townBlockBonusBuyLimit: #' to each level.
+      - In your town_level section you must add: 'townBlockBuyBonusLimit: #' to each level.
       - # being what you had your town.max_purchased_blocks set to.
     - Failure to do so will cause your Towny to not enable.
   - New Feature:
     - The ability to set maximum purchased blocks (/town buy bonus #) per Town_Level.
     - This means a higher population town will be able to buy more extra blocks.
     - Requires the town.max_purchased_blocks_uses_town_levels setting to be true.
-    - By default new configs will generate with townBlockBonusBuyLimits set to 0 for all Town_Levels, making the feature off by default.
+    - By default new configs will generate with townBlockBuyBonusLimits set to 0 for all Town_Levels, making the feature off by default.
     - Closes ticket #3483.
   - New Config Option: town.max_purchased_blocks_uses_town_levels
     - Default: true    
