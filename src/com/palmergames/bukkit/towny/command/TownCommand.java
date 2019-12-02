@@ -564,17 +564,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Town town = null;
 
 					try {
-						town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
+						Resident resident = townyUniverse.getDataSource().getResident(player.getName());
+						town = resident.getTown();
 					} catch (Exception e) {
+						TownyMessaging.sendErrorMsg(player, "UH OH");
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						return;
 					}
 					
-					for (PlotGroup group : town.getGroups()) {
-						TownyMessaging.sendMessage(player, group.toString());
+					if (town.hasGroups()) {
+						for (PlotGroup group : town.getGroups()) {
+							TownyMessaging.sendMessage(player, group.toString());
+						}
+					} else {
+						player.sendMessage("there are not groups in" + town.getName());
 					}
 					
-					return;
 					/*
 					if (split[1].equalsIgnoreCase("remove")) {
 						String groupName = split[2];

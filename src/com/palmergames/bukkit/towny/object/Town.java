@@ -1336,6 +1336,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		if (!hasGroups()) 
 			this.plotGroups = new HashSet<>();
 		
+		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName());
+		
 		this.plotGroups.add(group);
 		
 	}
