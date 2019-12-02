@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Groupable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -40,7 +39,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +73,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
 			dataFolderPath + File.separator + "plot-block-data",
 			dataFolderPath + File.separator + "townblocks",
-			dataFolderPath + File.separator + "groups"
+			dataFolderPath + File.separator + "plotgroups"
 		) || !FileMgmt.checkOrCreateFiles(
 			dataFolderPath + File.separator + "townblocks.txt",
 			dataFolderPath + File.separator + "residents.txt",
@@ -227,7 +225,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public String getGroupFilename(PlotGroup group) {
-		return dataFolderPath + File.separator + "groups" + File.separator + group.getTown().getName() + File.separator + group.getGroupName() + ".data";
+		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getTown().getName() + File.separator + group.getGroupName() + ".data";
 	}
 
 	/*
@@ -291,7 +289,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public boolean loadGroupList() {
+	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg("Loading Group List");
 		String line = null;
 
@@ -1458,7 +1456,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	 */
 	
-	public boolean loadGroups() {
+	public boolean loadPlotGroups() {
 		String line = "";
 		String path;
 		
@@ -1487,6 +1485,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null)
 						group.setID(Integer.parseInt(line.trim()));
 					
+					test = "town";
 					line = keys.get("town");
 					if (line != null && !line.isEmpty()) {
 						Town town = getTown(line.trim());
@@ -1501,9 +1500,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						
 					
 				} catch (Exception e) {
-					if (test == "groupID") {
+					if (test.equals("town")) {
 						TownyMessaging.sendDebugMsg("Group file missing Town, deleting " + path);
-						//deleteTownBlock(townBlock);
+						deleteGroup(group);
 						TownyMessaging.sendDebugMsg("Missing file: " + path + " deleting entry in group.txt");
 						//TownyWorld world = townBlock.getWorld();
 						//world.removeTownBlock(townBlock);
@@ -1639,7 +1638,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					if (groupID != null)
 					{
-						PlotGroup group = getGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
+						PlotGroup group = getPlotGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
 						TownyMessaging.sendErrorMsg("GROUP = " + String.valueOf(group));
 						townBlock.setGroup(group);
 					}
@@ -1967,16 +1966,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 		}
 		list.add("metadata=" + md.toString());
-		
-		// Groups
-		StringBuilder plotGroups = new StringBuilder();
-		if (town.hasGroups()) {
-			for (PlotGroup pGroup : town.getGroups()) {
-				plotGroups.append(pGroup.toString()).append(";");
-			}
-		}
-		
-		//list.add("groups=" + plotGroups);
 		
 		/*
 		 *  Make sure we only save in async
