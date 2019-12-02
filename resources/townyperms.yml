@@ -1,4 +1,3 @@
-
 # This file contains custom permission sets which will be assigned to your players
 # depending on their current status.
 #
@@ -25,7 +24,7 @@ nomad:
     - towny.command.town.list
     - towny.command.plot.perm
     - towny.command.nation.list
-    - towny.command.nation.townlist
+    - towny.command.nation.townlist  
     - towny.command.nation.allylist
     - towny.command.nation.enemylist
     - towny.town.resident
@@ -61,6 +60,7 @@ towns:
         - towny.outlaw.jailer
         - towny.command.nation.join
         - towny.command.nation.leave
+        - towny.command.town.siege
 
     ranks:
         # Ranks contain additional permissions residents will be
@@ -76,18 +76,17 @@ towns:
             - towny.command.town.rank.vip
             - towny.command.town.rank.helper
             - towny.outlaw.jailer
-            - towny.command.town.siege
         helper:
             - towny.claimed.townowned.switch.*
         donator:
-        # Currently only an example rank holder with no extra permissions
+            # Currently only an example rank holder with no extra permissions
         vip:
-        # Currently only an example rank holder with no extra permissions
+            # Currently only an example rank holder with no extra permissions
         # Sheriff rank is able to jail other town members.
         sheriff:
             - towny.command.town.toggle.jail
             - towny.outlaw.jailer
-
+            
 # This section of permissions covers players who are members of any town in a nation.
 nations:
     default:
@@ -105,7 +104,7 @@ nations:
         # Kings get these permissions in addition to the default set.
         - towny.command.nation.*
         - towny.command.nation.deposit.other
-
+        
     ranks:
         assistant:
             - towny.command.nation.rank.helper
