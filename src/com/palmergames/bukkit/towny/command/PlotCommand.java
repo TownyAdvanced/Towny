@@ -170,7 +170,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									// 2) Set the owner on each block in the group.
 									ArrayList<WorldCoord> coords = new ArrayList<>();
 									
-									for (TownBlock tb : town.getTownBlocksForGroup(group)) {
+									for (TownBlock tb : town.getTownBlocksForPlotGroup(group)) {
 										coords.add(tb.getWorldCoord());
 									}
 									
@@ -636,7 +636,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 								// Don't add the group to the town data if it's already there.
 								if (town.hasGroupName(newGroup.getGroupName())) {
-									newGroup = town.getGroupFromName(newGroup.getGroupName());
+									newGroup = town.getPlotGroupFromName(newGroup.getGroupName());
 								}
 
 								townBlock.setGroup(newGroup);
