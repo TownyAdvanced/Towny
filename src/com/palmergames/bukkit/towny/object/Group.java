@@ -43,7 +43,7 @@ public abstract class Group implements Groupable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof PlotGroup) {
+		if (obj instanceof Group) {
 			return ((Group) obj).id == this.id;
 		}
 		return false;
