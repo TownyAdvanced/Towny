@@ -2,6 +2,7 @@ package com.palmergames.util;
 
 import java.text.NumberFormat;
 import com.palmergames.bukkit.towny.TownySettings;
+
 import java.util.ArrayList;
 import java.util.List;
 

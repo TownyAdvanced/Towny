@@ -97,8 +97,7 @@ public class SQL_Schema {
 			+ "PRIMARY KEY (`siegeZoneName`)"
 			+ ")";
 	}
-
-
+	
 	private static List<String> getSiegeZoneColumns(){
 		List<String> columns = new ArrayList<>();
 		columns.add("`flagLocation` mediumtext NOT NULL");
@@ -107,8 +106,7 @@ public class SQL_Schema {
 		columns.add("`siegePoints` mediumtext NOT NULL");
 		return columns;
 	}
-
-
+	
 	private static String getTOWNS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS ("
@@ -167,6 +165,7 @@ public class SQL_Schema {
 		return columns;
 	}
 
+	
     private static String getRESIDENTS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS ("
@@ -193,7 +192,7 @@ public class SQL_Schema {
 		columns.add("`friends` mediumtext");
 		return columns;
 	}
-
+	
     private static String getTOWNBLOCKS() {
 
         return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS ("

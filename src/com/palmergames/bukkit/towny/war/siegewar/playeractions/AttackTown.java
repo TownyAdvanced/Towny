@@ -186,9 +186,6 @@ public class AttackTown {
 			
 			TownyMessaging.sendMessage(player, moneyMessage);
 		}
-        
-        //BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
-        //TODO - Do we announce a new siege event like this???
     }
 
 }

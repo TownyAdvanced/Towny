@@ -31,6 +31,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -1021,14 +1022,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     town.setRegistered(0);
                 }
 
-                try {
-                    line = rs.getString("metadata");
-                    if (line != null && !line.isEmpty()) {
-                        town.setMetadata(line);
-                    }
-                } catch (SQLException ignored) {
+				try {
+						line = rs.getString("metadata");
+						if (line != null && !line.isEmpty()) {
+							town.setMetadata(line);
+						}
+					} catch (SQLException ignored) {
 
-                }
+
+					}
 
                 town.setRecentlyRuinedEndTime(rs.getLong("recentlyRuinedEndTime"));
                 town.setRevoltImmunityEndTime(rs.getLong("revoltCooldownEndTime"));
@@ -1750,9 +1752,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             } else {
                 twn_hm.put("uuid", UUID.randomUUID());
             }
-
             twn_hm.put("registered", town.getRegistered());
-
+            
             twn_hm.put("recentlyRuinedEndTime", Long.toString(town.getRecentlyRuinedEndTime()));
             twn_hm.put("revoltCooldownEndTime", Long.toString(town.getRevoltImmunityEndTime()));
             twn_hm.put("siegeCooldownEndTime", Long.toString(town.getSiegeImmunityEndTime()));

@@ -192,7 +192,6 @@ public class TownBlock {
 		if (type != this.type)
 			this.permissions.reset();
 
-
 		if (type != null){
 			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 		}

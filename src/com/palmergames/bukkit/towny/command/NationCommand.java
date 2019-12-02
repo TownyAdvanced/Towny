@@ -39,6 +39,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1020,7 +1021,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public void newNation(Player player, String name, String capitalName) {
 
-		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
 
 			Town town = universe.getDataSource().getTown(capitalName);
@@ -1075,7 +1076,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public void mergeNation(Player player, String name) throws TownyException {
 		
-		com.palmergames.bukkit.towny.TownyUniverse universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+		TownyUniverse universe = TownyUniverse.getInstance();
 		Nation nation = null;
 		Nation remainingNation = null;
 		try {

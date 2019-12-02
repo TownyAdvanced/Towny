@@ -1,5 +1,4 @@
 package com.palmergames.bukkit.towny.utils;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -7,10 +6,22 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Wolf;
 
 import java.util.List;
 
@@ -227,7 +238,7 @@ public class CombatUtil {
 
 				if (block != null) {
 					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
+					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, ActionType.DESTROY);
 
 					if (!bDestroy) {
 

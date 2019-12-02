@@ -41,7 +41,11 @@ import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.Map;
 
 /**
  * @author ElgarL
@@ -846,6 +850,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			 * and the file move command may fail.
 			 */
 			deleteTown(town);
+			
 			if(town.hasSiege()) {
 				for(SiegeZone siegeZone: new ArrayList<>(town.getSiege().getSiegeZones().values())) {
 					deleteSiegeZone(siegeZone);
@@ -906,7 +911,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				//townBlock.setTown(town);
 				saveTownBlock(townBlock);
 			}
-			
+
 			saveTown(town);
 			for(SiegeZone siegeZone: town.getSiege().getSiegeZones().values()) {
 				saveSiegeZone(siegeZone);
@@ -973,6 +978,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//Tidy up old files
 			deleteNation(nation);
+
 			for(SiegeZone siegeZone: new ArrayList<>(nation.getSiegeZones())) {
 				deleteSiegeZone(siegeZone);
 			}
@@ -1037,7 +1043,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}
 				} else
 					toSave.remove(toCheck);
-				
+
 			for (Nation toCheck : toSaveNation)
 				saveNation(toCheck);
 

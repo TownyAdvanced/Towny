@@ -347,10 +347,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			numResidents += town.getNumResidents();
 		return numResidents;
 	}
-
-
-
-
+	
 	public void removeTown(Town town) throws EmptyNationException, NotRegisteredException {
 
 		if (!hasTown(town))
@@ -763,5 +760,4 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	public Resident getKing() {
 		return capital.getMayor();
 	}
-
 }

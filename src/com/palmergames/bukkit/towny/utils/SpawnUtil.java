@@ -2,8 +2,6 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 
-import com.palmergames.bukkit.towny.object.*;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSpawnUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,9 +18,19 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.NationSpawnLevel;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnType;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownSpawnLevel;
+import com.palmergames.bukkit.towny.object.TownyEconomyObject;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSpawnUtil;
 
 public class SpawnUtil {
 
@@ -59,7 +67,7 @@ public class SpawnUtil {
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
 			throw new TownyException(TownySettings.getLangString("msg_cannot_spawn_while_jailed"));
-		
+
 		Town town = null;
 		Nation nation = null;
 		Location spawnLoc = null;
@@ -85,12 +93,10 @@ public class SpawnUtil {
 			} else {
 				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
 			}
-			
 			break;
 
 			case TOWN:
 			town = (Town) townyObject;
-
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
 					throw new TownyException(TownySettings.getLangString("msg_err_outpost_spawn"));
@@ -236,7 +242,7 @@ public class SpawnUtil {
 
 			break;
 		}
-		
+
 		// Prevent spawn travel while in disallowed zones (if configured.)
 		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
@@ -309,7 +315,7 @@ public class SpawnUtil {
 				throw new TownyException(notAffordMSG);
 		} catch (EconomyException ignored) {
 		}
-		
+
 		// Essentials tests.
 		boolean usingESS = plugin.isEssentials();
 

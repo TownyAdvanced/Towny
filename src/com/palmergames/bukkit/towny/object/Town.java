@@ -1,12 +1,16 @@
 package com.palmergames.bukkit.towny.object;
-
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownTagChangeEvent;
-import com.palmergames.bukkit.towny.exceptions.*;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
@@ -23,7 +27,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.HashSet;
 
 import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
@@ -1421,5 +1430,5 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public long getRecentlyRuinedEndTime() {
 		return recentlyRuinedEndTime;
 	}
-
+	
 }

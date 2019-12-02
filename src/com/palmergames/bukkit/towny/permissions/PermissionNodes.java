@@ -156,7 +156,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_OUTLAW("towny.command.town.outlaw"),
 		TOWNY_COMMAND_TOWN_RESLIST("towny.command.town.reslist"),
 		TOWNY_COMMAND_TOWN_OUTLAWLIST("towny.command.town.outlawlist"),
-
+	
 	/*
 	 * Plot command permissions
 	 */

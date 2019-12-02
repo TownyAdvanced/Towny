@@ -26,8 +26,12 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.HashMap;
 
 /**
  * Towny's class for internal API Methods
@@ -43,8 +47,8 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Resident> residents = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, SiegeZone> siegeZones = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, SiegeZone> siegeZones = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
@@ -253,7 +257,7 @@ public class TownyUniverse {
     public ConcurrentHashMap<String, Nation> getNationsMap() {
         return nations;
     }
-
+    
     public ConcurrentHashMap<String, SiegeZone> getSiegeZonesMap() {
     	return siegeZones;
 	}
