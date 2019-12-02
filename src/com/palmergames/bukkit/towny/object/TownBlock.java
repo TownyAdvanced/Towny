@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Bukkit;
-
 import java.util.HashSet;
 
 public class TownBlock {

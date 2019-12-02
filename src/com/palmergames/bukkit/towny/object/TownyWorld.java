@@ -10,8 +10,8 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 public class TownyWorld extends TownyObject {
 
