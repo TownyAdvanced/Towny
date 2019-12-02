@@ -1476,8 +1476,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						deleteGroup(group);
 					
 					line = keys.get("groupPrice");
-					if (line != null)
+					if (line != null && !line.isEmpty())
 						group.setPrice(Double.parseDouble(line.trim()));
+					
+					line = keys.get("resident");
+					if (line != null && !line.isEmpty())
+						group.setResident(getResident(line.trim()));
 						
 					
 				} catch (Exception e) {
@@ -1611,14 +1615,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					test = "groupID";
 					line = keys.get("groupID");
 					Integer groupID = null;
-					if (line != null && !line.isEmpty())
-					{
+					if (line != null && !line.isEmpty()) {
 						groupID = Integer.parseInt(line.trim());
 					}
-						
 					
-					if (groupID != null)
-					{
+					if (groupID != null) {
 						PlotGroup group = getPlotGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
 						TownyMessaging.sendErrorMsg("GROUP = " + String.valueOf(group));
 						townBlock.setGroup(group);
@@ -1949,7 +1950,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public boolean saveGroup(PlotGroup group) {
+	public boolean savePlotGroup(PlotGroup group) {
 		
 		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "groups" + File.separator + group.getTown().getName());
 		
@@ -1966,6 +1967,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Town
 		list.add("town=" + group.getTown().toString());
+		
+		// Owner
+		if (group.hasResident())
+			try {
+				list.add("resident=" + group.getResident().toString());
+			} catch (NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(e.getMessage());
+			}
+		
 		
 		// Save file
 		this.queryQueue.add(new FlatFile_Task(list, getGroupFilename(group)));

@@ -1614,7 +1614,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public boolean saveGroup(PlotGroup group) {
+	public boolean savePlotGroup(PlotGroup group) {
 		return false;
 	}
 
