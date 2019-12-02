@@ -1,8 +1,6 @@
 package com.palmergames.util;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -40,25 +38,6 @@ public class StringMgmt {
 		String out = arr[0].toString();
 		for (int i = 1; i < arr.length; i++)
 			out += separator + arr[i];
-		return out;
-	}
-
-	public static String join(Map<?,?> map, String entrySeparator, String keyValueSeparator) {
-		if (map.size() == 0)
-			return "";
-
-		String out = "";
-		boolean firstEntry = true;
-
-		for(Object key: map.keySet()) {
-			if(!firstEntry) {
-				out += entrySeparator;
-			} else {
-				firstEntry = false;
-			}
-
-			out += key.toString() + keyValueSeparator + map.get(key).toString();
-		}
 		return out;
 	}
 
