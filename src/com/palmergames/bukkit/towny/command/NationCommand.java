@@ -32,6 +32,7 @@ import java.io.InvalidObjectException;
 import java.util.*;
 
 
+
 public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
