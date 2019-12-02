@@ -151,6 +151,13 @@ public class TownyWorld extends TownyObject {
 		return groups.get(key);
 	}
 	
+	public void removeGroup(PlotGroup group) {
+		if (hasGroup(group.getTown().toString(), group.getID())) {
+			String key = group.getTown().toString() + group.getID().toString();
+			townBlocks.remove(key);
+		}
+	}
+	
 	public PlotGroup getGroup(String townName, int groupID) {
 		return groups.get(townName + groupID);
 	}

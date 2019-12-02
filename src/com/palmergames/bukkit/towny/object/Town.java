@@ -1418,4 +1418,15 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		
 		return null;
 	}
+	
+	public PlotGroup getGroupFromName(String name) {
+		if (hasGroups()) {
+			for (PlotGroup pg : getGroups()) {
+				if (pg.getGroupName().equals(name))
+					return pg;
+			}
+		}
+		
+		return null;
+	}
 }

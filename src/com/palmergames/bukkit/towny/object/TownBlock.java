@@ -501,6 +501,10 @@ public class TownBlock {
 	public PlotGroup getGroup() {
 		return group;
 	}
+	
+	public void removeGroup() {
+		this.group = null;
+	}
 
 	public void setGroup(PlotGroup group) {
 		this.group = group;
