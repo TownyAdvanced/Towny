@@ -555,7 +555,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		removeTown(town, delayFullRemoval);
 	}
 
-
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
 		
