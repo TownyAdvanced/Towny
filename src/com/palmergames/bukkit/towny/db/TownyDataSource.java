@@ -292,7 +292,7 @@ public abstract class TownyDataSource {
 	abstract public boolean hasTown(String name);
 
 	abstract public boolean hasNation(String name);
-	
+
 	abstract public List<Town> getTowns(String[] names);
 
 	abstract public List<Town> getTowns();
