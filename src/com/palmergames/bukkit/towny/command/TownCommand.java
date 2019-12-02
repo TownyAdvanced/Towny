@@ -381,7 +381,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					townSpawn(player, newSplit, false);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
-
 					if (split.length >= 2) {
 						if (split[1].equalsIgnoreCase("list")) {
 							if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode())){
@@ -1198,7 +1197,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (outsiderintown) {
 					throw new TownyException(TownySettings.getLangString("msg_cant_toggle_pvp_outsider_in_town"));
 				}
-
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 				// Make sure we are allowed to set these permissions.
 				toggleTest(player, town, StringMgmt.join(split, " "));
@@ -2147,7 +2145,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			plotChunk = null;
 		}
-
 		TownyMessaging.sendDebugMsg("Creating new Town account: " + "town-" + name);
 		if (TownySettings.isUsingEconomy()) {
 			try {
@@ -2156,7 +2153,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-
+		
 		townyUniverse.getDataSource().saveResident(resident);
 		townyUniverse.getDataSource().saveTownBlock(townBlock);
 		townyUniverse.getDataSource().saveTown(town);
@@ -3316,7 +3313,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
-
+		
 	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> invited = new ArrayList<>();
