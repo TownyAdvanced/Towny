@@ -313,7 +313,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (NotRegisteredException ex) {
 						newWorld(tokens[0]);
 						world = getWorld(tokens[0]);
-					} 
+						TownyMessaging.sendErrorMsg("world null?");
+					}
 
 					world.newGroup(townName, groupName, groupID);
 				}
@@ -1442,6 +1443,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = "";
 		String path;
 		
+		TownyMessaging.sendErrorMsg("" + getAllGroups().size());
+		
 		for (PlotGroup group : getAllGroups()) {
 			path = getGroupFilename(group);
 			
@@ -1466,8 +1469,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						group.setID(Integer.parseInt(line.trim()));
 					
 					line = keys.get("town");
-					if (line != null && !line.isEmpty())
-						group.setTown(new Town(line.trim()));
+					if (line != null && !line.isEmpty()) {
+						Town town = getTown(line.trim());
+						group.setTown(town);
+					}
 					else
 						deleteGroup(group);
 					
@@ -1608,11 +1613,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("groupID");
 					Integer groupID = null;
 					if (line != null && !line.isEmpty())
+					{
 						groupID = Integer.parseInt(line.trim());
+					}
+						
 					
 					if (groupID != null)
 					{
 						PlotGroup group = getGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
+						TownyMessaging.sendErrorMsg("GROUP = " + String.valueOf(group));
 						townBlock.setGroup(group);
 					}
 					

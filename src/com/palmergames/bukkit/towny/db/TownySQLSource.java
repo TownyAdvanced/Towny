@@ -1901,8 +1901,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean loadGroupList() {
     	return false;
 	}
-    
-    @SuppressWarnings("deprecation")
+
+	@Override
+	public boolean loadGroups() {
+		return false;
+	}
+
+	@SuppressWarnings("deprecation")
 	@Override
     public boolean cleanup() {
 

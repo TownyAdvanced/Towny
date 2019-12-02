@@ -628,7 +628,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								return true;
 							} else if (split.length == 3) {
-								// Create brand new plot group.
+								// Create a brand new plot group.
 								int plotGroupID = town.generatePlotGroupID();
 								String plotGroupName = split[2];
 								
@@ -657,7 +657,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							TownyWorld gWorld = TownyUniverse.getInstance().getWorldMap().get(world);
 							try{
 								gWorld.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
-							} catch (Exception ignored) {}
+							} catch (Exception ignored) {
+								TownyMessaging.sendErrorMsg(ignored.getMessage());
+							}
 							
 							townyUniverse.getDataSource().saveGroupList();
 							

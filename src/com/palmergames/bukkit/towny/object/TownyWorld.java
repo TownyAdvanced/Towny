@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -141,12 +143,15 @@ public class TownyWorld extends TownyObject {
 	public PlotGroup newGroup(String townName, String name, int id) throws AlreadyRegisteredException {
 		PlotGroup newGroup = new PlotGroup(id, name,  new Town(townName));
 		
-		if (hasGroup(townName, id))
+		if (hasGroup(townName, id)) {
+			TownyMessaging.sendErrorMsg("group " + townName + ":" + id + " already exists");
 			throw new AlreadyRegisteredException();
+		}
 		
 		String key = townName + id;
-		
+		TownyMessaging.sendErrorMsg("New group = " + newGroup);
 		groups.put(key, newGroup);
+		TownyMessaging.sendErrorMsg("Group val = " + groups.get(key));
 		
 		return groups.get(key);
 	}
@@ -159,6 +164,14 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	public PlotGroup getGroup(String townName, int groupID) {
+		System.out.println("Group Size = " + groups.size());
+		for (String str : groups.keySet()) {
+			TownyMessaging.sendErrorMsg(str);
+		}
+		
+		
+		
+		TownyMessaging.sendErrorMsg("Return val = " + groups.get((townName + groupID)));
 		return groups.get(townName + groupID);
 	}
 	

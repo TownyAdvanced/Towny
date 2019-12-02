@@ -512,6 +512,7 @@ public class TownBlock {
 		try {
 			group.addTownBlock(this);
 		} catch (NullPointerException e) {
+			TownyMessaging.sendErrorMsg("Group is null." + String.valueOf(group));
 		}
 	}
 }

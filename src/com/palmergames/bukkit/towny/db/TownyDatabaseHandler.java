@@ -201,7 +201,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		world = universe.getWorldMap().get(worldName);
 		
 		if (world == null)
+		{
+			TownyMessaging.sendErrorMsg("OH NOOO!");
 			throw new NotRegisteredException();
+		}
+			
 		
 		return world.getGroup(townName, groupID);
 	}
