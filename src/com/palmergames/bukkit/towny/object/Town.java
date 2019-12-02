@@ -1318,7 +1318,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return this.conqueredDays;
 	}
 	
-	public List<TownBlock> getTownBlocksForGroup(PlotGroup group) {
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
 		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
@@ -1353,7 +1353,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 	
-	public void setGroups(String str) {
+	public void setPlotGroups(String str) {
 		
 		if (plotGroups == null)
 			plotGroups = new HashSet<>();
@@ -1393,7 +1393,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return null;
 	}
 	
-	public PlotGroup getGroupFromName(String name) {
+	public PlotGroup getPlotGroupFromName(String name) {
 		if (hasGroups()) {
 			for (PlotGroup pg : getGroups()) {
 				if (pg.getGroupName().equals(name))
