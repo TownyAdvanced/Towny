@@ -1898,12 +1898,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     
     }
 
-	public boolean loadGroupList() {
+	public boolean loadPlotGroupList() {
     	return false;
 	}
 
 	@Override
-	public boolean loadGroups() {
+	public boolean loadPlotGroups() {
 		return false;
 	}
 

@@ -48,7 +48,6 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, PlotGroup> groups = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;

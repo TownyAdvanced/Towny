@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**

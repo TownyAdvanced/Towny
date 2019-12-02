@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class TownyWorld extends TownyObject {
 	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
-	private ConcurrentHashMap<String, PlotGroup> groups = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -150,10 +148,10 @@ public class TownyWorld extends TownyObject {
 		
 		String key = townName + id;
 		TownyMessaging.sendErrorMsg("New group = " + newGroup);
-		groups.put(key, newGroup);
-		TownyMessaging.sendErrorMsg("Group val = " + groups.get(key));
+		plotGroups.put(key, newGroup);
+		TownyMessaging.sendErrorMsg("Group val = " + plotGroups.get(key));
 		
-		return groups.get(key);
+		return plotGroups.get(key);
 	}
 	
 	public void removeGroup(PlotGroup group) {
@@ -164,19 +162,19 @@ public class TownyWorld extends TownyObject {
 	}
 	
 	public PlotGroup getGroup(String townName, int groupID) {
-		System.out.println("Group Size = " + groups.size());
-		for (String str : groups.keySet()) {
+		System.out.println("Group Size = " + plotGroups.size());
+		for (String str : plotGroups.keySet()) {
 			TownyMessaging.sendErrorMsg(str);
 		}
 		
 		
 		
-		TownyMessaging.sendErrorMsg("Return val = " + groups.get((townName + groupID)));
-		return groups.get(townName + groupID);
+		TownyMessaging.sendErrorMsg("Return val = " + plotGroups.get((townName + groupID)));
+		return plotGroups.get(townName + groupID);
 	}
 	
 	public boolean hasGroup(String townName, int groupID) {
-		return groups.containsKey(townName + groupID);
+		return plotGroups.containsKey(townName + groupID);
 	}
 
 
@@ -815,7 +813,7 @@ public class TownyWorld extends TownyObject {
 		return warZones.contains(coord);
 	}
 
-	public Collection<PlotGroup> getGroups() {
-		return groups.values();
+	public Collection<PlotGroup> getPlotGroups() {
+		return plotGroups.values();
 	}
 }

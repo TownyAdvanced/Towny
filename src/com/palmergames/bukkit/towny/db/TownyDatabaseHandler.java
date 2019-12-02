@@ -34,7 +34,6 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.NameValidation;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.naming.InvalidNameException;
@@ -196,13 +195,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotGroup getGroup(String worldName, String townName, int groupID) throws NotRegisteredException {
+	public PlotGroup getPlotGroup(String worldName, String townName, int groupID) throws NotRegisteredException {
 		TownyWorld world;
 		world = universe.getWorldMap().get(worldName);
 		
 		if (world == null)
 		{
-			TownyMessaging.sendErrorMsg("OH NOOO!");
 			throw new NotRegisteredException();
 		}
 			
@@ -444,7 +442,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<PlotGroup> groups = new ArrayList<>();
 		
 		for (TownyWorld world : getWorlds())
-			groups.addAll(world.getGroups());
+			groups.addAll(world.getPlotGroups());
 		
 		return groups;
 	}
