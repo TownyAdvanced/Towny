@@ -1485,8 +1485,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						group.setID(Integer.parseInt(line.trim()));
 					
 					line = keys.get("town");
-					if (line != null)
+					if (line != null && !line.isEmpty())
 						group.setTown(new Town(line.trim()));
+					else
+						deleteGroup(group);
 					
 					line = keys.get("groupPrice");
 					if (line != null)
@@ -2672,5 +2674,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File file = new File(getTownBlockFilename(townBlock));
 		if (file.exists())
 			file.deleteOnExit();
+	}
+	
+	public void deleteGroup(PlotGroup group) {
+    	File file = new File(getGroupFilename(group));
+    	if (file.exists());
+    		file.deleteOnExit();
 	}
 }

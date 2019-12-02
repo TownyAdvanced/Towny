@@ -102,6 +102,11 @@ public class PlotGroup extends Group {
 		
 		townBlocks.add(townBlock);
 	}
+
+	public void removeTownBlock(TownBlock townBlock) {
+		if (townBlocks != null)
+			townBlocks.remove(townBlock);
+	}
 	
 	public List<TownBlock> getTownBlocks() {
 		return townBlocks;
