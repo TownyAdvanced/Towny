@@ -33,7 +33,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -414,50 +413,6 @@ public class TownyBlockListener implements Listener {
 		}
 
 		return false;
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onCreateExplosion(BlockExplodeEvent event) {
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-		
-		TownyWorld townyWorld = null;
-		List<Block> blocks = event.blockList();
-		int count = 0;
-		
-		try {
-			townyWorld = TownyUniverse.getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
-		}
-		for (Block block : blocks) {
-			count++;
-			
-			if (!locationCanExplode(townyWorld, block.getLocation())) {
-				event.setCancelled(true);
-				return;
-			}
-			
-			if (TownyUniverse.isWilderness(block)) {
-				if (townyWorld.isUsingTowny()) {
-					if (townyWorld.isExpl()) {
-						if (townyWorld.isUsingPlotManagementWildRevert()) {
-							//TownyMessaging.sendDebugMsg("onCreateExplosion: Testing block: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
-							if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
-								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block, false);
-								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
-								TownyRegenAPI.addProtectionRegenTask(task);
-								event.setYield((float) 0.0);
-								block.getDrops().clear();
-							}
-						}
-					}
-				}
-			}
-		}
-		
 	}
 	
 	/**
