@@ -82,7 +82,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "regen.txt",
 			dataFolderPath + File.separator + "snapshot_queue.txt",
-			dataFolderPath + File.separator + "groups.txt"
+			dataFolderPath + File.separator + "plotgroups.txt"
 		)) {
 			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
 		}
@@ -1455,7 +1455,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	 */
-	
+	@Override
 	public boolean loadPlotGroups() {
 		String line = "";
 		String path;
@@ -1491,8 +1491,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						Town town = getTown(line.trim());
 						group.setTown(town);
 					}
-					else
+					else {
+						TownyMessaging.sendErrorMsg("Could not add to town!");
 						deleteGroup(group);
+					}
 					
 					line = keys.get("groupPrice");
 					if (line != null && !line.isEmpty())

@@ -158,7 +158,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								if (block.hasGroup()) {
 									// This block is part of a group, special tasks need to be done.
-									PlotGroup group = (PlotGroup)block.getGroup();
+									PlotGroup group = block.getGroup();
 									
 									TownyMessaging.sendErrorMsg("Plot Coord = " + block.getCoord().toString());
 									TownyMessaging.sendErrorMsg("Plot hasGroup() = " + block.hasGroup());
@@ -170,11 +170,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									// 2) Set the owner on each block in the group.
 									ArrayList<WorldCoord> coords = new ArrayList<>();
 									
-									for (TownBlock tb : town.getTownBlocksForPlotGroup(group)) {
+									for (TownBlock tb : group.getTownBlocks()) {
+										TownyMessaging.sendErrorMsg(tb.getCoord().toString());
 										coords.add(tb.getWorldCoord());
 									}
 									
-									new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false);
+									new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false).start();
 									return true;
 									
 								}
