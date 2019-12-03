@@ -61,6 +61,7 @@ public class ChunkNotification {
 		outpostBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK);
 		forSaleNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
 		plotTypeNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_TYPE);
+		groupNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_GROUP);
 	}
 
 	WorldCoord from, to;
