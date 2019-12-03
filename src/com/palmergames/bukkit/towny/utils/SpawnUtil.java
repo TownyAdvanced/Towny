@@ -95,7 +95,7 @@ public class SpawnUtil {
 			}
 			break;
 
-			case TOWN:
+		case TOWN:
 			town = (Town) townyObject;
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
