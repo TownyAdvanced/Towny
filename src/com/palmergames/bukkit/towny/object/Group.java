@@ -4,7 +4,7 @@ package com.palmergames.bukkit.towny.object;
  * An abstract class which defines the mechanics of groups in towny.
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Group implements Groupable {
+public abstract class Group {
 	private int id;
 	private String name;
 
@@ -18,17 +18,14 @@ public abstract class Group implements Groupable {
 		this.name = name;
 	}
 	
-	@Override
 	public Integer getID() {
 		return id;
 	}
 	
-	@Override
 	public void setID(Integer ID) {
 		this.id = ID;
 	}
 	
-	@Override
 	public String getGroupName() {
 		return name;
 	}

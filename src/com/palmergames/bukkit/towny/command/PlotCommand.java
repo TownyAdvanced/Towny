@@ -156,14 +156,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								Town town = block.getTown();
 								double price = block.getPlotPrice();
 								
-								if (block.hasGroup()) {
+								if (block.hasPlotGroup()) {
 									// This block is part of a group, special tasks need to be done.
-									PlotGroup group = block.getGroup();
+									PlotGroup group = block.getPlotGroup();
 									
 									TownyMessaging.sendErrorMsg("Plot Coord = " + block.getCoord().toString());
-									TownyMessaging.sendErrorMsg("Plot hasGroup() = " + block.hasGroup());
-									TownyMessaging.sendErrorMsg("Plot group id = " + block.getGroup().getID());
-									TownyMessaging.sendErrorMsg("Group = " + block.getGroup());
+									TownyMessaging.sendErrorMsg("Plot hasGroup() = " + block.hasPlotGroup());
+									TownyMessaging.sendErrorMsg("Plot group id = " + block.getPlotGroup().getID());
+									TownyMessaging.sendErrorMsg("Group = " + block.getPlotGroup());
 									
 									// TODO: 1) Send invitation.
 									TownyMessaging.sendErrorMsg(player, "This plot belongs to a group!");
@@ -449,7 +449,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								//townBlock.setChanged(true);
 								townyUniverse.getDataSource().saveTownBlock(townBlock);
 
-								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_set_to"), townBlock.getGroup().getGroupName()));
+								TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("msg_plot_name_set_to"), townBlock.getPlotGroup().getGroupName()));
 
 							} else {
 
@@ -565,8 +565,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(ChatTools.formatCommand("", "group", "remove", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
 						 */
 						
-						if (townBlock.hasGroup())
-							TownyMessaging.sendMessage(player, townBlock.getGroup().toString());
+						if (townBlock.hasPlotGroup())
+							TownyMessaging.sendMessage(player, townBlock.getPlotGroup().toString());
 					}
 					
 					if (split.length >= 2) {
@@ -593,8 +593,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Add the group to the new plot.
 							PlotGroup newGroup = null;
 							
-							if (townBlock.hasGroup()) {
-								TownyMessaging.sendErrorMsg(player, "This plot already belongs to a group: " + townBlock.getGroup().getGroupName() + ", please remove it before adding it to another.");
+							if (townBlock.hasPlotGroup()) {
+								TownyMessaging.sendErrorMsg(player, "This plot already belongs to a group: " + townBlock.getPlotGroup().getGroupName() + ", please remove it before adding it to another.");
 								return false;
 							}
 							
@@ -620,7 +620,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 								
 								// Set the plot group.
-								townBlock.setGroup(newGroup);
+								townBlock.setPlotGroup(newGroup);
 
 								// Save changes.
 								townyUniverse.getDataSource().saveTown(town);
@@ -640,7 +640,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									newGroup = town.getPlotGroupFromName(newGroup.getGroupName());
 								}
 
-								townBlock.setGroup(newGroup);
+								townBlock.setPlotGroup(newGroup);
 
 								// Check if a plot price is available.
 								if (!(townBlock.getPlotPrice() < 0)) {
@@ -673,21 +673,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 						} else if (split[1].equalsIgnoreCase("remove")) {
 							
-							if (!townBlock.hasGroup()) {
+							if (!townBlock.hasPlotGroup()) {
 								TownyMessaging.sendErrorMsg(player, "This plot has no associated group.");
 								return false;
 							}
 
 							// Check if a plot price is available.
 							if (!(townBlock.getPlotPrice() < 0)) {
-								townBlock.getGroup().addPlotPrice(-townBlock.getPlotPrice());
+								townBlock.getPlotGroup().addPlotPrice(-townBlock.getPlotPrice());
 							}
 
 							// Remove the plot from the group.
-							townBlock.getGroup().removeTownBlock(townBlock);
+							townBlock.getPlotGroup().removeTownBlock(townBlock);
 							
 							// Detach group from townblock.
-							townBlock.removeGroup();
+							townBlock.removePlotGroup();
 							
 							// Save
 							TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);

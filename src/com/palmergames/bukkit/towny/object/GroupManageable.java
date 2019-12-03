@@ -5,15 +5,15 @@ import java.util.Set;
 /**
  * @author Suneet Tipirneni (Siris)
  */
-public interface GroupManageable<T extends Groupable> {
+public interface GroupManageable<T extends Group> {
 	Set<T> getGroups();
-	Groupable getGroupFromID(int ID);
+	T getGroupFromID(int ID);
 	
 	default boolean hasGroups() {
 		return getGroups() != null;
 	}
 	
-	default boolean hasGroup(Groupable group) {
+	default boolean hasGroup(T group) {
 		if (hasGroups())
 			return getGroups().contains(group);
 		
@@ -22,7 +22,7 @@ public interface GroupManageable<T extends Groupable> {
 	
 	default boolean hasGroupName(String name) {
 		if (hasGroups()) {
-			for (Groupable group : getGroups()) {
+			for (T group : getGroups()) {
 				if (group.getGroupName().equalsIgnoreCase(name)) {
 					return true;
 				}

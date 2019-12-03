@@ -107,7 +107,7 @@ public class ChunkNotification {
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
-			toPlotGroup = toTownBlock.hasGroup();
+			toPlotGroup = toTownBlock.hasPlotGroup();
 		} catch (NotRegisteredException e) {
 			toWild = true;
 		}
@@ -320,7 +320,7 @@ public class ChunkNotification {
 	
 	public String getGroupNotification() {
 		if (toPlotGroup)
-			return String.format(groupNotificationFormat, toTownBlock.getGroup().getGroupName());
+			return String.format(groupNotificationFormat, toTownBlock.getPlotGroup().getGroupName());
 		return null;
 	}
 
