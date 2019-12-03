@@ -3915,3 +3915,11 @@ v0.92.0.11:
   - chinese.yml updated to 0.66 by qsefthuopq
   - Made /ta ? require the towny.admin permission node.
     - Closes ticket #3531.
+  - REQUIRED CONFIG CHANGE (?!):
+    - Due to spelling corrections, two nodes may need to be fixed (Add what's in [brackets]):
+      - economy.banks.town_allow_withdraw[a]ls
+      - economy.banks.nation_allow_withdraw[a]ls
+      - #FlagIsAnAss - love, TheFlagCourier
+  - Added description for war.enemy.flag.waiting_time to prevent (some) further confusion. (#flagwar)
+  - Fix documentation pointers. Permissions should now point to the Towny Wiki, Placeholders to their own page.
+  - And various non-invasive spelling corrections in the config.
