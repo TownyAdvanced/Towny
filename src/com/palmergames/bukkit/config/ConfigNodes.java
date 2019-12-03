@@ -442,7 +442,7 @@ public enum ConfigNodes {
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
-			"# List of animals which can be kiled on farm plots by town residents."
+			"# List of animals which can be killed on farm plots by town residents."
 	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
@@ -739,8 +739,8 @@ public enum ConfigNodes {
 	
 	FILTERS_PAPI_CHAT_FORMATTING(
 			"filters_colour_chat.papi_chat_formatting","","",
-			"# See How Towny Works wikipage for list of PAPI placeholders.",
-			"# https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works"),
+			"# See the Placeholders wiki page for list of PAPI placeholders.",
+			"# https://github.com/TownyAdvanced/Towny/wiki/Placeholders"),
 	FILTERS_PAPI_CHAT_FORMATTING_BOTH(
 			"filters_colour_chat.papi_chat_formatting.both",
 			"&f[&6%n&f|&b%t&f] ",
@@ -1259,7 +1259,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock_refund",
 			"0.0",
 			"# The amount refunded to a town when they unclaim a townblock.",
-			"# Warning: do not set this higher than the cose to claim a townblock.",
+			"# Warning: do not set this higher than the cost to claim a townblock.",
 			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
@@ -1720,7 +1720,7 @@ public enum ConfigNodes {
 	WAR_WARZONE_EDITABLE_MATERIALS(
 			"war.warzone.editable_materials",
 			"tnt,oak_fence,birch_fence,spruce_fence,jungle_fence,dark_oak_fence,acacia_fence,ladder,oak_door,birch_door,spruce_door,jungle_door,dark_oak_door,acacia_fence,iron_door,fire",
-			"# List of materaials that can be modified in a warzone.",
+			"# List of materials that can be modified in a warzone.",
 			"# '*' = Allow all materials.",
 			"# Prepend a '-' in front of a material to remove it. Used in conjunction with when you use '*'.",
 			"# Eg: '*,-chest,-furnace'"),
