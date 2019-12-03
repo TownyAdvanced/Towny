@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -66,11 +67,12 @@ public class ChunkNotification {
 
 	WorldCoord from, to;
 	boolean fromWild = false, toWild = false, toForSale = false,
-			toHomeBlock = false, toOutpostBlock = false, toPlotGroup = false;
+			toHomeBlock = false, toOutpostBlock = false, toPlotGroupBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
 	TownBlockType fromPlotType = null, toPlotType = null;
+	PlotGroup fromPlotGroup = null, toPlotGroup = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -107,9 +109,22 @@ public class ChunkNotification {
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
-			toPlotGroup = toTownBlock.hasPlotGroup();
+			toPlotGroupBlock = toTownBlock.hasPlotGroup();
+			
 		} catch (NotRegisteredException e) {
 			toWild = true;
+		}
+		
+		try {
+			if (toTownBlock.hasPlotGroup()) {
+				toPlotGroup = toTownBlock.getPlotGroup();
+			}
+			
+			if (fromTownBlock.hasPlotGroup()) {
+				fromPlotGroup = fromTownBlock.getPlotGroup();
+			}
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("Could not get group for chunk notification.");
 		}
 	}
 
@@ -319,7 +334,7 @@ public class ChunkNotification {
 	}
 	
 	public String getGroupNotification() {
-		if (toPlotGroup)
+		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
 			return String.format(groupNotificationFormat, toTownBlock.getPlotGroup().getGroupName());
 		return null;
 	}
