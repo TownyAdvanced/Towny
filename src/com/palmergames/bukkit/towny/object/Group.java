@@ -9,7 +9,7 @@ public abstract class Group {
 	private String name;
 
 	/**
-	 *
+	 * The constructor for the Group object.
 	 * @param id A unique identifier for the group id.
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 */
@@ -46,6 +46,10 @@ public abstract class Group {
 		return false;
 	}
 
+	/**
+	 * Converts this into the qualified string representation.
+	 * @return A string in the format "name, id".
+	 */
 	@Override
 	public String toString() {
 		return name + "," + id;
