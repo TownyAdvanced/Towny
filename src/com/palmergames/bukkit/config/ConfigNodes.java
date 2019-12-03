@@ -933,6 +933,7 @@ public enum ConfigNodes {
 			"true",
 			"# When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.",
 			"# When false, it is only the town name."),	
+	NOTIFICATION_GROUP("notification.group", "&d&n[%s]"),
 	NOTIFICATION_USING_TITLES(
 			"notification.using_titles",
 			"false",
