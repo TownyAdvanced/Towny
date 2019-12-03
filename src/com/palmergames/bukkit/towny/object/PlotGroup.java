@@ -25,11 +25,6 @@ public class PlotGroup extends Group {
 		super(id, name);
 		this.town = town;
 	}
-	
-	public PlotGroup(String townName) {
-		super(-1, null);
-		this.town = new Town(townName);
-	}
 
 	public static PlotGroup fromString(String str) {
 		String[] fields = str.split(",");
@@ -57,7 +52,6 @@ public class PlotGroup extends Group {
 	}
 	
 	public void setTown(Town town) {
-		
 		this.town = town;
 		
 		try {

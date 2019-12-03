@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, GroupManageable {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, GroupManageable<PlotGroup> {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -1325,7 +1325,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		TownyMessaging.sendErrorMsg(group.toString());
 		
 		for (TownBlock townBlock : getTownBlocks()) {
-			if (townBlock.hasGroup() && townBlock.getGroup().equals(group))
+			if (townBlock.hasPlotGroup() && townBlock.getPlotGroup().equals(group))
 				retVal.add(townBlock);
 		}
 		
@@ -1345,8 +1345,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	public void removePlotGroup(PlotGroup plotGroup) {
 		if (hasGroups() && hasGroup(plotGroup)) {
 			for (TownBlock tb : getTownBlocks()) {
-				if (tb.hasGroup() && tb.getGroup().equals(plotGroup)) {
-					tb.getGroup().setID(null);
+				if (tb.hasPlotGroup() && tb.getPlotGroup().equals(plotGroup)) {
+					tb.getPlotGroup().setID(null);
 					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
 				}
 			}
@@ -1372,13 +1372,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	@Override
 	public HashSet<PlotGroup> getGroups() {
 		return plotGroups;
-	}
-	
-	public void addGroup(PlotGroup group) {
-		if (!hasGroups())
-			plotGroups = new HashSet<>();
-		
-		plotGroups.add(group);
 	}
 
 	@Override

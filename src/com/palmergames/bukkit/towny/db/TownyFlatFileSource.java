@@ -1643,7 +1643,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (groupID != null) {
 						PlotGroup group = getPlotGroup(townBlock.getWorld().toString(), townBlock.getTown().toString(), groupID);
 						TownyMessaging.sendErrorMsg("GROUP = " + String.valueOf(group));
-						townBlock.setGroup(group);
+						townBlock.setPlotGroup(group);
 					}
 					
 					
@@ -2295,9 +2295,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Group ID
 		StringBuilder groupID = new StringBuilder();
 		StringBuilder groupName = new StringBuilder();
-		if (townBlock.hasGroup()) {
-			groupID.append(townBlock.getGroup().getID());
-			groupName.append(townBlock.getGroup().getGroupName());
+		if (townBlock.hasPlotGroup()) {
+			groupID.append(townBlock.getPlotGroup().getID());
+			groupName.append(townBlock.getPlotGroup().getGroupName());
 		}
 		
 		list.add("groupID=" + groupID.toString());
