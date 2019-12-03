@@ -1284,18 +1284,18 @@ public enum ConfigNodes {
 			"0.0",
 			"# Maximum amount of money allowed in town bank",
 			"# Use 0 for no limit"),
-	ECO_BANK_TOWN_ALLOW_WITHDRAWLS(
-			"economy.banks.town_allow_withdrawls",
+	ECO_BANK_TOWN_ALLOW_WITHDRAWALS(
+			"economy.banks.town_allow_withdrawals",
 			"true",
-			"# Set to true to allow withdrawls from town banks"), ECO_BANK_CAP_NATION(
+			"# Set to true to allow withdrawals from town banks"), ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
 			"# Maximum amount of money allowed in nation bank",
 			"# Use 0 for no limit"),
-	ECO_BANK_NATION_ALLOW_WITHDRAWLS(
-			"economy.banks.nation_allow_withdrawls",
+	ECO_BANK_NATION_ALLOW_WITHDRAWALS(
+			"economy.banks.nation_allow_withdrawals",
 			"true",
-			"# Set to true to allow withdrawls from nation banks"),
+			"# Set to true to allow withdrawals from nation banks"),
 	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
 			"economy.banks.disallow_bank_actions_outside_town",
 			"false",
