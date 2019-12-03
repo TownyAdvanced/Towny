@@ -20,6 +20,7 @@ public class PlotGroup extends Group {
 	/**
 	 * @param id   A unique identifier for the group id.
 	 * @param name An alias for the id used for player in-game interaction via commands.
+	 * @param town The town that this group is owned by.   
 	 */
 	public PlotGroup(int id, String name, Town town) {
 		super(id, name);
