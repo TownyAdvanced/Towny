@@ -27,7 +27,7 @@ public enum ConfigNodes {
 			"#  Possible permission nodes",
 			"#",
 			"#    for a full list of permission nodes visit: ",
-			"#    http://palmergames.com/towny/towny-permission-nodes/ "),
+			"#    https://github.com/TownyAdvanced/Towny/wiki/Towny-Permission-Nodes "),
 	LEVELS(
 			"levels",
 			"",
