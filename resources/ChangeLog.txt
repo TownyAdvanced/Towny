@@ -3916,9 +3916,11 @@ v0.92.0.11:
   - Made /ta ? require the towny.admin permission node.
     - Closes ticket #3531.
   - REQUIRED CONFIG CHANGE (?!):
-    - Due to spelling corrections, two nodes may need to be fixed (Add what's in [brackets]):
+    - Due to spelling corrections, two nodes may need to be fixed (Add what's in [brackets]) (if your existing settings are true you can ignore this one.):
       - economy.banks.town_allow_withdraw[a]ls
+        - default: true
       - economy.banks.nation_allow_withdraw[a]ls
+        - default: true
       - #FlagIsAnAss - love, TheFlagCourier
   - Added description for war.enemy.flag.waiting_time to prevent (some) further confusion. (#flagwar)
   - Fix documentation pointers. Permissions should now point to the Towny Wiki, Placeholders to their own page.
