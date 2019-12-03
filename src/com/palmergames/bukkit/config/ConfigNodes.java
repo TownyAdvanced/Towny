@@ -1653,7 +1653,11 @@ public enum ConfigNodes {
 			"war.enemy.max_active_flags_per_player",
 			"1"),
 	WAR_ENEMY_FLAG("war.enemy.flag", ""),
-	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", "1m"),
+	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", 
+			"1m", 
+			"# This setting modifies the time between a war flag's Material shift. Accepts `s`(seconds) and `m`(minutes).",
+			"# Currently, you would multiply this times 10 to get the total time a flag should be in play.",
+			"# (It can also be set to `h` and `d` - but ain't nobody got time fo' that.)"),
 	WAR_ENEMY_FLAG_BASE_BLOCK(
 			"war.enemy.flag.base_block",
 			"oak_fence",
