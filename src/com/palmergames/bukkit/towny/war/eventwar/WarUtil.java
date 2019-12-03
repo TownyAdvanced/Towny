@@ -12,7 +12,8 @@ public class WarUtil {
 	/** 
 	 * Allows War Event to piggy back off of Flag War editable materials, while accounting for neutral nations.
 	 * 
-	 * @param player - Player who is being tested for neutrality. 
+	 * @param player - Player who is being tested for neutrality.
+	 * @return Whether a player is considered neutral. 
 	 */
 	public static boolean isPlayerNeutral(Player player) {
 		if (TownyAPI.getInstance().isWarTime()) {
