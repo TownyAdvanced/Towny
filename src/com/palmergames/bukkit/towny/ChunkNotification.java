@@ -39,6 +39,7 @@ public class ChunkNotification {
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
+	public static String groupNotificationFormat = Colors.LightPurple + "\u00A7o" + "[%s]";
 
 	/**
 	 * Called on Config load.
@@ -64,7 +65,7 @@ public class ChunkNotification {
 
 	WorldCoord from, to;
 	boolean fromWild = false, toWild = false, toForSale = false,
-			toHomeBlock = false, toOutpostBlock = false;
+			toHomeBlock = false, toOutpostBlock = false, toPlotGroup = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
@@ -105,6 +106,7 @@ public class ChunkNotification {
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
+			toPlotGroup = toTownBlock.hasGroup();
 		} catch (NotRegisteredException e) {
 			toWild = true;
 		}
@@ -288,6 +290,10 @@ public class ChunkNotification {
 		output = getPlotTypeNotification();
 		if (output != null && output.length() > 0)
 			out.add(output);
+		
+		output = getGroupNotification();
+		if (output != null && output.length() > 0)
+			out.add(output);
 
 		return out;
 	}
@@ -310,6 +316,12 @@ public class ChunkNotification {
 
 		if (toForSale)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
+		return null;
+	}
+	
+	public String getGroupNotification() {
+		if (toPlotGroup)
+			return String.format(groupNotificationFormat, toTownBlock.getGroup().getGroupName());
 		return null;
 	}
 
