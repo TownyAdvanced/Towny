@@ -1,5 +1,5 @@
 name: Towny
-version: 0.66
+version: 0.67
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1033,3 +1033,8 @@ msg_err_rename_cancelled: '重命名被其他插件取消了.'
 
 # Added in 0.66
 msg_war_defender_keeps_claims: '已禁用俘获. 防御城镇仍有土地所有权.'
+
+# Added in 0.67
+msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
+msg_conquered: '[Conquered]'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'

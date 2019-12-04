@@ -10,7 +10,9 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.EventWarEndEvent;
 import com.palmergames.bukkit.towny.event.EventWarPreStartEvent;
 import com.palmergames.bukkit.towny.event.EventWarStartEvent;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -593,7 +595,8 @@ public class War {
 			attacker.addBonusBlocks(1);
 		}
 		
-		if (TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
+		// We only change the townblocks over to the winning Town if the WinnerTakesOwnershipOfTown is false and WinnerTakesOwnershipOfTownblocks is true.
+		if (!TownySettings.getWarEventWinnerTakesOwnershipOfTown() && TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
 			townBlock.setTown(attacker);
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 		}		
@@ -659,6 +662,19 @@ public class War {
 
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
 
+		if (TownySettings.getWarEventWinnerTakesOwnershipOfTown()) {
+			town.setConquered(true);
+			town.setConqueredDays(TownySettings.getWarEventConquerTime());
+			try {
+				town.getNation().removeTown(town);
+				attacker.getNation().addTown(town);
+				TownyUniverse.getInstance().getDataSource().saveTown(town);
+				TownyUniverse.getInstance().getDataSource().saveNation(attacker.getNation());
+			} catch (EmptyNationException | AlreadyRegisteredException e) {
+			}
+			
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_war_town_has_been_conquered_by_nation_x_for_x_days"), town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
+		}
 		int fallenTownBlocks = 0;
 		warringTowns.remove(town);
 		for (TownBlock townBlock : town.getTownBlocks())

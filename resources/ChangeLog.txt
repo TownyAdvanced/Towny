@@ -3925,3 +3925,19 @@ v0.92.0.11:
   - Added description for war.enemy.flag.waiting_time to prevent (some) further confusion. (#flagwar)
   - Fix documentation pointers. Permissions should now point to the Towny Wiki, Placeholders to their own page.
   - And various non-invasive spelling corrections in the config.
+0.95.2.1:
+  - New Config Option: war.event.winner_takes_ownership_of_town
+    - default: false
+    - If set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.
+    - The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed.
+  - New Config Option: war.event.conquer_time
+    - default: 7
+    - Number of Towny new days until a conquered town loses its conquered status.
+  - Event War addition: town conquering:
+    - If war.event.winner_takes_ownership_of_town is set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.
+    - The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed. 
+    - Add conquered & conqueredDays to Towns.
+    - A town's conqueredDays will decrease each Towny new day.
+    - Closes ticket #3477.
+  - Fix /ta plot ? help screen.
+  - Bump language files to 0.67.

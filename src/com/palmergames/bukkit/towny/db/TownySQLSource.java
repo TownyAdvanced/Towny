@@ -879,6 +879,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 town.setSpawnCost(rs.getFloat("spawnCost"));
                 town.setOpen(rs.getBoolean("open"));
                 town.setPublic(rs.getBoolean("public"));
+                town.setConquered(rs.getBoolean("conquered"));
                 town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
                 town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
@@ -996,6 +997,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     town.setUuid(UUID.randomUUID());
                 }
 
+                line = rs.getString("conqueredDays");
+                if (line != null)
+                	town.setConqueredDays(Integer.valueOf(line));
+                else 
+                	town.setConqueredDays(0);
 
                 /*
                  * Attempt these for older databases.
@@ -1724,6 +1730,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("taxpercent", town.isTaxPercentage());
             twn_hm.put("open", town.isOpen());
             twn_hm.put("public", town.isPublic());
+            twn_hm.put("conquered", town.isConquered());
+            twn_hm.put("conqueredDays", town.getConqueredDays());
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			if (town.hasMeta())

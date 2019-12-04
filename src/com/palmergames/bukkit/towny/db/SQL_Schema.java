@@ -148,11 +148,11 @@ public class SQL_Schema {
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
-
+		columns.add("`conqueredDays` mediumint");
+		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		columns.add("`recentlyRuinedEndTime` BIGINT");
 		columns.add("`revoltCooldownEndTime` BIGINT");
 		columns.add("`siegeCooldownEndTime` BIGINT");
-
 		columns.add("`siegeStatus` mediumtext");
 		columns.add("`siegeTownPlundered` bool NOT NULL DEFAULT '0'");
 		columns.add("`siegeTownInvaded` bool NOT NULL DEFAULT '0'");
@@ -161,7 +161,6 @@ public class SQL_Schema {
 		columns.add("`siegeScheduledEndTime` BIGINT");
 		columns.add("`siegeActualEndTime` BIGINT");
 		columns.add("`siegeZones` mediumtext");
-		
 		return columns;
 	}
 

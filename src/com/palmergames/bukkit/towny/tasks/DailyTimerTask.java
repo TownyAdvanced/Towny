@@ -105,6 +105,17 @@ public class DailyTimerTask extends TownyTimerTask {
 				townyUniverse.getDataSource().saveResident(resident);
 			}			
 		}
+		
+		// Reduce conquered towns' conqueredDays
+		for (Town towns : TownyUniverse.getInstance().getDataSource().getTowns()) {
+			if (towns.isConquered()) {
+				if (towns.getConqueredDays() == 1) {
+					towns.setConquered(false);
+					towns.setConqueredDays(0);
+				} else
+					towns.setConqueredDays(towns.getConqueredDays() - 1);				
+			}
+		}
 
 		// Backups
 		TownyMessaging.sendDebugMsg("Cleaning up old backups.");

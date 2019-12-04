@@ -72,12 +72,14 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long registered;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
-	private HashSet<CustomDataField> metadata = null;
+    private HashSet<CustomDataField> metadata = null;
+	private boolean isConquered = false;
+	private int conqueredDays;
 	private long recentlyRuinedEndTime;
 	private long revoltImmunityEndTime;
 	private long siegeImmunityEndTime;
 	private Siege siege;
-
+	
 	public Town(String name) {
 		super(name);
 		permissions.loadDefault(this);
@@ -1353,7 +1355,22 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		}
 	}
 
+	public void setConquered(boolean conquered) {
+		this.isConquered = conquered;
+	}
 
+	public boolean isConquered() {
+		return this.isConquered;
+	}
+
+	public void setConqueredDays(int conqueredDays) {
+		this.conqueredDays = conqueredDays;
+	}
+
+	public int getConqueredDays() {
+		return this.conqueredDays;
+	}
+	
 	public Siege getSiege() {
 		return siege;
 	}
@@ -1371,11 +1388,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		} else {
 			return false;
 		}
-	}
-
-	public int getRevoltCooldownRemainingMinutes() {
-		double resultDouble = (revoltImmunityEndTime -System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS;
-		return (int) (resultDouble + 0.5);
 	}
 
 	public boolean isRevoltImmunityActive() {

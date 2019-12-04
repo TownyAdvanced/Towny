@@ -1606,8 +1606,17 @@ public enum ConfigNodes {
 			"war.event.winner_takes_ownership_of_townblocks",
 			"false",
 			"# If set to true when a town drops an enemy townblock's HP to 0, the attacking town takes full control of the townblock.",
-			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town."),
-	
+			"# One available (bonus) claim is given to the victorious town, one available (bonus) claim is removed from the losing town.",
+			"# Will not have any effect if war.event.winner_takes_ownership_of_town is set to true."),
+	WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWN(
+			"war.event.winner_takes_ownership_of_town",
+			"false",
+			"# If set to true when a town knocks another town out of the war, the losing town will join the winning town's nation.",
+			"# The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed."),
+	WAR_EVENT_CONQUER_TIME(
+			"war.event.conquer_time",
+			"7",
+			"# Number of Towny new days until a conquered town loses its conquered status."),	
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),
