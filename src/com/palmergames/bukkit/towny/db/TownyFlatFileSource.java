@@ -786,6 +786,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setConquered(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("conqueredDays");
+				if (line != null)
+					town.setConqueredDays(Integer.valueOf(line));
 
 				line = keys.get("townBlocks");
 				if (line != null)
@@ -900,11 +903,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setRegistered(0);
 					}
 				}
-				line = keys.get("conqueredDate");
-				if (line != null)
-					town.setConqueredDate(Long.valueOf(line));
-				else
-					town.setConqueredDate(0);
 
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
@@ -1716,7 +1714,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("public=" + town.isPublic());
 		// Conquered towns setting + date
 		list.add("conquered=" + town.isConquered());
-		list.add("conqueredDate=" + town.getConqueredDate());
+		list.add("conqueredDays " + town.getConqueredDays());
 		if (town.hasValidUUID()){
 			list.add("uuid=" + town.getUuid());
 		} else {
