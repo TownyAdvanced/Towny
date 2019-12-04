@@ -3938,4 +3938,6 @@ v0.92.0.11:
     - The losing town will enter a conquered state and be unable to leave the nation until the conquered time has passed. 
     - Add conquered & conqueredDays to Towns.
     - A town's conqueredDays will decrease each Towny new day.
+    - Closes ticket #3477.
+  - Fix /ta plot ? help screen.
   - Bump language files to 0.67.
