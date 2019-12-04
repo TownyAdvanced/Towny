@@ -2590,17 +2590,17 @@ public class TownySettings {
 
 	public static boolean getTownBankAllowWithdrawls() {
 
-		return getBoolean(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS);
+		return getBoolean(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS);
 	}
 
 	public static void SetTownBankAllowWithdrawls(boolean newSetting) {
 
-		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWLS.getRoot(), newSetting);
+		setProperty(ConfigNodes.ECO_BANK_TOWN_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
 	public static boolean geNationBankAllowWithdrawls() {
 
-		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS);
+		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}
 	
 	public static boolean isBankActionDisallowedOutsideTown() {
@@ -2615,7 +2615,7 @@ public class TownySettings {
 
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
-		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWLS.getRoot(), newSetting);
+		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
 	@Deprecated
