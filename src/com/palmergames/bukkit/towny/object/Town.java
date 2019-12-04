@@ -66,7 +66,9 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long registered;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
-	private HashSet<CustomDataField> metadata = null;
+    private HashSet<CustomDataField> metadata = null;
+	private boolean isConquered = false;
+	private long conqueredDate;
 
 	public Town(String name) {
 		super(name);
@@ -1326,5 +1328,20 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		for (int i = 0; i < objects.length; i++) {
 			metadata.add(CustomDataField.load(objects[i]));
 		}
+	}
+	public void setConquered(boolean conquered) {
+		this.isConquered = conquered;
+	}
+	
+	public boolean isConquered() {
+		return this.isConquered;
+	}
+	
+	public void setConqueredDate(long conqueredDate) {
+		this.conqueredDate = conqueredDate;
+	}
+	
+	public long getConqueredDate() {
+		return this.conqueredDate;
 	}
 }

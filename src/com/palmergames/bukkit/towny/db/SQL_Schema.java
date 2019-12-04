@@ -130,6 +130,8 @@ public class SQL_Schema {
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`conqueredDate` BIGINT DEFAULT NULL");
+		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 

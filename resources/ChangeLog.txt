@@ -3925,3 +3925,6 @@ v0.92.0.11:
   - Added description for war.enemy.flag.waiting_time to prevent (some) further confusion. (#flagwar)
   - Fix documentation pointers. Permissions should now point to the Towny Wiki, Placeholders to their own page.
   - And various non-invasive spelling corrections in the config.
+0.95.2.1:
+  - Add conquered & conqueredDate to Towns.
+    - As of yet unused settings to allow for a vassal system affected by war.
