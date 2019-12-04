@@ -425,7 +425,7 @@ public class TownyFormatter {
 
 		// Nation: Azur Empire
 		try {
-			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())));
+			out.add(String.format(TownySettings.getLangString("status_town_nation"), getFormattedName(town.getNation())) + (town.isConquered() ? TownySettings.getLangString("msg_conquered") : "" ));
 		} catch (TownyException e) {
 		}
 

@@ -1702,6 +1702,16 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS);
 	}
 	
+	public static boolean getWarEventWinnerTakesOwnershipOfTown() {
+		
+		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWN);
+	}
+	
+	public static int getWarEventConquerTime() {
+		
+		return getInt(ConfigNodes.WAR_EVENT_CONQUER_TIME);
+	}
+	
 	public static boolean isChargingDeath() {
 		
 		return (getDeathPrice()>0 || getDeathPriceTown()>0 || getDeathPriceNation()>0 );

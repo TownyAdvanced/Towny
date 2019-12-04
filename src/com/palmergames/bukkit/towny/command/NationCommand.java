@@ -1107,6 +1107,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = townyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = town.getNation();
+			
+			if (town.isConquered())
+				throw new TownyException(TownySettings.getLangString("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 
 			if (TownyWar.isUnderAttack(town) && TownySettings.isFlaggedInteractionTown()) {
 				throw new TownyException(TownySettings.getLangString("msg_war_flag_deny_town_under_attack"));
