@@ -6,5 +6,6 @@ public enum ConfirmationType {
 	UNCLAIMALL,
 	PURGE, 
 	NATIONMERGE,
-	NULL
+	NULL,
+	GROUPCLAIMACTION
 }

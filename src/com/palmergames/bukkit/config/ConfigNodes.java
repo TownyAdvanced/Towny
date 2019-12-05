@@ -928,7 +928,7 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
-	NOTIFICATION_GROUP("notification.group", "&d&n[%s]"),
+	NOTIFICATION_GROUP("notification.group", "&f[%s]"),
 	NOTIFICATION_USING_TITLES(
 			"notification.using_titles",
 			"false",

@@ -40,7 +40,7 @@ public class ChunkNotification {
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
-	public static String groupNotificationFormat = Colors.LightPurple + "\u00A7o" + "[%s]";
+	public static String groupNotificationFormat = Colors.White + "[%s]";
 
 	/**
 	 * Called on Config load.
