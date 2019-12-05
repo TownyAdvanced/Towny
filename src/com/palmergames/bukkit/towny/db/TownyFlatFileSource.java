@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
@@ -573,10 +575,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("townBlocks");
 				if (line != null)
 					utilLoadTownBlocks(line, null, resident);
+
+				line = keys.get("extraStatusFields");
+				if (line != null && !line.isEmpty())
+					resident.setExtraStatusFields(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
 				return false;
+			} finally {
+				saveResident(resident);
 			}
 			return true;
 		} else {
@@ -909,6 +917,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
+
+				line = keys.get("extraStatusFields");
+				if (line != null && !line.isEmpty())
+					town.setExtraStatusFields(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1076,9 +1088,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("extraStatusFields");
+				if (line != null && !line.isEmpty())
+					nation.setExtraStatusFields(line.trim());
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
+				e.printStackTrace();
 				return false;
+			} finally {
+				saveNation(nation);
 			}
 			return true;
 		} else {
@@ -1645,6 +1664,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
 
+		// Extra Status Fields
+		if (resident.hasExtraStatusFields())
+			list.add("extraStatusFields=" + StringMgmt.join(resident.getExtraStatusFields(), ":", ";"));
+
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1767,6 +1790,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 
+		// Extra Status Fields
+		if (town.hasExtraStatusFields())
+			list.add("extraStatusFields=" + StringMgmt.join(town.getExtraStatusFields(), ":", ";"));
+
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1820,6 +1847,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isPublic=" + nation.isPublic());
 		
 		list.add("isOpen=" + nation.isOpen());
+		
+		// Extra Status Fields
+		if (nation.hasExtraStatusFields())
+			list.add("extraStatusFields=" + StringMgmt.join(nation.getExtraStatusFields(), ":", ";"));
 
 		/*
 		 *  Make sure we only save in async

@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class TownyFormatter {
 
@@ -238,6 +240,9 @@ public class TownyFormatter {
 		List<Resident> friends = resident.getFriends();
 		out.addAll(getFormattedResidents(TownySettings.getLangString("status_friends"), friends));
 		
+		if (resident.hasExtraStatusFields())
+			out.addAll(getFormattedExtraStatusLines(new ArrayList<>(resident.getExtraStatusFields().values())));
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -440,6 +445,9 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
 
+		if (town.hasExtraStatusFields())
+			out.addAll(getFormattedExtraStatusLines(new ArrayList<>(town.getExtraStatusFields().values())));
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -552,6 +560,9 @@ public class TownyFormatter {
 		}
         out.addAll(ChatTools.listArr(enemies, String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
+		if (nation.hasExtraStatusFields())
+			out.addAll(getFormattedExtraStatusLines(new ArrayList<>(nation.getExtraStatusFields().values())));
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -745,5 +756,46 @@ public class TownyFormatter {
 		for (Nation nation : nations)
 			names.add(getFormattedName(nation));
 		return names.toArray(new String[0]);
+	}
+
+	public static List<String> getFormattedExtraStatusLines(List<CustomStatusField> csfields) {
+		List<String> out = new ArrayList<>();
+
+		String statusLine = "";
+		for (CustomStatusField field : csfields) {
+			if (out.contains(statusLine))
+				statusLine = "";
+
+			String value;
+			switch (field.getType()) {
+				case IntegerField:
+					value = (((int) field.getValue()) <= 0 ? Colors.Red : Colors.LightGreen) + field.getValue();
+					break;
+				case DoubleField:
+					value = (((double) field.getValue()) <= 0 ? Colors.Red : Colors.LightGreen) + field.getValue();
+					break;
+				case BalanceField:
+					value = (((double) field.getValue()) <= 0 ? Colors.Red : Colors.LightGreen) + TownyEconomyHandler.getFormattedBalance((double) field.getValue());
+					break;
+				case BooleanField:
+					value = ((boolean) field.getValue()) ? (Colors.LightGreen + "TRUE") : (Colors.Red + "FALSE");
+					break;
+				case StringField:
+					value = Colors.White + field.getValue();
+					break;
+				default:
+					value = Colors.Gray + "null";
+			}
+
+			statusLine += Colors.Green + field.getLabel()  + ": " + value + "  ";
+
+			if (statusLine.length() > 50)
+				out.add(statusLine);
+
+		}
+		if (!out.contains(statusLine))
+			out.add(statusLine);
+
+		return out;
 	}
 }

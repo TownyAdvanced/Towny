@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -1343,5 +1344,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public long getConqueredDate() {
 		return this.conqueredDate;
+	}
+
+	@Override
+	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
+		super.addExtraStatusField(plugin, key, field);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	@Override
+	public void removeExtraStatusField(String plugin, String key) {
+		super.removeExtraStatusField(plugin, key);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 }

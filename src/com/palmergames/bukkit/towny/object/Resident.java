@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -676,6 +677,18 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 
 	public ConfirmationType getConfirmationType() {
 		return confirmationType;
+	}
+
+	@Override
+	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
+		super.addExtraStatusField(plugin, key, field);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	@Override
+	public void removeExtraStatusField(String plugin, String key) {
+		super.removeExtraStatusField(plugin, key);
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 }
