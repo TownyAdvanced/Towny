@@ -7,6 +7,9 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.confirmations.GroupConfirmation;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -165,17 +168,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									TownyMessaging.sendErrorMsg("Plot group id = " + block.getPlotGroup().getID());
 									TownyMessaging.sendErrorMsg("Group = " + block.getPlotGroup());
 									
-									// TODO: 1) Send invitation.
-									TownyMessaging.sendErrorMsg(player, "This plot belongs to a group!");
-									// 2) Set the owner on each block in the group.
-									ArrayList<WorldCoord> coords = new ArrayList<>();
-									
-									for (TownBlock tb : group.getTownBlocks()) {
-										TownyMessaging.sendErrorMsg(tb.getCoord().toString());
-										coords.add(tb.getWorldCoord());
-									}
-									
-									new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false).start();
+									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(group, player));
+									String firstLine = "This plot is part a group of " + group.getTownBlocks().size() + " plot(s) by claiming you will inherit them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 									return true;
 									
 								}
@@ -605,13 +600,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								newGroup = resident.getPlotGroupFromMode();
 								
 								if (newGroup == null) {
-									// In this case we default the group name to the player's name.
-									newGroup = new PlotGroup(town.generatePlotGroupID(), player.getName(), town);
 									
-									TownyMessaging.sendErrorMsg("Group mode was null adding new group.");
+									TownyMessaging.sendErrorMsg(player, "You must specify a group name.");
 									
-									// Add this to the town.
-									newGroup.setTown(town);
+									return false;
 								}
 								
 								// Check if a plot price is available.
@@ -621,9 +613,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								// Set the plot group.
 								townBlock.setPlotGroup(newGroup);
+								
+								// Add the global list.
+								resident.getTown().getWorld().newGroup(town.getName(), newGroup.getGroupName(), newGroup.getID());
 
 								// Save changes.
 								townyUniverse.getDataSource().saveTown(town);
+								townyUniverse.getDataSource().saveGroupList();
+								townyUniverse.getDataSource().savePlotGroup(newGroup);
 
 								TownyMessaging.sendMessage(player, "" + ChatColor.BLUE + townBlock.getX() + "," + townBlock.getZ() + ") was put into group " + newGroup.getGroupName());
 								

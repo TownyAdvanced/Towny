@@ -7,9 +7,13 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.util.TimeTools;
@@ -17,6 +21,7 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfirmationHandler {
@@ -31,6 +36,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Nation> nationdeleteconfirmations = new HashMap<>();
 	private static HashMap<Resident, String> townypurgeconfirmations = new HashMap<>();
 	private static HashMap<Resident, Nation> nationmergeconfirmations = new HashMap<>();
+	private static HashMap<Resident, GroupConfirmation> groupclaimconfirmations = new HashMap<>();
 	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
 	private static Object consoleExtra = null;
 
@@ -92,6 +98,17 @@ public class ConfirmationHandler {
 				}
 			}.runTaskLater(plugin, 400);
 		}
+		if (type == ConfirmationType.GROUPCLAIMACTION) {
+			r.setConfirmationType(type);
+			groupclaimconfirmations.put(r, (GroupConfirmation) extra);
+
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					removeConfirmation(r, type, false);
+				}
+			}.runTaskLater(plugin, 400);
+		}
 	}
 
 	public static void removeConfirmation(Resident r, ConfirmationType type, boolean successful) {
@@ -129,6 +146,13 @@ public class ConfirmationHandler {
 				sendmessage = true;
 			}
 			nationmergeconfirmations.remove(r);
+			r.setConfirmationType(null);
+		}
+		if (type == ConfirmationType.GROUPCLAIMACTION) {
+			if (groupclaimconfirmations.containsKey(r) && !successful) {
+				sendmessage = true;
+			}
+			groupclaimconfirmations.remove(r);
 			r.setConfirmationType(null);
 		}
 		if (sendmessage) {
@@ -195,6 +219,20 @@ public class ConfirmationHandler {
 				townyUniverse.getDataSource().mergeNation(succumbingNation, prevailingNation);
 				TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("nation1_has_merged_with_nation2"), succumbingNation, prevailingNation));
 				removeConfirmation(r,type, true);
+			}
+		}
+		
+		if (type == ConfirmationType.GROUPCLAIMACTION) {
+			if (groupclaimconfirmations.containsKey(r)) {
+				ArrayList<WorldCoord> coords = new ArrayList<>();
+				GroupConfirmation confirmation = groupclaimconfirmations.get(r);
+				ArrayList<TownBlock> townBlocks = (ArrayList<TownBlock>) confirmation.getGroup().getTownBlocks();
+				for (TownBlock tb :townBlocks) {
+					TownyMessaging.sendErrorMsg(tb.getCoord().toString());
+					coords.add(tb.getWorldCoord());
+				}
+				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, true, false).start();
+				removeConfirmation(r, type, true);
 			}
 		}
 	}

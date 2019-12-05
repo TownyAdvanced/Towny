@@ -293,7 +293,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading Group List");
 		String line = null;
 
-		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "groups.txt"), StandardCharsets.UTF_8))) {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "plotgroups.txt"), StandardCharsets.UTF_8))) {
 
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
@@ -1703,7 +1703,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add(group.getTown().getWorld().getName() + "," + group.getTown().getName() + "," + group.getID() + "," + group.getGroupName());
 		}
 		
-		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "groups.txt"));
+		this.queryQueue.add(new FlatFile_Task(list, dataFolderPath + File.separator + "plotgroups.txt"));
 		
 		return true;
 	}
@@ -1982,7 +1982,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean savePlotGroup(PlotGroup group) {
 		
-		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "groups" + File.separator + group.getTown().getName());
+		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "plotgroups" + File.separator + group.getTown().getName());
 		
 		List<String> list = new ArrayList<>();
 		
