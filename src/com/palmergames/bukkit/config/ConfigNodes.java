@@ -1815,10 +1815,6 @@ public enum ConfigNodes {
 			"true",
 			"# If true, then pvp is always set to on during sieges",
 			"# Pvp returns to its previous setting when the siege ends"),
-	WAR_SIEGE_SPAWNING_DISABLED_NEAR_SIEGES(
-			"war.siege.switches.teleport_disabled_to_besieged_towns",
-			"true",
-			"# If true, then you cannot spawn near a besieged town."),
 	WAR_SIEGE_CLAIMING_DISABLED_NEAR_SIEGE_ZONES(
 			"war.siege.switches.claiming_disabled_near_siege_zones",
 			"true",
@@ -1906,10 +1902,6 @@ public enum ConfigNodes {
 			"# This is the max allowed elevation difference downward from siege banner to town.",
 			 "# There is no limit on the upward difference.",
 		     "# This setting prevents the banner being placed on a platform high in the air."),
-	WAR_SIEGE_MIN_ALLOWED_SPAWN_DISTANCE_FROM_SIEGE_ZONE(
-			"war.siege.distances.min_allowed_spawn_distance_from_siege_zone",
-			"300",
-			"# This is the distance from a zone in which spawning is disallowed."),
 	
 	//Siege points
 	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(

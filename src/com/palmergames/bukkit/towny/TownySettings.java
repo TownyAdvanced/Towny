@@ -2939,11 +2939,7 @@ public class TownySettings {
 	public static boolean getWarSiegePvpAlwaysOnInBesiegedTowns() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_PVP_ALWAYS_ON_IN_BESIEGED_TOWNS);
 	}
-
-	public static boolean getWarSiegeSpawningDisabledNearSieges() {
-		return getBoolean(ConfigNodes.WAR_SIEGE_SPAWNING_DISABLED_NEAR_SIEGES);
-	}
-
+	
 	public static boolean getWarSiegeDelayFullTownRemoval() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_DELAY_FULL_TOWN_REMOVAL);
 	}
@@ -2954,10 +2950,6 @@ public class TownySettings {
 
 	public static int getWarSiegeClaimDisableDistanceBlocks() {
 		return getInt(ConfigNodes.WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS);
-	}
-
-	public static int getWarSiegeMinAllowedSpawnDistanceFromSiegeZone() {
-		return getInt(ConfigNodes.WAR_SIEGE_MIN_ALLOWED_SPAWN_DISTANCE_FROM_SIEGE_ZONE);
 	}
 
 	public static int getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference() {

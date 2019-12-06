@@ -30,7 +30,6 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSpawnUtil;
 
 public class SpawnUtil {
 
@@ -300,11 +299,6 @@ public class SpawnUtil {
 			payee = nation;
 			break;
 		}
-
-		//Prevent spawning to locations near sieges
-		if(TownySettings.getWarSiegeEnabled())
-			SiegeWarSpawnUtil.throwErrorIfSpawnPointIsTooNearSiegeZone(spawnLoc);
-
 
 		// Check if need/can pay.
 		try {
