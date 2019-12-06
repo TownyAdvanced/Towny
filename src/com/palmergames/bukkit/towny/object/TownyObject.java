@@ -62,10 +62,21 @@ public abstract class TownyObject {
 		return TownyFormatter.getFormattedName(this);
 	}
 
+	/**
+	 * @return - All of the current extra status fields for this object
+	 */
 	public Map<String, CustomStatusField> getExtraStatusFields() {
 		return extraStatusFields;
 	}
-	
+
+	/**
+	 * Add a new field to display on this TownyObject's status screen
+	 * 
+	 * @param plugin - The name of the plugin adding the field
+	 * @param key - The key identifier for the field to add
+	 * @param field - The constructed field
+	 * @throws AlreadyRegisteredException - thrown if the plugin/key combination has already been added
+	 */
 	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
 		String namespaced = plugin + "_" + key;
 		if (extraStatusFields.containsKey(namespaced))
@@ -73,12 +84,23 @@ public abstract class TownyObject {
 		
 		extraStatusFields.put(key, field);
 	}
-	
+
+	/**
+	 * Remove a particular field from this TownyObject
+	 * 
+	 * @param plugin - The name of the plugin that added the field
+	 * @param key - The key identifier for the field to remove
+	 */
 	public void removeExtraStatusField(String plugin, String key) {
 		String namespaced = plugin + "_" + key;
 		extraStatusFields.remove(namespaced);
 	}
 
+	/**
+	 * Used during loading of TownyObjects to add back all saved fields
+	 * 
+	 * @param str - The string of data to add
+	 */
 	public void setExtraStatusFields(String str) {
 		String[] objects = str.split(";");
 		for (String obj : objects) {
@@ -112,7 +134,10 @@ public abstract class TownyObject {
 			}
 		}
 	}
-	
+
+	/**
+	 * @return - whether or not the TownyObject has any custom status fields
+	 */
 	public boolean hasExtraStatusFields() {
 		return extraStatusFields.size() > 0;
 	}
