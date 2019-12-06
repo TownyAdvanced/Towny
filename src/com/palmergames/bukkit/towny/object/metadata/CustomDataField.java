@@ -55,7 +55,11 @@ public abstract class CustomDataField<T> {
         
         return out;
     }
-    
+
+	/**
+	 * @param str 
+	 * @return
+	 */
     public static CustomDataField load(String str) {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];

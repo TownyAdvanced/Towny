@@ -1368,10 +1368,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setWarAllowed(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+
+				line = keys.get("extraStatusFields");
+				if (line != null && !line.isEmpty())
+					world.setExtraStatusFields(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 				return false;
+			} finally {
+				saveWorld(world);
 			}
 			return true;
 		} else {
@@ -1982,6 +1988,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("");
 		list.add("# This setting is used to enable or disable Event war in this world.");
 		list.add("warAllowed=" + world.isWarAllowed());
+
+		// Extra Status Fields
+		if (world.hasExtraStatusFields())
+			list.add("extraStatusFields=" + StringMgmt.join(world.getExtraStatusFields(), ":", ";"));
 
 		
 		/*

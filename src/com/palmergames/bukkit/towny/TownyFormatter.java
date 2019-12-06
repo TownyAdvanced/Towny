@@ -611,6 +611,9 @@ public class TownyFormatter {
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
 			out.add("    " + TownySettings.getLangString("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+
+			if (world.hasExtraStatusFields())
+				out.addAll(getFormattedExtraStatusLines(new ArrayList<>(world.getExtraStatusFields().values())));
 		}
 		
 		out = formatStatusScreens(out);
@@ -771,7 +774,7 @@ public class TownyFormatter {
 				case IntegerField:
 					value = (((int) field.getValue()) <= 0 ? Colors.Red : Colors.LightGreen) + field.getValue();
 					break;
-				case DoubleField:
+				case DecimalField:
 					value = (((double) field.getValue()) <= 0 ? Colors.Red : Colors.LightGreen) + field.getValue();
 					break;
 				case BalanceField:

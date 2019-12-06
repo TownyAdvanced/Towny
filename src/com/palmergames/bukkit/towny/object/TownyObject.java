@@ -118,7 +118,7 @@ public abstract class TownyObject {
 					csf = new CustomStatusField<>(val[1], type, val[2]);
 					break;
 				case BalanceField:
-				case DoubleField:
+				case DecimalField:
 					csf = new CustomStatusField<>(val[1], type, Double.parseDouble(val[2]));
 					break;
 				case BooleanField:

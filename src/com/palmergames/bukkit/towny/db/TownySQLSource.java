@@ -1411,6 +1411,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 } catch (Exception ignored) {
                 }
 
+				try {
+					line = rs.getString("extraStatusFields");
+					if (line != null && !line.isEmpty()) {
+						world.setExtraStatusFields(line);
+					}
+				} catch (SQLException ignored) {
+
+				}
+
             }
 
             s.close();
@@ -1776,6 +1785,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
             // War allowed in this world.
             nat_hm.put("warAllowed", world.isWarAllowed());
+
+			if (world.hasExtraStatusFields())
+				nat_hm.put("extraStatusFields", StringMgmt.join(world.getExtraStatusFields(), ":", ";"));
+			else
+				nat_hm.put("extraStatusFields", "");
             
             UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 

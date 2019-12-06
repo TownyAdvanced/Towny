@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object.status;
 
 public enum CustomStatusFieldType {
 	IntegerField(0, "Integer"), StringField(1, "String"), 
-	BalanceField(2, "Balance"), DoubleField(3, "Double"), 
+	BalanceField(2, "Balance"), DecimalField(3, "Decimal"), 
 	BooleanField(4, "Boolean");
 	
 	private Integer value;
