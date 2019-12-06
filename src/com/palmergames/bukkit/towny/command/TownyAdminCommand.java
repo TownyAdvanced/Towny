@@ -676,7 +676,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
-				handleTownMetaCommand(player, split);
+				handleTownMetaCommand(player, town, split);
 			}
 
 		} catch (TownyException e) {
@@ -1297,16 +1297,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void handleTownMetaCommand(Player player, String[] split) throws TownyException {
-		Town town = null;
+	public static void handleTownMetaCommand(Player player, Town town, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		try {
-			town = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(player, e.getClass().toString());
-			return;
-		}
 
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_META.getNode()))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
