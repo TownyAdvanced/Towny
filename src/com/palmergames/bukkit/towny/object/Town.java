@@ -1292,44 +1292,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public void addMetaData(CustomDataField md) {
-		if (getMetadata() == null)
-			metadata = new HashSet<>();
-		
-		getMetadata().add(md);
+		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public void removeMetaData(CustomDataField md) {
-		if (!hasMeta())
-			return;
-
-		getMetadata().remove(md);
-		
-		if (getMetadata().size() == 0)
-			this.metadata = null;
+		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
-
-	public HashSet<CustomDataField> getMetadata() {
-		return metadata;
-	}
-
-	public boolean hasMeta() {
-		return getMetadata() != null;
-	}
-
-	public void setMetadata(String str) {
-
-		if (metadata == null)
-			metadata = new HashSet<>();
-
-		String[] objects = str.split(";");
-		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
-		}
-	}
+	
 	public void setConquered(boolean conquered) {
 		this.isConquered = conquered;
 	}
@@ -1344,17 +1317,5 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public long getConqueredDate() {
 		return this.conqueredDate;
-	}
-
-	@Override
-	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
-		super.addExtraStatusField(plugin, key, field);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
-	}
-
-	@Override
-	public void removeExtraStatusField(String plugin, String key) {
-		super.removeExtraStatusField(plugin, key);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 }

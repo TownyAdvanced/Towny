@@ -1,24 +1,14 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyLogger;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.object.status.CustomStatusField;
-import com.palmergames.bukkit.towny.object.status.CustomStatusFieldType;
-import org.bukkit.plugin.Plugin;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class TownyObject {
 	private String name;
 
-	private Map<String, CustomStatusField> extraStatusFields = new HashMap<>(); // Emperor-Koala
+	private HashSet<CustomDataField> metadata = null;
 	
 	protected TownyObject(String name) {
 		this.name = name;
@@ -62,83 +52,40 @@ public abstract class TownyObject {
 		return TownyFormatter.getFormattedName(this);
 	}
 
-	/**
-	 * @return - All of the current extra status fields for this object
-	 */
-	public Map<String, CustomStatusField> getExtraStatusFields() {
-		return extraStatusFields;
+	public void addMetaData(CustomDataField md) {
+		if (getMetadata() == null)
+			metadata = new HashSet<>();
+
+		getMetadata().add(md);
 	}
 
-	/**
-	 * Add a new field to display on this TownyObject's status screen
-	 * 
-	 * @param plugin - The name of the plugin adding the field
-	 * @param key - The key identifier for the field to add
-	 * @param field - The constructed field
-	 * @throws AlreadyRegisteredException - thrown if the plugin/key combination has already been added
-	 */
-	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
-		String namespaced = plugin + "_" + key;
-		if (extraStatusFields.containsKey(namespaced))
-			throw new AlreadyRegisteredException("Field from plugin " + plugin + " already registered with key: " + key);
-		
-		extraStatusFields.put(key, field);
+	public void removeMetaData(CustomDataField md) {
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md);
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
 	}
 
-	/**
-	 * Remove a particular field from this TownyObject
-	 * 
-	 * @param plugin - The name of the plugin that added the field
-	 * @param key - The key identifier for the field to remove
-	 */
-	public void removeExtraStatusField(String plugin, String key) {
-		String namespaced = plugin + "_" + key;
-		extraStatusFields.remove(namespaced);
+	public HashSet<CustomDataField> getMetadata() {
+		return metadata;
 	}
 
-	/**
-	 * Used during loading of TownyObjects to add back all saved fields
-	 * 
-	 * @param str - The string of data to add
-	 */
-	public void setExtraStatusFields(String str) {
+	public boolean hasMeta() {
+		return getMetadata() != null;
+	}
+
+	public void setMetadata(String str) {
+
+		if (metadata == null)
+			metadata = new HashSet<>();
+
 		String[] objects = str.split(";");
-		for (String obj : objects) {
-			if (obj == null || obj.isEmpty()) continue;
-			String[] kvp = obj.split(":");
-			String[] pk = kvp[0].split("_");
-			String[] val = kvp[1].split(",");
-			CustomStatusField csf = null;
-			CustomStatusFieldType type = CustomStatusFieldType.values()[Integer.parseInt(val[0])];
-			switch (type) {
-				case IntegerField:
-					csf = new CustomStatusField<>(val[1], type, Integer.parseInt(val[2]));
-					break;
-				case StringField:
-					csf = new CustomStatusField<>(val[1], type, val[2]);
-					break;
-				case BalanceField:
-				case DecimalField:
-					csf = new CustomStatusField<>(val[1], type, Double.parseDouble(val[2]));
-					break;
-				case BooleanField:
-					csf = new CustomStatusField<>(val[1], type, Boolean.parseBoolean(val[2]));
-					break;
-			}
-			
-			try {
-				addExtraStatusField(pk[0], pk[1], csf);
-			} catch (AlreadyRegisteredException e) {
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-			}
+		for (int i = 0; i < objects.length; i++) {
+			metadata.add(CustomDataField.load(objects[i]));
 		}
 	}
-
-	/**
-	 * @return - whether or not the TownyObject has any custom status fields
-	 */
-	public boolean hasExtraStatusFields() {
-		return extraStatusFields.size() > 0;
-	}
+	
 }

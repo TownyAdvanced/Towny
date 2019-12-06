@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -772,15 +773,15 @@ public class TownyWorld extends TownyObject {
 		return warZones.contains(coord);
 	}
 
-	@Override
-	public void addExtraStatusField(String plugin, String key, CustomStatusField field) throws AlreadyRegisteredException {
-		super.addExtraStatusField(plugin, key, field);
-		com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	public void addMetaData(CustomDataField md) {
+		super.addMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 
-	@Override
-	public void removeExtraStatusField(String plugin, String key) {
-		super.removeExtraStatusField(plugin, key);
+	public void removeMetaData(CustomDataField md) {
+		super.removeMetaData(md);
+
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 }

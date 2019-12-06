@@ -756,9 +756,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
 				try {
-					line = rs.getString("extraStatusFields");
+					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
-						resident.setExtraStatusFields(line);
+						resident.setMetadata(line);
 					}
 				} catch (SQLException ignored) {
 
@@ -1008,15 +1008,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (SQLException ignored) {
 					
 				}
-				
-				try {
-					line = rs.getString("extraStatusFields");
-					if (line != null && !line.isEmpty()) {
-						town.setExtraStatusFields(line);
-					}
-				} catch (SQLException ignored) {
-
-				}
 
                 s.close();
                 return true;
@@ -1140,9 +1131,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             }
 
 			try {
-				line = rs.getString("extraStatusFields");
+				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
-					nation.setExtraStatusFields(line);
+					nation.setMetadata(line);
 				}
 			} catch (SQLException ignored) {
 
@@ -1412,9 +1403,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 }
 
 				try {
-					line = rs.getString("extraStatusFields");
+					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
-						world.setExtraStatusFields(line);
+						world.setMetadata(line);
 					}
 				} catch (SQLException ignored) {
 
@@ -1567,11 +1558,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-
-			if (resident.hasExtraStatusFields())
-				res_hm.put("extraStatusFields", StringMgmt.join(resident.getExtraStatusFields(), ":", ";"));
+            
+			if (resident.hasMeta())
+				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
 			else
-				res_hm.put("extraStatusFields", "");
+				res_hm.put("metadata", "");
 
             UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
             return true;
@@ -1619,11 +1610,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
 			else
 				twn_hm.put("metadata", "");
-			
-			if (town.hasExtraStatusFields())
-				twn_hm.put("extraStatusFields", StringMgmt.join(town.getExtraStatusFields(), ":", ";"));
-			else
-				twn_hm.put("extraStatusFields", "");
         
             //twn_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(town.getTownBlocks())));
             twn_hm.put("homeblock", town.hasHomeBlock() ? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#" + town.getHomeBlock().getZ() : "");
@@ -1684,11 +1670,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
-
-			if (nation.hasExtraStatusFields())
-				nat_hm.put("extraStatusFields", StringMgmt.join(nation.getExtraStatusFields(), ":", ";"));
+            
+			if (nation.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
 			else
-				nat_hm.put("extraStatusFields", "");
+				nat_hm.put("metadata", "");
 
             UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
@@ -1786,10 +1772,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             // War allowed in this world.
             nat_hm.put("warAllowed", world.isWarAllowed());
 
-			if (world.hasExtraStatusFields())
-				nat_hm.put("extraStatusFields", StringMgmt.join(world.getExtraStatusFields(), ":", ";"));
+			if (world.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(world.getMetadata()), ";"));
 			else
-				nat_hm.put("extraStatusFields", "");
+				nat_hm.put("metadata", "");
             
             UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 

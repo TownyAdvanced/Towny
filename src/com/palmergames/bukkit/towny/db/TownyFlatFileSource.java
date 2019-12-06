@@ -576,9 +576,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					utilLoadTownBlocks(line, null, resident);
 
-				line = keys.get("extraStatusFields");
+				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					resident.setExtraStatusFields(line.trim());
+					resident.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
@@ -917,10 +917,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					town.setMetadata(line.trim());
-
-				line = keys.get("extraStatusFields");
-				if (line != null && !line.isEmpty())
-					town.setExtraStatusFields(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -1088,9 +1084,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				line = keys.get("extraStatusFields");
+				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					nation.setExtraStatusFields(line.trim());
+					nation.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1369,9 +1365,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
-				line = keys.get("extraStatusFields");
+				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					world.setExtraStatusFields(line.trim());
+					world.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
@@ -1670,10 +1666,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
 
-		// Extra Status Fields
-		if (resident.hasExtraStatusFields())
-			list.add("extraStatusFields=" + StringMgmt.join(resident.getExtraStatusFields(), ":", ";"));
-
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (resident.hasMeta()) {
+			HashSet<CustomDataField> tdata = resident.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1796,10 +1797,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		list.add("metadata=" + md.toString());
 
-		// Extra Status Fields
-		if (town.hasExtraStatusFields())
-			list.add("extraStatusFields=" + StringMgmt.join(town.getExtraStatusFields(), ":", ";"));
-
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1853,11 +1850,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isPublic=" + nation.isPublic());
 		
 		list.add("isOpen=" + nation.isOpen());
-		
-		// Extra Status Fields
-		if (nation.hasExtraStatusFields())
-			list.add("extraStatusFields=" + StringMgmt.join(nation.getExtraStatusFields(), ":", ";"));
 
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (nation.hasMeta()) {
+			HashSet<CustomDataField> tdata = nation.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
+		
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1989,10 +1992,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# This setting is used to enable or disable Event war in this world.");
 		list.add("warAllowed=" + world.isWarAllowed());
 
-		// Extra Status Fields
-		if (world.hasExtraStatusFields())
-			list.add("extraStatusFields=" + StringMgmt.join(world.getExtraStatusFields(), ":", ";"));
-
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (world.hasMeta()) {
+			HashSet<CustomDataField> tdata = world.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
 		
 		/*
 		 *  Make sure we only save in async
