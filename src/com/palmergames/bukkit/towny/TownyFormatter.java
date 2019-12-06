@@ -136,6 +136,7 @@ public class TownyFormatter {
 					TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? TownySettings.getLangString("status_on"):TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
+			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
 		}
@@ -799,6 +800,51 @@ public class TownyFormatter {
 		}
 		
 		
+		return extraFields;
+	}
+
+	public static List<String> getExtraFields(TownBlock tb) {
+		if (!tb.hasMeta())
+			return new ArrayList<>();
+
+		List<String> extraFields = new ArrayList<>();
+
+		String field = "";
+
+		for (CustomDataField cdf : tb.getMetadata()) {
+			if (!cdf.hasLabel())
+				continue;
+
+			if (extraFields.contains(field))
+				field = Colors.Green + cdf.getLabel() + ": ";
+			else
+				field += Colors.Green + cdf.getLabel() + ": ";
+
+			switch (cdf.getType()) {
+				case IntegerField:
+					int ival = (int) cdf.getValue();
+					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
+					break;
+				case StringField:
+					field += Colors.White + cdf.getValue();
+					break;
+				case BooleanField:
+					boolean bval = (boolean) cdf.getValue();
+					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
+					break;
+				case DecimalField:
+					double dval = (double) cdf.getValue();
+					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
+					break;
+			}
+
+			field += "  ";
+
+			if (field.length() > 40)
+				extraFields.add(field);
+		}
+
+
 		return extraFields;
 	}
 }
