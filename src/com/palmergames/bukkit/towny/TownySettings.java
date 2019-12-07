@@ -2903,5 +2903,9 @@ public class TownySettings {
 	public static boolean isFlaggedInteractionNation() {
 		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
 	}
+	
+	public static boolean isNotificationsTownNamesVerbose() {
+		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
+	}
 }
 
