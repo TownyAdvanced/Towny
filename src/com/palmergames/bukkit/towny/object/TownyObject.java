@@ -3,7 +3,10 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 public abstract class TownyObject {
 	private String name;
