@@ -31,7 +31,6 @@ public abstract class CustomDataField<T> {
     }
 
     public void setValue(T value) {
-        // TODO: Save to yml
         
         this.value = value;
     }
@@ -56,7 +55,7 @@ public abstract class CustomDataField<T> {
         return out;
     }
     
-    public static CustomDataField load(String str) {
+    public static CustomDataField<Object> load(String str) {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
         String key = tokens[1];

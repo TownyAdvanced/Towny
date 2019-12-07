@@ -11,10 +11,11 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
+import com.palmergames.bukkit.towny.object.metadata.Metadatable;
 import org.bukkit.Bukkit;
-import java.util.HashSet;
 
-public class TownBlock {
+public class TownBlock implements Metadatable {
 
 	// TODO: Admin only or possibly a group check
 	// private List<Group> groups;
@@ -27,7 +28,7 @@ public class TownBlock {
 	private double plotPrice = -1;
 	private boolean locked = false;
 	private boolean outpost = false;
-	private HashSet<CustomDataField> metadata = null;
+	private MetaMap metadata = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -456,15 +457,17 @@ public class TownBlock {
 		return this.getType() == TownBlockType.JAIL;
 	}
 	
-	public void addMetaData(CustomDataField md) {
+	@Override
+	public void addMetaData(CustomDataField<Object> md) {
 		if (getMetadata() == null)
-			metadata = new HashSet<>();
+			metadata = new MetaMap();
 		
-		getMetadata().add(md);
+		getMetadata().put(md.getKey(), md);
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 	
-	public void removeMetaData(CustomDataField md) {
+	@Override
+	public void removeMetaData(CustomDataField<Object> md) {
 		if (!hasMeta())
 			return;
 		
@@ -476,22 +479,21 @@ public class TownBlock {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 
-	public HashSet<CustomDataField> getMetadata() {
+	@Override
+	public MetaMap getMetadata() {
 		return metadata;
 	}
-
-	public boolean hasMeta() {
-		return getMetadata() != null;
-	}
-
+	
+	@Override
 	public void setMetadata(String str) {
 		
 		if (metadata == null)
-			metadata = new HashSet<>();
+			metadata = new MetaMap();
 		
 		String[] objects = str.split(";");
 		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
+			CustomDataField<Object> field = CustomDataField.load(objects[i]);
+			metadata.put(field.getKey(), field);
 		}
 	}
 }

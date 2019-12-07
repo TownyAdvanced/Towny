@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.event.NationTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.NoMetadataException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -18,6 +19,9 @@ import com.palmergames.bukkit.towny.invites.TownyAllySender;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
+import com.palmergames.bukkit.towny.object.metadata.Metadatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -32,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender {
+public class Nation extends TownyEconomyObject implements ResidentList, TownyInviteSender, TownyInviteReceiver, TownyAllySender, Metadatable {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
@@ -53,6 +57,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
 	private transient List<Invite> sentallyinvites = new ArrayList<>();
+	private MetaMap metadata;
 
 	public Nation(String name) {
 		super(name);
@@ -694,5 +699,47 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	
 	public Resident getKing() {
 		return capital.getMayor();
+	}
+
+	@Override
+	public MetaMap getMetadata() throws NoMetadataException {
+		if (!hasMeta())
+			throw new NoMetadataException("Nation has no meta!");
+		return metadata;
+	}
+
+	@Override
+	public void setMetadata(String str) {
+		if (metadata == null)
+			metadata = new MetaMap();
+
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			CustomDataField<Object> field = CustomDataField.load(object);
+			metadata.put(field.getKey(), field);
+		}
+	}
+
+	@Override
+	public void addMetaData(CustomDataField<Object> md) {
+		if (metadata == null)
+			metadata = new MetaMap();
+
+		metadata.put(md.getKey(), md);
+
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
+
+	@Override
+	public void removeMetaData(CustomDataField<Object> md) {
+		if (!hasMeta())
+			return;
+
+		metadata.remove(md);
+
+		if (metadata.size() == 0)
+			this.metadata = null;
+
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 }

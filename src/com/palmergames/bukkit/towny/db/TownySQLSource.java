@@ -1575,7 +1575,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
             twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			if (town.hasMeta())
-				twn_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(town.getMetadata()), ";"));
+				twn_hm.put("metadata", StringMgmt.join(town.getMetadata().values().toArray(), ";"));
 			else
 				twn_hm.put("metadata", "");
         
@@ -1769,7 +1769,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             tb_hm.put("locked", townBlock.isLocked());
             tb_hm.put("changed", townBlock.isChanged());
             if (townBlock.hasMeta())
-				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(townBlock.getMetadata()), ";"));
+				tb_hm.put("metadata", StringMgmt.join(townBlock.getMetadata().values().toArray(), ";"));
 			else
 				tb_hm.put("metadata", "");
 

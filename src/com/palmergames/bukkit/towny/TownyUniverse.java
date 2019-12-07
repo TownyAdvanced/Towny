@@ -47,7 +47,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Town> towns = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+    private final HashMap<String, CustomDataField<Object>> registeredMetadata = new HashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -365,7 +365,7 @@ public class TownyUniverse {
         residents.clear();
     }
 
-	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+	public HashMap<String, CustomDataField<Object>> getRegisteredMetadataMap() {
 		return registeredMetadata;
 	}
 }

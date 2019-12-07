@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -1074,6 +1075,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("metadata");
+					if (line != null && !line.isEmpty())
+						nation.setMetadata(line.trim());
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
 				return false;
@@ -1757,12 +1762,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Metadata
 		StringBuilder md = new StringBuilder();
-		if (town.hasMeta()) {
-			HashSet<CustomDataField> tdata = town.getMetadata();
-			for (CustomDataField cdf : tdata) {
+		try {
+			MetaMap tdata = town.getMetadata();
+			for (CustomDataField<?> cdf : tdata.values()) {
 				md.append(cdf.toString()).append(";");
 			}
+		} catch (Exception e) {
 		}
+		
 		list.add("metadata=" + md.toString());
 
 		/*
@@ -1818,6 +1825,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("isPublic=" + nation.isPublic());
 		
 		list.add("isOpen=" + nation.isOpen());
+		
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			MetaMap tdata = nation.getMetadata();
+			for (CustomDataField<?> cdf : tdata.values()) {
+				sb.append(cdf.toString()).append(";");
+			}
+		} catch (Exception e) {
+		}
+		
+		list.add("metadata=" + sb.toString());
+			
 
 		/*
 		 *  Make sure we only save in async
@@ -2021,8 +2041,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		StringBuilder md = new StringBuilder();
 		if (townBlock.hasMeta()) {
-			HashSet<CustomDataField> tdata = townBlock.getMetadata();
-			for (CustomDataField cdf : tdata) {
+			MetaMap tdata = townBlock.getMetadata();
+			for (CustomDataField<?> cdf : tdata.values()) {
 				md.append(cdf.toString()).append(";");
 			}
 		}
