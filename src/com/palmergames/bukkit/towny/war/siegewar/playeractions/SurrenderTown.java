@@ -18,10 +18,21 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.ArrayList;
 
 /**
+ * This class is responsible for processing requests to surrender towns
+ *
  * @author Goosius
  */
 public class SurrenderTown {
 
+	/**
+	 * Process a surrender town request
+	 * 
+	 * This method does some final checks and if they pass, the surrender is executed.
+	 * 
+	 * @param player the player who placed the surrender banner
+	 * @param townWhereBlockWasPlaced the town where the banner was placed
+	 * @param event the place block event
+	 */
     public static void processTownSurrenderRequest(Player player,
                                                    Town townWhereBlockWasPlaced,
                                                    BlockPlaceEvent event) {

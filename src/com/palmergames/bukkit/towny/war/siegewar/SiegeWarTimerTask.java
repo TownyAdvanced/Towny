@@ -30,6 +30,16 @@ import java.util.Map;
 import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
 
 /**
+ * This class represents the siegewar timer task
+ * 
+ * The task is recommended to run about once every 10 seconds. 
+ * This rate can be configured.
+ * 
+ * The task does 3 things when it runs:
+ * 1. Evaluate each siege zone, and adjust siege points depending on which players are in the zones.
+ * 2. Evaluate each siege, to determine if the main phase is completed, or the aftermath is completed.
+ * 3. Completely delete towns which have already been ruined for a certain amount of time.
+ * 
  * @author Goosius
  */
 public class SiegeWarTimerTask extends TownyTimerTask {
@@ -64,7 +74,9 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
-	//Cycle through all siege zones
+	/**
+	 * Evaluate all siege zones
+	 */
 	private void evaluateSiegeZones() {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for(SiegeZone siegeZone: universe.getDataSource().getSiegeZones()) {
@@ -72,13 +84,18 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
-	//Cycle through all sieges
+	/**
+	 * Evaluate all sieges
+	 */
 	private void evaluateSieges() {
 		for(Siege siege: getAllSieges()) {
 			evaluateSiege(siege);
 		}
 	}
 
+	/**
+	 * Evaluate just 1 siege zone
+	 */
 	private static void evaluateSiegeZone(SiegeZone siegeZone) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		boolean siegeZoneChanged = false;
@@ -164,6 +181,11 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
+	/**
+	 * Evaluate just 1 siege
+	 * 
+	 * @param siege
+	 */
 	private static void evaluateSiege(Siege siege) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		
@@ -193,9 +215,19 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 		}
 	}
-
-
-	//Return siege-zone changed
+	
+	/**
+	 * Evaluate 1 siege zone player occupant.
+	 * Adjust siege points depending on how long the player has remained-in/occupied the scoring zone
+	 * The occupation time requirement is configurable
+	 * The siege points adjustment is configurable
+	 * 
+	 * @param player the player in the siegezone
+	 * @param siegeZone the siegezone
+	 * @param playerScoreTimeMap the map recording player arrival times 
+	 * @param siegePointsForZoneOccupation the int siege points adjustment which will occur if occupation is verified
+	 * @return true if the siege zone has been updated
+	 */
 	private static boolean evaluateSiegeZoneOccupant(Player player,
 													 SiegeZone siegeZone,
 													 Map<Player, Long> playerScoreTimeMap,
@@ -252,7 +284,17 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 		}
 	}
 
-
+	/**
+	 * This method removes 'garbage' from the player arrival time map.
+	 * 
+	 * For example, if a player has left the area, or logged off,
+	 * then although they will not score, the entry remains in the map as 'garbage'
+	 * 
+	 * @param map the map recording player arrival times 
+	 * @param townFilter the town which players must be in to avoid being removed from the map
+	 * @param nationFilter the nation which players must be in to avoid being removed from the map
+	 * @return true if the siegezone has been updated
+	 */
 	private static boolean removeGarbageFromPlayerScoreTimeMap(Map<Player, Long> map,
 															   Town townFilter,
 															   Nation nationFilter) {
@@ -300,8 +342,12 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 		return siegeZoneChanged;
 	}
-
-
+	
+	/**
+	 * Get all the sieges in the universe
+	 * 
+	 * @return list of all the sieges in the universe
+	 */
 	private static List<Siege> getAllSieges() {
 		List<Siege> result = new ArrayList<>();
 		for(Town town: TownyUniverse.getInstance().getDataSource().getTowns()) {

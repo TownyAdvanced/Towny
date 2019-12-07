@@ -16,10 +16,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
+ * This class is responsible for processing requests to Abandon siege attacks
+ *
  * @author Goosius
  */
 public class AbandonAttack {
 
+	/**
+	 * Process an abandon attack request
+	 *
+	 * This method does some final checks and if they pass, the abandon is executed
+	 *
+	 * @param player the player who placed the abandon banner
+	 * @param nearestSiegeZone the nearest siege zone
+	 * @param event the place block event
+	 */
     public static void processAbandonSiegeRequest(Player player, 
 												  SiegeZone nearestSiegeZone,
 												  BlockPlaceEvent event)  {

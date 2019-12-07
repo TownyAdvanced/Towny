@@ -132,6 +132,12 @@ public class Coord {
 		return cellSize;
 	}
 
+	/**
+	 * Get the Location object representing the "top north west corner" of this co-ord
+	 * 
+	 * @param world the world
+	 * @return the corner location
+	 */
 	public Location getTopNorthWestCornerLocation(World world) {
 		int locX = this.x * getCellSize();
 		int locZ = this.z * getCellSize();

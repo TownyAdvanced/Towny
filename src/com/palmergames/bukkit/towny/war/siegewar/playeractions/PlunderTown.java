@@ -15,10 +15,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
+ * This class is responsible for processing requests to plunder towns
+ *
  * @author Goosius
  */
 public class PlunderTown {
 
+	/**
+	 * Process a plunder town request
+	 *
+	 * This method does some final checks and if they pass, the plunder is executed.
+	 *
+	 * @param player the player who placed the plunder chest
+	 * @param resident the resident associated with the player object
+	 * @param town the town where the chest was placed
+	 * @param siege the siege on the town
+	 * @param event the place block event
+	 */
     public static void processPlunderTownRequest(Player player,
 												 Resident resident,
 												 Town town,
@@ -53,7 +66,7 @@ public class PlunderTown {
         }
     }
 
-    public static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
+    private static void plunderTown(Siege siege, Town defendingTown, Nation winnerNation) {
         siege.setTownPlundered(true);
 
         double fullPlunderAmount =

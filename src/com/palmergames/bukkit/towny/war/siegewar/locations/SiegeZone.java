@@ -9,6 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class represents a "Siege Zone".
+ *
+ * A siege zone is an "attack front" of a siege, a particular zone where one nation is attacking the town.
+ * The zone is centred on the "Siege Banner", which was placed when the attack started.
+ * 
+ * This class keeps track of the 'siege points', which usually determine who wins a siege.
+ * 
+ * The defending town requires negative siege points in all siegezones to win.  
+ * Both defending town residents, and defending nation members can contribute.
+ * An attacking nation requires positive siegepoints in their siegezone to win.
+ * 
+ * For a player to get siegepoints adjusted in their favour,
+ * they need to 'occupy' the wilderness area within one town-block-length of the siege banner.
+ * This is done simply by remaining on the ground in that area (and not flying or invisible.)
+ *
  * @author Goosius
  */
 public class SiegeZone {
@@ -74,39 +89,12 @@ public class SiegeZone {
         return defenderPlayerScoreTimeMap;
     }
 
-    public Map<String, Long> getAttackerPlayerIdScoreTimeMap() {
-        Map<String, Long> result = new HashMap<>();
-        for(Map.Entry<Player, Long> entry: attackerPlayerScoreTimeMap.entrySet()) {
-            System.out.println("TEST");
-            System.out.println(entry);
-            System.out.println(entry.getKey());
-            System.out.println(entry.getKey().getUniqueId());
-            System.out.println(entry.getKey().getUniqueId().toString());
-            System.out.println(entry.getValue());
-
-            result.put(entry.getKey().getUniqueId().toString(), entry.getValue());
-        }
-        return result;
-    }
-
-    public Map<String, Long> getDefenderPlayerIdScoreTimeMap() {
-        Map<String, Long> result = new HashMap<>();
-        for(Map.Entry<Player, Long> entry: defenderPlayerScoreTimeMap.entrySet()) {
-            result.put(entry.getKey().getUniqueId().toString(), entry.getValue());
-        }
-        return result;
-    }
-
     public Integer getSiegePoints() {
         return siegePoints;
     }
 
     public void setSiegePoints(int siegePoints) {
         this.siegePoints = siegePoints;
-    }
-
-    public void addSiegePoints(int siegePointsForAttackingPlayer) {
-        siegePoints += siegePointsForAttackingPlayer;
     }
     
     public void setAttackingNation(Nation attackingNation) {

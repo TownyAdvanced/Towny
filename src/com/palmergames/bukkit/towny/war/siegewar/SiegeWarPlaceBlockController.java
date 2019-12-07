@@ -20,16 +20,32 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.List;
 
 /**
+ * This class intercepts 'place block' events coming from the towny block listener class
+ *
+ * The class evaluates the event, and determines if it is siege related e.g.:
+ * 1. An attack request  (place coloured banner outside town)
+ * 2. A siege abandon request  (place white banner near attack banner)
+ * 3. A town surrender request  (place white banner in town)
+ * 4. A town invasion request (place chest in town)
+ * 5. A town plunder request (place coloured banner in town)
+ * 6. None of the above
+ * 
+ * If the place block event is determined to be a siege action,
+ * this class then calls an appropriate class/method in the 'playeractions' package
+ *
  * @author Goosius
  */
 public class SiegeWarPlaceBlockController {
 	
-	/*
-	 * coloured standing banner - could be attack or invade
-	 * white standing banner - could be surrender
-	 * chest - could be plunder
+	/**
+	 * Evaluates a block placement request.
+	 * If the block is a standing banner or chest, this method calls an appropriate private method.
 	 *
-	 * Return - skipOtherPerChecks
+	 * @param player The player placing the block
+	 * @param block The block about to be placed
+	 * @param event The event object related to the block placement    	
+	 * @param plugin The Towny object
+	 * @return true if subsequent perm checks for the event should be skipped
 	 */
 	public static boolean evaluateSiegeWarPlaceBlockRequest(Player player,
 													 Block block,
@@ -52,7 +68,11 @@ public class SiegeWarPlaceBlockController {
 		}
 	}
 
-
+	/**
+ 	 * Evaluates a banner placement request.
+     * Determines which type of banner this is, and where it is being placed.
+	 * Then calls an appropriate private method.
+ 	*/
 	private static boolean evaluateSiegeWarPlaceBannerRequest(Player player,
 													   Block block,
 													   String blockTypeName,
@@ -65,7 +85,6 @@ public class SiegeWarPlaceBlockController {
 
 		if(!townyWorld.hasTownBlock(blockCoord)) {
 			//Wilderness found
-			//Possible abandon or attack request
 			
 			if (blockTypeName.contains("white")  && ((Banner) block.getState()).getPatterns().size() == 0) {
 				return evaluatePlaceWhiteBannerOutsideTown(block, player, event);
@@ -75,7 +94,6 @@ public class SiegeWarPlaceBlockController {
 			
 		} else {
 			//Town block found
-			//Possible invade or surrender request
 			
 			TownBlock townBlock = null;
 			if(townyWorld.hasTownBlock(blockCoord)) {
@@ -105,10 +123,11 @@ public class SiegeWarPlaceBlockController {
 		}
 	}
 	
+	/**
+	 * Evaluates placing a white banner outside a town.
+	 * Determines if the event will be considered as an abandon request.
+	 */
 	private static boolean evaluatePlaceWhiteBannerOutsideTown(Block block, Player player, BlockPlaceEvent event) {
-		//White banner
-		//Possible abandon request
-		
 		if (!TownySettings.getWarSiegeAbandonEnabled())
 			return false;
 
@@ -147,11 +166,11 @@ public class SiegeWarPlaceBlockController {
 		return true;
 	}
 
-	
+	/**
+	 * Evaluates placing a coloured banner outside a town.
+	 * Determines if the event will be considered as an attack request.
+	 */
 	private static boolean evaluatePlaceColouredBannerOutsideTown(Block block, Player player, BlockPlaceEvent event) {
-		//Coloured banner
-		//Possible attack request
-		
 		if (!TownySettings.getWarSiegeAttackEnabled())
 			return false;
 
@@ -168,10 +187,11 @@ public class SiegeWarPlaceBlockController {
 		return true;
 	}
 
-
+	/**
+	 * Evaluates placing a white banner inside a town.
+	 * Determines if the event will be considered as a surrender request.
+	 */
     private static boolean evaluatePlaceWhiteBannerInTown(Player player, Town town, BlockPlaceEvent event) {
-		//White Banner: Evaluate Surrender request if siege exists in target town
-
 		if (!TownySettings.getWarSiegeSurrenderEnabled())
 			return false;
 
@@ -182,10 +202,14 @@ public class SiegeWarPlaceBlockController {
 		return true;
 	}
 
-	public static boolean evaluatePlaceColouredBannerInTown(Towny plugin, Player player, Town town, BlockPlaceEvent event) throws NotRegisteredException {
-		//Coloured Banner: Evaluate invade request if siege exists in target town,
-		// and player is a member of any of the attacking nations
-		
+	/**
+	 * Evaluates placing a coloured banner inside a town.
+	 * Determines if the event will be considered as an invade request.
+	 * 
+	 * The main verifications here are that a siege exists in the town (already checked) and
+	 * the placer is a member of an attacking nation
+	 */
+	private static boolean evaluatePlaceColouredBannerInTown(Towny plugin, Player player, Town town, BlockPlaceEvent event) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegeInvadeEnabled())
 			return false;
 
@@ -204,11 +228,16 @@ public class SiegeWarPlaceBlockController {
 		}
 	}
 	
+	/**
+	 * Evaluates placing a chest inside a town.
+	 * Determines if the event will be considered as a plunder request.
+	 * 
+	 * The main verifications here are that a siege exists in the town and
+	 * the placer is a member of an attacking nation
+	 */
 	private static boolean evaluateSiegeWarPlaceChestRequest(Player player,
 													  Block block,
 													  BlockPlaceEvent event) throws NotRegisteredException {
-		//Plunder chest: Evaluate plunder action if a member of any attacking nation attempts to place banner
-		
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
 

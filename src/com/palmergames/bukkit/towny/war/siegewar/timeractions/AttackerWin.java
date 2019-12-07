@@ -10,11 +10,19 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.util.ChatTools;
 
 /**
+ * This class is responsible for processing siege attacker wins
+ *
  * @author Goosius
  */
 public class AttackerWin {
 
-    public static void attackerWin(Siege siege, Nation winnerNation) {
+	/**
+	 * This method triggers siege values to be updated for an attacker win
+	 * 
+	 * @param siege the siege
+	 * @param winnerNation the winning nation
+	 */
+	public static void attackerWin(Siege siege, Nation winnerNation) {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_WIN, winnerNation);
 
         TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(

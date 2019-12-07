@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.war.siegewar.locations;
 
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -13,6 +11,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This class represents a "Siege".
+ * 
+ * A siege is an attack by one or more nations on a particular town.
+ * 
+ * A siege is initiated by a nation leader with appropriate permissions,
+ * It typically lasts for a moderate duration (e.g. hours or days),
+ * and can be ended n a number of ways, including abandon, surrender, or points victory.
+ * 
+ * After a siege ends, it enters an aftermath phase where the status is no longer "In Progress",
+ * During this phase, the town cannot be attacked again,
+ * and if an attacker has won, they have the options of "plunder" or "invade".
+ *
  * @author Goosius
  */
 public class Siege {
@@ -64,18 +74,6 @@ public class Siege {
     public long getStartTime() {
         return startTime;
     }
-
-    public void setSiegeZones(Map<Nation, SiegeZone> siegeZones) {
-        this.siegeZones = siegeZones;
-    }
-
-    public List<Nation> getAttackers() {
-    	return new ArrayList<Nation>(siegeZones.keySet());
-    }
-
-    public List<Nation> getAllAttackers() {
-        return new ArrayList<Nation>(siegeZones.keySet());
-    }
     
 	public List<String> getSiegeZoneNames() {
     	List<String> names = new ArrayList<>();
@@ -84,7 +82,6 @@ public class Siege {
 		}
     	return names;
 	}
-
 	
 	public void setStatus(SiegeStatus status) {
         this.status = status;
@@ -130,29 +127,6 @@ public class Siege {
             return TimeMgmt.getFormattedTimeValue(timeUntilCompletionMillis);
         } else {
             return "0";
-        }
-    }
-
-    public String getWinnerName() {
-        switch(status) {
-            case ATTACKER_WIN:
-            case DEFENDER_SURRENDER:
-                return TownyFormatter.getFormattedNationName(attackerWinner);
-            case DEFENDER_WIN:
-            case ATTACKER_ABANDON:
-                if(defendingTown.hasNation()) {
-                    try {
-                        return TownyFormatter.getFormattedNationName(defendingTown.getNation());
-                    } catch (NotRegisteredException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    return TownyFormatter.getFormattedTownName(defendingTown);
-                }
-            case IN_PROGRESS:
-                return "n/a";
-            default:
-                return "Unknown siege status";
         }
     }
 

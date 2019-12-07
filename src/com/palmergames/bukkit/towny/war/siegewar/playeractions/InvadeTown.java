@@ -21,10 +21,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class is responsible for processing requests to invade towns
+ *
  * @author Goosius
  */
 public class InvadeTown {
 
+	/**
+	 * Process an invade town request
+	 *
+	 * This method does some final checks and if they pass, the invasion is executed.
+	 *
+	 * @param plugin the town plugin object
+	 * @param player the player who placed the invade banner
+	 * @param resident the resident associated with the player object
+	 * @param town the town where the banner was placed
+	 * @param siege the siege on the town
+	 * @param event the place block event
+	 */
     public static void processInvadeTownRequest(Towny plugin,
                                                 Player player,
                                                 Resident resident,
@@ -80,7 +94,7 @@ public class InvadeTown {
         }
     }
 
-    public static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
+    private static void captureTown(Towny plugin, Siege siege, Nation attackingNation, Town defendingTown) {
         siege.setTownInvaded(true);
 		
         //Reset revolt immunity, to prevent immediate revolt after invasion 

@@ -7,10 +7,19 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 
 /**
+ * This class contains utility functions related to completing sieges
+ *
  * @author Goosius
  */
 public class SiegeWarSiegeCompletionUtil {
 
+	/**
+	 * This method adjusts siege values, depending on the new status, and who has won.
+	 * 
+	 * @param siege siege
+	 * @param siegeStatus the new status of the siege
+	 * @param winnerNation the winner of the siege
+	 */
 	public static void updateSiegeValuesToComplete(Siege siege,
 												   SiegeStatus siegeStatus,
 												   Nation winnerNation) {

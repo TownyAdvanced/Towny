@@ -10,10 +10,18 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.util.ChatTools;
 
 /**
+ * This class is responsible for processing siege defender wins
+ *
  * @author Goosius
  */
 public class DefenderWin
 {
+	/**
+	 * This method triggers siege values to be updated for a defender win
+	 *
+	 * @param siege the siege
+	 * @param winnerTown the winning town
+	 */
     public static void defenderWin(Siege siege, Town winnerTown) {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_WIN, null);
 

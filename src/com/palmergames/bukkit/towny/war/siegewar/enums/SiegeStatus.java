@@ -1,6 +1,11 @@
 package com.palmergames.bukkit.towny.war.siegewar.enums;
 
 /**
+ * This class represents the "status" of a siege
+ * 
+ * "In Process" means the siege is active, with the outcome not yet decided
+ * Any other status means the siege has "finished", with the outcome decided.
+ * 
  * @author Goosius
  */
 public enum SiegeStatus {

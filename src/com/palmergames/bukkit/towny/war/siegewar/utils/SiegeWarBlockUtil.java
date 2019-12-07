@@ -17,9 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class contains utility functions related to blocks 
+ * (e.g. placing/breaking/analysing nearby blocks)
+ *
  * @author Goosius
  */
 public class SiegeWarBlockUtil {
+
+	/**
+	 * This method gets a list of adjacent townblocks, either N, S, E or W.
+	 * 
+	 * @param player the player
+	 * @param block the block to start from
+	 * @return list of nearby townblocks
+	 */
 	public static List<TownBlock> getAdjacentTownBlocks(Player player, Block block) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld;
@@ -54,14 +65,26 @@ public class SiegeWarBlockUtil {
 		return nearbyTownBlocks;
 	}
 
+	/**
+	 * This method determines if the player has an air block above them
+	 *
+	 * @param player the player
+	 * @return true if player has an air block above them
+	 */
 	public static boolean doesPlayerHaveANonAirBlockAboveThem(Player player) {
 		return doesLocationHaveANonAirBlockAboveIt(player.getLocation());
 	}
 
+	/**
+	 * This method determines if a block has an air block above it
+	 *
+	 * @param block the block
+	 * @return true if block has an air block above it
+	 */
 	public static boolean doesBlockHaveANonAirBlockAboveIt(Block block) {
 		return doesLocationHaveANonAirBlockAboveIt(block.getLocation());
 	}
-
+	
 	private static boolean doesLocationHaveANonAirBlockAboveIt(Location location) {
 		location.add(0,1,0);
 
@@ -76,14 +99,21 @@ public class SiegeWarBlockUtil {
 		return false;  //There is nothing but air above them
 	}
 
+	/**
+	 * 	Determine if the block is near an active siege banner
+	 * 	
+	 * 	Look through all siege zones
+	 * 	Note that we don't just look at the town at the given location
+	 * 	....because mayor may have unclaimed the plot after the siege started
+	 *
+	 *  Siege must be in progress
+	 * 	This must be the banner or the block below the banner
+	 * 
+	 * @param block the block to be considered
+	 * @return true if the block is near an active siege banner
+	 */
 	public static boolean isBlockNearAnActiveSiegeBanner(Block block) {
-		//Look through all siege zones
-		//Note that we don't just look at the town at the given location
-		//....because mayor may have unclaimed the plot after the siege started
 
-		//Siege zone must be active
-		//Siege must be in progress
-		//This must be the banner or the block below the banner
 		Block flagBlock;
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
@@ -103,14 +133,24 @@ public class SiegeWarBlockUtil {
 		return false;
 	}
 
+	/**
+	 * This method determines if the difference in elevation between a (attack banner) block, 
+	 * and the average height of a town block,
+	 * is acceptable,
+	 * 
+	 * The allowed limit is configurable.
+	 * 
+	 * @param block the attack banner
+	 * @param townBlock the town block
+	 * @return true if the difference in elevation is acceptable
+	 */
 	public static boolean isBannerToTownElevationDifferenceOk(Block block, TownBlock townBlock) {
 		int allowedDownwardElevationDifference = TownySettings.getWarSiegeMaxAllowedBannerToTownDownwardElevationDifference();
 		int averageDownwardElevationDifference = getAverageBlockToTownDownwardElevationDistance(block, townBlock);
 		return averageDownwardElevationDifference <= allowedDownwardElevationDifference;
 	}
 	
-
-	public static int getAverageBlockToTownDownwardElevationDistance(Block block, TownBlock townBlock) {
+	private static int getAverageBlockToTownDownwardElevationDistance(Block block, TownBlock townBlock) {
 		int blockElevation = block.getY();
 		
 		Location topNorthWestCornerLocation = townBlock.getCoord().getTopNorthWestCornerLocation(block.getWorld());
@@ -128,11 +168,8 @@ public class SiegeWarBlockUtil {
 		int averageTownElevation = totalElevation / 4;
 		
 		return blockElevation - averageTownElevation;
-
 	}
-
-	//Feed in the top location you want to search from
-	//This method will search downwards
+	
 	private static Location getSurfaceLocation(Location topLocation) {
 		topLocation.add(0,-1,0);
 

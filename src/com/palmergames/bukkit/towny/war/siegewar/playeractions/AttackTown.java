@@ -20,10 +20,22 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.List;
 
 /**
+ * This class is responsible for processing requests to start siege attacks
+ *
  * @author Goosius
  */
 public class AttackTown {
 
+	/**
+	 * Process an attack town request
+	 *
+	 * This method does some final checks and if they pass, the attack is initiated.
+	 *
+	 * @param player the player who placed the attack banner
+	 * @param block the attack banner 
+	 * @param nearbyTownBlocks any nearby town block (n,s,e, or w)
+	 * @param event the place block event
+	 */
     public static void processAttackTownRequest(Player player,
                                                 Block block,
                                                 List<TownBlock> nearbyTownBlocks,
@@ -102,7 +114,7 @@ public class AttackTown {
     }
 
 
-    public static void attackTown(Player player,
+    private static void attackTown(Player player,
 								  Block block,
                                   Nation attackingNation,
                                     Town defendingTown) throws TownyException {
