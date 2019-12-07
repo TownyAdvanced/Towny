@@ -380,6 +380,21 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			town.setNation(null);
 		} catch (AlreadyRegisteredException ignored) {
 		}
+		
+		/*
+		 * Remove all resident titles/nationRanks before saving the town itself.
+		 */
+		List<Resident> titleRemove = new ArrayList<>(town.getResidents());
+
+		for (Resident res : titleRemove) {
+			if (res.hasTitle() || res.hasSurname()) {
+				res.setTitle("");
+				res.setSurname("");
+			}
+			res.updatePermsForNationRemoval(); // Clears the nationRanks.
+			TownyUniverse.getInstance().getDataSource().saveResident(res);
+		}
+		
 		towns.remove(town);
 		
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, this));
