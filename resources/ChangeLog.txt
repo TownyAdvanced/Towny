@@ -3946,3 +3946,4 @@ v0.92.0.11:
     - Default: true
     - When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.
     - When false, it is only the town name.	
+  - Made the town & nation levels' town, nation, capital prefixes and postfixes support the & colour codes.
