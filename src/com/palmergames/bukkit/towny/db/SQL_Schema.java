@@ -58,6 +58,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -87,6 +88,7 @@ public class SQL_Schema {
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 	
@@ -189,6 +191,7 @@ public class SQL_Schema {
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 	

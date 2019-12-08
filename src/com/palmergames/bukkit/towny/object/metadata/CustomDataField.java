@@ -7,18 +7,29 @@ public abstract class CustomDataField<T> {
     private T value;
     private String key;
     
-    public CustomDataField(String key, CustomDataFieldType type, T value)
+    private String label;
+    
+    public CustomDataField(String key, CustomDataFieldType type, T value, String label)
     {
         this.type = type;
         this.setValue(value);
         this.key = key;
+        this.label = label;
     }
+
+	public CustomDataField(String key, CustomDataFieldType type, T value)
+	{
+		this(key, type, value, null);
+	}
+
+	public CustomDataField(String key, CustomDataFieldType type, String label)
+	{
+		this(key, type, null, label);
+	}
 
     public CustomDataField(String key, CustomDataFieldType type)
     {
-        this.type = type;
-        this.value = null;
-        this.key = key;
+        this(key, type, null, null);
     }
 
     public CustomDataFieldType getType() {
@@ -39,8 +50,23 @@ public abstract class CustomDataField<T> {
     public String getKey() {
         return key;
     }
+    
+    public String getLabel() {
+    	if (hasLabel())
+    		return label;
+    	else
+    		return "nil";
+	}
+	
+	public boolean hasLabel() {
+    	return label != null;
+	}
 
-    @Override
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	@Override
     public String toString() {
         String out = "";
         
@@ -53,9 +79,16 @@ public abstract class CustomDataField<T> {
         // Value
         out += "," + getValue();
         
+        // Label
+        out += "," + getLabel();
+        
         return out;
     }
-    
+
+	/**
+	 * @param str - The metadata string to load
+	 * @return - The data field defined by the string
+	 */
     public static CustomDataField load(String str) {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
@@ -69,13 +102,23 @@ public abstract class CustomDataField<T> {
                 break;
             case StringField:
                 field = new StringDataField(key, tokens[2]);
+                break;
             case BooleanField:
                 field = new BooleanDataField(key, Boolean.parseBoolean(tokens[2]));
                 break;
             case DecimalField:
                 field = new DecimalDataField(key, Double.parseDouble(tokens[2]));
+                break;
         }
         
+		String label;
+		if (tokens[3] == null || tokens[3].equalsIgnoreCase("nil"))
+			label = null;
+		else
+			label = tokens[3];
+        
+		field.setLabel(label);
+		
         return field;
     }
     

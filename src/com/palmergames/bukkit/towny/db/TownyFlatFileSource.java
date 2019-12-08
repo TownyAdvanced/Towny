@@ -629,10 +629,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("townBlocks");
 				if (line != null)
 					utilLoadTownBlocks(line, null, resident);
+
+				line = keys.get("metadata");
+				if (line != null && !line.isEmpty())
+					resident.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading resident file " + resident.getName() + " at line: " + line + ", in towny\\data\\residents\\" + resident.getName() + ".txt");
 				return false;
+			} finally {
+				saveResident(resident);
 			}
 			return true;
 		} else {
@@ -1256,9 +1262,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("metadata");
+				if (line != null && !line.isEmpty())
+					nation.setMetadata(line.trim());
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
+				e.printStackTrace();
 				return false;
+			} finally {
+				saveNation(nation);
 			}
 			return true;
 		} else {
@@ -1588,10 +1601,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setWarAllowed(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+
+				line = keys.get("metadata");
+				if (line != null && !line.isEmpty())
+					world.setMetadata(line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
 				return false;
+			} finally {
+				saveWorld(world);
 			}
 			return true;
 		} else {
@@ -1900,6 +1919,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Protection
 		list.add("protectionStatus=" + resident.getPermissions().toString());
 
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (resident.hasMeta()) {
+			HashSet<CustomDataField> tdata = resident.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -2099,6 +2127,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("isOpen=" + nation.isOpen());
 
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (nation.hasMeta()) {
+			HashSet<CustomDataField> tdata = nation.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
+		
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -2253,6 +2291,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# This setting is used to enable or disable Event war in this world.");
 		list.add("warAllowed=" + world.isWarAllowed());
 
+		// Metadata
+		StringBuilder md = new StringBuilder();
+		if (world.hasMeta()) {
+			HashSet<CustomDataField> tdata = world.getMetadata();
+			for (CustomDataField cdf : tdata) {
+				md.append(cdf.toString()).append(";");
+			}
+		}
+		list.add("metadata=" + md.toString());
 		
 		/*
 		 *  Make sure we only save in async
