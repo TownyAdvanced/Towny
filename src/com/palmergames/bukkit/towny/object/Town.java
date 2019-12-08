@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -1291,44 +1292,17 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	}
 
 	public void addMetaData(CustomDataField md) {
-		if (getMetadata() == null)
-			metadata = new HashSet<>();
-		
-		getMetadata().add(md);
+		super.addMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 
 	public void removeMetaData(CustomDataField md) {
-		if (!hasMeta())
-			return;
-
-		getMetadata().remove(md);
-		
-		if (getMetadata().size() == 0)
-			this.metadata = null;
+		super.removeMetaData(md);
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
-
-	public HashSet<CustomDataField> getMetadata() {
-		return metadata;
-	}
-
-	public boolean hasMeta() {
-		return getMetadata() != null;
-	}
-
-	public void setMetadata(String str) {
-
-		if (metadata == null)
-			metadata = new HashSet<>();
-
-		String[] objects = str.split(";");
-		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
-		}
-	}
+	
 	public void setConquered(boolean conquered) {
 		this.isConquered = conquered;
 	}

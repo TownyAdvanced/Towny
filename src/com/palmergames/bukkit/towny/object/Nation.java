@@ -18,6 +18,9 @@ import com.palmergames.bukkit.towny.invites.TownyAllySender;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.status.CustomStatusField;
+import com.palmergames.bukkit.towny.object.status.CustomStatusFieldType;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -28,6 +31,7 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -709,5 +713,17 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	
 	public Resident getKing() {
 		return capital.getMayor();
+	}
+
+	public void addMetaData(CustomDataField md) {
+		super.addMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
+
+	public void removeMetaData(CustomDataField md) {
+		super.removeMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 }

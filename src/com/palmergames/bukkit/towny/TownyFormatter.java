@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class TownyFormatter {
 
@@ -134,6 +136,7 @@ public class TownyFormatter {
 					TownySettings.getLangString("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? TownySettings.getLangString("status_on"):TownySettings.getLangString("status_off")) + 
 					TownySettings.getLangString("mobspawns") + ((town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  TownySettings.getLangString("status_on"): TownySettings.getLangString("status_off")));
 
+			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
 		}
@@ -237,6 +240,8 @@ public class TownyFormatter {
 		// Friends [12]: James, Carry, Mason
 		List<Resident> friends = resident.getFriends();
 		out.addAll(getFormattedResidents(TownySettings.getLangString("status_friends"), friends));
+		
+		out.addAll(getExtraFields(resident));
 		
 		out = formatStatusScreens(out);
 		return out;
@@ -440,6 +445,8 @@ public class TownyFormatter {
 		}
 		out.addAll(ChatTools.listArr(residents, String.format(TownySettings.getLangString("status_town_reslist"), town.getNumResidents() )));		
 
+		out.addAll(getExtraFields(town));
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -552,6 +559,8 @@ public class TownyFormatter {
 		}
         out.addAll(ChatTools.listArr(enemies, String.format(TownySettings.getLangString("status_nation_enemies"), nation.getEnemies().size())));
 
+		out.addAll(getExtraFields(nation));
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -600,6 +609,8 @@ public class TownyFormatter {
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
 			out.add("    " + TownySettings.getLangString("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
+
+			out.addAll(getExtraFields(world));
 		}
 		
 		out = formatStatusScreens(out);
@@ -745,5 +756,95 @@ public class TownyFormatter {
 		for (Nation nation : nations)
 			names.add(getFormattedName(nation));
 		return names.toArray(new String[0]);
+	}
+	
+	public static List<String> getExtraFields(TownyObject to) {
+		if (!to.hasMeta())
+			return new ArrayList<>();
+		
+		List<String> extraFields = new ArrayList<>();
+		
+		String field = "";
+		
+		for (CustomDataField cdf : to.getMetadata()) {
+			if (!cdf.hasLabel())
+				continue;
+			
+			if (extraFields.contains(field))
+				field = Colors.Green + cdf.getLabel() + ": ";
+			else
+				field += Colors.Green + cdf.getLabel() + ": ";
+			
+			switch (cdf.getType()) {
+				case IntegerField:
+					int ival = (int) cdf.getValue();
+					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
+					break;
+				case StringField:
+					field += Colors.White + cdf.getValue();
+					break;
+				case BooleanField:
+					boolean bval = (boolean) cdf.getValue();
+					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
+					break;
+				case DecimalField:
+					double dval = (double) cdf.getValue();
+					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
+					break;
+			}
+			
+			field += "  ";
+			
+			if (field.length() > 40)
+				extraFields.add(field);
+		}
+		
+		
+		return extraFields;
+	}
+
+	public static List<String> getExtraFields(TownBlock tb) {
+		if (!tb.hasMeta())
+			return new ArrayList<>();
+
+		List<String> extraFields = new ArrayList<>();
+
+		String field = "";
+
+		for (CustomDataField cdf : tb.getMetadata()) {
+			if (!cdf.hasLabel())
+				continue;
+
+			if (extraFields.contains(field))
+				field = Colors.Green + cdf.getLabel() + ": ";
+			else
+				field += Colors.Green + cdf.getLabel() + ": ";
+
+			switch (cdf.getType()) {
+				case IntegerField:
+					int ival = (int) cdf.getValue();
+					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
+					break;
+				case StringField:
+					field += Colors.White + cdf.getValue();
+					break;
+				case BooleanField:
+					boolean bval = (boolean) cdf.getValue();
+					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
+					break;
+				case DecimalField:
+					double dval = (double) cdf.getValue();
+					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
+					break;
+			}
+
+			field += "  ";
+
+			if (field.length() > 40)
+				extraFields.add(field);
+		}
+
+
+		return extraFields;
 	}
 }
