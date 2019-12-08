@@ -6,7 +6,6 @@ public abstract class CustomDataField<T> {
     private CustomDataFieldType type;
     private T value;
     private String key;
-    
     private String label;
     
     public CustomDataField(String key, CustomDataFieldType type, T value, String label)
@@ -88,11 +87,12 @@ public abstract class CustomDataField<T> {
 	 * @param str - The metadata string to load
 	 * @return - The data field defined by the string
 	 */
-    public static CustomDataField<Object> load(String str) {
+	@SuppressWarnings("unchecked")
+    public static CustomDataField<Object> load(String str) throws ClassCastException {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
         String key = tokens[1];
-        CustomDataField field = null;
+        CustomDataField<?> field = null;
         
         switch (type) {
             case IntegerField:
@@ -118,7 +118,7 @@ public abstract class CustomDataField<T> {
         
 		field.setLabel(label);
 		
-        return field;
+        return (CustomDataField<Object>)field;
     }
     
     public void isValidType(String str) throws InvalidMetadataTypeException {

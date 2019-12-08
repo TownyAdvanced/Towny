@@ -1301,7 +1301,8 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
-
+	
+	@Override
 	public void removeMetaData(CustomDataField<Object> md) {
 		
 		if (!hasMeta())
