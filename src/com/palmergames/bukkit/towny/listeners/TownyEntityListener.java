@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
@@ -742,6 +743,12 @@ public class TownyEntityListener implements Listener {
 	 */
 	public boolean locationCanExplode(TownyWorld world, Location target) {
 
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
+				return false;
+			}
+		}
+		
 		Coord coord = Coord.parseCoord(target);
 
 		if (world.isWarZone(coord) && !TownyWarConfig.isAllowingExplosionsInWarZone()) {
@@ -889,6 +896,15 @@ public class TownyEntityListener implements Listener {
 			int count = 0;
 
 			for (Block block : blocks) {
+
+				if(TownySettings.getWarSiegeEnabled()) {
+					if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
+						TownyMessaging.sendDebugMsg("onEntityExplode: Canceled " + event.getEntity().getEntityId() + " from exploding near siege banner");
+						event.setCancelled(true);
+						return;
+					}
+				}
+				
 				Coord coord = Coord.parseCoord(block.getLocation());
 				count++;
 				
