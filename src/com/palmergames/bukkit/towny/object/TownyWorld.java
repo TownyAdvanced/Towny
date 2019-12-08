@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 

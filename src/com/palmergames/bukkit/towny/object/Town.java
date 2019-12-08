@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.object.status.CustomStatusField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
@@ -31,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.HashSet;
 
 public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
 
@@ -67,7 +65,6 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private long registered;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
 	private transient List<Invite> sentinvites = new ArrayList<>();
-    private HashSet<CustomDataField> metadata = null;
 	private boolean isConquered = false;
 	private int conqueredDays;
 
