@@ -2904,6 +2904,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
 	}
 
+	public static boolean isNotificationsTownNamesVerbose() {
+		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
+	}
+
 	public static boolean getWarSiegeEnabled() {
 		return getBoolean(ConfigNodes.WAR_SIEGE_ENABLED);
 	}
@@ -3002,6 +3006,5 @@ public class TownySettings {
 	public static int getWarSiegeZoneOccupationScoringTimeRequirementSeconds() {
 		return getInt(ConfigNodes.WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS);
 	}
-
 }
 

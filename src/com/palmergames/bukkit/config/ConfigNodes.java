@@ -928,6 +928,11 @@ public enum ConfigNodes {
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
+	NOTIFICATION_TOWN_NAMES_ARE_VERBOSE(
+			"notification.town_names_are_verbose",
+			"true",
+			"# When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.",
+			"# When false, it is only the town name."),	
 	NOTIFICATION_USING_TITLES(
 			"notification.using_titles",
 			"false",
