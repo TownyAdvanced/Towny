@@ -102,13 +102,13 @@ public class SiegeWarBlockUtil {
 	/**
 	 * 	Determine if the block is an active siege banner, or the support block.
 	 * 	
-	 * 	First look at the material of both the target block & the block above it.
+	 * 	First look at the material of both the target block and the block above it.
 	 * 	Return false if neither is a standing banner.
 	 * 	
 	 * 	Then look at all siege zones within 'in progress' sieges,
 	 * 	and determine if the target block or block above it is a siege banner.
 	 * 	
-	 * 	Note that we don't try to look at the nearby townblocks to find the nearby siege zone,
+	 * 	Note that we don't try to look at the nearby townblocks to find nearby siege zones,
 	 * 	....because mayor may have unclaimed townblocks after the siege started.
 	 *
 	 * @param block the block to be considered
