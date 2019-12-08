@@ -146,29 +146,18 @@ public class InvadeTown {
         } catch(EmptyNationException x) {
             removeNation = true;  //Set flag to remove nation at end of this method
         }
-        /*
-         * Remove all resident titles/nationRanks before saving the town itself.
-         */
-        List<Resident> titleRemove = new ArrayList<Resident>(town.getResidents());
-		TownyUniverse universe = TownyUniverse.getInstance();
-        
-        for (Resident res : titleRemove) {
-            if (res.hasTitle() || res.hasSurname()) {
-                res.setTitle("");
-                res.setSurname("");
-            }
-            res.updatePermsForNationRemoval(); // Clears the nationRanks.
-			universe.getDataSource().saveResident(res);
-        }
 
-        if(removeNation) {
+		TownyUniverse universe = TownyUniverse.getInstance();
+
+		//FYI We use the same sequence of saving here as found in NationCommand.nationLeave()
+		if(removeNation) {
 			universe.getDataSource().removeNation(nation);
 			universe.getDataSource().saveNationList();
         } else {
 			universe.getDataSource().saveNation(nation);
 			universe.getDataSource().saveNationList();
-            plugin.resetCache();
-        }
+			plugin.resetCache();
+		}
 
 		universe.getDataSource().saveTown(town);
     }
