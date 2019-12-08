@@ -6,6 +6,10 @@ public class IntegerDataField extends CustomDataField<Integer> {
     public IntegerDataField(String key) {
         super(key, CustomDataFieldType.IntegerField);
     }
+
+	public IntegerDataField(String key, Integer value, String label) {
+		super(key, CustomDataFieldType.IntegerField, value, label);
+	}
     
     // Allow for initialization with default value provided.
     public IntegerDataField(String key, Integer value) {

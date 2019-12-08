@@ -789,6 +789,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                     e.printStackTrace();
                 }
 
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						resident.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+
+				}
+
 				/*
 				 * Attempt these for older databases.
 				 */
@@ -1214,6 +1223,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 nation.setRegistered(0);
             }
 
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					nation.setMetadata(line);
+				}
+			} catch (SQLException ignored) {
+
+			}
+
             s.close();
             return true;
         } catch (SQLException e) {
@@ -1544,6 +1562,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
                 } catch (Exception ignored) {
                 }
 
+				try {
+					line = rs.getString("metadata");
+					if (line != null && !line.isEmpty()) {
+						world.setMetadata(line);
+					}
+				} catch (SQLException ignored) {
+
+				}
+
             }
 
             s.close();
@@ -1691,6 +1718,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
             //res_hm.put("townBlocks", utilSaveTownBlocks(new ArrayList<TownBlock>(resident.getTownBlocks())));
             res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
+            
+			if (resident.hasMeta())
+				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(resident.getMetadata()), ";"));
+			else
+				res_hm.put("metadata", "");
 
             UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
             return true;
@@ -1828,6 +1860,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
             nat_hm.put("registered",nation.getRegistered());
             nat_hm.put("isPublic", nation.isPublic());
             nat_hm.put("isOpen", nation.isOpen());
+            
+			if (nation.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(nation.getMetadata()), ";"));
+			else
+				nat_hm.put("metadata", "");
 
             UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
@@ -1956,6 +1993,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
             // War allowed in this world.
             nat_hm.put("warAllowed", world.isWarAllowed());
+
+			if (world.hasMeta())
+				nat_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField>(world.getMetadata()), ";"));
+			else
+				nat_hm.put("metadata", "");
             
             UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 

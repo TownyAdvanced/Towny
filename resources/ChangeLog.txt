@@ -3946,3 +3946,8 @@ v0.92.0.11:
     - Default: true
     - When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.
     - When false, it is only the town name.	
+  - Made the town & nation levels' town, nation, capital prefixes and postfixes support the & colour codes.
+  - Expansion of Metadata: courtesy of Emperor-Koala with PR #3548.
+    - Added the ability to expand status screens for through the use of metadata. By giving the metadata field, a label, it will then be displayed on the status screen for any object it is added to.
+    - Added metadata to worlds, nations and residents.
+    - Closes ticket #3543.

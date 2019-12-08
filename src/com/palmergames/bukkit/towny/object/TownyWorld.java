@@ -1,10 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -768,5 +770,17 @@ public class TownyWorld extends TownyObject {
 	public boolean isWarZone(Coord coord) {
 
 		return warZones.contains(coord);
+	}
+
+	public void addMetaData(CustomDataField md) {
+		super.addMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+	public void removeMetaData(CustomDataField md) {
+		super.removeMetaData(md);
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 }
