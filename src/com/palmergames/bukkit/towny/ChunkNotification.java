@@ -179,8 +179,10 @@ public class ChunkNotification {
 					// Not a Towny registered world
 				}
 			
-			} else
+			} else if (TownySettings.isNotificationsTownNamesVerbose())
 				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
+			else 
+				return String.format(areaTownNotificationFormat, toTown);
 			
 		} else if (fromWild && toWild) 
 			try {

@@ -1120,20 +1120,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			nation.removeTown(town);
-
-			/*
-			 * Remove all resident titles/nationRanks before saving the town itself.
-			 */
-			List<Resident> titleRemove = new ArrayList<>(town.getResidents());
-
-			for (Resident res : titleRemove) {
-				if (res.hasTitle() || res.hasSurname()) {
-					res.setTitle("");
-					res.setSurname("");
-				}
-				res.updatePermsForNationRemoval(); // Clears the nationRanks.
-				townyUniverse.getDataSource().saveResident(res);
-			}
+			
 			townyUniverse.getDataSource().saveNation(nation);
 			townyUniverse.getDataSource().saveNationList();
 

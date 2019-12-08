@@ -3941,3 +3941,15 @@ v0.92.0.11:
     - Closes ticket #3477.
   - Fix /ta plot ? help screen.
   - Bump language files to 0.67.
+  - Fix for /ta town meta not working on towns the admin doesnt own, courtesy of Siris with PR #3549.
+  - New Config Option: notification.town_names_are_verbose
+    - Default: true
+    - When set to true, town's names are the long form (townprefix)(name)(townpostfix) configured in the town_level section.
+    - When false, it is only the town name.	
+  - Made the town & nation levels' town, nation, capital prefixes and postfixes support the & colour codes.
+  - Expansion of Metadata: courtesy of Emperor-Koala with PR #3548.
+    - Added the ability to expand status screens for through the use of metadata. By giving the metadata field, a label, it will then be displayed on the status screen for any object it is added to.
+    - Added metadata to worlds, nations and residents.
+    - Closes ticket #3543.
+  - Fix keep inventory and keep experience features.
+    - Closes ticket #3551.
