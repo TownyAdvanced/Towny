@@ -3951,3 +3951,5 @@ v0.92.0.11:
     - Added the ability to expand status screens for through the use of metadata. By giving the metadata field, a label, it will then be displayed on the status screen for any object it is added to.
     - Added metadata to worlds, nations and residents.
     - Closes ticket #3543.
+  - Fix keep inventory and keep experience features.
+    - Closes ticket #3551.
