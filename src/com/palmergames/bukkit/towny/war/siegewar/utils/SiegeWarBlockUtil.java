@@ -100,21 +100,35 @@ public class SiegeWarBlockUtil {
 	}
 
 	/**
-	 * 	Determine if the block is near an active siege banner
+	 * 	Determine if the block is an active siege banner, or the support block.
 	 * 	
-	 * 	Look through all siege zones
-	 * 	Note that we don't just look at the town at the given location
-	 * 	....because mayor may have unclaimed the plot after the siege started
+	 * 	First look at the material of both the target block & the block above it.
+	 * 	Return false if neither is a standing banner.
+	 * 	
+	 * 	Then look at all siege zones within 'in progress' sieges,
+	 * 	and determine if the target block or block above it is a siege banner.
+	 * 	
+	 * 	Note that we don't try to look at the nearby townblocks to find the nearby siege zone,
+	 * 	....because mayor may have unclaimed townblocks after the siege started.
 	 *
-	 *  Siege must be in progress
-	 * 	This must be the banner or the block below the banner
-	 * 
 	 * @param block the block to be considered
 	 * @return true if the block is near an active siege banner
 	 */
 	public static boolean isBlockNearAnActiveSiegeBanner(Block block) {
+		Block blockAbove = block.getRelative(BlockFace.UP);
+		
+		//If neither the target block nor block above it is a banner, return false
+		if(!block.getType().name().endsWith("BANNER") && !blockAbove.getType().name().endsWith("BANNER"))
+			return false;
 
-		Block flagBlock;
+		//If either the target block or block above it is a wall banner, return false
+		if(block.getType().name().contains("WALL") || blockAbove.getType().name().contains("WALL"))
+			return false;
+		
+		//Look through all siege zones
+		Location locationOfBlock = block.getLocation();
+		Location locationOfBlockAbove = blockAbove.getLocation();
+		Location locationOfSiegeBanner;
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 
@@ -122,8 +136,8 @@ public class SiegeWarBlockUtil {
 				continue;
 			}
 
-			flagBlock = siegeZone.getFlagLocation().getBlock();
-			if(flagBlock.equals(block) || flagBlock.getRelative(BlockFace.DOWN).equals(block))
+			locationOfSiegeBanner = siegeZone.getFlagLocation();
+			if(locationOfBlock.equals(locationOfSiegeBanner) || locationOfBlockAbove.equals(locationOfSiegeBanner))
 			{
 				return true;	
 			}
