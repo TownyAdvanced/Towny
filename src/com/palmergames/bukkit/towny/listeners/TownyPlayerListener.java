@@ -906,7 +906,7 @@ public class TownyPlayerListener implements Listener {
 				if (tb != null) { // So a valid TownBlock appears, how wonderful
 					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
 						event.setKeepLevel(true);
-						event.getDrops().clear();
+						event.setDroppedExp(0);
 					}
 				}
 
