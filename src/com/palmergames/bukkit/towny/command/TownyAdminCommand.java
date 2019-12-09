@@ -302,9 +302,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split[0].equalsIgnoreCase("meta")) {
-
-			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM.getNode()))
-				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
 			// Get townblock
 			TownBlock townBlock = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)).getTownBlock();
