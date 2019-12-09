@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -266,6 +267,13 @@ public class TownyBlockListener implements Listener {
 		else {
 			blockTo = block.getRelative(direction.getOppositeFace());
 		}
+
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block) || SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(blockTo)) {
+				return true;
+			}
+		}
+		
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
 		Coord coord = Coord.parseCoord(loc);
@@ -313,7 +321,13 @@ public class TownyBlockListener implements Listener {
 	}
 
 	private boolean onBurn(Block block) {
-
+		
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(block)) {
+				return true;
+			}
+		}
+		
 		Location loc = block.getLocation();
 		Coord coord = Coord.parseCoord(loc);
 		TownyWorld townyWorld;
@@ -428,6 +442,12 @@ public class TownyBlockListener implements Listener {
 	 * @return true if allowed.
 	 */
 	public boolean locationCanExplode(TownyWorld world, Location target) {
+
+		if(TownySettings.getWarSiegeEnabled()) {
+			if(SiegeWarBlockUtil.isBlockNearAnActiveSiegeBanner(target.getBlock())) {
+				return false;
+			}
+		}
 
 		Coord coord = Coord.parseCoord(target);
 
