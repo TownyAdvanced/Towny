@@ -163,11 +163,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									// This block is part of a group, special tasks need to be done.
 									PlotGroup group = block.getPlotGroup();
 									
-									TownyMessaging.sendErrorMsg("Plot Coord = " + block.getCoord().toString());
-									TownyMessaging.sendErrorMsg("Plot hasGroup() = " + block.hasPlotGroup());
-									TownyMessaging.sendErrorMsg("Plot group id = " + block.getPlotGroup().getID());
-									TownyMessaging.sendErrorMsg("Group = " + block.getPlotGroup());
-									
 									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(group, player));
 									String firstLine = "This plot is part a group of " + group.getTownBlocks().size() + " plot(s) by claiming you will inherit them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
@@ -259,13 +254,30 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						new PlotClaim(plugin, player, resident, null, false, false).start();
 
 					} else {
+
+						
+						
 						List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
 
 						if (selection.size() > 0) {
 
-							// Start the unclaim task
-							new PlotClaim(plugin, player, resident, selection, false, false).start();
+							for (WorldCoord coord : selection) {
+								TownBlock block = coord.getTownBlock();
+								Town town = block.getTown();
+								double price = block.getPlotPrice();
+
+								if (!block.hasPlotGroup()) {
+									// Start the unclaim task
+									new PlotClaim(plugin, player, resident, selection, false, false).start();
+									continue;
+								}
+
+								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(block.getPlotGroup(), player));
+								String firstLine = "This plot is part a group of " + block.getPlotGroup().getTownBlocks().size() + " plot(s) by unclaiming you will lose them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
+
+							}
 
 						} else {
 							player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
