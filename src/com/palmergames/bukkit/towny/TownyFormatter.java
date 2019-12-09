@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.NoMetadataException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -15,6 +16,9 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
+import com.palmergames.bukkit.towny.object.metadata.Metadatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -26,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -608,7 +613,7 @@ public class TownyFormatter {
 			out.add(Colors.Green + world.getUnclaimedZoneName() + ":");
 			out.add("    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + "Build" + Colors.Gray + ", " + (world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + "Destroy" + Colors.Gray + ", " + (world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + "Switch" + Colors.Gray + ", " + (world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + "ItemUse");
 			out.add("    " + TownySettings.getLangString("status_world_ignoredblocks") + Colors.LightGreen + " " + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ", "));
-
+			
 			out.addAll(getExtraFields(world));
 		}
 		
@@ -757,92 +762,54 @@ public class TownyFormatter {
 		return names.toArray(new String[0]);
 	}
 	
-	public static List<String> getExtraFields(TownyObject to) {
-		if (!to.hasMeta())
-			return new ArrayList<>();
-		
+	public static List<String> getExtraFields(Metadatable obj) {
 		List<String> extraFields = new ArrayList<>();
-		
+
 		String field = "";
+
+		MetaMap metaData;
 		
-		for (CustomDataField cdf : to.getMetadata()) {
-			if (!cdf.hasLabel())
+		if (!obj.hasMeta()) {
+			return new ArrayList<>();
+		}
+		
+		metaData = obj.getMetadata();
+
+		for (CustomDataField<Object> cdf : metaData.values()) {
+			if (!cdf.hasLabel()) {
 				continue;
-			
+			}
+
 			if (extraFields.contains(field))
 				field = Colors.Green + cdf.getLabel() + ": ";
 			else
 				field += Colors.Green + cdf.getLabel() + ": ";
 			
+			String strVal = cdf.getValue().toString();
+
 			switch (cdf.getType()) {
 				case IntegerField:
-					int ival = (int) cdf.getValue();
+					int ival = Integer.parseInt(strVal);
 					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
 					break;
 				case StringField:
 					field += Colors.White + cdf.getValue();
 					break;
 				case BooleanField:
-					boolean bval = (boolean) cdf.getValue();
+					boolean bval = Boolean.parseBoolean(strVal);
 					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
 					break;
 				case DecimalField:
-					double dval = (double) cdf.getValue();
-					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
-					break;
-			}
-			
-			field += "  ";
-			
-			if (field.length() > 40)
-				extraFields.add(field);
-		}
-		
-		
-		return extraFields;
-	}
-
-	public static List<String> getExtraFields(TownBlock tb) {
-		if (!tb.hasMeta())
-			return new ArrayList<>();
-
-		List<String> extraFields = new ArrayList<>();
-
-		String field = "";
-
-		for (CustomDataField cdf : tb.getMetadata()) {
-			if (!cdf.hasLabel())
-				continue;
-
-			if (extraFields.contains(field))
-				field = Colors.Green + cdf.getLabel() + ": ";
-			else
-				field += Colors.Green + cdf.getLabel() + ": ";
-
-			switch (cdf.getType()) {
-				case IntegerField:
-					int ival = (int) cdf.getValue();
-					field += (ival <= 0 ? Colors.Red : Colors.LightGreen) + ival;
-					break;
-				case StringField:
-					field += Colors.White + cdf.getValue();
-					break;
-				case BooleanField:
-					boolean bval = (boolean) cdf.getValue();
-					field += (bval ? Colors.LightGreen : Colors.Red) + bval;
-					break;
-				case DecimalField:
-					double dval = (double) cdf.getValue();
+					double dval = Double.parseDouble(strVal);
 					field += (dval <= 0 ? Colors.Red : Colors.LightGreen) + dval;
 					break;
 			}
 
 			field += "  ";
 
-			if (field.length() > 40)
+			if (field.length() < 40)
 				extraFields.add(field);
 		}
-
 
 		return extraFields;
 	}

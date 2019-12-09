@@ -1292,55 +1292,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		
 		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
 	}
-
-	public void addMetaData(CustomDataField<Object> md) {
-		if (!hasMeta())
-			metadata = new MetaMap();
-		
-		metadata.put(md.getKey(), md);
-
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
-	}
 	
-	@Override
-	public void removeMetaData(CustomDataField<Object> md) {
-		
-		if (!hasMeta())
-			return;
-		
-		metadata.remove(md);
-		
-		if (metadata.size() == 0)
-			this.metadata = null;
-
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
-	}
-
-
-	@Override
-	public MetaMap getMetadata() throws NoMetadataException {
-		if (!hasMeta()) {
-			throw new
-				NoMetadataException(
-					TownySettings.getLangString("msg_err_this_plot_doesnt_have_any_associated_metadata")
-			);
-		}
-			
-		
-		return metadata;
-	}
-
-	@Override
-	public void setMetadata(String str) {
-		if (hasMeta())
-			metadata = new MetaMap();
-
-		String[] objects = str.split(";");
-		for (String object : objects) {
-			CustomDataField<Object> custom = CustomDataField.load(object);
-			metadata.put(custom.getKey(), custom);
-		}
-	}
 	public void setConquered(boolean conquered) {
 		this.isConquered = conquered;
 	}
@@ -1355,5 +1307,49 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public int getConqueredDays() {
 		return this.conqueredDays;
+	}
+
+	@Override
+	public void addMetaData(CustomDataField<Object> md) {
+		if (getMetadata() == null)
+			metadata = new MetaMap();
+
+		getMetadata().put(md.getKey(), md);
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	@Override
+	public void removeMetaData(CustomDataField<Object> md) {
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md.getKey());
+
+		if (getMetadata().size() == 0)
+			this.metadata = null;
+
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	@Override
+	public MetaMap getMetadata() {
+		return metadata;
+	}
+
+	@Override
+	public boolean hasMeta() {
+		return metadata != null;
+	}
+
+	@Override
+	public void setMetadata(String str) {
+		if (metadata == null)
+			metadata = new MetaMap();
+
+		String[] objects = str.split(";");
+		for (int i = 0; i < objects.length; i++) {
+			CustomDataField<Object> field = CustomDataField.load(objects[i]);
+			metadata.put(field.getKey(), field);
+		}
 	}
 }

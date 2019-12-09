@@ -15,16 +15,9 @@ public interface Metadatable {
 	 * @throws NoMetadataException Thrown when no metadata is available i.e, when {@link #getMetadata()}
 	 * returns null.
 	 */
-	MetaMap getMetadata() throws NoMetadataException;
+	MetaMap getMetadata();
 
-	default boolean hasMeta() {
-		try {
-			return getMetadata() != null;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
+	boolean hasMeta();
 	/**
 	 * Loads the metadata for the given string representation.
 	 * @param str The serialized version of the meta.

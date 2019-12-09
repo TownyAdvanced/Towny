@@ -310,8 +310,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyWorld world = new TownyWorld(player.getWorld().getName());
 			TownBlock townBlock = world.getTownBlock(Coord.parseCoord(player));
 			
-			
-			MetaCommand.handleMetaCommand(player, split, townBlock);
+			MetaCommand.handleMetaCommand(player, StringMgmt.remArgs(split, 1), townBlock);
+
+			// Save changes.
+			townyUniverse.getDataSource().saveTownBlock(townBlock);
 			return;
 		}
 		
@@ -546,6 +548,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					throw new TownyException(TownySettings.getLangString("msg_player_not_jailed_in_your_town"));
 				}
+			} else if (split[1].equalsIgnoreCase("meta")) {
+				
+				if (split.length == 3) {
+					player.sendMessage(ChatTools.formatTitle("/townyadmin resident {resident_name} meta"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the resident"));
+					return;
+				}
+
+				MetaCommand.handleMetaCommand(player, StringMgmt.remArgs(split, 1), resident);
+
+				TownyUniverse.getInstance().getDataSource().saveResident(resident);
 			}
 
 		} catch (NotRegisteredException e) {
@@ -695,7 +710,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				MetaCommand.handleMetaCommand(player,split, town);
+				MetaCommand.handleMetaCommand(player, StringMgmt.remArgs(split, 1), town);
 				// Save changes.
 				townyUniverse.getDataSource().saveTown(town);
 			}
@@ -861,6 +876,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[1].equalsIgnoreCase("toggle")) {
 				
 				NationCommand.nationToggle(player, StringMgmt.remArgs(split, 2), true, nation);
+			} else if (split[1].equalsIgnoreCase("meta")) {
+				
+				if (split.length == 3) {
+					player.sendMessage(ChatTools.formatTitle("/townyadmin nation {nation_name} meta"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+					player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the nation"));
+					return;
+				}
+
+				MetaCommand.handleMetaCommand(player, StringMgmt.remArgs(split, 1), nation);
+				TownyUniverse.getInstance().getDataSource().saveNation(nation);
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException e) {

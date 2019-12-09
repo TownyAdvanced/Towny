@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 
 public abstract class CustomDataField<T> {
@@ -88,7 +89,7 @@ public abstract class CustomDataField<T> {
 	 * @return - The data field defined by the string
 	 */
 	@SuppressWarnings("unchecked")
-    public static CustomDataField<Object> load(String str) throws ClassCastException {
+    public static CustomDataField load(String str) {
         String[] tokens = str.split(",");
         CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
         String key = tokens[1];
@@ -118,7 +119,7 @@ public abstract class CustomDataField<T> {
         
 		field.setLabel(label);
 		
-        return (CustomDataField<Object>)field;
+        return field;
     }
     
     public void isValidType(String str) throws InvalidMetadataTypeException {
@@ -162,13 +163,13 @@ public abstract class CustomDataField<T> {
     public CustomDataField newCopy() {
         switch (type) {
             case BooleanField:
-                return new BooleanDataField(getKey(), (Boolean)getValue());
+                return new BooleanDataField(getKey(), (Boolean)getValue(), label);
             case IntegerField:
-                return new IntegerDataField(getKey(), (Integer)getValue());
+                return new IntegerDataField(getKey(), (Integer)getValue(), label);
             case DecimalField:
-                return new DecimalDataField(getKey(), (Double)getValue());
+                return new DecimalDataField(getKey(), (Double)getValue(), label);
             case StringField:
-                return new StringDataField(getKey(), (String)getValue());
+                return new StringDataField(getKey(), (String)getValue(), label);
         }
         
         return null;

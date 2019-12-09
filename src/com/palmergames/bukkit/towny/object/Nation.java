@@ -718,10 +718,13 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 	}
 
 	@Override
-	public MetaMap getMetadata() throws NoMetadataException {
-		if (!hasMeta())
-			throw new NoMetadataException("Nation has no meta!");
+	public MetaMap getMetadata() {
 		return metadata;
+	}
+
+	@Override
+	public boolean hasMeta() {
+		return metadata != null;
 	}
 
 	@Override
@@ -751,7 +754,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 		if (!hasMeta())
 			return;
 
-		metadata.remove(md);
+		getMetadata().remove(md.getKey());
 
 		if (metadata.size() == 0)
 			this.metadata = null;

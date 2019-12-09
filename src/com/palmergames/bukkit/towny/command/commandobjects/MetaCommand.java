@@ -31,24 +31,26 @@ public class MetaCommand {
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_META.getNode()))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-		if (split.length == 2) {
-			player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
-			
-			for (CustomDataField<?> field : obj.getMetadata().values()) {
-				player.sendMessage(field.getKey() + " = " + field.getValue());
+		if (split.length == 1) {
+			if (obj.hasMeta()) {
+				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
+				for (CustomDataField<?> field : obj.getMetadata().values()) {
+					player.sendMessage(field.getKey() + " = " + field.getValue());
+				}
+			} else {
+				TownyMessaging.sendErrorMsg(player, "This item has no registered metadata");
 			}
-			
 			return;
 		}
 
-		if (split.length == 5) {
-			String mdKey = split[3];
-			String val = split[4];
+		if (split.length == 4) {
+			String mdKey = split[2];
+			String val = split[3];
 
 			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)){
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_the_metadata_for_key_is_not_registered"), mdKey));
 				return;
-			} else if (split[2].equalsIgnoreCase("set")) {
+			} else if (split[1].equalsIgnoreCase("set")) {
 				CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 				if (obj.hasMeta()) {
 					CustomDataField<Object> cdf = obj.getMetadata().get(mdKey);
@@ -72,11 +74,11 @@ public class MetaCommand {
 					}
 				}
 
-				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_key_x_is_not_part_of_this_town"), mdKey));
+				TownyMessaging.sendErrorMsg(player, "There is not metadata on this item.");
 
 			}
-		} else if (split[2].equalsIgnoreCase("add")) {
-			String mdKey = split[3];
+		} else if (split[1].equalsIgnoreCase("add")) {
+			String mdKey = split[2];
 
 			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_the_metadata_for_key_is_not_registered"), mdKey));
@@ -85,18 +87,18 @@ public class MetaCommand {
 
 			CustomDataField<Object> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
 			
-			if (obj.getMetadata().containsKey(mdKey)) {
+			if (obj.hasMeta() && obj.getMetadata().containsKey(mdKey)) {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_key_x_already_exists"), mdKey));
 				return;
 			}
 			
 			obj.addMetaData(md.newCopy());
 
-			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_custom_data_was_successfully_added_to_town"));
+			TownyMessaging.sendMsg(player, "Meta was added to item.");
 
 
-		} else if (split[2].equalsIgnoreCase("remove")) {
-			String mdKey = split[3];
+		} else if (split[1].equalsIgnoreCase("remove")) {
+			String mdKey = split[2];
 
 			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
 				TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("msg_err_the_metadata_for_key_is_not_registered"), mdKey));

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
+import com.palmergames.bukkit.towny.exceptions.NoMetadataException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -16,6 +17,8 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
+import com.palmergames.bukkit.towny.object.metadata.Metadatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -26,9 +29,10 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
-public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver {
+public class Resident extends TownBlockOwner implements ResidentModes, TownyInviteReceiver, Metadatable {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private Town town = null;
@@ -47,6 +51,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	private List<String> modes = new ArrayList<>();
 	private transient ConfirmationType confirmationType;
 	private transient List<Invite> receivedinvites = new ArrayList<>();
+	private MetaMap metadata;
 
 	private List<String> townRanks = new ArrayList<>();
 	private List<String> nationRanks = new ArrayList<>();
@@ -679,14 +684,49 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		return confirmationType;
 	}
 
-	public void addMetaData(CustomDataField md) {
-		super.addMetaData(md);
+	@Override
+	public MetaMap getMetadata() {
+		
+		return metadata;
+	}
+
+	@Override
+	public boolean hasMeta() {
+		return metadata != null;
+	}
+
+	@Override
+	public void setMetadata(String str) {
+		if (!hasMeta())
+			metadata = new MetaMap();
+
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			CustomDataField<Object> custom = CustomDataField.load(object);
+			metadata.put(custom.getKey(), custom);
+		}
+	}
+
+	@Override
+	public void addMetaData(CustomDataField<Object> md) {
+		if (!hasMeta())
+			metadata = new MetaMap();
+
+		metadata.put(md.getKey(), md);
 
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
-	public void removeMetaData(CustomDataField md) {
-		super.removeMetaData(md);
+	@Override
+	public void removeMetaData(CustomDataField<Object> md) {
+
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md.getKey());
+
+		if (metadata.size() == 0)
+			this.metadata = null;
 
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}

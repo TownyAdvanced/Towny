@@ -1665,12 +1665,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Metadata
 		StringBuilder md = new StringBuilder();
-		if (resident.hasMeta()) {
-			HashSet<CustomDataField> tdata = resident.getMetadata();
-			for (CustomDataField cdf : tdata) {
+		try {
+			MetaMap tdata = resident.getMetadata();
+			for (CustomDataField cdf : tdata.values()) {
 				md.append(cdf.toString()).append(";");
 			}
-		}
+		} catch (Exception ignored) {}
+		
 		list.add("metadata=" + md.toString());
 		/*
 		 *  Make sure we only save in async
@@ -1996,12 +1997,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Metadata
 		StringBuilder md = new StringBuilder();
-		if (world.hasMeta()) {
-			HashSet<CustomDataField> tdata = world.getMetadata();
-			for (CustomDataField cdf : tdata) {
+		try {
+			MetaMap tdata = world.getMetadata();
+			for (CustomDataField<Object> cdf : tdata.values()) {
 				md.append(cdf.toString()).append(";");
 			}
-		}
+		} catch (Exception ignored) {}
+		
 		list.add("metadata=" + md.toString());
 		
 		/*

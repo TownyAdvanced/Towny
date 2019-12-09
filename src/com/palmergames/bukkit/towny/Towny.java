@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
+import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -36,6 +37,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -101,6 +103,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWarEntityListener townyWarEntityListener = new TownyWarEntityListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
+	private static final IntegerDataField field = new IntegerDataField("level", 100, "Level");
 
 	private TownyUniverse townyUniverse;
 
@@ -165,6 +168,13 @@ public class Towny extends JavaPlugin {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
 		}
+		
+		try {
+			TownyAPI.getInstance().registerCustomDataField(field);
+		} catch (KeyAlreadyRegisteredException e) {
+			getLogger().info(e.getMessage());
+		}
+		
 
 		registerEvents();
 

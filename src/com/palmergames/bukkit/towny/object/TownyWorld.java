@@ -3,10 +3,13 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NoMetadataException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetaMap;
+import com.palmergames.bukkit.towny.object.metadata.Metadatable;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -15,7 +18,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 
-public class TownyWorld extends TownyObject {
+public class TownyWorld extends TownyObject implements Metadatable {
 
 	private List<Town> towns = new ArrayList<>();
 	private boolean isClaimable = true;
@@ -35,6 +38,7 @@ public class TownyWorld extends TownyObject {
 	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
+	private MetaMap metadata = null;
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -772,15 +776,50 @@ public class TownyWorld extends TownyObject {
 		return warZones.contains(coord);
 	}
 
-	public void addMetaData(CustomDataField md) {
-		super.addMetaData(md);
+	@Override
+	public void addMetaData(CustomDataField<Object> md) {
+		if (!hasMeta())
+			metadata = new MetaMap();
+
+		metadata.put(md.getKey(), md);
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 
-	public void removeMetaData(CustomDataField md) {
-		super.removeMetaData(md);
+	@Override
+	public void removeMetaData(CustomDataField<Object> md) {
+
+		if (!hasMeta())
+			return;
+
+		getMetadata().remove(md.getKey());
+
+		if (metadata.size() == 0)
+			this.metadata = null;
 
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
+
+	@Override
+	public MetaMap getMetadata() {
+		return metadata;
+	}
+
+	@Override
+	public boolean hasMeta() {
+		return metadata != null;
+	}
+
+	@Override
+	public void setMetadata(String str) {
+		if (hasMeta())
+			metadata = new MetaMap();
+
+		String[] objects = str.split(";");
+		for (String object : objects) {
+			CustomDataField<Object> custom = CustomDataField.load(object);
+			metadata.put(custom.getKey(), custom);
+		}
+	}
+	
 }

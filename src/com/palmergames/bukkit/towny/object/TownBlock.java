@@ -470,8 +470,8 @@ public class TownBlock implements Metadatable {
 	public void removeMetaData(CustomDataField<Object> md) {
 		if (!hasMeta())
 			return;
-		
-		getMetadata().remove(md);
+
+		getMetadata().remove(md.getKey());
 
 		if (getMetadata().size() == 0)
 			this.metadata = null;
@@ -483,7 +483,12 @@ public class TownBlock implements Metadatable {
 	public MetaMap getMetadata() {
 		return metadata;
 	}
-	
+
+	@Override
+	public boolean hasMeta() {
+		return metadata != null;
+	}
+
 	@Override
 	public void setMetadata(String str) {
 		
