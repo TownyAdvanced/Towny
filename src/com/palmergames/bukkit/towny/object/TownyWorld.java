@@ -819,6 +819,8 @@ public class TownyWorld extends TownyObject implements Metadatable {
 			CustomDataField<Object> custom = CustomDataField.load(object);
 			metadata.put(custom.getKey(), custom);
 		}
+
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 	
 }

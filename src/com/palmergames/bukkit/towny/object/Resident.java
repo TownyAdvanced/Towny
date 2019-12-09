@@ -703,6 +703,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 			CustomDataField<Object> custom = CustomDataField.load(object);
 			metadata.put(custom.getKey(), custom);
 		}
+
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
 	@Override

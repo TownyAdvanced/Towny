@@ -735,6 +735,8 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			CustomDataField<Object> field = CustomDataField.load(object);
 			metadata.put(field.getKey(), field);
 		}
+
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 
 	@Override

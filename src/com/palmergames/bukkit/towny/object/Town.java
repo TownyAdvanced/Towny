@@ -1350,5 +1350,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			CustomDataField<Object> field = CustomDataField.load(objects[i]);
 			metadata.put(field.getKey(), field);
 		}
+		
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 }

@@ -500,5 +500,7 @@ public class TownBlock implements Metadatable {
 			CustomDataField<Object> field = CustomDataField.load(objects[i]);
 			metadata.put(field.getKey(), field);
 		}
+
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 }

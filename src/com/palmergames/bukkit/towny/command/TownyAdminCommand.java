@@ -310,9 +310,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownBlock townBlock = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)).getTownBlock();
 			
 			MetaCommand.handleMetaCommand(player, split, townBlock);
-
-			// Save changes.
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			
 			return;
 		}
 		
