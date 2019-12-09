@@ -477,6 +477,7 @@ permissions:
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.resident.*: true
+            towny.command.townyadmin.meta: true
 
     towny.command.townyadmin.resident.*:
         description: User can access admin resident commands
@@ -516,7 +517,6 @@ permissions:
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
             towny.command.townyadmin.town.toggle: true
-            towny.command.townyadmin.town.meta: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -534,7 +534,6 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.plot.claim: true
-            towny.command.townyadmin.plot.meta: true
 
     towny.command.townyadmin.toggle.*:
         description: User can access the admin toggle commands.

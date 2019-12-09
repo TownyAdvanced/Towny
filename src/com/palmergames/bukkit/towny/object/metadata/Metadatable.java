@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.towny.exceptions.NoMetadataException;
-
 /**
  * An interface which allows objects to support the Towny metadata system.
  * @author Suneet Tipirneni (Siris)
@@ -12,8 +10,6 @@ public interface Metadatable {
 	 * The Set of metadata for a given object.
 	 * @return The HashSet of {@link CustomDataField} objects (meta) associated with
 	 * the conforming class.
-	 * @throws NoMetadataException Thrown when no metadata is available i.e, when {@link #getMetadata()}
-	 * returns null.
 	 */
 	MetaMap getMetadata();
 

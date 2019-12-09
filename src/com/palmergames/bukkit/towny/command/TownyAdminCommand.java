@@ -307,10 +307,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 			
 			// Get townblock
-			TownyWorld world = new TownyWorld(player.getWorld().getName());
-			TownBlock townBlock = world.getTownBlock(Coord.parseCoord(player));
+			TownBlock townBlock = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)).getTownBlock();
 			
-			MetaCommand.handleMetaCommand(player, StringMgmt.remArgs(split, 1), townBlock);
+			MetaCommand.handleMetaCommand(player, split, townBlock);
 
 			// Save changes.
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
