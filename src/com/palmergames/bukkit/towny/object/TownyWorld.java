@@ -34,7 +34,6 @@ public class TownyWorld extends TownyObject {
 	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private List<Coord> warZones = new ArrayList<>();
 	private List<String> entityExplosionProtection = null;
-	private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
 	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -137,47 +136,7 @@ public class TownyWorld extends TownyObject {
 
 		return townBlocks.values();
 	}
-
-	public PlotGroup newGroup(String townName, String name, int id) throws AlreadyRegisteredException {
-		PlotGroup newGroup = new PlotGroup(id, name,  new Town(townName));
-		
-		if (hasGroup(townName, id)) {
-			TownyMessaging.sendErrorMsg("group " + townName + ":" + id + " already exists");
-			throw new AlreadyRegisteredException();
-		}
-		
-		String key = townName + id;
-		TownyMessaging.sendErrorMsg("New group = " + newGroup);
-		plotGroups.put(key, newGroup);
-		TownyMessaging.sendErrorMsg("Group val = " + plotGroups.get(key));
-		
-		return plotGroups.get(key);
-	}
 	
-	public void removeGroup(PlotGroup group) {
-		if (hasGroup(group.getTown().toString(), group.getID())) {
-			String key = group.getTown().toString() + group.getID().toString();
-			townBlocks.remove(key);
-		}
-	}
-	
-	public PlotGroup getGroup(String townName, int groupID) {
-		System.out.println("Group Size = " + plotGroups.size());
-		for (String str : plotGroups.keySet()) {
-			TownyMessaging.sendErrorMsg(str);
-		}
-		
-		
-		
-		TownyMessaging.sendErrorMsg("Return val = " + plotGroups.get((townName + groupID)));
-		return plotGroups.get(townName + groupID);
-	}
-	
-	public boolean hasGroup(String townName, int groupID) {
-		return plotGroups.containsKey(townName + groupID);
-	}
-
-
 	public void removeTown(Town town) throws NotRegisteredException {
 
 		if (!hasTown(town))
@@ -811,9 +770,5 @@ public class TownyWorld extends TownyObject {
 	public boolean isWarZone(Coord coord) {
 
 		return warZones.contains(coord);
-	}
-
-	public Collection<PlotGroup> getPlotGroups() {
-		return plotGroups.values();
 	}
 }

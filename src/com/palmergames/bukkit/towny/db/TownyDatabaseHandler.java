@@ -195,17 +195,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotGroup getPlotGroup(String worldName, String townName, int groupID) throws NotRegisteredException {
-		TownyWorld world;
-		world = universe.getWorldMap().get(worldName);
-		
-		if (world == null)
-		{
-			throw new NotRegisteredException();
-		}
-			
-		
-		return world.getGroup(townName, groupID);
+	public PlotGroup getPlotGroup(String worldName, String townName, int groupID) {
+		return universe.getGroup(townName, groupID);
 	}
 
 	@Override
@@ -440,11 +431,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	public List<PlotGroup> getAllGroups() {
 		List<PlotGroup> groups = new ArrayList<>();
-		
-		for (TownyWorld world : getWorlds())
-			groups.addAll(world.getPlotGroups());
+		groups.addAll(universe.getGroups());
 		
 		return groups;
+	}
+	
+	public void newPlotGroup(PlotGroup group) {
+		String key = group.getTown().getName() + group.getID();
+		universe.getPlotGroupsMap().put(key, group);
 	}
 
 	@Override
@@ -970,6 +964,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
+	}
+
+	@Override
+	public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException {
+		// Create new one
+		group.setGroupName(newName);
+		
+		// Save
+		savePlotGroup(group);
+		saveGroupList();
+
+		// Delete the old group file.
+		deleteGroup(group);
 	}
 
 	@Override

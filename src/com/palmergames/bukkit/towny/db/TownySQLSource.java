@@ -1852,8 +1852,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     public void deleteFile(String file) {
     
     }
-    
-    @Override
+
+	@Override
+	public void deleteGroup(PlotGroup group) {
+		
+	}
+
+	@Override
     public synchronized boolean backup() throws IOException {
 
         TownyMessaging.sendMsg("Performing backup");

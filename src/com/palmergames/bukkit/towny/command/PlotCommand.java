@@ -566,11 +566,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					plotTestOwner(resident, townBlock);
 					
 					if (split.length <= 1) {
-						/*
+						
 						player.sendMessage(ChatTools.formatTitle("/... group"));
 						player.sendMessage(ChatTools.formatCommand("", "group", "add", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
 						player.sendMessage(ChatTools.formatCommand("", "group", "remove", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
-						 */
+						
 						
 						if (townBlock.hasPlotGroup())
 							TownyMessaging.sendMessage(player, townBlock.getPlotGroup().toString());
@@ -579,22 +579,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (split.length >= 2) {
 						
 						if (split[1].equalsIgnoreCase("add")) {
-							
-							/*
-							PlotGroup newgrp = new PlotGroup(town.getName());
-							newgrp.setPrice(1001);
-							newgrp.setGroupName("groupname");
-							newgrp.setID(1);
-							
-							TownyWorld gWorld = TownyUniverse.getInstance().getWorldMap().get("world");
-							
-							gWorld.newGroup("test", "groupname", 420);
-							
-							townyUniverse.getDataSource().saveGroupList();
-							
-							townyUniverse.getDataSource().saveGroup(newgrp);
-							
-							 */
 							
 							TownyWorld groupWorld = townBlock.getWorld();
 							// Add the group to the new plot.
@@ -627,7 +611,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								townBlock.setPlotGroup(newGroup);
 								
 								// Add the global list.
-								resident.getTown().getWorld().newGroup(town.getName(), newGroup.getGroupName(), newGroup.getID());
+								townyUniverse.newGroup(town.getName(), newGroup.getGroupName(), newGroup.getID());
 
 								// Save changes.
 								townyUniverse.getDataSource().saveTown(town);
@@ -639,7 +623,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return true;
 							} else if (split.length == 3) {
 								// Create a brand new plot group.
-								int plotGroupID = town.generatePlotGroupID();
+								int plotGroupID = townyUniverse.generatePlotGroupID();
 								String plotGroupName = split[2];
 								
 								newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
@@ -663,13 +647,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Set the resident mode.
 							resident.setPlotGroupMode(newGroup, true);
 							
-							// Save to the global list.
-							TownyWorld gWorld = TownyUniverse.getInstance().getWorldMap().get(world);
-							try{
-								gWorld.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
-							} catch (Exception ignored) {
-								TownyMessaging.sendErrorMsg(ignored.getMessage());
-							}
+							townyUniverse.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
+							
 							
 							townyUniverse.getDataSource().saveGroupList();
 							
@@ -702,13 +681,25 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 							TownyMessaging.sendMessage(player, "Plot (" + townBlock.getX() + "," + townBlock.getZ() + ") was removed from group.");
 							
+						} else if (split[1].equalsIgnoreCase("rename")) {
+							
+							String newName = split[2];
+							
+							if (!townBlock.hasPlotGroup()) {
+								TownyMessaging.sendErrorMsg(player, "This plot has no associated group.");
+								return false;
+							}
+							
+							// Change name;
+							TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotGroup(), newName);
+							TownyMessaging.sendMessage(player, "group was renamed to " + townBlock.getPlotGroup().getGroupName());
+							
 						} else if (split[1].equalsIgnoreCase("forsale") || split[1].equalsIgnoreCase("fs")) {
 							if (split.length == 2) {
 								// The player wants to add to group using their stored mode.
 
 								// Get the plot group from the resident mode.
 								PlotGroup pGroup = resident.getPlotGroupFromMode();
-
 								
 
 								return true;
