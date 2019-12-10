@@ -313,8 +313,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world = getWorld(tokens[0]);
 						TownyMessaging.sendErrorMsg("world null?");
 					}
-
-					world.newGroup(townName, groupName, groupID);
+					
+					universe.newGroup(townName, groupName, groupID);
 				}
 			}
 			
@@ -326,6 +326,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 		}
 	}
+	
 	
 	@Override
 	public boolean loadResidentList() {
@@ -1681,9 +1682,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 
 		for (TownBlock townBlock : getAllTownBlocks()) {
-
 			list.add(townBlock.getWorld().getName() + "," + townBlock.getX() + "," + townBlock.getZ());
-
 		}
 
 		/*
@@ -2688,7 +2687,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	public void deleteGroup(PlotGroup group) {
     	File file = new File(getGroupFilename(group));
-    	if (file.exists());
+    	TownyMessaging.sendErrorMsg("Attempting to delete" + file.getPath());
+    	if (file.exists())
     		file.deleteOnExit();
+    	else
+    		TownyMessaging.sendErrorMsg("That file doesn't exist!");
 	}
 }

@@ -153,6 +153,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteTownBlock(TownBlock townBlock);
 
 	abstract public void deleteFile(String file);
+	
+	abstract public void deleteGroup(PlotGroup group);
 
 	public boolean cleanup() {
 
@@ -332,4 +334,5 @@ public abstract class TownyDataSource {
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
 }
