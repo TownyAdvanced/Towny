@@ -12,10 +12,13 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarSiegeCompletionUtil;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
+
+import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
 /**
  * This class is responsible for processing requests to surrender towns
@@ -56,6 +59,13 @@ public class SurrenderTown {
             if(siege.getSiegeZones().size() > 1)
                 throw new TownyException(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_multiple_attackers"));
 
+            long timeUntilSurrenderIsAllowedMillis = siege.getTimeUntilSurrenderIsAllowedMillis();
+            if(timeUntilSurrenderIsAllowedMillis > 0) {
+				String message = String.format(TownySettings.getLangString("msg_err_siege_war_cannot_surrender_yet"), 
+					TimeMgmt.getFormattedTimeValue(timeUntilSurrenderIsAllowedMillis));
+				throw new TownyException(message);
+			}
+            
             //Surrender
             defenderSurrender(siege);
 

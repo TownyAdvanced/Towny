@@ -1094,6 +1094,7 @@ msg_err_siege_war_town_already_plundered: '&6[War]&c This town has already been 
 msg_err_siege_war_cannot_surrender_not_your_town: '&6[War]&c You cannot surrender because this is not your town.'
 msg_err_siege_war_cannot_surrender_siege_finished: '&6[War]&c You cannot surrender because the siege is over.'
 msg_err_siege_war_cannot_surrender_multiple_attackers: '&6[War]&c You cannot surrender if there are multiple attacking nations.'
+msg_err_siege_war_cannot_surrender_yet: '&6[War]&c You cannot surrender for another %s.'
 #Block destroy
 msg_err_siege_war_cannot_destroy_siege_banner: "&6[War]&c While the siege is in progress you cannot destroy the siege banner or the block it is attached to."
 

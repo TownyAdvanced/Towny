@@ -1864,6 +1864,12 @@ public enum ConfigNodes {
 			"# If the value is too high, regular players may be unsatisfied that sieges take too long.",
 			"# If the value is too low, casual players may be unsatisfied that ",
 		    "#    they are unable to contribute to sieges, especially those involving their own town/nation"),
+	WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_SURRENDER_HOURS(
+			"war.siege.times.min_siege_duration_before_surrender_hours",
+			"24",
+			"# The minimum duration of a siege before a town can surrender.",
+			"# This setting is important because it prevents a 'quick surrender' by the defender",
+			"# - which could leave the attacker with no 'aftermath' time in which to execute invade or plunder actions."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_NEW_TOWN_HOURS(
 			"war.siege.times.siege_immunity_time_new_town_hours",
 			"72",
@@ -1872,7 +1878,7 @@ public enum ConfigNodes {
 			"# A low value allows less time to fortify new towns, but community engagement by mayors will be faster."),
 	WAR_SIEGE_SIEGE_IMMUNITY_TIME_MODIFIER(
 			"war.siege.times.siege_immunity_time_modifier",
-			"1.5",
+			"3.0",
 			"# This value determines how long a town is safe from sieges, after a siege finishes.",
 			"# The actual cooldown time will be the length of the previous siege, multiplied by this modifer.",
 			"# A high value makes sieges less frequent. Suitable for moderately-aggressive servers",

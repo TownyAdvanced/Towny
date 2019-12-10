@@ -2996,6 +2996,10 @@ public class TownySettings {
 	public static double getWarSiegeMaxHoldoutTimeHours() {
 		return getDouble(ConfigNodes.WAR_SIEGE_MAX_HOLDOUT_TIME_HOURS);
 	}
+	
+	public static double getWarSiegeMinSiegeDurationBeforeSurrenderHours() {
+		return getDouble(ConfigNodes.WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_SURRENDER_HOURS);
+	}
 
 	public static int getSiegeWarPointsPerAttackingPlayer() {
 		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER);

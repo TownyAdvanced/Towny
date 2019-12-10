@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.war.siegewar.locations;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.palmergames.util.TimeMgmt.ONE_HOUR_IN_MILLIS;
 
 /**
  * This class represents a "Siege".
@@ -137,5 +140,12 @@ public class Siege {
     public boolean getTownInvaded() {
         return townInvaded;
     }
-    
+
+	public long getDurationMillis() {
+		return System.currentTimeMillis() - startTime;
+	}
+
+	public long getTimeUntilSurrenderIsAllowedMillis() {
+		return (long)((TownySettings.getWarSiegeMinSiegeDurationBeforeSurrenderHours() * ONE_HOUR_IN_MILLIS) - getDurationMillis());
+	}
 }
