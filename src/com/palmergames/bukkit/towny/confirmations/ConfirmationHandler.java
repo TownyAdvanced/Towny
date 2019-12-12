@@ -13,11 +13,13 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.entity.Player;
@@ -303,6 +305,13 @@ public class ConfirmationHandler {
 				for (TownBlock tb : confirmation.getGroup().getTownBlocks()) {
 					PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs());
 				}
+				
+				Player player = confirmation.getPlayer();
+				TownyPermission perm = confirmation.getGroup().getTownBlocks().get(0).getPermissions();
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 			}
 		}
 	}

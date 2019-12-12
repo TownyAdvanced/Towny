@@ -1407,36 +1407,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return false;
 		}
 	}
-	/*
-	public boolean loadGroups() {
-		String line = "";
-		String path;
-		
-		for (PlotGroup group : getAllGroups()) {
-			path = getGroupFilename(group);
-			
-			File groupFile = new File(path);
-			
-			if (groupFile.exists() && groupFile.isFile()) {
-				String test = null;
-
-				try {
-					HashMap<String, String> keys = new HashMap<>();
-					Properties properties = new Properties();
-					properties.load(new InputStreamReader(new FileInputStream(groupFile), StandardCharsets.UTF_8));
-					for (String key : properties.stringPropertyNames()) {
-						String value = properties.getProperty(key);
-						keys.put(key, String.valueOf(value));
-					}
-					
-					line = keys.get("name");
-				}
-				
-			}
-		}
-	}
 	
-	 */
 	@Override
 	public boolean loadPlotGroups() {
 		String line = "";
@@ -2181,11 +2152,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	
-	public boolean saveAllGroups() {
-		return false;
-	}
-
 	@Override
 	public boolean saveTownBlock(TownBlock townBlock) {
 
@@ -2638,6 +2604,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			file.deleteOnExit();
 	}
 	
+	@Override
 	public void deleteGroup(PlotGroup group) {
     	File file = new File(getGroupFilename(group));
     	TownyMessaging.sendErrorMsg("Attempting to delete" + file.getPath());

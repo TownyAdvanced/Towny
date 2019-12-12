@@ -359,8 +359,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						setPlotForSale(resident, pos, plotPrice);
 						
 						// Update group price if neccessary.
-						//if (pos.getTownBlock().hasGroup())
-							//pos.getTownBlock().getGroup().addPlotPrice(plotPrice);
+						if (pos.getTownBlock().hasPlotGroup())
+							pos.getTownBlock().getPlotGroup().addPlotPrice(plotPrice);
 					}
 
 				} else if (split[0].equalsIgnoreCase("perm") || split[0].equalsIgnoreCase("info")) {
@@ -580,7 +580,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						player.sendMessage(ChatTools.formatCommand("", "group", "add", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
 						player.sendMessage(ChatTools.formatCommand("", "group", "remove", "Ex: Groupname - \"Expensive\", \"Open\", etc..."));
 						
-						
 						if (townBlock.hasPlotGroup())
 							TownyMessaging.sendMessage(player, townBlock.getPlotGroup().toString());
 					}
@@ -709,6 +708,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 								// Get the plot group from the resident mode.
 								PlotGroup pGroup = resident.getPlotGroupFromMode();
+								
+								
 								
 
 								return true;
@@ -896,11 +897,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			townBlock.setChanged(true);
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
-
-			TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-			TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-			TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			
+			if (!townBlock.hasPlotGroup()) {
+				TownyMessaging.sendMsg(player, TownySettings.getLangString("msg_set_perms"));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
+				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			}
+			
 
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(townBlock);
