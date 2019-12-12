@@ -5,7 +5,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Group;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -38,6 +40,7 @@ public class ConfirmationHandler {
 	private static HashMap<Resident, Nation> nationmergeconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> groupclaimconfirmations = new HashMap<>();
 	private static HashMap<Resident, GroupConfirmation> groupremoveconfirmations = new HashMap<>();
+	private static HashMap<Resident, GroupConfirmation> groupsetpermconfirmations = new HashMap<>();
 	public static ConfirmationType consoleConfirmationType = ConfirmationType.NULL;
 	private static Object consoleExtra = null;
 
@@ -47,8 +50,7 @@ public class ConfirmationHandler {
 			case TOWNDELETE:
 				r.setConfirmationType(type);
 				towndeleteconfirmations.put(r, r.getTown()); // The good thing is, using the "put" option we override the past one!
-
-
+				
 				new BukkitRunnable() {
 					@Override
 					public void run() {
@@ -123,6 +125,17 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
+			case GROUPSETPERMACTION:
+				r.setConfirmationType(type);
+				groupsetpermconfirmations.put(r, (GroupConfirmation) extra);
+
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						removeConfirmation(r, type, false);
+					}
+				}.runTaskLater(plugin, 400);
+				break;
 		}
 	}
 
@@ -178,6 +191,13 @@ public class ConfirmationHandler {
 					sendmessage = true;
 				}
 				groupclaimconfirmations.remove(r);
+				r.setConfirmationType(null);
+				break;
+			case GROUPSETPERMACTION:
+				if (groupsetpermconfirmations.containsKey(r) && !successful) {
+					sendmessage = true;
+				}
+				groupsetpermconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
 		}
@@ -255,7 +275,6 @@ public class ConfirmationHandler {
 				GroupConfirmation confirmation = groupclaimconfirmations.get(r);
 				ArrayList<TownBlock> townBlocks = (ArrayList<TownBlock>) confirmation.getGroup().getTownBlocks();
 				for (TownBlock tb :townBlocks) {
-					TownyMessaging.sendErrorMsg(tb.getCoord().toString());
 					coords.add(tb.getWorldCoord());
 				}
 				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, true, false).start();
@@ -274,6 +293,16 @@ public class ConfirmationHandler {
 				}
 				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, false, false).start();
 				removeConfirmation(r, type, true);
+			}
+		}
+		
+		if (type == ConfirmationType.GROUPSETPERMACTION) {
+			if (groupsetpermconfirmations.containsKey(r)) {
+				GroupConfirmation confirmation = groupsetpermconfirmations.get(r);
+				
+				for (TownBlock tb : confirmation.getGroup().getTownBlocks()) {
+					PlotCommand.setTownBlockPermissions(confirmation.getPlayer(), tb.getResident(), tb, confirmation.getArgs());
+				}
 			}
 		}
 	}

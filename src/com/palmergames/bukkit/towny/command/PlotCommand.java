@@ -432,6 +432,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							// Check we are allowed to set these perms
 							toggleTest(player, townBlock, StringMgmt.join(StringMgmt.remFirstArg(split), ""));
+							
+							if (townBlock.hasPlotGroup()) {
+								GroupConfirmation confirmation = new GroupConfirmation(townBlock.getPlotGroup(), player);
+								confirmation.setArgs(StringMgmt.remFirstArg(split));
+								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPSETPERMACTION, confirmation);
+								String firstLine = "This plot is part a group of " + townBlock.getPlotGroup().getTownBlocks().size() + " plot(s) by setting perms on this it will affect all the other plots." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
+								return true;
+							}
 
 							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
 
