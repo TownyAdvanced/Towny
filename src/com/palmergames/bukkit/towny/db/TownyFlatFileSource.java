@@ -2153,7 +2153,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("flagLocation=" + siegeZone.getFlagLocation().getWorld().getName()
 			+ "," + siegeZone.getFlagLocation().getX()
 			+ "," + siegeZone.getFlagLocation().getY()
-			+ "," + siegeZone.getFlagLocation().getY()
 			+ "," + siegeZone.getFlagLocation().getZ());
 		list.add("attackingNation=" + siegeZone.getAttackingNation().getName());
 		list.add("defendingTown=" + siegeZone.getDefendingTown().getName());

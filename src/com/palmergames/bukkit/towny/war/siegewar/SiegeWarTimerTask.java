@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.war.siegewar;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -18,7 +19,6 @@ import com.palmergames.bukkit.towny.war.siegewar.timeractions.RemoveRuinedTowns;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarBlockUtil;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarPointsUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.palmergames.util.TimeMgmt.ONE_MINUTE_IN_MILLIS;
+import static com.palmergames.util.TimeMgmt.ONE_SECOND_IN_MILLIS;
 
 /**
  * This class represents the siegewar timer task
@@ -80,7 +81,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	private void evaluateSiegeZones() {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		for(SiegeZone siegeZone: universe.getDataSource().getSiegeZones()) {
-				evaluateSiegeZone(siegeZone);
+			evaluateSiegeZone(siegeZone);
 		}
 	}
 
@@ -97,6 +98,10 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 	 * Evaluate just 1 siege zone
 	 */
 	private static void evaluateSiegeZone(SiegeZone siegeZone) {
+		//Evaluate the siege zone only if the siege is 'in progress'.
+		if(siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) 
+			return;
+		
 		TownyUniverse universe = TownyUniverse.getInstance();
 		boolean siegeZoneChanged = false;
 		Resident resident;
@@ -153,7 +158,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			}
 		}
 		
-		//Remove garbage from player score time maps
+		//Remove garbage from player time maps
 		Town defendingTown =siegeZone.getDefendingTown();
 		Nation defendingNation= null;
 		if(defendingTown.hasNation()) {
@@ -165,16 +170,22 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 		siegeZoneChanged =
 				siegeZoneChanged ||
-						removeGarbageFromPlayerScoreTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
+						removeGarbageFromPlayerTimeMap(siegeZone.getDefenderPlayerScoreTimeMap(),
 								defendingTown,
 								defendingNation);
 
 		siegeZoneChanged =
 				siegeZoneChanged ||
-						removeGarbageFromPlayerScoreTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
+						removeGarbageFromPlayerTimeMap(siegeZone.getAttackerPlayerScoreTimeMap(),
 								null,
 								siegeZone.getAttackingNation());
 
+		siegeZoneChanged =
+				siegeZoneChanged ||
+						removeGarbageFromPlayerTimeMap(siegeZone.getPlayerAfkTimeMap(),
+								null,
+								null);
+		
 		//Save siege zone to db if it was changed
 		if(siegeZoneChanged) {
 			universe.getDataSource().saveSiegeZone(siegeZone);
@@ -239,25 +250,37 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 			//Player must still be in zone
 			if (!SiegeWarPointsUtil.isPlayerInSiegePointZone(player, siegeZone)) {
 				playerScoreTimeMap.remove(player);
+				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return true;
 			}
 			
 			//Player must still be in the open
 			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				playerScoreTimeMap.remove(player);
+				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return true;
 			}
 
-			//Player must have been there long enough
-			if (System.currentTimeMillis() > playerScoreTimeMap.get(player)) {
-				siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
-				playerScoreTimeMap.put(player,
-						System.currentTimeMillis()
-								+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
-				return true;
+			//Player must have been in zone long enough
+			if (System.currentTimeMillis() < playerScoreTimeMap.get(player)) {
+				return false;
 			}
 			
-			return false;
+			//Player must not have been in zone too long (anti-afk feature)
+			if (System.currentTimeMillis() > siegeZone.getPlayerAfkTimeMap().get(player)) {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_siege_war_cannot_occupy_zone_for_too_long"));
+				playerScoreTimeMap.put(player,
+					System.currentTimeMillis()
+						+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+				return false;
+			}
+			
+			//Player has been in zone long enough. Points awarded
+			siegeZone.adjustSiegePoints(siegePointsForZoneOccupation);
+			playerScoreTimeMap.put(player,
+					System.currentTimeMillis()
+							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+			return true;
 
 		} else {
 
@@ -278,26 +301,30 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 
 			playerScoreTimeMap.put(player,
 					System.currentTimeMillis()
-							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * TimeMgmt.ONE_SECOND_IN_MILLIS));
+							+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
+			
+			siegeZone.getPlayerAfkTimeMap().put(player,
+					System.currentTimeMillis()
+							+ (long)(TownySettings.getWarSiegeZoneMaximumScoringDurationMinutes() * ONE_MINUTE_IN_MILLIS));
 			
 			return true; //Player added to zone
 		}
 	}
 
 	/**
-	 * This method removes 'garbage' from the player arrival time map.
+	 * This method removes 'garbage' from a player time map.
 	 * 
 	 * For example, if a player has left the area, or logged off,
-	 * then although they will not score, the entry remains in the map as 'garbage'
+	 * then although they will no longer affect the siege, the entry remains in the time map as 'garbage'
 	 * 
-	 * @param map the map recording player arrival times 
+	 * @param map the map recording player to time
 	 * @param townFilter the town which players must be in to avoid being removed from the map
 	 * @param nationFilter the nation which players must be in to avoid being removed from the map
 	 * @return true if the siegezone has been updated
 	 */
-	private static boolean removeGarbageFromPlayerScoreTimeMap(Map<Player, Long> map,
-															   Town townFilter,
-															   Nation nationFilter) {
+	private static boolean removeGarbageFromPlayerTimeMap(Map<Player, Long> map,
+														  Town townFilter,
+														  Nation nationFilter) {
 
 		boolean siegeZoneChanged = false;
 

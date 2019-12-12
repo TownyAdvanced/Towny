@@ -34,7 +34,8 @@ public class SiegeZone {
     private int siegePoints;
     private Map<Player, Long> attackerPlayerScoreTimeMap; //player, time when they will score
     private Map<Player, Long> defenderPlayerScoreTimeMap; //player, time when they will score
-
+	private Map<Player, Long> playerAfkTimeMap;  //player, time they will be considered afk
+	
     public SiegeZone() {
         attackingNation = null;
         defendingTown = null;
@@ -42,6 +43,7 @@ public class SiegeZone {
         siegeBannerLocation = null;
         attackerPlayerScoreTimeMap = new HashMap<>();
         defenderPlayerScoreTimeMap = new HashMap<>();
+		playerAfkTimeMap = new HashMap<>();
     }
 
     public SiegeZone(Nation attackingNation, Town defendingTown) {
@@ -51,6 +53,7 @@ public class SiegeZone {
         siegeBannerLocation = null;
         attackerPlayerScoreTimeMap = new HashMap<>();
         defenderPlayerScoreTimeMap = new HashMap<>();
+		playerAfkTimeMap = new HashMap<>();
     }
 
     public String getName() {
@@ -113,4 +116,11 @@ public class SiegeZone {
         siegePoints += adjustment;
     }
 
+	public Map<Player, Long> getPlayerAfkTimeMap() {
+		return playerAfkTimeMap;
+	}
+
+	public void setPlayerAfkTimeMap(Map<Player, Long> playerAfkTimeMap) {
+		this.playerAfkTimeMap = playerAfkTimeMap;
+	}
 }

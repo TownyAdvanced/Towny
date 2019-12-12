@@ -1900,6 +1900,12 @@ public enum ConfigNodes {
 			"#     before siege points are awarded.",
 			"# It is recommended to have this over 30 seconds,",
 			"#     to prevent nations from too much spamming of siege zones with cannon-fodder troops"),
+	WAR_SIEGE_ZONE_MAXIMUM_SCORING_DURATION_MINUTES(
+			"war.siege.times.zone_maximum_scoring_duration_minutes",
+			"15",
+			"# This setting determines the maximum duration a player can continue to score siege points, while remaining in the siege zone.",
+			"# After this time, to resume scoring points, the player will need to exit then re-enter the siege zone.",
+			"# The setting is an important anti-afk'ing feature."),
 	
 	//Distances
 	WAR_SIEGE_CLAIM_DISABLE_DISTANCE_BLOCKS(
