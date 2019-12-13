@@ -104,7 +104,9 @@ public class TownyTimerHandler{
 		}
 
 		if (on && !isSiegeWarTimerRunning()) {
-			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new SiegeWarTimerTask(plugin), 0, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
+			//Note this small delay is a safeguard against race conditions
+			long delayTicks = TimeTools.convertToTicks(60);
+			siegeWarTask = BukkitTools.scheduleAsyncRepeatingTask(new SiegeWarTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getWarSiegeTimerIntervalSeconds()));
 
 			if (siegeWarTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule siege war timer.");
