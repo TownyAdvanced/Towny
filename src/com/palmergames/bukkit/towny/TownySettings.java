@@ -3001,12 +3001,24 @@ public class TownySettings {
 		return getDouble(ConfigNodes.WAR_SIEGE_MIN_SIEGE_DURATION_BEFORE_SURRENDER_HOURS);
 	}
 
-	public static int getSiegeWarPointsPerAttackingPlayer() {
-		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER);
+	public static int getWarSiegePointsForAttackerOccupation() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_ATTACKER_OCCUPATION);
 	}
 
-	public static int getSiegeWarPointsPerDefendingPlayer() {
-		return getInt(ConfigNodes.WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER);
+	public static int getWarSiegePointsForDefenderOccupation() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_DEFENDER_OCCUPATION);
+	}
+
+	public static int getWarSiegePointsForAttackerDeath() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_ATTACKER_DEATH);
+	}
+
+	public static int getWarSiegePointsForDefenderDeath() {
+		return getInt(ConfigNodes.WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH);
+	}
+	
+	public static int getWarSiegeZoneDeathRadiusBlocks() {
+		return getInt(ConfigNodes.WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS);
 	}
 
 	public static int getWarSiegeZoneOccupationScoringTimeRequirementSeconds() {

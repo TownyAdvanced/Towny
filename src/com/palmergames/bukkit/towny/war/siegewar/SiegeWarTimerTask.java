@@ -122,7 +122,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 												player,
 												siegeZone,
 												siegeZone.getDefenderPlayerScoreTimeMap(),
-												-TownySettings.getSiegeWarPointsPerDefendingPlayer());
+												-TownySettings.getWarSiegePointsForDefenderOccupation());
 
 					
 					} else if (resident.getTown().hasNation()) {
@@ -138,7 +138,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													player,
 													siegeZone,
 													siegeZone.getDefenderPlayerScoreTimeMap(),
-													-TownySettings.getSiegeWarPointsPerDefendingPlayer());
+													-TownySettings.getWarSiegePointsForDefenderOccupation());
 						
 						} else if (siegeZone.getAttackingNation() 
 							== resident.getTown().getNation()) {
@@ -150,7 +150,7 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 													player,
 													siegeZone,
 													siegeZone.getAttackerPlayerScoreTimeMap(),
-													TownySettings.getSiegeWarPointsPerAttackingPlayer());
+													TownySettings.getWarSiegePointsForAttackerOccupation());
 						}
 					}
 				}

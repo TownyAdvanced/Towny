@@ -1044,6 +1044,7 @@ msg_siege_war_siege_started_neutral_town: '&6[Towny] [War]&b An army belonging t
 msg_siege_war_siege_started_nation_town: '&6[Towny] [War]&b An army belonging to %s has attacked %s at %s. A siege has begun!'
 msg_siege_war_siege_joined: '&6[Towny] [War]&b An army belonging to %s has joined the siege on %s!'
 msg_siege_war_attack_money: '&bThe siege cost to your nation was %s. If the town is defeated and plundered at its current size, the plunder revenue for your nation will be %s.'
+msg_siege_war_participant_death: '&bDue to the death of %s during the siege on %s, %d siege points have been awarded to %s.'
 msg_siege_war_defender_win: '&6[Towny] [War]&b The defenders of %s have successfully driven off all attacking armies. The siege has failed!'
 msg_siege_war_attacker_win: '&6[Towny] [War]&b An army belonging to %s has successfully breached the defences of %s. The siege is over!'
 msg_siege_war_attacker_abandon: '&6[Towny] [War]&b An army belonging to %s has abandoned its attack on %s'

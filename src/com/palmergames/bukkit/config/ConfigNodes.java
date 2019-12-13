@@ -1919,20 +1919,41 @@ public enum ConfigNodes {
 			"# This is the max allowed elevation difference downward from siege banner to town.",
 			 "# There is no limit on the upward difference.",
 		     "# This setting prevents the banner being placed on a platform high in the air."),
+	WAR_SIEGE_ZONE_DEATH_RADIUS_BLOCKS(
+			"war.siege.distances.zone_death_radius_blocks",
+			"100",
+			"# If a siege zone participant dies within this distance of the siege banner,",
+			"# their opponents are awarded siege points."),
 	
 	//Siege points
-	WAR_SIEGE_POINTS_PER_ATTACKING_PLAYER(
-			"war.siege.scoring.points_per_attacking_player",
+	WAR_SIEGE_POINTS_FOR_ATTACKER_OCCUPATION(
+			"war.siege.scoring.points_for_attacker_occupation",
 			"1",
-			"# This setting determines the number of siege points awarded per attacking player.",
+			"# This setting determines the number of siege points awarded to an occupying attacker.",
 			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
 			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS "),
-	WAR_SIEGE_POINTS_PER_DEFENDING_PLAYER(
-			"war.siege.scoring.points_per_defending_player",
+	WAR_SIEGE_POINTS_FOR_DEFENDER_OCCUPATION(
+			"war.siege.scoring.points_for_defender_occupation",
 			"1",
-			"# This setting determines the number of siege points awarded per defender player.",
+			"# This setting determines the number of siege points awarded to an occupying defender.",
 			"# The points are awarded if a player remains within a town-block length of the siege banner for: ",
-			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS ");
+			"# WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS "),
+	WAR_SIEGE_POINTS_FOR_ATTACKER_DEATH(
+			"war.siege.scoring.points_for_attacker_death",
+			"5",
+			"# This setting determines the number of siege points awarded if an attacker dies.",
+			"# The points are awarded if the player dies within the configured siege zone death radius.",
+			"# The points are given to the defending town.",
+			"# The higher this value is, compared to the occupation value, the more cautious and tactical your battles will be.",
+		    "# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be."),
+	WAR_SIEGE_POINTS_FOR_DEFENDER_DEATH(
+			"war.siege.scoring.points_for_defender_death",
+			"5",
+			"# This setting determines the number of siege points awarded if a defender dies.",
+			"# The points are awarded if the player dies within the configured siege zone death radius.",
+			"# The points are given to all attacking nations.",
+			"# The higher this value is, compared to the occupation value, the more cautious and tactical your battles will be.",
+			"# The lower this value is, compared to the occupation value, the more aggressive and immediate your battles will be.");
 
 	private final String Root;
 	private final String Default;
