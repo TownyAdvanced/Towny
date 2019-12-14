@@ -9,7 +9,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationType;
+import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
+import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
@@ -1887,15 +1891,39 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Nation targetNation : enemies)
 			try {
 				if (add && !nation.getEnemies().contains(targetNation)) {
-					nation.addEnemy(targetNation);
-					TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_added_enemy"), nation.getName()));
-					// Remove any ally settings from the target nation
-					if (targetNation.hasAlly(nation))
-						nationlegacyAlly(resident, targetNation, Arrays.asList(nation), false);
+					NationPreAddEnemyEvent npaee = new NationPreAddEnemyEvent(nation, targetNation);
+					Bukkit.getPluginManager().callEvent(npaee);
+					
+					if (!npaee.isCancelled()) {
+						nation.addEnemy(targetNation);
+						
+						NationAddEnemyEvent naee = new NationAddEnemyEvent(nation, targetNation);
+						Bukkit.getPluginManager().callEvent(naee);
+						
+						TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_added_enemy"), nation.getName()));
+						// Remove any ally settings from the target nation
+						if (targetNation.hasAlly(nation))
+							nationlegacyAlly(resident, targetNation, Arrays.asList(nation), false);
+						
+					} else {
+						TownyMessaging.sendMessage(resident, npaee.getCancelMessage());
+						remove.add(targetNation);
+					}
 
 				} else if (nation.getEnemies().contains(targetNation)) {
-					nation.removeEnemy(targetNation);
-					TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_removed_enemy"), nation.getName()));
+					NationPreRemoveEnemyEvent npree = new NationPreRemoveEnemyEvent(nation, targetNation);
+					Bukkit.getPluginManager().callEvent(npree);
+					if (!npree.isCancelled()) {
+						nation.removeEnemy(targetNation);
+
+						NationRemoveEnemyEvent nree = new NationRemoveEnemyEvent(nation, targetNation);
+						Bukkit.getPluginManager().callEvent(nree);
+						
+						TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_removed_enemy"), nation.getName()));
+					} else {
+						TownyMessaging.sendMessage(resident, npree.getCancelMessage());
+						remove.add(targetNation);
+					}
 				}
 
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {

@@ -21,7 +21,7 @@ public class NationAddEnemyEvent extends Event {
 		return handlers;
 	}
 	
-	public NationAddEnemyEvent(Nation enemy, Nation nation) {
+	public NationAddEnemyEvent(Nation nation, Nation enemy) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.enemy = enemy;
 		this.nation = nation;
