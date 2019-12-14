@@ -14,8 +14,9 @@ import java.util.List;
 public class PlotGroup extends Group {
 	private Resident resident = null;
 	private List<TownBlock> townBlocks;
-	private double price;
+	private double price = -1;
 	private Town town;
+	private TownyPermission permissions;
 
 	/**
 	 * @param id   A unique identifier for the group id.
@@ -131,5 +132,13 @@ public class PlotGroup extends Group {
 		}
 		
 		this.price += pPrice;
+	}
+
+	public TownyPermission getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(TownyPermission permissions) {
+		this.permissions = permissions;
 	}
 }

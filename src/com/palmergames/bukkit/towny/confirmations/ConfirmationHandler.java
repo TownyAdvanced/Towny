@@ -279,7 +279,7 @@ public class ConfirmationHandler {
 				for (TownBlock tb :townBlocks) {
 					coords.add(tb.getWorldCoord());
 				}
-				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, true, false).start();
+				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, true, false, true).start();
 				removeConfirmation(r, type, true);
 			}
 		}
@@ -293,7 +293,7 @@ public class ConfirmationHandler {
 					TownyMessaging.sendErrorMsg(tb.getCoord().toString());
 					coords.add(tb.getWorldCoord());
 				}
-				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, false, false).start();
+				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, false, false, false).start();
 				removeConfirmation(r, type, true);
 			}
 		}
@@ -312,6 +312,8 @@ public class ConfirmationHandler {
 				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((r != null) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				
+				removeConfirmation(r, type, true);
 			}
 		}
 	}

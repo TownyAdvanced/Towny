@@ -496,7 +496,7 @@ public class TownBlock {
 		}
 	}
 	
-	public boolean hasPlotGroup() { return getPlotGroup() != null; }
+	public boolean hasPlotGroup() { return plotGroup != null; }
 
 	public PlotGroup getPlotGroup() {
 		return plotGroup;

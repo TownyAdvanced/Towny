@@ -197,7 +197,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_no_funds_claim"), selection.size(), TownyEconomyHandler.getFormattedBalance(cost)));
 
 						// Start the claim task
-						new PlotClaim(plugin, player, resident, selection, true, false).start();
+						new PlotClaim(plugin, player, resident, selection, true, false, false).start();
 
 					} else {
 						player.sendMessage(TownySettings.getLangString("msg_err_empty_area_selection"));
@@ -251,7 +251,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task
-						new PlotClaim(plugin, player, resident, null, false, false).start();
+						new PlotClaim(plugin, player, resident, null, false, false, false).start();
 
 					} else {
 
@@ -269,11 +269,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 								if (!block.hasPlotGroup()) {
 									// Start the unclaim task
-									new PlotClaim(plugin, player, resident, selection, false, false).start();
+									new PlotClaim(plugin, player, resident, selection, false, false, false).start();
 									continue;
 								}
 
-								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(block.getPlotGroup(), player));
+								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPUNCLAIMACTION, new GroupConfirmation(block.getPlotGroup(), player));
 								String firstLine = "This plot is part a group of " + block.getPlotGroup().getTownBlocks().size() + " plot(s) by unclaiming you will lose them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 
@@ -356,6 +356,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 					} else {
 						// basic 'plot fs' command
+						
+						if (pos.getTownBlock().hasPlotGroup()) {
+							TownyMessaging.sendErrorMsg(player, "This plot belongs to a group use /plot group [group name] fs [amount]");
+							return false;
+						}
+						
 						setPlotForSale(resident, pos, plotPrice);
 						
 						// Update group price if neccessary.
@@ -702,18 +708,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotGroup(), newName);
 							TownyMessaging.sendMessage(player, "group was renamed to " + townBlock.getPlotGroup().getGroupName());
 							
-						} else if (split[1].equalsIgnoreCase("forsale") || split[1].equalsIgnoreCase("fs")) {
-							if (split.length == 2) {
-								// The player wants to add to group using their stored mode.
-
-								// Get the plot group from the resident mode.
-								PlotGroup pGroup = resident.getPlotGroupFromMode();
-								
-								
-								
-
-								return true;
-							}
+						} else if (split[2].equalsIgnoreCase("forsale") || split[2].equalsIgnoreCase("fs")) {
+							
+							String groupName = split[1];
+							PlotGroup group = town.getPlotGroupFromName(groupName);
+							int price = Integer.parseInt(split[3]);
+							
+							group.setPrice(price);
+							
+							TownyMessaging.sendTownMessage(town, "Player " + player.getName() + " put group " + group.getGroupName() + " for sale for $" + group.getPrice());
 						}
 					}
 					

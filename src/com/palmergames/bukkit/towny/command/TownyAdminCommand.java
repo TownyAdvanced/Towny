@@ -326,7 +326,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
 
 			if (resident != null) {
-				new PlotClaim(plugin, player, resident, selection, true, true).start();
+				new PlotClaim(plugin, player, resident, selection, true, true, false).start();
 			}
 		}
 		
@@ -1132,8 +1132,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_error_must_be_int"));
 			return;
 		}
-		
-		
 
 		if (!isConsole) {
 
