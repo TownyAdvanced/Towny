@@ -86,6 +86,15 @@ public class TownyWar {
 	}
 
 	/**
+	 * Get all cells that are under attack
+	 * 
+	 * @return the cells that are under attack
+	 */
+	public List<CellUnderAttack> getCellsUnderAttack() {
+		return new ArrayList<>(cellsUnderAttack.values());
+	}
+
+	/**
 	 * Get the cells under attack in the specified town
 	 * 
 	 * @param town the town that is under attack
