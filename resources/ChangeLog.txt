@@ -3956,3 +3956,6 @@ v0.92.0.11:
 0.95.2.2:
   - Switch API to 1.15-R0.1-SNAPSHOT.
     - For the time being this is working on 1.14.* and 1.15 servers.
+  - Slightly change pom.xml to align with our wiki.
+  - Fix /ta set throwing error.
+    - Closes ticket #3565.
