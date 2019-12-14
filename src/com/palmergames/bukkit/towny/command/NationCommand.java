@@ -1906,7 +1906,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							nationlegacyAlly(resident, targetNation, Arrays.asList(nation), false);
 						
 					} else {
-						TownyMessaging.sendMessage(resident, npaee.getCancelMessage());
+						TownyMessaging.sendMsg(TownyAPI.getInstance().getPlayer(resident), npaee.getCancelMessage());
 						remove.add(targetNation);
 					}
 
@@ -1921,7 +1921,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						
 						TownyMessaging.sendNationMessage(targetNation, String.format(TownySettings.getLangString("msg_removed_enemy"), nation.getName()));
 					} else {
-						TownyMessaging.sendMessage(resident, npree.getCancelMessage());
+						TownyMessaging.sendMsg(TownyAPI.getInstance().getPlayer(resident), npree.getCancelMessage());
 						remove.add(targetNation);
 					}
 				}
