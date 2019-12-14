@@ -53,13 +53,29 @@ public class SiegeWarPlaceBlockController {
 													 Towny plugin)
 	{
 		try {
-			String blockTypeName = block.getType().getKey().getKey();
-			if (blockTypeName.endsWith("banner") && !blockTypeName.contains("wall")) {
-				return evaluateSiegeWarPlaceBannerRequest(player, block, blockTypeName, event, plugin);
-			} else if (block.getType().equals(Material.CHEST)) {
-				return evaluateSiegeWarPlaceChestRequest(player, block, event);
-			} else {
-				return false;
+			switch(block.getType()) {
+				case BLACK_BANNER:
+				case BLUE_BANNER:
+				case BROWN_BANNER:
+				case CYAN_BANNER:
+				case GRAY_BANNER:
+				case GREEN_BANNER:
+				case LIGHT_BLUE_BANNER:
+				case LIGHT_GRAY_BANNER:
+				case LIME_BANNER:
+				case MAGENTA_BANNER:
+				case ORANGE_BANNER:
+				case PINK_BANNER:
+				case PURPLE_BANNER:
+				case RED_BANNER:
+				case YELLOW_BANNER:
+				case WHITE_BANNER:
+					return evaluateSiegeWarPlaceBannerRequest(player, block, event, plugin);
+				case CHEST:
+				case TRAPPED_CHEST:
+					return evaluateSiegeWarPlaceChestRequest(player, block, event);
+				default:
+					return false;
 			}
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Problem placing siege related block");
@@ -75,7 +91,6 @@ public class SiegeWarPlaceBlockController {
  	*/
 	private static boolean evaluateSiegeWarPlaceBannerRequest(Player player,
 													   Block block,
-													   String blockTypeName,
 													   BlockPlaceEvent event,
 													   Towny plugin) throws NotRegisteredException
 	{
@@ -86,7 +101,7 @@ public class SiegeWarPlaceBlockController {
 		if(!townyWorld.hasTownBlock(blockCoord)) {
 			//Wilderness found
 			
-			if (blockTypeName.contains("white")  && ((Banner) block.getState()).getPatterns().size() == 0) {
+			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
 				return evaluatePlaceWhiteBannerOutsideTown(block, player, event);
 			} else {
 				return evaluatePlaceColouredBannerOutsideTown(block, player, event);
@@ -115,7 +130,7 @@ public class SiegeWarPlaceBlockController {
 			if (!town.hasSiege())
 				return false;
 
-			if (blockTypeName.contains("white")  && ((Banner) block.getState()).getPatterns().size() == 0) {
+			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
 				return evaluatePlaceWhiteBannerInTown(player, town, event);
 			} else {
 				return evaluatePlaceColouredBannerInTown(plugin, player, town, event);

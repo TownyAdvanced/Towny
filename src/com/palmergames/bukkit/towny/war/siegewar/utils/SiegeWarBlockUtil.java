@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -115,31 +116,25 @@ public class SiegeWarBlockUtil {
 	 * @return true if the block is near an active siege banner
 	 */
 	public static boolean isBlockNearAnActiveSiegeBanner(Block block) {
-		Block blockAbove = block.getRelative(BlockFace.UP);
 		
-		//If neither the target block nor block above it is a banner, return false
-		if(!block.getType().name().endsWith("BANNER") && !blockAbove.getType().name().endsWith("BANNER"))
-			return false;
+		//If either the target block or block above it is a standing coloured banner, continue, else return false
+		if(isStandingColouredBanner(block) || isStandingColouredBanner(block.getRelative(BlockFace.UP))) {
+			
+			//Look through all siege zones
+			Location locationOfBlock = block.getLocation();
+			Location locationOfBlockAbove = block.getRelative(BlockFace.UP).getLocation();
+			Location locationOfSiegeBanner;
+			TownyUniverse universe = TownyUniverse.getInstance();
+			for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
 
-		//If either the target block or block above it is a wall banner, return false
-		if(block.getType().name().contains("WALL") || blockAbove.getType().name().contains("WALL"))
-			return false;
-		
-		//Look through all siege zones
-		Location locationOfBlock = block.getLocation();
-		Location locationOfBlockAbove = blockAbove.getLocation();
-		Location locationOfSiegeBanner;
-		TownyUniverse universe = TownyUniverse.getInstance();
-		for (SiegeZone siegeZone : universe.getDataSource().getSiegeZones()) {
+				if (siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
+					continue;
+				}
 
-			if (siegeZone.getSiege().getStatus() != SiegeStatus.IN_PROGRESS) {
-				continue;
-			}
-
-			locationOfSiegeBanner = siegeZone.getFlagLocation();
-			if(locationOfBlock.equals(locationOfSiegeBanner) || locationOfBlockAbove.equals(locationOfSiegeBanner))
-			{
-				return true;	
+				locationOfSiegeBanner = siegeZone.getFlagLocation();
+				if (locationOfBlock.equals(locationOfSiegeBanner) || locationOfBlockAbove.equals(locationOfSiegeBanner)) {
+					return true;
+				}
 			}
 		}
 		
@@ -198,5 +193,30 @@ public class SiegeWarBlockUtil {
 		
 		topLocation.setY(255); //This would only occur if it was air all the way down.....unlikely but ok, just in case
 		return topLocation;
+	}
+	
+	private static boolean isStandingColouredBanner(Block block) {
+		switch (block.getType()) {
+			case BLACK_BANNER:
+			case BLUE_BANNER:
+			case BROWN_BANNER:
+			case CYAN_BANNER:
+			case GRAY_BANNER:
+			case GREEN_BANNER:
+			case LIGHT_BLUE_BANNER:
+			case LIGHT_GRAY_BANNER:
+			case LIME_BANNER:
+			case MAGENTA_BANNER:
+			case ORANGE_BANNER:
+			case PINK_BANNER:
+			case PURPLE_BANNER:
+			case RED_BANNER:
+			case YELLOW_BANNER:
+				return true;
+			case WHITE_BANNER:
+				return ((Banner) block.getState()).getPatterns().size() > 0;
+			default:
+				return false;
+		}
 	}
 }
