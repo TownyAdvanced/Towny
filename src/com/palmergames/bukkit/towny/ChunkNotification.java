@@ -106,10 +106,18 @@ public class ChunkNotification {
 			} catch (NotRegisteredException e) {
 			}
 
-			toForSale = toTownBlock.getPlotPrice() != -1;
+			
+			
+			
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
 			toPlotGroupBlock = toTownBlock.hasPlotGroup();
+
+			if (toTownBlock.hasPlotGroup()) {
+				toForSale = toTownBlock.getPlotGroup().getPrice() != -1;
+			} else {
+				toForSale = toTownBlock.getPlotPrice() != -1;
+			}
 			
 		} catch (NotRegisteredException e) {
 			toWild = true;
@@ -123,9 +131,7 @@ public class ChunkNotification {
 			if (fromTownBlock.hasPlotGroup()) {
 				fromPlotGroup = fromTownBlock.getPlotGroup();
 			}
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Could not get group for chunk notification.");
-		}
+		} catch (Exception ignored) { }
 	}
 
 	public String getNotificationString(Resident resident) {
@@ -330,7 +336,11 @@ public class ChunkNotification {
 
 	public String getForSaleNotification() {
 
-		if (toForSale)
+		// Were heading to a plot group do some things differently
+		if (toForSale && (fromPlotGroup != toPlotGroup))
+			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotGroup().getPrice()));
+		
+		if (toForSale && !toPlotGroupBlock)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
 		return null;
 	}
