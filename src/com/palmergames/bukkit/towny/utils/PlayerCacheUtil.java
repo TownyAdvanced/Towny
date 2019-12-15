@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 
+import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeStatus;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -450,7 +451,15 @@ public class PlayerCacheUtil {
 							Town nearestTown = null; 
 							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
 							Nation nearestNation = nearestTown.getNation();
-			
+
+							//During an in-progress siege, nobody can alter the nation zone
+							if(TownySettings.getWarSiegeEnabled()
+								&& nearestTown.hasSiege()
+								&& nearestTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS ) {
+								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_err_siege_war_nation_zone_this_area_protected_but_besieged"), pos.getTownyWorld().getUnclaimedZoneName(), nearestNation.getName()));
+								return false;
+							}
+
 							try {
 								playersNation = playersTown.getNation();
 							} catch (Exception e1) {							
