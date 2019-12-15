@@ -263,7 +263,7 @@ public class PlayerCacheUtil {
 			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
 			if (TownySettings.getNationZonesEnabled()) {
 				// This nation zone system can be disabled during wartime.
-				if (TownySettings.getNationZonesWarDisables() && !TownyAPI.getInstance().isWarTime()) {
+				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
 					Town nearestTown = null;
 					int distance;
 					try {
@@ -280,15 +280,23 @@ public class PlayerCacheUtil {
 						// If there isn't then we fall back on normal unclaimed zone status.
 						return TownBlockStatus.UNCLAIMED_ZONE;
 					}
-					if (nearestTown.isCapital()) {
-						distance = distance + TownySettings.getNationZonesCapitalBonusSize();
-					}
+
 					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
 						return TownBlockStatus.UNCLAIMED_ZONE;
-					}					
+					}
+
 					try {
-						if (distance <= Integer.valueOf(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())) {
+						int nationZoneRadius;
+						if (nearestTown.isCapital()) {
+							nationZoneRadius =
+								Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
+									+ TownySettings.getNationZonesCapitalBonusSize();
+						} else {
+							nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+						}
+
+						if (distance <= nationZoneRadius) {
 							return TownBlockStatus.NATION_ZONE;
 						}
 					} catch (NumberFormatException | NotRegisteredException ignored) {
