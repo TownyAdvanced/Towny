@@ -3960,3 +3960,10 @@ v0.92.0.11:
   - Fix /ta set throwing error.
     - Closes ticket #3565.
   - Fixes for Nation_Zones not working/not giving capitals their proper bonus, courtesy of Goosius with PR #3567.
+  - Courtesy of Emperor-Koala with PR #3566:
+    - API:
+      - NationPreAddEnemyEvent - Cancellable
+      - NationAddEnemeyEvent
+      - NationPreRemoveEnemyEvent - Cancellable
+      - NationRemoveEnemyEvent
+      - New methods to get the cells under attack in Flag War.
