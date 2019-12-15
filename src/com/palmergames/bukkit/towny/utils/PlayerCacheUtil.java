@@ -272,6 +272,15 @@ public class PlayerCacheUtil {
 						if (nearestTown == null) {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
+
+						//If nearest town has an in-progress siege, and war disables config is true, nationzone is disabled.
+						if(TownySettings.getWarSiegeEnabled()
+							&& TownySettings.getNationZonesWarDisables()
+							&& nearestTown.hasSiege()
+							&& nearestTown.getSiege().getStatus() == SiegeStatus.IN_PROGRESS)	{
+							return TownBlockStatus.UNCLAIMED_ZONE;
+						}
+
 						if (!nearestTown.hasNation()) {
 							return TownBlockStatus.UNCLAIMED_ZONE;
 						}
