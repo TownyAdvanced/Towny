@@ -50,9 +50,6 @@ public class TownyMessaging {
 		boolean isPlayer = false;
 		if (sender instanceof Player) {
 			isPlayer = true;
-		} else if (sender instanceof Resident) {
-			sender = TownyAPI.getInstance().getPlayer((Resident) sender);
-			isPlayer = true;
 		}
 
 		if (sender == null) {
@@ -80,9 +77,6 @@ public class TownyMessaging {
 	public static void sendErrorMsg(Object sender, String[] msg) {
 		boolean isPlayer = false;
 		if (sender instanceof Player) {
-			isPlayer = true;
-		} else if (sender instanceof Resident) {
-			sender = TownyAPI.getInstance().getPlayer((Resident) sender);
 			isPlayer = true;
 		}
 
