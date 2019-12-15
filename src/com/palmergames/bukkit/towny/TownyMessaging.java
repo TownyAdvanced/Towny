@@ -76,8 +76,9 @@ public class TownyMessaging {
 	 */
 	public static void sendErrorMsg(Object sender, String[] msg) {
 		boolean isPlayer = false;
-		if (sender instanceof Player)
+		if (sender instanceof Player) {
 			isPlayer = true;
+		}
 
 		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
 			if (isPlayer)
