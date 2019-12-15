@@ -895,6 +895,7 @@ public class TownyPlayerListener implements Listener {
 				if (tb != null) { // So a valid TownBlock appears, how wonderful
 					if (tb.hasTown()) { // So the townblock has a town, and we keep inventory in towns, deathloc in a town. Do it!
 						event.setKeepInventory(true);
+						event.getDrops().clear();
 					}
 				}
 			}
@@ -905,6 +906,7 @@ public class TownyPlayerListener implements Listener {
 				if (tb != null) { // So a valid TownBlock appears, how wonderful
 					if (tb.hasTown()) { // So the townblock has atown, and is at the death location
 						event.setKeepLevel(true);
+						event.setDroppedExp(0);
 					}
 				}
 

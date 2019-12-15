@@ -850,7 +850,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void adminSet(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET.getNode(split[0].toLowerCase())))
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET.getNode()))
 			throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
 		if (split.length == 0) {

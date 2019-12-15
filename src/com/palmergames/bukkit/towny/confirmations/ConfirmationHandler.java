@@ -208,36 +208,14 @@ public class ConfirmationHandler {
 	 */
 	public static void addConfirmation(final ConfirmationType type, Object extra) {
 		if (consoleConfirmationType.equals(ConfirmationType.NULL)) {
-			if (type == ConfirmationType.TOWNDELETE) {
-				consoleExtra = extra;
-				consoleConfirmationType = type;
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						removeConfirmation(type, false);
-					}
-				}.runTaskLater(plugin, 400);
-			}
-			if (type == ConfirmationType.PURGE) {
-				consoleExtra = extra;
-				consoleConfirmationType = type;
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						removeConfirmation(type, false);
-					}
-				}.runTaskLater(plugin, 400);
-			}
-			if (type == ConfirmationType.NATIONDELETE) {
-				consoleExtra = extra;
-				consoleConfirmationType = type;
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						removeConfirmation(type, false);
-					}
-				}.runTaskLater(plugin, 400);			
-			}
+			consoleExtra = extra;
+			consoleConfirmationType = type;
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					removeConfirmation(type, false);
+				}
+			}.runTaskLater(plugin, 400);
 		} else {
 			TownyMessaging.sendMsg("Unable to start a new confirmation, one already exists of type: " + consoleConfirmationType.toString());
 		}
@@ -252,24 +230,10 @@ public class ConfirmationHandler {
 	 */
 	public static void removeConfirmation(final ConfirmationType type, boolean successful) {
 		boolean sendmessage = false;
-		if (type == ConfirmationType.PURGE) {
-			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
-				sendmessage = true;
-			}
-			consoleConfirmationType = ConfirmationType.NULL;			
+		if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
+			sendmessage = true;
 		}
-		if (type == ConfirmationType.TOWNDELETE) {
-			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
-				sendmessage = true;
-			}
-			consoleConfirmationType = ConfirmationType.NULL;			
-		}
-		if (type == ConfirmationType.NATIONDELETE) {
-			if (!consoleConfirmationType.equals(ConfirmationType.NULL) && !successful) {
-				sendmessage = true;
-			}
-			consoleConfirmationType = ConfirmationType.NULL;			
-		}
+		consoleConfirmationType = ConfirmationType.NULL;
 		if (sendmessage) {
 			TownyMessaging.sendMsg(TownySettings.getLangString("successful_cancel"));
 		}

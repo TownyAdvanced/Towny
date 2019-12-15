@@ -14,11 +14,12 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.2.0) supports MC 1.14.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.2.0) supports MC 1.14.* & 1.15.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.
 
 | Minecraft Version | Towny Version |
 |:----:|:----:|
+| MC 1.15.* | Use the below Release for 1.14.* or the above Latest Pre-Release. |
 | MC 1.14.* | [0.95.2.0](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.2.0) |
 | MC 1.13.2 | [0.95.1.0 for 1.13.2](https://github.com/TownyAdvanced/Towny/releases/tag/0.95.1.0for1.13.2) |
 | MC 1.12.2 | [0.93.1.0 for 1.12.2](https://www.dropbox.com/s/v2e1uy6wip7rl3u/Towny_Advanced%200.93.1.0%20for%20MC%201.12.2.zip?dl=0) |
@@ -81,24 +82,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 - **Maven**
 
     - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
-    - Developers may use the following after setting up their github token [as shown here.](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry)
-        
-```
-  <repositories>
-    <repository>
-      <id>github-Towny</id>
-      <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
-    </repository>   
-  </repositories>
-  <dependencies>                    
-    <dependency>
-      <groupId>com.palmergames.bukkit.towny</groupId>
-      <artifactId>Towny</artifactId>
-      <version>0.95.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>  
-```
+    - Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
 
 - **Ant** (_Deprecated_)
 
