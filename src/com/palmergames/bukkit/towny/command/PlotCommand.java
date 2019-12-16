@@ -660,8 +660,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Set the resident mode.
 							resident.setPlotGroupMode(newGroup, true);
 							
-							townyUniverse.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
-							
+							if (!townyUniverse.hasGroup(newGroup.getTown().getName(), newGroup.getID())) {
+								townyUniverse.newGroup(newGroup.getTown().toString(), newGroup.getGroupName(), newGroup.getID());
+							}
 							
 							townyUniverse.getDataSource().saveGroupList();
 							
