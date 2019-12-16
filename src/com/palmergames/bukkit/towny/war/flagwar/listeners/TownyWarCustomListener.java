@@ -202,8 +202,8 @@ public class TownyWarCustomListener implements Listener {
 				}
 			} else {
 				
-				TownyMessaging.sendTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
-				TownyMessaging.sendTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(attackingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
+				TownyMessaging.sendPrefixedTownMessage(defendingTown, String.format(TownySettings.getLangString("msg_war_defender_keeps_claims")));
 			}
 
 			// Cleanup
@@ -219,7 +219,7 @@ public class TownyWarCustomListener implements Listener {
 						TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);
 					} catch (TownyException ignored) {
 					}
-					TownyMessaging.sendTownMessage(defendingTown, moneyTranserMsg);
+					TownyMessaging.sendPrefixedTownMessage(defendingTown, moneyTranserMsg);
 				}
 			}
 		} catch (NotRegisteredException e) {

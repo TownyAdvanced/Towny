@@ -529,7 +529,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						resident.removeJailSpawn();
 						resident.setJailTown(" ");
 						TownyMessaging.sendMsg(player, "You have been freed from jail.");
-						TownyMessaging.sendTownMessagePrefixed(townyUniverse.getDataSource().getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
+						TownyMessaging.sendPrefixedTownMessage(townyUniverse.getDataSource().getTown(town), jailedPlayer.getName() + " has been freed from jail number " + index);
 					} catch (TownyException e) {
 						e.printStackTrace();
 					}
@@ -624,7 +624,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renameTown(town, split[2]);
-					TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
+					TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 					TownyMessaging.sendMsg(getSender(), String.format(TownySettings.getLangString("msg_town_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 				} else {
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
@@ -816,7 +816,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renameNation(nation, split[2]);
-					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_set_name"), ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), TownySettings.getLangString("msg_invalid_name"));
 
@@ -925,7 +925,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 					townyUniverse.getDataSource().saveTown(town);
 					String[] msg = TownySettings.getNewMayorMsg(newMayor.getName());
-					TownyMessaging.sendTownMessage(town, msg);
+					TownyMessaging.sendPrefixedTownMessage(town, msg);
 					// TownyMessaging.sendMessage(player, msg);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
@@ -955,7 +955,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					nation.setCapital(newCapital);
 					plugin.resetCache();
 
-					TownyMessaging.sendNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
+					TownyMessaging.sendPrefixedNationMessage(nation, TownySettings.getNewKingMsg(newCapital.getMayor().getName(), nation.getName()));
 
 					townyUniverse.getDataSource().saveNation(nation);
 					townyUniverse.getDataSource().saveNationList();

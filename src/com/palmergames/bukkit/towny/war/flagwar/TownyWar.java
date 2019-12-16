@@ -84,6 +84,39 @@ public class TownyWar {
 		List<CellUnderAttack> activeFlags = cellsUnderAttackByPlayer.get(playerName);
 		return activeFlags == null ? 0 : activeFlags.size();
 	}
+
+	/**
+	 * Get all cells currently under attack
+	 * 
+	 * @return all the cells currently under attack
+	 */
+	public static List<CellUnderAttack> getCellsUnderAttack() {
+		return new ArrayList<>(cellsUnderAttack.values());
+	}
+
+	/**
+	 * Get all cells currently under attack in the specified town
+	 * 
+	 * @param town the town to get cells under attack
+	 * @return the cells under attack
+	 */
+	public static List<CellUnderAttack> getCellsUnderAttack(Town town) {
+		List<CellUnderAttack> cells = new ArrayList<>();
+		for(CellUnderAttack cua : cellsUnderAttack.values()) {
+			try {
+				Town townUnderAttack = TownyAPI.getInstance().getTownBlock(cua.getFlagBaseBlock().getLocation()).getTown();
+				if (townUnderAttack == null) {
+					continue;
+				}
+				if(townUnderAttack == town) {
+					cells.add(cua);
+				}
+			}
+			catch(NotRegisteredException ignored) {
+			}
+		}
+		return cells;
+	}
 	
 	public static boolean isUnderAttack(Town town) {
 		for(CellUnderAttack cua : cellsUnderAttack.values()) {

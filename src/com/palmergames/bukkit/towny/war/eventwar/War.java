@@ -201,13 +201,13 @@ public class War {
 			if (!nation.isNeutral()) {
 				add(nation);
 				if (warringNations.contains(nation))
-					TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
+					TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_nation"), nation.getName()));
 			} else if (!TownySettings.isDeclaringNeutral()) {
 				try {
 					nation.setNeutral(false);
 					add(nation);
 					if (warringNations.contains(nation))
-						TownyMessaging.sendNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_war_join_forced"), nation.getName()));
 				} catch (TownyException e) {
 					e.printStackTrace();
 				}
@@ -373,7 +373,7 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 		}
 		if (numTownBlocks > 0) {
-			TownyMessaging.sendTownMessage(town, TownySettings.getJoinWarMsg(town));
+			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getJoinWarMsg(town));
 			townScores.put(town, 0);
 			warringTowns.add(town);
 		}			
@@ -605,7 +605,7 @@ public class War {
 		try {
 			// Check for money loss in the defending town
 			if (!townBlock.getTown().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
+				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getLangString("msg_war_town_ran_out_of_money"));
 				TownyMessaging.sendTitleMessageToTown(townBlock.getTown(), TownySettings.getLangString("msg_war_town_removed_from_war_titlemsg"), "");
 				if (townBlock.getTown().isCapital())
 					remove(attacker, townBlock.getTown().getNation());
@@ -615,7 +615,7 @@ public class War {
 				townyUniverse.getDataSource().saveTown(attacker);
 				return;
 			} else
-				TownyMessaging.sendTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
+				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), String.format(TownySettings.getLangString("msg_war_town_lost_money_townblock"), TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		} catch (EconomyException ignored) {}
 		
 		// Check to see if this is a special TownBlock

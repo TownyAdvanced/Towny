@@ -259,7 +259,7 @@ public class TownClaim extends Thread {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
 			TownyUniverse.getInstance().getDataSource().removeTownBlocks(town);
-			TownyMessaging.sendTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
+			TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getLangString("msg_abandoned_area_1"));
 			
 			// Raise an event to signal the unclaim
 			BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, null));

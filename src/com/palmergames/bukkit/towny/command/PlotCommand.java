@@ -796,7 +796,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if (forSale != -1) {
-					TownyMessaging.sendTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
+					TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
 					if (townBlock.getTown() != resident.getTown())
 						TownyMessaging.sendMessage(resident, TownySettings.getPlotForSaleMsg(resident.getName(), worldCoord));
 				} else {

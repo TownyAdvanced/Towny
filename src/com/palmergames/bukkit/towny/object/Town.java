@@ -1010,7 +1010,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getHoldingBalance() > bankcap) {
-					TownyMessaging.sendTownMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedTownMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}
