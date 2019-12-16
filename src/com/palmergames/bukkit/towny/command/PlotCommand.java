@@ -144,8 +144,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					// selection = TownyUtil.filterUnownedPlots(selection);
-					
-					
 
 					if (selection.size() > 0) {
 
@@ -163,13 +161,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									// This block is part of a group, special tasks need to be done.
 									PlotGroup group = block.getPlotGroup();
 									
+									// Add the confirmation for claiming a plot group.
 									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(group, player));
 									String firstLine = "This plot is part a group of " + group.getTownBlocks().size() + " plot(s) by claiming you will inherit them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
+									
 									return true;
 									
 								}
 								
+								// Check if a plot has a price.
 								if (price > -1)
 									cost += block.getPlotPrice();
 								else {
@@ -254,8 +255,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						new PlotClaim(plugin, player, resident, null, false, false, false).start();
 
 					} else {
-
-						
 						
 						List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection);
