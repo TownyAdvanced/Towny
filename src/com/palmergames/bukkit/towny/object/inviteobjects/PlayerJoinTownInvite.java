@@ -43,7 +43,7 @@ public class PlayerJoinTownInvite implements Invite {
 		Resident resident = (Resident) getReceiver();
 		Town town = (Town) getSender();
 		TownCommand.townAddResident(town, resident);
-		TownyMessaging.sendTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+		TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 	}
@@ -55,10 +55,10 @@ public class PlayerJoinTownInvite implements Invite {
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 		if (!fromSender) {
-			TownyMessaging.sendTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
-			TownyMessaging.sendMessage(getReceiver(), TownySettings.getLangString("successful_deny"));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_deny_invite"), resident.getName()));
+			TownyMessaging.sendMsg(getReceiver(), TownySettings.getLangString("successful_deny"));
 		} else {
-			TownyMessaging.sendMessage(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
+			TownyMessaging.sendMsg(resident, String.format(TownySettings.getLangString("town_revoke_invite"), town.getName()));
 		}
 	}
 }

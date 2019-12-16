@@ -42,8 +42,8 @@ public class NationAllyNationInvite implements Invite {
 			Nation sendernation = (Nation) getSender();
 			receivernation.addAlly(sendernation);
 			sendernation.addAlly(receivernation);
-			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
-			TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(receivernation, String.format(TownySettings.getLangString("msg_added_ally"), sendernation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(sendernation, String.format(TownySettings.getLangString("msg_accept_ally"), receivernation.getName()));
 			receivernation.deleteReceivedInvite(this);
 			sendernation.deleteSentAllyInvite(this);
 			TownyUniverse.getInstance().getDataSource().saveNation(receivernation);
@@ -57,9 +57,9 @@ public class NationAllyNationInvite implements Invite {
 		receivernation.deleteReceivedInvite(this);
 		sendernation.deleteSentAllyInvite(this);
 		if (!fromSender) {
-			TownyMessaging.sendNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(sendernation, String.format(TownySettings.getLangString("msg_deny_ally"), TownySettings.getLangString("nation_sing") + ": " + receivernation.getName()));
 		} else {
-			TownyMessaging.sendNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
+			TownyMessaging.sendPrefixedNationMessage(receivernation, String.format(TownySettings.getLangString("nation_revoke_ally"), sendernation.getName()));
 		}
 	}
 }

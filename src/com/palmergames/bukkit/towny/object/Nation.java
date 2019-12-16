@@ -499,7 +499,7 @@ public class Nation extends TownyEconomyObject implements ResidentList, TownyInv
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getHoldingBalance() > bankcap) {
-					TownyMessaging.sendNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
+					TownyMessaging.sendPrefixedNationMessage(this, String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					return;
 				}
 			}

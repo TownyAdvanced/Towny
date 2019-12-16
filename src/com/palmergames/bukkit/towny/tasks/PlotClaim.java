@@ -155,7 +155,7 @@ public class PlotClaim extends Thread {
 					if (maxPlots >= 0 && resident.getTownBlocks().size() + 1 > maxPlots)
 						throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
-					TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
+					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotPrice()));
 					townBlock.setPlotPrice(-1);
 					townBlock.setResident(resident);
 
@@ -174,7 +174,7 @@ public class PlotClaim extends Thread {
 					if (TownySettings.isUsingEconomy() && !town.payTo(0.0, owner, "Plot - Buy Back"))
 						throw new TownyException(TownySettings.getLangString("msg_town_no_money_purchase_plot"));
 
-					TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
+					TownyMessaging.sendPrefixedTownMessage(town, TownySettings.getBuyResidentPlotMsg(town.getName(), owner.getName(), 0.0));
 					townBlock.setResident(null);
 					townBlock.setPlotPrice(-1);
 

@@ -3967,3 +3967,4 @@ v0.92.0.11:
       - NationPreRemoveEnemyEvent - Cancellable
       - NationRemoveEnemyEvent
       - New methods to get the cells under attack in Flag War.
+  - Made most of the unprefixed messages Towny emits use prefixes, either [Towny], [Townname] or [Nationname].
