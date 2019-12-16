@@ -98,18 +98,19 @@ public class PlunderTown {
     private static void sendPlunderSuccessMessage(Town defendingTown, Nation winnerNation, double plunderAmount) {
         //Same messages for now but may diverge in future (if we decide to track the original nation of the town)
     	if(defendingTown.hasNation()) {
-			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+			TownyMessaging.sendGlobalMessage(String.format(
 					TownySettings.getLangString("msg_siege_war_nation_town_plundered"),
 					TownyFormatter.getFormattedTownName(defendingTown),
-				TownyEconomyHandler.getFormattedBalance(plunderAmount),
-				TownyFormatter.getFormattedNationName(winnerNation)
-			)));
+					TownyEconomyHandler.getFormattedBalance(plunderAmount),
+					TownyFormatter.getFormattedNationName(winnerNation)
+			));
         } else {
-            TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+            TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_plundered"),
                     TownyFormatter.getFormattedTownName(defendingTown),
    				    TownyEconomyHandler.getFormattedBalance(plunderAmount),
-                    TownyFormatter.getFormattedNationName(winnerNation))));
+                    TownyFormatter.getFormattedNationName(winnerNation)
+			));
         }
     }
 

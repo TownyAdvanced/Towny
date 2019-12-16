@@ -25,10 +25,10 @@ public class AttackerWin {
 	public static void attackerWin(Siege siege, Nation winnerNation) {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.ATTACKER_WIN, winnerNation);
 
-        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+        TownyMessaging.sendGlobalMessage(String.format(
                 TownySettings.getLangString("msg_siege_war_attacker_win"),
                 TownyFormatter.getFormattedNationName(winnerNation),
-                TownyFormatter.getFormattedTownName(siege.getDefendingTown()))
-        ));
+                TownyFormatter.getFormattedTownName(siege.getDefendingTown())
+		));
     }
 }

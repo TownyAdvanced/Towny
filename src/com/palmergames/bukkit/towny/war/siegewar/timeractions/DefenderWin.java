@@ -25,10 +25,9 @@ public class DefenderWin
     public static void defenderWin(Siege siege, Town winnerTown) {
         SiegeWarSiegeCompletionUtil.updateSiegeValuesToComplete(siege, SiegeStatus.DEFENDER_WIN, null);
 
-        TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+        TownyMessaging.sendGlobalMessage(String.format(
                 TownySettings.getLangString("msg_siege_war_defender_win"),
-                TownyFormatter.getFormattedTownName(winnerTown)
-        )));
+                TownyFormatter.getFormattedTownName(winnerTown)));
     }
 
 }

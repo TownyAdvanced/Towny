@@ -112,27 +112,27 @@ public class InvadeTown {
 
             addTownToNation(plugin, defendingTown, attackingNation);
 
-            TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+            TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_nation_town_captured"),
                     TownyFormatter.getFormattedTownName(defendingTown),
                     TownyFormatter.getFormattedNationName(nationOfDefendingTown),
                     TownyFormatter.getFormattedNationName(attackingNation)
-            )));
+            ));
 
             if(nationOfDefendingTown.getTowns().size() == 0) {
-                TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+                TownyMessaging.sendGlobalMessage(String.format(
                         TownySettings.getLangString("msg_siege_war_nation_defeated"),
                         TownyFormatter.getFormattedNationName(nationOfDefendingTown)
-                )));
+                ));
             }
         } else {
             addTownToNation(plugin, defendingTown, attackingNation);
 
-            TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(
+            TownyMessaging.sendGlobalMessage(String.format(
                     TownySettings.getLangString("msg_siege_war_neutral_town_captured"),
                     TownyFormatter.getFormattedTownName(defendingTown),
                     TownyFormatter.getFormattedNationName(attackingNation)
-            )));
+            ));
         }
     }
 
