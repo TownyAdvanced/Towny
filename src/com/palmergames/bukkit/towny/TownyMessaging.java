@@ -532,7 +532,7 @@ public class TownyMessaging {
 	 * Uses default_towny_prefix
 	 *
 	 * @param nation the nation to send message to
-	 * @param the list of lines of the message
+	 * @param lines the list of lines of the message
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
 		for (String line : lines) {
