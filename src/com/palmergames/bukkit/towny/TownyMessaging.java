@@ -265,6 +265,7 @@ public class TownyMessaging {
 	 * @param town to receive message
 	 * @param lines String list to send as a message
 	 */
+	@Deprecated
 	public static void sendTownMessage(Town town, List<String> lines) {
 		sendTownMessage(town, lines.toArray(new String[0]));
 	}
@@ -277,6 +278,7 @@ public class TownyMessaging {
 	 * @param nation nation to receive message
 	 * @param lines String list to send as a message
 	 */
+	@Deprecated
 	public static void sendNationMessage(Nation nation, List<String> lines) {
 		sendNationMessage(nation, lines.toArray(new String[0]));
 	}
@@ -354,6 +356,7 @@ public class TownyMessaging {
 	 * @param town the town to send a message to
 	 * @param lines array of Strings constituting the message.
 	 */
+	@Deprecated
 	public static void sendTownMessage(Town town, String[] lines) {
 		for (String line : lines) {
 			LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
@@ -373,6 +376,7 @@ public class TownyMessaging {
 	 * @param town town to send message to
 	 * @param line the message to be sent
 	 */
+	@Deprecated
 	public static void sendTownMessage(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
@@ -441,6 +445,7 @@ public class TownyMessaging {
 	 * @param nation the nation to send to
 	 * @param lines array of Strings containing the message
 	 */
+	@Deprecated
 	public static void sendNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
 			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
@@ -460,6 +465,7 @@ public class TownyMessaging {
 	 * @param nation nation to send message to
 	 * @param line the message
 	 */
+	@Deprecated
 	public static void sendNationMessage(Nation nation, String line) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
