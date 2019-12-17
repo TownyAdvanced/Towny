@@ -1,23 +1,16 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
@@ -27,8 +20,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	private BlockLocation blockLocation;
 	private int TaskId;
 	private ItemStack[] contents;
-	private ItemStack[] leftSideContents;
-	private ItemStack[] rightSideContents;
 	
 	//Tekkit - InventoryView
 
@@ -36,7 +27,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 
 		super(plugin);
 		this.state = block.getState();
-		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
 		
 		// If the block has an inventory it implements the BlockInventoryHolder interface.
