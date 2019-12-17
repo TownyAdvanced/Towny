@@ -388,7 +388,7 @@ public class TownyBlockListener implements Listener {
 							//TownyMessaging.sendDebugMsg("onCreateExplosion: Testing block: " + entity.getType().getEntityClass().getSimpleName().toLowerCase() + " @ " + coord.toString() + ".");
 							if ((!TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation()))) && (block.getType() != Material.TNT)) {
 								ProtectionRegenTask task = new ProtectionRegenTask(plugin, block);
-								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count) * 20)));
+								task.setTaskId(plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, ((TownySettings.getPlotManagementWildRegenDelay() + count))));
 								TownyRegenAPI.addProtectionRegenTask(task);
 								event.setYield((float) 0.0);
 								block.getDrops().clear();
