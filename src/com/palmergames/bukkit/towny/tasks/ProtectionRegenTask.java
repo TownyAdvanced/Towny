@@ -15,13 +15,9 @@ import org.bukkit.inventory.ItemStack;
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
-	@SuppressWarnings("unused")
-	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
 	private ItemStack[] contents;
-	
-	//Tekkit - InventoryView
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 
