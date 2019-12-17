@@ -6,47 +6,28 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
-	@SuppressWarnings("unused")
-	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
-	private List<ItemStack> contents = new ArrayList<ItemStack>();
-	
-	//Tekkit - InventoryView
+	private ItemStack[] items;
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 
 		super(plugin);
 		this.state = block.getState();
-		this.altState = null;
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
 
-		if (state instanceof InventoryHolder) {
-			Inventory inven;
-
-			if (state instanceof Chest) {
-				inven = ((Chest) state).getBlockInventory();
-			} else {
-				// Contents we are respawning.
-				inven = ((InventoryHolder) state).getInventory();
-			}
-
-			for (ItemStack item : inven.getContents()) {
-				contents.add((item != null) ? item.clone() : null);
-			}
-
-			inven.clear();
+		if (state instanceof BlockInventoryHolder) {
+			Inventory inven = ((BlockInventoryHolder) state).getInventory(); 
+			items = inven.getContents();				
+			inven.clear();				
 		}
 	}
 
@@ -64,6 +45,8 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			BlockData blockData = state.getBlockData().clone();			
 			block.setType(state.getType(), false);
 			block.setBlockData(blockData);
+			if (block.getState() instanceof BlockInventoryHolder)
+				((BlockInventoryHolder) block.getState()).getInventory().setContents(items);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
