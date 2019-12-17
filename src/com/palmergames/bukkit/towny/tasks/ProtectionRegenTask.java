@@ -6,45 +6,54 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.block.Chest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.BlockInventoryHolder;
-import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class ProtectionRegenTask extends TownyTimerTask {
 
 	private BlockState state;
+	@SuppressWarnings("unused")
+	private BlockState altState;
 	private BlockLocation blockLocation;
 	private int TaskId;
-	private ItemStack[] items;
+	private ItemStack[] contents;
+	
+	//Tekkit - InventoryView
 
 	public ProtectionRegenTask(Towny plugin, Block block) {
 
 		super(plugin);
 		this.state = block.getState();
 		this.setBlockLocation(new BlockLocation(block.getLocation()));
-
+		
+		// If the block has an inventory it implements the BlockInventoryHolder interface.
 		if (state instanceof BlockInventoryHolder) {
-			Inventory inven = ((BlockInventoryHolder) state).getInventory();
 			
-			// Because DoubleChests are special we have to handle their inventory in two parts.
-			if (inven instanceof DoubleChestInventory) {
-				Inventory dblChestInven = ((Chest) state).getBlockInventory(); // .getBlockInventory() grabs only the 1/2 of the DoubleChest we want.
-				items = dblChestInven.getContents();
-				dblChestInven.clear();
-			} else { // Handle all other BlockInventoryHolders.				
-				items = inven.getContents();
-				inven.clear();
-			}			
+			// Cast the block to the interface representation.
+			BlockInventoryHolder container = (BlockInventoryHolder) state;
+			
+			// Capture inventory.
+			Inventory inventory = container.getInventory();
+			
+			// Chests are special.
+			if (state instanceof Chest) {
+				inventory = ((Chest) state).getBlockInventory();
+			}
+
+			// Copy the contents over.
+			contents = inventory.getContents().clone();
+			
+			// Clear the inventory so no items drops and causes dupes.
+			inventory.clear();
 		}
 	}
 
 	@Override
 	public void run() {
+
 		replaceProtections();
 		TownyRegenAPI.removeProtectionRegenTask(this);
 	}
@@ -52,20 +61,30 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	public void replaceProtections() {
 		
 		Block block = state.getBlock();
+		
+		// Replace physical block.
 		try {
 			BlockData blockData = state.getBlockData().clone();			
 			block.setType(state.getType(), false);
 			block.setBlockData(blockData);
-			if (block.getState() instanceof BlockInventoryHolder) {
-				InventoryHolder inven = ((BlockInventoryHolder) state).getInventory().getHolder();
-				if (inven instanceof DoubleChest) {
-					((Chest) block.getState()).getBlockInventory().setContents(items);
-				} else {
-					((BlockInventoryHolder) block.getState()).getInventory().setContents(items);					
-				}
-			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+		
+		// Add inventory back to the block if it conforms to BlockInventoryHolder.
+		if (state instanceof BlockInventoryHolder) {
+			// Up cast to interface.
+			BlockInventoryHolder container = (BlockInventoryHolder) state;
+			
+			// Check for chest.
+			if (container instanceof Chest) {
+				((Chest) state).getBlockInventory().setContents(contents);
+			} else {
+				((BlockInventoryHolder) state).getInventory().setContents(contents);
+			}
+			
+			// update blocks.
+			state.update();
 		}
 	}
 
