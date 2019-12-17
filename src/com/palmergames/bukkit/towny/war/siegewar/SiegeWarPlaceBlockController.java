@@ -70,10 +70,10 @@ public class SiegeWarPlaceBlockController {
 				case RED_BANNER:
 				case YELLOW_BANNER:
 				case WHITE_BANNER:
-					return evaluateSiegeWarPlaceBannerRequest(player, block, event, plugin);
+					return evaluatePlaceBanner(player, block, event, plugin);
 				case CHEST:
 				case TRAPPED_CHEST:
-					return evaluateSiegeWarPlaceChestRequest(player, block, event);
+					return evaluatePlaceChest(player, block, event);
 				default:
 					return false;
 			}
@@ -89,10 +89,10 @@ public class SiegeWarPlaceBlockController {
      * Determines which type of banner this is, and where it is being placed.
 	 * Then calls an appropriate private method.
  	*/
-	private static boolean evaluateSiegeWarPlaceBannerRequest(Player player,
-													   Block block,
-													   BlockPlaceEvent event,
-													   Towny plugin) throws NotRegisteredException
+	private static boolean evaluatePlaceBanner(Player player,
+											   Block block,
+											   BlockPlaceEvent event,
+											   Towny plugin) throws NotRegisteredException
 	{
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(block.getWorld().getName());
@@ -102,9 +102,9 @@ public class SiegeWarPlaceBlockController {
 			//Wilderness found
 			
 			if (block.getType() == Material.WHITE_BANNER  && ((Banner) block.getState()).getPatterns().size() == 0) {
-				return evaluatePlaceWhiteBannerOutsideTown(block, player, event);
+				return evaluatePlaceWhiteBannerInWilderness(block, player, event);
 			} else {
-				return evaluatePlaceColouredBannerOutsideTown(block, player, event);
+				return evaluatePlaceColouredBannerInWilderness(block, player, event);
 			}
 			
 		} else {
@@ -139,10 +139,10 @@ public class SiegeWarPlaceBlockController {
 	}
 	
 	/**
-	 * Evaluates placing a white banner outside a town.
+	 * Evaluates placing a white banner in the wilderness.
 	 * Determines if the event will be considered as an abandon request.
 	 */
-	private static boolean evaluatePlaceWhiteBannerOutsideTown(Block block, Player player, BlockPlaceEvent event) {
+	private static boolean evaluatePlaceWhiteBannerInWilderness(Block block, Player player, BlockPlaceEvent event) {
 		if (!TownySettings.getWarSiegeAbandonEnabled())
 			return false;
 
@@ -182,10 +182,10 @@ public class SiegeWarPlaceBlockController {
 	}
 
 	/**
-	 * Evaluates placing a coloured banner outside a town.
+	 * Evaluates placing a coloured banner in the wilderness.
 	 * Determines if the event will be considered as an attack request.
 	 */
-	private static boolean evaluatePlaceColouredBannerOutsideTown(Block block, Player player, BlockPlaceEvent event) {
+	private static boolean evaluatePlaceColouredBannerInWilderness(Block block, Player player, BlockPlaceEvent event) {
 		if (!TownySettings.getWarSiegeAttackEnabled())
 			return false;
 
@@ -244,15 +244,16 @@ public class SiegeWarPlaceBlockController {
 	}
 	
 	/**
-	 * Evaluates placing a chest inside a town.
+	 * Evaluates placing a chest.
 	 * Determines if the event will be considered as a plunder request.
 	 * 
-	 * The main verifications here are that a siege exists in the town and
+	 * The main verifications here are that the block is in a town, 
+	 * a siege exists in the town, and
 	 * the placer is a member of an attacking nation
 	 */
-	private static boolean evaluateSiegeWarPlaceChestRequest(Player player,
-													  Block block,
-													  BlockPlaceEvent event) throws NotRegisteredException {
+	private static boolean evaluatePlaceChest(Player player,
+											  Block block,
+											  BlockPlaceEvent event) throws NotRegisteredException {
 		if (!TownySettings.getWarSiegePlunderEnabled())
 			return false;
 
