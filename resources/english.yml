@@ -1043,7 +1043,7 @@ msg_siege_war_revolt: '&bThe people of %s, led by %s, have revolted against the 
 msg_siege_war_siege_started_neutral_town: '&6[War]&b An army belonging to %s has attacked %s. A siege has begun!'
 msg_siege_war_siege_started_nation_town: '&6[War]&b An army belonging to %s has attacked %s at %s. A siege has begun!'
 msg_siege_war_siege_joined: '&6[War]&b An army belonging to %s has joined the siege on %s!'
-msg_siege_war_attack_money: '&bThe siege cost to your nation was %s. If the town is defeated and plundered at its current size, the plunder revenue for your nation will be %s.'
+msg_siege_war_attack_money: '&6[War]&b The siege cost to your nation was %s. If the town is defeated and plundered at its current size, the plunder revenue for your nation will be %s.'
 msg_siege_war_participant_death: '&6[War]&b Due to the death of %s during the siege on %s, %d siege points have been awarded to %s.'
 msg_siege_war_defender_win: '&6[War]&b The defenders of %s have successfully driven off all attacking armies. The siege has failed!'
 msg_siege_war_attacker_win: '&6[War]&b An army belonging to %s has successfully breached the defences of %s. The siege is over!'

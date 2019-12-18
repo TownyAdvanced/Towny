@@ -113,11 +113,11 @@ public class SiegeWarDeathController {
 			siegePoints,
 			TownyFormatter.getFormattedName(pointsRecipient));
 
-		TownyMessaging.sendMessage(siegeZone.getAttackingNation(), message);
+		TownyMessaging.sendPrefixedNationMessage(siegeZone.getAttackingNation(), message);
 		if (siegeZone.getDefendingTown().hasNation()) {
-			TownyMessaging.sendMessage(siegeZone.getDefendingTown().getNation(), message);
+			TownyMessaging.sendPrefixedNationMessage(siegeZone.getDefendingTown().getNation(), message);
 		} else {
-			TownyMessaging.sendMessage(siegeZone.getDefendingTown(), message);
+			TownyMessaging.sendPrefixedTownMessage(siegeZone.getDefendingTown(), message);
 		}
 	}
 	
