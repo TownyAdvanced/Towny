@@ -1895,7 +1895,7 @@ public enum ConfigNodes {
 			"# This setting determines the delay between a town being ruined, and final deletion."),
 	WAR_SIEGE_ZONE_OCCUPATION_SCORING_TIME_REQUIREMENT_SECONDS(
 			"war.siege.times.zone_occupation_scoring_time_requirement_seconds",
-			"30",
+			"23",
 			"# This setting determines how long a player must remain in a siege zone,",
 			"# before siege points are awarded.",
 			"# If it is too high, points may appear to players to accumulate too slowly",
