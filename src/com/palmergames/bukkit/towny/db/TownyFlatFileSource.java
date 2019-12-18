@@ -82,7 +82,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "residents.txt",
 			dataFolderPath + File.separator + "towns.txt",
 			dataFolderPath + File.separator + "nations.txt",
-			dataFolderPath + File.separator + "siegezones",
+			dataFolderPath + File.separator + "siegezones.txt",
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "regen.txt",
 			dataFolderPath + File.separator + "snapshot_queue.txt"
