@@ -253,13 +253,6 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				siegeZone.getPlayerAfkTimeMap().remove(player);
 				return true;
 			}
-			
-			//Player must still be in the open
-			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
-				playerScoreTimeMap.remove(player);
-				siegeZone.getPlayerAfkTimeMap().remove(player);
-				return true;
-			}
 
 			//Player must have been in zone long enough
 			if (System.currentTimeMillis() < playerScoreTimeMap.get(player)) {
@@ -273,6 +266,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 					System.currentTimeMillis()
 						+ (long)(TownySettings.getWarSiegeZoneOccupationScoringTimeRequirementSeconds() * ONE_SECOND_IN_MILLIS));
 				return false;
+			}
+
+			//Player must still be in the open
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+				playerScoreTimeMap.remove(player);
+				siegeZone.getPlayerAfkTimeMap().remove(player);
+				return true;
 			}
 			
 			//Player has been in zone long enough. Points awarded
@@ -289,13 +289,13 @@ public class SiegeWarTimerTask extends TownyTimerTask {
 				return false;
 			}
 
-			//Player must be in the open
-			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
+			//Player must not be flying or invisible
+			if(player.isFlying() || player.getPotionEffect(PotionEffectType.INVISIBILITY) != null) {
 				return false;
 			}
 
-			//Player must not be flying or invisible
-			if(player.isFlying() || player.getPotionEffect(PotionEffectType.INVISIBILITY) != null) {
+			//Player must be in the open
+			if(SiegeWarBlockUtil.doesPlayerHaveANonAirBlockAboveThem(player)) {
 				return false;
 			}
 
