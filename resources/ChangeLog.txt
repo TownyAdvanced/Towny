@@ -3968,3 +3968,5 @@ v0.92.0.11:
       - NationRemoveEnemyEvent
       - New methods to get the cells under attack in Flag War.
   - Made most of the unprefixed messages Towny emits use prefixes, either [Towny], [Townname] or [Nationname].
+  - Fixed explosion regen deleting the contents of BlockInventoryHolders (chests, furnaces, hopper and more.)
+    - Closes tickets #3569, #3570. 
