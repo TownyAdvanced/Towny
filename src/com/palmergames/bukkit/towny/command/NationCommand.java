@@ -702,7 +702,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (onlineResidents.size() > 0 ) {
 					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_nation_online"), nation, player));
 				} else {
-					TownyMessaging.sendMsg(player, ChatTools.color(Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation)));
+					TownyMessaging.sendMsg(player, Colors.White +  "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_nation_online") + ": " + nation));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -1130,15 +1130,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			plugin.resetCache();
 
-			TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_nation_town_left"), StringMgmt.remUnderscore(town.getName()))));
-			TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_town_left_nation"), StringMgmt.remUnderscore(nation.getName()))));
+			TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_nation_town_left"), StringMgmt.remUnderscore(town.getName())));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_town_left_nation"), StringMgmt.remUnderscore(nation.getName())));
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			return;
 		} catch (EmptyNationException en) {
 			townyUniverse.getDataSource().removeNation(en.getNation());
 			townyUniverse.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName())));
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), en.getNation().getName()));
 		} finally {
 			townyUniverse.getDataSource().saveTown(town);
 		}
@@ -1328,7 +1328,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_invited_join_nation"), player.getName(), msg.toString()));
-			TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.color(msg.toString()));
+			TownyMessaging.sendPrefixedNationMessage(nation, msg.toString());
 		} else {
 			// This is executed when the arraylist returns empty (no valid town was entered).
 			throw new TownyException(TownySettings.getLangString("msg_invalid_name"));
@@ -1446,7 +1446,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_nation_kicked"), player.getName(), msg.toString()));
-			TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.color(msg.toString()));
+			TownyMessaging.sendPrefixedNationMessage(nation, msg.toString());
 			townyUniverse.getDataSource().saveNation(nation);
 
 			plugin.resetCache();
@@ -1787,7 +1787,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!targetNation.getCapital().getMayor().isNPC()) {
 						for (Nation newAlly : allies) {
 							nationCreateAllyRequest(player.getName(), nation, targetNation);
-							TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.color(String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName())));
+							TownyMessaging.sendPrefixedNationMessage(nation, String.format(TownySettings.getLangString("msg_ally_req_sent"), newAlly.getName()));
 						}
 					} else {
 						if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode())) {
@@ -1945,7 +1945,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			else
 				msg = String.format(TownySettings.getLangString("msg_enemy_to_neutral"), resident.getName(), msg);
 
-			TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.color(msg));
+			TownyMessaging.sendPrefixedNationMessage(nation, msg);
 			TownyUniverse.getInstance().getDataSource().saveNations();
 
 			plugin.resetCache();
