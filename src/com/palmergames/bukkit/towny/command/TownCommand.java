@@ -917,7 +917,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (onlineResidents.size() > 0) {
 					TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(TownySettings.getLangString("msg_town_online"), town, player));
 				} else {
-					TownyMessaging.sendMsg(player, ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.White + "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_town_online") + ": " + town)));
+					TownyMessaging.sendMsg(player, TownySettings.getLangString("default_towny_prefix") + Colors.White + "0 " + TownySettings.getLangString("res_list") + " " + (TownySettings.getLangString("msg_town_online") + ": " + town));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -2452,7 +2452,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_invited_join_town"), name, msg.toString()));
-			TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(msg.toString()));
+			TownyMessaging.sendPrefixedTownMessage(town, msg.toString());
 			townyUniverse.getDataSource().saveTown(town);
 		} else
 			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("msg_invalid_name"));
@@ -2550,11 +2550,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg = new StringBuilder(String.format(TownySettings.getLangString("msg_kicked"), (player != null) ? player.getName() : "CONSOLE", msg.toString()));
-			TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(msg.toString()));
+			TownyMessaging.sendPrefixedTownMessage(town, msg.toString());
 			try {
 				if (!(sender instanceof Player) || !townyUniverse.getDataSource().getResident(player.getName()).hasTown() || !TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().equals(town))
 					// For when the an admin uses /ta town {name} kick {residents}
-					TownyMessaging.sendMessage(sender, ChatTools.color(msg.toString()));
+					TownyMessaging.sendMessage(sender, msg.toString());
 			} catch (NotRegisteredException e) {
 			}
 			townyUniverse.getDataSource().saveTown(town);
@@ -2683,7 +2683,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			townAddResident(town, resident);
 
 			// Resident was added successfully.
-			TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+			TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(sender, e.getMessage());

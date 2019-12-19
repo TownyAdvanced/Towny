@@ -34,7 +34,6 @@ import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarTimeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.entity.Player;
@@ -1230,7 +1229,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.getDataSource().removeNation(en.getNation());
 			saveNation(prevailingNation);
 			universe.getDataSource().saveNationList();
-			TownyMessaging.sendGlobalMessage(ChatTools.color(String.format(TownySettings.getLangString("msg_del_nation"), name)));
+			TownyMessaging.sendGlobalMessage(String.format(TownySettings.getLangString("msg_del_nation"), name));
 			lock.unlock();
 		}
 	}
