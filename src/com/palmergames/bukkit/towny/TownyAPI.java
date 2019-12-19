@@ -296,7 +296,21 @@ public class TownyAPI {
         }
     }
     
-    /**
+	/**
+	 * Check if there is a {@link TownBlock} at a specific {@link Location}.
+	 *
+	 * @param location {@link Location} to check.
+	 * @return true if there is a {@link TownBlock} at the location, or false if there is not.
+	 */
+	public boolean hasTownBlock(Location location) {
+		try {
+			return townyUniverse.getDataSource().getWorld(location.getWorld().getName()).hasTownBlock(Coord.parseCoord(location));
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+	}
+
+	/**
      * Get a list of active {@link Resident}s.
      *
      * @return {@link List} of active {@link Resident}s.

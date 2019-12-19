@@ -1,10 +1,8 @@
 package com.palmergames.bukkit.towny.war.siegewar.utils;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyObject;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.war.siegewar.locations.Siege;
 import com.palmergames.bukkit.towny.war.siegewar.locations.SiegeZone;
 import org.bukkit.entity.Player;
@@ -46,9 +44,9 @@ public class SiegeWarPointsUtil {
 	 * This method determines if a players is in the 'point scoring zone' of a siegezone
 	 * 
 	 * - Must be in same world as flag
+	 * - Must be in wilderness  (This is important, otherwise the defender could create a 'safe space' 
+	 *                           inside a perm-protected town block, and gain points there with no threat.)
 	 * - Must be within 1 townblock length of the flag
-	 * - Must be in wilderness  (This is important, otherwise the defender could create a
-	 *   'safe space' inside a perm-protected town block, and gain points there with no threat.)
 	 *
 	 * @param player the player
 	 * @param siegeZone the siege zone
@@ -56,17 +54,8 @@ public class SiegeWarPointsUtil {
 	 */
 	public static boolean isPlayerInSiegePointZone(Player player, SiegeZone siegeZone) {
 
-		if (player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
-				&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize()) {
-
-			TownBlock townBlock = TownyUniverse.getTownBlock(player.getLocation());
-			if (townBlock == null) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return player.getLocation().getWorld() == siegeZone.getFlagLocation().getWorld()
+				&& !TownyAPI.getInstance().hasTownBlock(player.getLocation())
+				&& player.getLocation().distance(siegeZone.getFlagLocation()) < TownySettings.getTownBlockSize();
 	}
 }
