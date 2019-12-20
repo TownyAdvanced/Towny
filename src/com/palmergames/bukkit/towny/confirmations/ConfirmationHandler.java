@@ -273,12 +273,10 @@ public class ConfirmationHandler {
 		
 		if (type == ConfirmationType.GROUPCLAIMACTION) {
 			if (groupclaimconfirmations.containsKey(r)) {
-				ArrayList<WorldCoord> coords = new ArrayList<>();
+				
 				GroupConfirmation confirmation = groupclaimconfirmations.get(r);
-				ArrayList<TownBlock> townBlocks = (ArrayList<TownBlock>) confirmation.getGroup().getTownBlocks();
-				for (TownBlock tb :townBlocks) {
-					coords.add(tb.getWorldCoord());
-				}
+				ArrayList<WorldCoord> coords = plotGroupBlocksToCoords(confirmation.getGroup());
+				
 				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, true, false, true).start();
 				removeConfirmation(r, type, true);
 			}
@@ -286,13 +284,10 @@ public class ConfirmationHandler {
 		
 		if (type == ConfirmationType.GROUPUNCLAIMACTION) {
 			if (groupremoveconfirmations.containsKey(r)) {
-				ArrayList<WorldCoord> coords = new ArrayList<>();
+				
 				GroupConfirmation confirmation = groupremoveconfirmations.get(r);
-				ArrayList<TownBlock> townBlocks = (ArrayList<TownBlock>) confirmation.getGroup().getTownBlocks();
-				for (TownBlock tb :townBlocks) {
-					TownyMessaging.sendErrorMsg(tb.getCoord().toString());
-					coords.add(tb.getWorldCoord());
-				}
+				ArrayList<WorldCoord> coords = plotGroupBlocksToCoords(confirmation.getGroup());
+				
 				new PlotClaim(Towny.getPlugin(), confirmation.getPlayer(), r, coords, false, false, false).start();
 				removeConfirmation(r, type, true);
 			}
@@ -316,6 +311,22 @@ public class ConfirmationHandler {
 				removeConfirmation(r, type, true);
 			}
 		}
+	}
+
+	/**
+	 * A simple method to get coordinates from plot group plots.
+	 * @param group The {@link PlotGroup} to get the coords from.
+	 * @return An {@link ArrayList} of {@link WorldCoord}'s.
+	 * @author Suneet Tipirneni (Siris)
+	 */
+	private static ArrayList<WorldCoord> plotGroupBlocksToCoords(PlotGroup group) {
+		ArrayList<WorldCoord> coords = new ArrayList<>();
+		
+		for (TownBlock tb : group.getTownBlocks()) {
+			coords.add(tb.getWorldCoord());
+		}
+		
+		return coords;
 	}
 
 	/**

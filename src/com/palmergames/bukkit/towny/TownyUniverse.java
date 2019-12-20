@@ -50,7 +50,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
-	private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -378,13 +378,10 @@ public class TownyUniverse {
 	}
 
 	public PlotGroup getGroup(String townName, int groupID) {
-		System.out.println("Group Size = " + plotGroups.size());
 		
 		for (String str : plotGroups.keySet()) {
 			TownyMessaging.sendErrorMsg(str);
 		}
-		
-		TownyMessaging.sendErrorMsg("Return val = " + plotGroups.get((townName + groupID)));
 		
 		return plotGroups.get(townName + groupID);
 	}
@@ -393,18 +390,20 @@ public class TownyUniverse {
 		return getRegisteredMetadata();
 	}
 
-	public PlotGroup newGroup(String townName, String name, int id) throws AlreadyRegisteredException {
-		PlotGroup newGroup = new PlotGroup(id, name,  new Town(townName));
-
-		if (hasGroup(townName, id)) {
-			TownyMessaging.sendErrorMsg("group " + townName + ":" + id + " already exists");
+	public PlotGroup newGroup(Town town, String name, int id) throws AlreadyRegisteredException {
+    	
+    	// Create new plot group.
+		PlotGroup newGroup = new PlotGroup(id, name, town);
+		
+		// Check if there is a duplicate. (Should never happen)
+		if (hasGroup(town.getName(), id)) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists");
 			throw new AlreadyRegisteredException();
 		}
-
-		String key = townName + id;
-		TownyMessaging.sendErrorMsg("New group = " + newGroup);
+		
+		// Create key and store group globally.
+		String key = town.getName() + id;
 		plotGroups.put(key, newGroup);
-		TownyMessaging.sendErrorMsg("Group val = " + plotGroups.get(key));
 
 		return plotGroups.get(key);
 	}

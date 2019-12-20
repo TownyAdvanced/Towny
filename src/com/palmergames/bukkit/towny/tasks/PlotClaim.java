@@ -44,7 +44,8 @@ public class PlotClaim extends Thread {
 	 * @param selection List of WoorldCoords to claim/unclaim
 	 * @param claim or unclaim
 	 * @param admin - is this admin overrided.
-	 * @param resident - see player parameter   
+	 * @param resident - see player parameter
+	 * @param groupClaim Indicates whether the claim is part of a plot group claim.   
 	 */
 	public PlotClaim(Towny plugin, Player player, Resident resident, List<WorldCoord> selection, boolean claim, boolean admin, boolean groupClaim) {
 
@@ -147,13 +148,22 @@ public class PlotClaim extends Thread {
 		plugin.resetCache();
 
 	}
-	
+
+	/**
+	 * A similar function to {@link #residentClaim(WorldCoord)}, that deals
+	 * with group member, or more specifically updates plot group values, to
+	 * show group ownership and membership.
+	 * @param worldCoords The coordinates of the blocks to be claimed.
+	 * @return A boolean indicating if the transaction was successful.
+	 * @throws TownyException Whenever an object could not be retrieved.
+	 * @throws EconomyException Whenever a sender cannot pay for transaction.
+	 * @author Suneet Tipirneni (Siris)
+	 */
 	private boolean residentGroupClaim(List<WorldCoord> worldCoords) throws TownyException, EconomyException {
 		
 		for (int i = 0; i < worldCoords.size(); ++i) {
 			
 			TownyMessaging.sendErrorMsg(worldCoords.size() + "");
-			
 			WorldCoord worldCoord = worldCoords.get(i);
 			
 			try {

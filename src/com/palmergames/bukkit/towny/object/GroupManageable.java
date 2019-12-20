@@ -8,6 +8,7 @@ import java.util.Set;
  * @author Suneet Tipirneni (Siris)
  */
 public interface GroupManageable<T extends Group> {
+	
 	/**
 	 * Get the set of group objects associated with the subclass.
 	 * @return The {@link java.util.Set} associated with the subclass.
