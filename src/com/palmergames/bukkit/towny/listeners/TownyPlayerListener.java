@@ -534,16 +534,17 @@ public class TownyPlayerListener implements Listener {
 			from = event.getFrom();
 		}
 		
-		try {
-			TownyWorld fromWorld = townyUniverse.getDataSource().getWorld(from.getWorld().getName());
-			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
-			TownyWorld toWorld = townyUniverse.getDataSource().getWorld(to.getWorld().getName());
-			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
-			if (!fromCoord.equals(toCoord))
+		if (WorldCoord.cellChanged(from, to)) {
+			try {
+				TownyWorld fromWorld = townyUniverse.getDataSource().getWorld(from.getWorld().getName());
+				WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
+				TownyWorld toWorld = townyUniverse.getDataSource().getWorld(to.getWorld().getName());
+				WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
+				
 				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
-
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			} catch (NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage());
+			}
 		}
 
 		// Update the cached players current location
