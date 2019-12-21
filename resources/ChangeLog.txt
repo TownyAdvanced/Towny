@@ -3971,3 +3971,5 @@ v0.92.0.11:
   - Fixed explosion regen deleting the contents of BlockInventoryHolders (chests, furnaces, hopper and more.)
     - Closes tickets #3569, #3570. 
   - Object Allocation on player move reduced by Silverwolfg11 in PR #3573. 
+  - Added remaining ExtraFields for metadata, courtesy of Emperor-Koala with PR #3575.
+  - Add town_block_size to bstats charts.
