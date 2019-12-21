@@ -3973,3 +3973,4 @@ v0.92.0.11:
   - Object Allocation on player move reduced by Silverwolfg11 in PR #3573. 
   - Added remaining ExtraFields for metadata, courtesy of Emperor-Koala with PR #3575.
   - Add town_block_size to bstats charts.
+  - Switch API to 1.15.1-R0.1-SNAPSHOT.
