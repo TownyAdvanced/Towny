@@ -7,9 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Group;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -315,11 +314,11 @@ public class ConfirmationHandler {
 
 	/**
 	 * A simple method to get coordinates from plot group plots.
-	 * @param group The {@link PlotGroup} to get the coords from.
+	 * @param group The {@link PlotObjectGroup} to get the coords from.
 	 * @return An {@link ArrayList} of {@link WorldCoord}'s.
 	 * @author Suneet Tipirneni (Siris)
 	 */
-	private static ArrayList<WorldCoord> plotGroupBlocksToCoords(PlotGroup group) {
+	private static ArrayList<WorldCoord> plotGroupBlocksToCoords(PlotObjectGroup group) {
 		ArrayList<WorldCoord> coords = new ArrayList<>();
 		
 		for (TownBlock tb : group.getTownBlocks()) {

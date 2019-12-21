@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, GroupManageable<PlotGroup> {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, ObjectGroupManageable {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -40,7 +40,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
-	private HashSet<PlotGroup> plotGroups = null;
+	private HashSet<PlotObjectGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1318,22 +1318,22 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return this.conqueredDays;
 	}
 	
-	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotObjectGroup group) {
 		
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		
 		TownyMessaging.sendErrorMsg(group.toString());
 		
 		for (TownBlock townBlock : getTownBlocks()) {
-			if (townBlock.hasPlotGroup() && townBlock.getPlotGroup().equals(group))
+			if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group))
 				retVal.add(townBlock);
 		}
 		
 		return retVal;
 	}
 	
-	public void addPlotGroup(PlotGroup group) {
-		if (!hasGroups()) 
+	public void addPlotGroup(PlotObjectGroup group) {
+		if (!hasObjectGroups()) 
 			this.plotGroups = new HashSet<>();
 		
 		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName());
@@ -1342,11 +1342,11 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		
 	}
 	
-	public void removePlotGroup(PlotGroup plotGroup) {
-		if (hasGroups() && hasGroup(plotGroup)) {
+	public void removePlotGroup(PlotObjectGroup plotGroup) {
+		if (hasObjectGroups() && hasObjectGroup(plotGroup)) {
 			for (TownBlock tb : getTownBlocks()) {
-				if (tb.hasPlotGroup() && tb.getPlotGroup().equals(plotGroup)) {
-					tb.getPlotGroup().setID(null);
+				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
+					tb.getPlotObjectGroup().setID(null);
 					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
 				}
 			}
@@ -1361,24 +1361,24 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		String[] groups = str.split(";");
 		
 		for (String groupStr : groups) {
-			addPlotGroup(PlotGroup.fromString(groupStr));
+			addPlotGroup(PlotObjectGroup.fromString(groupStr));
 		}
 	}
 	
 	public int generatePlotGroupID() {
-		return (hasGroups()) ? getGroups().size() : 0;
+		return (hasObjectGroups()) ? getObjectGroups().size() : 0;
 	}
 
 	@Override
-	public HashSet<PlotGroup> getGroups() {
+	public HashSet<PlotObjectGroup> getObjectGroups() {
 		return plotGroups;
 	}
 
 	@Override
-	public PlotGroup getGroupFromID(int ID) {
-		if (hasGroups()) {
-			for (PlotGroup pg : getGroups()) {
-				if (pg.getID() == ID) 
+	public PlotObjectGroup getObjectGroupFromID(UUID ID) {
+		if (hasObjectGroups()) {
+			for (PlotObjectGroup pg : getObjectGroups()) {
+				if (pg.getID().equals(ID)) 
 					return pg;
 			}
 		}
@@ -1386,14 +1386,23 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 		return null;
 	}
 	
-	public PlotGroup getPlotGroupFromName(String name) {
-		if (hasGroups()) {
-			for (PlotGroup pg : getGroups()) {
+	public PlotObjectGroup getPlotObjectGroupFromName(String name) {
+		if (hasObjectGroups()) {
+			for (PlotObjectGroup pg : getObjectGroups()) {
 				if (pg.getGroupName().equals(name))
 					return pg;
 			}
 		}
 		
 		return null;
+	}
+	
+	// Wraps other functions to provide a better naming scheme for the end developer.
+	public PlotObjectGroup getPlotObjectGroupFromID(UUID ID) {
+		return getObjectGroupFromID(ID);
+	}
+	
+	public HashSet<PlotObjectGroup> getPlotObjectGroups() {
+		return getObjectGroups();
 	}
 }

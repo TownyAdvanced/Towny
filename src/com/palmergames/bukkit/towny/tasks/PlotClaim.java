@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -77,15 +77,15 @@ public class PlotClaim extends Thread {
 			for (WorldCoord worldCoord : selection) {
 				
 				try {
-					if (worldCoord.getTownBlock().hasPlotGroup() && residentGroupClaim(selection)) {
+					if (worldCoord.getTownBlock().hasPlotObjectGroup() && residentGroupClaim(selection)) {
 						claimed++;
 					}
 					
-					worldCoord.getTownBlock().getPlotGroup().setResident(resident);
-					worldCoord.getTownBlock().getPlotGroup().setPrice(-1);
-					TownyMessaging.sendTownMessage(worldCoord.getTownBlock().getTown(), "Successfully bought group " + worldCoord.getTownBlock().getPlotGroup().getGroupName());
+					worldCoord.getTownBlock().getPlotObjectGroup().setResident(resident);
+					worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
+					TownyMessaging.sendTownMessage(worldCoord.getTownBlock().getTown(), "Successfully bought group " + worldCoord.getTownBlock().getPlotObjectGroup().getGroupName());
 					
-					TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotGroup());
+					TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
 					
 					break;
 				} catch (Exception e) {
@@ -169,14 +169,14 @@ public class PlotClaim extends Thread {
 			try {
 				TownBlock townBlock = worldCoord.getTownBlock();
 				Town town = townBlock.getTown();
-				PlotGroup group = townBlock.getPlotGroup();
+				PlotObjectGroup group = townBlock.getPlotObjectGroup();
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(TownySettings.getLangString("msg_err_not_part_town"));
 				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 				TownyMessaging.sendErrorMsg("woop");
 				try {
-					Resident owner = townBlock.getPlotGroup().getResident();
+					Resident owner = townBlock.getPlotObjectGroup().getResident();
 
 					if (group.getPrice() != -1) {
 						// Plot is for sale
@@ -195,7 +195,7 @@ public class PlotClaim extends Thread {
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + group.getTownBlocks().size() > maxPlots)
 							throw new TownyException(String.format(TownySettings.getLangString("msg_max_plot_own"), maxPlots));
 
-						TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotGroup().getPrice()));
+						TownyMessaging.sendTownMessage(town, TownySettings.getBuyResidentPlotMsg(resident.getName(), owner.getName(), townBlock.getPlotObjectGroup().getPrice()));
 						
 						townBlock.setResident(resident);
 
@@ -238,7 +238,7 @@ public class PlotClaim extends Thread {
 				} catch (NotRegisteredException e) {
 					//Plot has no owner so it's the town selling it
 
-					if (townBlock.getPlotGroup().getPrice() == -1) {
+					if (townBlock.getPlotObjectGroup().getPrice() == -1) {
 						throw new TownyException(TownySettings.getLangString("msg_err_plot_nfs"));
 					}
 
@@ -249,7 +249,7 @@ public class PlotClaim extends Thread {
 							throw new TownyException(String.format(TownySettings.getLangString("msg_err_deposit_capped"), bankcap));
 					}
 
-					if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotGroup().getPrice(), town, "Plot - Buy From Town"))
+					if (TownySettings.isUsingEconomy() && !resident.payTo(townBlock.getPlotObjectGroup().getPrice(), town, "Plot - Buy From Town"))
 						throw new TownyException(TownySettings.getLangString("msg_no_money_purchase_plot"));
 
 					townBlock.setResident(resident);

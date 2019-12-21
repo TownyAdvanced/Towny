@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
-    private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, PlotObjectGroup> plotGroups = new ConcurrentHashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -369,20 +370,15 @@ public class TownyUniverse {
         plotGroups.clear();
     }
 
-	public boolean hasGroup(String townName, int groupID) {
+	public boolean hasGroup(String townName, UUID groupID) {
 		return plotGroups.containsKey(townName + groupID);
 	}
 
-	public Collection<PlotGroup> getGroups() {
+	public Collection<PlotObjectGroup> getGroups() {
 		return plotGroups.values();
 	}
 
-	public PlotGroup getGroup(String townName, int groupID) {
-		
-		for (String str : plotGroups.keySet()) {
-			TownyMessaging.sendErrorMsg(str);
-		}
-		
+	public PlotObjectGroup getGroup(String townName, UUID groupID) {
 		return plotGroups.get(townName + groupID);
 	}
 
@@ -390,10 +386,10 @@ public class TownyUniverse {
 		return getRegisteredMetadata();
 	}
 
-	public PlotGroup newGroup(Town town, String name, int id) throws AlreadyRegisteredException {
+	public PlotObjectGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {
     	
     	// Create new plot group.
-		PlotGroup newGroup = new PlotGroup(id, name, town);
+		PlotObjectGroup newGroup = new PlotObjectGroup(id, name, town);
 		
 		// Check if there is a duplicate. (Should never happen)
 		if (hasGroup(town.getName(), id)) {
@@ -408,12 +404,12 @@ public class TownyUniverse {
 		return plotGroups.get(key);
 	}
 
-	public int generatePlotGroupID() {
-		return plotGroups.size() + 1;
+	public UUID generatePlotGroupID() {
+		return UUID.randomUUID();
 	}
 
 
-	public void removeGroup(PlotGroup group) {
+	public void removeGroup(PlotObjectGroup group) {
 		if (hasGroup(group.getTown().toString(), group.getID())) {
 			String key = group.getTown().toString() + group.getID().toString();
 			plotGroups.remove(key);
@@ -424,7 +420,7 @@ public class TownyUniverse {
 		return registeredMetadata;
 	}
 
-	public ConcurrentHashMap<String, PlotGroup> getPlotGroupsMap() {
+	public ConcurrentHashMap<String, PlotObjectGroup> getPlotGroupsMap() {
 		return plotGroups;
 	}
 }

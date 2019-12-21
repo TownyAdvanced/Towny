@@ -21,7 +21,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -195,7 +195,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getTownsMap().get(name);
 	}
 	
-	public PlotGroup getPlotGroup(String worldName, String townName, int groupID) {
+	public PlotObjectGroup getPlotObjectGroup(String worldName, String townName, UUID groupID) {
 		return universe.getGroup(townName, groupID);
 	}
 
@@ -429,14 +429,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return townBlocks;
 	}
 	
-	public List<PlotGroup> getAllGroups() {
-		List<PlotGroup> groups = new ArrayList<>();
+	public List<PlotObjectGroup> getAllGroups() {
+		List<PlotObjectGroup> groups = new ArrayList<>();
 		groups.addAll(universe.getGroups());
 		
 		return groups;
 	}
 	
-	public void newPlotGroup(PlotGroup group) {
+	public void newPlotGroup(PlotObjectGroup group) {
 		String key = group.getTown().getName() + group.getID();
 		universe.getPlotGroupsMap().put(key, group);
 	}
@@ -967,7 +967,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException {
+	public void renameGroup(PlotObjectGroup group, String newName) throws AlreadyRegisteredException {
 		// Create new one
 		group.setGroupName(newName);
 		

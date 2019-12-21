@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -72,7 +72,7 @@ public class ChunkNotification {
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
 	TownBlockType fromPlotType = null, toPlotType = null;
-	PlotGroup fromPlotGroup = null, toPlotGroup = null;
+	PlotObjectGroup fromPlotGroup = null, toPlotGroup = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -111,10 +111,10 @@ public class ChunkNotification {
 			
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
-			toPlotGroupBlock = toTownBlock.hasPlotGroup();
+			toPlotGroupBlock = toTownBlock.hasPlotObjectGroup();
 
-			if (toTownBlock.hasPlotGroup()) {
-				toForSale = toTownBlock.getPlotGroup().getPrice() != -1;
+			if (toTownBlock.hasPlotObjectGroup()) {
+				toForSale = toTownBlock.getPlotObjectGroup().getPrice() != -1;
 			} else {
 				toForSale = toTownBlock.getPlotPrice() != -1;
 			}
@@ -124,12 +124,12 @@ public class ChunkNotification {
 		}
 		
 		try {
-			if (toTownBlock.hasPlotGroup()) {
-				toPlotGroup = toTownBlock.getPlotGroup();
+			if (toTownBlock.hasPlotObjectGroup()) {
+				toPlotGroup = toTownBlock.getPlotObjectGroup();
 			}
 			
-			if (fromTownBlock.hasPlotGroup()) {
-				fromPlotGroup = fromTownBlock.getPlotGroup();
+			if (fromTownBlock.hasPlotObjectGroup()) {
+				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
 			}
 		} catch (Exception ignored) { }
 	}
@@ -338,7 +338,7 @@ public class ChunkNotification {
 
 		// Were heading to a plot group do some things differently
 		if (toForSale && (fromPlotGroup != toPlotGroup))
-			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotGroup().getPrice()));
+			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotObjectGroup().getPrice()));
 		
 		if (toForSale && !toPlotGroupBlock)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
@@ -347,7 +347,7 @@ public class ChunkNotification {
 	
 	public String getGroupNotification() {
 		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(groupNotificationFormat, toTownBlock.getPlotGroup().getGroupName());
+			return String.format(groupNotificationFormat, toTownBlock.getPlotObjectGroup().getGroupName());
 		return null;
 	}
 

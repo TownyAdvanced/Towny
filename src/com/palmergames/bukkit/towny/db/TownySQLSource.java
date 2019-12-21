@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -1646,7 +1646,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public boolean savePlotGroup(PlotGroup group) {
+	public boolean savePlotGroup(PlotObjectGroup group) {
 		return false;
 	}
 
@@ -1896,7 +1896,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
     }
 
 	@Override
-	public void deleteGroup(PlotGroup group) {
+	public void deleteGroup(PlotObjectGroup group) {
 		
 	}
 
