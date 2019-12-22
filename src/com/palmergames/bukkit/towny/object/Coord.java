@@ -84,6 +84,17 @@ public class Coord {
 	 */
 
 	/**
+	 * Convert a value to the grid cell counterpart
+	 * @param value x/z integer
+	 * @return cell position
+	 */
+	protected static int toCell(int value) {
+		// Floor divides means that for negative values will round to the next negative value
+		// and positive value to the previous positive value.
+		return Math.floorDiv(value, getCellSize());
+	}
+
+	/**
 	 * Convert regular grid coordinates to their grid cell's counterparts.
 	 * 
 	 * @param x - X int (Coordinates)
@@ -92,12 +103,7 @@ public class Coord {
 	 * 
 	 */
 	public static Coord parseCoord(int x, int z) {
-
-		int xresult = x / getCellSize();
-		int zresult = z / getCellSize();
-		boolean xneedfix = x % getCellSize() != 0;
-		boolean zneedfix = z % getCellSize() != 0;
-		return new Coord(xresult - (x < 0 && xneedfix ? 1 : 0), zresult - (z < 0 && zneedfix ? 1 : 0));
+		return new Coord(toCell(x), toCell(z));
 	}
 
 	public static Coord parseCoord(Entity entity) {

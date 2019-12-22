@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.invites.TownyInviteReceiver;
 import com.palmergames.bukkit.towny.invites.TownyInviteSender;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.util.ChatTools;
 
 public class PlayerJoinTownInvite implements Invite {
 
@@ -43,7 +42,7 @@ public class PlayerJoinTownInvite implements Invite {
 		Resident resident = (Resident) getReceiver();
 		Town town = (Town) getSender();
 		TownCommand.townAddResident(town, resident);
-		TownyMessaging.sendPrefixedTownMessage(town, ChatTools.color(String.format(TownySettings.getLangString("msg_join_town"), resident.getName())));
+		TownyMessaging.sendPrefixedTownMessage(town, String.format(TownySettings.getLangString("msg_join_town"), resident.getName()));
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 	}
