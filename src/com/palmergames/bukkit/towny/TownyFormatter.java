@@ -911,6 +911,7 @@ public class TownyFormatter {
 				extraFields.add(field);
 		}
 		
+		extraFields.add(field);
 		
 		return extraFields;
 	}
@@ -956,6 +957,7 @@ public class TownyFormatter {
 				extraFields.add(field);
 		}
 
+		extraFields.add(field);
 
 		return extraFields;
 	}

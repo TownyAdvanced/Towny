@@ -870,5 +870,12 @@ public class Towny extends JavaPlugin {
 				return TownySettings.getSaveDatabase();
 			}
 		}));
+		
+		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return String.valueOf(TownySettings.getTownBlockSize());
+			}
+		}));
 	}
 }
