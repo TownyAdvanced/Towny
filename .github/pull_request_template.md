@@ -16,4 +16,4 @@ ____
 - [ ] I have tested this pull request for defects on a server. 
 <!--- Place x between [ ] if you have tested this code on a server. --->
 
-By submitting this Pull Request I agree that I have the right to waive copyright and related rights to my contribution, and agree that all copyright and related rights in my contributions are waived through the [CC0 1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/legalcode).
+By making this pull request, I represent that I have the right to waive copyright and related rights to my contribution, and agree that all copyright and related rights in my contributions are waived, and I acknowledge that the TownyAdvanced organization has the license to use and modify my contribution under the Towny [License](https://github.com/LlmDl/Towny/blob/master/LICENSE.md) for perpetuity.
