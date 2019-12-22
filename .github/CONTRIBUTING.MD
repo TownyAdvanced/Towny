@@ -5,7 +5,10 @@
 Code contributions are welcome and are made via GitHub's Pull Request. 
 You must fork the Towny repository (this) and then open it via your IDE.   
 You can ask for any information/help on your idea/contribution in the [Towny IRC](http://webchat.esper.net/?channels=towny).    
-Please make sure to read our [License](https://github.com/LlmDl/Towny/blob/master/LICENSE.md). If you do not agree with the terms and conditions of our license, please do not contribute any code.    
+
+* Please make sure to read our [License](https://github.com/LlmDl/Towny/blob/master/LICENSE.md). If you do not agree with the terms and conditions of our license, please do not contribute any code.
+* When you do make pull requests you represent that you have the right to waive copyright and related rights to your contribution, and agree that all copyright and related rights in your contributions are waived through the [CC0 1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/legalcode).
+  * This is a standard Contributor License Agreement that means if in the future you decide to not participate any longer, the code you have submitted in the past will still be owned by you, but will still be able to be used by Towny.
 
 # Pull & Code Requirements    
 ## Pull-Request Requirements
