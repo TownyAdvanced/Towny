@@ -1,17 +1,19 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Suneet Tipirneni (Siris)
  * A simple class which encapsulates the grouping of townblocks.
  */
-public class PlotGroup extends Group {
+public class PlotObjectGroup extends ObjectGroup {
 	private Resident resident = null;
 	private List<TownBlock> townBlocks;
 	private double price = -1;
@@ -23,22 +25,27 @@ public class PlotGroup extends Group {
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 * @param town The town that this group is owned by.   
 	 */
-	public PlotGroup(int id, String name, Town town) {
+	public PlotObjectGroup(UUID id, String name, Town town) {
 		super(id, name);
 		this.town = town;
 	}
 
-	public static PlotGroup fromString(String str) {
+	public static PlotObjectGroup fromString(String str) {
+		
+		// Get the fields
 		String[] fields = str.split(",");
 		String name = fields[0];
-		int id = Integer.parseInt(fields[1]);
+		UUID id = UUID.fromString(fields[1]);
 		String townName = fields[2];
 		double price = Double.parseDouble(fields[3]);
 		
-		Town town = null;
-		town = new Town(townName);
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		PlotGroup newGroup = new PlotGroup(id, name, town);
+		// Fetch the global town reference.
+		Town town = townyUniverse.getTownsMap().get(townName);
+		
+		// Fetch the global plot group reference.
+		PlotObjectGroup newGroup = townyUniverse.getGroup(townName, id);
 		newGroup.setPrice(price);
 		
 		return newGroup;
@@ -63,10 +70,6 @@ public class PlotGroup extends Group {
 		}
 	}
 	
-	public void setTownBlocks(String str) {
-		
-	}
-	
 	public Town getTown() {
 		return town;
 	}
@@ -83,9 +86,9 @@ public class PlotGroup extends Group {
 	 * @param modeStr The string in the resident mode format.
 	 * @return The plot group given from the mode string.
 	 */
-	public static PlotGroup fromModeString(String modeStr) {
+	public static PlotObjectGroup fromModeString(String modeStr) {
 		String objString = StringUtils.substringBetween(modeStr, "{", "}");
-		return PlotGroup.fromString(objString);
+		return PlotObjectGroup.fromString(objString);
 	}
 
 	public double getPrice() {
@@ -141,4 +144,5 @@ public class PlotGroup extends Group {
 	public void setPermissions(TownyPermission permissions) {
 		this.permissions = permissions;
 	}
+	
 }

@@ -1,11 +1,13 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.UUID;
+
 /**
  * An abstract class which defines the mechanics of groups in towny.
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Group {
-	private int id;
+public abstract class ObjectGroup {
+	private UUID id;
 	private String name;
 
 	/**
@@ -13,16 +15,16 @@ public abstract class Group {
 	 * @param id A unique identifier for the group id.
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 */
-	public Group(int id, String name) {
+	public ObjectGroup(UUID id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	
-	public Integer getID() {
+	public UUID getID() {
 		return id;
 	}
 	
-	public void setID(Integer ID) {
+	public void setID(UUID ID) {
 		this.id = ID;
 	}
 	
@@ -35,13 +37,13 @@ public abstract class Group {
 	/**
 	 * Determines whether a group is equivalent or not.
 	 * @param obj The group to be compared
-	 * @return Returns true if the id of the group matches the given group object.
+	 * @return Returns true if the id (UUID) of the group matches the given group object.
 	 * False otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Group) {
-			return ((Group) obj).id == this.id;
+		if (obj instanceof ObjectGroup) {
+			return ((ObjectGroup) obj).id.equals(this.id);
 		}
 		return false;
 	}

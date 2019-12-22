@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.PlotObjectGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -124,7 +124,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveTown(Town town);
 	
-	abstract public boolean savePlotGroup(PlotGroup group);
+	abstract public boolean savePlotGroup(PlotObjectGroup group);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -154,7 +154,7 @@ public abstract class TownyDataSource {
 
 	abstract public void deleteFile(String file);
 	
-	abstract public void deleteGroup(PlotGroup group);
+	abstract public void deleteGroup(PlotObjectGroup group);
 
 	public boolean cleanup() {
 
@@ -334,5 +334,5 @@ public abstract class TownyDataSource {
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	abstract public void renameGroup(PlotObjectGroup group, String newName) throws AlreadyRegisteredException;
 }

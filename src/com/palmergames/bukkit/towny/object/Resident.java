@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -528,14 +527,14 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	/**
 	 * @author Suneet Tipirneni (Siris)
 	 * Returns the group mode that is enabled.
-	 * @return The mode as a {@link com.palmergames.bukkit.towny.object.PlotGroup},
+	 * @return The mode as a {@link PlotObjectGroup},
 	 * where the substring between the curly braces is the qualified
 	 * string representation. If there is not group mode, then null is returned.
-	 * @see PlotGroup#toString()
+	 * @see PlotObjectGroup#toString()
 	 */
-	public PlotGroup getPlotGroupFromMode() {
+	public PlotObjectGroup getPlotObjectGroupFromMode() {
 		
-		PlotGroup pg = null;
+		PlotObjectGroup pg = null;
 		Town town = null;
 
 		try {
@@ -546,7 +545,7 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		
 		for (String mode : getModes()) {
 			if (mode.contains("Group")) {
-				return PlotGroup.fromModeString(mode);
+				return PlotObjectGroup.fromModeString(mode);
 			}
 		}
 		
@@ -558,8 +557,8 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 	 * @param group Indicates whether the given group mode is enabled.
 	 * @return A boolean, true if the given group mode is present and false if the group isn't present.
 	 */
-	public boolean hasPlotGroupMode(PlotGroup group) {
-		PlotGroup rGroup = getPlotGroupFromMode();
+	public boolean hasPlotGroupMode(PlotObjectGroup group) {
+		PlotObjectGroup rGroup = getPlotObjectGroupFromMode();
 		
 		if (rGroup != null && rGroup.equals(group)) {
 			return true;
@@ -568,9 +567,9 @@ public class Resident extends TownBlockOwner implements ResidentModes, TownyInvi
 		return false;
 	}
 
-	public void setPlotGroupMode(PlotGroup group, boolean notify) {
+	public void setPlotGroupMode(PlotObjectGroup group, boolean notify) {
 		
-		PlotGroup pGroup = getPlotGroupFromMode();
+		PlotObjectGroup pGroup = getPlotObjectGroupFromMode();
 		
 		// Remove and replace.
 		if (pGroup != null && !pGroup.equals(group)) {
