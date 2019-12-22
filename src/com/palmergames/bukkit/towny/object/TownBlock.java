@@ -28,6 +28,7 @@ public class TownBlock {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private HashSet<CustomDataField> metadata = null;
+	private PlotGroup plotGroup;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -490,8 +491,28 @@ public class TownBlock {
 			metadata = new HashSet<>();
 		
 		String[] objects = str.split(";");
-		for (int i = 0; i < objects.length; i++) {
-			metadata.add(CustomDataField.load(objects[i]));
+		for (String object : objects) {
+			metadata.add(CustomDataField.load(object));
+		}
+	}
+	
+	public boolean hasPlotGroup() { return plotGroup != null; }
+
+	public PlotGroup getPlotGroup() {
+		return plotGroup;
+	}
+	
+	public void removePlotGroup() {
+		this.plotGroup = null;
+	}
+
+	public void setPlotGroup(PlotGroup group) {
+		this.plotGroup = group;
+
+		try {
+			group.addTownBlock(this);
+		} catch (NullPointerException e) {
+			TownyMessaging.sendErrorMsg("Group is null." + String.valueOf(group));
 		}
 	}
 }

@@ -3,10 +3,12 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -48,6 +50,7 @@ public class TownyUniverse {
     private final ConcurrentHashMap<String, Nation> nations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final HashMap<String, CustomDataField> registeredMetadata = new HashMap<>();
+    private ConcurrentHashMap<String, PlotGroup> plotGroups = new ConcurrentHashMap<>();
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -363,9 +366,65 @@ public class TownyUniverse {
         nations.clear();
         towns.clear();
         residents.clear();
+        plotGroups.clear();
     }
 
+	public boolean hasGroup(String townName, int groupID) {
+		return plotGroups.containsKey(townName + groupID);
+	}
+
+	public Collection<PlotGroup> getGroups() {
+		return plotGroups.values();
+	}
+
+	public PlotGroup getGroup(String townName, int groupID) {
+		
+		for (String str : plotGroups.keySet()) {
+			TownyMessaging.sendErrorMsg(str);
+		}
+		
+		return plotGroups.get(townName + groupID);
+	}
+
 	public HashMap<String, CustomDataField> getRegisteredMetadataMap() {
+		return getRegisteredMetadata();
+	}
+
+	public PlotGroup newGroup(Town town, String name, int id) throws AlreadyRegisteredException {
+    	
+    	// Create new plot group.
+		PlotGroup newGroup = new PlotGroup(id, name, town);
+		
+		// Check if there is a duplicate. (Should never happen)
+		if (hasGroup(town.getName(), id)) {
+			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists");
+			throw new AlreadyRegisteredException();
+		}
+		
+		// Create key and store group globally.
+		String key = town.getName() + id;
+		plotGroups.put(key, newGroup);
+
+		return plotGroups.get(key);
+	}
+
+	public int generatePlotGroupID() {
+		return plotGroups.size() + 1;
+	}
+
+
+	public void removeGroup(PlotGroup group) {
+		if (hasGroup(group.getTown().toString(), group.getID())) {
+			String key = group.getTown().toString() + group.getID().toString();
+			plotGroups.remove(key);
+		}
+	}
+	
+	public HashMap<String, CustomDataField> getRegisteredMetadata() {
 		return registeredMetadata;
+	}
+
+	public ConcurrentHashMap<String, PlotGroup> getPlotGroupsMap() {
+		return plotGroups;
 	}
 }

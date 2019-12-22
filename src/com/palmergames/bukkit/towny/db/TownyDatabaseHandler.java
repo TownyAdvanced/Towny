@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -191,6 +192,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		return universe.getTownsMap().get(name);
+	}
+	
+	public PlotGroup getPlotGroup(String worldName, String townName, int groupID) {
+		return universe.getGroup(townName, groupID);
 	}
 
 	@Override
@@ -422,6 +427,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			townBlocks.addAll(world.getTownBlocks());
 		return townBlocks;
 	}
+	
+	public List<PlotGroup> getAllGroups() {
+		List<PlotGroup> groups = new ArrayList<>();
+		groups.addAll(universe.getGroups());
+		
+		return groups;
+	}
+	
+	public void newPlotGroup(PlotGroup group) {
+		String key = group.getTown().getName() + group.getID();
+		universe.getPlotGroupsMap().put(key, group);
+	}
 
 	@Override
 	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
@@ -462,6 +479,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			lock.unlock();
 		}
 	}
+	
+	// TODO: - New Group
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
@@ -944,6 +963,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		BukkitTools.getPluginManager().callEvent(new RenameNationEvent(oldName, nation));
+	}
+
+	@Override
+	public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException {
+		// Create new one
+		group.setGroupName(newName);
+		
+		// Save
+		savePlotGroup(group);
+		saveGroupList();
+
+		// Delete the old group file.
+		deleteGroup(group);
 	}
 
 	@Override

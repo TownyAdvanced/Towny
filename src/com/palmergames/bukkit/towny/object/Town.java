@@ -30,8 +30,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashSet;
 
-public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender {
+public class Town extends TownBlockOwner implements ResidentList, TownyInviteReceiver, TownyInviteSender, GroupManageable<PlotGroup> {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
@@ -39,6 +40,7 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	private List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Location> jailSpawns = new ArrayList<>();
+	private HashSet<PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1314,5 +1316,84 @@ public class Town extends TownBlockOwner implements ResidentList, TownyInviteRec
 	
 	public int getConqueredDays() {
 		return this.conqueredDays;
+	}
+	
+	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
+		
+		ArrayList<TownBlock> retVal = new ArrayList<>();
+		
+		TownyMessaging.sendErrorMsg(group.toString());
+		
+		for (TownBlock townBlock : getTownBlocks()) {
+			if (townBlock.hasPlotGroup() && townBlock.getPlotGroup().equals(group))
+				retVal.add(townBlock);
+		}
+		
+		return retVal;
+	}
+	
+	public void addPlotGroup(PlotGroup group) {
+		if (!hasGroups()) 
+			this.plotGroups = new HashSet<>();
+		
+		TownyMessaging.sendErrorMsg("Adding " + group.getGroupName() + " to " + this.getName());
+		
+		this.plotGroups.add(group);
+		
+	}
+	
+	public void removePlotGroup(PlotGroup plotGroup) {
+		if (hasGroups() && hasGroup(plotGroup)) {
+			for (TownBlock tb : getTownBlocks()) {
+				if (tb.hasPlotGroup() && tb.getPlotGroup().equals(plotGroup)) {
+					tb.getPlotGroup().setID(null);
+					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
+				}
+			}
+		}
+	}
+	
+	public void setPlotGroups(String str) {
+		
+		if (plotGroups == null)
+			plotGroups = new HashSet<>();
+		
+		String[] groups = str.split(";");
+		
+		for (String groupStr : groups) {
+			addPlotGroup(PlotGroup.fromString(groupStr));
+		}
+	}
+	
+	public int generatePlotGroupID() {
+		return (hasGroups()) ? getGroups().size() : 0;
+	}
+
+	@Override
+	public HashSet<PlotGroup> getGroups() {
+		return plotGroups;
+	}
+
+	@Override
+	public PlotGroup getGroupFromID(int ID) {
+		if (hasGroups()) {
+			for (PlotGroup pg : getGroups()) {
+				if (pg.getID() == ID) 
+					return pg;
+			}
+		}
+		
+		return null;
+	}
+	
+	public PlotGroup getPlotGroupFromName(String name) {
+		if (hasGroups()) {
+			for (PlotGroup pg : getGroups()) {
+				if (pg.getGroupName().equals(name))
+					return pg;
+			}
+		}
+		
+		return null;
 	}
 }
