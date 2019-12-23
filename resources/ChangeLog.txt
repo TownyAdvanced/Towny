@@ -3974,3 +3974,5 @@ v0.92.0.11:
   - Added remaining ExtraFields for metadata, courtesy of Emperor-Koala with PR #3575.
   - Add town_block_size to bstats charts.
   - Switch API to 1.15.1-R0.1-SNAPSHOT.
+0.95.2.3:
+  - Fix WARZONE status being given to townblocks when war is not active.
