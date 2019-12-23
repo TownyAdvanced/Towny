@@ -438,13 +438,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
+						
+						TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+						
+						// Make sure that the player is only operating on a plot object group if one exists.
+						if (townBlock.hasPlotObjectGroup()) {
+							// TODO: Translate lang strings.
+							TownyMessaging.sendErrorMsg(player, "This plot it part of a group, do /plot group set ... to operate on it");
+							return false;
+						}
 
 						if (split[0].equalsIgnoreCase("perm")) {
 
 							// Set plot level permissions (if the plot owner) or
 							// Mayor/Assistant of the town.
-
-							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+							
 							// Test we are allowed to work on this plot
 							TownBlockOwner owner = plotTestOwner(resident, townBlock);
 
@@ -469,8 +477,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							return true;
 
 						} else if (split[0].equalsIgnoreCase("name")) {
-
-							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+							
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							if (split.length == 1) {
@@ -499,9 +506,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							if (TownySettings.isAllowingOutposts()) {
 								if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode()))
-									throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));								
-								
-								TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
+									throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 								
 								// Test we are allowed to work on this plot
 								plotTestOwner(resident, townBlock);
