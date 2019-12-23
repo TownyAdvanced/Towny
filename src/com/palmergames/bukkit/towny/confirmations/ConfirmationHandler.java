@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotObjectGroup;
@@ -22,7 +21,6 @@ import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -50,7 +48,7 @@ public class ConfirmationHandler {
 	public static void addConfirmation(final Resident r, final ConfirmationType type, Object extra) throws TownyException {
 		// We use "extra" in certain instances like the number of days for something e.t.c
 		switch (type) {
-			case TOWNDELETE:
+			case TOWN_DELETE:
 				r.setConfirmationType(type);
 				towndeleteconfirmations.put(r, r.getTown()); // The good thing is, using the "put" option we override the past one!
 				
@@ -61,7 +59,7 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
-			case NATIONDELETE:
+			case NATION_DELETE:
 				r.setConfirmationType(type);
 				nationdeleteconfirmations.put(r, r.getTown().getNation());
 
@@ -72,7 +70,7 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
-			case UNCLAIMALL:
+			case UNCLAIM_ALL:
 				r.setConfirmationType(type);
 				townunclaimallconfirmations.put(r, r.getTown());
 
@@ -93,7 +91,7 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
-			case NATIONMERGE:
+			case NATION_MERGE:
 				r.setConfirmationType(type);
 				nationmergeconfirmations.put(r, (Nation) extra);
 
@@ -106,7 +104,7 @@ public class ConfirmationHandler {
 				break;
 			case NULL:
 				break;
-			case GROUPCLAIMACTION:
+			case GROUP_CLAIM_ACTION:
 				r.setConfirmationType(type);
 				groupclaimconfirmations.put(r, (GroupConfirmation) extra);
 
@@ -117,7 +115,7 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
-			case GROUPUNCLAIMACTION:
+			case GROUP_UNCLAIM_ACTION:
 				r.setConfirmationType(type);
 				groupremoveconfirmations.put(r, (GroupConfirmation) extra);
 
@@ -128,7 +126,7 @@ public class ConfirmationHandler {
 					}
 				}.runTaskLater(plugin, 400);
 				break;
-			case GROUPSETPERMACTION:
+			case GROUP_SET_PERM_ACTION:
 				r.setConfirmationType(type);
 				groupsetpermconfirmations.put(r, (GroupConfirmation) extra);
 
@@ -145,21 +143,21 @@ public class ConfirmationHandler {
 	public static void removeConfirmation(Resident r, ConfirmationType type, boolean successful) {
 		boolean sendmessage = false;
 		switch (type) {
-			case TOWNDELETE:
+			case TOWN_DELETE:
 				if (towndeleteconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
 				towndeleteconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
-			case NATIONDELETE:
+			case NATION_DELETE:
 				if (nationdeleteconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
 				nationdeleteconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
-			case UNCLAIMALL:
+			case UNCLAIM_ALL:
 				if (townunclaimallconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
@@ -173,7 +171,7 @@ public class ConfirmationHandler {
 				townypurgeconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
-			case NATIONMERGE:
+			case NATION_MERGE:
 				if (nationmergeconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
@@ -182,21 +180,21 @@ public class ConfirmationHandler {
 				break;
 			case NULL:
 				break;
-			case GROUPCLAIMACTION:
+			case GROUP_CLAIM_ACTION:
 				if (groupclaimconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
 				groupclaimconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
-			case GROUPUNCLAIMACTION:
+			case GROUP_UNCLAIM_ACTION:
 				if (groupremoveconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
 				groupclaimconfirmations.remove(r);
 				r.setConfirmationType(null);
 				break;
-			case GROUPSETPERMACTION:
+			case GROUP_SET_PERM_ACTION:
 				if (groupsetpermconfirmations.containsKey(r) && !successful) {
 					sendmessage = true;
 				}
@@ -212,7 +210,7 @@ public class ConfirmationHandler {
 
 	public static void handleConfirmation(Resident r, ConfirmationType type) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (type == ConfirmationType.TOWNDELETE) {
+		if (type == ConfirmationType.TOWN_DELETE) {
 			if (towndeleteconfirmations.containsKey(r)) {
 				if (towndeleteconfirmations.get(r).equals(r.getTown())) {
 					TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(towndeleteconfirmations.get(r)));
@@ -244,7 +242,7 @@ public class ConfirmationHandler {
 				removeConfirmation(r,type, true);
 			}
 		}
-		if (type == ConfirmationType.UNCLAIMALL) {
+		if (type == ConfirmationType.UNCLAIM_ALL) {
 			if (townunclaimallconfirmations.containsKey(r)) {
 				if (townunclaimallconfirmations.get(r).equals(r.getTown())) {
 					TownClaim.townUnclaimAll(plugin, townunclaimallconfirmations.get(r));
@@ -253,7 +251,7 @@ public class ConfirmationHandler {
 				}
 			}
 		}
-		if (type == ConfirmationType.NATIONDELETE) {
+		if (type == ConfirmationType.NATION_DELETE) {
 			if (nationdeleteconfirmations.containsKey(r)) {
 				if (nationdeleteconfirmations.get(r).equals(r.getTown().getNation())) {
 					townyUniverse.getDataSource().removeNation(nationdeleteconfirmations.get(r));
@@ -262,7 +260,7 @@ public class ConfirmationHandler {
 				}
 			}
 		}
-		if (type == ConfirmationType.NATIONMERGE) {
+		if (type == ConfirmationType.NATION_MERGE) {
 			if (nationmergeconfirmations.containsKey(r)) {
 				Nation succumbingNation = r.getTown().getNation();
 				Nation prevailingNation = nationmergeconfirmations.get(r);
@@ -272,7 +270,7 @@ public class ConfirmationHandler {
 			}
 		}
 		
-		if (type == ConfirmationType.GROUPCLAIMACTION) {
+		if (type == ConfirmationType.GROUP_CLAIM_ACTION) {
 			if (groupclaimconfirmations.containsKey(r)) {
 				
 				GroupConfirmation confirmation = groupclaimconfirmations.get(r);
@@ -283,7 +281,7 @@ public class ConfirmationHandler {
 			}
 		}
 		
-		if (type == ConfirmationType.GROUPUNCLAIMACTION) {
+		if (type == ConfirmationType.GROUP_UNCLAIM_ACTION) {
 			if (groupremoveconfirmations.containsKey(r)) {
 				
 				GroupConfirmation confirmation = groupremoveconfirmations.get(r);
@@ -294,7 +292,7 @@ public class ConfirmationHandler {
 			}
 		}
 		
-		if (type == ConfirmationType.GROUPSETPERMACTION) {
+		if (type == ConfirmationType.GROUP_SET_PERM_ACTION) {
 			if (groupsetpermconfirmations.containsKey(r)) {
 				GroupConfirmation confirmation = groupsetpermconfirmations.get(r);
 				
@@ -392,7 +390,7 @@ public class ConfirmationHandler {
 	 */
 	public static void handleConfirmation(ConfirmationType type) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (type == ConfirmationType.TOWNDELETE) {
+		if (type == ConfirmationType.TOWN_DELETE) {
 			Town town = (Town) consoleExtra;
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelTownMsg(town));
 			townyUniverse.getDataSource().removeTown(town);
@@ -414,7 +412,7 @@ public class ConfirmationHandler {
 			removeConfirmation(type, true);
 			consoleExtra = null;
 		}
-		if (type == ConfirmationType.NATIONDELETE) {
+		if (type == ConfirmationType.NATION_DELETE) {
 			Nation nation = (Nation) consoleExtra;
 			TownyMessaging.sendGlobalMessage(TownySettings.getDelNationMsg(nation));
 			townyUniverse.getDataSource().removeNation(nation);

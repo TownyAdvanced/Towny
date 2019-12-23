@@ -1097,7 +1097,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(String.format(TownySettings.getLangString("msg_err_king_of_that_nation_is_not_online"), name, king.getName()));
 			}
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), String.format(TownySettings.getLangString("msg_would_you_merge_your_nation_into_other_nation"), nation, remainingNation, remainingNation));
-			ConfirmationHandler.addConfirmation(king, ConfirmationType.NATIONMERGE, remainingNation);
+			ConfirmationHandler.addConfirmation(king, ConfirmationType.NATION_MERGE, remainingNation);
 			TownyMessaging.sendConfirmationMessage(BukkitTools.getPlayer(king.getName()), null, null, null, null);			
 		}
 	}
@@ -1149,7 +1149,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0)
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATIONDELETE, null); // It takes the resident's town & nation, done finished
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.NATION_DELETE, null); // It takes the resident's town & nation, done finished
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());

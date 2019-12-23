@@ -2375,7 +2375,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			try {
 				Resident resident = townyUniverse.getDataSource().getResident(player.getName());
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWNDELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.TOWN_DELETE, null); // It takes the senders town & nation, an admin deleting another town has no confirmation.
 				TownyMessaging.sendConfirmationMessage(player, null, null, null, null);
 
 			} catch (TownyException x) {

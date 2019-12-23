@@ -165,7 +165,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 									// TODO: Translate lang strings.
 									// Add the confirmation for claiming a plot group.
-									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPCLAIMACTION, new GroupConfirmation(group, player));
+									ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_CLAIM_ACTION, new GroupConfirmation(group, player));
 									String firstLine = "This plot is part a group of " + group.getTownBlocks().size() + " plot(s) by claiming you will inherit them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 									TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 									
@@ -276,7 +276,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 
 								// TODO: Translate lang strings.
-								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPUNCLAIMACTION, new GroupConfirmation(block.getPlotObjectGroup(), player));
+								ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_UNCLAIM_ACTION, new GroupConfirmation(block.getPlotObjectGroup(), player));
 								String firstLine = "This plot is part a group of " + block.getPlotObjectGroup().getTownBlocks().size() + " plot(s) by unclaiming you will lose them all." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
 								TownyMessaging.sendConfirmationMessage(player, firstLine, null, null, null);
 
@@ -1140,7 +1140,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
 		
-		player.sendMessage(Arrays.toString(split));
+		player.sendMessage(Arrays.toString(split)); // FIXME Debug message?
 
 		Resident resident;
 		String world;
@@ -1303,7 +1303,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Create confirmation.
 				GroupConfirmation confirmation = new GroupConfirmation(townBlock.getPlotObjectGroup(), player);
 				confirmation.setArgs(StringMgmt.remArgs(split, 2));
-				ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUPSETPERMACTION, confirmation);
+				ConfirmationHandler.addConfirmation(resident, ConfirmationType.GROUP_SET_PERM_ACTION, confirmation);
 
 				// TODO: Translate lang strings.
 				String firstLine = "This plot is part a group of " + townBlock.getPlotObjectGroup().getTownBlocks().size() + " plot(s) by setting perms on this it will affect all the other plots." + TownySettings.getLangString("are_you_sure_you_want_to_continue");
