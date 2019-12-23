@@ -301,6 +301,8 @@ public class War {
 		}.runTask(plugin);
 		
 
+		warZone.clear();
+		
 		double halfWinnings;
 		double nationWinnings = 0;
 		try {
