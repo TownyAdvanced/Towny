@@ -436,8 +436,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 	
 	public void newPlotGroup(PlotObjectGroup group) {
-		String key = group.getTown().getName() + group.getID();
-		universe.getPlotGroupsMap().put(key, group);
+		universe.getGroups().add(group);
 	}
 
 	@Override
